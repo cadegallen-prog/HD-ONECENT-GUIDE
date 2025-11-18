@@ -141,6 +141,24 @@ But for those who enjoy the hunt—the strategy, the thrill, the occasional win�
 
 ---
 
+## Meet the Admin Team
+
+The Home Depot Penny Items Guide is maintained by a small team of dedicated admins who created and continue to support the penny hunting community.
+
+### Spoe Jarky – Founder / Owner
+
+Founder and owner of the group. Co-creator of the community and the iconic Ryobi drill profile pic everyone recognizes.
+
+### Cade Allen – Co-Founder / Admin
+
+Co-founder, guide writer, and long-form explainer behind the Home Depot Penny Items Guide and a lot of the how-to content.
+
+### Jorian Wulf – Admin
+
+Admin and community support, helping keep posts, comments, and member questions organized and running smoothly.
+
+---
+
 ## Questions or Feedback?
 
 This guide is a living resource, and we're always looking to improve it based on community input.
