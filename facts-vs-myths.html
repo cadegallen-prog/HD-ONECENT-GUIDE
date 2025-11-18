@@ -10,6 +10,29 @@
   <nav>
     <div class="nav-container">
       <a href="index.html" class="nav-brand">Home Depot Penny Items Guide</a>
+      <!-- Search Bar -->
+      <div class="search-container">
+        <div class="search-bar">
+          <input type="text" class="search-input" placeholder="Search guide... (Ctrl+K or /)" aria-label="Search">
+          <button class="search-btn">Search</button>
+        </div>
+        <div class="search-results"></div>
+        <div class="search-hint">Press Ctrl+K or / to quick search</div>
+      </div>
+
+      <!-- Controls Bar -->
+      <div class="controls-bar">
+        <button class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+        <div class="font-size-controls">
+          <button class="font-size-btn" data-size="small">A</button>
+          <button class="font-size-btn" data-size="medium">A</button>
+          <button class="font-size-btn" data-size="large">A</button>
+        </div>
+        <span class="progress-indicator">0/16 pages read</span>
+        <button class="reset-progress-btn">Reset Progress</button>
+      </div>
+
+
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="what-are-pennies.html">What Are Pennies?</a></li>
@@ -27,7 +50,16 @@
   </nav>
 
   <main>
-    <h1>Facts vs. Myths: Sorting Reality from Wishful Thinking</h1>
+        <div class="breadcrumbs"></div>
+
+<h1>Facts vs. Myths: Sorting Reality from Wishful Thinking</h1>
+
+
+    <div class="table-of-contents">
+      <h3>On This Page</h3>
+    </div>
+
+
 
     <p>Despite how widespread penny hunting has become, Home Depot has <strong>never publicly confirmed</strong> the full clearance-to-penny process.</p>
 
@@ -185,12 +217,22 @@
     <hr>
 
     <p><strong>Next:</strong> Learn how to hunt responsibly and avoid ruining it for everyone in <a href="responsible-hunting.html">Responsible Penny Hunting</a>.</p>
-  </main>
+  
+    <div class="page-nav-buttons">
+      <a href="#" class="nav-prev-btn"></a>
+      <a href="#" class="nav-next-btn"></a>
+    </div>
+
+</main>
 
   <footer>
     <p>This site is based on community experience and is not affiliated with, endorsed by, or representing The Home Depot. Policies and practices vary by store and change over time. Always follow posted store policies and local laws.</p>
   </footer>
 
   <script src="scripts.js"></script>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" aria-label="Back to top">↑</button>
+
 </body>
 </html>

@@ -10,6 +10,29 @@
   <nav>
     <div class="nav-container">
       <a href="index.html" class="nav-brand">Home Depot Penny Items Guide</a>
+      <!-- Search Bar -->
+      <div class="search-container">
+        <div class="search-bar">
+          <input type="text" class="search-input" placeholder="Search guide... (Ctrl+K or /)" aria-label="Search">
+          <button class="search-btn">Search</button>
+        </div>
+        <div class="search-results"></div>
+        <div class="search-hint">Press Ctrl+K or / to quick search</div>
+      </div>
+
+      <!-- Controls Bar -->
+      <div class="controls-bar">
+        <button class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+        <div class="font-size-controls">
+          <button class="font-size-btn" data-size="small">A</button>
+          <button class="font-size-btn" data-size="medium">A</button>
+          <button class="font-size-btn" data-size="large">A</button>
+        </div>
+        <span class="progress-indicator">0/16 pages read</span>
+        <button class="reset-progress-btn">Reset Progress</button>
+      </div>
+
+
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="what-are-pennies.html">What Are Pennies?</a></li>
@@ -27,9 +50,20 @@
   </nav>
 
   <main>
-    <h1>Home Depot Penny Items: Start Here</h1>
+        <div class="breadcrumbs"></div>
 
-    <p>Welcome to the most comprehensive guide on finding Home Depot penny items—written for savvy shoppers who want to understand how it actually works.</p>
+<h1>Home Depot Penny Items: Start Here</h1>
+
+    <div class="page-metadata">
+      <span class="meta-badge icon-time difficulty-beginner">5 min read</span>
+      <span class="meta-badge icon-level difficulty-beginner">Beginner Friendly</span>
+    </div>
+
+    <div class="summary-box">
+      <h2 class="icon-star">Overview</h2>
+      <p>Welcome to the most comprehensive guide on finding Home Depot penny items—written for savvy shoppers who want to understand how it actually works. This guide cuts through the hype and gives you real, actionable strategies based on community knowledge and retail logic.</p>
+      <p><strong>What you'll find:</strong> Complete coverage of the penny hunting process from understanding clearance cycles to successful checkout strategies, plus responsible hunting practices to protect the community.</p>
+    </div>
 
     <div class="pdf-download-section">
       <h2>Download the Full PDF Guide</h2>
@@ -37,20 +71,20 @@
       <a href="Home Depot Penny Items Guide.pdf" class="pdf-download-btn" download>Download PDF Guide</a>
     </div>
 
-    <h2>What You'll Learn</h2>
-
-    <p>This guide covers everything you need to know about penny hunting at Home Depot:</p>
-
-    <ul>
-      <li><strong>What penny items are</strong> (and what they're not)</li>
-      <li><strong>How clearance cycles work</strong> and how items become penny-priced</li>
-      <li><strong>Digital pre-hunt strategies</strong> using the Home Depot app and website</li>
-      <li><strong>In-store tactics</strong> for finding items that haven't been pulled yet</li>
-      <li><strong>Checkout methods</strong> that actually work (and what to avoid)</li>
-      <li><strong>Internal systems</strong> that drive the whole process behind the scenes</li>
-      <li><strong>Facts vs. myths</strong> to help you separate reality from wishful thinking</li>
-      <li><strong>Responsible hunting</strong> so you don't ruin it for everyone else</li>
-    </ul>
+    <div class="callout key-takeaways">
+      <div class="callout-title icon-key">What You'll Learn</div>
+      <p>This guide covers everything you need to know about penny hunting at Home Depot:</p>
+      <ul class="list-enhanced checkmark">
+        <li><strong>What penny items are</strong> (and what they're not)</li>
+        <li><strong>How clearance cycles work</strong> and how items become penny-priced</li>
+        <li><strong>Digital pre-hunt strategies</strong> using the Home Depot app and website</li>
+        <li><strong>In-store tactics</strong> for finding items that haven't been pulled yet</li>
+        <li><strong>Checkout methods</strong> that actually work (and what to avoid)</li>
+        <li><strong>Internal systems</strong> that drive the whole process behind the scenes</li>
+        <li><strong>Facts vs. myths</strong> to help you separate reality from wishful thinking</li>
+        <li><strong>Responsible hunting</strong> so you don't ruin it for everyone else</li>
+      </ul>
+    </div>
 
     <h2>No Guru BS—Just Real Info</h2>
 
@@ -66,54 +100,80 @@
 
     <p><strong>Important:</strong> This guide reflects what the penny shopping community has learned over time. It's not official Home Depot policy, and practices vary by store.</p>
 
-    <h2>Is This for You?</h2>
+    <h2 class="icon-target">Is This for You?</h2>
 
-    <p>If you're looking for:</p>
-    <ul>
-      <li>A get-rich-quick scheme → this isn't it</li>
-      <li>Guaranteed finds every trip → not happening</li>
-      <li>Risk-free shopping → there are no guarantees</li>
-    </ul>
+    <div class="comparison-table">
+      <div class="comparison-column dont-column">
+        <h3 class="icon-cross">This ISN'T For You If...</h3>
+        <ul class="list-enhanced cross">
+          <li>A get-rich-quick scheme</li>
+          <li>Guaranteed finds every trip</li>
+          <li>Risk-free shopping</li>
+          <li>Zero time investment required</li>
+        </ul>
+      </div>
+      <div class="comparison-column do-column">
+        <h3 class="icon-check">This IS For You If...</h3>
+        <ul class="list-enhanced checkmark">
+          <li>Learn how the system works</li>
+          <li>Put in the time and effort</li>
+          <li>Stay patient through dry spells</li>
+          <li>Act respectfully in stores</li>
+        </ul>
+      </div>
+    </div>
 
-    <p>But if you're willing to:</p>
-    <ul>
-      <li>Learn how the system works</li>
-      <li>Put in the time and effort</li>
-      <li>Stay patient through dry spells</li>
-      <li>Act respectfully in stores</li>
-    </ul>
+    <h2 class="icon-book">Where to Start</h2>
 
-    <p>Then you're in the right place.</p>
+    <div class="quick-ref-card">
+      <h3 class="icon-target">New to Penny Hunting? Start Here</h3>
+      <div class="ref-item">
+        <strong>1. What Are Penny Items?</strong><br>
+        <a href="what-are-pennies.html">Understand the basics</a> — Learn what penny items are and why they exist
+      </div>
+      <div class="ref-item">
+        <strong>2. Clearance Lifecycle</strong><br>
+        <a href="clearance-lifecycle.html">Learn how items reach $0.01</a> — Decode price endings and markdown cadences
+      </div>
+      <div class="ref-item">
+        <strong>3. In-Store Strategy</strong><br>
+        <a href="in-store-strategy.html">Know where and how to look</a> — Master the art of finding hidden penny items
+      </div>
+    </div>
 
-    <h2>Where to Start</h2>
+    <div class="callout tip">
+      <div class="callout-title icon-tip">Already Know the Basics?</div>
+      <p>Jump straight to advanced topics:</p>
+      <ul>
+        <li><a href="digital-prehunt.html">Digital Pre-Hunt</a> — Use the app to scout ahead</li>
+        <li><a href="checkout-strategy.html">Checkout Strategy</a> — Get items through the register</li>
+        <li><a href="internal-systems.html">Internal Systems</a> — Understand what staff see</li>
+      </ul>
+    </div>
 
-    <p><strong>New to penny hunting?</strong> Start with these pages:</p>
-    <ol>
-      <li><a href="what-are-pennies.html">What Are Penny Items?</a> — Understand the basics</li>
-      <li><a href="clearance-lifecycle.html">Clearance Lifecycle</a> — Learn how items reach $0.01</li>
-      <li><a href="in-store-strategy.html">In-Store Strategy</a> — Know where and how to look</li>
-    </ol>
+    <div class="callout warning">
+      <div class="callout-title icon-warning">Final Heads-Up</div>
+      <p><strong>Penny items aren't meant to be sold.</strong> They're marked for removal. If you manage to buy one, it's because something slipped through the cracks.</p>
+      <p>Stores are actively trained to pull these items and stop these sales. Your success depends on staying low-key, respectful, and smart about it.</p>
+    </div>
 
-    <p><strong>Already know the basics?</strong> Jump straight to:</p>
-    <ul>
-      <li><a href="digital-prehunt.html">Digital Pre-Hunt</a> — Use the app to scout ahead</li>
-      <li><a href="checkout-strategy.html">Checkout Strategy</a> — Get items through the register</li>
-      <li><a href="internal-systems.html">Internal Systems</a> — Understand what staff see</li>
-    </ul>
+    <p><strong>Ready? Let's get started.</strong></p>
+  
+    <div class="page-nav-buttons">
+      <a href="#" class="nav-prev-btn"></a>
+      <a href="#" class="nav-next-btn"></a>
+    </div>
 
-    <h2>Final Heads-Up</h2>
-
-    <p>Penny items aren't meant to be sold. They're marked for removal. If you manage to buy one, it's because something slipped through the cracks.</p>
-
-    <p>Stores are actively trained to pull these items and stop these sales. Your success depends on staying low-key, respectful, and smart about it.</p>
-
-    <p>Ready? Let's get started.</p>
-  </main>
+</main>
 
   <footer>
     <p>This site is based on community experience and is not affiliated with, endorsed by, or representing The Home Depot. Policies and practices vary by store and change over time. Always follow posted store policies and local laws.</p>
   </footer>
 
   <script src="scripts.js"></script>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" aria-label="Back to top">↑</button>
+
 </body>
 </html>

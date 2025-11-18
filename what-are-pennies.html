@@ -10,6 +10,29 @@
   <nav>
     <div class="nav-container">
       <a href="index.html" class="nav-brand">Home Depot Penny Items Guide</a>
+      <!-- Search Bar -->
+      <div class="search-container">
+        <div class="search-bar">
+          <input type="text" class="search-input" placeholder="Search guide... (Ctrl+K or /)" aria-label="Search">
+          <button class="search-btn">Search</button>
+        </div>
+        <div class="search-results"></div>
+        <div class="search-hint">Press Ctrl+K or / to quick search</div>
+      </div>
+
+      <!-- Controls Bar -->
+      <div class="controls-bar">
+        <button class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+        <div class="font-size-controls">
+          <button class="font-size-btn" data-size="small">A</button>
+          <button class="font-size-btn" data-size="medium">A</button>
+          <button class="font-size-btn" data-size="large">A</button>
+        </div>
+        <span class="progress-indicator">0/16 pages read</span>
+        <button class="reset-progress-btn">Reset Progress</button>
+      </div>
+
+
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="what-are-pennies.html">What Are Pennies?</a></li>
@@ -27,43 +50,62 @@
   </nav>
 
   <main>
-    <h1>What Are Penny Items?</h1>
+        <div class="breadcrumbs"></div>
 
-    <p>At Home Depot, a "penny item" refers to merchandise that rings up at <strong>$0.01</strong> due to internal inventory clearance systems—not public promotions.</p>
+<h1>What Are Penny Items?</h1>
 
-    <h2>These Aren't Sales</h2>
 
-    <p>Let's be clear: penny items are <strong>not</strong> intentional deals or customer-facing discounts.</p>
+    <div class="table-of-contents">
+      <h3>On This Page</h3>
+    </div>
 
-    <p>They're items that:</p>
-    <ul>
-      <li>Have been chosen for removal</li>
-      <li>Are no longer intended for sale</li>
-      <li>Still happen to be on shelves because of oversight or delays</li>
-    </ul>
 
-    <p>If you find one and successfully buy it, it's because something slipped through the cracks in Home Depot's inventory management process.</p>
 
-    <h2>How It Works: Zero Margin Adjustment (ZMA)</h2>
+    <div class="page-metadata">
+      <span class="meta-badge icon-time difficulty-beginner">4 min read</span>
+      <span class="meta-badge icon-level difficulty-beginner">Beginner</span>
+    </div>
+
+    <div class="summary-box">
+      <h2 class="icon-info">Page Summary</h2>
+      <p>At Home Depot, a "penny item" refers to merchandise that rings up at <strong>$0.01</strong> due to internal inventory clearance systems—not public promotions. This page explains what penny items really are, how the ZMA system works, and why these items exist in the first place.</p>
+    </div>
+
+    <div class="callout warning">
+      <div class="callout-title icon-warning">These Aren't Sales</div>
+      <p>Let's be clear: penny items are <strong>not</strong> intentional deals or customer-facing discounts.</p>
+      <p>They're items that:</p>
+      <ul>
+        <li>Have been chosen for removal</li>
+        <li>Are no longer intended for sale</li>
+        <li>Still happen to be on shelves because of oversight or delays</li>
+      </ul>
+      <p>If you find one and successfully buy it, it's because something slipped through the cracks in Home Depot's inventory management process.</p>
+    </div>
+
+    <h2 class="icon-info">How It Works: Zero Margin Adjustment (ZMA)</h2>
 
     <p>The $0.01 price is triggered by a financial mechanism called <strong>Zero Margin Adjustment (ZMA)</strong>.</p>
 
-    <p>Here's what happens:</p>
-    <ol>
-      <li>Home Depot decides an item is no longer worth selling (discontinued, damaged, seasonal changeover, etc.)</li>
-      <li>The system uses ZMA to reduce the item's value to nearly zero—specifically, $0.01</li>
-      <li>The item is flagged for removal from the sales floor</li>
-      <li>Staff are supposed to pull it and dispose of it or liquidate it</li>
-    </ol>
+    <div class="callout info">
+      <div class="callout-title icon-target">The ZMA Process</div>
+      <ol class="procedure-steps">
+        <li><strong>Item marked for removal</strong><br>Home Depot decides an item is no longer worth selling (discontinued, damaged, seasonal changeover, etc.)</li>
+        <li><strong>System applies ZMA</strong><br>The system uses ZMA to reduce the item's value to nearly zero—specifically, $0.01</li>
+        <li><strong>Flagged for removal</strong><br>The item is flagged for removal from the sales floor</li>
+        <li><strong>Staff pulls item</strong><br>Staff are supposed to pull it and dispose of it or liquidate it</li>
+      </ol>
+    </div>
 
-    <p><strong>But sometimes:</strong></p>
-    <ul>
-      <li>Staff miss it</li>
-      <li>There's a backlog in pulling items</li>
-      <li>The item gets shoved to a back shelf or misplaced</li>
-    </ul>
-
-    <p>That's when shoppers find it.</p>
+    <div class="callout tip">
+      <div class="callout-title icon-tip">But Sometimes...</div>
+      <ul class="list-enhanced arrow">
+        <li>Staff miss it during their clearance sweep</li>
+        <li>There's a backlog in pulling items</li>
+        <li>The item gets shoved to a back shelf or misplaced</li>
+      </ul>
+      <p><strong>That's when shoppers find it.</strong></p>
+    </div>
 
     <h2>Why Do Penny Items Exist?</h2>
 
@@ -78,11 +120,11 @@
       <li><strong>Overhead storage</strong> — Items stored on top shelves are harder to track and remove</li>
     </ul>
 
-    <h2>What Penny Items Are NOT</h2>
+    <h2 class="icon-warning">What Penny Items Are NOT</h2>
 
     <p>Let's clear up some misconceptions:</p>
 
-    <ul>
+    <ul class="list-enhanced cross">
       <li><strong>NOT a secret sale</strong> — Home Depot isn't running a promotion</li>
       <li><strong>NOT legal gray area</strong> — Buying one isn't illegal, but stores can refuse the sale</li>
       <li><strong>NOT guaranteed</strong> — Just because something hit $0.01 doesn't mean it's still there</li>
@@ -105,19 +147,40 @@
 
     <p>What you'll learn here reflects patterns observed by penny shoppers over time—not insider information or official documentation.</p>
 
-    <h2>Bottom Line</h2>
+    <div class="callout key-takeaways">
+      <div class="callout-title icon-key">Bottom Line</div>
+      <p>Penny items are the last stage of Home Depot's clearance cycle. They're meant to be removed, not sold.</p>
+      <p><strong>If you manage to buy one, consider it a gap in the system—not an entitlement.</strong></p>
+    </div>
 
-    <p>Penny items are the last stage of Home Depot's clearance cycle. They're meant to be removed, not sold.</p>
+    <hr>
 
-    <p>If you manage to buy one, consider it a gap in the system—not an entitlement.</p>
+    <div class="related-topics-section">
+      <h3 class="icon-link">Related Topics</h3>
+      <ul>
+        <li><a href="clearance-lifecycle.html">Clearance Lifecycle</a> — Learn how items reach penny status</li>
+        <li><a href="internal-systems.html">Internal Systems</a> — Understand ZMA and store processes</li>
+        <li><a href="facts-vs-myths.html">Facts vs. Myths</a> — Separate reality from wishful thinking</li>
+      </ul>
+    </div>
 
     <p><strong>Next:</strong> Learn how items reach penny status by understanding the <a href="clearance-lifecycle.html">Clearance Lifecycle</a>.</p>
-  </main>
+  
+    <div class="page-nav-buttons">
+      <a href="#" class="nav-prev-btn"></a>
+      <a href="#" class="nav-next-btn"></a>
+    </div>
+
+</main>
 
   <footer>
     <p>This site is based on community experience and is not affiliated with, endorsed by, or representing The Home Depot. Policies and practices vary by store and change over time. Always follow posted store policies and local laws.</p>
   </footer>
 
   <script src="scripts.js"></script>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" aria-label="Back to top">↑</button>
+
 </body>
 </html>

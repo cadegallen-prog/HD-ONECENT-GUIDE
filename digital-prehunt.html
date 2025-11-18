@@ -10,6 +10,29 @@
   <nav>
     <div class="nav-container">
       <a href="index.html" class="nav-brand">Home Depot Penny Items Guide</a>
+      <!-- Search Bar -->
+      <div class="search-container">
+        <div class="search-bar">
+          <input type="text" class="search-input" placeholder="Search guide... (Ctrl+K or /)" aria-label="Search">
+          <button class="search-btn">Search</button>
+        </div>
+        <div class="search-results"></div>
+        <div class="search-hint">Press Ctrl+K or / to quick search</div>
+      </div>
+
+      <!-- Controls Bar -->
+      <div class="controls-bar">
+        <button class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+        <div class="font-size-controls">
+          <button class="font-size-btn" data-size="small">A</button>
+          <button class="font-size-btn" data-size="medium">A</button>
+          <button class="font-size-btn" data-size="large">A</button>
+        </div>
+        <span class="progress-indicator">0/16 pages read</span>
+        <button class="reset-progress-btn">Reset Progress</button>
+      </div>
+
+
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="what-are-pennies.html">What Are Pennies?</a></li>
@@ -27,15 +50,41 @@
   </nav>
 
   <main>
-    <h1>Digital Pre-Hunt: Using the Home Depot App &amp; Website</h1>
+        <div class="breadcrumbs"></div>
 
-    <p>Before heading into a store, use Home Depot's app or website to scout items that might have reached penny status.</p>
+<h1>Digital Pre-Hunt: Using the Home Depot App &amp; Website</h1>
 
-    <p><strong>Important:</strong> The app won't show you the $0.01 price directly—but it <strong>can</strong> give you signals that an item has been marked internally.</p>
+
+    <div class="table-of-contents">
+      <h3>On This Page</h3>
+    </div>
+
+    <div class="page-metadata">
+      <span class="meta-badge icon-time difficulty-intermediate">5 min read</span>
+      <span class="meta-badge icon-level difficulty-intermediate">Intermediate</span>
+    </div>
+
+    <div class="summary-box">
+      <h2 class="icon-search">Page Summary</h2>
+      <p>Before heading into a store, use Home Depot's app or website to scout items that might have reached penny status. This page teaches you how to use digital tools to filter potential penny items and decide which stores are worth visiting in person.</p>
+    </div>
+
+    <div class="callout warning">
+      <div class="callout-title icon-warning">Important Limitation</div>
+      <p>The app won't show you the $0.01 price directly—but it <strong>can</strong> give you signals that an item has been marked internally.</p>
+    </div>
+
+    <div class="prerequisites-section">
+      <h3 class="icon-book">Prerequisites</h3>
+      <ul>
+        <li><a href="what-are-pennies.html">What Are Penny Items?</a> — Understand penny basics</li>
+        <li><a href="clearance-lifecycle.html">Clearance Lifecycle</a> — Know price endings and cadences</li>
+      </ul>
+    </div>
 
     <hr>
 
-    <h2>Step 1: Set Your Store Location</h2>
+    <h2 class="icon-target">Step 1: Set Your Store Location</h2>
 
     <p>In the app or online, <strong>set your specific store location</strong> before searching.</p>
 
@@ -70,38 +119,43 @@
 
     <hr>
 
-    <h2>Step 3: Interpret What You See</h2>
+    <h2 class="icon-search">Step 3: Interpret What You See</h2>
 
     <p>Once you've searched an item, use the chart below to decode what the listing might mean:</p>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Online Status</th>
-          <th>What It Could Mean</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>In Stock + Clearance Price visible</strong></td>
-          <td>Still in clearance cycle, not pennied yet</td>
-        </tr>
-        <tr>
-          <td><strong>In Stock + Full Price</strong></td>
-          <td>Still active inventory</td>
-        </tr>
-        <tr>
-          <td><strong>Out of Stock / Unavailable / Ship to Store Only + Full Price</strong></td>
-          <td><strong>Strong penny candidate</strong> — system may have pennied it, but it hasn't been removed from shelves yet</td>
-        </tr>
-        <tr>
-          <td><strong>Clearance price still showing online</strong></td>
-          <td>Not yet a penny item</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-enhanced">
+      <table>
+        <thead>
+          <tr>
+            <th>Online Status</th>
+            <th>What It Could Mean</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-color-low">
+            <td><strong>In Stock + Clearance Price visible</strong></td>
+            <td><span class="status-badge warning">Still in clearance cycle, not pennied yet</span></td>
+          </tr>
+          <tr class="table-color-low">
+            <td><strong>In Stock + Full Price</strong></td>
+            <td><span class="status-badge danger">Still active inventory</span></td>
+          </tr>
+          <tr class="table-color-high">
+            <td><strong>Out of Stock / Unavailable / Ship to Store Only + Full Price</strong></td>
+            <td><span class="status-badge success">Strong penny candidate</span> — system may have pennied it, but it hasn't been removed from shelves yet</td>
+          </tr>
+          <tr class="table-color-medium">
+            <td><strong>Clearance price still showing online</strong></td>
+            <td><span class="status-badge info">Not yet a penny item</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-    <p><strong>Key Insight:</strong> If the system shows a <strong>full price</strong> but <strong>no stock</strong>, it might have already hit $0.01 internally and just hasn't been pulled.</p>
+    <div class="callout tip">
+      <div class="callout-title icon-tip">Key Insight</div>
+      <p>If the system shows a <strong>full price</strong> but <strong>no stock</strong>, it might have already hit $0.01 internally and just hasn't been pulled.</p>
+    </div>
 
     <hr>
 
@@ -119,21 +173,20 @@
 
     <hr>
 
-    <h2>When to Go In-Store</h2>
-
-    <p>Only go check in person if:</p>
-
-    <ul>
-      <li>You've found an item that shows <strong>no local stock</strong> but is still listed online</li>
-      <li>You're tracking the item based on its <strong>clearance cycle and tag date</strong></li>
-      <li>You've seen reports in <strong>penny shopping communities</strong> about that item pennying out recently</li>
-    </ul>
-
-    <p>If the item shows in stock at full clearance price, it's probably not pennied yet. Wait and check again in a week or two.</p>
+    <div class="callout key-takeaways">
+      <div class="callout-title icon-key">When to Go In-Store</div>
+      <p>Only go check in person if:</p>
+      <ul class="list-enhanced checkmark">
+        <li>You've found an item that shows <strong>no local stock</strong> but is still listed online</li>
+        <li>You're tracking the item based on its <strong>clearance cycle and tag date</strong></li>
+        <li>You've seen reports in <strong>penny shopping communities</strong> about that item pennying out recently</li>
+      </ul>
+      <p><strong>Remember:</strong> If the item shows in stock at full clearance price, it's probably not pennied yet. Wait and check again in a week or two.</p>
+    </div>
 
     <hr>
 
-    <h2>Advanced Tip: Track Multiple Stores</h2>
+    <h2 class="icon-tip">Advanced Tip: Track Multiple Stores</h2>
 
     <p>If you live near multiple Home Depot locations, check the app for the same SKU across all of them.</p>
 
@@ -148,13 +201,32 @@
 
     <hr>
 
+    <div class="related-topics-section">
+      <h3 class="icon-link">Related Topics</h3>
+      <ul>
+        <li><a href="in-store-strategy.html">In-Store Strategy</a> — Find items once you're at the store</li>
+        <li><a href="clearance-lifecycle.html">Clearance Lifecycle</a> — Understand markdown timing</li>
+        <li><a href="checkout-strategy.html">Checkout Strategy</a> — Successfully purchase penny items</li>
+      </ul>
+    </div>
+
     <p><strong>Next:</strong> Once you've scouted online and identified potential penny items, it's time to head in-store. Learn the best tactics in <a href="in-store-strategy.html">In-Store Strategy</a>.</p>
-  </main>
+  
+    <div class="page-nav-buttons">
+      <a href="#" class="nav-prev-btn"></a>
+      <a href="#" class="nav-next-btn"></a>
+    </div>
+
+</main>
 
   <footer>
     <p>This site is based on community experience and is not affiliated with, endorsed by, or representing The Home Depot. Policies and practices vary by store and change over time. Always follow posted store policies and local laws.</p>
   </footer>
 
   <script src="scripts.js"></script>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" aria-label="Back to top">↑</button>
+
 </body>
 </html>
