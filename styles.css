@@ -352,3 +352,74 @@ hr {
   border-top: 2px solid var(--border-color);
   margin: 2rem 0;
 }
+
+/* PDF Download Section */
+.pdf-download-section {
+  background-color: #ffffff;
+  border: 2px solid var(--accent-color);
+  border-radius: 8px;
+  padding: 2rem;
+  margin: 2.5rem 0;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(249, 99, 2, 0.15);
+}
+
+.pdf-download-section h2 {
+  margin-top: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+  color: var(--accent-color);
+}
+
+.pdf-download-section p {
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+.pdf-download-btn {
+  display: inline-block;
+  background-color: var(--accent-color);
+  color: #ffffff;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.pdf-download-btn:hover {
+  background-color: var(--accent-hover);
+  color: #ffffff;
+  text-decoration: none;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.pdf-download-btn::before {
+  content: '📥 ';
+  margin-right: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .pdf-download-section {
+    padding: 1.5rem;
+  }
+
+  .pdf-download-btn {
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .pdf-download-section {
+    padding: 1.25rem;
+  }
+
+  .pdf-download-btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+  }
+}
