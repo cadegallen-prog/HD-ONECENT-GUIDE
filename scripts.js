@@ -14,6 +14,7 @@ const PAGE_ORDER = [
   'internal-systems.html',
   'facts-vs-myths.html',
   'responsible-hunting.html',
+  'calculators.html',
   'faq.html',
   'resources.html',
   'quick-reference-card.html',
@@ -33,6 +34,7 @@ const PAGE_TITLES = {
   'internal-systems.html': 'Internal Systems',
   'facts-vs-myths.html': 'Facts vs. Myths',
   'responsible-hunting.html': 'Responsible Hunting',
+  'calculators.html': 'Calculators',
   'faq.html': 'FAQ',
   'resources.html': 'Resources',
   'quick-reference-card.html': 'Quick Reference',
@@ -1865,6 +1867,7 @@ const LearningPaths = {
         { page: 'what-are-pennies.html', title: 'What Are Pennies?', required: true },
         { page: 'facts-vs-myths.html', title: 'Facts vs. Myths', required: true },
         { page: 'responsible-hunting.html', title: 'Responsible Hunting', required: true },
+  'calculators.html',
         { page: 'quick-start.html', title: 'Quick Start Guide', required: true },
         { quiz: 'myths-vs-facts', title: 'Myths vs. Facts Quiz', required: true },
         { page: 'digital-prehunt.html', title: 'Digital Pre-Hunt', required: false }
@@ -1898,6 +1901,7 @@ const LearningPaths = {
         { quiz: 'in-store-strategy', title: 'In-Store Strategy Quiz', required: true },
         { quiz: 'checkout-scenario', title: 'Checkout Scenario Quiz', required: true },
         { page: 'responsible-hunting.html', title: 'Responsible Hunting', required: true }
+  'calculators.html',
       ]
     }
   },

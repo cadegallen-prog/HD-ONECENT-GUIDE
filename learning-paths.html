@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning Paths - Home Depot Penny Items Guide</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">Home Depot Penny Items Guide</a>
+      <!-- Search Bar -->
+      <div class="search-container">
+        <div class="search-bar">
+          <input type="text" class="search-input" placeholder="Search guide... (Ctrl+K or /)" aria-label="Search">
+          <button class="search-btn">Search</button>
+        </div>
+        <div class="search-results"></div>
+        <div class="search-hint">Press Ctrl+K or / to quick search</div>
+      </div>
+
+      <!-- Controls Bar -->
+      <div class="controls-bar">
+        <button class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+        <div class="font-size-controls">
+          <button class="font-size-btn" data-size="small">A</button>
+          <button class="font-size-btn" data-size="medium">A</button>
+          <button class="font-size-btn" data-size="large">A</button>
+        </div>
+        <span class="progress-indicator">0/16 pages read</span>
+        <span class="level-indicator">🌱 Newbie (Level 1)</span>
+        <button class="reset-progress-btn">Reset Progress</button>
+      </div>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="what-are-pennies.html">What Are Pennies?</a></li>
+        <li><a href="clearance-lifecycle.html">Clearance Lifecycle</a></li>
+        <li><a href="digital-prehunt.html">Digital Pre-Hunt</a></li>
+        <li><a href="in-store-strategy.html">In-Store Strategy</a></li>
+        <li><a href="checkout-strategy.html">Checkout Strategy</a></li>
+        <li><a href="internal-systems.html">Internal Systems</a></li>
+        <li><a href="facts-vs-myths.html">Facts vs Myths</a></li>
+        <li><a href="responsible-hunting.html">Responsible Hunting</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="resources.html">Resources</a></li>
+        <li><a href="quick-start.html">Quick Start</a></li>
+        <li><a href="quizzes.html">Quizzes</a></li>
+        <li><a href="achievements.html">Achievements</a></li>
+        <li><a href="learning-paths.html">Learning Paths</a></li>
+        <li><a href="contribute.html">Contribute</a></li>
+        <li><a href="changelog.html">Updates</a></li>
+        <li><a href="about.html">About</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="breadcrumbs"></div>
+
+    <h1>🛤️ Learning Paths</h1>
+
+    <div class="page-metadata">
+      <span class="meta-badge icon-star difficulty-all">Guided Learning</span>
+      <span class="meta-badge icon-target difficulty-all">Structured Approach</span>
+    </div>
+
+    <div class="summary-box">
+      <h2 class="icon-star">Structured Learning for Every Level</h2>
+      <p>Follow these curated learning paths to master penny hunting step-by-step. Each path is designed to take you from beginner to expert in a specific area.</p>
+      <p><strong>Complete all paths to unlock the "Master of All Paths" achievement and earn 200 XP!</strong></p>
+    </div>
+
+    <!-- Path 1: Complete Beginner -->
+    <div class="learning-path-card difficulty-beginner">
+      <div class="path-header">
+        <div class="path-icon">🌱</div>
+        <div class="path-info">
+          <h2>Complete Beginner</h2>
+          <p class="path-description">Perfect for someone who has never penny hunted before</p>
+          <div class="path-meta">
+            <span class="path-difficulty">Beginner</span>
+            <span class="path-duration">⏱️ 1-2 weeks</span>
+            <span class="path-reward">🎁 +75 XP on completion</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="path-progress-bar">
+        <div class="path-progress-fill" id="progress-complete-beginner" style="width: 0%"></div>
+      </div>
+      <div class="path-progress-text">
+        <span id="progress-text-complete-beginner">0% Complete</span>
+      </div>
+
+      <div class="path-steps">
+        <div class="path-step" data-step="page" data-value="what-are-pennies.html">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>What Are Pennies?</h4>
+            <p>Understand the basics of penny items and why they exist</p>
+            <span class="step-required">Required</span>
+          </div>
+          <div class="step-status">⏳</div>
+        </div>
+
+        <div class="path-step" data-step="page" data-value="facts-vs-myths.html">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>Facts vs. Myths</h4>
+            <p>Separate reality from misconceptions</p>
+            <span class="step-required">Required</span>
+          </div>
+          <div class="step-status">⏳</div>
+        </div>
+
+        <div class="path-step" data-step="page" data-value="responsible-hunting.html">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4>Responsible Hunting</h4>
+            <p>Learn ethical practices and community guidelines</p>
+            <span class="step-required">Required</span>
+          </div>
+          <div class="step-status">⏳</div>
+        </div>
+
+        <div class="path-step" data-step="page" data-value="quick-start.html">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h4>Quick Start Guide</h4>
+            <p>Get started with your first penny hunt</p>
+            <span class="step-required">Required</span>
+          </div>
+          <div class="step-status">⏳</div>
+        </div>
+
+        <div class="path-step" data-step="quiz" data-value="myths-vs-facts">
+          <div class="step-number">5</div>
+          <div class="step-content">
+            <h4>Myths vs. Facts Quiz</h4>
+            <p>Test your understanding with the quiz</p>
+            <span class="step-required">Required</span>
+          </div>
+          <div class="step-status">⏳</div>
+        </div>
+
+        <div class="path-step" data-step="page" data-value="digital-prehunt.html">
+          <div class="step-number">6</div>
+          <div class="step-content">
+            <h4>Digital Pre-Hunt</h4>
+            <p>Learn how to scout online before visiting stores</p>
+            <span class="step-optional">Optional</span>
+          </div>
+          <div class="step-status">⏳</div>
+        </div>
+      </div>
+
+      <button class="path-complete-btn" id="btn-complete-beginner" style="display: none;">
+        🎉 Claim Completion Reward (+75 XP)
+      </button>
+    </div>
+
+    <!-- Path 2: Digital Scout -->
+    <div class="learning-path-card difficulty-intermediate">
+      <div class="path-header">
+        <div class="path-icon">🔍</div>
+        <div class="path-info">
+          <h2>Digital Scout</h2>
+          <p class="path-description">Master online research and app-based scouting techniques</p>
+          <div class="path-meta">
+            <span class="path-difficulty">Intermediate</span>
+            <span class="path-duration">⏱️ 1 week</span>
+            <span class="path-reward">🎁 +75 XP on completion</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="path-progress-bar">
+        <div class="path-progress-fill" id="progress-digital-scout" style="width: 0%"></div>
+      </div>
+      <div class="path-progress-text">
+        <span id="progress-text-digital-scout">0% Complete</span>
+      </div>
+
+      <div class="path-steps">
+        <div class="path-step" data-step="page" data-value="digital-prehunt.html">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>Digital Pre-Hunt</h4>
+            <p>Master app and website scouting techniques</p>
+            <span class="step-required">Required</span>
+          </div>
+          <div class="step-status">⏳</div>
+        </div>
+
+        <div class="path-step" data-step="page" data-value="internal-systems.html">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>Internal Systems</h4>
+            <p>Understand how Home Depot's systems work</p>
+            <span class="step-required">Required</span>
+          </div>
+          <div class="step-status">⏳</div>
+        </div>
+
+        <div class="path-step" data-step="page" data-value="clearance-lifecycle.html">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4>Clearance Lifecycle</h4>
+            <p>Learn markdown patterns and price endings</p>
+            <span class="step-required">Required</span>
+          </div>
+          <div class="step-status">⏳</div>
+        </div>
+
+        <div class="path-step" data-step="quiz" data-value="price-endings">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h4>Price Endings Quiz</h4>
+            <p>Test your knowledge of price endings</p>
+            <span class="step-required">Required</span>
+          </div>
+          <div class="step-status">⏳</div>
+        </div>
+
+        <div class="path-step" data-step="quiz" data-value="clearance-cadence">
+          <div class="step-number">5</div>
+          <div class="step-content">
+            <h4>Clearance Cadence Quiz</h4>
+            <p>Master markdown timing and schedules</p>
+            <span class="step-required">Required</span>
+          </div>
+          <div class="step-status">⏳</div>
+        </div>
+      </div>
+
+      <button class="path-complete-btn" id="btn-digital-scout" style="display: none;">
+        🎉 Claim Completion Reward (+75 XP)
+      </button>
+    </div>
+
+    <!-- Path 3: In-Store Expert -->
+    <div class="learning-path-card difficulty-advanced">
+      <div class="path-header">
+        <div class="path-icon">🏪</div>
+        <div class="path-info">
+          <h2>In-Store Expert</h2>
+          <p class="path-description">Deep dive into finding and purchasing penny items in stores</p>
+          <div class="path-meta">
+            <span class="path-difficulty">Advanced</span>
+            <span class="path-duration">⏱️ 2 weeks</span>
+            <span class="path-reward">🎁 +75 XP on completion</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="path-progress-bar">
+        <div class="path-progress-fill" id="progress-in-store-expert" style="width: 0%"></div>
+      </div>
+      <div class="path-progress-text">
+        <span id="progress-text-in-store-expert">0% Complete</span>
+      </div>
+
+      <div class="path-steps">
+        <div class="path-step" data-step="page" data-value="in-store-strategy.html">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>In-Store Strategy</h4>
+            <p>Learn where and how to find penny items</p>
+            <span class="step-required">Required</span>
+          </div>
+          <div class="step-status">⏳</div>
+        </div>
+
+        <div class="path-step" data-step="page" data-value="checkout-strategy.html">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>Checkout Strategy</h4>
+            <p>Master successful checkout techniques</p>
+            <span class="step-required">Required</span>
+          </div>
+          <div class="step-status">⏳</div>
+        </div>
+
+        <div class="path-step" data-step="quiz" data-value="in-store-strategy">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4>In-Store Strategy Quiz</h4>
+            <p>Test your in-store hunting knowledge</p>
+            <span class="step-required">Required</span>
+          </div>
+          <div class="step-status">⏳</div>
+        </div>
+
+        <div class="path-step" data-step="quiz" data-value="checkout-scenario">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h4>Checkout Scenario Quiz</h4>
+            <p>Practice checkout decision-making</p>
+            <span class="step-required">Required</span>
+          </div>
+          <div class="step-status">⏳</div>
+        </div>
+
+        <div class="path-step" data-step="page" data-value="responsible-hunting.html">
+          <div class="step-number">5</div>
+          <div class="step-content">
+            <h4>Responsible Hunting</h4>
+            <p>Review ethical practices and etiquette</p>
+            <span class="step-required">Required</span>
+          </div>
+          <div class="step-status">⏳</div>
+        </div>
+      </div>
+
+      <button class="path-complete-btn" id="btn-in-store-expert" style="display: none;">
+        🎉 Claim Completion Reward (+75 XP)
+      </button>
+    </div>
+
+    <hr>
+
+    <div class="callout tip">
+      <div class="callout-title icon-tip">Learning Path Tips</div>
+      <ul>
+        <li>Complete steps in order for the best learning experience</li>
+        <li>Take your time - there's no rush to finish</li>
+        <li>Required steps must be completed to finish the path</li>
+        <li>Optional steps provide extra knowledge but aren't mandatory</li>
+        <li>Quizzes require 80% to pass and count as completed</li>
+        <li>Earn achievements and XP as you progress through paths</li>
+      </ul>
+    </div>
+
+    <hr>
+
+    <div class="page-nav-buttons">
+      <a href="achievements.html" class="nav-prev-btn"><span class="nav-arrow">←</span> Achievements</a>
+      <a href="contribute.html" class="nav-next-btn">Contribute <span class="nav-arrow">→</span></a>
+    </div>
+  </main>
+
+  <footer>
+    <p>This site is based on community experience and is not affiliated with, endorsed by, or representing The Home Depot. Policies and practices vary by store and change over time. Always follow posted store policies and local laws.</p>
+  </footer>
+
+  <script src="scripts.js"></script>
+  <script>
+    // Learning paths page functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const pathIds = ['complete-beginner', 'digital-scout', 'in-store-expert'];
+
+      pathIds.forEach(pathId => {
+        updatePathProgress(pathId);
+      });
+
+      function updatePathProgress(pathId) {
+        const path = LearningPaths.paths[pathId];
+        if (!path) return;
+
+        const progress = LearningPaths.getPathProgress(pathId);
+        const isComplete = LearningPaths.isPathComplete(pathId);
+
+        // Update progress bar
+        const progressBar = document.getElementById(`progress-${pathId}`);
+        const progressText = document.getElementById(`progress-text-${pathId}`);
+        const completeBtn = document.getElementById(`btn-${pathId}`);
+
+        if (progressBar) progressBar.style.width = progress + '%';
+        if (progressText) progressText.textContent = progress + '% Complete';
+
+        // Show complete button if path is done but not claimed
+        if (isComplete && !Gamification.userData.pathsCompleted.includes(pathId)) {
+          if (completeBtn) completeBtn.style.display = 'block';
+        }
+
+        // Update step statuses
+        const pathCard = document.querySelector(`.learning-path-card.difficulty-${path.difficulty}`);
+        if (!pathCard) return;
+
+        const readPages = ProgressTracker.getReadPages();
+        const completedQuizzes = Gamification.userData.quizzesCompleted;
+
+        const steps = pathCard.querySelectorAll('.path-step');
+        steps.forEach((stepEl, index) => {
+          const step = path.steps[index];
+          if (!step) return;
+
+          const statusEl = stepEl.querySelector('.step-status');
+          let isCompleted = false;
+
+          if (step.page && readPages.includes(step.page)) {
+            isCompleted = true;
+          } else if (step.quiz && completedQuizzes.includes(step.quiz)) {
+            isCompleted = true;
+          }
+
+          if (isCompleted) {
+            stepEl.classList.add('completed');
+            if (statusEl) statusEl.textContent = '✓';
+          } else {
+            stepEl.classList.remove('completed');
+            if (statusEl) statusEl.textContent = '⏳';
+          }
+
+          // Add click handler to navigate to page/quiz
+          stepEl.style.cursor = 'pointer';
+          stepEl.addEventListener('click', () => {
+            if (step.page) {
+              window.location.href = step.page;
+            } else if (step.quiz) {
+              window.location.href = `quizzes.html#${step.quiz}`;
+            }
+          });
+        });
+      }
+
+      // Claim completion buttons
+      document.querySelectorAll('.path-complete-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const pathId = this.id.replace('btn-', '');
+          LearningPaths.checkPathCompletion(pathId);
+
+          // Show success message
+          alert(`🎉 Congratulations! You've completed the ${LearningPaths.paths[pathId].name} path and earned 75 XP!`);
+
+          // Reload to update UI
+          window.location.reload();
+        });
+      });
+    });
+  </script>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" aria-label="Back to top">↑</button>
+</body>
+</html>
