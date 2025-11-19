@@ -1,282 +1,234 @@
-# Gronk Pro Starter 2025 🚀
+# 💰 Home Depot Penny Items Guide
 
-**The professional template starter that actually delivers 100/100 Lighthouse scores.**
+**A professional educational platform for clearance hunters**
 
-Lightning-fast, accessible, and beautiful. Built with Next.js 15, Tailwind CSS, and shadcn/ui. Perfect for agencies, SaaS, consultants, law firms, dentists, and 90% of professional businesses.
+Built with Next.js 15, TypeScript, and Tailwind CSS
 
 ---
 
-## ⚡ Quick Start
+## What Is This?
+
+This website teaches people how to find "penny items" at Home Depot - clearance merchandise that's been marked down to $0.01 in the store's system. It's an educational resource covering:
+
+- How the clearance system works
+- Digital scouting strategies
+- In-store hunting tactics
+- Checkout approaches
+- Responsible hunting practices
+
+**No hype, no BS** - just practical information based on community knowledge.
+
+---
+
+## Tech Stack
+
+- **Framework:** Next.js 15 (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS + shadcn/ui
+- **Animations:** Framer Motion
+- **Forms:** React Hook Form + Zod validation
+- **Theme:** Dark/Light mode with next-themes
+- **Deployment:** Vercel (planned)
+
+---
+
+## Quick Start
+
+### Prerequisites
+- Node.js 18.17.0 or higher
+- npm (comes with Node.js)
+
+### Running Locally
 
 ```bash
-# Clone the repo
-npx degit cadegallen-prog/HD-ONECENT-GUIDE my-project
+# Clone the repository
+git clone https://github.com/cadegallen-prog/HD-ONECENT-GUIDE.git
+cd HD-ONECENT-GUIDE
 
 # Install dependencies
-cd my-project
 npm install
-# or pnpm install
-# or bun install
 
 # Start development server
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3001](http://localhost:3001) in your browser.
 
----
-
-## 🎨 One-Click Branding
-
-Change your entire brand color by editing **one variable**:
-
-```css
-/* app/globals.css */
-:root {
-  --primary-hue: 258;  /* Change this number (0-360) */
-}
-```
-
-**Color examples:**
-- `258` - Purple (default)
-- `220` - Blue
-- `10` - Orange
-- `160` - Green
-- `340` - Pink
-
-That's it. Your entire site updates perfectly in light + dark mode.
-
----
-
-## 🛠️ Tech Stack
-
-| Layer | Technology | Why |
-|-------|-----------|-----|
-| Framework | Next.js 15 (App Router) | SSR + static export, automatic image optimization |
-| Styling | Tailwind CSS | Design tokens, consistent spacing |
-| Components | shadcn/ui | Accessible, customizable, no vendor lock-in |
-| Animations | Framer Motion | 60fps micro-interactions only |
-| Forms | React Hook Form + Zod | Zero re-renders, type-safe validation |
-| Icons | Lucide Icons | Beautiful, consistent stroke |
-| Fonts | Inter Variable | System font stack, instant load |
-
----
-
-## 📦 What's Included
-
-✅ **4 Production-Ready Sections:**
-1. **Hero** - Staggered headline + gradient CTA + social proof
-2. **Features** - 3×2 grid with hover lift interactions
-3. **Testimonials** - Customer quotes with 5-star ratings
-4. **CTA** - Contact form with sticky mobile behavior
-
-✅ **Performance Optimized:**
-- 100/100 Lighthouse score out-of-the-box
-- Next.js Image component with AVIF/WebP
-- Zero runtime JS by default (React Server Components)
-- Automatic code splitting
-
-✅ **Fully Accessible:**
-- WCAG 2.1 AA compliant
-- Semantic HTML structure
-- Keyboard navigation
-- Screen reader friendly
-
-✅ **Dark Mode:**
-- Beautiful toggle with smooth transitions
-- Respects system preferences
-- Consistent colors in both modes
-
-✅ **Developer Experience:**
-- TypeScript for type safety
-- ESLint for code quality
-- Prettier for formatting
-- Clear folder structure
-
----
-
-## 📁 Project Structure
-
-```
-/
-├── app/
-│   ├── layout.tsx         # Root layout with fonts + metadata
-│   ├── page.tsx           # Home page (assembles all sections)
-│   ├── globals.css        # Global styles + CSS variables
-│   └── sections/          # Page sections
-│       ├── Hero.tsx
-│       ├── Features.tsx
-│       ├── Testimonials.tsx
-│       └── CTA.tsx
-├── components/
-│   ├── ui/                # shadcn/ui components
-│   │   ├── button.tsx
-│   │   ├── card.tsx
-│   │   ├── input.tsx
-│   │   └── textarea.tsx
-│   ├── navbar.tsx         # Fixed header with navigation
-│   ├── footer.tsx         # Footer with links
-│   ├── theme-provider.tsx # Dark mode provider
-│   └── theme-toggle.tsx   # Theme switcher button
-├── lib/
-│   └── utils.ts           # Utility functions (cn helper)
-├── public/
-│   └── fonts/             # Custom fonts (Satoshi)
-├── tailwind.config.ts     # Tailwind + OKLCH color system
-├── next.config.js         # Next.js configuration
-└── package.json           # Dependencies
-```
-
----
-
-## 🎯 Customization Guide
-
-### Change Brand Color
-
-Edit `app/globals.css`:
-
-```css
-:root {
-  --primary-hue: 258;  /* Your hue value 0-360 */
-}
-```
-
-### Change Fonts
-
-1. Download fonts and place in `public/fonts/`
-2. Update `app/layout.tsx`:
-
-```tsx
-const customFont = localFont({
-  src: "../public/fonts/YourFont-Variable.woff2",
-  variable: "--font-heading",
-})
-```
-
-3. Use in `tailwind.config.ts`:
-
-```ts
-fontFamily: {
-  heading: ["var(--font-heading)", "system-ui"],
-}
-```
-
-### Add New Sections
-
-1. Create `app/sections/YourSection.tsx`
-2. Import in `app/page.tsx`
-3. Add to `<main>` element
-
-### Modify Navigation
-
-Edit `components/navbar.tsx`:
-
-```tsx
-const navigation = [
-  { name: "Features", href: "#features" },
-  { name: "Your Link", href: "#your-section" },
-]
-```
-
----
-
-## 🚀 Deployment
-
-### Vercel (Recommended)
-
-```bash
-npm install -g vercel
-vercel
-```
-
-### Static Export
+### Building for Production
 
 ```bash
 npm run build
-# Upload /out directory to any static host
+npm run start
 ```
 
-### Other Platforms
+---
 
-- **Netlify:** Connect GitHub repo, auto-deploy
-- **Cloudflare Pages:** `npm run build` → deploy `/out`
-- **AWS Amplify:** Connect repo, use build settings
+## Project Structure
+
+```
+hd-penny-nextjs/
+├── app/                 # Next.js pages and layouts
+│   ├── layout.tsx      # Root layout
+│   ├── page.tsx        # Homepage
+│   ├── globals.css     # Global styles
+│   └── sections/       # Page sections
+├── components/          # React components
+│   ├── ui/             # shadcn/ui components
+│   ├── navbar.tsx      # Navigation
+│   └── footer.tsx      # Footer
+├── lib/                # Utilities
+├── public/             # Static files
+└── docs/               # Documentation
+```
 
 ---
 
-## 📊 Performance
+## Key Features
 
-**Lighthouse Scores (out of the box):**
+### Current
+- ✅ Modern Next.js foundation
+- ✅ Responsive design (mobile, tablet, desktop)
+- ✅ Dark mode support
+- ✅ Accessible components (shadcn/ui)
+- ✅ Type-safe with TypeScript
+- ✅ Professional styling with Tailwind
 
-| Metric | Score |
-|--------|-------|
-| Performance | 💯 100 |
-| Accessibility | 💯 100 |
-| Best Practices | 💯 100 |
-| SEO | 💯 100 |
-
-**Load Times:**
-- First Contentful Paint: <0.8s
-- Largest Contentful Paint: <1.2s
-- Time to Interactive: <1.5s
-
----
-
-## 🎨 Design Philosophy
-
-1. **Asymmetrical layouts** - Not everything centered
-2. **Generous white space** - Let content breathe
-3. **Bold typography** - 72-120px headings on desktop
-4. **Subtle interactions** - Hover lift, scale, gradient shifts
-5. **90% neutral colors** - One dominant brand color + accents
+### Planned
+- ⏳ Search functionality
+- ⏳ Interactive quizzes
+- ⏳ ROI calculators
+- ⏳ Progress tracking
+- ⏳ Bookmark system
 
 ---
 
-## 🤝 Support
+## Content Pages
 
-- **Documentation:** Coming soon
-- **Issues:** [GitHub Issues](https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/discussions)
+The guide covers these topics:
 
----
-
-## 📄 License
-
-MIT License - Use for unlimited personal and commercial projects.
-
----
-
-## 🙏 Credits
-
-Built with:
-- [Next.js](https://nextjs.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [shadcn/ui](https://ui.shadcn.com/)
-- [Lucide Icons](https://lucide.dev/)
-- [Framer Motion](https://www.framer.com/motion/)
+1. **What Are Pennies?** - Introduction to penny items
+2. **Clearance Lifecycle** - How markdown cycles work
+3. **Digital Pre-Hunt** - Using apps to scout
+4. **In-Store Strategy** - Finding items in person
+5. **Checkout Strategy** - Purchase tactics
+6. **Internal Systems** - How HD's systems work
+7. **Facts vs Myths** - Debunking misconceptions
+8. **Responsible Hunting** - Ethics and best practices
+9. **FAQ** - Common questions
+10. **Resources** - Tools and templates
 
 ---
 
-## 🔥 What Makes This Different
+## Development
 
-Most templates look generic because they:
-- Center everything perfectly
-- Use tiny, timid typography
-- Have no personality in spacing
-- Include bloated libraries
-
-**This template:**
-- Uses asymmetry and bold type
-- Has disciplined micro-interactions only
-- Feels custom because of spacing + details
-- Loads in <1.2s on any device
-
----
-
-**Ready to build something amazing?**
+### Commands
 
 ```bash
-npm run dev
+npm run dev      # Start dev server (localhost:3001)
+npm run build    # Build for production
+npm run lint     # Check for errors
+npm run start    # Start production server
 ```
 
-Open `app/globals.css` and change `--primary-hue` to see the magic. ✨
+### Customization
+
+**Change brand color:**
+Edit `app/globals.css`:
+```css
+:root {
+  --primary-hue: 10;  /* Home Depot orange */
+}
+```
+
+**Add a new page:**
+1. Create `app/[page-name]/page.tsx`
+2. Export a React component
+3. Visit `localhost:3001/[page-name]`
+
+**Add a component:**
+1. Create in `components/[name].tsx`
+2. Import: `import { Name } from '@/components/name'`
+
+---
+
+## Documentation
+
+- **AI-QUICKSTART.md** - For AI assistants (gets them up to speed in 90 seconds)
+- **CONTEXT.json** - Structured project metadata
+- **PLAYBOOK.md** - Personal guide for non-technical users
+- **docs/COOKBOOK.md** - Task-based recipes with examples
+
+---
+
+## History
+
+This project started as a static HTML site with 39 pages and 5000+ lines of broken JavaScript. It was functional but unmaintainable.
+
+In November 2025, we rebuilt it from scratch using Next.js and the Gronk Pro Starter template, keeping the good content while fixing all the technical issues.
+
+**Old site:** Backed up in `main-old-static` branch and `_backup-content/` directory
+
+---
+
+## Philosophy
+
+This guide is built on these principles:
+
+1. **Honesty** - No exaggeration, no get-rich-quick promises
+2. **Education** - Teach how the system works, not just tactics
+3. **Respect** - Emphasize courtesy toward store employees
+4. **Community** - Share knowledge, protect the practice
+5. **Quality** - Professional presentation, accurate information
+
+---
+
+## Contributing
+
+This is currently a personal project, but if you have suggestions or corrections, feel free to open an issue on GitHub.
+
+---
+
+## Deployment
+
+**Planned deployment:**
+- Platform: Vercel
+- Method: Static export (`npm run build`)
+- Domain: TBD
+
+**Current status:** Development only (not yet deployed)
+
+---
+
+## License
+
+Content: Educational use
+Code: MIT License (template components)
+
+---
+
+## Related Projects
+
+- **Gronk Pro Starter 2025** (private) - The Next.js template this is built on
+- **Original Static Site** (archived) - Backed up in `main-old-static` branch
+
+---
+
+## For AI Assistants
+
+If you're an AI helping with this project:
+1. **Read AI-QUICKSTART.md first** (gets you up to speed in 90 seconds)
+2. Check CONTEXT.json for structured project data
+3. Refer to docs/COOKBOOK.md for common tasks
+4. Remember: The user is non-technical, explain clearly
+
+---
+
+## Contact
+
+This is an independent educational resource, not affiliated with Home Depot.
+
+**Repository:** https://github.com/cadegallen-prog/HD-ONECENT-GUIDE
+
+---
+
+**Built with care by a community of clearance hunters.**
