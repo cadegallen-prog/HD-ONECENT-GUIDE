@@ -1,7 +1,7 @@
 # My HD Penny Guide Playbook
 **Your Personal Cheat Sheet (Plain English, No Jargon)**
 
-**Last Updated:** 2025-11-19
+**Last Updated:** 2025-11-19 (Added AI Session Modes)
 
 > 💡 **This is YOUR guide** - bookmark it! Everything you need to know about working with this project.
 
@@ -16,6 +16,142 @@
 3. **I'm ready!** - No re-explaining needed
 
 **That's it.** The documentation does the heavy lifting.
+
+---
+
+## 🎭 AI Session Modes (How to Get the Best Results)
+
+Use these prompts to switch the AI into different working styles:
+
+### 🧠 Strategic Mode: Explore Options Before Building
+
+**When to use:** Starting a new feature, making decisions, stuck on approach
+
+**Say this:**
+```
+Strategic mode: I need to explore options before we build anything.
+
+Read PLAYBOOK.md for context.
+
+[Describe your idea or problem]
+
+Help me think through:
+1. What are 2-3 different ways to approach this?
+2. What's cool/innovative that I might not have thought of?
+3. For each approach: What's great? What could go wrong?
+4. Which approach gives me the most flexibility later?
+5. What should I try first to validate this idea?
+
+Be creative. Suggest things I haven't considered. I want to explore possibilities.
+```
+
+**The AI will:** Act as strategic advisor, explore options, suggest creative solutions, explain tradeoffs in plain English.
+
+---
+
+### 📋 Planning Mode: Design Before Implementation
+
+**When to use:** After choosing an approach, before writing code
+
+**Say this:**
+```
+Planning mode: Let's design this feature step-by-step.
+
+Read PLAYBOOK.md and AI-QUICKSTART.md.
+
+We've decided to: [your decision from strategic mode]
+
+Create a detailed plan:
+1. Break this into 3-5 phases I can test independently
+2. What's the simplest version that proves the concept?
+3. What can I verify after each phase (without reading code)?
+4. Where might we get stuck? What's the backup plan?
+5. What should we build AFTER this to build on it?
+
+Think ahead. What opportunities does this create?
+```
+
+**The AI will:** Create step-by-step plan, identify risks, suggest testing approach, think about future possibilities.
+
+---
+
+### ⚙️ Execution Mode: Build Specific Tasks
+
+**When to use:** After strategic + planning, ready to implement
+
+**Say this:**
+```
+Execution mode: Build this specific task.
+
+Read AI-QUICKSTART.md.
+
+Task: [Clear, specific request]
+
+Success looks like:
+- [Outcome 1]
+- [Outcome 2]
+
+After building, tell me:
+1. What you built and where to test it
+2. What could break and how I'd know
+3. What we should enhance next
+4. Any creative ideas you had while building
+```
+
+**The AI will:** Implement the feature, provide testing steps, proactively suggest improvements.
+
+---
+
+### 🔍 Review Mode: Check What We've Built
+
+**When to use:** Every 3-5 features, or when things feel messy
+
+**Say this:**
+```
+Review mode: Let's step back and assess our progress.
+
+We've recently built:
+- [Feature 1]
+- [Feature 2]
+- [Feature 3]
+
+Strategic review:
+1. What patterns are emerging? What's working well?
+2. What's getting messy or fragile?
+3. What foundation work should we do now to make future features easier?
+4. What am I NOT asking about that I should be?
+5. What creative opportunities are we missing?
+6. What will bite me in 3 months if we don't address it?
+
+Be honest and proactive. Suggest improvements I haven't thought of.
+```
+
+**The AI will:** Identify technical debt, suggest refactoring, propose creative enhancements, think long-term.
+
+---
+
+## 💡 Key Principles for Working Together
+
+**1. AI Should Be Proactive**
+- Suggest better approaches even if I didn't ask
+- Point out opportunities I'm missing
+- Think ahead about what comes next
+- Be creative and exploratory
+
+**2. Optimize for My Strengths**
+- I'm great at: judging UX, making strategic decisions, describing outcomes
+- Help me leverage these strengths
+- Compensate for technical gaps without limiting creativity
+
+**3. Think in Outcomes, Not Code**
+- I can visualize user experiences
+- I can describe what success looks like
+- Help me translate vision into implementation
+
+**4. Explore Before Executing**
+- More options = better decisions
+- Creative suggestions welcome
+- Think "what's possible?" not "what's minimal?"
 
 ---
 
