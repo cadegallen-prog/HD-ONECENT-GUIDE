@@ -1,0 +1,534 @@
+{
+  "siteInfo": {
+    "name": "Home Depot Penny Items Guide",
+    "version": "2.0",
+    "lastUpdated": "2025-11-18",
+    "baseUrl": "https://yourdomain.com",
+    "description": "Comprehensive educational guide for finding penny items at Home Depot"
+  },
+
+  "navigationGroups": [
+    {
+      "id": "core-learning",
+      "name": "Core Learning Path",
+      "description": "Essential pages for understanding penny hunting",
+      "order": 1,
+      "pages": [
+        {
+          "id": "index",
+          "title": "Home",
+          "file": "index.html",
+          "url": "/index.html",
+          "description": "Welcome page and site overview",
+          "readTime": "5 min",
+          "difficulty": "beginner",
+          "keywords": ["home", "overview", "introduction"],
+          "order": 1
+        },
+        {
+          "id": "quick-start",
+          "title": "Quick Start",
+          "file": "quick-start.html",
+          "url": "/quick-start.html",
+          "description": "5-step getting started guide for new hunters",
+          "readTime": "3 min",
+          "difficulty": "beginner",
+          "keywords": ["quick start", "getting started", "beginner guide"],
+          "order": 2
+        },
+        {
+          "id": "what-are-pennies",
+          "title": "What Are Pennies?",
+          "file": "what-are-pennies.html",
+          "url": "/what-are-pennies.html",
+          "description": "Understanding penny items and how they work",
+          "readTime": "4 min",
+          "difficulty": "beginner",
+          "keywords": ["penny items", "basics", "ZMA", "clearance"],
+          "order": 3
+        },
+        {
+          "id": "clearance-lifecycle",
+          "title": "Clearance Lifecycle",
+          "file": "clearance-lifecycle.html",
+          "url": "/clearance-lifecycle.html",
+          "description": "Markdown cadences and price ending meanings",
+          "readTime": "6 min",
+          "difficulty": "intermediate",
+          "keywords": ["clearance", "markdown", "cadence", "price endings"],
+          "order": 4
+        },
+        {
+          "id": "digital-prehunt",
+          "title": "Digital Pre-Hunt",
+          "file": "digital-prehunt.html",
+          "url": "/digital-prehunt.html",
+          "description": "Scouting items using apps and websites",
+          "readTime": "7 min",
+          "difficulty": "intermediate",
+          "keywords": ["app", "website", "scouting", "digital"],
+          "order": 5
+        },
+        {
+          "id": "in-store-strategy",
+          "title": "In-Store Strategy",
+          "file": "in-store-strategy.html",
+          "url": "/in-store-strategy.html",
+          "description": "Finding penny items on shelves and in storage",
+          "readTime": "8 min",
+          "difficulty": "intermediate",
+          "keywords": ["in-store", "finding items", "strategy", "locations"],
+          "order": 6
+        },
+        {
+          "id": "checkout-strategy",
+          "title": "Checkout Strategy",
+          "file": "checkout-strategy.html",
+          "url": "/checkout-strategy.html",
+          "description": "Successfully purchasing penny items at checkout",
+          "readTime": "7 min",
+          "difficulty": "advanced",
+          "keywords": ["checkout", "purchase", "SCO", "cashier"],
+          "order": 7
+        },
+        {
+          "id": "internal-systems",
+          "title": "Internal Systems",
+          "file": "internal-systems.html",
+          "url": "/internal-systems.html",
+          "description": "Understanding Home Depot's backend systems",
+          "readTime": "6 min",
+          "difficulty": "advanced",
+          "keywords": ["systems", "ZMA", "backend", "technical"],
+          "order": 8
+        },
+        {
+          "id": "facts-vs-myths",
+          "title": "Facts vs. Myths",
+          "file": "facts-vs-myths.html",
+          "url": "/facts-vs-myths.html",
+          "description": "Debunking common misconceptions",
+          "readTime": "5 min",
+          "difficulty": "intermediate",
+          "keywords": ["myths", "facts", "misconceptions", "truth"],
+          "order": 9
+        },
+        {
+          "id": "responsible-hunting",
+          "title": "Responsible Hunting",
+          "file": "responsible-hunting.html",
+          "url": "/responsible-hunting.html",
+          "description": "Ethics and best practices for the community",
+          "readTime": "6 min",
+          "difficulty": "beginner",
+          "keywords": ["ethics", "responsibility", "community", "guidelines"],
+          "order": 10
+        }
+      ]
+    },
+    {
+      "id": "tools-resources",
+      "name": "Tools & Resources",
+      "description": "Helpful tools, calculators, and reference materials",
+      "order": 2,
+      "pages": [
+        {
+          "id": "calculators",
+          "title": "Calculators",
+          "file": "calculators.html",
+          "url": "/calculators.html",
+          "description": "Profit calculators and markdown estimators",
+          "readTime": "3 min",
+          "difficulty": "beginner",
+          "keywords": ["calculator", "profit", "markdown", "tools"],
+          "order": 11
+        },
+        {
+          "id": "resources",
+          "title": "Resources",
+          "file": "resources.html",
+          "url": "/resources.html",
+          "description": "External tools, communities, and downloads",
+          "readTime": "4 min",
+          "difficulty": "beginner",
+          "keywords": ["resources", "tools", "community", "downloads"],
+          "order": 12
+        },
+        {
+          "id": "quick-reference-card",
+          "title": "Quick Reference",
+          "file": "quick-reference-card.html",
+          "url": "/quick-reference-card.html",
+          "description": "Printable quick reference card",
+          "readTime": "2 min",
+          "difficulty": "beginner",
+          "keywords": ["reference", "cheat sheet", "printable", "quick"],
+          "order": 13
+        }
+      ]
+    },
+    {
+      "id": "interactive",
+      "name": "Interactive Features",
+      "description": "Quizzes, achievements, and learning paths",
+      "order": 3,
+      "pages": [
+        {
+          "id": "quizzes",
+          "title": "Quizzes",
+          "file": "quizzes.html",
+          "url": "/quizzes.html",
+          "description": "Test your knowledge with interactive quizzes",
+          "readTime": "Variable",
+          "difficulty": "all levels",
+          "keywords": ["quiz", "test", "knowledge", "learning"],
+          "order": 14
+        },
+        {
+          "id": "achievements",
+          "title": "Achievements",
+          "file": "achievements.html",
+          "url": "/achievements.html",
+          "description": "Track your learning progress and earn badges",
+          "readTime": "2 min",
+          "difficulty": "beginner",
+          "keywords": ["achievements", "badges", "progress", "gamification"],
+          "order": 15
+        },
+        {
+          "id": "learning-paths",
+          "title": "Learning Paths",
+          "file": "learning-paths.html",
+          "url": "/learning-paths.html",
+          "description": "Structured learning paths for different skill levels",
+          "readTime": "4 min",
+          "difficulty": "beginner",
+          "keywords": ["learning path", "curriculum", "structured learning"],
+          "order": 16
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "name": "FAQ & Reference",
+      "description": "Frequently asked questions and quick answers",
+      "order": 4,
+      "pages": [
+        {
+          "id": "faq",
+          "title": "FAQ",
+          "file": "faq.html",
+          "url": "/faq.html",
+          "description": "Frequently asked questions about penny hunting",
+          "readTime": "10 min",
+          "difficulty": "all levels",
+          "keywords": ["FAQ", "questions", "answers", "help"],
+          "order": 17
+        }
+      ]
+    },
+    {
+      "id": "personal-tools",
+      "name": "Personal Tools",
+      "description": "Your personal notes, bookmarks, and tracking",
+      "order": 5,
+      "pages": [
+        {
+          "id": "notes",
+          "title": "My Notes",
+          "file": "notes.html",
+          "url": "/notes.html",
+          "description": "Personal note-taking space",
+          "readTime": "1 min",
+          "difficulty": "beginner",
+          "keywords": ["notes", "personal", "tracking"],
+          "order": 18
+        },
+        {
+          "id": "bookmarks",
+          "title": "Bookmarks",
+          "file": "bookmarks.html",
+          "url": "/bookmarks.html",
+          "description": "Save and organize your favorite pages",
+          "readTime": "1 min",
+          "difficulty": "beginner",
+          "keywords": ["bookmarks", "favorites", "saved"],
+          "order": 19
+        }
+      ]
+    },
+    {
+      "id": "community",
+      "name": "Community & Meta",
+      "description": "About, contribute, and site information",
+      "order": 6,
+      "pages": [
+        {
+          "id": "contribute",
+          "title": "Contribute",
+          "file": "contribute.html",
+          "url": "/contribute.html",
+          "description": "Help improve this guide",
+          "readTime": "3 min",
+          "difficulty": "beginner",
+          "keywords": ["contribute", "help", "community", "feedback"],
+          "order": 20
+        },
+        {
+          "id": "changelog",
+          "title": "Updates",
+          "file": "changelog.html",
+          "url": "/changelog.html",
+          "description": "Recent changes and version history",
+          "readTime": "3 min",
+          "difficulty": "beginner",
+          "keywords": ["updates", "changelog", "history", "news"],
+          "order": 21
+        },
+        {
+          "id": "about",
+          "title": "About",
+          "file": "about.html",
+          "url": "/about.html",
+          "description": "About this guide and the team",
+          "readTime": "4 min",
+          "difficulty": "beginner",
+          "keywords": ["about", "team", "mission", "info"],
+          "order": 22
+        }
+      ]
+    },
+    {
+      "id": "templates",
+      "name": "Templates & Tools",
+      "description": "Downloadable templates and tracking tools",
+      "order": 7,
+      "pages": [
+        {
+          "id": "digital-prehunt-workflow",
+          "title": "Digital Pre-Hunt Workflow",
+          "file": "digital-prehunt-workflow.html",
+          "url": "/digital-prehunt-workflow.html",
+          "description": "Step-by-step digital scouting workflow",
+          "readTime": "5 min",
+          "difficulty": "intermediate",
+          "keywords": ["workflow", "digital", "template", "process"],
+          "order": 23
+        },
+        {
+          "id": "store-visit-checklist",
+          "title": "Store Visit Checklist",
+          "file": "store-visit-checklist.html",
+          "url": "/store-visit-checklist.html",
+          "description": "Printable in-store hunting checklist",
+          "readTime": "2 min",
+          "difficulty": "beginner",
+          "keywords": ["checklist", "in-store", "printable"],
+          "order": 24
+        },
+        {
+          "id": "store-notes-template",
+          "title": "Store Notes Template",
+          "file": "store-notes-template.html",
+          "url": "/store-notes-template.html",
+          "description": "Template for tracking store-specific info",
+          "readTime": "2 min",
+          "difficulty": "beginner",
+          "keywords": ["template", "notes", "tracking"],
+          "order": 25
+        },
+        {
+          "id": "finds-log-template",
+          "title": "Finds Log Template",
+          "file": "finds-log-template.html",
+          "url": "/finds-log-template.html",
+          "description": "Log and track your penny item finds",
+          "readTime": "2 min",
+          "difficulty": "beginner",
+          "keywords": ["log", "tracking", "finds", "template"],
+          "order": 26
+        }
+      ]
+    },
+    {
+      "id": "utility",
+      "name": "Utility Pages",
+      "description": "Site utilities and special pages",
+      "order": 8,
+      "pages": [
+        {
+          "id": "shortcuts",
+          "title": "Keyboard Shortcuts",
+          "file": "shortcuts.html",
+          "url": "/shortcuts.html",
+          "description": "List of keyboard shortcuts",
+          "readTime": "2 min",
+          "difficulty": "beginner",
+          "keywords": ["shortcuts", "keyboard", "navigation"],
+          "order": 27
+        },
+        {
+          "id": "a11y",
+          "title": "Accessibility",
+          "file": "a11y.html",
+          "url": "/a11y.html",
+          "description": "Accessibility features and support",
+          "readTime": "3 min",
+          "difficulty": "beginner",
+          "keywords": ["accessibility", "a11y", "support"],
+          "order": 28
+        },
+        {
+          "id": "offline",
+          "title": "Offline Mode",
+          "file": "offline.html",
+          "url": "/offline.html",
+          "description": "Offline functionality information",
+          "readTime": "2 min",
+          "difficulty": "beginner",
+          "keywords": ["offline", "PWA", "download"],
+          "order": 29
+        }
+      ]
+    }
+  ],
+
+  "readingOrder": [
+    "index.html",
+    "quick-start.html",
+    "what-are-pennies.html",
+    "clearance-lifecycle.html",
+    "digital-prehunt.html",
+    "in-store-strategy.html",
+    "checkout-strategy.html",
+    "internal-systems.html",
+    "facts-vs-myths.html",
+    "responsible-hunting.html",
+    "calculators.html",
+    "faq.html",
+    "resources.html",
+    "quick-reference-card.html",
+    "contribute.html",
+    "changelog.html",
+    "about.html"
+  ],
+
+  "learningPaths": {
+    "beginner": {
+      "name": "Newbie Path",
+      "description": "Start here if you're brand new to penny hunting",
+      "icon": "🌱",
+      "estimatedTime": "45 min",
+      "pages": [
+        "index.html",
+        "quick-start.html",
+        "what-are-pennies.html",
+        "responsible-hunting.html",
+        "faq.html"
+      ]
+    },
+    "intermediate": {
+      "name": "Hunter Path",
+      "description": "Ready to get serious about finding penny items",
+      "icon": "🎯",
+      "estimatedTime": "90 min",
+      "pages": [
+        "clearance-lifecycle.html",
+        "digital-prehunt.html",
+        "in-store-strategy.html",
+        "checkout-strategy.html",
+        "facts-vs-myths.html"
+      ]
+    },
+    "advanced": {
+      "name": "Expert Path",
+      "description": "Master the technical details and optimize your strategy",
+      "icon": "🏆",
+      "estimatedTime": "60 min",
+      "pages": [
+        "internal-systems.html",
+        "calculators.html",
+        "digital-prehunt-workflow.html",
+        "resources.html"
+      ]
+    }
+  },
+
+  "topicalGroups": {
+    "understanding-basics": {
+      "name": "Understanding the Basics",
+      "pages": ["what-are-pennies.html", "clearance-lifecycle.html", "facts-vs-myths.html"]
+    },
+    "finding-items": {
+      "name": "Finding Penny Items",
+      "pages": ["digital-prehunt.html", "in-store-strategy.html"]
+    },
+    "purchasing": {
+      "name": "Purchasing Strategies",
+      "pages": ["checkout-strategy.html", "responsible-hunting.html"]
+    },
+    "tools-and-tracking": {
+      "name": "Tools & Tracking",
+      "pages": ["calculators.html", "finds-log-template.html", "store-notes-template.html"]
+    },
+    "community": {
+      "name": "Community & Support",
+      "pages": ["resources.html", "contribute.html", "faq.html"]
+    }
+  },
+
+  "siteMap": {
+    "showInNavigation": [
+      "index.html",
+      "what-are-pennies.html",
+      "clearance-lifecycle.html",
+      "digital-prehunt.html",
+      "in-store-strategy.html",
+      "checkout-strategy.html",
+      "internal-systems.html",
+      "facts-vs-myths.html",
+      "responsible-hunting.html",
+      "faq.html",
+      "resources.html",
+      "quick-start.html",
+      "quizzes.html",
+      "achievements.html",
+      "learning-paths.html",
+      "contribute.html",
+      "changelog.html",
+      "notes.html",
+      "bookmarks.html",
+      "about.html"
+    ],
+    "utilityPages": [
+      "shortcuts.html",
+      "a11y.html",
+      "offline.html"
+    ],
+    "templates": [
+      "digital-prehunt-workflow.html",
+      "store-visit-checklist.html",
+      "store-notes-template.html",
+      "finds-log-template.html",
+      "quick-reference-card.html"
+    ]
+  },
+
+  "downloads": {
+    "pdf": {
+      "title": "Complete PDF Guide",
+      "file": "Home Depot Penny Items Guide.pdf",
+      "size": "259 KB",
+      "pages": 7,
+      "description": "Downloadable offline version of the full guide"
+    }
+  },
+
+  "externalLinks": {
+    "facebook": {
+      "name": "Home Depot Penny Shopping Facebook Group",
+      "url": "https://www.facebook.com/groups/homedepotpennyshopping",
+      "description": "Community Facebook group for penny hunters"
+    }
+  }
+}
