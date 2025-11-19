@@ -7,52 +7,51 @@ import { useState } from "react"
 import Link from "next/link"
 
 const navigation = [
-  { name: "Guide", href: "#features" },
-  { name: "Recent Finds", href: "/recent-finds" },
-  { name: "Store Finder", href: "/store-finder" },
-  { name: "About", href: "#testimonials" },
+  { name: "What Are Pennies", href: "#what-are-pennies" },
+  { name: "Clearance Lifecycle", href: "#clearance-lifecycle" },
+  { name: "Digital Tools", href: "#digital-tools" },
+  { name: "In-Store Strategies", href: "#in-store-strategies" },
+  { name: "FAQ", href: "#faq" },
 ]
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
-      <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
+      <nav className="container mx-auto px-4 h-16 flex items-center justify-between max-w-7xl">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary-hover flex items-center justify-center">
-            <span className="text-white font-bold text-lg">¢</span>
+          <div className="w-8 h-8 rounded bg-primary flex items-center justify-center">
+            <span className="text-primary-foreground font-bold text-lg">¢</span>
           </div>
-          <span className="font-heading font-bold text-xl group-hover:text-primary transition-colors">
+          <span className="font-heading font-semibold text-lg group-hover:text-primary transition-colors">
             HD Penny Guide
           </span>
         </Link>
 
         {/* Desktop navigation */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden lg:flex items-center gap-6">
           {navigation.map((item) => (
             <a
               key={item.name}
               href={item.href}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              className="text-sm font-heading text-muted-foreground hover:text-foreground transition-colors"
             >
               {item.name}
             </a>
           ))}
         </div>
 
-        {/* Right side - CTA + Theme toggle */}
+        {/* Right side - Theme toggle only */}
         <div className="flex items-center gap-4">
           <ThemeToggle />
-          <Button size="sm" className="hidden sm:inline-flex">
-            Get Alerts
-          </Button>
 
           {/* Mobile menu button */}
           <button
-            className="md:hidden p-2"
+            className="lg:hidden p-2"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
           >
             {mobileMenuOpen ? (
               <X className="h-6 w-6" />
@@ -65,21 +64,18 @@ export function Navbar() {
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-border bg-background">
-          <div className="container mx-auto px-4 py-4 space-y-4">
+        <div className="lg:hidden border-t border-border bg-background">
+          <div className="container mx-auto px-4 py-4 space-y-3">
             {navigation.map((item) => (
               <a
                 key={item.name}
                 href={item.href}
-                className="block text-base font-medium text-muted-foreground hover:text-foreground transition-colors"
+                className="block text-base font-heading text-muted-foreground hover:text-foreground transition-colors py-2"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {item.name}
               </a>
             ))}
-            <Button size="sm" className="w-full">
-              Get Alerts
-            </Button>
           </div>
         </div>
       )}

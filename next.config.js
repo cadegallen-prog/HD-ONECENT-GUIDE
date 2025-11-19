@@ -11,6 +11,10 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react', 'framer-motion'],
   },
+  eslint: {
+    ignoreDuringBuilds: false,
+    dirs: ['app', 'components', 'lib'],
+  },
 }
 
 module.exports = nextConfig

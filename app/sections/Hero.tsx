@@ -1,95 +1,66 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Sparkles } from "lucide-react"
-import { motion } from "framer-motion"
+import { Download, ChevronDown } from "lucide-react"
+import Image from "next/image"
 
 export function Hero() {
+  const scrollToSections = () => {
+    const sections = document.getElementById('sections')
+    sections?.scrollIntoView({ behavior: 'smooth' })
+  }
+
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-background via-background to-muted/20">
-      {/* Background gradient orbs */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-20 left-20 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse [animation-delay:2s]" />
-      </div>
+    <section className="relative bg-background">
+      <div className="container mx-auto px-4 py-12 md:py-16 max-w-5xl">
+        <div className="grid md:grid-cols-[1fr_300px] gap-8 md:gap-12 items-start">
+          {/* Left: Title and intro */}
+          <div>
+            <h1 className="text-4xl md:text-5xl font-heading font-semibold mb-6 leading-tight text-foreground">
+              Home Depot Penny Items: Complete Guide
+            </h1>
 
-      <div className="container mx-auto px-4 py-24">
-        <div className="max-w-4xl mx-auto text-center">
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary border border-primary/20 mb-8"
-          >
-            <Sparkles className="w-4 h-4" />
-            <span className="text-sm font-medium">Join 32,000+ penny hunters</span>
-          </motion.div>
-
-          {/* Staggered headline */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-6xl md:text-7xl lg:text-8xl font-heading font-bold tracking-tight mb-6 leading-[1.1]"
-          >
-            Master Home Depot
-            <br />
-            <span className="text-primary">Penny Shopping</span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed"
-          >
-            Find clearance items marked down to $0.01 before anyone else.
-            Learn the complete system from clearance cycles to checkout strategies.
-          </motion.p>
-
-          {/* CTA buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-          >
-            <Button size="lg" className="text-lg group">
-              Start Learning
-              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-            </Button>
-            <Button size="lg" variant="outline" className="text-lg">
-              Recent Finds
-            </Button>
-          </motion.div>
-
-          {/* Social proof */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="mt-16 flex flex-col items-center gap-4"
-          >
-            <p className="text-sm text-muted-foreground">
-              Trusted by 32,000+ penny hunters in our community
+            <p className="text-lg md:text-xl mb-8 leading-relaxed text-foreground">
+              A comprehensive reference for finding clearance items marked to $0.01 at Home Depot.
+              Learn the lifecycle, timing patterns, digital scouting techniques, and in-store strategies
+              used by the 32,000-member "Home Depot One Cent Items" community.
             </p>
-            <div className="flex items-center gap-2">
-              <div className="flex -space-x-2">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <div
-                    key={i}
-                    className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/30 to-primary/10 border-2 border-background flex items-center justify-center text-sm font-semibold"
-                  >
-                    {i}
-                  </div>
-                ))}
-              </div>
-              <span className="text-sm text-muted-foreground ml-2">+32,000 hunters</span>
+
+            {/* Primary actions */}
+            <div className="flex flex-col sm:flex-row gap-4 items-start">
+              <Button
+                size="lg"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Download PDF Guide
+              </Button>
+
+              <button
+                onClick={scrollToSections}
+                className="text-primary hover:text-primary/80 font-heading font-medium flex items-center gap-1 transition-colors"
+              >
+                Browse Sections
+                <ChevronDown className="w-4 h-4" />
+              </button>
             </div>
-          </motion.div>
+          </div>
+
+          {/* Right: Muted reference image */}
+          <div className="hidden md:block">
+            <div className="bg-surface border border-border rounded-lg p-6 aspect-square flex items-center justify-center">
+              <div className="text-center text-muted-foreground">
+                <div className="text-6xl font-mono font-bold mb-2">$0.01</div>
+                <div className="text-sm font-heading">PLACEHOLDER_HERO_IMAGE</div>
+                <div className="text-xs mt-2">hero-clearance-tag-mockup.png</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* Subtle divider */}
+      <div className="border-b border-border"></div>
     </section>
   )
 }

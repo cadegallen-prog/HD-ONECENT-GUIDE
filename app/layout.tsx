@@ -1,23 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 
-// Inter Variable for body text and headings
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-body",
-  display: "swap",
-});
-
-// For headings, use bold Inter until you add custom font
-const interHeading = Inter({
-  subsets: ["latin"],
-  weight: ["700", "800", "900"],
-  variable: "--font-heading",
-  display: "swap",
-});
+// Fonts are defined in globals.css using system fonts
+// This avoids network dependency on Google Fonts
 
 // To use Satoshi or custom font:
 // 1. Download font and place in public/fonts/
@@ -61,7 +47,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} ${interHeading.variable} antialiased`}>
+      <body className="antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

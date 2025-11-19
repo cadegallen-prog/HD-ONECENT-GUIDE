@@ -1,126 +1,109 @@
-import { Github, Twitter, Linkedin } from "lucide-react"
 import Link from "next/link"
-
-const footerLinks = {
-  product: [
-    { name: "Features", href: "#features" },
-    { name: "Pricing", href: "#pricing" },
-    { name: "Testimonials", href: "#testimonials" },
-    { name: "Documentation", href: "#docs" },
-  ],
-  company: [
-    { name: "About", href: "#about" },
-    { name: "Blog", href: "#blog" },
-    { name: "Careers", href: "#careers" },
-    { name: "Contact", href: "#cta" },
-  ],
-  legal: [
-    { name: "Privacy", href: "#privacy" },
-    { name: "Terms", href: "#terms" },
-    { name: "License", href: "#license" },
-  ],
-}
 
 export function Footer() {
   return (
-    <footer className="bg-muted/30 border-t border-border">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
-          {/* Brand */}
-          <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary-hover flex items-center justify-center">
-                <span className="text-white font-bold text-lg">G</span>
-              </div>
-              <span className="font-heading font-bold text-xl">Gronk Pro</span>
-            </Link>
-            <p className="text-sm text-muted-foreground mb-4">
-              Professional template starter for modern businesses. Built with care in 2025.
-            </p>
-            <div className="flex items-center gap-4">
-              <a
-                href="https://github.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <Github className="w-5 h-5" />
-              </a>
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <Linkedin className="w-5 h-5" />
-              </a>
+    <footer className="bg-surface border-t border-border">
+      <div className="container mx-auto px-4 py-12 max-w-7xl">
+        {/* Disclaimer */}
+        <div className="max-w-4xl mx-auto mb-8">
+          <div className="callout-box warning">
+            <h3 className="font-heading font-semibold mb-3 text-sm">Disclaimer</h3>
+            <div className="text-xs space-y-2 text-foreground">
+              <p>
+                This guide is an educational resource created by and for the "Home Depot One Cent Items"
+                community. It is not affiliated with, endorsed by, or sponsored by The Home Depot, Inc.
+              </p>
+              <p>
+                PLACEHOLDER_FOOTER_DISCLAIMER: All information is provided for educational purposes.
+                Retail policies vary by location and are subject to change. Store managers have
+                discretion to refuse any sale. Always respect store staff and policies. The creators
+                of this guide assume no liability for actions taken based on this information.
+              </p>
+              <p>
+                "Home Depot" is a registered trademark of Homer TLC, Inc. This guide is a
+                community-created educational resource and makes fair use of the trademark for
+                descriptive purposes only.
+              </p>
             </div>
           </div>
+        </div>
 
-          {/* Product */}
+        {/* Links */}
+        <div className="grid md:grid-cols-3 gap-8 mb-8 max-w-4xl mx-auto">
           <div>
-            <h3 className="font-semibold mb-4">Product</h3>
-            <ul className="space-y-3">
-              {footerLinks.product.map((link) => (
-                <li key={link.name}>
-                  <a
-                    href={link.href}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {link.name}
-                  </a>
-                </li>
-              ))}
+            <h3 className="font-heading font-semibold mb-4 text-sm">Reference Sections</h3>
+            <ul className="space-y-2">
+              <li>
+                <a href="#what-are-pennies" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  What Are Pennies
+                </a>
+              </li>
+              <li>
+                <a href="#clearance-lifecycle" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Clearance Lifecycle
+                </a>
+              </li>
+              <li>
+                <a href="#digital-tools" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Digital Tools
+                </a>
+              </li>
+              <li>
+                <a href="#in-store-strategies" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  In-Store Strategies
+                </a>
+              </li>
             </ul>
           </div>
 
-          {/* Company */}
           <div>
-            <h3 className="font-semibold mb-4">Company</h3>
-            <ul className="space-y-3">
-              {footerLinks.company.map((link) => (
-                <li key={link.name}>
-                  <a
-                    href={link.href}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {link.name}
-                  </a>
-                </li>
-              ))}
+            <h3 className="font-heading font-semibold mb-4 text-sm">Best Practices</h3>
+            <ul className="space-y-2">
+              <li>
+                <a href="#checkout" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Checkout Procedures
+                </a>
+              </li>
+              <li>
+                <a href="#responsible-hunting" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Responsible Hunting
+                </a>
+              </li>
+              <li>
+                <a href="#facts-vs-myths" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Facts vs Myths
+                </a>
+              </li>
+              <li>
+                <a href="#faq" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  FAQ
+                </a>
+              </li>
             </ul>
           </div>
 
-          {/* Legal */}
           <div>
-            <h3 className="font-semibold mb-4">Legal</h3>
-            <ul className="space-y-3">
-              {footerLinks.legal.map((link) => (
-                <li key={link.name}>
-                  <a
-                    href={link.href}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {link.name}
-                  </a>
-                </li>
-              ))}
+            <h3 className="font-heading font-semibold mb-4 text-sm">Community</h3>
+            <ul className="space-y-2">
+              <li>
+                <span className="text-sm text-muted-foreground">
+                  Facebook: "Home Depot One Cent Items"
+                </span>
+              </li>
+              <li>
+                <span className="text-sm text-muted-foreground">
+                  32,000+ active members
+                </span>
+              </li>
             </ul>
           </div>
         </div>
 
         {/* Bottom bar */}
-        <div className="pt-8 border-t border-border">
-          <p className="text-sm text-muted-foreground text-center">
-            © {new Date().getFullYear()} Gronk Pro. All rights reserved. Built with Next.js 15 & Tailwind CSS.
+        <div className="pt-6 border-t border-border">
+          <p className="text-xs text-muted-foreground text-center">
+            © {new Date().getFullYear()} HD Penny Guide Community Resource. Not affiliated with The Home Depot, Inc.
+            Built with Next.js & Tailwind CSS.
           </p>
         </div>
       </div>
