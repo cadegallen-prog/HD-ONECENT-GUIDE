@@ -1,7 +1,7 @@
 {
-  "name": "gronk-pro-starter-2025",
+  "name": "hd-penny-guide-nextjs",
   "version": "1.0.0",
-  "description": "Professional template starter for client projects - 100/100 Lighthouse scores",
+  "description": "Home Depot Penny Items Guide - Professional Next.js educational platform",
   "private": true,
   "scripts": {
     "dev": "next dev",
