@@ -23,7 +23,7 @@ export function Hero() {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary border border-primary/20 mb-8"
           >
             <Sparkles className="w-4 h-4" />
-            <span className="text-sm font-medium">Built for professionals in 2025</span>
+            <span className="text-sm font-medium">Join 32,000+ penny hunters</span>
           </motion.div>
 
           {/* Staggered headline */}
@@ -33,9 +33,9 @@ export function Hero() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-6xl md:text-7xl lg:text-8xl font-heading font-bold tracking-tight mb-6 leading-[1.1]"
           >
-            Beautiful websites
+            Master Home Depot
             <br />
-            <span className="text-primary">that convert</span>
+            <span className="text-primary">Penny Shopping</span>
           </motion.h1>
 
           <motion.p
@@ -44,8 +44,8 @@ export function Hero() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed"
           >
-            The professional template starter that scores 100/100 on Lighthouse.
-            Lightning-fast, accessible, and ready to customize in 60 seconds.
+            Find clearance items marked down to $0.01 before anyone else.
+            Learn the complete system from clearance cycles to checkout strategies.
           </motion.p>
 
           {/* CTA buttons */}
@@ -56,11 +56,11 @@ export function Hero() {
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
             <Button size="lg" className="text-lg group">
-              Get Started
+              Start Learning
               <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Button>
             <Button size="lg" variant="outline" className="text-lg">
-              View Demo
+              Recent Finds
             </Button>
           </motion.div>
 
@@ -72,7 +72,7 @@ export function Hero() {
             className="mt-16 flex flex-col items-center gap-4"
           >
             <p className="text-sm text-muted-foreground">
-              Trusted by 500+ agencies and freelancers
+              Trusted by 32,000+ penny hunters in our community
             </p>
             <div className="flex items-center gap-2">
               <div className="flex -space-x-2">
@@ -85,7 +85,7 @@ export function Hero() {
                   </div>
                 ))}
               </div>
-              <span className="text-sm text-muted-foreground ml-2">+500 more</span>
+              <span className="text-sm text-muted-foreground ml-2">+32,000 hunters</span>
             </div>
           </motion.div>
         </div>

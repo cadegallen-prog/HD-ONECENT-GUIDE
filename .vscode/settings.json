@@ -1,0 +1,6 @@
+{
+    "python-envs.defaultEnvManager": "ms-python.python:venv",
+    "python-envs.pythonProjects": [],
+    "python.useEnvironmentsExtension": true,
+    "python.defaultInterpreterPath": "C:\\Users\\cadeg\\AppData\\Local\\Programs\\Python\\Python311\\python.exe"
+}

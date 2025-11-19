@@ -5,39 +5,39 @@ import { Star } from "lucide-react"
 
 const testimonials = [
   {
-    name: "Sarah Chen",
-    role: "Founder, DesignLab",
-    content: "This template saved me 40+ hours of development. The attention to detail is incredible, and my clients can't tell it's a template. Worth every penny.",
+    name: "Sarah M.",
+    role: "DIY Enthusiast, Texas",
+    content: "Found 12 gallons of Behr paint marked to a penny last month. Saved over $400 and finally painted my whole house. This guide taught me exactly when to check the paint aisle.",
     rating: 5,
   },
   {
-    name: "Marcus Rodriguez",
-    role: "Freelance Developer",
-    content: "I've used countless templates and this is the only one that actually delivers on the 'premium' promise. The code quality is exceptional.",
+    name: "Mike R.",
+    role: "Reseller, Florida",
+    content: "I've been penny shopping for 2 years, but this guide showed me timing patterns I never knew existed. My monthly finds tripled after learning the clearance cycles.",
     rating: 5,
   },
   {
-    name: "Emily Thompson",
-    role: "Agency Owner",
-    content: "We've built 15+ client sites with this starter. The one-click branding feature alone has saved us hundreds of hours. Game changer.",
+    name: "Jennifer L.",
+    role: "Budget Shopper, Ohio",
+    content: "As a single mom, every dollar counts. Last week I got 25 items for under $1 total. The checkout strategies helped me handle it professionally and the cashiers were super nice about it.",
     rating: 5,
   },
   {
-    name: "David Park",
-    role: "Product Designer",
-    content: "Finally, a template that respects design systems. The OKLCH color implementation is brilliant. No more color inconsistencies.",
+    name: "Carlos G.",
+    role: "Tool Collector, California",
+    content: "Scored 8 DeWalt batteries at $0.01 each using the digital scouting techniques. That's $400+ in savings. The route optimizer saves me so much gas money too.",
     rating: 5,
   },
   {
-    name: "Lisa Anderson",
-    role: "SaaS Founder",
-    content: "The performance is insane. We went from 65 Lighthouse to 100 across all metrics. Our conversion rate improved by 23%.",
+    name: "Amanda K.",
+    role: "Home Renovator, Georgia",
+    content: "Found enough clearance flooring to redo my entire kitchen for $3.50. The in-store tactics section is gold - I know exactly where to look now.",
     rating: 5,
   },
   {
-    name: "James Mitchell",
-    role: "Tech Lead",
-    content: "Best code quality I've seen in a template. TypeScript, proper separation of concerns, and actually maintainable. Impressed.",
+    name: "Tom B.",
+    role: "Penny Hunter, Michigan",
+    content: "The legal and ethical section helped me understand the line between smart shopping and policy violations. I hunt responsibly now and have great relationships with my local stores.",
     rating: 5,
   },
 ]
@@ -48,10 +48,10 @@ export function Testimonials() {
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-heading font-bold mb-6">
-            Loved by developers and designers
+            Real finds from real hunters
           </h2>
           <p className="text-xl text-muted-foreground">
-            Join hundreds of professionals building better websites faster.
+            Join 32,000+ penny hunters saving hundreds every month.
           </p>
         </div>
 

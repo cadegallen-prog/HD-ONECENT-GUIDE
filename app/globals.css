@@ -5,7 +5,7 @@
 @layer base {
   :root {
     /* Change this single value to rebrand entire site */
-    --primary-hue: 258;
+    --primary-hue: 20;
 
     /* Base colors */
     --background: 0 0% 100%;
@@ -47,7 +47,7 @@
   }
 
   .dark {
-    --primary-hue: 258;
+    --primary-hue: 20;
 
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;

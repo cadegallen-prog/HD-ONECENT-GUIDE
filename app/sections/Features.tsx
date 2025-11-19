@@ -1,38 +1,38 @@
 "use client"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Zap, Shield, Palette, Rocket, Code2, TrendingUp } from "lucide-react"
+import { Calendar, Search, Store, CreditCard, Scale, Users } from "lucide-react"
 
 const features = [
   {
-    icon: Zap,
-    title: "Lightning Fast",
-    description: "Optimized for performance with Next.js 15 and React Server Components. Zero runtime JS by default.",
+    icon: Calendar,
+    title: "Understand Clearance Cycles",
+    description: "Learn exactly when Home Depot marks items to penny. Master the timing, patterns, and seasonal cycles to hunt at the perfect moment.",
   },
   {
-    icon: Shield,
-    title: "100% Accessible",
-    description: "WCAG 2.1 AA compliant out of the box. Semantic HTML, ARIA labels, and keyboard navigation built-in.",
+    icon: Search,
+    title: "Digital Scouting Strategies",
+    description: "Discover how to pre-scout inventory online, identify high-probability stores, and plan your hunting routes for maximum efficiency.",
   },
   {
-    icon: Palette,
-    title: "One-Click Branding",
-    description: "Change a single CSS variable to rebrand your entire site. OKLCH color system for perfect consistency.",
+    icon: Store,
+    title: "In-Store Tactics",
+    description: "Navigate aisles like a pro. Learn where penny items hide, how to scan efficiently, and what signals indicate fresh markdowns.",
   },
   {
-    icon: Rocket,
-    title: "SEO Optimized",
-    description: "Perfect Lighthouse scores. Automatic sitemap, meta tags, Open Graph, and structured data included.",
+    icon: CreditCard,
+    title: "Checkout Best Practices",
+    description: "Handle transactions smoothly and professionally. Know your rights, avoid common mistakes, and build positive relationships with staff.",
   },
   {
-    icon: Code2,
-    title: "Developer Experience",
-    description: "TypeScript, Tailwind CSS, and shadcn/ui. Beautiful code that's a joy to maintain and extend.",
+    icon: Scale,
+    title: "Legal & Ethical Practices",
+    description: "Hunt responsibly and legally. Understand store policies, quantity limits, and the difference between savvy shopping and policy violations.",
   },
   {
-    icon: TrendingUp,
-    title: "Conversion Focused",
-    description: "Designed with micro-interactions and psychology principles that drive engagement and conversions.",
+    icon: Users,
+    title: "Community Knowledge",
+    description: "Join 32,000+ hunters sharing real-time finds, store-specific tips, and proven strategies. Learn from collective experience.",
   },
 ]
 
@@ -42,10 +42,10 @@ export function Features() {
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-heading font-bold mb-6">
-            Everything you need to launch fast
+            Everything you need to find pennies
           </h2>
           <p className="text-xl text-muted-foreground">
-            Built with modern best practices and optimized for real business results.
+            A complete system from beginner basics to advanced tactics. Start finding penny items today.
           </p>
         </div>
 

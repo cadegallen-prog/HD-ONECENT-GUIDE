@@ -7,10 +7,10 @@ import { useState } from "react"
 import Link from "next/link"
 
 const navigation = [
-  { name: "Features", href: "#features" },
-  { name: "Testimonials", href: "#testimonials" },
-  { name: "Pricing", href: "#pricing" },
-  { name: "Contact", href: "#cta" },
+  { name: "Guide", href: "#features" },
+  { name: "Recent Finds", href: "/recent-finds" },
+  { name: "Store Finder", href: "/store-finder" },
+  { name: "About", href: "#testimonials" },
 ]
 
 export function Navbar() {
@@ -22,10 +22,10 @@ export function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary-hover flex items-center justify-center">
-            <span className="text-white font-bold text-lg">G</span>
+            <span className="text-white font-bold text-lg">¢</span>
           </div>
           <span className="font-heading font-bold text-xl group-hover:text-primary transition-colors">
-            Gronk Pro
+            HD Penny Guide
           </span>
         </Link>
 
@@ -46,7 +46,7 @@ export function Navbar() {
         <div className="flex items-center gap-4">
           <ThemeToggle />
           <Button size="sm" className="hidden sm:inline-flex">
-            Get Started
+            Get Alerts
           </Button>
 
           {/* Mobile menu button */}
@@ -78,7 +78,7 @@ export function Navbar() {
               </a>
             ))}
             <Button size="sm" className="w-full">
-              Get Started
+              Get Alerts
             </Button>
           </div>
         </div>

@@ -31,10 +31,10 @@ export function CTA() {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold mb-6">
-              Ready to build something amazing?
+              Never miss a penny find in your area
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Get started with the professional template that delivers results. No credit card required.
+              Join 32,000+ hunters getting weekly alerts, exclusive tips, and recent finds delivered to your inbox.
             </p>
           </div>
 
@@ -44,34 +44,34 @@ export function CTA() {
               <div className="flex items-start gap-4">
                 <div className="w-2 h-2 rounded-full bg-primary mt-2" />
                 <div>
-                  <h3 className="font-semibold text-lg mb-1">Instant access</h3>
-                  <p className="text-muted-foreground">Clone and deploy in under 5 minutes</p>
+                  <h3 className="font-semibold text-lg mb-1">Weekly penny alerts</h3>
+                  <p className="text-muted-foreground">Get notified when items hit penny in your region</p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
                 <div className="w-2 h-2 rounded-full bg-primary mt-2" />
                 <div>
-                  <h3 className="font-semibold text-lg mb-1">Lifetime updates</h3>
-                  <p className="text-muted-foreground">Free updates and improvements forever</p>
+                  <h3 className="font-semibold text-lg mb-1">Exclusive hunting tips</h3>
+                  <p className="text-muted-foreground">Advanced strategies not in the public guide</p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
                 <div className="w-2 h-2 rounded-full bg-primary mt-2" />
                 <div>
-                  <h3 className="font-semibold text-lg mb-1">Premium support</h3>
-                  <p className="text-muted-foreground">Get help when you need it from the creator</p>
+                  <h3 className="font-semibold text-lg mb-1">Community finds digest</h3>
+                  <p className="text-muted-foreground">See what 32k+ hunters found this week</p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
                 <div className="w-2 h-2 rounded-full bg-primary mt-2" />
                 <div>
-                  <h3 className="font-semibold text-lg mb-1">Commercial license</h3>
-                  <p className="text-muted-foreground">Use for unlimited client projects</p>
+                  <h3 className="font-semibold text-lg mb-1">100% free, no spam</h3>
+                  <p className="text-muted-foreground">Unsubscribe anytime. We respect your inbox</p>
                 </div>
               </div>
             </div>
 
-            {/* Right side - Contact form */}
+            {/* Right side - Email signup form */}
             <div className="bg-card p-8 rounded-2xl border-2 shadow-xl">
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
@@ -81,7 +81,7 @@ export function CTA() {
                   <Input
                     id="email"
                     type="email"
-                    placeholder="you@company.com"
+                    placeholder="your.email@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -90,23 +90,25 @@ export function CTA() {
                 </div>
                 <div>
                   <label htmlFor="message" className="block text-sm font-medium mb-2">
-                    What are you building?
+                    Your state (optional)
                   </label>
-                  <Textarea
+                  <Input
                     id="message"
-                    placeholder="Tell us about your project..."
+                    placeholder="e.g., Texas"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    required
                     className="w-full"
                   />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Helps us send you relevant regional finds
+                  </p>
                 </div>
                 <Button type="submit" size="lg" className="w-full group">
-                  Get Started Now
+                  Get Penny Alerts
                   <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Button>
                 <p className="text-xs text-center text-muted-foreground mt-4">
-                  Free to clone. No credit card required. MIT licensed.
+                  Free forever. We never share your email. Unsubscribe anytime.
                 </p>
               </form>
             </div>

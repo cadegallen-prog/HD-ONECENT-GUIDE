@@ -30,23 +30,23 @@ const interHeading = Inter({
 // });
 
 export const metadata: Metadata = {
-  title: "Professional Template Starter - Gronk Pro 2025",
-  description: "Lightning-fast, accessible, and beautiful professional website template. Built with Next.js 15, Tailwind CSS, and shadcn/ui. Perfect for agencies, SaaS, consultants, and professional services.",
-  keywords: ["Next.js", "Tailwind CSS", "Professional Template", "Business Website", "Agency Template"],
-  authors: [{ name: "Gronk Pro" }],
-  metadataBase: new URL("https://gronk-pro-starter-2025.vercel.app"),
+  title: "HD Penny Guide - Master Home Depot Penny Shopping",
+  description: "Learn how to find Home Depot penny items (clearance marked to $0.01). Complete guide covering clearance cycles, digital scouting, in-store strategies, and responsible hunting practices. Join 32,000+ penny hunters.",
+  keywords: ["home depot penny items", "hd clearance penny", "penny shopping", "home depot clearance", "clearance lifecycle", "penny hunting", "retail clearance"],
+  authors: [{ name: "HD Penny Guide" }],
+  metadataBase: new URL("https://hd-penny-guide.vercel.app"), // Update with your actual domain
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://gronk-pro-starter-2025.vercel.app",
-    title: "Professional Template Starter - Gronk Pro 2025",
-    description: "Lightning-fast, accessible, and beautiful professional website template.",
-    siteName: "Gronk Pro Starter",
+    url: "https://hd-penny-guide.vercel.app",
+    title: "HD Penny Guide - Master Home Depot Penny Shopping",
+    description: "Complete guide to finding Home Depot penny items. Learn clearance cycles, digital strategies, and in-store tactics from 32,000+ penny hunters.",
+    siteName: "HD Penny Guide",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Professional Template Starter - Gronk Pro 2025",
-    description: "Lightning-fast, accessible, and beautiful professional website template.",
+    title: "HD Penny Guide - Master Home Depot Penny Shopping",
+    description: "Complete guide to finding Home Depot penny items. Learn clearance cycles, digital strategies, and in-store tactics.",
   },
   robots: {
     index: true,
