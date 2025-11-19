@@ -1,0 +1,306 @@
+{
+  "pages": [
+    { "id": "home", "path": "/", "altPaths": ["/index.html"], "title": "Home", "xp": 10 },
+    { "id": "what-are-pennies", "path": "/what-are-pennies.html", "title": "What Are Pennies?", "xp": 10 },
+    { "id": "clearance-lifecycle", "path": "/clearance-lifecycle.html", "title": "Clearance Lifecycle", "xp": 10 },
+    { "id": "digital-prehunt", "path": "/digital-prehunt.html", "title": "Digital Pre-Hunt", "xp": 10 },
+    { "id": "in-store-strategy", "path": "/in-store-strategy.html", "title": "In-Store Strategy", "xp": 10 },
+    { "id": "checkout-strategy", "path": "/checkout-strategy.html", "title": "Checkout Strategy", "xp": 10 },
+    { "id": "internal-systems", "path": "/internal-systems.html", "title": "Internal Systems", "xp": 10 },
+    { "id": "facts-vs-myths", "path": "/facts-vs-myths.html", "title": "Facts vs Myths", "xp": 10 },
+    { "id": "responsible-hunting", "path": "/responsible-hunting.html", "title": "Responsible Hunting", "xp": 10 },
+    { "id": "faq", "path": "/faq.html", "title": "FAQ", "xp": 10 },
+    { "id": "about", "path": "/about.html", "title": "About", "xp": 10 },
+    { "id": "resources", "path": "/resources.html", "title": "Resources", "xp": 10 },
+    { "id": "quick-start", "path": "/quick-start.html", "title": "Quick Start", "xp": 10 },
+    { "id": "learning-paths", "path": "/learning-paths.html", "title": "Learning Paths", "xp": 10 },
+    { "id": "quizzes", "path": "/quizzes.html", "title": "Quizzes", "xp": 10 },
+    { "id": "updates", "path": "/updates.html", "title": "Updates", "xp": 10 }
+  ],
+
+  "learningPaths": {
+    "guided": {
+      "id": "guided",
+      "name": "Guided Learning",
+      "description": "Perfect for complete beginners. Start from the basics and build a solid foundation.",
+      "difficulty": "Beginner",
+      "icon": "🎓",
+      "estimatedTime": "45 min",
+      "completionXP": 100,
+      "pages": [
+        "what-are-pennies",
+        "clearance-lifecycle",
+        "in-store-strategy",
+        "checkout-strategy",
+        "responsible-hunting"
+      ]
+    },
+    "structured": {
+      "id": "structured",
+      "name": "Structured Approach",
+      "description": "For methodical learners who want comprehensive knowledge of all systems.",
+      "difficulty": "Intermediate",
+      "icon": "📚",
+      "estimatedTime": "60 min",
+      "completionXP": 100,
+      "pages": [
+        "digital-prehunt",
+        "in-store-strategy",
+        "checkout-strategy",
+        "internal-systems",
+        "facts-vs-myths"
+      ]
+    },
+    "quickStart": {
+      "id": "quickStart",
+      "name": "Quick Start",
+      "description": "Fast track to get hunting quickly. Learn the essentials in minimal time.",
+      "difficulty": "Fast Track",
+      "icon": "⚡",
+      "estimatedTime": "20 min",
+      "completionXP": 100,
+      "pages": [
+        "quick-start",
+        "what-are-pennies",
+        "in-store-strategy",
+        "checkout-strategy"
+      ]
+    }
+  },
+
+  "levels": [
+    { "level": 1, "name": "Newbie", "minXP": 0, "maxXP": 50, "icon": "🌱", "color": "#8BC34A" },
+    { "level": 2, "name": "Beginner", "minXP": 51, "maxXP": 150, "icon": "🔍", "color": "#03A9F4" },
+    { "level": 3, "name": "Intermediate", "minXP": 151, "maxXP": 300, "icon": "🎯", "color": "#FF9800" },
+    { "level": 4, "name": "Advanced", "minXP": 301, "maxXP": 500, "icon": "⭐", "color": "#9C27B0" },
+    { "level": 5, "name": "Expert", "minXP": 501, "maxXP": 999999, "icon": "👑", "color": "#FFD700" }
+  ],
+
+  "achievements": [
+    {
+      "id": "first-steps",
+      "name": "First Steps",
+      "description": "Visit your first page",
+      "icon": "👣",
+      "xpBonus": 10,
+      "category": "progress",
+      "condition": { "type": "pagesRead", "count": 1 }
+    },
+    {
+      "id": "knowledge-seeker",
+      "name": "Knowledge Seeker",
+      "description": "Read 5 pages",
+      "icon": "🔍",
+      "xpBonus": 25,
+      "category": "progress",
+      "condition": { "type": "pagesRead", "count": 5 }
+    },
+    {
+      "id": "bookworm",
+      "name": "Bookworm",
+      "description": "Read 10 pages",
+      "icon": "📖",
+      "xpBonus": 50,
+      "category": "progress",
+      "condition": { "type": "pagesRead", "count": 10 }
+    },
+    {
+      "id": "completionist",
+      "name": "Completionist",
+      "description": "Read all 16 pages",
+      "icon": "🏆",
+      "xpBonus": 100,
+      "category": "progress",
+      "condition": { "type": "pagesRead", "count": 16 }
+    },
+    {
+      "id": "path-explorer",
+      "name": "Path Explorer",
+      "description": "Start a learning path",
+      "icon": "🗺️",
+      "xpBonus": 15,
+      "category": "paths",
+      "condition": { "type": "pathStarted", "count": 1 }
+    },
+    {
+      "id": "path-master",
+      "name": "Path Master",
+      "description": "Complete any learning path",
+      "icon": "🎖️",
+      "xpBonus": 75,
+      "category": "paths",
+      "condition": { "type": "pathsCompleted", "count": 1 }
+    },
+    {
+      "id": "master-of-all-paths",
+      "name": "Master of All Paths",
+      "description": "Complete all 3 learning paths",
+      "icon": "👑",
+      "xpBonus": 200,
+      "category": "paths",
+      "condition": { "type": "pathsCompleted", "count": 3 }
+    },
+    {
+      "id": "quiz-taker",
+      "name": "Quiz Taker",
+      "description": "Complete your first quiz",
+      "icon": "📝",
+      "xpBonus": 20,
+      "category": "quizzes",
+      "condition": { "type": "quizzesCompleted", "count": 1 }
+    },
+    {
+      "id": "quiz-champion",
+      "name": "Quiz Champion",
+      "description": "Score 100% on any quiz",
+      "icon": "🏅",
+      "xpBonus": 50,
+      "category": "quizzes",
+      "condition": { "type": "perfectQuizzes", "count": 1 }
+    },
+    {
+      "id": "perfect-student",
+      "name": "Perfect Student",
+      "description": "Score 100% on all quizzes",
+      "icon": "🌟",
+      "xpBonus": 150,
+      "category": "quizzes",
+      "condition": { "type": "perfectQuizzes", "count": 5 }
+    },
+    {
+      "id": "speed-reader",
+      "name": "Speed Reader",
+      "description": "Read 5 pages in one session",
+      "icon": "⚡",
+      "xpBonus": 30,
+      "category": "engagement",
+      "condition": { "type": "pagesInSession", "count": 5 }
+    },
+    {
+      "id": "night-owl",
+      "name": "Night Owl",
+      "description": "Use dark mode",
+      "icon": "🌙",
+      "xpBonus": 5,
+      "category": "customization",
+      "condition": { "type": "usedDarkMode" }
+    },
+    {
+      "id": "customizer",
+      "name": "Customizer",
+      "description": "Change font size",
+      "icon": "🎨",
+      "xpBonus": 5,
+      "category": "customization",
+      "condition": { "type": "changedFontSize" }
+    },
+    {
+      "id": "dedicated-learner",
+      "name": "Dedicated Learner",
+      "description": "Visit the site 5 times",
+      "icon": "💪",
+      "xpBonus": 40,
+      "category": "engagement",
+      "condition": { "type": "visitCount", "count": 5 }
+    },
+    {
+      "id": "returning-user",
+      "name": "Returning User",
+      "description": "Visit on 3 different days",
+      "icon": "📅",
+      "xpBonus": 35,
+      "category": "engagement",
+      "condition": { "type": "uniqueDays", "count": 3 }
+    },
+    {
+      "id": "early-bird",
+      "name": "Early Bird",
+      "description": "Visit the site before 8 AM",
+      "icon": "🌅",
+      "xpBonus": 10,
+      "category": "engagement",
+      "condition": { "type": "earlyMorningVisit" }
+    },
+    {
+      "id": "weekend-warrior",
+      "name": "Weekend Warrior",
+      "description": "Visit on a weekend",
+      "icon": "🎉",
+      "xpBonus": 10,
+      "category": "engagement",
+      "condition": { "type": "weekendVisit" }
+    },
+    {
+      "id": "penny-expert",
+      "name": "Penny Expert",
+      "description": "Reach Expert level (Level 5)",
+      "icon": "🎓",
+      "xpBonus": 100,
+      "category": "progression",
+      "condition": { "type": "reachedLevel", "level": 5 }
+    },
+    {
+      "id": "level-up",
+      "name": "Level Up!",
+      "description": "Reach Level 2",
+      "icon": "⬆️",
+      "xpBonus": 15,
+      "category": "progression",
+      "condition": { "type": "reachedLevel", "level": 2 }
+    },
+    {
+      "id": "halfway-there",
+      "name": "Halfway There",
+      "description": "Read 8 pages (halfway to completion)",
+      "icon": "🎯",
+      "xpBonus": 40,
+      "category": "progress",
+      "condition": { "type": "pagesRead", "count": 8 }
+    },
+    {
+      "id": "faq-master",
+      "name": "FAQ Master",
+      "description": "Read the entire FAQ page",
+      "icon": "❓",
+      "xpBonus": 15,
+      "category": "special",
+      "condition": { "type": "specificPage", "pageId": "faq" }
+    },
+    {
+      "id": "responsible-hunter",
+      "name": "Responsible Hunter",
+      "description": "Read the Responsible Hunting page",
+      "icon": "🤝",
+      "xpBonus": 20,
+      "category": "special",
+      "condition": { "type": "specificPage", "pageId": "responsible-hunting" }
+    },
+    {
+      "id": "myth-buster",
+      "name": "Myth Buster",
+      "description": "Read Facts vs Myths",
+      "icon": "💡",
+      "xpBonus": 15,
+      "category": "special",
+      "condition": { "type": "specificPage", "pageId": "facts-vs-myths" }
+    },
+    {
+      "id": "systems-expert",
+      "name": "Systems Expert",
+      "description": "Read Internal Systems page",
+      "icon": "⚙️",
+      "xpBonus": 15,
+      "category": "special",
+      "condition": { "type": "specificPage", "pageId": "internal-systems" }
+    },
+    {
+      "id": "achievement-hunter",
+      "name": "Achievement Hunter",
+      "description": "Unlock 10 achievements",
+      "icon": "🏆",
+      "xpBonus": 75,
+      "category": "meta",
+      "condition": { "type": "achievementsUnlocked", "count": 10 }
+    }
+  ]
+}

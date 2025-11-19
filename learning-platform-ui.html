@@ -1,0 +1,429 @@
+<!--
+  HD Penny Guide - Learning Platform UI Components
+
+  This file contains all HTML snippets needed to integrate the learning platform
+  Copy and paste these components into your existing pages as needed
+-->
+
+<!-- ============================================================================
+     HEADER COMPONENTS
+     Add these to your page header/navigation area
+     ============================================================================ -->
+
+<!-- Progress Indicator (shows X/16 pages read) -->
+<div class="learning-progress-container">
+  <div class="learning-progress-label">
+    <span class="learning-progress-text">0/16 pages read</span>
+  </div>
+  <div class="learning-progress-bar-container">
+    <div class="learning-progress-bar" style="width: 0%"></div>
+  </div>
+</div>
+
+<!-- Level Badge (shows current level with icon and tooltip) -->
+<div class="learning-level-container">
+  <div class="learning-level-badge" data-level="1">
+    <span class="learning-level-icon">🌱</span>
+    <span class="learning-level-text">Level 1: Newbie</span>
+  </div>
+  <div class="learning-level-tooltip">
+    <div class="tooltip-content">
+      <div class="tooltip-level">Level 1: Newbie</div>
+      <div class="tooltip-xp learning-xp-tooltip">0 XP • 50 needed</div>
+    </div>
+  </div>
+</div>
+
+<!-- XP Progress Bar (shows progress to next level) -->
+<div class="learning-xp-container">
+  <div class="learning-xp-label">
+    <span class="learning-xp-text">0 XP (50 to Level 2)</span>
+  </div>
+  <div class="learning-xp-bar-container">
+    <div class="learning-xp-bar" style="width: 0%"></div>
+  </div>
+</div>
+
+<!-- Combined Header Widget (all-in-one compact version) -->
+<div class="learning-header-widget">
+  <div class="widget-level">
+    <span class="learning-level-icon">🌱</span>
+    <span class="learning-level-text">Level 1</span>
+  </div>
+  <div class="widget-progress">
+    <div class="widget-label">
+      <span class="learning-progress-text">0/16</span>
+      <span class="learning-xp-text">0 XP</span>
+    </div>
+    <div class="widget-bars">
+      <div class="bar-container">
+        <div class="learning-progress-bar" style="width: 0%"></div>
+      </div>
+      <div class="bar-container">
+        <div class="learning-xp-bar" style="width: 0%"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================================================
+     LEARNING PATHS PAGE
+     Create a new page: learning-paths.html
+     ============================================================================ -->
+
+<div class="learning-paths-page">
+  <header>
+    <h1>Learning Paths</h1>
+    <p>Choose your learning journey. Complete all pages in a path to earn bonus XP!</p>
+  </header>
+
+  <!-- Path 1: Guided Learning -->
+  <div class="learning-path-card" data-path="guided">
+    <div class="path-header">
+      <div class="path-icon">🎓</div>
+      <div class="path-info">
+        <h2>Guided Learning</h2>
+        <div class="path-meta">
+          <span class="path-difficulty beginner">Beginner</span>
+          <span class="path-time">⏱️ ~45 min</span>
+        </div>
+      </div>
+      <div class="path-status">Not Started</div>
+    </div>
+
+    <p class="path-description">
+      Perfect for complete beginners. Start from the basics and build a solid foundation.
+    </p>
+
+    <div class="path-progress">
+      <div class="path-progress-text">0/5 pages</div>
+      <div class="path-progress-bar-container">
+        <div class="path-progress-bar" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <div class="path-pages">
+      <a href="/what-are-pennies.html" class="path-page-link">
+        <span class="page-check">☐</span>
+        <span class="page-title">What Are Pennies?</span>
+      </a>
+      <a href="/clearance-lifecycle.html" class="path-page-link">
+        <span class="page-check">☐</span>
+        <span class="page-title">Clearance Lifecycle</span>
+      </a>
+      <a href="/in-store-strategy.html" class="path-page-link">
+        <span class="page-check">☐</span>
+        <span class="page-title">In-Store Strategy</span>
+      </a>
+      <a href="/checkout-strategy.html" class="path-page-link">
+        <span class="page-check">☐</span>
+        <span class="page-title">Checkout Strategy</span>
+      </a>
+      <a href="/responsible-hunting.html" class="path-page-link">
+        <span class="page-check">☐</span>
+        <span class="page-title">Responsible Hunting</span>
+      </a>
+    </div>
+
+    <div class="path-reward">
+      <strong>Reward:</strong> +100 XP on completion
+    </div>
+  </div>
+
+  <!-- Path 2: Structured Approach -->
+  <div class="learning-path-card" data-path="structured">
+    <div class="path-header">
+      <div class="path-icon">📚</div>
+      <div class="path-info">
+        <h2>Structured Approach</h2>
+        <div class="path-meta">
+          <span class="path-difficulty intermediate">Intermediate</span>
+          <span class="path-time">⏱️ ~60 min</span>
+        </div>
+      </div>
+      <div class="path-status">Not Started</div>
+    </div>
+
+    <p class="path-description">
+      For methodical learners who want comprehensive knowledge of all systems.
+    </p>
+
+    <div class="path-progress">
+      <div class="path-progress-text">0/5 pages</div>
+      <div class="path-progress-bar-container">
+        <div class="path-progress-bar" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <div class="path-pages">
+      <a href="/digital-prehunt.html" class="path-page-link">
+        <span class="page-check">☐</span>
+        <span class="page-title">Digital Pre-Hunt</span>
+      </a>
+      <a href="/in-store-strategy.html" class="path-page-link">
+        <span class="page-check">☐</span>
+        <span class="page-title">In-Store Strategy</span>
+      </a>
+      <a href="/checkout-strategy.html" class="path-page-link">
+        <span class="page-check">☐</span>
+        <span class="page-title">Checkout Strategy</span>
+      </a>
+      <a href="/internal-systems.html" class="path-page-link">
+        <span class="page-check">☐</span>
+        <span class="page-title">Internal Systems</span>
+      </a>
+      <a href="/facts-vs-myths.html" class="path-page-link">
+        <span class="page-check">☐</span>
+        <span class="page-title">Facts vs Myths</span>
+      </a>
+    </div>
+
+    <div class="path-reward">
+      <strong>Reward:</strong> +100 XP on completion
+    </div>
+  </div>
+
+  <!-- Path 3: Quick Start -->
+  <div class="learning-path-card" data-path="quickStart">
+    <div class="path-header">
+      <div class="path-icon">⚡</div>
+      <div class="path-info">
+        <h2>Quick Start</h2>
+        <div class="path-meta">
+          <span class="path-difficulty fast-track">Fast Track</span>
+          <span class="path-time">⏱️ ~20 min</span>
+        </div>
+      </div>
+      <div class="path-status">Not Started</div>
+    </div>
+
+    <p class="path-description">
+      Fast track to get hunting quickly. Learn the essentials in minimal time.
+    </p>
+
+    <div class="path-progress">
+      <div class="path-progress-text">0/4 pages</div>
+      <div class="path-progress-bar-container">
+        <div class="path-progress-bar" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <div class="path-pages">
+      <a href="/quick-start.html" class="path-page-link">
+        <span class="page-check">☐</span>
+        <span class="page-title">Quick Start</span>
+      </a>
+      <a href="/what-are-pennies.html" class="path-page-link">
+        <span class="page-check">☐</span>
+        <span class="page-title">What Are Pennies?</span>
+      </a>
+      <a href="/in-store-strategy.html" class="path-page-link">
+        <span class="page-check">☐</span>
+        <span class="page-title">In-Store Strategy</span>
+      </a>
+      <a href="/checkout-strategy.html" class="path-page-link">
+        <span class="page-check">☐</span>
+        <span class="page-title">Checkout Strategy</span>
+      </a>
+    </div>
+
+    <div class="path-reward">
+      <strong>Reward:</strong> +100 XP on completion
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================================================
+     ACHIEVEMENTS PAGE
+     Create achievements.html or add to existing page
+     ============================================================================ -->
+
+<div class="achievements-page">
+  <header>
+    <h1>Achievements</h1>
+    <p>Unlock achievements by completing challenges and milestones!</p>
+    <div class="achievements-stats">
+      <span id="stat-achievements">0/25</span> unlocked
+    </div>
+  </header>
+
+  <!-- Filter Tabs -->
+  <div class="achievements-filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="progress">Progress</button>
+    <button class="filter-btn" data-filter="paths">Paths</button>
+    <button class="filter-btn" data-filter="quizzes">Quizzes</button>
+    <button class="filter-btn" data-filter="engagement">Engagement</button>
+    <button class="filter-btn" data-filter="special">Special</button>
+  </div>
+
+  <!-- Achievements Grid (populated by JavaScript) -->
+  <div class="achievements-grid">
+    <!-- Achievement cards will be inserted here by learning-platform.js -->
+  </div>
+</div>
+
+
+<!-- ============================================================================
+     USER PROFILE / STATS DASHBOARD
+     Add to about.html or create profile.html
+     ============================================================================ -->
+
+<div class="user-stats-dashboard">
+  <h2>Your Progress</h2>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">⚡</div>
+      <div class="stat-value" id="stat-total-xp">0</div>
+      <div class="stat-label">Total XP</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">🎓</div>
+      <div class="stat-value" id="stat-level">1</div>
+      <div class="stat-label">Level</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">📖</div>
+      <div class="stat-value" id="stat-pages-read">0/16</div>
+      <div class="stat-label">Pages Read</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">🗺️</div>
+      <div class="stat-value" id="stat-paths-completed">0</div>
+      <div class="stat-label">Paths Completed</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">🏆</div>
+      <div class="stat-value" id="stat-achievements">0/25</div>
+      <div class="stat-label">Achievements</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">📝</div>
+      <div class="stat-value" id="stat-quizzes">0</div>
+      <div class="stat-label">Quizzes Completed</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">👣</div>
+      <div class="stat-value" id="stat-visit-count">0</div>
+      <div class="stat-label">Total Visits</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon">📅</div>
+      <div class="stat-value" id="stat-unique-days">0</div>
+      <div class="stat-label">Days Active</div>
+    </div>
+  </div>
+
+  <!-- Data Management Buttons -->
+  <div class="data-management">
+    <h3>Manage Your Data</h3>
+    <div class="data-buttons">
+      <button id="export-progress-btn" class="btn btn-primary">
+        📥 Export Progress
+      </button>
+      <button id="import-progress-btn" class="btn btn-secondary">
+        📤 Import Progress
+      </button>
+      <button id="reset-progress-btn" class="btn btn-danger">
+        🗑️ Reset All Progress
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================================================
+     MODALS
+     Add these to the bottom of your page, just before </body>
+     ============================================================================ -->
+
+<!-- Level Up Modal -->
+<div id="level-up-modal" class="modal">
+  <div class="modal-content modal-celebration">
+    <button class="modal-close">&times;</button>
+    <div class="celebration-icon level-up-icon">🌱</div>
+    <h2 class="level-up-title">Level 2: Beginner</h2>
+    <p class="level-up-message">You've advanced to the next level! Keep learning!</p>
+    <button class="btn btn-primary modal-close">Awesome!</button>
+  </div>
+</div>
+
+<!-- Path Complete Modal -->
+<div id="path-complete-modal" class="modal">
+  <div class="modal-content modal-celebration">
+    <button class="modal-close">&times;</button>
+    <div class="celebration-icon path-complete-icon">🎓</div>
+    <h2 class="path-complete-title">Guided Learning Complete!</h2>
+    <p class="path-complete-message">Congratulations! You've completed a learning path.</p>
+    <div class="path-complete-xp">+100 XP</div>
+    <button class="btn btn-primary modal-close">Continue Learning</button>
+  </div>
+</div>
+
+<!-- Achievement Unlocked Modal (optional, toast is preferred) -->
+<div id="achievement-modal" class="modal">
+  <div class="modal-content modal-celebration">
+    <button class="modal-close">&times;</button>
+    <div class="celebration-icon achievement-icon">🏆</div>
+    <h2>Achievement Unlocked!</h2>
+    <h3 class="achievement-name">Achievement Name</h3>
+    <p class="achievement-description">Achievement description</p>
+    <div class="achievement-xp">+50 XP</div>
+    <button class="btn btn-primary modal-close">Nice!</button>
+  </div>
+</div>
+
+<!-- Confetti Canvas (for level-up animation) -->
+<canvas id="confetti-canvas" style="position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999;"></canvas>
+
+
+<!-- ============================================================================
+     SCRIPTS
+     Add at the bottom of each page
+     ============================================================================ -->
+
+<script src="/learning-platform.js"></script>
+<script>
+  // Initialize learning platform when page loads
+  document.addEventListener('DOMContentLoaded', () => {
+    window.initLearningPlatform();
+  });
+
+  // Example: Listen for custom events
+  window.addEventListener('hdpg:levelUp', (e) => {
+    console.log('Level up!', e.detail);
+  });
+
+  window.addEventListener('hdpg:achievementUnlocked', (e) => {
+    console.log('Achievement unlocked!', e.detail);
+  });
+</script>
+
+
+<!-- ============================================================================
+     QUIZ INTEGRATION EXAMPLE
+     How to integrate quizzes with the learning platform
+     ============================================================================ -->
+
+<script>
+  // After user completes a quiz, record it:
+  function handleQuizCompletion(quizId, userScore, maxScore) {
+    if (window.HDPennyGuide) {
+      window.HDPennyGuide.recordQuizCompletion(quizId, userScore, maxScore);
+    }
+  }
+
+  // Example usage:
+  // User scored 8 out of 10 on "basics-quiz"
+  // handleQuizCompletion('basics-quiz', 8, 10);
+</script>
