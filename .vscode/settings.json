@@ -4,5 +4,6 @@
     "python.useEnvironmentsExtension": true,
     "python.defaultInterpreterPath": "C:\\Users\\cadeg\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
     "workbench.startupEditor": "readme",
-    "workbench.editor.enablePreview": false
+    "workbench.editor.enablePreview": false,
+    "css.lint.unknownAtRules": "ignore"
 }
