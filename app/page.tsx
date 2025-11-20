@@ -1,11 +1,10 @@
 import { Footer } from "@/components/footer"
+import { Navbar } from "@/components/navbar"
 import { Hero } from "./sections/Hero"
 import { ContentSections } from "./sections/ContentSections"
 import { TableOfContents } from "@/components/table-of-contents"
 
 export default function Home() {
-  const cadence = clearanceCadenceData as { cadenceA: CadenceRow[]; cadenceB: CadenceRow[] }
-
   return (
     <>
       <Navbar />
