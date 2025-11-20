@@ -19,8 +19,13 @@ const config: Config = {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
-          hover: "hsl(186 70% 28%)",
         },
+        surface: "hsl(var(--surface))",
+        text: "hsl(var(--text))",
+        "text-muted": "hsl(var(--text-muted))",
+        "accent-success": "hsl(var(--accent-success))",
+        "accent-warning": "hsl(var(--accent-warning))",
+        "accent-info": "hsl(var(--accent-info))",
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
@@ -55,9 +60,9 @@ const config: Config = {
         },
       },
       fontFamily: {
-        heading: ["var(--font-heading)", "Inter", "system-ui", "sans-serif"],
-        body: ["Georgia", "Charter", "\"Times New Roman\"", "serif"],
-        mono: ["\"JetBrains Mono\"", "\"Courier New\"", "monospace"],
+        heading: ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
+        body: ["Georgia", "Charter", "serif"],
+        mono: ["JetBrains Mono", "Courier New", "Consolas", "Monaco", "monospace"],
       },
       borderRadius: {
         lg: "var(--radius)",

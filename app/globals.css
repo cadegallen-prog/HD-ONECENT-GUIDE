@@ -4,59 +4,81 @@
 
 @layer base {
   :root {
-    --background: 210 20% 96%;
-    --foreground: 222 36% 18%;
-    --surface: 213 25% 92%;
-    --panel: 210 22% 94%;
-    --card: 210 22% 94%;
-    --card-foreground: 222 36% 18%;
-    --popover: 210 20% 96%;
-    --popover-foreground: 222 36% 18%;
-    --primary: 186 70% 32%;
-    --primary-foreground: 210 40% 96%;
-    --secondary: 215 25% 90%;
-    --secondary-foreground: 222 36% 18%;
-    --muted: 215 18% 88%;
-    --muted-foreground: 220 15% 40%;
-    --accent: 210 32% 90%;
-    --accent-foreground: 222 36% 18%;
-    --destructive: 0 72% 50%;
-    --destructive-foreground: 210 40% 96%;
-    --border: 215 18% 80%;
-    --input: 215 18% 80%;
-    --ring: 186 70% 32%;
-    --success: 150 52% 34%;
-    --warning: 32 80% 48%;
-    --radius: 0.75rem;
-    --font-heading: "Inter", system-ui, -apple-system, sans-serif;
-    --font-body: "Georgia", "Charter", "Times New Roman", serif;
-    --font-mono: "JetBrains Mono", "Courier New", monospace;
+    /* Educational Reference Design System */
+    /* Primary: HD Orange (use sparingly) */
+    --primary: 18 95% 49%;           /* #EA5B0C */
+    --primary-foreground: 0 0% 100%;
+
+    /* Background colors */
+    --background: 0 0% 100%;          /* #FFFFFF */
+    --foreground: 220 13% 13%;        /* #1F2937 */
+
+    /* Surface and borders */
+    --surface: 210 20% 98%;           /* #F9FAFB */
+    --border: 214 14% 82%;            /* #D1D5DB */
+    --input: 214 14% 82%;
+
+    /* Text colors */
+    --text: 220 13% 13%;              /* #1F2937 */
+    --text-muted: 215 14% 48%;        /* #6B7280 */
+
+    /* Card colors */
+    --card: 0 0% 100%;
+    --card-foreground: 220 13% 13%;
+
+    /* Muted colors */
+    --muted: 210 20% 98%;
+    --muted-foreground: 215 14% 48%;
+
+    /* Accent colors for badges and highlights */
+    --accent-success: 160 84% 39%;    /* #059669 */
+    --accent-warning: 25 95% 53%;     /* #D97706 */
+    --accent-info: 217 91% 60%;       /* #3B82F6 */
+
+    /* Secondary (deprecated in this design) */
+    --secondary: 210 20% 98%;
+    --secondary-foreground: 220 13% 13%;
+
+    /* Destructive */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Other */
+    --ring: 18 95% 49%;
+    --radius: 0.25rem;
   }
 
   .dark {
-    --background: 222 34% 10%;
-    --foreground: 210 20% 94%;
-    --surface: 222 28% 14%;
-    --panel: 222 22% 16%;
-    --card: 222 22% 16%;
-    --card-foreground: 210 20% 94%;
-    --popover: 222 34% 12%;
-    --popover-foreground: 210 20% 94%;
-    --primary: 186 60% 52%;
-    --primary-foreground: 222 34% 10%;
-    --secondary: 222 22% 20%;
-    --secondary-foreground: 210 20% 94%;
-    --muted: 222 16% 24%;
-    --muted-foreground: 215 16% 74%;
-    --accent: 222 20% 22%;
-    --accent-foreground: 210 20% 94%;
-    --destructive: 0 72% 60%;
-    --destructive-foreground: 210 40% 96%;
-    --border: 222 20% 28%;
-    --input: 222 20% 28%;
-    --ring: 186 60% 52%;
-    --success: 150 52% 48%;
-    --warning: 32 80% 56%;
+    --primary: 18 95% 49%;
+    --primary-foreground: 0 0% 100%;
+
+    --background: 220 13% 13%;
+    --foreground: 210 20% 98%;
+
+    --surface: 220 13% 18%;
+    --border: 215 14% 34%;
+    --input: 215 14% 34%;
+
+    --text: 210 20% 98%;
+    --text-muted: 215 14% 71%;
+
+    --card: 220 13% 18%;
+    --card-foreground: 210 20% 98%;
+
+    --muted: 220 13% 18%;
+    --muted-foreground: 215 14% 71%;
+
+    --accent-success: 160 84% 39%;
+    --accent-warning: 25 95% 53%;
+    --accent-info: 217 91% 60%;
+
+    --secondary: 220 13% 18%;
+    --secondary-foreground: 210 20% 98%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --ring: 18 95% 49%;
   }
 
   * {
@@ -65,7 +87,7 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: var(--font-body);
+    font-family: Georgia, Charter, serif;
     font-size: 18px;
     line-height: 1.75;
     font-feature-settings: "rlig" 1, "calt" 1;
@@ -73,242 +95,130 @@
     background-image: radial-gradient(circle at 10% 20%, rgba(0, 0, 0, 0.02) 0, transparent 25%), radial-gradient(circle at 90% 10%, rgba(0, 0, 0, 0.015) 0, transparent 20%);
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-family: var(--font-heading);
-    color: hsl(var(--foreground));
+  h1, h2, h3, h4, h5, h6 {
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-weight: 600;
+    line-height: 1.2;
   }
 
   h1 {
     font-size: 40px;
-    line-height: 1.2;
-    font-weight: 700;
-    letter-spacing: -0.01em;
   }
 
   h2 {
     font-size: 28px;
-    line-height: 1.3;
-    font-weight: 700;
   }
 
   h3 {
     font-size: 22px;
-    line-height: 1.35;
-    font-weight: 600;
   }
 
-  a {
-    color: hsl(var(--primary));
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 4px;
-  }
-
-  a:hover {
-    color: hsl(var(--foreground));
-  }
-
-  code,
-  pre {
-    font-family: var(--font-mono);
-  }
-
-  html {
-    scroll-behavior: smooth;
-    scroll-padding-top: 96px;
-  }
-
-  ::selection {
-    background-color: rgba(17, 100, 102, 0.15);
-    color: hsl(var(--foreground));
-  }
-}
-
-@layer components {
-  .data-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: hsl(var(--panel));
+  /* Tables use Inter */
+  table {
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     font-size: 16px;
   }
 
-  .data-table thead th {
-    background: hsl(var(--muted));
-    text-align: left;
-    color: hsl(var(--foreground));
-    font-weight: 600;
+  /* Code and SKUs use monospace */
+  code, .sku, .code {
+    font-family: "JetBrains Mono", "Courier New", Consolas, Monaco, monospace;
+    font-size: 15px;
   }
 
-  .data-table th,
-  .data-table td {
-    border: 1px solid hsl(var(--border));
-    padding: 14px;
+  /* Caption text */
+  .caption, figcaption {
+    font-size: 15px;
   }
+}
 
-  .data-table tbody tr:nth-child(odd) {
-    background: hsl(var(--secondary));
-  }
-
+/* Educational Reference Components */
+@layer components {
+  /* Badges */
   .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    border-radius: 9999px;
-    padding: 4px 10px;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
+    @apply inline-flex items-center px-2.5 py-0.5 rounded text-sm font-heading font-medium;
   }
 
   .badge-low {
-    background: #eef2f7;
-    color: hsl(var(--muted-foreground));
-    border: 1px solid hsl(var(--border));
+    @apply bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300;
   }
 
   .badge-medium {
-    background: #fff7ed;
-    color: #b45309;
-    border: 1px solid #fed7aa;
+    @apply bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400;
   }
 
   .badge-high {
-    background: #e6f4f1;
-    color: #0f766e;
-    border: 1px solid #b7e0d8;
+    @apply bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400;
   }
 
   .badge-penny {
-    background: #f3e8ff;
-    color: #6b21a8;
-    border: 1px solid #e9d5ff;
+    @apply bg-orange-100 text-orange-700 border border-orange-300 dark:bg-orange-900/30 dark:text-orange-400 dark:border-orange-700;
   }
 
   .badge-true {
-    background: #e6f4f1;
-    color: #0f766e;
-    border: 1px solid #b7e0d8;
+    @apply bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400;
   }
 
   .badge-false {
-    background: #fce8e8;
-    color: #b91c1c;
-    border: 1px solid #f7caca;
+    @apply bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400;
   }
 
   .badge-varies {
-    background: #e5e7eb;
-    color: #374151;
-    border: 1px solid hsl(var(--border));
+    @apply bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400;
   }
 
+  /* Callouts */
   .callout-box {
-    border-left: 4px solid hsl(var(--border));
-    background: hsl(var(--surface));
-    padding: 16px;
-    border-radius: 12px;
+    @apply rounded-lg border-l-4 p-4 my-4;
   }
 
   .callout-box.info {
-    border-color: #2563eb;
-    background: #eff6ff;
-    color: #1d4ed8;
+    @apply bg-blue-50 border-blue-500 dark:bg-blue-900/20 dark:border-blue-400;
   }
 
   .callout-box.warning {
-    border-color: #d97706;
-    background: #fffbeb;
-    color: #b45309;
+    @apply bg-orange-50 border-orange-500 dark:bg-orange-900/20 dark:border-orange-400;
   }
 
+  .callout-box.success {
+    @apply bg-green-50 border-green-500 dark:bg-green-900/20 dark:border-green-400;
+  }
+
+  /* Data Tables */
+  .data-table {
+    @apply w-full border-collapse;
+  }
+
+  .data-table th {
+    @apply bg-surface border border-border px-4 py-3 text-left font-heading font-semibold text-sm;
+  }
+
+  .data-table td {
+    @apply border border-border px-4 py-3;
+  }
+
+  .data-table tbody tr:nth-child(even) {
+    @apply bg-surface/50;
+  }
+
+  .data-table tbody tr:hover {
+    @apply bg-surface;
+  }
+
+  /* Step Guide */
   .step-guide {
-    counter-reset: step;
-    list-style: none;
-    padding: 0;
-    margin: 0;
+    @apply space-y-6;
   }
 
-  .step-guide li {
-    counter-increment: step;
-    margin-bottom: 16px;
-    padding-left: 48px;
-    position: relative;
+  .step-guide-item {
+    @apply flex gap-4;
   }
 
-  .step-guide li::before {
-    content: counter(step);
-    position: absolute;
-    left: 0;
-    top: 2px;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: hsl(var(--surface));
-    border: 1px solid hsl(var(--border));
-    display: grid;
-    place-items: center;
-    font-weight: 700;
-    color: hsl(var(--foreground));
+  .step-number {
+    @apply flex-shrink-0 w-8 h-8 rounded-full bg-primary text-primary-foreground font-heading font-bold flex items-center justify-center;
   }
 
+  /* Reference Cards */
   .reference-card {
-    border: 1px solid hsl(var(--border));
-    background: hsl(var(--panel));
-    border-radius: 16px;
-    padding: 20px;
-  }
-
-  .reference-card h3 {
-    margin-bottom: 8px;
-  }
-
-  .image-placeholder {
-    border: 1px dashed hsl(var(--border));
-    background: hsl(var(--surface));
-    color: hsl(var(--muted-foreground));
-    border-radius: 14px;
-    display: grid;
-    place-items: center;
-    text-align: center;
-    padding: 24px;
-    font-size: 14px;
-  }
-
-  .pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 10px;
-    border-radius: 9999px;
-    background: hsl(var(--panel));
-    color: hsl(var(--muted-foreground));
-    border: 1px solid hsl(var(--border));
-  }
-
-  .section-panel {
-    background: hsl(var(--panel));
-    border: 1px solid hsl(var(--border));
-    border-radius: 18px;
-    padding: 24px;
-    box-shadow: 0 10px 30px -18px rgba(15, 23, 42, 0.35);
-  }
-
-  .section-panel.alt {
-    background: hsl(var(--surface));
-  }
-
-  .hero-grid {
-    background: hsl(var(--panel));
-    border: 1px solid hsl(var(--border));
-    border-radius: 18px;
-    padding: 24px;
-    display: grid;
-    gap: 16px;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    @apply border border-border rounded-lg p-6 bg-card hover:shadow-md transition-shadow;
   }
 }

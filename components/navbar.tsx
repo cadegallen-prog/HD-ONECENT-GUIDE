@@ -8,8 +8,9 @@ import { useTheme } from "next-themes"
 
 const navigation = [
   { name: "What Are Pennies", href: "#what-are-pennies" },
-  { name: "Clearance", href: "#clearance-lifecycle" },
-  { name: "Digital Tools", href: "#pre-hunt-digital-tools" },
+  { name: "Clearance Lifecycle", href: "#clearance-lifecycle" },
+  { name: "Digital Tools", href: "#digital-tools" },
+  { name: "In-Store Strategies", href: "#in-store-strategies" },
   { name: "FAQ", href: "#faq" },
 ]
 
@@ -20,38 +21,40 @@ export function Navbar() {
   const current = theme === "system" ? systemTheme : theme
 
   return (
-    <header className="sticky top-0 z-50 bg-background/90 backdrop-blur-sm border-b border-border">
-      <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3 no-underline">
-          <div className="h-10 w-10 rounded-lg border border-border bg-[hsl(var(--surface))] flex items-center justify-center text-xs font-semibold text-foreground">
-            HD
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
+      <nav className="container mx-auto px-4 h-16 flex items-center justify-between max-w-7xl">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2 group">
+          <div className="w-8 h-8 rounded bg-primary flex items-center justify-center">
+            <span className="text-primary-foreground font-bold text-lg">¢</span>
           </div>
-          <div className="flex flex-col leading-tight">
-            <span className="font-heading text-lg font-semibold text-foreground">Home Depot Penny Guide</span>
-            <span className="text-xs text-muted-foreground">Home Depot One Cent Items · 32,000 members</span>
-          </div>
+          <span className="font-heading font-semibold text-lg group-hover:text-primary transition-colors">
+            HD Penny Guide
+          </span>
         </Link>
 
+        {/* Desktop navigation */}
         <div className="hidden lg:flex items-center gap-6">
           {navigation.map((item) => (
             <a
               key={item.name}
               href={item.href}
-              className="text-sm text-muted-foreground hover:text-foreground no-underline"
+              className="text-sm font-heading text-muted-foreground hover:text-foreground transition-colors"
             >
               {item.name}
             </a>
           ))}
-          <Button variant="primary" size="sm" href={pdfLink} aria-label="Download PDF reference">
-            <span className="flex items-center gap-2">
-              <Download className="h-4 w-4" />
-              Download PDF
-            </span>
-          </Button>
+        </div>
+
+        {/* Right side - Theme toggle only */}
+        <div className="flex items-center gap-4">
+          <ThemeToggle />
+
+          {/* Mobile menu button */}
           <button
-            className="p-2 rounded-md border border-border hover:bg-muted transition-colors"
-            aria-label="Toggle dark mode"
-            onClick={() => setTheme(current === "dark" ? "light" : "dark")}
+            className="lg:hidden p-2"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
           >
             {current === "dark" ? <SunMedium className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
@@ -73,32 +76,12 @@ export function Navbar() {
               <a
                 key={item.name}
                 href={item.href}
-                className="block text-base font-medium text-muted-foreground hover:text-foreground no-underline"
+                className="block text-base font-heading text-muted-foreground hover:text-foreground transition-colors py-2"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {item.name}
               </a>
             ))}
-            <Button variant="primary" size="sm" className="w-full" href={pdfLink} aria-label="Download PDF reference">
-              <span className="flex items-center gap-2 justify-center">
-                <Download className="h-4 w-4" />
-                Download PDF
-              </span>
-            </Button>
-            <Button
-              variant="secondary"
-              size="sm"
-              className="w-full"
-              onClick={() => {
-                setTheme(current === "dark" ? "light" : "dark")
-                setMobileMenuOpen(false)
-              }}
-            >
-              <span className="flex items-center gap-2 justify-center">
-                {current === "dark" ? <SunMedium className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                {current === "dark" ? "Light mode" : "Dark mode"}
-              </span>
-            </Button>
           </div>
         </div>
       )}
