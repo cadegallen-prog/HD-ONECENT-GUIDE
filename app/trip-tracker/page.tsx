@@ -274,7 +274,7 @@ export default function TripTrackerPage() {
                     {!selectedTemplate && (
                       <div>
                         <label className="block text-sm font-medium mb-3 text-foreground">Start with a template</label>
-                        <div className="grid md:grid-cols-3 gap-3">
+                          <div className="grid md:grid-cols-3 gap-3">
                           {templates.map((template, i) => (
                             <button
                               key={i}
