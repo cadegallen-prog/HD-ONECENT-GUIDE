@@ -17,10 +17,15 @@ const config: Config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "oklch(65% 0.25 var(--primary-hue))",
-          foreground: "oklch(98% 0.01 var(--primary-hue))",
-          hover: "oklch(60% 0.25 var(--primary-hue))",
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
         },
+        surface: "hsl(var(--surface))",
+        text: "hsl(var(--text))",
+        "text-muted": "hsl(var(--text-muted))",
+        "accent-success": "hsl(var(--accent-success))",
+        "accent-warning": "hsl(var(--accent-warning))",
+        "accent-info": "hsl(var(--accent-info))",
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
@@ -47,8 +52,9 @@ const config: Config = {
         },
       },
       fontFamily: {
-        heading: ["var(--font-heading)", "system-ui", "sans-serif"],
-        body: ["var(--font-body)", "system-ui", "sans-serif"],
+        heading: ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
+        body: ["Georgia", "Charter", "serif"],
+        mono: ["JetBrains Mono", "Courier New", "Consolas", "Monaco", "monospace"],
       },
       borderRadius: {
         lg: "var(--radius)",

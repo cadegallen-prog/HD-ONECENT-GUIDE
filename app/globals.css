@@ -4,75 +4,81 @@
 
 @layer base {
   :root {
-    /* Change this single value to rebrand entire site */
-    --primary-hue: 20;
+    /* Educational Reference Design System */
+    /* Primary: HD Orange (use sparingly) */
+    --primary: 18 95% 49%;           /* #EA5B0C */
+    --primary-foreground: 0 0% 100%;
 
-    /* Base colors */
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    /* Background colors */
+    --background: 0 0% 100%;          /* #FFFFFF */
+    --foreground: 220 13% 13%;        /* #1F2937 */
+
+    /* Surface and borders */
+    --surface: 210 20% 98%;           /* #F9FAFB */
+    --border: 214 14% 82%;            /* #D1D5DB */
+    --input: 214 14% 82%;
+
+    /* Text colors */
+    --text: 220 13% 13%;              /* #1F2937 */
+    --text-muted: 215 14% 48%;        /* #6B7280 */
 
     /* Card colors */
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-
-    /* Popover colors */
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-
-    /* Primary colors (OKLCH in tailwind.config.ts) */
-
-    /* Secondary colors */
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
+    --card-foreground: 220 13% 13%;
 
     /* Muted colors */
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
+    --muted: 210 20% 98%;
+    --muted-foreground: 215 14% 48%;
 
-    /* Accent colors */
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
+    /* Accent colors for badges and highlights */
+    --accent-success: 160 84% 39%;    /* #059669 */
+    --accent-warning: 25 95% 53%;     /* #D97706 */
+    --accent-info: 217 91% 60%;       /* #3B82F6 */
 
-    /* Destructive colors */
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+    /* Secondary (deprecated in this design) */
+    --secondary: 210 20% 98%;
+    --secondary-foreground: 220 13% 13%;
 
-    /* Border colors */
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5% 64.9%;
+    /* Destructive */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    /* Border radius */
-    --radius: 0.5rem;
+    /* Other */
+    --ring: 18 95% 49%;
+    --radius: 0.25rem;
   }
 
   .dark {
-    --primary-hue: 20;
+    --primary: 18 95% 49%;
+    --primary-foreground: 0 0% 100%;
 
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+    --background: 220 13% 13%;
+    --foreground: 210 20% 98%;
 
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
+    --surface: 220 13% 18%;
+    --border: 215 14% 34%;
+    --input: 215 14% 34%;
 
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
+    --text: 210 20% 98%;
+    --text-muted: 215 14% 71%;
 
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
+    --card: 220 13% 18%;
+    --card-foreground: 210 20% 98%;
 
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+    --muted: 220 13% 18%;
+    --muted-foreground: 215 14% 71%;
 
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
+    --accent-success: 160 84% 39%;
+    --accent-warning: 25 95% 53%;
+    --accent-info: 217 91% 60%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
+    --secondary: 220 13% 18%;
+    --secondary-foreground: 210 20% 98%;
 
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --ring: 18 95% 49%;
   }
 }
 
@@ -82,40 +88,138 @@
   }
 
   body {
-    @apply bg-background text-foreground font-body;
+    @apply bg-background text-foreground;
+    font-family: Georgia, Charter, serif;
+    font-size: 18px;
+    line-height: 1.75;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-heading;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  h1 {
+    font-size: 40px;
+  }
+
+  h2 {
+    font-size: 28px;
+  }
+
+  h3 {
+    font-size: 22px;
+  }
+
+  /* Tables use Inter */
+  table {
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 16px;
+  }
+
+  /* Code and SKUs use monospace */
+  code, .sku, .code {
+    font-family: "JetBrains Mono", "Courier New", Consolas, Monaco, monospace;
+    font-size: 15px;
+  }
+
+  /* Caption text */
+  .caption, figcaption {
+    font-size: 15px;
   }
 }
 
-/* Custom button interactions */
+/* Educational Reference Components */
 @layer components {
-  .btn-gradient-shift {
-    background: linear-gradient(135deg, oklch(65% 0.25 var(--primary-hue)) 0%, oklch(60% 0.25 var(--primary-hue)) 100%);
-    background-size: 200% 200%;
-    background-position: 0% 50%;
-    transition: all 0.3s ease;
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded text-sm font-heading font-medium;
   }
 
-  .btn-gradient-shift:hover {
-    background-position: 100% 50%;
-    transform: scale(1.02);
+  .badge-low {
+    @apply bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300;
   }
 
-  .card-lift {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  .badge-medium {
+    @apply bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400;
   }
 
-  .card-lift:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  .badge-high {
+    @apply bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400;
   }
 
-  .dark .card-lift:hover {
-    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.4), 0 8px 10px -6px rgb(0 0 0 / 0.3);
+  .badge-penny {
+    @apply bg-orange-100 text-orange-700 border border-orange-300 dark:bg-orange-900/30 dark:text-orange-400 dark:border-orange-700;
+  }
+
+  .badge-true {
+    @apply bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400;
+  }
+
+  .badge-false {
+    @apply bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400;
+  }
+
+  .badge-varies {
+    @apply bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400;
+  }
+
+  /* Callouts */
+  .callout-box {
+    @apply rounded-lg border-l-4 p-4 my-4;
+  }
+
+  .callout-box.info {
+    @apply bg-blue-50 border-blue-500 dark:bg-blue-900/20 dark:border-blue-400;
+  }
+
+  .callout-box.warning {
+    @apply bg-orange-50 border-orange-500 dark:bg-orange-900/20 dark:border-orange-400;
+  }
+
+  .callout-box.success {
+    @apply bg-green-50 border-green-500 dark:bg-green-900/20 dark:border-green-400;
+  }
+
+  /* Data Tables */
+  .data-table {
+    @apply w-full border-collapse;
+  }
+
+  .data-table th {
+    @apply bg-surface border border-border px-4 py-3 text-left font-heading font-semibold text-sm;
+  }
+
+  .data-table td {
+    @apply border border-border px-4 py-3;
+  }
+
+  .data-table tbody tr:nth-child(even) {
+    @apply bg-surface/50;
+  }
+
+  .data-table tbody tr:hover {
+    @apply bg-surface;
+  }
+
+  /* Step Guide */
+  .step-guide {
+    @apply space-y-6;
+  }
+
+  .step-guide-item {
+    @apply flex gap-4;
+  }
+
+  .step-number {
+    @apply flex-shrink-0 w-8 h-8 rounded-full bg-primary text-primary-foreground font-heading font-bold flex items-center justify-center;
+  }
+
+  /* Reference Cards */
+  .reference-card {
+    @apply border border-border rounded-lg p-6 bg-card hover:shadow-md transition-shadow;
   }
 }
 
