@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
+import { CommandPaletteProvider } from "@/components/command-palette-provider";
+import { QuickActionsButton } from "@/components/quick-actions-button";
 
 // Fonts are defined in globals.css using system fonts
 // This avoids network dependency on Google Fonts
@@ -53,7 +56,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <CommandPaletteProvider>
+            {children}
+            <QuickActionsButton />
+            <Toaster />
+          </CommandPaletteProvider>
         </ThemeProvider>
       </body>
     </html>
