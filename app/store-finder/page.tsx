@@ -375,14 +375,14 @@ export default function StoreFinderPage() {
                 <div className="flex gap-2">
                   <Button
                     onClick={() => setViewMode("map")}
-                    variant={viewMode === "map" ? "default" : "outline"}
+                    variant={viewMode === "map" ? undefined : "outline"}
                   >
                     <MapIcon className="h-4 w-4 mr-2" />
                     Map
                   </Button>
                   <Button
                     onClick={() => setViewMode("list")}
-                    variant={viewMode === "list" ? "default" : "outline"}
+                    variant={viewMode === "list" ? undefined : "outline"}
                   >
                     <List className="h-4 w-4 mr-2" />
                     List
