@@ -1,0 +1,54 @@
+[
+  {
+    "question": "Is buying penny items legal?",
+    "answer": "Buying one is not illegal, but Home Depot can refuse the sale or ask for the item back. Stay calm and respectful if asked to return it."
+  },
+  {
+    "question": "How often do items penny out?",
+    "answer": "There is no fixed schedule. Two common cadences exist (~13 weeks and ~7 weeks), but timing varies by store, inventory, and how quickly staff pull items."
+  },
+  {
+    "question": "Will the app or website show $0.01 pricing?",
+    "answer": "No. The online experience never shows the penny price. Use the app only for signals like stock status and whether a clearance price disappeared."
+  },
+  {
+    "question": "Can I return a penny item?",
+    "answer": "Yes, but the refund will be $0.01. Returns are processed at the price paid, not at prior retail pricing."
+  },
+  {
+    "question": "How many penny items can I checkout at once?",
+    "answer": "Multiple units of the same SKU usually ring up fine. Mixing different SKUs increases the chance of staff intervention. Keep transactions small and separate."
+  },
+  {
+    "question": "What if a self-checkout attendant stops me?",
+    "answer": "Stay polite. If you have already paid, show the receipt. If asked to surrender the item before payment, decide whether to comply or simply walk away without arguing."
+  },
+  {
+    "question": "Are employees allowed to buy penny items?",
+    "answer": "No. Employees are trained to pull penny items and can face discipline for purchasing them. Many stores enforce waiting periods after markdowns for staff."
+  },
+  {
+    "question": "Do all clearance items become penny items?",
+    "answer": "No. Many sell through or are pulled before hitting $0.01. Use price endings and tag dates to gauge likelihood, not guarantees."
+  },
+  {
+    "question": "Which categories penny most often?",
+    "answer": "Hardware, lighting, electrical parts, paint accessories, seasonal leftovers, and discontinued brands are common. Use clearance tag dates and endings to time revisits."
+  },
+  {
+    "question": "Should I scan the yellow clearance tag?",
+    "answer": "Avoid it. Clearance tags can freeze or flag self-checkout. Scan the UPC barcode on the product instead."
+  },
+  {
+    "question": "Can I ask an employee to check a suspected penny?",
+    "answer": "You can, but it often prompts them to pull the item. If you must ask, request a 'stock check,' not a price check, and watch the FIRST phone screen discreetly."
+  },
+  {
+    "question": "Can I use the yellow ladders for overhead items?",
+    "answer": "Yellow customer ladders are generally OK if used safely. Orange rolling ladders are employee-only and higher risk; ask instead of climbing."
+  },
+  {
+    "question": "How do I handle locked cases or cages?",
+    "answer": "Bring a normal keeper item, ask to unlock, and go to self-checkout. Scan the keeper first, then the candidate item after staff step away."
+  }
+]
