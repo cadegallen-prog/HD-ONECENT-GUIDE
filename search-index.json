@@ -1,0 +1,146 @@
+[
+  {
+    "id": "home",
+    "title": "Home",
+    "url": "index.html",
+    "description": "Complete guide to finding Home Depot penny items and clearance hunting strategies",
+    "keywords": ["home", "introduction", "start", "overview", "penny items", "guide", "clearance"],
+    "category": "Getting Started",
+    "icon": "🏠"
+  },
+  {
+    "id": "what-are-pennies",
+    "title": "What Are Pennies?",
+    "url": "what-are-pennies.html",
+    "description": "Learn what penny items are, why they exist, and the basics of Home Depot's clearance system",
+    "keywords": ["penny", "clearance", "markdown", "pricing", "basics", "definition", "0.01"],
+    "category": "Fundamentals",
+    "icon": "💰"
+  },
+  {
+    "id": "clearance-lifecycle",
+    "title": "Clearance Lifecycle",
+    "url": "clearance-lifecycle.html",
+    "description": "Understand markdown cadences, price endings, and how items progress to penny status",
+    "keywords": ["lifecycle", "markdown", "cadence", "pricing", "stages", "timeline", "schedule"],
+    "category": "Fundamentals",
+    "icon": "🔄"
+  },
+  {
+    "id": "digital-prehunt",
+    "title": "Digital Pre-Hunt",
+    "url": "digital-prehunt.html",
+    "description": "Use apps, websites, and digital tools to scout for penny items before visiting stores",
+    "keywords": ["app", "website", "digital", "online", "scout", "brickseek", "tools", "research"],
+    "category": "Strategy",
+    "icon": "📱"
+  },
+  {
+    "id": "in-store-strategy",
+    "title": "In-Store Strategy",
+    "url": "in-store-strategy.html",
+    "description": "Where to look, when to hunt, and proven tactics for finding penny items in stores",
+    "keywords": ["in-store", "hunting", "strategy", "location", "timing", "shelves", "endcaps"],
+    "category": "Strategy",
+    "icon": "🏪"
+  },
+  {
+    "id": "checkout-strategy",
+    "title": "Checkout Strategy",
+    "url": "checkout-strategy.html",
+    "description": "Navigate the checkout process, handle interactions, and complete purchases successfully",
+    "keywords": ["checkout", "purchase", "self-checkout", "cashier", "manager", "buying", "register"],
+    "category": "Strategy",
+    "icon": "🛒"
+  },
+  {
+    "id": "internal-systems",
+    "title": "Internal Systems",
+    "url": "internal-systems.html",
+    "description": "Understand Home Depot's inventory systems, SKUs, and internal processes",
+    "keywords": ["system", "inventory", "sku", "barcode", "internal", "database", "software"],
+    "category": "Advanced",
+    "icon": "💻"
+  },
+  {
+    "id": "facts-vs-myths",
+    "title": "Facts vs Myths",
+    "url": "facts-vs-myths.html",
+    "description": "Debunk common misconceptions and learn the truth about penny hunting",
+    "keywords": ["myths", "facts", "truth", "misconceptions", "debunk", "reality", "false"],
+    "category": "Knowledge",
+    "icon": "🔍"
+  },
+  {
+    "id": "responsible-hunting",
+    "title": "Responsible Hunting",
+    "url": "responsible-hunting.html",
+    "description": "Practice ethical penny hunting with respect for employees and community guidelines",
+    "keywords": ["responsible", "ethics", "respect", "employees", "community", "guidelines", "behavior"],
+    "category": "Ethics",
+    "icon": "🤝"
+  },
+  {
+    "id": "faq",
+    "title": "FAQ",
+    "url": "faq.html",
+    "description": "Frequently asked questions about penny items, hunting strategies, and common issues",
+    "keywords": ["faq", "questions", "answers", "help", "common", "issues", "troubleshooting"],
+    "category": "Help",
+    "icon": "❓"
+  },
+  {
+    "id": "resources",
+    "title": "Resources",
+    "url": "resources.html",
+    "description": "Downloadable guides, templates, and additional resources for penny hunters",
+    "keywords": ["resources", "download", "pdf", "template", "tracker", "tools", "guides"],
+    "category": "Resources",
+    "icon": "📚"
+  },
+  {
+    "id": "quick-start",
+    "title": "Quick Start Guide",
+    "url": "quick-start.html",
+    "description": "Jump in fast with essential tips and a condensed guide to penny hunting",
+    "keywords": ["quick", "start", "beginner", "fast", "condensed", "essential", "basics"],
+    "category": "Getting Started",
+    "icon": "⚡"
+  },
+  {
+    "id": "about",
+    "title": "About",
+    "url": "about.html",
+    "description": "Learn about this guide, its purpose, and the community behind it",
+    "keywords": ["about", "purpose", "community", "info", "background", "mission"],
+    "category": "Info",
+    "icon": "ℹ️"
+  },
+  {
+    "id": "learning-paths",
+    "title": "Learning Paths",
+    "url": "learning-paths.html",
+    "description": "Structured learning paths from beginner to expert penny hunter",
+    "keywords": ["learning", "path", "progression", "beginner", "intermediate", "expert", "levels"],
+    "category": "Learning",
+    "icon": "🎓"
+  },
+  {
+    "id": "quizzes",
+    "title": "Quizzes",
+    "url": "quizzes.html",
+    "description": "Test your knowledge with interactive quizzes and earn XP for completing them",
+    "keywords": ["quiz", "test", "questions", "knowledge", "xp", "learn", "practice"],
+    "category": "Learning",
+    "icon": "📝"
+  },
+  {
+    "id": "updates",
+    "title": "Updates & Changelog",
+    "url": "updates.html",
+    "description": "Recent updates, new features, and changes to the guide",
+    "keywords": ["updates", "changelog", "new", "changes", "recent", "history", "news"],
+    "category": "Info",
+    "icon": "🔔"
+  }
+]

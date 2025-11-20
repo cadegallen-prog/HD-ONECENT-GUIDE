@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feature Demo - HD Penny Guide Interactive Features</title>
+    <link rel="stylesheet" href="component-styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #212529;
+            background: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #f96302, #d55502);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        header p {
+            font-size: 20px;
+            opacity: 0.9;
+        }
+
+        .demo-section {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .demo-section h2 {
+            color: #f96302;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f96302;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .demo-button {
+            padding: 12px 24px;
+            background: #f96302;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .demo-button:hover {
+            background: #d55502;
+        }
+
+        .demo-button.secondary {
+            background: #6c757d;
+        }
+
+        .demo-button.secondary:hover {
+            background: #5a6268;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            color: #28a745;
+            font-weight: bold;
+            margin-right: 12px;
+            font-size: 20px;
+        }
+
+        .tooltip-demo {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #17a2b8;
+            color: white;
+            border-radius: 4px;
+            margin: 8px;
+            cursor: pointer;
+        }
+
+        .loading-demo-box {
+            background: #e9ecef;
+            padding: 60px 20px;
+            border-radius: 8px;
+            text-align: center;
+            position: relative;
+            min-height: 200px;
+        }
+
+        kbd {
+            padding: 3px 8px;
+            background: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 14px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #f96302, #d55502);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 16px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .status-badge.success {
+            background: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🎯 Interactive Features Demo</h1>
+        <p>Test all advanced features for HD Penny Guide</p>
+    </header>
+
+    <div class="container">
+        <!-- Stats Overview -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">3</div>
+                <div class="stat-label">Major Features</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">30+</div>
+                <div class="stat-label">Quiz Questions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">16</div>
+                <div class="stat-label">Searchable Pages</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">7</div>
+                <div class="stat-label">UI Components</div>
+            </div>
+        </div>
+
+        <!-- Search System Demo -->
+        <div class="demo-section">
+            <h2>1. Advanced Search System <span class="status-badge success">Ready</span></h2>
+
+            <p><strong>Keyboard Shortcuts:</strong></p>
+            <ul class="feature-list">
+                <li><kbd>Ctrl+K</kbd> or <kbd>Cmd+K</kbd> - Open search modal</li>
+                <li><kbd>/</kbd> - Quick search (when not in input)</li>
+                <li><kbd>↑</kbd> <kbd>↓</kbd> - Navigate results</li>
+                <li><kbd>Enter</kbd> - Select result</li>
+                <li><kbd>Esc</kbd> - Close modal</li>
+            </ul>
+
+            <p style="margin: 20px 0;"><strong>Try it now:</strong> Press <kbd>Ctrl+K</kbd> to open the search modal!</p>
+
+            <p><strong>Features:</strong></p>
+            <ul class="feature-list">
+                <li>Fuzzy search across 16 pages</li>
+                <li>Real-time results with relevance scoring</li>
+                <li>Recent search history (localStorage)</li>
+                <li>Highlighted matches</li>
+                <li>Mobile-friendly with touch support</li>
+            </ul>
+        </div>
+
+        <!-- UI Components Demo -->
+        <div class="demo-section">
+            <h2>2. UI Components <span class="status-badge success">Ready</span></h2>
+
+            <!-- Tooltips -->
+            <h3>Tooltips</h3>
+            <p>Hover or tap these elements:</p>
+            <div style="margin: 20px 0;">
+                <span class="tooltip-demo" data-tooltip="Top tooltip (default)">Top</span>
+                <span class="tooltip-demo" data-tooltip="Bottom tooltip" data-tooltip-position="bottom">Bottom</span>
+                <span class="tooltip-demo" data-tooltip="Left tooltip" data-tooltip-position="left">Left</span>
+                <span class="tooltip-demo" data-tooltip="Right tooltip" data-tooltip-position="right">Right</span>
+            </div>
+
+            <!-- Modals -->
+            <h3 style="margin-top: 30px;">Modals</h3>
+            <div class="demo-grid">
+                <button class="demo-button" onclick="showInfoModal()">Info Modal</button>
+                <button class="demo-button" onclick="showConfirmModal()">Confirm Modal</button>
+                <button class="demo-button" onclick="showCustomModal()">Custom Modal</button>
+            </div>
+
+            <!-- Toasts -->
+            <h3 style="margin-top: 30px;">Toast Notifications</h3>
+            <div class="demo-grid">
+                <button class="demo-button" onclick="window.UIComponents.Toast.success('Success! Everything worked.')">Success</button>
+                <button class="demo-button" onclick="window.UIComponents.Toast.error('Error! Something failed.')">Error</button>
+                <button class="demo-button" onclick="window.UIComponents.Toast.warning('Warning! Be careful.')">Warning</button>
+                <button class="demo-button" onclick="window.UIComponents.Toast.info('Info: Helpful tip here.')">Info</button>
+            </div>
+
+            <!-- Loading States -->
+            <h3 style="margin-top: 30px;">Loading States</h3>
+            <div id="loading-demo" class="loading-demo-box">
+                <p>Target element for loading demo</p>
+            </div>
+            <div class="demo-grid" style="margin-top: 16px;">
+                <button class="demo-button" onclick="demoElementLoading()">Element Loading</button>
+                <button class="demo-button" onclick="demoOverlayLoading()">Full-page Loading</button>
+            </div>
+
+            <!-- Error States -->
+            <h3 style="margin-top: 30px;">Error States</h3>
+            <div id="error-demo" style="background: #e9ecef; padding: 20px; border-radius: 8px; min-height: 200px;">
+                <p style="text-align: center; color: #666;">Error state will appear here</p>
+            </div>
+            <div class="demo-grid" style="margin-top: 16px;">
+                <button class="demo-button" onclick="demoGenericError()">Generic Error</button>
+                <button class="demo-button" onclick="demo404Error()">404 Error</button>
+                <button class="demo-button" onclick="demoNoResults()">No Results</button>
+                <button class="demo-button secondary" onclick="clearErrorDemo()">Clear</button>
+            </div>
+        </div>
+
+        <!-- Quiz System Demo -->
+        <div class="demo-section">
+            <h2>3. Interactive Quiz System <span class="status-badge success">Ready</span></h2>
+
+            <p><strong>Features:</strong></p>
+            <ul class="feature-list">
+                <li>5 quizzes with 30+ questions total</li>
+                <li>Multiple question types (multiple-choice, multiple-select, true/false)</li>
+                <li>Immediate feedback with explanations</li>
+                <li>Score tracking and XP rewards</li>
+                <li>Review mode to see all answers</li>
+                <li>Progress saved to localStorage</li>
+                <li>Integration with learning platform</li>
+            </ul>
+
+            <p style="margin: 20px 0;"><strong>Available Quizzes:</strong></p>
+            <ul class="feature-list">
+                <li>What Are Pennies? (6 questions, Easy)</li>
+                <li>Clearance Lifecycle (6 questions, Medium)</li>
+                <li>In-Store Strategy (6 questions, Medium)</li>
+                <li>Checkout Strategy (6 questions, Medium)</li>
+                <li>Master Quiz (10 questions, Hard)</li>
+            </ul>
+
+            <p style="margin: 20px 0;"><strong>XP Rewards:</strong></p>
+            <ul class="feature-list">
+                <li>50 XP base reward per quiz</li>
+                <li>+25 XP bonus for perfect score (100%)</li>
+                <li>Achievements unlocked for milestones</li>
+            </ul>
+
+            <p><strong>Note:</strong> Visit the <code>quizzes.html</code> page to try the quiz system.</p>
+        </div>
+
+        <!-- Integration Info -->
+        <div class="demo-section">
+            <h2>4. Integration & Files</h2>
+
+            <p><strong>Files Created:</strong></p>
+            <ul class="feature-list">
+                <li>search.js - Search functionality</li>
+                <li>search-index.json - Search data</li>
+                <li>quiz-system.js - Quiz engine</li>
+                <li>quizzes.json - Quiz questions</li>
+                <li>ui-components.js - Reusable UI components</li>
+                <li>component-styles.css - All styles</li>
+                <li>integration-guide.md - Complete documentation</li>
+                <li>html-snippets.html - HTML examples</li>
+            </ul>
+
+            <p style="margin-top: 20px;"><strong>Integration:</strong></p>
+            <div class="code-block">
+&lt;!-- Add to &lt;head&gt; --&gt;
+&lt;link rel="stylesheet" href="component-styles.css"&gt;
+
+&lt;!-- Add before &lt;/body&gt; --&gt;
+&lt;script src="ui-components.js"&gt;&lt;/script&gt;
+&lt;script src="search.js"&gt;&lt;/script&gt;
+&lt;script src="quiz-system.js"&gt;&lt;/script&gt;
+
+&lt;script&gt;
+  document.addEventListener('DOMContentLoaded', () =&gt; {
+    if (window.initUIComponents) window.initUIComponents();
+    if (window.initSearch) window.initSearch();
+    if (window.initQuizzes) window.initQuizzes();
+  });
+&lt;/script&gt;
+            </div>
+
+            <p style="margin-top: 20px;"><strong>Required HTML Elements:</strong></p>
+            <div class="code-block">
+&lt;!-- Breadcrumb navigation --&gt;
+&lt;div id="breadcrumb-nav"&gt;&lt;/div&gt;
+
+&lt;!-- Suggested next pages --&gt;
+&lt;div id="suggested-next"&gt;&lt;/div&gt;
+
+&lt;!-- Quiz container (quizzes.html only) --&gt;
+&lt;div id="quiz-container"&gt;&lt;/div&gt;
+            </div>
+        </div>
+
+        <!-- Documentation -->
+        <div class="demo-section">
+            <h2>5. Documentation</h2>
+
+            <p><strong>Complete guides available:</strong></p>
+            <ul class="feature-list">
+                <li><strong>integration-guide.md</strong> - Comprehensive integration guide with API reference</li>
+                <li><strong>html-snippets.html</strong> - HTML markup examples for all components</li>
+                <li><strong>This demo page</strong> - Live testing of all features</li>
+            </ul>
+
+            <p style="margin-top: 20px;"><strong>Key Topics Covered:</strong></p>
+            <ul class="feature-list">
+                <li>Quick start guide</li>
+                <li>Search system integration</li>
+                <li>Quiz system integration</li>
+                <li>UI components API</li>
+                <li>Learning platform integration</li>
+                <li>Event system</li>
+                <li>Browser support</li>
+                <li>Troubleshooting</li>
+            </ul>
+        </div>
+
+        <!-- Next Steps -->
+        <div class="demo-section" style="background: linear-gradient(135deg, #f96302, #d55502); color: white;">
+            <h2 style="color: white; border-bottom-color: white;">🚀 Next Steps</h2>
+
+            <ol style="padding-left: 20px;">
+                <li style="margin-bottom: 12px;">Review the <strong>integration-guide.md</strong> for detailed instructions</li>
+                <li style="margin-bottom: 12px;">Add CSS and JS files to your pages</li>
+                <li style="margin-bottom: 12px;">Add required HTML elements (breadcrumb-nav, suggested-next, quiz-container)</li>
+                <li style="margin-bottom: 12px;">Test search with <kbd>Ctrl+K</kbd></li>
+                <li style="margin-bottom: 12px;">Create quizzes.html page with quiz container</li>
+                <li style="margin-bottom: 12px;">Configure breadcrumb paths in ui-components.js</li>
+                <li style="margin-bottom: 12px;">Customize as needed!</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="ui-components.js"></script>
+    <script src="search.js"></script>
+
+    <script>
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.initUIComponents) {
+                window.initUIComponents();
+            }
+            if (window.initSearch) {
+                window.initSearch();
+            }
+            console.log('✅ Demo page loaded successfully!');
+            console.log('Try pressing Ctrl+K to open search!');
+        });
+
+        // Modal demos
+        function showInfoModal() {
+            window.UIComponents.Modal.open({
+                title: 'Information',
+                content: '<p>This is an <strong>information modal</strong>. It can contain any HTML content!</p><p>Click OK or press Escape to close.</p>',
+                type: 'info',
+                confirmText: 'Got it!'
+            });
+        }
+
+        function showConfirmModal() {
+            window.UIComponents.Modal.open({
+                title: 'Confirm Action',
+                content: '<p>Are you sure you want to proceed with this action?</p>',
+                type: 'confirm',
+                confirmText: 'Yes, Continue',
+                cancelText: 'Cancel',
+                onConfirm: () => {
+                    window.UIComponents.Toast.success('Action confirmed!');
+                },
+                onCancel: () => {
+                    window.UIComponents.Toast.info('Action cancelled');
+                }
+            });
+        }
+
+        function showCustomModal() {
+            window.UIComponents.Modal.open({
+                title: 'Custom Content Modal',
+                content: `
+                    <h3>Custom Modal Content</h3>
+                    <p>You can put any HTML content here:</p>
+                    <ul>
+                        <li>Lists</li>
+                        <li>Images</li>
+                        <li>Forms</li>
+                        <li>Anything!</li>
+                    </ul>
+                    <p style="color: #f96302; font-weight: 600;">This is very flexible!</p>
+                `,
+                type: 'info',
+                confirmText: 'Close'
+            });
+        }
+
+        // Loading demos
+        function demoElementLoading() {
+            const target = document.getElementById('loading-demo');
+            window.UIComponents.Loading.show(target, 'Loading data...');
+            setTimeout(() => {
+                window.UIComponents.Loading.hide(target);
+                window.UIComponents.Toast.success('Loading complete!');
+            }, 3000);
+        }
+
+        function demoOverlayLoading() {
+            window.UIComponents.Loading.overlay(true, 'Processing your request...');
+            setTimeout(() => {
+                window.UIComponents.Loading.overlay(false);
+                window.UIComponents.Toast.success('Processing complete!');
+            }, 3000);
+        }
+
+        // Error demos
+        function demoGenericError() {
+            window.UIComponents.ErrorState.show('#error-demo', {
+                icon: '⚠️',
+                title: 'Oops!',
+                message: 'Something went wrong. Please try again.',
+                actionText: 'Retry',
+                onAction: () => {
+                    window.UIComponents.Toast.info('Retrying...');
+                    setTimeout(() => {
+                        clearErrorDemo();
+                    }, 1000);
+                }
+            });
+        }
+
+        function demo404Error() {
+            window.UIComponents.ErrorState.notFound('#error-demo');
+        }
+
+        function demoNoResults() {
+            window.UIComponents.ErrorState.noResults('#error-demo');
+        }
+
+        function clearErrorDemo() {
+            document.getElementById('error-demo').innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">Error state cleared</p>';
+        }
+    </script>
+</body>
+</html>

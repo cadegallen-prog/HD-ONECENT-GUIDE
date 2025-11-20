@@ -1,0 +1,815 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-11-18",
+  "description": "Internal linking map for the HD-ONECENT-GUIDE site. Shows recommended cross-links between pages for optimal user navigation and SEO.",
+
+  "pages": {
+    "index.html": {
+      "title": "Home",
+      "shouldLinkTo": [
+        {
+          "page": "quick-start.html",
+          "context": "Getting started section",
+          "anchorText": "Quick Start Guide",
+          "priority": "high"
+        },
+        {
+          "page": "what-are-pennies.html",
+          "context": "Basics section",
+          "anchorText": "What Are Pennies?",
+          "priority": "high"
+        },
+        {
+          "page": "clearance-lifecycle.html",
+          "context": "Learning path",
+          "anchorText": "Clearance Lifecycle",
+          "priority": "high"
+        },
+        {
+          "page": "in-store-strategy.html",
+          "context": "Getting started",
+          "anchorText": "In-Store Strategy",
+          "priority": "high"
+        },
+        {
+          "page": "digital-prehunt.html",
+          "context": "Advanced topics",
+          "anchorText": "Digital Pre-Hunt",
+          "priority": "medium"
+        },
+        {
+          "page": "checkout-strategy.html",
+          "context": "Advanced topics",
+          "anchorText": "Checkout Strategy",
+          "priority": "medium"
+        },
+        {
+          "page": "internal-systems.html",
+          "context": "Advanced topics",
+          "anchorText": "Internal Systems",
+          "priority": "medium"
+        },
+        {
+          "page": "responsible-hunting.html",
+          "context": "Important guidelines",
+          "anchorText": "Responsible Hunting",
+          "priority": "high"
+        },
+        {
+          "page": "faq.html",
+          "context": "Support",
+          "anchorText": "FAQ",
+          "priority": "medium"
+        },
+        {
+          "page": "about.html",
+          "context": "Footer/About section",
+          "anchorText": "About This Guide",
+          "priority": "low"
+        }
+      ],
+      "receives LinksFrom": ["All pages (nav)"]
+    },
+
+    "quick-start.html": {
+      "title": "Quick Start",
+      "shouldLinkTo": [
+        {
+          "page": "what-are-pennies.html",
+          "context": "Step 1: Understanding basics",
+          "anchorText": "What Are Pennies?",
+          "priority": "high"
+        },
+        {
+          "page": "clearance-lifecycle.html",
+          "context": "Step 2: Learning markdown system",
+          "anchorText": "Clearance Lifecycle",
+          "priority": "high"
+        },
+        {
+          "page": "in-store-strategy.html",
+          "context": "Step 3: Finding items",
+          "anchorText": "In-Store Strategy",
+          "priority": "high"
+        },
+        {
+          "page": "responsible-hunting.html",
+          "context": "Guidelines",
+          "anchorText": "Responsible Hunting",
+          "priority": "high"
+        },
+        {
+          "page": "faq.html",
+          "context": "Questions",
+          "anchorText": "FAQ",
+          "priority": "medium"
+        }
+      ],
+      "receivesLinksFrom": ["index.html", "learning-paths.html"]
+    },
+
+    "what-are-pennies.html": {
+      "title": "What Are Pennies?",
+      "shouldLinkTo": [
+        {
+          "page": "clearance-lifecycle.html",
+          "context": "Next step: How items reach penny status",
+          "anchorText": "Clearance Lifecycle",
+          "priority": "high"
+        },
+        {
+          "page": "internal-systems.html",
+          "context": "Understanding ZMA system",
+          "anchorText": "Internal Systems",
+          "priority": "medium"
+        },
+        {
+          "page": "facts-vs-myths.html",
+          "context": "Common misconceptions",
+          "anchorText": "Facts vs. Myths",
+          "priority": "medium"
+        },
+        {
+          "page": "responsible-hunting.html",
+          "context": "Ethics",
+          "anchorText": "Responsible Hunting",
+          "priority": "medium"
+        }
+      ],
+      "receivesLinksFrom": ["index.html", "quick-start.html", "clearance-lifecycle.html", "faq.html"]
+    },
+
+    "clearance-lifecycle.html": {
+      "title": "Clearance Lifecycle",
+      "shouldLinkTo": [
+        {
+          "page": "what-are-pennies.html",
+          "context": "Understanding basics",
+          "anchorText": "What Are Pennies?",
+          "priority": "medium"
+        },
+        {
+          "page": "digital-prehunt.html",
+          "context": "Next step: Scouting items",
+          "anchorText": "Digital Pre-Hunt",
+          "priority": "high"
+        },
+        {
+          "page": "in-store-strategy.html",
+          "context": "Finding items at each stage",
+          "anchorText": "In-Store Strategy",
+          "priority": "high"
+        },
+        {
+          "page": "internal-systems.html",
+          "context": "How system triggers markdowns",
+          "anchorText": "Internal Systems",
+          "priority": "medium"
+        },
+        {
+          "page": "calculators.html",
+          "context": "Calculate markdown timing",
+          "anchorText": "Calculators",
+          "priority": "low"
+        }
+      ],
+      "receivesLinksFrom": ["what-are-pennies.html", "digital-prehunt.html", "faq.html"]
+    },
+
+    "digital-prehunt.html": {
+      "title": "Digital Pre-Hunt",
+      "shouldLinkTo": [
+        {
+          "page": "clearance-lifecycle.html",
+          "context": "Understanding price endings",
+          "anchorText": "Clearance Lifecycle",
+          "priority": "high"
+        },
+        {
+          "page": "in-store-strategy.html",
+          "context": "Next step: In-store hunting",
+          "anchorText": "In-Store Strategy",
+          "priority": "high"
+        },
+        {
+          "page": "digital-prehunt-workflow.html",
+          "context": "Detailed workflow template",
+          "anchorText": "Digital Pre-Hunt Workflow",
+          "priority": "medium"
+        },
+        {
+          "page": "store-notes-template.html",
+          "context": "Track store info",
+          "anchorText": "Store Notes Template",
+          "priority": "low"
+        }
+      ],
+      "receivesLinksFrom": ["clearance-lifecycle.html", "in-store-strategy.html", "quick-start.html"]
+    },
+
+    "in-store-strategy.html": {
+      "title": "In-Store Strategy",
+      "shouldLinkTo": [
+        {
+          "page": "digital-prehunt.html",
+          "context": "Pre-scout before visiting",
+          "anchorText": "Digital Pre-Hunt",
+          "priority": "medium"
+        },
+        {
+          "page": "checkout-strategy.html",
+          "context": "Next step: Getting items through checkout",
+          "anchorText": "Checkout Strategy",
+          "priority": "high"
+        },
+        {
+          "page": "clearance-lifecycle.html",
+          "context": "Understanding price stages",
+          "anchorText": "Clearance Lifecycle",
+          "priority": "medium"
+        },
+        {
+          "page": "responsible-hunting.html",
+          "context": "In-store etiquette",
+          "anchorText": "Responsible Hunting",
+          "priority": "high"
+        },
+        {
+          "page": "store-visit-checklist.html",
+          "context": "Printable checklist",
+          "anchorText": "Store Visit Checklist",
+          "priority": "medium"
+        },
+        {
+          "page": "finds-log-template.html",
+          "context": "Track your finds",
+          "anchorText": "Finds Log Template",
+          "priority": "low"
+        }
+      ],
+      "receivesLinksFrom": ["digital-prehunt.html", "checkout-strategy.html", "quick-start.html"]
+    },
+
+    "checkout-strategy.html": {
+      "title": "Checkout Strategy",
+      "shouldLinkTo": [
+        {
+          "page": "in-store-strategy.html",
+          "context": "Finding items first",
+          "anchorText": "In-Store Strategy",
+          "priority": "medium"
+        },
+        {
+          "page": "responsible-hunting.html",
+          "context": "Ethical checkout practices",
+          "anchorText": "Responsible Hunting",
+          "priority": "high"
+        },
+        {
+          "page": "facts-vs-myths.html",
+          "context": "Common checkout myths",
+          "anchorText": "Facts vs. Myths",
+          "priority": "medium"
+        },
+        {
+          "page": "internal-systems.html",
+          "context": "What staff see at checkout",
+          "anchorText": "Internal Systems",
+          "priority": "medium"
+        }
+      ],
+      "receivesLinksFrom": ["in-store-strategy.html", "responsible-hunting.html", "faq.html"]
+    },
+
+    "internal-systems.html": {
+      "title": "Internal Systems",
+      "shouldLinkTo": [
+        {
+          "page": "what-are-pennies.html",
+          "context": "ZMA basics",
+          "anchorText": "What Are Pennies?",
+          "priority": "medium"
+        },
+        {
+          "page": "clearance-lifecycle.html",
+          "context": "How system triggers markdowns",
+          "anchorText": "Clearance Lifecycle",
+          "priority": "high"
+        },
+        {
+          "page": "checkout-strategy.html",
+          "context": "What displays at register",
+          "anchorText": "Checkout Strategy",
+          "priority": "medium"
+        },
+        {
+          "page": "facts-vs-myths.html",
+          "context": "System misconceptions",
+          "anchorText": "Facts vs. Myths",
+          "priority": "medium"
+        }
+      ],
+      "receivesLinksFrom": ["what-are-pennies.html", "clearance-lifecycle.html", "checkout-strategy.html"]
+    },
+
+    "facts-vs-myths.html": {
+      "title": "Facts vs. Myths",
+      "shouldLinkTo": [
+        {
+          "page": "what-are-pennies.html",
+          "context": "Understanding the reality",
+          "anchorText": "What Are Pennies?",
+          "priority": "high"
+        },
+        {
+          "page": "clearance-lifecycle.html",
+          "context": "How it actually works",
+          "anchorText": "Clearance Lifecycle",
+          "priority": "medium"
+        },
+        {
+          "page": "checkout-strategy.html",
+          "context": "Checkout myths",
+          "anchorText": "Checkout Strategy",
+          "priority": "medium"
+        },
+        {
+          "page": "internal-systems.html",
+          "context": "System facts",
+          "anchorText": "Internal Systems",
+          "priority": "medium"
+        },
+        {
+          "page": "responsible-hunting.html",
+          "context": "Ethics and reality",
+          "anchorText": "Responsible Hunting",
+          "priority": "medium"
+        }
+      ],
+      "receivesLinksFrom": ["checkout-strategy.html", "internal-systems.html", "faq.html"]
+    },
+
+    "responsible-hunting.html": {
+      "title": "Responsible Hunting",
+      "shouldLinkTo": [
+        {
+          "page": "in-store-strategy.html",
+          "context": "Respectful in-store behavior",
+          "anchorText": "In-Store Strategy",
+          "priority": "high"
+        },
+        {
+          "page": "checkout-strategy.html",
+          "context": "Ethical checkout practices",
+          "anchorText": "Checkout Strategy",
+          "priority": "high"
+        },
+        {
+          "page": "facts-vs-myths.html",
+          "context": "Understanding reality",
+          "anchorText": "Facts vs. Myths",
+          "priority": "medium"
+        },
+        {
+          "page": "contribute.html",
+          "context": "Community contribution",
+          "anchorText": "Contribute",
+          "priority": "low"
+        }
+      ],
+      "receivesLinksFrom": ["index.html", "checkout-strategy.html", "in-store-strategy.html", "quick-start.html"]
+    },
+
+    "calculators.html": {
+      "title": "Calculators",
+      "shouldLinkTo": [
+        {
+          "page": "clearance-lifecycle.html",
+          "context": "Understanding markdown timing",
+          "anchorText": "Clearance Lifecycle",
+          "priority": "high"
+        },
+        {
+          "page": "digital-prehunt.html",
+          "context": "Use with scouting",
+          "anchorText": "Digital Pre-Hunt",
+          "priority": "medium"
+        }
+      ],
+      "receivesLinksFrom": ["clearance-lifecycle.html", "resources.html"]
+    },
+
+    "faq.html": {
+      "title": "FAQ",
+      "shouldLinkTo": [
+        {
+          "page": "what-are-pennies.html",
+          "context": "Basics questions",
+          "anchorText": "What Are Pennies?",
+          "priority": "high"
+        },
+        {
+          "page": "clearance-lifecycle.html",
+          "context": "Markdown questions",
+          "anchorText": "Clearance Lifecycle",
+          "priority": "high"
+        },
+        {
+          "page": "checkout-strategy.html",
+          "context": "Checkout questions",
+          "anchorText": "Checkout Strategy",
+          "priority": "high"
+        },
+        {
+          "page": "facts-vs-myths.html",
+          "context": "Myth-busting",
+          "anchorText": "Facts vs. Myths",
+          "priority": "medium"
+        },
+        {
+          "page": "resources.html",
+          "context": "More help",
+          "anchorText": "Resources",
+          "priority": "medium"
+        },
+        {
+          "page": "contribute.html",
+          "context": "Submit questions",
+          "anchorText": "Contribute",
+          "priority": "low"
+        }
+      ],
+      "receivesLinksFrom": ["index.html", "All pages (Help)"]
+    },
+
+    "resources.html": {
+      "title": "Resources",
+      "shouldLinkTo": [
+        {
+          "page": "calculators.html",
+          "context": "Tools section",
+          "anchorText": "Calculators",
+          "priority": "medium"
+        },
+        {
+          "page": "quick-reference-card.html",
+          "context": "Downloads section",
+          "anchorText": "Quick Reference Card",
+          "priority": "medium"
+        },
+        {
+          "page": "digital-prehunt-workflow.html",
+          "context": "Templates section",
+          "anchorText": "Digital Pre-Hunt Workflow",
+          "priority": "low"
+        },
+        {
+          "page": "store-visit-checklist.html",
+          "context": "Templates section",
+          "anchorText": "Store Visit Checklist",
+          "priority": "low"
+        },
+        {
+          "page": "faq.html",
+          "context": "Support section",
+          "anchorText": "FAQ",
+          "priority": "medium"
+        },
+        {
+          "page": "contribute.html",
+          "context": "Community section",
+          "anchorText": "Contribute",
+          "priority": "low"
+        }
+      ],
+      "receivesLinksFrom": ["index.html", "faq.html", "about.html"]
+    },
+
+    "quick-reference-card.html": {
+      "title": "Quick Reference",
+      "shouldLinkTo": [
+        {
+          "page": "clearance-lifecycle.html",
+          "context": "Full details on price endings",
+          "anchorText": "Clearance Lifecycle",
+          "priority": "high"
+        },
+        {
+          "page": "in-store-strategy.html",
+          "context": "Full in-store guide",
+          "anchorText": "In-Store Strategy",
+          "priority": "medium"
+        }
+      ],
+      "receivesLinksFrom": ["resources.html"]
+    },
+
+    "quizzes.html": {
+      "title": "Quizzes",
+      "shouldLinkTo": [
+        {
+          "page": "learning-paths.html",
+          "context": "Structured learning",
+          "anchorText": "Learning Paths",
+          "priority": "medium"
+        },
+        {
+          "page": "achievements.html",
+          "context": "Earn badges",
+          "anchorText": "Achievements",
+          "priority": "low"
+        }
+      ],
+      "receivesLinksFrom": ["learning-paths.html", "achievements.html"]
+    },
+
+    "achievements.html": {
+      "title": "Achievements",
+      "shouldLinkTo": [
+        {
+          "page": "quizzes.html",
+          "context": "Earn badges through quizzes",
+          "anchorText": "Quizzes",
+          "priority": "medium"
+        },
+        {
+          "page": "learning-paths.html",
+          "context": "Complete learning paths",
+          "anchorText": "Learning Paths",
+          "priority": "medium"
+        }
+      ],
+      "receivesLinksFrom": ["quizzes.html", "learning-paths.html"]
+    },
+
+    "learning-paths.html": {
+      "title": "Learning Paths",
+      "shouldLinkTo": [
+        {
+          "page": "quick-start.html",
+          "context": "Beginner path",
+          "anchorText": "Quick Start",
+          "priority": "high"
+        },
+        {
+          "page": "what-are-pennies.html",
+          "context": "Beginner path",
+          "anchorText": "What Are Pennies?",
+          "priority": "high"
+        },
+        {
+          "page": "clearance-lifecycle.html",
+          "context": "Intermediate path",
+          "anchorText": "Clearance Lifecycle",
+          "priority": "high"
+        },
+        {
+          "page": "digital-prehunt.html",
+          "context": "Intermediate path",
+          "anchorText": "Digital Pre-Hunt",
+          "priority": "high"
+        },
+        {
+          "page": "internal-systems.html",
+          "context": "Advanced path",
+          "anchorText": "Internal Systems",
+          "priority": "medium"
+        },
+        {
+          "page": "quizzes.html",
+          "context": "Test knowledge",
+          "anchorText": "Quizzes",
+          "priority": "medium"
+        }
+      ],
+      "receivesLinksFrom": ["index.html"]
+    },
+
+    "contribute.html": {
+      "title": "Contribute",
+      "shouldLinkTo": [
+        {
+          "page": "resources.html",
+          "context": "Community resources",
+          "anchorText": "Resources",
+          "priority": "medium"
+        },
+        {
+          "page": "changelog.html",
+          "context": "Recent updates",
+          "anchorText": "Updates",
+          "priority": "low"
+        }
+      ],
+      "receivesLinksFrom": ["resources.html", "about.html", "faq.html"]
+    },
+
+    "changelog.html": {
+      "title": "Updates",
+      "shouldLinkTo": [
+        {
+          "page": "contribute.html",
+          "context": "Help make updates",
+          "anchorText": "Contribute",
+          "priority": "low"
+        }
+      ],
+      "receivesLinksFrom": ["about.html", "contribute.html"]
+    },
+
+    "about.html": {
+      "title": "About",
+      "shouldLinkTo": [
+        {
+          "page": "resources.html",
+          "context": "Community and downloads",
+          "anchorText": "Resources",
+          "priority": "medium"
+        },
+        {
+          "page": "contribute.html",
+          "context": "Get involved",
+          "anchorText": "Contribute",
+          "priority": "medium"
+        },
+        {
+          "page": "changelog.html",
+          "context": "Version history",
+          "anchorText": "Updates",
+          "priority": "low"
+        }
+      ],
+      "receivesLinksFrom": ["index.html"]
+    },
+
+    "digital-prehunt-workflow.html": {
+      "title": "Digital Pre-Hunt Workflow",
+      "shouldLinkTo": [
+        {
+          "page": "digital-prehunt.html",
+          "context": "Full guide",
+          "anchorText": "Digital Pre-Hunt",
+          "priority": "high"
+        },
+        {
+          "page": "store-notes-template.html",
+          "context": "Track findings",
+          "anchorText": "Store Notes Template",
+          "priority": "medium"
+        }
+      ],
+      "receivesLinksFrom": ["digital-prehunt.html", "resources.html"]
+    },
+
+    "store-visit-checklist.html": {
+      "title": "Store Visit Checklist",
+      "shouldLinkTo": [
+        {
+          "page": "in-store-strategy.html",
+          "context": "Full guide",
+          "anchorText": "In-Store Strategy",
+          "priority": "high"
+        }
+      ],
+      "receivesLinksFrom": ["in-store-strategy.html", "resources.html"]
+    },
+
+    "store-notes-template.html": {
+      "title": "Store Notes Template",
+      "shouldLinkTo": [
+        {
+          "page": "digital-prehunt.html",
+          "context": "Scouting guide",
+          "anchorText": "Digital Pre-Hunt",
+          "priority": "medium"
+        },
+        {
+          "page": "in-store-strategy.html",
+          "context": "In-store tips",
+          "anchorText": "In-Store Strategy",
+          "priority": "medium"
+        }
+      ],
+      "receivesLinksFrom": ["digital-prehunt.html", "resources.html"]
+    },
+
+    "finds-log-template.html": {
+      "title": "Finds Log Template",
+      "shouldLinkTo": [
+        {
+          "page": "in-store-strategy.html",
+          "context": "Finding items",
+          "anchorText": "In-Store Strategy",
+          "priority": "medium"
+        },
+        {
+          "page": "calculators.html",
+          "context": "Calculate profits",
+          "anchorText": "Calculators",
+          "priority": "low"
+        }
+      ],
+      "receivesLinksFrom": ["in-store-strategy.html", "resources.html"]
+    },
+
+    "notes.html": {
+      "title": "My Notes",
+      "shouldLinkTo": [],
+      "receivesLinksFrom": ["All pages (nav)"]
+    },
+
+    "bookmarks.html": {
+      "title": "Bookmarks",
+      "shouldLinkTo": [],
+      "receivesLinksFrom": ["All pages (nav)"]
+    },
+
+    "shortcuts.html": {
+      "title": "Keyboard Shortcuts",
+      "shouldLinkTo": [
+        {
+          "page": "a11y.html",
+          "context": "Accessibility features",
+          "anchorText": "Accessibility",
+          "priority": "low"
+        }
+      ],
+      "receivesLinksFrom": ["a11y.html"]
+    },
+
+    "a11y.html": {
+      "title": "Accessibility",
+      "shouldLinkTo": [
+        {
+          "page": "shortcuts.html",
+          "context": "Keyboard navigation",
+          "anchorText": "Keyboard Shortcuts",
+          "priority": "medium"
+        }
+      ],
+      "receivesLinksFrom": ["shortcuts.html"]
+    },
+
+    "offline.html": {
+      "title": "Offline Mode",
+      "shouldLinkTo": [
+        {
+          "page": "resources.html",
+          "context": "Downloads",
+          "anchorText": "Resources",
+          "priority": "medium"
+        }
+      ],
+      "receivesLinksFrom": []
+    }
+  },
+
+  "linkingBestPractices": {
+    "contextualLinks": {
+      "description": "Links should appear naturally within content, not as standalone 'click here' text",
+      "examples": [
+        {
+          "bad": "To learn more, <a href='clearance-lifecycle.html'>click here</a>.",
+          "good": "Learn how items reach penny status in the <a href='clearance-lifecycle.html'>Clearance Lifecycle</a> guide."
+        }
+      ]
+    },
+    "relatedTopics": {
+      "description": "Every page should have a 'Related Topics' section at the end linking to 2-4 related pages",
+      "template": "<div class='related-topics-section'><h3 class='icon-link'>Related Topics</h3><ul><li><a href='page.html'>Title</a> — Description</li></ul></div>"
+    },
+    "nextSteps": {
+      "description": "Guide users to the next logical page in their learning journey",
+      "template": "<p><strong>Next:</strong> <a href='next-page.html'>Next Topic Title</a></p>"
+    },
+    "crossReferences": {
+      "description": "Link to other pages when mentioning related concepts",
+      "examples": [
+        "When scouting with the <a href='digital-prehunt.html'>app</a>...",
+        "Understanding <a href='clearance-lifecycle.html'>price endings</a> is essential..."
+      ]
+    }
+  },
+
+  "seoConsiderations": {
+    "internalLinking": [
+      "Each page should have 3-10 internal links to other pages",
+      "Use descriptive anchor text (not 'click here')",
+      "Link to both higher and lower hierarchy pages",
+      "Ensure important pages receive more internal links",
+      "Avoid linking to the same page multiple times from one page (unless in different contexts)"
+    ],
+    "linkHierarchy": {
+      "tier1": ["index.html", "what-are-pennies.html", "clearance-lifecycle.html"],
+      "tier2": ["digital-prehunt.html", "in-store-strategy.html", "checkout-strategy.html", "faq.html"],
+      "tier3": ["internal-systems.html", "facts-vs-myths.html", "responsible-hunting.html", "resources.html"],
+      "tier4": ["All other pages"]
+    }
+  },
+
+  "orphanPages": {
+    "description": "Pages with no incoming links (should be avoided)",
+    "current": [],
+    "note": "All pages should be accessible from navigation AND have contextual links from related pages"
+  }
+}

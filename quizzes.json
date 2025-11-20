@@ -1,0 +1,529 @@
+{
+  "quizzes": [
+    {
+      "id": "what-are-pennies",
+      "title": "What Are Pennies?",
+      "description": "Test your understanding of penny items and how they work",
+      "category": "Fundamentals",
+      "difficulty": "easy",
+      "estimatedTime": 5,
+      "xpReward": 50,
+      "questions": [
+        {
+          "id": "penny-def-1",
+          "type": "multiple-choice",
+          "difficulty": "easy",
+          "question": "What is a 'penny item' at Home Depot?",
+          "answers": [
+            "An item originally priced at $0.01",
+            "An item that rings up as $0.01 at checkout",
+            "An item with a penny symbol on the price tag",
+            "An item worth collecting as an antique"
+          ],
+          "correct": "An item that rings up as $0.01 at checkout",
+          "explanation": "Penny items are clearance products that scan at $0.01 when checked out, regardless of their original price. This is Home Depot's internal system for marking discontinued merchandise.",
+          "points": 10
+        },
+        {
+          "id": "penny-def-2",
+          "type": "true-false",
+          "difficulty": "easy",
+          "question": "Penny items are intentionally advertised by Home Depot to clear inventory quickly.",
+          "answers": ["True", "False"],
+          "correct": "False",
+          "explanation": "False. Penny items are NOT advertised or intentionally publicized. They're part of Home Depot's internal clearance system meant for employees to remove from shelves, not for customers to hunt.",
+          "points": 10
+        },
+        {
+          "id": "penny-def-3",
+          "type": "multiple-choice",
+          "difficulty": "medium",
+          "question": "Why do penny items exist in Home Depot's system?",
+          "answers": [
+            "To reward loyal customers with special deals",
+            "As a pricing error that occurs randomly",
+            "As a final markdown stage for discontinued inventory",
+            "To test customer service protocols"
+          ],
+          "correct": "As a final markdown stage for discontinued inventory",
+          "explanation": "Penny pricing is the final stage in Home Depot's clearance lifecycle. When an item reaches this stage, it's meant to be removed from the sales floor by employees, not sold to customers.",
+          "points": 10
+        },
+        {
+          "id": "penny-def-4",
+          "type": "multiple-select",
+          "difficulty": "medium",
+          "question": "Which statements about penny items are TRUE? (Select all that apply)",
+          "answers": [
+            "They are extremely rare and hard to find",
+            "Stores are required to sell them if they scan at $0.01",
+            "Not all clearance items become penny items",
+            "Finding them requires luck and persistence"
+          ],
+          "correct": ["They are extremely rare and hard to find", "Not all clearance items become penny items", "Finding them requires luck and persistence"],
+          "explanation": "Penny items are rare, not all clearance reaches penny status, and finding them takes effort. However, stores are NOT required to sell them - many employees will refuse or remove them from the floor when discovered.",
+          "points": 15
+        },
+        {
+          "id": "penny-def-5",
+          "type": "multiple-choice",
+          "difficulty": "easy",
+          "question": "What should you expect from penny hunting?",
+          "answers": [
+            "Consistent finds every visit with high resale profits",
+            "Getting rich quickly with minimal effort",
+            "Occasional finds with realistic expectations",
+            "Special treatment from store employees"
+          ],
+          "correct": "Occasional finds with realistic expectations",
+          "explanation": "Penny hunting should be approached with realistic expectations. Finds are occasional, not guaranteed, and most hunters do it as a hobby rather than a reliable income source.",
+          "points": 10
+        },
+        {
+          "id": "penny-def-6",
+          "type": "true-false",
+          "difficulty": "easy",
+          "question": "All Home Depot locations follow the exact same clearance schedule.",
+          "answers": ["True", "False"],
+          "correct": "False",
+          "explanation": "False. While there are general patterns, different stores may have different markdown schedules, inventory levels, and clearance cadences. What works at one store may not work at another.",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "id": "clearance-lifecycle",
+      "title": "Clearance Lifecycle",
+      "description": "Master the markdown process and pricing patterns",
+      "category": "Fundamentals",
+      "difficulty": "medium",
+      "estimatedTime": 6,
+      "xpReward": 50,
+      "questions": [
+        {
+          "id": "lifecycle-1",
+          "type": "multiple-choice",
+          "difficulty": "medium",
+          "question": "What does a price ending in .06 typically indicate?",
+          "answers": [
+            "Clearance item ready for markdown",
+            "Regular priced item",
+            "Manager special pricing",
+            "Price mistake that needs correction"
+          ],
+          "correct": "Clearance item ready for markdown",
+          "explanation": "Prices ending in .06 often indicate clearance items that may go through additional markdowns. This is part of Home Depot's pricing structure for tracking clearance inventory.",
+          "points": 10
+        },
+        {
+          "id": "lifecycle-2",
+          "type": "multiple-choice",
+          "difficulty": "hard",
+          "question": "In a typical markdown cadence, how often do major markdowns occur?",
+          "answers": [
+            "Daily",
+            "Weekly",
+            "Every 2-4 weeks",
+            "Monthly"
+          ],
+          "correct": "Every 2-4 weeks",
+          "explanation": "Most Home Depot stores follow markdown cadences where major price reductions happen every 2-4 weeks. This gives items time to sell at each price point before further reduction.",
+          "points": 10
+        },
+        {
+          "id": "lifecycle-3",
+          "type": "multiple-select",
+          "difficulty": "medium",
+          "question": "Which price endings commonly indicate clearance items? (Select all that apply)",
+          "answers": [
+            ".03",
+            ".06",
+            ".98",
+            ".97"
+          ],
+          "correct": [".03", ".06"],
+          "explanation": "Prices ending in .03 and .06 often indicate clearance items in Home Depot's system. Regular prices typically end in .97, .98, or whole dollar amounts.",
+          "points": 15
+        },
+        {
+          "id": "lifecycle-4",
+          "type": "true-false",
+          "difficulty": "easy",
+          "question": "An item priced at $5.03 is guaranteed to eventually become a penny item.",
+          "answers": ["True", "False"],
+          "correct": "False",
+          "explanation": "False. While .03 endings indicate clearance, there's no guarantee an item will reach penny status. Items may sell out, be returned to vendors, or be removed from shelves before reaching $0.01.",
+          "points": 10
+        },
+        {
+          "id": "lifecycle-5",
+          "type": "multiple-choice",
+          "difficulty": "hard",
+          "question": "What typically happens BEFORE an item reaches penny status?",
+          "answers": [
+            "One or two markdown cycles at higher clearance prices",
+            "Direct discount from full price to $0.01",
+            "Store-wide announcement to clear the item",
+            "Automatic removal from the sales floor"
+          ],
+          "correct": "One or two markdown cycles at higher clearance prices",
+          "explanation": "Items typically go through several markdown stages (often multiple .03 or .06 prices at decreasing amounts) before potentially reaching penny status. It's a gradual process, not immediate.",
+          "points": 10
+        },
+        {
+          "id": "lifecycle-6",
+          "type": "multiple-choice",
+          "difficulty": "medium",
+          "question": "What is a 'markdown cadence'?",
+          "answers": [
+            "The musical rhythm employees use when stocking shelves",
+            "A scheduled pattern of when clearance prices are reduced",
+            "The speed at which items sell during clearance",
+            "A training program for clearance management"
+          ],
+          "correct": "A scheduled pattern of when clearance prices are reduced",
+          "explanation": "A markdown cadence is the regular schedule stores follow for reducing clearance prices. Many stores follow Cadence A or B, with markdowns happening on specific days every few weeks.",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "id": "in-store-strategy",
+      "title": "In-Store Strategy",
+      "description": "Learn where and when to hunt for the best results",
+      "category": "Strategy",
+      "difficulty": "medium",
+      "estimatedTime": 7,
+      "xpReward": 50,
+      "questions": [
+        {
+          "id": "store-1",
+          "type": "multiple-select",
+          "difficulty": "medium",
+          "question": "Where are penny items most commonly found? (Select all that apply)",
+          "answers": [
+            "End caps of aisles",
+            "Clearance endcaps with orange tags",
+            "Mixed in with regular priced items on shelves",
+            "Behind customer service desk"
+          ],
+          "correct": ["End caps of aisles", "Clearance endcaps with orange tags", "Mixed in with regular priced items on shelves"],
+          "explanation": "Penny items can be found on endcaps, dedicated clearance sections, or mixed with regular inventory. They're rarely stored behind customer service - employees typically remove them when discovered.",
+          "points": 15
+        },
+        {
+          "id": "store-2",
+          "type": "multiple-choice",
+          "difficulty": "easy",
+          "question": "What's the best time to hunt for penny items?",
+          "answers": [
+            "Right when the store opens",
+            "During peak afternoon hours",
+            "Late evening before closing",
+            "There's no guaranteed 'best' time"
+          ],
+          "correct": "There's no guaranteed 'best' time",
+          "explanation": "While early morning may offer less competition, there's no truly 'best' time. Success depends on markdown schedules, restocking patterns, and when other hunters visit. Consistency matters more than timing.",
+          "points": 10
+        },
+        {
+          "id": "store-3",
+          "type": "true-false",
+          "difficulty": "easy",
+          "question": "You should always scan every item in the clearance section to find penny items.",
+          "answers": ["True", "False"],
+          "correct": "False",
+          "explanation": "False. While thorough checking helps, scanning literally everything is time-consuming and may annoy employees. Focus on items with .03/.06 pricing and use strategic scanning rather than blind checking.",
+          "points": 10
+        },
+        {
+          "id": "store-4",
+          "type": "multiple-choice",
+          "difficulty": "medium",
+          "question": "What should you bring on a penny hunting trip?",
+          "answers": [
+            "Nothing special - just yourself",
+            "The Home Depot app for price checking",
+            "A list of known penny SKUs from online groups",
+            "Professional scanning equipment"
+          ],
+          "correct": "The Home Depot app for price checking",
+          "explanation": "The official Home Depot app is the most useful tool, allowing you to scan items and check prices. SKU lists can help but are often outdated. Professional equipment is unnecessary and may draw unwanted attention.",
+          "points": 10
+        },
+        {
+          "id": "store-5",
+          "type": "multiple-select",
+          "difficulty": "hard",
+          "question": "Which departments commonly have penny items? (Select all that apply)",
+          "answers": [
+            "Seasonal (after season ends)",
+            "Tools and hardware",
+            "Paint and flooring",
+            "Discontinued appliances"
+          ],
+          "correct": ["Seasonal (after season ends)", "Tools and hardware", "Paint and flooring", "Discontinued appliances"],
+          "explanation": "All of these departments can have penny items. Seasonal items after their season, discontinued tools, paint colors being phased out, and old model appliances are all candidates for penny markdowns.",
+          "points": 15
+        },
+        {
+          "id": "store-6",
+          "type": "multiple-choice",
+          "difficulty": "medium",
+          "question": "How should you behave while penny hunting in the store?",
+          "answers": [
+            "Be as quick and stealthy as possible to avoid detection",
+            "Shop respectfully and don't make a mess",
+            "Ask every employee if they know where penny items are",
+            "Bring a group of friends to cover more ground faster"
+          ],
+          "correct": "Shop respectfully and don't make a mess",
+          "explanation": "The best approach is to shop like a normal customer - be respectful, don't create messes, and don't draw excessive attention. Being disruptive or involving employees unnecessarily can get you asked to leave.",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "id": "checkout-strategy",
+      "title": "Checkout Strategy",
+      "description": "Navigate the checkout process successfully",
+      "category": "Strategy",
+      "difficulty": "medium",
+      "estimatedTime": 6,
+      "xpReward": 50,
+      "questions": [
+        {
+          "id": "checkout-1",
+          "type": "multiple-choice",
+          "difficulty": "easy",
+          "question": "Which checkout method is generally preferred for penny items?",
+          "answers": [
+            "Self-checkout",
+            "Regular cashier lane",
+            "Pro desk",
+            "Online order pickup"
+          ],
+          "correct": "Self-checkout",
+          "explanation": "Self-checkout is often preferred because you can see the price immediately without involving a cashier who might question or refuse the sale. However, this doesn't guarantee success.",
+          "points": 10
+        },
+        {
+          "id": "checkout-2",
+          "type": "true-false",
+          "difficulty": "medium",
+          "question": "If an item scans at $0.01, the store is legally required to sell it to you at that price.",
+          "answers": ["True", "False"],
+          "correct": "False",
+          "explanation": "False. Stores have the right to refuse sales, and many will not honor penny prices. Employees can cancel transactions or remove items if they recognize them as penny items meant to be pulled from shelves.",
+          "points": 10
+        },
+        {
+          "id": "checkout-3",
+          "type": "multiple-choice",
+          "difficulty": "medium",
+          "question": "What should you do if a cashier questions your penny item?",
+          "answers": [
+            "Argue that it's false advertising if they don't sell it",
+            "Demand to speak to a manager immediately",
+            "Politely accept their decision and don't make a scene",
+            "Show them online posts proving it's a penny item"
+          ],
+          "correct": "Politely accept their decision and don't make a scene",
+          "explanation": "If questioned or refused, the best response is to be polite and accept the decision. Arguing, demanding, or causing a scene can get you banned from the store and gives penny hunters a bad reputation.",
+          "points": 10
+        },
+        {
+          "id": "checkout-4",
+          "type": "multiple-select",
+          "difficulty": "hard",
+          "question": "What might cause a penny item transaction to be stopped? (Select all that apply)",
+          "answers": [
+            "Self-checkout attendant notices the $0.01 price",
+            "System flags the transaction for manager approval",
+            "You're buying an excessive quantity of the same item",
+            "The item was supposed to be removed from shelves already"
+          ],
+          "correct": ["Self-checkout attendant notices the $0.01 price", "System flags the transaction for manager approval", "You're buying an excessive quantity of the same item", "The item was supposed to be removed from shelves already"],
+          "explanation": "All of these can stop a penny transaction. Employees may notice unusual prices, systems can flag them, large quantities raise suspicion, and items at penny status should technically be off the floor.",
+          "points": 15
+        },
+        {
+          "id": "checkout-5",
+          "type": "multiple-choice",
+          "difficulty": "medium",
+          "question": "How many of the same penny item is reasonable to purchase without raising suspicion?",
+          "answers": [
+            "1-2 items",
+            "As many as you can find",
+            "Exactly 10 items",
+            "One shopping cart full"
+          ],
+          "correct": "1-2 items",
+          "explanation": "Buying 1-2 of the same item looks like normal shopping. Large quantities of identical items, especially at $0.01, will almost certainly be questioned or refused. Quality over quantity is key.",
+          "points": 10
+        },
+        {
+          "id": "checkout-6",
+          "type": "true-false",
+          "difficulty": "easy",
+          "question": "You should always check your receipt after purchasing penny items.",
+          "answers": ["True", "False"],
+          "correct": "True",
+          "explanation": "True. Always verify the items rang up at $0.01 as expected. Occasionally prices update in the system, or items scan differently than anticipated. Checking prevents overpaying.",
+          "points": 10
+        }
+      ]
+    },
+    {
+      "id": "master-quiz",
+      "title": "Master Penny Hunter Quiz",
+      "description": "The ultimate test of your penny hunting knowledge",
+      "category": "Challenge",
+      "difficulty": "hard",
+      "estimatedTime": 10,
+      "xpReward": 75,
+      "questions": [
+        {
+          "id": "master-1",
+          "type": "multiple-choice",
+          "difficulty": "hard",
+          "question": "A store employee asks you to leave items you found at penny prices. What should you do?",
+          "answers": [
+            "Refuse and insist on your right to purchase",
+            "Comply politely and leave without incident",
+            "Film the interaction for social media",
+            "Contact corporate headquarters immediately"
+          ],
+          "correct": "Comply politely and leave without incident",
+          "explanation": "Always comply with employee requests, even if disappointing. Stores can refuse service, and being confrontational can lead to being banned. Maintain good relationships for future visits.",
+          "points": 10
+        },
+        {
+          "id": "master-2",
+          "type": "multiple-select",
+          "difficulty": "hard",
+          "question": "Which practices are considered responsible penny hunting? (Select all that apply)",
+          "answers": [
+            "Respecting store employees and their decisions",
+            "Not clearing entire shelves of items",
+            "Sharing finds with the community online",
+            "Hiding items to come back for later"
+          ],
+          "correct": ["Respecting store employees and their decisions", "Not clearing entire shelves of items", "Sharing finds with the community online"],
+          "explanation": "Responsible hunting means respecting employees, not being greedy, and contributing to the community. Hiding items for later is unethical and disrupts normal store operations.",
+          "points": 15
+        },
+        {
+          "id": "master-3",
+          "type": "true-false",
+          "difficulty": "medium",
+          "question": "Using the Home Depot app to check prices in-store is against store policy.",
+          "answers": ["True", "False"],
+          "correct": "False",
+          "explanation": "False. Using the official Home Depot app is completely acceptable and even encouraged. It's a tool provided by the company for customers to check prices and inventory.",
+          "points": 10
+        },
+        {
+          "id": "master-4",
+          "type": "multiple-choice",
+          "difficulty": "hard",
+          "question": "What's the most important factor in penny hunting success?",
+          "answers": [
+            "Having insider information from employees",
+            "Visiting stores daily without fail",
+            "Patience, persistence, and realistic expectations",
+            "Knowing exact markdown schedules for each store"
+          ],
+          "correct": "Patience, persistence, and realistic expectations",
+          "explanation": "Success comes from consistent effort with realistic expectations. You don't need insider info or daily visits - patience and persistence over time yield the best results while maintaining a healthy perspective.",
+          "points": 10
+        },
+        {
+          "id": "master-5",
+          "type": "multiple-choice",
+          "difficulty": "hard",
+          "question": "An online group posts specific SKUs claiming they're all penny items this week. What should you do?",
+          "answers": [
+            "Rush to your store immediately to scan all of them",
+            "Use them as starting points but verify prices yourself",
+            "Trust the list completely - they're always accurate",
+            "Ignore them - SKU lists never work"
+          ],
+          "correct": "Use them as starting points but verify prices yourself",
+          "explanation": "SKU lists can be helpful hints but vary by location and timing. Use them as leads to investigate, not as guaranteed finds. Always verify prices yourself as they change frequently.",
+          "points": 10
+        },
+        {
+          "id": "master-6",
+          "type": "multiple-select",
+          "difficulty": "hard",
+          "question": "What are valid reasons items might NOT reach penny status? (Select all that apply)",
+          "answers": [
+            "They sold out at a higher clearance price",
+            "They were returned to the vendor",
+            "The store manager changed their mind",
+            "They were transferred to another store"
+          ],
+          "correct": ["They sold out at a higher clearance price", "They were returned to the vendor", "They were transferred to another store"],
+          "explanation": "Items may sell out, be returned to vendors, or transferred before reaching penny. Store managers don't arbitrarily change prices - they follow corporate markdown schedules.",
+          "points": 15
+        },
+        {
+          "id": "master-7",
+          "type": "true-false",
+          "difficulty": "medium",
+          "question": "Penny hunting is a reliable way to earn consistent income.",
+          "answers": ["True", "False"],
+          "correct": "False",
+          "explanation": "False. Penny hunting is extremely inconsistent and should be treated as a hobby, not income. Finds are unpredictable, and building a business around it is unrealistic for most people.",
+          "points": 10
+        },
+        {
+          "id": "master-8",
+          "type": "multiple-choice",
+          "difficulty": "hard",
+          "question": "What's the relationship between clearance cadences and penny items?",
+          "answers": [
+            "Cadences have no impact on penny items",
+            "Cadences determine when items may reach penny status",
+            "Only Cadence A stores have penny items",
+            "Cadences are just theories with no real pattern"
+          ],
+          "correct": "Cadences determine when items may reach penny status",
+          "explanation": "Markdown cadences (A or B) influence when clearance items are reduced, which affects when they might reach penny. Understanding your store's cadence helps time your visits better.",
+          "points": 10
+        },
+        {
+          "id": "master-9",
+          "type": "multiple-choice",
+          "difficulty": "hard",
+          "question": "If you find a valuable item (worth $100+) at penny price, what's the ethical approach?",
+          "answers": [
+            "Buy as many as you can find immediately",
+            "Buy 1-2 for personal use/reasonable resale",
+            "Leave it for other hunters to find",
+            "Tell an employee so they can fix the 'mistake'"
+          ],
+          "correct": "Buy 1-2 for personal use/reasonable resale",
+          "explanation": "The ethical approach is taking a reasonable quantity (1-2) without being greedy. Clearing shelves is frowned upon, but you're not obligated to leave items or alert employees to 'fix' legitimate clearance pricing.",
+          "points": 10
+        },
+        {
+          "id": "master-10",
+          "type": "multiple-select",
+          "difficulty": "hard",
+          "question": "Which statements reflect a healthy penny hunting mindset? (Select all that apply)",
+          "answers": [
+            "It's a fun hobby with occasional rewards",
+            "Success requires minimal effort and maximum profits",
+            "Respecting employees matters more than getting deals",
+            "Empty-handed trips are part of the experience"
+          ],
+          "correct": ["It's a fun hobby with occasional rewards", "Respecting employees matters more than getting deals", "Empty-handed trips are part of the experience"],
+          "explanation": "A healthy mindset treats hunting as a hobby, values respect over deals, and accepts that most trips won't find anything. Expecting easy profits with no effort is unrealistic and leads to frustration.",
+          "points": 15
+        }
+      ]
+    }
+  ]
+}

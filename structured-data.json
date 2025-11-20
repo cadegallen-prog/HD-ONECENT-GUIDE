@@ -1,0 +1,666 @@
+{
+  "README": "JSON-LD Structured Data Templates for HD-ONECENT-GUIDE - Copy and paste into <script type='application/ld+json'> tags",
+
+  "1_WEBSITE_SCHEMA": {
+    "description": "Main website schema - Use on homepage (index.html)",
+    "schema": {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Home Depot Penny Items Guide",
+      "alternateName": "HD-ONECENT-GUIDE",
+      "url": "https://yourdomain.com",
+      "description": "Comprehensive educational guide to finding Home Depot penny items and mastering clearance hunting techniques",
+      "publisher": {
+        "@type": "Organization",
+        "name": "HD-ONECENT-GUIDE",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://yourdomain.com/images/logo.png",
+          "width": 512,
+          "height": 512
+        }
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://yourdomain.com/search?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      },
+      "inLanguage": "en-US",
+      "copyrightYear": 2025,
+      "genre": "Educational Guide",
+      "keywords": "Home Depot penny items, clearance hunting, penny shopping, retail arbitrage, Home Depot clearance guide"
+    }
+  },
+
+  "2_ORGANIZATION_SCHEMA": {
+    "description": "Organization schema - Use on about.html",
+    "schema": {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "HD-ONECENT-GUIDE",
+      "url": "https://yourdomain.com",
+      "logo": "https://yourdomain.com/images/logo.png",
+      "description": "Educational community focused on Home Depot penny items and responsible clearance hunting practices",
+      "foundingDate": "2024",
+      "sameAs": [
+        "https://www.facebook.com/groups/homedepotonecent"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Community Support",
+        "url": "https://www.facebook.com/groups/homedepotonecent",
+        "availableLanguage": "English"
+      },
+      "knowsAbout": [
+        "Home Depot clearance",
+        "Penny items",
+        "Retail markdown cycles",
+        "Clearance hunting",
+        "Responsible shopping"
+      ]
+    }
+  },
+
+  "3_BREADCRUMB_SCHEMA_EXAMPLES": {
+    "description": "Breadcrumb navigation - Customize for each page",
+    "homepage": {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://yourdomain.com/"
+        }
+      ]
+    },
+    "documentation_page": {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://yourdomain.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "What Are Pennies",
+          "item": "https://yourdomain.com/what-are-pennies.html"
+        }
+      ]
+    }
+  },
+
+  "4_ARTICLE_SCHEMA_TEMPLATE": {
+    "description": "Article schema - Use on all documentation pages (what-are-pennies.html, clearance-lifecycle.html, etc.)",
+    "schema": {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "[PAGE_TITLE - Max 110 characters]",
+      "alternativeHeadline": "[ALTERNATIVE_TITLE]",
+      "description": "[PAGE_DESCRIPTION]",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://yourdomain.com/images/article-[page-name].jpg",
+        "width": 1200,
+        "height": 630
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "HD-ONECENT-GUIDE"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "HD-ONECENT-GUIDE",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://yourdomain.com/images/logo.png",
+          "width": 512,
+          "height": 512
+        }
+      },
+      "datePublished": "2025-01-15T00:00:00Z",
+      "dateModified": "2025-01-15T00:00:00Z",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://yourdomain.com/[page-name].html"
+      },
+      "articleSection": "Penny Hunting Guide",
+      "keywords": "[comma, separated, keywords]",
+      "inLanguage": "en-US",
+      "wordCount": 1500,
+      "articleBody": "[First paragraph of article content]"
+    }
+  },
+
+  "5_FAQ_PAGE_COMPLETE_SCHEMA": {
+    "description": "Complete FAQ schema with all 33+ questions - Use on faq.html",
+    "schema": {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What are penny items at Home Depot?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Penny items are products that have been marked down to $0.01 in Home Depot's inventory system as part of their final clearance process. When scanned at checkout, these items ring up at one cent instead of their original price."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I find penny items at Home Depot?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Use the Home Depot mobile app to scan items in-store, check clearance endcaps and damaged product sections, learn to recognize markdown price patterns (like prices ending in .03, .06, .09), and understand Home Depot's clearance cadence schedule."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is it legal to buy penny items?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, purchasing penny items is completely legal. When an item scans at $0.01, Home Depot is honoring their own pricing system. However, stores may have policies limiting quantities or refusing sales at manager discretion."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can Home Depot refuse to sell penny items?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Home Depot reserves the right to refuse any sale. While their system prices items at $0.01, store managers can choose not to honor that price, especially for high-value items or large quantities."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "When does Home Depot markdown clearance items?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Home Depot follows two main markdown cadences (A and B) that operate on 9-week cycles. Items typically progress through markdown phases (15% off, 25% off, 50% off, 75% off) before potentially reaching penny status in the final week."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What do price endings mean at Home Depot?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Price endings indicate clearance status: prices ending in .06 typically mean first markdown, .03 indicates deeper clearance, .01 is penny status, and .00 often indicates department-specific clearance or special pricing."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I scan items with the Home Depot app?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! The official Home Depot mobile app has a barcode scanner that shows current pricing, including penny prices. This is the primary tool for digital pre-hunting and in-store scanning."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Will employees tell me where penny items are?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Most employees won't actively help locate penny items, as corporate policy may discourage it. Some may be friendly and point you in general directions, but don't expect staff to guide penny hunting efforts."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How often should I check for penny items?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Understanding the 9-week markdown cadence helps you time visits. Many hunters check weekly, focusing on markdown transition days. However, availability varies greatly by location and timing."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are penny items damaged or defective?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Not necessarily. Penny items can include perfectly good products that are discontinued, seasonal overstock, or slow-moving inventory. Some may have damaged packaging but functional contents."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I return penny items?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Return policies on penny items vary by store. Some locations may not accept returns on clearance items purchased at $0.01, while others follow standard return policies. Always ask before purchasing if this matters to you."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is penny hunting worth my time?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It depends on your goals and expectations. Penny hunting requires time, patience, and realistic expectations. Most hunters don't find valuable items every trip. It's a hobby for deal enthusiasts, not a reliable income source."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I resell penny items for profit?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, but profitability varies dramatically. Factor in time invested, gas, platform fees, shipping costs, and competition. Most successful resellers focus on specific niches and have realistic profit expectations."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What's the best time of day to hunt?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Early mornings when stores open often offer first access to newly marked items. Late evenings may have less competition. However, timing matters less than understanding markdown schedules and being persistent."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Should I ask to speak to a manager about penny items?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Generally no. Managers are busy and may view penny hunters as problematic. Only involve management if there's a legitimate pricing dispute or checkout issue. Be respectful and don't demand special treatment."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I buy all the penny items in a store?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Technically possible but ethically questionable. Clearing entire inventory prevents other hunters from finding items and may get you banned from stores. Community etiquette suggests taking reasonable quantities and leaving items for others."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What are the two markdown cadences?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Cadence A and Cadence B are Home Depot's two 9-week markdown schedules. They alternate which types of products get marked down each week, covering different departments and categories throughout the cycle."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do all Home Depot stores have penny items?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, all stores participate in the clearance system, but availability varies dramatically by location. High-traffic urban stores may have fewer pennies due to competition, while suburban stores might have more inventory."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What's the difference between clearance and penny items?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "All penny items are clearance, but not all clearance is penny-priced. Clearance items progress through multiple markdown phases (15%, 25%, 50%, 75% off) before potentially reaching the final penny status."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I use coupons on penny items?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "This varies by store policy. Since items are already at $0.01, coupons typically can't reduce the price further. Most stores don't allow coupon stacking on penny items."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I know what department an item belongs to?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SKU numbers indicate departments. The first few digits of the SKU correspond to specific departments. Understanding SKU patterns helps you identify which markdown cadence affects certain products."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What's the best scanning strategy?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Focus on clearance sections, endcaps, damaged product areas, and seasonal departments. Scan systematically rather than randomly. Look for items with clearance price endings (.03, .06) that might soon drop to penny status."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can employees buy penny items?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Employee purchase policies vary. Some stores allow employee purchases of clearance items, others restrict it. Employees often have first access to markdown items before they hit the sales floor."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are there Facebook groups for penny hunting?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! The Home Depot One Cent group (https://www.facebook.com/groups/homedepotonecent) is a community of penny hunters sharing finds, strategies, and tips. It's a valuable resource for learning from experienced hunters."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What should I do if an item won't scan?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Items that don't scan in the app may not be in the system, may be delisted, or may have barcode issues. You can ask an employee to check pricing, but understand they may not honor delisted items at any price."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I negotiate penny item prices?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Penny items are already at the lowest possible system price of $0.01. There's nothing to negotiate. Attempting to negotiate may annoy staff and harm the penny hunting community's reputation."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What's the biggest penny item find possible?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "While viral posts show expensive items at penny prices, these are extremely rare exceptions, not the norm. Most penny items are small, low-value products. Don't expect to find appliances or power tools at $0.01 regularly."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Should I tell other shoppers about penny items?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "This is a personal choice. Some hunters share finds to build community, others keep discoveries private. Consider store relationships and community etiquette when deciding what to share publicly."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can stores ban me for penny hunting?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Stores can ban anyone for any reason. Aggressive hunting, disrespecting staff, clearing shelves, or causing disruptions can result in being asked to leave or banned. Always be respectful and ethical."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do penny items still earn Home Depot credit card rewards?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, purchases made with Home Depot credit cards typically earn rewards on the purchase total, even if items are penny-priced. Check current card terms for specific details."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What's the ethical way to penny hunt?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Be respectful to employees, don't clear entire inventories, follow store policies, don't rescan items employees have removed from shelves, maintain good store relationships, and understand that penny hunting is a privilege, not a right."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How accurate are penny hunting posts on social media?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Take social media posts with skepticism. Many are exaggerated, outdated, or location-specific. What works in one store may not work in yours. Use them as learning tools, not guaranteed strategies."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is there a guaranteed way to find penny items?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Penny hunting has no guarantees. Success requires knowledge of markdown cycles, persistence, good timing, and luck. Anyone promising guaranteed finds or 'secret methods' is likely exaggerating or selling something."
+          }
+        }
+      ]
+    }
+  },
+
+  "6_HOWTO_GUIDE_SCHEMA": {
+    "description": "HowTo schema for instructional pages like digital-prehunt.html or in-store-strategy.html",
+    "schema": {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": "How to Find Home Depot Penny Items",
+      "description": "Step-by-step guide to finding penny items at Home Depot using digital pre-hunting and in-store scanning strategies",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://yourdomain.com/images/howto-penny-hunting.jpg",
+        "width": 1200,
+        "height": 630
+      },
+      "totalTime": "PT1H",
+      "estimatedCost": {
+        "@type": "MonetaryAmount",
+        "currency": "USD",
+        "value": "0"
+      },
+      "supply": [
+        {
+          "@type": "HowToSupply",
+          "name": "Home Depot Mobile App"
+        },
+        {
+          "@type": "HowToSupply",
+          "name": "Smartphone with camera"
+        }
+      ],
+      "tool": [
+        {
+          "@type": "HowToTool",
+          "name": "Home Depot App Barcode Scanner"
+        }
+      ],
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "name": "Download the Home Depot App",
+          "text": "Install the official Home Depot mobile app on your smartphone from the App Store or Google Play.",
+          "url": "https://yourdomain.com/digital-prehunt.html#step1"
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "name": "Learn Markdown Cadence Schedule",
+          "text": "Study Home Depot's clearance lifecycle to understand when items are marked down to penny status.",
+          "url": "https://yourdomain.com/clearance-lifecycle.html"
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "name": "Scan Clearance Sections",
+          "text": "Use the app's scanner to check prices on items in clearance endcaps, damaged product areas, and seasonal sections.",
+          "url": "https://yourdomain.com/in-store-strategy.html#scanning"
+        },
+        {
+          "@type": "HowToStep",
+          "position": 4,
+          "name": "Look for Penny Prices",
+          "text": "Items showing $0.01 in the app are penny items. Check if the store has them in stock.",
+          "url": "https://yourdomain.com/in-store-strategy.html#finding-pennies"
+        },
+        {
+          "@type": "HowToStep",
+          "position": 5,
+          "name": "Purchase Respectfully",
+          "text": "Bring items to checkout and complete the purchase politely. Be prepared for questions and potential manager involvement.",
+          "url": "https://yourdomain.com/checkout-strategy.html"
+        }
+      ]
+    }
+  },
+
+  "7_EDUCATIONAL_ORGANIZATION_SCHEMA": {
+    "description": "EducationalOrganization schema - Alternative to Organization schema for about.html",
+    "schema": {
+      "@context": "https://schema.org",
+      "@type": "EducationalOrganization",
+      "name": "HD-ONECENT-GUIDE",
+      "url": "https://yourdomain.com",
+      "logo": "https://yourdomain.com/images/logo.png",
+      "description": "Educational community providing comprehensive guides and resources for Home Depot penny item hunting",
+      "sameAs": [
+        "https://www.facebook.com/groups/homedepotonecent"
+      ],
+      "knowsAbout": [
+        {
+          "@type": "Thing",
+          "name": "Home Depot Clearance System"
+        },
+        {
+          "@type": "Thing",
+          "name": "Penny Items"
+        },
+        {
+          "@type": "Thing",
+          "name": "Retail Markdown Cycles"
+        }
+      ]
+    }
+  },
+
+  "8_LEARNING_RESOURCE_SCHEMA": {
+    "description": "LearningResource schema for educational content pages",
+    "schema": {
+      "@context": "https://schema.org",
+      "@type": "LearningResource",
+      "name": "Home Depot Clearance Lifecycle Guide",
+      "description": "Educational guide explaining Home Depot's markdown cadence and clearance timing",
+      "learningResourceType": "Guide",
+      "educationalLevel": "Beginner to Advanced",
+      "inLanguage": "en-US",
+      "author": {
+        "@type": "Organization",
+        "name": "HD-ONECENT-GUIDE"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "HD-ONECENT-GUIDE"
+      },
+      "datePublished": "2025-01-15",
+      "isAccessibleForFree": true,
+      "teaches": [
+        "Understanding Home Depot markdown cadences",
+        "Identifying clearance price patterns",
+        "Timing penny hunting visits",
+        "Reading SKU patterns"
+      ]
+    }
+  },
+
+  "9_WEBSITE_NAVIGATION_SCHEMA": {
+    "description": "SiteNavigationElement schema for main navigation - Use on all pages",
+    "schema": {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "Main Navigation",
+      "itemListElement": [
+        {
+          "@type": "SiteNavigationElement",
+          "position": 1,
+          "name": "Home",
+          "url": "https://yourdomain.com/"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 2,
+          "name": "What Are Pennies",
+          "url": "https://yourdomain.com/what-are-pennies.html"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 3,
+          "name": "Clearance Lifecycle",
+          "url": "https://yourdomain.com/clearance-lifecycle.html"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 4,
+          "name": "Digital Pre-Hunt",
+          "url": "https://yourdomain.com/digital-prehunt.html"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 5,
+          "name": "In-Store Strategy",
+          "url": "https://yourdomain.com/in-store-strategy.html"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 6,
+          "name": "Checkout Strategy",
+          "url": "https://yourdomain.com/checkout-strategy.html"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 7,
+          "name": "Internal Systems",
+          "url": "https://yourdomain.com/internal-systems.html"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 8,
+          "name": "Facts vs Myths",
+          "url": "https://yourdomain.com/facts-vs-myths.html"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 9,
+          "name": "Responsible Hunting",
+          "url": "https://yourdomain.com/responsible-hunting.html"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 10,
+          "name": "FAQ",
+          "url": "https://yourdomain.com/faq.html"
+        },
+        {
+          "@type": "SiteNavigationElement",
+          "position": 11,
+          "name": "About",
+          "url": "https://yourdomain.com/about.html"
+        }
+      ]
+    }
+  },
+
+  "10_DOWNLOADABLE_PDF_SCHEMA": {
+    "description": "Schema for the downloadable PDF guide",
+    "schema": {
+      "@context": "https://schema.org",
+      "@type": "DigitalDocument",
+      "name": "Home Depot Penny Items Guide",
+      "description": "7-page comprehensive PDF guide to finding Home Depot penny items",
+      "url": "https://yourdomain.com/Home%20Depot%20Penny%20Items%20Guide.pdf",
+      "encodingFormat": "application/pdf",
+      "fileSize": "259 KB",
+      "numberOfPages": 7,
+      "inLanguage": "en-US",
+      "author": {
+        "@type": "Organization",
+        "name": "HD-ONECENT-GUIDE"
+      },
+      "datePublished": "2025-01-15",
+      "isAccessibleForFree": true,
+      "license": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+    }
+  },
+
+  "IMPLEMENTATION_NOTES": {
+    "instructions": [
+      "1. Copy the relevant schema from this file",
+      "2. Paste into <script type='application/ld+json'> tag in your HTML <head>",
+      "3. Replace placeholder values (yourdomain.com, dates, etc.)",
+      "4. Multiple schemas can be included on the same page",
+      "5. Validate using Google Rich Results Test: https://search.google.com/test/rich-results",
+      "6. Test with Schema Markup Validator: https://validator.schema.org/",
+      "7. Monitor in Google Search Console after deployment"
+    ],
+    "recommended_combinations": {
+      "homepage": ["1_WEBSITE_SCHEMA", "9_WEBSITE_NAVIGATION_SCHEMA", "3_BREADCRUMB_SCHEMA_EXAMPLES.homepage"],
+      "documentation_pages": ["4_ARTICLE_SCHEMA_TEMPLATE", "3_BREADCRUMB_SCHEMA_EXAMPLES.documentation_page", "6_HOWTO_GUIDE_SCHEMA (if applicable)"],
+      "faq_page": ["5_FAQ_PAGE_COMPLETE_SCHEMA", "3_BREADCRUMB_SCHEMA_EXAMPLES.documentation_page"],
+      "about_page": ["2_ORGANIZATION_SCHEMA", "3_BREADCRUMB_SCHEMA_EXAMPLES.documentation_page"]
+    }
+  }
+}
