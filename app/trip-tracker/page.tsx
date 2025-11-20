@@ -140,7 +140,7 @@ export default function TripTrackerPage() {
     ))
   }
 
-  const useTemplate = (template: TripTemplate) => {
+  const applyTemplate = (template: TripTemplate) => {
     setSelectedTemplate(template)
     setFormData({
       ...formData,
@@ -278,7 +278,7 @@ export default function TripTrackerPage() {
                           {templates.map((template, i) => (
                             <button
                               key={i}
-                              onClick={() => useTemplate(template)}
+                              onClick={() => applyTemplate(template)}
                               className="p-4 border-2 border-border rounded-xl hover:border-primary hover:bg-accent transition-all text-left"
                             >
                               <template.icon className="h-6 w-6 text-primary mb-2" />
