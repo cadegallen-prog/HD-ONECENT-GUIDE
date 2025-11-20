@@ -47,8 +47,19 @@ export function Navbar() {
           ))}
         </div>
 
-        {/* Right side - Theme toggle only */}
-        <div className="flex items-center gap-4">
+        {/* Right side - PDF Download & Theme toggle */}
+        <div className="flex items-center gap-3">
+          {/* PDF Download - Desktop only */}
+          <a
+            href="/Home-Depot-Penny-Guide.pdf"
+            download="Home-Depot-Penny-Guide.pdf"
+            target="_blank"
+            className="hidden lg:flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all hover:scale-105 active:scale-95 font-heading font-medium text-sm shadow-sm hover:shadow-md"
+          >
+            <Download className="h-4 w-4" />
+            <span>Download PDF</span>
+          </a>
+
           <ThemeToggle />
 
           {/* Mobile menu button */}
@@ -73,6 +84,18 @@ export function Navbar() {
       {mobileMenuOpen && (
         <div className="lg:hidden border-t border-border bg-background">
           <div className="container mx-auto px-4 py-4 space-y-3">
+            {/* PDF Download in mobile menu */}
+            <a
+              href="/Home-Depot-Penny-Guide.pdf"
+              download="Home-Depot-Penny-Guide.pdf"
+              target="_blank"
+              className="flex items-center gap-2 px-4 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all font-heading font-medium text-sm shadow-sm mb-3"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <Download className="h-4 w-4" />
+              <span>Download PDF Guide</span>
+            </a>
+
             {navigation.map((item) => (
               <a
                 key={item.name}

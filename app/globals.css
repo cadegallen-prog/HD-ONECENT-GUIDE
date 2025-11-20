@@ -4,81 +4,103 @@
 
 @layer base {
   :root {
-    /* Educational Reference Design System */
-    /* Primary: HD Orange (use sparingly) */
-    --primary: 18 95% 49%;           /* #EA5B0C */
+    /* Educational Reference Design System - Modernized & Accessible */
+
+    /* Primary: Softer HD Orange - reduced saturation for visual comfort */
+    --primary: 24 88% 58%;            /* #F97316 - Warmer, gentler orange */
     --primary-foreground: 0 0% 100%;
 
-    /* Background colors */
-    --background: 0 0% 100%;          /* #FFFFFF */
-    --foreground: 220 13% 13%;        /* #1F2937 */
+    /* Background colors - warmer tones */
+    --background: 30 20% 99%;         /* #FEFDFB - Warm white */
+    --foreground: 220 15% 20%;        /* #2D3748 - Softer dark gray */
 
-    /* Surface and borders */
-    --surface: 210 20% 98%;           /* #F9FAFB */
-    --border: 214 14% 82%;            /* #D1D5DB */
-    --input: 214 14% 82%;
+    /* Surface and borders - harmonious neutrals */
+    --surface: 30 25% 97%;            /* #FAF9F7 - Warm light surface */
+    --border: 220 13% 88%;            /* #E2E4E9 - Softer border */
+    --input: 220 13% 88%;
 
-    /* Text colors */
-    --text: 220 13% 13%;              /* #1F2937 */
-    --text-muted: 215 14% 48%;        /* #6B7280 */
+    /* Text colors - improved readability */
+    --text: 220 15% 20%;              /* #2D3748 - Main text */
+    --text-muted: 220 10% 50%;        /* #6E7584 - Muted text */
 
     /* Card colors */
     --card: 0 0% 100%;
-    --card-foreground: 220 13% 13%;
+    --card-foreground: 220 15% 20%;
 
-    /* Muted colors */
-    --muted: 210 20% 98%;
-    --muted-foreground: 215 14% 48%;
+    /* Muted colors - subtle backgrounds */
+    --muted: 30 25% 97%;
+    --muted-foreground: 220 10% 50%;
 
-    /* Accent colors for badges and highlights */
-    --accent-success: 160 84% 39%;    /* #059669 */
-    --accent-warning: 25 95% 53%;     /* #D97706 */
-    --accent-info: 217 91% 60%;       /* #3B82F6 */
+    /* Accent colors - softer, more accessible */
+    --accent: 30 35% 95%;             /* Warm accent bg */
+    --accent-foreground: 220 15% 20%;
 
-    /* Secondary (deprecated in this design) */
-    --secondary: 210 20% 98%;
-    --secondary-foreground: 220 13% 13%;
+    --accent-success: 152 69% 40%;    /* #16A34A - Softer green */
+    --accent-warning: 32 95% 58%;     /* #FB923C - Softer orange-amber */
+    --accent-info: 217 80% 55%;       /* #3B82F6 - Softer blue */
 
-    /* Destructive */
-    --destructive: 0 84% 60%;
+    /* Secondary - complementary teal */
+    --secondary: 186 25% 94%;         /* Soft teal background */
+    --secondary-foreground: 220 15% 20%;
+
+    /* Destructive - softer red */
+    --destructive: 0 72% 55%;         /* #E63946 - Less harsh red */
     --destructive-foreground: 0 0% 100%;
 
-    /* Other */
-    --ring: 18 95% 49%;
-    --radius: 0.25rem;
+    /* Success and Warning for status indicators */
+    --success: 152 69% 40%;
+    --warning: 32 95% 58%;
+
+    /* Popover */
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 15% 20%;
+
+    /* Focus ring - matches primary */
+    --ring: 24 88% 58%;
+    --radius: 0.5rem;
   }
 
   .dark {
-    --primary: 18 95% 49%;
-    --primary-foreground: 0 0% 100%;
+    /* Dark mode - refined for reduced eye strain */
+    --primary: 24 88% 58%;            /* Same orange, pops on dark */
+    --primary-foreground: 220 20% 10%;
 
-    --background: 220 13% 13%;
-    --foreground: 210 20% 98%;
+    --background: 220 18% 12%;        /* #1A1D28 - Softer dark blue-gray */
+    --foreground: 210 20% 92%;        /* #E8EAF0 - Warm light text */
 
-    --surface: 220 13% 18%;
-    --border: 215 14% 34%;
-    --input: 215 14% 34%;
+    --surface: 220 16% 16%;           /* #22262F - Elevated surface */
+    --border: 215 15% 28%;            /* #3E4554 - Softer borders */
+    --input: 215 15% 28%;
 
-    --text: 210 20% 98%;
-    --text-muted: 215 14% 71%;
+    --text: 210 20% 92%;
+    --text-muted: 215 12% 65%;        /* #9BA1B0 - Softer muted */
 
-    --card: 220 13% 18%;
-    --card-foreground: 210 20% 98%;
+    --card: 220 16% 16%;
+    --card-foreground: 210 20% 92%;
 
-    --muted: 220 13% 18%;
-    --muted-foreground: 215 14% 71%;
+    --muted: 220 16% 16%;
+    --muted-foreground: 215 12% 65%;
 
-    --accent-success: 160 84% 39%;
-    --accent-warning: 25 95% 53%;
-    --accent-info: 217 91% 60%;
+    --accent: 220 16% 20%;            /* Darker accent bg */
+    --accent-foreground: 210 20% 92%;
 
-    --secondary: 220 13% 18%;
-    --secondary-foreground: 210 20% 98%;
+    --accent-success: 152 65% 48%;    /* #22C55E - Brighter for dark */
+    --accent-warning: 32 95% 60%;     /* #FB923C - Visible on dark */
+    --accent-info: 217 80% 62%;       /* #60A5FA - Softer bright blue */
 
-    --destructive: 0 84% 60%;
+    --secondary: 220 16% 20%;
+    --secondary-foreground: 210 20% 92%;
+
+    --destructive: 0 70% 60%;         /* #E63946 - Visible but not harsh */
     --destructive-foreground: 0 0% 100%;
 
-    --ring: 18 95% 49%;
+    --success: 152 65% 48%;
+    --warning: 32 95% 60%;
+
+    --popover: 220 16% 16%;
+    --popover-foreground: 210 20% 92%;
+
+    --ring: 24 88% 58%;
   }
 
   * {
@@ -133,54 +155,54 @@
 
 /* Educational Reference Components */
 @layer components {
-  /* Badges */
+  /* Badges - Modernized with softer colors */
   .badge {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded text-sm font-heading font-medium;
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-heading font-medium transition-colors;
   }
 
   .badge-low {
-    @apply bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300;
+    @apply bg-slate-100 text-slate-700 dark:bg-slate-800/50 dark:text-slate-300;
   }
 
   .badge-medium {
-    @apply bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400;
+    @apply bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300;
   }
 
   .badge-high {
-    @apply bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400;
+    @apply bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300;
   }
 
   .badge-penny {
-    @apply bg-orange-100 text-orange-700 border border-orange-300 dark:bg-orange-900/30 dark:text-orange-400 dark:border-orange-700;
+    @apply bg-orange-100 text-orange-800 border border-orange-200 dark:bg-orange-900/40 dark:text-orange-300 dark:border-orange-800/50;
   }
 
   .badge-true {
-    @apply bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400;
+    @apply bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300;
   }
 
   .badge-false {
-    @apply bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400;
+    @apply bg-rose-100 text-rose-800 dark:bg-rose-900/40 dark:text-rose-300;
   }
 
   .badge-varies {
-    @apply bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400;
+    @apply bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300;
   }
 
-  /* Callouts */
+  /* Callouts - Softer, more accessible */
   .callout-box {
-    @apply rounded-lg border-l-4 p-4 my-4;
+    @apply rounded-lg border-l-4 p-4 my-4 transition-colors;
   }
 
   .callout-box.info {
-    @apply bg-blue-50 border-blue-500 dark:bg-blue-900/20 dark:border-blue-400;
+    @apply bg-blue-50/80 border-blue-500/70 dark:bg-blue-900/25 dark:border-blue-400/70;
   }
 
   .callout-box.warning {
-    @apply bg-orange-50 border-orange-500 dark:bg-orange-900/20 dark:border-orange-400;
+    @apply bg-amber-50/80 border-amber-500/70 dark:bg-amber-900/25 dark:border-amber-400/70;
   }
 
   .callout-box.success {
-    @apply bg-green-50 border-green-500 dark:bg-green-900/20 dark:border-green-400;
+    @apply bg-emerald-50/80 border-emerald-500/70 dark:bg-emerald-900/25 dark:border-emerald-400/70;
   }
 
   /* Data Tables */

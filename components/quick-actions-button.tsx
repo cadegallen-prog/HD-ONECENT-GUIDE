@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Plus, Tag, Map, Clock, X } from "lucide-react"
+import { Plus, Tag, Map, Clock, X, Download } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 
@@ -10,6 +10,20 @@ export function QuickActionsButton() {
   const router = useRouter()
 
   const actions = [
+    {
+      icon: Download,
+      label: "Download PDF",
+      description: "Get the complete guide",
+      action: () => {
+        const link = document.createElement('a')
+        link.href = '/Home-Depot-Penny-Guide.pdf'
+        link.download = 'Home-Depot-Penny-Guide.pdf'
+        link.target = '_blank'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      },
+    },
     {
       icon: Tag,
       label: "Submit Find",
@@ -39,16 +53,16 @@ export function QuickActionsButton() {
     <>
       {/* Action menu */}
       {isOpen && (
-        <div className="fixed bottom-24 right-4 md:right-8 z-50 bg-background border border-border rounded-lg shadow-2xl p-2 min-w-[240px]">
+        <div className="fixed bottom-24 right-4 md:right-8 z-50 bg-card/95 backdrop-blur-sm border-2 border-border rounded-xl shadow-2xl p-2 min-w-[260px] animate-in slide-in-from-bottom-4 duration-200">
           {actions.map((action, index) => (
             <button
               key={index}
               onClick={() => handleAction(action.action)}
-              className="w-full flex items-start gap-3 px-3 py-2.5 rounded-md hover:bg-accent transition-colors text-left"
+              className="w-full flex items-start gap-3 px-4 py-3 rounded-lg hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all text-left group"
             >
-              <action.icon className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+              <action.icon className="w-5 h-5 text-primary mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform" />
               <div>
-                <div className="font-medium text-sm">{action.label}</div>
+                <div className="font-medium text-sm text-foreground group-hover:text-primary transition-colors">{action.label}</div>
                 <div className="text-xs text-muted-foreground">{action.description}</div>
               </div>
             </button>
@@ -60,12 +74,12 @@ export function QuickActionsButton() {
       <Button
         size="lg"
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-4 md:right-8 z-50 h-14 w-14 rounded-full shadow-2xl hover:scale-105 transition-transform"
+        className="fixed bottom-6 right-4 md:right-8 z-50 h-14 w-14 rounded-full shadow-2xl hover:shadow-primary/20 hover:scale-110 active:scale-95 transition-all duration-200 ring-2 ring-primary/10 hover:ring-primary/30"
       >
         {isOpen ? (
-          <X className="h-6 w-6" />
+          <X className="h-6 w-6 transition-transform duration-200" />
         ) : (
-          <Plus className="h-6 w-6" />
+          <Plus className="h-6 w-6 transition-transform duration-200" />
         )}
         <span className="sr-only">Quick actions</span>
       </Button>
