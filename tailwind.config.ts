@@ -17,9 +17,9 @@ const config: Config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "oklch(65% 0.25 var(--primary-hue))",
-          foreground: "oklch(98% 0.01 var(--primary-hue))",
-          hover: "oklch(60% 0.25 var(--primary-hue))",
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+          hover: "hsl(186 70% 28%)",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -45,10 +45,19 @@ const config: Config = {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
         },
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "#f0fdf4",
+        },
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+          foreground: "#fffbeb",
+        },
       },
       fontFamily: {
-        heading: ["var(--font-heading)", "system-ui", "sans-serif"],
-        body: ["var(--font-body)", "system-ui", "sans-serif"],
+        heading: ["var(--font-heading)", "Inter", "system-ui", "sans-serif"],
+        body: ["Georgia", "Charter", "\"Times New Roman\"", "serif"],
+        mono: ["\"JetBrains Mono\"", "\"Courier New\"", "monospace"],
       },
       borderRadius: {
         lg: "var(--radius)",

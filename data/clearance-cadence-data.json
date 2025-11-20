@@ -1,0 +1,62 @@
+{
+  "cadenceA": [
+    {
+      "stage": "Initial markdown",
+      "priceEnding": ".00",
+      "discount": "~10-25% off",
+      "duration": "~4 weeks",
+      "notes": "Item enters clearance; watch for tag date to age"
+    },
+    {
+      "stage": "Second markdown",
+      "priceEnding": ".06",
+      "discount": "~50% off",
+      "duration": "~6 weeks",
+      "notes": "Signals progression; a few weeks from final drop"
+    },
+    {
+      "stage": "Final markdown",
+      "priceEnding": ".03",
+      "discount": "~75% off",
+      "duration": "~3 weeks",
+      "notes": "Last price ending before penny status"
+    },
+    {
+      "stage": "System update",
+      "priceEnding": "penny",
+      "discount": "$0.01",
+      "duration": "Internal",
+      "notes": "Pennied if not pulled by staff"
+    }
+  ],
+  "cadenceB": [
+    {
+      "stage": "Initial markdown",
+      "priceEnding": ".00",
+      "discount": "~10-25% off",
+      "duration": "1-2 weeks",
+      "notes": "Short entry stage; moves quickly"
+    },
+    {
+      "stage": "Second markdown",
+      "priceEnding": ".04",
+      "discount": "~50% off",
+      "duration": "~4 weeks",
+      "notes": "Often overlooked by shoppers"
+    },
+    {
+      "stage": "Final markdown",
+      "priceEnding": ".02",
+      "discount": "~75% off",
+      "duration": "~2 weeks",
+      "notes": "High chance of penny status next"
+    },
+    {
+      "stage": "System update",
+      "priceEnding": "penny",
+      "discount": "$0.01",
+      "duration": "Internal",
+      "notes": "Pennied if not pulled by staff"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+[
+  {
+    "sku": "PLACEHOLDER-0001",
+    "item": "Sample LED shop light (placeholder)",
+    "store": "City, ST",
+    "date": "2025-11-10",
+    "category": "Lighting"
+  },
+  {
+    "sku": "PLACEHOLDER-0002",
+    "item": "Sample paint tray liner pack (placeholder)",
+    "store": "City, ST",
+    "date": "2025-11-12",
+    "category": "Paint"
+  },
+  {
+    "sku": "PLACEHOLDER-0003",
+    "item": "Sample cabinet hinge 2-pack (placeholder)",
+    "store": "City, ST",
+    "date": "2025-11-14",
+    "category": "Hardware"
+  }
+]
