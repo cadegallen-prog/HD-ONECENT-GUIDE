@@ -1,7 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet"
+import { MapContainer, TileLayer, Marker, Popup, CircleMarker } from "react-leaflet"
+import type { Map as LeafletMap } from "leaflet"
 import "leaflet/dist/leaflet.css"
 
 // Fix for default marker icons in react-leaflet
@@ -23,6 +24,9 @@ export interface StoreLocation {
   state: string
   lat: number
   lng: number
+   zip?: string
+   number?: string
+   distance?: number
   phone?: string
   hours?: {
     weekday?: string
@@ -34,14 +38,30 @@ interface StoreMapProps {
   stores: StoreLocation[]
   center?: [number, number]
   zoom?: number
+  selectedStore?: StoreLocation | null
+  onSelect?: (store: StoreLocation) => void
+  userLocation?: { lat: number, lng: number } | null
 }
 
-export function StoreMap({ stores, center = [39.8283, -98.5795], zoom = 4 }: StoreMapProps) {
+export function StoreMap({ stores, center = [39.8283, -98.5795], zoom = 4, selectedStore, onSelect, userLocation }: StoreMapProps) {
   const [mounted, setMounted] = React.useState(false)
+  const mapRef = React.useRef<LeafletMap | null>(null)
 
   React.useEffect(() => {
     setMounted(true)
   }, [])
+
+  React.useEffect(() => {
+    if (mapRef.current) {
+      mapRef.current.setView(center, mapRef.current.getZoom())
+    }
+  }, [center])
+
+  React.useEffect(() => {
+    if (mapRef.current && selectedStore) {
+      mapRef.current.flyTo([selectedStore.lat, selectedStore.lng], Math.max(mapRef.current.getZoom(), 11))
+    }
+  }, [selectedStore])
 
   if (!mounted) {
     return (
@@ -58,16 +78,31 @@ export function StoreMap({ stores, center = [39.8283, -98.5795], zoom = 4 }: Sto
         zoom={zoom}
         style={{ height: "100%", width: "100%" }}
         scrollWheelZoom={false}
+        ref={mapRef as React.MutableRefObject<any>}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+        {userLocation && (
+          <CircleMarker
+            center={[userLocation.lat, userLocation.lng]}
+            radius={8}
+            pathOptions={{ color: "#f97316", fillColor: "#f97316", fillOpacity: 0.4 }}
+          />
+        )}
         {stores.map((store) => (
-          <Marker key={store.id} position={[store.lat, store.lng]}>
+          <Marker
+            key={store.id}
+            position={[store.lat, store.lng]}
+            eventHandlers={{
+              click: () => onSelect?.(store)
+            }}
+          >
             <Popup>
               <div className="p-2 space-y-1">
                 <h3 className="font-semibold text-sm">{store.name}</h3>
+                <p className="text-[11px] text-muted-foreground">Store #: {store.number || "Not provided"}</p>
                 <p className="text-xs text-muted-foreground">{store.address}</p>
                 <p className="text-xs text-muted-foreground">{store.city}, {store.state}</p>
                 {store.phone && (

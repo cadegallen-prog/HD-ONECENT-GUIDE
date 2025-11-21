@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react"
 import dynamic from "next/dynamic"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { MapPin, Search, Navigation, Filter, List, Map as MapIcon, Phone, Clock, Heart, Info, X } from "lucide-react"
+import { MapPin, Search, Navigation, List, Map as MapIcon, Phone, Clock, Heart, Info, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 // Dynamically import StoreMap to avoid SSR issues with Leaflet
@@ -17,18 +17,18 @@ import sampleStoresData from "@/data/home-depot-stores.sample.json"
 
 export interface StoreLocation {
   id: string
-  number: string
+  number?: string
   name: string
   address: string
   city: string
   state: string
-  zip: string
-  phone: string
+  zip?: string
+  phone?: string
   lat: number
   lng: number
   hours?: {
-    weekday: string
-    weekend: string
+    weekday?: string
+    weekend?: string
   }
   services?: string[]
   hoursFetchedAt?: string
@@ -36,13 +36,66 @@ export interface StoreLocation {
   distance?: number
 }
 
+const bannedNameTokens = [
+  "lowe",
+  "ace hardware",
+  "innovation center",
+  "support center",
+  "crown bolt",
+  "backyard",
+  "renovation depot",
+  "distribution center",
+  "corporate"
+]
+
+const sanitizeText = (value?: string) => {
+  if (!value) return ""
+  return value
+    .replace(/â€“|â€”|–|—/g, "-")
+    .replace(/â€™|’/g, "'")
+    .replace(/â€œ|â€\u009d|“|”/g, "\"")
+    .replace(/[^\x20-\x7E]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
+const isValidHomeDepot = (name?: string) => {
+  if (!name) return false
+  const lower = name.toLowerCase()
+  if (!lower.includes("home depot")) return false
+  return !bannedNameTokens.some((token) => lower.includes(token))
+}
+
+const limitByZip = (stores: StoreLocation[], limit = 20) => {
+  const counts: Record<string, number> = {}
+  return stores.filter((store) => {
+    const zip = store.zip || "unknown"
+    counts[zip] = (counts[zip] || 0) + 1
+    return counts[zip] <= limit
+  })
+}
+
 const normalizeStore = (s: StoreLocation): StoreLocation => ({
   ...s,
-  hours: s.hours || { weekday: "", weekend: "" },
-  services: s.services || []
+  name: sanitizeText(s.name) || "Home Depot",
+  address: sanitizeText(s.address),
+  city: sanitizeText(s.city),
+  state: sanitizeText(s.state),
+  zip: sanitizeText(s.zip),
+  phone: sanitizeText(s.phone),
+  hours: {
+    weekday: sanitizeText(s.hours?.weekday) || "",
+    weekend: sanitizeText(s.hours?.weekend) || ""
+  },
+  services: (s.services || []).map(sanitizeText).filter(Boolean)
 })
 
-const fallbackStores: StoreLocation[] = (sampleStoresData as StoreLocation[]).map(normalizeStore)
+const fallbackStores: StoreLocation[] = limitByZip(
+  (sampleStoresData as StoreLocation[])
+    .map(normalizeStore)
+    .filter((s) => isValidHomeDepot(s.name)),
+  20
+)
 
 function hasHours(store: StoreLocation) {
   return Boolean(store.hours && (store.hours.weekday || store.hours.weekend))
@@ -66,12 +119,11 @@ export default function StoreFinderPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [viewMode, setViewMode] = useState<"map" | "list">("map")
   const [userLocation, setUserLocation] = useState<{ lat: number, lng: number } | null>(null)
+  const [mapCenter, setMapCenter] = useState<[number, number]>([33.7490, -84.3880])
   const [selectedStore, setSelectedStore] = useState<StoreLocation | null>(null)
   const [favorites, setFavorites] = useState<string[]>([])
   const [filters, setFilters] = useState({
     state: "all",
-    hasHours: false,
-    hasServices: false,
     maxDistance: 50
   })
 
@@ -88,6 +140,13 @@ export default function StoreFinderPage() {
     [stores]
   )
 
+  useEffect(() => {
+    if (stores.length > 0 && !selectedStore) {
+      setSelectedStore(stores[0])
+      setMapCenter([stores[0].lat, stores[0].lng])
+    }
+  }, [stores, selectedStore])
+
   // Load store data from remote URL if provided; otherwise use the bundled sample.
   useEffect(() => {
     const url = process.env.NEXT_PUBLIC_HOME_DEPOT_STORES_URL
@@ -102,7 +161,12 @@ export default function StoreFinderPage() {
         const res = await fetch(url)
         if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`)
         const json = (await res.json()) as StoreLocation[]
-        const normalized = json.map(normalizeStore)
+        const normalized = limitByZip(
+          json
+            .map(normalizeStore)
+            .filter((s) => isValidHomeDepot(s.name)),
+          20
+        )
         if (!cancelled) {
           setStores(normalized)
           setFilteredStores(normalized)
@@ -146,12 +210,14 @@ export default function StoreFinderPage() {
             lat: position.coords.latitude,
             lng: position.coords.longitude
           })
+          setMapCenter([position.coords.latitude, position.coords.longitude])
           calculateDistances(position.coords.latitude, position.coords.longitude)
         },
         (error) => {
           console.error("Error getting location:", error)
           // Default to Atlanta
           setUserLocation({ lat: 33.7490, lng: -84.3880 })
+          setMapCenter([33.7490, -84.3880])
         }
       )
     }
@@ -165,7 +231,12 @@ export default function StoreFinderPage() {
         distance: calculateDistance(lat, lng, store.lat, store.lng)
       }))
       storesWithDistance.sort((a, b) => (a.distance || 0) - (b.distance || 0))
-      setFilteredStores(storesWithDistance)
+      const limited = limitByZip(storesWithDistance, 20)
+      if (limited.length > 0) {
+        setSelectedStore(limited[0])
+        setMapCenter([limited[0].lat, limited[0].lng])
+      }
+      setFilteredStores(limited)
       return storesWithDistance
     })
   }
@@ -187,17 +258,17 @@ export default function StoreFinderPage() {
 
   // Search functionality
   useEffect(() => {
-    let filtered = stores
+    let filtered = stores.filter((s) => isValidHomeDepot(s.name))
 
     if (searchQuery) {
-      const query = searchQuery.toLowerCase()
+      const query = sanitizeText(searchQuery).toLowerCase()
       filtered = filtered.filter(store =>
         store.name.toLowerCase().includes(query) ||
         store.address.toLowerCase().includes(query) ||
         store.city.toLowerCase().includes(query) ||
         store.state.toLowerCase().includes(query) ||
-        store.zip.includes(query) ||
-        store.number.includes(query)
+        (store.zip || "").toLowerCase().includes(query) ||
+        (store.number || "").toLowerCase().includes(query)
       )
     }
 
@@ -205,20 +276,19 @@ export default function StoreFinderPage() {
       filtered = filtered.filter(store => store.state === filters.state)
     }
 
-    if (filters.hasHours) {
-      filtered = filtered.filter(store => hasHours(store))
-    }
-
-    if (filters.hasServices) {
-      filtered = filtered.filter(store => store.services && store.services.length > 0)
-    }
-
     if (filters.maxDistance < 50 && userLocation) {
       filtered = filtered.filter(store => (store.distance ?? Infinity) <= filters.maxDistance)
     }
 
+    filtered = limitByZip(filtered, 20)
+
     setFilteredStores(filtered)
   }, [searchQuery, filters, stores, userLocation])
+
+  const selectStore = (store: StoreLocation) => {
+    setSelectedStore(store)
+    setMapCenter([store.lat, store.lng])
+  }
 
   const toggleFavorite = (storeId: string) => {
     setFavorites(prev =>
@@ -227,10 +297,6 @@ export default function StoreFinderPage() {
         : [...prev, storeId]
     )
   }
-
-  const mapCenter: [number, number] = userLocation
-    ? [userLocation.lat, userLocation.lng]
-    : [33.7490, -84.3880]
 
   return (
     <>
@@ -293,7 +359,6 @@ export default function StoreFinderPage() {
               {/* Filters */}
               <div className="mt-4 flex flex-wrap gap-4 items-center">
                 <div className="flex items-center gap-2">
-                  <Filter className="h-4 w-4 text-muted-foreground" />
                   <span className="text-sm font-medium text-foreground">Filters:</span>
                 </div>
 
@@ -310,24 +375,6 @@ export default function StoreFinderPage() {
                     ))}
                   </select>
                 </div>
-
-                <label className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <input
-                    type="checkbox"
-                    checked={filters.hasHours}
-                    onChange={(e) => setFilters({ ...filters, hasHours: e.target.checked })}
-                  />
-                  With hours posted
-                </label>
-
-                <label className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <input
-                    type="checkbox"
-                    checked={filters.hasServices}
-                    onChange={(e) => setFilters({ ...filters, hasServices: e.target.checked })}
-                  />
-                  With services listed
-                </label>
 
                 {userLocation && (
                   <div className="flex items-center gap-2">
@@ -353,15 +400,39 @@ export default function StoreFinderPage() {
               <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
                 <Info className="h-4 w-4 text-primary" />
                 <span>
-                  Data from Google Places. Hours captured for {stores.length - missingHoursCount} stores ({missingHoursCount} missing); services present for {stores.length - missingServicesCount} stores ({missingServicesCount} missing).
+                  Data from Google Places. Hours captured for {stores.length - missingHoursCount} stores ({missingHoursCount} missing); services present for {stores.length - missingServicesCount} stores ({missingServicesCount} missing). Store hours may vary from actual hours—check the retailer website for the most up-to-date information.
                 </span>
               </div>
             </div>
 
             {/* Map View */}
             {viewMode === "map" && (
-              <div className="bg-card border border-border rounded-xl p-2 mb-6">
-                <StoreMap stores={filteredStores} center={mapCenter} zoom={10} />
+              <div className="bg-card border border-border rounded-xl p-4 mb-6">
+                <div className="grid lg:grid-cols-[380px_1fr] gap-4">
+                  <div className="max-h-[640px] overflow-y-auto pr-1 space-y-3">
+                    {filteredStores.length === 0 && (
+                      <div className="text-sm text-muted-foreground">No stores match your search.</div>
+                    )}
+                    {filteredStores.map(store => (
+                      <StoreCard
+                        key={store.id}
+                        store={store}
+                        isFavorite={favorites.includes(store.id)}
+                        onToggleFavorite={() => toggleFavorite(store.id)}
+                        onSelect={() => selectStore(store)}
+                        active={selectedStore?.id === store.id}
+                      />
+                    ))}
+                  </div>
+                  <StoreMap
+                    stores={filteredStores}
+                    center={mapCenter}
+                    zoom={10}
+                    selectedStore={selectedStore}
+                    onSelect={(store) => selectStore(store)}
+                    userLocation={userLocation}
+                  />
+                </div>
               </div>
             )}
 
@@ -374,7 +445,7 @@ export default function StoreFinderPage() {
                     store={store}
                     isFavorite={favorites.includes(store.id)}
                     onToggleFavorite={() => toggleFavorite(store.id)}
-                    onSelect={() => setSelectedStore(store)}
+                    onSelect={() => selectStore(store)}
                   />
                 ))}
               </div>
@@ -412,7 +483,7 @@ export default function StoreFinderPage() {
                     <h2 className="text-2xl font-heading font-bold mb-2 text-foreground">{selectedStore.name}</h2>
                     <p className="text-muted-foreground">{selectedStore.address}</p>
                     <p className="text-muted-foreground">{selectedStore.city}, {selectedStore.state} {selectedStore.zip}</p>
-                    <p className="text-xs text-muted-foreground mt-1">Store ID: {selectedStore.number}</p>
+                    <p className="text-xs text-muted-foreground mt-1">Store #: {selectedStore.number || "Not provided"}</p>
                   </div>
                   <button
                     onClick={() => setSelectedStore(null)}
@@ -462,32 +533,8 @@ export default function StoreFinderPage() {
                         <Clock className="h-4 w-4 text-primary" />
                         <span>Weekends: {selectedStore.hours?.weekend || "Not provided"}</span>
                       </div>
-                      <div className="flex items-center gap-2 text-xs">
-                        <Clock className="h-3 w-3 text-primary" />
-                        <span>
-                          Last observed: {formatDateTime(selectedStore.hoursFetchedAt)}{selectedStore.hoursLastChangedAt ? ` | Last change detected: ${formatDateTime(selectedStore.hoursLastChangedAt)}` : ""}
-                        </span>
-                      </div>
-                      <p className="text-xs text-muted-foreground">
-                        Hours may adjust seasonally; verify current hours on the Home Depot store locator.
-                      </p>
                     </div>
                   </div>
-                </div>
-
-                <div className="mb-6">
-                  <h3 className="font-heading font-semibold mb-3 text-foreground">Services</h3>
-                  {selectedStore.services && selectedStore.services.length > 0 ? (
-                    <div className="flex flex-wrap gap-2">
-                      {selectedStore.services.map((svc, i) => (
-                        <span key={i} className="px-3 py-1 bg-primary/10 text-primary rounded-lg text-sm font-medium">
-                          {svc}
-                        </span>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-sm text-muted-foreground">Services not provided.</p>
-                  )}
                 </div>
 
                 <div className="mt-6 flex gap-3">
@@ -519,19 +566,24 @@ export default function StoreFinderPage() {
   )
 }
 
-function StoreCard({ store, isFavorite, onToggleFavorite, onSelect }: {
+function StoreCard({ store, isFavorite, onToggleFavorite, onSelect, active }: {
   store: StoreLocation
   isFavorite: boolean
   onToggleFavorite: () => void
   onSelect: () => void
+  active?: boolean
 }) {
   return (
-    <div className="bg-card border-2 border-border rounded-xl p-6 hover:border-primary/50 transition-all cursor-pointer group" onClick={onSelect}>
+    <div
+      className={`bg-card border-2 rounded-xl p-6 hover:border-primary/50 transition-all cursor-pointer group ${active ? "border-primary/60" : "border-border"}`}
+      onClick={onSelect}
+    >
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1">
           <h3 className="text-lg font-heading font-bold text-foreground group-hover:text-primary transition-colors">
             {store.name}
           </h3>
+          <p className="text-xs text-muted-foreground mt-1">Store #: {store.number || "Not provided"}</p>
           <p className="text-sm text-muted-foreground mt-1">{store.address}</p>
           <p className="text-sm text-muted-foreground">{store.city}, {store.state} {store.zip}</p>
         </div>
@@ -559,30 +611,6 @@ function StoreCard({ store, isFavorite, onToggleFavorite, onSelect }: {
           <Clock className="h-4 w-4 text-primary" />
           <span>Weekends: {store.hours?.weekend || "Not provided"}</span>
         </div>
-        <div className="flex items-center gap-2 text-xs">
-          <Clock className="h-3 w-3 text-primary" />
-          <span>
-            Last observed: {formatDateTime(store.hoursFetchedAt)}{store.hoursLastChangedAt ? ` | Last change: ${formatDateTime(store.hoursLastChangedAt)}` : ""}
-          </span>
-        </div>
-      </div>
-
-      <div className="mb-3">
-        <h4 className="text-xs font-semibold text-foreground mb-1">Services</h4>
-        {store.services && store.services.length > 0 ? (
-          <div className="flex flex-wrap gap-2">
-            {store.services.slice(0, 4).map((svc, i) => (
-              <span key={i} className="px-2 py-1 bg-primary/10 text-primary rounded text-xs font-medium">
-                {svc}
-              </span>
-            ))}
-            {store.services.length > 4 && (
-              <span className="text-xs text-muted-foreground">+{store.services.length - 4} more</span>
-            )}
-          </div>
-        ) : (
-          <p className="text-xs text-muted-foreground">Services not provided.</p>
-        )}
       </div>
 
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
