@@ -297,11 +297,7 @@ function normalizePlace(place) {
     lat: place.location?.latitude,
     lng: place.location?.longitude,
     hours: normalizeHours(place.currentOpeningHours, place.regularOpeningHours),
-    services: normalizeServices(place.types, place.primaryType),
-    departments: [],
-    lastPennyFind: "N/A",
-    pennyFrequency: 0,
-    avgItemsPerVisit: 0
+    services: normalizeServices(place.types, place.primaryType)
   }
 }
 

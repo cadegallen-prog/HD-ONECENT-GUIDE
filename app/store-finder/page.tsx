@@ -34,14 +34,17 @@ export interface StoreLocation {
   hoursFetchedAt?: string
   hoursLastChangedAt?: string
   is24Hour?: boolean
-  departments: string[]
+  departments?: string[]
   lastPennyFind?: string
-  pennyFrequency: number // 0-100
-  avgItemsPerVisit: number
+  pennyFrequency?: number // 0-100
+  avgItemsPerVisit?: number
   distance?: number
 }
 
-const allStores: StoreLocation[] = storesData as StoreLocation[]
+const allStores: StoreLocation[] = (storesData as StoreLocation[]).map((s) => ({
+  ...s,
+  departments: s.departments || []
+}))
 
 export default function StoreFinderPage() {
   const [stores, setStores] = useState<StoreLocation[]>(allStores)
