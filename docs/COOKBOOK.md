@@ -30,4 +30,11 @@ Verify at `/example`.
 ## Cleanup Policy
 - Delete one-off test scripts/assets after use.
 - Move durable commands into package scripts or document them here.
-- Keep docs limited to the canonical set noted in `README.md`.*** End Patch
+- Keep docs limited to the canonical set noted in `README.md`.
+
+## Refresh Store Data (Places API)
+- Script: `node scripts/fetch-home-depot-places.js` (uses `GOOGLE_PLACES_API_KEY` from `.env.local`; request caps are built-in to control spend).
+- Output: `data/home-depot-stores.json` (git-ignored). Fields include `hoursFetchedAt`/`hoursLastChangedAt` and `services`.
+- Known gaps: some stores may be missing hours/services if Places does not return them.
+- Caution: API spend—keep caps low; to fill gaps, run a small Places Details backfill only on the specific missing IDs (not a full sweep).
+- After generation: spot-check counts and missing fields; do not stage the JSON. The Store Finder consumes it via `app/store-finder/page.tsx`.

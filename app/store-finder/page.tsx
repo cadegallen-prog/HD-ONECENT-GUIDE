@@ -46,6 +46,17 @@ const allStores: StoreLocation[] = (storesData as StoreLocation[]).map((s) => ({
   departments: s.departments || []
 }))
 
+const formatDateTime = (iso?: string) => {
+  if (!iso) return "Not recorded"
+  const d = new Date(iso)
+  return d.toLocaleString(undefined, {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit"
+  })
+}
+
 export default function StoreFinderPage() {
   const [stores, setStores] = useState<StoreLocation[]>(allStores)
   const [filteredStores, setFilteredStores] = useState<StoreLocation[]>(allStores)
@@ -360,11 +371,17 @@ export default function StoreFinderPage() {
                     <div className="space-y-1 text-sm text-muted-foreground">
                       <div className="flex items-center gap-2">
                         <Clock className="h-4 w-4 text-primary" />
-                        <span>Weekdays: {selectedStore.hours.weekday}</span>
+                        <span>Weekdays: {selectedStore.hours?.weekday || "Not provided"}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Clock className="h-4 w-4 text-primary" />
-                        <span>Weekends: {selectedStore.hours.weekend}</span>
+                        <span>Weekends: {selectedStore.hours?.weekend || "Not provided"}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs">
+                        <Clock className="h-3 w-3 text-primary" />
+                        <span>
+                          Last observed: {formatDateTime(selectedStore.hoursFetchedAt)}{selectedStore.hoursLastChangedAt ? ` • Last change detected: ${formatDateTime(selectedStore.hoursLastChangedAt)}` : ""}
+                        </span>
                       </div>
                       <p className="text-xs text-muted-foreground">
                         Hours may adjust seasonally; verify current hours on the Home Depot store locator.
@@ -373,33 +390,34 @@ export default function StoreFinderPage() {
                   </div>
                 </div>
 
-                <div className="mb-6">
-                  <h3 className="font-heading font-semibold mb-3 text-foreground">Penny Hunting Stats</h3>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="text-center p-4 bg-accent/50 rounded-lg">
-                      <div className="text-2xl font-bold text-primary">{selectedStore.pennyFrequency}%</div>
-                      <div className="text-xs text-muted-foreground mt-1">Success Rate</div>
+                <div>
+                  <h3 className="font-heading font-semibold mb-3 text-foreground">Popular Departments</h3>
+                  {selectedStore.departments.length > 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                      {selectedStore.departments.map((dept, i) => (
+                        <span key={i} className="px-3 py-1 bg-primary/10 text-primary rounded-lg text-sm font-medium">
+                          {dept}
+                        </span>
+                      ))}
                     </div>
-                    <div className="text-center p-4 bg-accent/50 rounded-lg">
-                      <div className="text-2xl font-bold text-primary">{selectedStore.avgItemsPerVisit}</div>
-                      <div className="text-xs text-muted-foreground mt-1">Avg Items</div>
-                    </div>
-                    <div className="text-center p-4 bg-accent/50 rounded-lg">
-                      <div className="text-2xl font-bold text-primary">{selectedStore.lastPennyFind}</div>
-                      <div className="text-xs text-muted-foreground mt-1">Last Find</div>
-                    </div>
-                  </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">Departments not provided.</p>
+                  )}
                 </div>
 
                 <div>
-                  <h3 className="font-heading font-semibold mb-3 text-foreground">Popular Departments</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedStore.departments.map((dept, i) => (
-                      <span key={i} className="px-3 py-1 bg-primary/10 text-primary rounded-lg text-sm font-medium">
-                        {dept}
-                      </span>
-                    ))}
-                  </div>
+                  <h3 className="font-heading font-semibold mb-3 text-foreground">Services</h3>
+                  {selectedStore.services && selectedStore.services.length > 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                      {selectedStore.services.map((svc, i) => (
+                        <span key={i} className="px-3 py-1 bg-primary/10 text-primary rounded-lg text-sm font-medium">
+                          {svc}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">Services not provided.</p>
+                  )}
                 </div>
 
                 <div className="mt-6 flex gap-3">
@@ -462,18 +480,14 @@ function StoreCard({ store, isFavorite, onToggleFavorite, onSelect }: {
         </div>
       )}
 
-      <div className="grid grid-cols-3 gap-2 mb-3">
-        <div className="text-center p-2 bg-accent/50 rounded">
-          <div className="text-sm font-bold text-foreground">{store.pennyFrequency}%</div>
-          <div className="text-xs text-muted-foreground">Success</div>
+      <div className="space-y-1 mb-3 text-sm text-muted-foreground">
+        <div className="flex items-center gap-2">
+          <Clock className="h-4 w-4 text-primary" />
+          <span>Weekdays: {store.hours?.weekday || "Not provided"}</span>
         </div>
-        <div className="text-center p-2 bg-accent/50 rounded">
-          <div className="text-sm font-bold text-foreground">{store.avgItemsPerVisit}</div>
-          <div className="text-xs text-muted-foreground">Avg Items</div>
-        </div>
-        <div className="text-center p-2 bg-accent/50 rounded">
-          <div className="text-xs font-bold text-foreground">{store.lastPennyFind}</div>
-          <div className="text-xs text-muted-foreground">Last Find</div>
+        <div className="flex items-center gap-2">
+          <Clock className="h-4 w-4 text-primary" />
+          <span>Weekends: {store.hours?.weekend || "Not provided"}</span>
         </div>
       </div>
 

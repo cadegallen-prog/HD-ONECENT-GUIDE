@@ -3,9 +3,10 @@ Start every session by opening and following `/AGENT_RULES.md` (keep it pinned).
 Short runbook for AI collaborators working on the HD Penny Items Guide.
 
 ## Context Snapshot
-- Goal: Calm reference site for Home Depot penny items (no marketing); target audience 30–50, info-first tone.
+- Goal: Calm reference site for Home Depot penny items (no marketing); target audience 30-50, info-first tone.
 - Stack: Next.js 15 (App Router), TypeScript, Tailwind; Inter headings, Georgia body, primary #EA5B0C used sparingly.
 - Live data: JSON in `data/` (cadences, FAQs, recent finds). Legacy static backup: branch `main-old-static`. PDF lives at `public/Home-Depot-Penny-Guide.pdf`.
+- Maintainer context: Non-coder; expects AI to propose plans, implement end-to-end, explain simply, and avoid surprises (API spend, destructive actions).
 
 ## Startup Checklist (every session)
 1. Read `README.md`, `docs/DECISIONS.md`, and `docs/COOKBOOK.md`.
