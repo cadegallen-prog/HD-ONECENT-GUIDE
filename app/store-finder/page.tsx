@@ -1,10 +1,10 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 import dynamic from "next/dynamic"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { MapPin, Search, Navigation, Star, Filter, List, Map as MapIcon, Phone, Clock, ExternalLink, Heart, TrendingUp, Calendar } from "lucide-react"
+import { MapPin, Search, Navigation, Filter, List, Map as MapIcon, Phone, Clock, Heart, Info, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 // Dynamically import StoreMap to avoid SSR issues with Leaflet
@@ -17,8 +17,8 @@ import storesData from "@/data/home-depot-stores.json"
 
 export interface StoreLocation {
   id: string
-  name: string
   number: string
+  name: string
   address: string
   city: string
   state: string
@@ -26,25 +26,29 @@ export interface StoreLocation {
   phone: string
   lat: number
   lng: number
-  hours: {
+  hours?: {
     weekday: string
     weekend: string
   }
   services?: string[]
   hoursFetchedAt?: string
   hoursLastChangedAt?: string
-  is24Hour?: boolean
-  departments?: string[]
-  lastPennyFind?: string
-  pennyFrequency?: number // 0-100
-  avgItemsPerVisit?: number
   distance?: number
 }
 
 const allStores: StoreLocation[] = (storesData as StoreLocation[]).map((s) => ({
   ...s,
-  departments: s.departments || []
+  hours: s.hours || { weekday: "", weekend: "" },
+  services: s.services || []
 }))
+
+const stateOptions = Array.from(new Set(allStores.map((s) => s.state).filter(Boolean))).sort()
+const missingHoursCount = allStores.filter((store) => !hasHours(store)).length
+const missingServicesCount = allStores.filter((store) => !store.services || store.services.length === 0).length
+
+function hasHours(store: StoreLocation) {
+  return Boolean(store.hours && (store.hours.weekday || store.hours.weekend))
+}
 
 const formatDateTime = (iso?: string) => {
   if (!iso) return "Not recorded"
@@ -66,9 +70,10 @@ export default function StoreFinderPage() {
   const [selectedStore, setSelectedStore] = useState<StoreLocation | null>(null)
   const [favorites, setFavorites] = useState<string[]>([])
   const [filters, setFilters] = useState({
-    maxDistance: 50,
-    minPennyFrequency: 0,
-    show24Hour: false
+    state: "all",
+    hasHours: false,
+    hasServices: false,
+    maxDistance: 50
   })
 
   // Load favorites from localStorage
@@ -85,9 +90,7 @@ export default function StoreFinderPage() {
 
   // Save favorites to localStorage
   useEffect(() => {
-    if (favorites.length > 0) {
-      localStorage.setItem('hd-penny-favorites', JSON.stringify(favorites))
-    }
+    localStorage.setItem('hd-penny-favorites', JSON.stringify(favorites))
   }, [favorites])
 
   // Get user location
@@ -146,21 +149,26 @@ export default function StoreFinderPage() {
         store.name.toLowerCase().includes(query) ||
         store.address.toLowerCase().includes(query) ||
         store.city.toLowerCase().includes(query) ||
+        store.state.toLowerCase().includes(query) ||
         store.zip.includes(query) ||
         store.number.includes(query)
       )
     }
 
-    if (filters.minPennyFrequency > 0) {
-      filtered = filtered.filter(store => store.pennyFrequency >= filters.minPennyFrequency)
+    if (filters.state !== "all") {
+      filtered = filtered.filter(store => store.state === filters.state)
     }
 
-    if (filters.show24Hour) {
-      filtered = filtered.filter(store => store.is24Hour)
+    if (filters.hasHours) {
+      filtered = filtered.filter(store => hasHours(store))
+    }
+
+    if (filters.hasServices) {
+      filtered = filtered.filter(store => store.services && store.services.length > 0)
     }
 
     if (filters.maxDistance < 50 && userLocation) {
-      filtered = filtered.filter(store => (store.distance || 0) <= filters.maxDistance)
+      filtered = filtered.filter(store => (store.distance ?? Infinity) <= filters.maxDistance)
     }
 
     setFilteredStores(filtered)
@@ -190,7 +198,7 @@ export default function StoreFinderPage() {
                 Store Finder
               </h1>
               <p className="text-lg text-muted-foreground">
-                Find nearby Home Depot stores and discover the best penny hunting locations
+                Find nearby Home Depot stores, check hours and services, and save your go-to locations
               </p>
             </div>
 
@@ -205,7 +213,7 @@ export default function StoreFinderPage() {
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Search by store number, address, city, or ZIP..."
+                      placeholder="Search by store number, address, city, state, or ZIP..."
                       className="w-full pl-10 pr-4 py-3 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent"
                     />
                   </div>
@@ -244,22 +252,40 @@ export default function StoreFinderPage() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <label className="text-sm text-muted-foreground">Min Success Rate:</label>
+                  <label className="text-sm text-muted-foreground">State:</label>
                   <select
-                    value={filters.minPennyFrequency}
-                    onChange={(e) => setFilters({ ...filters, minPennyFrequency: Number(e.target.value) })}
+                    value={filters.state}
+                    onChange={(e) => setFilters({ ...filters, state: e.target.value })}
                     className="px-3 py-1.5 border border-border rounded-lg bg-background text-foreground text-sm"
                   >
-                    <option value="0">Any</option>
-                    <option value="50">50%+</option>
-                    <option value="70">70%+</option>
-                    <option value="80">80%+</option>
+                    <option value="all">All</option>
+                    {stateOptions.map((state) => (
+                      <option key={state} value={state}>{state}</option>
+                    ))}
                   </select>
                 </div>
 
+                <label className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <input
+                    type="checkbox"
+                    checked={filters.hasHours}
+                    onChange={(e) => setFilters({ ...filters, hasHours: e.target.checked })}
+                  />
+                  With hours posted
+                </label>
+
+                <label className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <input
+                    type="checkbox"
+                    checked={filters.hasServices}
+                    onChange={(e) => setFilters({ ...filters, hasServices: e.target.checked })}
+                  />
+                  With services listed
+                </label>
+
                 {userLocation && (
                   <div className="flex items-center gap-2">
-                    <label className="text-sm text-muted-foreground">Max Distance:</label>
+                    <label className="text-sm text-muted-foreground">Within:</label>
                     <select
                       value={filters.maxDistance}
                       onChange={(e) => setFilters({ ...filters, maxDistance: Number(e.target.value) })}
@@ -276,6 +302,13 @@ export default function StoreFinderPage() {
                 <div className="text-sm text-muted-foreground">
                   Showing {filteredStores.length} of {stores.length} stores
                 </div>
+              </div>
+
+              <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+                <Info className="h-4 w-4 text-primary" />
+                <span>
+                  Data from Google Places. Hours captured for {allStores.length - missingHoursCount} stores ({missingHoursCount} missing); services present for {allStores.length - missingServicesCount} stores ({missingServicesCount} missing).
+                </span>
               </div>
             </div>
 
@@ -313,13 +346,13 @@ export default function StoreFinderPage() {
             <div className="mt-12 callout-box info">
               <h3 className="font-heading font-semibold mb-3 text-foreground">Store Hunting Tips</h3>
               <ul className="space-y-2 text-sm text-foreground">
-                <li>• Stores with higher success rates typically have more active clearance cycles</li>
-                <li>• Call ahead to ask about clearance department location</li>
-                <li>• Different stores mark down on different days - track patterns</li>
-                <li>• Suburban stores often have less competition than urban locations</li>
-                <li>• Save your favorite stores for quick access</li>
+                <li>Use the map to spot nearby clusters, then save favorites for quick return trips.</li>
+                <li>Call ahead to confirm where clearance end caps are located; layouts vary by store.</li>
+                <li>Hours can shift seasonally - double-check before driving a long distance.</li>
+                <li>Suburban stores often have lighter competition than dense city locations.</li>
               </ul>
             </div>
+
           </div>
         </div>
 
@@ -333,12 +366,14 @@ export default function StoreFinderPage() {
                     <h2 className="text-2xl font-heading font-bold mb-2 text-foreground">{selectedStore.name}</h2>
                     <p className="text-muted-foreground">{selectedStore.address}</p>
                     <p className="text-muted-foreground">{selectedStore.city}, {selectedStore.state} {selectedStore.zip}</p>
+                    <p className="text-xs text-muted-foreground mt-1">Store ID: {selectedStore.number}</p>
                   </div>
                   <button
                     onClick={() => setSelectedStore(null)}
                     className="text-muted-foreground hover:text-foreground"
+                    aria-label="Close details"
                   >
-                    ✕
+                    <X className="h-5 w-5" />
                   </button>
                 </div>
 
@@ -348,9 +383,13 @@ export default function StoreFinderPage() {
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 text-sm">
                         <Phone className="h-4 w-4 text-primary" />
-                        <a href={`tel:${selectedStore.phone}`} className="text-primary hover:underline">
-                          {selectedStore.phone}
-                        </a>
+                        {selectedStore.phone ? (
+                          <a href={`tel:${selectedStore.phone}`} className="text-primary hover:underline">
+                            {selectedStore.phone}
+                          </a>
+                        ) : (
+                          <span className="text-muted-foreground">Phone not listed</span>
+                        )}
                       </div>
                       <div className="flex items-center gap-2 text-sm">
                         <MapPin className="h-4 w-4 text-primary" />
@@ -380,7 +419,7 @@ export default function StoreFinderPage() {
                       <div className="flex items-center gap-2 text-xs">
                         <Clock className="h-3 w-3 text-primary" />
                         <span>
-                          Last observed: {formatDateTime(selectedStore.hoursFetchedAt)}{selectedStore.hoursLastChangedAt ? ` • Last change detected: ${formatDateTime(selectedStore.hoursLastChangedAt)}` : ""}
+                          Last observed: {formatDateTime(selectedStore.hoursFetchedAt)}{selectedStore.hoursLastChangedAt ? ` | Last change detected: ${formatDateTime(selectedStore.hoursLastChangedAt)}` : ""}
                         </span>
                       </div>
                       <p className="text-xs text-muted-foreground">
@@ -390,22 +429,7 @@ export default function StoreFinderPage() {
                   </div>
                 </div>
 
-                <div>
-                  <h3 className="font-heading font-semibold mb-3 text-foreground">Popular Departments</h3>
-                  {selectedStore.departments.length > 0 ? (
-                    <div className="flex flex-wrap gap-2">
-                      {selectedStore.departments.map((dept, i) => (
-                        <span key={i} className="px-3 py-1 bg-primary/10 text-primary rounded-lg text-sm font-medium">
-                          {dept}
-                        </span>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-sm text-muted-foreground">Departments not provided.</p>
-                  )}
-                </div>
-
-                <div>
+                <div className="mb-6">
                   <h3 className="font-heading font-semibold mb-3 text-foreground">Services</h3>
                   {selectedStore.services && selectedStore.services.length > 0 ? (
                     <div className="flex flex-wrap gap-2">
@@ -489,11 +513,35 @@ function StoreCard({ store, isFavorite, onToggleFavorite, onSelect }: {
           <Clock className="h-4 w-4 text-primary" />
           <span>Weekends: {store.hours?.weekend || "Not provided"}</span>
         </div>
+        <div className="flex items-center gap-2 text-xs">
+          <Clock className="h-3 w-3 text-primary" />
+          <span>
+            Last observed: {formatDateTime(store.hoursFetchedAt)}{store.hoursLastChangedAt ? ` | Last change: ${formatDateTime(store.hoursLastChangedAt)}` : ""}
+          </span>
+        </div>
+      </div>
+
+      <div className="mb-3">
+        <h4 className="text-xs font-semibold text-foreground mb-1">Services</h4>
+        {store.services && store.services.length > 0 ? (
+          <div className="flex flex-wrap gap-2">
+            {store.services.slice(0, 4).map((svc, i) => (
+              <span key={i} className="px-2 py-1 bg-primary/10 text-primary rounded text-xs font-medium">
+                {svc}
+              </span>
+            ))}
+            {store.services.length > 4 && (
+              <span className="text-xs text-muted-foreground">+{store.services.length - 4} more</span>
+            )}
+          </div>
+        ) : (
+          <p className="text-xs text-muted-foreground">Services not provided.</p>
+        )}
       </div>
 
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <Phone className="h-4 w-4" />
-        {store.phone}
+        {store.phone || "Phone not listed"}
       </div>
     </div>
   )

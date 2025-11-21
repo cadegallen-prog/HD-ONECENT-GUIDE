@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet"
-import { Icon } from "leaflet"
 import "leaflet/dist/leaflet.css"
 
 // Fix for default marker icons in react-leaflet
@@ -22,11 +21,15 @@ export interface StoreLocation {
   id: string
   name: string
   address: string
+  city: string
+  state: string
   lat: number
   lng: number
-  lastMarkdown?: string
-  avgItems?: number
-  successRate?: number
+  phone?: string
+  hours?: {
+    weekday?: string
+    weekend?: string
+  }
 }
 
 interface StoreMapProps {
@@ -65,22 +68,19 @@ export function StoreMap({ stores, center = [39.8283, -98.5795], zoom = 4 }: Sto
         {stores.map((store) => (
           <Marker key={store.id} position={[store.lat, store.lng]}>
             <Popup>
-              <div className="p-2">
-                <h3 className="font-semibold text-sm mb-1">{store.name}</h3>
-                <p className="text-xs text-muted-foreground mb-2">{store.address}</p>
-                {store.lastMarkdown && (
+              <div className="p-2 space-y-1">
+                <h3 className="font-semibold text-sm">{store.name}</h3>
+                <p className="text-xs text-muted-foreground">{store.address}</p>
+                <p className="text-xs text-muted-foreground">{store.city}, {store.state}</p>
+                {store.phone && (
                   <p className="text-xs">
-                    <span className="font-medium">Last Markdown:</span> {store.lastMarkdown}
+                    <span className="font-medium">Phone:</span> {store.phone}
                   </p>
                 )}
-                {store.avgItems && (
+                {store.hours && (store.hours.weekday || store.hours.weekend) && (
                   <p className="text-xs">
-                    <span className="font-medium">Avg Items:</span> {store.avgItems}
-                  </p>
-                )}
-                {store.successRate && (
-                  <p className="text-xs">
-                    <span className="font-medium">Success Rate:</span> {store.successRate}%
+                    <span className="font-medium">Hours:</span>{" "}
+                    {[store.hours.weekday, store.hours.weekend].filter(Boolean).join(" | ")}
                   </p>
                 )}
               </div>
