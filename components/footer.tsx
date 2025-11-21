@@ -10,19 +10,16 @@ export function Footer() {
             <h3 className="font-heading font-semibold mb-3 text-sm">Disclaimer</h3>
             <div className="text-xs space-y-2 text-foreground">
               <p>
-                This guide is an educational resource created by and for the "Home Depot One Cent Items"
-                community. It is not affiliated with, endorsed by, or sponsored by The Home Depot, Inc.
+                Community-run educational resource for the “Home Depot One Cent Items” community. Not affiliated with,
+                endorsed by, or sponsored by The Home Depot, Inc.
               </p>
               <p>
-                PLACEHOLDER_FOOTER_DISCLAIMER: All information is provided for educational purposes.
-                Retail policies vary by location and are subject to change. Store managers have
-                discretion to refuse any sale. Always respect store staff and policies. The creators
-                of this guide assume no liability for actions taken based on this information.
+                For informational use only; not legal advice. Retail policies vary and can change without notice; managers
+                may refuse any sale. Follow posted store rules, respect staff, and comply with all applicable federal,
+                state, and local laws (including Georgia/Bartow County if that is your location).
               </p>
               <p>
-                "Home Depot" is a registered trademark of Homer TLC, Inc. This guide is a
-                community-created educational resource and makes fair use of the trademark for
-                descriptive purposes only.
+                “Home Depot” is a registered trademark of Homer TLC, Inc.; used here descriptively under fair use.
               </p>
             </div>
           </div>
@@ -105,8 +102,8 @@ export function Footer() {
                   Messenger Chat: Home Depot One Cent Items
                 </Link>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Community chats are going away starting October 5. Download messages in Accounts Center and stay
-                  connected in the group on Facebook.
+                  Join the active Messenger chat for updates and coordination. Keep following the Facebook group for
+                  long-form community posts.
                 </p>
               </li>
               <li>
@@ -119,8 +116,7 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="pt-6 border-t border-border">
           <p className="text-xs text-muted-foreground text-center">
-            © {new Date().getFullYear()} HD Penny Guide Community Resource. Not affiliated with The Home Depot, Inc.
-            Built with Next.js & Tailwind CSS.
+            Community resource maintained by volunteers. Not affiliated with The Home Depot, Inc.
           </p>
         </div>
       </div>
