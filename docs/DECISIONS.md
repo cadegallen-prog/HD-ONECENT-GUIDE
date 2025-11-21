@@ -10,8 +10,11 @@ Concise record of choices that shape the project. Add entries with date, decisio
 - **2025-11-19 — Tailwind + paired typography palette**  
   Utility-first styling with Inter headings, Georgia body, JetBrains Mono for codes; primary #EA5B0C used sparingly. Impact: fast theming; stay consistent with single-column reference feel.
 
-- **2025-11-19 — Content posture: calm reference**  
+- **2025-11-19 - Content posture: calm reference**  
   No testimonials, urgency, or sales tone. Use tables, anchors, and factual copy patterned on Wirecutter/Wikipedia/MDN. Impact: guardrails for all new UI/content.
 
-- **2025-11-20 — Documentation & cleanup discipline**  
+- **2025-11-20 - Documentation & cleanup discipline**  
   Canonical docs limited to `README.md`, `docs/AGENTS.md`, `docs/DECISIONS.md`, `docs/COOKBOOK.md`. Remove stale docs and one-off test scripts after use; move repeatable tasks into the cookbook. Impact: prevents doc sprawl and keeps repo tidy.*** End Patch" ***!
+
+- **2025-11-21 - Store data sourcing + hours handling**  
+  Generated `data/home-depot-stores.json` via Google Places (Text Search) and wired Store Finder to consume it. Added `hoursFetchedAt`/`hoursLastChangedAt` to track observed hour changes; hours disclaimer added in the UI. Removed template-only fields (departments/penny stats) from store records and git-ignored the large JSON. Impact: live store data in UI with seasonal-hours caveat; no further bulk Places calls to control spend unless explicitly approved.

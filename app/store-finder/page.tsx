@@ -13,6 +13,8 @@ const StoreMap = dynamic(
   { ssr: false, loading: () => <div className="h-96 bg-muted/30 rounded-xl animate-pulse"></div> }
 )
 
+import storesData from "@/data/home-depot-stores.json"
+
 export interface StoreLocation {
   id: string
   name: string
@@ -28,6 +30,9 @@ export interface StoreLocation {
     weekday: string
     weekend: string
   }
+  services?: string[]
+  hoursFetchedAt?: string
+  hoursLastChangedAt?: string
   is24Hour?: boolean
   departments: string[]
   lastPennyFind?: string
@@ -36,180 +41,7 @@ export interface StoreLocation {
   distance?: number
 }
 
-// Comprehensive mock data with stores across the US
-const allStores: StoreLocation[] = [
-  {
-    id: "1",
-    number: "0123",
-    name: "Home Depot #0123",
-    address: "1450 Peachtree St NE",
-    city: "Atlanta",
-    state: "GA",
-    zip: "30309",
-    phone: "(404) 555-0123",
-    lat: 33.7967,
-    lng: -84.3856,
-    hours: { weekday: "6 AM - 9 PM", weekend: "7 AM - 8 PM" },
-    departments: ["Garden", "Tools", "Hardware", "Seasonal"],
-    lastPennyFind: "2 days ago",
-    pennyFrequency: 85,
-    avgItemsPerVisit: 12
-  },
-  {
-    id: "2",
-    number: "0456",
-    name: "Home Depot #0456",
-    address: "2150 Commerce Dr",
-    city: "Atlanta",
-    state: "GA",
-    zip: "30318",
-    phone: "(404) 555-0456",
-    lat: 33.8078,
-    lng: -84.4321,
-    hours: { weekday: "6 AM - 10 PM", weekend: "7 AM - 9 PM" },
-    is24Hour: false,
-    departments: ["Garden", "Paint", "Plumbing", "Seasonal"],
-    lastPennyFind: "5 days ago",
-    pennyFrequency: 72,
-    avgItemsPerVisit: 8
-  },
-  {
-    id: "3",
-    number: "0789",
-    name: "Home Depot #0789",
-    address: "5600 Roswell Rd",
-    city: "Sandy Springs",
-    state: "GA",
-    zip: "30342",
-    phone: "(770) 555-0789",
-    lat: 33.9526,
-    lng: -84.3671,
-    hours: { weekday: "6 AM - 9 PM", weekend: "7 AM - 8 PM" },
-    departments: ["Electrical", "Lumber", "Garden", "Hardware"],
-    lastPennyFind: "1 day ago",
-    pennyFrequency: 92,
-    avgItemsPerVisit: 15
-  },
-  {
-    id: "4",
-    number: "1234",
-    name: "Home Depot #1234",
-    address: "3535 Piedmont Rd NE",
-    city: "Atlanta",
-    state: "GA",
-    zip: "30305",
-    phone: "(404) 555-1234",
-    lat: 33.8417,
-    lng: -84.3733,
-    hours: { weekday: "6 AM - 10 PM", weekend: "8 AM - 8 PM" },
-    departments: ["Paint", "Garden", "Seasonal", "Tools"],
-    lastPennyFind: "3 days ago",
-    pennyFrequency: 68,
-    avgItemsPerVisit: 9
-  },
-  {
-    id: "5",
-    number: "2345",
-    name: "Home Depot #2345",
-    address: "12850 Hwy 9 North",
-    city: "Milton",
-    state: "GA",
-    zip: "30004",
-    phone: "(770) 555-2345",
-    lat: 34.1323,
-    lng: -84.2960,
-    hours: { weekday: "6 AM - 9 PM", weekend: "7 AM - 8 PM" },
-    departments: ["Garden", "Tools", "Hardware", "Lumber"],
-    lastPennyFind: "1 week ago",
-    pennyFrequency: 58,
-    avgItemsPerVisit: 6
-  },
-  {
-    id: "6",
-    number: "3456",
-    name: "Home Depot #3456",
-    address: "11700 Medlock Bridge Rd",
-    city: "Johns Creek",
-    state: "GA",
-    zip: "30097",
-    phone: "(770) 555-3456",
-    lat: 34.0289,
-    lng: -84.1988,
-    hours: { weekday: "6 AM - 10 PM", weekend: "7 AM - 9 PM" },
-    departments: ["Seasonal", "Garden", "Hardware", "Paint"],
-    lastPennyFind: "4 days ago",
-    pennyFrequency: 75,
-    avgItemsPerVisit: 11
-  },
-  {
-    id: "7",
-    number: "4567",
-    name: "Home Depot #4567",
-    address: "2455 Paces Ferry Rd SE",
-    city: "Atlanta",
-    state: "GA",
-    zip: "30339",
-    phone: "(770) 555-4567",
-    lat: 33.8670,
-    lng: -84.4647,
-    hours: { weekday: "6 AM - 9 PM", weekend: "7 AM - 8 PM" },
-    departments: ["Tools", "Garden", "Electrical", "Plumbing"],
-    lastPennyFind: "6 days ago",
-    pennyFrequency: 63,
-    avgItemsPerVisit: 7
-  },
-  {
-    id: "8",
-    number: "5678",
-    name: "Home Depot #5678",
-    address: "725 Ponce De Leon Ave NE",
-    city: "Atlanta",
-    state: "GA",
-    zip: "30306",
-    phone: "(404) 555-5678",
-    lat: 33.7717,
-    lng: -84.3638,
-    hours: { weekday: "6 AM - 10 PM", weekend: "8 AM - 9 PM" },
-    departments: ["Paint", "Hardware", "Garden", "Seasonal"],
-    lastPennyFind: "2 days ago",
-    pennyFrequency: 80,
-    avgItemsPerVisit: 13
-  },
-  {
-    id: "9",
-    number: "6789",
-    name: "Home Depot #6789",
-    address: "2080 Cobb Pkwy SE",
-    city: "Smyrna",
-    state: "GA",
-    zip: "30080",
-    phone: "(770) 555-6789",
-    lat: 33.8607,
-    lng: -84.5146,
-    hours: { weekday: "6 AM - 9 PM", weekend: "7 AM - 8 PM" },
-    departments: ["Garden", "Tools", "Lumber", "Hardware"],
-    lastPennyFind: "1 day ago",
-    pennyFrequency: 88,
-    avgItemsPerVisit: 14
-  },
-  {
-    id: "10",
-    number: "7890",
-    name: "Home Depot #7890",
-    address: "4900 Ashford Dunwoody Rd",
-    city: "Dunwoody",
-    state: "GA",
-    zip: "30338",
-    phone: "(770) 555-7890",
-    lat: 33.9284,
-    lng: -84.3388,
-    hours: { weekday: "6 AM - 10 PM", weekend: "7 AM - 9 PM" },
-    departments: ["Seasonal", "Paint", "Garden", "Tools"],
-    lastPennyFind: "3 days ago",
-    pennyFrequency: 70,
-    avgItemsPerVisit: 10
-  }
-]
+const allStores: StoreLocation[] = storesData as StoreLocation[]
 
 export default function StoreFinderPage() {
   const [stores, setStores] = useState<StoreLocation[]>(allStores)
@@ -531,6 +363,9 @@ export default function StoreFinderPage() {
                         <Clock className="h-4 w-4 text-primary" />
                         <span>Weekends: {selectedStore.hours.weekend}</span>
                       </div>
+                      <p className="text-xs text-muted-foreground">
+                        Hours may adjust seasonally; verify current hours on the Home Depot store locator.
+                      </p>
                     </div>
                   </div>
                 </div>

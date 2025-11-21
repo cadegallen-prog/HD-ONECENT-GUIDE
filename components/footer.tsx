@@ -86,14 +86,31 @@ export function Footer() {
             <h3 className="font-heading font-semibold mb-4 text-sm">Community</h3>
             <ul className="space-y-2">
               <li>
-                <span className="text-sm text-muted-foreground">
-                  Facebook: "Home Depot One Cent Items"
-                </span>
+                <Link
+                  href="https://www.facebook.com/groups/homedepotonecent"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                >
+                  Facebook Group: Home Depot One Cent Items
+                </Link>
               </li>
               <li>
-                <span className="text-sm text-muted-foreground">
-                  32,000+ active members
-                </span>
+                <Link
+                  href="https://m.me/cm/AbYH-T88smeOjfsT/"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                >
+                  Messenger Chat: Home Depot One Cent Items
+                </Link>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Community chats are going away starting October 5. Download messages in Accounts Center and stay
+                  connected in the group on Facebook.
+                </p>
+              </li>
+              <li>
+                <span className="text-sm text-muted-foreground">32,000+ active members</span>
               </li>
             </ul>
           </div>
