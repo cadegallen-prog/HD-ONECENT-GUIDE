@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import dynamic from "next/dynamic"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
@@ -13,7 +13,7 @@ const StoreMap = dynamic(
   { ssr: false, loading: () => <div className="h-96 bg-muted/30 rounded-xl animate-pulse"></div> }
 )
 
-import storesData from "@/data/home-depot-stores.json"
+import sampleStoresData from "@/data/home-depot-stores.sample.json"
 
 export interface StoreLocation {
   id: string
@@ -36,15 +36,13 @@ export interface StoreLocation {
   distance?: number
 }
 
-const allStores: StoreLocation[] = (storesData as StoreLocation[]).map((s) => ({
+const normalizeStore = (s: StoreLocation): StoreLocation => ({
   ...s,
   hours: s.hours || { weekday: "", weekend: "" },
   services: s.services || []
-}))
+})
 
-const stateOptions = Array.from(new Set(allStores.map((s) => s.state).filter(Boolean))).sort()
-const missingHoursCount = allStores.filter((store) => !hasHours(store)).length
-const missingServicesCount = allStores.filter((store) => !store.services || store.services.length === 0).length
+const fallbackStores: StoreLocation[] = (sampleStoresData as StoreLocation[]).map(normalizeStore)
 
 function hasHours(store: StoreLocation) {
   return Boolean(store.hours && (store.hours.weekday || store.hours.weekend))
@@ -62,8 +60,9 @@ const formatDateTime = (iso?: string) => {
 }
 
 export default function StoreFinderPage() {
-  const [stores, setStores] = useState<StoreLocation[]>(allStores)
-  const [filteredStores, setFilteredStores] = useState<StoreLocation[]>(allStores)
+  const [stores, setStores] = useState<StoreLocation[]>(fallbackStores)
+  const [filteredStores, setFilteredStores] = useState<StoreLocation[]>(fallbackStores)
+  const [loadingStores, setLoadingStores] = useState<boolean>(Boolean(process.env.NEXT_PUBLIC_HOME_DEPOT_STORES_URL))
   const [searchQuery, setSearchQuery] = useState("")
   const [viewMode, setViewMode] = useState<"map" | "list">("map")
   const [userLocation, setUserLocation] = useState<{ lat: number, lng: number } | null>(null)
@@ -75,6 +74,51 @@ export default function StoreFinderPage() {
     hasServices: false,
     maxDistance: 50
   })
+
+  const stateOptions = useMemo(
+    () => Array.from(new Set(stores.map((s) => s.state).filter(Boolean))).sort(),
+    [stores]
+  )
+  const missingHoursCount = useMemo(
+    () => stores.filter((store) => !hasHours(store)).length,
+    [stores]
+  )
+  const missingServicesCount = useMemo(
+    () => stores.filter((store) => !store.services || store.services.length === 0).length,
+    [stores]
+  )
+
+  // Load store data from remote URL if provided; otherwise use the bundled sample.
+  useEffect(() => {
+    const url = process.env.NEXT_PUBLIC_HOME_DEPOT_STORES_URL
+    if (!url) {
+      setLoadingStores(false)
+      return
+    }
+
+    let cancelled = false
+    const load = async () => {
+      try {
+        const res = await fetch(url)
+        if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`)
+        const json = (await res.json()) as StoreLocation[]
+        const normalized = json.map(normalizeStore)
+        if (!cancelled) {
+          setStores(normalized)
+          setFilteredStores(normalized)
+        }
+      } catch (err) {
+        console.error("Failed to load remote store data; using fallback sample instead.", err)
+      } finally {
+        if (!cancelled) setLoadingStores(false)
+      }
+    }
+
+    load()
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   // Load favorites from localStorage
   useEffect(() => {
@@ -115,13 +159,15 @@ export default function StoreFinderPage() {
 
   // Calculate distances
   const calculateDistances = (lat: number, lng: number) => {
-    const storesWithDistance = allStores.map(store => ({
-      ...store,
-      distance: calculateDistance(lat, lng, store.lat, store.lng)
-    }))
-    storesWithDistance.sort((a, b) => (a.distance || 0) - (b.distance || 0))
-    setStores(storesWithDistance)
-    setFilteredStores(storesWithDistance)
+    setStores((prev) => {
+      const storesWithDistance = prev.map(store => ({
+        ...store,
+        distance: calculateDistance(lat, lng, store.lat, store.lng)
+      }))
+      storesWithDistance.sort((a, b) => (a.distance || 0) - (b.distance || 0))
+      setFilteredStores(storesWithDistance)
+      return storesWithDistance
+    })
   }
 
   // Haversine formula for distance calculation
@@ -307,7 +353,7 @@ export default function StoreFinderPage() {
               <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
                 <Info className="h-4 w-4 text-primary" />
                 <span>
-                  Data from Google Places. Hours captured for {allStores.length - missingHoursCount} stores ({missingHoursCount} missing); services present for {allStores.length - missingServicesCount} stores ({missingServicesCount} missing).
+                  Data from Google Places. Hours captured for {stores.length - missingHoursCount} stores ({missingHoursCount} missing); services present for {stores.length - missingServicesCount} stores ({missingServicesCount} missing).
                 </span>
               </div>
             </div>
