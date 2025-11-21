@@ -6,9 +6,7 @@ import "leaflet/dist/leaflet.css"
 
 // Fix for default marker icons in react-leaflet
 if (typeof window !== "undefined") {
-  /* eslint-disable */
   const L = require("leaflet")
-  /* eslint-enable */
   delete L.Icon.Default.prototype._getIconUrl
   L.Icon.Default.mergeOptions({
     iconRetinaUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
