@@ -62,7 +62,7 @@ export function TableOfContents({ variant = "desktop" }: TableOfContentsProps) {
   const isMobile = variant === "mobile"
 
   return (
-    <nav className={isMobile ? "" : "sticky top-20"}>
+    <nav aria-label="Guide navigation menu" className={isMobile ? "" : "sticky top-20"}>
       <div className={isMobile ? "space-y-4" : "space-y-6"}>
         {/* Section Menu Control */}
         <div>
