@@ -59,11 +59,35 @@ const sanitizeText = (value?: string) => {
     .trim()
 }
 
-const isValidHomeDepot = (name?: string) => {
+// Validate store - now just checks it's not a banned type
+const isValidStore = (name?: string) => {
   if (!name) return false
   const lower = name.toLowerCase()
-  if (!lower.includes("home depot")) return false
   return !bannedNameTokens.some((token) => lower.includes(token))
+}
+
+// Format store number for display (4 digits with leading zeros)
+const formatStoreNumber = (num?: string): string => {
+  if (!num) return "N/A"
+  // Ensure it's 4 digits with leading zeros
+  return num.padStart(4, '0')
+}
+
+// Get store number for URL (no leading zeros)
+const getStoreUrlNumber = (num?: string): string => {
+  if (!num) return ""
+  return parseInt(num, 10).toString()
+}
+
+// Build Home Depot store URL
+// Format: https://www.homedepot.com/l/{Store_Name}/{State}/{City}/{Zip}/{Store_Number}
+const getStoreUrl = (store: StoreLocation): string => {
+  const storeName = (store.name || store.city || "Store").replace(/\s+/g, '-')
+  const state = store.state || "GA"
+  const city = store.city || "Atlanta"
+  const zip = store.zip || ""
+  const storeNum = getStoreUrlNumber(store.number)
+  return `https://www.homedepot.com/l/${storeName}/${state}/${city}/${zip}/${storeNum}`
 }
 
 const normalizeStore = (s: StoreLocation): StoreLocation => ({
@@ -107,7 +131,7 @@ const getClosestStores = (stores: StoreLocation[], lat: number, lng: number): St
 // Load and validate stores
 const allStores: StoreLocation[] = (sampleStoresData as StoreLocation[])
   .map(normalizeStore)
-  .filter((s) => isValidHomeDepot(s.name))
+  .filter((s) => isValidStore(s.name))
 
 // Default center (Atlanta, GA)
 const DEFAULT_CENTER: [number, number] = [33.7490, -84.3880]
@@ -155,7 +179,7 @@ export default function StoreFinderPage() {
         const json = (await res.json()) as StoreLocation[]
         const normalized = json
           .map(normalizeStore)
-          .filter((s) => isValidHomeDepot(s.name))
+          .filter((s) => isValidStore(s.name))
         if (!cancelled) {
           setAllLoadedStores(normalized)
         }
@@ -528,9 +552,9 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
                 <h3 className={`font-semibold text-sm truncate ${isSelected ? 'text-primary' : 'text-foreground'}`}>
-                  {store.city}, {store.state}
+                  {store.name} #{formatStoreNumber(store.number)}
                 </h3>
-                <p className="text-xs text-muted-foreground">Store #{store.number || "N/A"}</p>
+                <p className="text-xs text-muted-foreground">{store.city}, {store.state}</p>
               </div>
               <button
                 onClick={onToggleFavorite}
@@ -575,7 +599,7 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
                   Directions
                 </a>
                 <a
-                  href={`https://www.homedepot.com/l/storeSearchByAddress?myStoreId=${store.number}`}
+                  href={getStoreUrl(store)}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
@@ -610,9 +634,9 @@ function StoreCard({ store, index, isFavorite, onToggleFavorite }: {
           </div>
           <div>
             <h3 className="font-heading font-bold text-foreground">
-              {store.city}, {store.state}
+              {store.name} #{formatStoreNumber(store.number)}
             </h3>
-            <p className="text-xs text-muted-foreground">Store #{store.number || "N/A"}</p>
+            <p className="text-xs text-muted-foreground">{store.city}, {store.state}</p>
           </div>
         </div>
         <button
@@ -662,7 +686,7 @@ function StoreCard({ store, index, isFavorite, onToggleFavorite }: {
           Get Directions
         </a>
         <a
-          href={`https://www.homedepot.com/l/storeSearchByAddress?myStoreId=${store.number}`}
+          href={getStoreUrl(store)}
           target="_blank"
           rel="noopener noreferrer"
           className="flex-1 text-sm border border-border py-2 px-4 rounded-lg text-center hover:bg-accent transition-colors flex items-center justify-center gap-2"
