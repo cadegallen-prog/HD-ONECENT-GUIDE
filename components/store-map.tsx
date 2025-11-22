@@ -72,18 +72,17 @@ interface StoreMapProps {
 // Component to handle map view changes
 function MapController({ center, selectedStore }: { center: [number, number]; selectedStore?: StoreLocation | null }) {
   const map = useMap()
+  const lastSelectedIdRef = React.useRef<string | null>(null)
 
+  // Only fly to selected store when it changes (not on every center change)
   React.useEffect(() => {
-    if (selectedStore) {
+    if (selectedStore && selectedStore.id !== lastSelectedIdRef.current) {
+      lastSelectedIdRef.current = selectedStore.id
       map.flyTo([selectedStore.lat, selectedStore.lng], Math.max(map.getZoom(), 12), {
         duration: 0.5
       })
     }
   }, [selectedStore, map])
-
-  React.useEffect(() => {
-    map.setView(center, map.getZoom())
-  }, [center, map])
 
   return null
 }

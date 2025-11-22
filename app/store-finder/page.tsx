@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState, useRef, useCallback, forwardRef } from "react"
+import { useEffect, useState, useRef, useCallback, forwardRef } from "react"
 import dynamic from "next/dynamic"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
@@ -112,29 +112,35 @@ const allStores: StoreLocation[] = (sampleStoresData as StoreLocation[])
 // Default center (Atlanta, GA)
 const DEFAULT_CENTER: [number, number] = [33.7490, -84.3880]
 
+// Pre-compute initial stores for immediate display
+const initialDisplayedStores = getClosestStores(allStores, DEFAULT_CENTER[0], DEFAULT_CENTER[1])
+
 export default function StoreFinderPage() {
-  const [displayedStores, setDisplayedStores] = useState<StoreLocation[]>([])
-  const [loadingStores, setLoadingStores] = useState(true)
+  const [displayedStores, setDisplayedStores] = useState<StoreLocation[]>(initialDisplayedStores)
+  const [loadingStores, setLoadingStores] = useState(false)
+  const [locatingUser, setLocatingUser] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [viewMode, setViewMode] = useState<"map" | "list">("map")
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [mapCenter, setMapCenter] = useState<[number, number]>(DEFAULT_CENTER)
-  const [selectedStore, setSelectedStore] = useState<StoreLocation | null>(null)
+  const [selectedStore, setSelectedStore] = useState<StoreLocation | null>(initialDisplayedStores[0] || null)
   const [favorites, setFavorites] = useState<string[]>([])
   const [allLoadedStores, setAllLoadedStores] = useState<StoreLocation[]>(allStores)
 
   const listContainerRef = useRef<HTMLDivElement>(null)
   const storeRefs = useRef<Map<string, HTMLDivElement>>(new Map())
 
-  // Initialize with default location's closest stores
+  // Re-calculate displayed stores when remote data loads
   useEffect(() => {
-    const initialStores = getClosestStores(allLoadedStores, DEFAULT_CENTER[0], DEFAULT_CENTER[1])
-    setDisplayedStores(initialStores)
-    if (initialStores.length > 0) {
-      setSelectedStore(initialStores[0])
+    if (allLoadedStores !== allStores) {
+      // Remote data loaded, recalculate closest stores
+      const newStores = getClosestStores(allLoadedStores, mapCenter[0], mapCenter[1])
+      setDisplayedStores(newStores)
+      if (newStores.length > 0 && !selectedStore) {
+        setSelectedStore(newStores[0])
+      }
     }
-    setLoadingStores(false)
-  }, [allLoadedStores])
+  }, [allLoadedStores, mapCenter, selectedStore])
 
   // Load remote store data if URL is provided
   useEffect(() => {
@@ -191,6 +197,7 @@ export default function StoreFinderPage() {
   // Get user's current location
   const getUserLocation = useCallback(() => {
     if ("geolocation" in navigator) {
+      setLocatingUser(true)
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const lat = position.coords.latitude
@@ -204,9 +211,11 @@ export default function StoreFinderPage() {
           if (closestStores.length > 0) {
             setSelectedStore(closestStores[0])
           }
+          setLocatingUser(false)
         },
         (error) => {
           console.error("Error getting location:", error)
+          setLocatingUser(false)
           alert("Could not get your location. Please try searching by ZIP code instead.")
         }
       )
@@ -326,10 +335,19 @@ export default function StoreFinderPage() {
                 </div>
 
                 {/* Location Button */}
-                <Button onClick={getUserLocation} variant="outline" className="flex items-center gap-2">
-                  <Navigation className="h-4 w-4" />
-                  <span className="hidden sm:inline">Use My Location</span>
-                  <span className="sm:hidden">My Location</span>
+                <Button
+                  onClick={getUserLocation}
+                  variant="outline"
+                  className="flex items-center gap-2"
+                  disabled={locatingUser}
+                >
+                  <Navigation className={`h-4 w-4 ${locatingUser ? 'animate-pulse' : ''}`} />
+                  <span className="hidden sm:inline">
+                    {locatingUser ? 'Locating...' : 'Use My Location'}
+                  </span>
+                  <span className="sm:hidden">
+                    {locatingUser ? 'Locating...' : 'My Location'}
+                  </span>
                 </Button>
 
                 {/* View Toggle */}
@@ -557,7 +575,7 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
                   Directions
                 </a>
                 <a
-                  href={`https://www.homedepot.com/l/${store.city?.replace(/\s+/g, '-')}/${store.state}/${store.number}`}
+                  href={`https://www.homedepot.com/l/storeSearchByAddress?myStoreId=${store.number}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
@@ -644,7 +662,7 @@ function StoreCard({ store, index, isFavorite, onToggleFavorite }: {
           Get Directions
         </a>
         <a
-          href={`https://www.homedepot.com/l/${store.city?.replace(/\s+/g, '-')}/${store.state}/${store.number}`}
+          href={`https://www.homedepot.com/l/storeSearchByAddress?myStoreId=${store.number}`}
           target="_blank"
           rel="noopener noreferrer"
           className="flex-1 text-sm border border-border py-2 px-4 rounded-lg text-center hover:bg-accent transition-colors flex items-center justify-center gap-2"
