@@ -34,13 +34,12 @@ export function Hero() {
             </button>
           </div>
 
-          {/* Right: Muted reference image */}
+          {/* Right: Stylized penny price display */}
           <div className="hidden md:block">
             <div className="bg-surface border border-border rounded-lg p-6 aspect-square flex items-center justify-center">
-              <div className="text-center text-muted-foreground">
-                <div className="text-6xl font-mono font-bold mb-2">$0.01</div>
-                <div className="text-sm font-heading">PLACEHOLDER_HERO_IMAGE</div>
-                <div className="text-xs mt-2">hero-clearance-tag-mockup.png</div>
+              <div className="text-center">
+                <div className="text-6xl font-mono font-bold text-primary mb-2">$0.01</div>
+                <div className="text-sm font-heading text-muted-foreground">The magic price</div>
               </div>
             </div>
           </div>

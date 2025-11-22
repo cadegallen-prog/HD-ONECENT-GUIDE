@@ -23,11 +23,6 @@ export function ContentSections() {
             is to sell it at that price.
           </p>
 
-          <div className="callout-box info">
-            <p className="font-heading font-semibold mb-2">PLACEHOLDER_RECEIPT_EXAMPLE</p>
-            <p className="text-sm">Image: receipt-penny-item-example.jpg</p>
-          </div>
-
           <h3 className="text-xl font-heading font-semibold mt-8 mb-4">
             How Items Reach Penny Status
           </h3>
@@ -71,11 +66,6 @@ export function ContentSections() {
           <p className="text-foreground">
             Items typically follow one of two markdown cadence patterns:
           </p>
-
-          <div className="callout-box info">
-            <p className="text-sm font-heading font-semibold mb-2">PLACEHOLDER_DIAGRAM</p>
-            <p className="text-sm text-muted-foreground">SVG: cadence-comparison-chart.svg</p>
-          </div>
 
           <table className="data-table">
             <thead>
@@ -179,13 +169,10 @@ export function ContentSections() {
               <div className="step-number">1</div>
               <div>
                 <h4 className="font-heading font-semibold mb-2">Set Your Store</h4>
-                <p className="text-foreground mb-2">
+                <p className="text-foreground">
                   Open the app and select your target store location. Pricing and availability are
                   store-specific.
                 </p>
-                <div className="callout-box info">
-                  <p className="text-sm">PLACEHOLDER: app-screenshot-store-selector.png</p>
-                </div>
               </div>
             </div>
 
@@ -193,13 +180,10 @@ export function ContentSections() {
               <div className="step-number">2</div>
               <div>
                 <h4 className="font-heading font-semibold mb-2">Search by SKU or Name</h4>
-                <p className="text-foreground mb-2">
+                <p className="text-foreground">
                   Enter the SKU (internet number) or product name. SKUs from community finds are
                   most reliable.
                 </p>
-                <div className="callout-box info">
-                  <p className="text-sm">PLACEHOLDER: app-screenshot-sku-search.png</p>
-                </div>
               </div>
             </div>
 
@@ -271,12 +255,9 @@ export function ContentSections() {
           <div className="grid md:grid-cols-2 gap-6">
             <div className="reference-card">
               <h4 className="font-heading font-semibold mb-3">Clearance Endcaps</h4>
-              <p className="text-sm mb-2">
+              <p className="text-sm">
                 Orange "clearance" signed endcaps at aisle ends. Check items with .03/.06 tags.
               </p>
-              <div className="callout-box info">
-                <p className="text-xs">PLACEHOLDER: photo-clearance-endcap.jpg</p>
-              </div>
             </div>
 
             <div className="reference-card">
@@ -288,12 +269,9 @@ export function ContentSections() {
 
             <div className="reference-card">
               <h4 className="font-heading font-semibold mb-3">Back Corners & Dust</h4>
-              <p className="text-sm mb-2">
+              <p className="text-sm">
                 Forgotten items on back shelves, especially garden and seasonal aisles.
               </p>
-              <div className="callout-box info">
-                <p className="text-xs">PLACEHOLDER: photo-dusty-shelf-example.jpg</p>
-              </div>
             </div>
 
             <div className="reference-card">
@@ -404,10 +382,6 @@ export function ContentSections() {
             Home Depot systems prioritize barcode scan over physical tags. A clearance tag showing
             $5.03 may scan at $0.01 if further markdowns occurred.
           </p>
-
-          <div className="callout-box info">
-            <p className="text-sm">PLACEHOLDER: diagram-barcode-vs-tag.svg</p>
-          </div>
         </div>
       </section>
 
@@ -438,10 +412,6 @@ export function ContentSections() {
             ZMA is the internal workflow for clearing penny items from the store:
           </p>
 
-          <div className="callout-box info">
-            <p className="text-sm mb-2">PLACEHOLDER: diagram-zma-process-flow.svg</p>
-          </div>
-
           <ol className="list-decimal list-inside space-y-2 ml-4">
             <li>System flags items marked to $0.01</li>
             <li>Report generates for store management</li>
@@ -469,10 +439,6 @@ export function ContentSections() {
             <li>Locate items via aisle/bay numbers</li>
             <li>Process ZMA pulls</li>
           </ul>
-
-          <div className="callout-box info">
-            <p className="text-sm">PLACEHOLDER: photo-first-phone.jpg</p>
-          </div>
         </div>
       </section>
 
@@ -620,9 +586,6 @@ export function ContentSections() {
               Is penny shopping legal?
             </h3>
             <p className="text-foreground">
-              PLACEHOLDER_FAQ_LEGAL
-            </p>
-            <p className="text-foreground mt-2">
               Yes. Purchasing items at their scanned register price is legal. Penny items are not
               "stolen" - they're legitimate clearance items that scan at $0.01. However, stores
               have the right to refuse any sale, and managers can void transactions at their
@@ -635,9 +598,6 @@ export function ContentSections() {
               How often should I check for penny items?
             </h3>
             <p className="text-foreground">
-              PLACEHOLDER_FAQ_FREQUENCY
-            </p>
-            <p className="text-foreground mt-2">
               For best results, visit stores 1-2 times per week. Clearance markdowns often happen
               overnight on Tuesdays and Thursdays, but this varies by store. Seasonal transitions
               (end of summer, post-holiday) are high-activity periods.
@@ -649,9 +609,6 @@ export function ContentSections() {
               Can I return penny items?
             </h3>
             <p className="text-foreground">
-              PLACEHOLDER_FAQ_RETURNS
-            </p>
-            <p className="text-foreground mt-2">
               Technically yes, but you'll only receive a $0.01 refund per item. Returns are
               credited at purchase price, not original retail. Attempting to return penny items
               for profit is considered fraud.
@@ -692,10 +649,6 @@ export function ContentSections() {
               entire inventories, and consider the impact on other hunters and genuine customers.
             </p>
           </div>
-
-          <p className="text-sm text-muted-foreground mt-8">
-            PLACEHOLDER_FAQ_ADDITIONAL_5_QUESTIONS
-          </p>
         </div>
       </section>
 
