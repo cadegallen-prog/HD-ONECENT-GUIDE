@@ -45,11 +45,13 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Right: Styled price tag display */}
+          {/* Right: Stylized penny price display */}
           <div className="hidden md:block">
-            <div className="bg-gradient-to-br from-primary/10 to-primary/5 border-2 border-primary/20 rounded-2xl p-8 aspect-square flex flex-col items-center justify-center">
-              <div className="text-6xl font-mono font-bold text-primary mb-2">$0.01</div>
-              <div className="text-sm text-muted-foreground font-heading">The magic price</div>
+            <div className="bg-surface border border-border rounded-lg p-6 aspect-square flex items-center justify-center">
+              <div className="text-center">
+                <div className="text-6xl font-mono font-bold text-primary mb-2">$0.01</div>
+                <div className="text-sm font-heading text-muted-foreground">The magic price</div>
+              </div>
             </div>
           </div>
         </div>
