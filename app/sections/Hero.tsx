@@ -1,6 +1,6 @@
 "use client"
 
-import { ChevronDown } from "lucide-react"
+import { ChevronDown, ExternalLink } from "lucide-react"
 
 export function Hero() {
   const scrollToSections = () => {
@@ -24,14 +24,25 @@ export function Hero() {
               used by the 32,000-member "Home Depot One Cent Items" community.
             </p>
 
-            {/* Primary action */}
-            <button
-              onClick={scrollToSections}
-              className="text-primary hover:text-primary/80 font-heading font-medium flex items-center gap-1 transition-colors"
-            >
-              Browse Sections
-              <ChevronDown className="w-4 h-4" />
-            </button>
+            {/* Actions */}
+            <div className="flex flex-wrap items-center gap-4">
+              <button
+                onClick={scrollToSections}
+                className="text-primary hover:text-primary/80 font-heading font-medium flex items-center gap-1 transition-colors"
+              >
+                Browse Sections
+                <ChevronDown className="w-4 h-4" />
+              </button>
+              <a
+                href="https://www.facebook.com/groups/homedepotonecent"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground font-heading text-sm flex items-center gap-1 transition-colors"
+              >
+                Join the Facebook Group
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
           </div>
 
           {/* Right: Styled price tag display */}
