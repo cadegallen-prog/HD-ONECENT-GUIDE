@@ -1,5 +1,7 @@
 "use client"
 
+import { Download } from "lucide-react"
+
 export function ContentSections() {
   return (
     <div className="space-y-16 py-12">
@@ -696,6 +698,21 @@ export function ContentSections() {
           </p>
         </div>
       </section>
+
+      {/* Bottom PDF Download */}
+      <div className="border-t border-border pt-8 mt-8">
+        <div className="flex items-center justify-center">
+          <a
+            href="/Home-Depot-Penny-Guide.pdf"
+            download="Home-Depot-Penny-Guide.pdf"
+            target="_blank"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+          >
+            <Download className="h-4 w-4" />
+            <span>Download this guide as PDF</span>
+          </a>
+        </div>
+      </div>
     </div>
   )
 }
