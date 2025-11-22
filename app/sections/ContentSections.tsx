@@ -620,9 +620,6 @@ export function ContentSections() {
               Is penny shopping legal?
             </h3>
             <p className="text-foreground">
-              PLACEHOLDER_FAQ_LEGAL
-            </p>
-            <p className="text-foreground mt-2">
               Yes. Purchasing items at their scanned register price is legal. Penny items are not
               "stolen" - they're legitimate clearance items that scan at $0.01. However, stores
               have the right to refuse any sale, and managers can void transactions at their
@@ -635,9 +632,6 @@ export function ContentSections() {
               How often should I check for penny items?
             </h3>
             <p className="text-foreground">
-              PLACEHOLDER_FAQ_FREQUENCY
-            </p>
-            <p className="text-foreground mt-2">
               For best results, visit stores 1-2 times per week. Clearance markdowns often happen
               overnight on Tuesdays and Thursdays, but this varies by store. Seasonal transitions
               (end of summer, post-holiday) are high-activity periods.
@@ -649,9 +643,6 @@ export function ContentSections() {
               Can I return penny items?
             </h3>
             <p className="text-foreground">
-              PLACEHOLDER_FAQ_RETURNS
-            </p>
-            <p className="text-foreground mt-2">
               Technically yes, but you'll only receive a $0.01 refund per item. Returns are
               credited at purchase price, not original retail. Attempting to return penny items
               for profit is considered fraud.
@@ -693,9 +684,6 @@ export function ContentSections() {
             </p>
           </div>
 
-          <p className="text-sm text-muted-foreground mt-8">
-            PLACEHOLDER_FAQ_ADDITIONAL_5_QUESTIONS
-          </p>
         </div>
       </section>
 
