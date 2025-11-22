@@ -58,7 +58,8 @@ export function QuickActionsButton() {
             <button
               key={index}
               onClick={() => handleAction(action.action)}
-              className="w-full flex items-start gap-3 px-4 py-3 rounded-lg hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all text-left group"
+              aria-label={action.label}
+              className="w-full flex items-start gap-3 px-4 py-3 rounded-lg hover:bg-accent hover:scale-[1.02] active:scale-95 transition-all text-left group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-inset"
             >
               <action.icon className="w-5 h-5 text-primary mt-0.5 flex-shrink-0 group-hover:scale-110 transition-transform" />
               <div>
@@ -74,7 +75,7 @@ export function QuickActionsButton() {
       <Button
         size="lg"
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-4 md:right-8 z-50 h-14 w-14 rounded-full shadow-2xl hover:shadow-primary/20 hover:scale-110 active:scale-95 transition-all duration-200 ring-2 ring-primary/10 hover:ring-primary/30"
+        className="fixed bottom-6 right-4 md:right-8 z-50 h-14 w-14 rounded-full shadow-2xl hover:shadow-primary/20 hover:scale-110 active:scale-95 transition-all duration-200 ring-2 ring-primary/10 hover:ring-primary/30 focus:ring-2 focus:ring-offset-2 focus:ring-primary"
       >
         {isOpen ? (
           <X className="h-6 w-6 transition-transform duration-200" />

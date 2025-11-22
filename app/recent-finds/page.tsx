@@ -12,7 +12,7 @@ export default function RecentFindsPage() {
               Recent Penny Finds
             </h1>
             <p className="text-xl text-muted-foreground mb-8">
-              See what 32,000+ hunters are finding in real-time. Submit your own finds to help the community!
+              Examples of penny items found by our 32,000+ member community. Join our Facebook group to share your finds!
             </p>
 
             <RecentFindsFeed />

@@ -29,7 +29,7 @@ interface TableOfContentsProps {
 
 export function TableOfContents({ variant = "desktop" }: TableOfContentsProps) {
   const [activeSection, setActiveSection] = useState("")
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(true)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -62,7 +62,7 @@ export function TableOfContents({ variant = "desktop" }: TableOfContentsProps) {
   const isMobile = variant === "mobile"
 
   return (
-    <nav className={isMobile ? "" : "sticky top-20"}>
+    <nav aria-label="Guide navigation menu" className={isMobile ? "" : "sticky top-20"}>
       <div className={isMobile ? "space-y-4" : "space-y-6"}>
         {/* Section Menu Control */}
         <div>
@@ -78,7 +78,7 @@ export function TableOfContents({ variant = "desktop" }: TableOfContentsProps) {
             aria-controls="section-menu"
           >
             <span className="text-sm font-heading font-medium text-foreground group-hover:text-primary transition-colors">
-              Jump to a Section
+              Guide Sections
             </span>
             <ChevronDown
               className={`h-4 w-4 text-muted-foreground group-hover:text-primary transition-all ${
@@ -86,10 +86,6 @@ export function TableOfContents({ variant = "desktop" }: TableOfContentsProps) {
               }`}
             />
           </button>
-
-          <p className="text-xs text-muted-foreground mt-1.5 px-1">
-            {isMobile ? "Tap to open section menu" : "Click to open section menu"}
-          </p>
 
           {/* Dropdown menu */}
           {isOpen && (
