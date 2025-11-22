@@ -4,7 +4,6 @@ import * as React from "react"
 import { Tag, MapPin, Clock, User, TrendingUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
-import { toast } from "sonner"
 
 export interface PennyFind {
   id: string
@@ -23,14 +22,14 @@ interface RecentFindsFeedProps {
   loading?: boolean
 }
 
-// Sample data
+// Sample data - example finds shared by community members
 const sampleFinds: PennyFind[] = [
   {
     id: "1",
     itemName: "DeWalt Drill Bit Set",
     storeName: "Store #1234",
     storeLocation: "Atlanta, GA",
-    foundAt: "2 hours ago",
+    foundAt: "Nov 2024",
     submittedBy: "PennyHunter123",
     originalPrice: "$24.99",
     category: "Tools",
@@ -41,7 +40,7 @@ const sampleFinds: PennyFind[] = [
     itemName: "Garden Hose 50ft",
     storeName: "Store #5678",
     storeLocation: "Dallas, TX",
-    foundAt: "4 hours ago",
+    foundAt: "Nov 2024",
     submittedBy: "SavingsSeeker",
     originalPrice: "$18.97",
     category: "Garden",
@@ -52,7 +51,7 @@ const sampleFinds: PennyFind[] = [
     itemName: "LED Light Bulbs (4-pack)",
     storeName: "Store #9012",
     storeLocation: "Phoenix, AZ",
-    foundAt: "6 hours ago",
+    foundAt: "Oct 2024",
     submittedBy: "DealFinder99",
     originalPrice: "$12.48",
     category: "Electrical",
@@ -61,10 +60,6 @@ const sampleFinds: PennyFind[] = [
 
 export function RecentFindsFeed({ finds = sampleFinds, loading = false }: RecentFindsFeedProps) {
   const [filter, setFilter] = React.useState<string>("all")
-
-  const handleSubmitFind = () => {
-    toast.success("Find submission form opening...")
-  }
 
   const filteredFinds = filter === "all"
     ? finds
@@ -119,9 +114,9 @@ export function RecentFindsFeed({ finds = sampleFinds, loading = false }: Recent
           </Button>
         </div>
 
-        <Button onClick={handleSubmitFind}>
+        <Button onClick={() => window.open('https://www.facebook.com/groups/homedepotonecent', '_blank')}>
           <Tag className="w-4 h-4 mr-2" />
-          Submit Your Find
+          Share in Facebook Group
         </Button>
       </div>
 
@@ -186,14 +181,19 @@ export function RecentFindsFeed({ finds = sampleFinds, loading = false }: Recent
         </div>
       )}
 
-      {/* Live indicator */}
-      <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground py-4">
-        <span className="relative flex h-3 w-3">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-        </span>
-        <span>Live feed - Updates automatically</span>
-      </div>
+      {/* Community note */}
+      <p className="text-sm text-muted-foreground text-center py-4 border-t border-border">
+        Community finds are shared in our{" "}
+        <a
+          href="https://www.facebook.com/groups/homedepotonecent"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-primary hover:underline"
+        >
+          Facebook group
+        </a>
+        . This page shows recent examples.
+      </p>
     </div>
   )
 }
