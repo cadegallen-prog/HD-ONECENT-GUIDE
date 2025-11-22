@@ -1,8 +1,6 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Download, ChevronDown } from "lucide-react"
-import Image from "next/image"
+import { ChevronDown } from "lucide-react"
 
 export function Hero() {
   const scrollToSections = () => {
@@ -26,24 +24,14 @@ export function Hero() {
               used by the 32,000-member "Home Depot One Cent Items" community.
             </p>
 
-            {/* Primary actions */}
-            <div className="flex flex-col sm:flex-row gap-4 items-start">
-              <Button
-                size="lg"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground"
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Download PDF Guide
-              </Button>
-
-              <button
-                onClick={scrollToSections}
-                className="text-primary hover:text-primary/80 font-heading font-medium flex items-center gap-1 transition-colors"
-              >
-                Browse Sections
-                <ChevronDown className="w-4 h-4" />
-              </button>
-            </div>
+            {/* Primary action */}
+            <button
+              onClick={scrollToSections}
+              className="text-primary hover:text-primary/80 font-heading font-medium flex items-center gap-1 transition-colors"
+            >
+              Browse Sections
+              <ChevronDown className="w-4 h-4" />
+            </button>
           </div>
 
           {/* Right: Muted reference image */}

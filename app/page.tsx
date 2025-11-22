@@ -13,16 +13,21 @@ export default function Home() {
 
         {/* Main content with TOC sidebar */}
         <div className="container mx-auto px-4 max-w-7xl" id="sections">
-          <div className="grid lg:grid-cols-[1fr_250px] gap-8 lg:gap-12 py-8">
+          {/* Mobile TOC - Above content on mobile */}
+          <div className="lg:hidden py-6 border-b border-border mb-6">
+            <TableOfContents variant="mobile" />
+          </div>
+
+          <div className="grid lg:grid-cols-[250px_1fr] gap-8 lg:gap-12 py-8 lg:py-8">
+            {/* Sticky TOC - Left sidebar on desktop */}
+            <aside className="hidden lg:block">
+              <TableOfContents variant="desktop" />
+            </aside>
+
             {/* Main content */}
             <div className="min-w-0 max-w-4xl">
               <ContentSections />
             </div>
-
-            {/* Sticky TOC - Desktop only */}
-            <aside className="hidden lg:block">
-              <TableOfContents />
-            </aside>
           </div>
         </div>
       </main>
