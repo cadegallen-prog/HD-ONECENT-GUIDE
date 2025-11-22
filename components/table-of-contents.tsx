@@ -23,7 +23,11 @@ const tools = [
   { href: "/recent-finds", label: "Recent Finds", icon: Tag },
 ]
 
-export function TableOfContents() {
+interface TableOfContentsProps {
+  variant?: "desktop" | "mobile"
+}
+
+export function TableOfContents({ variant = "desktop" }: TableOfContentsProps) {
   const [activeSection, setActiveSection] = useState("")
   const [isOpen, setIsOpen] = useState(false)
 
@@ -55,9 +59,11 @@ export function TableOfContents() {
     }
   }
 
+  const isMobile = variant === "mobile"
+
   return (
-    <nav className="sticky top-20">
-      <div className="space-y-6">
+    <nav className={isMobile ? "" : "sticky top-20"}>
+      <div className={isMobile ? "space-y-4" : "space-y-6"}>
         {/* Section Menu Control */}
         <div>
           <div className="text-xs font-heading font-medium text-muted-foreground uppercase tracking-wide mb-2">
@@ -82,7 +88,7 @@ export function TableOfContents() {
           </button>
 
           <p className="text-xs text-muted-foreground mt-1.5 px-1">
-            Click to open section menu
+            {isMobile ? "Tap to open section menu" : "Click to open section menu"}
           </p>
 
           {/* Dropdown menu */}
@@ -113,12 +119,16 @@ export function TableOfContents() {
           <div className="text-xs font-heading font-medium text-muted-foreground uppercase tracking-wide mb-3">
             Community Tools
           </div>
-          <div className="space-y-1">
+          <div className={isMobile ? "flex flex-wrap gap-2" : "space-y-1"}>
             {tools.map((tool) => (
               <Link
                 key={tool.href}
                 href={tool.href}
-                className="flex items-center gap-2.5 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors"
+                className={
+                  isMobile
+                    ? "inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground bg-surface border border-border rounded-md hover:bg-accent transition-colors"
+                    : "flex items-center gap-2.5 px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors"
+                }
               >
                 <tool.icon className="h-4 w-4" />
                 {tool.label}
