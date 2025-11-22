@@ -1,1 +1,512 @@
-[]
+[
+  {
+    "id": "1",
+    "number": "121",
+    "name": "The Home Depot",
+    "address": "2727 Paces Ferry Rd SE",
+    "city": "Atlanta",
+    "state": "GA",
+    "zip": "30339",
+    "phone": "(770) 438-8211",
+    "lat": 33.8675,
+    "lng": -84.4631,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting", "Paint Mixing"]
+  },
+  {
+    "id": "2",
+    "number": "148",
+    "name": "The Home Depot",
+    "address": "595 Piedmont Ave NE",
+    "city": "Atlanta",
+    "state": "GA",
+    "zip": "30308",
+    "phone": "(404) 249-8232",
+    "lat": 33.7711,
+    "lng": -84.3834,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting"]
+  },
+  {
+    "id": "3",
+    "number": "506",
+    "name": "The Home Depot",
+    "address": "1600 NE Expressway Access Rd",
+    "city": "Atlanta",
+    "state": "GA",
+    "zip": "30329",
+    "phone": "(404) 634-5666",
+    "lat": 33.8167,
+    "lng": -84.3381,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting", "Paint Mixing", "Truck Rental"]
+  },
+  {
+    "id": "4",
+    "number": "142",
+    "name": "The Home Depot",
+    "address": "2500 Briarcliff Rd NE",
+    "city": "Atlanta",
+    "state": "GA",
+    "zip": "30329",
+    "phone": "(404) 633-6800",
+    "lat": 33.8261,
+    "lng": -84.3261,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting"]
+  },
+  {
+    "id": "5",
+    "number": "149",
+    "name": "The Home Depot",
+    "address": "2401 Perkerson Rd SW",
+    "city": "Atlanta",
+    "state": "GA",
+    "zip": "30315",
+    "phone": "(404) 762-7400",
+    "lat": 33.6878,
+    "lng": -84.4039,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting", "Paint Mixing"]
+  },
+  {
+    "id": "6",
+    "number": "123",
+    "name": "The Home Depot",
+    "address": "4015 LaVista Rd",
+    "city": "Tucker",
+    "state": "GA",
+    "zip": "30084",
+    "phone": "(770) 493-0200",
+    "lat": 33.8488,
+    "lng": -84.2172,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting"]
+  },
+  {
+    "id": "7",
+    "number": "147",
+    "name": "The Home Depot",
+    "address": "2850 Cobb Pkwy SE",
+    "city": "Smyrna",
+    "state": "GA",
+    "zip": "30080",
+    "phone": "(770) 801-6000",
+    "lat": 33.8647,
+    "lng": -84.5036,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting", "Paint Mixing"]
+  },
+  {
+    "id": "8",
+    "number": "504",
+    "name": "The Home Depot",
+    "address": "2550 Mt Zion Pkwy",
+    "city": "Morrow",
+    "state": "GA",
+    "zip": "30260",
+    "phone": "(770) 961-0980",
+    "lat": 33.5689,
+    "lng": -84.3397,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting"]
+  },
+  {
+    "id": "9",
+    "number": "143",
+    "name": "The Home Depot",
+    "address": "3205 Cobb Galleria Pkwy",
+    "city": "Marietta",
+    "state": "GA",
+    "zip": "30339",
+    "phone": "(770) 955-5300",
+    "lat": 33.8841,
+    "lng": -84.4678,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting", "Paint Mixing", "Truck Rental"]
+  },
+  {
+    "id": "10",
+    "number": "128",
+    "name": "The Home Depot",
+    "address": "4101 Roswell Rd NE",
+    "city": "Marietta",
+    "state": "GA",
+    "zip": "30062",
+    "phone": "(770) 579-4501",
+    "lat": 33.9542,
+    "lng": -84.4531,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting"]
+  },
+  {
+    "id": "11",
+    "number": "505",
+    "name": "The Home Depot",
+    "address": "6625 North Point Pkwy",
+    "city": "Alpharetta",
+    "state": "GA",
+    "zip": "30022",
+    "phone": "(770) 664-3820",
+    "lat": 34.0425,
+    "lng": -84.2833,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting", "Paint Mixing"]
+  },
+  {
+    "id": "12",
+    "number": "134",
+    "name": "The Home Depot",
+    "address": "1955 Scenic Hwy S",
+    "city": "Snellville",
+    "state": "GA",
+    "zip": "30078",
+    "phone": "(770) 985-4334",
+    "lat": 33.8317,
+    "lng": -84.0197,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting"]
+  },
+  {
+    "id": "13",
+    "number": "127",
+    "name": "The Home Depot",
+    "address": "2900 Holcomb Bridge Rd",
+    "city": "Roswell",
+    "state": "GA",
+    "zip": "30076",
+    "phone": "(770) 643-7900",
+    "lat": 34.0164,
+    "lng": -84.3542,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting", "Paint Mixing"]
+  },
+  {
+    "id": "14",
+    "number": "503",
+    "name": "The Home Depot",
+    "address": "2135 Pleasant Hill Rd",
+    "city": "Duluth",
+    "state": "GA",
+    "zip": "30096",
+    "phone": "(770) 476-4111",
+    "lat": 33.9728,
+    "lng": -84.1461,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting"]
+  },
+  {
+    "id": "15",
+    "number": "146",
+    "name": "The Home Depot",
+    "address": "500 Ernest Barrett Pkwy NW",
+    "city": "Kennesaw",
+    "state": "GA",
+    "zip": "30144",
+    "phone": "(770) 426-0404",
+    "lat": 34.0108,
+    "lng": -84.5886,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting", "Paint Mixing", "Truck Rental"]
+  },
+  {
+    "id": "16",
+    "number": "125",
+    "name": "The Home Depot",
+    "address": "4101 Highway 78",
+    "city": "Lilburn",
+    "state": "GA",
+    "zip": "30047",
+    "phone": "(770) 381-8800",
+    "lat": 33.8781,
+    "lng": -84.0942,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting"]
+  },
+  {
+    "id": "17",
+    "number": "502",
+    "name": "The Home Depot",
+    "address": "1301 Johnson Ferry Rd",
+    "city": "Marietta",
+    "state": "GA",
+    "zip": "30068",
+    "phone": "(770) 509-2000",
+    "lat": 33.9728,
+    "lng": -84.4231,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting", "Paint Mixing"]
+  },
+  {
+    "id": "18",
+    "number": "138",
+    "name": "The Home Depot",
+    "address": "5401 Sugarloaf Pkwy",
+    "city": "Lawrenceville",
+    "state": "GA",
+    "zip": "30043",
+    "phone": "(770) 339-9300",
+    "lat": 33.9558,
+    "lng": -84.0489,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting"]
+  },
+  {
+    "id": "19",
+    "number": "501",
+    "name": "The Home Depot",
+    "address": "4475 Jonesboro Rd",
+    "city": "Union City",
+    "state": "GA",
+    "zip": "30291",
+    "phone": "(770) 969-5900",
+    "lat": 33.5628,
+    "lng": -84.4611,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting", "Paint Mixing"]
+  },
+  {
+    "id": "20",
+    "number": "137",
+    "name": "The Home Depot",
+    "address": "2755 Chastain Meadows Pkwy NW",
+    "city": "Marietta",
+    "state": "GA",
+    "zip": "30066",
+    "phone": "(770) 565-2680",
+    "lat": 34.0214,
+    "lng": -84.5414,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting"]
+  },
+  {
+    "id": "21",
+    "number": "133",
+    "name": "The Home Depot",
+    "address": "3550 Cobb Pkwy NW",
+    "city": "Acworth",
+    "state": "GA",
+    "zip": "30101",
+    "phone": "(770) 966-1121",
+    "lat": 34.0639,
+    "lng": -84.6661,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting", "Paint Mixing"]
+  },
+  {
+    "id": "22",
+    "number": "500",
+    "name": "The Home Depot",
+    "address": "3340 Satellite Blvd",
+    "city": "Duluth",
+    "state": "GA",
+    "zip": "30096",
+    "phone": "(770) 495-6310",
+    "lat": 33.9783,
+    "lng": -84.0956,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting"]
+  },
+  {
+    "id": "23",
+    "number": "131",
+    "name": "The Home Depot",
+    "address": "910 Gravel Springs Rd",
+    "city": "Buford",
+    "state": "GA",
+    "zip": "30518",
+    "phone": "(678) 714-8600",
+    "lat": 34.1056,
+    "lng": -84.0567,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting", "Paint Mixing"]
+  },
+  {
+    "id": "24",
+    "number": "508",
+    "name": "The Home Depot",
+    "address": "2625 Dallas Hwy SW",
+    "city": "Marietta",
+    "state": "GA",
+    "zip": "30064",
+    "phone": "(770) 528-8500",
+    "lat": 33.9147,
+    "lng": -84.5875,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting"]
+  },
+  {
+    "id": "25",
+    "number": "130",
+    "name": "The Home Depot",
+    "address": "1801 Rockbridge Rd SW",
+    "city": "Stone Mountain",
+    "state": "GA",
+    "zip": "30087",
+    "phone": "(770) 879-2500",
+    "lat": 33.8061,
+    "lng": -84.1467,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting", "Paint Mixing"]
+  },
+  {
+    "id": "26",
+    "number": "509",
+    "name": "The Home Depot",
+    "address": "2620 Highway 54 W",
+    "city": "Peachtree City",
+    "state": "GA",
+    "zip": "30269",
+    "phone": "(770) 487-1140",
+    "lat": 33.3978,
+    "lng": -84.5875,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting"]
+  },
+  {
+    "id": "27",
+    "number": "135",
+    "name": "The Home Depot",
+    "address": "4321 Hugh Howell Rd",
+    "city": "Tucker",
+    "state": "GA",
+    "zip": "30084",
+    "phone": "(770) 723-9700",
+    "lat": 33.8356,
+    "lng": -84.1847,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting", "Paint Mixing"]
+  },
+  {
+    "id": "28",
+    "number": "507",
+    "name": "The Home Depot",
+    "address": "3105 Highway 138 SE",
+    "city": "Conyers",
+    "state": "GA",
+    "zip": "30013",
+    "phone": "(770) 918-0200",
+    "lat": 33.6456,
+    "lng": -84.0183,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting"]
+  },
+  {
+    "id": "29",
+    "number": "139",
+    "name": "The Home Depot",
+    "address": "8050 Mall Parkway",
+    "city": "Stonecrest",
+    "state": "GA",
+    "zip": "30038",
+    "phone": "(770) 484-5450",
+    "lat": 33.6928,
+    "lng": -84.1492,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting", "Paint Mixing"]
+  },
+  {
+    "id": "30",
+    "number": "510",
+    "name": "The Home Depot",
+    "address": "1001 Whitlock Ave NW",
+    "city": "Marietta",
+    "state": "GA",
+    "zip": "30064",
+    "phone": "(770) 429-0340",
+    "lat": 33.9542,
+    "lng": -84.5583,
+    "hours": {
+      "weekday": "6:00 AM - 10:00 PM",
+      "weekend": "6:00 AM - 10:00 PM"
+    },
+    "services": ["Tool Rental", "Key Cutting"]
+  }
+]
