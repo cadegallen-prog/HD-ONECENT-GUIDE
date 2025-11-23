@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation"
 
 export default function InStoreRedirect() {
-  redirect("/#in-store-strategy")
+  redirect("/#in-store-strategies")
 }
