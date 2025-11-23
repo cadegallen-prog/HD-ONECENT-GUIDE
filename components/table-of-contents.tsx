@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Map, Clock, Tag } from "lucide-react"
+import { ChevronDown, Map, Clock } from "lucide-react"
 import Link from "next/link"
 
 const sections = [
@@ -20,7 +20,6 @@ const sections = [
 const tools = [
   { href: "/store-finder", label: "Store Finder", icon: Map },
   { href: "/trip-tracker", label: "Trip Tracker", icon: Clock },
-  { href: "/recent-finds", label: "Recent Finds", icon: Tag },
 ]
 
 interface TableOfContentsProps {

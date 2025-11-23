@@ -21,7 +21,6 @@ const pages = [
   { icon: ShoppingCart, label: "Checkout Strategy", path: "/checkout-strategy", group: "Strategy" },
   { icon: Clock, label: "Trip Tracker", path: "/trip-tracker", group: "Tools" },
   { icon: Map, label: "Store Finder", path: "/store-finder", group: "Tools" },
-  { icon: FileText, label: "Recent Finds", path: "/recent-finds", group: "Tools" },
   { icon: Lightbulb, label: "Resources", path: "/resources", group: "More" },
   { icon: AlertCircle, label: "Responsible Hunting", path: "/responsible-hunting", group: "More" },
   { icon: HelpCircle, label: "FAQ", path: "/faq", group: "More" },
