@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { ChevronDown, Map, Clock } from "lucide-react"
+import { Map, Clock } from "lucide-react"
 import Link from "next/link"
 
 const sections = [
