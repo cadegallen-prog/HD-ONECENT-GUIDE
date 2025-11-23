@@ -166,23 +166,26 @@ export default function StoreFinderPage() {
     }
   }, [allLoadedStores, mapCenter, selectedStore])
 
-  // Load remote store data if URL is provided
+  // Load remote store data via cached API route
   useEffect(() => {
-    const url = process.env.NEXT_PUBLIC_HOME_DEPOT_STORES_URL
-    if (!url) return
-
     let cancelled = false
     const load = async () => {
       try {
-        const res = await fetch(url)
-        if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`)
-        const json = (await res.json()) as StoreLocation[]
-        const normalized = json
-          .map(normalizeStore)
-          .filter((s) => isValidStore(s.name))
-        if (!cancelled) {
-          setAllLoadedStores(normalized)
+        // Fetch from our API route which handles caching (24 hour revalidation)
+        const res = await fetch('/api/stores')
+        if (!res.ok) throw new Error(`API request failed: ${res.status}`)
+        const json = await res.json()
+
+        // If API returned stores, use them
+        if (json.stores && Array.isArray(json.stores) && json.stores.length > 0) {
+          const normalized = (json.stores as StoreLocation[])
+            .map(normalizeStore)
+            .filter((s) => isValidStore(s.name))
+          if (!cancelled) {
+            setAllLoadedStores(normalized)
+          }
         }
+        // Otherwise, keep using the sample data (already loaded)
       } catch (err) {
         console.error("Failed to load remote store data; using fallback sample instead.", err)
       }

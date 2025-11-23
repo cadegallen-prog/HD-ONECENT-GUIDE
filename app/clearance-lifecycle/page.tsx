@@ -1,11 +1,14 @@
+import { Navbar } from "@/components/navbar"
+import { Footer } from "@/components/footer"
 import { Breadcrumb } from "@/components/breadcrumb"
 import { ClearanceLifecycleChart } from "@/components/clearance-lifecycle-chart"
 
 export default function ClearanceLifecyclePage() {
   return (
     <>
+      <Navbar />
       <Breadcrumb />
-      <main className="min-h-screen pb-16">
+      <main className="min-h-screen pt-16 pb-16">
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-4xl mx-auto">
             <h1 className="text-4xl md:text-5xl font-heading font-bold mb-6">
@@ -93,6 +96,7 @@ export default function ClearanceLifecyclePage() {
           </div>
         </div>
       </main>
+      <Footer />
     </>
   )
 }
