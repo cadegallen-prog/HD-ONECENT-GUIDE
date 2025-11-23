@@ -20,15 +20,15 @@ export const metadata: Metadata = {
     "self checkout penny items",
   ],
   authors: [{ name: "Home Depot One Cent Items Community" }],
-  metadataBase: new URL("https://hd-penny-guide.vercel.app"),
+  metadataBase: new URL("https://pennycentral.com"),
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://hd-penny-guide.vercel.app",
+    url: "https://pennycentral.com",
     title: "Home Depot Penny Items: Complete Guide",
     description:
       "Reference-first overview of penny items, clearance lifecycle, digital tools, in-store tactics, checkout, and responsible hunting.",
-    siteName: "Home Depot Penny Items Guide",
+    siteName: "Penny Central",
   },
   twitter: {
     card: "summary_large_image",
