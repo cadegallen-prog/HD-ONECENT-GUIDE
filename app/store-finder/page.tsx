@@ -81,7 +81,7 @@ const formatStoreNumber = (num?: string): string => {
 // Get store number for URL (no leading zeros) – only when it's a real numeric store #
 const getStoreUrlNumber = (num?: string): string => {
   if (!hasValidStoreNumber(num)) return ""
-  return parseInt(num.trim(), 10).toString()
+  return parseInt(num!.trim(), 10).toString()
 }
 
 // Human-facing title for a store, handling placeholder when we don't yet know the real name/number
