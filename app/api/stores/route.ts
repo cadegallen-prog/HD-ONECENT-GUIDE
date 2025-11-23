@@ -1,40 +1,60 @@
-import { NextResponse } from 'next/server'
+import { NextResponse } from "next/server"
 
-// Cache for 24 hours (86400 seconds)
-export const revalidate = 86400
+const SOURCE_URL = process.env.HOME_DEPOT_STORES_URL || process.env.NEXT_PUBLIC_HOME_DEPOT_STORES_URL
+const CACHE_SECONDS = 3600
+const STALE_SECONDS = 86400
 
-export async function GET() {
-  // Use server-side env var (no NEXT_PUBLIC_ prefix) for security
-  const url = process.env.HOME_DEPOT_STORES_URL || process.env.NEXT_PUBLIC_HOME_DEPOT_STORES_URL
-
-  if (!url) {
-    return NextResponse.json(
-      { error: 'Store URL not configured', stores: [] },
-      { status: 200 } // Return 200 so client can fallback to sample data
-    )
+async function fetchStores() {
+  if (!SOURCE_URL) {
+    throw new Error("HOME_DEPOT_STORES_URL is not configured")
   }
 
+  const res = await fetch(SOURCE_URL, {
+    cache: "force-cache",
+    next: { revalidate: CACHE_SECONDS }
+  })
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch stores: ${res.status}`)
+  }
+
+  return res.json()
+}
+
+export async function GET(request: Request) {
+  const url = new URL(request.url)
+  const state = url.searchParams.get("state")?.toLowerCase().trim()
+  const limit = Number(url.searchParams.get("limit")) || undefined
+
   try {
-    const res = await fetch(url, {
-      next: { revalidate: 86400 } // Cache for 24 hours
+    const data = await fetchStores()
+    const stores = Array.isArray(data) ? data : []
+
+    const filtered = stores.filter((store) => {
+      if (!state) return true
+      const storeState = typeof store.state === "string" ? store.state.toLowerCase() : ""
+      return storeState === state
     })
 
-    if (!res.ok) {
-      console.error(`Failed to fetch stores: ${res.status}`)
-      return NextResponse.json(
-        { error: `Failed to fetch stores: ${res.status}`, stores: [] },
-        { status: 200 }
-      )
-    }
+    const limited = limit ? filtered.slice(0, limit) : filtered
 
-    const data = await res.json()
-
-    return NextResponse.json({ stores: data })
+    return new NextResponse(JSON.stringify(limited), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": `public, s-maxage=${CACHE_SECONDS}, stale-while-revalidate=${STALE_SECONDS}`
+      }
+    })
   } catch (error) {
-    console.error('Error fetching store data:', error)
+    console.error("Failed to load stores", error)
     return NextResponse.json(
-      { error: 'Failed to fetch store data', stores: [] },
-      { status: 200 }
+      { error: "Failed to load stores" },
+      {
+        status: 500,
+        headers: {
+          "Cache-Control": "public, s-maxage=60"
+        }
+      }
     )
   }
 }

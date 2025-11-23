@@ -66,17 +66,40 @@ const isValidStore = (name?: string) => {
   return !bannedNameTokens.some((token) => lower.includes(token))
 }
 
-// Format store number for display (4 digits with leading zeros)
-const formatStoreNumber = (num?: string): string => {
-  if (!num) return "N/A"
-  // Ensure it's 4 digits with leading zeros
-  return num.padStart(4, '0')
+// Check if we have a real Home Depot store number (1-5 digits)
+const hasValidStoreNumber = (num?: string): boolean => {
+  if (!num) return false
+  return /^\d{1,5}$/.test(num.trim())
 }
 
-// Get store number for URL (no leading zeros)
+// Format store number for display (4 digits with leading zeros)
+const formatStoreNumber = (num?: string): string => {
+  if (!hasValidStoreNumber(num)) return ""
+  return num!.trim().padStart(4, "0")
+}
+
+// Get store number for URL (no leading zeros) – only when it's a real numeric store #
 const getStoreUrlNumber = (num?: string): string => {
-  if (!num) return ""
-  return parseInt(num, 10).toString()
+  if (!hasValidStoreNumber(num)) return ""
+  return parseInt(num.trim(), 10).toString()
+}
+
+// Human-facing title for a store, handling placeholder when we don't yet know the real name/number
+const getStoreTitle = (store: StoreLocation): string => {
+  const name = store.name || "The Home Depot"
+  const hasNumber = hasValidStoreNumber(store.number)
+
+  // If we have a real store number, show a branded title with store nickname and padded number
+  if (hasNumber) {
+    const padded = formatStoreNumber(store.number)
+    const baseName = name.toLowerCase().startsWith("the home depot")
+      ? name
+      : `The Home Depot ${name}`
+    return `${baseName} #${padded}`
+  }
+
+  // While we only have Places IDs (not real store numbers), show a neutral placeholder
+  return "The Home Depot {store_name}{store_#xxxx}"
 }
 
 // Build Home Depot store URL
@@ -87,7 +110,8 @@ const getStoreUrl = (store: StoreLocation): string => {
   const city = store.city || "Atlanta"
   const zip = store.zip || ""
   const storeNum = getStoreUrlNumber(store.number)
-  return `https://www.homedepot.com/l/${storeName}/${state}/${city}/${zip}/${storeNum}`
+  const baseUrl = `https://www.homedepot.com/l/${storeName}/${state}/${city}/${zip}`
+  return storeNum ? `${baseUrl}/${storeNum}` : baseUrl
 }
 
 const normalizeStore = (s: StoreLocation): StoreLocation => ({
@@ -170,24 +194,23 @@ export default function StoreFinderPage() {
   useEffect(() => {
     let cancelled = false
     const load = async () => {
+      setLoadingStores(true)
       try {
-        // Fetch from our API route which handles caching (24 hour revalidation)
-        const res = await fetch('/api/stores')
-        if (!res.ok) throw new Error(`API request failed: ${res.status}`)
-        const json = await res.json()
-
-        // If API returned stores, use them
-        if (json.stores && Array.isArray(json.stores) && json.stores.length > 0) {
-          const normalized = (json.stores as StoreLocation[])
-            .map(normalizeStore)
-            .filter((s) => isValidStore(s.name))
-          if (!cancelled) {
-            setAllLoadedStores(normalized)
-          }
+        const res = await fetch("/api/stores", { cache: "force-cache" })
+        if (!res.ok) throw new Error(`Failed to fetch /api/stores: ${res.status}`)
+        const json = (await res.json()) as StoreLocation[]
+        const normalized = json
+          .map(normalizeStore)
+          .filter((s) => isValidStore(s.name))
+        if (!cancelled) {
+          setAllLoadedStores(normalized)
         }
-        // Otherwise, keep using the sample data (already loaded)
       } catch (err) {
         console.error("Failed to load remote store data; using fallback sample instead.", err)
+      } finally {
+        if (!cancelled) {
+          setLoadingStores(false)
+        }
       }
     }
     load()
@@ -415,7 +438,7 @@ export default function StoreFinderPage() {
                     ref={listContainerRef}
                     className="h-[300px] lg:h-[640px] overflow-y-auto border-b lg:border-b-0 lg:border-r border-border"
                   >
-                    {loadingStores ? (
+                    {loadingStores && displayedStores.length === 0 ? (
                       <div className="p-4 space-y-3">
                         {[...Array(5)].map((_, i) => (
                           <div key={i} className="h-24 bg-muted/30 rounded-lg animate-pulse" />
@@ -463,7 +486,7 @@ export default function StoreFinderPage() {
             {/* List View */}
             {viewMode === "list" && (
               <div className="space-y-4">
-                {loadingStores ? (
+                {loadingStores && displayedStores.length === 0 ? (
                   <div className="grid md:grid-cols-2 gap-4">
                     {[...Array(6)].map((_, i) => (
                       <div key={i} className="h-40 bg-muted/30 rounded-xl animate-pulse" />
@@ -555,7 +578,7 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
                 <h3 className={`font-semibold text-sm truncate ${isSelected ? 'text-primary' : 'text-foreground'}`}>
-                  {store.name} #{formatStoreNumber(store.number)}
+                  {getStoreTitle(store)}
                 </h3>
                 <p className="text-xs text-muted-foreground">{store.city}, {store.state}</p>
               </div>
@@ -570,21 +593,35 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
 
             <p className="text-xs text-muted-foreground mt-1 truncate">{store.address}</p>
 
-            <div className="flex items-center gap-3 mt-2">
-              {store.distance !== undefined && (
-                <span className="text-xs font-medium text-primary">
-                  {store.distance.toFixed(1)} mi
-                </span>
-              )}
-              {store.phone && (
-                <a
-                  href={`tel:${store.phone}`}
-                  onClick={(e) => e.stopPropagation()}
-                  className="text-xs text-muted-foreground hover:text-primary flex items-center gap-1"
-                >
-                  <Phone className="h-3 w-3" />
-                  {store.phone}
-                </a>
+            <div className="flex flex-col gap-1 mt-2">
+              <div className="flex items-center gap-3">
+                {store.distance !== undefined && (
+                  <span className="text-xs font-medium text-primary">
+                    {store.distance.toFixed(1)} mi
+                  </span>
+                )}
+                {store.phone && (
+                  <a
+                    href={`tel:${store.phone}`}
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-xs text-muted-foreground hover:text-primary flex items-center gap-1"
+                  >
+                    <Phone className="h-3 w-3" />
+                    {store.phone}
+                  </a>
+                )}
+              </div>
+
+              {(store.hours?.weekday || store.hours?.weekend) && (
+                <div className="flex items-start gap-1 text-[11px] text-muted-foreground">
+                  <Clock className="h-3 w-3 mt-[1px]" />
+                  <div className="flex flex-col gap-0.5 truncate">
+                    {store.hours?.weekday && <span className="truncate">{store.hours.weekday}</span>}
+                    {store.hours?.weekend && (
+                      <span className="truncate">Weekend: {store.hours.weekend}</span>
+                    )}
+                  </div>
+                </div>
               )}
             </div>
 
@@ -637,7 +674,7 @@ function StoreCard({ store, index, isFavorite, onToggleFavorite }: {
           </div>
           <div>
             <h3 className="font-heading font-bold text-foreground">
-              {store.name} #{formatStoreNumber(store.number)}
+              {getStoreTitle(store)}
             </h3>
             <p className="text-xs text-muted-foreground">{store.city}, {store.state}</p>
           </div>
@@ -670,10 +707,13 @@ function StoreCard({ store, index, isFavorite, onToggleFavorite }: {
             <a href={`tel:${store.phone}`} className="hover:text-primary">{store.phone}</a>
           </div>
         )}
-        {store.hours?.weekday && (
-          <div className="flex items-center gap-2">
-            <Clock className="h-4 w-4" />
-            <span>{store.hours.weekday}</span>
+        {(store.hours?.weekday || store.hours?.weekend) && (
+          <div className="flex items-start gap-2">
+            <Clock className="h-4 w-4 mt-0.5" />
+            <div className="flex flex-col gap-0.5">
+              {store.hours?.weekday && <span>{store.hours.weekday}</span>}
+              {store.hours?.weekend && <span>Weekend: {store.hours.weekend}</span>}
+            </div>
           </div>
         )}
       </div>
