@@ -36,12 +36,15 @@ export function Footer() {
           {/* Created By */}
           <div>
             <h3 className="font-heading font-semibold mb-4 text-sm">Created By</h3>
-            <p className="text-sm text-muted-foreground mb-2">
+            <p className="text-sm text-muted-foreground mb-3">
               Built by Cade Allen for the Home Depot One Cent Items community.
             </p>
-            <p className="text-xs text-muted-foreground">
-              Group Admins: Spoe Jarky, Cade Allen, Jorian Wulf
-            </p>
+            <div className="text-xs text-muted-foreground space-y-1">
+              <p><span className="font-medium">Group Admins:</span></p>
+              <p>Spoe Jarky - Admin / Alleged Electrician</p>
+              <p>Cade Allen - Admin</p>
+              <p>Jorian Wulf - Admin</p>
+            </div>
           </div>
         </div>
 
