@@ -12,18 +12,21 @@ interface CommandPaletteProps {
 
 // Define all pages/sections for quick navigation
 const pages = [
-  { icon: FileText, label: "What Are Pennies", path: "/what-are-pennies", group: "Learn" },
-  { icon: Clock, label: "Clearance Lifecycle", path: "/clearance-lifecycle", group: "Learn" },
-  { icon: AlertCircle, label: "Facts vs Myths", path: "/facts-vs-myths", group: "Learn" },
-  { icon: FileText, label: "Internal Systems", path: "/internal-systems", group: "Learn" },
-  { icon: Search, label: "Digital Pre-Hunt", path: "/digital-pre-hunt", group: "Strategy" },
-  { icon: Map, label: "In-Store Strategy", path: "/in-store-strategy", group: "Strategy" },
-  { icon: ShoppingCart, label: "Checkout Strategy", path: "/checkout-strategy", group: "Strategy" },
-  { icon: Clock, label: "Trip Tracker", path: "/trip-tracker", group: "Tools" },
+  // Guide Sections (homepage anchor links for faster navigation)
+  { icon: FileText, label: "What Are Pennies", path: "/#what-are-pennies", group: "Guide" },
+  { icon: Clock, label: "Clearance Lifecycle", path: "/clearance-lifecycle", group: "Guide" },
+  { icon: Search, label: "Digital Tools", path: "/#digital-tools", group: "Guide" },
+  { icon: Map, label: "In-Store Strategies", path: "/#in-store-strategy", group: "Guide" },
+  { icon: ShoppingCart, label: "Checkout", path: "/#checkout", group: "Guide" },
+  { icon: FileText, label: "Internal Systems", path: "/#internal-systems", group: "Guide" },
+  { icon: AlertCircle, label: "Facts vs Myths", path: "/#facts-vs-myths", group: "Guide" },
+  { icon: Lightbulb, label: "Responsible Hunting", path: "/#responsible-hunting", group: "Guide" },
+  { icon: HelpCircle, label: "FAQ", path: "/#faq", group: "Guide" },
+  // Tools (actual pages)
   { icon: Map, label: "Store Finder", path: "/store-finder", group: "Tools" },
-  { icon: Lightbulb, label: "Resources", path: "/resources", group: "More" },
-  { icon: AlertCircle, label: "Responsible Hunting", path: "/responsible-hunting", group: "More" },
-  { icon: HelpCircle, label: "FAQ", path: "/faq", group: "More" },
+  { icon: Clock, label: "Trip Tracker", path: "/trip-tracker", group: "Tools" },
+  // More
+  { icon: FileText, label: "Resources", path: "/resources", group: "More" },
   { icon: Info, label: "About", path: "/about", group: "More" },
 ]
 
