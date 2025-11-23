@@ -59,7 +59,7 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="pt-6 border-t border-border">
           <p className="text-xs text-muted-foreground text-center">
-            Community resource maintained by volunteers. Not affiliated with The Home Depot, Inc.
+            Built by Cade Allen for the Home Depot One Cent Items community. Not affiliated with The Home Depot, Inc.
           </p>
         </div>
       </div>

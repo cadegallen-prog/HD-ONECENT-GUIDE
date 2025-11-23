@@ -90,7 +90,7 @@ export function ClearanceLifecycleChart() {
       <div className="bg-background border border-border rounded-lg p-6">
         <h3 className="text-xl font-heading font-semibold mb-6">Penny Find Success Rate by Department</h3>
         <p className="text-sm text-muted-foreground mb-6">
-          Based on community data: likelihood of finding penny items by department
+          Typical penny find patterns by department (illustrative estimates)
         </p>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={departmentData}>
@@ -131,8 +131,7 @@ export function ClearanceLifecycleChart() {
       {/* Info note */}
       <div className="bg-muted/30 border border-border rounded-lg p-4">
         <p className="text-sm text-muted-foreground">
-          <strong>Note:</strong> Charts show aggregated community data. Individual store patterns may vary.
-          Success rates calculated from user submissions over the past 90 days.
+          <strong>Note:</strong> Charts show typical markdown patterns based on community observations. Individual store timing may vary significantly.
         </p>
       </div>
     </div>

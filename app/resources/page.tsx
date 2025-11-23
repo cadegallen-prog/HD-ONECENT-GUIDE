@@ -48,21 +48,21 @@ export default function ResourcesPage() {
 
   const quickRef = [
     {
-      title: "Clearance Price Endings",
+      title: "Price Ending Decoder",
       items: [
-        "$.03, $.06, $.09 = Low markdown (10-25% off)",
-        "$.33, $.66 = Medium markdown (25-50% off)",
-        "$.97 = Full clearance (deep discount)",
-        "$.01 = Penny items (discontinued)"
+        "$.01 = Penny item (buy immediately)",
+        "$.03 / $.02 = Final markdown before penny",
+        "$.06 / $.04 = Mid-clearance (check weekly)",
+        "$.00 = Initial clearance (add to watch list)"
       ]
     },
     {
       title: "Best Times to Hunt",
       items: [
-        "Weekday mornings (7-9 AM) - Less competition",
-        "Tuesday/Wednesday - New markdowns often appear",
-        "End of season - Major clearance cycles",
-        "After inventory counts - Items get marked down"
+        "Weekday mornings (less competition)",
+        "Tuesday/Wednesday (markdowns often appear)",
+        "End of season (major clearance cycles)",
+        "After holidays (seasonal items penny out)"
       ]
     },
     {
@@ -70,7 +70,7 @@ export default function ResourcesPage() {
       items: [
         "Phone with Home Depot app installed",
         "Reusable shopping bags",
-        "List of stores to check",
+        "List of SKUs to check",
         "Patience and politeness"
       ]
     }
@@ -213,9 +213,9 @@ export default function ResourcesPage() {
                       <h4 className="font-heading font-semibold mb-2 text-foreground">Price Decoder</h4>
                       <div className="space-y-1 text-sm">
                         <div className="flex justify-between"><span className="text-muted-foreground">$.01</span><span className="font-medium text-primary">PENNY!</span></div>
-                        <div className="flex justify-between"><span className="text-muted-foreground">$.03/.06/.09</span><span className="font-medium">10-25% off</span></div>
-                        <div className="flex justify-between"><span className="text-muted-foreground">$.33/.66</span><span className="font-medium">25-50% off</span></div>
-                        <div className="flex justify-between"><span className="text-muted-foreground">$.97</span><span className="font-medium">Deep discount</span></div>
+                        <div className="flex justify-between"><span className="text-muted-foreground">$.03 / $.02</span><span className="font-medium">Final markdown</span></div>
+                        <div className="flex justify-between"><span className="text-muted-foreground">$.06 / $.04</span><span className="font-medium">Mid-clearance</span></div>
+                        <div className="flex justify-between"><span className="text-muted-foreground">$.00</span><span className="font-medium">Initial clearance</span></div>
                       </div>
                     </div>
                     <div>
