@@ -3,18 +3,6 @@
 
 import { z } from "zod"
 
-// Recent Finds submission schema
-export const recentFindSchema = z.object({
-  date: z.date(),
-  sku: z.string().optional(),
-  item: z.string().min(10, "Description must be at least 10 characters").max(200, "Description must be under 200 characters"),
-  storeNumber: z.string().regex(/^\d{4}$/, "Store number must be 4 digits"),
-  state: z.string().min(2, "Please select a state"),
-  photo: z.instanceof(File).optional(),
-})
-
-export type RecentFind = z.infer<typeof recentFindSchema>
-
 // Trip Tracker schema
 export const tripSchema = z.object({
   date: z.date(),

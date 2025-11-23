@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Plus, Tag, Map, Clock, X, Download } from "lucide-react"
+import { Plus, Map, Clock, X, Download } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 
@@ -23,12 +23,6 @@ export function QuickActionsButton() {
         link.click()
         document.body.removeChild(link)
       },
-    },
-    {
-      icon: Tag,
-      label: "Submit Find",
-      description: "Share your penny find",
-      action: () => router.push("/recent-finds"),
     },
     {
       icon: Map,
