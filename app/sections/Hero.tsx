@@ -21,7 +21,7 @@ export function Hero() {
             <p className="text-lg md:text-xl mb-8 leading-relaxed text-foreground">
               A comprehensive reference for finding clearance items marked to $0.01 at Home Depot.
               Learn the lifecycle, timing patterns, digital scouting techniques, and in-store strategies
-              used by the 32,000-member "Home Depot One Cent Items" community.
+              shared by the "Home Depot One Cent Items" Facebook community.
             </p>
 
             {/* Actions */}

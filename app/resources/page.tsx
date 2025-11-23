@@ -40,8 +40,8 @@ export default function ResourcesPage() {
     {
       icon: Facebook,
       name: "Home Depot One Cent Items Group",
-      description: "Join 32,000+ hunters sharing finds and tips",
-      url: "https://www.facebook.com/groups/homedepot1centitems",
+      description: "Active community sharing finds and tips",
+      url: "https://www.facebook.com/groups/homedepotonecent",
       category: "Community"
     },
   ]
