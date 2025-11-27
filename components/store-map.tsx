@@ -4,7 +4,6 @@ import * as React from "react"
 import { MapContainer, TileLayer, Marker, CircleMarker, useMap } from "react-leaflet"
 import type { Map as LeafletMap } from "leaflet"
 import "leaflet/dist/leaflet.css"
-import React from "react"
 
 export interface StoreLocation {
   id: string
