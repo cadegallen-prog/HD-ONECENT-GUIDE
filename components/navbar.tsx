@@ -2,9 +2,10 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Download, Menu, X, Map, Clock, Search } from "lucide-react"
+import { Download, Menu, X, Map, Clock, Search, Users } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { useCommandPalette } from "@/components/command-palette-provider"
+import { Button } from "@/components/ui/button"
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -41,6 +42,19 @@ export function Navbar() {
                 About
               </Link>
             </div>
+
+            {/* Join Community CTA - desktop only */}
+            <Button
+              href="https://www.facebook.com/groups/homedepotpenny"
+              size="sm"
+              className="hidden md:inline-flex gap-1.5"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Users className="h-3.5 w-3.5" />
+              Join Community
+            </Button>
+
             {/* Search / Command Palette trigger - desktop only */}
             <button
               onClick={() => setOpen(true)}
@@ -52,8 +66,8 @@ export function Navbar() {
 
             {/* Small PDF Download link */}
             <a
-              href="/Home-Depot-Penny-Guide.pdf"
-              download="Home-Depot-Penny-Guide.pdf"
+              href="/Home_Depot_Penny_Items_Guide.pdf"
+              download="Home_Depot_Penny_Items_Guide.pdf"
               target="_blank"
               aria-label="Download PDF guide"
               className="hidden sm:flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
@@ -108,6 +122,21 @@ export function Navbar() {
             >
               About
             </Link>
+
+            {/* Join Community CTA - mobile */}
+            <div className="pt-2 mt-2 border-t border-border">
+              <Button
+                href="https://www.facebook.com/groups/homedepotpenny"
+                size="sm"
+                className="w-full gap-2"
+                onClick={() => setMobileMenuOpen(false)}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Users className="h-4 w-4" />
+                Join Community
+              </Button>
+            </div>
           </nav>
         </div>
       )}

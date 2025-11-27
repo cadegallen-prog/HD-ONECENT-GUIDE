@@ -5,16 +5,15 @@ import { Map, Clock } from "lucide-react"
 import Link from "next/link"
 
 const sections = [
-  { id: "what-are-pennies", title: "What Are Pennies" },
-  { id: "clearance-lifecycle", title: "Clearance Lifecycle" },
-  { id: "cadence-comparison", title: "Cadence Comparison" },
-  { id: "digital-tools", title: "Digital Tools" },
-  { id: "in-store-strategies", title: "In-Store Strategies" },
-  { id: "checkout", title: "Checkout Procedures" },
-  { id: "internal-systems", title: "Internal Systems" },
-  { id: "facts-vs-myths", title: "Facts vs Myths" },
-  { id: "responsible-hunting", title: "Responsible Hunting" },
-  { id: "faq", title: "FAQ" },
+  { id: "introduction", title: "I. Introduction: What Are Penny Items?" },
+  { id: "clearance-lifecycle", title: "II. Understanding the Clearance Lifecycle" },
+  { id: "digital-tools", title: "III. Pre-Hunt Intelligence: Digital Tools" },
+  { id: "in-store-hunting", title: "IV. In-Store Penny Hunting Strategies" },
+  { id: "checkout", title: "V. The Checkout Challenge" },
+  { id: "internal-operations", title: "VI. The Inside Scoop: Internal Operations" },
+  { id: "fact-vs-fiction", title: "VII. Research Deep Dive: Fact vs Fiction" },
+  { id: "responsible-hunting", title: "VIII. Responsible Penny Hunting" },
+  { id: "conclusion", title: "IX. Conclusion: Tips for Success" },
 ]
 
 const tools = [

@@ -6,6 +6,9 @@ export interface ButtonProps
   variant?: "primary" | "secondary" | "outline" | "ghost"
   size?: "sm" | "md" | "lg"
   href?: string
+  download?: string
+  target?: string
+  rel?: string
 }
 
 const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(

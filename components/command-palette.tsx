@@ -13,13 +13,13 @@ interface CommandPaletteProps {
 // Define all pages/sections for quick navigation
 const pages = [
   // Guide Sections (homepage anchor links for faster navigation)
-  { icon: FileText, label: "What Are Pennies", path: "/#what-are-pennies", group: "Guide" },
+  { icon: FileText, label: "What Are Pennies", path: "/#introduction", group: "Guide" },
   { icon: Clock, label: "Clearance Lifecycle", path: "/clearance-lifecycle", group: "Guide" },
   { icon: Search, label: "Digital Tools", path: "/#digital-tools", group: "Guide" },
-  { icon: Map, label: "In-Store Strategies", path: "/#in-store-strategy", group: "Guide" },
+  { icon: Map, label: "In-Store Strategies", path: "/#in-store-hunting", group: "Guide" },
   { icon: ShoppingCart, label: "Checkout", path: "/#checkout", group: "Guide" },
-  { icon: FileText, label: "Internal Systems", path: "/#internal-systems", group: "Guide" },
-  { icon: AlertCircle, label: "Facts vs Myths", path: "/#facts-vs-myths", group: "Guide" },
+  { icon: FileText, label: "Internal Systems", path: "/#internal-operations", group: "Guide" },
+  { icon: AlertCircle, label: "Facts vs Myths", path: "/#fact-vs-fiction", group: "Guide" },
   { icon: Lightbulb, label: "Responsible Hunting", path: "/#responsible-hunting", group: "Guide" },
   { icon: HelpCircle, label: "FAQ", path: "/#faq", group: "Guide" },
   // Tools (actual pages)

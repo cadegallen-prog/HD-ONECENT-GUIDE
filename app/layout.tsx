@@ -9,9 +9,9 @@ import { QuickActionsButton } from "@/components/quick-actions-button";
 // This avoids network dependency on Google Fonts
 
 export const metadata: Metadata = {
-  title: "Home Depot Penny Items: Complete Guide",
+  title: "Penny Central: The Home Depot $0.01 Hunting Guide",
   description:
-    "Calm, reference-style guide for the Home Depot One Cent Items community. Learn how penny pricing works, clearance cadences, digital pre-hunt steps, in-store strategy, checkout flow, and responsible hunting.",
+    "The complete guide to finding Home Depot penny items. Learn clearance cycles, in-store hunting strategies, checkout tips, and join 35,000+ penny hunters.",
   keywords: [
     "home depot penny items guide",
     "one cent items",
@@ -25,16 +25,16 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://pennycentral.com",
-    title: "Home Depot Penny Items: Complete Guide",
+    title: "Penny Central: The Home Depot $0.01 Hunting Guide",
     description:
-      "Reference-first overview of penny items, clearance lifecycle, digital tools, in-store tactics, checkout, and responsible hunting.",
+      "The complete guide to finding Home Depot penny items. Learn clearance cycles, in-store hunting strategies, checkout tips, and join 35,000+ penny hunters.",
     siteName: "Penny Central",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Home Depot Penny Items: Complete Guide",
+    title: "Penny Central: The Home Depot $0.01 Hunting Guide",
     description:
-      "Reference-first overview for the Home Depot One Cent Items community.",
+      "The complete guide to finding Home Depot penny items. Learn clearance cycles, in-store hunting strategies, checkout tips, and join 35,000+ penny hunters.",
   },
   robots: {
     index: true,

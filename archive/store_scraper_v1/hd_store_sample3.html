@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Error Page</title>
+    <style>
+        body{font:14px Arial;margin:0;display:flex;flex-direction:column;min-height:100vh;color:#333}
+        .hdr{background:#f96302;color:#fff;padding:8px;text-align:center}
+        .err{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px}
+        .msg{font-size:24px;color:#d81118;margin:20px 0}
+        .btn{background:#f96302;color:#fff;border:0;padding:15px 30px;border-radius:6px;cursor:pointer;font-size:16px;font-weight:bold;box-shadow:0 2px 4px rgba(0,0,0,0.2);transition:all 0.3s}
+        .ftr{background:#333;color:#fff;padding:10px;text-align:center}
+    </style>
+</head>
+<body>
+    <div class="hdr">#1 Home Improvement Retailer</div>
+    
+    <main class="err">
+        <div class="msg">Oops!! Something went wrong. Please refresh page</div>
+        <button class="btn" onclick="document.cookie='_bman_adv=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=.www.homedepot.com';window.location.href='/'">Refresh</button>
+    </main>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.cookie='_bman_adv=2656fcTEcT634190902sEST8aaDvd3PR; path=/; max-age=300; domain=.www.homedepot.com; secure';
+            ['bm_s','bm_so','bm_ss','bm_sv','bm_sz','_abck','bm_mi'].forEach(n => {
+                document.cookie = n + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=.homedepot.com';
+            });
+        });
+        
+        window.digitalData = window.digitalData || {};
+        digitalData.page = digitalData.page || {};
+        digitalData.page.pageInfo = digitalData.page.pageInfo || {};
+        digitalData.page.pageInfo.pageName = digitalData.page.pageInfo.pageName || 'error page';
+    </script>
+    
+    <script defer type="text/javascript" src="https://assets.thdstatic.com/core/global-privacy-control/v1.6.0/gpc.js"></script>
+    
+    <div class="ftr">
+        How doers get more done™<br>
+        Need Help? Visit our <a href="#" onclick="window.open('https://'+location.hostname+'/c/customer-service','_blank')" style="color:#fff;text-decoration:underline">Customer Service Center</a>
+    </div>
+</body>
+</html>

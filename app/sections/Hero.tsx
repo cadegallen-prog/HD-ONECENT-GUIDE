@@ -1,6 +1,7 @@
 "use client"
 
-import { ChevronDown, ExternalLink } from "lucide-react"
+import { ChevronDown, Download, ExternalLink } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 export function Hero() {
   const scrollToSections = () => {
@@ -15,7 +16,7 @@ export function Hero() {
           {/* Left: Title and intro */}
           <div>
             <h1 className="text-4xl md:text-5xl font-heading font-semibold mb-6 leading-tight text-foreground">
-              Home Depot Penny Items: Complete Guide
+              Penny Central: The Home Depot $0.01 Hunting Guide
             </h1>
 
             <p className="text-lg md:text-xl mb-8 leading-relaxed text-foreground">
@@ -26,6 +27,15 @@ export function Hero() {
 
             {/* Actions */}
             <div className="flex flex-wrap items-center gap-6">
+              <Button
+                variant="outline"
+                href="/Home_Depot_Penny_Items_Guide.pdf"
+                download="Home_Depot_Penny_Items_Guide.pdf"
+                className="gap-2"
+              >
+                <Download className="w-4 h-4" />
+                Download PDF Guide
+              </Button>
               <a
                 href="https://www.facebook.com/groups/homedepotonecent"
                 target="_blank"

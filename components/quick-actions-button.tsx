@@ -16,8 +16,8 @@ export function QuickActionsButton() {
       description: "Get the complete guide",
       action: () => {
         const link = document.createElement('a')
-        link.href = '/Home-Depot-Penny-Guide.pdf'
-        link.download = 'Home-Depot-Penny-Guide.pdf'
+        link.href = '/Home_Depot_Penny_Items_Guide.pdf'
+        link.download = 'Home_Depot_Penny_Items_Guide.pdf'
         link.target = '_blank'
         document.body.appendChild(link)
         link.click()

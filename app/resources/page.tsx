@@ -7,8 +7,8 @@ import { Footer } from "@/components/footer"
 export default function ResourcesPage() {
   const handleDownload = (type: string) => {
     const link = document.createElement('a')
-    link.href = '/Home-Depot-Penny-Guide.pdf'
-    link.download = 'Home-Depot-Penny-Guide.pdf'
+    link.href = '/Home_Depot_Penny_Items_Guide.pdf'
+    link.download = 'Home_Depot_Penny_Items_Guide.pdf'
     link.target = '_blank'
     document.body.appendChild(link)
     link.click()
@@ -115,7 +115,7 @@ export default function ResourcesPage() {
                         Download Full Guide (PDF)
                       </button>
                       <a
-                        href="/Home-Depot-Penny-Guide.pdf"
+                        href="/Home_Depot_Penny_Items_Guide.pdf"
                         target="_blank"
                         className="flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-all hover:scale-105 active:scale-95 font-heading font-semibold"
                       >

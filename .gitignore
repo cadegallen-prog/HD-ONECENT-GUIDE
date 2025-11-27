@@ -31,6 +31,10 @@ yarn-error.log*
 # large generated data
 data/home-depot-stores.json
 
+# local experiments / scratch
+experimental_scraper/
+nul
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
