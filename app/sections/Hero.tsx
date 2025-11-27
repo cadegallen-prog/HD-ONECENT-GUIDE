@@ -25,21 +25,23 @@ export function Hero() {
             </p>
 
             {/* Actions */}
-            <div className="flex flex-wrap items-center gap-4">
-              <button
-                onClick={scrollToSections}
-                className="text-primary hover:text-primary/80 font-heading font-medium flex items-center gap-1 transition-colors"
-              >
-                Browse Sections
-                <ChevronDown className="w-4 h-4" />
-              </button>
+            <div className="flex flex-wrap items-center gap-6">
               <a
                 href="https://www.facebook.com/groups/homedepotonecent"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground font-heading text-sm flex items-center gap-1 transition-colors"
+                className="text-primary hover:text-primary/80 font-heading text-sm flex items-center gap-1 transition-colors"
               >
                 Join the Facebook Group
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+              <a
+                href="https://m.me/cm/AbYH-T88smeOjfsT/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:text-primary/80 font-heading text-sm flex items-center gap-1 transition-colors"
+              >
+                Join the Messenger Chat
                 <ExternalLink className="w-3.5 h-3.5" />
               </a>
             </div>

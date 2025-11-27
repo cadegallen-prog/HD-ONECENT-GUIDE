@@ -4,103 +4,102 @@
 
 @layer base {
   :root {
-    /* Educational Reference Design System - Modernized & Accessible */
+    /* Industrial dark theme - neutral, utilitarian */
 
-    /* Primary: Softer HD Orange - reduced saturation for visual comfort */
-    --primary: 24 88% 58%;            /* #F97316 - Warmer, gentler orange */
-    --primary-foreground: 0 0% 100%;
+    /* Primary: muted steel blue (links/buttons only) */
+    --primary: 217 91% 60%;           /* #3B82F6 */
+    --primary-foreground: 210 40% 98%;/* near white */
 
-    /* Background colors - warmer tones */
-    --background: 30 20% 99%;         /* #FEFDFB - Warm white */
-    --foreground: 220 15% 20%;        /* #2D3748 - Softer dark gray */
+    /* Background / surface */
+    --background: 222 47% 5%;         /* #020617 - near-black slate */
+    --foreground: 210 40% 98%;        /* #F9FAFB - near white */
 
-    /* Surface and borders - harmonious neutrals */
-    --surface: 30 25% 97%;            /* #FAF9F7 - Warm light surface */
-    --border: 220 13% 88%;            /* #E2E4E9 - Softer border */
-    --input: 220 13% 88%;
+    --surface: 222 35% 10%;           /* #0B1120 - card */
+    --border: 215 19% 24%;            /* #1F2937 */
+    --input: 215 19% 24%;
 
-    /* Text colors - improved readability */
-    --text: 220 15% 20%;              /* #2D3748 - Main text */
-    --text-muted: 220 10% 50%;        /* #6E7584 - Muted text */
+    /* Text colors */
+    --text: 210 40% 98%;
+    --text-muted: 215 20% 65%;        /* #9CA3AF */
 
     /* Card colors */
-    --card: 0 0% 100%;
-    --card-foreground: 220 15% 20%;
+    --card: 222 35% 10%;
+    --card-foreground: 210 40% 96%;
 
-    /* Muted colors - subtle backgrounds */
-    --muted: 30 25% 97%;
-    --muted-foreground: 220 10% 50%;
+    /* Muted backgrounds */
+    --muted: 222 35% 8%;
+    --muted-foreground: 215 20% 65%;
 
-    /* Accent colors - softer, more accessible */
-    --accent: 30 35% 95%;             /* Warm accent bg */
-    --accent-foreground: 220 15% 20%;
+    /* Accent colors - minimal */
+    --accent: 222 35% 14%;
+    --accent-foreground: 210 40% 96%;
 
-    --accent-success: 152 69% 40%;    /* #16A34A - Softer green */
-    --accent-warning: 32 95% 58%;     /* #FB923C - Softer orange-amber */
-    --accent-info: 217 80% 55%;       /* #3B82F6 - Softer blue */
+    --accent-success: 142 76% 36%;    /* #16A34A */
+    --accent-warning: 32 95% 58%;     /* #FB923C */
+    --accent-info: 217 91% 60%;       /* same steel blue */
 
-    /* Secondary - complementary teal */
-    --secondary: 186 25% 94%;         /* Soft teal background */
-    --secondary-foreground: 220 15% 20%;
+    /* Secondary */
+    --secondary: 222 35% 14%;
+    --secondary-foreground: 210 40% 96%;
 
-    /* Destructive - softer red */
-    --destructive: 0 72% 55%;         /* #E63946 - Less harsh red */
-    --destructive-foreground: 0 0% 100%;
+    /* Destructive */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 96%;
 
-    /* Success and Warning for status indicators */
-    --success: 152 69% 40%;
+    /* Success / warning tokens */
+    --success: 142 76% 36%;
     --warning: 32 95% 58%;
 
     /* Popover */
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 15% 20%;
+    --popover: 222 35% 10%;
+    --popover-foreground: 210 40% 96%;
 
-    /* Focus ring - matches primary */
-    --ring: 24 88% 58%;
+    /* Focus ring */
+    --ring: 217 91% 60%;
     --radius: 0.5rem;
   }
 
   .dark {
-    /* Dark mode - refined for reduced eye strain */
-    --primary: 24 88% 58%;            /* Same orange, pops on dark */
-    --primary-foreground: 220 20% 10%;
+    /* Dark mode: essentially the same as root for consistency */
+    --primary: 217 91% 60%;
+    --primary-foreground: 210 40% 98%;
 
-    --background: 220 18% 12%;        /* #1A1D28 - Softer dark blue-gray */
-    --foreground: 210 20% 92%;        /* #E8EAF0 - Warm light text */
+    --background: 222 47% 4%;
+    --foreground: 210 40% 98%;
 
-    --surface: 220 16% 16%;           /* #22262F - Elevated surface */
-    --border: 215 15% 28%;            /* #3E4554 - Softer borders */
-    --input: 215 15% 28%;
+    --surface: 222 35% 9%;
+    --border: 215 19% 24%;
+    --input: 215 19% 24%;
 
-    --text: 210 20% 92%;
-    --text-muted: 215 12% 65%;        /* #9BA1B0 - Softer muted */
+    --text: 210 40% 98%;
+    --text-muted: 215 20% 65%;
 
-    --card: 220 16% 16%;
-    --card-foreground: 210 20% 92%;
+    --card: 222 35% 9%;
+    --card-foreground: 210 40% 96%;
 
-    --muted: 220 16% 16%;
-    --muted-foreground: 215 12% 65%;
+    --muted: 222 35% 7%;
+    --muted-foreground: 215 20% 65%;
 
-    --accent: 220 16% 20%;            /* Darker accent bg */
-    --accent-foreground: 210 20% 92%;
+    --accent: 222 35% 14%;
+    --accent-foreground: 210 40% 96%;
 
-    --accent-success: 152 65% 48%;    /* #22C55E - Brighter for dark */
-    --accent-warning: 32 95% 60%;     /* #FB923C - Visible on dark */
-    --accent-info: 217 80% 62%;       /* #60A5FA - Softer bright blue */
+    --accent-success: 142 76% 36%;
+    --accent-warning: 32 95% 58%;
+    --accent-info: 217 91% 60%;
 
-    --secondary: 220 16% 20%;
-    --secondary-foreground: 210 20% 92%;
+    --secondary: 222 35% 14%;
+    --secondary-foreground: 210 40% 96%;
 
-    --destructive: 0 70% 60%;         /* #E63946 - Visible but not harsh */
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 96%;
 
-    --success: 152 65% 48%;
-    --warning: 32 95% 60%;
+    --success: 142 76% 36%;
+    --warning: 32 95% 58%;
 
-    --popover: 220 16% 16%;
-    --popover-foreground: 210 20% 92%;
+    --popover: 222 35% 9%;
+    --popover-foreground: 210 40% 96%;
 
-    --ring: 24 88% 58%;
+    --ring: 217 91% 60%;
   }
 
   * {
@@ -109,12 +108,12 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: Georgia, Charter, serif;
-    font-size: 18px;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 17px;
     line-height: 1.75;
     font-feature-settings: "rlig" 1, "calt" 1;
     color: hsl(var(--foreground));
-    background-image: radial-gradient(circle at 10% 20%, rgba(0, 0, 0, 0.02) 0, transparent 25%), radial-gradient(circle at 90% 10%, rgba(0, 0, 0, 0.015) 0, transparent 20%);
+    background-image: none;
   }
 
   h1, h2, h3, h4, h5, h6 {

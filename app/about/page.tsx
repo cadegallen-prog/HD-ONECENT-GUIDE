@@ -15,13 +15,13 @@ export default function AboutPage() {
       <main className="min-h-screen pt-24 pb-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-6">
+            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-8">
               About Penny Central
             </h1>
 
-            <div className="prose prose-lg dark:prose-invert max-w-none space-y-8">
-              <section>
-                <p className="text-xl text-muted-foreground">
+            <div className="space-y-8">
+              <section className="bg-card border border-border rounded-xl p-6 md:p-8 shadow-sm">
+                <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
                   Penny Central is the official companion site for the{" "}
                   <Link
                     href="https://www.facebook.com/groups/homedepotonecent"
@@ -31,16 +31,16 @@ export default function AboutPage() {
                   >
                     Home Depot One Cent Items
                   </Link>{" "}
-                  Facebook community—a group of 32,000+ members dedicated to finding clearance items
+                  Facebook community-a group of 32,000+ members dedicated to finding clearance items
                   marked down to $0.01 at Home Depot stores.
                 </p>
               </section>
 
-              <section>
-                <h2 className="text-2xl font-heading font-semibold mb-4">What This Guide Covers</h2>
-                <ul className="space-y-2 text-foreground">
+              <section className="bg-muted/40 dark:bg-muted/10 border border-border rounded-xl p-6 md:p-8 space-y-4">
+                <h2 className="text-2xl font-heading font-semibold">What This Guide Covers</h2>
+                <ul className="space-y-2 text-foreground text-sm md:text-base">
                   <li>
-                    <strong>What pennies are</strong> — How Home Depot's clearance system works and why items get marked to $0.01
+                    <strong>What pennies are</strong> - How Home Depot's clearance system works and why items get marked to $0.01
                   </li>
                   <li>
                     <strong>Clearance lifecycle</strong> — Understanding markdown patterns and timing to predict penny status
@@ -58,32 +58,14 @@ export default function AboutPage() {
                     <strong>Facts vs myths</strong> — Separating accurate information from common misconceptions
                   </li>
                   <li>
-                    <strong>Responsible hunting</strong> — Community guidelines for ethical penny shopping
+                    <strong>Responsible hunting</strong> - Community guidelines for ethical penny shopping
                   </li>
                 </ul>
               </section>
 
-              <section>
-                <h2 className="text-2xl font-heading font-semibold mb-4">Group Admins</h2>
-                <div className="grid md:grid-cols-3 gap-4">
-                  <div className="border border-border rounded-lg p-4">
-                    <p className="font-heading font-semibold">Spoe Jarky</p>
-                    <p className="text-sm text-muted-foreground">Admin / Alleged Electrician</p>
-                  </div>
-                  <div className="border border-border rounded-lg p-4">
-                    <p className="font-heading font-semibold">Cade Allen</p>
-                    <p className="text-sm text-muted-foreground">Admin</p>
-                  </div>
-                  <div className="border border-border rounded-lg p-4">
-                    <p className="font-heading font-semibold">Jorian Wulf</p>
-                    <p className="text-sm text-muted-foreground">Admin</p>
-                  </div>
-                </div>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-heading font-semibold mb-4">Join the Community</h2>
-                <p className="text-foreground mb-4">
+              <section className="bg-card border border-border rounded-xl p-6 md:p-8 space-y-4">
+                <h2 className="text-2xl font-heading font-semibold">Join the Community</h2>
+                <p className="text-foreground">
                   Connect with fellow penny hunters, share finds, and get the latest tips:
                 </p>
                 <div className="flex flex-wrap gap-4">
@@ -106,11 +88,6 @@ export default function AboutPage() {
                 </div>
               </section>
 
-              <section className="pt-8 border-t border-border">
-                <p className="text-sm text-muted-foreground">
-                  Built by Cade Allen. Not affiliated with The Home Depot, Inc.
-                </p>
-              </section>
             </div>
           </div>
         </div>

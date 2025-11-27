@@ -24,8 +24,23 @@ export function Navbar() {
             </span>
           </Link>
 
-          {/* Right side - Search, PDF Download, Theme toggle & Mobile menu */}
+          {/* Right side - Desktop nav, Search, PDF Download, Theme toggle & Mobile menu */}
           <div className="flex items-center gap-4">
+            {/* Desktop nav links */}
+            <div className="hidden md:flex items-center gap-6 mr-2 text-sm text-muted-foreground">
+              <Link href="/store-finder" className="hover:text-primary transition-colors">
+                Store Finder
+              </Link>
+              <Link href="/trip-tracker" className="hover:text-primary transition-colors">
+                Trip Tracker
+              </Link>
+              <Link href="/resources" className="hover:text-primary transition-colors">
+                Resources
+              </Link>
+              <Link href="/about" className="hover:text-primary transition-colors">
+                About
+              </Link>
+            </div>
             {/* Search / Command Palette trigger - desktop only */}
             <button
               onClick={() => setOpen(true)}

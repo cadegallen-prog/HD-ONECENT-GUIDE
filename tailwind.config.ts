@@ -61,7 +61,7 @@ const config: Config = {
       },
       fontFamily: {
         heading: ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
-        body: ["Georgia", "Charter", "serif"],
+        body: ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
         mono: ["JetBrains Mono", "Courier New", "Consolas", "Monaco", "monospace"],
       },
       borderRadius: {

@@ -8,8 +8,8 @@ export function Footer() {
         <div className="grid md:grid-cols-2 gap-8 mb-8 max-w-4xl mx-auto">
           {/* Community */}
           <div>
-            <h3 className="font-heading font-semibold mb-4 text-sm">Community</h3>
-            <ul className="space-y-2">
+            <h3 className="text-sm font-semibold text-foreground mb-2">Community</h3>
+            <ul className="space-y-2 text-sm">
               <li>
                 <Link
                   href="https://www.facebook.com/groups/homedepotonecent"
@@ -33,28 +33,14 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Created By */}
+          {/* About */}
           <div>
-            <h3 className="font-heading font-semibold mb-4 text-sm">Created By</h3>
+            <h3 className="text-sm font-semibold text-foreground mb-2">About</h3>
             <p className="text-sm text-muted-foreground mb-3">
-              Built by Cade Allen for the Home Depot One Cent Items community.
+              Built by members of the Home Depot One Cent Items community.
             </p>
-            <div className="text-xs text-muted-foreground space-y-1">
-              <p><span className="font-medium">Group Admins:</span></p>
-              <p>Spoe Jarky - Admin / Alleged Electrician</p>
-              <p>Cade Allen - Admin</p>
-              <p>Jorian Wulf - Admin</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Disclaimer */}
-        <div className="max-w-4xl mx-auto mb-6">
-          <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
-            <p className="text-xs text-amber-800 dark:text-amber-200">
-              <span className="font-semibold">Disclaimer:</span> Community-run educational resource. Not affiliated with,
-              endorsed by, or sponsored by The Home Depot, Inc. For informational use only. Retail policies vary and can
-              change without notice. "Home Depot" is a registered trademark of Homer TLC, Inc.
+            <p className="text-sm text-muted-foreground">
+              Community-run educational resource made for HDOCI.
             </p>
           </div>
         </div>
@@ -62,7 +48,10 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="pt-6 border-t border-border">
           <p className="text-xs text-muted-foreground text-center">
-            Built by Cade Allen for the Home Depot One Cent Items community. Not affiliated with The Home Depot, Inc.
+            <span className="font-semibold">Disclaimer:</span>{" "}
+            Not affiliated with, endorsed by, or sponsored by The Home Depot, Inc. For informational use only. Retail
+            policies vary and can change without notice. &quot;Home Depot&quot; is a registered trademark of Homer TLC,
+            Inc.
           </p>
         </div>
       </div>

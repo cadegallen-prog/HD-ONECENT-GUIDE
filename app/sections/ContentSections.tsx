@@ -638,17 +638,6 @@ export function ContentSections() {
             </p>
           </div>
 
-          <div className="border-b border-border pb-6">
-            <h3 className="text-lg font-heading font-semibold mb-2 text-foreground">
-              Can I use penny shopping to start a resale business?
-            </h3>
-            <p className="text-foreground">
-              While legal, this practice is frowned upon by the community and often leads to
-              store restrictions. Many stores limit quantities specifically to prevent resellers
-              from clearing shelves. If you resell, do so responsibly: don't hoard, don't clear
-              entire inventories, and consider the impact on other hunters and genuine customers.
-            </p>
-          </div>
         </div>
       </section>
 
