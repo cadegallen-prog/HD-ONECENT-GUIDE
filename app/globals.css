@@ -4,102 +4,92 @@
 
 @layer base {
   :root {
-    /* Industrial dark theme - neutral, utilitarian */
-
-    /* Primary: muted steel blue (links/buttons only) */
-    --primary: 217 91% 60%;           /* #3B82F6 */
-    --primary-foreground: 210 40% 98%;/* near white */
-
-    /* Background / surface */
-    --background: 222 47% 5%;         /* #020617 - near-black slate */
-    --foreground: 210 40% 98%;        /* #F9FAFB - near white */
-
-    --surface: 222 35% 10%;           /* #0B1120 - card */
-    --border: 215 19% 24%;            /* #1F2937 */
-    --input: 215 19% 24%;
-
-    /* Text colors */
-    --text: 210 40% 98%;
-    --text-muted: 215 20% 65%;        /* #9CA3AF */
-
-    /* Card colors */
-    --card: 222 35% 10%;
-    --card-foreground: 210 40% 96%;
-
-    /* Muted backgrounds */
-    --muted: 222 35% 8%;
-    --muted-foreground: 215 20% 65%;
-
-    /* Accent colors - minimal */
-    --accent: 222 35% 14%;
-    --accent-foreground: 210 40% 96%;
-
-    --accent-success: 142 76% 36%;    /* #16A34A */
-    --accent-warning: 32 95% 58%;     /* #FB923C */
-    --accent-info: 217 91% 60%;       /* same steel blue */
-
-    /* Secondary */
-    --secondary: 222 35% 14%;
-    --secondary-foreground: 210 40% 96%;
-
-    /* Destructive */
+    /* LIGHT MODE - Clean white with teal accents */
+    
+    --primary: 172 66% 40%;           /* Teal #1A9A8A */
+    --primary-foreground: 0 0% 100%;
+    
+    --background: 0 0% 100%;          /* Pure white */
+    --foreground: 224 71% 4%;         /* Near black #030712 */
+    
+    --surface: 210 20% 98%;           /* Very light gray #F8FAFC */
+    --border: 220 13% 91%;            /* Light border #E2E8F0 */
+    --input: 220 13% 91%;
+    
+    --text: 224 71% 4%;               /* Near black */
+    --text-muted: 220 9% 46%;         /* Medium gray #64748B */
+    
+    --card: 0 0% 100%;
+    --card-foreground: 224 71% 4%;
+    
+    --muted: 210 20% 96%;             /* Light gray bg */
+    --muted-foreground: 220 9% 46%;
+    
+    --accent: 172 66% 95%;            /* Very light teal */
+    --accent-foreground: 172 66% 30%;
+    
+    --accent-success: 142 71% 45%;
+    --accent-warning: 38 92% 50%;
+    --accent-info: 199 89% 48%;
+    
+    --secondary: 210 20% 96%;
+    --secondary-foreground: 224 71% 4%;
+    
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 96%;
-
-    /* Success / warning tokens */
-    --success: 142 76% 36%;
-    --warning: 32 95% 58%;
-
-    /* Popover */
-    --popover: 222 35% 10%;
-    --popover-foreground: 210 40% 96%;
-
-    /* Focus ring */
-    --ring: 217 91% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --success: 142 71% 45%;
+    --warning: 38 92% 50%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71% 4%;
+    
+    --ring: 172 66% 40%;
     --radius: 0.5rem;
   }
 
   .dark {
-    /* Dark mode: essentially the same as root for consistency */
-    --primary: 217 91% 60%;
-    --primary-foreground: 210 40% 98%;
-
-    --background: 222 47% 4%;
-    --foreground: 210 40% 98%;
-
-    --surface: 222 35% 9%;
-    --border: 215 19% 24%;
-    --input: 215 19% 24%;
-
-    --text: 210 40% 98%;
-    --text-muted: 215 20% 65%;
-
-    --card: 222 35% 9%;
-    --card-foreground: 210 40% 96%;
-
-    --muted: 222 35% 7%;
-    --muted-foreground: 215 20% 65%;
-
-    --accent: 222 35% 14%;
-    --accent-foreground: 210 40% 96%;
-
-    --accent-success: 142 76% 36%;
-    --accent-warning: 32 95% 58%;
-    --accent-info: 217 91% 60%;
-
-    --secondary: 222 35% 14%;
-    --secondary-foreground: 210 40% 96%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 96%;
-
-    --success: 142 76% 36%;
-    --warning: 32 95% 58%;
-
-    --popover: 222 35% 9%;
-    --popover-foreground: 210 40% 96%;
-
-    --ring: 217 91% 60%;
+    /* DARK MODE - Deep slate with teal accents */
+    
+    --primary: 172 66% 50%;           /* Brighter teal for dark */
+    --primary-foreground: 224 71% 4%;
+    
+    --background: 224 71% 4%;         /* Near black #030712 */
+    --foreground: 210 20% 98%;        /* Near white #F8FAFC */
+    
+    --surface: 223 47% 11%;           /* Dark card bg #0F172A */
+    --border: 217 33% 17%;            /* Dark border #1E293B */
+    --input: 217 33% 17%;
+    
+    --text: 210 20% 98%;
+    --text-muted: 217 19% 62%;        /* Muted light #94A3B8 */
+    
+    --card: 223 47% 11%;
+    --card-foreground: 210 20% 98%;
+    
+    --muted: 223 47% 11%;
+    --muted-foreground: 217 19% 62%;
+    
+    --accent: 172 66% 15%;            /* Dark teal bg */
+    --accent-foreground: 172 66% 70%;
+    
+    --accent-success: 142 71% 45%;
+    --accent-warning: 38 92% 50%;
+    --accent-info: 199 89% 48%;
+    
+    --secondary: 223 47% 11%;
+    --secondary-foreground: 210 20% 98%;
+    
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 210 20% 98%;
+    
+    --success: 142 71% 45%;
+    --warning: 38 92% 50%;
+    
+    --popover: 223 47% 11%;
+    --popover-foreground: 210 20% 98%;
+    
+    --ring: 172 66% 50%;
   }
 
   * {
@@ -112,96 +102,84 @@
     font-size: 17px;
     line-height: 1.75;
     font-feature-settings: "rlig" 1, "calt" 1;
-    color: hsl(var(--foreground));
-    background-image: none;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     font-weight: 600;
     line-height: 1.2;
+    color: hsl(var(--foreground));
   }
 
-  h1 {
-    font-size: 40px;
-  }
+  h1 { font-size: 40px; }
+  h2 { font-size: 28px; }
+  h3 { font-size: 22px; }
 
-  h2 {
-    font-size: 28px;
-  }
-
-  h3 {
-    font-size: 22px;
-  }
-
-  /* Tables use Inter */
   table {
     font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     font-size: 16px;
   }
 
-  /* Code and SKUs use monospace */
   code, .sku, .code {
     font-family: "JetBrains Mono", "Courier New", Consolas, Monaco, monospace;
     font-size: 15px;
   }
 
-  /* Caption text */
   .caption, figcaption {
     font-size: 15px;
+    color: hsl(var(--text-muted));
   }
 }
 
-/* Educational Reference Components */
 @layer components {
-  /* Badges - Modernized with softer colors */
+  /* Badges - NO orange/amber, using teal and semantic colors */
   .badge {
     @apply inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-heading font-medium transition-colors;
   }
 
   .badge-low {
-    @apply bg-slate-100 text-slate-700 dark:bg-slate-800/50 dark:text-slate-300;
+    @apply bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300;
   }
 
   .badge-medium {
-    @apply bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300;
+    @apply bg-sky-100 text-sky-800 dark:bg-sky-900/50 dark:text-sky-300;
   }
 
   .badge-high {
-    @apply bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300;
+    @apply bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300;
   }
 
   .badge-penny {
-    @apply bg-orange-100 text-orange-800 border border-orange-200 dark:bg-orange-900/40 dark:text-orange-300 dark:border-orange-800/50;
+    @apply bg-teal-100 text-teal-800 border border-teal-200 dark:bg-teal-900/50 dark:text-teal-300 dark:border-teal-700;
   }
 
   .badge-true {
-    @apply bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300;
+    @apply bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300;
   }
 
   .badge-false {
-    @apply bg-rose-100 text-rose-800 dark:bg-rose-900/40 dark:text-rose-300;
+    @apply bg-rose-100 text-rose-800 dark:bg-rose-900/50 dark:text-rose-300;
   }
 
   .badge-varies {
-    @apply bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300;
+    @apply bg-sky-100 text-sky-800 dark:bg-sky-900/50 dark:text-sky-300;
   }
 
-  /* Callouts - Softer, more accessible */
+  /* Callouts - NO amber, using blue/teal/emerald */
   .callout-box {
     @apply rounded-lg border-l-4 p-4 my-4 transition-colors;
   }
 
   .callout-box.info {
-    @apply bg-blue-50/80 border-blue-500/70 dark:bg-blue-900/25 dark:border-blue-400/70;
+    @apply bg-sky-50 border-sky-500 text-slate-800 dark:bg-sky-950/30 dark:border-sky-400 dark:text-slate-200;
   }
 
   .callout-box.warning {
-    @apply bg-amber-50/80 border-amber-500/70 dark:bg-amber-900/25 dark:border-amber-400/70;
+    @apply bg-rose-50 border-rose-500 text-slate-800 dark:bg-rose-950/30 dark:border-rose-400 dark:text-slate-200;
   }
 
   .callout-box.success {
-    @apply bg-emerald-50/80 border-emerald-500/70 dark:bg-emerald-900/25 dark:border-emerald-400/70;
+    @apply bg-emerald-50 border-emerald-500 text-slate-800 dark:bg-emerald-950/30 dark:border-emerald-400 dark:text-slate-200;
   }
 
   /* Data Tables */
@@ -210,19 +188,19 @@
   }
 
   .data-table th {
-    @apply bg-surface border border-border px-4 py-3 text-left font-heading font-semibold text-sm;
+    @apply bg-slate-50 border border-border px-4 py-3 text-left font-heading font-semibold text-sm text-slate-900 dark:bg-slate-800 dark:text-slate-100;
   }
 
   .data-table td {
-    @apply border border-border px-4 py-3;
+    @apply border border-border px-4 py-3 text-slate-700 dark:text-slate-300;
   }
 
   .data-table tbody tr:nth-child(even) {
-    @apply bg-surface/50;
+    @apply bg-slate-50/50 dark:bg-slate-800/30;
   }
 
   .data-table tbody tr:hover {
-    @apply bg-surface;
+    @apply bg-slate-100 dark:bg-slate-800/50;
   }
 
   /* Step Guide */
@@ -235,7 +213,7 @@
   }
 
   .step-number {
-    @apply flex-shrink-0 w-8 h-8 rounded-full bg-primary text-primary-foreground font-heading font-bold flex items-center justify-center;
+    @apply flex-shrink-0 w-8 h-8 rounded-full bg-teal-600 text-white font-heading font-bold flex items-center justify-center;
   }
 
   /* Reference Cards */

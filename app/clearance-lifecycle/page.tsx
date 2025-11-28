@@ -29,7 +29,7 @@ export default function ClearanceLifecyclePage() {
                 markdown depth. Understanding these patterns helps predict when items will reach penny status.
               </p>
 
-              <div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+              <div className="bg-sky-50 dark:bg-sky-950/30 border border-sky-200 dark:border-sky-800 rounded-lg p-4">
                 <p className="font-heading font-semibold text-amber-900 dark:text-amber-100">Important</p>
                 <p className="text-sm mt-1 text-amber-800 dark:text-amber-200">
                   Clearance timing varies by store, region, and department. These patterns are general
