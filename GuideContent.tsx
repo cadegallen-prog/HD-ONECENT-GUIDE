@@ -27,7 +27,7 @@ import {
 
 export function GuideContent() {
   return (
-    <article className="prose prose-slate dark:prose-invert max-w-none">
+    <article className="prose prose-slate dark:prose-invert max-w-none bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 p-8 sm:p-10 rounded-2xl border border-border shadow-sm">
       {/* ============================================ */}
       {/* SECTION I: INTRODUCTION */}
       {/* ============================================ */}
@@ -36,7 +36,7 @@ export function GuideContent() {
           <span className="text-orange-500">I.</span> Introduction: What Are Penny Items?
         </h2>
 
-        <p className="lead text-lg text-foreground">
+        <p className="lead text-lg text-muted-foreground">
           At Home Depot, a "penny item" refers to merchandise that rings up at <strong>$0.01</strong> due to internal inventory clearance systems — not public promotions.
         </p>
 
@@ -51,7 +51,7 @@ export function GuideContent() {
           This process is driven by <strong>Zero Margin Adjustment (ZMA)</strong> — a financial mechanism that reduces an item's value in the system to nearly zero. While these items are meant to be removed, some stay on the floor and can still be bought.
         </p>
 
-        <Alert className="bg-amber-50 dark:bg-amber-950/30 border-amber-200 text-slate-900 dark:text-slate-100">
+        <Alert className="bg-slate-100 dark:bg-slate-900/40 border border-border">
           <Info className="h-4 w-4 text-amber-600" />
           <AlertDescription>
             <strong>Important:</strong> This guide is based on consistent community reports and retail logic, not official Home Depot policy. Practices may vary by store.
@@ -106,7 +106,7 @@ export function GuideContent() {
                 <TableCell>~3 weeks</TableCell>
                 <TableCell>Last stage before removal</TableCell>
               </TableRow>
-              <TableRow className="bg-green-50 dark:bg-green-950/30">
+              <TableRow className="bg-slate-100 dark:bg-slate-900/40">
                 <TableCell>System Update</TableCell>
                 <TableCell><Badge className="bg-green-600">$0.01</Badge></TableCell>
                 <TableCell>Internal</TableCell>
@@ -152,7 +152,7 @@ export function GuideContent() {
                 <TableCell>~2 weeks</TableCell>
                 <TableCell>High likelihood of penny pricing next</TableCell>
               </TableRow>
-              <TableRow className="bg-green-50 dark:bg-green-950/30">
+              <TableRow className="bg-slate-100 dark:bg-slate-900/40">
                 <TableCell>System Update</TableCell>
                 <TableCell><Badge className="bg-green-600">$0.01</Badge></TableCell>
                 <TableCell>Internal</TableCell>
@@ -236,21 +236,21 @@ export function GuideContent() {
         </p>
 
         <div className="grid md:grid-cols-3 gap-4 my-6">
-          <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-lg border text-slate-900 dark:text-slate-100">
+          <div className="bg-slate-100 dark:bg-slate-900/30 p-4 rounded-lg border border-border">
             <h4 className="font-semibold mb-2">Step 1: Set Your Store</h4>
-            <p className="text-sm text-foreground">
+            <p className="text-sm text-muted-foreground">
               In the app or online, set your specific store location. Inventory and pricing data is store-specific — wrong location = wrong info.
             </p>
           </div>
-          <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-lg border text-slate-900 dark:text-slate-100">
+          <div className="bg-slate-100 dark:bg-slate-900/30 p-4 rounded-lg border border-border">
             <h4 className="font-semibold mb-2">Step 2: Search by SKU</h4>
-            <p className="text-sm text-foreground">
+            <p className="text-sm text-muted-foreground">
               Find the SKU number on product packaging or clearance tag. Use that number in the Home Depot app or site search.
             </p>
           </div>
-          <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-lg border text-slate-900 dark:text-slate-100">
+          <div className="bg-slate-100 dark:bg-slate-900/30 p-4 rounded-lg border border-border">
             <h4 className="font-semibold mb-2">Step 3: Interpret Results</h4>
-            <p className="text-sm text-foreground">
+            <p className="text-sm text-muted-foreground">
               Use the chart below to decode what the listing might mean.
             </p>
           </div>
@@ -274,7 +274,7 @@ export function GuideContent() {
                 <TableCell>In Stock + Full Price</TableCell>
                 <TableCell>Still active inventory</TableCell>
               </TableRow>
-              <TableRow className="bg-green-50 dark:bg-green-950/30">
+              <TableRow className="bg-slate-100 dark:bg-slate-900/40">
                 <TableCell className="font-medium">Out of Stock / Unavailable / Ship to Store Only + Full Price</TableCell>
                 <TableCell><strong>Strong penny candidate</strong> — system may have pennied it, but it hasn't been removed from shelves yet</TableCell>
               </TableRow>
@@ -286,7 +286,7 @@ export function GuideContent() {
           </Table>
         </div>
 
-        <Alert className="mt-6 bg-blue-50 dark:bg-blue-950/30 border-blue-200 text-slate-900 dark:text-slate-100">
+        <Alert className="mt-6 bg-white dark:bg-slate-900/40 border border-border">
           <Info className="h-4 w-4 text-blue-600" />
           <AlertDescription>
             <strong>Important:</strong> If the system shows a full price but no stock, it might have already hit $0.01 internally and just hasn't been pulled.
@@ -325,7 +325,7 @@ export function GuideContent() {
         <h3 className="text-xl font-semibold mt-8 mb-4">Where to Look</h3>
         
         <div className="grid md:grid-cols-2 gap-6 my-6">
-          <div className="bg-orange-50 dark:bg-orange-950/30 p-4 rounded-lg border border-orange-200 text-slate-900 dark:text-slate-100">
+          <div className="bg-white dark:bg-slate-900/40 p-4 rounded-lg border border-border">
             <h4 className="font-semibold mb-3 text-orange-700 dark:text-orange-400">Primary Hotspots</h4>
             <ul className="space-y-1 text-sm">
               <li>• Clearance endcaps</li>
@@ -333,7 +333,7 @@ export function GuideContent() {
               <li>• Seasonal sections (especially post-season)</li>
             </ul>
           </div>
-          <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-lg border text-slate-900 dark:text-slate-100">
+          <div className="bg-slate-100 dark:bg-slate-900/30 p-4 rounded-lg border border-border">
             <h4 className="font-semibold mb-3">Hidden Gems</h4>
             <ul className="space-y-1 text-sm">
               <li>• Bottom or top shelves in standard aisles</li>
@@ -365,7 +365,7 @@ export function GuideContent() {
 
         <h3 className="text-xl font-semibold mt-8 mb-4">How to Check the Price (Discreetly)</h3>
         
-        <div className="bg-green-50 dark:bg-green-950/30 p-6 rounded-lg border border-green-200 my-6 text-slate-900 dark:text-slate-100">
+        <div className="bg-slate-100 dark:bg-slate-900/40 p-6 rounded-lg border border-border my-6">
           <h4 className="font-semibold text-green-700 dark:text-green-400 mb-3">Best Method: Self-Checkout (SCO)</h4>
           <ol className="space-y-2">
             <li>1. Go to a SCO terminal with the item in hand</li>
@@ -395,17 +395,17 @@ export function GuideContent() {
         <p>Items stored overhead present a unique challenge — and some real risks:</p>
         
         <div className="grid md:grid-cols-2 gap-4 my-6">
-          <div className="p-4 rounded-lg border bg-yellow-50 dark:bg-yellow-950/30 border-yellow-200 text-slate-900 dark:text-slate-100">
+          <div className="p-4 rounded-lg border bg-slate-100 dark:bg-slate-900/40 border-border">
             <h4 className="font-semibold mb-2">Yellow Ladders (Customer Use)</h4>
             <p className="text-sm">Small yellow ladders (often in paint section) are for customer use. You can use these — just know they're visible and will draw attention.</p>
           </div>
-          <div className="p-4 rounded-lg border bg-red-50 dark:bg-red-950/30 border-red-200 text-slate-900 dark:text-slate-100">
+          <div className="p-4 rounded-lg border bg-slate-100 dark:bg-slate-900/40 border-border">
             <h4 className="font-semibold mb-2">Orange Ladders (Employee Only)</h4>
             <p className="text-sm">These are strictly for employees. Using them as a customer is against store policy and can escalate quickly.</p>
           </div>
         </div>
 
-        <Alert className="bg-amber-50 dark:bg-amber-950/30 border-amber-200 text-slate-900 dark:text-slate-100">
+        <Alert className="bg-slate-100 dark:bg-slate-900/40 border border-border">
           <Info className="h-4 w-4 text-amber-600" />
           <AlertDescription>
             <strong>Pro Tip:</strong> If you ask an employee to retrieve an overhead item, there's a 50/50 chance they'll scan it first. If it scans at $0.01, they'll likely say "This can't be sold" and that item will be removed from the floor entirely.
@@ -426,7 +426,7 @@ export function GuideContent() {
           You found a penny item. Now comes the tricky part: getting it through checkout without issues.
         </p>
 
-        <div className="bg-green-50 dark:bg-green-950/30 p-6 rounded-lg border border-green-200 my-6 text-slate-900 dark:text-slate-100">
+        <div className="bg-slate-100 dark:bg-slate-900/40 p-6 rounded-lg border border-border my-6">
           <h3 className="text-lg font-semibold text-green-700 dark:text-green-400 mb-4">Preferred Method: Self-Checkout (SCO)</h3>
           <ol className="space-y-2">
             <li><strong>1.</strong> Have your payment ready before scanning</li>
@@ -466,7 +466,7 @@ export function GuideContent() {
         <h3 className="text-xl font-semibold mt-8 mb-4">If You're Stopped by an Employee</h3>
         
         <div className="grid md:grid-cols-2 gap-4 my-6">
-          <div className="p-4 rounded-lg border bg-green-50 dark:bg-green-950/30 border-green-200 text-slate-900 dark:text-slate-100">
+          <div className="p-4 rounded-lg border bg-slate-100 dark:bg-slate-900/40 border-border">
             <h4 className="font-semibold text-green-700 dark:text-green-400 mb-3 flex items-center gap-2">
               <CheckCircle2 className="h-4 w-4" /> Do This
             </h4>
@@ -476,7 +476,7 @@ export function GuideContent() {
               <li>• Say: "That's just what it scanned for." or "I found it on the shelf and thought I'd buy it."</li>
             </ul>
           </div>
-          <div className="p-4 rounded-lg border bg-red-50 dark:bg-red-950/30 border-red-200 text-slate-900 dark:text-slate-100">
+          <div className="p-4 rounded-lg border bg-slate-100 dark:bg-slate-900/40 border-border">
             <h4 className="font-semibold text-red-700 dark:text-red-400 mb-3 flex items-center gap-2">
               <XCircle className="h-4 w-4" /> Don't Do This
             </h4>
@@ -494,7 +494,7 @@ export function GuideContent() {
           <li>"I've completed the purchase and have my receipt. I'm not returning it."</li>
           <li>If pressed: "Can I speak with a manager for clarification on store policy?"</li>
         </ul>
-        <p className="text-foreground text-sm mt-2">
+        <p className="text-muted-foreground text-sm mt-2">
           Some stores might honor it, others may confiscate it. Reactions vary.
         </p>
       </section>
@@ -522,7 +522,7 @@ export function GuideContent() {
           <li>System flags it for removal from shelves — but sometimes it gets missed</li>
         </ul>
 
-        <Alert className="my-6 bg-blue-50 dark:bg-blue-950/30 border-blue-200 text-slate-900 dark:text-slate-100">
+        <Alert className="my-6 bg-white dark:bg-slate-900/40 border border-border">
           <Info className="h-4 w-4 text-blue-600" />
           <AlertDescription>
             If an item is still on the floor at $0.01, it's likely due to oversight or staff backlog.
@@ -545,7 +545,7 @@ export function GuideContent() {
           <li>Filter by department, location, price, on-hand stock, and "no home" items</li>
           <li>Flag items for removal</li>
         </ul>
-        <p className="text-foreground text-sm mt-2">
+        <p className="text-muted-foreground text-sm mt-2">
           This tool helps staff actively search for and remove penny items from the sales floor.
         </p>
 
@@ -644,7 +644,7 @@ export function GuideContent() {
           <li><strong>Store-specific pennies</strong> (returns, damaged goods, unpulled clearance) are hit-or-miss</li>
           <li>Community screenshots and shared receipts are gold — but dates matter</li>
         </ul>
-        <p className="text-foreground text-sm mt-2">
+        <p className="text-muted-foreground text-sm mt-2">
           Always check timestamps on community posts. A penny item from 4 weeks ago may already be pulled or long gone.
         </p>
       </section>
@@ -664,31 +664,31 @@ export function GuideContent() {
         <div className="grid md:grid-cols-2 gap-6 my-6">
           <div className="p-4 rounded-lg border">
             <h4 className="font-semibold mb-3">1. Be Respectful to Store Employees</h4>
-            <p className="text-sm text-foreground">
+            <p className="text-sm text-muted-foreground">
               Even if you're frustrated, caught off-guard, or denied a penny sale: stay calm, stay polite, avoid confrontations. Staff are following orders — not making personal decisions against you.
             </p>
           </div>
           <div className="p-4 rounded-lg border">
             <h4 className="font-semibold mb-3">2. Don't Be Loud About Finds</h4>
-            <p className="text-sm text-foreground">
+            <p className="text-sm text-muted-foreground">
               Getting loud, excited, or bragging at checkout draws attention. Don't show receipts to other customers, tell staff about your score, or film inside the store.
             </p>
           </div>
           <div className="p-4 rounded-lg border">
             <h4 className="font-semibold mb-3">3. Use Community Resources Wisely</h4>
-            <p className="text-sm text-foreground">
+            <p className="text-sm text-muted-foreground">
               Share helpful info like UPCs, tag dates, or clearance cycles. Post accurate finds — not rumors. Don't flood groups with repeat questions.
             </p>
           </div>
           <div className="p-4 rounded-lg border">
             <h4 className="font-semibold mb-3">4. Know When to Walk Away</h4>
-            <p className="text-sm text-foreground">
+            <p className="text-sm text-muted-foreground">
               If an employee or manager denies the sale, just move on. It's not worth getting banned from the store. Better to lose one item than burn access to future deals.
             </p>
           </div>
         </div>
 
-        <Alert className="bg-amber-50 dark:bg-amber-950/30 border-amber-200 text-slate-900 dark:text-slate-100">
+        <Alert className="bg-slate-100 dark:bg-slate-900/40 border border-border">
           <AlertTriangle className="h-4 w-4 text-amber-600" />
           <AlertDescription>
             <strong>Reality Check:</strong> This is not a get-rich-quick game. Penny hunting requires time, patience, and a lot of empty trips. You might check 3 stores and find nothing. Don't expect huge savings every time — it's about the long game.
@@ -710,7 +710,7 @@ export function GuideContent() {
 
         <div className="grid md:grid-cols-2 gap-6 my-8">
           {/* Beginners */}
-          <div className="bg-blue-50 dark:bg-blue-950/30 p-6 rounded-lg border border-blue-200">
+          <div className="bg-white dark:bg-slate-900/40 p-6 rounded-lg border border-border">
             <h3 className="text-lg font-semibold text-blue-700 dark:text-blue-400 mb-4">For Beginners: Start Here</h3>
             
             <h4 className="font-medium mt-4 mb-2">Understand the Basics</h4>
@@ -736,7 +736,7 @@ export function GuideContent() {
           </div>
 
           {/* Experienced */}
-          <div className="bg-orange-50 dark:bg-orange-950/30 p-6 rounded-lg border border-orange-200 text-slate-900 dark:text-slate-100">
+          <div className="bg-white dark:bg-slate-900/40 p-6 rounded-lg border border-border">
             <h3 className="text-lg font-semibold text-orange-700 dark:text-orange-400 mb-4">For Experienced Hunters: Refine Your Game</h3>
             
             <h4 className="font-medium mt-4 mb-2">Know the Clearance Cadences</h4>
@@ -762,9 +762,9 @@ export function GuideContent() {
           </div>
         </div>
 
-        <div className="bg-slate-100 dark:bg-slate-800 p-6 rounded-lg text-center my-8 text-slate-900 dark:text-slate-100">
+        <div className="bg-white dark:bg-slate-900/40 p-6 rounded-lg text-center my-8">
           <h3 className="text-xl font-semibold mb-3">Final Mindset</h3>
-          <p className="text-foreground mb-4">
+          <p className="text-muted-foreground mb-4">
             Many hunters enjoy this for more than the savings: the thrill of the hunt, the satisfaction of outsmarting a system, and the camaraderie of a tight-knit, info-sharing community.
           </p>
           <p className="font-medium">
@@ -778,3 +778,5 @@ export function GuideContent() {
     </article>
   );
 }
+
+
