@@ -156,51 +156,51 @@ export const StoreMap = React.memo(function StoreMap({
                 }
               }}
             >
-              <Popup className="min-w-[240px]">
-                <div className="space-y-2 text-left">
-                  <p className="font-semibold text-sm text-foreground mb-2">{getStoreTitle(store)}</p>
+              <Popup className="min-w-[220px]">
+                <div className="space-y-1 text-left">
+                  <p className="font-semibold text-sm text-gray-900 dark:text-gray-100">{getStoreTitle(store)}</p>
 
                   {store.distance !== undefined && (
-                    <p className="text-xs font-medium text-primary">{store.distance.toFixed(1)} miles away</p>
+                    <p className="text-xs font-medium text-primary mb-1">{store.distance.toFixed(1)} miles away</p>
                   )}
 
                   {(store.hours?.weekday || store.hours?.weekend) && (
-                    <div className="space-y-0.5">
+                    <div className="space-y-0">
                       {(() => {
                         const formatted = formatStoreHours(store.hours)
                         return (
                           <>
-                            <p className="text-xs text-muted-foreground">{formatted.weekday}</p>
-                            <p className="text-xs text-muted-foreground">{formatted.saturday}</p>
-                            <p className="text-xs text-muted-foreground">{formatted.sunday}</p>
+                            <p className="text-xs text-muted-foreground leading-tight">{formatted.weekday}</p>
+                            <p className="text-xs text-muted-foreground leading-tight">{formatted.saturday}</p>
+                            <p className="text-xs text-muted-foreground leading-tight">{formatted.sunday}</p>
                           </>
                         )
                       })()}
                     </div>
                   )}
 
-                  <div className="pt-1 border-t border-border space-y-0.5">
-                    <p className="text-xs text-muted-foreground">{store.address}</p>
-                    <p className="text-xs text-muted-foreground">{store.city}, {store.state} {store.zip}</p>
+                  <div className="pt-1 mt-1 border-t border-border space-y-0">
+                    <p className="text-xs text-muted-foreground leading-tight">{store.address}</p>
+                    <p className="text-xs text-muted-foreground leading-tight">{store.city}, {store.state} {store.zip}</p>
                   </div>
 
                   {store.phone && (
                     <a
                       href={`tel:${store.phone}`}
-                      className="text-xs text-primary hover:underline block"
+                      className="text-xs text-primary hover:underline block mt-1"
                     >
                       {store.phone}
                     </a>
                   )}
 
-                  <div className="pt-1 border-t border-border flex flex-col gap-1.5">
+                  <div className="pt-1 mt-1 border-t border-border flex flex-col gap-1">
                     <a
                       href={`https://www.google.com/maps/dir/?api=1&destination=${store.lat},${store.lng}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-xs text-primary hover:underline"
                     >
-                      → Get Directions
+                      Get Directions
                     </a>
                     <a
                       href={getStoreUrl(store)}
@@ -208,7 +208,7 @@ export const StoreMap = React.memo(function StoreMap({
                       rel="noopener noreferrer"
                       className="text-xs text-primary hover:underline"
                     >
-                      → View Store Page
+                      View Store Page
                     </a>
                   </div>
                 </div>
