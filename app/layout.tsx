@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { CommandPaletteProvider } from "@/components/command-palette-provider";
 import { QuickActionsButton } from "@/components/quick-actions-button";
+import { Analytics } from "@vercel/analytics/react";
 
 // Fonts are defined in globals.css using system fonts
 // This avoids network dependency on Google Fonts
@@ -84,6 +85,7 @@ export default function RootLayout({
             <Toaster />
           </CommandPaletteProvider>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
