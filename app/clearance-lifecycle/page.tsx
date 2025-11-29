@@ -29,9 +29,9 @@ export default function ClearanceLifecyclePage() {
                 markdown depth. Understanding these patterns helps predict when items will reach penny status.
               </p>
 
-              <div className="bg-sky-50 dark:bg-sky-950/30 border border-sky-200 dark:border-sky-800 rounded-lg p-4">
-                <p className="font-heading font-semibold text-amber-900 dark:text-amber-100">Important</p>
-                <p className="text-sm mt-1 text-amber-800 dark:text-amber-200">
+              <div className="bg-sky-50 dark:bg-slate-900/40 border border-sky-200 dark:border-slate-700 rounded-lg p-4">
+                <p className="font-heading font-semibold text-sky-900 dark:text-sky-200">Important</p>
+                <p className="text-sm mt-1 text-slate-700 dark:text-slate-200">
                   Clearance timing varies by store, region, and department. These patterns are general
                   guidelines based on community observations, not official Home Depot policy.
                 </p>

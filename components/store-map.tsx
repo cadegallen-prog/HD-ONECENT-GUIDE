@@ -1,27 +1,11 @@
 "use client"
 
 import * as React from "react"
-import { MapContainer, TileLayer, Marker, CircleMarker, useMap } from "react-leaflet"
-import type { Map as LeafletMap } from "leaflet"
+import { MapContainer, TileLayer, Marker, CircleMarker, useMap, Popup } from "react-leaflet"
+import type { Map as LeafletMap, Marker as LeafletMarker } from "leaflet"
 import "leaflet/dist/leaflet.css"
-
-export interface StoreLocation {
-  id: string
-  name: string
-  address: string
-  city: string
-  state: string
-  lat: number
-  lng: number
-  zip?: string
-  number?: string
-  distance?: number
-  phone?: string
-  hours?: {
-    weekday?: string
-    weekend?: string
-  }
-}
+import { getStoreTitle, getStoreUrl, formatStoreHours } from "@/lib/stores"
+import type { StoreLocation } from "@/lib/stores"
 
 interface StoreMapProps {
   stores: StoreLocation[]
@@ -50,7 +34,7 @@ function MapController({ center, selectedStore }: { center: [number, number]; se
   return null
 }
 
-export function StoreMap({
+export const StoreMap = React.memo(function StoreMap({
   stores,
   center = [39.8283, -98.5795],
   zoom = 10,
@@ -59,6 +43,18 @@ export function StoreMap({
   userLocation
 }: StoreMapProps) {
   const [mounted, setMounted] = React.useState(false)
+  const markersRef = React.useRef<Record<string, LeafletMarker | null>>({})
+
+  const orderedStores = React.useMemo(() => {
+    if (selectedStore) {
+      const selectedId = selectedStore.id
+      const selectedInList = stores.find((store) => store.id === selectedId)
+      if (selectedInList) {
+        return [...stores.filter((store) => store.id !== selectedId), selectedInList]
+      }
+    }
+    return stores
+  }, [stores, selectedStore])
 
   // Load Leaflet and create icons only on the client after mount to avoid SSR/dynamic import issues
   const { defaultIcon, selectedIcon } = React.useMemo(() => {
@@ -68,7 +64,7 @@ export function StoreMap({
     const baseIcon = new L.Icon({
       iconUrl: "data:image/svg+xml," + encodeURIComponent(`
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 36" width="24" height="36">
-          <path fill="#EA5B0C" stroke="#ffffff" stroke-width="1.5" d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z"/>
+          <path fill="#0EA5E9" stroke="#ffffff" stroke-width="1.5" d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z"/>
           <circle fill="#ffffff" cx="12" cy="12" r="5"/>
         </svg>
       `),
@@ -81,9 +77,9 @@ export function StoreMap({
       iconUrl: "data:image/svg+xml," + encodeURIComponent(`
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 48" width="32" height="48">
           <ellipse cx="16" cy="46" rx="8" ry="2" fill="rgba(0,0,0,0.3)"/>
-          <path fill="#EA5B0C" stroke="#ffffff" stroke-width="2" d="M16 0C7.2 0 0 7.2 0 16c0 12 16 32 16 32s16-20 16-32c0-8.8-7.2-16-16-16z"/>
+          <path fill="#0EA5E9" stroke="#ffffff" stroke-width="2" d="M16 0C7.2 0 0 7.2 0 16c0 12 16 32 16 32s16-20 16-32c0-8.8-7.2-16-16-16z"/>
           <circle fill="#ffffff" cx="16" cy="16" r="7"/>
-          <circle fill="#EA5B0C" cx="16" cy="16" r="4"/>
+          <circle fill="#0EA5E9" cx="16" cy="16" r="4"/>
         </svg>
       `),
       iconSize: [32, 48],
@@ -98,6 +94,13 @@ export function StoreMap({
     setMounted(true)
   }, [])
 
+  React.useEffect(() => {
+    if (selectedStore) {
+      const marker = markersRef.current[selectedStore.id]
+      marker?.openPopup()
+    }
+  }, [selectedStore])
+
   if (!mounted) {
     return (
       <div className="w-full h-full min-h-[500px] bg-muted rounded-lg flex items-center justify-center">
@@ -109,6 +112,7 @@ export function StoreMap({
   return (
     <div className="w-full h-full min-h-[500px] rounded-lg overflow-hidden border border-border">
       <MapContainer
+        key="store-finder-map"
         center={center}
         zoom={zoom}
         style={{ height: "100%", width: "100%", minHeight: "500px" }}
@@ -134,32 +138,85 @@ export function StoreMap({
           />
         )}
 
-        {/* Store markers - render non-selected first, selected last so it appears on top */}
-        {stores
-          .filter(store => store.id !== selectedStore?.id)
-          .map((store) => (
+        {orderedStores.map((store) => {
+          const isSelected = selectedStore?.id === store.id
+          return (
             <Marker
               key={store.id}
               position={[store.lat, store.lng]}
-              icon={defaultIcon || undefined}
+              icon={(isSelected ? selectedIcon : defaultIcon) || undefined}
               eventHandlers={{
                 click: () => onSelect?.(store)
               }}
-            />
-          ))}
+              ref={(marker) => {
+                if (marker) {
+                  markersRef.current[store.id] = marker
+                } else {
+                  delete markersRef.current[store.id]
+                }
+              }}
+            >
+              <Popup className="min-w-[240px]">
+                <div className="space-y-2 text-left">
+                  <p className="font-semibold text-sm text-foreground mb-2">{getStoreTitle(store)}</p>
 
-        {/* Selected store marker - rendered last to appear on top */}
-        {selectedStore && (
-          <Marker
-            key={`selected-${selectedStore.id}`}
-            position={[selectedStore.lat, selectedStore.lng]}
-            icon={selectedIcon || undefined}
-            eventHandlers={{
-              click: () => onSelect?.(selectedStore)
-            }}
-          />
-        )}
+                  {store.distance !== undefined && (
+                    <p className="text-xs font-medium text-primary">{store.distance.toFixed(1)} miles away</p>
+                  )}
+
+                  {(store.hours?.weekday || store.hours?.weekend) && (
+                    <div className="space-y-0.5">
+                      {(() => {
+                        const formatted = formatStoreHours(store.hours)
+                        return (
+                          <>
+                            <p className="text-xs text-muted-foreground">{formatted.weekday}</p>
+                            <p className="text-xs text-muted-foreground">{formatted.saturday}</p>
+                            <p className="text-xs text-muted-foreground">{formatted.sunday}</p>
+                          </>
+                        )
+                      })()}
+                    </div>
+                  )}
+
+                  <div className="pt-1 border-t border-border space-y-0.5">
+                    <p className="text-xs text-muted-foreground">{store.address}</p>
+                    <p className="text-xs text-muted-foreground">{store.city}, {store.state} {store.zip}</p>
+                  </div>
+
+                  {store.phone && (
+                    <a
+                      href={`tel:${store.phone}`}
+                      className="text-xs text-primary hover:underline block"
+                    >
+                      {store.phone}
+                    </a>
+                  )}
+
+                  <div className="pt-1 border-t border-border flex flex-col gap-1.5">
+                    <a
+                      href={`https://www.google.com/maps/dir/?api=1&destination=${store.lat},${store.lng}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-primary hover:underline"
+                    >
+                      → Get Directions
+                    </a>
+                    <a
+                      href={getStoreUrl(store)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-primary hover:underline"
+                    >
+                      → View Store Page
+                    </a>
+                  </div>
+                </div>
+              </Popup>
+            </Marker>
+          )
+        })}
       </MapContainer>
     </div>
   )
-}
+})

@@ -6,4 +6,7 @@
     "workbench.startupEditor": "readme",
     "workbench.editor.enablePreview": false,
     "css.lint.unknownAtRules": "ignore"
+    ,
+    "security.workspace.trust.enabled": true,
+    "python.terminal.activateEnvironment": true
 }

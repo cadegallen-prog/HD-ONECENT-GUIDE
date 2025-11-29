@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { StoreLocation } from "./store-map"
+import type { StoreLocation } from "@/lib/stores"
 import { MapPin, Phone } from "lucide-react"
 
 interface StoreComparisonTableProps {

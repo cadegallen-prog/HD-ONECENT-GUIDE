@@ -4,9 +4,9 @@
 
 @layer base {
   :root {
-    /* LIGHT MODE - Clean white with teal accents */
+    /* LIGHT MODE - Cool slate with blue accents */
     
-    --primary: 172 66% 40%;           /* Teal #1A9A8A */
+    --primary: 199 89% 48%;          /* Bright sky blue */
     --primary-foreground: 0 0% 100%;
     
     --background: 0 0% 100%;          /* Pure white */
@@ -29,7 +29,7 @@
     --accent-foreground: 172 66% 30%;
     
     --accent-success: 142 71% 45%;
-    --accent-warning: 38 92% 50%;
+    --accent-warning: 199 89% 48%;
     --accent-info: 199 89% 48%;
     
     --secondary: 210 20% 96%;
@@ -39,7 +39,7 @@
     --destructive-foreground: 0 0% 100%;
     
     --success: 142 71% 45%;
-    --warning: 38 92% 50%;
+    --warning: 199 89% 48%;
     
     --popover: 0 0% 100%;
     --popover-foreground: 224 71% 4%;
@@ -51,7 +51,7 @@
   .dark {
     /* DARK MODE - Deep slate with teal accents */
     
-    --primary: 172 66% 50%;           /* Brighter teal for dark */
+    --primary: 199 90% 60%;           /* Bright sky blue for dark */
     --primary-foreground: 224 71% 4%;
     
     --background: 224 71% 4%;         /* Near black #030712 */
@@ -74,7 +74,7 @@
     --accent-foreground: 172 66% 70%;
     
     --accent-success: 142 71% 45%;
-    --accent-warning: 38 92% 50%;
+    --accent-warning: 199 89% 48%;
     --accent-info: 199 89% 48%;
     
     --secondary: 223 47% 11%;
@@ -84,7 +84,7 @@
     --destructive-foreground: 210 20% 98%;
     
     --success: 142 71% 45%;
-    --warning: 38 92% 50%;
+    --warning: 199 89% 48%;
     
     --popover: 223 47% 11%;
     --popover-foreground: 210 20% 98%;
@@ -132,7 +132,7 @@
 }
 
 @layer components {
-  /* Badges - NO orange/amber, using teal and semantic colors */
+  /* Badges - cool neutrals + semantic colors */
   .badge {
     @apply inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-heading font-medium transition-colors;
   }
@@ -150,7 +150,7 @@
   }
 
   .badge-penny {
-    @apply bg-teal-100 text-teal-800 border border-teal-200 dark:bg-teal-900/50 dark:text-teal-300 dark:border-teal-700;
+    @apply bg-sky-100 text-sky-800 border border-sky-200 dark:bg-sky-900/40 dark:text-sky-200 dark:border-sky-700;
   }
 
   .badge-true {
@@ -165,7 +165,7 @@
     @apply bg-sky-100 text-sky-800 dark:bg-sky-900/50 dark:text-sky-300;
   }
 
-  /* Callouts - NO amber, using blue/teal/emerald */
+  /* Callouts */
   .callout-box {
     @apply rounded-lg border-l-4 p-4 my-4 transition-colors;
   }
@@ -182,42 +182,128 @@
     @apply bg-emerald-50 border-emerald-500 text-slate-800 dark:bg-emerald-950/30 dark:border-emerald-400 dark:text-slate-200;
   }
 
-  /* Data Tables */
-  .data-table {
-    @apply w-full border-collapse;
+  /* Guide layout + typography */
+  .guide-article {
+    @apply prose prose-slate dark:prose-invert max-w-none bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 p-8 md:p-12 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm;
   }
 
-  .data-table th {
-    @apply bg-slate-50 border border-border px-4 py-3 text-left font-heading font-semibold text-sm text-slate-900 dark:bg-slate-800 dark:text-slate-100;
+  .guide-article p {
+    @apply mb-6 leading-relaxed;
   }
 
-  .data-table td {
-    @apply border border-border px-4 py-3 text-slate-700 dark:text-slate-300;
+  .guide-article ul {
+    @apply list-disc ml-6 mt-4 mb-6 space-y-3;
   }
 
-  .data-table tbody tr:nth-child(even) {
-    @apply bg-slate-50/50 dark:bg-slate-800/30;
+  .guide-article ol {
+    @apply list-decimal ml-6 mt-4 mb-6 space-y-3;
   }
 
-  .data-table tbody tr:hover {
+  .guide-article li {
+    @apply leading-relaxed;
+  }
+
+  .section-heading {
+    @apply mt-16 first:mt-0 mb-8 text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tracking-tight border-l-4 border-slate-300 dark:border-slate-600 pl-4 flex items-center gap-3;
+  }
+
+  /* Callouts */
+  .callout {
+    @apply rounded-xl border border-l-4 p-6 my-10 shadow-sm bg-white dark:bg-slate-900/60;
+  }
+
+  .callout-sky {
+    @apply bg-sky-50 dark:bg-slate-900/30 border-sky-200 dark:border-sky-800 border-l-sky-500 dark:border-l-sky-400;
+  }
+
+  .callout-body {
+    @apply text-slate-700 dark:text-slate-200 mt-2 leading-relaxed;
+  }
+
+  .callout-compact {
+    @apply p-4 text-sm;
+  }
+
+  .content-panel {
+    @apply bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 rounded-2xl p-7 shadow-sm;
+  }
+
+  /* Step cards */
+  .step-grid {
+    @apply grid gap-6 sm:grid-cols-2 xl:grid-cols-3 my-12;
+  }
+
+  .step-card {
+    @apply bg-white dark:bg-slate-900/70 border border-slate-200 dark:border-slate-700 rounded-2xl p-9 flex flex-col gap-4 h-full shadow-sm transition-all hover:shadow-lg hover:-translate-y-1;
+  }
+
+  .step-badge {
+    @apply inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary text-primary-foreground font-bold text-lg shadow-md ring-2 ring-primary/20;
+  }
+
+  .step-title {
+    @apply text-xl font-semibold text-slate-900 dark:text-white;
+  }
+
+  .step-desc {
+    @apply text-base text-slate-600 dark:text-slate-300 leading-relaxed;
+  }
+
+  /* Tables */
+  .guide-table-wrapper {
+    @apply my-8 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden bg-white dark:bg-slate-900;
+  }
+
+  .guide-table-scroll {
+    @apply w-full overflow-x-auto;
+  }
+
+  .guide-table {
+    @apply w-full text-sm text-left;
+  }
+
+  .guide-table thead {
+    @apply bg-slate-100 dark:bg-slate-800;
+  }
+
+  .guide-table th {
+    @apply px-4 py-3 text-left text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wide border-b-2 border-slate-300 dark:border-slate-600;
+  }
+
+  .guide-table td {
+    @apply px-4 py-3 text-slate-700 dark:text-slate-300 border-b border-slate-200 dark:border-slate-700 leading-relaxed;
+  }
+
+  .guide-table tbody tr:nth-child(even) {
+    @apply bg-slate-50 dark:bg-slate-800/30;
+  }
+
+  .guide-table tbody tr:hover {
     @apply bg-slate-100 dark:bg-slate-800/50;
   }
 
-  /* Step Guide */
-  .step-guide {
-    @apply space-y-6;
+  /* Chips & badges */
+  .price-chip {
+    @apply font-mono text-sm bg-slate-100 dark:bg-slate-800 text-sky-700 dark:text-sky-300 px-2 py-1 rounded-md font-medium;
   }
 
-  .step-guide-item {
-    @apply flex gap-4;
+  .priority-badge {
+    @apply px-3 py-1 rounded-full text-xs font-bold uppercase;
   }
 
-  .step-number {
-    @apply flex-shrink-0 w-8 h-8 rounded-full bg-teal-600 text-white font-heading font-bold flex items-center justify-center;
+  .priority-badge.penny {
+    @apply bg-sky-600 text-white;
   }
 
-  /* Reference Cards */
-  .reference-card {
-    @apply border border-border rounded-lg p-6 bg-card hover:shadow-md transition-shadow;
+  .priority-badge.high {
+    @apply bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300;
+  }
+
+  .priority-badge.medium {
+    @apply bg-sky-100 text-sky-700 dark:bg-sky-900/50 dark:text-sky-300;
+  }
+
+  .priority-badge.low {
+    @apply bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300;
   }
 }

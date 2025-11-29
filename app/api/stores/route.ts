@@ -95,12 +95,16 @@ function haversineMiles(lat1: number, lon1: number, lat2: number, lon2: number) 
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const stateParam = url.searchParams.get("state")?.toLowerCase().trim();
-  const limit = Math.max(1, Math.min(Number(url.searchParams.get("limit")) || 20, 100));
   const lat = url.searchParams.get("lat");
   const lng = url.searchParams.get("lng");
 
   try {
     const stores = loadStores();
+    const totalStores = stores.length;
+    const limitParam = Number(url.searchParams.get("limit"));
+    const limit = Number.isFinite(limitParam)
+      ? Math.max(1, Math.min(limitParam, totalStores))
+      : totalStores;
 
     let results: Store[] = stores;
 

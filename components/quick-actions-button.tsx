@@ -69,14 +69,19 @@ export function QuickActionsButton() {
       <Button
         size="lg"
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-4 md:right-8 z-50 h-14 w-14 rounded-full shadow-2xl hover:shadow-primary/20 hover:scale-110 active:scale-95 transition-all duration-200 ring-2 ring-primary/10 hover:ring-primary/30 focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+        className="fixed bottom-6 right-4 md:right-8 z-50 h-14 rounded-full shadow-2xl hover:shadow-primary/20 hover:scale-105 active:scale-95 transition-all duration-200 ring-2 ring-primary/10 hover:ring-primary/30 focus:ring-2 focus:ring-offset-2 focus:ring-primary px-5 gap-2"
       >
         {isOpen ? (
-          <X className="h-6 w-6 transition-transform duration-200" />
+          <>
+            <X className="h-5 w-5 transition-transform duration-200" />
+            <span className="text-sm font-semibold">Close</span>
+          </>
         ) : (
-          <Plus className="h-6 w-6 transition-transform duration-200" />
+          <>
+            <Plus className="h-5 w-5 transition-transform duration-200" />
+            <span className="text-sm font-semibold">Quick Actions</span>
+          </>
         )}
-        <span className="sr-only">Quick actions</span>
       </Button>
 
       {/* Backdrop when open */}

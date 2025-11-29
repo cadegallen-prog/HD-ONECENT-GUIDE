@@ -6,6 +6,8 @@ import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { MapPin, Search, Navigation, List, Map as MapIcon, Phone, Clock, Heart, Info, ExternalLink } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { sanitizeText, cleanStoreName, getStoreTitle, getStoreUrl, hasValidCoordinates, formatStoreHours } from "@/lib/stores"
+import type { StoreLocation } from "@/lib/stores"
 
 // Dynamically import StoreMap to avoid SSR issues with Leaflet
 const StoreMap = dynamic(
@@ -14,25 +16,6 @@ const StoreMap = dynamic(
 )
 
 import sampleStoresData from "@/data/home-depot-stores.sample.json"
-
-export interface StoreLocation {
-  id: string
-  number?: string
-  name: string
-  address: string
-  city: string
-  state: string
-  zip?: string
-  phone?: string
-  lat: number
-  lng: number
-  hours?: {
-    weekday?: string
-    weekend?: string
-  }
-  services?: string[]
-  distance?: number
-}
 
 const MAX_STORES = 20
 
@@ -48,86 +31,33 @@ const bannedNameTokens = [
   "corporate"
 ]
 
-const sanitizeText = (value?: string) => {
-  if (!value) return ""
-  return value
-    .replace(/â€"|â€"|–|—/g, "-")
-    .replace(/â€™|'/g, "'")
-    .replace(/â€œ|â€\u009d|"|"/g, "\"")
-    .replace(/[^\x20-\x7E]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim()
-}
-
 // Validate store - now just checks it's not a banned type
 const isValidStore = (name?: string) => {
   if (!name) return false
-  const lower = name.toLowerCase()
+  const lower = cleanStoreName(name).toLowerCase()
   return !bannedNameTokens.some((token) => lower.includes(token))
 }
 
-// Check if we have a real Home Depot store number (1-5 digits)
-const hasValidStoreNumber = (num?: string): boolean => {
-  if (!num) return false
-  return /^\d{1,5}$/.test(num.trim())
-}
-
-// Format store number for display (4 digits with leading zeros)
-const formatStoreNumber = (num?: string): string => {
-  if (!hasValidStoreNumber(num)) return ""
-  return num!.trim().padStart(4, "0")
-}
-
-// Get store number for URL (no leading zeros) – only when it's a real numeric store #
-const getStoreUrlNumber = (num?: string): string => {
-  if (!hasValidStoreNumber(num)) return ""
-  return parseInt(num!.trim(), 10).toString()
-}
-
-// Human-facing title for a store, handling placeholder when we don't yet know the real name/number
-const getStoreTitle = (store: StoreLocation): string => {
-  const name = store.name || "The Home Depot"
-  const hasNumber = hasValidStoreNumber(store.number)
-
-  // If we have a real store number, show a branded title with store nickname and padded number
-  if (hasNumber) {
-    const padded = formatStoreNumber(store.number)
-    const baseName = name.toLowerCase().startsWith("the home depot")
-      ? name
-      : `The Home Depot ${name}`
-    return `${baseName} #${padded}`
+const normalizeStore = (s: StoreLocation): StoreLocation => {
+  const lat = typeof s.lat === "number" ? s.lat : Number(s.lat)
+  const lng = typeof s.lng === "number" ? s.lng : Number(s.lng)
+  return {
+    ...s,
+    name: cleanStoreName(s.name),
+    address: sanitizeText(s.address),
+    city: sanitizeText(s.city),
+    state: sanitizeText(s.state),
+    zip: sanitizeText(s.zip),
+    phone: sanitizeText(s.phone),
+    lat: Number.isFinite(lat) ? lat : 0,
+    lng: Number.isFinite(lng) ? lng : 0,
+    hours: {
+      weekday: sanitizeText(s.hours?.weekday) || "",
+      weekend: sanitizeText(s.hours?.weekend) || ""
+    },
+    services: (s.services || []).map(sanitizeText).filter(Boolean)
   }
-
-  // While we only have Places IDs (not real store numbers), show a neutral placeholder
-  return "The Home Depot {store_name}{store_#xxxx}"
 }
-
-// Build Home Depot store URL
-// Format: https://www.homedepot.com/l/{Store_Name}/{State}/{City}/{Zip}/{Store_Number}
-const getStoreUrl = (store: StoreLocation): string => {
-  const storeName = (store.name || store.city || "Store").replace(/\s+/g, '-')
-  const state = store.state || "GA"
-  const city = store.city || "Atlanta"
-  const zip = store.zip || ""
-  const storeNum = getStoreUrlNumber(store.number)
-  const baseUrl = `https://www.homedepot.com/l/${storeName}/${state}/${city}/${zip}`
-  return storeNum ? `${baseUrl}/${storeNum}` : baseUrl
-}
-
-const normalizeStore = (s: StoreLocation): StoreLocation => ({
-  ...s,
-  name: sanitizeText(s.name) || "Home Depot",
-  address: sanitizeText(s.address),
-  city: sanitizeText(s.city),
-  state: sanitizeText(s.state),
-  zip: sanitizeText(s.zip),
-  phone: sanitizeText(s.phone),
-  hours: {
-    weekday: sanitizeText(s.hours?.weekday) || "",
-    weekend: sanitizeText(s.hours?.weekend) || ""
-  },
-  services: (s.services || []).map(sanitizeText).filter(Boolean)
-})
 
 // Haversine formula for distance calculation
 const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
@@ -155,10 +85,26 @@ const getClosestStores = (stores: StoreLocation[], lat: number, lng: number): St
 // Load and validate stores
 const allStores: StoreLocation[] = (sampleStoresData as StoreLocation[])
   .map(normalizeStore)
-  .filter((s) => isValidStore(s.name))
+  .filter((s) => isValidStore(s.name) && hasValidCoordinates(s))
 
 // Default center (Atlanta, GA)
 const DEFAULT_CENTER: [number, number] = [33.7490, -84.3880]
+
+const getAverageCoordinates = (stores: StoreLocation[]) => {
+  const totals = stores.reduce(
+    (acc, store) => {
+      acc.lat += store.lat
+      acc.lng += store.lng
+      return acc
+    },
+    { lat: 0, lng: 0 }
+  )
+
+  return {
+    lat: totals.lat / stores.length,
+    lng: totals.lng / stores.length
+  }
+}
 
 // Pre-compute initial stores for immediate display
 const initialDisplayedStores = getClosestStores(allStores, DEFAULT_CENTER[0], DEFAULT_CENTER[1])
@@ -180,15 +126,17 @@ export default function StoreFinderPage() {
 
   // Re-calculate displayed stores when remote data loads
   useEffect(() => {
-    if (allLoadedStores !== allStores) {
-      // Remote data loaded, recalculate closest stores
+    // Only recalculate if we actually have new data (length changed significantly)
+    if (allLoadedStores.length > allStores.length) {
+      // Remote data loaded, recalculate closest stores using current map center
       const newStores = getClosestStores(allLoadedStores, mapCenter[0], mapCenter[1])
       setDisplayedStores(newStores)
       if (newStores.length > 0 && !selectedStore) {
         setSelectedStore(newStores[0])
       }
     }
-  }, [allLoadedStores, mapCenter, selectedStore])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allLoadedStores.length])
 
   // Load remote store data via cached API route
   useEffect(() => {
@@ -196,17 +144,28 @@ export default function StoreFinderPage() {
     const load = async () => {
       setLoadingStores(true)
       try {
-        const res = await fetch("/api/stores", { cache: "force-cache" })
-        if (!res.ok) throw new Error(`Failed to fetch /api/stores: ${res.status}`)
+        console.log('[Store Finder] Fetching stores from API...')
+        const res = await fetch("/api/stores?limit=2000", { cache: "force-cache" })
+
+        if (!res.ok) {
+          throw new Error(`Failed to fetch /api/stores: ${res.status} ${res.statusText}`)
+        }
+
         const json = (await res.json()) as StoreLocation[]
+        console.log(`[Store Finder] Received ${json.length} stores from API`)
+
         const normalized = json
           .map(normalizeStore)
-          .filter((s) => isValidStore(s.name))
+          .filter((s) => isValidStore(s.name) && hasValidCoordinates(s))
+
+        console.log(`[Store Finder] After filtering: ${normalized.length} valid stores`)
+
         if (!cancelled) {
           setAllLoadedStores(normalized)
         }
       } catch (err) {
         console.error("Failed to load remote store data; using fallback sample instead.", err)
+        // Keep using the sample data (already in allLoadedStores)
       } finally {
         if (!cancelled) {
           setLoadingStores(false)
@@ -274,8 +233,8 @@ export default function StoreFinderPage() {
 
   // Search by ZIP code, city, or address
   const handleSearch = useCallback(() => {
-    if (!searchQuery.trim()) {
-      // Reset to default location if search is cleared
+    const trimmedQuery = searchQuery.trim()
+    if (!trimmedQuery) {
       const initialStores = getClosestStores(allLoadedStores, DEFAULT_CENTER[0], DEFAULT_CENTER[1])
       setDisplayedStores(initialStores)
       setMapCenter(DEFAULT_CENTER)
@@ -285,31 +244,73 @@ export default function StoreFinderPage() {
       return
     }
 
-    const query = sanitizeText(searchQuery).toLowerCase()
+    const latLngMatch = trimmedQuery.match(/^\s*(-?\d+(\.\d+)?)\s*,\s*(-?\d+(\.\d+)?)\s*$/)
+    if (latLngMatch) {
+      const lat = parseFloat(latLngMatch[1])
+      const lng = parseFloat(latLngMatch[3])
+      if (!Number.isNaN(lat) && !Number.isNaN(lng)) {
+        const closestStores = getClosestStores(allLoadedStores, lat, lng)
+        setDisplayedStores(closestStores)
+        setMapCenter([lat, lng])
+        setSelectedStore(closestStores[0] || null)
+      }
+      return
+    }
 
-    // First, try to find stores that match the search query directly
-    const matchingStores = allLoadedStores.filter(store =>
-      store.name.toLowerCase().includes(query) ||
-      store.address.toLowerCase().includes(query) ||
-      store.city.toLowerCase().includes(query) ||
-      store.state.toLowerCase().includes(query) ||
-      (store.zip || "").toLowerCase().includes(query) ||
-      (store.number || "").toLowerCase().includes(query)
-    )
+    const tokens = sanitizeText(trimmedQuery)
+      .toLowerCase()
+      .split(/[\s,]+/)
+      .map((token) => token.trim())
+      .filter(Boolean)
 
-    if (matchingStores.length > 0) {
-      // If we found matches, calculate distances from first match and sort
-      const centerStore = matchingStores[0]
-      const closestStores = getClosestStores(allLoadedStores, centerStore.lat, centerStore.lng)
-        .filter(store => matchingStores.some(m => m.id === store.id) || store.distance! < 50)
-        .slice(0, MAX_STORES)
+    if (tokens.length === 0) {
+      setDisplayedStores([])
+      setSelectedStore(null)
+      return
+    }
 
+    const scoredStores = allLoadedStores.map((store) => {
+      const fields = [
+        store.name,
+        store.address,
+        store.city,
+        store.state,
+        store.zip || "",
+        store.number || ""
+      ].map((value) => value.toLowerCase())
+
+      const score = tokens.reduce(
+        (count, token) => count + (fields.some((field) => field.includes(token)) ? 1 : 0),
+        0
+      )
+
+      return { store, score }
+    })
+
+    let referenceStores = scoredStores
+      .filter(({ score }) => score === tokens.length && tokens.length > 0)
+      .map(({ store }) => store)
+
+    if (referenceStores.length === 0) {
+      const bestScore = Math.max(0, ...scoredStores.map(({ score }) => score))
+      if (bestScore > 0) {
+        referenceStores = scoredStores
+          .filter(({ score }) => score === bestScore)
+          .map(({ store }) => store)
+      }
+    }
+
+    if (referenceStores.length > 0) {
+      const centerPoint =
+        referenceStores.length === 1
+          ? { lat: referenceStores[0].lat, lng: referenceStores[0].lng }
+          : getAverageCoordinates(referenceStores)
+
+      const closestStores = getClosestStores(allLoadedStores, centerPoint.lat, centerPoint.lng)
       setDisplayedStores(closestStores)
-      setMapCenter([centerStore.lat, centerStore.lng])
+      setMapCenter([centerPoint.lat, centerPoint.lng])
       setSelectedStore(closestStores[0] || null)
     } else {
-      // If no direct matches, use geocoding simulation with approximate coordinates
-      // In a real app, you'd use a geocoding API here
       setDisplayedStores([])
       setSelectedStore(null)
     }
@@ -615,11 +616,17 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
               {(store.hours?.weekday || store.hours?.weekend) && (
                 <div className="flex items-start gap-1 text-[11px] text-muted-foreground">
                   <Clock className="h-3 w-3 mt-[1px]" />
-                  <div className="flex flex-col gap-0.5 truncate">
-                    {store.hours?.weekday && <span className="truncate">{store.hours.weekday}</span>}
-                    {store.hours?.weekend && (
-                      <span className="truncate">Weekend: {store.hours.weekend}</span>
-                    )}
+                  <div className="flex flex-col gap-0.5">
+                    {(() => {
+                      const formatted = formatStoreHours(store.hours)
+                      return (
+                        <>
+                          <span className="truncate">{formatted.weekday}</span>
+                          <span className="truncate">{formatted.saturday}</span>
+                          <span className="truncate">{formatted.sunday}</span>
+                        </>
+                      )
+                    })()}
                   </div>
                 </div>
               )}
@@ -711,8 +718,16 @@ function StoreCard({ store, index, isFavorite, onToggleFavorite }: {
           <div className="flex items-start gap-2">
             <Clock className="h-4 w-4 mt-0.5" />
             <div className="flex flex-col gap-0.5">
-              {store.hours?.weekday && <span>{store.hours.weekday}</span>}
-              {store.hours?.weekend && <span>Weekend: {store.hours.weekend}</span>}
+              {(() => {
+                const formatted = formatStoreHours(store.hours)
+                return (
+                  <>
+                    <span>{formatted.weekday}</span>
+                    <span>{formatted.saturday}</span>
+                    <span>{formatted.sunday}</span>
+                  </>
+                )
+              })()}
             </div>
           </div>
         )}

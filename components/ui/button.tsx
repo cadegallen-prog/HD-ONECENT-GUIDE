@@ -16,7 +16,7 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
     const classes = cn(
       "inline-flex items-center justify-center rounded-lg font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border shadow-sm",
       {
-        primary: "bg-primary text-primary-foreground border-transparent hover:bg-[hsl(186_70%_28%)]",
+        primary: "bg-primary text-primary-foreground border-transparent hover:bg-[hsl(199_89%_40%)]",
         secondary: "bg-secondary text-secondary-foreground hover:bg-muted",
         outline: "border-border text-foreground hover:border-primary hover:text-primary hover:bg-secondary",
         ghost: "border-transparent text-foreground hover:bg-muted",

@@ -4,7 +4,15 @@
       "Bash(gh pr list:*)",
       "Bash(git fetch:*)",
       "Bash(git add:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(npm run dev:*)",
+      "Bash(taskkill:*)",
+      "Bash(if exist .next rmdir /s /q .next)",
+      "Bash(npm install:*)",
+      "Bash(git checkout:*)",
+      "Bash(npx kill-port:*)",
+      "Bash(cat:*)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []

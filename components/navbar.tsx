@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Download, Menu, X, Map, Clock, Search, Users } from "lucide-react"
+import { Menu, X, Map, Clock, Search, Users } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { useCommandPalette } from "@/components/command-palette-provider"
 import { Button } from "@/components/ui/button"
@@ -25,7 +25,7 @@ export function Navbar() {
             </span>
           </Link>
 
-          {/* Right side - Desktop nav, Search, PDF Download, Theme toggle & Mobile menu */}
+          {/* Right side - Desktop nav, Search, Theme toggle & Mobile menu */}
           <div className="flex items-center gap-4">
             {/* Desktop nav links */}
             <div className="hidden md:flex items-center gap-6 mr-2 text-sm text-muted-foreground">
@@ -58,23 +58,11 @@ export function Navbar() {
             {/* Search / Command Palette trigger - desktop only */}
             <button
               onClick={() => setOpen(true)}
-              className="hidden md:flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1 border border-border rounded-md"
+              className="hidden md:flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors px-3 py-1.5 border border-border rounded-md"
             >
-              <Search className="h-3 w-3" />
-              <kbd className="px-1.5 py-0.5 text-[10px] bg-muted rounded">⌘K</kbd>
+              <Search className="h-3.5 w-3.5" />
+              <span className="text-[11px] font-medium">Search</span>
             </button>
-
-            {/* Small PDF Download link */}
-            <a
-              href="/Home_Depot_Penny_Items_Guide.pdf"
-              download="Home_Depot_Penny_Items_Guide.pdf"
-              target="_blank"
-              aria-label="Download PDF guide"
-              className="hidden sm:flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-            >
-              <Download className="h-3.5 w-3.5" />
-              <span>PDF</span>
-            </a>
 
             <ThemeToggle />
 

@@ -32,6 +32,8 @@ export function ThemeProvider({
   const [theme, setThemeState] = React.useState<Theme>(defaultTheme)
 
   React.useEffect(() => {
+    if (typeof window === "undefined") return
+
     const root = window.document.documentElement
     const savedTheme = localStorage.getItem("theme") as Theme | null
 
@@ -79,6 +81,8 @@ export function ThemeProvider({
   }, [defaultTheme, enableSystem, disableTransitionOnChange])
 
   const setTheme = (newTheme: Theme) => {
+    if (typeof window === "undefined") return
+
     setThemeState(newTheme)
     localStorage.setItem("theme", newTheme)
 
