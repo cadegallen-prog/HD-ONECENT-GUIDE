@@ -23,11 +23,9 @@ const ThemeProviderContext = React.createContext<ThemeProviderState | undefined>
 
 export function ThemeProvider({
   children,
-  attribute = "class",
   defaultTheme = "system",
   enableSystem = true,
   disableTransitionOnChange = false,
-  ...props
 }: ThemeProviderProps) {
   const [theme, setThemeState] = React.useState<Theme>(defaultTheme)
 
@@ -59,7 +57,7 @@ export function ThemeProvider({
         )
         document.head.appendChild(css)
 
-        const _ = window.getComputedStyle(document.body)
+        void window.getComputedStyle(document.body)
 
         setTimeout(() => {
           document.head.removeChild(css)

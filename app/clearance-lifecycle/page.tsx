@@ -1,21 +1,16 @@
-import { Navbar } from "@/components/navbar"
-import { Footer } from "@/components/footer"
 import { Breadcrumb } from "@/components/breadcrumb"
 import { ClearanceLifecycleChart } from "@/components/clearance-lifecycle-chart"
 
 export default function ClearanceLifecyclePage() {
   return (
-    <>
-      <Navbar />
+    <div className="p-6 max-w-[1200px]">
       <Breadcrumb />
-      <main className="min-h-screen pt-8 pb-16">
-        <div className="container mx-auto px-4 py-8">
-          <div className="max-w-4xl mx-auto">
+      <div className="mt-8">
             <h1 className="text-4xl md:text-5xl font-heading font-bold mb-6">
               Clearance Lifecycle
             </h1>
-            <p className="text-xl text-muted-foreground mb-8">
-              Understanding Home Depot's clearance markdown patterns and timing to predict when items will reach penny status.
+              <p className="text-xl text-muted-foreground mb-8">
+              Understanding Home Depot&apos;s clearance markdown patterns and timing to predict when items will reach penny status.
             </p>
 
             {/* Visual Charts */}
@@ -29,8 +24,8 @@ export default function ClearanceLifecyclePage() {
                 markdown depth. Understanding these patterns helps predict when items will reach penny status.
               </p>
 
-              <div className="bg-sky-50 dark:bg-slate-900/40 border border-sky-200 dark:border-slate-700 rounded-lg p-4">
-                <p className="font-heading font-semibold text-sky-900 dark:text-sky-200">Important</p>
+              <div className="bg-accent-50 dark:bg-slate-900/40 border border-accent-200 dark:border-slate-700 rounded-lg p-4">
+                <p className="font-heading font-semibold text-accent-900 dark:text-accent-200">Important</p>
                 <p className="text-sm mt-1 text-slate-700 dark:text-slate-200">
                   Clearance timing varies by store, region, and department. These patterns are general
                   guidelines based on community observations, not official Home Depot policy.
@@ -93,10 +88,7 @@ export default function ClearanceLifecyclePage() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </main>
-      <Footer />
-    </>
+      </div>
+    </div>
   )
 }

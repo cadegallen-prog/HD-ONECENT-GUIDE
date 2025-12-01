@@ -4,11 +4,9 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { CommandPaletteProvider } from "@/components/command-palette-provider";
-import { QuickActionsButton } from "@/components/quick-actions-button";
+import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
 import { Analytics } from "@vercel/analytics/react";
-
-// Fonts are defined in globals.css using system fonts
-// This avoids network dependency on Google Fonts
 
 export const metadata: Metadata = {
   title: "Penny Central: The Home Depot $0.01 Hunting Guide",
@@ -58,6 +56,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+          rel="stylesheet"
+        />
         <Script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-DJ4RJRX05E"
@@ -72,16 +74,23 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className="antialiased font-body">
+      <body className="bg-page text-text-primary">
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
+          defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
           <CommandPaletteProvider>
-            {children}
-            <QuickActionsButton />
+            {/* Navbar with full mobile functionality */}
+            <Navbar />
+
+            {/* Main content */}
+            <main className="min-h-screen">
+              {children}
+              <Footer />
+            </main>
+
             <Toaster />
           </CommandPaletteProvider>
         </ThemeProvider>

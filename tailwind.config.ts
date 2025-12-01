@@ -11,58 +11,66 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+        // shadcn/ui compatibility
+        border: "var(--border)",
+        input: "var(--input)",
+        ring: "var(--ring)",
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+
+        // Page structure
+        page: "var(--bg-page)",
+        card: {
+          DEFAULT: "var(--card)",
+          foreground: "var(--card-foreground)",
         },
-        surface: "hsl(var(--surface))",
-        text: "hsl(var(--text))",
-        "text-muted": "hsl(var(--text-muted))",
-        "accent-success": "hsl(var(--accent-success))",
-        "accent-warning": "hsl(var(--accent-warning))",
-        "accent-info": "hsl(var(--accent-info))",
+        elevated: "var(--bg-elevated)",
+
+        // Text colors
+        "text-primary": "var(--text-primary)",
+        "text-secondary": "var(--text-secondary)",
+        "text-muted": "var(--text-muted)",
+
+        // Primary/Secondary for shadcn
+        primary: {
+          DEFAULT: "var(--primary)",
+          foreground: "var(--primary-foreground)",
+        },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "var(--secondary)",
+          foreground: "var(--secondary-foreground)",
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT: "var(--muted)",
+          foreground: "var(--muted-foreground)",
         },
+
+        // Accent - limited use
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: "var(--accent)",
+          hover: "var(--accent-hover)",
+          muted: "var(--accent-muted)",
+          foreground: "var(--accent-foreground)",
         },
+
+        // Status only
+        success: "var(--success)",
+        error: "var(--error)",
+        warning: "var(--warning)",
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          DEFAULT: "var(--destructive)",
+          foreground: "var(--destructive-foreground)",
         },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
+
+        // Popover for shadcn
         popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        success: {
-          DEFAULT: "hsl(var(--success))",
-          foreground: "#f0fdf4",
-        },
-        warning: {
-          DEFAULT: "hsl(var(--warning))",
-          foreground: "#fffbeb",
+          DEFAULT: "var(--popover)",
+          foreground: "var(--popover-foreground)",
         },
       },
       fontFamily: {
-        heading: ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
-        body: ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
-        mono: ["JetBrains Mono", "Courier New", "Consolas", "Monaco", "monospace"],
+        sans: ["Inter", "system-ui", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+        mono: ["ui-monospace", "monospace"],
       },
       borderRadius: {
         lg: "var(--radius)",

@@ -2,8 +2,6 @@
 
 import { useEffect, useState, useRef, useCallback, forwardRef } from "react"
 import dynamic from "next/dynamic"
-import { Navbar } from "@/components/navbar"
-import { Footer } from "@/components/footer"
 import { MapPin, Search, Navigation, List, Map as MapIcon, Phone, Clock, Heart, Info, ExternalLink } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { sanitizeText, cleanStoreName, getStoreTitle, getStoreUrl, hasValidCoordinates, formatStoreHours } from "@/lib/stores"
@@ -349,11 +347,7 @@ export default function StoreFinderPage() {
   }, [])
 
   return (
-    <>
-      <Navbar />
-      <main className="min-h-screen pt-24 pb-16 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="max-w-7xl mx-auto">
+    <div className="p-6 max-w-[1200px]">
             {/* Header */}
             <div className="mb-6">
               <h1 className="text-3xl md:text-4xl font-heading font-bold mb-2 text-foreground">
@@ -388,7 +382,7 @@ export default function StoreFinderPage() {
                 {/* Location Button */}
                 <Button
                   onClick={getUserLocation}
-                  variant="outline"
+                  variant="secondary"
                   className="flex items-center gap-2"
                   disabled={locatingUser}
                 >
@@ -405,7 +399,7 @@ export default function StoreFinderPage() {
                 <div className="flex gap-2">
                   <Button
                     onClick={() => setViewMode("map")}
-                    variant={viewMode === "map" ? "primary" : "outline"}
+                    variant={viewMode === "map" ? "primary" : "secondary"}
                     size="sm"
                   >
                     <MapIcon className="h-4 w-4 md:mr-2" />
@@ -413,7 +407,7 @@ export default function StoreFinderPage() {
                   </Button>
                   <Button
                     onClick={() => setViewMode("list")}
-                    variant={viewMode === "list" ? "primary" : "outline"}
+                    variant={viewMode === "list" ? "primary" : "secondary"}
                     size="sm"
                   >
                     <List className="h-4 w-4 md:mr-2" />
@@ -537,11 +531,7 @@ export default function StoreFinderPage() {
                 </li>
               </ul>
             </div>
-          </div>
-        </div>
-      </main>
-      <Footer />
-    </>
+    </div>
   )
 }
 

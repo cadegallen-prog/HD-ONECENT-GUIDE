@@ -3,34 +3,34 @@ import { cn } from "@/lib/utils"
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "outline" | "ghost"
-  size?: "sm" | "md" | "lg"
+  variant?: "primary" | "secondary" | "ghost"
+  size?: "sm" | "default" | "lg"
   href?: string
   download?: string
   target?: string
   rel?: string
+  asChild?: boolean
 }
 
 const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
-  ({ className, variant = "primary", size = "md", href, type, ...props }, ref) => {
+  ({ className, variant = "secondary", size = "default", href, type, ...props }, ref) => {
     const classes = cn(
-      "inline-flex items-center justify-center rounded-lg font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border shadow-sm",
+      "inline-flex items-center justify-center rounded-md font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
       {
-        primary: "bg-primary text-primary-foreground border-transparent hover:bg-[hsl(199_89%_40%)]",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-muted",
-        outline: "border-border text-foreground hover:border-primary hover:text-primary hover:bg-secondary",
-        ghost: "border-transparent text-foreground hover:bg-muted",
+        primary: "bg-gradient-to-b from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white shadow-lg shadow-indigo-500/25 hover:-translate-y-0.5",
+        secondary: "bg-transparent border border-border hover:bg-accent-muted hover:border-accent text-text-primary",
+        ghost: "bg-transparent text-text-secondary hover:bg-elevated hover:text-text-primary",
       }[variant],
       {
-        sm: "h-9 px-4 text-sm",
-        md: "h-11 px-6 text-base",
-        lg: "h-14 px-8 text-lg",
+        sm: "h-9 px-3 text-sm",
+        default: "h-10 px-4 text-sm",
+        lg: "h-11 px-5 text-sm",
       }[size],
       className
     )
 
     if (href) {
-      const { onClick, ...anchorProps } = props
+      const anchorProps = props
       return (
         <a
           href={href}

@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { MapContainer, TileLayer, Marker, CircleMarker, useMap, Popup } from "react-leaflet"
-import type { Map as LeafletMap, Marker as LeafletMarker } from "leaflet"
+import type { Marker as LeafletMarker } from "leaflet"
 import "leaflet/dist/leaflet.css"
 import { getStoreTitle, getStoreUrl, formatStoreHours } from "@/lib/stores"
 import type { StoreLocation } from "@/lib/stores"
@@ -17,7 +17,7 @@ interface StoreMapProps {
 }
 
 // Component to handle map view changes
-function MapController({ center, selectedStore }: { center: [number, number]; selectedStore?: StoreLocation | null }) {
+function MapController({ selectedStore }: { selectedStore?: StoreLocation | null }) {
   const map = useMap()
   const lastSelectedIdRef = React.useRef<string | null>(null)
 
@@ -59,6 +59,8 @@ export const StoreMap = React.memo(function StoreMap({
   // Load Leaflet and create icons only on the client after mount to avoid SSR/dynamic import issues
   const { defaultIcon, selectedIcon } = React.useMemo(() => {
     if (typeof window === "undefined") return { defaultIcon: null, selectedIcon: null }
+    // `require` is used intentionally here because leaflet expects to be loaded on the client.
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const L = require("leaflet")
 
     const baseIcon = new L.Icon({
@@ -118,7 +120,7 @@ export const StoreMap = React.memo(function StoreMap({
         style={{ height: "100%", width: "100%", minHeight: "500px" }}
         scrollWheelZoom={true}
       >
-        <MapController center={center} selectedStore={selectedStore} />
+        <MapController selectedStore={selectedStore} />
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

@@ -12,7 +12,8 @@ interface CommandPaletteProps {
 
 // Define all pages/sections for quick navigation
 const pages = [
-  // Guide Sections (homepage anchor links for faster navigation)
+  // Guide Sections
+  { icon: FileText, label: "Complete Guide", path: "/guide", group: "Guide" },
   { icon: FileText, label: "What Are Pennies", path: "/#introduction", group: "Guide" },
   { icon: Clock, label: "Clearance Lifecycle", path: "/clearance-lifecycle", group: "Guide" },
   { icon: Search, label: "Digital Tools", path: "/#digital-tools", group: "Guide" },

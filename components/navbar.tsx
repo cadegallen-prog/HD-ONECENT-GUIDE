@@ -1,131 +1,135 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
-import { Menu, X, Map, Clock, Search, Users } from "lucide-react"
-import { ThemeToggle } from "@/components/theme-toggle"
-import { useCommandPalette } from "@/components/command-palette-provider"
-import { Button } from "@/components/ui/button"
+import { usePathname } from "next/navigation"
+import { Home, Map, Clock, BookOpen, User, Moon, Sun, Book, Menu, X } from "lucide-react"
+import { useTheme } from "@/components/theme-provider"
 
 export function Navbar() {
+  const pathname = usePathname()
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const { setOpen } = useCommandPalette()
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const isDark = mounted && document.documentElement.classList.contains('dark')
+
+  const navItems = [
+    { href: "/", label: "Home", icon: Home },
+    { href: "/guide", label: "Guide", icon: Book },
+    { href: "/store-finder", label: "Store Finder", icon: Map },
+    { href: "/trip-tracker", label: "Trip Tracker", icon: Clock },
+    { href: "/resources", label: "Resources", icon: BookOpen },
+    { href: "/about", label: "About", icon: User },
+  ]
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
-        <nav aria-label="Main navigation" className="container mx-auto px-4 h-16 flex items-center justify-between max-w-7xl">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-lg">¢</span>
+      {/* Desktop & Mobile Navbar */}
+      <nav className="sticky top-0 z-50 backdrop-blur-lg bg-white/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <Link href="/" className="flex items-center">
+              <span className="text-lg font-semibold text-slate-900 dark:text-white">
+                Penny Central
+              </span>
+            </Link>
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center gap-1">
+              {navItems.map((item) => {
+                const isActive = pathname === item.href
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={`
+                      px-4 py-2 rounded-lg text-sm font-medium transition-colors
+                      ${
+                        isActive
+                          ? "bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400"
+                          : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800"
+                      }
+                    `}
+                  >
+                    {item.label}
+                  </Link>
+                )
+              })}
             </div>
-            <span className="font-heading font-semibold text-lg group-hover:text-primary transition-colors">
-              Penny Central
-            </span>
-          </Link>
 
-          {/* Right side - Desktop nav, Search, Theme toggle & Mobile menu */}
-          <div className="flex items-center gap-4">
-            {/* Desktop nav links */}
-            <div className="hidden md:flex items-center gap-6 mr-2 text-sm text-muted-foreground">
-              <Link href="/store-finder" className="hover:text-primary transition-colors">
-                Store Finder
-              </Link>
-              <Link href="/trip-tracker" className="hover:text-primary transition-colors">
-                Trip Tracker
-              </Link>
-              <Link href="/resources" className="hover:text-primary transition-colors">
-                Resources
-              </Link>
-              <Link href="/about" className="hover:text-primary transition-colors">
-                About
-              </Link>
-            </div>
-
-            {/* Join Community CTA - desktop only */}
-            <Button
-              href="https://www.facebook.com/groups/homedepotpenny"
-              size="sm"
-              className="hidden md:inline-flex gap-1.5"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Users className="h-3.5 w-3.5" />
-              Join Community
-            </Button>
-
-            {/* Search / Command Palette trigger - desktop only */}
+            {/* Desktop Theme Toggle */}
             <button
-              onClick={() => setOpen(true)}
-              className="hidden md:flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors px-3 py-1.5 border border-border rounded-md"
+              onClick={() => setTheme(isDark ? "light" : "dark")}
+              className="hidden md:flex items-center justify-center w-10 h-10 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              aria-label="Toggle theme"
             >
-              <Search className="h-3.5 w-3.5" />
-              <span className="text-[11px] font-medium">Search</span>
+              {mounted && (isDark ? <Sun size={20} /> : <Moon size={20} />)}
+              {!mounted && <Moon size={20} />}
             </button>
 
-            <ThemeToggle />
-
-            {/* Mobile menu button */}
+            {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-muted-foreground hover:text-foreground"
+              className="md:hidden flex items-center justify-center w-10 h-10 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               aria-label="Toggle menu"
             >
-              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
-        </nav>
-      </header>
+        </div>
+      </nav>
 
-      {/* Mobile menu */}
+      {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
-        <div className="md:hidden fixed top-16 left-0 right-0 bg-background border-b border-border z-40 p-4">
-          <nav className="space-y-2">
-            <Link
-              href="/store-finder"
-              className="flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent rounded-md"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <Map className="h-4 w-4" /> Store Finder
-            </Link>
-            <Link
-              href="/trip-tracker"
-              className="flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent rounded-md"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <Clock className="h-4 w-4" /> Trip Tracker
-            </Link>
-            <Link
-              href="/resources"
-              className="flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent rounded-md"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Resources
-            </Link>
-            <Link
-              href="/about"
-              className="flex items-center gap-2 px-3 py-2 text-sm hover:bg-accent rounded-md"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              About
-            </Link>
+        <div className="fixed inset-0 z-40 bg-white dark:bg-slate-900 md:hidden">
+          <div className="flex flex-col h-full pt-20 px-6">
+            {/* Mobile Navigation Items */}
+            <nav className="space-y-2">
+              {navItems.map((item) => {
+                const Icon = item.icon
+                const isActive = pathname === item.href
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`
+                      flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors
+                      ${
+                        isActive
+                          ? "bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400"
+                          : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800"
+                      }
+                    `}
+                  >
+                    <Icon size={18} strokeWidth={1.5} />
+                    {item.label}
+                  </Link>
+                )
+              })}
+            </nav>
 
-            {/* Join Community CTA - mobile */}
-            <div className="pt-2 mt-2 border-t border-border">
-              <Button
-                href="https://www.facebook.com/groups/homedepotpenny"
-                size="sm"
-                className="w-full gap-2"
-                onClick={() => setMobileMenuOpen(false)}
-                target="_blank"
-                rel="noopener noreferrer"
+            {/* Mobile Theme Toggle */}
+            <div className="mt-8">
+              <button
+                onClick={() => {
+                  setTheme(isDark ? "light" : "dark")
+                  setMobileMenuOpen(false)
+                }}
+                className="flex items-center gap-3 px-4 py-3 rounded-lg w-full text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               >
-                <Users className="h-4 w-4" />
-                Join Community
-              </Button>
+                {mounted && (isDark ? <Sun size={18} /> : <Moon size={18} />)}
+                {!mounted && <Moon size={18} />}
+                Toggle theme
+              </button>
             </div>
-          </nav>
+          </div>
         </div>
       )}
     </>

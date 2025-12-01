@@ -47,7 +47,7 @@ export function GuideContent() {
           <div className="flex items-start gap-3">
             <span className="text-lg leading-none">⚠️</span>
             <div>
-              <div className="font-bold text-sky-900 dark:text-sky-200 flex items-center gap-2 mb-2">
+              <div className="font-bold text-accent-900 dark:text-accent-200 flex items-center gap-2 mb-2">
                 <span>Important:</span>
               </div>
               <p className="text-slate-700 dark:text-slate-200 mt-2 leading-relaxed">
@@ -207,11 +207,11 @@ export function GuideContent() {
           </TableBody>
         </Table>
 
-        <div className="bg-sky-50 dark:bg-slate-900/40 border border-sky-200 dark:border-slate-700 border-l-4 border-l-sky-500 dark:border-l-sky-400 rounded-lg p-5 my-10">
+        <div className="bg-accent-50 dark:bg-slate-900/40 border border-accent-200 dark:border-slate-700 border-l-4 border-l-accent-500 dark:border-l-accent-400 rounded-lg p-5 my-10">
           <div className="flex items-start gap-3">
             <span className="text-lg leading-none">💡</span>
             <div>
-              <div className="font-bold text-sky-900 dark:text-sky-200 flex items-center gap-2 mb-2">
+              <div className="font-bold text-accent-900 dark:text-accent-200 flex items-center gap-2 mb-2">
                 <span>Key Takeaways:</span>
               </div>
               <p className="text-slate-700 dark:text-slate-200 mt-2 leading-relaxed">
@@ -287,11 +287,11 @@ export function GuideContent() {
           </TableBody>
         </Table>
 
-        <div className="bg-sky-50 dark:bg-slate-900/40 border border-sky-200 dark:border-slate-700 border-l-4 border-l-sky-500 dark:border-l-sky-400 rounded-lg p-5 my-10">
+        <div className="bg-accent-50 dark:bg-slate-900/40 border border-accent-200 dark:border-slate-700 border-l-4 border-l-accent-500 dark:border-l-accent-400 rounded-lg p-5 my-10">
           <div className="flex items-start gap-3">
             <span className="text-lg leading-none">⚠️</span>
             <div>
-              <div className="font-bold text-sky-900 dark:text-sky-200 flex items-center gap-2 mb-2">
+              <div className="font-bold text-accent-900 dark:text-accent-200 flex items-center gap-2 mb-2">
                 <span>Important:</span>
               </div>
               <p className="text-slate-700 dark:text-slate-200 mt-2 leading-relaxed">
@@ -334,7 +334,7 @@ export function GuideContent() {
         
         <div className="grid md:grid-cols-2 gap-6 my-6">
           <div className="bg-white dark:bg-slate-900/40 p-4 rounded-lg border border-border">
-            <h4 className="font-semibold mb-3 text-orange-700 dark:text-orange-400">Primary Hotspots</h4>
+            <h4 className="font-semibold mb-3 text-accent-700 dark:text-accent-400">Primary Hotspots</h4>
             <ul className="space-y-3 text-sm">
               <li>Clearance endcaps</li>
               <li>Aisles with yellow tags</li>
@@ -368,7 +368,7 @@ export function GuideContent() {
           <div className="flex items-start gap-3">
             <span className="text-lg leading-none">💡</span>
             <div>
-              <div className="font-bold text-sky-800 dark:text-sky-200">Tip:</div>
+              <div className="font-bold text-accent-800 dark:text-accent-200">Tip:</div>
               <p className="callout-body">
                 Watch for "known penny items" discussed in online communities - these often go chain-wide. "Store-specific" pennies usually result from returns, overstock, or untracked markdowns.
               </p>
@@ -390,7 +390,7 @@ export function GuideContent() {
             <div className="flex items-start gap-3">
               <span className="text-lg leading-none">⚠️</span>
               <div>
-                <div className="font-bold text-sky-900 dark:text-sky-200 flex items-center gap-2 mb-2">
+                <div className="font-bold text-accent-900 dark:text-accent-200 flex items-center gap-2 mb-2">
                   <span>Warning:</span>
                 </div>
                 <p className="text-slate-700 dark:text-slate-200 mt-2 leading-relaxed">
@@ -431,7 +431,7 @@ export function GuideContent() {
             <div className="flex items-start gap-3">
               <span className="text-lg leading-none">💡</span>
               <div>
-                <div className="font-bold text-sky-800 dark:text-sky-200">Pro Tip:</div>
+                <div className="font-bold text-accent-800 dark:text-accent-200">Pro Tip:</div>
                 <p className="callout-body">
                   If you ask an employee to retrieve an overhead item, there's a 50/50 chance they'll scan it first. If it scans at $0.01, they'll likely say "This can't be sold" and that item will be removed from the floor entirely.
                 </p>
@@ -550,11 +550,11 @@ export function GuideContent() {
           <li>System flags it for removal from shelves - but sometimes it gets missed</li>
         </ul>
 
-        <div className="bg-sky-50 dark:bg-slate-900/40 border border-sky-200 dark:border-slate-700 border-l-4 border-l-sky-500 dark:border-l-sky-400 rounded-lg p-5 my-10">
+        <div className="bg-accent-50 dark:bg-slate-900/40 border border-accent-200 dark:border-slate-700 border-l-4 border-l-accent-500 dark:border-l-accent-400 rounded-lg p-5 my-10">
           <div className="flex items-start gap-3">
             <span className="text-lg leading-none">ℹ️</span>
             <div>
-              <div className="font-bold text-sky-900 dark:text-sky-200 flex items-center gap-2 mb-2">
+              <div className="font-bold text-accent-900 dark:text-accent-200 flex items-center gap-2 mb-2">
                 <span>Key Takeaway:</span>
               </div>
               <p className="text-slate-700 dark:text-slate-200 mt-2 leading-relaxed">
@@ -721,11 +721,11 @@ export function GuideContent() {
           </div>
         </div>
 
-        <div className="bg-sky-50 dark:bg-slate-900/40 border border-sky-200 dark:border-slate-700 border-l-4 border-l-sky-500 dark:border-l-sky-400 rounded-lg p-5 my-10">
+        <div className="bg-accent-50 dark:bg-slate-900/40 border border-accent-200 dark:border-slate-700 border-l-4 border-l-accent-500 dark:border-l-accent-400 rounded-lg p-5 my-10">
           <div className="flex items-start gap-3">
             <span className="text-lg leading-none">⚠️</span>
             <div>
-              <div className="font-bold text-sky-900 dark:text-sky-200 flex items-center gap-2 mb-2">
+              <div className="font-bold text-accent-900 dark:text-accent-200 flex items-center gap-2 mb-2">
                 <span>Reality Check:</span>
               </div>
               <p className="text-slate-700 dark:text-slate-200 mt-2 leading-relaxed">
@@ -779,7 +779,7 @@ export function GuideContent() {
 
           {/* Experienced */}
           <div className="bg-white dark:bg-slate-900/40 p-6 rounded-lg border border-border">
-            <h3 className="text-lg font-semibold text-orange-700 dark:text-orange-400 mb-4">For Experienced Hunters: Refine Your Game</h3>
+            <h3 className="text-lg font-semibold text-accent-700 dark:text-accent-400 mb-4">For Experienced Hunters: Refine Your Game</h3>
             
             <h4 className="font-medium mt-4 mb-2">Know the Clearance Cadences</h4>
             <div className="text-sm space-y-3 font-mono bg-white/50 dark:bg-black/20 p-3 rounded">
@@ -830,7 +830,7 @@ export function GuideContent() {
           <p className="font-medium">
             But remember: one person's unruly behavior can ruin it for everyone. Stay sharp, stay respectful, and help keep the game alive.
           </p>
-          <p className="text-lg font-semibold text-orange-600 dark:text-orange-400 mt-4">
+          <p className="text-lg font-semibold text-accent-600 dark:text-accent-400 mt-4">
             Penny hunting is part luck, part hustle, and all strategy. Treat it like a skill - not a shortcut.
           </p>
         </div>

@@ -1,9 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Navbar } from "@/components/navbar"
-import { Footer } from "@/components/footer"
-import { Plus, Calendar, MapPin, Clock, Trash2, CheckCircle2, Circle, Download, TrendingUp, Store, DollarSign } from "lucide-react"
+import { Plus, Calendar, MapPin, Clock, Trash2, CheckCircle2, Circle, TrendingUp, Store } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface Trip {
@@ -22,7 +20,7 @@ interface Trip {
 
 interface TripTemplate {
   name: string
-  icon: any
+  icon: React.ElementType
   description: string
   stores: number
   checklist: string[]
@@ -197,10 +195,7 @@ export default function TripTrackerPage() {
   const successRate = totalTrips > 0 ? Math.round((completedTrips / totalTrips) * 100) : 0
 
   return (
-    <>
-      <Navbar />
-      <main className="min-h-screen pt-24 pb-16 bg-background">
-        <div className="container mx-auto px-4">
+    <div className="p-6 max-w-[1200px]">
           <div className="max-w-6xl mx-auto">
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
@@ -213,7 +208,7 @@ export default function TripTrackerPage() {
                 </p>
               </div>
               <div className="flex gap-3 mt-4 md:mt-0">
-                <Button onClick={quickStartToday} variant="outline" className="flex items-center gap-2">
+                <Button onClick={quickStartToday} variant="secondary" className="flex items-center gap-2">
                   <Clock className="h-4 w-4" />
                   Quick Start Today
                 </Button>
@@ -250,8 +245,8 @@ export default function TripTrackerPage() {
               </div>
               <div className="bg-card border border-border rounded-xl p-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center">
-                    <TrendingUp className="h-6 w-6 text-blue-500" />
+                  <div className="w-12 h-12 bg-indigo-500/10 rounded-lg flex items-center justify-center">
+                    <TrendingUp className="h-6 w-6 text-indigo-500" />
                   </div>
                   <div>
                     <div className="text-2xl font-bold text-foreground">{successRate}%</div>
@@ -336,13 +331,13 @@ export default function TripTrackerPage() {
                             placeholder="Store address or name"
                           />
                           {formData.stores.length > 1 && (
-                            <Button variant="outline" size="sm" onClick={() => removeStore(i)}>
+                            <Button variant="secondary" size="sm" onClick={() => removeStore(i)}>
                               <Trash2 className="h-4 w-4" />
                             </Button>
                           )}
                         </div>
                       ))}
-                      <Button variant="outline" onClick={addStore} className="w-full mt-2">
+                      <Button variant="secondary" onClick={addStore} className="w-full mt-2">
                         <Plus className="h-4 w-4 mr-2" />
                         Add Store
                       </Button>
@@ -361,7 +356,7 @@ export default function TripTrackerPage() {
                           </div>
                         ))}
                       </div>
-                      <Button variant="outline" onClick={addChecklistItem} className="w-full">
+                      <Button variant="secondary" onClick={addChecklistItem} className="w-full">
                         <Plus className="h-4 w-4 mr-2" />
                         Add Checklist Item
                       </Button>
@@ -379,7 +374,7 @@ export default function TripTrackerPage() {
                   </div>
 
                   <div className="p-6 border-t border-border flex gap-3">
-                    <Button variant="outline" onClick={() => { setShowNewTrip(false); resetForm(); }} className="flex-1">
+                    <Button variant="secondary" onClick={() => { setShowNewTrip(false); resetForm(); }} className="flex-1">
                       Cancel
                     </Button>
                     <Button onClick={createTrip} className="flex-1">
@@ -438,15 +433,11 @@ export default function TripTrackerPage() {
               </ul>
             </div>
           </div>
-        </div>
-      </main>
-      <Footer />
-    </>
+    </div>
   )
 }
 
 function TripCard({ trip, onToggle, onDelete }: { trip: Trip, onToggle: (id: string) => void, onDelete: (id: string) => void }) {
-  const isPast = new Date(trip.date) < new Date(new Date().toISOString().split('T')[0])
 
   return (
     <div className={`bg-card border-2 rounded-xl p-6 transition-all ${trip.completed ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-border'}`}>
@@ -477,14 +468,14 @@ function TripCard({ trip, onToggle, onDelete }: { trip: Trip, onToggle: (id: str
         </div>
         <div className="flex gap-2">
           <Button
-            variant="outline"
+            variant="secondary"
             size="sm"
             onClick={() => onToggle(trip.id)}
             className={trip.completed ? "bg-emerald-500/10" : ""}
           >
             {trip.completed ? <CheckCircle2 className="h-4 w-4" /> : <Circle className="h-4 w-4" />}
           </Button>
-          <Button variant="outline" size="sm" onClick={() => onDelete(trip.id)}>
+          <Button variant="secondary" size="sm" onClick={() => onDelete(trip.id)}>
             <Trash2 className="h-4 w-4" />
           </Button>
         </div>

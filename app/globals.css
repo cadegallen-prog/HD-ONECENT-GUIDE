@@ -4,92 +4,94 @@
 
 @layer base {
   :root {
-    /* LIGHT MODE - Cool slate with blue accents */
-    
-    --primary: 199 89% 48%;          /* Bright sky blue */
-    --primary-foreground: 0 0% 100%;
-    
-    --background: 0 0% 100%;          /* Pure white */
-    --foreground: 224 71% 4%;         /* Near black #030712 */
-    
-    --surface: 210 20% 98%;           /* Very light gray #F8FAFC */
-    --border: 220 13% 91%;            /* Light border #E2E8F0 */
-    --input: 220 13% 91%;
-    
-    --text: 224 71% 4%;               /* Near black */
-    --text-muted: 220 9% 46%;         /* Medium gray #64748B */
-    
-    --card: 0 0% 100%;
-    --card-foreground: 224 71% 4%;
-    
-    --muted: 210 20% 96%;             /* Light gray bg */
-    --muted-foreground: 220 9% 46%;
-    
-    --accent: 172 66% 95%;            /* Very light teal */
-    --accent-foreground: 172 66% 30%;
-    
-    --accent-success: 142 71% 45%;
-    --accent-warning: 199 89% 48%;
-    --accent-info: 199 89% 48%;
-    
-    --secondary: 210 20% 96%;
-    --secondary-foreground: 224 71% 4%;
-    
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-    
-    --success: 142 71% 45%;
-    --warning: 199 89% 48%;
-    
-    --popover: 0 0% 100%;
-    --popover-foreground: 224 71% 4%;
-    
-    --ring: 172 66% 40%;
+    /* ===============================================
+       PENNY CENTRAL – MINIMALIST DESIGN SYSTEM
+       Linear/Vercel/Stripe aesthetic
+       =============================================== */
+
+    /* Backgrounds - Light */
+    --bg-page: #FAFAFA;
+    --bg-card: #FFFFFF;
+    --bg-elevated: #F4F4F5;
+
+    /* Backgrounds - Dark */
+    --bg-page-dark: #0F172A;
+    --bg-card-dark: #1E293B;
+    --bg-elevated-dark: #27272A;
+
+    /* Text - Light */
+    --text-primary: #0F172A;
+    --text-secondary: #334155;
+    --text-muted: #64748B;
+
+    /* Text - Dark */
+    --text-primary-dark: #FAFAFA;
+    --text-secondary-dark: #94A3B8;
+    --text-muted-dark: #64748B;
+
+    /* Borders */
+    --border-light: #E2E8F0;
+    --border-dark: #334155;
+
+    /* Accent — INDIGO — USE SPARINGLY */
+    --accent: #6366F1;
+    --accent-hover: #4F46E5;
+    --accent-muted: #E0E7FF;
+    --shadow-card: 0 1px 3px rgba(0,0,0,0.08);
+
+    /* Status only - never decorative */
+    --success: #16a34a;
+    --error: #dc2626;
+    --warning: #ca8a04;
+
+    /* Compatibility with shadcn/ui components */
+    --background: var(--bg-page);
+    --foreground: var(--text-primary);
+    --card: var(--bg-card);
+    --card-foreground: var(--text-primary);
+    --popover: var(--bg-card);
+    --popover-foreground: var(--text-primary);
+    --primary: var(--accent);
+    --primary-foreground: #ffffff;
+    --secondary: var(--bg-elevated);
+    --secondary-foreground: var(--text-primary);
+    --muted: var(--bg-elevated);
+    --muted-foreground: var(--text-muted);
+    --accent-foreground: #ffffff;
+    --destructive: var(--error);
+    --destructive-foreground: #ffffff;
+    --border: var(--border-light);
+    --input: var(--border-light);
+    --ring: var(--accent);
     --radius: 0.5rem;
   }
 
   .dark {
-    /* DARK MODE - Deep slate with teal accents */
-    
-    --primary: 199 90% 60%;           /* Bright sky blue for dark */
-    --primary-foreground: 224 71% 4%;
-    
-    --background: 224 71% 4%;         /* Near black #030712 */
-    --foreground: 210 20% 98%;        /* Near white #F8FAFC */
-    
-    --surface: 223 47% 11%;           /* Dark card bg #0F172A */
-    --border: 217 33% 17%;            /* Dark border #1E293B */
-    --input: 217 33% 17%;
-    
-    --text: 210 20% 98%;
-    --text-muted: 217 19% 62%;        /* Muted light #94A3B8 */
-    
-    --card: 223 47% 11%;
-    --card-foreground: 210 20% 98%;
-    
-    --muted: 223 47% 11%;
-    --muted-foreground: 217 19% 62%;
-    
-    --accent: 172 66% 15%;            /* Dark teal bg */
-    --accent-foreground: 172 66% 70%;
-    
-    --accent-success: 142 71% 45%;
-    --accent-warning: 199 89% 48%;
-    --accent-info: 199 89% 48%;
-    
-    --secondary: 223 47% 11%;
-    --secondary-foreground: 210 20% 98%;
-    
-    --destructive: 0 62% 50%;
-    --destructive-foreground: 210 20% 98%;
-    
-    --success: 142 71% 45%;
-    --warning: 199 89% 48%;
-    
-    --popover: 223 47% 11%;
-    --popover-foreground: 210 20% 98%;
-    
-    --ring: 172 66% 50%;
+    --bg-page: var(--bg-page-dark);
+    --bg-card: var(--bg-card-dark);
+    --bg-elevated: var(--bg-elevated-dark);
+    --text-primary: var(--text-primary-dark);
+    --text-secondary: var(--text-secondary-dark);
+    --text-muted: var(--text-muted-dark);
+    --border: var(--border-dark);
+    --accent: #818CF8;
+    --accent-hover: #6366F1;
+    --accent-muted: rgba(79,70,229,0.2);
+    --shadow-card: inset 0 1px 0 rgba(99,102,241,0.1);
+
+    /* Compatibility with shadcn/ui components */
+    --background: var(--bg-page-dark);
+    --foreground: var(--text-primary-dark);
+    --card: var(--bg-card-dark);
+    --card-foreground: var(--text-primary-dark);
+    --popover: var(--bg-card-dark);
+    --popover-foreground: var(--text-primary-dark);
+    --secondary: var(--bg-elevated-dark);
+    --secondary-foreground: var(--text-primary-dark);
+    --muted: var(--bg-elevated-dark);
+    --muted-foreground: var(--text-muted-dark);
+    --border: var(--border-dark);
+    --input: var(--border-dark);
   }
 
   * {
@@ -98,212 +100,37 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-size: 17px;
-    line-height: 1.75;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-weight: 600;
-    line-height: 1.2;
-    color: hsl(var(--foreground));
-  }
-
-  h1 { font-size: 40px; }
-  h2 { font-size: 28px; }
-  h3 { font-size: 22px; }
-
-  table {
-    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-size: 16px;
-  }
+  /* Typography - Use Tailwind utilities instead of global styles */
+  /* Page titles: text-[22px] font-semibold text-text-primary */
+  /* Section headings: text-base font-semibold text-text-primary */
+  /* Card titles: text-sm font-semibold text-text-primary */
+  /* Body text: text-sm text-text-primary */
 
   code, .sku, .code {
-    font-family: "JetBrains Mono", "Courier New", Consolas, Monaco, monospace;
-    font-size: 15px;
+    font-family: ui-monospace, monospace;
+    font-size: 14px;
   }
 
   .caption, figcaption {
-    font-size: 15px;
-    color: hsl(var(--text-muted));
+    font-size: 12px;
+    color: var(--text-muted);
   }
 }
 
 @layer components {
-  /* Badges - cool neutrals + semantic colors */
-  .badge {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-heading font-medium transition-colors;
-  }
-
-  .badge-low {
-    @apply bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300;
-  }
-
-  .badge-medium {
-    @apply bg-sky-100 text-sky-800 dark:bg-sky-900/50 dark:text-sky-300;
-  }
-
-  .badge-high {
-    @apply bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300;
-  }
-
-  .badge-penny {
-    @apply bg-sky-100 text-sky-800 border border-sky-200 dark:bg-sky-900/40 dark:text-sky-200 dark:border-sky-700;
-  }
-
-  .badge-true {
-    @apply bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300;
-  }
-
-  .badge-false {
-    @apply bg-rose-100 text-rose-800 dark:bg-rose-900/50 dark:text-rose-300;
-  }
-
-  .badge-varies {
-    @apply bg-sky-100 text-sky-800 dark:bg-sky-900/50 dark:text-sky-300;
-  }
-
-  /* Callouts */
-  .callout-box {
-    @apply rounded-lg border-l-4 p-4 my-4 transition-colors;
-  }
-
-  .callout-box.info {
-    @apply bg-sky-50 border-sky-500 text-slate-800 dark:bg-sky-950/30 dark:border-sky-400 dark:text-slate-200;
-  }
-
-  .callout-box.warning {
-    @apply bg-rose-50 border-rose-500 text-slate-800 dark:bg-rose-950/30 dark:border-rose-400 dark:text-slate-200;
-  }
-
-  .callout-box.success {
-    @apply bg-emerald-50 border-emerald-500 text-slate-800 dark:bg-emerald-950/30 dark:border-emerald-400 dark:text-slate-200;
-  }
-
-  /* Guide layout + typography */
-  .guide-article {
-    @apply prose prose-slate dark:prose-invert max-w-none bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 p-8 md:p-12 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm;
-  }
-
-  .guide-article p {
-    @apply mb-6 leading-relaxed;
-  }
-
-  .guide-article ul {
-    @apply list-disc ml-6 mt-4 mb-6 space-y-3;
-  }
-
-  .guide-article ol {
-    @apply list-decimal ml-6 mt-4 mb-6 space-y-3;
-  }
-
-  .guide-article li {
-    @apply leading-relaxed;
-  }
-
-  .section-heading {
-    @apply mt-16 first:mt-0 mb-8 text-2xl md:text-3xl font-bold text-slate-900 dark:text-white tracking-tight border-l-4 border-slate-300 dark:border-slate-600 pl-4 flex items-center gap-3;
-  }
-
-  /* Callouts */
-  .callout {
-    @apply rounded-xl border border-l-4 p-6 my-10 shadow-sm bg-white dark:bg-slate-900/60;
-  }
-
-  .callout-sky {
-    @apply bg-sky-50 dark:bg-slate-900/30 border-sky-200 dark:border-sky-800 border-l-sky-500 dark:border-l-sky-400;
-  }
-
-  .callout-body {
-    @apply text-slate-700 dark:text-slate-200 mt-2 leading-relaxed;
-  }
-
-  .callout-compact {
-    @apply p-4 text-sm;
-  }
-
-  .content-panel {
-    @apply bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 rounded-2xl p-7 shadow-sm;
-  }
-
-  /* Step cards */
-  .step-grid {
-    @apply grid gap-6 sm:grid-cols-2 xl:grid-cols-3 my-12;
-  }
-
-  .step-card {
-    @apply bg-white dark:bg-slate-900/70 border border-slate-200 dark:border-slate-700 rounded-2xl p-9 flex flex-col gap-4 h-full shadow-sm transition-all hover:shadow-lg hover:-translate-y-1;
-  }
-
-  .step-badge {
-    @apply inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary text-primary-foreground font-bold text-lg shadow-md ring-2 ring-primary/20;
-  }
-
-  .step-title {
-    @apply text-xl font-semibold text-slate-900 dark:text-white;
-  }
-
-  .step-desc {
-    @apply text-base text-slate-600 dark:text-slate-300 leading-relaxed;
-  }
-
-  /* Tables */
-  .guide-table-wrapper {
-    @apply my-8 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden bg-white dark:bg-slate-900;
-  }
-
-  .guide-table-scroll {
-    @apply w-full overflow-x-auto;
-  }
-
-  .guide-table {
-    @apply w-full text-sm text-left;
-  }
-
-  .guide-table thead {
-    @apply bg-slate-100 dark:bg-slate-800;
-  }
-
-  .guide-table th {
-    @apply px-4 py-3 text-left text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wide border-b-2 border-slate-300 dark:border-slate-600;
-  }
-
-  .guide-table td {
-    @apply px-4 py-3 text-slate-700 dark:text-slate-300 border-b border-slate-200 dark:border-slate-700 leading-relaxed;
-  }
-
-  .guide-table tbody tr:nth-child(even) {
-    @apply bg-slate-50 dark:bg-slate-800/30;
-  }
-
-  .guide-table tbody tr:hover {
-    @apply bg-slate-100 dark:bg-slate-800/50;
-  }
-
-  /* Chips & badges */
-  .price-chip {
-    @apply font-mono text-sm bg-slate-100 dark:bg-slate-800 text-sky-700 dark:text-sky-300 px-2 py-1 rounded-md font-medium;
-  }
-
-  .priority-badge {
-    @apply px-3 py-1 rounded-full text-xs font-bold uppercase;
-  }
-
-  .priority-badge.penny {
-    @apply bg-sky-600 text-white;
-  }
-
-  .priority-badge.high {
-    @apply bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300;
-  }
-
-  .priority-badge.medium {
-    @apply bg-sky-100 text-sky-700 dark:bg-sky-900/50 dark:text-sky-300;
-  }
-
-  .priority-badge.low {
-    @apply bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300;
-  }
+  /*
+   * Custom component classes removed - use shadcn/ui components and Tailwind utilities instead
+   *
+   * For badges: Use components/ui/badge.tsx
+   * For cards: Use components/ui/card.tsx
+   * For tables: Use components/ui/table.tsx
+   * For alerts/callouts: Use components/ui/alert.tsx
+   */
 }
