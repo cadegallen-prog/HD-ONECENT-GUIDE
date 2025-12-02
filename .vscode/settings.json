@@ -1,12 +1,51 @@
 {
+    // Editor: Auto-format and fix on save
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "always"
+    },
+
+    // JavaScript/TypeScript: Use Prettier
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    // Python: Use Black formatter
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+        }
+    },
+
+    // Python environment settings
     "python-envs.defaultEnvManager": "ms-python.python:venv",
     "python-envs.pythonProjects": [],
     "python.useEnvironmentsExtension": true,
     "python.defaultInterpreterPath": "C:\\Users\\cadeg\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "python.terminal.activateEnvironment": true,
+
+    // Workspace settings
     "workbench.startupEditor": "readme",
     "workbench.editor.enablePreview": false,
-    "css.lint.unknownAtRules": "ignore"
-    ,
-    "security.workspace.trust.enabled": true,
-    "python.terminal.activateEnvironment": true
+    "css.lint.unknownAtRules": "ignore",
+    "security.workspace.trust.enabled": true
 }

@@ -1,35 +1,181 @@
-# AGENTS.md — Penny Central
+# AGENTS GUIDE
 
-Read this file at the start of every session. This is the single source of truth.
+This file is the single source of truth for how any AI assistant should work in this repo.
+
+If you are Claude, GitHub Copilot Chat, ChatGPT, or any other agent reading this, follow these rules.
 
 ---
 
-## What This Project Is
+## 1. About the user
+
+- The user **cannot read, write, debug, or review code** in a meaningful way.
+- They can:
+  - Copy and paste.
+  - Follow clear, concrete instructions.
+  - Understand concepts if explained in plain language.
+
+Assume:
+- You are the engineer.
+- They are the product owner and tester.
+- You must protect them from complexity and accidental damage.
+
+---
+
+## 2. General behavior rules
+
+1. **Minimal disruption**
+   - Do not restructure the whole codebase unless explicitly asked.
+   - Prefer small, targeted changes that solve the current problem.
+
+2. **Explain what you did**
+   - After making changes, always write a short summary:
+     - Which files you touched.
+     - What each change does in plain language.
+
+3. **No surprise refactors**
+   - Do not rename lots of files, move folders, or introduce heavy new dependencies without a clear reason and explicit approval in the prompt.
+
+4. **Be conservative with deletions**
+   - If something looks unused, prefer to:
+     - Mark it as deprecated in a comment, or
+     - Move it to a clearly named `archive/` folder,
+     before actually deleting it.
+
+---
+
+## 2.5 Copilot and Credit Awareness
+
+GitHub Copilot Chat consumes metered credits per interaction.
+
+**Efficiency rules:**
+- Short, superficial replies are wasteful. Each response should deliver substantial, multi-step progress.
+- Prefer dense, well-structured answers that move several related pieces forward at once.
+- Respect the user's energy limits. Be information-dense rather than long-winded.
+- Use clear headings and bullet points over walls of prose.
+- For strategic decisions, provide at most 3 options and clearly recommend one.
+
+---
+
+## 3. Documentation structure
+
+There are a few key docs that you must treat as a system:
+
+| File | Purpose |
+|------|---------||
+| `README.md` | High level explanation of what this project is and how to run it. Links to the other docs. |
+| `AGENTS.md` (this file) | How agents should behave. User preferences and constraints. Safety rules. |
+| `CLAUDE.md` | Claude specific instructions that reference `AGENTS.md`. |
+| `.github/copilot-instructions.md` | Copilot Chat specific instructions that reference `AGENTS.md`. |
+| `PROJECT_ROADMAP.md` | High level features, status, and upcoming work. |
+| `CHANGELOG.md` | Brief chronological log of completed work for progress visibility. |
+
+These files should **not** drift apart or contradict each other.
+
+---
+
+## 4. Auto tidy rule for agents
+
+At the end of any **feature implementation**, **meaningful refactor**, or **config change**, run this mental checklist:
+
+1. Does `README.md` still describe the project accurately?
+   - If new commands, new entry points, or new features were added, update README briefly.
+
+2. Does `PROJECT_ROADMAP.md` need an update?
+   - If you completed, abandoned, or significantly changed a planned feature, reflect that in the roadmap.
+
+3. Does `AGENTS.md` need an update?
+   - Only if:
+     - The user preferences changed.
+     - The structure of the project changed in a way that affects how agents should work.
+   - Keep this file stable. Update it only when truly necessary.
+
+4. Do `CLAUDE.md` or `.github/copilot-instructions.md` need tweaks?
+   - Only if we changed how we expect those tools to be used.
+   - They should mostly just point to `AGENTS.md`.
+
+If you change any of these docs:
+- Keep edits minimal.
+- Do not rewrite the user's voice.
+- Note the change in your summary.
+
+---
+
+## 5. How to use this file inside a session
+
+At the start of a new session, do this:
+
+1. Locate and open:
+   - `AGENTS.md` (this file)
+   - `README.md`
+   - `PROJECT_ROADMAP.md`
+   - Tool specific file for your client:
+     - `CLAUDE.md` if you are Claude.
+     - `.github/copilot-instructions.md` if you are Copilot Chat.
+
+2. Build a short mental model:
+   - What this repo is for.
+   - What the current state of the project is.
+   - What the user's constraints are.
+
+3. While working:
+   - Always stack your decisions against:
+     - "Does this help the user move forward with minimal mess?"
+     - "Is this consistent with the docs?"
+
+---
+
+## 6. Style constraints
+
+- No unnecessary files.
+- No huge monolithic "god" modules if you can avoid it.
+- Favor clarity over cleverness.
+- Prefer explicit names and simple flows.
+
+When in doubt:
+- Leave a short comment in code explaining why something exists, especially if it is a hack or temporary workaround.
+
+---
+
+## 7. When you are not sure
+
+If you are unsure where to put something or whether to change a global pattern:
+
+- Default to:
+  - Minimal change.
+  - A small comment in the relevant doc.
+- Do not invent completely new directory structures unless the prompt clearly asks for an architectural rework.
+
+---
+
+## 8. Project specific details
+
+### What this project is
 
 Penny Central is a **utility/reference guide** for finding Home Depot clearance items marked to $0.01. It serves a 36,000+ member Facebook community.
 
-**Site type:** Practical field guide with utility tools (Store Finder, Trip Tracker)
+**Mission:** Build and maintain PennyCentral.com as the central hub for:
+- Education on Home Depot penny items and deep discounts
+- Tools that help members find, plan, and evaluate deals
+- Practical guidance on whether items are worth buying to keep, donate, or resell, with realistic time vs money tradeoffs
+
+**Site type:** Practical field guide with utility tools (Store Finder, Trip Tracker)  
 **Not:** A blog, forum, marketplace, SaaS, or gamified learning platform
 
 **Live site:** https://pennycentral.com
 
----
-
-## Tech Stack
+### Tech Stack
 
 - **Framework:** Next.js 15 (App Router)
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS
-- **Fonts:** Inter (headings + body)
+- **Font:** Inter (headings + body)
 - **Hosting:** Vercel
 
----
-
-## Design System — Crisp Arctic Indigo
+### Design System — Crisp Arctic Indigo
 
 Use ONLY these colors. No exceptions.
 
-### Light Mode
+#### Light Mode
 
 | Role | Hex | Tailwind |
 |------|-----|----------|
@@ -43,7 +189,7 @@ Use ONLY these colors. No exceptions.
 | Accent hover | `#4F46E5` | `bg-indigo-600` |
 | Accent subtle | `#E0E7FF` | `bg-indigo-100` |
 
-### Dark Mode
+#### Dark Mode
 
 | Role | Hex | Tailwind |
 |------|-----|----------|
@@ -57,7 +203,7 @@ Use ONLY these colors. No exceptions.
 | Accent hover | `#6366F1` | `bg-indigo-500` |
 | Accent subtle | `rgba(79,70,229,0.2)` | `bg-indigo-500/20` |
 
-### Accent Usage Rules
+#### Accent Usage Rules
 
 The accent color may ONLY appear on:
 1. ONE primary button per page
@@ -67,34 +213,7 @@ The accent color may ONLY appear on:
 
 Maximum 3 accent elements visible per screen.
 
----
-
-## Typography
-
-- **Font:** Inter (weights 400, 500, 600)
-- **Max heading size:** 22px
-- **Body text:** 14-15px
-- **No italics, no underlines (except links), no ALL CAPS (except badges)**
-
----
-
-## Design Philosophy
-
-**Three questions before adding anything:**
-1. Does it look clean and professional?
-2. Is it functional and readable?
-3. Is it necessary?
-
-**The vibe:**
-- Light mode: Airy, clean, "Apple store at noon"
-- Dark mode: Deep space with electric indigo sparks
-- Switching modes feels like turning a light on/off in the same room
-
-**Reference aesthetic:** Linear, Vercel Dashboard, Stripe Dashboard
-
----
-
-## Forbidden Elements
+### Forbidden Elements
 
 Never add:
 - Illustrations or decorative graphics
@@ -105,83 +224,11 @@ Never add:
 - Emoji in UI
 - Colored card backgrounds
 - Multiple accent colors
-- Orange, amber, teal, cyan, pink, or purple
+- Orange, amber, teal, cyan, pink, or purple as accents
 - Gamification (XP, levels, achievements, badges)
 - Price tag icons or shopping illustrations
 
----
-
-## Component Standards
-
-### Buttons
-
-**Primary (one per page max):**
-```tsx
-className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium"
-```
-
-**Secondary:**
-```tsx
-className="bg-transparent border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 px-4 py-2 rounded-lg font-medium"
-```
-
-### Cards
-
-```tsx
-className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-5"
-```
-
-No shadows. No hover effects. No colored backgrounds.
-
-### Navigation Active State
-
-```tsx
-className="bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400"
-```
-
----
-
-## File Structure
-
-```
-app/                    # Next.js App Router pages
-  page.tsx              # Homepage (main guide)
-  store-finder/
-  trip-tracker/
-  resources/
-  about/
-components/             # Shared UI components
-  Navbar.tsx
-  Footer.tsx
-  etc.
-public/                 # Static assets
-tailwind.config.ts      # Tailwind configuration
-```
-
----
-
-## Working Rules
-
-1. **Make changes directly.** Explain in 2-5 plain English lines.
-2. **Infer missing details** from the codebase. Don't ask for file paths or imports.
-3. **Choose safe defaults** when unsure. Don't stall.
-4. **Preserve existing content** when making style changes.
-5. **Test dark mode** after any color/style changes.
-6. **Mobile-first.** Everything must work at 375px width.
-
----
-
-## Current Priorities
-
-1. Site builds and runs without errors
-2. All pages render correctly on desktop and mobile
-3. Dark/light mode toggle works and persists
-4. UX feels clean, consistent, and intentional
-5. Deploy works and stays stable
-
----
-
-## Commands
+### Commands
 
 ```bash
 npm run dev          # Start dev server (localhost:3000)
@@ -189,9 +236,7 @@ npm run build        # Production build
 npm run lint         # Run linter
 ```
 
----
-
-## Don't Touch
+### Don't Touch (without good reason)
 
 - `package.json` (unless adding necessary dependencies)
 - `.env*` files
@@ -199,16 +244,49 @@ npm run lint         # Run linter
 
 ---
 
-## Support Integration
+## 9. Skills and Tools
 
-Footer on all pages includes:
-- BeFrugal affiliate link (replace XXXXX with actual referral code)
-- PayPal/CashApp donation link (replace XXXXX with actual handle)
+### Technical Stack
 
-These are tasteful, non-obtrusive, and provide value.
+| Category | Tools |
+|----------|-------|
+| **Framework** | Next.js 15 (App Router) |
+| **Language** | TypeScript |
+| **Styling** | Tailwind CSS |
+| **UI Components** | shadcn/ui, Lucide icons |
+| **Maps** | Leaflet / React-Leaflet |
+| **Forms** | React Hook Form + Zod |
+| **Animation** | Framer Motion (sparingly) |
+| **Hosting** | Vercel |
+| **Data** | JSON files in `data/`, Firebase (planned) |
+
+### MCP Configuration
+
+Agent configs live in `.claude/`:
+- `settings.json` - MCP server definitions (filesystem, git, github, vercel)
+- `settings.local.json` - Bash command permissions
+
+VS Code configs live in `.vscode/`:
+- `settings.json` - Workspace settings (formatting, Python, etc.)
+- `extensions.json` - Recommended extensions
+
+### Experimental / Separate
+
+- `experimental_scraper/` - Rust-based scraper experiment. Treat as a separate project. Do not delete or refactor without explicit approval.
+- `archive/` - Old code and deprecated docs. Safe to read for context. Do not restore without asking.
 
 ---
 
-## End of File
+## 10. Handling Unclear Requests
 
-This is the only agent instruction file. Delete any others you find (CLAUDE.md, AGENT_RULES.md, etc.)
+When the user's request is vague or ambiguous:
+
+1. **Do not guess wildly.** Ask one targeted clarifying question.
+
+2. **Offer bounded options.** Present at most 3 interpretations and ask which they meant.
+
+3. **Default to minimal.** If you must proceed, choose the smallest change that could plausibly satisfy the request.
+
+4. **State your assumption.** Begin your implementation with "I interpreted this as X. If you meant Y, let me know."
+
+5. **Suggest adjacent value.** After completing a task, you may optionally suggest one related improvement. Mark it clearly as optional and do not implement without approval.

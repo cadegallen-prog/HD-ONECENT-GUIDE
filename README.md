@@ -75,11 +75,10 @@ public/                 # Static assets
 
 ## For AI Agents
 
-Read `AGENTS.md` before making any changes. It contains:
-- Exact color values
-- Component standards
-- Forbidden elements
-- Working rules
+- **`AGENTS.md`** — Single source of truth for how agents should behave, design specs, and project rules.
+- **`CLAUDE.md`** — Claude-specific instructions (points to AGENTS.md).
+- **`.github/copilot-instructions.md`** — Copilot Chat-specific instructions (points to AGENTS.md).
+- **`PROJECT_ROADMAP.md`** — What's done, in progress, and planned.
 
 ---
 

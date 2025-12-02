@@ -125,12 +125,207 @@
 }
 
 @layer components {
-  /*
-   * Custom component classes removed - use shadcn/ui components and Tailwind utilities instead
-   *
-   * For badges: Use components/ui/badge.tsx
-   * For cards: Use components/ui/card.tsx
-   * For tables: Use components/ui/table.tsx
-   * For alerts/callouts: Use components/ui/alert.tsx
-   */
+  /* ===============================================
+     GUIDE ARTICLE STYLES
+     =============================================== */
+  .guide-article {
+    @apply text-slate-700 dark:text-slate-300;
+  }
+
+  .guide-article p {
+    @apply mb-4 leading-relaxed;
+  }
+
+  .guide-article ul {
+    @apply mb-6 ml-6 space-y-2 list-disc;
+  }
+
+  .guide-article li {
+    @apply leading-relaxed;
+  }
+
+  .guide-article strong {
+    @apply text-slate-900 dark:text-white font-semibold;
+  }
+
+  /* Section Headings */
+  .section-heading {
+    @apply text-xl font-semibold text-slate-900 dark:text-white mb-6 pb-3 border-b border-slate-200 dark:border-slate-700;
+  }
+
+  .lead {
+    @apply text-lg text-slate-600 dark:text-slate-400 mb-6;
+  }
+
+  /* ===============================================
+     CALLOUT BOXES
+     =============================================== */
+  .callout {
+    @apply rounded-xl p-5 mb-6 border;
+  }
+
+  .callout-sky {
+    @apply bg-sky-50 dark:bg-sky-950/30 border-sky-200 dark:border-sky-800;
+  }
+
+  .callout-amber {
+    @apply bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800;
+  }
+
+  .callout-emerald {
+    @apply bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800;
+  }
+
+  .callout-rose {
+    @apply bg-rose-50 dark:bg-rose-950/30 border-rose-200 dark:border-rose-800;
+  }
+
+  .callout-compact {
+    @apply p-4;
+  }
+
+  /* ===============================================
+     PRICE CHIPS
+     =============================================== */
+  .price-chip {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-mono font-medium;
+    @apply bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300;
+  }
+
+  /* ===============================================
+     STEP CARDS (for numbered steps)
+     =============================================== */
+  .step-card {
+    @apply relative pl-12 py-4;
+  }
+
+  .step-badge {
+    @apply absolute left-0 top-4 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold;
+    @apply bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400;
+  }
+
+  /* ===============================================
+     INFO CARDS
+     =============================================== */
+  .info-card {
+    @apply bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-5;
+  }
+
+  .info-card-header {
+    @apply flex items-center gap-3 mb-3;
+  }
+
+  .info-card-icon {
+    @apply w-10 h-10 rounded-lg flex items-center justify-center;
+    @apply bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400;
+  }
+
+  .info-card-title {
+    @apply text-base font-semibold text-slate-900 dark:text-white;
+  }
+
+  /* ===============================================
+     TABLES ENHANCEMENT
+     =============================================== */
+  .guide-article table {
+    @apply w-full mb-8 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700;
+  }
+
+  .guide-article thead {
+    @apply bg-slate-50 dark:bg-slate-800/50;
+  }
+
+  .guide-article th {
+    @apply text-left px-4 py-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider;
+  }
+
+  .guide-article td {
+    @apply px-4 py-3 text-sm border-t border-slate-100 dark:border-slate-700/50;
+  }
+
+  .guide-article tbody tr {
+    @apply bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors;
+  }
+
+  /* ===============================================
+     STATUS BADGES
+     =============================================== */
+  .status-high {
+    @apply text-emerald-600 dark:text-emerald-400 font-medium;
+  }
+
+  .status-medium {
+    @apply text-amber-600 dark:text-amber-400 font-medium;
+  }
+
+  .status-low {
+    @apply text-rose-600 dark:text-rose-400 font-medium;
+  }
+
+  /* ===============================================
+     LEAFLET MAP POPUP OVERRIDES
+     Ensures popup is always visible, high contrast,
+     and consistent with the design system.
+     =============================================== */
+
+  /* Popup container styling */
+  .leaflet-popup-content-wrapper {
+    @apply bg-white rounded-xl shadow-lg border border-slate-200;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .leaflet-popup-content {
+    margin: 12px 14px;
+    line-height: 1.4;
+    font-size: 13px;
+    color: #0f172a; /* slate-900 */
+  }
+
+  /* Popup tip (arrow) styling */
+  .leaflet-popup-tip-container {
+    margin-top: -1px;
+  }
+
+  .leaflet-popup-tip {
+    @apply bg-white border border-slate-200;
+    box-shadow: none;
+  }
+
+  /* Close button styling */
+  .leaflet-popup-close-button {
+    color: #64748b !important; /* slate-500 */
+    font-size: 20px !important;
+    font-weight: 400 !important;
+    width: 28px !important;
+    height: 28px !important;
+    top: 6px !important;
+    right: 6px !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  .leaflet-popup-close-button:hover {
+    color: #0f172a !important; /* slate-900 */
+    background-color: #f1f5f9 !important; /* slate-100 */
+  }
+
+  /* Ensure popup links have clear hover states */
+  .store-popup-link {
+    text-decoration: none;
+    transition: color 0.15s ease, text-decoration 0.15s ease;
+  }
+
+  .store-popup-link:hover {
+    text-decoration: underline;
+  }
+
+  /* Prevent popup from hugging edges - add margin to popup pane */
+  .leaflet-popup {
+    margin-bottom: 10px;
+  }
 }

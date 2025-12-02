@@ -1,5 +1,6 @@
 import Link from "next/link"
 import type { Metadata } from "next"
+import { SupportAndCashbackCard } from "@/components/SupportAndCashbackCard"
 
 export const metadata: Metadata = {
   title: "About | Penny Central",
@@ -148,6 +149,50 @@ export default function AboutPage() {
             </a>
           </div>
         </div>
+      </section>
+
+      {/* How This Site Stays Free */}
+      <section className="mb-16">
+        <h2 className="text-2xl font-semibold text-slate-900 dark:text-white mb-4">
+          How This Site Stays Free
+        </h2>
+        <div className="text-slate-700 dark:text-slate-300 space-y-4 leading-relaxed mb-6">
+          <p>
+            I cover the cost of the site, tools, and updates myself. There are no paywalls or
+            hidden &quot;gotchas.&quot;
+          </p>
+
+          <p>
+            To keep everything free long term, there are two totally optional ways to support the
+            project:
+          </p>
+
+          <ul className="list-disc pl-5 space-y-1">
+            <li>
+              A cashback site and app called BeFrugal that pays you when you shop online and sends
+              me a one time referral bonus if you actually use it and earn at least $10 in cashback
+            </li>
+            <li>
+              A PayPal tip jar for people who feel like the guides and tools saved them serious
+              time or money
+            </li>
+          </ul>
+
+          <p>
+            None of this is required. All the penny item info and guides work with or without it.
+            If you want the full breakdown of how cashback works, how long it takes, and what the
+            catches are, you can read the full explanation here:
+          </p>
+        </div>
+
+        <Link
+          href="/cashback"
+          className="inline-flex items-center text-indigo-600 dark:text-indigo-400 font-medium hover:underline mb-6"
+        >
+          Read the full cashback guide →
+        </Link>
+
+        <SupportAndCashbackCard className="mt-4" />
       </section>
     </div>
   )
