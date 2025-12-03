@@ -13,22 +13,22 @@ export default function AboutPage() {
     <div className="container mx-auto px-4 sm:px-6 py-8 max-w-4xl">
       {/* Header */}
       <header className="mb-12">
-        <h1 className="text-3xl sm:text-4xl font-semibold text-slate-900 dark:text-white mb-4">
+        <h1 className="text-3xl sm:text-4xl font-semibold text-stone-900 dark:text-stone-50 mb-4">
           About Penny Central
         </h1>
-        <p className="text-lg text-slate-600 dark:text-slate-400">
+        <p className="text-lg text-stone-600 dark:text-stone-400">
           A free, community-driven guide for finding $0.01 clearance items at Home Depot.
         </p>
       </header>
 
       {/* What This Is */}
       <section className="mb-16">
-        <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+        <p className="text-stone-700 dark:text-stone-300 leading-relaxed mb-4">
           Penny Central is a community-driven guide for finding clearance items marked to $0.01 at
           Home Depot stores. This resource was created by and for members of the{" "}
           <Link
             href="https://www.facebook.com/groups/homedepotonecent"
-            className="text-slate-700 dark:text-slate-300 hover:underline font-medium"
+            className="text-cta-primary dark:text-blue-400 hover:underline font-medium"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -37,7 +37,7 @@ export default function AboutPage() {
           , which has grown to over 36,000 members.
         </p>
 
-        <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+        <p className="text-stone-700 dark:text-stone-300 leading-relaxed">
           This guide covers the clearance lifecycle, digital scouting tools, in-store strategies,
           checkout procedures, and community best practices. Everything you need to understand how
           penny items work and how to find them effectively.
@@ -46,10 +46,10 @@ export default function AboutPage() {
 
       {/* How This Site is Supported */}
       <section id="support" className="mb-16">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-white mb-4">
+        <h2 className="text-2xl font-semibold text-stone-900 dark:text-stone-50 mb-4">
           How This Site is Supported
         </h2>
-        <p className="text-slate-600 dark:text-slate-400 mb-8">
+        <p className="text-stone-600 dark:text-stone-400 mb-8">
           Penny Central is completely free. No ads, no paywalls, no premium tiers. Running this site
           comes with real costs: hosting, domain, development time, and ongoing maintenance.
           Here&apos;s how you can help:
@@ -57,10 +57,10 @@ export default function AboutPage() {
 
         <div className="grid md:grid-cols-2 gap-6">
           {/* BeFrugal Card */}
-          <div className="bg-white dark:bg-slate-800 rounded-lg p-8 border border-slate-200 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-500 transition-all">
-            <div className="w-12 h-12 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center mb-6">
+          <div className="bg-white dark:bg-stone-800 rounded-xl p-8 border-l-4 border-brand-copper border-t border-r border-b border-stone-200 dark:border-stone-700 hover:shadow-lg transition-all">
+            <div className="w-12 h-12 rounded-lg bg-stone-100 dark:bg-stone-700 flex items-center justify-center mb-6">
               <svg
-                className="w-6 h-6 text-slate-600 dark:text-slate-400"
+                className="w-6 h-6 text-brand-gunmetal dark:text-stone-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -73,18 +73,18 @@ export default function AboutPage() {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-3">
-              Save Money (and Support the Site)
+            <h3 className="text-xl font-semibold text-stone-900 dark:text-stone-50 mb-3">
+              Use BeFrugal for Cashback
             </h3>
-            <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+            <p className="text-stone-600 dark:text-stone-400 mb-6 leading-relaxed">
               Already shopping at Home Depot for your penny hunting trips? BeFrugal gives you
               cashback on every purchase. Sign up free through our link and start earning cashback
               automatically.
             </p>
-            <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-2 mb-6">
+            <ul className="text-sm text-stone-600 dark:text-stone-400 space-y-2 mb-6">
               <li className="flex items-start">
                 <svg
-                  className="w-5 h-5 text-slate-600 dark:text-slate-400 mr-2 flex-shrink-0 mt-0.5"
+                  className="w-5 h-5 text-color-success mr-2 flex-shrink-0 mt-0.5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -100,7 +100,7 @@ export default function AboutPage() {
               </li>
               <li className="flex items-start">
                 <svg
-                  className="w-5 h-5 text-slate-600 dark:text-slate-400 mr-2 flex-shrink-0 mt-0.5"
+                  className="w-5 h-5 text-color-success mr-2 flex-shrink-0 mt-0.5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -116,7 +116,7 @@ export default function AboutPage() {
               </li>
               <li className="flex items-start">
                 <svg
-                  className="w-5 h-5 text-slate-600 dark:text-slate-400 mr-2 flex-shrink-0 mt-0.5"
+                  className="w-5 h-5 text-color-success mr-2 flex-shrink-0 mt-0.5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -135,17 +135,17 @@ export default function AboutPage() {
               href="https://www.befrugal.com/rs/NJIKJUB/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center text-slate-700 dark:text-slate-300 font-medium hover:gap-3 gap-2 transition-all"
+              className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-cta-primary hover:bg-cta-hover text-white font-semibold transition-all"
             >
-              Get Cashback with BeFrugal →
+              Get Cashback with BeFrugal
             </a>
           </div>
 
           {/* PayPal Card */}
-          <div className="bg-white dark:bg-slate-800 rounded-lg p-8 border border-slate-200 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-500 transition-all">
-            <div className="w-12 h-12 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center mb-6">
+          <div className="bg-white dark:bg-stone-800 rounded-xl p-8 border-l-4 border-brand-copper border-t border-r border-b border-stone-200 dark:border-stone-700 hover:shadow-lg transition-all">
+            <div className="w-12 h-12 rounded-lg bg-stone-100 dark:bg-stone-700 flex items-center justify-center mb-6">
               <svg
-                className="w-6 h-6 text-slate-600 dark:text-slate-400"
+                className="w-6 h-6 text-brand-gunmetal dark:text-stone-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -158,18 +158,18 @@ export default function AboutPage() {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-3">
-              Buy Me a Coffee
+            <h3 className="text-xl font-semibold text-stone-900 dark:text-stone-50 mb-3">
+              Leave a Tip
             </h3>
-            <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+            <p className="text-stone-600 dark:text-stone-400 mb-6 leading-relaxed">
               Penny Central is a passion project that costs real money to run: hosting, domain,
               ongoing development and maintenance. If this site has helped you score deals, consider
               buying me a coffee.
             </p>
-            <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-2 mb-6">
+            <ul className="text-sm text-stone-600 dark:text-stone-400 space-y-2 mb-6">
               <li className="flex items-start">
                 <svg
-                  className="w-5 h-5 text-slate-600 dark:text-slate-400 mr-2 flex-shrink-0 mt-0.5"
+                  className="w-5 h-5 text-color-success mr-2 flex-shrink-0 mt-0.5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -185,7 +185,7 @@ export default function AboutPage() {
               </li>
               <li className="flex items-start">
                 <svg
-                  className="w-5 h-5 text-slate-600 dark:text-slate-400 mr-2 flex-shrink-0 mt-0.5"
+                  className="w-5 h-5 text-color-success mr-2 flex-shrink-0 mt-0.5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -201,7 +201,7 @@ export default function AboutPage() {
               </li>
               <li className="flex items-start">
                 <svg
-                  className="w-5 h-5 text-slate-600 dark:text-slate-400 mr-2 flex-shrink-0 mt-0.5"
+                  className="w-5 h-5 text-color-success mr-2 flex-shrink-0 mt-0.5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -220,9 +220,9 @@ export default function AboutPage() {
               href="https://paypal.me/cadegallen"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center text-slate-700 dark:text-slate-300 font-medium hover:gap-3 gap-2 transition-all"
+              className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-cta-primary hover:bg-cta-hover text-white font-semibold transition-all"
             >
-              Support on PayPal ☕ →
+              Leave a Tip
             </a>
           </div>
         </div>
@@ -230,10 +230,10 @@ export default function AboutPage() {
 
       {/* How This Site Stays Free */}
       <section className="mb-16">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-white mb-4">
+        <h2 className="text-2xl font-semibold text-stone-900 dark:text-stone-50 mb-4">
           How This Site Stays Free
         </h2>
-        <div className="text-slate-700 dark:text-slate-300 space-y-4 leading-relaxed mb-6">
+        <div className="text-stone-700 dark:text-stone-300 space-y-4 leading-relaxed mb-6">
           <p>
             I cover the cost of the site, tools, and updates myself. There are no paywalls or hidden
             &quot;gotchas.&quot;
@@ -264,7 +264,7 @@ export default function AboutPage() {
 
         <Link
           href="/cashback"
-          className="inline-flex items-center text-slate-700 dark:text-slate-300 font-medium hover:underline mb-6"
+          className="inline-flex items-center text-cta-primary dark:text-blue-400 font-medium hover:underline mb-6"
         >
           Read the full cashback guide →
         </Link>

@@ -46,9 +46,10 @@ Dev server runs at http://localhost:3000
 
 ## Design System
 
-**Palette:** Crisp Arctic Indigo
-- Light mode: `#FAFAFA` background, `#0F172A` text, `#6366F1` accent
-- Dark mode: `#0F172A` background, `#FAFAFA` text, `#818CF8` accent
+**Palette:** Slate Steel
+
+- Light mode: `#FAFAFA` background, `#0F172A` text, `#475569` accent
+- Dark mode: `#0F172A` background, `#FAFAFA` text, `#64748B` accent
 
 **Font:** Inter
 

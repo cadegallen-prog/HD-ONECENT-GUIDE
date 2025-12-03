@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss";
+import type { Config } from "tailwindcss"
 
 const config: Config = {
   darkMode: ["class"],
@@ -67,6 +67,29 @@ const config: Config = {
           DEFAULT: "var(--popover)",
           foreground: "var(--popover-foreground)",
         },
+
+        // New design system colors (60-30-10 rule)
+        brand: {
+          gunmetal: "#374151",
+          "gunmetal-light": "#4B5563",
+          copper: "#B87333",
+          bronze: "#CD7F32",
+        },
+        cta: {
+          primary: "#1D4ED8",
+          hover: "#1E40AF",
+        },
+        surface: {
+          primary: "#FFFFFF",
+          secondary: "#F5F5F4",
+          dark: "#1C1917",
+        },
+        content: {
+          primary: "#1C1917",
+          secondary: "#57534E",
+          muted: "#A8A29E",
+          inverse: "#FAFAF9",
+        },
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
@@ -99,6 +122,6 @@ const config: Config = {
     },
   },
   plugins: [require("tailwindcss-animate"), require("@tailwindcss/forms")],
-};
+}
 
-export default config;
+export default config

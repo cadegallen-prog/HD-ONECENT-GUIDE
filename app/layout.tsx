@@ -1,12 +1,20 @@
-import type { Metadata } from "next";
-import Script from "next/script";
-import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "@/components/ui/toaster";
-import { CommandPaletteProvider } from "@/components/command-palette-provider";
-import { Navbar } from "@/components/navbar";
-import { Footer } from "@/components/footer";
-import { Analytics } from "@vercel/analytics/react";
+import type { Metadata } from "next"
+import Script from "next/script"
+import { Inter } from "next/font/google"
+import "./globals.css"
+import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "@/components/ui/toaster"
+import { CommandPaletteProvider } from "@/components/command-palette-provider"
+import { Navbar } from "@/components/navbar"
+import { Footer } from "@/components/footer"
+import { Analytics } from "@vercel/analytics/react"
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  display: "swap",
+  variable: "--font-inter",
+})
 
 export const metadata: Metadata = {
   title: "Penny Central: The Home Depot $0.01 Hunting Guide",
@@ -41,25 +49,19 @@ export const metadata: Metadata = {
     follow: true,
   },
   icons: {
-    icon: [
-      { url: '/icon.svg', type: 'image/svg+xml' },
-    ],
-    apple: '/icon.svg',
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    apple: "/icon.svg",
   },
-};
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={inter.variable}>
       <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
-          rel="stylesheet"
-        />
         <Script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-DJ4RJRX05E"
@@ -97,5 +99,5 @@ export default function RootLayout({
         <Analytics />
       </body>
     </html>
-  );
+  )
 }

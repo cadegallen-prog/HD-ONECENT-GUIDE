@@ -4,6 +4,39 @@ Brief log of completed work. Most recent at top.
 
 ---
 
+## 2024-12-03 — Design System Refinement: 60-30-10 Rule
+
+- **Color System Overhaul:** Implemented 60-30-10 color rule for better visual hierarchy
+  - 60% Neutral: Stone grays for backgrounds and text (WCAG AA compliant)
+  - 30% Brand: Gunmetal (#374151) for headers, Copper (#B87333) for decorative accents
+  - 10% CTA: Blue (#1D4ED8) for primary action buttons ONLY
+- **Homepage Redesign:**
+  - Hero section with clear social proof badge and blue CTAs
+  - "How It Works" section: 4-step grid layout with copper-bordered number circles
+  - NEW "Support the Site" section prominently featuring tip jar and BeFrugal affiliate
+  - Refined Tools section with hover effects
+  - Community section with dark background
+- **Footer Redesign:**
+  - 4-column layout: Brand, Quick Links, Support, Legal
+  - Dark background (#1C1917) matching design system
+  - Prominent support/affiliate links
+- **Component Updates:**
+  - `SupportAndCashbackCard`: Copper left-border accent, blue CTA buttons
+  - `Navbar`: Blue active state, copper penny logo accent
+  - About page: Cards with copper left-border accent, blue action buttons
+- **Files Updated:**
+  - `tailwind.config.ts`: Added brand, cta, surface, content color tokens
+  - `globals.css`: New CSS custom properties with 60-30-10 palette
+  - `app/page.tsx`: Complete homepage redesign
+  - `components/footer.tsx`: Full footer redesign
+  - `components/navbar.tsx`: Blue active states, copper logo
+  - `components/SupportAndCashbackCard.tsx`: Copper accent, blue buttons
+  - `app/about/page.tsx`: Updated color scheme and button styling
+- **Monetization:** Tip/affiliate links prominently displayed on homepage, footer, and key pages
+- **Result:** Clean, professional design with clear visual hierarchy and accessible contrast
+
+---
+
 ## 2024-12-04 — Design System Overhaul: Slate Steel
 
 - **Color Palette Change:** Replaced "Crisp Arctic Indigo" with new "Slate Steel" palette

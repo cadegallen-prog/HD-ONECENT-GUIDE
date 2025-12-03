@@ -2,36 +2,142 @@ import Link from "next/link"
 
 export function Footer() {
   return (
-    <footer className="border-t border-slate-200 dark:border-slate-800 mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="text-center">
-          <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">
-            Penny Central is free and community-supported.{" "}
+    <footer className="bg-stone-900 dark:bg-stone-950 border-t border-stone-800 mt-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {/* Brand Column */}
+          <div className="md:col-span-1">
             <Link
-              href="/about#support"
-              className="text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors underline-offset-2 hover:underline"
+              href="/"
+              className="text-lg font-bold text-stone-50 hover:text-white transition-colors"
             >
-              Learn how you can help
+              Penny Central
             </Link>
-          </p>
-          <div className="flex items-center justify-center gap-3 text-xs">
-            <a
-              href="https://www.befrugal.com/rs/NJIKJUB/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
-            >
-              💰 BeFrugal
-            </a>
-            <span className="text-slate-300 dark:text-slate-600">•</span>
-            <a
-              href="https://paypal.me/cadegallen"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
-            >
-              ☕ Support
-            </a>
+            <p className="mt-3 text-sm text-stone-400">
+              The complete guide to finding $0.01 items at Home Depot.
+            </p>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h3 className="text-sm font-semibold text-stone-200 mb-4">Quick Links</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link
+                  href="/"
+                  className="text-sm text-stone-400 hover:text-stone-50 transition-colors underline underline-offset-2"
+                >
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/guide"
+                  className="text-sm text-stone-400 hover:text-stone-50 transition-colors underline underline-offset-2"
+                >
+                  Guide
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/store-finder"
+                  className="text-sm text-stone-400 hover:text-stone-50 transition-colors underline underline-offset-2"
+                >
+                  Store Finder
+                </Link>
+              </li>
+              <li>
+                <a
+                  href="https://www.facebook.com/groups/homedepotonecent"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-stone-400 hover:text-stone-50 transition-colors underline underline-offset-2"
+                >
+                  Community
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Support */}
+          <div>
+            <h3 className="text-sm font-semibold text-stone-200 mb-4">Support the Site</h3>
+            <ul className="space-y-2">
+              <li>
+                <a
+                  href="https://paypal.me/cadegallen"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-stone-400 hover:text-stone-50 transition-colors underline underline-offset-2"
+                >
+                  ☕ Leave a Tip
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.befrugal.com/rs/NJIKJUB/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-stone-400 hover:text-stone-50 transition-colors underline underline-offset-2"
+                >
+                  💰 BeFrugal Cashback
+                </a>
+              </li>
+              <li>
+                <Link
+                  href="/cashback"
+                  className="text-sm text-stone-400 hover:text-stone-50 transition-colors underline underline-offset-2"
+                >
+                  How Cashback Works
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/about#support"
+                  className="text-sm text-stone-400 hover:text-stone-50 transition-colors underline underline-offset-2"
+                >
+                  About Support
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <h3 className="text-sm font-semibold text-stone-200 mb-4">Legal</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link
+                  href="/about"
+                  className="text-sm text-stone-400 hover:text-stone-50 transition-colors underline underline-offset-2"
+                >
+                  About
+                </Link>
+              </li>
+              <li>
+                <span className="text-sm text-stone-500">Not affiliated with Home Depot</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="mt-10 pt-8 border-t border-stone-800">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p className="text-xs text-stone-400">© 2025 Penny Central. Educational use only.</p>
+            <div className="flex items-center gap-4">
+              <a
+                href="https://www.facebook.com/groups/homedepotonecent"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-stone-400 hover:text-stone-50 transition-colors"
+                aria-label="Facebook Group"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                </svg>
+              </a>
+            </div>
           </div>
         </div>
       </div>

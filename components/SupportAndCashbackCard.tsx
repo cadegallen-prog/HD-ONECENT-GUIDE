@@ -10,15 +10,15 @@ export function SupportAndCashbackCard({ className }: SupportAndCashbackCardProp
   return (
     <div
       className={cn(
-        "bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700",
+        "bg-white dark:bg-stone-800 rounded-xl p-6 border-l-4 border-brand-copper border-t border-r border-b border-stone-200 dark:border-stone-700",
         className
       )}
     >
-      <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-3">
-        Stack Extra Savings (Optional)
+      <h3 className="text-lg font-semibold text-stone-900 dark:text-stone-50 mb-3">
+        Support the Site (Optional)
       </h3>
 
-      <div className="text-sm text-slate-600 dark:text-slate-400 space-y-3 mb-5">
+      <div className="text-sm text-stone-600 dark:text-stone-400 space-y-3 mb-5">
         <p>
           Keeping this site running, testing deals, and building new tools takes time and money.
         </p>
@@ -36,7 +36,7 @@ export function SupportAndCashbackCard({ className }: SupportAndCashbackCardProp
           </li>
         </ul>
 
-        <p className="text-xs text-slate-500 dark:text-slate-500">
+        <p className="text-xs text-stone-400 dark:text-stone-400">
           BeFrugal does not show or unlock penny items. Penny items are in store only. This is just
           a quiet way to get a bit back on the normal stuff you are already buying.
         </p>
@@ -47,17 +47,17 @@ export function SupportAndCashbackCard({ className }: SupportAndCashbackCardProp
           href="https://www.befrugal.com/rs/NJIKJUB/"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center px-4 py-2.5 bg-slate-800 hover:bg-slate-900 dark:bg-slate-600 dark:hover:bg-slate-500 text-white text-sm font-medium rounded-lg transition-colors"
+          className="inline-flex items-center justify-center px-4 py-2.5 bg-cta-primary hover:bg-cta-hover text-white text-sm font-medium rounded-lg transition-colors"
         >
-          Activate BeFrugal Cashback
+          Get Cashback with BeFrugal
         </a>
         <a
           href="https://paypal.me/cadegallen"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center px-4 py-2.5 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 text-sm font-medium rounded-lg transition-colors"
+          className="inline-flex items-center justify-center px-4 py-2.5 bg-stone-100 dark:bg-stone-700 hover:bg-stone-200 dark:hover:bg-stone-600 text-stone-700 dark:text-stone-200 text-sm font-medium rounded-lg transition-colors border border-stone-300 dark:border-stone-600"
         >
-          Tip via PayPal
+          Leave a Tip
         </a>
       </div>
     </div>

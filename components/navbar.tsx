@@ -18,7 +18,7 @@ function PennyLogo({ className = "" }: { className?: string }) {
         fill="none"
         stroke="currentColor"
         strokeWidth="2"
-        className="text-slate-400 dark:text-slate-500"
+        className="text-brand-copper"
       />
       {/* Inner coin detail */}
       <circle
@@ -28,14 +28,14 @@ function PennyLogo({ className = "" }: { className?: string }) {
         fill="none"
         stroke="currentColor"
         strokeWidth="1.5"
-        className="text-slate-300 dark:text-slate-600"
+        className="text-brand-bronze"
       />
       {/* Center "1" for one cent */}
       <text
         x="16"
         y="21"
         textAnchor="middle"
-        className="text-slate-700 dark:text-slate-300 font-bold"
+        className="text-brand-gunmetal dark:text-stone-300 font-bold"
         style={{ fontSize: "14px", fontFamily: "system-ui" }}
         fill="currentColor"
       >
@@ -46,7 +46,7 @@ function PennyLogo({ className = "" }: { className?: string }) {
         x="23"
         y="12"
         textAnchor="middle"
-        className="text-slate-500 dark:text-slate-400"
+        className="text-stone-500 dark:text-stone-400"
         style={{ fontSize: "8px", fontFamily: "system-ui" }}
         fill="currentColor"
       >
@@ -80,13 +80,13 @@ export function Navbar() {
   return (
     <>
       {/* Desktop & Mobile Navbar */}
-      <nav className="sticky top-0 z-50 backdrop-blur-lg bg-white/90 dark:bg-slate-900/90 border-b border-slate-200 dark:border-slate-800">
+      <nav className="sticky top-0 z-50 backdrop-blur-lg bg-white/90 dark:bg-stone-900/90 border-b border-stone-200 dark:border-stone-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2.5 group">
               <PennyLogo className="w-8 h-8 transition-transform group-hover:scale-105" />
-              <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
+              <span className="text-lg font-bold tracking-tight text-stone-900 dark:text-stone-50">
                 Penny Central
               </span>
             </Link>
@@ -103,8 +103,8 @@ export function Navbar() {
                       px-4 py-2 rounded-lg text-sm font-medium transition-all duration-150
                       ${
                         isActive
-                          ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900"
-                          : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800"
+                          ? "bg-cta-primary text-white"
+                          : "text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-50 hover:bg-stone-100 dark:hover:bg-stone-800"
                       }
                     `}
                   >
@@ -117,7 +117,7 @@ export function Navbar() {
             {/* Desktop Theme Toggle */}
             <button
               onClick={() => setTheme(isDark ? "light" : "dark")}
-              className="hidden md:flex items-center justify-center w-10 h-10 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="hidden md:flex items-center justify-center w-10 h-10 rounded-lg text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-50 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
               aria-label="Toggle theme"
             >
               {mounted && (isDark ? <Sun size={20} /> : <Moon size={20} />)}
@@ -127,7 +127,7 @@ export function Navbar() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden flex items-center justify-center w-10 h-10 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="md:hidden flex items-center justify-center w-10 h-10 rounded-lg text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-50 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -138,7 +138,7 @@ export function Navbar() {
 
       {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-white dark:bg-slate-900 md:hidden">
+        <div className="fixed inset-0 z-40 bg-white dark:bg-stone-900 md:hidden">
           <div className="flex flex-col h-full pt-20 px-6">
             {/* Mobile Navigation Items */}
             <nav className="space-y-2">
@@ -154,8 +154,8 @@ export function Navbar() {
                       flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-150
                       ${
                         isActive
-                          ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900"
-                          : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800"
+                          ? "bg-cta-primary text-white"
+                          : "text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-50 hover:bg-stone-100 dark:hover:bg-stone-800"
                       }
                     `}
                   >
@@ -173,7 +173,7 @@ export function Navbar() {
                   setTheme(isDark ? "light" : "dark")
                   setMobileMenuOpen(false)
                 }}
-                className="flex items-center gap-3 px-4 py-3 rounded-lg w-full text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                className="flex items-center gap-3 px-4 py-3 rounded-lg w-full text-sm font-medium text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-50 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
               >
                 {mounted && (isDark ? <Sun size={18} /> : <Moon size={18} />)}
                 {!mounted && <Moon size={18} />}
