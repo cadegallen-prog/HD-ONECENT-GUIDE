@@ -2,40 +2,28 @@
 
 If you are GitHub Copilot Chat working in this repo, follow these rules.
 
-1. **Read `AGENTS.md` when a new chat starts.**
-   - Respect the user's constraints.
-   - Respect the documentation structure.
+---
 
-2. **Copilot credits matter.**
-   - Each interaction costs credits. Deliver substantial progress per response.
-   - Prefer dense, well-structured answers over many small exchanges.
-   - Use clear headings and bullet points. Avoid walls of prose.
+## Quick Start
 
-3. Assume small, focused tasks.
-   - The user will often paste a single prompt and wants:
-     - One feature.
-     - One bug fix.
-     - One integration.
-   - Do not go on refactor adventures.
+1. **Behavior rules:** Read `AGENTS.md` — the master source of truth for constraints, design system, and documentation structure.
+2. **Skills & stack:** Skim `SKILLS.md` — compact reference for tools, domains, and MCP usage patterns.
+3. **Current state:** Check `PROJECT_ROADMAP.md` for priorities and status.
 
-3. When editing:
-   - Keep changes as small and local as possible.
-   - Avoid reorganizing folders or renaming many files.
+---
 
-4. After completing a feature or fix:
-   - Post a short summary:
-     - Files changed.
-     - What changed in each file.
-   - If the change is non trivial, consider updating:
-     - `PROJECT_ROADMAP.md` to mark items done.
-     - `README.md` if usage changed.
-   - Only touch these docs if there is a clear, direct reason.
+## Copilot-Specific Notes
 
-5. The user cannot safely "fill in the gaps".
-   - Do not respond with only partial stubs and "you can finish the rest".
-   - Provide complete, working examples and code blocks.
+1. **Credits matter.** Deliver substantial progress per response. Prefer dense answers over many exchanges.
 
-6. If you are unsure about how aggressive to be:
-   - Default to:
-     - Minimal change.
-     - Comments that explain how to extend later.
+2. **Small, focused tasks.** The user typically wants one feature, one fix, or one integration. No refactor adventures.
+
+3. **Minimal edits.** Keep changes as small and local as possible. Avoid reorganizing folders or renaming files.
+
+4. **Complete code.** The user cannot "fill in gaps." Provide working examples, not stubs.
+
+5. **After changes:**
+   - Post a short summary (files changed, what changed).
+   - Update `PROJECT_ROADMAP.md` or `CHANGELOG.md` if meaningful work was done.
+
+6. **When unsure:** Default to minimal change with comments explaining how to extend later.

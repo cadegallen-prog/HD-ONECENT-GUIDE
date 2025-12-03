@@ -6,6 +6,56 @@ import { usePathname } from "next/navigation"
 import { Home, Map, Clock, BookOpen, User, Moon, Sun, Book, Menu, X } from "lucide-react"
 import { useTheme } from "@/components/theme-provider"
 
+// Professional Penny Logo component
+function PennyLogo({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 32 32" className={className} aria-hidden="true">
+      {/* Outer coin ring */}
+      <circle
+        cx="16"
+        cy="16"
+        r="14"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        className="text-slate-400 dark:text-slate-500"
+      />
+      {/* Inner coin detail */}
+      <circle
+        cx="16"
+        cy="16"
+        r="11"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className="text-slate-300 dark:text-slate-600"
+      />
+      {/* Center "1" for one cent */}
+      <text
+        x="16"
+        y="21"
+        textAnchor="middle"
+        className="text-slate-700 dark:text-slate-300 font-bold"
+        style={{ fontSize: "14px", fontFamily: "system-ui" }}
+        fill="currentColor"
+      >
+        1
+      </text>
+      {/* Small cent symbol */}
+      <text
+        x="23"
+        y="12"
+        textAnchor="middle"
+        className="text-slate-500 dark:text-slate-400"
+        style={{ fontSize: "8px", fontFamily: "system-ui" }}
+        fill="currentColor"
+      >
+        ¢
+      </text>
+    </svg>
+  )
+}
+
 export function Navbar() {
   const pathname = usePathname()
   const { theme, setTheme } = useTheme()
@@ -16,7 +66,7 @@ export function Navbar() {
     setMounted(true)
   }, [])
 
-  const isDark = mounted && document.documentElement.classList.contains('dark')
+  const isDark = mounted && document.documentElement.classList.contains("dark")
 
   const navItems = [
     { href: "/", label: "Home", icon: Home },
@@ -30,12 +80,13 @@ export function Navbar() {
   return (
     <>
       {/* Desktop & Mobile Navbar */}
-      <nav className="sticky top-0 z-50 backdrop-blur-lg bg-white/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-700">
+      <nav className="sticky top-0 z-50 backdrop-blur-lg bg-white/90 dark:bg-slate-900/90 border-b border-slate-200 dark:border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <Link href="/" className="flex items-center">
-              <span className="text-lg font-semibold text-slate-900 dark:text-white">
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <PennyLogo className="w-8 h-8 transition-transform group-hover:scale-105" />
+              <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
                 Penny Central
               </span>
             </Link>
@@ -49,10 +100,10 @@ export function Navbar() {
                     key={item.href}
                     href={item.href}
                     className={`
-                      px-4 py-2 rounded-lg text-sm font-medium transition-colors
+                      px-4 py-2 rounded-lg text-sm font-medium transition-all duration-150
                       ${
                         isActive
-                          ? "bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400"
+                          ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900"
                           : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800"
                       }
                     `}
@@ -66,7 +117,7 @@ export function Navbar() {
             {/* Desktop Theme Toggle */}
             <button
               onClick={() => setTheme(isDark ? "light" : "dark")}
-              className="hidden md:flex items-center justify-center w-10 h-10 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="hidden md:flex items-center justify-center w-10 h-10 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               aria-label="Toggle theme"
             >
               {mounted && (isDark ? <Sun size={20} /> : <Moon size={20} />)}
@@ -100,10 +151,10 @@ export function Navbar() {
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
                     className={`
-                      flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors
+                      flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-150
                       ${
                         isActive
-                          ? "bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400"
+                          ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900"
                           : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800"
                       }
                     `}

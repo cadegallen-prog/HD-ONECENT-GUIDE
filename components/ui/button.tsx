@@ -1,8 +1,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "ghost"
   size?: "sm" | "default" | "lg"
   href?: string
@@ -17,8 +16,10 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
     const classes = cn(
       "inline-flex items-center justify-center rounded-md font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
       {
-        primary: "bg-gradient-to-b from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white shadow-lg shadow-indigo-500/25 hover:-translate-y-0.5",
-        secondary: "bg-transparent border border-border hover:bg-accent-muted hover:border-accent text-text-primary",
+        primary:
+          "bg-slate-800 hover:bg-slate-900 dark:bg-slate-600 dark:hover:bg-slate-500 text-white shadow-sm hover:-translate-y-0.5",
+        secondary:
+          "bg-transparent border border-border hover:bg-accent-muted hover:border-accent text-text-primary",
         ghost: "bg-transparent text-text-secondary hover:bg-elevated hover:text-text-primary",
       }[variant],
       {

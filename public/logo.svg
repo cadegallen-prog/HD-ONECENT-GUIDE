@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <!-- Professional Penny Logo - Slate Steel Design -->
+  
+  <!-- Outer coin ring with subtle gradient effect -->
+  <circle cx="24" cy="24" r="22" stroke="#64748b" stroke-width="2.5" fill="none"/>
+  
+  <!-- Inner coin detail ring -->
+  <circle cx="24" cy="24" r="17" stroke="#94a3b8" stroke-width="1.5" fill="none"/>
+  
+  <!-- Center "1" numeral - bold and commanding -->
+  <text 
+    x="24" 
+    y="30" 
+    text-anchor="middle" 
+    font-family="system-ui, -apple-system, sans-serif" 
+    font-size="20" 
+    font-weight="700"
+    fill="#334155"
+  >1</text>
+  
+  <!-- Cent symbol - positioned top right -->
+  <text 
+    x="35" 
+    y="16" 
+    text-anchor="middle" 
+    font-family="system-ui, -apple-system, sans-serif" 
+    font-size="10" 
+    font-weight="600"
+    fill="#64748b"
+  >¢</text>
+  
+  <!-- Decorative dots around the rim (like a real penny) -->
+  <circle cx="24" cy="4" r="1" fill="#cbd5e1"/>
+  <circle cx="24" cy="44" r="1" fill="#cbd5e1"/>
+  <circle cx="4" cy="24" r="1" fill="#cbd5e1"/>
+  <circle cx="44" cy="24" r="1" fill="#cbd5e1"/>
+</svg>

@@ -76,8 +76,9 @@ public/                 # Static assets
 ## For AI Agents
 
 - **`AGENTS.md`** — Single source of truth for how agents should behave, design specs, and project rules.
-- **`CLAUDE.md`** — Claude-specific instructions (points to AGENTS.md).
-- **`.github/copilot-instructions.md`** — Copilot Chat-specific instructions (points to AGENTS.md).
+- **`SKILLS.md`** — Compact reference for technical stack, domain skills, MCP servers, and tooling.
+- **`CLAUDE.md`** — Claude-specific instructions (points to AGENTS.md and SKILLS.md).
+- **`.github/copilot-instructions.md`** — Copilot Chat-specific instructions (points to AGENTS.md and SKILLS.md).
 - **`PROJECT_ROADMAP.md`** — What's done, in progress, and planned.
 
 ---

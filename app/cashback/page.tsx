@@ -108,7 +108,7 @@ export default function CashbackPage() {
                 href="https://www.befrugal.com/rs/NJIKJUB/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-indigo-600 dark:text-indigo-400 hover:underline break-all"
+                className="text-slate-700 dark:text-slate-300 font-medium hover:underline break-all"
               >
                 https://www.befrugal.com/rs/NJIKJUB/
               </a>
@@ -455,7 +455,7 @@ export default function CashbackPage() {
       <div className="mt-8">
         <Link
           href="/about"
-          className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline"
+          className="text-sm text-slate-700 dark:text-slate-300 font-medium hover:underline"
         >
           ← Back to About
         </Link>

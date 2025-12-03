@@ -15,6 +15,7 @@ If you are Claude, GitHub Copilot Chat, ChatGPT, or any other agent reading this
   - Understand concepts if explained in plain language.
 
 Assume:
+
 - You are the engineer.
 - They are the product owner and tester.
 - You must protect them from complexity and accidental damage.
@@ -39,7 +40,7 @@ Assume:
    - If something looks unused, prefer to:
      - Mark it as deprecated in a comment, or
      - Move it to a clearly named `archive/` folder,
-     before actually deleting it.
+       before actually deleting it.
 
 ---
 
@@ -48,6 +49,7 @@ Assume:
 GitHub Copilot Chat consumes metered credits per interaction.
 
 **Efficiency rules:**
+
 - Short, superficial replies are wasteful. Each response should deliver substantial, multi-step progress.
 - Prefer dense, well-structured answers that move several related pieces forward at once.
 - Respect the user's energy limits. Be information-dense rather than long-winded.
@@ -60,14 +62,15 @@ GitHub Copilot Chat consumes metered credits per interaction.
 
 There are a few key docs that you must treat as a system:
 
-| File | Purpose |
-|------|---------||
-| `README.md` | High level explanation of what this project is and how to run it. Links to the other docs. |
-| `AGENTS.md` (this file) | How agents should behave. User preferences and constraints. Safety rules. |
-| `CLAUDE.md` | Claude specific instructions that reference `AGENTS.md`. |
-| `.github/copilot-instructions.md` | Copilot Chat specific instructions that reference `AGENTS.md`. |
-| `PROJECT_ROADMAP.md` | High level features, status, and upcoming work. |
-| `CHANGELOG.md` | Brief chronological log of completed work for progress visibility. |
+| File                              | Purpose                                                                                    |
+| --------------------------------- | ------------------------------------------------------------------------------------------ |
+| `README.md`                       | High level explanation of what this project is and how to run it. Links to the other docs. |
+| `AGENTS.md` (this file)           | How agents should behave. User preferences and constraints. Safety rules. Design system.   |
+| `SKILLS.md`                       | Compact reference for technical stack, domain skills, MCP servers, and tooling.            |
+| `CLAUDE.md`                       | Claude specific instructions that reference `AGENTS.md` and `SKILLS.md`.                   |
+| `.github/copilot-instructions.md` | Copilot Chat specific instructions that reference `AGENTS.md` and `SKILLS.md`.             |
+| `PROJECT_ROADMAP.md`              | High level features, status, and upcoming work.                                            |
+| `CHANGELOG.md`                    | Brief chronological log of completed work for progress visibility.                         |
 
 These files should **not** drift apart or contradict each other.
 
@@ -94,6 +97,7 @@ At the end of any **feature implementation**, **meaningful refactor**, or **conf
    - They should mostly just point to `AGENTS.md`.
 
 If you change any of these docs:
+
 - Keep edits minimal.
 - Do not rewrite the user's voice.
 - Note the change in your summary.
@@ -132,6 +136,7 @@ At the start of a new session, do this:
 - Prefer explicit names and simple flows.
 
 When in doubt:
+
 - Leave a short comment in code explaining why something exists, especially if it is a hack or temporary workaround.
 
 ---
@@ -154,6 +159,7 @@ If you are unsure where to put something or whether to change a global pattern:
 Penny Central is a **utility/reference guide** for finding Home Depot clearance items marked to $0.01. It serves a 36,000+ member Facebook community.
 
 **Mission:** Build and maintain PennyCentral.com as the central hub for:
+
 - Education on Home Depot penny items and deep discounts
 - Tools that help members find, plan, and evaluate deals
 - Practical guidance on whether items are worth buying to keep, donate, or resell, with realistic time vs money tradeoffs
@@ -171,41 +177,42 @@ Penny Central is a **utility/reference guide** for finding Home Depot clearance 
 - **Font:** Inter (headings + body)
 - **Hosting:** Vercel
 
-### Design System — Crisp Arctic Indigo
+### Design System — Slate Steel
 
 Use ONLY these colors. No exceptions.
 
 #### Light Mode
 
-| Role | Hex | Tailwind |
-|------|-----|----------|
-| Page background | `#FAFAFA` | `bg-[#FAFAFA]` |
-| Card surface | `#FFFFFF` | `bg-white` |
-| Primary text | `#0F172A` | `text-slate-900` |
-| Secondary text | `#334155` | `text-slate-700` |
-| Muted text | `#64748B` | `text-slate-500` |
-| Borders | `#E2E8F0` | `border-slate-200` |
-| Accent | `#6366F1` | `bg-indigo-500` |
-| Accent hover | `#4F46E5` | `bg-indigo-600` |
-| Accent subtle | `#E0E7FF` | `bg-indigo-100` |
+| Role            | Hex       | Tailwind           |
+| --------------- | --------- | ------------------ |
+| Page background | `#FAFAFA` | `bg-[#FAFAFA]`     |
+| Card surface    | `#FFFFFF` | `bg-white`         |
+| Primary text    | `#0F172A` | `text-slate-900`   |
+| Secondary text  | `#334155` | `text-slate-700`   |
+| Muted text      | `#64748B` | `text-slate-500`   |
+| Borders         | `#E2E8F0` | `border-slate-200` |
+| Accent          | `#475569` | `bg-slate-600`     |
+| Accent hover    | `#334155` | `bg-slate-700`     |
+| Accent subtle   | `#F1F5F9` | `bg-slate-100`     |
 
 #### Dark Mode
 
-| Role | Hex | Tailwind |
-|------|-----|----------|
-| Page background | `#0F172A` | `bg-slate-900` |
-| Card surface | `#1E293B` | `bg-slate-800` |
-| Primary text | `#FAFAFA` | `text-slate-50` |
-| Secondary text | `#94A3B8` | `text-slate-400` |
-| Muted text | `#64748B` | `text-slate-500` |
-| Borders | `#334155` | `border-slate-700` |
-| Accent | `#818CF8` | `bg-indigo-400` |
-| Accent hover | `#6366F1` | `bg-indigo-500` |
-| Accent subtle | `rgba(79,70,229,0.2)` | `bg-indigo-500/20` |
+| Role            | Hex       | Tailwind           |
+| --------------- | --------- | ------------------ |
+| Page background | `#0F172A` | `bg-slate-900`     |
+| Card surface    | `#1E293B` | `bg-slate-800`     |
+| Primary text    | `#FAFAFA` | `text-slate-50`    |
+| Secondary text  | `#94A3B8` | `text-slate-400`   |
+| Muted text      | `#64748B` | `text-slate-500`   |
+| Borders         | `#334155` | `border-slate-700` |
+| Accent          | `#64748B` | `bg-slate-500`     |
+| Accent hover    | `#475569` | `bg-slate-600`     |
+| Accent subtle   | `#334155` | `bg-slate-700`     |
 
 #### Accent Usage Rules
 
 The accent color may ONLY appear on:
+
 1. ONE primary button per page
 2. Active navigation state
 3. Links on hover
@@ -216,6 +223,7 @@ Maximum 3 accent elements visible per screen.
 ### Forbidden Elements
 
 Never add:
+
 - Illustrations or decorative graphics
 - Gradients (except subtle button gradients)
 - Shadows (except subtle card elevation)
@@ -224,7 +232,7 @@ Never add:
 - Emoji in UI
 - Colored card backgrounds
 - Multiple accent colors
-- Orange, amber, teal, cyan, pink, or purple as accents
+- Orange, amber, teal, cyan, pink, purple, or indigo as accents
 - Gamification (XP, levels, achievements, badges)
 - Price tag icons or shopping illustrations
 
@@ -244,36 +252,11 @@ npm run lint         # Run linter
 
 ---
 
-## 9. Skills and Tools
+## 9. Skills, Tools, and MCP
 
-### Technical Stack
+**For technical stack, domain skills, MCP servers, and tooling guidance, see `SKILLS.md`.**
 
-| Category | Tools |
-|----------|-------|
-| **Framework** | Next.js 15 (App Router) |
-| **Language** | TypeScript |
-| **Styling** | Tailwind CSS |
-| **UI Components** | shadcn/ui, Lucide icons |
-| **Maps** | Leaflet / React-Leaflet |
-| **Forms** | React Hook Form + Zod |
-| **Animation** | Framer Motion (sparingly) |
-| **Hosting** | Vercel |
-| **Data** | JSON files in `data/`, Firebase (planned) |
-
-### MCP Configuration
-
-Agent configs live in `.claude/`:
-- `settings.json` - MCP server definitions (filesystem, git, github, vercel)
-- `settings.local.json` - Bash command permissions
-
-VS Code configs live in `.vscode/`:
-- `settings.json` - Workspace settings (formatting, Python, etc.)
-- `extensions.json` - Recommended extensions
-
-### Experimental / Separate
-
-- `experimental_scraper/` - Rust-based scraper experiment. Treat as a separate project. Do not delete or refactor without explicit approval.
-- `archive/` - Old code and deprecated docs. Safe to read for context. Do not restore without asking.
+That file is the canonical reference for what this project can do and how to work efficiently with its tools.
 
 ---
 

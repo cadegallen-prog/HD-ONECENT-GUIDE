@@ -31,7 +31,8 @@ export function SupportAndCashbackCard({ className }: SupportAndCashbackCardProp
             Lowe&apos;s, Sam&apos;s Club, Amazon, and more
           </li>
           <li>
-            Toss a small tip into the PayPal coffee fund if the guides saved you serious time or money
+            Toss a small tip into the PayPal coffee fund if the guides saved you serious time or
+            money
           </li>
         </ul>
 
@@ -46,7 +47,7 @@ export function SupportAndCashbackCard({ className }: SupportAndCashbackCardProp
           href="https://www.befrugal.com/rs/NJIKJUB/"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center px-4 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium rounded-lg transition-colors"
+          className="inline-flex items-center justify-center px-4 py-2.5 bg-slate-800 hover:bg-slate-900 dark:bg-slate-600 dark:hover:bg-slate-500 text-white text-sm font-medium rounded-lg transition-colors"
         >
           Activate BeFrugal Cashback
         </a>

@@ -5,46 +5,49 @@
 @layer base {
   :root {
     /* ===============================================
-       PENNY CENTRAL – MINIMALIST DESIGN SYSTEM
-       Linear/Vercel/Stripe aesthetic
+       PENNY CENTRAL – SLATE STEEL DESIGN SYSTEM
+       Clean, authoritative, professional aesthetic
        =============================================== */
 
-    /* Backgrounds - Light */
-    --bg-page: #FAFAFA;
-    --bg-card: #FFFFFF;
-    --bg-elevated: #F4F4F5;
+    /* Backgrounds - Light Mode */
+    --bg-page: #f8fafc; /* slate-50 - softer than pure white */
+    --bg-card: #ffffff;
+    --bg-elevated: #f1f5f9; /* slate-100 */
 
-    /* Backgrounds - Dark */
-    --bg-page-dark: #0F172A;
-    --bg-card-dark: #1E293B;
-    --bg-elevated-dark: #27272A;
+    /* Backgrounds - Dark Mode */
+    --bg-page-dark: #0f172a; /* slate-900 */
+    --bg-card-dark: #1e293b; /* slate-800 */
+    --bg-elevated-dark: #334155; /* slate-700 */
 
-    /* Text - Light */
-    --text-primary: #0F172A;
-    --text-secondary: #334155;
-    --text-muted: #64748B;
+    /* Text - Light Mode */
+    --text-primary: #0f172a; /* slate-900 */
+    --text-secondary: #334155; /* slate-700 */
+    --text-muted: #64748b; /* slate-500 */
 
-    /* Text - Dark */
-    --text-primary-dark: #FAFAFA;
-    --text-secondary-dark: #94A3B8;
-    --text-muted-dark: #64748B;
+    /* Text - Dark Mode */
+    --text-primary-dark: #f1f5f9; /* slate-100 */
+    --text-secondary-dark: #cbd5e1; /* slate-300 */
+    --text-muted-dark: #94a3b8; /* slate-400 */
 
     /* Borders */
-    --border-light: #E2E8F0;
-    --border-dark: #334155;
+    --border-light: #e2e8f0; /* slate-200 */
+    --border-dark: #334155; /* slate-700 */
 
-    /* Accent — INDIGO — USE SPARINGLY */
-    --accent: #6366F1;
-    --accent-hover: #4F46E5;
-    --accent-muted: #E0E7FF;
-    --shadow-card: 0 1px 3px rgba(0,0,0,0.08);
+    /* Accent — SLATE STEEL — Professional authority */
+    --accent: #475569; /* slate-600 - main accent */
+    --accent-hover: #334155; /* slate-700 - darker on hover */
+    --accent-muted: #f1f5f9; /* slate-100 - subtle background */
+    --accent-emphasis: #1e293b; /* slate-800 - strong emphasis */
 
-    /* Status only - never decorative */
+    /* Shadow for cards */
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+
+    /* Status colors - functional only */
     --success: #16a34a;
     --error: #dc2626;
-    --warning: #ca8a04;
+    --warning: #d97706;
 
-    /* Compatibility with shadcn/ui components */
+    /* shadcn/ui compatibility */
     --background: var(--bg-page);
     --foreground: var(--text-primary);
     --card: var(--bg-card);
@@ -74,12 +77,16 @@
     --text-secondary: var(--text-secondary-dark);
     --text-muted: var(--text-muted-dark);
     --border: var(--border-dark);
-    --accent: #818CF8;
-    --accent-hover: #6366F1;
-    --accent-muted: rgba(79,70,229,0.2);
-    --shadow-card: inset 0 1px 0 rgba(99,102,241,0.1);
 
-    /* Compatibility with shadcn/ui components */
+    /* Dark mode accents - slightly lighter for visibility */
+    --accent: #94a3b8; /* slate-400 */
+    --accent-hover: #cbd5e1; /* slate-300 */
+    --accent-muted: rgba(148, 163, 184, 0.15);
+    --accent-emphasis: #f1f5f9; /* slate-100 */
+
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3);
+
+    /* shadcn/ui compatibility - dark */
     --background: var(--bg-page-dark);
     --foreground: var(--text-primary-dark);
     --card: var(--bg-card-dark);
@@ -100,7 +107,11 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family:
+      "Inter",
+      -apple-system,
+      BlinkMacSystemFont,
+      sans-serif;
     font-size: 15px;
     line-height: 1.5;
     color: var(--text-primary);
@@ -113,12 +124,15 @@
   /* Card titles: text-sm font-semibold text-text-primary */
   /* Body text: text-sm text-text-primary */
 
-  code, .sku, .code {
+  code,
+  .sku,
+  .code {
     font-family: ui-monospace, monospace;
     font-size: 14px;
   }
 
-  .caption, figcaption {
+  .caption,
+  figcaption {
     font-size: 12px;
     color: var(--text-muted);
   }
@@ -196,32 +210,32 @@
      STEP CARDS (for numbered steps)
      =============================================== */
   .step-card {
-    @apply relative pl-12 py-4;
+    @apply relative pl-10 py-3;
   }
 
   .step-badge {
-    @apply absolute left-0 top-4 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold;
-    @apply bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400;
+    @apply absolute left-0 top-3 w-7 h-7 rounded flex items-center justify-center text-xs font-bold;
+    @apply bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300;
   }
 
   /* ===============================================
      INFO CARDS
      =============================================== */
   .info-card {
-    @apply bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-5;
+    @apply bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-4;
   }
 
   .info-card-header {
-    @apply flex items-center gap-3 mb-3;
+    @apply flex items-center gap-2.5 mb-2;
   }
 
   .info-card-icon {
-    @apply w-10 h-10 rounded-lg flex items-center justify-center;
-    @apply bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400;
+    @apply w-8 h-8 rounded flex items-center justify-center;
+    @apply bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400;
   }
 
   .info-card-title {
-    @apply text-base font-semibold text-slate-900 dark:text-white;
+    @apply text-sm font-semibold text-slate-900 dark:text-white;
   }
 
   /* ===============================================
@@ -268,7 +282,7 @@
      and consistent with the design system.
      =============================================== */
 
-  /* Popup container styling */
+  /* Popup container styling - Light mode */
   .leaflet-popup-content-wrapper {
     @apply bg-white rounded-xl shadow-lg border border-slate-200;
     padding: 0;
@@ -276,13 +290,13 @@
   }
 
   .leaflet-popup-content {
-    margin: 12px 14px;
-    line-height: 1.4;
+    margin: 14px 16px;
+    line-height: 1.5;
     font-size: 13px;
     color: #0f172a; /* slate-900 */
   }
 
-  /* Popup tip (arrow) styling */
+  /* Popup tip (arrow) styling - Light mode */
   .leaflet-popup-tip-container {
     margin-top: -1px;
   }
@@ -292,21 +306,23 @@
     box-shadow: none;
   }
 
-  /* Close button styling */
+  /* Close button styling - Light mode */
   .leaflet-popup-close-button {
     color: #64748b !important; /* slate-500 */
     font-size: 20px !important;
     font-weight: 400 !important;
     width: 28px !important;
     height: 28px !important;
-    top: 6px !important;
-    right: 6px !important;
+    top: 8px !important;
+    right: 8px !important;
     padding: 0 !important;
     display: flex !important;
     align-items: center;
     justify-content: center;
     border-radius: 6px;
-    transition: background-color 0.15s ease, color 0.15s ease;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
   }
 
   .leaflet-popup-close-button:hover {
@@ -314,10 +330,36 @@
     background-color: #f1f5f9 !important; /* slate-100 */
   }
 
+  /* ===============================================
+     DARK MODE POPUP OVERRIDES
+     =============================================== */
+  .dark .leaflet-popup-content-wrapper {
+    @apply bg-slate-800 border-slate-700;
+  }
+
+  .dark .leaflet-popup-content {
+    color: #f8fafc; /* slate-50 */
+  }
+
+  .dark .leaflet-popup-tip {
+    @apply bg-slate-800 border-slate-700;
+  }
+
+  .dark .leaflet-popup-close-button {
+    color: #94a3b8 !important; /* slate-400 */
+  }
+
+  .dark .leaflet-popup-close-button:hover {
+    color: #f8fafc !important; /* slate-50 */
+    background-color: #334155 !important; /* slate-700 */
+  }
+
   /* Ensure popup links have clear hover states */
   .store-popup-link {
     text-decoration: none;
-    transition: color 0.15s ease, text-decoration 0.15s ease;
+    transition:
+      color 0.15s ease,
+      text-decoration 0.15s ease;
   }
 
   .store-popup-link:hover {

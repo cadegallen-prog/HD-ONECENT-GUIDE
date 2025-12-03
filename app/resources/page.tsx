@@ -36,9 +36,7 @@ export default function ResourcesPage() {
   return (
     <div className="p-6 max-w-[1200px]">
       <header className="mb-6">
-        <h1 className="text-[22px] font-semibold text-text-primary">
-          Resources
-        </h1>
+        <h1 className="text-[22px] font-semibold text-text-primary">Resources</h1>
       </header>
 
       {/* PDF Download */}
@@ -54,9 +52,7 @@ export default function ResourcesPage() {
 
       {/* External Tools */}
       <div className="space-y-3">
-        <h2 className="text-base font-semibold text-text-primary mb-3">
-          External Tools
-        </h2>
+        <h2 className="text-base font-semibold text-text-primary mb-3">External Tools</h2>
 
         {tools.map((tool) => (
           <a
@@ -67,24 +63,23 @@ export default function ResourcesPage() {
             className="flex items-center justify-between p-4 bg-card border border-border rounded-lg hover:bg-elevated transition-colors group"
           >
             <div>
-              <h3 className="text-sm font-semibold text-text-primary mb-1">
-                {tool.name}
-              </h3>
-              <p className="text-xs text-text-secondary">
-                {tool.description}
-              </p>
+              <h3 className="text-sm font-semibold text-text-primary mb-1">{tool.name}</h3>
+              <p className="text-xs text-text-secondary">{tool.description}</p>
             </div>
-            <ExternalLink size={14} className="text-text-muted group-hover:text-accent flex-shrink-0 ml-4" />
+            <ExternalLink
+              size={14}
+              className="text-text-muted group-hover:text-accent flex-shrink-0 ml-4"
+            />
           </a>
         ))}
 
         {/* Support Card */}
         <Link
           href="/about#support"
-          className="flex items-center justify-between p-4 bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-colors group mt-6"
+          className="flex items-center justify-between p-4 bg-slate-100 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors group mt-6"
         >
           <div className="flex items-start gap-3">
-            <Heart size={18} className="text-indigo-500 dark:text-indigo-400 flex-shrink-0 mt-0.5" />
+            <Heart size={18} className="text-slate-600 dark:text-slate-400 flex-shrink-0 mt-0.5" />
             <div>
               <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-1">
                 Support Penny Central
@@ -94,7 +89,10 @@ export default function ResourcesPage() {
               </p>
             </div>
           </div>
-          <ExternalLink size={14} className="text-indigo-500 dark:text-indigo-400 flex-shrink-0 ml-4" />
+          <ExternalLink
+            size={14}
+            className="text-slate-600 dark:text-slate-400 flex-shrink-0 ml-4"
+          />
         </Link>
       </div>
     </div>
