@@ -54,7 +54,7 @@ export default function ResourcesPage() {
           <Download size={20} className="text-[var(--text-muted)] flex-shrink-0" />
           <div className="flex-1">
             <h2 className="text-sm font-semibold text-[var(--text-primary)]">PDF Guide</h2>
-            <p className="text-sm text-[var(--text-muted)]">Printable reference for in-store use</p>
+            <p className="text-sm text-[var(--text-muted)]">Study guide to learn penny hunting basics before you shop</p>
           </div>
           <Button variant="primary" asChild className="min-h-[44px]">
             <a href="/Home-Depot-Penny-Guide.pdf" download>
