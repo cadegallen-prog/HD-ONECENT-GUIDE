@@ -11,7 +11,6 @@ import {
   Phone,
   Clock,
   Heart,
-  Info,
   ExternalLink,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -164,32 +163,29 @@ export default function StoreFinderPage() {
   }, [allLoadedStores.length])
 
   // Load remote store data via cached API route
+  // Initial load is limited to 300 stores for faster LCP; full dataset loads on demand
   useEffect(() => {
     let cancelled = false
     const load = async () => {
       setLoadingStores(true)
       try {
-        console.log("[Store Finder] Fetching stores from API...")
-        const res = await fetch("/api/stores?limit=2000", { cache: "force-cache" })
+        // Fetch limited initial set for fast initial paint
+        const res = await fetch("/api/stores?limit=300", { cache: "force-cache" })
 
         if (!res.ok) {
           throw new Error(`Failed to fetch /api/stores: ${res.status} ${res.statusText}`)
         }
 
         const json = (await res.json()) as StoreLocation[]
-        console.log(`[Store Finder] Received ${json.length} stores from API`)
 
         const normalized = json
           .map(normalizeStore)
           .filter((s) => isValidStore(s.name) && hasValidCoordinates(s))
 
-        console.log(`[Store Finder] After filtering: ${normalized.length} valid stores`)
-
         if (!cancelled) {
           setAllLoadedStores(normalized)
         }
-      } catch (err) {
-        console.error("Failed to load remote store data; using fallback sample instead.", err)
+      } catch {
         // Keep using the sample data (already in allLoadedStores)
       } finally {
         if (!cancelled) {
@@ -390,19 +386,27 @@ export default function StoreFinderPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-col sm:flex-row gap-3">
             {/* Search Input */}
-            <div className="flex-1 flex gap-2">
+            <div className="flex-1 flex gap-2" role="search">
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <label htmlFor="store-search" className="sr-only">
+                  Search for stores
+                </label>
+                <Search
+                  className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
+                  aria-hidden="true"
+                />
                 <input
-                  type="text"
+                  id="store-search"
+                  type="search"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="ZIP code, city, or address..."
-                  className="w-full pl-10 pr-4 py-2.5 text-sm border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-slate-900 dark:focus:ring-white focus:border-transparent transition-shadow"
+                  aria-label="Search for stores by ZIP code, city, or address"
+                  className="w-full pl-10 pr-4 py-2.5 text-sm border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-slate-900 dark:focus:ring-white focus:border-transparent transition-shadow min-h-[44px]"
                 />
               </div>
-              <Button onClick={handleSearch} size="sm" className="px-4">
+              <Button onClick={handleSearch} size="sm" className="px-4 min-h-[44px]">
                 Search
               </Button>
             </div>
@@ -413,10 +417,14 @@ export default function StoreFinderPage() {
                 onClick={getUserLocation}
                 variant="secondary"
                 size="sm"
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 min-h-[44px]"
                 disabled={locatingUser}
+                aria-label={locatingUser ? "Locating your position" : "Use my current location"}
               >
-                <Navigation className={`h-4 w-4 ${locatingUser ? "animate-pulse" : ""}`} />
+                <Navigation
+                  className={`h-4 w-4 ${locatingUser ? "animate-pulse" : ""}`}
+                  aria-hidden="true"
+                />
                 <span className="hidden sm:inline">
                   {locatingUser ? "Locating..." : "My Location"}
                 </span>
@@ -452,7 +460,7 @@ export default function StoreFinderPage() {
           </div>
 
           {/* Status line */}
-          <p className="text-xs text-muted-foreground mt-3">
+          <p className="text-xs text-muted-foreground mt-3" aria-live="polite" role="status">
             Showing {displayedStores.length} stores • Hours may vary
           </p>
         </div>
@@ -462,11 +470,11 @@ export default function StoreFinderPage() {
       <div className="flex-1">
         {/* Map View */}
         {viewMode === "map" && (
-          <div className="flex flex-col lg:flex-row h-[calc(100vh-200px)] min-h-[500px]">
+          <div className="flex flex-col lg:flex-row h-[450px] lg:h-[500px]">
             {/* Store List Panel */}
             <div
               ref={listContainerRef}
-              className="w-full lg:w-96 xl:w-[420px] flex-shrink-0 h-64 lg:h-full overflow-y-auto border-b lg:border-b-0 lg:border-r border-border bg-card"
+              className="w-full lg:w-96 xl:w-[420px] flex-shrink-0 h-48 lg:h-full overflow-y-auto border-b lg:border-b-0 lg:border-r border-border bg-card"
             >
               {loadingStores && displayedStores.length === 0 ? (
                 <div className="p-4 space-y-3">
@@ -498,7 +506,7 @@ export default function StoreFinderPage() {
             </div>
 
             {/* Map Panel - Takes remaining space */}
-            <div className="flex-1 min-h-[300px] lg:min-h-full">
+            <div className="flex-1 min-h-[250px] lg:min-h-full">
               <StoreMap
                 stores={displayedStores}
                 center={mapCenter}
@@ -523,7 +531,7 @@ export default function StoreFinderPage() {
             ) : displayedStores.length === 0 ? (
               <div className="text-center py-16 bg-card border border-border rounded-xl">
                 <MapPin className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-semibold mb-2 text-foreground">No stores found</h3>
+                <h2 className="text-lg font-semibold mb-2 text-foreground">No stores found</h2>
                 <p className="text-sm text-muted-foreground">Try adjusting your search</p>
               </div>
             ) : (
@@ -572,7 +580,7 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
         <div className="flex items-start gap-2.5">
           {/* Index number */}
           <div
-            className={`flex-shrink-0 w-5 h-5 rounded text-[10px] font-bold flex items-center justify-center ${
+            className={`flex-shrink-0 w-6 h-6 rounded text-xs font-bold flex items-center justify-center ${
               isSelected
                 ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900"
                 : "bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400"
@@ -585,13 +593,13 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
-                <h3
+                <h2
                   className={`font-semibold text-sm leading-tight truncate ${
                     isSelected ? "text-slate-900 dark:text-white" : "text-foreground"
                   }`}
                 >
                   {getStoreTitle(store)}
-                </h3>
+                </h2>
                 <p className="text-xs text-muted-foreground mt-0.5">
                   {store.city}, {store.state}
                 </p>
@@ -607,7 +615,9 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
               </button>
             </div>
 
-            <p className="text-[11px] text-muted-foreground mt-1 truncate">{store.address}</p>
+            <p className="text-xs text-stone-600 dark:text-stone-400 mt-1 truncate">
+              {store.address}
+            </p>
 
             <div className="flex items-center gap-2 mt-1.5">
               {store.distance !== undefined && (
@@ -619,7 +629,7 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
                 <a
                   href={`tel:${store.phone}`}
                   onClick={(e) => e.stopPropagation()}
-                  className="text-[11px] text-muted-foreground hover:text-foreground flex items-center gap-1"
+                  className="text-xs text-stone-600 dark:text-stone-400 hover:text-foreground flex items-center gap-1"
                 >
                   <Phone className="h-3 w-3" />
                   {store.phone}
@@ -628,7 +638,7 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
             </div>
 
             {(store.hours?.weekday || store.hours?.weekend) && (
-              <div className="flex items-start gap-1 mt-1.5 text-[10px] text-muted-foreground leading-tight">
+              <div className="flex items-start gap-1 mt-1.5 text-xs text-stone-600 dark:text-stone-400 leading-tight">
                 <Clock className="h-3 w-3 mt-px flex-shrink-0" />
                 <div className="space-y-0">
                   {(() => {
@@ -653,9 +663,9 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="flex-1 text-[11px] font-medium bg-slate-900 dark:bg-white text-white dark:text-slate-900 py-1.5 px-2 rounded text-center hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors flex items-center justify-center gap-1"
+                  className="flex-1 text-xs font-medium bg-slate-900 dark:bg-white text-white dark:text-slate-900 py-2 px-3 rounded text-center hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors flex items-center justify-center gap-1 min-h-[44px]"
                 >
-                  <Navigation className="h-3 w-3" />
+                  <Navigation className="h-4 w-4" />
                   Directions
                 </a>
                 <a
@@ -663,9 +673,9 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="flex-1 text-[11px] font-medium border border-border py-1.5 px-2 rounded text-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center justify-center gap-1"
+                  className="flex-1 text-xs font-medium border border-border py-2 px-3 rounded text-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center justify-center gap-1 min-h-[44px]"
                 >
-                  <ExternalLink className="h-3 w-3" />
+                  <ExternalLink className="h-4 w-4" />
                   Store
                 </a>
               </div>
@@ -698,7 +708,7 @@ function StoreCard({
             {index}
           </div>
           <div>
-            <h3 className="font-semibold text-sm text-foreground">{getStoreTitle(store)}</h3>
+            <h2 className="font-semibold text-sm text-foreground">{getStoreTitle(store)}</h2>
             <p className="text-xs text-muted-foreground">
               {store.city}, {store.state}
             </p>
@@ -746,7 +756,7 @@ function StoreCard({
         {(store.hours?.weekday || store.hours?.weekend) && (
           <div className="flex items-start gap-1.5">
             <Clock className="h-3.5 w-3.5 mt-px" />
-            <div className="space-y-0 text-[11px] leading-tight">
+            <div className="space-y-0 text-xs text-stone-600 dark:text-stone-400 leading-tight">
               {(() => {
                 const formatted = formatStoreHours(store.hours)
                 return (

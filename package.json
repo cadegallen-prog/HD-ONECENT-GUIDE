@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev -p 3001",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3001",
     "lint": "eslint app components lib --ext .ts,.tsx --max-warnings=0",
     "export": "next build && next export",
     "test:e2e": "playwright test"

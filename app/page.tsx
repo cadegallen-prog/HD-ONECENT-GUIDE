@@ -1,10 +1,10 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { COMMUNITY_MEMBER_COUNT_DISPLAY, FACEBOOK_GROUP_URL } from "@/lib/constants"
 
 export const metadata: Metadata = {
   title: "Penny Central - Find $0.01 Items at Home Depot",
-  description:
-    "Join 36,000+ penny hunters. Learn the clearance system and score items for a single cent.",
+  description: `Join ${COMMUNITY_MEMBER_COUNT_DISPLAY} penny hunters. Learn the clearance system and score items for a single cent.`,
 }
 
 export default function Home() {
@@ -20,7 +20,7 @@ export default function Home() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-copper opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-copper"></span>
           </span>
-          Join 36,000+ penny hunters
+          Join {COMMUNITY_MEMBER_COUNT_DISPLAY} penny hunters
         </div>
 
         {/* Headline */}
@@ -322,7 +322,7 @@ export default function Home() {
                 commission at no extra cost to you.
               </p>
               <a
-                href="https://www.befrugal.com/rs/NJIKJUB/"
+                href="/go/befrugal"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-cta-primary hover:bg-cta-hover text-white font-semibold transition-all"
@@ -348,7 +348,7 @@ export default function Home() {
       <section className="py-20 px-6 bg-stone-900 dark:bg-stone-950">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-stone-50 mb-6">
-            Join 36,000+ Penny Hunters
+            Join {COMMUNITY_MEMBER_COUNT_DISPLAY} Penny Hunters
           </h2>
           <p className="text-stone-300 text-lg mb-10 max-w-2xl mx-auto">
             Share finds, ask questions, and stay updated on the latest tips and patterns in the Home
@@ -356,7 +356,7 @@ export default function Home() {
           </p>
 
           <a
-            href="https://www.facebook.com/groups/homedepotonecent"
+            href={FACEBOOK_GROUP_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-cta-primary hover:bg-cta-hover text-white font-semibold text-lg transition-all hover:-translate-y-0.5"

@@ -156,7 +156,7 @@ If you are unsure where to put something or whether to change a global pattern:
 
 ### What this project is
 
-Penny Central is a **utility/reference guide** for finding Home Depot clearance items marked to $0.01. It serves a 36,000+ member Facebook community.
+Penny Central is a **utility/reference guide** for finding Home Depot clearance items marked to $0.01. It serves a 37,000+ member Facebook community.
 
 **Mission:** Build and maintain PennyCentral.com as the central hub for:
 

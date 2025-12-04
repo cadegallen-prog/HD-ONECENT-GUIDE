@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/components/ui/badge"
 import {
   Table,
   TableBody,
@@ -8,14 +8,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import {
-  CheckCircle2,
-  Search,
-  ShoppingCart,
-  Store,
-  XCircle,
-} from "lucide-react";
+} from "@/components/ui/table"
+import { CheckCircle2, Search, ShoppingCart, Store, XCircle } from "lucide-react"
 
 export function GuideContent() {
   return (
@@ -25,11 +19,14 @@ export function GuideContent() {
       {/* ============================================ */}
       <section id="introduction" className="scroll-mt-28">
         <h2 className="section-heading">
-          <span className="text-slate-900 dark:text-white">I.</span> Introduction: What Are Penny Items?
+          <span className="text-slate-900 dark:text-white">I.</span> Introduction: What Are Penny
+          Items?
         </h2>
 
-        <p className="lead text-lg text-muted-foreground">
-          At Home Depot, a "penny item" refers to merchandise that rings up at <strong>$0.01</strong> due to internal inventory clearance systems - not public promotions.
+        <p className="lead text-lg text-stone-600 dark:text-stone-300">
+          At Home Depot, a "penny item" refers to merchandise that rings up at{" "}
+          <strong>$0.01</strong> due to internal inventory clearance systems - not public
+          promotions.
         </p>
 
         <p>These aren't sales. They're items that:</p>
@@ -40,7 +37,9 @@ export function GuideContent() {
         </ul>
 
         <p>
-          This process is driven by <strong>Zero Margin Adjustment (ZMA)</strong> - a financial mechanism that reduces an item's value in the system to nearly zero. While these items are meant to be removed, some stay on the floor and can still be bought.
+          This process is driven by <strong>Zero Margin Adjustment (ZMA)</strong> - a financial
+          mechanism that reduces an item's value in the system to nearly zero. While these items are
+          meant to be removed, some stay on the floor and can still be bought.
         </p>
 
         <div className="callout callout-sky callout-compact my-10">
@@ -51,7 +50,8 @@ export function GuideContent() {
                 <span>Important:</span>
               </div>
               <p className="text-slate-700 dark:text-slate-200 mt-2 leading-relaxed">
-                This guide is based on consistent community reports and retail logic, not official Home Depot policy. Practices may vary by store.
+                This guide is based on consistent community reports and retail logic, not official
+                Home Depot policy. Practices may vary by store.
               </p>
             </div>
           </div>
@@ -63,11 +63,14 @@ export function GuideContent() {
       {/* ============================================ */}
       <section id="clearance-lifecycle" className="scroll-mt-28">
         <h2 className="section-heading">
-          <span className="text-slate-900 dark:text-white">II.</span> Understanding the Clearance Lifecycle
+          <span className="text-slate-900 dark:text-white">II.</span> Understanding the Clearance
+          Lifecycle
         </h2>
 
         <p>
-          At Home Depot, clearance items follow a markdown sequence that may eventually lead to the $0.01 "penny" status. While unofficial, two distinct markdown patterns - or <strong>Clearance Cadences</strong> - have been consistently seen by shoppers.
+          At Home Depot, clearance items follow a markdown sequence that may eventually lead to the
+          $0.01 "penny" status. While unofficial, two distinct markdown patterns - or{" "}
+          <strong>Clearance Cadences</strong> - have been consistently seen by shoppers.
         </p>
 
         {/* Cadence A */}
@@ -85,28 +88,36 @@ export function GuideContent() {
           <TableBody>
             <TableRow>
               <TableCell>Initial Markdown</TableCell>
-              <TableCell><span className="price-chip">.00</span></TableCell>
+              <TableCell>
+                <span className="price-chip">.00</span>
+              </TableCell>
               <TableCell>~10-25% off</TableCell>
               <TableCell>4 weeks (est.)</TableCell>
               <TableCell>Enters clearance</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Second Markdown</TableCell>
-              <TableCell><span className="price-chip">.06</span></TableCell>
+              <TableCell>
+                <span className="price-chip">.06</span>
+              </TableCell>
               <TableCell>~50% off</TableCell>
               <TableCell>~6 weeks</TableCell>
               <TableCell>Signals progression</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Final Markdown</TableCell>
-              <TableCell><span className="price-chip">.03</span></TableCell>
+              <TableCell>
+                <span className="price-chip">.03</span>
+              </TableCell>
               <TableCell>~75% off</TableCell>
               <TableCell>~3 weeks</TableCell>
               <TableCell>Last stage before removal</TableCell>
             </TableRow>
             <TableRow className="bg-slate-50 dark:bg-slate-800/30">
               <TableCell>System Update</TableCell>
-              <TableCell><span className="price-chip font-semibold">$0.01</span></TableCell>
+              <TableCell>
+                <span className="price-chip font-semibold">$0.01</span>
+              </TableCell>
               <TableCell>Internal</TableCell>
               <TableCell>-</TableCell>
               <TableCell>If not pulled, system marks as penny item</TableCell>
@@ -129,28 +140,36 @@ export function GuideContent() {
           <TableBody>
             <TableRow>
               <TableCell>Initial Markdown</TableCell>
-              <TableCell><span className="price-chip">.00</span></TableCell>
+              <TableCell>
+                <span className="price-chip">.00</span>
+              </TableCell>
               <TableCell>~10-25% off</TableCell>
               <TableCell>1-2 weeks</TableCell>
               <TableCell>Starts clearance</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Second Markdown</TableCell>
-              <TableCell><span className="price-chip">.04</span></TableCell>
+              <TableCell>
+                <span className="price-chip">.04</span>
+              </TableCell>
               <TableCell>~50% off</TableCell>
               <TableCell>~4 weeks</TableCell>
               <TableCell>Often missed by shoppers</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Final Markdown</TableCell>
-              <TableCell><span className="price-chip">.02</span></TableCell>
+              <TableCell>
+                <span className="price-chip">.02</span>
+              </TableCell>
               <TableCell>~75% off</TableCell>
               <TableCell>~2 weeks</TableCell>
               <TableCell>High likelihood of penny pricing next</TableCell>
             </TableRow>
             <TableRow className="bg-slate-50 dark:bg-slate-800/30">
               <TableCell>System Update</TableCell>
-              <TableCell><span className="price-chip font-semibold">$0.01</span></TableCell>
+              <TableCell>
+                <span className="price-chip font-semibold">$0.01</span>
+              </TableCell>
               <TableCell>Internal</TableCell>
               <TableCell>-</TableCell>
               <TableCell>System triggers penny status</TableCell>
@@ -159,7 +178,9 @@ export function GuideContent() {
         </Table>
 
         {/* Price Ending Cheat Sheet */}
-        <h3 className="text-xl font-semibold mt-8 mb-4">Quick Reference: Price Ending Cheat Sheet</h3>
+        <h3 className="text-xl font-semibold mt-8 mb-4">
+          Quick Reference: Price Ending Cheat Sheet
+        </h3>
         <Table>
           <TableHeader>
             <TableRow>
@@ -170,39 +191,67 @@ export function GuideContent() {
           </TableHeader>
           <TableBody>
             <TableRow>
-              <TableCell><span className="price-chip">.00</span></TableCell>
+              <TableCell>
+                <span className="price-chip">.00</span>
+              </TableCell>
               <TableCell>First markdown, entering clearance</TableCell>
-              <TableCell><span className="priority-badge low">Low</span></TableCell>
+              <TableCell>
+                <span className="priority-badge low">Low</span>
+              </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell><span className="price-chip">.06</span></TableCell>
+              <TableCell>
+                <span className="price-chip">.06</span>
+              </TableCell>
               <TableCell>Second markdown (Cadence A)</TableCell>
-              <TableCell><span className="priority-badge medium">Medium</span></TableCell>
+              <TableCell>
+                <span className="priority-badge medium">Medium</span>
+              </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell><span className="price-chip">.03</span></TableCell>
+              <TableCell>
+                <span className="price-chip">.03</span>
+              </TableCell>
               <TableCell>Final markdown (Cadence A)</TableCell>
-              <TableCell><span className="priority-badge high">High</span></TableCell>
+              <TableCell>
+                <span className="priority-badge high">High</span>
+              </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell><span className="price-chip">.04</span></TableCell>
+              <TableCell>
+                <span className="price-chip">.04</span>
+              </TableCell>
               <TableCell>Second markdown (Cadence B)</TableCell>
-              <TableCell><span className="priority-badge medium">Medium</span></TableCell>
+              <TableCell>
+                <span className="priority-badge medium">Medium</span>
+              </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell><span className="price-chip">.02</span></TableCell>
+              <TableCell>
+                <span className="price-chip">.02</span>
+              </TableCell>
               <TableCell>Final markdown (Cadence B)</TableCell>
-              <TableCell><span className="priority-badge high">High</span></TableCell>
+              <TableCell>
+                <span className="priority-badge high">High</span>
+              </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell><span className="price-chip">.97 / .98</span></TableCell>
+              <TableCell>
+                <span className="price-chip">.97 / .98</span>
+              </TableCell>
               <TableCell>Regular sale price</TableCell>
-              <TableCell><span className="priority-badge low">Extremely low</span></TableCell>
+              <TableCell>
+                <span className="priority-badge low">Extremely low</span>
+              </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell><span className="price-chip">Others (e.g., .56)</span></TableCell>
+              <TableCell>
+                <span className="price-chip">Others (e.g., .56)</span>
+              </TableCell>
               <TableCell>Inconsistent meaning</TableCell>
-              <TableCell><span className="priority-badge low">Low - speculative only</span></TableCell>
+              <TableCell>
+                <span className="priority-badge low">Low - speculative only</span>
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -215,7 +264,9 @@ export function GuideContent() {
                 <span>Key Takeaways:</span>
               </div>
               <p className="text-slate-700 dark:text-slate-200 mt-2 leading-relaxed">
-                Price endings matter - they signal where an item is in its markdown lifecycle. Watch the clearance tag date to estimate when the next drop may happen. Don't rely on fixed timing - while these cadences are common, store exceptions exist.
+                Price endings matter - they signal where an item is in its markdown lifecycle. Watch
+                the clearance tag date to estimate when the next drop may happen. Don't rely on
+                fixed timing - while these cadences are common, store exceptions exist.
               </p>
             </div>
           </div>
@@ -228,11 +279,14 @@ export function GuideContent() {
       <section id="digital-tools" className="scroll-mt-28">
         <h2 className="section-heading">
           <Search className="h-6 w-6 text-slate-500 dark:text-slate-300" />
-          <span className="text-slate-900 dark:text-white">III.</span> Pre-Hunt Intelligence: Using Digital Tools
+          <span className="text-slate-900 dark:text-white">III.</span> Pre-Hunt Intelligence: Using
+          Digital Tools
         </h2>
 
         <p>
-          Before heading into a store, use Home Depot's app or website to scout items that might have reached penny status. It won't show you the $0.01 price directly - but it can give you signals that an item has been marked internally.
+          Before heading into a store, use Home Depot's app or website to scout items that might
+          have reached penny status. It won't show you the $0.01 price directly - but it can give
+          you signals that an item has been marked internally.
         </p>
 
         <div className="step-grid">
@@ -240,22 +294,22 @@ export function GuideContent() {
             <div className="step-badge">1</div>
             <div className="step-title">Set Your Store</div>
             <p className="step-desc">
-              In the app or online, set your specific store location. Inventory and pricing data is store-specific - wrong location = wrong info.
+              In the app or online, set your specific store location. Inventory and pricing data is
+              store-specific - wrong location = wrong info.
             </p>
           </div>
           <div className="step-card">
             <div className="step-badge">2</div>
             <div className="step-title">Search by SKU</div>
             <p className="step-desc">
-              Find the SKU number on product packaging or clearance tag. Use that number in the Home Depot app or site search.
+              Find the SKU number on product packaging or clearance tag. Use that number in the Home
+              Depot app or site search.
             </p>
           </div>
           <div className="step-card">
             <div className="step-badge">3</div>
             <div className="step-title">Interpret Results</div>
-            <p className="step-desc">
-              Use the chart below to decode what the listing might mean.
-            </p>
+            <p className="step-desc">Use the chart below to decode what the listing might mean.</p>
           </div>
         </div>
 
@@ -277,8 +331,13 @@ export function GuideContent() {
               <TableCell>Still active inventory</TableCell>
             </TableRow>
             <TableRow className="bg-slate-50 dark:bg-slate-800/40">
-              <TableCell className="font-medium">Out of Stock / Unavailable / Ship to Store Only + Full Price</TableCell>
-              <TableCell><strong>Strong penny candidate</strong> - system may have pennied it, but it hasn't been removed from shelves yet</TableCell>
+              <TableCell className="font-medium">
+                Out of Stock / Unavailable / Ship to Store Only + Full Price
+              </TableCell>
+              <TableCell>
+                <strong>Strong penny candidate</strong> - system may have pennied it, but it hasn't
+                been removed from shelves yet
+              </TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Clearance price still showing online</TableCell>
@@ -295,7 +354,8 @@ export function GuideContent() {
                 <span>Important:</span>
               </div>
               <p className="text-slate-700 dark:text-slate-200 mt-2 leading-relaxed">
-                If the system shows a full price but no stock, it might have already hit $0.01 internally and just hasn't been pulled.
+                If the system shows a full price but no stock, it might have already hit $0.01
+                internally and just hasn't been pulled.
               </p>
             </div>
           </div>
@@ -304,7 +364,9 @@ export function GuideContent() {
         <h3 className="text-xl font-semibold mt-8 mb-4">Limitations to Keep in Mind</h3>
         <ul>
           <li>Online data isn't real-time - there can be a delay of 1-2 days</li>
-          <li>The penny price ($0.01) <strong>never shows online</strong></li>
+          <li>
+            The penny price ($0.01) <strong>never shows online</strong>
+          </li>
           <li>You still need in-store confirmation to be sure - this is just a filtering step</li>
         </ul>
 
@@ -313,7 +375,9 @@ export function GuideContent() {
         <ul>
           <li>You've found an item that shows no local stock but is still listed online</li>
           <li>You're tracking the item based on its clearance cycle and tag date</li>
-          <li>You've seen reports in penny shopping communities about that item pennied out recently</li>
+          <li>
+            You've seen reports in penny shopping communities about that item pennied out recently
+          </li>
         </ul>
       </section>
 
@@ -323,18 +387,23 @@ export function GuideContent() {
       <section id="in-store-hunting" className="scroll-mt-28">
         <h2 className="section-heading">
           <Store className="h-6 w-6 text-slate-500 dark:text-slate-300" />
-          <span className="text-slate-900 dark:text-white">IV.</span> In-Store Penny Hunting Strategies
+          <span className="text-slate-900 dark:text-white">IV.</span> In-Store Penny Hunting
+          Strategies
         </h2>
 
         <p>
-          Once you're in the store, your goal is to find penny-priced items that haven't yet been pulled from the shelves. These are usually clearance items that slipped through the cracks.
+          Once you're in the store, your goal is to find penny-priced items that haven't yet been
+          pulled from the shelves. These are usually clearance items that slipped through the
+          cracks.
         </p>
 
         <h3 className="text-xl font-semibold mt-8 mb-4">Where to Look</h3>
-        
+
         <div className="grid md:grid-cols-2 gap-6 my-6">
           <div className="bg-white dark:bg-slate-900/40 p-4 rounded-lg border border-border">
-            <h4 className="font-semibold mb-3 text-accent-700 dark:text-accent-400">Primary Hotspots</h4>
+            <h4 className="font-semibold mb-3 text-accent-700 dark:text-accent-400">
+              Primary Hotspots
+            </h4>
             <ul className="space-y-3 text-sm">
               <li>Clearance endcaps</li>
               <li>Aisles with yellow tags</li>
@@ -370,19 +439,26 @@ export function GuideContent() {
             <div>
               <div className="font-bold text-accent-800 dark:text-accent-200">Tip:</div>
               <p className="callout-body">
-                Watch for "known penny items" discussed in online communities - these often go chain-wide. "Store-specific" pennies usually result from returns, overstock, or untracked markdowns.
+                Watch for "known penny items" discussed in online communities - these often go
+                chain-wide. "Store-specific" pennies usually result from returns, overstock, or
+                untracked markdowns.
               </p>
             </div>
           </div>
         </div>
 
         <h3 className="text-xl font-semibold mt-8 mb-4">How to Check the Price (Discreetly)</h3>
-        
+
         <div className="content-panel space-y-4 my-6">
-          <h4 className="font-semibold text-green-700 dark:text-green-400">Best Method: Self-Checkout (SCO)</h4>
+          <h4 className="font-semibold text-green-700 dark:text-green-400">
+            Best Method: Self-Checkout (SCO)
+          </h4>
           <ol className="space-y-2">
             <li>1. Go to a SCO terminal with the item in hand</li>
-            <li>2. Scan the manufacturer's UPC barcode - <strong>not the yellow clearance sticker</strong></li>
+            <li>
+              2. Scan the manufacturer's UPC barcode -{" "}
+              <strong>not the yellow clearance sticker</strong>
+            </li>
             <li>3. If it scans at $0.01, pay at once and print your receipt</li>
             <li>4. Stay low-key - don't draw attention to the screen</li>
           </ol>
@@ -406,24 +482,37 @@ export function GuideContent() {
           <p>If you must ask an employee:</p>
           <ul>
             <li>Look for one using a FIRST phone (orange handheld scanner)</li>
-            <li>Say: "Can you do a stock check on this?" - <strong>not</strong> a price check</li>
+            <li>
+              Say: "Can you do a stock check on this?" - <strong>not</strong> a price check
+            </li>
             <li>Give them the SKU or show the UPC barcode</li>
-            <li>Watch the screen discreetly: if it shows $0.01, "0" quantity, or an error - it's probably pennied</li>
+            <li>
+              Watch the screen discreetly: if it shows $0.01, "0" quantity, or an error - it's
+              probably pennied
+            </li>
           </ul>
         </div>
 
-        <h3 className="text-xl font-semibold mt-8 mb-4">Overhead Items: High-Risk, Mixed Results</h3>
+        <h3 className="text-xl font-semibold mt-8 mb-4">
+          Overhead Items: High-Risk, Mixed Results
+        </h3>
         <div className="content-panel space-y-6">
           <p>Items stored overhead present a unique challenge - and some real risks:</p>
-          
+
           <div className="grid md:grid-cols-2 gap-4">
             <div className="p-4 rounded-lg border bg-slate-100 dark:bg-slate-900/40 border-border">
               <h4 className="font-semibold mb-2">Yellow Ladders (Customer Use)</h4>
-              <p className="text-sm">Small yellow ladders (often in paint section) are for customer use. You can use these - just know they're visible and will draw attention.</p>
+              <p className="text-sm">
+                Small yellow ladders (often in paint section) are for customer use. You can use
+                these - just know they're visible and will draw attention.
+              </p>
             </div>
             <div className="p-4 rounded-lg border bg-slate-100 dark:bg-slate-900/40 border-border">
               <h4 className="font-semibold mb-2">Orange Ladders (Employee Only)</h4>
-              <p className="text-sm">These are strictly for employees. Using them as a customer is against store policy and can escalate quickly.</p>
+              <p className="text-sm">
+                These are strictly for employees. Using them as a customer is against store policy
+                and can escalate quickly.
+              </p>
             </div>
           </div>
 
@@ -433,7 +522,9 @@ export function GuideContent() {
               <div>
                 <div className="font-bold text-accent-800 dark:text-accent-200">Pro Tip:</div>
                 <p className="callout-body">
-                  If you ask an employee to retrieve an overhead item, there's a 50/50 chance they'll scan it first. If it scans at $0.01, they'll likely say "This can't be sold" and that item will be removed from the floor entirely.
+                  If you ask an employee to retrieve an overhead item, there's a 50/50 chance
+                  they'll scan it first. If it scans at $0.01, they'll likely say "This can't be
+                  sold" and that item will be removed from the floor entirely.
                 </p>
               </div>
             </div>
@@ -451,19 +542,38 @@ export function GuideContent() {
         </h2>
 
         <p>
-          You found a penny item. Now comes the tricky part: getting it through checkout without issues.
+          You found a penny item. Now comes the tricky part: getting it through checkout without
+          issues.
         </p>
 
         <div className="bg-slate-100 dark:bg-slate-900/40 p-6 rounded-lg border border-border my-6">
-          <h3 className="text-lg font-semibold text-green-700 dark:text-green-400 mb-4">Preferred Method: Self-Checkout (SCO)</h3>
+          <h3 className="text-lg font-semibold text-green-700 dark:text-green-400 mb-4">
+            Preferred Method: Self-Checkout (SCO)
+          </h3>
           <ol className="space-y-2">
-            <li><strong>1.</strong> Have your payment ready before scanning</li>
-            <li><strong>2.</strong> Go to a self-checkout kiosk where the attendant is distracted or busy</li>
-            <li><strong>3.</strong> Scan only the UPC barcode on the item itself - <strong>not the yellow clearance tag</strong></li>
-            <li><strong>4.</strong> Confirm it scans at $0.01</li>
-            <li><strong>5.</strong> Pay immediately</li>
-            <li><strong>6.</strong> Print your receipt - this is your proof of purchase</li>
-            <li><strong>7.</strong> Exit calmly. Act like it's just another item in your cart</li>
+            <li>
+              <strong>1.</strong> Have your payment ready before scanning
+            </li>
+            <li>
+              <strong>2.</strong> Go to a self-checkout kiosk where the attendant is distracted or
+              busy
+            </li>
+            <li>
+              <strong>3.</strong> Scan only the UPC barcode on the item itself -{" "}
+              <strong>not the yellow clearance tag</strong>
+            </li>
+            <li>
+              <strong>4.</strong> Confirm it scans at $0.01
+            </li>
+            <li>
+              <strong>5.</strong> Pay immediately
+            </li>
+            <li>
+              <strong>6.</strong> Print your receipt - this is your proof of purchase
+            </li>
+            <li>
+              <strong>7.</strong> Exit calmly. Act like it's just another item in your cart
+            </li>
           </ol>
         </div>
 
@@ -484,15 +594,26 @@ export function GuideContent() {
 
         <h3 className="text-xl font-semibold mt-8 mb-4">Locked Case or Cage Items</h3>
         <ol className="space-y-2">
-          <li><strong>1.</strong> Add a "keeper" item to your cart</li>
-          <li><strong>2.</strong> Ask a staff member to unlock the item</li>
-          <li><strong>3.</strong> Politely direct them toward self-checkout</li>
-          <li><strong>4.</strong> At SCO: Scan the keeper item first, then scan the suspected penny item. Staff may leave once the item is scanned.</li>
-          <li><strong>5.</strong> Pay and print your receipt as usual</li>
+          <li>
+            <strong>1.</strong> Add a "keeper" item to your cart
+          </li>
+          <li>
+            <strong>2.</strong> Ask a staff member to unlock the item
+          </li>
+          <li>
+            <strong>3.</strong> Politely direct them toward self-checkout
+          </li>
+          <li>
+            <strong>4.</strong> At SCO: Scan the keeper item first, then scan the suspected penny
+            item. Staff may leave once the item is scanned.
+          </li>
+          <li>
+            <strong>5.</strong> Pay and print your receipt as usual
+          </li>
         </ol>
 
         <h3 className="text-xl font-semibold mt-8 mb-4">If You're Stopped by an Employee</h3>
-        
+
         <div className="grid md:grid-cols-2 gap-4 my-6">
           <div className="p-4 rounded-lg border bg-slate-100 dark:bg-slate-900/40 border-border">
             <h4 className="font-semibold text-green-700 dark:text-green-400 mb-3 flex items-center gap-2">
@@ -501,7 +622,10 @@ export function GuideContent() {
             <ul className="space-y-3 text-sm">
               <li>Stay calm and polite</li>
               <li>Finish payment if possible and print your receipt</li>
-              <li>Say: "That's just what it scanned for." or "I found it on the shelf and thought I'd buy it."</li>
+              <li>
+                Say: "That's just what it scanned for." or "I found it on the shelf and thought I'd
+                buy it."
+              </li>
             </ul>
           </div>
           <div className="p-4 rounded-lg border bg-slate-100 dark:bg-slate-900/40 border-border">
@@ -532,16 +656,19 @@ export function GuideContent() {
       {/* ============================================ */}
       <section id="internal-operations" className="scroll-mt-28">
         <h2 className="section-heading">
-          <span className="text-slate-900 dark:text-white">VI.</span> The Inside Scoop: Internal Operations
+          <span className="text-slate-900 dark:text-white">VI.</span> The Inside Scoop: Internal
+          Operations
         </h2>
 
         <p>
-          Understanding Home Depot's internal operations helps you grasp why penny items exist, why staff act the way they do, and how the system works behind the scenes.
+          Understanding Home Depot's internal operations helps you grasp why penny items exist, why
+          staff act the way they do, and how the system works behind the scenes.
         </p>
 
         <h3 className="text-xl font-semibold mt-8 mb-4">Penny Items = Not Meant for Sale</h3>
         <p>
-          Home Depot doesn't price things at $0.01 for customers - it's an internal accounting mechanism triggered by <strong>Zero Margin Adjustment (ZMA)</strong>.
+          Home Depot doesn't price things at $0.01 for customers - it's an internal accounting
+          mechanism triggered by <strong>Zero Margin Adjustment (ZMA)</strong>.
         </p>
         <p>Why does it happen:</p>
         <ul>
@@ -558,7 +685,8 @@ export function GuideContent() {
                 <span>Key Takeaway:</span>
               </div>
               <p className="text-slate-700 dark:text-slate-200 mt-2 leading-relaxed">
-                If an item is still on the floor at $0.01, it's likely due to oversight or staff backlog.
+                If an item is still on the floor at $0.01, it's likely due to oversight or staff
+                backlog.
               </p>
             </div>
           </div>
@@ -566,14 +694,21 @@ export function GuideContent() {
 
         <h3 className="text-xl font-semibold mt-8 mb-4">Employee Policy: Strict Rules</h3>
         <ul>
-          <li><strong>Employees are forbidden from buying penny items</strong> - doing so results in termination</li>
-          <li>Many stores enforce a "24-hour rule": staff can't buy newly marked-down clearance until it's been on the floor for 24+ hours</li>
+          <li>
+            <strong>Employees are forbidden from buying penny items</strong> - doing so results in
+            termination
+          </li>
+          <li>
+            Many stores enforce a "24-hour rule": staff can't buy newly marked-down clearance until
+            it's been on the floor for 24+ hours
+          </li>
           <li>This prevents staff from hiding items for themselves</li>
         </ul>
 
         <h3 className="text-xl font-semibold mt-8 mb-4">FIRST Phones & the Clearance App</h3>
         <p>
-          Home Depot equips staff with handheld devices called FIRST phones. The <strong>Clearance App</strong> lets associates:
+          Home Depot equips staff with handheld devices called FIRST phones. The{" "}
+          <strong>Clearance App</strong> lets associates:
         </p>
         <ul>
           <li>See a list of clearance items, including penny-priced ones</li>
@@ -598,11 +733,11 @@ export function GuideContent() {
         <ul>
           <li>Some managers will quietly honor the sale to avoid escalation</li>
           <li>Others will confiscate the item or cancel the transaction</li>
-          <li>Some employees may even give it away as a "damaged out" freebie - rare, but it happens</li>
+          <li>
+            Some employees may even give it away as a "damaged out" freebie - rare, but it happens
+          </li>
         </ul>
-        <p className="font-medium mt-4">
-          Same store, different shifts = different outcomes.
-        </p>
+        <p className="font-medium mt-4">Same store, different shifts = different outcomes.</p>
       </section>
 
       {/* ============================================ */}
@@ -610,11 +745,15 @@ export function GuideContent() {
       {/* ============================================ */}
       <section id="fact-vs-fiction" className="scroll-mt-28">
         <h2 className="section-heading">
-          <span className="text-slate-900 dark:text-white">VII.</span> Research Deep Dive: Fact vs Fiction
+          <span className="text-slate-900 dark:text-white">VII.</span> Research Deep Dive: Fact vs
+          Fiction
         </h2>
 
         <p>
-          Despite how widespread penny hunting has become, Home Depot has never publicly confirmed the full clearance-to-penny process. Most of what we know comes from community observations, shared screenshots and receipts, and logical deductions from how retail clearance cycles work.
+          Despite how widespread penny hunting has become, Home Depot has never publicly confirmed
+          the full clearance-to-penny process. Most of what we know comes from community
+          observations, shared screenshots and receipts, and logical deductions from how retail
+          clearance cycles work.
         </p>
 
         <h3 className="text-xl font-semibold mt-8 mb-4">What's Real vs. What's Rumor</h3>
@@ -629,42 +768,58 @@ export function GuideContent() {
           <TableBody>
             <TableRow>
               <TableCell>Items go to $0.01</TableCell>
-              <TableCell><span className="priority-badge high">True</span></TableCell>
+              <TableCell>
+                <span className="priority-badge high">True</span>
+              </TableCell>
               <TableCell>Via internal ZMA process</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Price endings predict markdowns</TableCell>
-              <TableCell><span className="priority-badge high">True</span></TableCell>
+              <TableCell>
+                <span className="priority-badge high">True</span>
+              </TableCell>
               <TableCell>.06/.03 and .04/.02 are common sequences</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Penny items are "secret sales"</TableCell>
-              <TableCell><span className="priority-badge low">False</span></TableCell>
+              <TableCell>
+                <span className="priority-badge low">False</span>
+              </TableCell>
               <TableCell>They're not intended for sale at all</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Home Depot honors the first scanned price</TableCell>
-              <TableCell><span className="priority-badge medium">Sometimes</span></TableCell>
+              <TableCell>
+                <span className="priority-badge medium">Sometimes</span>
+              </TableCell>
               <TableCell>Depends on the manager</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Employees buy penny items</TableCell>
-              <TableCell><span className="priority-badge low">False</span></TableCell>
+              <TableCell>
+                <span className="priority-badge low">False</span>
+              </TableCell>
               <TableCell>Against policy and grounds for termination</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Using ladders to get pennies is okay</TableCell>
-              <TableCell><span className="priority-badge medium">Depends</span></TableCell>
+              <TableCell>
+                <span className="priority-badge medium">Depends</span>
+              </TableCell>
               <TableCell>Yellow ladder: yes. Orange ladder: employee-only (high risk)</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Stores will always sell penny items</TableCell>
-              <TableCell><span className="priority-badge low">False</span></TableCell>
+              <TableCell>
+                <span className="priority-badge low">False</span>
+              </TableCell>
               <TableCell>Many will cancel the sale or remove the item</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Penny items show online</TableCell>
-              <TableCell><span className="priority-badge low">False</span></TableCell>
+              <TableCell>
+                <span className="priority-badge low">False</span>
+              </TableCell>
               <TableCell>The $0.01 price never appears in the app or website</TableCell>
             </TableRow>
           </TableBody>
@@ -673,12 +828,19 @@ export function GuideContent() {
         <h3 className="text-xl font-semibold mt-8 mb-4">How Dependable Is Community Intel?</h3>
         <p>Very - but with a few caveats:</p>
         <ul>
-          <li><strong>National penny items</strong> (brand-wide markdowns) are dependable across many stores</li>
-          <li><strong>Store-specific pennies</strong> (returns, damaged goods, unpulled clearance) are hit-or-miss</li>
+          <li>
+            <strong>National penny items</strong> (brand-wide markdowns) are dependable across many
+            stores
+          </li>
+          <li>
+            <strong>Store-specific pennies</strong> (returns, damaged goods, unpulled clearance) are
+            hit-or-miss
+          </li>
           <li>Community screenshots and shared receipts are gold - but dates matter</li>
         </ul>
         <p className="text-muted-foreground text-sm mt-2">
-          Always check timestamps on community posts. A penny item from 4 weeks ago may already be pulled or long gone.
+          Always check timestamps on community posts. A penny item from 4 weeks ago may already be
+          pulled or long gone.
         </p>
       </section>
 
@@ -691,32 +853,39 @@ export function GuideContent() {
         </h2>
 
         <p>
-          Penny hunting thrives on community, strategy, and discretion. Acting irresponsibly not only gets you shut down - it can cause stores to crack down harder on <strong>everyone</strong>.
+          Penny hunting thrives on community, strategy, and discretion. Acting irresponsibly not
+          only gets you shut down - it can cause stores to crack down harder on{" "}
+          <strong>everyone</strong>.
         </p>
 
         <div className="grid md:grid-cols-2 gap-6 my-6">
           <div className="p-4 rounded-lg border">
             <h4 className="font-semibold mb-3">1. Be Respectful to Store Employees</h4>
             <p className="text-sm text-muted-foreground">
-              Even if you're frustrated, caught off-guard, or denied a penny sale: stay calm, stay polite, avoid confrontations. Staff are following orders - not making personal decisions against you.
+              Even if you're frustrated, caught off-guard, or denied a penny sale: stay calm, stay
+              polite, avoid confrontations. Staff are following orders - not making personal
+              decisions against you.
             </p>
           </div>
           <div className="p-4 rounded-lg border">
             <h4 className="font-semibold mb-3">2. Don't Be Loud About Finds</h4>
             <p className="text-sm text-muted-foreground">
-              Getting loud, excited, or bragging at checkout draws attention. Don't show receipts to other customers, tell staff about your score, or film inside the store.
+              Getting loud, excited, or bragging at checkout draws attention. Don't show receipts to
+              other customers, tell staff about your score, or film inside the store.
             </p>
           </div>
           <div className="p-4 rounded-lg border">
             <h4 className="font-semibold mb-3">3. Use Community Resources Wisely</h4>
             <p className="text-sm text-muted-foreground">
-              Share helpful info like UPCs, tag dates, or clearance cycles. Post accurate finds - not rumors. Don't flood groups with repeat questions.
+              Share helpful info like UPCs, tag dates, or clearance cycles. Post accurate finds -
+              not rumors. Don't flood groups with repeat questions.
             </p>
           </div>
           <div className="p-4 rounded-lg border">
             <h4 className="font-semibold mb-3">4. Know When to Walk Away</h4>
             <p className="text-sm text-muted-foreground">
-              If an employee or manager denies the sale, just move on. It's not worth getting banned from the store. Better to lose one item than burn access to future deals.
+              If an employee or manager denies the sale, just move on. It's not worth getting banned
+              from the store. Better to lose one item than burn access to future deals.
             </p>
           </div>
         </div>
@@ -729,7 +898,9 @@ export function GuideContent() {
                 <span>Reality Check:</span>
               </div>
               <p className="text-slate-700 dark:text-slate-200 mt-2 leading-relaxed">
-                This is not a get-rich-quick game. Penny hunting requires time, patience, and a lot of empty trips. You might check 3 stores and find nothing. Don't expect huge savings every time - it's about the long game.
+                This is not a get-rich-quick game. Penny hunting requires time, patience, and a lot
+                of empty trips. You might check 3 stores and find nothing. Don't expect huge savings
+                every time - it's about the long game.
               </p>
             </div>
           </div>
@@ -745,14 +916,17 @@ export function GuideContent() {
         </h2>
 
         <p>
-          Whether you're just starting out or you've been hunting for a while, here's what matters most: <strong>know the system, stay patient, play it smart, and stay respectful.</strong>
+          Whether you're just starting out or you've been hunting for a while, here's what matters
+          most: <strong>know the system, stay patient, play it smart, and stay respectful.</strong>
         </p>
 
         <div className="grid md:grid-cols-2 gap-6 my-8">
           {/* Beginners */}
           <div className="bg-white dark:bg-slate-900/40 p-6 rounded-lg border border-border">
-            <h3 className="text-lg font-semibold text-blue-700 dark:text-blue-400 mb-4">For Beginners: Start Here</h3>
-            
+            <h3 className="text-lg font-semibold text-blue-700 dark:text-blue-400 mb-4">
+              For Beginners: Start Here
+            </h3>
+
             <h4 className="font-medium mt-4 mb-2">Understand the Basics</h4>
             <ul className="text-sm space-y-3">
               <li>Penny items are the last stage in Home Depot's clearance cycle</li>
@@ -770,7 +944,8 @@ export function GuideContent() {
             <ul className="text-sm space-y-3">
               <li>Go straight to clearance endcaps and seasonal sections</li>
               <li>
-                Check price endings like <span className="price-chip">.03</span>/<span className="price-chip">.02</span>
+                Check price endings like <span className="price-chip">.03</span>/
+                <span className="price-chip">.02</span>
               </li>
               <li>Use self-checkout, scan the UPC, print your receipt</li>
               <li>Don't scan the clearance tag</li>
@@ -779,8 +954,10 @@ export function GuideContent() {
 
           {/* Experienced */}
           <div className="bg-white dark:bg-slate-900/40 p-6 rounded-lg border border-border">
-            <h3 className="text-lg font-semibold text-accent-700 dark:text-accent-400 mb-4">For Experienced Hunters: Refine Your Game</h3>
-            
+            <h3 className="text-lg font-semibold text-accent-700 dark:text-accent-400 mb-4">
+              For Experienced Hunters: Refine Your Game
+            </h3>
+
             <h4 className="font-medium mt-4 mb-2">Know the Clearance Cadences</h4>
             <div className="text-sm space-y-3 font-mono bg-white/50 dark:bg-black/20 p-3 rounded">
               <div className="flex flex-wrap items-center gap-2">
@@ -825,18 +1002,20 @@ export function GuideContent() {
         <div className="bg-white dark:bg-slate-900/40 p-6 rounded-lg text-center my-8">
           <h3 className="text-xl font-semibold mb-3">Final Mindset</h3>
           <p className="text-muted-foreground mb-4">
-            Many hunters enjoy this for more than the savings: the thrill of the hunt, the satisfaction of outsmarting a system, and the camaraderie of a tight-knit, info-sharing community.
+            Many hunters enjoy this for more than the savings: the thrill of the hunt, the
+            satisfaction of outsmarting a system, and the camaraderie of a tight-knit, info-sharing
+            community.
           </p>
           <p className="font-medium">
-            But remember: one person's unruly behavior can ruin it for everyone. Stay sharp, stay respectful, and help keep the game alive.
+            But remember: one person's unruly behavior can ruin it for everyone. Stay sharp, stay
+            respectful, and help keep the game alive.
           </p>
           <p className="text-lg font-semibold text-accent-600 dark:text-accent-400 mt-4">
-            Penny hunting is part luck, part hustle, and all strategy. Treat it like a skill - not a shortcut.
+            Penny hunting is part luck, part hustle, and all strategy. Treat it like a skill - not a
+            shortcut.
           </p>
         </div>
       </section>
     </article>
-  );
+  )
 }
-
-

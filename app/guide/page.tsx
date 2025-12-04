@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import { GuideContent } from "@/components/GuideContent"
-import Link from "next/link"
 import { SupportAndCashbackCard } from "@/components/SupportAndCashbackCard"
 
 export const metadata: Metadata = {

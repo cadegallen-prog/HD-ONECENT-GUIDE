@@ -220,7 +220,7 @@ export default function TripTrackerPage() {
             <h1 className="text-4xl md:text-5xl font-heading font-bold mb-2 text-foreground">
               Trip Tracker
             </h1>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-lg text-stone-600 dark:text-stone-400">
               Plan your penny hunting trips and track your success
             </p>
           </div>
@@ -249,7 +249,7 @@ export default function TripTrackerPage() {
               </div>
               <div>
                 <div className="text-2xl font-bold text-foreground">{totalTrips}</div>
-                <div className="text-sm text-muted-foreground">Total Trips</div>
+                <div className="text-sm text-stone-600 dark:text-stone-400">Total Trips</div>
               </div>
             </div>
           </div>
@@ -260,7 +260,7 @@ export default function TripTrackerPage() {
               </div>
               <div>
                 <div className="text-2xl font-bold text-foreground">{completedTrips}</div>
-                <div className="text-sm text-muted-foreground">Completed</div>
+                <div className="text-sm text-stone-600 dark:text-stone-400">Completed</div>
               </div>
             </div>
           </div>
@@ -271,7 +271,7 @@ export default function TripTrackerPage() {
               </div>
               <div>
                 <div className="text-2xl font-bold text-foreground">{successRate}%</div>
-                <div className="text-sm text-muted-foreground">Success Rate</div>
+                <div className="text-sm text-stone-600 dark:text-stone-400">Success Rate</div>
               </div>
             </div>
           </div>
@@ -301,13 +301,13 @@ export default function TripTrackerPage() {
                         >
                           <template.icon className="h-6 w-6 text-primary mb-2" />
                           <div className="font-semibold text-foreground">{template.name}</div>
-                          <div className="text-xs text-muted-foreground mt-1">
+                          <div className="text-xs text-stone-600 dark:text-stone-400 mt-1">
                             {template.description}
                           </div>
                         </button>
                       ))}
                     </div>
-                    <div className="text-center my-4 text-sm text-muted-foreground">
+                    <div className="text-center my-4 text-sm text-stone-600 dark:text-stone-400">
                       or start from scratch
                     </div>
                   </div>
@@ -329,8 +329,14 @@ export default function TripTrackerPage() {
 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2 text-foreground">Date</label>
+                    <label
+                      htmlFor="trip-date"
+                      className="block text-sm font-medium mb-2 text-foreground"
+                    >
+                      Date
+                    </label>
                     <input
+                      id="trip-date"
                       type="date"
                       value={formData.date}
                       onChange={(e) => setFormData({ ...formData, date: e.target.value })}
@@ -338,8 +344,14 @@ export default function TripTrackerPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-2 text-foreground">Time</label>
+                    <label
+                      htmlFor="trip-time"
+                      className="block text-sm font-medium mb-2 text-foreground"
+                    >
+                      Time
+                    </label>
                     <input
+                      id="trip-time"
                       type="time"
                       value={formData.time}
                       onChange={(e) => setFormData({ ...formData, time: e.target.value })}
@@ -386,7 +398,11 @@ export default function TripTrackerPage() {
                       >
                         <CheckCircle2 className="h-4 w-4 text-primary" />
                         <span className="flex-1 text-sm text-foreground">{item}</span>
-                        <button onClick={() => removeChecklistItem(i)}>
+                        <button
+                          onClick={() => removeChecklistItem(i)}
+                          aria-label={`Remove ${item}`}
+                          title="Remove item"
+                        >
                           <Trash2 className="h-4 w-4 text-muted-foreground hover:text-destructive" />
                         </button>
                       </div>
@@ -464,11 +480,11 @@ export default function TripTrackerPage() {
 
         {trips.length === 0 && (
           <div className="text-center py-16">
-            <Calendar className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+            <Calendar className="h-16 w-16 text-stone-500 dark:text-stone-500 mx-auto mb-4" />
             <h3 className="text-xl font-heading font-semibold mb-2 text-foreground">
               No trips planned yet
             </h3>
-            <p className="text-muted-foreground mb-6">
+            <p className="text-stone-600 dark:text-stone-400 mb-6">
               Start planning your first penny hunting trip!
             </p>
             <Button onClick={() => setShowNewTrip(true)}>
@@ -517,7 +533,7 @@ function TripCard({
               </span>
             )}
           </div>
-          <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+          <div className="flex flex-wrap gap-4 text-sm text-stone-600 dark:text-stone-400">
             <div className="flex items-center gap-1">
               <Calendar className="h-4 w-4" />
               {new Date(trip.date).toLocaleDateString()}
@@ -555,7 +571,10 @@ function TripCard({
             {trip.stores
               .filter((s) => s)
               .map((store, i) => (
-                <span key={i} className="px-3 py-1 bg-accent rounded-lg text-sm text-foreground">
+                <span
+                  key={i}
+                  className="inline-flex items-center px-2 py-1 rounded-md bg-accent/10 text-xs text-foreground"
+                >
                   <MapPin className="h-3 w-3 inline mr-1" />
                   {store}
                 </span>
@@ -569,7 +588,10 @@ function TripCard({
           <div className="text-sm font-medium mb-2 text-foreground">Checklist:</div>
           <div className="grid md:grid-cols-2 gap-2">
             {trip.checklist.map((item, i) => (
-              <div key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
+              <div
+                key={i}
+                className="flex items-center gap-2 text-sm text-stone-600 dark:text-stone-400"
+              >
                 <CheckCircle2 className="h-3 w-3 text-primary" />
                 {item}
               </div>
@@ -581,7 +603,7 @@ function TripCard({
       {trip.notes && (
         <div className="mt-3 p-3 bg-accent/50 rounded-lg">
           <div className="text-sm font-medium mb-1 text-foreground">Notes:</div>
-          <div className="text-sm text-muted-foreground">{trip.notes}</div>
+          <div className="text-sm text-stone-600 dark:text-stone-400">{trip.notes}</div>
         </div>
       )}
     </div>

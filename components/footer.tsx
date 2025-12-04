@@ -2,7 +2,7 @@ import Link from "next/link"
 
 export function Footer() {
   return (
-    <footer className="bg-stone-900 dark:bg-stone-950 border-t border-stone-800 mt-auto">
+    <footer className="bg-stone-900 dark:bg-[#0d0b0a] border-t border-stone-800 dark:border-stone-900 mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand Column */}
@@ -25,7 +25,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/"
-                  className="text-sm text-stone-400 hover:text-stone-50 transition-colors underline underline-offset-2"
+                  className="text-sm text-stone-400 hover:text-stone-200 transition-colors"
                 >
                   Home
                 </Link>
@@ -33,7 +33,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/guide"
-                  className="text-sm text-stone-400 hover:text-stone-50 transition-colors underline underline-offset-2"
+                  className="text-sm text-stone-400 hover:text-stone-200 transition-colors"
                 >
                   Guide
                 </Link>
@@ -41,7 +41,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/store-finder"
-                  className="text-sm text-stone-400 hover:text-stone-50 transition-colors underline underline-offset-2"
+                  className="text-sm text-stone-400 hover:text-stone-200 transition-colors"
                 >
                   Store Finder
                 </Link>
@@ -51,7 +51,7 @@ export function Footer() {
                   href="https://www.facebook.com/groups/homedepotonecent"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-stone-400 hover:text-stone-50 transition-colors underline underline-offset-2"
+                  className="text-sm text-stone-400 hover:text-stone-200 transition-colors"
                 >
                   Community
                 </a>
@@ -68,17 +68,17 @@ export function Footer() {
                   href="https://paypal.me/cadegallen"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-stone-400 hover:text-stone-50 transition-colors underline underline-offset-2"
+                  className="text-sm text-stone-400 hover:text-stone-200 transition-colors"
                 >
                   ☕ Leave a Tip
                 </a>
               </li>
               <li>
                 <a
-                  href="https://www.befrugal.com/rs/NJIKJUB/"
+                  href="/go/befrugal"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-stone-400 hover:text-stone-50 transition-colors underline underline-offset-2"
+                  className="text-sm text-stone-400 hover:text-stone-200 transition-colors"
                 >
                   💰 BeFrugal Cashback
                 </a>
@@ -86,7 +86,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/cashback"
-                  className="text-sm text-stone-400 hover:text-stone-50 transition-colors underline underline-offset-2"
+                  className="text-sm text-stone-400 hover:text-stone-200 transition-colors"
                 >
                   How Cashback Works
                 </Link>
@@ -94,7 +94,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/about#support"
-                  className="text-sm text-stone-400 hover:text-stone-50 transition-colors underline underline-offset-2"
+                  className="text-sm text-stone-400 hover:text-stone-200 transition-colors"
                 >
                   About Support
                 </Link>
@@ -109,20 +109,20 @@ export function Footer() {
               <li>
                 <Link
                   href="/about"
-                  className="text-sm text-stone-400 hover:text-stone-50 transition-colors underline underline-offset-2"
+                  className="text-sm text-stone-400 hover:text-stone-200 transition-colors"
                 >
                   About
                 </Link>
               </li>
               <li>
-                <span className="text-sm text-stone-500">Not affiliated with Home Depot</span>
+                <span className="text-sm text-stone-400">Not affiliated with Home Depot</span>
               </li>
             </ul>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-10 pt-8 border-t border-stone-800">
+        <div className="mt-10 pt-8 border-t border-stone-800 dark:border-stone-900">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <p className="text-xs text-stone-400">© 2025 Penny Central. Educational use only.</p>
             <div className="flex items-center gap-4">
@@ -130,7 +130,7 @@ export function Footer() {
                 href="https://www.facebook.com/groups/homedepotonecent"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-stone-400 hover:text-stone-50 transition-colors"
+                className="text-stone-400 hover:text-stone-200 transition-colors"
                 aria-label="Facebook Group"
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">

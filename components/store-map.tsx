@@ -16,10 +16,37 @@ interface StoreMapProps {
   userLocation?: { lat: number; lng: number } | null
 }
 
-// Component to handle map view changes
+// Component to handle map view changes and ensure proper initialization
 function MapController({ selectedStore }: { selectedStore?: StoreLocation | null }) {
   const map = useMap()
   const lastSelectedIdRef = React.useRef<string | null>(null)
+  const hasInvalidatedRef = React.useRef(false)
+
+  // Invalidate map size on first mount to ensure tiles load properly
+  // Use multiple delays to handle various container rendering timings
+  React.useEffect(() => {
+    if (!hasInvalidatedRef.current) {
+      hasInvalidatedRef.current = true
+
+      // Immediate invalidation for fast renders
+      map.invalidateSize()
+
+      // Secondary invalidation after container is fully styled
+      const timeout1 = setTimeout(() => {
+        map.invalidateSize()
+      }, 100)
+
+      // Final invalidation for edge cases with slow layout
+      const timeout2 = setTimeout(() => {
+        map.invalidateSize()
+      }, 300)
+
+      return () => {
+        clearTimeout(timeout1)
+        clearTimeout(timeout2)
+      }
+    }
+  }, [map])
 
   // Only fly to selected store when it changes (not on every center change)
   React.useEffect(() => {
@@ -109,19 +136,30 @@ export const StoreMap = React.memo(function StoreMap({
 
   if (!mounted) {
     return (
-      <div className="w-full h-full min-h-[500px] bg-muted rounded-lg flex items-center justify-center">
-        <p className="text-muted-foreground">Loading map...</p>
+      <div
+        className="w-full h-full min-h-[300px] bg-muted rounded-lg flex items-center justify-center"
+        role="status"
+        aria-label="Loading map"
+      >
+        <div className="text-center">
+          <div className="animate-pulse w-8 h-8 rounded-full bg-muted-foreground/20 mx-auto mb-2"></div>
+          <p className="text-muted-foreground text-sm">Loading map...</p>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="w-full h-full min-h-[500px] rounded-lg overflow-hidden border border-border">
+    <div
+      className="w-full h-full min-h-[300px] rounded-lg overflow-hidden border border-border"
+      role="application"
+      aria-label="Interactive store map"
+    >
       <MapContainer
         key="store-finder-map"
         center={center}
         zoom={zoom}
-        style={{ height: "100%", width: "100%", minHeight: "500px" }}
+        style={{ height: "100%", width: "100%", minHeight: "300px" }}
         scrollWheelZoom={true}
       >
         <MapController selectedStore={selectedStore} />
@@ -183,7 +221,7 @@ export const StoreMap = React.memo(function StoreMap({
 
                   {/* Store hours */}
                   {(store.hours?.weekday || store.hours?.weekend) && (
-                    <div className="pt-1 space-y-0 text-[11px] leading-tight">
+                    <div className="pt-1 space-y-0 text-xs leading-tight">
                       {(() => {
                         const formatted = formatStoreHours(store.hours)
                         return (
@@ -203,10 +241,10 @@ export const StoreMap = React.memo(function StoreMap({
 
                   {/* Address block */}
                   <div className="pt-1.5 mt-1.5 border-t border-slate-200 dark:border-slate-600 space-y-0">
-                    <p className="text-[11px] text-slate-700 dark:text-slate-300 leading-tight">
+                    <p className="text-xs text-slate-700 dark:text-slate-300 leading-tight">
                       {store.address}
                     </p>
-                    <p className="text-[11px] text-slate-700 dark:text-slate-300 leading-tight">
+                    <p className="text-xs text-slate-700 dark:text-slate-300 leading-tight">
                       {store.city}, {store.state} {store.zip}
                     </p>
                   </div>
@@ -215,7 +253,7 @@ export const StoreMap = React.memo(function StoreMap({
                   {store.phone && (
                     <a
                       href={`tel:${store.phone}`}
-                      className="store-popup-link text-[11px] font-medium text-slate-600 dark:text-slate-400 block py-0.5 hover:text-slate-900 dark:hover:text-slate-200 transition-colors"
+                      className="store-popup-link text-xs font-medium text-slate-600 dark:text-slate-400 block py-1 hover:text-slate-900 dark:hover:text-slate-200 transition-colors min-h-[44px] flex items-center"
                     >
                       {store.phone}
                     </a>
@@ -227,7 +265,7 @@ export const StoreMap = React.memo(function StoreMap({
                       href={`https://www.google.com/maps/dir/?api=1&destination=${store.lat},${store.lng}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="store-popup-link text-[11px] font-medium text-slate-700 dark:text-slate-300 py-0.5 hover:text-slate-900 dark:hover:text-white transition-colors"
+                      className="store-popup-link text-xs font-medium text-slate-700 dark:text-slate-300 py-2 hover:text-slate-900 dark:hover:text-white transition-colors min-h-[44px] flex items-center"
                     >
                       Get Directions →
                     </a>
@@ -235,7 +273,7 @@ export const StoreMap = React.memo(function StoreMap({
                       href={getStoreUrl(store)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="store-popup-link text-[11px] font-medium text-slate-700 dark:text-slate-300 py-0.5 hover:text-slate-900 dark:hover:text-white transition-colors"
+                      className="store-popup-link text-xs font-medium text-slate-700 dark:text-slate-300 py-2 hover:text-slate-900 dark:hover:text-white transition-colors min-h-[44px] flex items-center"
                     >
                       View Store Page →
                     </a>

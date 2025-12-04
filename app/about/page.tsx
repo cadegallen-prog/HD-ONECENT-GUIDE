@@ -1,6 +1,7 @@
 import Link from "next/link"
 import type { Metadata } from "next"
 import { SupportAndCashbackCard } from "@/components/SupportAndCashbackCard"
+import { COMMUNITY_MEMBER_COUNT_DISPLAY, FACEBOOK_GROUP_URL } from "@/lib/constants"
 
 export const metadata: Metadata = {
   title: "About | Penny Central",
@@ -27,14 +28,14 @@ export default function AboutPage() {
           Penny Central is a community-driven guide for finding clearance items marked to $0.01 at
           Home Depot stores. This resource was created by and for members of the{" "}
           <Link
-            href="https://www.facebook.com/groups/homedepotonecent"
+            href={FACEBOOK_GROUP_URL}
             className="text-cta-primary dark:text-blue-400 hover:underline font-medium"
             target="_blank"
             rel="noopener noreferrer"
           >
             Home Depot One Cent Items Facebook group
           </Link>
-          , which has grown to over 36,000 members.
+          , which has grown to over {COMMUNITY_MEMBER_COUNT_DISPLAY} members.
         </p>
 
         <p className="text-stone-700 dark:text-stone-300 leading-relaxed">
@@ -45,11 +46,11 @@ export default function AboutPage() {
       </section>
 
       {/* How This Site is Supported */}
-      <section id="support" className="mb-16">
+      <section id="support" className="mb-16 scroll-mt-24">
         <h2 className="text-2xl font-semibold text-stone-900 dark:text-stone-50 mb-4">
           How This Site is Supported
         </h2>
-        <p className="text-stone-600 dark:text-stone-400 mb-8">
+        <p className="text-stone-700 dark:text-stone-300 mb-8">
           Penny Central is completely free. No ads, no paywalls, no premium tiers. Running this site
           comes with real costs: hosting, domain, development time, and ongoing maintenance.
           Here&apos;s how you can help:
@@ -76,12 +77,12 @@ export default function AboutPage() {
             <h3 className="text-xl font-semibold text-stone-900 dark:text-stone-50 mb-3">
               Use BeFrugal for Cashback
             </h3>
-            <p className="text-stone-600 dark:text-stone-400 mb-6 leading-relaxed">
+            <p className="text-stone-700 dark:text-stone-300 mb-6 leading-relaxed">
               Already shopping at Home Depot for your penny hunting trips? BeFrugal gives you
               cashback on every purchase. Sign up free through our link and start earning cashback
               automatically.
             </p>
-            <ul className="text-sm text-stone-600 dark:text-stone-400 space-y-2 mb-6">
+            <ul className="text-sm text-stone-700 dark:text-stone-300 space-y-2 mb-6">
               <li className="flex items-start">
                 <svg
                   className="w-5 h-5 text-color-success mr-2 flex-shrink-0 mt-0.5"
@@ -132,7 +133,7 @@ export default function AboutPage() {
               </li>
             </ul>
             <a
-              href="https://www.befrugal.com/rs/NJIKJUB/"
+              href="/go/befrugal"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-cta-primary hover:bg-cta-hover text-white font-semibold transition-all"
@@ -161,12 +162,12 @@ export default function AboutPage() {
             <h3 className="text-xl font-semibold text-stone-900 dark:text-stone-50 mb-3">
               Leave a Tip
             </h3>
-            <p className="text-stone-600 dark:text-stone-400 mb-6 leading-relaxed">
+            <p className="text-stone-700 dark:text-stone-300 mb-6 leading-relaxed">
               Penny Central is a passion project that costs real money to run: hosting, domain,
               ongoing development and maintenance. If this site has helped you score deals, consider
               buying me a coffee.
             </p>
-            <ul className="text-sm text-stone-600 dark:text-stone-400 space-y-2 mb-6">
+            <ul className="text-sm text-stone-700 dark:text-stone-300 space-y-2 mb-6">
               <li className="flex items-start">
                 <svg
                   className="w-5 h-5 text-color-success mr-2 flex-shrink-0 mt-0.5"

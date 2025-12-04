@@ -47,7 +47,7 @@ function PennyLogo({ className = "" }: { className?: string }) {
         y="12"
         textAnchor="middle"
         className="text-stone-500 dark:text-stone-400"
-        style={{ fontSize: "8px", fontFamily: "system-ui" }}
+        style={{ fontSize: "10px", fontFamily: "system-ui" }}
         fill="currentColor"
       >
         ¢
@@ -58,7 +58,7 @@ function PennyLogo({ className = "" }: { className?: string }) {
 
 export function Navbar() {
   const pathname = usePathname()
-  const { theme, setTheme } = useTheme()
+  const { setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
