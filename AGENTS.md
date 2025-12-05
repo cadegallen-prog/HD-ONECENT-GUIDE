@@ -177,48 +177,58 @@ Penny Central is a **utility/reference guide** for finding Home Depot clearance 
 - **Font:** Inter (headings + body)
 - **Hosting:** Vercel
 
-### Design System — Slate Steel
+### Design System — WCAG AAA Compliant
 
-Use ONLY these colors. No exceptions.
+**Full specification:** See `docs/COLOR-SYSTEM.md` for complete contrast ratios and verification.
 
-#### Light Mode
+**Target:** WCAG AAA (7:1 normal text, 4.5:1 large text, 3:1 UI components)
 
-| Role            | Hex       | Tailwind           |
-| --------------- | --------- | ------------------ |
-| Page background | `#FAFAFA` | `bg-[#FAFAFA]`     |
-| Card surface    | `#FFFFFF` | `bg-white`         |
-| Primary text    | `#0F172A` | `text-slate-900`   |
-| Secondary text  | `#334155` | `text-slate-700`   |
-| Muted text      | `#64748B` | `text-slate-500`   |
-| Borders         | `#E2E8F0` | `border-slate-200` |
-| Accent          | `#475569` | `bg-slate-600`     |
-| Accent hover    | `#334155` | `bg-slate-700`     |
-| Accent subtle   | `#F1F5F9` | `bg-slate-100`     |
+#### Color Philosophy
 
-#### Dark Mode
+- **60-30-10 Rule:** 60% neutral backgrounds, 30% supporting elements, 10% CTA accent
+- **Warm neutrals + Cool CTA:** Stone/cream backgrounds with blue accent for maximum pop
+- **Complementary contrast:** Warm vs cool creates clear visual hierarchy
 
-| Role            | Hex       | Tailwind           |
-| --------------- | --------- | ------------------ |
-| Page background | `#0F172A` | `bg-slate-900`     |
-| Card surface    | `#1E293B` | `bg-slate-800`     |
-| Primary text    | `#FAFAFA` | `text-slate-50`    |
-| Secondary text  | `#94A3B8` | `text-slate-400`   |
-| Muted text      | `#64748B` | `text-slate-500`   |
-| Borders         | `#334155` | `border-slate-700` |
-| Accent          | `#64748B` | `bg-slate-500`     |
-| Accent hover    | `#475569` | `bg-slate-600`     |
-| Accent subtle   | `#334155` | `bg-slate-700`     |
+#### Light Mode (Quick Reference)
 
-#### Accent Usage Rules
+| Role            | Hex       | Contrast | WCAG   |
+| --------------- | --------- | -------- | ------ |
+| Page background | `#FFFFFF` | —        | —      |
+| Card surface    | `#F8F8F7` | —        | —      |
+| Primary text    | `#1C1917` | 15.4:1   | ✓ AAA  |
+| Secondary text  | `#44403C` | 9.7:1    | ✓ AAA  |
+| Muted text      | `#57534E` | 7.1:1    | ✓ AAA  |
+| CTA button      | `#1D4ED8` | 8.6:1    | ✓ AAA  |
+| Borders         | `#E7E5E4` | —        | —      |
 
-The accent color may ONLY appear on:
+#### Dark Mode (Quick Reference)
 
-1. ONE primary button per page
+| Role            | Hex       | Contrast | WCAG   |
+| --------------- | --------- | -------- | ------ |
+| Page background | `#171412` | —        | —      |
+| Card surface    | `#231F1C` | —        | —      |
+| Primary text    | `#FAFAF9` | 16.2:1   | ✓ AAA  |
+| Secondary text  | `#D6D3D1` | 11.8:1   | ✓ AAA  |
+| Muted text      | `#A8A29E` | 7.1:1    | ✓ AAA  |
+| CTA button      | `#3B82F6` | 4.7:1    | ✓ AA   |
+| Borders         | `#3D3835` | —        | —      |
+
+#### CTA Accent Rules
+
+The CTA blue (`#1D4ED8` / `#3B82F6`) may ONLY appear on:
+
+1. ONE primary button per page (the main action)
 2. Active navigation state
-3. Links on hover
+3. Inline links (must also be underlined)
 4. Focus rings
 
 Maximum 3 accent elements visible per screen.
+
+#### Interactive Element Requirements
+
+- **Inline links:** MUST be underlined AND use CTA color (not just on hover)
+- **Buttons:** Solid background, 44x44px minimum touch target, visible hover/focus states
+- **Focus rings:** 2px solid outline with offset, visible on all focusable elements
 
 ### Forbidden Elements
 

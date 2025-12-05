@@ -4,7 +4,8 @@ import { SupportAndCashbackCard } from "@/components/SupportAndCashbackCard"
 
 export const metadata: Metadata = {
   title: "Complete Guide | Penny Central",
-  description: "Master the art of finding $0.01 clearance items at Home Depot. Learn the clearance lifecycle, digital pre-hunt strategies, in-store tactics, and checkout procedures.",
+  description:
+    "Master the art of finding $0.01 clearance items at Home Depot. Learn the clearance lifecycle, digital pre-hunt strategies, in-store tactics, and checkout procedures.",
 }
 
 export default function GuidePage() {
