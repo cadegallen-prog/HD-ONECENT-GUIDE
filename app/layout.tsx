@@ -97,8 +97,8 @@ export default function RootLayout({
             <Toaster />
           </CommandPaletteProvider>
         </ThemeProvider>
-        {/* Vercel Analytics - only loads in production on Vercel */}
-        {process.env.VERCEL && <Analytics />}
+        {/* Vercel Analytics - loads in production */}
+        {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
   )
