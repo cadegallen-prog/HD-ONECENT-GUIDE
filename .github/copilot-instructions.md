@@ -31,21 +31,22 @@ The user **cannot code**. They can copy/paste and follow instructions. You are t
 
 **Target:** WCAG AAA (7:1 normal text, 4.5:1 large text)
 
-| Light Mode | Hex | Contrast |
-|------------|-----|----------|
-| Page bg | `#FFFFFF` | — |
-| Text | `#1C1917` | 15.4:1 ✓ AAA |
-| Muted | `#57534E` | 7.1:1 ✓ AAA |
-| CTA | `#1D4ED8` | 8.6:1 ✓ AAA |
+| Light Mode | Hex       | Contrast     |
+| ---------- | --------- | ------------ |
+| Page bg    | `#FFFFFF` | —            |
+| Text       | `#1C1917` | 15.4:1 ✓ AAA |
+| Muted      | `#57534E` | 7.1:1 ✓ AAA  |
+| CTA        | `#1D4ED8` | 8.6:1 ✓ AAA  |
 
-| Dark Mode | Hex | Contrast |
-|-----------|-----|----------|
-| Page bg | `#171412` | — |
-| Text | `#FAFAF9` | 16.2:1 ✓ AAA |
-| Muted | `#A8A29E` | 7.1:1 ✓ AAA |
-| CTA | `#3B82F6` | 4.7:1 ✓ AA |
+| Dark Mode | Hex       | Contrast     |
+| --------- | --------- | ------------ |
+| Page bg   | `#171412` | —            |
+| Text      | `#FAFAF9` | 16.2:1 ✓ AAA |
+| Muted     | `#A8A29E` | 7.1:1 ✓ AAA  |
+| CTA       | `#3B82F6` | 4.7:1 ✓ AA   |
 
 **Rules:**
+
 - 60-30-10 color ratio (neutral-supporting-CTA)
 - Inline links: MUST be underlined + CTA color
 - Max 3 accent elements per screen

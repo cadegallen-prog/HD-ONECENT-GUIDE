@@ -1,16 +1,54 @@
 # ============================================================================
-# PENNY CENTRAL — PAGE IMPROVEMENT WIZARD
+# PENNY CENTRAL — PAGE IMPROVEMENT WIZARD v2
 # ============================================================================
 # Purpose: Generate structured prompts for AI coding assistants that align
 #          with PennyCentral's design system, accessibility standards, and docs.
 #
-# Usage: Run this script, answer the questions, then paste the output into
-#        your AI coding assistant (Copilot, Claude, ChatGPT).
+# Usage:
+#   Full mode:   .\page-improvement-wizard.ps1
+#   Quick mode:  .\page-improvement-wizard.ps1 -Quick -Page "landing"
+#   List pages:  .\page-improvement-wizard.ps1 -ListPages
 #
 # WCAG Target: AAA compliance (7:1 contrast for normal text, 4.5:1 for large)
 # ============================================================================
 
+param(
+    [switch]$Quick,           # Skip ratings, use default "needs improvement"
+    [switch]$ListPages,       # Just list available pages and exit
+    [string]$Page = "",       # Pre-select a page
+    [string]$Problem = "",    # Pre-fill the problem description
+    [switch]$Help             # Show help
+)
+
 $ErrorActionPreference = "Stop"
+
+# ============================================================================
+# AVAILABLE PAGES
+# ============================================================================
+
+$pageMap = @{
+    "landing"             = "app/page.tsx"
+    "home"                = "app/page.tsx"
+    "store-finder"        = "app/store-finder/page.tsx"
+    "trip-tracker"        = "app/trip-tracker/page.tsx"
+    "guide"               = "app/guide/page.tsx"
+    "resources"           = "app/resources/page.tsx"
+    "cashback"            = "app/cashback/page.tsx"
+    "about"               = "app/about/page.tsx"
+    "faq"                 = "app/faq/page.tsx"
+    "what-are-pennies"    = "app/what-are-pennies/page.tsx"
+    "clearance-lifecycle" = "app/clearance-lifecycle/page.tsx"
+    "checkout-strategy"   = "app/checkout-strategy/page.tsx"
+    "in-store-strategy"   = "app/in-store-strategy/page.tsx"
+    "digital-pre-hunt"    = "app/digital-pre-hunt/page.tsx"
+    "facts-vs-myths"      = "app/facts-vs-myths/page.tsx"
+    "responsible-hunting" = "app/responsible-hunting/page.tsx"
+    "internal-systems"    = "app/internal-systems/page.tsx"
+}
+
+# ============================================================================
+# HELPER FUNCTIONS
+# ============================================================================
 
 function Write-Section {
     param([string]$Title)
@@ -37,12 +75,62 @@ function Get-Rating {
         if ($Description) {
             Write-Host "  ($Description)" -ForegroundColor DarkGray
         }
-        $input = Read-Host "  Rating [1-5]"
-        if ($input -match '^[1-5]$') {
-            return [int]$input
+        $response = Read-Host "  Rating [1-5]"
+        if ($response -match '^[1-5]$') {
+            return [int]$response
         }
         Write-Host "  Please enter a number between 1 and 5." -ForegroundColor Red
     }
+}
+
+function Show-Help {
+    Write-Host ""
+    Write-Host "PENNY CENTRAL PAGE IMPROVEMENT WIZARD" -ForegroundColor Cyan
+    Write-Host "=====================================" -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "Usage:" -ForegroundColor Yellow
+    Write-Host "  .\page-improvement-wizard.ps1                    # Full interactive mode"
+    Write-Host "  .\page-improvement-wizard.ps1 -Quick -Page landing"
+    Write-Host "  .\page-improvement-wizard.ps1 -Page guide -Problem 'too much text'"
+    Write-Host "  .\page-improvement-wizard.ps1 -ListPages         # Show all pages"
+    Write-Host ""
+    Write-Host "Parameters:" -ForegroundColor Yellow
+    Write-Host "  -Quick      Skip the rating questions, assume page needs work"
+    Write-Host "  -Page       Pre-select the page to improve"
+    Write-Host "  -Problem    Pre-fill the problem description"
+    Write-Host "  -ListPages  List all available pages and exit"
+    Write-Host "  -Help       Show this help message"
+    Write-Host ""
+    Write-Host "The wizard generates a prompt to paste into Copilot/Claude/ChatGPT." -ForegroundColor Gray
+    Write-Host ""
+}
+
+function Show-PageList {
+    Write-Host ""
+    Write-Host "AVAILABLE PAGES" -ForegroundColor Cyan
+    Write-Host "===============" -ForegroundColor Cyan
+    Write-Host ""
+    $i = 1
+    foreach ($key in $pageMap.Keys | Sort-Object) {
+        Write-Host "  $i. $key" -ForegroundColor White -NoNewline
+        Write-Host " → $($pageMap[$key])" -ForegroundColor DarkGray
+        $i++
+    }
+    Write-Host ""
+}
+
+# ============================================================================
+# HANDLE FLAGS
+# ============================================================================
+
+if ($Help) {
+    Show-Help
+    exit 0
+}
+
+if ($ListPages) {
+    Show-PageList
+    exit 0
 }
 
 # ============================================================================
@@ -52,131 +140,143 @@ function Get-Rating {
 Clear-Host
 Write-Host ""
 Write-Host "╔══════════════════════════════════════════════════════════════════╗" -ForegroundColor Magenta
-Write-Host "║           PENNY CENTRAL — PAGE IMPROVEMENT WIZARD                ║" -ForegroundColor Magenta
-Write-Host "║                                                                  ║" -ForegroundColor Magenta
-Write-Host "║  This wizard captures structured input about a page you want    ║" -ForegroundColor Magenta
-Write-Host "║  to improve, then generates a prompt for your AI assistant.     ║" -ForegroundColor Magenta
+Write-Host "║           PENNY CENTRAL — PAGE IMPROVEMENT WIZARD v2             ║" -ForegroundColor Magenta
 Write-Host "║                                                                  ║" -ForegroundColor Magenta
 Write-Host "║  Target: WCAG AAA Compliance | Design System: PennyCentral v2   ║" -ForegroundColor Magenta
 Write-Host "╚══════════════════════════════════════════════════════════════════╝" -ForegroundColor Magenta
+
+if ($Quick) {
+    Write-Host ""
+    Write-Host "  [QUICK MODE] Skipping detailed ratings" -ForegroundColor Yellow
+}
+
 Write-Host ""
 
 # ============================================================================
-# AVAILABLE PAGES
+# STEP 1: SELECT PAGE
 # ============================================================================
-
-$availablePages = @(
-    "landing (app/page.tsx)",
-    "store-finder",
-    "trip-tracker",
-    "guide",
-    "resources",
-    "cashback",
-    "about",
-    "faq",
-    "what-are-pennies",
-    "clearance-lifecycle",
-    "checkout-strategy",
-    "in-store-strategy",
-    "digital-pre-hunt",
-    "facts-vs-myths",
-    "responsible-hunting",
-    "internal-systems"
-)
 
 Write-Section "STEP 1: SELECT PAGE"
 
-Write-Host "Available pages:" -ForegroundColor Gray
-$i = 1
-foreach ($page in $availablePages) {
-    Write-Host "  $i. $page" -ForegroundColor Gray
-    $i++
+if (-not $Page) {
+    Show-PageList
+    $Page = Read-Host "Which page? (Enter name or number)"
 }
-Write-Host ""
 
-$pageName = Read-Host "Which page are you improving? (Enter name or number)"
-
-# Convert number to name if applicable
-if ($pageName -match '^\d+$') {
-    $index = [int]$pageName - 1
-    if ($index -ge 0 -and $index -lt $availablePages.Count) {
-        $pageName = $availablePages[$index] -replace ' \(.*\)', ''
+# Convert number to name
+if ($Page -match '^\d+$') {
+    $sortedKeys = $pageMap.Keys | Sort-Object
+    $index = [int]$Page - 1
+    if ($index -ge 0 -and $index -lt $sortedKeys.Count) {
+        $Page = $sortedKeys[$index]
     }
 }
 
-# Normalize page name
-$pageName = $pageName.Trim().ToLower()
-if ($pageName -eq "landing" -or $pageName -eq "home" -or $pageName -eq "homepage") {
+# Normalize
+$pageName = $Page.Trim().ToLower()
+if ($pageName -eq "home" -or $pageName -eq "homepage") {
     $pageName = "landing"
-    $pageFile = "app/page.tsx"
-} else {
-    $pageFile = "app/$pageName/page.tsx"
 }
 
-Write-Host ""
-Write-Host "Selected: $pageName ($pageFile)" -ForegroundColor Green
+# Validate
+if (-not $pageMap.ContainsKey($pageName)) {
+    Write-Host "Unknown page: $pageName" -ForegroundColor Red
+    Write-Host "Use -ListPages to see available pages." -ForegroundColor Gray
+    exit 1
+}
+
+$pageFile = $pageMap[$pageName]
+Write-Host "Selected: " -NoNewline
+Write-Host "$pageName" -ForegroundColor Green -NoNewline
+Write-Host " ($pageFile)" -ForegroundColor DarkGray
 
 # ============================================================================
-# PAGE CONTEXT
+# STEP 2: PAGE CONTEXT
 # ============================================================================
 
 Write-Section "STEP 2: PAGE CONTEXT"
 
-$pageGoal = Read-Host "What is the MAIN GOAL of this page for the user?"
-Write-Host "  Example: Help users find their nearest Home Depot stores" -ForegroundColor DarkGray
-Write-Host ""
+if ($Quick) {
+    # Quick mode defaults
+    $pageGoal = Read-Host "Main GOAL of this page? (one sentence)"
+    $primaryUsers = "Penny hunters visiting the site"
+    $primaryCTA = Read-Host "Primary CTA? (e.g., 'Use store finder')"
+    $currentProblems = if ($Problem) { $Problem } else { Read-Host "What's WRONG with the current page?" }
+    $successLook = "Users quickly understand and take action"
+    $extraNotes = ""
+} else {
+    $pageGoal = Read-Host "What is the MAIN GOAL of this page for the user?"
+    Write-Host "  Example: Help users find their nearest Home Depot stores" -ForegroundColor DarkGray
+    Write-Host ""
 
-$primaryUsers = Read-Host "Who are the PRIMARY USERS of this page?"
-Write-Host "  Example: Casual penny hunters, serious resellers, first-time visitors" -ForegroundColor DarkGray
-Write-Host ""
+    $primaryUsers = Read-Host "Who are the PRIMARY USERS of this page?"
+    Write-Host "  Example: Casual penny hunters, serious resellers, first-time visitors" -ForegroundColor DarkGray
+    Write-Host ""
 
-$primaryCTA = Read-Host "What is the PRIMARY CALL TO ACTION?"
-Write-Host "  Example: Use store finder, Read penny guide, Join Facebook group" -ForegroundColor DarkGray
-Write-Host ""
+    $primaryCTA = Read-Host "What is the PRIMARY CALL TO ACTION?"
+    Write-Host "  Example: Use store finder, Read penny guide, Join Facebook group" -ForegroundColor DarkGray
+    Write-Host ""
 
-$currentProblems = Read-Host "What feels WRONG or WEAK about the current page?"
-Write-Host "  Example: Too much text, unclear purpose, CTA buried, poor mobile layout" -ForegroundColor DarkGray
-Write-Host ""
+    $currentProblems = if ($Problem) { $Problem } else { Read-Host "What feels WRONG or WEAK about the current page?" }
+    Write-Host "  Example: Too much text, unclear purpose, CTA buried, poor mobile layout" -ForegroundColor DarkGray
+    Write-Host ""
 
-$successLook = Read-Host "If this page were PERFECT, what would users do or say?"
-Write-Host "  Example: 'I immediately found what I needed and took action'" -ForegroundColor DarkGray
-Write-Host ""
+    $successLook = Read-Host "If this page were PERFECT, what would users do or say?"
+    Write-Host "  Example: 'I immediately found what I needed and took action'" -ForegroundColor DarkGray
+    Write-Host ""
 
-$extraNotes = Read-Host "Any EXTRA NOTES, constraints, or ideas? (Press Enter to skip)"
+    $extraNotes = Read-Host "Any EXTRA NOTES, constraints, or ideas? (Press Enter to skip)"
+}
 
 # ============================================================================
-# SELF-ASSESSMENT RATINGS
+# STEP 3: SELF-ASSESSMENT (Skip in Quick mode)
 # ============================================================================
 
-Write-Section "STEP 3: SELF-ASSESSMENT"
+if ($Quick) {
+    # Default scores for Quick mode (assume needs work)
+    $clarity = 3
+    $scan = 3
+    $cta = 3
+    $layout = 3
+    $hierarchy = 3
+    $colorUse = 4  # Assume color system is OK
+    $typography = 4  # Assume typography is OK
+    $mobile = 3
+    $access = 4  # Assume accessibility basics are OK
+    $interactive = 4
+} else {
+    Write-Section "STEP 3: SELF-ASSESSMENT"
 
-Write-Host "Rate the CURRENT page from 1-5 for each factor." -ForegroundColor White
-Write-Host "1 = Terrible, 2 = Weak, 3 = Acceptable, 4 = Good, 5 = Excellent" -ForegroundColor Gray
-Write-Host "If unsure, estimate based on your gut feeling." -ForegroundColor Gray
+    Write-Host "Rate the CURRENT page from 1-5 for each factor." -ForegroundColor White
+    Write-Host "1 = Terrible, 2 = Weak, 3 = Acceptable, 4 = Good, 5 = Excellent" -ForegroundColor Gray
+    Write-Host "If unsure, estimate based on your gut feeling." -ForegroundColor Gray
 
-Write-Subsection "Content & Clarity"
-$clarity = Get-Rating "How CLEAR is it what this page is for at a glance?" "Can a new visitor understand the purpose in 3 seconds?"
-$scan = Get-Rating "How SCANNABLE is the content?" "Can users get the gist by reading headings only?"
-$cta = Get-Rating "How STRONG and OBVIOUS is the main call to action?" "Does the primary CTA stand out?"
+    Write-Subsection "Content & Clarity"
+    $clarity = Get-Rating "How CLEAR is it what this page is for at a glance?" "Can a new visitor understand the purpose in 3 seconds?"
+    $scan = Get-Rating "How SCANNABLE is the content?" "Can users get the gist by reading headings only?"
+    $cta = Get-Rating "How STRONG and OBVIOUS is the main call to action?" "Does the primary CTA stand out?"
 
-Write-Subsection "Layout & Visual Design"
-$layout = Get-Rating "How good is the LAYOUT and SPACING?" "Does it feel organized and breathable?"
-$hierarchy = Get-Rating "How clear is the VISUAL HIERARCHY?" "Do important things look important?"
-$colorUse = Get-Rating "How appropriate is the COLOR usage?" "Consistent palette, not noisy, proper contrast?"
+    Write-Subsection "Layout & Visual Design"
+    $layout = Get-Rating "How good is the LAYOUT and SPACING?" "Does it feel organized and breathable?"
+    $hierarchy = Get-Rating "How clear is the VISUAL HIERARCHY?" "Do important things look important?"
+    $colorUse = Get-Rating "How appropriate is the COLOR usage?" "Consistent palette, not noisy, proper contrast?"
 
-Write-Subsection "Accessibility & Mobile"
-$mobile = Get-Rating "How good is the MOBILE experience?" "Works well on phone screens?"
-$access = Get-Rating "How ACCESSIBLE is the page?" "Contrast, font sizes, screen reader friendly?"
-$interactive = Get-Rating "How obviously CLICKABLE are interactive elements?" "Links underlined, buttons look like buttons?"
+    Write-Subsection "Typography & Readability"
+    $typography = Get-Rating "How good is the TYPOGRAPHY?" "Font sizes, line lengths, heading hierarchy?"
+
+    Write-Subsection "Accessibility & Mobile"
+    $mobile = Get-Rating "How good is the MOBILE experience?" "Works well on phone screens?"
+    $access = Get-Rating "How ACCESSIBLE is the page?" "Contrast, font sizes, screen reader friendly?"
+    $interactive = Get-Rating "How obviously CLICKABLE are interactive elements?" "Links underlined, buttons look like buttons?"
+}
 
 # ============================================================================
 # COMPUTE DIAGNOSIS
 # ============================================================================
 
-$allScores = @($clarity, $scan, $cta, $layout, $hierarchy, $colorUse, $mobile, $access, $interactive)
+$allScores = @($clarity, $scan, $cta, $layout, $hierarchy, $colorUse, $typography, $mobile, $access, $interactive)
 $avgScore = ($allScores | Measure-Object -Average).Average
 $avgScore = [math]::Round($avgScore, 1)
-$minScore = ($allScores | Measure-Object -Minimum).Minimum
 
 # Quality tier
 if ($avgScore -lt 2.5) {
@@ -200,8 +300,7 @@ else {
     $qualityColor = "Green"
 }
 
-# Identify weak areas (below 3)
-$weakAreas = @()
+# Identify weak areas
 $scoreNames = @{
     0 = "Clarity of purpose"
     1 = "Scannability"
@@ -209,24 +308,26 @@ $scoreNames = @{
     3 = "Layout and spacing"
     4 = "Visual hierarchy"
     5 = "Color usage"
-    6 = "Mobile experience"
-    7 = "Accessibility"
-    8 = "Interactive element clarity"
+    6 = "Typography and readability"
+    7 = "Mobile experience"
+    8 = "Accessibility"
+    9 = "Interactive element clarity"
 }
 
-for ($i = 0; $i -lt $allScores.Count; $i++) {
-    if ($allScores[$i] -lt 3) {
-        $weakAreas += $scoreNames[$i]
-    }
-}
-
-# Critical areas (below 2)
+$weakAreas = @()
 $criticalAreas = @()
 for ($i = 0; $i -lt $allScores.Count; $i++) {
     if ($allScores[$i] -lt 2) {
         $criticalAreas += $scoreNames[$i]
     }
+    elseif ($allScores[$i] -lt 3) {
+        $weakAreas += $scoreNames[$i]
+    }
 }
+
+# ============================================================================
+# SHOW DIAGNOSIS
+# ============================================================================
 
 Write-Section "DIAGNOSIS"
 
@@ -253,11 +354,6 @@ if ($weakAreas.Count -gt 0) {
     }
 }
 
-if ($weakAreas.Count -eq 0 -and $criticalAreas.Count -eq 0) {
-    Write-Host ""
-    Write-Host "No areas scored below 3. Focus on polish and optimization." -ForegroundColor Green
-}
-
 # ============================================================================
 # BUILD THE PROMPT
 # ============================================================================
@@ -276,9 +372,9 @@ You are improving a page on www.pennycentral.com, a utility guide for Home Depot
 
 Before making ANY changes, read these files in the repo:
 1. **AGENTS.md** — Design system, forbidden elements, behavior rules
-2. **lib/constants.ts** — Centralized constants (member count, URLs)
-3. **app/globals.css** — CSS variables and color system
-4. **tailwind.config.ts** — Tailwind theme configuration
+2. **docs/COLOR-SYSTEM.md** — WCAG AAA color specifications and typography
+3. **lib/constants.ts** — Centralized constants (member count, URLs)
+4. **app/globals.css** — CSS variables and base styles
 
 These docs are the source of truth. Do not deviate from them.
 
@@ -322,6 +418,7 @@ $(if ($extraNotes) { $extraNotes } else { "None provided" })
 | Layout/spacing | $layout | $(if ($layout -lt 3) { "⚠️ WEAK" } elseif ($layout -lt 4) { "→ Improve" } else { "✓ OK" }) |
 | Visual hierarchy | $hierarchy | $(if ($hierarchy -lt 3) { "⚠️ WEAK" } elseif ($hierarchy -lt 4) { "→ Improve" } else { "✓ OK" }) |
 | Color usage | $colorUse | $(if ($colorUse -lt 3) { "⚠️ WEAK" } elseif ($colorUse -lt 4) { "→ Improve" } else { "✓ OK" }) |
+| Typography | $typography | $(if ($typography -lt 3) { "⚠️ WEAK" } elseif ($typography -lt 4) { "→ Improve" } else { "✓ OK" }) |
 | Mobile experience | $mobile | $(if ($mobile -lt 3) { "⚠️ WEAK" } elseif ($mobile -lt 4) { "→ Improve" } else { "✓ OK" }) |
 | Accessibility | $access | $(if ($access -lt 3) { "⚠️ WEAK" } elseif ($access -lt 4) { "→ Improve" } else { "✓ OK" }) |
 | Interactive clarity | $interactive | $(if ($interactive -lt 3) { "⚠️ WEAK" } elseif ($interactive -lt 4) { "→ Improve" } else { "✓ OK" }) |
@@ -337,36 +434,37 @@ $(if ($extraNotes) { $extraNotes } else { "None provided" })
 
 ### Color System (WCAG AAA Target)
 
-PennyCentral uses a **warm neutral + blue CTA** system:
-
 **Light Mode:**
 - Background: #FFFFFF (primary), #F8F8F7 (secondary)
-- Text: #1C1917 (primary, 15.4:1 contrast ✓), #44403C (secondary, 9.7:1 ✓), #6B6560 (muted, 5.7:1 ✓)
-- CTA: #1D4ED8 (blue, white text at 8.6:1 ✓)
-- Borders: #E7E5E4
+- Text: #1C1917 (15.4:1 ✓ AAA), #44403C (9.7:1 ✓ AAA), #57534E (7.1:1 ✓ AAA)
+- CTA: #1D4ED8 blue, white text (8.6:1 ✓ AAA)
 
 **Dark Mode:**
-- Background: #171412 (primary), #231F1C (card), #2E2926 (elevated)
-- Text: #FAFAF9 (primary, 16.2:1 ✓), #D6D3D1 (secondary, 11.8:1 ✓), #A8A29E (muted, 7.1:1 ✓)
-- CTA: #3B82F6 (blue, white text)
-- Borders: #3D3835
+- Background: #171412 (primary), #231F1C (card)
+- Text: #FAFAF9 (16.2:1 ✓ AAA), #D6D3D1 (11.8:1 ✓ AAA), #A8A29E (7.1:1 ✓ AAA)
+- CTA: #3B82F6 blue, white text
 
-### Typography
-- Font: Inter (sans-serif)
-- Body: 16px base, 1.6 line height
-- Headings: Bold weight, clear size hierarchy
+### Typography (from docs/COLOR-SYSTEM.md)
 
-### Interactive Elements (CRITICAL for Accessibility)
-- **Inline links:** Must be underlined AND use a distinct color
-- **Buttons:** Solid background, sufficient padding, visible hover/focus states
-- **Focus rings:** Visible outline on keyboard focus
+- Font: Inter (400, 500, 600 weights)
+- Body: 16px, line-height 1.6
+- H1: 30px max, H2: 24px, H3: 20px
+- Minimum: 12px (enforced)
+- Line length: max 65-80 characters (use max-w-prose)
+- No justified text, left-aligned only
+
+### Interactive Elements
+
+- **Links in body text:** MUST be underlined AND blue (#1D4ED8)
+- **Buttons:** Solid CTA background, 44x44px minimum touch target
+- **Focus rings:** 2px solid outline, visible on all focusable elements
 
 ### Forbidden Elements
+
 - Gradients, heavy shadows, animations >150ms
 - Emoji in UI, decorative graphics
 - Orange/amber/teal/cyan/pink/purple accents
-- Text larger than 22px
-- Gamification elements
+- Text larger than 30px, smaller than 12px
 
 ---
 
@@ -374,23 +472,22 @@ PennyCentral uses a **warm neutral + blue CTA** system:
 
 1. **Read the page code** at $pageFile and related components
 2. **Address weak areas first** (anything scored < 3)
-3. **Improve toward exceptional** using the criteria above
-4. **Maintain consistency** with the design system in globals.css
+3. **Improve toward exceptional** using the design system
+4. **Verify accessibility** — contrast, font sizes, touch targets
 
 ### Output Format
 
-1. **UX Plan** — Brief explanation of layout/hierarchy/CTA changes
-2. **Files Changed** — List of files you will modify
+1. **UX Plan** — Brief explanation of changes
+2. **Files Changed** — List of modified files
 3. **Code Changes** — Complete updated code for each file
 
 ### Constraints
 
 - Do NOT turn pages into walls of text
 - Do NOT break existing navigation or routing
-- Do NOT add new dependencies without explaining why
-- DO use existing shadcn/ui components where appropriate
+- DO use existing shadcn/ui components
 - DO use constants from lib/constants.ts
-- DO follow the 60-30-10 color rule (60% neutral, 30% supporting, 10% CTA)
+- DO follow 60-30-10 color rule
 "@
 
 # ============================================================================
@@ -399,7 +496,7 @@ PennyCentral uses a **warm neutral + blue CTA** system:
 
 Write-Section "GENERATED PROMPT"
 
-Write-Host "Copy everything below the line and paste into your AI assistant:" -ForegroundColor White
+Write-Host "Copy everything below and paste into your AI assistant:" -ForegroundColor White
 Write-Host ""
 Write-Host "════════════════════════════════════════════════════════════════════" -ForegroundColor Green
 Write-Host ""
@@ -413,17 +510,17 @@ $prompt | Set-Clipboard
 Write-Host "✓ Prompt copied to clipboard!" -ForegroundColor Green
 Write-Host ""
 
-# Save to file for reference
+# Save to file
 $timestamp = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
-$outputFile = "scripts/prompts/$pageName-$timestamp.md"
-$outputDir = Split-Path $outputFile -Parent
+$outputDir = Join-Path $PSScriptRoot "prompts"
+$outputFile = Join-Path $outputDir "$pageName-$timestamp.md"
 
 if (-not (Test-Path $outputDir)) {
     New-Item -ItemType Directory -Path $outputDir -Force | Out-Null
 }
 
 $prompt | Out-File -FilePath $outputFile -Encoding UTF8
-Write-Host "✓ Prompt saved to: $outputFile" -ForegroundColor Gray
+Write-Host "✓ Saved to: $outputFile" -ForegroundColor Gray
 Write-Host ""
-Write-Host "Paste this prompt into Copilot Chat, Claude, or ChatGPT to begin." -ForegroundColor Cyan
+Write-Host "Paste this prompt into Copilot Chat to begin." -ForegroundColor Cyan
 Write-Host ""

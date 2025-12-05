@@ -147,28 +147,29 @@
   }
 
   /* ===============================================
-     ACCESSIBILITY: LINKS - Refined approach
-     Only underline links in running prose text.
-     Navigation, cards, and buttons use other cues.
+     ACCESSIBILITY: LINKS - WCAG AAA Compliant
+     Body text links MUST be underlined by default.
+     Navigation and buttons use other visual cues.
      =============================================== */
 
-  /* Prose links (paragraphs, articles) - underline on hover */
+  /* Prose links (paragraphs, articles) - ALWAYS underlined */
   .guide-article a,
   article a,
   p a,
   .prose a {
     color: var(--cta-primary);
-    text-decoration: none;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+    text-decoration-thickness: 1px;
     font-weight: 500;
-    transition: all 0.15s ease;
+    transition: text-decoration-thickness 0.15s ease;
   }
 
   .guide-article a:hover,
   article a:hover,
   p a:hover,
   .prose a:hover {
-    text-decoration: underline;
-    text-underline-offset: 0.15em;
+    text-decoration-thickness: 2px;
   }
 
   /* Focus ring for accessibility - all interactive elements */

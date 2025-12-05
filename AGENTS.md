@@ -191,27 +191,27 @@ Penny Central is a **utility/reference guide** for finding Home Depot clearance 
 
 #### Light Mode (Quick Reference)
 
-| Role            | Hex       | Contrast | WCAG   |
-| --------------- | --------- | -------- | ------ |
-| Page background | `#FFFFFF` | —        | —      |
-| Card surface    | `#F8F8F7` | —        | —      |
-| Primary text    | `#1C1917` | 15.4:1   | ✓ AAA  |
-| Secondary text  | `#44403C` | 9.7:1    | ✓ AAA  |
-| Muted text      | `#57534E` | 7.1:1    | ✓ AAA  |
-| CTA button      | `#1D4ED8` | 8.6:1    | ✓ AAA  |
-| Borders         | `#E7E5E4` | —        | —      |
+| Role            | Hex       | Contrast | WCAG  |
+| --------------- | --------- | -------- | ----- |
+| Page background | `#FFFFFF` | —        | —     |
+| Card surface    | `#F8F8F7` | —        | —     |
+| Primary text    | `#1C1917` | 15.4:1   | ✓ AAA |
+| Secondary text  | `#44403C` | 9.7:1    | ✓ AAA |
+| Muted text      | `#57534E` | 7.1:1    | ✓ AAA |
+| CTA button      | `#1D4ED8` | 8.6:1    | ✓ AAA |
+| Borders         | `#E7E5E4` | —        | —     |
 
 #### Dark Mode (Quick Reference)
 
-| Role            | Hex       | Contrast | WCAG   |
-| --------------- | --------- | -------- | ------ |
-| Page background | `#171412` | —        | —      |
-| Card surface    | `#231F1C` | —        | —      |
-| Primary text    | `#FAFAF9` | 16.2:1   | ✓ AAA  |
-| Secondary text  | `#D6D3D1` | 11.8:1   | ✓ AAA  |
-| Muted text      | `#A8A29E` | 7.1:1    | ✓ AAA  |
-| CTA button      | `#3B82F6` | 4.7:1    | ✓ AA   |
-| Borders         | `#3D3835` | —        | —      |
+| Role            | Hex       | Contrast | WCAG  |
+| --------------- | --------- | -------- | ----- |
+| Page background | `#171412` | —        | —     |
+| Card surface    | `#231F1C` | —        | —     |
+| Primary text    | `#FAFAF9` | 16.2:1   | ✓ AAA |
+| Secondary text  | `#D6D3D1` | 11.8:1   | ✓ AAA |
+| Muted text      | `#A8A29E` | 7.1:1    | ✓ AAA |
+| CTA button      | `#3B82F6` | 4.7:1    | ✓ AA  |
+| Borders         | `#3D3835` | —        | —     |
 
 #### CTA Accent Rules
 
