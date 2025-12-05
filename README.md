@@ -1,63 +1,55 @@
 # Penny Central
 
-A utility/reference guide for finding Home Depot clearance items marked to $0.01. The official companion site for the "Home Depot One Cent Items" Facebook community (40,000+ members and growing).
+The official companion site for the "Home Depot One Cent Items" Facebook community (40,000+ members and growing). A utility/reference guide for finding Home Depot clearance items marked to $0.01.
 
-**Live:** https://pennycentral.com ✅ **LAUNCHED**
-
-**Current Phase:** Stabilization and foundation-building. Focusing on site reliability, performance optimization, and core user experience before adding new features.
+**Live:** https://pennycentral.com
 
 ---
 
 ## What It Does
 
 - **Penny Guide** — Complete reference on how clearance items reach penny status
-- **Store Finder** — Find nearby Home Depot locations with map integration
+- **Store Finder** — Find nearby Home Depot locations with interactive map
 - **Trip Tracker** — Plan and log penny hunting trips
 - **Resources** — External tools and community links
+- **Cashback Guide** — How to stack savings with cashback apps
 
 ---
 
 ## Tech Stack
 
-- Next.js 15 (App Router)
-- TypeScript
-- Tailwind CSS
-- Vercel (hosting)
+- **Framework:** Next.js 15 (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS + CSS Variables
+- **Components:** shadcn/ui
+- **Font:** Inter
+- **Hosting:** Vercel
 
 ---
 
 ## Quick Start
 
 ```bash
-# Install dependencies
-npm install
-
-# Run development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Run linter
-npm run lint
+npm install        # Install dependencies
+npm run dev        # Dev server (localhost:3001)
+npm run build      # Production build
+npm run lint       # ESLint check
 ```
-
-Dev server runs at http://localhost:3000
 
 ---
 
 ## Design System
 
-**Palette:** Slate Steel
+**Full spec:** `docs/DESIGN-SYSTEM-AAA.md`
 
-- Light mode: `#FAFAFA` background, `#0F172A` text, `#475569` accent
-- Dark mode: `#0F172A` background, `#FAFAFA` text, `#64748B` accent
+**Target:** WCAG AAA compliance (7:1 contrast for normal text)
 
-**Font:** Inter
+**Palette:** Clean neutrals + blue CTA + amber live indicator
 
-**Aesthetic:** Clean, professional, minimal. Inspired by Linear, Vercel, Stripe.
-
-See `AGENTS.md` for complete design specifications.
+| Mode  | Background | Text      | CTA       | Live Indicator |
+| ----- | ---------- | --------- | --------- | -------------- |
+| Light | `#FFFFFF`  | `#18181B` | `#1D4ED8` | `#D97706`      |
+| Dark  | `#18181B`  | `#FAFAFA` | `#3B82F6` | `#FBBF24`      |
 
 ---
 
@@ -65,12 +57,17 @@ See `AGENTS.md` for complete design specifications.
 
 ```
 app/                    # Pages (App Router)
-  page.tsx              # Homepage / main guide
-  store-finder/
-  trip-tracker/
-  resources/
-  about/
+  page.tsx              # Homepage
+  store-finder/         # Store Finder
+  trip-tracker/         # Trip Tracker
+  guide/                # Penny Guide
+  resources/            # Resources
+  about/                # About
+  cashback/             # Cashback Guide
 components/             # Shared components
+docs/                   # Documentation
+  DESIGN-SYSTEM-AAA.md  # Color & typography spec
+lib/                    # Utilities and constants
 public/                 # Static assets
 ```
 
@@ -78,11 +75,14 @@ public/                 # Static assets
 
 ## For AI Agents
 
-- **`AGENTS.md`** — Single source of truth for how agents should behave, design specs, and project rules.
-- **`SKILLS.md`** — Compact reference for technical stack, domain skills, MCP servers, and tooling.
-- **`CLAUDE.md`** — Claude-specific instructions (points to AGENTS.md and SKILLS.md).
-- **`.github/copilot-instructions.md`** — Copilot Chat-specific instructions (points to AGENTS.md and SKILLS.md).
-- **`PROJECT_ROADMAP.md`** — What's done, in progress, and planned.
+| File                              | Purpose                                                             |
+| --------------------------------- | ------------------------------------------------------------------- |
+| `AGENTS.md`                       | Master source of truth — behavior rules, design system, constraints |
+| `SKILLS.md`                       | Technical stack, domain knowledge, MCP patterns                     |
+| `CLAUDE.md`                       | Claude Code instructions (points to AGENTS.md)                      |
+| `.github/copilot-instructions.md` | Copilot Chat instructions (points to AGENTS.md)                     |
+| `PROJECT_ROADMAP.md`              | Current priorities and feature status                               |
+| `docs/DESIGN-SYSTEM-AAA.md`       | Complete color and typography specification                         |
 
 ---
 

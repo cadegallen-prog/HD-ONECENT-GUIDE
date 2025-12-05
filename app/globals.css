@@ -28,19 +28,19 @@
 
     /* 60% - NEUTRAL BASE (backgrounds, text) */
     --bg-primary: #ffffff;
-    --bg-secondary: #FAFAFA;
-    --bg-tertiary: #F4F4F5;
-    --bg-dark: #18181B;
+    --bg-secondary: #fafafa;
+    --bg-tertiary: #f4f4f5;
+    --bg-dark: #18181b;
 
     /* WCAG AAA compliant text colors (7:1+ contrast) */
-    --text-primary: #18181B; /* 17.4:1 on white */
-    --text-secondary: #3F3F46; /* 10.1:1 on white */
-    --text-muted: #52525B; /* 7.2:1 on white - AAA minimum */
-    --text-inverse: #FAFAFA;
+    --text-primary: #18181b; /* 17.4:1 on white */
+    --text-secondary: #3f3f46; /* 10.1:1 on white */
+    --text-muted: #52525b; /* 7.2:1 on white - AAA minimum */
+    --text-inverse: #fafafa;
 
-    --border-default: #E4E4E7;
-    --border-strong: #D4D4D8;
-    --border-dark: #71717A;
+    --border-default: #e4e4e7;
+    --border-strong: #d4d4d8;
+    --border-dark: #71717a;
 
     /* 30% - BRAND COLORS (headers, accents, icons) */
     --brand-gunmetal: #374151;
@@ -63,7 +63,7 @@
     /* Page backgrounds */
     --bg-page: #ffffff;
     --bg-card: #ffffff;
-    --bg-elevated: #FAFAFA;
+    --bg-elevated: #fafafa;
 
     /* Legacy variables for compatibility */
     --accent: #374151;
@@ -106,20 +106,20 @@
 
   .dark {
     /* Dark mode backgrounds - clear layer separation */
-    --bg-page: #18181B;
-    --bg-card: #27272A;
-    --bg-elevated: #3F3F46;
-    --bg-tertiary: #52525B;
+    --bg-page: #18181b;
+    --bg-card: #27272a;
+    --bg-elevated: #3f3f46;
+    --bg-tertiary: #52525b;
 
     /* Dark mode text - WCAG AAA compliant */
-    --text-primary: #FAFAFA; /* 17.4:1 on #18181B */
-    --text-secondary: #D4D4D8; /* 12.3:1 on #18181B */
-    --text-muted: #A1A1AA; /* 7.1:1 on #18181B - AAA minimum */
+    --text-primary: #fafafa; /* 17.4:1 on #18181B */
+    --text-secondary: #d4d4d8; /* 12.3:1 on #18181B */
+    --text-muted: #a1a1aa; /* 7.1:1 on #18181B - AAA minimum */
 
     /* Dark mode borders */
-    --border-default: #3F3F46;
-    --border-strong: #52525B;
-    --border-dark: #71717A;
+    --border-default: #3f3f46;
+    --border-strong: #52525b;
+    --border-dark: #71717a;
 
     /* Dark mode brand */
     --brand-gunmetal: #9ca3af;
