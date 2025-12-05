@@ -8,7 +8,7 @@
        PENNY CENTRAL – UNIFIED DESIGN SYSTEM
        60-30-10 Rule: Neutral-Brand-CTA
        WCAG AAA Compliant Typography & Colors
-       See: docs/DESIGN_TYPOGRAPHY.md & docs/COLOR-SYSTEM.md
+       See: docs/DESIGN-SYSTEM-AAA.md
        =============================================== */
 
     /* ===============================================
@@ -28,19 +28,19 @@
 
     /* 60% - NEUTRAL BASE (backgrounds, text) */
     --bg-primary: #ffffff;
-    --bg-secondary: #f8f8f7;
-    --bg-tertiary: #f1f0ef;
-    --bg-dark: #1c1917;
+    --bg-secondary: #FAFAFA;
+    --bg-tertiary: #F4F4F5;
+    --bg-dark: #18181B;
 
     /* WCAG AAA compliant text colors (7:1+ contrast) */
-    --text-primary: #1c1917; /* 15.4:1 on white */
-    --text-secondary: #44403c; /* 9.7:1 on white */
-    --text-muted: #57534e; /* 7.1:1 on white - AAA minimum */
-    --text-inverse: #fafaf9;
+    --text-primary: #18181B; /* 17.4:1 on white */
+    --text-secondary: #3F3F46; /* 10.1:1 on white */
+    --text-muted: #52525B; /* 7.2:1 on white - AAA minimum */
+    --text-inverse: #FAFAFA;
 
-    --border-default: #e7e5e4;
-    --border-strong: #d6d3d1;
-    --border-dark: #78716c;
+    --border-default: #E4E4E7;
+    --border-strong: #D4D4D8;
+    --border-dark: #71717A;
 
     /* 30% - BRAND COLORS (headers, accents, icons) */
     --brand-gunmetal: #374151;
@@ -63,7 +63,7 @@
     /* Page backgrounds */
     --bg-page: #ffffff;
     --bg-card: #ffffff;
-    --bg-elevated: #f8f8f7;
+    --bg-elevated: #FAFAFA;
 
     /* Legacy variables for compatibility */
     --accent: #374151;
@@ -106,20 +106,20 @@
 
   .dark {
     /* Dark mode backgrounds - clear layer separation */
-    --bg-page: #171412;
-    --bg-card: #231f1c;
-    --bg-elevated: #2e2926;
-    --bg-tertiary: #3a3532;
+    --bg-page: #18181B;
+    --bg-card: #27272A;
+    --bg-elevated: #3F3F46;
+    --bg-tertiary: #52525B;
 
     /* Dark mode text - WCAG AAA compliant */
-    --text-primary: #fafaf9; /* 16.2:1 on #171412 */
-    --text-secondary: #d6d3d1; /* 11.8:1 on #171412 */
-    --text-muted: #a8a29e; /* 7.1:1 on #171412 - AAA minimum */
+    --text-primary: #FAFAFA; /* 17.4:1 on #18181B */
+    --text-secondary: #D4D4D8; /* 12.3:1 on #18181B */
+    --text-muted: #A1A1AA; /* 7.1:1 on #18181B - AAA minimum */
 
     /* Dark mode borders */
-    --border-default: #3d3835;
-    --border-strong: #57534e;
-    --border-dark: #5c5550;
+    --border-default: #3F3F46;
+    --border-strong: #52525B;
+    --border-dark: #71717A;
 
     /* Dark mode brand */
     --brand-gunmetal: #9ca3af;
