@@ -1,459 +1,343 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { COMMUNITY_MEMBER_COUNT_DISPLAY, FACEBOOK_GROUP_URL } from "@/lib/constants"
+import {
+  MapPin,
+  BookOpen,
+  ClipboardCheck,
+  ExternalLink,
+  Heart,
+  DollarSign,
+  Users,
+} from "lucide-react"
+import {
+  COMMUNITY_MEMBER_COUNT_DISPLAY,
+  FACEBOOK_GROUP_URL,
+  BEFRUGAL_REFERRAL_PATH,
+} from "@/lib/constants"
 
 export const metadata: Metadata = {
-  title: "Penny Central - Find $0.01 Items at Home Depot",
-  description: `Join ${COMMUNITY_MEMBER_COUNT_DISPLAY} penny hunters. Learn the clearance system and score items for a single cent.`,
+  title: "Penny Central - Your Guide to $0.01 Home Depot Items",
+  description: `The complete guide to finding Home Depot penny items. Tools, guides, and tips used by ${COMMUNITY_MEMBER_COUNT_DISPLAY} penny hunters.`,
 }
 
 export default function Home() {
   return (
     <>
-      {/* ============================================ */}
-      {/* HERO SECTION */}
-      {/* ============================================ */}
-      <section className="min-h-[85vh] flex flex-col items-center justify-center text-center px-6 py-20 bg-white dark:bg-stone-900">
-        {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-700 dark:text-stone-300 text-sm font-medium mb-8 border border-stone-200 dark:border-stone-700">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-copper opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-copper"></span>
-          </span>
-          Join {COMMUNITY_MEMBER_COUNT_DISPLAY} penny hunters
-        </div>
+      {/* ============================================
+          HERO SECTION
+          
+          Typography: Uses unified type scale
+          - H1: text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight
+          - Lead: text-lg sm:text-xl leading-relaxed
+          - Body: text-base leading-relaxed
+          
+          Spacing: Unified section padding system
+          - py-12 sm:py-16 lg:py-20 for main sections
+          - Badge → H1: mt-4
+          - H1 → Lead: mt-3
+          - Lead → CTAs: mt-6
+          ============================================ */}
+      <section className="section-padding px-4 sm:px-6 bg-white dark:bg-[var(--bg-page)]">
+        <div className="max-w-4xl mx-auto text-center">
+          {/* Trust badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-default)] shadow-sm mb-4 animate-fade-in">
+            <span
+              className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"
+              aria-hidden="true"
+            ></span>
+            <span className="text-sm font-medium text-[var(--text-secondary)]">
+              Join {COMMUNITY_MEMBER_COUNT_DISPLAY} penny hunters
+            </span>
+          </div>
 
-        {/* Headline */}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-stone-900 dark:text-stone-50 max-w-4xl leading-tight">
-          Find <span className="text-brand-gunmetal dark:text-stone-400">$0.01</span> Items at Home
-          Depot
-        </h1>
+          {/* H1 - Unified type scale */}
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[var(--text-primary)] leading-tight">
+            Find $0.01 Items at Home Depot
+          </h1>
 
-        {/* Subtitle */}
-        <p className="mt-6 text-lg sm:text-xl text-stone-600 dark:text-stone-400 max-w-2xl">
-          The complete guide to penny hunting. Learn the clearance system, find stores, and score
-          items for a single cent.
-        </p>
-
-        {/* CTAs */}
-        <div className="mt-10 flex flex-col sm:flex-row gap-4">
-          <Link
-            href="/guide"
-            className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-cta-primary hover:bg-cta-hover text-white font-semibold text-lg transition-all hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-brand-copper focus:ring-offset-2"
-          >
-            Read the Complete Guide
-            <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 7l5 5m0 0l-5 5m5-5H6"
-              />
-            </svg>
-          </Link>
-          <Link
-            href="/store-finder"
-            className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-white dark:bg-stone-800 border-2 border-brand-gunmetal dark:border-stone-600 hover:bg-brand-gunmetal hover:text-white dark:hover:bg-stone-700 text-brand-gunmetal dark:text-stone-300 font-semibold text-lg transition-all hover:-translate-y-0.5"
-          >
-            Find Nearby Stores
-          </Link>
-        </div>
-      </section>
-
-      {/* ============================================ */}
-      {/* VALUE PROPS SECTION */}
-      {/* ============================================ */}
-      <section className="py-20 px-6 bg-stone-100 dark:bg-stone-800/30">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-center text-3xl font-bold tracking-tight text-brand-gunmetal dark:text-stone-50 mb-4">
-            Everything you need to start
-          </h2>
-          <p className="text-center text-stone-600 dark:text-stone-400 mb-16 max-w-2xl mx-auto">
-            Penny hunting isn't luck — it's strategy. Learn the system and start saving.
+          {/* Lead text */}
+          <p className="mt-3 text-lg sm:text-xl text-[var(--text-secondary)] leading-relaxed">
+            Your guide to finding penny items at Home Depot.
           </p>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            {/* Card 1 - Learn */}
-            <div className="bg-white dark:bg-stone-800 rounded-lg p-6 border border-stone-200 dark:border-stone-700 hover:shadow-md transition-all hover:-translate-y-0.5">
-              <div className="w-10 h-10 rounded bg-stone-100 dark:bg-stone-700 flex items-center justify-center mb-4">
-                <svg
-                  className="w-5 h-5 text-brand-gunmetal dark:text-stone-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-stone-900 dark:text-stone-50 mb-2">
-                Learn the System
-              </h3>
-              <p className="text-sm text-stone-600 dark:text-stone-400">
-                Understand how Home Depot's clearance cycle works and when items hit $0.01.
-              </p>
-            </div>
+          {/* Supporting text */}
+          <p className="mt-4 text-base text-[var(--text-muted)] max-w-2xl mx-auto leading-relaxed">
+            Free tools and guides to help you find $0.01 clearance items. Learn the markdown system
+            and start hunting today.
+          </p>
 
-            {/* Card 2 - Find */}
-            <div className="bg-white dark:bg-stone-800 rounded-lg p-6 border border-stone-200 dark:border-stone-700 hover:shadow-md transition-all hover:-translate-y-0.5">
-              <div className="w-10 h-10 rounded bg-stone-100 dark:bg-stone-700 flex items-center justify-center mb-4">
-                <svg
-                  className="w-5 h-5 text-brand-gunmetal dark:text-stone-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-stone-900 dark:text-stone-50 mb-2">
-                Find Stores
-              </h3>
-              <p className="text-sm text-stone-600 dark:text-stone-400">
-                Locate Home Depot stores near you with hours, contact info, and distance.
-              </p>
-            </div>
-
-            {/* Card 3 - Save */}
-            <div className="bg-white dark:bg-stone-800 rounded-lg p-6 border border-stone-200 dark:border-stone-700 hover:shadow-md transition-all hover:-translate-y-0.5">
-              <div className="w-10 h-10 rounded bg-stone-100 dark:bg-stone-700 flex items-center justify-center mb-4">
-                <svg
-                  className="w-5 h-5 text-brand-gunmetal dark:text-stone-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-stone-900 dark:text-stone-50 mb-2">
-                Save Big
-              </h3>
-              <p className="text-sm text-stone-600 dark:text-stone-400">
-                Score hardware, tools, lighting, and more — all for just one cent each.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================ */}
-      {/* HOW IT WORKS SECTION */}
-      {/* ============================================ */}
-      <section className="py-20 px-6 bg-white dark:bg-stone-900">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-center text-3xl font-bold tracking-tight text-brand-gunmetal dark:text-stone-50 mb-16">
-            How penny hunting works
-          </h2>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Step 1 */}
-            <div className="text-center">
-              <div className="w-12 h-12 rounded-full border-2 border-brand-copper mx-auto mb-4 flex items-center justify-center">
-                <span className="text-lg font-bold text-brand-gunmetal dark:text-stone-300">1</span>
-              </div>
-              <h3 className="text-base font-semibold text-stone-900 dark:text-stone-50 mb-2">
-                Learn the lifecycle
-              </h3>
-              <p className="text-sm text-stone-600 dark:text-stone-400">
-                Items follow a predictable markdown pattern: .00 → .06 → .03 → .01
-              </p>
-            </div>
-
-            {/* Step 2 */}
-            <div className="text-center">
-              <div className="w-12 h-12 rounded-full border-2 border-brand-copper mx-auto mb-4 flex items-center justify-center">
-                <span className="text-lg font-bold text-brand-gunmetal dark:text-stone-300">2</span>
-              </div>
-              <h3 className="text-base font-semibold text-stone-900 dark:text-stone-50 mb-2">
-                Scout digitally
-              </h3>
-              <p className="text-sm text-stone-600 dark:text-stone-400">
-                Use the Home Depot app to check inventory and spot signals
-              </p>
-            </div>
-
-            {/* Step 3 */}
-            <div className="text-center">
-              <div className="w-12 h-12 rounded-full border-2 border-brand-copper mx-auto mb-4 flex items-center justify-center">
-                <span className="text-lg font-bold text-brand-gunmetal dark:text-stone-300">3</span>
-              </div>
-              <h3 className="text-base font-semibold text-stone-900 dark:text-stone-50 mb-2">
-                Hunt strategically
-              </h3>
-              <p className="text-sm text-stone-600 dark:text-stone-400">
-                Check clearance endcaps, back corners, and overhead storage
-              </p>
-            </div>
-
-            {/* Step 4 */}
-            <div className="text-center">
-              <div className="w-12 h-12 rounded-full border-2 border-brand-copper mx-auto mb-4 flex items-center justify-center">
-                <span className="text-lg font-bold text-brand-gunmetal dark:text-stone-300">4</span>
-              </div>
-              <h3 className="text-base font-semibold text-stone-900 dark:text-stone-50 mb-2">
-                Checkout confidently
-              </h3>
-              <p className="text-sm text-stone-600 dark:text-stone-400">
-                Use self-checkout, stay calm, and handle any questions
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-16 text-center">
+          {/* CTAs - Unified button system */}
+          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+            <Link
+              href="/store-finder"
+              className="btn-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg bg-[var(--cta-primary)] text-white font-semibold shadow-md hover:bg-[var(--cta-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
+            >
+              <MapPin className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
+              Find Stores Near You
+            </Link>
             <Link
               href="/guide"
-              className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-cta-primary hover:bg-cta-hover text-white font-semibold text-lg transition-all hover:-translate-y-0.5"
+              className="btn-secondary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg border-2 border-[var(--border-default)] dark:border-[var(--border-strong)] bg-transparent text-[var(--text-primary)] font-semibold hover:bg-[var(--bg-elevated)] hover:border-[var(--border-strong)] dark:hover:bg-[var(--bg-elevated)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
             >
-              Start Learning
-              <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 7l5 5m0 0l-5 5m5-5H6"
-                />
-              </svg>
+              <BookOpen className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
+              Read the Guide
             </Link>
           </div>
         </div>
       </section>
 
-      {/* ============================================ */}
-      {/* SUPPORT THE SITE SECTION */}
-      {/* ============================================ */}
-      <section className="py-20 px-6 bg-stone-100 dark:bg-stone-800/50">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold tracking-tight text-brand-gunmetal dark:text-stone-50 mb-4">
-              Support Penny Central
+      {/* ============================================
+          TOOLS SECTION
+          
+          Layout: Unified container + grid system
+          Typography: H2 + supporting text
+          Cards: card-interactive class for hover states
+          ============================================ */}
+      <section className="section-padding px-4 sm:px-6 bg-[var(--bg-elevated)] dark:bg-[var(--bg-card)]">
+        <div className="container-wide">
+          {/* Section header */}
+          <div className="text-center mb-10">
+            <h2 className="text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug">
+              Penny Hunting Tools
             </h2>
-            <p className="text-stone-600 dark:text-stone-400 max-w-2xl mx-auto">
-              This site is free to use. If you've found value here, consider supporting the project.
-              Every bit helps, and using our affiliate links costs you nothing extra. Thank you!
+            <p className="mt-2 text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed">
+              Everything you need to plan and execute successful hunts
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Tip Card */}
-            <div className="bg-white dark:bg-stone-800 rounded-xl p-8 border-l-4 border-brand-copper border-t border-r border-b border-stone-200 dark:border-stone-700 hover:shadow-lg transition-all">
-              <div className="w-12 h-12 rounded-lg bg-stone-100 dark:bg-stone-700 flex items-center justify-center mb-6">
-                <svg
-                  className="w-6 h-6 text-brand-gunmetal dark:text-stone-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-stone-900 dark:text-stone-50 mb-3">
-                Leave a Tip
-              </h3>
-              <p className="text-stone-600 dark:text-stone-400 mb-6 leading-relaxed">
-                Buy me a coffee or contribute any amount to help cover hosting, domain, and
-                development costs.
-              </p>
-              <a
-                href="https://paypal.me/cadegallen"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-cta-primary hover:bg-cta-hover text-white font-semibold transition-all"
-              >
-                Leave a Tip
-                <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                  />
-                </svg>
-              </a>
-            </div>
-
-            {/* BeFrugal Card */}
-            <div className="bg-white dark:bg-stone-800 rounded-xl p-8 border-l-4 border-brand-copper border-t border-r border-b border-stone-200 dark:border-stone-700 hover:shadow-lg transition-all">
-              <div className="w-12 h-12 rounded-lg bg-stone-100 dark:bg-stone-700 flex items-center justify-center mb-6">
-                <svg
-                  className="w-6 h-6 text-brand-gunmetal dark:text-stone-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-stone-900 dark:text-stone-50 mb-3">
-                Use BeFrugal for Cashback
-              </h3>
-              <p className="text-stone-600 dark:text-stone-400 mb-6 leading-relaxed">
-                Sign up through our link and earn cashback on your purchases. We receive a small
-                commission at no extra cost to you.
-              </p>
-              <a
-                href="/go/befrugal"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-cta-primary hover:bg-cta-hover text-white font-semibold transition-all"
-              >
-                Get Cashback with BeFrugal
-                <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                  />
-                </svg>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================ */}
-      {/* COMMUNITY SECTION */}
-      {/* ============================================ */}
-      <section className="py-20 px-6 bg-stone-900 dark:bg-stone-950">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-stone-50 mb-6">
-            Join {COMMUNITY_MEMBER_COUNT_DISPLAY} Penny Hunters
-          </h2>
-          <p className="text-stone-300 text-lg mb-10 max-w-2xl mx-auto">
-            Share finds, ask questions, and stay updated on the latest tips and patterns in the Home
-            Depot One Cent Items Facebook group.
-          </p>
-
-          <a
-            href={FACEBOOK_GROUP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center px-8 py-4 rounded-lg bg-cta-primary hover:bg-cta-hover text-white font-semibold text-lg transition-all hover:-translate-y-0.5"
-          >
-            Join the Facebook Group
-            <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-              />
-            </svg>
-          </a>
-        </div>
-      </section>
-
-      {/* ============================================ */}
-      {/* TOOLS SECTION */}
-      {/* ============================================ */}
-      <section className="py-20 px-6 bg-white dark:bg-stone-900">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-center text-3xl font-bold tracking-tight text-brand-gunmetal dark:text-stone-50 mb-4">
-            Tools to help you hunt
-          </h2>
-          <p className="text-center text-stone-600 dark:text-stone-400 mb-16">
-            Plan smarter, hunt better.
-          </p>
-
-          <div className="grid md:grid-cols-2 gap-6">
+          {/* Tool cards grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {/* Store Finder Card */}
             <Link
               href="/store-finder"
-              className="group bg-white dark:bg-stone-800 rounded-lg p-6 border border-stone-200 dark:border-stone-700 hover:border-brand-gunmetal dark:hover:border-stone-500 transition-all hover:-translate-y-1 hover:shadow-md"
+              className="card-interactive group flex flex-col bg-white dark:bg-[var(--bg-elevated)] rounded-xl p-6 border border-[var(--border-default)]"
             >
-              <div className="w-10 h-10 rounded bg-stone-100 dark:bg-stone-700 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <svg
-                  className="w-5 h-5 text-brand-gunmetal dark:text-stone-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
+              <div className="w-12 h-12 rounded-xl bg-[var(--bg-elevated)] dark:bg-[var(--bg-tertiary)] flex items-center justify-center mb-4">
+                <MapPin className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
               </div>
-              <h3 className="text-xl font-semibold text-stone-900 dark:text-stone-50 mb-2">
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
                 Store Finder
               </h3>
-              <p className="text-sm text-stone-600 dark:text-stone-400 mb-4">
-                Find Home Depot locations near you with map, hours, phone numbers, and distance.
+              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed flex-grow">
+                Find Home Depot locations near you with hours, phone numbers, and directions.
               </p>
-              <span className="inline-flex items-center text-cta-primary dark:text-blue-400 text-sm font-medium group-hover:gap-2 gap-1.5 transition-all">
-                Find nearby stores →
+              <span className="mt-4 inline-flex items-center text-[var(--cta-primary)] text-sm font-medium group-hover:underline">
+                Find stores →
+              </span>
+            </Link>
+
+            {/* Penny Guide Card */}
+            <Link
+              href="/guide"
+              className="card-interactive group flex flex-col bg-white dark:bg-[var(--bg-elevated)] rounded-xl p-6 border border-[var(--border-default)]"
+            >
+              <div className="w-12 h-12 rounded-xl bg-[var(--bg-elevated)] dark:bg-[var(--bg-tertiary)] flex items-center justify-center mb-4">
+                <BookOpen className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
+              </div>
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
+                Complete Guide
+              </h3>
+              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed flex-grow">
+                Learn how penny items work, the markdown lifecycle, and proven hunting strategies.
+              </p>
+              <span className="mt-4 inline-flex items-center text-[var(--cta-primary)] text-sm font-medium group-hover:underline">
+                Start learning →
               </span>
             </Link>
 
             {/* Trip Tracker Card */}
             <Link
               href="/trip-tracker"
-              className="group bg-white dark:bg-stone-800 rounded-lg p-6 border border-stone-200 dark:border-stone-700 hover:border-brand-gunmetal dark:hover:border-stone-500 transition-all hover:-translate-y-1 hover:shadow-md"
+              className="card-interactive group flex flex-col bg-white dark:bg-[var(--bg-elevated)] rounded-xl p-6 border border-[var(--border-default)]"
             >
-              <div className="w-10 h-10 rounded bg-stone-100 dark:bg-stone-700 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <svg
-                  className="w-5 h-5 text-brand-gunmetal dark:text-stone-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
-                  />
-                </svg>
+              <div className="w-12 h-12 rounded-xl bg-[var(--bg-elevated)] dark:bg-[var(--bg-tertiary)] flex items-center justify-center mb-4">
+                <ClipboardCheck className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
               </div>
-              <h3 className="text-xl font-semibold text-stone-900 dark:text-stone-50 mb-2">
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
                 Trip Tracker
               </h3>
-              <p className="text-sm text-stone-600 dark:text-stone-400 mb-4">
-                Plan your penny hunting trips and track your success over time.
+              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed flex-grow">
+                Plan your penny hunting trips and track your finds over time.
               </p>
-              <span className="inline-flex items-center text-cta-primary dark:text-blue-400 text-sm font-medium group-hover:gap-2 gap-1.5 transition-all">
+              <span className="mt-4 inline-flex items-center text-[var(--cta-primary)] text-sm font-medium group-hover:underline">
                 Plan a trip →
               </span>
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================
+          HOW IT WORKS SECTION
+          Scannable steps with unified typography
+          ============================================ */}
+      <section className="section-padding px-4 sm:px-6 bg-white dark:bg-[var(--bg-page)]">
+        <div className="max-w-4xl mx-auto">
+          {/* Section header */}
+          <div className="text-center mb-10">
+            <h2 className="text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug">
+              How Penny Hunting Works
+            </h2>
+            <p className="mt-2 text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed">
+              Items follow a predictable markdown cycle before hitting $0.01
+            </p>
+          </div>
+
+          {/* Steps grid */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {/* Step 1 */}
+            <div className="text-center p-4">
+              <div className="w-12 h-12 rounded-full bg-[var(--bg-elevated)] dark:bg-[var(--bg-tertiary)] mx-auto mb-3 flex items-center justify-center border border-[var(--border-default)]">
+                <span className="text-base font-bold text-[var(--cta-primary)]">1</span>
+              </div>
+              <h3 className="text-base font-semibold text-[var(--text-primary)] leading-snug">
+                Learn the Cycle
+              </h3>
+              <p className="mt-1 text-sm text-[var(--text-secondary)] leading-relaxed">
+                Items markdown from .00 → .06 → .03 → .01
+              </p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="text-center p-4">
+              <div className="w-12 h-12 rounded-full bg-[var(--bg-elevated)] dark:bg-[var(--bg-tertiary)] mx-auto mb-3 flex items-center justify-center border border-[var(--border-default)]">
+                <span className="text-base font-bold text-[var(--cta-primary)]">2</span>
+              </div>
+              <h3 className="text-base font-semibold text-[var(--text-primary)] leading-snug">
+                Scout Digitally
+              </h3>
+              <p className="mt-1 text-sm text-[var(--text-secondary)] leading-relaxed">
+                Use the HD app to check inventory before visiting
+              </p>
+            </div>
+
+            {/* Step 3 */}
+            <div className="text-center p-4">
+              <div className="w-12 h-12 rounded-full bg-[var(--bg-elevated)] dark:bg-[var(--bg-tertiary)] mx-auto mb-3 flex items-center justify-center border border-[var(--border-default)]">
+                <span className="text-base font-bold text-[var(--cta-primary)]">3</span>
+              </div>
+              <h3 className="text-base font-semibold text-[var(--text-primary)] leading-snug">
+                Hunt Smart
+              </h3>
+              <p className="mt-1 text-sm text-[var(--text-secondary)] leading-relaxed">
+                Check endcaps, back corners, and overhead storage
+              </p>
+            </div>
+
+            {/* Step 4 */}
+            <div className="text-center p-4">
+              <div className="w-12 h-12 rounded-full bg-[var(--bg-elevated)] dark:bg-[var(--bg-tertiary)] mx-auto mb-3 flex items-center justify-center border border-[var(--border-default)]">
+                <span className="text-base font-bold text-[var(--cta-primary)]">4</span>
+              </div>
+              <h3 className="text-base font-semibold text-[var(--text-primary)] leading-snug">
+                Checkout
+              </h3>
+              <p className="mt-1 text-sm text-[var(--text-secondary)] leading-relaxed">
+                Self-checkout works best for penny items
+              </p>
+            </div>
+          </div>
+
+          {/* CTA link */}
+          <div className="mt-8 text-center">
+            <Link
+              href="/guide"
+              className="inline-flex items-center gap-2 text-[var(--cta-primary)] font-medium hover:underline"
+            >
+              Learn more in the full guide →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================
+          COMMUNITY SECTION
+          Social proof + community CTA
+          ============================================ */}
+      <section className="section-padding px-4 sm:px-6 bg-[var(--bg-elevated)] dark:bg-[var(--bg-card)]">
+        <div className="max-w-3xl mx-auto text-center">
+          <div className="w-12 h-12 rounded-full bg-white dark:bg-[var(--bg-elevated)] mx-auto mb-4 flex items-center justify-center border border-[var(--border-default)]">
+            <Users className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug">
+            Join {COMMUNITY_MEMBER_COUNT_DISPLAY} Penny Hunters
+          </h2>
+          <p className="mt-3 text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed max-w-xl mx-auto">
+            Connect with the community to share finds, ask questions, and stay updated on the latest
+            penny patterns.
+          </p>
+          <a
+            href={FACEBOOK_GROUP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary mt-6 w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg bg-[var(--cta-primary)] text-white font-semibold shadow-md hover:bg-[var(--cta-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-card)]"
+          >
+            Join the Facebook Group
+            <ExternalLink className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
+          </a>
+        </div>
+      </section>
+
+      {/* ============================================
+          SUPPORT SECTION
+          Secondary CTAs for tips and cashback
+          ============================================ */}
+      <section className="section-padding px-4 sm:px-6 bg-white dark:bg-[var(--bg-page)]">
+        <div className="container-wide">
+          {/* Section header */}
+          <div className="text-center mb-10">
+            <h2 className="text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug">
+              Support Penny Central
+            </h2>
+            <p className="mt-2 text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed max-w-xl mx-auto">
+              This site is free. If it&apos;s been helpful, here are ways to support the project.
+            </p>
+          </div>
+
+          {/* Support cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            {/* Tip Card */}
+            <div className="card-interactive bg-[var(--bg-elevated)] dark:bg-[var(--bg-card)] rounded-xl p-6 border border-[var(--border-default)]">
+              <div className="w-12 h-12 rounded-xl bg-white dark:bg-[var(--bg-elevated)] flex items-center justify-center mb-4 border border-[var(--border-default)]">
+                <Heart className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
+              </div>
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
+                Leave a Tip
+              </h3>
+              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed">
+                Help cover hosting and development costs with a one-time contribution.
+              </p>
+              <a
+                href="https://paypal.me/cadegallen"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-flex items-center gap-2 text-[var(--cta-primary)] font-medium hover:underline"
+              >
+                Send a tip via PayPal
+                <ExternalLink className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
+              </a>
+            </div>
+
+            {/* Cashback Card */}
+            <div className="card-interactive bg-[var(--bg-elevated)] dark:bg-[var(--bg-card)] rounded-xl p-6 border border-[var(--border-default)]">
+              <div className="w-12 h-12 rounded-xl bg-white dark:bg-[var(--bg-elevated)] flex items-center justify-center mb-4 border border-[var(--border-default)]">
+                <DollarSign className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
+              </div>
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
+                Use BeFrugal
+              </h3>
+              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed">
+                Sign up through our link to earn cashback. We get a small referral at no cost to
+                you.
+              </p>
+              <Link
+                href={BEFRUGAL_REFERRAL_PATH}
+                className="mt-4 inline-flex items-center gap-2 text-[var(--cta-primary)] font-medium hover:underline"
+              >
+                Get cashback with BeFrugal
+                <ExternalLink className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>

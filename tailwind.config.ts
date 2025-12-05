@@ -18,15 +18,16 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
 
-        // Page structure
+        // Page structure (CSS variable-based for theme switching)
         page: "var(--bg-page)",
         card: {
           DEFAULT: "var(--card)",
           foreground: "var(--card-foreground)",
         },
         elevated: "var(--bg-elevated)",
+        tertiary: "var(--bg-tertiary)",
 
-        // Text colors
+        // Text colors (CSS variable-based)
         "text-primary": "var(--text-primary)",
         "text-secondary": "var(--text-secondary)",
         "text-muted": "var(--text-muted)",
@@ -68,28 +69,26 @@ const config: Config = {
           foreground: "var(--popover-foreground)",
         },
 
-        // New design system colors (60-30-10 rule)
+        // Brand colors (static values for non-themed elements)
         brand: {
-          gunmetal: "#374151",
-          "gunmetal-light": "#4B5563",
+          gunmetal: "var(--brand-gunmetal)",
+          "gunmetal-light": "var(--brand-gunmetal-light)",
           copper: "#B87333",
           bronze: "#CD7F32",
         },
+
+        // CTA colors (CSS variable-based for theme switching)
         cta: {
-          primary: "#1D4ED8",
-          hover: "#1E40AF",
+          primary: "var(--cta-primary)",
+          hover: "var(--cta-hover)",
+          active: "var(--cta-active)",
         },
-        surface: {
-          primary: "#FFFFFF",
-          secondary: "#F5F5F4",
-          dark: "#1C1917",
-        },
-        content: {
-          primary: "#1C1917",
-          secondary: "#57534E",
-          muted: "#A8A29E",
-          inverse: "#FAFAF9",
-        },
+
+        // Color system tokens
+        "color-success": "var(--color-success)",
+        "color-warning": "var(--color-warning)",
+        "color-error": "var(--color-error)",
+        "color-info": "var(--color-info)",
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "-apple-system", "BlinkMacSystemFont", "sans-serif"],

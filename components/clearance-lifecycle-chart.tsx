@@ -43,16 +43,13 @@ export function ClearanceLifecycleChart() {
       <div className="bg-background border border-border rounded-lg p-6">
         <h3 className="text-xl font-heading font-semibold mb-6">Markdown Progression Over Time</h3>
         <p className="text-sm text-muted-foreground mb-6">
-          Visualization of how items progress through clearance cadences (percentage of original price)
+          Visualization of how items progress through clearance cadences (percentage of original
+          price)
         </p>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={cadenceData}>
             <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-            <XAxis
-              dataKey="week"
-              className="text-xs"
-              tick={{ fill: "currentColor" }}
-            />
+            <XAxis dataKey="week" className="text-xs" tick={{ fill: "currentColor" }} />
             <YAxis
               label={{ value: "% of Original Price", angle: -90, position: "insideLeft" }}
               className="text-xs"
@@ -88,18 +85,16 @@ export function ClearanceLifecycleChart() {
 
       {/* Department Success Rates Chart */}
       <div className="bg-background border border-border rounded-lg p-6">
-        <h3 className="text-xl font-heading font-semibold mb-6">Penny Find Success Rate by Department</h3>
+        <h3 className="text-xl font-heading font-semibold mb-6">
+          Penny Find Success Rate by Department
+        </h3>
         <p className="text-sm text-muted-foreground mb-6">
           Typical penny find patterns by department (illustrative estimates)
         </p>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={departmentData}>
             <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-            <XAxis
-              dataKey="department"
-              className="text-xs"
-              tick={{ fill: "currentColor" }}
-            />
+            <XAxis dataKey="department" className="text-xs" tick={{ fill: "currentColor" }} />
             <YAxis
               label={{ value: "Success Rate (%)", angle: -90, position: "insideLeft" }}
               className="text-xs"
@@ -131,7 +126,8 @@ export function ClearanceLifecycleChart() {
       {/* Info note */}
       <div className="bg-muted/30 border border-border rounded-lg p-4">
         <p className="text-sm text-muted-foreground">
-          <strong>Note:</strong> Charts show typical markdown patterns based on community observations. Individual store timing may vary significantly.
+          <strong>Note:</strong> Charts show typical markdown patterns based on community
+          observations. Individual store timing may vary significantly.
         </p>
       </div>
     </div>

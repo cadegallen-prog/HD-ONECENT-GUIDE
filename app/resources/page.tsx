@@ -40,21 +40,24 @@ export default function ResourcesPage() {
   ]
 
   return (
-    <div className="p-6 max-w-[1200px] mx-auto">
-      <header className="mb-8">
-        <h1 className="text-2xl font-semibold text-[var(--text-primary)]">Resources</h1>
-        <p className="text-sm text-[var(--text-muted)] mt-2">
+    <div className="container-narrow py-12 sm:py-16">
+      {/* Header */}
+      <header className="mb-10">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug">
+          Resources
+        </h1>
+        <p className="mt-2 text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed">
           Essential tools for penny hunting success
         </p>
       </header>
 
       {/* PDF Download */}
-      <Card className="mb-8 bg-[var(--bg-card)] border-[var(--border-default)]">
-        <CardContent className="py-5 flex items-center gap-4">
-          <Download size={20} className="text-[var(--text-muted)] flex-shrink-0" />
+      <Card className="mb-10 bg-[var(--bg-card)] border-[var(--border-default)]">
+        <CardContent className="py-6 flex items-center gap-4">
+          <Download size={24} className="text-[var(--cta-primary)] flex-shrink-0" />
           <div className="flex-1">
-            <h2 className="text-sm font-semibold text-[var(--text-primary)]">PDF Guide</h2>
-            <p className="text-sm text-[var(--text-muted)]">
+            <h2 className="text-base font-semibold text-[var(--text-primary)]">PDF Guide</h2>
+            <p className="mt-1 text-sm text-[var(--text-secondary)]">
               Study guide to learn penny hunting basics before you shop
             </p>
           </div>
@@ -68,29 +71,31 @@ export default function ResourcesPage() {
 
       {/* External Tools */}
       <section>
-        <div className="flex items-center gap-2 mb-4">
-          <Wrench size={18} className="text-[var(--text-muted)]" />
-          <h2 className="text-lg font-semibold text-[var(--text-primary)]">External Tools</h2>
+        <div className="flex items-center gap-2 mb-6">
+          <Wrench size={20} className="text-[var(--cta-primary)]" />
+          <h2 className="text-xl font-semibold text-[var(--text-primary)]">External Tools</h2>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-4">
           {tools.map((tool) => (
             <a
               key={tool.name}
               href={tool.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between p-4 min-h-[56px] bg-[var(--bg-card)] border border-[var(--border-default)] rounded-lg hover:bg-[var(--bg-elevated)] transition-colors group"
+              className="card-interactive flex items-center justify-between p-5 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl group"
             >
               <div>
-                <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-0.5">
+                <h3 className="text-base font-semibold text-[var(--text-primary)] leading-snug">
                   {tool.name}
                 </h3>
-                <p className="text-sm text-[var(--text-muted)]">{tool.description}</p>
+                <p className="mt-1 text-sm text-[var(--text-secondary)] leading-relaxed">
+                  {tool.description}
+                </p>
               </div>
               <ExternalLink
-                size={18}
-                className="text-[var(--text-muted)] group-hover:text-[var(--text-primary)] flex-shrink-0 ml-4 transition-colors"
+                size={20}
+                className="text-[var(--text-muted)] group-hover:text-[var(--cta-primary)] flex-shrink-0 ml-4 transition-colors"
                 aria-hidden="true"
               />
             </a>

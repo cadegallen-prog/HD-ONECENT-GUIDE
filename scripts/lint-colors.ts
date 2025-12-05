@@ -80,7 +80,8 @@ const FORBIDDEN_PATTERNS = [
 
   // Arbitrary hex colors that aren't in the design system
   {
-    pattern: /bg-\[#(?!1C1917|1D4ED8|1E40AF|3B82F6|FFFFFF|F8F8F7|171412|231F1C|FAFAF9)[0-9A-Fa-f]{6}\]/,
+    pattern:
+      /bg-\[#(?!1C1917|1D4ED8|1E40AF|3B82F6|FFFFFF|F8F8F7|171412|231F1C|FAFAF9)[0-9A-Fa-f]{6}\]/,
     reason: "Arbitrary hex color - use CSS variables from design system",
   },
   {

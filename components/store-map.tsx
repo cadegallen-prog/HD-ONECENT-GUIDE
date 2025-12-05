@@ -21,6 +21,7 @@ function MapController({ selectedStore }: { selectedStore?: StoreLocation | null
   const map = useMap()
   const lastSelectedIdRef = React.useRef<string | null>(null)
   const hasInvalidatedRef = React.useRef(false)
+  const userHasInteractedRef = React.useRef(false)
 
   // Invalidate map size on first mount to ensure tiles load properly
   // Use multiple delays to handle various container rendering timings
@@ -48,13 +49,38 @@ function MapController({ selectedStore }: { selectedStore?: StoreLocation | null
     }
   }, [map])
 
-  // Only fly to selected store when it changes (not on every center change)
+  // Track manual user interactions to disable auto-centering
+  React.useEffect(() => {
+    const onDragStart = () => {
+      userHasInteractedRef.current = true
+    }
+    const onZoomStart = () => {
+      userHasInteractedRef.current = true
+    }
+
+    map.on("dragstart", onDragStart)
+    map.on("zoomstart", onZoomStart)
+
+    return () => {
+      map.off("dragstart", onDragStart)
+      map.off("zoomstart", onZoomStart)
+    }
+  }, [map])
+
+  // Only fly to selected store when it changes and user hasn't manually interacted
   React.useEffect(() => {
     if (selectedStore && selectedStore.id !== lastSelectedIdRef.current) {
       lastSelectedIdRef.current = selectedStore.id
-      map.flyTo([selectedStore.lat, selectedStore.lng], Math.max(map.getZoom(), 12), {
-        duration: 0.5,
-      })
+
+      // Re-enable auto-centering on new store selection
+      userHasInteractedRef.current = false
+
+      // Ensure correct coordinates are passed and zoom is set to 13
+      if (!userHasInteractedRef.current) {
+        map.flyTo([selectedStore.lat, selectedStore.lng], 13, {
+          duration: 0.5,
+        })
+      }
     }
   }, [selectedStore, map])
 
@@ -205,46 +231,42 @@ export const StoreMap = React.memo(function StoreMap({
                 autoPan={true}
                 autoPanPadding={[80, 80]}
                 keepInView={true}
+                maxWidth={280}
+                minWidth={200}
               >
-                <div className="space-y-1.5 text-left min-w-[220px] max-w-[260px]">
+                <div className="space-y-2 text-left">
                   {/* Store name and number */}
-                  <p className="font-semibold text-sm text-slate-900 dark:text-slate-50 leading-tight pr-5">
+                  <p className="font-semibold text-sm text-foreground leading-tight pr-4">
                     {getStoreTitle(store)}
                   </p>
 
                   {/* Distance badge */}
                   {store.distance !== undefined && (
-                    <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                      {store.distance.toFixed(1)} miles away
+                    <p className="text-xs font-semibold text-[var(--text-secondary)]">
+                      {store.distance.toFixed(1)} mi away
                     </p>
                   )}
 
-                  {/* Store hours */}
+                  {/* Store hours - compact display */}
                   {(store.hours?.weekday || store.hours?.weekend) && (
-                    <div className="pt-1 space-y-0 text-xs leading-tight">
+                    <div className="pt-1 text-xs text-muted-foreground">
                       {(() => {
                         const formatted = formatStoreHours(store.hours)
                         return (
-                          <>
-                            <p className="text-slate-600 dark:text-slate-400">
-                              {formatted.weekday}
-                            </p>
-                            <p className="text-slate-600 dark:text-slate-400">
-                              {formatted.saturday}
-                            </p>
-                            <p className="text-slate-600 dark:text-slate-400">{formatted.sunday}</p>
-                          </>
+                          <div className="space-y-0.5">
+                            <p>{formatted.weekday}</p>
+                            <p>{formatted.saturday}</p>
+                            <p>{formatted.sunday}</p>
+                          </div>
                         )
                       })()}
                     </div>
                   )}
 
                   {/* Address block */}
-                  <div className="pt-1.5 mt-1.5 border-t border-slate-200 dark:border-slate-600 space-y-0">
-                    <p className="text-xs text-slate-700 dark:text-slate-300 leading-tight">
-                      {store.address}
-                    </p>
-                    <p className="text-xs text-slate-700 dark:text-slate-300 leading-tight">
+                  <div className="pt-1 border-t border-border">
+                    <p className="text-xs text-[var(--text-secondary)]">{store.address}</p>
+                    <p className="text-xs text-[var(--text-secondary)]">
                       {store.city}, {store.state} {store.zip}
                     </p>
                   </div>
@@ -253,19 +275,19 @@ export const StoreMap = React.memo(function StoreMap({
                   {store.phone && (
                     <a
                       href={`tel:${store.phone}`}
-                      className="store-popup-link text-xs font-medium text-slate-600 dark:text-slate-400 block py-1 hover:text-slate-900 dark:hover:text-slate-200 transition-colors min-h-[44px] flex items-center"
+                      className="store-popup-link text-xs font-medium text-muted-foreground hover:text-foreground block transition-colors"
                     >
                       {store.phone}
                     </a>
                   )}
 
                   {/* Action links */}
-                  <div className="pt-1.5 mt-1 border-t border-slate-200 dark:border-slate-600 flex flex-col gap-1">
+                  <div className="pt-1 border-t border-border flex flex-col gap-1">
                     <a
                       href={`https://www.google.com/maps/dir/?api=1&destination=${store.lat},${store.lng}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="store-popup-link text-xs font-medium text-slate-700 dark:text-slate-300 py-2 hover:text-slate-900 dark:hover:text-white transition-colors min-h-[44px] flex items-center"
+                      className="store-popup-link text-xs font-medium text-[var(--text-secondary)] hover:text-foreground py-2 transition-colors"
                     >
                       Get Directions →
                     </a>
@@ -273,7 +295,7 @@ export const StoreMap = React.memo(function StoreMap({
                       href={getStoreUrl(store)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="store-popup-link text-xs font-medium text-slate-700 dark:text-slate-300 py-2 hover:text-slate-900 dark:hover:text-white transition-colors min-h-[44px] flex items-center"
+                      className="store-popup-link text-xs font-medium text-[var(--text-secondary)] hover:text-foreground py-2 transition-colors"
                     >
                       View Store Page →
                     </a>

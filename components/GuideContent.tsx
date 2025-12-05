@@ -19,11 +19,10 @@ export function GuideContent() {
       {/* ============================================ */}
       <section id="introduction" className="scroll-mt-28">
         <h2 className="section-heading">
-          <span className="text-slate-900 dark:text-white">I.</span> Introduction: What Are Penny
-          Items?
+          <span className="text-[var(--text-primary)]">I.</span> Introduction: What Are Penny Items?
         </h2>
 
-        <p className="lead text-lg text-stone-600 dark:text-stone-300">
+        <p className="lead text-lg text-[var(--text-secondary)]">
           At Home Depot, a "penny item" refers to merchandise that rings up at{" "}
           <strong>$0.01</strong> due to internal inventory clearance systems - not public
           promotions.
@@ -49,7 +48,7 @@ export function GuideContent() {
               <div className="font-bold text-accent-900 dark:text-accent-200 flex items-center gap-2 mb-2">
                 <span>Important:</span>
               </div>
-              <p className="text-slate-700 dark:text-slate-200 mt-2 leading-relaxed">
+              <p className="text-[var(--text-secondary)] mt-2 leading-relaxed">
                 This guide is based on consistent community reports and retail logic, not official
                 Home Depot policy. Practices may vary by store.
               </p>
@@ -63,7 +62,7 @@ export function GuideContent() {
       {/* ============================================ */}
       <section id="clearance-lifecycle" className="scroll-mt-28">
         <h2 className="section-heading">
-          <span className="text-slate-900 dark:text-white">II.</span> Understanding the Clearance
+          <span className="text-[var(--text-primary)]">II.</span> Understanding the Clearance
           Lifecycle
         </h2>
 
@@ -113,7 +112,7 @@ export function GuideContent() {
               <TableCell>~3 weeks</TableCell>
               <TableCell>Last stage before removal</TableCell>
             </TableRow>
-            <TableRow className="bg-slate-50 dark:bg-slate-800/30">
+            <TableRow className="bg-[var(--bg-elevated)]">
               <TableCell>System Update</TableCell>
               <TableCell>
                 <span className="price-chip font-semibold">$0.01</span>
@@ -165,7 +164,7 @@ export function GuideContent() {
               <TableCell>~2 weeks</TableCell>
               <TableCell>High likelihood of penny pricing next</TableCell>
             </TableRow>
-            <TableRow className="bg-slate-50 dark:bg-slate-800/30">
+            <TableRow className="bg-[var(--bg-elevated)]">
               <TableCell>System Update</TableCell>
               <TableCell>
                 <span className="price-chip font-semibold">$0.01</span>
@@ -256,14 +255,14 @@ export function GuideContent() {
           </TableBody>
         </Table>
 
-        <div className="bg-accent-50 dark:bg-slate-900/40 border border-accent-200 dark:border-slate-700 border-l-4 border-l-accent-500 dark:border-l-accent-400 rounded-lg p-5 my-10">
+        <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] border-l-4 border-l-accent-500 dark:border-l-accent-400 rounded-lg p-5 my-10">
           <div className="flex items-start gap-3">
             <span className="text-lg leading-none">💡</span>
             <div>
               <div className="font-bold text-accent-900 dark:text-accent-200 flex items-center gap-2 mb-2">
                 <span>Key Takeaways:</span>
               </div>
-              <p className="text-slate-700 dark:text-slate-200 mt-2 leading-relaxed">
+              <p className="text-[var(--text-secondary)] mt-2 leading-relaxed">
                 Price endings matter - they signal where an item is in its markdown lifecycle. Watch
                 the clearance tag date to estimate when the next drop may happen. Don't rely on
                 fixed timing - while these cadences are common, store exceptions exist.
@@ -278,8 +277,8 @@ export function GuideContent() {
       {/* ============================================ */}
       <section id="digital-tools" className="scroll-mt-28">
         <h2 className="section-heading">
-          <Search className="h-6 w-6 text-slate-500 dark:text-slate-300" />
-          <span className="text-slate-900 dark:text-white">III.</span> Pre-Hunt Intelligence: Using
+          <Search className="h-6 w-6 text-[var(--text-muted)]" />
+          <span className="text-[var(--text-primary)]">III.</span> Pre-Hunt Intelligence: Using
           Digital Tools
         </h2>
 
@@ -330,7 +329,7 @@ export function GuideContent() {
               <TableCell>In Stock + Full Price</TableCell>
               <TableCell>Still active inventory</TableCell>
             </TableRow>
-            <TableRow className="bg-slate-50 dark:bg-slate-800/40">
+            <TableRow className="bg-[var(--bg-elevated)]">
               <TableCell className="font-medium">
                 Out of Stock / Unavailable / Ship to Store Only + Full Price
               </TableCell>
@@ -346,14 +345,14 @@ export function GuideContent() {
           </TableBody>
         </Table>
 
-        <div className="bg-accent-50 dark:bg-slate-900/40 border border-accent-200 dark:border-slate-700 border-l-4 border-l-accent-500 dark:border-l-accent-400 rounded-lg p-5 my-10">
+        <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] border-l-4 border-l-accent-500 dark:border-l-accent-400 rounded-lg p-5 my-10">
           <div className="flex items-start gap-3">
             <span className="text-lg leading-none">⚠️</span>
             <div>
               <div className="font-bold text-accent-900 dark:text-accent-200 flex items-center gap-2 mb-2">
                 <span>Important:</span>
               </div>
-              <p className="text-slate-700 dark:text-slate-200 mt-2 leading-relaxed">
+              <p className="text-[var(--text-secondary)] mt-2 leading-relaxed">
                 If the system shows a full price but no stock, it might have already hit $0.01
                 internally and just hasn't been pulled.
               </p>
@@ -386,9 +385,8 @@ export function GuideContent() {
       {/* ============================================ */}
       <section id="in-store-hunting" className="scroll-mt-28">
         <h2 className="section-heading">
-          <Store className="h-6 w-6 text-slate-500 dark:text-slate-300" />
-          <span className="text-slate-900 dark:text-white">IV.</span> In-Store Penny Hunting
-          Strategies
+          <Store className="h-6 w-6 text-[var(--text-muted)]" />
+          <span className="text-[var(--text-primary)]">IV.</span> In-Store Penny Hunting Strategies
         </h2>
 
         <p>
@@ -400,7 +398,7 @@ export function GuideContent() {
         <h3 className="text-xl font-semibold mt-8 mb-4">Where to Look</h3>
 
         <div className="grid md:grid-cols-2 gap-6 my-6">
-          <div className="bg-white dark:bg-slate-900/40 p-4 rounded-lg border border-border">
+          <div className="bg-[var(--bg-card)] p-4 rounded-lg border border-[var(--border-default)]">
             <h4 className="font-semibold mb-3 text-accent-700 dark:text-accent-400">
               Primary Hotspots
             </h4>
@@ -410,7 +408,7 @@ export function GuideContent() {
               <li>Seasonal sections (especially post-season)</li>
             </ul>
           </div>
-          <div className="bg-slate-100 dark:bg-slate-900/30 p-4 rounded-lg border border-border">
+          <div className="bg-[var(--bg-elevated)] p-4 rounded-lg border border-[var(--border-default)]">
             <h4 className="font-semibold mb-3">Hidden Gems</h4>
             <ul className="space-y-3 text-sm">
               <li>Bottom or top shelves in standard aisles</li>
@@ -469,7 +467,7 @@ export function GuideContent() {
                 <div className="font-bold text-accent-900 dark:text-accent-200 flex items-center gap-2 mb-2">
                   <span>Warning:</span>
                 </div>
-                <p className="text-slate-700 dark:text-slate-200 mt-2 leading-relaxed">
+                <p className="text-[var(--text-secondary)] mt-2 leading-relaxed">
                   Scanning the clearance tag can freeze the terminal and flag an employee.
                 </p>
               </div>
@@ -500,14 +498,14 @@ export function GuideContent() {
           <p>Items stored overhead present a unique challenge - and some real risks:</p>
 
           <div className="grid md:grid-cols-2 gap-4">
-            <div className="p-4 rounded-lg border bg-slate-100 dark:bg-slate-900/40 border-border">
+            <div className="p-4 rounded-lg border bg-[var(--bg-elevated)] border-[var(--border-default)]">
               <h4 className="font-semibold mb-2">Yellow Ladders (Customer Use)</h4>
               <p className="text-sm">
                 Small yellow ladders (often in paint section) are for customer use. You can use
                 these - just know they're visible and will draw attention.
               </p>
             </div>
-            <div className="p-4 rounded-lg border bg-slate-100 dark:bg-slate-900/40 border-border">
+            <div className="p-4 rounded-lg border bg-[var(--bg-elevated)] border-[var(--border-default)]">
               <h4 className="font-semibold mb-2">Orange Ladders (Employee Only)</h4>
               <p className="text-sm">
                 These are strictly for employees. Using them as a customer is against store policy
@@ -537,8 +535,8 @@ export function GuideContent() {
       {/* ============================================ */}
       <section id="checkout" className="scroll-mt-28">
         <h2 className="section-heading">
-          <ShoppingCart className="h-6 w-6 text-slate-500 dark:text-slate-300" />
-          <span className="text-slate-900 dark:text-white">V.</span> The Checkout Challenge
+          <ShoppingCart className="h-6 w-6 text-[var(--text-muted)]" />
+          <span className="text-[var(--text-primary)]">V.</span> The Checkout Challenge
         </h2>
 
         <p>
@@ -546,7 +544,7 @@ export function GuideContent() {
           issues.
         </p>
 
-        <div className="bg-slate-100 dark:bg-slate-900/40 p-6 rounded-lg border border-border my-6">
+        <div className="bg-[var(--bg-elevated)] p-6 rounded-lg border border-[var(--border-default)] my-6">
           <h3 className="text-lg font-semibold text-green-700 dark:text-green-400 mb-4">
             Preferred Method: Self-Checkout (SCO)
           </h3>
@@ -615,7 +613,7 @@ export function GuideContent() {
         <h3 className="text-xl font-semibold mt-8 mb-4">If You're Stopped by an Employee</h3>
 
         <div className="grid md:grid-cols-2 gap-4 my-6">
-          <div className="p-4 rounded-lg border bg-slate-100 dark:bg-slate-900/40 border-border">
+          <div className="p-4 rounded-lg border bg-[var(--bg-elevated)] border-[var(--border-default)]">
             <h4 className="font-semibold text-green-700 dark:text-green-400 mb-3 flex items-center gap-2">
               <CheckCircle2 className="h-4 w-4" /> Do This
             </h4>
@@ -628,7 +626,7 @@ export function GuideContent() {
               </li>
             </ul>
           </div>
-          <div className="p-4 rounded-lg border bg-slate-100 dark:bg-slate-900/40 border-border">
+          <div className="p-4 rounded-lg border bg-[var(--bg-elevated)] border-[var(--border-default)]">
             <h4 className="font-semibold text-red-700 dark:text-red-400 mb-3 flex items-center gap-2">
               <XCircle className="h-4 w-4" /> Don't Do This
             </h4>
@@ -656,7 +654,7 @@ export function GuideContent() {
       {/* ============================================ */}
       <section id="internal-operations" className="scroll-mt-28">
         <h2 className="section-heading">
-          <span className="text-slate-900 dark:text-white">VI.</span> The Inside Scoop: Internal
+          <span className="text-[var(--text-primary)]">VI.</span> The Inside Scoop: Internal
           Operations
         </h2>
 
@@ -677,14 +675,14 @@ export function GuideContent() {
           <li>System flags it for removal from shelves - but sometimes it gets missed</li>
         </ul>
 
-        <div className="bg-accent-50 dark:bg-slate-900/40 border border-accent-200 dark:border-slate-700 border-l-4 border-l-accent-500 dark:border-l-accent-400 rounded-lg p-5 my-10">
+        <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] border-l-4 border-l-accent-500 dark:border-l-accent-400 rounded-lg p-5 my-10">
           <div className="flex items-start gap-3">
             <span className="text-lg leading-none">ℹ️</span>
             <div>
               <div className="font-bold text-accent-900 dark:text-accent-200 flex items-center gap-2 mb-2">
                 <span>Key Takeaway:</span>
               </div>
-              <p className="text-slate-700 dark:text-slate-200 mt-2 leading-relaxed">
+              <p className="text-[var(--text-secondary)] mt-2 leading-relaxed">
                 If an item is still on the floor at $0.01, it's likely due to oversight or staff
                 backlog.
               </p>
@@ -745,7 +743,7 @@ export function GuideContent() {
       {/* ============================================ */}
       <section id="fact-vs-fiction" className="scroll-mt-28">
         <h2 className="section-heading">
-          <span className="text-slate-900 dark:text-white">VII.</span> Research Deep Dive: Fact vs
+          <span className="text-[var(--text-primary)]">VII.</span> Research Deep Dive: Fact vs
           Fiction
         </h2>
 
@@ -849,7 +847,7 @@ export function GuideContent() {
       {/* ============================================ */}
       <section id="responsible-hunting" className="scroll-mt-28">
         <h2 className="section-heading">
-          <span className="text-slate-900 dark:text-white">VIII.</span> Responsible Penny Hunting
+          <span className="text-[var(--text-primary)]">VIII.</span> Responsible Penny Hunting
         </h2>
 
         <p>
@@ -890,14 +888,14 @@ export function GuideContent() {
           </div>
         </div>
 
-        <div className="bg-accent-50 dark:bg-slate-900/40 border border-accent-200 dark:border-slate-700 border-l-4 border-l-accent-500 dark:border-l-accent-400 rounded-lg p-5 my-10">
+        <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] border-l-4 border-l-accent-500 dark:border-l-accent-400 rounded-lg p-5 my-10">
           <div className="flex items-start gap-3">
             <span className="text-lg leading-none">⚠️</span>
             <div>
               <div className="font-bold text-accent-900 dark:text-accent-200 flex items-center gap-2 mb-2">
                 <span>Reality Check:</span>
               </div>
-              <p className="text-slate-700 dark:text-slate-200 mt-2 leading-relaxed">
+              <p className="text-[var(--text-secondary)] mt-2 leading-relaxed">
                 This is not a get-rich-quick game. Penny hunting requires time, patience, and a lot
                 of empty trips. You might check 3 stores and find nothing. Don't expect huge savings
                 every time - it's about the long game.
@@ -912,7 +910,7 @@ export function GuideContent() {
       {/* ============================================ */}
       <section id="conclusion" className="scroll-mt-28">
         <h2 className="section-heading">
-          <span className="text-slate-900 dark:text-white">IX.</span> Conclusion: Tips for Success
+          <span className="text-[var(--text-primary)]">IX.</span> Conclusion: Tips for Success
         </h2>
 
         <p>
@@ -922,7 +920,7 @@ export function GuideContent() {
 
         <div className="grid md:grid-cols-2 gap-6 my-8">
           {/* Beginners */}
-          <div className="bg-white dark:bg-slate-900/40 p-6 rounded-lg border border-border">
+          <div className="bg-[var(--bg-card)] p-6 rounded-lg border border-[var(--border-default)]">
             <h3 className="text-lg font-semibold text-blue-700 dark:text-blue-400 mb-4">
               For Beginners: Start Here
             </h3>
@@ -953,7 +951,7 @@ export function GuideContent() {
           </div>
 
           {/* Experienced */}
-          <div className="bg-white dark:bg-slate-900/40 p-6 rounded-lg border border-border">
+          <div className="bg-[var(--bg-card)] p-6 rounded-lg border border-[var(--border-default)]">
             <h3 className="text-lg font-semibold text-accent-700 dark:text-accent-400 mb-4">
               For Experienced Hunters: Refine Your Game
             </h3>
@@ -963,21 +961,21 @@ export function GuideContent() {
               <div className="flex flex-wrap items-center gap-2">
                 <span>Cadence A:</span>
                 <span className="price-chip">.00</span>
-                <span className="text-slate-500">{`->`}</span>
+                <span className="text-[var(--text-muted)]">{`->`}</span>
                 <span className="price-chip">.06</span>
-                <span className="text-slate-500">{`->`}</span>
+                <span className="text-[var(--text-muted)]">{`->`}</span>
                 <span className="price-chip">.03</span>
-                <span className="text-slate-500">{`->`}</span>
+                <span className="text-[var(--text-muted)]">{`->`}</span>
                 <span className="priority-badge penny">Penny</span>
               </div>
               <div className="flex flex-wrap items-center gap-2">
                 <span>Cadence B:</span>
                 <span className="price-chip">.00</span>
-                <span className="text-slate-500">{`->`}</span>
+                <span className="text-[var(--text-muted)]">{`->`}</span>
                 <span className="price-chip">.04</span>
-                <span className="text-slate-500">{`->`}</span>
+                <span className="text-[var(--text-muted)]">{`->`}</span>
                 <span className="price-chip">.02</span>
-                <span className="text-slate-500">{`->`}</span>
+                <span className="text-[var(--text-muted)]">{`->`}</span>
                 <span className="priority-badge penny">Penny</span>
               </div>
             </div>
@@ -999,7 +997,7 @@ export function GuideContent() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-slate-900/40 p-6 rounded-lg text-center my-8">
+        <div className="bg-[var(--bg-card)] p-6 rounded-lg text-center my-8">
           <h3 className="text-xl font-semibold mb-3">Final Mindset</h3>
           <p className="text-muted-foreground mb-4">
             Many hunters enjoy this for more than the savings: the thrill of the hunt, the

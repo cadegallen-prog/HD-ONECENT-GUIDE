@@ -3,7 +3,17 @@
 import * as React from "react"
 import { useRouter } from "next/navigation"
 import { Command } from "cmdk"
-import { Search, FileText, Map, Clock, Info, HelpCircle, Lightbulb, ShoppingCart, AlertCircle } from "lucide-react"
+import {
+  Search,
+  FileText,
+  Map,
+  Clock,
+  Info,
+  HelpCircle,
+  Lightbulb,
+  ShoppingCart,
+  AlertCircle,
+} from "lucide-react"
 
 interface CommandPaletteProps {
   open: boolean
@@ -38,7 +48,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
   // Group pages by category
   const groupedPages = React.useMemo(() => {
     const groups: Record<string, typeof pages> = {}
-    pages.forEach(page => {
+    pages.forEach((page) => {
       if (!groups[page.group]) groups[page.group] = []
       groups[page.group].push(page)
     })
@@ -83,7 +93,11 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
           </Command.Empty>
 
           {Object.entries(groupedPages).map(([group, items]) => (
-            <Command.Group key={group} heading={group} className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground">
+            <Command.Group
+              key={group}
+              heading={group}
+              className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground"
+            >
               {items.map((page) => (
                 <Command.Item
                   key={page.path}

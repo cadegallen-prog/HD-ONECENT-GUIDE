@@ -22,32 +22,37 @@ export interface StoreLocation {
 
 export const sanitizeText = (value?: string): string => {
   if (!value) return ""
-  return value
-    // Fix UTF-8 dashes and hyphens
-    .replace(/[\u2013\u2014\u2015]/g, "-")  // en-dash, em-dash, horizontal bar
-    // Fix UTF-8 quotes
-    .replace(/[\u2018\u2019\u201A\u201B]/g, "'")  // single quotes
-    .replace(/[\u201C\u201D\u201E\u201F]/g, "\"")  // double quotes
-    // Fix UTF-8 spaces
-    .replace(/[\u00A0\u2002\u2003\u2009\u200A\u202F]/g, " ")  // various spaces
-    // Fix ellipsis
-    .replace(/\u2026/g, "...")
-    // Fix mangled UTF-8 sequences (double-encoded)
-    .replace(/â€¯/g, " ")  // U+202F narrow no-break space
-    .replace(/â€‰/g, " ")  // U+2009 thin space
-    .replace(/â€"/g, "-")  // U+2013 en-dash
-    .replace(/â€œ/g, "\"") // U+201C left double quote
-    .replace(/â€/g, "\"")  // U+201D right double quote
-    // Remove any remaining non-printable ASCII characters
-    .replace(/[^\x20-\x7E]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim()
+  return (
+    value
+      // Fix UTF-8 dashes and hyphens
+      .replace(/[\u2013\u2014\u2015]/g, "-") // en-dash, em-dash, horizontal bar
+      // Fix UTF-8 quotes
+      .replace(/[\u2018\u2019\u201A\u201B]/g, "'") // single quotes
+      .replace(/[\u201C\u201D\u201E\u201F]/g, '"') // double quotes
+      // Fix UTF-8 spaces
+      .replace(/[\u00A0\u2002\u2003\u2009\u200A\u202F]/g, " ") // various spaces
+      // Fix ellipsis
+      .replace(/\u2026/g, "...")
+      // Fix mangled UTF-8 sequences (double-encoded)
+      .replace(/â€¯/g, " ") // U+202F narrow no-break space
+      .replace(/â€‰/g, " ") // U+2009 thin space
+      .replace(/â€"/g, "-") // U+2013 en-dash
+      .replace(/â€œ/g, '"') // U+201C left double quote
+      .replace(/â€/g, '"') // U+201D right double quote
+      // Remove any remaining non-printable ASCII characters
+      .replace(/[^\x20-\x7E]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+  )
 }
 
 export const cleanStoreName = (value?: string): string => {
   const sanitized = sanitizeText(value)
   if (!sanitized) return "Home Depot"
-  const noPrefix = sanitized.replace(/^the home depot\s*/i, "").replace(/^home depot\s*/i, "").trim()
+  const noPrefix = sanitized
+    .replace(/^the home depot\s*/i, "")
+    .replace(/^home depot\s*/i, "")
+    .trim()
   const noNumber = noPrefix.replace(/\s*(store)?\s*#?\s*\d{3,5}\s*$/i, "").trim()
   return noNumber || "Home Depot"
 }
@@ -94,6 +99,19 @@ export interface FormattedHours {
   saturday: string
   sunday: string
   weekday: string
+  /** Compact single-line format for tight spaces */
+  compact: string
+}
+
+/**
+ * Formats time string to be more compact (e.g., "6:00 AM - 10:00 PM" -> "6AM-10PM")
+ */
+const compactTime = (timeStr: string): string => {
+  return timeStr
+    .replace(/:00/g, "")
+    .replace(/\s*AM/gi, "AM")
+    .replace(/\s*PM/gi, "PM")
+    .replace(/\s*-\s*/g, "-")
 }
 
 /**
@@ -102,19 +120,26 @@ export interface FormattedHours {
  */
 export const formatStoreHours = (hours?: StoreHours): FormattedHours => {
   const defaultHours: FormattedHours = {
-    saturday: "Saturday: Hours vary",
-    sunday: "Sunday: Hours vary",
-    weekday: "Mon-Fri: Hours vary"
+    saturday: "Sat: Hours vary",
+    sunday: "Sun: Hours vary",
+    weekday: "M-F: Hours vary",
+    compact: "Hours vary",
   }
 
   if (!hours) return defaultHours
 
   // Clean weekday hours
   let weekday = sanitizeText(hours.weekday)
+  let weekdayTime = ""
   if (weekday) {
-    // Ensure Mon-Fri prefix exists
+    // Extract just the time portion for compact display
+    weekdayTime = weekday.replace(/^mon.*?:\s*/i, "").trim()
+    // Ensure M-F prefix exists
     if (!weekday.toLowerCase().includes("mon")) {
-      weekday = `Mon-Fri: ${weekday}`
+      weekday = `M-F: ${weekday}`
+    } else {
+      // Shorten "Mon-Fri" to "M-F"
+      weekday = weekday.replace(/mon(?:day)?[\s-]*fri(?:day)?:?\s*/i, "M-F: ")
     }
   } else {
     weekday = defaultHours.weekday
@@ -126,16 +151,19 @@ export const formatStoreHours = (hours?: StoreHours): FormattedHours => {
 
   const weekendRaw = sanitizeText(hours.weekend)
   if (weekendRaw) {
-    const parts = weekendRaw.split("/").map(p => p.trim())
+    const parts = weekendRaw.split("/").map((p) => p.trim())
 
     if (parts.length === 2) {
-      saturday = `Saturday: ${parts[0]}`
-      sunday = `Sunday: ${parts[1]}`
+      saturday = `Sat: ${parts[0]}`
+      sunday = `Sun: ${parts[1]}`
     } else if (parts.length === 1) {
-      saturday = `Saturday: ${parts[0]}`
-      sunday = `Sunday: ${parts[0]}`
+      saturday = `Sat: ${parts[0]}`
+      sunday = `Sun: ${parts[0]}`
     }
   }
 
-  return { saturday, sunday, weekday }
+  // Build compact version (just shows weekday hours as most stores have same hours)
+  const compact = weekdayTime ? compactTime(weekdayTime) : defaultHours.compact
+
+  return { saturday, sunday, weekday, compact }
 }

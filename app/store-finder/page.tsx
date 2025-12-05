@@ -40,7 +40,6 @@ import sampleStoresData from "@/data/home-depot-stores.sample.json"
 const MAX_STORES = 20
 
 const bannedNameTokens = [
-  "lowe",
   "ace hardware",
   "innovation center",
   "support center",
@@ -51,11 +50,20 @@ const bannedNameTokens = [
   "corporate",
 ]
 
-// Validate store - now just checks it's not a banned type
+// Validate store - checks it's not a banned type
+// Lowes filter uses word boundary to match only the brand name, not substrings like "lower" or "flower"
 const isValidStore = (name?: string) => {
   if (!name) return false
   const lower = cleanStoreName(name).toLowerCase()
-  return !bannedNameTokens.some((token) => lower.includes(token))
+
+  // Check general banned tokens (substring matching)
+  if (bannedNameTokens.some((token) => lower.includes(token))) {
+    return false
+  }
+
+  // Check for Lowe's brand with word boundaries (not "lower", "flower", etc.)
+  const lowesRegex = /\b(lowes?|lowe's)\b/i
+  return !lowesRegex.test(lower)
 }
 
 const normalizeStore = (s: StoreLocation): StoreLocation => {
@@ -137,7 +145,8 @@ export default function StoreFinderPage() {
   const [locatingUser, setLocatingUser] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [viewMode, setViewMode] = useState<"map" | "list">("map")
-  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
+  const [, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
+  const [geolocationResolved, setGeolocationResolved] = useState(false)
   const [mapCenter, setMapCenter] = useState<[number, number]>(DEFAULT_CENTER)
   const [selectedStore, setSelectedStore] = useState<StoreLocation | null>(
     initialDisplayedStores[0] || null
@@ -159,8 +168,7 @@ export default function StoreFinderPage() {
         setSelectedStore(newStores[0])
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allLoadedStores.length])
+  }, [allLoadedStores.length, selectedStore])
 
   // Load remote store data via cached API route
   // Initial load is limited to 300 stores for faster LCP; full dataset loads on demand
@@ -169,8 +177,8 @@ export default function StoreFinderPage() {
     const load = async () => {
       setLoadingStores(true)
       try {
-        // Fetch limited initial set for fast initial paint
-        const res = await fetch("/api/stores?limit=300", { cache: "force-cache" })
+        // Fetch ALL stores - bypass browser cache
+        const res = await fetch("/api/stores", { cache: "no-store" })
 
         if (!res.ok) {
           throw new Error(`Failed to fetch /api/stores: ${res.status} ${res.statusText}`)
@@ -231,23 +239,47 @@ export default function StoreFinderPage() {
     if ("geolocation" in navigator) {
       setLocatingUser(true)
       navigator.geolocation.getCurrentPosition(
-        (position) => {
+        async (position) => {
           const lat = position.coords.latitude
           const lng = position.coords.longitude
           setUserLocation({ lat, lng })
+          setGeolocationResolved(true)
           setMapCenter([lat, lng])
 
-          // Get closest 20 stores to user's location
-          const closestStores = getClosestStores(allLoadedStores, lat, lng)
-          setDisplayedStores(closestStores)
-          if (closestStores.length > 0) {
-            setSelectedStore(closestStores[0])
+          // Fetch stores with server-side distance calculation for accuracy
+          try {
+            const res = await fetch(`/api/stores?lat=${lat}&lng=${lng}&limit=${MAX_STORES}`)
+            if (res.ok) {
+              const serverStores = (await res.json()) as StoreLocation[]
+              const normalized = serverStores
+                .map(normalizeStore)
+                .filter((s) => isValidStore(s.name) && hasValidCoordinates(s))
+              setDisplayedStores(normalized)
+              if (normalized.length > 0) {
+                setSelectedStore(normalized[0])
+              }
+            } else {
+              // Fallback to client-side calculation
+              const closestStores = getClosestStores(allLoadedStores, lat, lng)
+              setDisplayedStores(closestStores)
+              if (closestStores.length > 0) {
+                setSelectedStore(closestStores[0])
+              }
+            }
+          } catch {
+            // Fallback to client-side calculation
+            const closestStores = getClosestStores(allLoadedStores, lat, lng)
+            setDisplayedStores(closestStores)
+            if (closestStores.length > 0) {
+              setSelectedStore(closestStores[0])
+            }
           }
           setLocatingUser(false)
         },
         (error) => {
           console.error("Error getting location:", error)
           setLocatingUser(false)
+          setGeolocationResolved(false)
           alert("Could not get your location. Please try searching by ZIP code instead.")
         }
       )
@@ -370,23 +402,25 @@ export default function StoreFinderPage() {
   }, [])
 
   return (
-    <div className="min-h-screen">
-      {/* Hero Header - Clean and minimal */}
+    <div className="min-h-screen flex flex-col">
+      {/* Hero Header - Compact on mobile 
+          MOBILE: Reduced padding, smaller text */}
       <div className="border-b border-border bg-card">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-foreground">
             Store Finder
           </h1>
           <p className="text-sm text-muted-foreground mt-1">Find Home Depot locations near you</p>
         </div>
       </div>
 
-      {/* Search Controls */}
+      {/* Search Controls 
+          MOBILE: Stack vertically, full-width inputs, larger touch targets */}
       <div className="border-b border-border bg-card">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex flex-col sm:flex-row gap-3">
-            {/* Search Input */}
-            <div className="flex-1 flex gap-2" role="search">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
+          <div className="flex flex-col gap-3">
+            {/* Search Input - Full width on mobile */}
+            <div className="flex gap-2" role="search">
               <div className="relative flex-1">
                 <label htmlFor="store-search" className="sr-only">
                   Search for stores
@@ -403,21 +437,25 @@ export default function StoreFinderPage() {
                   onKeyDown={handleKeyDown}
                   placeholder="ZIP code, city, or address..."
                   aria-label="Search for stores by ZIP code, city, or address"
-                  className="w-full pl-10 pr-4 py-2.5 text-sm border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-slate-900 dark:focus:ring-white focus:border-transparent transition-shadow min-h-[44px]"
+                  className="w-full pl-10 pr-4 py-3 text-base sm:text-sm border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent transition-shadow min-h-[48px] sm:min-h-[44px]"
                 />
               </div>
-              <Button onClick={handleSearch} size="sm" className="px-4 min-h-[44px]">
+              <Button
+                onClick={handleSearch}
+                size="sm"
+                className="px-4 sm:px-6 min-h-[48px] sm:min-h-[44px]"
+              >
                 Search
               </Button>
             </div>
 
-            {/* Location + View Toggle */}
-            <div className="flex gap-2">
+            {/* Location + View Toggle - Row on mobile */}
+            <div className="flex gap-2 justify-between sm:justify-start">
               <Button
                 onClick={getUserLocation}
                 variant="secondary"
                 size="sm"
-                className="flex items-center gap-2 min-h-[44px]"
+                className="flex-1 sm:flex-initial flex items-center justify-center gap-2 min-h-[44px]"
                 disabled={locatingUser}
                 aria-label={locatingUser ? "Locating your position" : "Use my current location"}
               >
@@ -437,7 +475,7 @@ export default function StoreFinderPage() {
                   title="Map view"
                   className={`px-3 py-2 text-sm font-medium transition-colors ${
                     viewMode === "map"
-                      ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900"
+                      ? "bg-[var(--text-primary)] text-[var(--bg-page)]"
                       : "bg-background text-muted-foreground hover:text-foreground"
                   }`}
                 >
@@ -447,9 +485,9 @@ export default function StoreFinderPage() {
                   onClick={() => setViewMode("list")}
                   aria-label="List view"
                   title="List view"
-                  className={`px-3 py-2 text-sm font-medium transition-colors border-l border-border ${
+                  className={`px-3 py-2 min-h-[44px] text-sm font-medium transition-colors border-l border-border ${
                     viewMode === "list"
-                      ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900"
+                      ? "bg-[var(--text-primary)] text-[var(--bg-page)]"
                       : "bg-background text-muted-foreground hover:text-foreground"
                   }`}
                 >
@@ -459,22 +497,50 @@ export default function StoreFinderPage() {
             </div>
           </div>
 
-          {/* Status line */}
-          <p className="text-xs text-muted-foreground mt-3" aria-live="polite" role="status">
-            Showing {displayedStores.length} stores • Hours may vary
+          {/* Status line - Visible on mobile */}
+          <p
+            className="text-xs sm:text-sm text-muted-foreground mt-2 sm:mt-3 px-1"
+            aria-live="polite"
+            role="status"
+          >
+            {loadingStores ? (
+              <span className="flex items-center gap-1.5">
+                <span className="inline-block w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
+                Loading all {allLoadedStores.length.toLocaleString()}+ stores...
+              </span>
+            ) : (
+              <>
+                Showing {displayedStores.length} of {allLoadedStores.length.toLocaleString()} stores
+                • Hours may vary
+              </>
+            )}
           </p>
         </div>
       </div>
 
-      {/* Main Content Area - Full Width */}
-      <div className="flex-1">
+      {/* Main Content Area - Flex column on mobile
+          MOBILE OPTIMIZATIONS:
+          - Map is constrained height on mobile (not full viewport)
+          - Store list scrolls independently below map
+          - Minimum heights prevent layout collapse */}
+      <div className="flex-1 flex flex-col">
         {/* Map View */}
         {viewMode === "map" && (
-          <div className="flex flex-col lg:flex-row h-[450px] lg:h-[500px]">
-            {/* Store List Panel */}
+          <div className="flex flex-col lg:flex-row flex-1 min-h-0">
+            {/* Map Panel - Constrained on mobile, flex on desktop */}
+            <div className="h-[280px] sm:h-[320px] lg:flex-1 lg:h-auto lg:min-h-[400px] order-1 lg:order-2">
+              <StoreMap
+                stores={displayedStores}
+                center={mapCenter}
+                selectedStore={selectedStore}
+                onSelect={selectStore}
+              />
+            </div>
+
+            {/* Store List Panel - Scrollable on mobile */}
             <div
               ref={listContainerRef}
-              className="w-full lg:w-96 xl:w-[420px] flex-shrink-0 h-48 lg:h-full overflow-y-auto border-b lg:border-b-0 lg:border-r border-border bg-card"
+              className="flex-1 lg:flex-none lg:w-80 xl:w-96 min-h-[200px] lg:min-h-0 lg:h-full overflow-y-auto border-t lg:border-t-0 lg:border-r border-border bg-card order-2 lg:order-1"
             >
               {loadingStores && displayedStores.length === 0 ? (
                 <div className="p-4 space-y-3">
@@ -483,8 +549,8 @@ export default function StoreFinderPage() {
                   ))}
                 </div>
               ) : displayedStores.length === 0 ? (
-                <div className="p-8 text-center">
-                  <MapPin className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
+                <div className="p-6 sm:p-8 text-center">
+                  <MapPin className="h-8 w-8 sm:h-10 sm:w-10 text-muted-foreground mx-auto mb-3" />
                   <p className="text-sm text-muted-foreground">No stores found</p>
                 </div>
               ) : (
@@ -499,29 +565,18 @@ export default function StoreFinderPage() {
                       onSelect={() => selectStore(store)}
                       onToggleFavorite={(e) => toggleFavorite(store.id, e)}
                       ref={(el) => setStoreRef(store.id, el)}
+                      geolocationResolved={geolocationResolved}
                     />
                   ))}
                 </div>
               )}
-            </div>
-
-            {/* Map Panel - Takes remaining space */}
-            <div className="flex-1 min-h-[250px] lg:min-h-full">
-              <StoreMap
-                stores={displayedStores}
-                center={mapCenter}
-                zoom={11}
-                selectedStore={selectedStore}
-                onSelect={selectStore}
-                userLocation={userLocation}
-              />
             </div>
           </div>
         )}
 
         {/* List View */}
         {viewMode === "list" && (
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
             {loadingStores && displayedStores.length === 0 ? (
               <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
                 {[...Array(6)].map((_, i) => (
@@ -543,6 +598,7 @@ export default function StoreFinderPage() {
                     index={index + 1}
                     isFavorite={favorites.includes(store.id)}
                     onToggleFavorite={() => toggleFavorite(store.id)}
+                    geolocationResolved={geolocationResolved}
                   />
                 ))}
               </div>
@@ -563,18 +619,30 @@ interface StoreListItemProps {
   isFavorite: boolean
   onSelect: () => void
   onToggleFavorite: (e: React.MouseEvent) => void
+  geolocationResolved?: boolean
 }
 
 const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
-  ({ store, index, isSelected, isFavorite, onSelect, onToggleFavorite }, ref) => {
+  (
+    {
+      store,
+      index,
+      isSelected,
+      isFavorite,
+      onSelect,
+      onToggleFavorite,
+      geolocationResolved = false,
+    },
+    ref
+  ) => {
     return (
       <div
         ref={ref}
         onClick={onSelect}
-        className={`p-3 cursor-pointer transition-all duration-150 ${
+        className={`p-4 cursor-pointer transition-all duration-150 ${
           isSelected
-            ? "bg-slate-100 dark:bg-slate-800 border-l-2 border-l-slate-900 dark:border-l-white"
-            : "hover:bg-slate-50 dark:hover:bg-slate-800/50"
+            ? "bg-[var(--bg-elevated)] border-l-2 border-l-[var(--cta-primary)]"
+            : "hover:bg-[var(--bg-elevated)]"
         }`}
       >
         <div className="flex items-start gap-2.5">
@@ -582,8 +650,8 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
           <div
             className={`flex-shrink-0 w-6 h-6 rounded text-xs font-bold flex items-center justify-center ${
               isSelected
-                ? "bg-slate-900 dark:bg-white text-white dark:text-slate-900"
-                : "bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400"
+                ? "bg-[var(--cta-primary)] text-white"
+                : "bg-[var(--bg-elevated)] text-[var(--text-muted)]"
             }`}
           >
             {index}
@@ -595,7 +663,7 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
               <div className="min-w-0">
                 <h2
                   className={`font-semibold text-sm leading-tight truncate ${
-                    isSelected ? "text-slate-900 dark:text-white" : "text-foreground"
+                    isSelected ? "text-[var(--text-primary)]" : "text-foreground"
                   }`}
                 >
                   {getStoreTitle(store)}
@@ -606,7 +674,7 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
               </div>
               <button
                 onClick={onToggleFavorite}
-                className="p-1 hover:bg-slate-200 dark:hover:bg-slate-700 rounded transition-colors flex-shrink-0"
+                className="p-1 hover:bg-[var(--bg-elevated)] rounded transition-colors flex-shrink-0"
                 aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
               >
                 <Heart
@@ -615,13 +683,11 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
               </button>
             </div>
 
-            <p className="text-xs text-stone-600 dark:text-stone-400 mt-1 truncate">
-              {store.address}
-            </p>
+            <p className="text-xs text-muted-foreground mt-1 truncate">{store.address}</p>
 
-            <div className="flex items-center gap-2 mt-1.5">
-              {store.distance !== undefined && (
-                <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+            <div className="flex items-center gap-2 mt-2">
+              {store.distance !== undefined && geolocationResolved && (
+                <span className="text-xs font-semibold text-[var(--text-secondary)]">
                   {store.distance.toFixed(1)} mi
                 </span>
               )}
@@ -629,7 +695,7 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
                 <a
                   href={`tel:${store.phone}`}
                   onClick={(e) => e.stopPropagation()}
-                  className="text-xs text-stone-600 dark:text-stone-400 hover:text-foreground flex items-center gap-1"
+                  className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1"
                 >
                   <Phone className="h-3 w-3" />
                   {store.phone}
@@ -638,32 +704,21 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
             </div>
 
             {(store.hours?.weekday || store.hours?.weekend) && (
-              <div className="flex items-start gap-1 mt-1.5 text-xs text-stone-600 dark:text-stone-400 leading-tight">
-                <Clock className="h-3 w-3 mt-px flex-shrink-0" />
-                <div className="space-y-0">
-                  {(() => {
-                    const formatted = formatStoreHours(store.hours)
-                    return (
-                      <>
-                        <span className="block">{formatted.weekday}</span>
-                        <span className="block">{formatted.saturday}</span>
-                        <span className="block">{formatted.sunday}</span>
-                      </>
-                    )
-                  })()}
-                </div>
+              <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
+                <Clock className="h-3 w-3 flex-shrink-0" />
+                <span>{formatStoreHours(store.hours).compact}</span>
               </div>
             )}
 
             {/* Quick action buttons when selected */}
             {isSelected && (
-              <div className="flex gap-2 mt-2.5">
+              <div className="flex gap-2 mt-4">
                 <a
                   href={`https://www.google.com/maps/dir/?api=1&destination=${store.lat},${store.lng}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="flex-1 text-xs font-medium bg-slate-900 dark:bg-white text-white dark:text-slate-900 py-2 px-3 rounded text-center hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors flex items-center justify-center gap-1 min-h-[44px]"
+                  className="flex-1 text-xs font-medium bg-[var(--cta-primary)] text-white py-2 px-3 rounded text-center hover:bg-[var(--cta-hover)] transition-colors flex items-center justify-center gap-1 min-h-[44px]"
                 >
                   <Navigation className="h-4 w-4" />
                   Directions
@@ -673,7 +728,7 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="flex-1 text-xs font-medium border border-border py-2 px-3 rounded text-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center justify-center gap-1 min-h-[44px]"
+                  className="flex-1 text-xs font-medium border border-border py-2 px-3 rounded text-center hover:bg-[var(--bg-elevated)] transition-colors flex items-center justify-center gap-1 min-h-[44px]"
                 >
                   <ExternalLink className="h-4 w-4" />
                   Store
@@ -694,17 +749,19 @@ function StoreCard({
   index,
   isFavorite,
   onToggleFavorite,
+  geolocationResolved = false,
 }: {
   store: StoreLocation
   index: number
   isFavorite: boolean
   onToggleFavorite: () => void
+  geolocationResolved?: boolean
 }) {
   return (
-    <div className="bg-card border border-border rounded-lg p-4 hover:border-slate-400 dark:hover:border-slate-600 transition-colors">
+    <div className="bg-card border border-border rounded-lg p-4 hover:border-[var(--border-strong)] transition-colors">
       <div className="flex items-start justify-between mb-2">
         <div className="flex items-start gap-2.5">
-          <div className="w-6 h-6 rounded bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-600 dark:text-slate-400">
+          <div className="w-6 h-6 rounded bg-[var(--bg-elevated)] flex items-center justify-center text-xs font-bold text-[var(--text-muted)]">
             {index}
           </div>
           <div>
@@ -719,7 +776,7 @@ function StoreCard({
             e.stopPropagation()
             onToggleFavorite()
           }}
-          className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded transition-colors"
+          className="p-1.5 hover:bg-[var(--bg-elevated)] rounded transition-colors"
           aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
         >
           <Heart
@@ -735,10 +792,10 @@ function StoreCard({
         </p>
       </div>
 
-      {store.distance !== undefined && (
-        <div className="flex items-center gap-1.5 mb-2">
-          <Navigation className="h-3.5 w-3.5 text-slate-600 dark:text-slate-400" />
-          <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+      {store.distance !== undefined && geolocationResolved && (
+        <div className="flex items-center gap-2 mb-2">
+          <Navigation className="h-3.5 w-3.5 text-[var(--text-muted)]" />
+          <span className="text-xs font-semibold text-[var(--text-secondary)]">
             {store.distance.toFixed(1)} miles
           </span>
         </div>
@@ -754,20 +811,9 @@ function StoreCard({
           </div>
         )}
         {(store.hours?.weekday || store.hours?.weekend) && (
-          <div className="flex items-start gap-1.5">
-            <Clock className="h-3.5 w-3.5 mt-px" />
-            <div className="space-y-0 text-xs text-stone-600 dark:text-stone-400 leading-tight">
-              {(() => {
-                const formatted = formatStoreHours(store.hours)
-                return (
-                  <>
-                    <span className="block">{formatted.weekday}</span>
-                    <span className="block">{formatted.saturday}</span>
-                    <span className="block">{formatted.sunday}</span>
-                  </>
-                )
-              })()}
-            </div>
+          <div className="flex items-center gap-1.5">
+            <Clock className="h-3.5 w-3.5" />
+            <span>{formatStoreHours(store.hours).compact}</span>
           </div>
         )}
       </div>
@@ -777,7 +823,7 @@ function StoreCard({
           href={`https://www.google.com/maps/dir/?api=1&destination=${store.lat},${store.lng}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-1 text-xs font-medium bg-slate-900 dark:bg-white text-white dark:text-slate-900 py-2 px-3 rounded text-center hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors flex items-center justify-center gap-1.5"
+          className="flex-1 text-xs font-medium bg-[var(--cta-primary)] text-white py-2 px-3 rounded text-center hover:bg-[var(--cta-hover)] transition-colors flex items-center justify-center gap-1.5"
         >
           <Navigation className="h-3.5 w-3.5" />
           Directions
@@ -786,7 +832,7 @@ function StoreCard({
           href={getStoreUrl(store)}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-1 text-xs font-medium border border-border py-2 px-3 rounded text-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center justify-center gap-1.5"
+          className="flex-1 text-xs font-medium border border-border py-2 px-3 rounded text-center hover:bg-[var(--bg-elevated)] transition-colors flex items-center justify-center gap-1.5"
         >
           <ExternalLink className="h-3.5 w-3.5" />
           Store Page

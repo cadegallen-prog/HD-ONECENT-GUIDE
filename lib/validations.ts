@@ -27,8 +27,14 @@ export type Newsletter = z.infer<typeof newsletterSchema>
 // Store search schema
 export const storeSearchSchema = z.object({
   state: z.string().optional(),
-  zip: z.string().regex(/^\d{5}$/, "ZIP code must be 5 digits").optional(),
-  storeNumber: z.string().regex(/^\d{4}$/, "Store number must be 4 digits").optional(),
+  zip: z
+    .string()
+    .regex(/^\d{5}$/, "ZIP code must be 5 digits")
+    .optional(),
+  storeNumber: z
+    .string()
+    .regex(/^\d{4}$/, "Store number must be 4 digits")
+    .optional(),
 })
 
 export type StoreSearch = z.infer<typeof storeSearchSchema>

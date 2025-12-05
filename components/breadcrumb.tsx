@@ -17,12 +17,15 @@ export function Breadcrumb() {
   const formatLabel = (segment: string) => {
     return segment
       .split("-")
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ")
   }
 
   return (
-    <nav aria-label="Breadcrumb" className="py-4 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <nav
+      aria-label="Breadcrumb"
+      className="py-4 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+    >
       <div className="container mx-auto px-4">
         <ol className="flex items-center gap-2 text-sm">
           <li>
@@ -43,9 +46,7 @@ export function Breadcrumb() {
               <li key={path} className="flex items-center gap-2">
                 <ChevronRight className="w-4 h-4 text-muted-foreground" />
                 {isLast ? (
-                  <span className="font-medium text-foreground">
-                    {formatLabel(segment)}
-                  </span>
+                  <span className="font-medium text-foreground">{formatLabel(segment)}</span>
                 ) : (
                   <Link
                     href={path}

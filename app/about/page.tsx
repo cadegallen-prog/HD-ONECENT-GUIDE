@@ -11,25 +11,25 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="container mx-auto px-4 sm:px-6 py-8 max-w-4xl">
+    <div className="container-narrow py-12 sm:py-16">
       {/* Header */}
       <header className="mb-12">
-        <h1 className="text-3xl sm:text-4xl font-semibold text-stone-900 dark:text-stone-50 mb-4">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[var(--text-primary)] leading-tight">
           About Penny Central
         </h1>
-        <p className="text-lg text-stone-600 dark:text-stone-400">
+        <p className="mt-4 text-lg sm:text-xl text-[var(--text-secondary)] leading-relaxed">
           A free, community-driven guide for finding $0.01 clearance items at Home Depot.
         </p>
       </header>
 
       {/* What This Is */}
       <section className="mb-16">
-        <p className="text-stone-700 dark:text-stone-300 leading-relaxed mb-4">
+        <p className="text-[var(--text-secondary)] leading-relaxed mb-4">
           Penny Central is a community-driven guide for finding clearance items marked to $0.01 at
           Home Depot stores. This resource was created by and for members of the{" "}
           <Link
             href={FACEBOOK_GROUP_URL}
-            className="text-cta-primary dark:text-blue-400 hover:underline font-medium"
+            className="text-[var(--cta-primary)] hover:underline font-medium"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -38,7 +38,7 @@ export default function AboutPage() {
           , which has grown to over {COMMUNITY_MEMBER_COUNT_DISPLAY} members.
         </p>
 
-        <p className="text-stone-700 dark:text-stone-300 leading-relaxed">
+        <p className="text-[var(--text-secondary)] leading-relaxed">
           This guide covers the clearance lifecycle, digital scouting tools, in-store strategies,
           checkout procedures, and community best practices. Everything you need to understand how
           penny items work and how to find them effectively.
@@ -47,10 +47,10 @@ export default function AboutPage() {
 
       {/* How This Site is Supported */}
       <section id="support" className="mb-16 scroll-mt-24">
-        <h2 className="text-2xl font-semibold text-stone-900 dark:text-stone-50 mb-4">
+        <h2 className="text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug mb-4">
           How This Site is Supported
         </h2>
-        <p className="text-stone-700 dark:text-stone-300 mb-8">
+        <p className="text-[var(--text-secondary)] leading-relaxed mb-8">
           Penny Central is completely free. No ads, no paywalls, no premium tiers. Running this site
           comes with real costs: hosting, domain, development time, and ongoing maintenance.
           Here&apos;s how you can help:
