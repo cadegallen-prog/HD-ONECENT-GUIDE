@@ -8,9 +8,13 @@ Agents: keep this file short and useful. Update it when you actually finish or s
 
 ## 1. Product Context
 
+**Status:** ✅ **LIVE** at https://pennycentral.com (launched Dec 2025)
+
+**Current Phase:** Foundation & Stabilization — Prioritizing site reliability, performance, accessibility, and core UX over new features.
+
 **What:** PennyCentral.com - a utility/reference guide for finding Home Depot clearance items marked to $0.01.
 
-**Who:** Members of the "Home Depot One Cent Items" Facebook community (37,000+ members). Savvy shoppers who want actionable intel, not hype.
+**Who:** Members of the "Home Depot One Cent Items" Facebook community (40,000+ members and growing). Savvy shoppers who want actionable intel, not hype.
 
 **Core value:** Education on how clearance works, tools to find stores and plan trips, and realistic guidance on whether items are worth buying.
 

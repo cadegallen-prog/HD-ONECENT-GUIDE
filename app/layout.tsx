@@ -1,25 +1,27 @@
 import type { Metadata } from "next"
 import Script from "next/script"
 import { Inter } from "next/font/google"
+import { Analytics } from "@vercel/analytics/react"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
 import { CommandPaletteProvider } from "@/components/command-palette-provider"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { Analytics } from "@vercel/analytics/react"
 
 const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
   display: "swap",
   variable: "--font-inter",
+  preload: true,
+  fallback: ["system-ui", "arial"],
 })
 
 export const metadata: Metadata = {
   title: "Penny Central: The Home Depot $0.01 Hunting Guide",
   description:
-    "The complete guide to finding Home Depot penny items. Learn clearance cycles, in-store hunting strategies, checkout tips, and join 37,000+ penny hunters.",
+    "The complete guide to finding Home Depot penny items. Learn clearance cycles, in-store hunting strategies, checkout tips, and join 40,000+ penny hunters.",
   keywords: [
     "home depot penny items guide",
     "one cent items",
@@ -35,14 +37,14 @@ export const metadata: Metadata = {
     url: "https://pennycentral.com",
     title: "Penny Central: The Home Depot $0.01 Hunting Guide",
     description:
-      "The complete guide to finding Home Depot penny items. Learn clearance cycles, in-store hunting strategies, checkout tips, and join 37,000+ penny hunters.",
+      "The complete guide to finding Home Depot penny items. Learn clearance cycles, in-store hunting strategies, checkout tips, and join 40,000+ penny hunters.",
     siteName: "Penny Central",
   },
   twitter: {
     card: "summary_large_image",
     title: "Penny Central: The Home Depot $0.01 Hunting Guide",
     description:
-      "The complete guide to finding Home Depot penny items. Learn clearance cycles, in-store hunting strategies, checkout tips, and join 37,000+ penny hunters.",
+      "The complete guide to finding Home Depot penny items. Learn clearance cycles, in-store hunting strategies, checkout tips, and join 40,000+ penny hunters.",
   },
   robots: {
     index: true,
@@ -98,7 +100,7 @@ export default function RootLayout({
           </CommandPaletteProvider>
         </ThemeProvider>
         {/* Vercel Analytics - loads in production */}
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
     </html>
   )

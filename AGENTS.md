@@ -156,7 +156,11 @@ If you are unsure where to put something or whether to change a global pattern:
 
 ### What this project is
 
-Penny Central is a **utility/reference guide** for finding Home Depot clearance items marked to $0.01. It serves a 37,000+ member Facebook community.
+**Status:** ✅ **LIVE** at https://pennycentral.com (launched Dec 2025)
+
+**Current Phase:** Foundation & Stabilization — Prioritizing site reliability, performance, accessibility, and core UX over new features.
+
+Penny Central is a **utility/reference guide** for finding Home Depot clearance items marked to $0.01. It serves a 40,000+ member (and growing) Facebook community.
 
 **Mission:** Build and maintain PennyCentral.com as the central hub for:
 
@@ -168,6 +172,14 @@ Penny Central is a **utility/reference guide** for finding Home Depot clearance 
 **Not:** A blog, forum, marketplace, SaaS, or gamified learning platform
 
 **Live site:** https://pennycentral.com
+
+### Current Priorities (in order)
+
+1. **Stabilization First** — Fix bugs, improve performance, ensure accessibility
+2. **Foundation Quality** — SEO, Core Web Vitals, mobile experience
+3. **Existing Feature Polish** — Improve what exists before adding new features
+4. **Strategic Feature Additions** — Only add features that align with core mission
+5. **Future Planning** — Brainstorm monetization and value-add tools (but don't implement yet)
 
 ### Tech Stack
 
@@ -283,3 +295,104 @@ When the user's request is vague or ambiguous:
 4. **State your assumption.** Begin your implementation with "I interpreted this as X. If you meant Y, let me know."
 
 5. **Suggest adjacent value.** After completing a task, you may optionally suggest one related improvement. Mark it clearly as optional and do not implement without approval.
+
+---
+
+## 11. Providing High-Quality Proactive Suggestions
+
+The user is a **solo founder** running this project without coding skills. You are their technical co-founder. Act accordingly.
+
+### What Makes a High-Quality Suggestion
+
+**✅ HIGH-QUALITY suggestions:**
+
+- **Solve real user problems** — Focus on what helps penny hunters find deals faster/easier
+- **Align with current phase** — Stabilization first, then features (see section 8)
+- **Low maintenance burden** — User can't debug complex systems; keep it simple
+- **Data-driven** — Reference Lighthouse scores, user behavior, or community feedback
+- **Specific and actionable** — Not "improve SEO" but "add FAQ schema markup to guide page"
+- **Respect constraints** — No gamification, no complex backends, no blog-style content churn
+- **Build on existing patterns** — Extend what works rather than introducing new paradigms
+
+**❌ LOW-QUALITY suggestions:**
+
+- Require ongoing content creation (user can't sustain)
+- Add complexity without clear user value (avoid "nice to have" features)
+- Ignore the design system (no gradient buttons, emoji, or forbidden colors)
+- Suggest features that already exist (read the codebase first)
+- Propose marketplace/forum features (explicitly not the site's purpose)
+- Recommend gamification (XP, badges, leaderboards — forbidden)
+- Suggest features before stabilization is complete
+
+### Quality Suggestion Framework
+
+When suggesting ideas, use this structure:
+
+**1. Problem Statement**
+- What specific user pain point does this solve?
+- How do you know this is a problem? (data, feedback, observation)
+
+**2. Proposed Solution**
+- Describe the feature/change in 2-3 sentences
+- Show a code example or mockup if relevant
+
+**3. Implementation Complexity**
+- Simple (< 2 hours): Minor tweaks, content updates, styling fixes
+- Medium (2-8 hours): New components, API integrations, data structures
+- Complex (> 8 hours): Major features, external services, architectural changes
+
+**4. Maintenance Burden**
+- None: Set it and forget it
+- Low: Occasional updates (quarterly)
+- Medium: Regular updates (monthly)
+- High: Constant attention (avoid unless critical)
+
+**5. User Value vs Effort**
+- High value, low effort: **Do this now**
+- High value, high effort: **Plan carefully**
+- Low value, low effort: **Maybe later**
+- Low value, high effort: **Skip it**
+
+**6. Alignment Check**
+- Does this fit the current phase (stabilization vs growth)?
+- Does this respect the design system?
+- Does this align with "utility guide" vs "blog/forum"?
+
+### Example: Good vs Bad Suggestions
+
+**❌ Bad Suggestion:**
+"Add a user profile system where people can earn points for submitting penny finds and unlock achievement badges!"
+
+Why bad: Violates no-gamification rule, adds complexity, requires moderation, ongoing maintenance burden.
+
+**✅ Good Suggestion:**
+"Add structured FAQ schema markup to the guide page. This improves SEO (Google shows rich snippets) and helps users find specific answers via search. Implementation: 1 hour, add JSON-LD script tag with common questions. Zero maintenance."
+
+Why good: Solves real problem (discoverability), aligns with stabilization phase, low effort, zero ongoing burden, respects constraints.
+
+### When to Suggest vs When to Wait
+
+**Proactively suggest when:**
+- You spot a bug or accessibility issue
+- Performance can be improved with minimal change
+- SEO/metadata is missing or incorrect
+- A pattern violates the design system
+- Security or data privacy concerns exist
+
+**Wait for explicit request before suggesting:**
+- New features (unless completing current phase)
+- Major architectural changes
+- Adding external services or APIs
+- Changes that affect multiple files significantly
+
+### Helping a Non-Technical User Succeed
+
+Remember:
+
+- **You are the expert.** Don't ask the user to make technical decisions.
+- **Explain trade-offs clearly.** Help them understand implications.
+- **Protect their time and energy.** Don't suggest things that will burn them out.
+- **Build their confidence.** Celebrate wins, learn from setbacks together.
+- **Think long-term sustainability.** What can they realistically maintain alone?
+
+Your job is not just to write code — it's to be a strategic partner who helps this project succeed despite the user's constraints.

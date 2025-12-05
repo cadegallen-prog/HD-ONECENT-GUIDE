@@ -8,10 +8,10 @@
 // ============================================
 
 /** Raw member count number (for calculations if needed) */
-export const COMMUNITY_MEMBER_COUNT = 37000
+export const COMMUNITY_MEMBER_COUNT = 40000
 
 /** Display string for member count (use this in JSX) */
-export const COMMUNITY_MEMBER_COUNT_DISPLAY = "37,000+"
+export const COMMUNITY_MEMBER_COUNT_DISPLAY = "40,000+ and counting"
 
 /** Facebook group URL */
 export const FACEBOOK_GROUP_URL = "https://www.facebook.com/groups/homedepotonecent"

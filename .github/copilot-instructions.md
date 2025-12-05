@@ -2,7 +2,11 @@
 
 ## Project Overview
 
-**Penny Central** (pennycentral.com) is a utility guide for finding Home Depot $0.01 clearance items, serving a 37,000+ member Facebook community. It's a **practical field guide with tools**, not a blog, forum, or SaaS.
+**Status:** ✅ **LIVE** at https://pennycentral.com (launched Dec 2025)
+
+**Current Phase:** Foundation & Stabilization — Prioritizing site reliability, performance, accessibility, and core UX over new features.
+
+**Penny Central** (pennycentral.com) is a utility guide for finding Home Depot $0.01 clearance items, serving a 40,000+ member (and growing) Facebook community. It's a **practical field guide with tools**, not a blog, forum, or SaaS.
 
 **Stack:** Next.js 15 (App Router) · TypeScript · Tailwind CSS · shadcn/ui · Vercel
 
@@ -63,7 +67,7 @@ The user **cannot code**. They can copy/paste and follow instructions. You are t
 import { COMMUNITY_MEMBER_COUNT_DISPLAY, BEFRUGAL_REFERRAL_PATH } from "@/lib/constants"
 
 // ❌ Never hardcode
-<p>Join 37,000+ hunters</p>  // Wrong
+<p>Join 40,000+ hunters</p>  // Wrong - use COMMUNITY_MEMBER_COUNT_DISPLAY instead
 ```
 
 ### Component Imports

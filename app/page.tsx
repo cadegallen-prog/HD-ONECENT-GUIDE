@@ -42,7 +42,7 @@ export default function Home() {
           {/* Trust badge */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-default)] shadow-sm mb-4 animate-fade-in">
             <span
-              className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"
+              className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"
               aria-hidden="true"
             ></span>
             <span className="text-sm font-medium text-[var(--text-secondary)]">
