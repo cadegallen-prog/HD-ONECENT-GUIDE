@@ -185,10 +185,12 @@ These colors are NOT allowed in the PennyCentral design system:
 ### Font Stack
 
 **Primary Font:** Inter (Google Fonts)
+
 - Weights used: 400 (regular), 500 (medium), 600 (semibold)
 - Fallback: system-ui, -apple-system, BlinkMacSystemFont, sans-serif
 
 **Why Inter:**
+
 - Designed specifically for screen readability
 - Excellent x-height (improves legibility at small sizes)
 - Clear distinction between similar characters (I, l, 1)
@@ -197,25 +199,25 @@ These colors are NOT allowed in the PennyCentral design system:
 
 ### Type Scale (Modular)
 
-| Element | Size | Weight | Line Height | Use Case |
-|---------|------|--------|-------------|----------|
-| H1 | 30px (1.875rem) | 600 | 1.2 | Page titles only |
-| H2 | 24px (1.5rem) | 600 | 1.3 | Major sections |
-| H3 | 20px (1.25rem) | 600 | 1.4 | Subsections |
-| H4 | 18px (1.125rem) | 600 | 1.4 | Card titles |
-| Body | 16px (1rem) | 400 | 1.6 | Running text |
-| Body Small | 14px (0.875rem) | 400 | 1.5 | Secondary info |
-| Caption | 12px (0.75rem) | 400 | 1.5 | Labels, metadata |
+| Element    | Size            | Weight | Line Height | Use Case         |
+| ---------- | --------------- | ------ | ----------- | ---------------- |
+| H1         | 30px (1.875rem) | 600    | 1.2         | Page titles only |
+| H2         | 24px (1.5rem)   | 600    | 1.3         | Major sections   |
+| H3         | 20px (1.25rem)  | 600    | 1.4         | Subsections      |
+| H4         | 18px (1.125rem) | 600    | 1.4         | Card titles      |
+| Body       | 16px (1rem)     | 400    | 1.6         | Running text     |
+| Body Small | 14px (0.875rem) | 400    | 1.5         | Secondary info   |
+| Caption    | 12px (0.75rem)  | 400    | 1.5         | Labels, metadata |
 
 **Maximum text size:** 30px — no larger for accessibility
 **Minimum text size:** 12px — enforced via CSS override
 
 ### Line Length (Measure)
 
-| Context | Ideal | Max | CSS |
-|---------|-------|-----|-----|
-| Body text | 65-75 chars | 80 chars | `max-w-prose` (65ch) |
-| Headings | 20-40 chars | 60 chars | Natural width |
+| Context   | Ideal       | Max      | CSS                    |
+| --------- | ----------- | -------- | ---------------------- |
+| Body text | 65-75 chars | 80 chars | `max-w-prose` (65ch)   |
+| Headings  | 20-40 chars | 60 chars | Natural width          |
 | UI labels | 10-20 chars | 30 chars | Truncate with ellipsis |
 
 **Why this matters:** Lines longer than 80 characters cause eye fatigue. The reader loses their place when moving to the next line.
@@ -228,11 +230,11 @@ These colors are NOT allowed in the PennyCentral design system:
 
 ### Font Weight Usage
 
-| Weight | Value | Use For |
-|--------|-------|---------|
-| Regular | 400 | Body text, descriptions |
-| Medium | 500 | Links, emphasized text, nav items |
-| Semibold | 600 | Headings, buttons, labels |
+| Weight   | Value | Use For                           |
+| -------- | ----- | --------------------------------- |
+| Regular  | 400   | Body text, descriptions           |
+| Medium   | 500   | Links, emphasized text, nav items |
+| Semibold | 600   | Headings, buttons, labels         |
 
 **Never use:** 300 (too light for screens), 700+ (only if making a point)
 
@@ -245,7 +247,7 @@ These colors are NOT allowed in the PennyCentral design system:
 ✅ No justified text (causes uneven spacing)  
 ✅ Left-aligned text (easier to scan)  
 ✅ Clear heading hierarchy (size + weight)  
-✅ Adequate paragraph spacing  
+✅ Adequate paragraph spacing
 
 ---
 
