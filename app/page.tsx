@@ -293,7 +293,12 @@ export default function Home() {
           {/* Support cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
             {/* Tip Card */}
-            <div className="card-interactive bg-[var(--bg-elevated)] dark:bg-[var(--bg-card)] rounded-xl p-6 border border-[var(--border-default)]">
+            <a
+              href="https://paypal.me/cadegallen"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="card-interactive bg-[var(--bg-elevated)] dark:bg-[var(--bg-card)] rounded-xl p-6 border border-[var(--border-default)] block"
+            >
               <div className="w-12 h-12 rounded-xl bg-white dark:bg-[var(--bg-elevated)] flex items-center justify-center mb-4 border border-[var(--border-default)]">
                 <Heart className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
               </div>
@@ -303,19 +308,17 @@ export default function Home() {
               <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed">
                 Help cover hosting and development costs with a one-time contribution.
               </p>
-              <a
-                href="https://paypal.me/cadegallen"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-4 inline-flex items-center gap-2 text-[var(--cta-primary)] font-medium hover:underline"
-              >
+              <div className="mt-4 inline-flex items-center gap-2 text-[var(--cta-primary)] font-medium">
                 Send a tip via PayPal
                 <ExternalLink className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
-              </a>
-            </div>
+              </div>
+            </a>
 
             {/* Cashback Card */}
-            <div className="card-interactive bg-[var(--bg-elevated)] dark:bg-[var(--bg-card)] rounded-xl p-6 border border-[var(--border-default)]">
+            <Link
+              href={BEFRUGAL_REFERRAL_PATH}
+              className="card-interactive bg-[var(--bg-elevated)] dark:bg-[var(--bg-card)] rounded-xl p-6 border border-[var(--border-default)] block"
+            >
               <div className="w-12 h-12 rounded-xl bg-white dark:bg-[var(--bg-elevated)] flex items-center justify-center mb-4 border border-[var(--border-default)]">
                 <DollarSign className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
               </div>
@@ -326,14 +329,11 @@ export default function Home() {
                 Sign up through our link to earn cashback. We get a small referral at no cost to
                 you.
               </p>
-              <Link
-                href={BEFRUGAL_REFERRAL_PATH}
-                className="mt-4 inline-flex items-center gap-2 text-[var(--cta-primary)] font-medium hover:underline"
-              >
+              <div className="mt-4 inline-flex items-center gap-2 text-[var(--cta-primary)] font-medium">
                 Get cashback with BeFrugal
                 <ExternalLink className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
-              </Link>
-            </div>
+              </div>
+            </Link>
           </div>
         </div>
       </section>
