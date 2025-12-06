@@ -11,10 +11,6 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ["lucide-react", "framer-motion"],
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-    dirs: ["app", "components", "lib"],
-  },
   // Security and caching headers
   async headers() {
     return [
