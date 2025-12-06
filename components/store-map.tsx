@@ -77,7 +77,9 @@ function MapController({ selectedStore }: { selectedStore?: StoreLocation | null
 
       // Ensure correct coordinates are passed and zoom is set to 13
       if (!userHasInteractedRef.current) {
-        map.flyTo([selectedStore.lat, selectedStore.lng], 13, {
+        // Offset the center slightly to make room for the popup (which is above the marker)
+        // This is a rough approximation, but helps keep the popup in view
+        map.flyTo([selectedStore.lat + 0.005, selectedStore.lng], 13, {
           duration: 0.5,
         })
       }
@@ -227,27 +229,29 @@ export const StoreMap = React.memo(function StoreMap({
               <Popup
                 className="store-popup"
                 autoPan={true}
-                autoPanPadding={[80, 80]}
-                keepInView={true}
-                maxWidth={280}
+                autoPanPadding={[50, 50]}
+                keepInView={false}
+                maxWidth={220}
                 minWidth={200}
+                closeButton={false}
               >
-                <div className="space-y-2 text-left">
+                <div className="space-y-1.5 text-left p-1">
                   {/* Store name and number */}
-                  <p className="font-semibold text-sm text-foreground leading-tight pr-4">
-                    {getStoreTitle(store)}
-                  </p>
-
-                  {/* Distance badge */}
-                  {store.distance !== undefined && (
-                    <p className="text-xs font-semibold text-[var(--text-secondary)]">
-                      {store.distance.toFixed(1)} mi away
+                  <div className="flex justify-between items-start gap-2">
+                    <p className="font-bold text-sm text-foreground leading-tight">
+                      {getStoreTitle(store)}
                     </p>
-                  )}
+                    {/* Distance badge - only show if meaningful */}
+                    {store.distance !== undefined && store.distance > 0.1 && (
+                      <span className="text-[10px] font-medium bg-muted px-1.5 py-0.5 rounded text-muted-foreground whitespace-nowrap">
+                        {store.distance.toFixed(1)} mi
+                      </span>
+                    )}
+                  </div>
 
                   {/* Store hours - compact display */}
                   {(store.hours?.weekday || store.hours?.weekend) && (
-                    <div className="pt-1 text-xs text-muted-foreground">
+                    <div className="text-[11px] text-muted-foreground leading-snug">
                       {(() => {
                         const formatted = formatStoreHours(store.hours)
                         return (
@@ -262,9 +266,9 @@ export const StoreMap = React.memo(function StoreMap({
                   )}
 
                   {/* Address block */}
-                  <div className="pt-1 border-t border-border">
-                    <p className="text-xs text-[var(--text-secondary)]">{store.address}</p>
-                    <p className="text-xs text-[var(--text-secondary)]">
+                  <div className="pt-1.5 border-t border-border/50">
+                    <p className="text-[11px] text-muted-foreground leading-snug">{store.address}</p>
+                    <p className="text-[11px] text-muted-foreground leading-snug">
                       {store.city}, {store.state} {store.zip}
                     </p>
                   </div>
@@ -273,29 +277,29 @@ export const StoreMap = React.memo(function StoreMap({
                   {store.phone && (
                     <a
                       href={`tel:${store.phone}`}
-                      className="store-popup-link text-xs font-medium text-muted-foreground hover:text-foreground block transition-colors"
+                      className="block text-[11px] font-medium text-blue-600 dark:text-blue-400 hover:underline mt-0.5"
                     >
                       {store.phone}
                     </a>
                   )}
 
                   {/* Action links */}
-                  <div className="pt-1 border-t border-border flex flex-col gap-1">
+                  <div className="pt-2 flex gap-2">
                     <a
                       href={`https://www.google.com/maps/dir/?api=1&destination=${store.lat},${store.lng}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="store-popup-link text-xs font-medium text-[var(--text-secondary)] hover:text-foreground py-2 transition-colors"
+                      className="flex-1 text-center bg-primary text-primary-foreground text-[10px] font-medium py-1.5 rounded hover:bg-primary/90 transition-colors"
                     >
-                      Get Directions →
+                      Directions
                     </a>
                     <a
                       href={getStoreUrl(store)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="store-popup-link text-xs font-medium text-[var(--text-secondary)] hover:text-foreground py-2 transition-colors"
+                      className="flex-1 text-center bg-secondary text-secondary-foreground text-[10px] font-medium py-1.5 rounded hover:bg-secondary/80 transition-colors"
                     >
-                      View Store Page →
+                      Details
                     </a>
                   </div>
                 </div>

@@ -145,7 +145,7 @@ export default function StoreFinderPage() {
   const [locatingUser, setLocatingUser] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [viewMode, setViewMode] = useState<"map" | "list">("map")
-  const [, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [geolocationResolved, setGeolocationResolved] = useState(false)
   const [mapCenter, setMapCenter] = useState<[number, number]>(DEFAULT_CENTER)
   const [selectedStore, setSelectedStore] = useState<StoreLocation | null>(
@@ -406,11 +406,11 @@ export default function StoreFinderPage() {
       {/* Hero Header - Compact on mobile 
           MOBILE: Reduced padding, smaller text */}
       <div className="border-b border-border bg-card">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
+          <h1 className="text-lg sm:text-xl md:text-2xl font-bold tracking-tight text-foreground">
             Store Finder
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">Find Home Depot locations near you</p>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">Find Home Depot locations near you</p>
         </div>
       </div>
 
@@ -523,53 +523,56 @@ export default function StoreFinderPage() {
           - Map is constrained height on mobile (not full viewport)
           - Store list scrolls independently below map
           - Minimum heights prevent layout collapse */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col bg-muted/5">
         {/* Map View */}
         {viewMode === "map" && (
-          <div className="flex flex-col lg:flex-row flex-1 min-h-0">
-            {/* Map Panel - Constrained on mobile, flex on desktop */}
-            <div className="h-[280px] sm:h-[320px] lg:flex-1 lg:h-auto lg:min-h-[400px] order-1 lg:order-2">
-              <StoreMap
-                stores={displayedStores}
-                center={mapCenter}
-                selectedStore={selectedStore}
-                onSelect={selectStore}
-              />
-            </div>
+          <div className="flex-1 p-0 sm:p-4 lg:p-6">
+            <div className="flex flex-col lg:flex-row h-[calc(100vh-220px)] min-h-[500px] max-h-[800px] max-w-7xl mx-auto bg-card sm:border sm:border-border sm:rounded-xl overflow-hidden shadow-sm">
+              {/* Store List Panel - Scrollable on mobile */}
+              <div
+                ref={listContainerRef}
+                className="flex-1 lg:flex-none lg:w-80 xl:w-96 min-h-[200px] lg:min-h-0 lg:h-full overflow-y-auto border-t lg:border-t-0 lg:border-r border-border bg-card order-2 lg:order-1"
+              >
+                {loadingStores && displayedStores.length === 0 ? (
+                  <div className="p-4 space-y-3">
+                    {[...Array(5)].map((_, i) => (
+                      <div key={i} className="h-20 bg-muted/30 rounded-lg animate-pulse" />
+                    ))}
+                  </div>
+                ) : displayedStores.length === 0 ? (
+                  <div className="p-6 sm:p-8 text-center">
+                    <MapPin className="h-8 w-8 sm:h-10 sm:w-10 text-muted-foreground mx-auto mb-3" />
+                    <p className="text-sm text-muted-foreground">No stores found</p>
+                  </div>
+                ) : (
+                  <div className="divide-y divide-border">
+                    {displayedStores.map((store, index) => (
+                      <StoreListItem
+                        key={store.id}
+                        store={store}
+                        index={index + 1}
+                        isSelected={selectedStore?.id === store.id}
+                        isFavorite={favorites.includes(store.id)}
+                        onSelect={() => selectStore(store)}
+                        onToggleFavorite={(e) => toggleFavorite(store.id, e)}
+                        ref={(el) => setStoreRef(store.id, el)}
+                        geolocationResolved={geolocationResolved}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
 
-            {/* Store List Panel - Scrollable on mobile */}
-            <div
-              ref={listContainerRef}
-              className="flex-1 lg:flex-none lg:w-80 xl:w-96 min-h-[200px] lg:min-h-0 lg:h-full overflow-y-auto border-t lg:border-t-0 lg:border-r border-border bg-card order-2 lg:order-1"
-            >
-              {loadingStores && displayedStores.length === 0 ? (
-                <div className="p-4 space-y-3">
-                  {[...Array(5)].map((_, i) => (
-                    <div key={i} className="h-20 bg-muted/30 rounded-lg animate-pulse" />
-                  ))}
-                </div>
-              ) : displayedStores.length === 0 ? (
-                <div className="p-6 sm:p-8 text-center">
-                  <MapPin className="h-8 w-8 sm:h-10 sm:w-10 text-muted-foreground mx-auto mb-3" />
-                  <p className="text-sm text-muted-foreground">No stores found</p>
-                </div>
-              ) : (
-                <div className="divide-y divide-border">
-                  {displayedStores.map((store, index) => (
-                    <StoreListItem
-                      key={store.id}
-                      store={store}
-                      index={index + 1}
-                      isSelected={selectedStore?.id === store.id}
-                      isFavorite={favorites.includes(store.id)}
-                      onSelect={() => selectStore(store)}
-                      onToggleFavorite={(e) => toggleFavorite(store.id, e)}
-                      ref={(el) => setStoreRef(store.id, el)}
-                      geolocationResolved={geolocationResolved}
-                    />
-                  ))}
-                </div>
-              )}
+              {/* Map Panel - Constrained on mobile, flex on desktop */}
+              <div className="h-[280px] sm:h-[320px] lg:flex-1 lg:h-full order-1 lg:order-2 relative z-0">
+                <StoreMap
+                  stores={displayedStores}
+                  center={mapCenter}
+                  selectedStore={selectedStore}
+                  onSelect={selectStore}
+                  userLocation={userLocation}
+                />
+              </div>
             </div>
           </div>
         )}
