@@ -109,6 +109,20 @@ export default function PennyListPage() {
             ))}
           </div>
 
+          {/* About This List */}
+          <div className="mb-12 bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800 rounded-xl p-6">
+            <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
+              How This List Works
+            </h2>
+            <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+              This is a <strong>community-verified list</strong> of items that members have found
+              for $0.01 at Home Depot stores. New items are reviewed and added weekly based on
+              community submissions. Each item shows the quantity found and locations reported to
+              help you hunt smarter. <strong>YMMV (Your Mileage May Vary)</strong> — just because it
+              was found at one store doesn't mean yours has it, but it's a strong signal to check.
+            </p>
+          </div>
+
           {/* Call to Action Section */}
           <div className="mt-16 grid md:grid-cols-2 gap-8">
             {/* Submit a Find */}
