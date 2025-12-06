@@ -98,6 +98,29 @@ export default function PennyListPage() {
 
                   <p className="text-sm text-[var(--text-muted)] mb-4 line-clamp-3">{item.notes}</p>
 
+                  {/* Location Data */}
+                  {"locations" in item &&
+                    item.locations &&
+                    Object.keys(item.locations).length > 0 && (
+                      <div className="mb-4">
+                        <p className="text-xs font-medium text-[var(--text-secondary)] mb-2">
+                          Found in:
+                        </p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {Object.entries(item.locations as unknown as Record<string, number>).map(
+                            ([state, count]) => (
+                              <span
+                                key={state}
+                                className="px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-medium"
+                              >
+                                {state} ({count})
+                              </span>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    )}
+
                   <div className="pt-4 border-t border-[var(--border-default)] flex items-center justify-between">
                     <span className="text-xs text-[var(--text-muted)]">Verified by Community</span>
                     <span className="text-emerald-600 dark:text-emerald-400 font-bold text-lg">
