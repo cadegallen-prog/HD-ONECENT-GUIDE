@@ -40,9 +40,12 @@ export default function Home() {
       <section className="section-padding px-4 sm:px-6 bg-white dark:bg-[var(--bg-page)]">
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-default)] shadow-sm mb-4">
-            <span className="w-2 h-2 rounded-full bg-amber-500" aria-hidden="true"></span>
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-radar absolute inline-flex h-full w-full rounded-full bg-amber-500"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
+            </span>
             <span className="text-sm font-medium text-[var(--text-secondary)]">
-              Join {COMMUNITY_MEMBER_COUNT_DISPLAY} penny hunters
+              Join over {COMMUNITY_MEMBER_COUNT_DISPLAY} penny hunters
             </span>
           </div>
 
