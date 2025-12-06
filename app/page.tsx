@@ -39,12 +39,8 @@ export default function Home() {
           ============================================ */}
       <section className="section-padding px-4 sm:px-6 bg-white dark:bg-[var(--bg-page)]">
         <div className="max-w-4xl mx-auto text-center">
-          {/* Trust badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-default)] shadow-sm mb-4 animate-fade-in">
-            <span
-              className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"
-              aria-hidden="true"
-            ></span>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-default)] shadow-sm mb-4">
+            <span className="w-2 h-2 rounded-full bg-amber-500" aria-hidden="true"></span>
             <span className="text-sm font-medium text-[var(--text-secondary)]">
               Join {COMMUNITY_MEMBER_COUNT_DISPLAY} penny hunters
             </span>
@@ -70,7 +66,7 @@ export default function Home() {
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
             <Link
               href="/store-finder"
-              className="btn-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg bg-[var(--cta-primary)] text-white font-semibold shadow-md hover:bg-[var(--cta-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
+              className="btn-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold shadow-md hover:bg-[var(--cta-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
             >
               <MapPin className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
               Find Stores Near You
@@ -270,7 +266,7 @@ export default function Home() {
             href={FACEBOOK_GROUP_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-primary mt-6 w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg bg-[var(--cta-primary)] text-white font-semibold shadow-md hover:bg-[var(--cta-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-card)]"
+            className="btn-primary mt-6 w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold shadow-md hover:bg-[var(--cta-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-card)]"
           >
             Join the Facebook Group
             <ExternalLink className="w-4 h-4 flex-shrink-0" aria-hidden="true" />

@@ -30,7 +30,7 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
       // Variant-specific styles - reduced translate-y for mobile stability
       {
         primary:
-          "bg-[var(--cta-primary)] hover:bg-[var(--cta-hover)] text-white shadow-md hover:shadow-lg hover:-translate-y-px active:translate-y-0",
+          "bg-[var(--cta-primary)] hover:bg-[var(--cta-hover)] text-[var(--cta-text)] shadow-md hover:shadow-lg hover:-translate-y-px active:translate-y-0",
         secondary:
           "bg-transparent border-2 border-[var(--border-default)] dark:border-[var(--border-dark)] hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-elevated)] hover:border-[var(--text-muted)] text-[var(--text-primary)] hover:-translate-y-px active:translate-y-0",
         ghost:

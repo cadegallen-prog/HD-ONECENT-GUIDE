@@ -3,7 +3,7 @@
 ## Project Overview
 
 PennyCentral.com is a Next.js 15 app serving the Home Depot penny hunting community.
-It's the official resource for a 37,000-member Facebook group.
+It's the official resource for a 40,000+ member Facebook group.
 
 ## Tech Stack
 

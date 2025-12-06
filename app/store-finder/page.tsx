@@ -650,7 +650,7 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
           <div
             className={`flex-shrink-0 w-6 h-6 rounded text-xs font-bold flex items-center justify-center ${
               isSelected
-                ? "bg-[var(--cta-primary)] text-white"
+                ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
                 : "bg-[var(--bg-elevated)] text-[var(--text-muted)]"
             }`}
           >
@@ -718,7 +718,7 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="flex-1 text-xs font-medium bg-[var(--cta-primary)] text-white py-2 px-3 rounded text-center hover:bg-[var(--cta-hover)] transition-colors flex items-center justify-center gap-1 min-h-[44px]"
+                  className="flex-1 text-xs font-medium bg-[var(--cta-primary)] text-[var(--cta-text)] py-2 px-3 rounded text-center hover:bg-[var(--cta-hover)] transition-colors flex items-center justify-center gap-1 min-h-[44px]"
                 >
                   <Navigation className="h-4 w-4" />
                   Directions
@@ -823,7 +823,7 @@ function StoreCard({
           href={`https://www.google.com/maps/dir/?api=1&destination=${store.lat},${store.lng}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-1 text-xs font-medium bg-[var(--cta-primary)] text-white py-2 px-3 rounded text-center hover:bg-[var(--cta-hover)] transition-colors flex items-center justify-center gap-1.5"
+          className="flex-1 text-xs font-medium bg-[var(--cta-primary)] text-[var(--cta-text)] py-2 px-3 rounded text-center hover:bg-[var(--cta-hover)] transition-colors flex items-center justify-center gap-1.5"
         >
           <Navigation className="h-3.5 w-3.5" />
           Directions

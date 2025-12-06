@@ -35,7 +35,7 @@ function PennyLogo({ className = "" }: { className?: string }) {
         x="16"
         y="21"
         textAnchor="middle"
-        className="text-brand-gunmetal dark:text-[var(--text-secondary)] font-bold"
+        className="text-zinc-800 dark:text-[var(--text-secondary)] font-bold"
         style={{ fontSize: "14px", fontFamily: "system-ui" }}
         fill="currentColor"
       >
@@ -46,7 +46,7 @@ function PennyLogo({ className = "" }: { className?: string }) {
         x="23"
         y="12"
         textAnchor="middle"
-        className="text-muted-foreground"
+        className="text-zinc-700 dark:text-zinc-400"
         style={{ fontSize: "10px", fontFamily: "system-ui" }}
         fill="currentColor"
       >
@@ -80,7 +80,7 @@ export function Navbar() {
   return (
     <>
       {/* Desktop & Mobile Navbar */}
-      <nav className="sticky top-0 z-50 backdrop-blur-lg bg-white/90 dark:bg-[var(--bg-page)]/90 border-b border-[var(--border-default)]">
+      <nav className="sticky top-0 z-50 backdrop-blur-lg bg-white/90 dark:bg-zinc-900/90 border-b border-[var(--border-default)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -108,7 +108,7 @@ export function Navbar() {
                       px-4 py-2 rounded-lg text-sm font-medium transition-all duration-150
                       ${
                         isActive
-                          ? "bg-[var(--cta-primary)] text-white"
+                          ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
                           : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-elevated)]"
                       }
                     `}
@@ -165,7 +165,7 @@ export function Navbar() {
                       flex items-center gap-3 px-4 py-3.5 min-h-[48px] rounded-lg text-base font-medium transition-all duration-150
                       ${
                         isActive
-                          ? "bg-[var(--cta-primary)] text-white"
+                          ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
                           : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-elevated)] active:bg-[var(--bg-elevated)]"
                       }
                     `}

@@ -113,8 +113,8 @@
 
     /* Dark mode text - WCAG AAA compliant */
     --text-primary: #fafafa; /* 17.4:1 on #18181B */
-    --text-secondary: #d4d4d8; /* 12.3:1 on #18181B */
-    --text-muted: #a1a1aa; /* 7.1:1 on #18181B - AAA minimum */
+    --text-secondary: #e4e4e7; /* Zinc 200 - High contrast */
+    --text-muted: #d4d4d8; /* Zinc 300 - 10.4:1 on #27272A (bg-card) */
 
     /* Dark mode borders */
     --border-default: #3f3f46;
@@ -126,9 +126,10 @@
     --brand-gunmetal-light: #d1d5db;
 
     /* Dark mode CTA - adjusted for visibility */
-    --cta-primary: #3b82f6; /* 4.7:1 - AA for large text */
-    --cta-hover: #60a5fa;
-    --cta-active: #93c5fd;
+    --cta-primary: #93c5fd; /* Blue 300 - Better contrast against dark bg */
+    --cta-text: #18181b; /* Dark text on light button for AAA */
+    --cta-hover: #bfdbfe;
+    --cta-active: #dbeafe;
 
     /* Legacy compatibility */
     --accent: #9ca3af;
@@ -378,6 +379,48 @@
   /* Card with lift effect (optional, use .card-lift) */
   .card-lift:hover {
     transform: translateY(-2px);
+  }
+
+  /* ===============================================
+     MAP MARKER ANIMATIONS
+     Smooth scale and shadow on hover
+     =============================================== */
+  .map-marker-default,
+  .map-marker-selected {
+    background: transparent;
+    border: none;
+  }
+
+  .map-marker-default svg,
+  .map-marker-selected svg {
+    transition:
+      transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+      filter 0.2s ease;
+    transform-origin: bottom center;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  }
+
+  .map-marker-default:hover svg {
+    transform: scale(1.15);
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+    z-index: 1000;
+  }
+
+  .map-marker-selected:hover svg {
+    transform: scale(1.1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .map-marker-default svg,
+    .map-marker-selected svg {
+      transition: none;
+      transform: none;
+    }
+
+    .map-marker-default:hover svg,
+    .map-marker-selected:hover svg {
+      transform: none;
+    }
   }
 
   /* ===============================================
@@ -635,7 +678,7 @@
   }
 
   .markdown-price.active {
-    @apply bg-[var(--cta-primary)] text-white;
+    @apply bg-[var(--cta-primary)] text-[var(--cta-text)];
   }
 
   .markdown-price.penny {

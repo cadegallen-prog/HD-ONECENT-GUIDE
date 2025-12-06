@@ -9,33 +9,28 @@ export function Footer() {
           <div className="col-span-2 md:col-span-1">
             <Link
               href="/"
-              className="text-lg font-bold text-[var(--text-inverse)] hover:text-white transition-colors"
+              className="text-lg font-bold text-white hover:text-zinc-200 transition-colors"
             >
               Penny Central
             </Link>
-            <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+            <p className="mt-3 text-sm text-zinc-400 leading-relaxed">
               The complete guide to finding $0.01 items at Home Depot.
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-sm font-semibold text-[var(--text-secondary)] dark:text-[var(--text-secondary)] mb-4">
-              Quick Links
-            </h3>
+            <h3 className="text-sm font-semibold text-zinc-100 mb-4">Quick Links</h3>
             <ul className="space-y-2.5">
               <li>
-                <Link
-                  href="/"
-                  className="text-sm text-muted-foreground hover:text-[var(--text-secondary)] transition-colors"
-                >
+                <Link href="/" className="text-sm text-zinc-400 hover:text-white transition-colors">
                   Home
                 </Link>
               </li>
               <li>
                 <Link
                   href="/guide"
-                  className="text-sm text-muted-foreground hover:text-[var(--text-secondary)] transition-colors"
+                  className="text-sm text-zinc-400 hover:text-white transition-colors"
                 >
                   Guide
                 </Link>
@@ -43,7 +38,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/store-finder"
-                  className="text-sm text-muted-foreground hover:text-[var(--text-secondary)] transition-colors"
+                  className="text-sm text-zinc-400 hover:text-white transition-colors"
                 >
                   Store Finder
                 </Link>
@@ -53,7 +48,7 @@ export function Footer() {
                   href="https://www.facebook.com/groups/homedepotonecent"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-muted-foreground hover:text-[var(--text-secondary)] transition-colors"
+                  className="text-sm text-zinc-400 hover:text-white transition-colors"
                 >
                   Community
                 </a>
@@ -63,16 +58,14 @@ export function Footer() {
 
           {/* Support */}
           <div>
-            <h3 className="text-sm font-semibold text-[var(--text-secondary)] dark:text-[var(--text-secondary)] mb-4">
-              Support
-            </h3>
+            <h3 className="text-sm font-semibold text-zinc-100 mb-4">Support</h3>
             <ul className="space-y-2.5">
               <li>
                 <a
                   href="https://paypal.me/cadegallen"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-muted-foreground hover:text-[var(--text-secondary)] transition-colors"
+                  className="text-sm text-zinc-400 hover:text-white transition-colors"
                 >
                   Leave a Tip
                 </a>
@@ -80,7 +73,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/go/befrugal"
-                  className="text-sm text-muted-foreground hover:text-[var(--text-secondary)] transition-colors"
+                  className="text-sm text-zinc-400 hover:text-white transition-colors"
                 >
                   BeFrugal Cashback
                 </Link>
@@ -88,7 +81,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/cashback"
-                  className="text-sm text-muted-foreground hover:text-[var(--text-secondary)] transition-colors"
+                  className="text-sm text-zinc-400 hover:text-white transition-colors"
                 >
                   Cashback Info
                 </Link>
@@ -98,20 +91,18 @@ export function Footer() {
 
           {/* Legal */}
           <div>
-            <h3 className="text-sm font-semibold text-[var(--text-secondary)] dark:text-[var(--text-secondary)] mb-4">
-              About
-            </h3>
+            <h3 className="text-sm font-semibold text-zinc-100 mb-4">About</h3>
             <ul className="space-y-2.5">
               <li>
                 <Link
                   href="/about"
-                  className="text-sm text-muted-foreground hover:text-[var(--text-secondary)] transition-colors"
+                  className="text-sm text-zinc-400 hover:text-white transition-colors"
                 >
                   About Us
                 </Link>
               </li>
               <li>
-                <span className="text-sm text-muted-foreground leading-relaxed block">
+                <span className="text-sm text-zinc-400 leading-relaxed block">
                   Not affiliated with Home Depot
                 </span>
               </li>
@@ -122,7 +113,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="mt-10 pt-8 border-t border-[var(--border-dark)] dark:border-[var(--border-default)]">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p className="text-xs text-muted-foreground order-2 sm:order-1">
+            <p className="text-xs text-zinc-400 order-2 sm:order-1">
               © 2025 Penny Central. Educational use only.
             </p>
             <div className="flex items-center gap-4 order-1 sm:order-2">
@@ -130,7 +121,7 @@ export function Footer() {
                 href="https://www.facebook.com/groups/homedepotonecent"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-[var(--text-secondary)] transition-colors p-2"
+                className="text-zinc-400 hover:text-white transition-colors p-2"
                 aria-label="Facebook Group"
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
