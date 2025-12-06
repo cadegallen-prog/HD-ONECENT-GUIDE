@@ -410,7 +410,9 @@ export default function StoreFinderPage() {
           <h1 className="text-lg sm:text-xl md:text-2xl font-bold tracking-tight text-foreground">
             Store Finder
           </h1>
-          <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">Find Home Depot locations near you</p>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
+            Find Home Depot locations near you
+          </p>
         </div>
       </div>
 

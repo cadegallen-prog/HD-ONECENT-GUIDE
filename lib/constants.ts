@@ -16,6 +16,15 @@ export const COMMUNITY_MEMBER_COUNT_DISPLAY = "40,000+ and counting"
 /** Facebook group URL */
 export const FACEBOOK_GROUP_URL = "https://www.facebook.com/groups/homedepotonecent"
 
+/**
+ * Google Form URL for submitting penny finds.
+ * TODO: Replace with the actual form link created by the user.
+ */
+export const SUBMIT_FIND_FORM_URL = "https://forms.gle/WdP63y6yobs3s1pJ8"
+
+/** Kit (ConvertKit) Landing Page URL */
+export const NEWSLETTER_URL = "https://pennycentral.kit.com"
+
 // ============================================
 // AFFILIATE LINKS
 // ============================================

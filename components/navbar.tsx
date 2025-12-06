@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, Map, Clock, BookOpen, User, Moon, Sun, Book, Menu, X } from "lucide-react"
+import { Home, Map, Clock, BookOpen, User, Moon, Sun, Book, Menu, X, Star } from "lucide-react"
 import { useTheme } from "@/components/theme-provider"
 
 // Professional Penny Logo component
@@ -70,6 +70,7 @@ export function Navbar() {
 
   const navItems = [
     { href: "/", label: "Home", icon: Home },
+    { href: "/penny-list", label: "Penny List", icon: Star },
     { href: "/guide", label: "Guide", icon: Book },
     { href: "/store-finder", label: "Store Finder", icon: Map },
     { href: "/trip-tracker", label: "Trip Tracker", icon: Clock },

@@ -1,0 +1,46 @@
+[
+  {
+    "id": "1",
+    "name": "Glacier Bay 24in Towel Bar - Bronze",
+    "sku": "1001-234-567",
+    "price": 0.01,
+    "dateAdded": "2025-12-05",
+    "status": "Nationwide",
+    "quantityFound": "12+ (Full Shelf)",
+    "imageUrl": "/images/placeholder-product.jpg",
+    "notes": "Confirmed in FL, TX, and CA. Check the overhead bins in the bath aisle."
+  },
+  {
+    "id": "2",
+    "name": "Husky 50ft Extension Cord (Heavy Duty)",
+    "sku": "555-111-222",
+    "price": 0.01,
+    "dateAdded": "2025-12-04",
+    "status": "Regional",
+    "quantityFound": "3 found",
+    "imageUrl": "/images/placeholder-product.jpg",
+    "notes": "Clearance sticker might still say $15.00. Scan it! Found in clearance bay."
+  },
+  {
+    "id": "3",
+    "name": "Ryobi 18V One+ Battery 2-Pack (Old Packaging)",
+    "sku": "999-888-777",
+    "price": 0.01,
+    "dateAdded": "2025-12-02",
+    "status": "Rare",
+    "quantityFound": "1 (Hidden)",
+    "imageUrl": "/images/placeholder-product.jpg",
+    "notes": "Look for the yellow corner on the box. Found behind new stock."
+  },
+  {
+    "id": "4",
+    "name": "Hampton Bay Outdoor LED Sconce",
+    "sku": "333-444-555",
+    "price": 0.01,
+    "dateAdded": "2025-12-01",
+    "status": "Nationwide",
+    "quantityFound": "6 found",
+    "imageUrl": "/images/placeholder-product.jpg",
+    "notes": "Box is white with blue text. Check the lighting clearance endcap."
+  }
+]

@@ -267,7 +267,9 @@ export const StoreMap = React.memo(function StoreMap({
 
                   {/* Address block */}
                   <div className="pt-1.5 border-t border-border/50">
-                    <p className="text-[11px] text-muted-foreground leading-snug">{store.address}</p>
+                    <p className="text-[11px] text-muted-foreground leading-snug">
+                      {store.address}
+                    </p>
                     <p className="text-[11px] text-muted-foreground leading-snug">
                       {store.city}, {store.state} {store.zip}
                     </p>
