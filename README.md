@@ -77,6 +77,7 @@ public/                 # Static assets
 ## Critical Dec 2025 Updates
 
 ### Autonomous Penny List (Live)
+
 - **Live CSV Feed:** Google Form responses auto-published to site every hour
 - **Files:** `lib/fetch-penny-data.ts`, `app/penny-list/page.tsx`
 - **How it works:** Publish your Google Sheet as CSV → set `GOOGLE_SHEET_URL` in Vercel env → updates hourly with no manual work
@@ -84,6 +85,7 @@ public/                 # Static assets
 - **Zero moderation overhead:** All submissions auto-include; delete bad rows in Sheet if needed
 
 ### Setup Required
+
 1. In your Google Sheet response, go **File → Share → Publish to web**
 2. Select **Form Responses 1** → **CSV** → Copy link
 3. Add to Vercel environment: `GOOGLE_SHEET_URL=<your-csv-link>`
@@ -112,6 +114,7 @@ public/                 # Static assets
 - **`dev-next`** — Development branch. All feature work happens here. Merged to main when ready.
 
 **Workflow:**
+
 1. Work on `dev-next`
 2. Commit + lint/build check
 3. Merge `dev-next → main` when stable

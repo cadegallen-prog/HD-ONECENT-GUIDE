@@ -58,12 +58,14 @@ Agents: keep this file short and useful. Update it when you actually finish or s
 **What:** Community can now submit penny finds via a simple Google Form. Data auto-publishes to the site every hour with zero manual intervention.
 
 **Why it matters:**
+
 - Converts 40,000 community members into data sources
 - Creates a real-time, crowd-sourced intelligence feed
 - Dramatically increases site value and stickiness
 - Requires no founder time to manage (just Google Sheet moderation)
 
 **How it works:**
+
 1. Community submits finds via Google Form (visible link on site)
 2. Google Sheet auto-collects responses (Google handles this)
 3. Site fetches CSV hourly and renders on `/penny-list`
@@ -71,12 +73,14 @@ Agents: keep this file short and useful. Update it when you actually finish or s
 5. Founder can delete bad rows directly in Sheet if needed
 
 **Technical setup:**
+
 - `lib/fetch-penny-data.ts` — Parses CSV with field aliases (handles any column name variation)
 - `app/penny-list/page.tsx` — Server-side rendering with 1-hour revalidation
 - `papaparse` library — Lightweight CSV parsing
 - No database needed; no user auth needed; no infrastructure complexity
 
 **For no-code owner:**
+
 - Set `GOOGLE_SHEET_URL` in Vercel environment (one-time, 2 min)
 - Google Form is already live and collecting responses
 - That's it. Site updates itself hourly.
@@ -107,6 +111,7 @@ Agents: keep this file short and useful. Update it when you actually finish or s
 ### Immediate (Week 1—2)
 
 **What you need to do:**
+
 1. ✅ Set `GOOGLE_SHEET_URL` in Vercel (copy the published CSV link from your Sheet)
 2. ✅ Monitor the first 5–10 submissions to ensure quality
 3. ✅ Delete any spam or obviously bad entries from the Sheet
@@ -117,11 +122,13 @@ Agents: keep this file short and useful. Update it when you actually finish or s
 ### Month 1
 
 **Content you can add (no coding):**
+
 - Quick "How to Submit a Find" guide (in Facebook group or site FAQ)
 - Highlight interesting finds in group posts (drives traffic back to site)
 - Ask community to suggest which categories matter most (Rare vs Common)
 
 **What not to do:**
+
 - Don't overthink moderation; let crowd-sourced quality control work
 - Don't add heavy curation rules (kills participation)
 - Don't try to manually verify every entry (defeats purpose)
@@ -129,11 +136,13 @@ Agents: keep this file short and useful. Update it when you actually finish or s
 ### Months 2–3
 
 **Scale:**
+
 - Site becomes the single source of truth for recent penny finds
 - Community benefits from seeing what others found (motivating)
 - You get free, real-time market intel on which items are clearing
 
 **Optional enhancements (if you want):**
+
 - Email summary of top finds (no coding needed; use Zapier/Make)
 - Tier/rarity filters on penny list (AI agent can add in 30 min)
 - Regional breakdown (what's clearing in your state vs others)
@@ -141,6 +150,7 @@ Agents: keep this file short and useful. Update it when you actually finish or s
 ### Ongoing
 
 **Maintenance burden (realistic):**
+
 - 5 min/week: Delete obvious spam from the Sheet
 - 1 message/month: Post in group asking for submissions
 - That's it.
@@ -201,23 +211,27 @@ Agents: keep this file short and useful. Update it when you actually finish or s
 ## 8. When to Ask AI for Help
 
 **Easy wins to delegate (< 2 hours):**
+
 - "Add a filter/sort to penny list"
 - "Style/layout improvements"
 - "Add a new page (e.g., FAQ, How-To Guide)"
 - "Documentation updates"
 
 **Medium lifts (2–4 hours):**
+
 - "Wire up moderation (approval column)"
 - "Add email digest automation"
 - "Regional breakdown feature"
 
 **Get technical co-founder for (> 4 hours or uncertain):**
+
 - Database/auth changes
 - Major architecture shifts
 - Performance optimization
 - Third-party integrations (payment, auth, etc.)
 
 **Don't bother coding:**
+
 - Marketplace features (buying/selling)
 - Forum or comments (complexity; community should stay on Facebook)
 - Gamification (badges, leaderboards)
