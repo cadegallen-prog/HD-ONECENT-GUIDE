@@ -35,8 +35,7 @@ function PennyLogo({ className = "" }: { className?: string }) {
         x="16"
         y="21"
         textAnchor="middle"
-        className="text-zinc-800 dark:text-[var(--text-secondary)] font-bold"
-        style={{ fontSize: "14px", fontFamily: "system-ui" }}
+        className="text-zinc-800 dark:text-[var(--text-secondary)] font-bold text-sm"
         fill="currentColor"
       >
         1
@@ -46,8 +45,7 @@ function PennyLogo({ className = "" }: { className?: string }) {
         x="23"
         y="12"
         textAnchor="middle"
-        className="text-zinc-700 dark:text-zinc-400"
-        style={{ fontSize: "10px", fontFamily: "system-ui" }}
+        className="text-zinc-700 dark:text-zinc-400 text-xs"
         fill="currentColor"
       >
         ¢
