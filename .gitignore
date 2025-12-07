@@ -28,9 +28,6 @@ yarn-error.log*
 # vercel
 .vercel
 
-# large generated data
-data/home-depot-stores.json
-
 # local experiments / scratch
 experimental_scraper/
 nul
