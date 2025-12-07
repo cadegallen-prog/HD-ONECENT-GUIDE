@@ -39,6 +39,59 @@ import sampleStoresData from "@/data/home-depot-stores.sample.json"
 
 const MAX_STORES = 20
 
+const STATE_ABBREV_MAP: Record<string, string> = {
+  alabama: "AL",
+  alaska: "AK",
+  arizona: "AZ",
+  arkansas: "AR",
+  california: "CA",
+  colorado: "CO",
+  connecticut: "CT",
+  delaware: "DE",
+  florida: "FL",
+  georgia: "GA",
+  hawaii: "HI",
+  idaho: "ID",
+  illinois: "IL",
+  indiana: "IN",
+  iowa: "IA",
+  kansas: "KS",
+  kentucky: "KY",
+  louisiana: "LA",
+  maine: "ME",
+  maryland: "MD",
+  massachusetts: "MA",
+  michigan: "MI",
+  minnesota: "MN",
+  mississippi: "MS",
+  missouri: "MO",
+  montana: "MT",
+  nebraska: "NE",
+  nevada: "NV",
+  "new hampshire": "NH",
+  "new jersey": "NJ",
+  "new mexico": "NM",
+  "new york": "NY",
+  "north carolina": "NC",
+  "north dakota": "ND",
+  ohio: "OH",
+  oklahoma: "OK",
+  oregon: "OR",
+  pennsylvania: "PA",
+  "rhode island": "RI",
+  "south carolina": "SC",
+  "south dakota": "SD",
+  tennessee: "TN",
+  texas: "TX",
+  utah: "UT",
+  vermont: "VT",
+  virginia: "VA",
+  washington: "WA",
+  "west virginia": "WV",
+  wisconsin: "WI",
+  wyoming: "WY",
+}
+
 const bannedNameTokens = [
   "ace hardware",
   "innovation center",
@@ -117,8 +170,8 @@ const allStores: StoreLocation[] = (sampleStoresData as StoreLocation[])
   .map(normalizeStore)
   .filter((s) => isValidStore(s.name) && hasValidCoordinates(s))
 
-// Default center (Atlanta, GA)
-const DEFAULT_CENTER: [number, number] = [33.749, -84.388]
+// Default center (Geographic center of contiguous US - Lebanon, KS area)
+const DEFAULT_CENTER: [number, number] = [39.8283, -98.5795]
 
 const getAverageCoordinates = (stores: StoreLocation[]) => {
   const totals = stores.reduce(
@@ -204,6 +257,16 @@ export default function StoreFinderPage() {
     load()
     return () => {
       cancelled = true
+    }
+  }, [])
+
+  // Auto-request user location on page load (runs once)
+  useEffect(() => {
+    // Only auto-request if user hasn't interacted yet
+    const hasRequestedBefore = sessionStorage.getItem("hd-location-requested")
+    if (!hasRequestedBefore && !geolocationResolved) {
+      sessionStorage.setItem("hd-location-requested", "true")
+      getUserLocation()
     }
   }, [])
 
@@ -312,6 +375,41 @@ export default function StoreFinderPage() {
       return
     }
 
+    // Check if query is a 5-digit ZIP code
+    const zipMatch = trimmedQuery.match(/^\d{5}$/)
+    if (zipMatch) {
+      // Geocode ZIP code using free Nominatim API (OpenStreetMap)
+      const geocodeZip = async () => {
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/search?postalcode=${trimmedQuery}&country=US&format=json&limit=1`,
+            {
+              headers: {
+                "User-Agent": "PennyCentral.com Store Finder",
+              },
+            }
+          )
+          const data = await response.json()
+          if (data && data.length > 0) {
+            const lat = parseFloat(data[0].lat)
+            const lng = parseFloat(data[0].lon)
+            const closestStores = getClosestStores(allLoadedStores, lat, lng)
+            setDisplayedStores(closestStores)
+            setMapCenter([lat, lng])
+            setSelectedStore(closestStores[0] || null)
+          } else {
+            // ZIP not found, fall through to regular search
+            alert(`ZIP code ${trimmedQuery} not found. Try searching by city name instead.`)
+          }
+        } catch (error) {
+          console.error("Geocoding error:", error)
+          alert("Could not geocode ZIP code. Try searching by city name instead.")
+        }
+      }
+      geocodeZip()
+      return
+    }
+
     const tokens = sanitizeText(trimmedQuery)
       .toLowerCase()
       .split(/[\s,]+/)
@@ -324,6 +422,14 @@ export default function StoreFinderPage() {
       return
     }
 
+    // Expand tokens to include state abbreviations
+    const expandedTokens = [...tokens]
+    tokens.forEach((token) => {
+      if (STATE_ABBREV_MAP[token]) {
+        expandedTokens.push(STATE_ABBREV_MAP[token].toLowerCase())
+      }
+    })
+
     const scoredStores = allLoadedStores.map((store) => {
       const fields = [
         store.name,
@@ -334,7 +440,7 @@ export default function StoreFinderPage() {
         store.number || "",
       ].map((value) => value.toLowerCase())
 
-      const score = tokens.reduce(
+      const score = expandedTokens.reduce(
         (count, token) => count + (fields.some((field) => field.includes(token)) ? 1 : 0),
         0
       )
@@ -343,7 +449,7 @@ export default function StoreFinderPage() {
     })
 
     let referenceStores = scoredStores
-      .filter(({ score }) => score === tokens.length && tokens.length > 0)
+      .filter(({ score }) => score >= tokens.length && tokens.length > 0)
       .map(({ store }) => store)
 
     if (referenceStores.length === 0) {

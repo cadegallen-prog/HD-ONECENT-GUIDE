@@ -4,7 +4,7 @@ import * as React from "react"
 import { MapContainer, TileLayer, Marker, CircleMarker, useMap, Popup } from "react-leaflet"
 import type { Marker as LeafletMarker } from "leaflet"
 import "leaflet/dist/leaflet.css"
-import { getStoreTitle, getStoreUrl, formatStoreHours } from "@/lib/stores"
+import { getStoreUrl, formatStoreHours, cleanStoreName, formatStoreNumber } from "@/lib/stores"
 import type { StoreLocation } from "@/lib/stores"
 
 interface StoreMapProps {
@@ -231,67 +231,43 @@ export const StoreMap = React.memo(function StoreMap({
                 autoPan={true}
                 autoPanPadding={[50, 50]}
                 keepInView={false}
-                maxWidth={220}
-                minWidth={200}
+                maxWidth={180}
+                minWidth={160}
                 closeButton={false}
               >
-                <div className="space-y-1.5 text-left p-1">
+                <div className="space-y-1 text-left p-0.5">
                   {/* Store name and number */}
                   <div className="flex justify-between items-start gap-2">
-                    <p className="font-bold text-sm text-foreground leading-tight">
-                      {getStoreTitle(store)}
+                    <p className="font-bold text-xs text-foreground leading-tight">
+                      {cleanStoreName(store.name)} #{formatStoreNumber(store.number)}
                     </p>
-                    {/* Distance badge - only show if meaningful */}
+                    {/* Distance - rounded to whole number */}
                     {store.distance !== undefined && store.distance > 0.1 && (
-                      <span className="text-[10px] font-medium bg-muted px-1.5 py-0.5 rounded text-muted-foreground whitespace-nowrap">
-                        {store.distance.toFixed(1)} mi
+                      <span className="text-[10px] font-medium text-muted-foreground whitespace-nowrap">
+                        {Math.round(store.distance)} mi
                       </span>
                     )}
                   </div>
 
-                  {/* Store hours - compact display */}
+                  {/* Store hours - single line compact */}
                   {(store.hours?.weekday || store.hours?.weekend) && (
-                    <div className="text-[11px] text-muted-foreground leading-snug">
-                      {(() => {
-                        const formatted = formatStoreHours(store.hours)
-                        return (
-                          <div className="space-y-0.5">
-                            <p>{formatted.weekday}</p>
-                            <p>{formatted.saturday}</p>
-                            <p>{formatted.sunday}</p>
-                          </div>
-                        )
-                      })()}
-                    </div>
+                    <p className="text-[10px] text-muted-foreground">
+                      {formatStoreHours(store.hours).compact}
+                    </p>
                   )}
 
-                  {/* Address block */}
-                  <div className="pt-1.5 border-t border-border/50">
-                    <p className="text-[11px] text-muted-foreground leading-snug">
-                      {store.address}
-                    </p>
-                    <p className="text-[11px] text-muted-foreground leading-snug">
-                      {store.city}, {store.state} {store.zip}
-                    </p>
-                  </div>
-
-                  {/* Phone link */}
-                  {store.phone && (
-                    <a
-                      href={`tel:${store.phone}`}
-                      className="block text-[11px] font-medium text-blue-600 dark:text-blue-400 hover:underline mt-0.5"
-                    >
-                      {store.phone}
-                    </a>
-                  )}
+                  {/* Address - single line */}
+                  <p className="text-[10px] text-muted-foreground leading-snug pt-0.5">
+                    {store.city}, {store.state}
+                  </p>
 
                   {/* Action links */}
-                  <div className="pt-2 flex gap-2">
+                  <div className="pt-1 flex gap-1.5">
                     <a
                       href={`https://www.google.com/maps/dir/?api=1&destination=${store.lat},${store.lng}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 text-center bg-primary text-primary-foreground text-[10px] font-medium py-1.5 rounded hover:bg-primary/90 transition-colors"
+                      className="flex-1 text-center bg-primary text-primary-foreground text-[10px] font-medium py-1 rounded hover:bg-primary/90 transition-colors"
                     >
                       Directions
                     </a>
@@ -299,7 +275,7 @@ export const StoreMap = React.memo(function StoreMap({
                       href={getStoreUrl(store)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 text-center bg-secondary text-secondary-foreground text-[10px] font-medium py-1.5 rounded hover:bg-secondary/80 transition-colors"
+                      className="flex-1 text-center bg-secondary text-secondary-foreground text-[10px] font-medium py-1 rounded hover:bg-secondary/80 transition-colors"
                     >
                       Details
                     </a>
