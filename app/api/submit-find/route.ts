@@ -1,20 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { promises as fs } from "fs"
-import path from "path"
-
-interface FindSubmission {
-  id: string
-  sku: string
-  storeName: string
-  storeCity: string
-  storeState: string
-  dateFound: string
-  quantity?: string
-  notes?: string
-  submittedAt: string
-  status: "pending" | "approved" | "rejected"
-  validationScore?: number
-}
+import { sql } from "@vercel/postgres"
 
 // Basic SKU validation
 function validateSKU(sku: string): boolean {
@@ -22,10 +7,15 @@ function validateSKU(sku: string): boolean {
   return cleaned.length === 6 || cleaned.length === 10
 }
 
-// Calculate basic fraud score
-function calculateValidationScore(
-  submission: Omit<FindSubmission, "id" | "submittedAt" | "status" | "validationScore">
-): number {
+function calculateValidationScore(submission: {
+  sku: string
+  storeName: string
+  storeCity: string
+  storeState: string
+  dateFound: string
+  quantity?: string
+  notes?: string
+}): number {
   let score = 0
 
   // Valid SKU format
@@ -75,41 +65,24 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Calculate validation score
     const validationScore = calculateValidationScore(body)
+    const cleanedSku = body.sku.replace(/\D/g, "")
 
-    // Create submission object
-    const submission: FindSubmission = {
-      id: `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      sku: body.sku.replace(/\D/g, ""), // Clean SKU
-      storeName: body.storeName.trim(),
-      storeCity: body.storeCity?.trim() || "",
-      storeState: body.storeState.toUpperCase(),
-      dateFound: body.dateFound,
-      quantity: body.quantity?.trim(),
-      notes: body.notes?.trim(),
-      submittedAt: new Date().toISOString(),
-      status: "pending",
-      validationScore,
-    }
-
-    // Read existing submissions
-    const filePath = path.join(process.cwd(), "data", "pending-submissions.json")
-    let submissions: FindSubmission[] = []
-
-    try {
-      const fileContent = await fs.readFile(filePath, "utf-8")
-      submissions = JSON.parse(fileContent)
-    } catch {
-      // File doesn't exist or is empty, start with empty array
-      submissions = []
-    }
-
-    // Add new submission
-    submissions.push(submission)
-
-    // Write back to file
-    await fs.writeFile(filePath, JSON.stringify(submissions, null, 2))
+    await sql`
+      INSERT INTO submissions (
+        sku, store_name, store_city, store_state, 
+        date_found, quantity, notes, validation_score
+      ) VALUES (
+        ${cleanedSku},
+        ${body.storeName.trim()},
+        ${body.storeCity?.trim() || ""},
+        ${body.storeState.toUpperCase()},
+        ${body.dateFound},
+        ${body.quantity?.trim() || null},
+        ${body.notes?.trim() || null},
+        ${validationScore}
+      )
+    `
 
     return NextResponse.json({
       success: true,

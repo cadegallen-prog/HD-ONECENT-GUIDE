@@ -5,6 +5,7 @@
     "sku": "1001234567",
     "price": 0.01,
     "dateAdded": "2025-12-05",
+    "tier": "Very Common",
     "status": "Nationwide",
     "quantityFound": "12+ (Full Shelf)",
     "imageUrl": "/images/placeholder-product.jpg",
@@ -21,6 +22,7 @@
     "sku": "555111222",
     "price": 0.01,
     "dateAdded": "2025-12-04",
+    "tier": "Common",
     "status": "Regional",
     "quantityFound": "3 found",
     "imageUrl": "/images/placeholder-product.jpg",
@@ -36,6 +38,7 @@
     "sku": "999888777",
     "price": 0.01,
     "dateAdded": "2025-12-02",
+    "tier": "Rare",
     "status": "Rare",
     "quantityFound": "1 (Hidden)",
     "imageUrl": "/images/placeholder-product.jpg",
@@ -50,6 +53,7 @@
     "sku": "333444555",
     "price": 0.01,
     "dateAdded": "2025-12-01",
+    "tier": "Very Common",
     "status": "Nationwide",
     "quantityFound": "6 found",
     "imageUrl": "/images/placeholder-product.jpg",
@@ -59,6 +63,43 @@
       "TX": 2,
       "OH": 1,
       "CA": 1
+    }
+  },
+  {
+    "id": "5",
+    "name": "Milwaukee Packout Small Parts Organizer (Last Year Model)",
+    "sku": "777222444",
+    "price": 0.01,
+    "dateAdded": "2025-12-03",
+    "tier": "Common",
+    "status": "Regional",
+    "quantityFound": "2-3 per store",
+    "imageUrl": "/images/placeholder-product.jpg",
+    "notes": "Older latch style. Check top shelf in tool storage aisle.",
+    "locations": {
+      "IL": 1,
+      "WI": 1,
+      "MI": 1,
+      "IN": 1
+    }
+  },
+  {
+    "id": "6",
+    "name": "Behr Premium Plus Interior Paint (Mis-tint, 1 Gal)",
+    "sku": "444222111",
+    "price": 0.01,
+    "dateAdded": "2025-12-06",
+    "tier": "Very Common",
+    "status": "Regional",
+    "quantityFound": "Endcap full",
+    "imageUrl": "/images/placeholder-product.jpg",
+    "notes": "Look for yellow clearance sticker with 01¢. Often near paint desk returns.",
+    "locations": {
+      "NY": 2,
+      "NJ": 2,
+      "PA": 2,
+      "MD": 1,
+      "VA": 1
     }
   }
 ]
