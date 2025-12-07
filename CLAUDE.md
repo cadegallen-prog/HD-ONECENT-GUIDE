@@ -39,7 +39,7 @@ It's the official resource for a 40,000+ member Facebook group.
 ## Known Fragile Areas
 
 - React-Leaflet hydration (must use dynamic imports with ssr: false)
-- [Add other areas you've had repeated issues with]
+- Store finder search relies on Zippopotam API for ZIP geocoding (free, no key needed)
 
 ## Current Priorities
 
