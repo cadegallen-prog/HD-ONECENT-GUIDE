@@ -71,10 +71,10 @@ export function Navbar() {
   const navItems = [
     { href: "/", label: "Home", icon: Home },
     { href: "/penny-list", label: "Penny List", icon: Star },
+    { href: "/report-find", label: "Report Find", icon: BookOpen },
     { href: "/guide", label: "Guide", icon: Book },
     { href: "/store-finder", label: "Store Finder", icon: Map },
     { href: "/trip-tracker", label: "Trip Tracker", icon: Clock },
-    { href: "/resources", label: "Resources", icon: BookOpen },
     { href: "/about", label: "About", icon: User },
   ]
 

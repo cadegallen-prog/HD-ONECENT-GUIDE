@@ -8,6 +8,7 @@
 ## The 3-Step Process
 
 ### Step 1: Review Submissions (10 min)
+
 1. Open your Google Form responses
 2. Click **Responses** → **Green Sheets Icon**
 3. Scan for items with:
@@ -17,12 +18,15 @@
    - ✅ Recent date (within 7 days)
 
 Skip items that are:
+
 - ❌ One-off reports with no confirmation
 - ❌ Older than 2 weeks
 - ❌ Vague or missing details
 
 ### Step 2: Copy Best Items (3 min)
+
 From the spreadsheet, gather your top **3-5 items**:
+
 - Item name
 - SKU (6 or 10 digits)
 - Quantity found
@@ -34,6 +38,7 @@ From the spreadsheet, gather your top **3-5 items**:
 **File to edit:** `data/penny-list.json`
 
 **Format to use:**
+
 ```json
 {
   "id": "5",
@@ -49,11 +54,13 @@ From the spreadsheet, gather your top **3-5 items**:
 ```
 
 **Status options:**
+
 - `"Nationwide"` — Reported in 3+ states or multiple regions
 - `"Regional"` — Reported in 1-2 states
 - `"Rare"` — Single report or very few
 
 **Commit & Push:**
+
 ```bash
 git add data/penny-list.json
 git commit -m "Weekly penny list update"
@@ -97,12 +104,12 @@ Filter these out. Community quality > quantity.
 
 ## Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| Can't find responses | Check you're in the right Google Form |
-| JSON file won't save | Make sure you're editing the right file: `data/penny-list.json` |
-| Changes don't appear on site | Give Vercel 3-5 min to deploy, then refresh |
-| Too many submissions (50+/week) | Start a second curation pass or discuss Phase 2 automation |
+| Issue                           | Solution                                                        |
+| ------------------------------- | --------------------------------------------------------------- |
+| Can't find responses            | Check you're in the right Google Form                           |
+| JSON file won't save            | Make sure you're editing the right file: `data/penny-list.json` |
+| Changes don't appear on site    | Give Vercel 3-5 min to deploy, then refresh                     |
+| Too many submissions (50+/week) | Start a second curation pass or discuss Phase 2 automation      |
 
 ---
 

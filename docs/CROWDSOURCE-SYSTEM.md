@@ -14,6 +14,7 @@ You want a crowdsourced penny list, but **you cannot manually curate submissions
 ## The Solution: Three-Tier System
 
 ### TIER 1: Passive Collection (Requires No Your Action)
+
 ✅ **Google Form** collects all submissions automatically.  
 ✅ **Submissions appear in a public Google Sheet** (sharable, live-updated).  
 ✅ **Community can see what's been reported** (transparency, no secrets).
@@ -21,7 +22,9 @@ You want a crowdsourced penny list, but **you cannot manually curate submissions
 **Your time cost:** Zero (happens automatically).
 
 ### TIER 2: Lightweight Curation (15 min/week)
+
 You review the Google Sheet **1x per week** and:
+
 1. Look for **high-confidence items** (multiple reports of same SKU, consistent dates/stores).
 2. Copy the top 3-5 items into `data/penny-list.json`.
 3. Website updates automatically (no code changes needed).
@@ -29,6 +32,7 @@ You review the Google Sheet **1x per week** and:
 **Your time cost:** 15 minutes on, say, Sunday night.
 
 ### TIER 3: Community Voting (Future Enhancement)
+
 Long-term: Let the community upvote/downvote items directly on the site.  
 This surfaces **the best finds without you doing anything**.
 
@@ -39,6 +43,7 @@ This surfaces **the best finds without you doing anything**.
 ## How It Works Today (Phase 1)
 
 ### The Google Form
+
 - Collects: Item Name, SKU, Quantity, Store Location, Date, Photos, Notes
 - **Response Validation** prevents garbage data
 - **File uploads** build trust (people submit evidence)
@@ -62,6 +67,7 @@ This surfaces **the best finds without you doing anything**.
 ## Your Weekly Workflow (15 min)
 
 ### Step 1: Open the Form Responses (2 min)
+
 1. Go to your Google Form: [https://forms.gle/WdP63y6yobs3s1pJ8](https://forms.gle/WdP63y6yobs3s1pJ8)
 2. Click **Responses** tab
 3. Click **Green Sheets Icon** → "Open in Sheets"
@@ -71,12 +77,14 @@ You'll see a spreadsheet with all submissions, sorted by date.
 ### Step 2: Identify High-Signal Findings (10 min)
 
 **Look for:**
+
 - **Duplicate SKUs** (same item reported multiple times = strong signal)
 - **Multiple Regions** (nationwide = higher value)
 - **Recent Dates** (within last 7 days = fresher)
 - **Photos Attached** (proof = more trustworthy)
 
 **Skip:**
+
 - Single reports with no confirmation
 - Super old findings (>2 weeks)
 - Items with unclear/inconsistent details
@@ -141,12 +149,14 @@ Share → Anyone with the link can view
 ```
 
 **Benefits:**
+
 - Community sees their submissions are being considered
 - Reduces duplicate reports (they see it's already there)
 - Builds trust ("I know my data is being used")
 - No pressure on you to respond quickly
 
 **You can link to it on the penny-list page:**
+
 > "See all community submissions (reviewed weekly): [link to sheet]"
 
 ---
@@ -175,10 +185,12 @@ Once you have enough submissions flowing, you could:
 ## Scaling Guardrails
 
 **If submissions exceed 20/week:**
+
 - Consider a second weekly pass (still only 30 min total)
 - Or: Move to community voting (automate your curation)
 
 **If submissions exceed 50/week:**
+
 - You probably need a backend (database, voting system)
 - But that's a great problem to have!
 
@@ -187,6 +199,7 @@ Once you have enough submissions flowing, you could:
 ## Monthly Check-In
 
 Every month, ask:
+
 - Are submissions trending toward quality items or noise?
 - Is the community happy with update frequency?
 - Do you have time to maintain this?
@@ -197,14 +210,14 @@ Adjust your curation threshold accordingly.
 
 ## Summary
 
-| Aspect | Approach |
-|--------|----------|
-| **Collection** | Google Form (automatic) |
-| **Storage** | Google Sheet (free, visible) |
-| **Curation** | You (1x/week, 15 min) |
-| **Publishing** | JSON file (no code changes) |
-| **Deployment** | Git push → Vercel (auto) |
-| **Time Cost** | 30 min/week |
+| Aspect          | Approach                            |
+| --------------- | ----------------------------------- |
+| **Collection**  | Google Form (automatic)             |
+| **Storage**     | Google Sheet (free, visible)        |
+| **Curation**    | You (1x/week, 15 min)               |
+| **Publishing**  | JSON file (no code changes)         |
+| **Deployment**  | Git push → Vercel (auto)            |
+| **Time Cost**   | 30 min/week                         |
 | **Scalability** | Sustainable to ~50 submissions/week |
 
 ---

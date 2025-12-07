@@ -39,3 +39,5 @@ archive/
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+.vercel
+.env*.local
