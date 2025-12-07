@@ -379,7 +379,7 @@ export default function StoreFinderPage() {
     const zipMatch = trimmedQuery.match(/^\d{5}$/)
     if (zipMatch) {
       // First, try to find exact ZIP match in our data
-      const storesWithZip = allLoadedStores.filter(store => store.zip === trimmedQuery)
+      const storesWithZip = allLoadedStores.filter((store) => store.zip === trimmedQuery)
 
       if (storesWithZip.length > 0) {
         // Found exact match - use that store's location as center
@@ -394,7 +394,24 @@ export default function StoreFinderPage() {
       // No exact match - try geocoding for nearby area
       const geocodeZip = async () => {
         try {
-          const response = await fetch(
+          // Try Zippopotam first (more reliable, free, no rate limit)
+          const zipResponse = await fetch(`https://api.zippopotam.us/us/${trimmedQuery}`)
+
+          if (zipResponse.ok) {
+            const zipData = await zipResponse.json()
+            if (zipData && zipData.places && zipData.places.length > 0) {
+              const lat = parseFloat(zipData.places[0].latitude)
+              const lng = parseFloat(zipData.places[0].longitude)
+              const closestStores = getClosestStores(allLoadedStores, lat, lng)
+              setDisplayedStores(closestStores)
+              setMapCenter([lat, lng])
+              setSelectedStore(closestStores[0] || null)
+              return
+            }
+          }
+
+          // Fallback to Nominatim if Zippopotam fails
+          const nomResponse = await fetch(
             `https://nominatim.openstreetmap.org/search?postalcode=${trimmedQuery}&country=US&format=json&limit=1`,
             {
               headers: {
@@ -402,16 +419,16 @@ export default function StoreFinderPage() {
               },
             }
           )
-          const data = await response.json()
-          if (data && data.length > 0) {
-            const lat = parseFloat(data[0].lat)
-            const lng = parseFloat(data[0].lon)
+          const nomData = await nomResponse.json()
+          if (nomData && nomData.length > 0) {
+            const lat = parseFloat(nomData[0].lat)
+            const lng = parseFloat(nomData[0].lon)
             const closestStores = getClosestStores(allLoadedStores, lat, lng)
             setDisplayedStores(closestStores)
             setMapCenter([lat, lng])
             setSelectedStore(closestStores[0] || null)
           } else {
-            // ZIP not found via geocoding either - show message
+            // ZIP not found via any geocoding - show no results
             setDisplayedStores([])
             setSelectedStore(null)
           }
