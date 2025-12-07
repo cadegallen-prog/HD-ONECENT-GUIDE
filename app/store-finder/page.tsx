@@ -378,7 +378,20 @@ export default function StoreFinderPage() {
     // Check if query is a 5-digit ZIP code
     const zipMatch = trimmedQuery.match(/^\d{5}$/)
     if (zipMatch) {
-      // Geocode ZIP code using free Nominatim API (OpenStreetMap)
+      // First, try to find exact ZIP match in our data
+      const storesWithZip = allLoadedStores.filter(store => store.zip === trimmedQuery)
+
+      if (storesWithZip.length > 0) {
+        // Found exact match - use that store's location as center
+        const centerStore = storesWithZip[0]
+        const closestStores = getClosestStores(allLoadedStores, centerStore.lat, centerStore.lng)
+        setDisplayedStores(closestStores)
+        setMapCenter([centerStore.lat, centerStore.lng])
+        setSelectedStore(closestStores[0] || null)
+        return
+      }
+
+      // No exact match - try geocoding for nearby area
       const geocodeZip = async () => {
         try {
           const response = await fetch(
@@ -398,12 +411,15 @@ export default function StoreFinderPage() {
             setMapCenter([lat, lng])
             setSelectedStore(closestStores[0] || null)
           } else {
-            // ZIP not found, fall through to regular search
-            alert(`ZIP code ${trimmedQuery} not found. Try searching by city name instead.`)
+            // ZIP not found via geocoding either - show message
+            setDisplayedStores([])
+            setSelectedStore(null)
           }
         } catch (error) {
           console.error("Geocoding error:", error)
-          alert("Could not geocode ZIP code. Try searching by city name instead.")
+          // Silently fail - user can try city search instead
+          setDisplayedStores([])
+          setSelectedStore(null)
         }
       }
       geocodeZip()
