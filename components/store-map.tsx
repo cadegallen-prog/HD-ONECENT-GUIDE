@@ -73,19 +73,13 @@ function MapController({ selectedStore }: { selectedStore?: StoreLocation | null
     if (selectedStore && selectedStore.id !== lastSelectedIdRef.current) {
       lastSelectedIdRef.current = selectedStore.id
 
-      // Re-enable auto-centering on new store selection
-      userHasInteractedRef.current = false
+      if (userHasInteractedRef.current) return
 
-      // Ensure correct coordinates are passed
-      if (!userHasInteractedRef.current) {
-        // Pan to the store (keep current zoom)
-        // Offset slightly for popup visibility if needed, but user requested "not fixed"
-        // We'll just pan to the location.
-        map.panTo([selectedStore.lat + 0.002, selectedStore.lng], {
-          animate: true,
-          duration: 0.5,
-        })
-      }
+      // Pan to the store (keep current zoom) without nudging position to avoid unwanted recentering
+      map.panTo([selectedStore.lat, selectedStore.lng], {
+        animate: true,
+        duration: 0.5,
+      })
     }
   }, [selectedStore, map])
 

@@ -35,7 +35,9 @@ const StoreMap = dynamic(
   }
 )
 
-const MAX_STORES = 20
+// Temporary proof-of-concept mode: intentionally load every store to validate data completeness
+const PROOF_OF_CONCEPT_MODE = true
+const MAX_STORES = PROOF_OF_CONCEPT_MODE ? 5000 : 20
 
 const STATE_ABBREV_MAP: Record<string, string> = {
   alabama: "AL",
@@ -155,13 +157,14 @@ const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: numbe
 
 // Calculate distances and return sorted list limited to MAX_STORES
 const getClosestStores = (stores: StoreLocation[], lat: number, lng: number): StoreLocation[] => {
+  const limit = PROOF_OF_CONCEPT_MODE ? stores.length : MAX_STORES
   const storesWithDistance = stores
     .map((store) => ({
       ...store,
       distance: calculateDistance(lat, lng, store.lat, store.lng),
     }))
     .sort((a, b) => (a.distance || 0) - (b.distance || 0))
-    .slice(0, MAX_STORES)
+    .slice(0, limit)
 
   return storesWithDistance.map((store, index) => ({ ...store, rank: index + 1 }))
 }
@@ -206,6 +209,8 @@ export default function StoreFinderPage() {
   const [favorites, setFavorites] = useState<string[]>([])
   const [allLoadedStores, setAllLoadedStores] = useState<StoreLocation[]>(allStores)
   const allStoresRef = useRef<StoreLocation[]>(allStores)
+  const storesToRender =
+    PROOF_OF_CONCEPT_MODE && displayedStores.length === 0 ? allLoadedStores : displayedStores
 
   const listContainerRef = useRef<HTMLDivElement>(null)
   const storeRefs = useRef<Map<string, HTMLDivElement>>(new Map())
@@ -574,6 +579,12 @@ export default function StoreFinderPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      {PROOF_OF_CONCEPT_MODE && (
+        <div className="bg-red-700 text-white text-center px-4 py-3 text-sm font-semibold">
+          PROOF OF CONCEPT - ALL ~{(allLoadedStores.length || 2007).toLocaleString()} STORES LOADED
+          (mobile will be slow!)
+        </div>
+      )}
       {/* Hero Header - Compact on mobile 
           MOBILE: Reduced padding, smaller text */}
       <div className="border-b border-border bg-card">
@@ -683,8 +694,8 @@ export default function StoreFinderPage() {
               </span>
             ) : (
               <>
-                Showing {displayedStores.length} of {allLoadedStores.length.toLocaleString()} stores
-                • Hours may vary
+                Showing {storesToRender.length} of {allLoadedStores.length.toLocaleString()} stores
+                - Hours may vary
               </>
             )}
           </p>
@@ -706,20 +717,20 @@ export default function StoreFinderPage() {
                 ref={listContainerRef}
                 className="flex-1 lg:flex-none lg:w-80 xl:w-96 min-h-[200px] lg:min-h-0 lg:h-full overflow-y-auto border-t lg:border-t-0 lg:border-r border-border bg-card order-2 lg:order-1"
               >
-                {loadingStores && displayedStores.length === 0 ? (
+                {loadingStores && storesToRender.length === 0 ? (
                   <div className="p-4 space-y-3">
                     {[...Array(5)].map((_, i) => (
                       <div key={i} className="h-20 bg-muted/30 rounded-lg animate-pulse" />
                     ))}
                   </div>
-                ) : displayedStores.length === 0 ? (
+                ) : storesToRender.length === 0 ? (
                   <div className="p-6 sm:p-8 text-center">
                     <MapPin className="h-8 w-8 sm:h-10 sm:w-10 text-muted-foreground mx-auto mb-3" />
                     <p className="text-sm text-muted-foreground">No stores found</p>
                   </div>
                 ) : (
                   <div className="divide-y divide-border">
-                    {displayedStores.map((store, index) => (
+                    {storesToRender.map((store, index) => (
                       <StoreListItem
                         key={store.id}
                         store={store}
@@ -739,7 +750,7 @@ export default function StoreFinderPage() {
               {/* Map Panel - Constrained on mobile, flex on desktop */}
               <div className="h-[280px] sm:h-[320px] lg:flex-1 lg:h-full order-1 lg:order-2 relative z-0">
                 <StoreMap
-                  stores={displayedStores}
+                  stores={storesToRender}
                   center={mapCenter}
                   selectedStore={selectedStore}
                   onSelect={selectStore}
@@ -753,13 +764,13 @@ export default function StoreFinderPage() {
         {/* List View */}
         {viewMode === "list" && (
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-            {loadingStores && displayedStores.length === 0 ? (
+            {loadingStores && storesToRender.length === 0 ? (
               <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
                 {[...Array(6)].map((_, i) => (
                   <div key={i} className="h-40 bg-muted/30 rounded-xl animate-pulse" />
                 ))}
               </div>
-            ) : displayedStores.length === 0 ? (
+            ) : storesToRender.length === 0 ? (
               <div className="text-center py-16 bg-card border border-border rounded-xl">
                 <MapPin className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                 <h2 className="text-lg font-semibold mb-2 text-foreground">No stores found</h2>
@@ -767,7 +778,7 @@ export default function StoreFinderPage() {
               </div>
             ) : (
               <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
-                {displayedStores.map((store, index) => (
+                {storesToRender.map((store, index) => (
                   <StoreCard
                     key={store.id}
                     store={store}
