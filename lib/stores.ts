@@ -277,9 +277,9 @@ export const mergeConsecutiveDays = (dayHours: DayHours): MergedHours => {
   const hoursPerDay = dayNames.map((day) => dayHours[day as keyof DayHours])
 
   // Check if this store has irregular hours
-  const uniqueHours = new Set(hoursPerDay)
-  const isExpanded =
-    uniqueHours.size > 1 || hoursPerDay.some((h) => h === "Closed" || h === "Hours vary")
+  // Expand ONLY if there's a closed day (indicates irregular schedule)
+  const hasClosedDay = hoursPerDay.some((h) => h === "Closed")
+  const isExpanded = hasClosedDay
 
   // Group consecutive days with same hours
   const ranges: Array<{ days: string; hours: string }> = []
