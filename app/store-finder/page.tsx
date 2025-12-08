@@ -300,15 +300,15 @@ export default function StoreFinderPage() {
     localStorage.setItem("hd-penny-favorites", JSON.stringify(favorites))
   }, [favorites])
 
-  // Auto-scroll to selected store in the list (disabled to prevent confusion with rank positions)
-  // useEffect(() => {
-  //   if (selectedStore && listContainerRef.current) {
-  //     const storeElement = storeRefs.current.get(selectedStore.id)
-  //     if (storeElement) {
-  //       storeElement.scrollIntoView({ behavior: "smooth", block: "nearest" })
-  //     }
-  //   }
-  // }, [selectedStore])
+  // Auto-scroll to selected store in the list while maintaining order
+  useEffect(() => {
+    if (selectedStore && listContainerRef.current) {
+      const storeElement = storeRefs.current.get(selectedStore.id)
+      if (storeElement) {
+        storeElement.scrollIntoView({ behavior: "smooth", block: "nearest" })
+      }
+    }
+  }, [selectedStore])
 
   // Get user's current location
   const getUserLocation = useCallback(() => {
@@ -742,7 +742,6 @@ export default function StoreFinderPage() {
                         onSelect={() => selectStore(store)}
                         onToggleFavorite={(e) => toggleFavorite(store.id, e)}
                         ref={(el) => setStoreRef(store.id, el)}
-                        geolocationResolved={geolocationResolved}
                       />
                     ))}
                   </div>
@@ -787,7 +786,6 @@ export default function StoreFinderPage() {
                     index={store.rank ?? index + 1}
                     isFavorite={favorites.includes(store.id)}
                     onToggleFavorite={() => toggleFavorite(store.id)}
-                    geolocationResolved={geolocationResolved}
                   />
                 ))}
               </div>
@@ -808,22 +806,10 @@ interface StoreListItemProps {
   isFavorite: boolean
   onSelect: () => void
   onToggleFavorite: (e: React.MouseEvent) => void
-  geolocationResolved?: boolean
 }
 
 const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
-  (
-    {
-      store,
-      index,
-      isSelected,
-      isFavorite,
-      onSelect,
-      onToggleFavorite,
-      geolocationResolved = false,
-    },
-    ref
-  ) => {
+  ({ store, index, isSelected, isFavorite, onSelect, onToggleFavorite }, ref) => {
     return (
       <div
         ref={ref}
@@ -875,7 +861,7 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
             <p className="text-xs text-muted-foreground mt-1 truncate">{store.address}</p>
 
             <div className="flex items-center gap-2 mt-2">
-              {store.distance !== undefined && geolocationResolved && (
+              {store.distance !== undefined && (
                 <span className="text-xs font-semibold text-[var(--text-secondary)]">
                   {store.distance.toFixed(1)} mi
                 </span>
@@ -971,13 +957,11 @@ function StoreCard({
   index,
   isFavorite,
   onToggleFavorite,
-  geolocationResolved = false,
 }: {
   store: StoreLocation
   index: number
   isFavorite: boolean
   onToggleFavorite: () => void
-  geolocationResolved?: boolean
 }) {
   return (
     <div className="bg-card border border-border rounded-lg p-4 hover:border-[var(--border-strong)] transition-colors">
@@ -1014,7 +998,7 @@ function StoreCard({
         </p>
       </div>
 
-      {store.distance !== undefined && geolocationResolved && (
+      {store.distance !== undefined && (
         <div className="flex items-center gap-2 mb-2">
           <Navigation className="h-3.5 w-3.5 text-[var(--text-muted)]" />
           <span className="text-xs font-semibold text-[var(--text-secondary)]">
