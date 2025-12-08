@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { AlertCircle, CheckCircle2, MapPin, Package, Calendar } from "lucide-react"
+import { trackEvent } from "@/lib/analytics"
 
 export default function ReportFindPage() {
   const [formData, setFormData] = useState({
@@ -37,6 +38,11 @@ export default function ReportFindPage() {
       const data = await response.json()
 
       if (response.ok) {
+        // Track successful submission
+        trackEvent("find_submit", {
+          event_label: "success",
+          value: data.validationScore || 0,
+        })
         setResult({
           success: true,
           message: data.message,
@@ -110,18 +116,24 @@ export default function ReportFindPage() {
               htmlFor="sku"
               className="block text-sm font-medium text-[var(--text-primary)] mb-2"
             >
-              Item SKU <span className="text-red-500">*</span>
+              Item SKU{" "}
+              <span className="text-red-500" aria-hidden="true">
+                *
+              </span>
+              <span className="sr-only">(required)</span>
             </label>
             <input
               type="text"
               id="sku"
               required
+              aria-required="true"
+              aria-describedby="sku-hint"
               value={formData.sku}
               onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
               placeholder="e.g., 1001234567 or 123456"
               className="w-full px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent"
             />
-            <p className="mt-1 text-xs text-[var(--text-muted)]">
+            <p id="sku-hint" className="mt-1 text-xs text-[var(--text-muted)]">
               6 or 10 digit SKU from receipt or Home Depot app
             </p>
           </div>
@@ -132,12 +144,17 @@ export default function ReportFindPage() {
               htmlFor="storeName"
               className="block text-sm font-medium text-[var(--text-primary)] mb-2"
             >
-              Store Name/Number <span className="text-red-500">*</span>
+              Store Name/Number{" "}
+              <span className="text-red-500" aria-hidden="true">
+                *
+              </span>
+              <span className="sr-only">(required)</span>
             </label>
             <input
               type="text"
               id="storeName"
               required
+              aria-required="true"
               value={formData.storeName}
               onChange={(e) => setFormData({ ...formData, storeName: e.target.value })}
               placeholder="e.g., Home Depot #1234 or Brandon"
@@ -168,12 +185,17 @@ export default function ReportFindPage() {
                 htmlFor="storeState"
                 className="block text-sm font-medium text-[var(--text-primary)] mb-2"
               >
-                State <span className="text-red-500">*</span>
+                State{" "}
+                <span className="text-red-500" aria-hidden="true">
+                  *
+                </span>
+                <span className="sr-only">(required)</span>
               </label>
               <input
                 type="text"
                 id="storeState"
                 required
+                aria-required="true"
                 maxLength={2}
                 value={formData.storeState}
                 onChange={(e) =>

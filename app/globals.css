@@ -886,16 +886,18 @@
 
   /* Popup container styling - Light mode */
   .leaflet-popup-content-wrapper {
-    @apply bg-white rounded-xl shadow-lg border border-slate-200;
+    @apply rounded-xl shadow-lg border;
     padding: 0;
     overflow: hidden;
+    background-color: var(--bg-card);
+    border-color: var(--border-default);
   }
 
   .leaflet-popup-content {
     margin: 14px 16px;
     line-height: 1.5;
     font-size: 14px; /* Minimum 12px, using 14px for readability */
-    color: #0f172a; /* slate-900 */
+    color: var(--text-primary);
   }
 
   /* Popup tip (arrow) styling - Light mode */
@@ -904,8 +906,10 @@
   }
 
   .leaflet-popup-tip {
-    @apply bg-white border border-slate-200;
+    @apply border;
     box-shadow: none;
+    background-color: var(--bg-card);
+    border-color: var(--border-default);
   }
 
   /* Close button styling - Light mode */
@@ -936,15 +940,17 @@
      DARK MODE POPUP OVERRIDES
      =============================================== */
   .dark .leaflet-popup-content-wrapper {
-    @apply bg-slate-800 border-slate-700;
+    background-color: var(--bg-card);
+    border-color: var(--border-default);
   }
 
   .dark .leaflet-popup-content {
-    color: #f8fafc; /* slate-50 */
+    color: var(--text-primary);
   }
 
   .dark .leaflet-popup-tip {
-    @apply bg-slate-800 border-slate-700;
+    background-color: var(--bg-card);
+    border-color: var(--border-default);
   }
 
   .dark .leaflet-popup-close-button {

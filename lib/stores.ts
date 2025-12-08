@@ -29,6 +29,11 @@ export interface StoreLocation {
   rank?: number
 }
 
+// Store naming overrides for special locations that need clearer labels
+const STORE_NAME_OVERRIDES_BY_NUMBER: Record<string, string> = {
+  "3203": "SW Omaha",
+}
+
 export const sanitizeText = (value?: string): string => {
   if (!value) return ""
   return (
@@ -82,7 +87,9 @@ export const getStoreUrlNumber = (num?: string): string => {
 }
 
 export const getStoreTitle = (store: StoreLocation): string => {
-  const name = cleanStoreName(store.name)
+  const rawNumber = store.number?.trim()
+  const overrideName = rawNumber ? STORE_NAME_OVERRIDES_BY_NUMBER[rawNumber] : undefined
+  const name = overrideName || cleanStoreName(store.name)
   const formattedNumber = formatStoreNumber(store.number)
   if (formattedNumber) {
     return `${name} #${formattedNumber}`

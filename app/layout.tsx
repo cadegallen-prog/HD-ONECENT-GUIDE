@@ -79,8 +79,57 @@ export default function RootLayout({
             gtag('config', 'G-DJ4RJRX05E');
           `}
         </Script>
+
+        {/* Preconnect hints for faster resource loading */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
+        {/* JSON-LD Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "Penny Central",
+              url: "https://pennycentral.com",
+              description:
+                "The complete guide to finding Home Depot penny items. Learn clearance cycles, in-store hunting strategies, checkout tips, and join 40,000+ penny hunters.",
+              potentialAction: {
+                "@type": "SearchAction",
+                target: {
+                  "@type": "EntryPoint",
+                  urlTemplate: "https://pennycentral.com/store-finder?q={search_term_string}",
+                },
+                "query-input": "required name=search_term_string",
+              },
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "Penny Central",
+              url: "https://pennycentral.com",
+              description:
+                "Community resource for Home Depot penny item hunters with 40,000+ members.",
+              sameAs: ["https://www.facebook.com/groups/homedepotpennies"],
+            }),
+          }}
+        />
       </head>
       <body className="bg-background text-foreground">
+        {/* Skip link for keyboard accessibility */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-[var(--cta-primary)] focus:text-white focus:rounded-lg focus:outline-none"
+        >
+          Skip to main content
+        </a>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -92,7 +141,7 @@ export default function RootLayout({
             <Navbar />
 
             {/* Main content */}
-            <main className="min-h-screen">
+            <main id="main-content" className="min-h-screen">
               {children}
               <Footer />
             </main>

@@ -4,13 +4,7 @@ import * as React from "react"
 import { MapContainer, TileLayer, Marker, CircleMarker, useMap, Popup } from "react-leaflet"
 import type { Marker as LeafletMarker } from "leaflet"
 import "leaflet/dist/leaflet.css"
-import {
-  getStoreUrl,
-  normalizeDayHours,
-  mergeConsecutiveDays,
-  cleanStoreName,
-  formatStoreNumber,
-} from "@/lib/stores"
+import { getStoreUrl, normalizeDayHours, mergeConsecutiveDays, getStoreTitle } from "@/lib/stores"
 import type { StoreLocation } from "@/lib/stores"
 import { Navigation, Info } from "lucide-react"
 
@@ -118,7 +112,7 @@ export const StoreMap = React.memo(function StoreMap({
       className: "map-marker-default",
       html: `
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 36" width="24" height="36" style="display: block; width: 100%; height: 100%;">
-          <path fill="#1f2937" stroke="#ffffff" stroke-width="1.5" d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z"/>
+          <path fill="var(--brand-gunmetal)" stroke="#ffffff" stroke-width="1.5" d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z"/>
           <circle fill="#ffffff" cx="12" cy="12" r="5"/>
         </svg>
       `,
@@ -131,10 +125,10 @@ export const StoreMap = React.memo(function StoreMap({
       className: "map-marker-selected",
       html: `
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 48" width="32" height="48" style="display: block; width: 100%; height: 100%;">
-          <ellipse cx="16" cy="46" rx="8" ry="2" fill="rgba(0,0,0,0.3)"/>
-          <path fill="#1d4ed8" stroke="#ffffff" stroke-width="2" d="M16 0C7.2 0 0 7.2 0 16c0 12 16 32 16 32s16-20 16-32c0-8.8-7.2-16-16-16z"/>
+          <ellipse cx="16" cy="46" rx="8" ry="2" fill="rgba(15,23,42,0.3)"/>
+          <path fill="var(--cta-primary)" stroke="#ffffff" stroke-width="2" d="M16 0C7.2 0 0 7.2 0 16c0 12 16 32 16 32s16-20 16-32c0-8.8-7.2-16-16-16z"/>
           <circle fill="#ffffff" cx="16" cy="16" r="7"/>
-          <circle fill="#1d4ed8" cx="16" cy="16" r="4"/>
+          <circle fill="var(--cta-primary)" cx="16" cy="16" r="4"/>
         </svg>
       `,
       iconSize: [32, 48],
@@ -196,8 +190,8 @@ export const StoreMap = React.memo(function StoreMap({
             center={[userLocation.lat, userLocation.lng]}
             radius={10}
             pathOptions={{
-              color: "#3b82f6",
-              fillColor: "#3b82f6",
+              color: "var(--cta-primary)",
+              fillColor: "var(--cta-primary)",
               fillOpacity: 0.6,
               weight: 3,
             }}
@@ -237,10 +231,8 @@ export const StoreMap = React.memo(function StoreMap({
               >
                 <div className="text-left p-4 bg-[var(--bg-elevated)] text-[var(--text-primary)] rounded-lg shadow-md border border-[var(--border-default)]">
                   <div className="mb-3 pr-8 relative">
-                    <h3 className="font-bold text-sm leading-tight">
-                      {cleanStoreName(store.name)} #{formatStoreNumber(store.number)}
-                    </h3>
-                    <div className="absolute -top-1 -right-1 bg-[var(--cta-primary)] text-[var(--cta-text)] text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
+                    <h3 className="font-bold text-sm leading-tight">{getStoreTitle(store)}</h3>
+                    <div className="absolute -top-1 -right-1 bg-[var(--cta-primary)] text-[var(--cta-text)] text-xs leading-none font-bold px-1.5 py-0.5 rounded-full shadow-sm">
                       #{rank}
                     </div>
                   </div>
@@ -252,7 +244,7 @@ export const StoreMap = React.memo(function StoreMap({
                     {store.phone && <p>{store.phone}</p>}
                   </div>
                   <div className="text-xs text-[var(--text-primary)] mb-4 space-y-0.5">
-                    <div className="font-semibold text-[var(--text-secondary)] text-[10px] uppercase tracking-wider mb-1">
+                    <div className="font-semibold text-[var(--text-secondary)] text-xs uppercase tracking-wider mb-1">
                       Hours
                     </div>
                     {mergedHours.isExpanded
@@ -288,7 +280,7 @@ export const StoreMap = React.memo(function StoreMap({
                       href={`https://www.google.com/maps/dir/?api=1&destination=${store.lat},${store.lng}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 text-center bg-[var(--cta-primary)] text-[var(--cta-text)] text-xs font-medium py-2 rounded hover:bg-[var(--cta-hover)] transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+                      className="flex-1 text-center bg-[var(--cta-primary)] text-[var(--cta-text)] text-xs font-medium py-2 min-h-[44px] rounded hover:bg-[var(--cta-hover)] transition-colors flex items-center justify-center gap-1.5 shadow-sm"
                     >
                       <Navigation className="w-3 h-3" />
                       Directions
@@ -297,7 +289,7 @@ export const StoreMap = React.memo(function StoreMap({
                       href={getStoreUrl(store)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 text-center border border-[var(--border-default)] text-xs font-medium py-2 rounded hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)] transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+                      className="flex-1 text-center border border-[var(--border-default)] text-xs font-medium py-2 min-h-[44px] rounded hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)] transition-colors flex items-center justify-center gap-1.5 shadow-sm"
                     >
                       <Info className="w-3 h-3" />
                       Details

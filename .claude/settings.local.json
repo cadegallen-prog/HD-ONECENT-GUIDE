@@ -15,7 +15,13 @@
       "Bash(curl:*)",
       "Bash(npm run build:*)",
       "Bash(dir:*)",
-      "Bash(test:*)"
+      "Bash(test:*)",
+      "Bash(npm audit:*)",
+      "Bash(npm run lint:*)",
+      "Bash(npx eslint:*)",
+      "Bash(timeout /t 8 /nobreak)",
+      "Bash(npx lighthouse:*)",
+      "Bash(findstr:*)"
     ],
     "deny": [],
     "ask": []

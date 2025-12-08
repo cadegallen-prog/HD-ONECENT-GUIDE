@@ -4,6 +4,7 @@ import { AlertTriangle, Calendar, Package } from "lucide-react"
 import { SUBMIT_FIND_FORM_URL, NEWSLETTER_URL } from "@/lib/constants"
 import { getPennyList, type PennyItem } from "@/lib/fetch-penny-data"
 import { CopySkuButton } from "@/components/copy-sku-button"
+import { TrackableLink } from "@/components/trackable-link"
 
 export const metadata: Metadata = {
   title: "Potential Penny List - Penny Central",
@@ -300,14 +301,16 @@ export default async function PennyListPage() {
                 Don't miss out. Get the weekly list of confirmed penny items delivered to your
                 inbox.
               </p>
-              <a
+              <TrackableLink
                 href={NEWSLETTER_URL}
                 target="_blank"
                 rel="noopener noreferrer"
+                eventName="newsletter_click"
+                eventParams={{ location: "penny-list" }}
                 className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-lg bg-[var(--text-primary)] text-[var(--bg-page)] font-medium hover:opacity-90 transition-opacity"
               >
                 Subscribe to Alerts
-              </a>
+              </TrackableLink>
               <p className="text-xs text-[var(--text-muted)] mt-3">
                 We respect your inbox. No spam, ever.
               </p>

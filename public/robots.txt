@@ -1,27 +1,16 @@
-# robots.txt for HD-ONECENT-GUIDE
+# robots.txt for Penny Central
 # Home Depot Penny Items Educational Guide
 
 # Allow all search engines to crawl all content
 User-agent: *
 Allow: /
 
+# Block admin and API routes
+Disallow: /admin/
+Disallow: /api/
+
 # Sitemap location
-# IMPORTANT: Replace "yourdomain.com" with your actual domain
-Sitemap: https://yourdomain.com/sitemap.xml
-
-# Crawl-delay (optional - helps prevent server overload)
-# Uncomment if you experience crawling issues
-# Crawl-delay: 1
-
-# Block access to any admin or private areas (if added in future)
-# User-agent: *
-# Disallow: /admin/
-# Disallow: /private/
-# Disallow: /.git/
-
-# Block specific search engines (if needed)
-# User-agent: AhrefsBot
-# Disallow: /
+Sitemap: https://pennycentral.com/sitemap.xml
 
 # Allow Google, Bing, and other major search engines (explicitly)
 User-agent: Googlebot
@@ -51,16 +40,3 @@ Allow: /
 
 User-agent: WhatsApp
 Allow: /
-
-# SETUP INSTRUCTIONS:
-# 1. Replace "https://yourdomain.com/sitemap.xml" with your actual domain
-# 2. Upload this file to the root directory of your website
-# 3. Verify in Google Search Console: Settings → Crawl Stats → robots.txt Tester
-# 4. Verify in Bing Webmaster Tools: Configure My Site → robots.txt
-# 5. Test at: https://yourdomain.com/robots.txt
-
-# NOTES:
-# - This file allows all search engines to index all content
-# - If you add private pages in the future, add Disallow rules above
-# - The sitemap URL helps search engines discover all pages efficiently
-# - Major search engines and social media bots are explicitly allowed for maximum visibility

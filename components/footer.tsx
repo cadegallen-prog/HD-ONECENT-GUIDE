@@ -1,4 +1,7 @@
+"use client"
+
 import Link from "next/link"
+import { trackEvent } from "@/lib/analytics"
 
 export function Footer() {
   return (
@@ -66,6 +69,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm text-zinc-400 hover:text-white transition-colors"
+                  onClick={() => trackEvent("donation_click", { location: "footer" })}
                 >
                   Leave a Tip
                 </a>
@@ -74,6 +78,7 @@ export function Footer() {
                 <Link
                   href="/go/befrugal"
                   className="text-sm text-zinc-400 hover:text-white transition-colors"
+                  onClick={() => trackEvent("befrugal_click", { location: "footer" })}
                 >
                   BeFrugal Cashback
                 </Link>

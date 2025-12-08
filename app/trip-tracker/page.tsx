@@ -13,6 +13,7 @@ import {
   Store,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { trackEvent } from "@/lib/analytics"
 
 interface Trip {
   id: string
@@ -115,6 +116,12 @@ export default function TripTrackerPage() {
       checklist: formData.checklist,
       completed: false,
     }
+
+    // Track trip creation
+    trackEvent("trip_create", {
+      event_label: newTrip.stores.length > 0 ? "with_stores" : "no_stores",
+      value: newTrip.stores.length,
+    })
 
     setTrips([...trips, newTrip])
     setShowNewTrip(false)

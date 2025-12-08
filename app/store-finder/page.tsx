@@ -25,6 +25,7 @@ import {
   mergeConsecutiveDays,
 } from "@/lib/stores"
 import type { StoreLocation } from "@/lib/stores"
+import { trackEvent } from "@/lib/analytics"
 
 // Dynamically import StoreMap to avoid SSR issues with Leaflet
 const StoreMap = dynamic(
@@ -375,6 +376,14 @@ export default function StoreFinderPage() {
   const handleSearch = useCallback(async () => {
     const storesSource = await ensureStoresLoaded()
     const trimmedQuery = searchQuery.trim()
+
+    // Track search events (only when there's a query)
+    if (trimmedQuery) {
+      trackEvent("store_search", {
+        event_label: trimmedQuery.length <= 5 ? "zip_or_store" : "city_or_address",
+      })
+    }
+
     if (!trimmedQuery) {
       const initialStores = getClosestStores(storesSource, DEFAULT_CENTER[0], DEFAULT_CENTER[1])
       setDisplayedStores(initialStores)

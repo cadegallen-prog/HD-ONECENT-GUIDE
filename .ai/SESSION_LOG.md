@@ -127,6 +127,75 @@
 
 ---
 
+## December 8, 2025 - Claude Code - Comprehensive Site Audit & Optimization
+
+**AI:** Claude Code (Opus 4.5)
+**Goal:** Comprehensive audit for performance, accessibility, SEO, conversion tracking, and security
+**Approach:** Systematic audit of all 18 public pages, fixing issues within project constraints
+
+**Changes Made:**
+
+*SEO:*
+- Fixed `sitemap.xml` - corrected domain, removed .html extensions, added 6 missing pages
+- Fixed `public/robots.txt` - corrected domain, added /admin/ and /api/ disallows
+- Added JSON-LD structured data to `app/layout.tsx` (WebSite + Organization schemas)
+- Added preconnect hints for Google Tag Manager and fonts
+
+*Accessibility:*
+- Added skip-to-main-content link in `app/layout.tsx`
+- Added `id="main-content"` to main element
+- Improved form accessibility in `app/report-find/page.tsx` (aria-required, aria-describedby)
+
+*Conversion Tracking:*
+- Created `lib/analytics.ts` - type-safe GA4 event tracking utility
+- Created `components/trackable-link.tsx` - reusable tracked link component
+- Added event tracking to 6 key CTAs:
+  - newsletter_click (/penny-list)
+  - store_search (/store-finder)
+  - trip_create (/trip-tracker)
+  - find_submit (/report-find)
+  - donation_click (footer)
+  - befrugal_click (footer)
+
+**Outcome:** ✅ **Success**
+
+*Performance Metrics (Production Build):*
+- FCP: 0.8s (excellent)
+- LCP: 2.9s (close to 2.5s target)
+- TBT: 100ms (at target)
+- CLS: 0 (perfect)
+
+*Important Finding:* The 14s LCP from dev mode was misleading - production build performs well.
+
+**Completed Items:**
+- ✅ Sitemap/robots.txt fixed and validated
+- ✅ JSON-LD structured data added
+- ✅ Skip link and accessibility improvements
+- ✅ Event tracking for 6 conversion points
+- ✅ npm audit (0 vulnerabilities)
+- ✅ npm run build passed
+- ✅ npm run lint passed
+- ✅ Created AUDIT_REPORT_2025-12-08.md
+
+**Unfinished Items:**
+- Search Console submission (requires Cade's access)
+- A/B testing setup (needs decision on which CTA to test)
+- Automated Lighthouse CI integration (optional)
+
+**Learnings:**
+- Next.js dev mode can show misleading performance metrics (14s LCP vs 2.9s prod)
+- Server components can't have onClick handlers - use client component wrappers
+- Footer needed "use client" directive to enable event tracking
+- Store-finder already had good ARIA attributes
+
+**For Next AI:**
+- Don't re-investigate the LCP issue - it was a dev mode artifact
+- Structured data is in layout.tsx (not separate component)
+- Event tracking uses lib/analytics.ts utility
+- Full audit report at .ai/AUDIT_REPORT_2025-12-08.md
+
+---
+
 ## Template for Future Entries
 
 Copy this template when adding new sessions:
