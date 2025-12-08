@@ -155,12 +155,15 @@ const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: numbe
 
 // Calculate distances and return sorted list limited to MAX_STORES
 const getClosestStores = (stores: StoreLocation[], lat: number, lng: number): StoreLocation[] => {
-  const storesWithDistance = stores.map((store) => ({
-    ...store,
-    distance: calculateDistance(lat, lng, store.lat, store.lng),
-  }))
-  storesWithDistance.sort((a, b) => (a.distance || 0) - (b.distance || 0))
-  return storesWithDistance.slice(0, MAX_STORES)
+  const storesWithDistance = stores
+    .map((store) => ({
+      ...store,
+      distance: calculateDistance(lat, lng, store.lat, store.lng),
+    }))
+    .sort((a, b) => (a.distance || 0) - (b.distance || 0))
+    .slice(0, MAX_STORES)
+
+  return storesWithDistance.map((store, index) => ({ ...store, rank: index + 1 }))
 }
 
 // Load and validate stores (initially empty; remote load fills in)
@@ -399,7 +402,7 @@ export default function StoreFinderPage() {
         const closestStores = getClosestStores(storesSource, matchedStore.lat, matchedStore.lng)
         setDisplayedStores(closestStores)
         setMapCenter([matchedStore.lat, matchedStore.lng])
-        setSelectedStore(matchedStore)
+        setSelectedStore(closestStores[0] || matchedStore)
         return
       }
     }
@@ -416,7 +419,7 @@ export default function StoreFinderPage() {
         const closestStores = getClosestStores(storesSource, centerStore.lat, centerStore.lng)
         setDisplayedStores(closestStores)
         setMapCenter([centerStore.lat, centerStore.lng])
-        setSelectedStore(closestStores[0] || null)
+        setSelectedStore(closestStores[0] || centerStore)
         return
       }
 
@@ -720,7 +723,7 @@ export default function StoreFinderPage() {
                       <StoreListItem
                         key={store.id}
                         store={store}
-                        index={index + 1}
+                        index={store.rank ?? index + 1}
                         isSelected={selectedStore?.id === store.id}
                         isFavorite={favorites.includes(store.id)}
                         onSelect={() => selectStore(store)}
@@ -768,7 +771,7 @@ export default function StoreFinderPage() {
                   <StoreCard
                     key={store.id}
                     store={store}
-                    index={index + 1}
+                    index={store.rank ?? index + 1}
                     isFavorite={favorites.includes(store.id)}
                     onToggleFavorite={() => toggleFavorite(store.id)}
                     geolocationResolved={geolocationResolved}
@@ -877,9 +880,13 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
             </div>
 
             {(store.hours?.weekday || store.hours?.weekend) && (
-              <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
+              <div className="flex items-start gap-2 mt-2 text-xs text-muted-foreground">
                 <Clock className="h-3 w-3 flex-shrink-0" />
-                <span>{formatStoreHours(store.hours).compact}</span>
+                <div className="space-y-0.5">
+                  <div>{formatStoreHours(store.hours).weekday}</div>
+                  <div>{formatStoreHours(store.hours).saturday}</div>
+                  <div>{formatStoreHours(store.hours).sunday}</div>
+                </div>
               </div>
             )}
 
