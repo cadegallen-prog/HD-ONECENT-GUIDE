@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server"
 import fs from "fs"
 import path from "path"
+import { sanitizeText } from "@/lib/stores"
 
 const DATA_PATH = path.join(process.cwd(), "data", "stores", "store_directory.master.json")
+const REMOTE_URL =
+  process.env.NEXT_PUBLIC_HOME_DEPOT_STORES_URL || process.env.HOME_DEPOT_STORES_URL || ""
 const CACHE_SECONDS = 3600
 const STALE_SECONDS = 86400
 
@@ -21,6 +24,16 @@ type StoreDirectoryItem = {
     weekend?: string
     [key: string]: string | undefined
   } | null
+}
+
+type FlexibleStore = StoreDirectoryItem & {
+  id?: string
+  number?: string
+  name?: string
+  latitude?: number
+  longitude?: number
+  lat?: number
+  lng?: number
 }
 
 type Store = {
@@ -42,33 +55,78 @@ type Store = {
 }
 
 let storeCache: Store[] | null = null
+let storeCacheTimestamp = 0
 
-function normalizeStore(item: StoreDirectoryItem): Store {
-  const number = (item.store_number || "").trim()
-  const idBase = number || `${item.store_name}-${item.city}-${item.state}`
+const CACHE_TTL_MS = 30 * 60 * 1000 // 30 minutes
+
+function normalizeStore(item: FlexibleStore): Store {
+  const rawNumber = (item.store_number ?? item.number ?? "").toString().trim()
+  const lat = item.lat ?? item.latitude
+  const lng = item.lng ?? item.longitude
+
+  const idBase =
+    rawNumber || item.id || `${item.store_name || item.name}-${item.city}-${item.state}`
+
+  let parsedHours: Store["hours"] = undefined
+  if (item.hours) {
+    if (typeof item.hours === "string") {
+      try {
+        parsedHours = JSON.parse(item.hours)
+      } catch {
+        parsedHours = undefined
+      }
+    } else {
+      parsedHours = item.hours ?? undefined
+    }
+  }
+
   return {
-    id: `store-${idBase}`,
-    number: number || undefined,
-    name: item.store_name || "The Home Depot",
-    address: item.address,
-    city: item.city,
-    state: item.state,
-    zip: item.zip || undefined,
-    phone: item.phone || undefined,
-    lat: Number(item.latitude),
-    lng: Number(item.longitude),
-    hours: item.hours ?? undefined,
+    id: sanitizeText(idBase),
+    number: sanitizeText(rawNumber) || undefined,
+    name: sanitizeText(item.store_name || item.name || "The Home Depot"),
+    address: sanitizeText(item.address),
+    city: sanitizeText(item.city),
+    state: sanitizeText(item.state),
+    zip: sanitizeText(item.zip),
+    phone: sanitizeText(item.phone),
+    lat: Number(lat),
+    lng: Number(lng),
+    hours: parsedHours,
   }
 }
 
-function loadStores(): Store[] {
-  // Always reload in development to avoid stale cache
-  if (process.env.NODE_ENV === "development") {
-    storeCache = null
-  }
-  if (storeCache) {
+async function loadStores(): Promise<Store[]> {
+  const now = Date.now()
+  const isDev = process.env.NODE_ENV === "development"
+
+  if (!isDev && storeCache && now - storeCacheTimestamp < CACHE_TTL_MS) {
     return storeCache
   }
+
+  // Try remote first if configured
+  if (REMOTE_URL) {
+    try {
+      const res = await fetch(REMOTE_URL, { cache: "no-store" })
+      if (!res.ok) {
+        throw new Error(`Remote fetch failed: ${res.status}`)
+      }
+      const json = (await res.json()) as FlexibleStore[]
+      if (Array.isArray(json)) {
+        const normalized = json
+          .map(normalizeStore)
+          .filter((s) => Number.isFinite(s.lat) && Number.isFinite(s.lng))
+        if (normalized.length > 0) {
+          storeCache = normalized
+          storeCacheTimestamp = now
+          return storeCache
+        }
+      }
+    } catch (err) {
+      console.warn("Falling back to local store data due to remote error", err)
+    }
+  }
+
+  // Fallback: local file packaged with the build
   if (!fs.existsSync(DATA_PATH)) {
     throw new Error(`Missing store data at ${DATA_PATH}`)
   }
@@ -77,7 +135,10 @@ function loadStores(): Store[] {
   if (!Array.isArray(parsed)) {
     throw new Error("Store directory JSON is not an array")
   }
-  storeCache = parsed.map((item) => normalizeStore(item as StoreDirectoryItem))
+  storeCache = parsed
+    .map((item) => normalizeStore(item as StoreDirectoryItem))
+    .filter((s) => Number.isFinite(s.lat) && Number.isFinite(s.lng))
+  storeCacheTimestamp = now
   return storeCache
 }
 
@@ -100,7 +161,7 @@ export async function GET(request: Request) {
   const lng = url.searchParams.get("lng")
 
   try {
-    const stores = loadStores()
+    const stores = await loadStores()
     const totalStores = stores.length
 
     // Handle limit parameter - only use if explicitly provided as a positive number

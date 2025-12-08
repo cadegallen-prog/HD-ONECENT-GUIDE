@@ -6,6 +6,7 @@ import type { Marker as LeafletMarker } from "leaflet"
 import "leaflet/dist/leaflet.css"
 import { getStoreUrl, formatStoreHours, cleanStoreName, formatStoreNumber } from "@/lib/stores"
 import type { StoreLocation } from "@/lib/stores"
+import { Navigation, Info } from "lucide-react"
 
 interface StoreMapProps {
   stores: StoreLocation[]
@@ -67,7 +68,7 @@ function MapController({ selectedStore }: { selectedStore?: StoreLocation | null
     }
   }, [map])
 
-  // Only fly to selected store when it changes and user hasn't manually interacted
+  // Only pan to selected store when it changes and user hasn't manually interacted
   React.useEffect(() => {
     if (selectedStore && selectedStore.id !== lastSelectedIdRef.current) {
       lastSelectedIdRef.current = selectedStore.id
@@ -75,11 +76,13 @@ function MapController({ selectedStore }: { selectedStore?: StoreLocation | null
       // Re-enable auto-centering on new store selection
       userHasInteractedRef.current = false
 
-      // Ensure correct coordinates are passed and zoom is set to 13
+      // Ensure correct coordinates are passed
       if (!userHasInteractedRef.current) {
-        // Offset the center slightly to make room for the popup (which is above the marker)
-        // This is a rough approximation, but helps keep the popup in view
-        map.flyTo([selectedStore.lat + 0.005, selectedStore.lng], 13, {
+        // Pan to the store (keep current zoom)
+        // Offset slightly for popup visibility if needed, but user requested "not fixed"
+        // We'll just pan to the location.
+        map.panTo([selectedStore.lat + 0.002, selectedStore.lng], {
+          animate: true,
           duration: 0.5,
         })
       }
@@ -100,6 +103,12 @@ export const StoreMap = React.memo(function StoreMap({
   const [mounted, setMounted] = React.useState(false)
   const markersRef = React.useRef<Record<string, LeafletMarker | null>>({})
 
+  // We do NOT want to re-order stores based on selection for rendering order if it confuses the user,
+  // but Leaflet renders in order, so last = top.
+  // The user complained about "promoted to #1 spot".
+  // If they meant the list, that's handled in page.tsx.
+  // If they meant the map marker z-index, that's this logic.
+  // I'll keep this logic because selected marker SHOULD be on top visually.
   const orderedStores = React.useMemo(() => {
     if (selectedStore) {
       const selectedId = selectedStore.id
@@ -210,6 +219,10 @@ export const StoreMap = React.memo(function StoreMap({
 
         {orderedStores.map((store) => {
           const isSelected = selectedStore?.id === store.id
+          const rank = stores.findIndex((s) => s.id === store.id) + 1
+          const hours = formatStoreHours(store.hours)
+          const isMonSatSame = hours.weekday === hours.saturday
+
           return (
             <Marker
               key={store.id}
@@ -231,52 +244,73 @@ export const StoreMap = React.memo(function StoreMap({
                 autoPan={true}
                 autoPanPadding={[50, 50]}
                 keepInView={false}
-                maxWidth={180}
-                minWidth={160}
+                maxWidth={240}
+                minWidth={200}
                 closeButton={false}
               >
-                <div className="space-y-1 text-left p-0.5">
-                  {/* Store name and number */}
-                  <div className="flex justify-between items-start gap-2">
-                    <p className="font-bold text-xs text-foreground leading-tight">
+                <div className="text-left p-3 bg-slate-900 text-slate-50 rounded-md shadow-xl border border-slate-700">
+                  <div className="mb-3 pr-8 relative">
+                    <h3 className="font-bold text-sm text-white leading-tight">
                       {cleanStoreName(store.name)} #{formatStoreNumber(store.number)}
-                    </p>
-                    {/* Distance - rounded to whole number */}
-                    {store.distance !== undefined && store.distance > 0.1 && (
-                      <span className="text-[10px] font-medium text-muted-foreground whitespace-nowrap">
-                        {Math.round(store.distance)} mi
-                      </span>
-                    )}
+                    </h3>
+                    <div className="absolute -top-1 -right-1 bg-blue-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
+                      #{rank}
+                    </div>
                   </div>
-
-                  {/* Store hours - single line compact */}
-                  {(store.hours?.weekday || store.hours?.weekend) && (
-                    <p className="text-[10px] text-muted-foreground">
-                      {formatStoreHours(store.hours).compact}
+                  <div className="text-xs text-slate-300 mb-3 leading-snug">
+                    <p>{store.address}</p>
+                    <p>
+                      {store.city}, {store.state} {store.zip}
                     </p>
-                  )}
-
-                  {/* Address - single line */}
-                  <p className="text-[10px] text-muted-foreground leading-snug pt-0.5">
-                    {store.city}, {store.state}
-                  </p>
-
-                  {/* Action links */}
-                  <div className="pt-1 flex gap-1.5">
+                  </div>
+                  <div className="text-xs text-slate-300 mb-4 space-y-1">
+                    {isMonSatSame ? (
+                      <div>
+                        <span className="block font-semibold text-slate-400 text-[10px] uppercase tracking-wider">
+                          Mon-Sat
+                        </span>
+                        <span>{hours.weekday}</span>
+                      </div>
+                    ) : (
+                      <>
+                        <div>
+                          <span className="block font-semibold text-slate-400 text-[10px] uppercase tracking-wider">
+                            Mon-Fri
+                          </span>
+                          <span>{hours.weekday}</span>
+                        </div>
+                        <div>
+                          <span className="block font-semibold text-slate-400 text-[10px] uppercase tracking-wider">
+                            Sat
+                          </span>
+                          <span>{hours.saturday}</span>
+                        </div>
+                      </>
+                    )}
+                    <div className="pt-1">
+                      <span className="block font-semibold text-slate-400 text-[10px] uppercase tracking-wider">
+                        Sun
+                      </span>
+                      <span>{hours.sunday}</span>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
                     <a
                       href={`https://www.google.com/maps/dir/?api=1&destination=${store.lat},${store.lng}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 text-center bg-primary text-primary-foreground text-[10px] font-medium py-1 rounded hover:bg-primary/90 transition-colors"
+                      className="flex-1 text-center bg-blue-600 text-white text-xs font-medium py-2 rounded hover:bg-blue-700 transition-colors flex items-center justify-center gap-1.5 shadow-sm"
                     >
+                      <Navigation className="w-3 h-3" />
                       Directions
                     </a>
                     <a
                       href={getStoreUrl(store)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 text-center bg-secondary text-secondary-foreground text-[10px] font-medium py-1 rounded hover:bg-secondary/80 transition-colors"
+                      className="flex-1 text-center bg-slate-700 text-slate-200 text-xs font-medium py-2 rounded hover:bg-slate-600 transition-colors flex items-center justify-center gap-1.5 shadow-sm"
                     >
+                      <Info className="w-3 h-3" />
                       Details
                     </a>
                   </div>
