@@ -21,6 +21,8 @@ import {
   getStoreUrl,
   hasValidCoordinates,
   formatStoreHours,
+  normalizeDayHours,
+  mergeConsecutiveDays,
 } from "@/lib/stores"
 import type { StoreLocation } from "@/lib/stores"
 
@@ -890,13 +892,42 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
               )}
             </div>
 
-            {(store.hours?.weekday || store.hours?.weekend) && (
+            {(store.hours?.weekday || store.hours?.weekend || store.hours?.monday) && (
               <div className="flex items-start gap-2 mt-2 text-xs text-muted-foreground">
-                <Clock className="h-3 w-3 flex-shrink-0" />
-                <div className="space-y-0.5">
-                  <div>{formatStoreHours(store.hours).weekday}</div>
-                  <div>{formatStoreHours(store.hours).saturday}</div>
-                  <div>{formatStoreHours(store.hours).sunday}</div>
+                <Clock className="h-3 w-3 flex-shrink-0 mt-0.5" />
+                <div className="space-y-0.5 flex-1">
+                  {(() => {
+                    const dayHours = normalizeDayHours(store.hours)
+                    const mergedHours = mergeConsecutiveDays(dayHours)
+
+                    if (mergedHours.isExpanded) {
+                      // Show all 7 days for irregular hours
+                      const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+                      const dayValues = [
+                        dayHours.monday,
+                        dayHours.tuesday,
+                        dayHours.wednesday,
+                        dayHours.thursday,
+                        dayHours.friday,
+                        dayHours.saturday,
+                        dayHours.sunday,
+                      ]
+                      return dayLabels.map((label, index) => (
+                        <div key={label} className="flex justify-between gap-2">
+                          <span className="font-semibold w-6">{label}</span>
+                          <span>{dayValues[index]}</span>
+                        </div>
+                      ))
+                    } else {
+                      // Show merged ranges for standard hours
+                      return mergedHours.ranges.map((range) => (
+                        <div key={range.days} className="flex justify-between gap-2">
+                          <span className="font-semibold">{range.days}</span>
+                          <span>{range.hours}</span>
+                        </div>
+                      ))
+                    }
+                  })()}
                 </div>
               </div>
             )}

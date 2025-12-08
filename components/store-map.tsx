@@ -4,7 +4,13 @@ import * as React from "react"
 import { MapContainer, TileLayer, Marker, CircleMarker, useMap, Popup } from "react-leaflet"
 import type { Marker as LeafletMarker } from "leaflet"
 import "leaflet/dist/leaflet.css"
-import { getStoreUrl, formatStoreHours, cleanStoreName, formatStoreNumber } from "@/lib/stores"
+import {
+  getStoreUrl,
+  normalizeDayHours,
+  mergeConsecutiveDays,
+  cleanStoreName,
+  formatStoreNumber,
+} from "@/lib/stores"
 import type { StoreLocation } from "@/lib/stores"
 import { Navigation, Info } from "lucide-react"
 
@@ -214,8 +220,8 @@ export const StoreMap = React.memo(function StoreMap({
         {orderedStores.map((store) => {
           const isSelected = selectedStore?.id === store.id
           const rank = store.rank ?? stores.findIndex((s) => s.id === store.id) + 1
-          const hours = formatStoreHours(store.hours)
-          const isMonSatSame = hours.weekday === hours.saturday
+          const dayHours = normalizeDayHours(store.hours)
+          const mergedHours = mergeConsecutiveDays(dayHours)
 
           return (
             <Marker
@@ -256,37 +262,39 @@ export const StoreMap = React.memo(function StoreMap({
                     <p>
                       {store.city}, {store.state} {store.zip}
                     </p>
+                    {store.phone && <p>{store.phone}</p>}
                   </div>
-                  <div className="text-xs text-[var(--text-primary)] mb-4 space-y-1">
-                    {isMonSatSame ? (
-                      <div>
-                        <span className="block font-semibold text-[var(--text-secondary)] text-[10px] uppercase tracking-wider">
-                          Mon-Sat
-                        </span>
-                        <span>{hours.weekday}</span>
-                      </div>
-                    ) : (
-                      <>
-                        <div>
-                          <span className="block font-semibold text-[var(--text-secondary)] text-[10px] uppercase tracking-wider">
-                            Mon-Fri
-                          </span>
-                          <span>{hours.weekday}</span>
-                        </div>
-                        <div>
-                          <span className="block font-semibold text-[var(--text-secondary)] text-[10px] uppercase tracking-wider">
-                            Sat
-                          </span>
-                          <span>{hours.saturday}</span>
-                        </div>
-                      </>
-                    )}
-                    <div className="pt-1">
-                      <span className="block font-semibold text-[var(--text-secondary)] text-[10px] uppercase tracking-wider">
-                        Sun
-                      </span>
-                      <span>{hours.sunday}</span>
+                  <div className="text-xs text-[var(--text-primary)] mb-4 space-y-0.5">
+                    <div className="font-semibold text-[var(--text-secondary)] text-[10px] uppercase tracking-wider mb-1">
+                      Hours
                     </div>
+                    {mergedHours.isExpanded
+                      ? // Show all 7 days for irregular hours
+                        (() => {
+                          const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+                          const dayValues = [
+                            dayHours.monday,
+                            dayHours.tuesday,
+                            dayHours.wednesday,
+                            dayHours.thursday,
+                            dayHours.friday,
+                            dayHours.saturday,
+                            dayHours.sunday,
+                          ]
+                          return dayLabels.map((label, index) => (
+                            <div key={label} className="flex justify-between">
+                              <span className="w-8">{label}</span>
+                              <span className="flex-1 text-right">{dayValues[index]}</span>
+                            </div>
+                          ))
+                        })()
+                      : // Show merged ranges for standard hours
+                        mergedHours.ranges.map((range) => (
+                          <div key={range.days} className="flex justify-between gap-2">
+                            <span className="font-medium">{range.days}</span>
+                            <span className="text-right">{range.hours}</span>
+                          </div>
+                        ))}
                   </div>
                   <div className="flex gap-2">
                     <a
