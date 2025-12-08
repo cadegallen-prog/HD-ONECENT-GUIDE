@@ -25,6 +25,8 @@ export interface StoreLocation {
   hours?: StoreHours
   services?: string[]
   distance?: number
+  /** 1-based rank within the displayed result set */
+  rank?: number
 }
 
 export const sanitizeText = (value?: string): string => {

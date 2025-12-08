@@ -73,19 +73,13 @@ function MapController({ selectedStore }: { selectedStore?: StoreLocation | null
     if (selectedStore && selectedStore.id !== lastSelectedIdRef.current) {
       lastSelectedIdRef.current = selectedStore.id
 
-      // Re-enable auto-centering on new store selection
-      userHasInteractedRef.current = false
+      if (userHasInteractedRef.current) return
 
-      // Ensure correct coordinates are passed
-      if (!userHasInteractedRef.current) {
-        // Pan to the store (keep current zoom)
-        // Offset slightly for popup visibility if needed, but user requested "not fixed"
-        // We'll just pan to the location.
-        map.panTo([selectedStore.lat + 0.002, selectedStore.lng], {
-          animate: true,
-          duration: 0.5,
-        })
-      }
+      // Pan to the store (keep current zoom) without nudging position to avoid unwanted recentering
+      map.panTo([selectedStore.lat, selectedStore.lng], {
+        animate: true,
+        duration: 0.5,
+      })
     }
   }, [selectedStore, map])
 
@@ -131,7 +125,7 @@ export const StoreMap = React.memo(function StoreMap({
       className: "map-marker-default",
       html: `
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 36" width="24" height="36" style="display: block; width: 100%; height: 100%;">
-          <path fill="#475569" stroke="#ffffff" stroke-width="1.5" d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z"/>
+          <path fill="#1f2937" stroke="#ffffff" stroke-width="1.5" d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z"/>
           <circle fill="#ffffff" cx="12" cy="12" r="5"/>
         </svg>
       `,
@@ -145,9 +139,9 @@ export const StoreMap = React.memo(function StoreMap({
       html: `
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 48" width="32" height="48" style="display: block; width: 100%; height: 100%;">
           <ellipse cx="16" cy="46" rx="8" ry="2" fill="rgba(0,0,0,0.3)"/>
-          <path fill="#0f172a" stroke="#ffffff" stroke-width="2" d="M16 0C7.2 0 0 7.2 0 16c0 12 16 32 16 32s16-20 16-32c0-8.8-7.2-16-16-16z"/>
+          <path fill="#1d4ed8" stroke="#ffffff" stroke-width="2" d="M16 0C7.2 0 0 7.2 0 16c0 12 16 32 16 32s16-20 16-32c0-8.8-7.2-16-16-16z"/>
           <circle fill="#ffffff" cx="16" cy="16" r="7"/>
-          <circle fill="#0f172a" cx="16" cy="16" r="4"/>
+          <circle fill="#1d4ed8" cx="16" cy="16" r="4"/>
         </svg>
       `,
       iconSize: [32, 48],
@@ -219,7 +213,7 @@ export const StoreMap = React.memo(function StoreMap({
 
         {orderedStores.map((store) => {
           const isSelected = selectedStore?.id === store.id
-          const rank = stores.findIndex((s) => s.id === store.id) + 1
+          const rank = store.rank ?? stores.findIndex((s) => s.id === store.id) + 1
           const hours = formatStoreHours(store.hours)
           const isMonSatSame = hours.weekday === hours.saturday
 
@@ -244,29 +238,29 @@ export const StoreMap = React.memo(function StoreMap({
                 autoPan={true}
                 autoPanPadding={[50, 50]}
                 keepInView={false}
-                maxWidth={240}
-                minWidth={200}
+                maxWidth={260}
+                minWidth={220}
                 closeButton={false}
               >
-                <div className="text-left p-3 bg-slate-900 text-slate-50 rounded-md shadow-xl border border-slate-700">
+                <div className="text-left p-4 bg-[var(--bg-elevated)] text-[var(--text-primary)] rounded-lg shadow-md border border-[var(--border-default)]">
                   <div className="mb-3 pr-8 relative">
-                    <h3 className="font-bold text-sm text-white leading-tight">
+                    <h3 className="font-bold text-sm leading-tight">
                       {cleanStoreName(store.name)} #{formatStoreNumber(store.number)}
                     </h3>
-                    <div className="absolute -top-1 -right-1 bg-blue-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
+                    <div className="absolute -top-1 -right-1 bg-[var(--cta-primary)] text-[var(--cta-text)] text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
                       #{rank}
                     </div>
                   </div>
-                  <div className="text-xs text-slate-300 mb-3 leading-snug">
+                  <div className="text-xs text-[var(--text-secondary)] mb-3 leading-snug">
                     <p>{store.address}</p>
                     <p>
                       {store.city}, {store.state} {store.zip}
                     </p>
                   </div>
-                  <div className="text-xs text-slate-300 mb-4 space-y-1">
+                  <div className="text-xs text-[var(--text-primary)] mb-4 space-y-1">
                     {isMonSatSame ? (
                       <div>
-                        <span className="block font-semibold text-slate-400 text-[10px] uppercase tracking-wider">
+                        <span className="block font-semibold text-[var(--text-secondary)] text-[10px] uppercase tracking-wider">
                           Mon-Sat
                         </span>
                         <span>{hours.weekday}</span>
@@ -274,13 +268,13 @@ export const StoreMap = React.memo(function StoreMap({
                     ) : (
                       <>
                         <div>
-                          <span className="block font-semibold text-slate-400 text-[10px] uppercase tracking-wider">
+                          <span className="block font-semibold text-[var(--text-secondary)] text-[10px] uppercase tracking-wider">
                             Mon-Fri
                           </span>
                           <span>{hours.weekday}</span>
                         </div>
                         <div>
-                          <span className="block font-semibold text-slate-400 text-[10px] uppercase tracking-wider">
+                          <span className="block font-semibold text-[var(--text-secondary)] text-[10px] uppercase tracking-wider">
                             Sat
                           </span>
                           <span>{hours.saturday}</span>
@@ -288,7 +282,7 @@ export const StoreMap = React.memo(function StoreMap({
                       </>
                     )}
                     <div className="pt-1">
-                      <span className="block font-semibold text-slate-400 text-[10px] uppercase tracking-wider">
+                      <span className="block font-semibold text-[var(--text-secondary)] text-[10px] uppercase tracking-wider">
                         Sun
                       </span>
                       <span>{hours.sunday}</span>
@@ -299,7 +293,7 @@ export const StoreMap = React.memo(function StoreMap({
                       href={`https://www.google.com/maps/dir/?api=1&destination=${store.lat},${store.lng}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 text-center bg-blue-600 text-white text-xs font-medium py-2 rounded hover:bg-blue-700 transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+                      className="flex-1 text-center bg-[var(--cta-primary)] text-[var(--cta-text)] text-xs font-medium py-2 rounded hover:bg-[var(--cta-hover)] transition-colors flex items-center justify-center gap-1.5 shadow-sm"
                     >
                       <Navigation className="w-3 h-3" />
                       Directions
@@ -308,7 +302,7 @@ export const StoreMap = React.memo(function StoreMap({
                       href={getStoreUrl(store)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 text-center bg-slate-700 text-slate-200 text-xs font-medium py-2 rounded hover:bg-slate-600 transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+                      className="flex-1 text-center border border-[var(--border-default)] text-xs font-medium py-2 rounded hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)] transition-colors flex items-center justify-center gap-1.5 shadow-sm"
                     >
                       <Info className="w-3 h-3" />
                       Details

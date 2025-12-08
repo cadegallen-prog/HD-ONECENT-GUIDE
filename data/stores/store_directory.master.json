@@ -1171,12 +1171,12 @@
   {
     "store_number": "4707",
     "store_name": "Aurora",
-    "address": "11616 Aurora Avenue North",
-    "city": "Seattle",
+    "address": "1335 North 205th Street",
+    "city": "Shoreline",
     "state": "WA",
     "zip": "98133",
-    "latitude": 47.7140634,
-    "longitude": -122.34295970000001,
+    "latitude": 47.7760962,
+    "longitude": -122.3419665,
     "phone": "(206) 361-9600",
     "hours": {
       "weekday": "Mon-Fri: 6:00â€¯AMâ€‰â€“â€‰10:00â€¯PM",
@@ -9981,12 +9981,12 @@
   {
     "store_number": "6561",
     "store_name": "Grand Parkway",
-    "address": "133 Cane Island Parkway",
+    "address": "6850 South Fry Road",
     "city": "Katy",
     "state": "TX",
     "zip": "77494",
-    "latitude": 29.774589000000002,
-    "longitude": -95.85184749999999,
+    "latitude": 29.7166354,
+    "longitude": -95.7750413,
     "phone": "(281) 505-6900",
     "hours": {
       "weekday": "Mon-Fri: 6:00â€¯AMâ€‰â€“â€‰10:00â€¯PM",
@@ -24408,8 +24408,8 @@
     "city": "Southington",
     "state": "CT",
     "zip": "06489",
-    "latitude": 41.56159040000001,
-    "longitude": -72.9078055,
+    "latitude": 41.5617146,
+    "longitude": -72.9080579,
     "phone": "(860) 276-6837",
     "hours": {
       "weekday": "Mon-Fri: 6:00â€¯AMâ€‰â€“â€‰9:00â€¯PM",
@@ -24522,7 +24522,7 @@
   {
     "store_number": "6208",
     "store_name": "Southington",
-    "address": "1816 Meriden-Waterbury Turnpike",
+    "address": "89 Interstate Park Drive",
     "city": "Southington",
     "state": "CT",
     "zip": "06489",
@@ -24848,12 +24848,12 @@
   {
     "store_number": "6334",
     "store_name": "St Augustine",
-    "address": "1750 U.S. Rte 1, St. Augustine, FL 32084, USA",
+    "address": "1750 US Highway 1 South",
     "city": "St. Augustine",
     "state": "FL",
     "zip": "32084",
-    "latitude": 29.8674841,
-    "longitude": -81.323003,
+    "latitude": 29.9175,
+    "longitude": -81.3668,
     "phone": "(904) 824-3657",
     "hours": {
       "weekday": "Monday: 6:00 AM – 9:00 PM | Tuesday: 6:00 AM – 9:00 PM | Wednesday: 6:00 AM – 9:00 PM | Thursday: Closed | Friday: 6:00 AM – 9:00 PM | Saturday: 6:00 AM – 9:00 PM | Sunday: 8:00 AM – 8:00 PM"
@@ -27814,12 +27814,12 @@
   {
     "store_number": "459",
     "store_name": "West Bell Rd",
-    "address": "6160 West Behrend Drive",
+    "address": "6880 West Bell Road",
     "city": "Glendale",
     "state": "AZ",
     "zip": "85308",
-    "latitude": 33.6670727,
-    "longitude": -112.1904892,
+    "latitude": 33.6396684,
+    "longitude": -112.2066417,
     "phone": "(623) 376-0278",
     "hours": {
       "weekday": "Mon-Fri: 5:00â€¯AMâ€‰â€“â€‰9:00â€¯PM",
@@ -28376,7 +28376,7 @@
   {
     "store_number": "1981",
     "store_name": "West Niles",
-    "address": "901 Civic Center Drive",
+    "address": "8650 Dempster Street",
     "city": "Niles",
     "state": "IL",
     "zip": "60714",
@@ -29458,12 +29458,12 @@
   {
     "store_number": "6342",
     "store_name": "World Commerce Center",
-    "address": "1750 U.S. Rte 1, St. Augustine, FL 32084, USA",
+    "address": "2905 International Golf Parkway",
     "city": "St. Augustine",
     "state": "FL",
-    "zip": "32084",
-    "latitude": 29.8699967,
-    "longitude": -81.3203199,
+    "zip": "32092",
+    "latitude": 29.9475,
+    "longitude": -81.5264,
     "phone": "(904) 824-3657",
     "hours": {
       "weekday": "Monday: 6:00 AM – 9:00 PM | Tuesday: 6:00 AM – 9:00 PM | Wednesday: 6:00 AM – 9:00 PM | Thursday: Closed | Friday: 6:00 AM – 9:00 PM | Saturday: 6:00 AM – 9:00 PM | Sunday: 8:00 AM – 8:00 PM"
