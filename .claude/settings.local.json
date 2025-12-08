@@ -13,7 +13,9 @@
       "Bash(npx kill-port:*)",
       "Bash(cat:*)",
       "Bash(curl:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(dir:*)",
+      "Bash(test:*)"
     ],
     "deny": [],
     "ask": []

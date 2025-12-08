@@ -1,6 +1,13 @@
 export interface StoreHours {
   weekday?: string
   weekend?: string
+  monday?: string
+  tuesday?: string
+  wednesday?: string
+  thursday?: string
+  friday?: string
+  saturday?: string
+  sunday?: string
   [key: string]: string | undefined
 }
 
@@ -99,13 +106,9 @@ export interface FormattedHours {
   saturday: string
   sunday: string
   weekday: string
-  /** Compact single-line format for tight spaces */
   compact: string
 }
 
-/**
- * Formats time string to be more compact (e.g., "6:00 AM - 10:00 PM" -> "6AM-10PM")
- */
 const compactTime = (timeStr: string): string => {
   return timeStr
     .replace(/:00/g, "")

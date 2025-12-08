@@ -79,6 +79,57 @@ Ask yourself:
 
 5. **Build before done** — Always run `npm run build` before considering work complete.
 
+6. **Check git branch** — Always verify which branch you're on before declaring success.
+
+---
+
+## 4.1. ⚠️ CRITICAL: Git Branching & Deployment
+
+**DEPLOYMENT RULE:** Changes only go live when merged to `main` and pushed to remote.
+
+- **`dev` branch:** Local development and testing — changes here do NOT deploy
+- **`main` branch:** Production — only code here gets deployed to Vercel
+
+**Common failure pattern:**
+
+1. You make changes in `dev` branch
+2. Test locally — everything works perfectly
+3. Commit and push to `dev`
+4. Declare success
+5. Founder uses production site (still running old `main` code)
+6. Founder reports "it's still broken"
+7. You iterate and change more code
+8. Cycle repeats 15+ times
+9. Original fix was correct but now buried under broken iterations
+
+**Why this happens:**
+
+- Local `dev` testing ≠ production deployment
+- Only `main` branch code deploys to https://pennycentral.com
+- Founder may not realize they need to merge before changes go live
+- You assume "works locally" means "works in production"
+
+**Correct workflow:**
+
+1. Make changes in `dev` branch
+2. Test locally (`npm run build` + manual verification)
+3. Commit to `dev` branch
+4. **Explicitly tell founder: "These changes are in `dev` — they need to be merged to `main` and pushed to deploy"**
+5. Founder merges `dev` → `main` (manually or via PR)
+6. Founder pushes `main` to remote
+7. **NOW** it deploys to Vercel
+8. Verify on https://pennycentral.com
+
+**Never assume changes are live until:**
+
+- Confirmed merged to `main` branch
+- Confirmed pushed to remote
+- Verified on production URL
+
+**Before declaring any fix complete, ask:**
+
+> "Are we testing this in `dev` locally, or are we verifying on the live production site? If we're in `dev`, remember this needs to be merged to `main` and pushed before it deploys."
+
 ---
 
 ## 5. Documentation Structure

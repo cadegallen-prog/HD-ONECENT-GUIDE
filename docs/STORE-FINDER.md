@@ -13,6 +13,7 @@ The Store Finder helps users locate nearby Home Depot stores using an interactiv
 ### Search Capabilities
 
 Users can search for stores by:
+
 - **State name** (e.g., "Texas", "California", "New York")
 - **State abbreviation** (e.g., "TX", "CA", "NY")
 - **City name** (e.g., "Kerrville", "Seattle", "Atlanta")
@@ -40,6 +41,7 @@ Users can search for stores by:
 ### Data Source
 
 **File:** `data/stores/store_directory.master.json`
+
 - **Total stores:** 2,007 locations
 - **Coverage:** All 50 US states including Alaska & Hawaii
 - **Unique ZIPs:** 1,965 ZIP codes
@@ -70,7 +72,9 @@ All 50 state names are mapped to abbreviations, so users can search "Texas" inst
 
 ```typescript
 const STATE_ABBREV_MAP = {
-  'alabama': 'AL', 'alaska': 'AK', 'arizona': 'AZ', // ... all 50 states
+  alabama: "AL",
+  alaska: "AK",
+  arizona: "AZ", // ... all 50 states
 }
 ```
 
@@ -84,6 +88,7 @@ const STATE_ABBREV_MAP = {
 - Custom markers with store-specific popups
 
 **Popup format:**
+
 ```
 [Store Name] #[Number]    [X mi]
 [Hours]
@@ -95,19 +100,20 @@ const STATE_ABBREV_MAP = {
 
 ## Files
 
-| Path | Purpose |
-|------|---------|
-| `app/store-finder/page.tsx` | Main store finder page with search logic |
-| `components/store-map.tsx` | Interactive Leaflet map component |
-| `lib/stores.ts` | Store utility functions and types |
-| `data/stores/store_directory.master.json` | Complete store database (2,007 locations) |
-| `data/home-depot-stores.sample.json` | Sample data for faster initial load (30 stores) |
+| Path                                      | Purpose                                                              |
+| ----------------------------------------- | -------------------------------------------------------------------- |
+| `app/store-finder/page.tsx`               | Main store finder page with search logic                             |
+| `components/store-map.tsx`                | Interactive Leaflet map component                                    |
+| `lib/stores.ts`                           | Store utility functions and types                                    |
+| `data/stores/store_directory.master.json` | Complete store database (2,007 locations)                            |
+| `data/home-depot-stores.json`             | Generated, sanitized JSON used in production (upload to Vercel Blob) |
 
 ---
 
 ## APIs Used
 
 ### Zippopotam (Primary ZIP Geocoding)
+
 - **Endpoint:** `https://api.zippopotam.us/us/{zip}`
 - **Cost:** Free forever
 - **Rate limit:** None
@@ -115,6 +121,7 @@ const STATE_ABBREV_MAP = {
 - **Docs:** https://www.zippopotam.us/
 
 ### Nominatim (Fallback ZIP Geocoding)
+
 - **Endpoint:** `https://nominatim.openstreetmap.org/search`
 - **Cost:** Free
 - **Rate limit:** 1 request/second
@@ -125,6 +132,8 @@ const STATE_ABBREV_MAP = {
 
 ## Data Quality
 
+> Reminder: whenever store data changes (hours, adds/removes), regenerate `data/home-depot-stores.json` from `data/stores/store_directory.master.json`, then upload it to the Vercel Blob URL in `NEXT_PUBLIC_HOME_DEPOT_STORES_URL` to keep production in sync. Keep CSV/JSON in lockstep to avoid drift.
+
 ### Fixed Issues
 
 - **35 stores** had incorrect coordinates (fixed via geocoding)
@@ -134,6 +143,7 @@ const STATE_ABBREV_MAP = {
 ### Testing
 
 Comprehensive testing performed:
+
 - ✅ 200/200 exact ZIP matches (100%)
 - ✅ 15/15 non-database ZIPs via geocoding (100%)
 - ✅ All 50 state names searchable
@@ -172,6 +182,7 @@ Comprehensive testing performed:
 ## Future Improvements
 
 Potential enhancements:
+
 - [ ] Real-time store hours via Home Depot API
 - [ ] User favorites persistence across devices
 - [ ] Distance radius filter (5mi, 10mi, 25mi options)
@@ -197,6 +208,7 @@ To update the store database:
 Both Zippopotam and Nominatim are free services with no SLA guarantees.
 
 **Monitoring recommendations:**
+
 - Check browser console for geocoding errors
 - Monitor user reports of "ZIP not found" issues
 - Consider adding error tracking (Sentry, etc.)

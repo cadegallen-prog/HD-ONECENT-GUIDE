@@ -1,5 +1,16 @@
 # Penny Central Development Guide
 
+⚠️ **BEFORE DOING ANYTHING:** Read ALL files in the `.ai/` directory for the collaboration protocol:
+- `.ai/CONTRACT.md` - Collaboration rules (what Cade provides, what you provide)
+- `.ai/DECISION_RIGHTS.md` - What you can decide vs. must get approval for
+- `.ai/CONSTRAINTS.md` - Fragile areas you must NOT touch
+- `.ai/SESSION_LOG.md` - Recent work history and context
+- `.ai/LEARNINGS.md` - Past mistakes to avoid
+
+Then ask Cade for **GOAL / WHY / DONE** for this session.
+
+---
+
 ## Project Overview
 
 PennyCentral.com is a Next.js 15 app serving the Home Depot penny hunting community.

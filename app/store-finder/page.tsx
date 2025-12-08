@@ -35,8 +35,6 @@ const StoreMap = dynamic(
   }
 )
 
-import sampleStoresData from "@/data/home-depot-stores.sample.json"
-
 const MAX_STORES = 20
 
 const STATE_ABBREV_MAP: Record<string, string> = {
@@ -165,10 +163,8 @@ const getClosestStores = (stores: StoreLocation[], lat: number, lng: number): St
   return storesWithDistance.slice(0, MAX_STORES)
 }
 
-// Load and validate stores
-const allStores: StoreLocation[] = (sampleStoresData as StoreLocation[])
-  .map(normalizeStore)
-  .filter((s) => isValidStore(s.name) && hasValidCoordinates(s))
+// Load and validate stores (initially empty; remote load fills in)
+const allStores: StoreLocation[] = []
 
 // Default center (Geographic center of contiguous US - Lebanon, KS area)
 const DEFAULT_CENTER: [number, number] = [39.8283, -98.5795]
@@ -190,7 +186,7 @@ const getAverageCoordinates = (stores: StoreLocation[]) => {
 }
 
 // Pre-compute initial stores for immediate display
-const initialDisplayedStores = getClosestStores(allStores, DEFAULT_CENTER[0], DEFAULT_CENTER[1])
+const initialDisplayedStores: StoreLocation[] = []
 
 export default function StoreFinderPage() {
   const [displayedStores, setDisplayedStores] = useState<StoreLocation[]>(initialDisplayedStores)
@@ -206,6 +202,7 @@ export default function StoreFinderPage() {
   )
   const [favorites, setFavorites] = useState<string[]>([])
   const [allLoadedStores, setAllLoadedStores] = useState<StoreLocation[]>(allStores)
+  const allStoresRef = useRef<StoreLocation[]>(allStores)
 
   const listContainerRef = useRef<HTMLDivElement>(null)
   const storeRefs = useRef<Map<string, HTMLDivElement>>(new Map())
@@ -230,28 +227,21 @@ export default function StoreFinderPage() {
     const load = async () => {
       setLoadingStores(true)
       try {
-        // Fetch ALL stores - bypass browser cache
         const res = await fetch("/api/stores", { cache: "no-store" })
-
-        if (!res.ok) {
-          throw new Error(`Failed to fetch /api/stores: ${res.status} ${res.statusText}`)
-        }
-
+        if (!res.ok) throw new Error(`Failed to fetch /api/stores: ${res.status} ${res.statusText}`)
         const json = (await res.json()) as StoreLocation[]
-
         const normalized = json
           .map(normalizeStore)
           .filter((s) => isValidStore(s.name) && hasValidCoordinates(s))
 
-        if (!cancelled) {
+        if (!cancelled && normalized.length) {
           setAllLoadedStores(normalized)
+          allStoresRef.current = normalized
         }
       } catch {
-        // Keep using the sample data (already in allLoadedStores)
+        // swallow
       } finally {
-        if (!cancelled) {
-          setLoadingStores(false)
-        }
+        if (!cancelled) setLoadingStores(false)
       }
     }
     load()
@@ -260,14 +250,27 @@ export default function StoreFinderPage() {
     }
   }, [])
 
-  // Auto-request user location on page load (runs once)
-  useEffect(() => {
-    // Only auto-request if user hasn't interacted yet
-    const hasRequestedBefore = sessionStorage.getItem("hd-location-requested")
-    if (!hasRequestedBefore && !geolocationResolved) {
-      sessionStorage.setItem("hd-location-requested", "true")
-      getUserLocation()
+  const ensureStoresLoaded = useCallback(async () => {
+    if (allStoresRef.current.length > 0) return allStoresRef.current
+    try {
+      setLoadingStores(true)
+      const res = await fetch("/api/stores", { cache: "no-store" })
+      if (!res.ok) throw new Error("fetch failed")
+      const json = (await res.json()) as StoreLocation[]
+      const normalized = json
+        .map(normalizeStore)
+        .filter((s) => isValidStore(s.name) && hasValidCoordinates(s))
+      if (normalized.length) {
+        setAllLoadedStores(normalized)
+        allStoresRef.current = normalized
+        return normalized
+      }
+    } catch {
+      // ignore
+    } finally {
+      setLoadingStores(false)
     }
+    return allStoresRef.current
   }, [])
 
   // Load favorites from localStorage
@@ -349,11 +352,21 @@ export default function StoreFinderPage() {
     }
   }, [allLoadedStores])
 
+  // Auto-request user location on page load (runs once)
+  useEffect(() => {
+    const hasRequestedBefore = sessionStorage.getItem("hd-location-requested")
+    if (!hasRequestedBefore && !geolocationResolved) {
+      sessionStorage.setItem("hd-location-requested", "true")
+      getUserLocation()
+    }
+  }, [geolocationResolved, getUserLocation])
+
   // Search by ZIP code, city, or address
-  const handleSearch = useCallback(() => {
+  const handleSearch = useCallback(async () => {
+    const storesSource = await ensureStoresLoaded()
     const trimmedQuery = searchQuery.trim()
     if (!trimmedQuery) {
-      const initialStores = getClosestStores(allLoadedStores, DEFAULT_CENTER[0], DEFAULT_CENTER[1])
+      const initialStores = getClosestStores(storesSource, DEFAULT_CENTER[0], DEFAULT_CENTER[1])
       setDisplayedStores(initialStores)
       setMapCenter(DEFAULT_CENTER)
       if (initialStores.length > 0) {
@@ -367,7 +380,7 @@ export default function StoreFinderPage() {
       const lat = parseFloat(latLngMatch[1])
       const lng = parseFloat(latLngMatch[3])
       if (!Number.isNaN(lat) && !Number.isNaN(lng)) {
-        const closestStores = getClosestStores(allLoadedStores, lat, lng)
+        const closestStores = getClosestStores(storesSource, lat, lng)
         setDisplayedStores(closestStores)
         setMapCenter([lat, lng])
         setSelectedStore(closestStores[0] || null)
@@ -375,16 +388,32 @@ export default function StoreFinderPage() {
       return
     }
 
+    // Check if query is a store number (3-5 digits)
+    if (/^\d{3,5}$/.test(trimmedQuery)) {
+      const storeNumber = trimmedQuery.padStart(4, "0")
+      const matchedStore = storesSource.find(
+        (s) => s.number === storeNumber || s.id === trimmedQuery || s.id === storeNumber
+      )
+
+      if (matchedStore) {
+        const closestStores = getClosestStores(storesSource, matchedStore.lat, matchedStore.lng)
+        setDisplayedStores(closestStores)
+        setMapCenter([matchedStore.lat, matchedStore.lng])
+        setSelectedStore(matchedStore)
+        return
+      }
+    }
+
     // Check if query is a 5-digit ZIP code
     const zipMatch = trimmedQuery.match(/^\d{5}$/)
     if (zipMatch) {
       // First, try to find exact ZIP match in our data
-      const storesWithZip = allLoadedStores.filter((store) => store.zip === trimmedQuery)
+      const storesWithZip = storesSource.filter((store) => store.zip === trimmedQuery)
 
       if (storesWithZip.length > 0) {
         // Found exact match - use that store's location as center
         const centerStore = storesWithZip[0]
-        const closestStores = getClosestStores(allLoadedStores, centerStore.lat, centerStore.lng)
+        const closestStores = getClosestStores(storesSource, centerStore.lat, centerStore.lng)
         setDisplayedStores(closestStores)
         setMapCenter([centerStore.lat, centerStore.lng])
         setSelectedStore(closestStores[0] || null)
@@ -402,7 +431,7 @@ export default function StoreFinderPage() {
             if (zipData && zipData.places && zipData.places.length > 0) {
               const lat = parseFloat(zipData.places[0].latitude)
               const lng = parseFloat(zipData.places[0].longitude)
-              const closestStores = getClosestStores(allLoadedStores, lat, lng)
+              const closestStores = getClosestStores(storesSource, lat, lng)
               setDisplayedStores(closestStores)
               setMapCenter([lat, lng])
               setSelectedStore(closestStores[0] || null)
@@ -423,7 +452,7 @@ export default function StoreFinderPage() {
           if (nomData && nomData.length > 0) {
             const lat = parseFloat(nomData[0].lat)
             const lng = parseFloat(nomData[0].lon)
-            const closestStores = getClosestStores(allLoadedStores, lat, lng)
+            const closestStores = getClosestStores(storesSource, lat, lng)
             setDisplayedStores(closestStores)
             setMapCenter([lat, lng])
             setSelectedStore(closestStores[0] || null)
@@ -463,7 +492,7 @@ export default function StoreFinderPage() {
       }
     })
 
-    const scoredStores = allLoadedStores.map((store) => {
+    const scoredStores = storesSource.map((store) => {
       const fields = [
         store.name,
         store.address,
@@ -500,7 +529,7 @@ export default function StoreFinderPage() {
           ? { lat: referenceStores[0].lat, lng: referenceStores[0].lng }
           : getAverageCoordinates(referenceStores)
 
-      const closestStores = getClosestStores(allLoadedStores, centerPoint.lat, centerPoint.lng)
+      const closestStores = getClosestStores(storesSource, centerPoint.lat, centerPoint.lng)
       setDisplayedStores(closestStores)
       setMapCenter([centerPoint.lat, centerPoint.lng])
       setSelectedStore(closestStores[0] || null)
@@ -872,7 +901,7 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="flex-1 text-xs font-medium border border-border py-2 px-3 rounded text-center hover:bg-[var(--bg-elevated)] transition-colors flex items-center justify-center gap-1 min-h-[44px]"
+                  className="flex-1 text-xs font-medium border border-border py-2 px-3 rounded text-center hover:bg-accent hover:text-accent-foreground transition-colors flex items-center justify-center gap-1 min-h-[44px]"
                 >
                   <ExternalLink className="h-4 w-4" />
                   Store
