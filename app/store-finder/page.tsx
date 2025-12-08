@@ -38,7 +38,7 @@ const StoreMap = dynamic(
 )
 
 // Temporary proof-of-concept mode: intentionally load every store to validate data completeness
-const PROOF_OF_CONCEPT_MODE = true
+const PROOF_OF_CONCEPT_MODE = false
 const MAX_STORES = PROOF_OF_CONCEPT_MODE ? 5000 : 20
 
 const STATE_ABBREV_MAP: Record<string, string> = {
