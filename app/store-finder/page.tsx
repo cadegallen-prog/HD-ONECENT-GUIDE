@@ -300,15 +300,15 @@ export default function StoreFinderPage() {
     localStorage.setItem("hd-penny-favorites", JSON.stringify(favorites))
   }, [favorites])
 
-  // Auto-scroll to selected store in the list
-  useEffect(() => {
-    if (selectedStore && listContainerRef.current) {
-      const storeElement = storeRefs.current.get(selectedStore.id)
-      if (storeElement) {
-        storeElement.scrollIntoView({ behavior: "smooth", block: "nearest" })
-      }
-    }
-  }, [selectedStore])
+  // Auto-scroll to selected store in the list (disabled to prevent confusion with rank positions)
+  // useEffect(() => {
+  //   if (selectedStore && listContainerRef.current) {
+  //     const storeElement = storeRefs.current.get(selectedStore.id)
+  //     if (storeElement) {
+  //       storeElement.scrollIntoView({ behavior: "smooth", block: "nearest" })
+  //     }
+  //   }
+  // }, [selectedStore])
 
   // Get user's current location
   const getUserLocation = useCallback(() => {
