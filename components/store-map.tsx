@@ -103,22 +103,9 @@ export const StoreMap = React.memo(function StoreMap({
   const [mounted, setMounted] = React.useState(false)
   const markersRef = React.useRef<Record<string, LeafletMarker | null>>({})
 
-  // We do NOT want to re-order stores based on selection for rendering order if it confuses the user,
-  // but Leaflet renders in order, so last = top.
-  // The user complained about "promoted to #1 spot".
-  // If they meant the list, that's handled in page.tsx.
-  // If they meant the map marker z-index, that's this logic.
-  // I'll keep this logic because selected marker SHOULD be on top visually.
-  const orderedStores = React.useMemo(() => {
-    if (selectedStore) {
-      const selectedId = selectedStore.id
-      const selectedInList = stores.find((store) => store.id === selectedId)
-      if (selectedInList) {
-        return [...stores.filter((store) => store.id !== selectedId), selectedInList]
-      }
-    }
-    return stores
-  }, [stores, selectedStore])
+  // Keep original store order - do NOT reorder based on selection
+  // This prevents confusion with the list order and the rank numbers
+  const orderedStores = stores
 
   // Load Leaflet and create icons only on the client after mount to avoid SSR/dynamic import issues
   const { defaultIcon, selectedIcon } = React.useMemo(() => {
