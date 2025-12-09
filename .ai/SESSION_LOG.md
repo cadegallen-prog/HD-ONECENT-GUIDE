@@ -261,6 +261,75 @@
 
 ---
 
+## December 8, 2025 - Claude Code - Penny List UI/UX Improvements & Homepage Updates
+
+**AI:** Claude Code (Sonnet 4.5)
+**Goal:** Fix UI/UX issues on penny-list page (asymmetrical buttons, poor hover states, accessibility), remove Trip Tracker from live site, fix Submit Find link, and add Penny List card to homepage
+**Approach:** Comprehensive UI/UX overhaul following accessibility best practices (WCAG AAA), removed Trip Tracker from user-facing areas while keeping code, updated Submit Find to use internal routing
+
+**Changes Made:**
+
+*Penny List Page (app/penny-list/page.tsx):*
+- Made CTA buttons uniform (both use `TrackableLink`, same padding `px-6 py-3`, same colors)
+- Improved hover states with multi-signal feedback (color change, shadow, lift effect, focus ring)
+- Replaced "How This List Works" section with icon-based design (5 items with color-coded badges)
+- Added ARIA labels to all buttons for screen reader accessibility
+- Changed Submit Find button event from `submit_find_click` to `find_submit` (matches EventName type)
+
+*Submit Find URL Update:*
+- Updated `SUBMIT_FIND_FORM_URL` in `lib/constants.ts` from Google Form to `/report-find`
+- Removed `target="_blank"` and `rel="noopener noreferrer"` from Submit Find button (now internal link)
+
+*Trip Tracker Removal:*
+- Commented out Trip Tracker from navbar (`components/navbar.tsx` line 75)
+- Removed Trip Tracker card from homepage Tools section (`app/page.tsx`)
+- Removed unused imports: `ClipboardCheck` from homepage, `Clock` from navbar
+- Initially changed grid to 2 columns, then restored to 3 columns when Penny List card was added
+
+*Homepage Updates (app/page.tsx):*
+- Added Penny List card as first item in "Penny Hunting Tools" section
+- Grid now shows: Penny List, Store Finder, Complete Guide (3 cards)
+- Imported `Star` icon from lucide-react for Penny List card
+
+**Outcome:** ✅ **Success**
+- All UI/UX improvements implemented and tested
+- Build passes: `npm run build` ✓
+- Lint passes: `npm run lint` ✓
+- Two commits pushed to main branch
+
+**Completed Items:**
+- ✅ Updated icon imports in penny-list page (Clock, CheckCircle2, Info)
+- ✅ Replaced "How This List Works" with icon-based structure
+- ✅ Updated "Submit a Find" button styling and tracking
+- ✅ Updated "Subscribe to Alerts" button styling
+- ✅ Updated SUBMIT_FIND_FORM_URL constant to '/report-find'
+- ✅ Removed Trip Tracker from navbar
+- ✅ Removed Trip Tracker card from homepage
+- ✅ Removed ClipboardCheck and Clock unused imports
+- ✅ Added Penny List card to homepage Tools section
+- ✅ Restored 3-column grid layout
+- ✅ All tests passed (build + lint)
+- ✅ Staged, committed, and pushed to main
+
+**Unfinished Items:**
+- None - all tasks completed successfully
+
+**Learnings:**
+- TrackableLink component has strict TypeScript types - event names must match `EventName` type in `lib/analytics.ts`
+- The existing event name is `find_submit` (not `submit_find_click`)
+- Icon-based visual hierarchy greatly improves accessibility for color-blind users
+- Multi-signal hover feedback (color + shadow + transform) provides better UX than opacity-only changes
+- Prettier auto-fix handles most formatting issues automatically
+
+**For Next AI:**
+- Penny List now has 3 prominent placements: (1) Navbar, (2) Homepage Tools section (first card), (3) Direct link
+- Submit Find button on penny-list page now routes to `/report-find` (internal page, not Google Form)
+- Trip Tracker is hidden from UI but route still exists at `/trip-tracker` (accessible via direct URL)
+- All accessibility improvements follow WCAG AAA standards
+- Event tracking uses correct event names from `lib/analytics.ts` EventName type
+
+---
+
 ## Template for Future Entries
 
 Copy this template when adding new sessions:
