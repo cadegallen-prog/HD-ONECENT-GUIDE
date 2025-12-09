@@ -196,6 +196,71 @@
 
 ---
 
+## December 8, 2025 - Claude Code - Report-Find & Penny-List Unverified Model
+
+**AI:** Claude Code (Opus 4.5)
+**Goal:** Update /report-find form and /penny-list page to reflect "live, unverified radar" concept; connect form submissions directly to Google Sheets
+**Approach:** Rewrote form with new fields and validation, changed API route to POST to Google Apps Script webhook, updated all copy to remove "verified" language
+
+**Changes Made:**
+
+*Report-Find Form (`app/report-find/page.tsx`):*
+- Added "Item Name" field (required, max 75 chars)
+- Added SKU visual formatting (xxx-xxx or xxxx-xxx-xxx while typing)
+- Converted State from text input to dropdown (all US states + territories)
+- Made Store Name/Number optional (was required)
+- Updated all copy to clarify unverified nature
+- Removed "reviewed before publishing" and "24-48 hours" language
+
+*API Route (`app/api/submit-find/route.ts`):*
+- Changed from PostgreSQL to Google Apps Script webhook
+- Updated validation (itemName required, storeName optional)
+- Format data to match Google Sheet column aliases
+
+*Penny List (`app/penny-list/page.tsx`):*
+- Changed title to "Crowd Reports: Recent Penny Leads (Unverified)"
+- Updated disclaimer box with honest unverified language
+- Updated "How This List Works" section
+- Removed "Verified by Community" badges
+- Changed to "Unverified report" label
+
+*New File (`lib/us-states.ts`):*
+- US states and territories array for dropdown
+
+**Outcome:** ✅ **Success**
+- All code changes complete and pushed to main
+- Google Apps Script webhook set up by Cade
+- Environment variable `GOOGLE_APPS_SCRIPT_URL` added to Vercel
+- Form now submits directly to Google Sheets (auto-appears on Penny List within ~1 hour)
+
+**Completed Items:**
+- ✅ Item Name field added with validation
+- ✅ SKU formatting with dashes (visual only)
+- ✅ Store Name/Number made optional
+- ✅ State converted to dropdown
+- ✅ All "verified" language removed from both pages
+- ✅ API route rewired to Google Apps Script
+- ✅ Google Apps Script deployed by Cade
+- ✅ Environment variable added to Vercel
+
+**Unfinished Items:**
+- None - feature is complete and ready to test
+
+**Learnings:**
+- Form was previously disconnected from Penny List (went to PostgreSQL, list read from Google Sheets)
+- Google Apps Script webhooks are free and easy to set up
+- ARIA `aria-invalid` attribute requires string "true" or undefined, not boolean
+- Non-coders can deploy Apps Script webhooks with step-by-step instructions
+
+**For Next AI:**
+- Form submissions now go to Google Sheets via Apps Script webhook
+- Environment variable is `GOOGLE_APPS_SCRIPT_URL`
+- The PostgreSQL database (`@vercel/postgres`) is no longer used for submissions
+- If Cade reports issues with form submissions, check the Apps Script deployment
+- Penny List still uses hourly revalidation from Google Sheets CSV
+
+---
+
 ## Template for Future Entries
 
 Copy this template when adding new sessions:
