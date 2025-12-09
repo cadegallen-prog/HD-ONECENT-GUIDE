@@ -83,6 +83,14 @@ Ask yourself:
 
 ---
 
+### 4.2. Affiliate Redirect Safety
+
+- `/go/befrugal` (and any future `go/*` affiliate paths) **must** stay a normal `<a>` tag with `target="_blank"` + `rel="noopener noreferrer"`.
+- Never wrap these links in `next/link`, `Button`, or any component that might prefetch or fire a fetch on render. Next.js prefetching triggers background requests to befrugal.com, which throws noisy CORS errors and can risk referral tracking.
+- Tracking clicks is allowed (e.g., `onClick={() => trackEvent(...)}`), but do not attempt to `fetch` or otherwise touch the redirect programmatically.
+
+---
+
 ## 4.1. ⚠️ CRITICAL: Git Branching & Deployment
 
 **DEPLOYMENT RULE:** Changes only go live when merged to `main` and pushed to remote.
