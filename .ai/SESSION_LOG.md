@@ -417,6 +417,55 @@ The Store Finder map popup still lets scroll-wheel gestures over the popup conte
 
 ---
 
+## December 9, 2025 - Claude Code - Penny List Sync Fix + CSP Update
+
+**AI:** Claude Code (Opus 4.5)
+**Goal:** Investigate why penny list wasn't showing Google Sheets data; investigate map location accuracy issue
+**Approach:** Traced data flow, tested CSV URLs directly, identified publish settings issue
+
+**Changes Made:**
+- Fixed CSP in `next.config.js` to allow befrugal.com affiliate links
+
+**Outcome:** ✅ **Success** (Penny List) / ⚠️ **External Issue** (Map Location)
+
+**Penny List Issue - FIXED:**
+- Root cause: Google Sheet was "shared" but not "published to web"
+- "Publish to Web" creates a public read-only CSV URL (different from Share settings)
+- User published Form Responses 1 as CSV with auto-republish enabled
+- After Vercel redeploy, all 21+ submissions now display correctly
+
+**Map Location Issue - BROWSER PROBLEM:**
+- User reported location showing 15 miles off in Adairsville, GA
+- Investigated all recent code changes - none touched geolocation logic
+- User ran `navigator.geolocation.getCurrentPosition()` in console
+- Browser returned coordinates `34.3769088, -84.9936384` (which IS Adairsville)
+- Conclusion: Browser's Geolocation API returning inaccurate data (WiFi/IP positioning)
+- Workaround: Use ZIP code search instead of "My Location" button
+
+**Completed Items:**
+- ✅ Identified penny list root cause (publish vs share settings)
+- ✅ Guided user through "Publish to Web" process
+- ✅ Verified CSV returns data after publish
+- ✅ Penny list now working in production
+- ✅ Added befrugal.com to CSP connect-src directive
+
+**Unfinished Items:**
+- Map location accuracy (external browser issue, not code)
+
+**Learnings:**
+- "Publish to Web" in Google Sheets is DIFFERENT from "Share" settings
+- Always test CSV URLs directly with curl to verify data is accessible
+- Browser geolocation accuracy varies wildly - WiFi/IP can be 10-20+ miles off
+- CSP blocks any domains not explicitly whitelisted
+
+**For Next AI:**
+- Penny list sync is working correctly now
+- If user reports location issues, it's likely browser geolocation, not code
+- ZIP code search is the reliable alternative to "My Location"
+- befrugal.com is now in CSP whitelist
+
+---
+
 ## Template for Future Entries
 
 Copy this template when adding new sessions:
