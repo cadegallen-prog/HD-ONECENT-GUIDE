@@ -466,6 +466,76 @@ The Store Finder map popup still lets scroll-wheel gestures over the popup conte
 
 ---
 
+## December 9, 2025 - Claude Code - Penny List Milestone: WCAG AAA + Filtering System
+
+**AI:** Claude Code (Opus 4.5)
+**Goal:** Major milestone - Transform penny list into scalable, accessible, filterable resource for 100+ items
+**Approach:** Split page into server+client components, add comprehensive filtering system, improve state display, add table view, ensure WCAG AAA compliance
+
+**Changes Made:**
+
+*New Components Created:*
+- `components/penny-list-client.tsx` - Main client component orchestrating all filtering/sorting
+- `components/penny-list-filters.tsx` - Filter bar with state dropdown, tier toggles, search, sort
+- `components/penny-list-card.tsx` - Reusable card component with improved state display
+- `components/penny-list-table.tsx` - Table view for desktop users scanning 100+ items
+
+*Page Refactored:*
+- `app/penny-list/page.tsx` - Now thin server component that fetches data and passes to client
+
+*Key Features Implemented:*
+1. **State Filter** - Dropdown with all US states, filters items by location
+2. **Tier Toggle** - All / Very Common / Common / Rare buttons with aria-pressed
+3. **Search** - Debounced search by item name or SKU
+4. **Sort** - Newest / Oldest / Most Reports / Alphabetical
+5. **Table View** - Desktop toggle between cards and compact table
+6. **Improved State Display** - Now shows "TX · 3" with tooltip explaining "Texas: 3 reports"
+7. **Images Removed** - Per user request, no more placeholder images
+
+*WCAG AAA Compliance:*
+- All touch targets ≥44px minimum
+- aria-live="polite" region announces filter result counts
+- Proper landmark regions with aria-label
+- aria-pressed on toggle buttons
+- Proper heading hierarchy (h2 for Hot section, h3 for cards)
+- Focus-visible outlines on all interactive elements
+- Screen reader friendly state badges with aria-labels
+
+**Outcome:** ✅ **Success**
+- `npm run build` passes
+- `npm run lint` passes (0 errors, 0 warnings)
+- All features implemented as planned
+- Ready for user testing
+
+**Completed Items:**
+- ✅ Split penny-list into server/client components
+- ✅ Removed all image sections from cards
+- ✅ Added filter bar with state/tier/search/sort
+- ✅ Improved state display format (TX · 3 with tooltips)
+- ✅ Added table view toggle for desktop
+- ✅ WCAG AAA compliance (44px targets, aria-live, landmarks)
+- ✅ Empty state with "clear filters" button
+- ✅ Hot section hidden when filters active
+
+**Unfinished Items:**
+- None - all planned features implemented
+
+**Learnings:**
+- Client-side filtering is efficient for <1000 items (no need for server roundtrips)
+- Splitting server/client components keeps data fetching fast while enabling interactivity
+- US_STATES constant from lib/us-states.ts is reusable across features
+- aria-live="polite" is better than "assertive" for filter updates (less disruptive)
+- Table view is much better for scanning large lists than cards
+
+**For Next AI:**
+- Penny list now has comprehensive filtering - no need to re-implement
+- Data layer (`lib/fetch-penny-data.ts`) was NOT modified - still uses Google Sheets CSV
+- Images are intentionally removed - future stock images would need a separate system
+- If adding more filters, follow the pattern in `penny-list-filters.tsx`
+- Test with screen reader (NVDA/JAWS) if making accessibility changes
+
+---
+
 ## Template for Future Entries
 
 Copy this template when adding new sessions:
