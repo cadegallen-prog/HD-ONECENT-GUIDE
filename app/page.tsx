@@ -310,8 +310,10 @@ export default function Home() {
             </a>
 
             {/* Cashback Card */}
-            <Link
+            <a
               href={BEFRUGAL_REFERRAL_PATH}
+              target="_blank"
+              rel="noopener noreferrer"
               className="card-interactive bg-[var(--bg-elevated)] dark:bg-[var(--bg-card)] rounded-xl p-6 border border-[var(--border-default)] block"
             >
               <div className="w-12 h-12 rounded-xl bg-white dark:bg-[var(--bg-elevated)] flex items-center justify-center mb-4 border border-[var(--border-default)]">
@@ -328,7 +330,7 @@ export default function Home() {
                 Get cashback with BeFrugal
                 <ExternalLink className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
               </div>
-            </Link>
+            </a>
           </div>
         </div>
       </section>
