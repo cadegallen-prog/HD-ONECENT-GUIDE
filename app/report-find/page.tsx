@@ -2,11 +2,40 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { AlertCircle, CheckCircle2, MapPin, Package, Calendar } from "lucide-react"
+import { AlertCircle, CheckCircle2, MapPin, Package, Calendar, Info } from "lucide-react"
 import { trackEvent } from "@/lib/analytics"
+import { US_STATES } from "@/lib/us-states"
+
+// Format SKU for display: 123456 -> 123-456, 1234567890 -> 1234-567-890
+function formatSkuForDisplay(rawSku: string): string {
+  const digits = rawSku.replace(/\D/g, "")
+  if (digits.length <= 3) return digits
+  if (digits.length <= 6) {
+    return `${digits.slice(0, 3)}-${digits.slice(3)}`
+  }
+  if (digits.length <= 7) {
+    return `${digits.slice(0, 4)}-${digits.slice(4)}`
+  }
+  if (digits.length <= 10) {
+    return `${digits.slice(0, 4)}-${digits.slice(4, 7)}-${digits.slice(7)}`
+  }
+  // More than 10 digits - just show first 10 formatted
+  return `${digits.slice(0, 4)}-${digits.slice(4, 7)}-${digits.slice(7, 10)}`
+}
+
+// Get raw digits from SKU input
+function getRawSku(input: string): string {
+  return input.replace(/\D/g, "")
+}
+
+// Validate SKU is exactly 6 or 10 digits
+function isValidSku(rawSku: string): boolean {
+  return rawSku.length === 6 || rawSku.length === 10
+}
 
 export default function ReportFindPage() {
   const [formData, setFormData] = useState({
+    itemName: "",
     sku: "",
     storeName: "",
     storeCity: "",
@@ -16,15 +45,44 @@ export default function ReportFindPage() {
     notes: "",
   })
 
+  const [skuDisplay, setSkuDisplay] = useState("")
+  const [skuError, setSkuError] = useState("")
   const [submitting, setSubmitting] = useState(false)
   const [result, setResult] = useState<{
     success: boolean
     message: string
-    validationScore?: number
   } | null>(null)
+
+  const handleSkuChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value
+    const rawDigits = getRawSku(input)
+
+    // Limit to 10 digits max
+    const limitedDigits = rawDigits.slice(0, 10)
+
+    // Update display with formatting
+    setSkuDisplay(formatSkuForDisplay(limitedDigits))
+
+    // Store raw digits
+    setFormData({ ...formData, sku: limitedDigits })
+
+    // Validate and show error if needed
+    if (limitedDigits.length > 0 && limitedDigits.length !== 6 && limitedDigits.length !== 10) {
+      setSkuError("SKU must be 6 or 10 digits")
+    } else {
+      setSkuError("")
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    // Final SKU validation
+    if (!isValidSku(formData.sku)) {
+      setSkuError("SKU must be 6 or 10 digits")
+      return
+    }
+
     setSubmitting(true)
     setResult(null)
 
@@ -41,15 +99,15 @@ export default function ReportFindPage() {
         // Track successful submission
         trackEvent("find_submit", {
           event_label: "success",
-          value: data.validationScore || 0,
+          value: 1,
         })
         setResult({
           success: true,
           message: data.message,
-          validationScore: data.validationScore,
         })
         // Reset form
         setFormData({
+          itemName: "",
           sku: "",
           storeName: "",
           storeCity: "",
@@ -58,6 +116,8 @@ export default function ReportFindPage() {
           quantity: "",
           notes: "",
         })
+        setSkuDisplay("")
+        setSkuError("")
       } else {
         setResult({
           success: false,
@@ -87,20 +147,23 @@ export default function ReportFindPage() {
             Report a Penny Find
           </h1>
           <p className="text-lg text-[var(--text-secondary)] max-w-xl mx-auto">
-            Share what you found to help other hunters in your area. All submissions are reviewed
-            before publishing.
+            Share what you found to help other hunters in your area.
           </p>
         </div>
 
         {/* Info Box */}
-        <div className="bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-800 rounded-lg p-4 mb-8 flex gap-3 items-start">
-          <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-500 flex-shrink-0 mt-0.5" />
-          <div className="text-sm text-amber-800 dark:text-amber-200">
-            <p className="font-semibold mb-1">Quick Tips:</p>
+        <div className="bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-8 flex gap-3 items-start">
+          <Info className="w-5 h-5 text-blue-600 dark:text-blue-500 flex-shrink-0 mt-0.5" />
+          <div className="text-sm text-blue-800 dark:text-blue-200">
+            <p className="font-semibold mb-2">About This Form</p>
+            <p className="mb-2">This form is for quick, crowd-sourced reports of penny finds.</p>
             <ul className="list-disc pl-4 space-y-1">
-              <li>Enter the exact SKU from your receipt or the app</li>
-              <li>Include your store location (helps others nearby)</li>
-              <li>Recent finds (last 7-14 days) are most valuable</li>
+              <li>Submissions are not individually verified.</li>
+              <li>The Penny List may contain mistakes, sold-out items, or prices that changed.</li>
+              <li>
+                For proof-of-purchase posts with receipts and discussion, always use the Facebook
+                group.
+              </li>
             </ul>
           </div>
         </div>
@@ -110,13 +173,41 @@ export default function ReportFindPage() {
           onSubmit={handleSubmit}
           className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl p-6 sm:p-8 space-y-6"
         >
+          {/* Item Name */}
+          <div>
+            <label
+              htmlFor="itemName"
+              className="block text-sm font-medium text-[var(--text-primary)] mb-2"
+            >
+              Item Name{" "}
+              <span className="text-red-500" aria-hidden="true">
+                *
+              </span>
+              <span className="sr-only">(required)</span>
+            </label>
+            <input
+              type="text"
+              id="itemName"
+              required
+              aria-required="true"
+              maxLength={75}
+              value={formData.itemName}
+              onChange={(e) => setFormData({ ...formData, itemName: e.target.value })}
+              placeholder="e.g., Milwaukee Drill Set, Ryobi Battery Pack"
+              className="w-full px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent"
+            />
+            <p className="mt-1 text-xs text-[var(--text-muted)]">
+              What is the item? (max 75 characters)
+            </p>
+          </div>
+
           {/* SKU */}
           <div>
             <label
               htmlFor="sku"
               className="block text-sm font-medium text-[var(--text-primary)] mb-2"
             >
-              Item SKU{" "}
+              SKU Number{" "}
               <span className="text-red-500" aria-hidden="true">
                 *
               </span>
@@ -128,33 +219,37 @@ export default function ReportFindPage() {
               required
               aria-required="true"
               aria-describedby="sku-hint"
-              value={formData.sku}
-              onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
-              placeholder="e.g., 1001234567 or 123456"
-              className="w-full px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent"
+              aria-invalid={skuError ? "true" : undefined}
+              value={skuDisplay}
+              onChange={handleSkuChange}
+              placeholder="e.g., 123-456 or 1234-567-890"
+              className={`w-full px-4 py-2 rounded-lg border bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent font-mono ${
+                skuError ? "border-red-500 dark:border-red-400" : "border-[var(--border-default)]"
+              }`}
             />
-            <p id="sku-hint" className="mt-1 text-xs text-[var(--text-muted)]">
-              6 or 10 digit SKU from receipt or Home Depot app
-            </p>
+            {skuError ? (
+              <p className="mt-1 text-xs text-red-600 dark:text-red-400 flex items-center gap-1">
+                <AlertCircle className="w-3 h-3" />
+                {skuError}
+              </p>
+            ) : (
+              <p id="sku-hint" className="mt-1 text-xs text-[var(--text-muted)]">
+                6 or 10 digit SKU from receipt or Home Depot app
+              </p>
+            )}
           </div>
 
-          {/* Store Name */}
+          {/* Store Name (now optional) */}
           <div>
             <label
               htmlFor="storeName"
               className="block text-sm font-medium text-[var(--text-primary)] mb-2"
             >
-              Store Name/Number{" "}
-              <span className="text-red-500" aria-hidden="true">
-                *
-              </span>
-              <span className="sr-only">(required)</span>
+              Store Name/Number (optional)
             </label>
             <input
               type="text"
               id="storeName"
-              required
-              aria-required="true"
               value={formData.storeName}
               onChange={(e) => setFormData({ ...formData, storeName: e.target.value })}
               placeholder="e.g., Home Depot #1234 or Brandon"
@@ -169,7 +264,7 @@ export default function ReportFindPage() {
                 htmlFor="storeCity"
                 className="block text-sm font-medium text-[var(--text-primary)] mb-2"
               >
-                City
+                City (optional)
               </label>
               <input
                 type="text"
@@ -191,19 +286,21 @@ export default function ReportFindPage() {
                 </span>
                 <span className="sr-only">(required)</span>
               </label>
-              <input
-                type="text"
+              <select
                 id="storeState"
                 required
                 aria-required="true"
-                maxLength={2}
                 value={formData.storeState}
-                onChange={(e) =>
-                  setFormData({ ...formData, storeState: e.target.value.toUpperCase() })
-                }
-                placeholder="FL"
+                onChange={(e) => setFormData({ ...formData, storeState: e.target.value })}
                 className="w-full px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent"
-              />
+              >
+                <option value="">Select state...</option>
+                {US_STATES.map((state) => (
+                  <option key={state.code} value={state.code}>
+                    {state.name} ({state.code})
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
@@ -241,7 +338,7 @@ export default function ReportFindPage() {
               id="quantity"
               value={formData.quantity}
               onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-              placeholder="e.g., 5 on shelf, Full endcap, 1 left"
+              placeholder="e.g., 3 on shelf, 1 left"
               className="w-full px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent"
             />
           </div>
@@ -267,7 +364,7 @@ export default function ReportFindPage() {
           {/* Submit Button */}
           <Button
             type="submit"
-            disabled={submitting}
+            disabled={submitting || !!skuError}
             className="w-full bg-[var(--cta-primary)] text-white hover:opacity-90 py-6 text-lg font-medium"
           >
             {submitting ? "Submitting..." : "Submit Find"}
@@ -297,9 +394,10 @@ export default function ReportFindPage() {
                 >
                   {result.message}
                 </p>
-                {result.success && result.validationScore && (
+                {result.success && (
                   <p className="text-xs text-green-700 dark:text-green-300 mt-1">
-                    Your submission will be reviewed within 24-48 hours.
+                    Please post your haul with receipt photos in the Facebook group so the community
+                    can confirm this find.
                   </p>
                 )}
               </div>
@@ -310,8 +408,8 @@ export default function ReportFindPage() {
         {/* Bottom Info */}
         <div className="mt-8 text-center text-sm text-[var(--text-muted)]">
           <p>
-            All submissions are manually reviewed to ensure accuracy. Thank you for helping the
-            community!
+            Submissions appear on the Penny List automatically. The Facebook group is the gold
+            standard for verified finds.
           </p>
         </div>
       </div>

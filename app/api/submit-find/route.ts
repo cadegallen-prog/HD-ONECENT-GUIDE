@@ -1,58 +1,27 @@
 import { NextRequest, NextResponse } from "next/server"
-import { sql } from "@vercel/postgres"
 
-// Basic SKU validation
+// Basic SKU validation - must be exactly 6 or 10 digits
 function validateSKU(sku: string): boolean {
   const cleaned = sku.replace(/\D/g, "")
   return cleaned.length === 6 || cleaned.length === 10
-}
-
-function calculateValidationScore(submission: {
-  sku: string
-  storeName: string
-  storeCity: string
-  storeState: string
-  dateFound: string
-  quantity?: string
-  notes?: string
-}): number {
-  let score = 0
-
-  // Valid SKU format
-  if (validateSKU(submission.sku)) score += 20
-
-  // Has store name
-  if (submission.storeName.trim().length > 0) score += 10
-
-  // Has state
-  if (submission.storeState.length === 2) score += 10
-
-  // Has city
-  if (submission.storeCity.trim().length > 0) score += 10
-
-  // Recent date (within last 30 days)
-  const dateFound = new Date(submission.dateFound)
-  const today = new Date()
-  const daysDiff = Math.floor((today.getTime() - dateFound.getTime()) / (1000 * 60 * 60 * 24))
-  if (daysDiff >= 0 && daysDiff <= 30) score += 20
-
-  // Has quantity info
-  if (submission.quantity && submission.quantity.trim().length > 0) score += 5
-
-  // Has notes
-  if (submission.notes && submission.notes.trim().length > 0) score += 5
-
-  return score
 }
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
 
-    // Basic validation
-    if (!body.sku || !body.storeName || !body.storeState || !body.dateFound) {
+    // Validate required fields (storeName is now optional)
+    if (!body.itemName || !body.sku || !body.storeState || !body.dateFound) {
       return NextResponse.json(
-        { error: "Missing required fields: sku, storeName, storeState, dateFound" },
+        { error: "Missing required fields: itemName, sku, storeState, dateFound" },
+        { status: 400 }
+      )
+    }
+
+    // Validate Item Name length
+    if (body.itemName.trim().length === 0 || body.itemName.trim().length > 75) {
+      return NextResponse.json(
+        { error: "Item name must be between 1 and 75 characters." },
         { status: 400 }
       )
     }
@@ -65,29 +34,56 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const validationScore = calculateValidationScore(body)
+    // Validate state is 2 characters
+    if (body.storeState.length !== 2) {
+      return NextResponse.json({ error: "State must be a 2-letter code." }, { status: 400 })
+    }
+
     const cleanedSku = body.sku.replace(/\D/g, "")
 
-    await sql`
-      INSERT INTO submissions (
-        sku, store_name, store_city, store_state, 
-        date_found, quantity, notes, validation_score
-      ) VALUES (
-        ${cleanedSku},
-        ${body.storeName.trim()},
-        ${body.storeCity?.trim() || ""},
-        ${body.storeState.toUpperCase()},
-        ${body.dateFound},
-        ${body.quantity?.trim() || null},
-        ${body.notes?.trim() || null},
-        ${validationScore}
+    // Format location as "City, State" for Google Sheets
+    const city = body.storeCity?.trim() || ""
+    const state = body.storeState.toUpperCase()
+    const location = city ? `${city}, ${state}` : state
+
+    // Prepare payload for Google Apps Script
+    const sheetPayload = {
+      "Item Name": body.itemName.trim(),
+      SKU: cleanedSku,
+      "Store (City, State)": location,
+      "Purchase Date": body.dateFound,
+      "Exact Quantity Found": body.quantity?.trim() || "",
+      "Notes (optional)": body.notes?.trim() || "",
+    }
+
+    // POST to Google Apps Script webhook
+    const appsScriptUrl = process.env.GOOGLE_APPS_SCRIPT_URL
+
+    if (!appsScriptUrl) {
+      console.error("GOOGLE_APPS_SCRIPT_URL is not configured")
+      return NextResponse.json(
+        { error: "Submission service is not configured. Please try again later." },
+        { status: 500 }
       )
-    `
+    }
+
+    const scriptResponse = await fetch(appsScriptUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(sheetPayload),
+    })
+
+    if (!scriptResponse.ok) {
+      console.error("Google Apps Script error:", await scriptResponse.text())
+      return NextResponse.json(
+        { error: "Failed to submit find. Please try again." },
+        { status: 500 }
+      )
+    }
 
     return NextResponse.json({
       success: true,
-      message: "Thank you! Your find has been submitted for review.",
-      validationScore,
+      message: "Thanks! Your find has been added to the Penny List.",
     })
   } catch (error) {
     console.error("Error submitting find:", error)

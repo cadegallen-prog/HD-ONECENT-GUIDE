@@ -7,9 +7,9 @@ import { CopySkuButton } from "@/components/copy-sku-button"
 import { TrackableLink } from "@/components/trackable-link"
 
 export const metadata: Metadata = {
-  title: "Potential Penny List - Penny Central",
+  title: "Crowd Reports: Penny Leads - Penny Central",
   description:
-    "A curated list of items that have recently dropped to $0.01 at Home Depot stores nationwide.",
+    "Unverified crowd-sourced reports of penny items at Home Depot stores. YMMV - always verify in store.",
 }
 
 export default async function PennyListPage() {
@@ -69,18 +69,17 @@ export default async function PennyListPage() {
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-[var(--text-secondary)] text-sm font-medium mb-4">
             <span
-              className="inline-flex h-2 w-2 rounded-full bg-emerald-500"
+              className="inline-flex h-2 w-2 rounded-full bg-amber-500"
               aria-hidden="true"
             ></span>
-            Verified reports (last 30 days)
+            Crowd reports (last 30 days)
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)] mb-4">
-            Potential Penny List
+            Crowd Reports: Recent Penny Leads (Unverified)
           </h1>
           <p className="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
-            Items that have been confirmed as $0.01 in multiple regions. Remember:{" "}
-            <strong>YMMV (Your Mileage May Vary)</strong>. Not every store marks down at the same
-            time.
+            Recent penny finds reported by PennyCentral users. These are unverified leads —{" "}
+            <strong>YMMV (Your Mileage May Vary)</strong>.
           </p>
         </div>
       </section>
@@ -147,14 +146,22 @@ export default async function PennyListPage() {
           <div className="bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-800 rounded-lg p-4 mb-8 flex gap-3 items-start">
             <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-500 flex-shrink-0 mt-0.5" />
             <div className="text-sm text-amber-800 dark:text-amber-200">
-              <p className="font-semibold mb-1">Please Read Before Hunting:</p>
-              <p>
-                These items were found for a penny by other members. Do not ask employees to check
-                prices or look for these items.
+              <p className="font-semibold mb-2">Please Read:</p>
+              <p className="mb-2">
+                This page shows crowd-sourced reports from PennyCentral users. Submissions are added
+                automatically and are not vetted or guaranteed.
               </p>
-              <p className="mt-2">
-                Use the Home Depot app to check the SKU, but remember the app price often shows full
-                price even if it scans for $0.01 in-store.
+              <ul className="list-disc pl-4 space-y-1 mb-2">
+                <li>Prices and availability are YMMV.</li>
+                <li>Items may be mistyped, mis-scanned, or already pulled from the shelf.</li>
+                <li>
+                  Always double-check in store and use the Facebook group for proof-of-purchase
+                  posts and discussion.
+                </li>
+              </ul>
+              <p>
+                The Facebook group remains the gold standard for verified hauls, receipts, and
+                conversation. This list is a fast, experimental radar for possible leads.
               </p>
             </div>
           </div>
@@ -163,8 +170,8 @@ export default async function PennyListPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {recentItems.length === 0 && (
               <div className="col-span-full rounded-xl border border-[var(--border-default)] bg-[var(--bg-elevated)] p-6 text-[var(--text-secondary)]">
-                No verified penny items in the last {RECENT_WINDOW_DAYS} days. Check back soon or
-                submit a find.
+                No penny reports in the last {RECENT_WINDOW_DAYS} days. Check back soon or submit a
+                find!
               </div>
             )}
             {recentItems.map((item) => (
@@ -247,7 +254,7 @@ export default async function PennyListPage() {
                     )}
 
                   <div className="pt-4 border-t border-[var(--border-default)] flex items-center justify-between">
-                    <span className="text-xs text-[var(--text-muted)]">Verified by Community</span>
+                    <span className="text-xs text-[var(--text-muted)]">Unverified report</span>
                     <span className="text-emerald-600 dark:text-emerald-400 font-bold text-lg">
                       $0.01
                     </span>
@@ -262,13 +269,20 @@ export default async function PennyListPage() {
             <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
               How This List Works
             </h2>
-            <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
-              This is a <strong>community-verified list</strong> of items that members have found
-              for $0.01 at Home Depot stores. New items are reviewed and added weekly based on
-              community submissions. Each item shows the quantity found and locations reported to
-              help you hunt smarter. <strong>YMMV (Your Mileage May Vary)</strong> — just because it
-              was found at one store doesn't mean yours has it, but it's a strong signal to check.
-            </p>
+            <div className="text-sm text-[var(--text-secondary)] leading-relaxed space-y-2">
+              <p>Members submit penny finds through the Report a Find form on PennyCentral.</p>
+              <p>Submissions are added to this page automatically, usually within about an hour.</p>
+              <p>
+                <strong>No admin reviews each entry before it appears here.</strong>
+              </p>
+              <p>
+                Use the Facebook group to look for haul posts, photos, and real-time feedback on
+                these SKUs.
+              </p>
+              <p>
+                Think of this as a <strong>lead board</strong>, not a guarantee board.
+              </p>
+            </div>
           </div>
 
           {/* Call to Action Section */}
@@ -279,8 +293,8 @@ export default async function PennyListPage() {
                 Found a Penny Item?
               </h3>
               <p className="text-[var(--text-secondary)] mb-6">
-                Help the community by reporting your finds. We verify all submissions before
-                posting.
+                Help the community by reporting your finds. Your submission will appear on this list
+                automatically.
               </p>
               <a
                 href={SUBMIT_FIND_FORM_URL}
