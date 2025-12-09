@@ -75,13 +75,15 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <Link
+                <a
                   href="/go/befrugal"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-sm text-zinc-400 hover:text-white transition-colors"
                   onClick={() => trackEvent("befrugal_click", { location: "footer" })}
                 >
                   BeFrugal Cashback
-                </Link>
+                </a>
               </li>
               <li>
                 <Link
