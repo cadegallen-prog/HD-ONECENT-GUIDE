@@ -261,6 +261,93 @@
 
 ---
 
+## December 9, 2025 - ChatGPT Codex - Store Finder distance bug + map popup accessibility polish
+
+**AI:** ChatGPT Codex (gpt-5.1)
+**Goal:** Fix Store Finder behavior where clicking a store re-centered the distance calculations, and improve Store Finder map pins + popup buttons for WCAG-compliant contrast and cleaner styling.
+**Approach:** Adjusted Store Finder page state updates so only location/search changes recompute closest stores; refined `StoreMap` popup button styles and added a small CSS override for Leaflet popups and marker hover states, using existing design tokens.
+
+**Changes Made:**
+- Updated `app/store-finder/page.tsx` to stop recomputing `displayedStores` and `rank` when the user simply selects a store; now only My Location/search changes affect the list ordering.
+- Ensured `selectedStore` is set only once on initial load and not overwritten when remote store data finishes loading.
+- Updated `components/store-map.tsx` to:
+  - Import a new scoped stylesheet `components/store-map.css`.
+  - Increase popup "Directions" and "Details" button text to `text-sm` with stronger font weight and focus-visible rings that use `--cta-primary`, improving contrast/readability in light and dark modes.
+  - Keep buttons on design tokens: CTA blue for primary, elevated/page backgrounds and primary text for secondary.
+- Added `components/store-map.css` to:
+  - Provide a subtle hover highlight for default map pins using existing `--cta-primary`/`--brand-gunmetal` colors.
+  - Remove Leaflet’s default popup chrome (outer ring and tip) for `.store-popup`, so only the inner card with our own border/background is visible.
+
+**Outcome:** ✅ **Success**
+- Clicking a store in the list or on the map no longer causes that store to jump to `#1` or reset distances; ordering now only changes when My Location or the search box changes.
+- Store Finder build and lint both pass (`npm run build`, `npm run lint`).
+- Map popup buttons have higher-contrast, larger text and better focus states in both themes while respecting existing design tokens.
+- Leaflet popups no longer show a double border/outer ring around the custom card, improving readability.
+
+**Completed Items:**
+- ✅ Fixed Store Finder list re-centering bug by decoupling `selectedStore` from the "remote data loaded" effect.
+- ✅ Ensured only location/search changes recompute `displayedStores` via `getClosestStores`.
+- ✅ Adjusted popup "Directions" and "Details" buttons for better contrast, size, and focus treatment.
+- ✅ Added marker hover styling and a scoped CSS override to strip Leaflet’s extra popup ring/tip for `.store-popup`.
+- ✅ `npm run build` and `npm run lint` run clean on `main`.
+
+**Unfinished Items:**
+- Scroll-wheel behavior when hovering the popup: currently, scrolling over the popup content may scroll the page instead of zooming the map. This is mostly default Leaflet/browser behavior; no code changes made yet because it would require touching event propagation in the React-Leaflet map (a fragile area).
+
+**Future Prompts (for unfinished items):**
+
+If you want to adjust scroll behavior over the popup (so scroll always zooms the map instead of the page), copy-paste:
+```
+The Store Finder map popup still lets scroll-wheel gestures over the popup content scroll the page instead of zooming the map. Within the constraints for React-Leaflet in this repo, propose and carefully implement the smallest event-handling change needed so wheel events over the popup are captured by the map (zooming) instead of bubbling up to the page, and then run npm run build + npm run lint.
+```
+
+**Learnings:**
+- Coupling `selectedStore` into the "remote store data loaded" effect caused subtle re-sorting bugs; using a functional state update (`current ?? initial`) prevents overriding the user’s selection.
+- WCAG contrast for dark-mode buttons can often be satisfied by pairing existing tokens with slightly larger text (qualifying as "large text") instead of inventing new colors.
+- Leaflet’s default popup chrome can safely be neutralized via a scoped `.store-popup` CSS override without touching `globals.css` or the map initialization logic.
+
+**For Next AI:**
+- Store Finder behavior should now feel stable: store ordering is driven only by location/search, not by which store is selected.
+- Map pin and popup styling changes are localized to `components/store-map.tsx` and `components/store-map.css`; avoid modifying `store-map.tsx` structure or map initialization without consulting `CONSTRAINTS.md`.
+- If Cade reports remaining visibility or accessibility issues on the map, focus on CSS-level tweaks in `store-map.css` and button classnames in `store-map.tsx` rather than any changes to the React-Leaflet wiring.
+
+---
+
+## December 9, 2025 - ChatGPT Codex - Store Finder map popup scroll/zoom behavior
+
+**AI:** ChatGPT Codex (gpt-5.1)
+**Goal:** Make sure scroll-wheel gestures over the Store Finder popup zoom the map instead of scrolling the page while keeping the React-Leaflet integration stable.
+**Approach:** Added a targeted wheel-event handler inside the existing `MapController` helper so only wheel events that originate from the `.store-popup` area are intercepted and turned into map zoom actions.
+
+**Changes Made:**
+- Updated `components/store-map.tsx` `MapController` to:
+  - Attach a `wheel` listener to the Leaflet map container in a `useEffect`.
+  - When the event target is inside `.store-popup`, call `event.preventDefault()` and `event.stopImmediatePropagation()` to keep the event from scrolling the page or double-firing other handlers.
+  - Translate `deltaY` into `map.zoomIn()` / `map.zoomOut()`, preserving smooth animated zoom.
+- Left all other map settings (including `scrollWheelZoom`) unchanged so standard map interactions still behave as before outside the popup.
+
+**Outcome:** ✅ **Success**
+- When the cursor is over the popup card, scroll now zooms the map instead of moving the page.
+- Interactions elsewhere on the map still behave normally (pan, zoom, scroll).
+- `npm run build` and `npm run lint` both pass on `main`.
+
+**Completed Items:**
+- ✅ Tightened scroll/zoom behavior when hovering the Store Finder popup by handling wheel events scoped to `.store-popup`.
+- ✅ Verified no regression to map rendering or selection behavior.
+
+**Unfinished Items:**
+- None related to Store Finder scroll/zoom; further UX tweaks would be polish only.
+
+**Learnings:**
+- Scoping event handling to `.store-popup` via the map container is enough to control scroll behavior without touching global Leaflet config or `MapContainer` props.
+- Using `event.stopImmediatePropagation()` prevents Leaflet’s own wheel handler from double-zooming while still allowing a custom zoom implementation.
+
+**For Next AI:**
+- If future map changes are needed, keep modifications within `MapController` and `store-map.css` to avoid disturbing the fragile React-Leaflet setup described in `CONSTRAINTS.md`.
+- If Cade reports edge-case behavior (e.g., unusual trackpad behavior on a specific OS), start by inspecting the wheel handler in `MapController` before adjusting core map options.
+
+---
+
 ## December 8, 2025 - Claude Code - Penny List UI/UX Improvements & Homepage Updates
 
 **AI:** Claude Code (Sonnet 4.5)

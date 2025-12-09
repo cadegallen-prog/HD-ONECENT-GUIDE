@@ -7,6 +7,7 @@ import "leaflet/dist/leaflet.css"
 import { getStoreUrl, normalizeDayHours, mergeConsecutiveDays, getStoreTitle } from "@/lib/stores"
 import type { StoreLocation } from "@/lib/stores"
 import { Navigation, Info } from "lucide-react"
+import "./store-map.css"
 
 interface StoreMapProps {
   stores: StoreLocation[]
@@ -65,6 +66,33 @@ function MapController({ selectedStore }: { selectedStore?: StoreLocation | null
     return () => {
       map.off("dragstart", onDragStart)
       map.off("zoomstart", onZoomStart)
+    }
+  }, [map])
+
+  // Ensure scroll-wheel gestures over the popup zoom the map instead of scrolling the page
+  React.useEffect(() => {
+    const container = map.getContainer()
+
+    const handleWheel = (event: WheelEvent) => {
+      const target = event.target as HTMLElement | null
+      if (!target) return
+
+      if (!target.closest(".store-popup")) return
+
+      event.preventDefault()
+      event.stopImmediatePropagation()
+
+      if (event.deltaY < 0) {
+        map.zoomIn()
+      } else if (event.deltaY > 0) {
+        map.zoomOut()
+      }
+    }
+
+    container.addEventListener("wheel", handleWheel, { passive: false })
+
+    return () => {
+      container.removeEventListener("wheel", handleWheel)
     }
   }, [map])
 
@@ -280,7 +308,7 @@ export const StoreMap = React.memo(function StoreMap({
                       href={`https://www.google.com/maps/dir/?api=1&destination=${store.lat},${store.lng}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 text-center bg-[var(--cta-primary)] text-[var(--cta-text)] text-xs font-medium py-2 min-h-[44px] rounded hover:bg-[var(--cta-hover)] transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+                      className="flex-1 text-center bg-[var(--cta-primary)] text-[var(--cta-text)] text-sm font-semibold py-2 min-h-[44px] rounded hover:bg-[var(--cta-hover)] transition-colors flex items-center justify-center gap-1.5 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cta-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-elevated)]"
                     >
                       <Navigation className="w-3 h-3" />
                       Directions
@@ -289,7 +317,7 @@ export const StoreMap = React.memo(function StoreMap({
                       href={getStoreUrl(store)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 text-center border border-[var(--border-default)] text-xs font-medium py-2 min-h-[44px] rounded hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)] transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+                      className="flex-1 text-center border border-[var(--border-default)] bg-[var(--bg-elevated)] text-[var(--text-primary)] text-sm font-semibold py-2 min-h-[44px] rounded hover:bg-[var(--bg-page)] hover:text-[var(--text-primary)] transition-colors flex items-center justify-center gap-1.5 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cta-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-elevated)]"
                     >
                       <Info className="w-3 h-3" />
                       Details

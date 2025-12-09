@@ -225,11 +225,12 @@ export default function StoreFinderPage() {
       // Remote data loaded, recalculate closest stores using current map center
       const newStores = getClosestStores(allLoadedStores, mapCenter[0], mapCenter[1])
       setDisplayedStores(newStores)
-      if (newStores.length > 0 && !selectedStore) {
-        setSelectedStore(newStores[0])
+      if (newStores.length > 0) {
+        // Only set an initial selection; don't override the user's choice
+        setSelectedStore((current) => current ?? newStores[0])
       }
     }
-  }, [allLoadedStores.length, selectedStore])
+  }, [allLoadedStores.length])
 
   // Load remote store data via cached API route
   // Initial load is limited to 300 stores for faster LCP; full dataset loads on demand

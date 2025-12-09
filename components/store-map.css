@@ -1,0 +1,55 @@
+/* Map marker hover states
+ * Uses existing design tokens from globals.css via CSS variables.
+ */
+
+.map-marker-default svg path {
+  transition: fill 150ms ease, stroke 150ms ease;
+}
+
+.map-marker-default svg circle {
+  transition: fill 150ms ease;
+}
+
+.map-marker-default:hover svg path {
+  fill: var(--cta-primary);
+}
+
+.map-marker-default:hover svg circle {
+  fill: #ffffff;
+}
+
+/* Ensure selected marker remains visually distinct and readable */
+.map-marker-selected svg path {
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.map-marker-selected:hover svg path {
+  transform: translateY(-1px);
+}
+
+/* Leaflet popup chrome override for store popups
+ * Remove the extra outer ring and tip so only the inner card is visible.
+ */
+
+.store-popup.leaflet-popup {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.store-popup .leaflet-popup-content-wrapper {
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+}
+
+.store-popup .leaflet-popup-content {
+  margin: 0;
+  padding: 0;
+}
+
+.store-popup .leaflet-popup-tip-container {
+  display: none;
+}
+
