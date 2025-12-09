@@ -10,10 +10,10 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
 
-    // Validate required fields (storeName is now optional)
-    if (!body.itemName || !body.sku || !body.storeState || !body.dateFound) {
+    // Validate required fields (storeName is optional)
+    if (!body.itemName || !body.sku || !body.storeState || !body.dateFound || !body.quantity) {
       return NextResponse.json(
-        { error: "Missing required fields: itemName, sku, storeState, dateFound" },
+        { error: "Missing required fields: itemName, sku, storeState, dateFound, quantity" },
         { status: 400 }
       )
     }
@@ -37,6 +37,15 @@ export async function POST(request: NextRequest) {
     // Validate state is 2 characters
     if (body.storeState.length !== 2) {
       return NextResponse.json({ error: "State must be a 2-letter code." }, { status: 400 })
+    }
+
+    // Validate quantity (must be a number between 1 and 99)
+    const qty = parseInt(body.quantity, 10)
+    if (isNaN(qty) || qty < 1 || qty > 99) {
+      return NextResponse.json(
+        { error: "Quantity must be a number between 1 and 99." },
+        { status: 400 }
+      )
     }
 
     const cleanedSku = body.sku.replace(/\D/g, "")

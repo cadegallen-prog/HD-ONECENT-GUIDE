@@ -40,7 +40,7 @@ export default function ReportFindPage() {
     storeName: "",
     storeCity: "",
     storeState: "",
-    dateFound: new Date().toISOString().split("T")[0],
+    dateFound: new Date().toLocaleDateString("en-CA"),
     quantity: "",
     notes: "",
   })
@@ -112,7 +112,7 @@ export default function ReportFindPage() {
           storeName: "",
           storeCity: "",
           storeState: "",
-          dateFound: new Date().toISOString().split("T")[0],
+          dateFound: new Date().toLocaleDateString("en-CA"),
           quantity: "",
           notes: "",
         })
@@ -219,7 +219,7 @@ export default function ReportFindPage() {
               required
               aria-required="true"
               aria-describedby="sku-hint"
-              aria-invalid={skuError ? "true" : undefined}
+              aria-errormessage={skuError ? "sku-error" : undefined}
               value={skuDisplay}
               onChange={handleSkuChange}
               placeholder="e.g., 123-456 or 1234-567-890"
@@ -228,7 +228,10 @@ export default function ReportFindPage() {
               }`}
             />
             {skuError ? (
-              <p className="mt-1 text-xs text-red-600 dark:text-red-400 flex items-center gap-1">
+              <p
+                id="sku-error"
+                className="mt-1 text-xs text-red-600 dark:text-red-400 flex items-center gap-1"
+              >
                 <AlertCircle className="w-3 h-3" />
                 {skuError}
               </p>
@@ -319,28 +322,37 @@ export default function ReportFindPage() {
               required
               value={formData.dateFound}
               onChange={(e) => setFormData({ ...formData, dateFound: e.target.value })}
-              max={new Date().toISOString().split("T")[0]}
+              max={new Date().toLocaleDateString("en-CA")}
               className="w-full px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent"
             />
           </div>
 
-          {/* Quantity (optional) */}
+          {/* Quantity (required) */}
           <div>
             <label
               htmlFor="quantity"
               className="block text-sm font-medium text-[var(--text-primary)] mb-2 flex items-center gap-2"
             >
               <Package className="w-4 h-4" />
-              Quantity Found (optional)
+              Quantity Found{" "}
+              <span className="text-red-500" aria-hidden="true">
+                *
+              </span>
+              <span className="sr-only">(required)</span>
             </label>
             <input
-              type="text"
+              type="number"
               id="quantity"
+              required
+              aria-required="true"
+              min={1}
+              max={99}
               value={formData.quantity}
               onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-              placeholder="e.g., 3 on shelf, 1 left"
+              placeholder="e.g., 3"
               className="w-full px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent"
             />
+            <p className="mt-1 text-xs text-[var(--text-muted)]">How many did you find? (1-99)</p>
           </div>
 
           {/* Notes (optional) */}
