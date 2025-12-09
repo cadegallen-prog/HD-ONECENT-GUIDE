@@ -75,12 +75,12 @@ export default function AboutPage() {
               </svg>
             </div>
             <h3 className="text-xl font-semibold text-stone-900 dark:text-stone-50 mb-3">
-              Use BeFrugal for Cashback
+              Activate BeFrugal Cashback
             </h3>
             <p className="text-stone-700 dark:text-stone-300 mb-6 leading-relaxed">
-              Already shopping at Home Depot for your penny hunting trips? BeFrugal gives you
-              cashback on every purchase. Sign up free through our link and start earning cashback
-              automatically.
+              This is the easiest win. Turn on cashback before normal purchases, earn money back,
+              and when you clear $10 BeFrugal sends a referral bonus that keeps Penny Central
+              running.
             </p>
             <ul className="text-sm text-stone-700 dark:text-stone-300 space-y-2 mb-6">
               <li className="flex items-start">
@@ -97,7 +97,7 @@ export default function AboutPage() {
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                Earn cashback on Home Depot purchases
+                Works at Home Depot, Lowe&apos;s, Sam&apos;s Club, Amazon, and more
               </li>
               <li className="flex items-start">
                 <svg
@@ -113,7 +113,7 @@ export default function AboutPage() {
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                Free to sign up and use
+                Free to sign up, no card required
               </li>
               <li className="flex items-start">
                 <svg
@@ -129,7 +129,7 @@ export default function AboutPage() {
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                Supports this site at no cost to you
+                Supports Penny Central once you earn $10+ in cashback
               </li>
             </ul>
             <a
@@ -138,7 +138,7 @@ export default function AboutPage() {
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-cta-primary hover:bg-cta-hover text-white font-semibold transition-all"
             >
-              Get Cashback with BeFrugal
+              Activate BeFrugal Cashback
             </a>
           </div>
 
@@ -160,12 +160,11 @@ export default function AboutPage() {
               </svg>
             </div>
             <h3 className="text-xl font-semibold text-stone-900 dark:text-stone-50 mb-3">
-              Leave a Tip
+              Buy Me a Coffee
             </h3>
             <p className="text-stone-700 dark:text-stone-300 mb-6 leading-relaxed">
-              Penny Central is a passion project that costs real money to run: hosting, domain,
-              ongoing development and maintenance. If this site has helped you score deals, consider
-              buying me a coffee.
+              Hosting, APIs, map tiles, and in-store testing runs add up. If the guides helped you
+              score a haul, buying me a coffee via PayPal keeps everything fast and free.
             </p>
             <ul className="text-sm text-stone-700 dark:text-stone-300 space-y-2 mb-6">
               <li className="flex items-start">
@@ -182,7 +181,7 @@ export default function AboutPage() {
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                Keeps the site running
+                Covers hosting, domains, and analytics
               </li>
               <li className="flex items-start">
                 <svg
@@ -198,7 +197,7 @@ export default function AboutPage() {
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                Funds new features
+                Funds new tools and field-testing trips
               </li>
               <li className="flex items-start">
                 <svg
@@ -214,7 +213,7 @@ export default function AboutPage() {
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-                No ads, no paywalls, ever
+                Keeps the guides ad-free and open to everyone
               </li>
             </ul>
             <a
@@ -223,7 +222,7 @@ export default function AboutPage() {
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-cta-primary hover:bg-cta-hover text-white font-semibold transition-all"
             >
-              Leave a Tip
+              Buy Me a Coffee
             </a>
           </div>
         </div>
@@ -247,12 +246,11 @@ export default function AboutPage() {
 
           <ul className="list-disc pl-5 space-y-1">
             <li>
-              A cashback site and app called BeFrugal that pays you when you shop online and sends
-              me a one time referral bonus if you actually use it and earn at least $10 in cashback
+              BeFrugal cashback — you earn money back on normal orders and I receive a one-time
+              referral bonus after you reach $10
             </li>
             <li>
-              A PayPal tip jar for people who feel like the guides and tools saved them serious time
-              or money
+              Buying me a coffee via PayPal when the guides save you serious time or gas money
             </li>
           </ul>
 

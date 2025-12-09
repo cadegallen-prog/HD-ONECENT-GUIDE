@@ -118,7 +118,7 @@ export default function ResourcesPage() {
                 Support Penny Central
               </h3>
               <p className="text-sm text-[var(--text-muted)]">
-                Get cashback on HD purchases with BeFrugal or chip in for hosting costs
+                Activate BeFrugal cashback or buy me a coffee to keep the tools free for everyone
               </p>
             </div>
           </div>

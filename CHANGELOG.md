@@ -4,7 +4,15 @@ Brief log of completed work. Most recent at top.
 
 ---
 
-## 2024-12-03 — Design System Refinement: 60-30-10 Rule
+## 2025-12-09 - Support CTA Messaging Refresh
+
+- Replaced every "Leave a Tip" reference with the more personable "Buy Me a Coffee" CTA across the homepage, About page, footer, SupportAndCashbackCard, and global support copy.
+- Reworded BeFrugal explanations to highlight the benefit for users and call out the referral bonus so visitors understand why activating cashback matters.
+- Updated Resources page support blurb and AGENTS instructions to match the new terminology.
+
+---
+
+## 2024-12-03 - Design System Refinement: 60-30-10 Rule
 
 - **Color System Overhaul:** Implemented 60-30-10 color rule for better visual hierarchy
   - 60% Neutral: Stone grays for backgrounds and text (WCAG AA compliant)

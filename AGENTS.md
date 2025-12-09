@@ -176,7 +176,7 @@ Penny Central is a **utility/reference guide** for finding Home Depot clearance 
 2. **Stability** — Nothing should break when you push
 3. **Performance** — Lighthouse scores matter (90+ target)
 4. **Mobile Experience** — Most users are on phones
-5. **Monetization Foundation** — Affiliate links, tip jar visibility
+5. **Monetization Foundation** — Affiliate links, “Buy Me a Coffee” visibility
 
 Everything else is noise until these are solid.
 

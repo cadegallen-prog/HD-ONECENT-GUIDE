@@ -71,7 +71,7 @@ export function Footer() {
                   className="text-sm text-zinc-400 hover:text-white transition-colors"
                   onClick={() => trackEvent("donation_click", { location: "footer" })}
                 >
-                  Leave a Tip
+                  Buy Me a Coffee
                 </a>
               </li>
               <li>

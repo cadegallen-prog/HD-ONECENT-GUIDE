@@ -298,13 +298,14 @@ export default function Home() {
                 <Heart className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
               </div>
               <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
-                Leave a Tip
+                Buy Me a Coffee
               </h3>
               <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed">
-                Help cover hosting and development costs with a one-time contribution.
+                If the guide saved you time or gas money, a one-time PayPal coffee covers hosting,
+                APIs, and the odd scouting trip.
               </p>
               <div className="mt-4 inline-flex items-center gap-2 text-[var(--cta-primary)] font-medium">
-                Send a tip via PayPal
+                Buy me a coffee
                 <ExternalLink className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
               </div>
             </a>
@@ -320,14 +321,14 @@ export default function Home() {
                 <DollarSign className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
               </div>
               <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
-                Use BeFrugal
+                Activate BeFrugal Cashback
               </h3>
               <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed">
-                Sign up through our link to earn cashback. We get a small referral at no cost to
-                you.
+                Turn on free cashback before normal Home Depot orders. When you earn $10+ BeFrugal
+                sends a referral bonus that keeps the site free.
               </p>
               <div className="mt-4 inline-flex items-center gap-2 text-[var(--cta-primary)] font-medium">
-                Get cashback with BeFrugal
+                Activate BeFrugal cashback
                 <ExternalLink className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
               </div>
             </a>
