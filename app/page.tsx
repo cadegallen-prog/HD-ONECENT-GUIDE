@@ -1,14 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import {
-  MapPin,
-  BookOpen,
-  ClipboardCheck,
-  ExternalLink,
-  Heart,
-  DollarSign,
-  Users,
-} from "lucide-react"
+import { MapPin, BookOpen, ExternalLink, Heart, DollarSign, Users } from "lucide-react"
 import {
   COMMUNITY_MEMBER_COUNT_DISPLAY,
   FACEBOOK_GROUP_URL,
@@ -105,7 +97,7 @@ export default function Home() {
           </div>
 
           {/* Tool cards grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 max-w-3xl mx-auto">
             {/* Store Finder Card */}
             <Link
               href="/store-finder"
@@ -141,25 +133,6 @@ export default function Home() {
               </p>
               <span className="mt-4 inline-flex items-center text-[var(--cta-primary)] text-sm font-medium group-hover:underline">
                 Start learning →
-              </span>
-            </Link>
-
-            {/* Trip Tracker Card */}
-            <Link
-              href="/trip-tracker"
-              className="card-interactive group flex flex-col bg-white dark:bg-[var(--bg-elevated)] rounded-xl p-6 border border-[var(--border-default)]"
-            >
-              <div className="w-12 h-12 rounded-xl bg-[var(--bg-elevated)] dark:bg-[var(--bg-tertiary)] flex items-center justify-center mb-4">
-                <ClipboardCheck className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
-              </div>
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
-                Trip Tracker
-              </h3>
-              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed flex-grow">
-                Plan your penny hunting trips and track your finds over time.
-              </p>
-              <span className="mt-4 inline-flex items-center text-[var(--cta-primary)] text-sm font-medium group-hover:underline">
-                Plan a trip →
               </span>
             </Link>
           </div>

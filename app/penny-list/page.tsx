@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Image from "next/image"
-import { AlertTriangle, Calendar, Package } from "lucide-react"
+import { AlertTriangle, Calendar, Package, Clock, CheckCircle2, Info } from "lucide-react"
 import { SUBMIT_FIND_FORM_URL, NEWSLETTER_URL } from "@/lib/constants"
 import { getPennyList, type PennyItem } from "@/lib/fetch-penny-data"
 import { CopySkuButton } from "@/components/copy-sku-button"
@@ -266,22 +266,88 @@ export default async function PennyListPage() {
 
           {/* About This List */}
           <div className="mt-12 mb-12 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
+            <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-4">
               How This List Works
             </h2>
-            <div className="text-sm text-[var(--text-secondary)] leading-relaxed space-y-2">
-              <p>Members submit penny finds through the Report a Find form on PennyCentral.</p>
-              <p>Submissions are added to this page automatically, usually within about an hour.</p>
-              <p>
-                <strong>No admin reviews each entry before it appears here.</strong>
-              </p>
-              <p>
-                Use the Facebook group to look for haul posts, photos, and real-time feedback on
-                these SKUs.
-              </p>
-              <p>
-                Think of this as a <strong>lead board</strong>, not a guarantee board.
-              </p>
+
+            <div className="space-y-4">
+              {/* Item 1: Submission */}
+              <div className="flex gap-3 items-start">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                  <Package
+                    className="w-4 h-4 text-blue-600 dark:text-blue-400"
+                    aria-hidden="true"
+                  />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+                    Members submit penny finds through the Report a Find form on PennyCentral.
+                  </p>
+                </div>
+              </div>
+
+              {/* Item 2: Automation */}
+              <div className="flex gap-3 items-start">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
+                  <Clock
+                    className="w-4 h-4 text-emerald-600 dark:text-emerald-400"
+                    aria-hidden="true"
+                  />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+                    Submissions are added to this page automatically, usually within about an hour.
+                  </p>
+                </div>
+              </div>
+
+              {/* Item 3: Unverified (highlighted) */}
+              <div className="flex gap-3 items-start">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
+                  <AlertTriangle
+                    className="w-4 h-4 text-amber-600 dark:text-amber-400"
+                    aria-hidden="true"
+                  />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm text-[var(--text-primary)] font-semibold leading-relaxed">
+                    No admin reviews each entry before it appears here.
+                  </p>
+                  <p className="text-xs text-[var(--text-muted)] mt-1">
+                    This is crowd-sourced data—always verify in person.
+                  </p>
+                </div>
+              </div>
+
+              {/* Item 4: Facebook verification */}
+              <div className="flex gap-3 items-start">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+                  <CheckCircle2
+                    className="w-4 h-4 text-purple-600 dark:text-purple-400"
+                    aria-hidden="true"
+                  />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+                    Use the Facebook group to look for haul posts, photos, and real-time feedback on
+                    these SKUs.
+                  </p>
+                </div>
+              </div>
+
+              {/* Item 5: Lead board concept */}
+              <div className="flex gap-3 items-start">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+                  <Info className="w-4 h-4 text-slate-600 dark:text-slate-400" aria-hidden="true" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+                    Think of this as a{" "}
+                    <span className="font-semibold text-[var(--text-primary)]">lead board</span>,
+                    not a guarantee board.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -296,14 +362,18 @@ export default async function PennyListPage() {
                 Help the community by reporting your finds. Your submission will appear on this list
                 automatically.
               </p>
-              <a
+              <TrackableLink
                 href={SUBMIT_FIND_FORM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-[var(--cta-primary)] text-white font-medium hover:opacity-90 transition-opacity"
+                eventName="find_submit"
+                eventParams={{ location: "penny-list" }}
+                className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-medium transition-all duration-200 hover:bg-[var(--cta-hover)] hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+                aria-label="Submit a penny find to the community"
               >
                 Submit a Find
-              </a>
+              </TrackableLink>
+              <p className="text-xs text-[var(--text-muted)] mt-3">
+                Your submission appears within an hour.
+              </p>
             </div>
 
             {/* Newsletter */}
@@ -321,7 +391,8 @@ export default async function PennyListPage() {
                 rel="noopener noreferrer"
                 eventName="newsletter_click"
                 eventParams={{ location: "penny-list" }}
-                className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-lg bg-[var(--text-primary)] text-[var(--bg-page)] font-medium hover:opacity-90 transition-opacity"
+                className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-medium transition-all duration-200 hover:bg-[var(--cta-hover)] hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+                aria-label="Subscribe to weekly penny alerts newsletter"
               >
                 Subscribe to Alerts
               </TrackableLink>
