@@ -178,7 +178,7 @@ export function PennyListFilters({
           <button
             type="button"
             onClick={() => setStateFilter(stateFilter === userState ? "" : userState)}
-            aria-pressed={stateFilter === userState}
+            aria-pressed={stateFilter === userState ? true : false}
             className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium min-h-[44px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
               stateFilter === userState
                 ? "bg-[var(--cta-primary)] text-white"
@@ -205,7 +205,7 @@ export function PennyListFilters({
                 key={option.value}
                 type="button"
                 onClick={() => setTierFilter(option.value)}
-                aria-pressed={tierFilter === option.value}
+                aria-pressed={tierFilter === option.value ? true : false}
                 className={`px-3 sm:px-4 py-2.5 text-sm font-medium min-h-[44px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
                   tierFilter === option.value
                     ? "bg-[var(--cta-primary)] text-white"
@@ -225,7 +225,7 @@ export function PennyListFilters({
           <button
             type="button"
             onClick={() => setViewMode("cards")}
-            aria-pressed={viewMode === "cards"}
+            aria-pressed={viewMode === "cards" ? true : false}
             className={`px-3 py-2.5 min-h-[44px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
               viewMode === "cards"
                 ? "bg-[var(--cta-primary)] text-white"
@@ -239,7 +239,7 @@ export function PennyListFilters({
           <button
             type="button"
             onClick={() => setViewMode("table")}
-            aria-pressed={viewMode === "table"}
+            aria-pressed={viewMode === "table" ? true : false}
             className={`px-3 py-2.5 min-h-[44px] border-l border-[var(--border-default)] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
               viewMode === "table"
                 ? "bg-[var(--cta-primary)] text-white"
@@ -291,7 +291,7 @@ export function PennyListFilters({
                 key={option.value}
                 type="button"
                 onClick={() => setDateRange(option.value)}
-                aria-pressed={dateRange === option.value}
+                aria-pressed={dateRange === option.value ? true : false}
                 className={`px-3 py-2.5 text-sm font-medium min-h-[44px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
                   dateRange === option.value
                     ? "bg-[var(--cta-primary)] text-white"
