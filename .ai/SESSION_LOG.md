@@ -588,6 +588,39 @@ The Store Finder map popup still lets scroll-wheel gestures over the popup conte
 
 ---
 
+## December 9, 2025 - Claude Code - Auto-Calculated Tiers (Phase 3)
+
+**AI:** Claude Code (Opus 4.5)
+**Goal:** Replace subjective manual tiers with data-driven auto-calculation
+**Approach:** Calculate tier from actual report counts and state coverage
+
+**Changes Made:**
+
+*Modified `lib/fetch-penny-data.ts`:*
+- Added `calculateTier()` function
+- Removed manual tier field parsing from CSV
+- Tier now calculated AFTER aggregation based on locations data
+
+**Tier Logic:**
+```
+Very Common: 6+ total reports OR 4+ states
+Common: 3-5 reports OR 2-3 states
+Rare: 1-2 reports AND only 1 state
+```
+
+**Outcome:** ✅ **Success**
+- Commit: `83aa7d2`
+- Build/lint pass
+- Tier now reflects "how likely am I to find this?" with real data
+
+**For Next AI:**
+- Tiers are auto-calculated - don't add manual tier back
+- The calculateTier() function is in fetch-penny-data.ts:60-76
+- Thresholds can be tweaked if needed (currently 6/4 for Very Common, 3/2 for Common)
+- If user wants different thresholds, just adjust the numbers in calculateTier()
+
+---
+
 ## Template for Future Entries
 
 Copy this template when adding new sessions:
