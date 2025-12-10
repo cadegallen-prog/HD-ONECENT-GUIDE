@@ -536,6 +536,58 @@ The Store Finder map popup still lets scroll-wheel gestures over the popup conte
 
 ---
 
+## December 9, 2025 - Claude Code - Penny List UX Enhancements (Phase 2)
+
+**AI:** Claude Code (Opus 4.5)
+**Goal:** Iterate on penny list with deal-tracking site best practices
+**Approach:** Researched Slickdeals, BrickSeek, Smashing Magazine filter UX patterns; implemented top recommendations
+
+**Changes Made:**
+
+*Enhanced Filter Component (`penny-list-filters.tsx`):*
+- Added **active filter chips** - dismissible chips showing applied filters
+- Added **sticky filter bar** - stays visible while scrolling (`sticky top-0 z-20`)
+- Added **"My State" quick filter** - button using saved localStorage preference
+- Added **date range toggles** - 7/14/30 day buttons for quick time filtering
+
+*Enhanced Client Component (`penny-list-client.tsx`):*
+- Added **URL parameter sync** - shareable filter URLs
+  - `?state=GA` - state filter
+  - `?tier=rare` - tier filter
+  - `?q=dewalt` - search query
+  - `?sort=most-reports` - sort option
+  - `?view=table` - view mode
+  - `?days=7` - date range
+- Added **localStorage persistence** for user's preferred state
+- Wrapped in `<Suspense>` for `useSearchParams()` (Next.js 15 requirement)
+
+*Enhanced Page (`app/penny-list/page.tsx`):*
+- Added **loading skeleton** - animated placeholder while filters initialize
+- Added Suspense boundary for client component
+
+**Research Sources Used:**
+- https://www.smashingmagazine.com/2021/07/frustrating-design-patterns-broken-frozen-filters/
+- https://www.pencilandpaper.io/articles/ux-pattern-analysis-mobile-filters
+- Slickdeals/BrickSeek pattern analysis
+
+**Outcome:** ✅ **Success**
+- `npm run build` passes
+- `npm run lint` passes
+- All UX improvements implemented
+
+**Commits:**
+- `7948f71` - Initial WCAG AAA + filtering system
+- `f0a3989` - Enhanced UX improvements
+
+**For Next AI:**
+- URL params work - users can share filtered views
+- "My State" auto-remembers last state user selected
+- Filter bar is sticky - good UX for long lists
+- Active chips let users quickly remove individual filters
+- Loading skeleton prevents layout shift on initial load
+
+---
+
 ## Template for Future Entries
 
 Copy this template when adding new sessions:
