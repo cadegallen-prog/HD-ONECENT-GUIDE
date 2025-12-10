@@ -42,7 +42,7 @@ export function PennyListCard({ item }: PennyListCardProps) {
         <div className="flex justify-between items-start">
           <div className="flex items-center gap-2 flex-wrap">
             {item.status && item.status !== item.tier && (
-              <span className="text-xs font-semibold px-2 py-1 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-default)] text-[var(--text-primary)]">
+              <span className="text-xs font-semibold px-2 py-1 rounded-full bg-[var(--bg-page)] border border-[var(--border-default)] text-[var(--text-primary)]">
                 {item.status}
               </span>
             )}
@@ -66,7 +66,7 @@ export function PennyListCard({ item }: PennyListCardProps) {
           {item.name}
         </h3>
 
-        <div className="flex items-center gap-2 text-sm text-[var(--text-primary)] font-mono bg-[var(--bg-elevated)] border border-[var(--border-default)] px-2 py-1.5 rounded w-fit">
+        <div className="flex items-center gap-2 text-sm text-[var(--text-primary)] font-mono bg-[var(--bg-page)] border border-[var(--border-default)] px-2 py-1.5 rounded w-fit">
           <span className="select-all">SKU: {item.sku}</span>
           <CopySkuButton sku={item.sku} />
         </div>
@@ -79,14 +79,14 @@ export function PennyListCard({ item }: PennyListCardProps) {
         )}
 
         {item.notes && (
-          <p className="text-base text-[var(--text-secondary)] leading-6 line-clamp-3">
+          <p className="text-base text-[var(--text-primary)] leading-7 line-clamp-3">
             {item.notes}
           </p>
         )}
 
         {item.locations && Object.keys(item.locations).length > 0 && (
           <div className="mt-auto space-y-2">
-            <p className="text-sm font-semibold text-[var(--text-secondary)]">
+            <p className="text-sm font-semibold text-[var(--text-primary)]">
               Reported in {stateCount} {stateCount === 1 ? "state" : "states"}:
             </p>
             <div className="flex flex-wrap gap-1.5" role="list" aria-label="States with reports">
@@ -96,11 +96,11 @@ export function PennyListCard({ item }: PennyListCardProps) {
                   <span
                     key={state}
                     role="listitem"
-                    className="px-2 py-1 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-default)] text-[var(--text-primary)] text-xs font-semibold min-h-[28px] flex items-center"
+                    className="px-2 py-1 rounded-full bg-[var(--bg-page)] border border-[var(--border-default)] text-[var(--text-primary)] text-xs font-semibold min-h-[28px] flex items-center"
                     title={`${getStateName(state)}: ${count} ${count === 1 ? "report" : "reports"}`}
                     aria-label={`${getStateName(state)}: ${count} ${count === 1 ? "report" : "reports"}`}
                   >
-                    {state} ú {count}
+                    {state} · {count}
                   </span>
                 ))}
             </div>
@@ -168,7 +168,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
                 className="px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-[var(--text-secondary)] text-xs"
                 aria-label={`${state}: ${count} ${count === 1 ? "report" : "reports"}`}
               >
-                {state} ú {count}
+                {state} · {count}
               </span>
             ))}
           {Object.keys(item.locations).length > 5 && (
