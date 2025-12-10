@@ -39,47 +39,47 @@ export function PennyListCard({ item }: PennyListCardProps) {
       aria-labelledby={`item-${item.id}-name`}
     >
       <div className="p-5 flex flex-col flex-1 space-y-3">
-        <div className="flex justify-between items-start">
+        <div className="flex justify-between items-start gap-3">
           <div className="flex items-center gap-2 flex-wrap">
             {item.status && item.status !== item.tier && (
-              <span className="text-xs font-semibold px-2 py-1 rounded-full bg-[var(--bg-page)] border border-[var(--border-default)] text-[var(--text-primary)]">
+              <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-[var(--text-primary)]">
                 {item.status}
               </span>
             )}
             <span
-              className={`text-xs font-semibold px-2 py-1 rounded-full border border-[var(--border-default)] ${commonnessTone(item.tier)}`}
+              className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${commonnessTone(item.tier)}`}
               aria-label={`Commonness: ${item.tier || "Rare"}`}
             >
               {item.tier || "Rare"}
             </span>
           </div>
-          <span className="text-sm text-[var(--text-secondary)] flex items-center gap-1">
-            <Calendar className="w-3 h-3" aria-hidden="true" />
+          <span className="text-sm text-[var(--text-secondary)] font-medium flex items-center gap-1.5 flex-shrink-0">
+            <Calendar className="w-3.5 h-3.5" aria-hidden="true" />
             <time dateTime={item.dateAdded}>{formatRelativeDate(item.dateAdded)}</time>
           </span>
         </div>
 
         <h3
           id={`item-${item.id}-name`}
-          className="font-semibold text-lg text-[var(--text-primary)] leading-7 line-clamp-2"
+          className="font-semibold text-lg text-[var(--text-primary)] leading-[1.4] line-clamp-2"
         >
           {item.name}
         </h3>
 
-        <div className="flex items-center gap-2 text-sm text-[var(--text-primary)] font-mono bg-[var(--bg-page)] border border-[var(--border-default)] px-2 py-1.5 rounded w-fit">
+        <div className="flex items-center gap-2 text-sm text-[var(--text-primary)] font-mono bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 px-2.5 py-1.5 rounded w-fit font-medium">
           <span className="select-all">SKU: {item.sku}</span>
           <CopySkuButton sku={item.sku} />
         </div>
 
         {item.quantityFound && (
-          <div className="flex items-center gap-1.5 text-sm font-semibold text-[var(--text-secondary)]">
-            <Package className="w-3.5 h-3.5" aria-hidden="true" />
+          <div className="flex items-center gap-2 text-sm font-semibold text-[var(--text-secondary)]">
+            <Package className="w-4 h-4" aria-hidden="true" />
             <span>{item.quantityFound}</span>
           </div>
         )}
 
         {item.notes && (
-          <p className="text-base text-[var(--text-primary)] leading-7 line-clamp-3">
+          <p className="text-base text-[var(--text-primary)] leading-[1.6] line-clamp-3">
             {item.notes}
           </p>
         )}
@@ -96,7 +96,7 @@ export function PennyListCard({ item }: PennyListCardProps) {
                   <span
                     key={state}
                     role="listitem"
-                    className="px-2 py-1 rounded-full bg-[var(--bg-page)] border border-[var(--border-default)] text-[var(--text-primary)] text-xs font-semibold min-h-[28px] flex items-center"
+                    className="px-2.5 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-[var(--text-primary)] text-xs font-semibold min-h-[28px] flex items-center"
                     title={`${getStateName(state)}: ${count} ${count === 1 ? "report" : "reports"}`}
                     aria-label={`${getStateName(state)}: ${count} ${count === 1 ? "report" : "reports"}`}
                   >
@@ -135,25 +135,25 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
       className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] p-4"
       aria-labelledby={`hot-item-${item.id}-name`}
     >
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex items-center justify-between mb-2 gap-2">
         <span
-          className={`text-xs font-medium px-2 py-1 rounded-full ${commonnessTone(item.tier)}`}
+          className={`text-xs font-semibold px-2.5 py-1 rounded-full ${commonnessTone(item.tier)}`}
           aria-label={`Commonness: ${item.tier || "Rare"}`}
         >
           {item.tier || "Rare"}
         </span>
-        <span className="text-xs text-[var(--text-muted)] flex items-center gap-1">
+        <span className="text-xs text-[var(--text-secondary)] font-medium flex items-center gap-1 flex-shrink-0">
           <Calendar className="w-3 h-3" aria-hidden="true" />
           <time dateTime={item.dateAdded}>{formatRelativeDate(item.dateAdded)}</time>
         </span>
       </div>
       <h3
         id={`hot-item-${item.id}-name`}
-        className="text-sm font-semibold text-[var(--text-primary)] leading-snug line-clamp-2"
+        className="text-sm font-semibold text-[var(--text-primary)] leading-[1.4] line-clamp-2"
       >
         {item.name}
       </h3>
-      <div className="mt-2 flex items-center gap-2 text-xs text-[var(--text-secondary)] font-mono bg-zinc-100 dark:bg-zinc-800/50 px-2 py-1 rounded w-fit">
+      <div className="mt-2 flex items-center gap-2 text-xs text-[var(--text-primary)] font-mono bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 px-2 py-1 rounded w-fit font-medium">
         SKU: {item.sku}
       </div>
       {item.locations && Object.keys(item.locations).length > 0 && (
@@ -165,14 +165,14 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
               <span
                 key={`${item.id}-${state}`}
                 role="listitem"
-                className="px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-[var(--text-secondary)] text-xs"
+                className="px-2 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-[var(--text-primary)] text-xs font-semibold"
                 aria-label={`${state}: ${count} ${count === 1 ? "report" : "reports"}`}
               >
                 {state} · {count}
               </span>
             ))}
           {Object.keys(item.locations).length > 5 && (
-            <span className="px-2 py-0.5 text-[var(--text-muted)] text-xs">
+            <span className="px-2 py-1 text-[var(--text-muted)] text-xs font-medium">
               +{Object.keys(item.locations).length - 5} more
             </span>
           )}

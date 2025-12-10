@@ -41,7 +41,7 @@ Agents: keep this file short and useful. Update it when you actually finish or s
 ## 2. Current major features
 
 - **Penny Guide** (`/guide`) — Complete reference on clearance cadences, markdown stages, and how items reach penny status. ✅ Live
-- **Penny List** (`/penny-list`) ⭐ **NEW DEC 7** — Community-powered list of reported penny finds, auto-updated hourly from Google Form. Zero manual work. ✅ Live
+- **Penny List** (`/penny-list`) ⭐ **ENHANCED DEC 10** — Community-powered list of reported penny finds, auto-updated hourly from Google Form. Phase 1 UI polish complete (improved readability, contrast, mobile UX). ✅ Live
 - **Store Finder** (`/store-finder`) — Find nearby Home Depot locations with interactive map. ✅ Live
 - **Trip Tracker** (`/trip-tracker`) — Plan and log penny hunting trips. ✅ Live
 - **Resources** (`/resources`) — External tools and community links. ✅ Live
@@ -103,6 +103,7 @@ Agents: keep this file short and useful. Update it when you actually finish or s
 - Map popup UX improvements ✅ Done Dec 6
 - **Autonomous Penny List System** ✅ **Done Dec 7** — Live, tested, documented
 - Branch strategy (main + dev-next) ✅ **Done Dec 7** — Clean separation for ongoing development
+- **Penny List Phase 1 UI Polish** ✅ **Done Dec 10** — Enhanced table/card readability, improved contrast, mobile scroll hints, comprehensive test coverage
 
 ---
 

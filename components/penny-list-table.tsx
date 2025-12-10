@@ -117,6 +117,10 @@ function TierBadge({ tier }: { tier?: string }) {
 export function PennyListTable({ items, sortOption, onSortChange }: PennyListTableProps) {
   return (
     <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl overflow-hidden">
+      {/* Mobile scroll hint */}
+      <div className="lg:hidden px-4 py-2 bg-zinc-50 dark:bg-zinc-900/30 border-b border-[var(--border-default)] text-xs text-[var(--text-muted)] text-center">
+        ← Scroll horizontally to see all columns →
+      </div>
       <div className="overflow-x-auto">
         <table
           className="w-full text-sm table-fixed min-w-[900px]"

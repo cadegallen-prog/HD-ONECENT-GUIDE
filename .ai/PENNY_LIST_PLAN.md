@@ -22,7 +22,7 @@
 - Email capture prompt (Phase 2 – only if Phase 1 is working and not annoying).
 - `Approved` / moderation column (only if spam actually becomes a problem).
 - Pagination (only if the list grows to the point that it hurts UX/performance).
-- Per-item “NEW” badges or chips (deferred until metrics are healthy and design constraints allow it).
+- Per-item “NEW” badges or chips (deferred until metrics are healthy and design constraints allow it). Urgency treatments stay off in Phase 1; see “Future Phases” backlog for when to add them.
 
 **Why this matters**
 
@@ -137,11 +137,11 @@ function formatRelativeDate(dateStr: string): string {
   const diffMs = now.getTime() - date.getTime()
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
 
-  if (diffDays === 0) return 'Today'
-  if (diffDays === 1) return 'Yesterday'
+  if (diffDays === 0) return "Today"
+  if (diffDays === 1) return "Yesterday"
   if (diffDays <= 14) return `${diffDays} days ago`
 
-  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+  return date.toLocaleDateString("en-US", { month: "short", day: "numeric" })
 }
 ```
 
@@ -230,6 +230,16 @@ These are **just options** for future phases if traffic and engagement justify i
   - If row count grows into hundreds/thousands and affects UX/performance.
   - No infinite scroll; keep page 1 SSR/ISR.
 
+### Prioritized backlog from competitive analysis (post–Phase 1 only)
+
+- **Visual urgency signals** (🔥 FRESH / ⏰ RECENT) to highlight items <6h old; defer until Phase 1 metrics are stable and color/accent limits can be honored.
+- **Confidence visualization** (report-count bars) to show "1 claim vs 8 confirmations" without photos or accounts; uses existing `locations` counts.
+- **Mobile UX polish** (48px touch targets, spacing, table warning on mobile) to lift mobile retention; implement once Phase 1 is solid.
+- **Trending sort** (recency + report-weighted score) as a new sort option; keep "newest" available but default to trending once tested.
+- **State landing pages** (`/penny-list/CA`, etc.) for SEO/shareable entry points; reuse existing filters/SSR, add state-specific metadata.
+
+All of the above require explicit approval and should run only after Phase 1 is shipped, measured, and deemed healthy.
+
 Nothing here should be built until the readiness gates in `CODEX_GREAT_PLAN.md` (Section 11/11a) are satisfied.
 
 ---
@@ -278,12 +288,12 @@ These mirror `AGENTS.md` and `CODEX_GREAT_PLAN.md` and apply to all Penny List w
 
 ## 8. Effort Estimate (Phase 1 Only)
 
-| Task                                | Time   |
-|-------------------------------------|--------|
-| Validation + `validRows` wiring     | 10–15m |
-| 24h/30d summary block (SSR)        | 10–15m |
-| Relative timestamp helper + wiring | 10–15m |
-| Testing & verification              | 10–15m |
+| Task                               | Time    |
+| ---------------------------------- | ------- |
+| Validation + `validRows` wiring    | 10–15m  |
+| 24h/30d summary block (SSR)        | 10–15m  |
+| Relative timestamp helper + wiring | 10–15m  |
+| Testing & verification             | 10–15m  |
 | **Total (Phase 1)**                | ~45–60m |
 
 ---
@@ -315,11 +325,13 @@ Do **not**:
 **Why:** Table and card views need clearer alignment, spacing, and contrast (especially at 75% zoom) to reduce scanning fatigue.
 
 **Goals (actionable & testable):**
+
 - **Table:** Equal column spacing with fixed widths; headers and cells left-aligned; item names wrap to 2 lines instead of truncating; badges and SKUs use higher-contrast text/background; tabular numbers align cleanly.
 - **Cards:** Increase text legibility (font weight/size within AAA rules), consistent badge styling, clearer contrast for SKUs/states/notes; ensure readability at 75% zoom.
 - **QA:** Visual diff or screenshots after changes; manual check that state filter still works; `npm run lint`, `npm run build`, `npm run test:unit`.
 
 **Suggested steps:**
-1) Table layout: add `colgroup` widths, left-align headers/cells, allow 2-line wrap for item names/notes, lighten badge backgrounds using existing tokens, ensure tabular numbers for counts/dates.
-2) Card layout: bump supporting text to `text-sm/base`, use consistent border+background for badges/SKUs/states, increase line-height, keep CTA/price unchanged.
-3) Validate: run unit tests + lint + build; capture quick before/after screenshots; verify filters and sorting still respond.
+
+1. Table layout: add `colgroup` widths, left-align headers/cells, allow 2-line wrap for item names/notes, lighten badge backgrounds using existing tokens, ensure tabular numbers for counts/dates.
+2. Card layout: bump supporting text to `text-sm/base`, use consistent border+background for badges/SKUs/states, increase line-height, keep CTA/price unchanged.
+3. Validate: run unit tests + lint + build; capture quick before/after screenshots; verify filters and sorting still respond.

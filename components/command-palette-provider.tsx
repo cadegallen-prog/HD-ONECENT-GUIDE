@@ -6,7 +6,7 @@ import dynamic from "next/dynamic"
 const CommandPalette = dynamic(
   () => import("./command-palette").then((mod) => mod.CommandPalette),
   {
-    ssr: false,
+    loading: () => null,
   }
 )
 

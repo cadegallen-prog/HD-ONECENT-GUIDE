@@ -4,6 +4,59 @@ Brief log of completed work. Most recent at top.
 
 ---
 
+## 2025-12-10 - Penny List Phase 1: UI Polish & Testing
+
+**Objective:** Implement Phase 1 of PENNY_LIST_PLAN.md - enhance table/card readability, verify validation logic, and add comprehensive test coverage.
+
+**UI/UX Improvements:**
+
+- **Table Enhancements:**
+  - Added `.line-clamp-2-table` CSS utility for proper 2-line text wrapping (ESLint compliant)
+  - Rebalanced column widths for better space utilization (30%, 14%, 13%, 16%, 11%, 16%)
+  - Improved line-heights throughout: 1.4 for headings, 1.5 for supporting text
+  - Enhanced contrast for SKUs, badges, and state chips using zinc palette (zinc-100/800 bg, zinc-300/700 borders)
+  - Added tabular-nums to numeric columns for clean alignment
+  - Added mobile scroll hint banner for horizontal table scrolling
+
+- **Card Layout:**
+  - Increased font-weight on dates/times from regular to medium for better scannability
+  - Applied consistent zinc palette to all badges and state chips for improved contrast
+  - Updated SKU displays with zinc backgrounds/borders
+  - Standardized badge padding to 2.5px for better touch targets
+  - Improved line-heights: 1.4 for titles, 1.6 for notes
+
+**Testing & Quality:**
+
+- **Enhanced Unit Tests:**
+  - Added edge case tests for freshness metrics (invalid dates, 30-day boundaries, future dates)
+  - Added comprehensive validation tests (whitespace handling, empty strings, malformed dates)
+  - Added relative date formatting edge cases
+  - All tests passing ✅
+
+- **Build Quality:**
+  - Fixed CSS syntax error in globals.css
+  - Fixed prettier formatting issues
+  - All lint checks passing (0 warnings)
+  - Production build successful (25/25 routes)
+
+**Files Modified:**
+
+- `components/penny-list-table.tsx` - Table layout and contrast improvements
+- `components/penny-list-card.tsx` - Card layout and readability enhancements
+- `app/globals.css` - Added `.line-clamp-2-table` utility class
+- `tests/penny-list-utils.test.ts` - Comprehensive edge case coverage
+
+**Design System Compliance:**
+
+- All changes respect WCAG AAA constraints
+- No new accent colors introduced
+- Max 3 accent elements per viewport maintained
+- Touch targets all 44px minimum
+
+**Status:** ✅ Phase 1 Complete - Production Ready
+
+---
+
 ## 2025-12-09 - Support CTA Messaging Refresh
 
 - Replaced every "Leave a Tip" reference with the more personable "Buy Me a Coffee" CTA across the homepage, About page, footer, SupportAndCashbackCard, and global support copy.

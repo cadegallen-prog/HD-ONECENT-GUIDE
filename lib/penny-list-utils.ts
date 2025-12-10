@@ -15,6 +15,11 @@ function normalizeString(value: string | undefined): string {
   return value ? value.trim() : ""
 }
 
+/**
+ * Phase 1a validation: Filters out invalid penny items.
+ * Requirements: non-empty SKU, non-empty name, valid date.
+ * Used by penny-list page to gate rendering - if no valid rows, show feed-unavailable banner.
+ */
 export function filterValidPennyItems(items: PennyItem[]): PennyItem[] {
   return items
     .map((item) => {
@@ -32,6 +37,11 @@ export function filterValidPennyItems(items: PennyItem[]): PennyItem[] {
     .filter((item) => item.name !== "" && item.sku !== "" && isValidDate(item.dateAdded))
 }
 
+/**
+ * Phase 1c: Convert dates to human-friendly relative format.
+ * Rules: "Today", "Yesterday", "X days ago" (up to 14), then "MMM d" format.
+ * Keeps semantic <time datetime> for SEO while showing friendly label.
+ */
 export function formatRelativeDate(dateStr: string, now: Date = new Date()): string {
   const date = new Date(dateStr)
   const timestamp = date.getTime()
@@ -87,6 +97,12 @@ export function extractStateFromLocation(value: string): string {
   return ""
 }
 
+/**
+ * Phase 1b: Calculate freshness metrics for the summary block.
+ * Returns counts for: new items in last 24h, total items in last 30 days.
+ * Uses ROLLING windows (not calendar days) - 24h = 86400000ms, 30d = 2592000000ms.
+ * Only counts items with valid dates (invalid dates are skipped).
+ */
 export function computeFreshnessMetrics(
   items: PennyItem[],
   nowMs: number = Date.now()
