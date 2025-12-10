@@ -1,10 +1,11 @@
 "use client"
 
-import { useState, useMemo, useEffect, useCallback } from "react"
-import { useSearchParams, useRouter, usePathname } from "next/navigation"
+import { useState, useMemo, useEffect, useCallback, useRef } from "react"
+import { useRouter, usePathname } from "next/navigation"
 import { AlertTriangle, Package, Clock, CheckCircle2, Info } from "lucide-react"
 import { SUBMIT_FIND_FORM_URL, NEWSLETTER_URL } from "@/lib/constants"
 import { TrackableLink } from "@/components/trackable-link"
+import { filterValidPennyItems } from "@/lib/penny-list-utils"
 import {
   PennyListFilters,
   type TierFilter,
@@ -18,6 +19,7 @@ import type { PennyItem } from "@/lib/fetch-penny-data"
 
 interface PennyListClientProps {
   initialItems: PennyItem[]
+  initialSearchParams?: Record<string, string | string[] | undefined>
 }
 
 // Get total reports across all states
@@ -25,34 +27,64 @@ function getTotalReports(locations: Record<string, number>): number {
   return Object.values(locations).reduce((sum, count) => sum + count, 0)
 }
 
+function toURLSearchParams(
+  params?: Record<string, string | string[] | undefined>
+): URLSearchParams {
+  const searchParams = new URLSearchParams()
+
+  if (!params) return searchParams
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (Array.isArray(value)) {
+      value.filter(Boolean).forEach((v) => searchParams.append(key, v))
+    } else if (typeof value === "string") {
+      searchParams.set(key, value)
+    }
+  })
+
+  return searchParams
+}
+
 // Storage key for user's preferred state
 const USER_STATE_KEY = "pennycentral_user_state"
 
-export function PennyListClient({ initialItems }: PennyListClientProps) {
+export function PennyListClient({ initialItems, initialSearchParams }: PennyListClientProps) {
   const router = useRouter()
   const pathname = usePathname()
-  const searchParams = useSearchParams()
 
   const HOT_WINDOW_DAYS = 14
 
+  const initialParams = useMemo(() => toURLSearchParams(initialSearchParams), [initialSearchParams])
+  const paramsRef = useRef<URLSearchParams>(initialParams)
+
+  const getInitialParam = (key: string) => initialParams.get(key) || ""
+
   // Initialize state from URL params
-  const [stateFilter, setStateFilter] = useState(() => searchParams.get("state") || "")
-  const [tierFilter, setTierFilter] = useState<TierFilter>(
-    () => (searchParams.get("tier") as TierFilter) || "all"
-  )
-  const [searchQuery, setSearchQuery] = useState(() => searchParams.get("q") || "")
-  const [sortOption, setSortOption] = useState<SortOption>(
-    () => (searchParams.get("sort") as SortOption) || "newest"
-  )
-  const [viewMode, setViewMode] = useState<ViewMode>(
-    () => (searchParams.get("view") as ViewMode) || "cards"
-  )
-  const [dateRange, setDateRange] = useState<DateRange>(
-    () => (searchParams.get("days") as DateRange) || "30"
-  )
+  const [stateFilter, setStateFilter] = useState(() => getInitialParam("state"))
+  const [tierFilter, setTierFilter] = useState<TierFilter>(() => {
+    const value = getInitialParam("tier") as TierFilter
+    return value === "Very Common" || value === "Common" || value === "Rare" ? value : "all"
+  })
+  const [searchQuery, setSearchQuery] = useState(() => getInitialParam("q"))
+  const [sortOption, setSortOption] = useState<SortOption>(() => {
+    const value = getInitialParam("sort") as SortOption
+    return value === "oldest" || value === "most-reports" || value === "alphabetical"
+      ? value
+      : "newest"
+  })
+  const [viewMode, setViewMode] = useState<ViewMode>(() => {
+    const value = getInitialParam("view") as ViewMode
+    return value === "table" ? value : "cards"
+  })
+  const [dateRange, setDateRange] = useState<DateRange>(() => {
+    const value = getInitialParam("days") as DateRange
+    return value === "7" || value === "14" ? value : "30"
+  })
 
   // User's saved state for "My State" button
   const [userState, setUserState] = useState<string | undefined>(undefined)
+
+  const validRows = useMemo(() => filterValidPennyItems(initialItems), [initialItems])
 
   // Load user's state from localStorage on mount
   useEffect(() => {
@@ -73,7 +105,7 @@ export function PennyListClient({ initialItems }: PennyListClientProps) {
   // Sync filters to URL params
   const updateURL = useCallback(
     (updates: Record<string, string | null>) => {
-      const params = new URLSearchParams(searchParams.toString())
+      const params = new URLSearchParams(paramsRef.current)
 
       Object.entries(updates).forEach(([key, value]) => {
         if (
@@ -90,10 +122,11 @@ export function PennyListClient({ initialItems }: PennyListClientProps) {
         }
       })
 
+      paramsRef.current = params
       const newURL = params.toString() ? `${pathname}?${params.toString()}` : pathname
       router.replace(newURL, { scroll: false })
     },
-    [searchParams, pathname, router]
+    [pathname, router]
   )
 
   // Wrapper setters that also update URL
@@ -162,7 +195,7 @@ export function PennyListClient({ initialItems }: PennyListClientProps) {
     }
 
     // Add parsed dates and filter to recent window
-    const withMeta = initialItems
+    const withMeta = validRows
       .map((item) => ({
         ...item,
         parsedDate: normalizeDate(item.dateAdded),
@@ -238,7 +271,7 @@ export function PennyListClient({ initialItems }: PennyListClientProps) {
       hotItems: hot,
       filteredItems: filtered,
     }
-  }, [initialItems, stateFilter, tierFilter, searchQuery, sortOption, dateRange])
+  }, [validRows, stateFilter, tierFilter, searchQuery, sortOption, dateRange])
 
   const hasActiveFilters =
     stateFilter !== "" || tierFilter !== "all" || searchQuery !== "" || dateRange !== "30"

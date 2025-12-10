@@ -3,6 +3,7 @@
 import { Calendar, Package } from "lucide-react"
 import { CopySkuButton } from "@/components/copy-sku-button"
 import { US_STATES } from "@/lib/us-states"
+import { formatRelativeDate } from "@/lib/penny-list-utils"
 import type { PennyItem } from "@/lib/fetch-penny-data"
 
 interface PennyListCardProps {
@@ -55,7 +56,7 @@ export function PennyListCard({ item }: PennyListCardProps) {
           </div>
           <span className="text-xs text-[var(--text-muted)] flex items-center gap-1">
             <Calendar className="w-3 h-3" aria-hidden="true" />
-            <time dateTime={item.dateAdded}>{item.dateAdded}</time>
+            <time dateTime={item.dateAdded}>{formatRelativeDate(item.dateAdded)}</time>
           </span>
         </div>
 
@@ -149,7 +150,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
         </span>
         <span className="text-xs text-[var(--text-muted)] flex items-center gap-1">
           <Calendar className="w-3 h-3" aria-hidden="true" />
-          <time dateTime={item.dateAdded}>{item.dateAdded}</time>
+          <time dateTime={item.dateAdded}>{formatRelativeDate(item.dateAdded)}</time>
         </span>
       </div>
       <h3

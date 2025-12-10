@@ -1,4 +1,5 @@
 import Papa from "papaparse"
+import { extractStateFromLocation } from "./penny-list-utils"
 
 // Define the shape of your penny item
 export type PennyItem = {
@@ -49,6 +50,14 @@ function pickField(row: Record<string, string>, key: string): string {
     if (foundKey && row[foundKey]) return row[foundKey]
   }
   return ""
+}
+
+// Return ISO date (YYYY-MM-DD) when valid, otherwise null
+function parseDateToISO(value: string): string | null {
+  if (!value) return null
+  const parsed = new Date(value)
+  if (Number.isNaN(parsed.getTime())) return null
+  return parsed.toISOString().split("T")[0]
 }
 
 /**
@@ -103,25 +112,17 @@ async function fetchPennyListRaw(): Promise<PennyItem[]> {
       const quantity = pickField(row, "quantity").trim()
       const cityState = pickField(row, "city_state").trim()
       const dateFound = pickField(row, "date_found").trim()
+      const timestamp = pickField(row, "timestamp").trim()
       const photo = pickField(row, "photo").trim()
       const notes = pickField(row, "notes").trim()
       const status = pickField(row, "status").trim()
 
       // 2. Parse Date
-      let dateAdded = new Date().toISOString().split("T")[0]
-      if (dateFound) {
-        const d = new Date(dateFound)
-        if (!isNaN(d.getTime())) {
-          dateAdded = d.toISOString().split("T")[0]
-        }
-      }
+      const parsedDate = parseDateToISO(dateFound) ?? parseDateToISO(timestamp)
+      const dateAdded = parsedDate ?? ""
 
       // 3. Parse Location
-      let state = ""
-      if (cityState.includes(",")) {
-        const parts = cityState.split(",")
-        state = parts[1].trim().toUpperCase()
-      }
+      const state = extractStateFromLocation(cityState)
 
       // 4. Aggregate by SKU
       if (!grouped[sku]) {
@@ -140,7 +141,11 @@ async function fetchPennyListRaw(): Promise<PennyItem[]> {
       }
 
       // Update latest date
-      if (dateAdded > grouped[sku].dateAdded) {
+      if (
+        dateAdded &&
+        (!grouped[sku].dateAdded ||
+          new Date(dateAdded).getTime() > new Date(grouped[sku].dateAdded).getTime())
+      ) {
         grouped[sku].dateAdded = dateAdded
       }
 

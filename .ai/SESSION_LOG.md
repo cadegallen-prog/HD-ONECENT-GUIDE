@@ -621,6 +621,76 @@ Rare: 1-2 reports AND only 1 state
 
 ---
 
+## December 10, 2025 - ChatGPT Codex - Penny List Freshness Phase 1
+
+**AI:** ChatGPT Codex (gpt-5.1)
+**Goal:** Implement Phase 1 validation, freshness summary, and relative timestamps from PENNY_LIST_PLAN.
+**Approach:** Added shared validation utilities, filtered penny list data to valid rows, rendered the freshness summary server-side, and switched item dates to human-friendly labels while keeping semantic `<time>`.
+
+**Changes Made:**
+- Added `lib/penny-list-utils.ts` with `filterValidPennyItems`, `computeFreshnessMetrics`, and `formatRelativeDate` helpers.
+- Updated `lib/fetch-penny-data.ts` to stop defaulting missing dates to today, parse timestamps when available, and keep ISO dates only when valid.
+- Updated `app/penny-list/page.tsx` to gate on validated rows, server-render the 24h/30d freshness summary, and show the feed-unavailable banner based on validated data.
+- Updated `components/penny-list-client.tsx`, `components/penny-list-card.tsx`, and `components/penny-list-table.tsx` to rely on validated rows and display relative timestamps with `<time datetime=...>`.
+
+**Outcome:** ? **Success**
+- `npm run lint` and `npm run build` both pass.
+- Invalid rows (missing SKU/name/valid date) are dropped; if all rows are invalid the banner shows and the summary reads `0 / 0`.
+- Freshness counts come from validated rows on the server; item dates render as "Today / Yesterday / X days ago / MMM d" while keeping semantic HTML.
+
+**Completed Items:**
+- Validation gating for penny list rows (SKU, name, valid `dateAdded`).
+- Server-side freshness summary using 24h and 30d rolling windows.
+- Relative timestamp formatting across cards and table.
+- Lint and build executed successfully.
+
+**Unfinished Items:**
+- None.
+
+**Learnings:**
+- Defaulting blank dates to "today" masked bad data; dropping invalid dates keeps freshness counts honest.
+- Shared helpers keep server summary and client filters aligned on the same validated dataset.
+
+**For Next AI:**
+- If the homepage teaser needs the same counts, reuse `computeFreshnessMetrics` + `filterValidPennyItems` from `lib/penny-list-utils.ts`.
+- Feed-unavailable now keys off validated rows; if the banner appears unexpectedly, inspect `dateAdded` values coming from the Sheet.
+
+---
+
+## December 10, 2025 - ChatGPT Codex - Penny List State Parsing + Unit Tests
+
+**AI:** ChatGPT Codex (gpt-5.1)
+**Goal:** Fix state filtering by improving location parsing and add repeatable tests for validation/freshness/relative dates.
+**Approach:** Added robust state extraction helper used during fetch aggregation, and created a lightweight tsx-based unit test suite to validate parsing, gating, freshness math, and relative date formatting.
+
+**Changes Made:**
+- `lib/penny-list-utils.ts`: Added `extractStateFromLocation` with code/name detection for inputs like “Store 123 - Phoenix AZ” or “Anchorage, Alaska”; reused state maps from `US_STATES`.
+- `lib/fetch-penny-data.ts`: Uses `extractStateFromLocation` when aggregating locations so state filter has data even when commas/formats vary.
+- `tests/penny-list-utils.test.ts`: New Node test (run via tsx) covering state parsing, validation gating, freshness metrics, and relative date formatting.
+- `package.json`: Added `test:unit` script (`npx tsx --test tests/**/*.test.ts`).
+
+**Outcome:** ? **Success**
+- State parsing is more tolerant; location strings now populate `locations` so state filter can match.
+- `npm run test:unit`, `npm run lint`, and `npm run build` all pass.
+
+**Completed Items:**
+- Robust state parsing hooked into fetch aggregation.
+- Added deterministic unit tests for penny-list helpers.
+- All checks rerun (tests + lint + build).
+
+**Unfinished Items:**
+- None specific to state parsing/tests.
+
+**Learnings:**
+- State extraction needs to handle commas, codes, and full names; centralizing this prevents silent filter failures.
+- tsx’s `--test` flag is enough for lightweight unit coverage without new deps.
+
+**For Next AI:**
+- If state filter still fails in the UI, inspect incoming `store` column values; add a test case mirroring the exact string to `extractStateFromLocation`.
+- Run `npm run test:unit` + `npm run lint` + `npm run build` before shipping.
+
+---
+
 ## Template for Future Entries
 
 Copy this template when adding new sessions:

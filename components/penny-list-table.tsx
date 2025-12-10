@@ -3,6 +3,7 @@
 import { ArrowUpDown, ArrowUp, ArrowDown, Copy, Check } from "lucide-react"
 import { useState } from "react"
 import { US_STATES } from "@/lib/us-states"
+import { formatRelativeDate } from "@/lib/penny-list-utils"
 import type { PennyItem } from "@/lib/fetch-penny-data"
 import type { SortOption } from "./penny-list-filters"
 
@@ -251,7 +252,7 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
 
                   {/* Date */}
                   <td className="px-4 py-3 tabular-nums text-[var(--text-secondary)]">
-                    <time dateTime={item.dateAdded}>{item.dateAdded}</time>
+                    <time dateTime={item.dateAdded}>{formatRelativeDate(item.dateAdded)}</time>
                   </td>
                 </tr>
               )
