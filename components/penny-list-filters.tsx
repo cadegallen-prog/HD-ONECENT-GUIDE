@@ -291,7 +291,7 @@ export function PennyListFilters({
                 key={option.value}
                 type="button"
                 onClick={() => setDateRange(option.value)}
-                aria-pressed={dateRange === option.value ? "true" : "false"}
+                aria-pressed={dateRange === option.value}
                 className={`px-3 py-2.5 text-sm font-medium min-h-[44px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
                   dateRange === option.value
                     ? "bg-[var(--cta-primary)] text-white"
