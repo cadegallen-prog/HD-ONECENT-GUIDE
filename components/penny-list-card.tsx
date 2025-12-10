@@ -38,87 +38,82 @@ export function PennyListCard({ item }: PennyListCardProps) {
       className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow h-full flex flex-col"
       aria-labelledby={`item-${item.id}-name`}
     >
-      <div className="p-5 flex flex-col flex-1">
-        {/* Header: Tier + Date */}
-        <div className="flex justify-between items-start mb-3">
+      <div className="p-5 flex flex-col flex-1 space-y-3">
+        <div className="flex justify-between items-start">
           <div className="flex items-center gap-2 flex-wrap">
             {item.status && item.status !== item.tier && (
-              <span className="text-xs font-medium px-2 py-1 rounded-full bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+              <span className="text-xs font-semibold px-2 py-1 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-default)] text-[var(--text-primary)]">
                 {item.status}
               </span>
             )}
             <span
-              className={`text-xs font-medium px-2 py-1 rounded-full ${commonnessTone(item.tier)}`}
+              className={`text-xs font-semibold px-2 py-1 rounded-full border border-[var(--border-default)] ${commonnessTone(item.tier)}`}
               aria-label={`Commonness: ${item.tier || "Rare"}`}
             >
               {item.tier || "Rare"}
             </span>
           </div>
-          <span className="text-xs text-[var(--text-muted)] flex items-center gap-1">
+          <span className="text-sm text-[var(--text-secondary)] flex items-center gap-1">
             <Calendar className="w-3 h-3" aria-hidden="true" />
             <time dateTime={item.dateAdded}>{formatRelativeDate(item.dateAdded)}</time>
           </span>
         </div>
 
-        {/* Item Name */}
         <h3
           id={`item-${item.id}-name`}
-          className="font-semibold text-lg text-[var(--text-primary)] mb-2 line-clamp-2"
+          className="font-semibold text-lg text-[var(--text-primary)] leading-7 line-clamp-2"
         >
           {item.name}
         </h3>
 
-        {/* SKU */}
-        <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)] mb-3 font-mono bg-zinc-100 dark:bg-zinc-800/50 px-2 py-1.5 rounded w-fit">
+        <div className="flex items-center gap-2 text-sm text-[var(--text-primary)] font-mono bg-[var(--bg-elevated)] border border-[var(--border-default)] px-2 py-1.5 rounded w-fit">
           <span className="select-all">SKU: {item.sku}</span>
           <CopySkuButton sku={item.sku} />
         </div>
 
-        {/* Quantity Found Badge */}
         {item.quantityFound && (
-          <div className="flex items-center gap-1.5 text-xs font-medium text-emerald-700 dark:text-emerald-300 mb-3">
+          <div className="flex items-center gap-1.5 text-sm font-semibold text-[var(--text-secondary)]">
             <Package className="w-3.5 h-3.5" aria-hidden="true" />
             <span>{item.quantityFound}</span>
           </div>
         )}
 
-        {/* Notes */}
         {item.notes && (
-          <p className="text-sm text-[var(--text-muted)] mb-3 line-clamp-2">{item.notes}</p>
+          <p className="text-base text-[var(--text-secondary)] leading-6 line-clamp-3">
+            {item.notes}
+          </p>
         )}
 
-        {/* Location Data - Improved Display */}
         {item.locations && Object.keys(item.locations).length > 0 && (
-          <div className="mb-4 mt-auto">
-            <p className="text-xs font-medium text-[var(--text-secondary)] mb-2">
+          <div className="mt-auto space-y-2">
+            <p className="text-sm font-semibold text-[var(--text-secondary)]">
               Reported in {stateCount} {stateCount === 1 ? "state" : "states"}:
             </p>
             <div className="flex flex-wrap gap-1.5" role="list" aria-label="States with reports">
               {Object.entries(item.locations)
-                .sort(([, a], [, b]) => b - a) // Sort by count descending
+                .sort(([, a], [, b]) => b - a)
                 .map(([state, count]) => (
                   <span
                     key={state}
                     role="listitem"
-                    className="px-2 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-[var(--text-secondary)] text-xs font-medium min-h-[28px] flex items-center"
+                    className="px-2 py-1 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-default)] text-[var(--text-primary)] text-xs font-semibold min-h-[28px] flex items-center"
                     title={`${getStateName(state)}: ${count} ${count === 1 ? "report" : "reports"}`}
                     aria-label={`${getStateName(state)}: ${count} ${count === 1 ? "report" : "reports"}`}
                   >
-                    {state} · {count}
+                    {state} ú {count}
                   </span>
                 ))}
             </div>
             {totalReports > 1 && (
-              <p className="text-xs text-[var(--text-muted)] mt-2">
+              <p className="text-sm text-[var(--text-secondary)]">
                 {totalReports} total {totalReports === 1 ? "report" : "reports"}
               </p>
             )}
           </div>
         )}
 
-        {/* Footer */}
         <div className="pt-4 border-t border-[var(--border-default)] flex items-center justify-between mt-auto">
-          <span className="text-xs text-[var(--text-muted)]">Unverified report</span>
+          <span className="text-sm text-[var(--text-secondary)]">Unverified report</span>
           <span className="text-emerald-600 dark:text-emerald-400 font-bold text-lg">$0.01</span>
         </div>
       </div>
@@ -126,7 +121,6 @@ export function PennyListCard({ item }: PennyListCardProps) {
   )
 }
 
-// Compact card for "Hot Right Now" section
 export function PennyListCardCompact({ item }: PennyListCardProps) {
   const commonnessTone = (tier?: string) => {
     if (tier === "Very Common")
@@ -166,7 +160,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
         <div className="mt-3 flex flex-wrap gap-1.5" role="list" aria-label="States with reports">
           {Object.entries(item.locations)
             .sort(([, a], [, b]) => b - a)
-            .slice(0, 5) // Show max 5 states in compact view
+            .slice(0, 5)
             .map(([state, count]) => (
               <span
                 key={`${item.id}-${state}`}
@@ -174,7 +168,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
                 className="px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-800 text-[var(--text-secondary)] text-xs"
                 aria-label={`${state}: ${count} ${count === 1 ? "report" : "reports"}`}
               >
-                {state} · {count}
+                {state} ú {count}
               </span>
             ))}
           {Object.keys(item.locations).length > 5 && (

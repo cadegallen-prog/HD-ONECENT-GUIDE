@@ -304,7 +304,22 @@ These mirror `AGENTS.md` and `CODEX_GREAT_PLAN.md` and apply to all Penny List w
 
 Do **not**:
 
-- Jump to Phase 2 or “Later Ideas” before Phase 1 is fully implemented and stable.
-- Modify the data layer (`lib/fetch-penny-data.ts`) beyond what’s needed for validation.
+- Jump to Phase 2 or "Later Ideas" before Phase 1 is fully implemented and stable.
+- Modify the data layer (`lib/fetch-penny-data.ts`) beyond what's needed for validation.
 - Add features not described here or in `CODEX_GREAT_PLAN.md` without clearly documenting why.
 
+---
+
+## 10. UI Readability & Alignment (Next Polish)
+
+**Why:** Table and card views need clearer alignment, spacing, and contrast (especially at 75% zoom) to reduce scanning fatigue.
+
+**Goals (actionable & testable):**
+- **Table:** Equal column spacing with fixed widths; headers and cells left-aligned; item names wrap to 2 lines instead of truncating; badges and SKUs use higher-contrast text/background; tabular numbers align cleanly.
+- **Cards:** Increase text legibility (font weight/size within AAA rules), consistent badge styling, clearer contrast for SKUs/states/notes; ensure readability at 75% zoom.
+- **QA:** Visual diff or screenshots after changes; manual check that state filter still works; `npm run lint`, `npm run build`, `npm run test:unit`.
+
+**Suggested steps:**
+1) Table layout: add `colgroup` widths, left-align headers/cells, allow 2-line wrap for item names/notes, lighten badge backgrounds using existing tokens, ensure tabular numbers for counts/dates.
+2) Card layout: bump supporting text to `text-sm/base`, use consistent border+background for badges/SKUs/states, increase line-height, keep CTA/price unchanged.
+3) Validate: run unit tests + lint + build; capture quick before/after screenshots; verify filters and sorting still respond.

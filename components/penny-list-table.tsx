@@ -118,12 +118,25 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
   return (
     <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full text-sm" role="table" aria-label="Penny list items">
+        <table
+          className="w-full text-sm table-fixed"
+          role="table"
+          aria-label="Penny list items"
+          style={{ tableLayout: "fixed" }}
+        >
+          <colgroup>
+            <col style={{ width: "32%" }} />
+            <col style={{ width: "16%" }} />
+            <col style={{ width: "14%" }} />
+            <col style={{ width: "14%" }} />
+            <col style={{ width: "10%" }} />
+            <col style={{ width: "14%" }} />
+          </colgroup>
           <thead>
             <tr className="border-b border-[var(--border-default)] bg-zinc-50 dark:bg-zinc-900/50">
               <th
                 scope="col"
-                className="text-left px-4 py-3 font-medium text-[var(--text-secondary)]"
+                className="text-left px-4 py-3 font-semibold text-[var(--text-primary)]"
               >
                 <SortButton column="alphabetical" currentSort={sortOption} onSort={onSortChange}>
                   Item Name
@@ -131,25 +144,25 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
               </th>
               <th
                 scope="col"
-                className="text-left px-4 py-3 font-medium text-[var(--text-secondary)]"
+                className="text-left px-4 py-3 font-semibold text-[var(--text-primary)]"
               >
                 SKU
               </th>
               <th
                 scope="col"
-                className="text-left px-4 py-3 font-medium text-[var(--text-secondary)]"
+                className="text-left px-4 py-3 font-semibold text-[var(--text-primary)]"
               >
                 Tier
               </th>
               <th
                 scope="col"
-                className="text-left px-4 py-3 font-medium text-[var(--text-secondary)]"
+                className="text-left px-4 py-3 font-semibold text-[var(--text-primary)]"
               >
                 States
               </th>
               <th
                 scope="col"
-                className="text-left px-4 py-3 font-medium text-[var(--text-secondary)]"
+                className="text-left px-4 py-3 font-semibold text-[var(--text-primary)]"
               >
                 <SortButton column="most-reports" currentSort={sortOption} onSort={onSortChange}>
                   Reports
@@ -157,7 +170,7 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
               </th>
               <th
                 scope="col"
-                className="text-left px-4 py-3 font-medium text-[var(--text-secondary)]"
+                className="text-left px-4 py-3 font-semibold text-[var(--text-primary)]"
               >
                 <SortButton column="newest" currentSort={sortOption} onSort={onSortChange}>
                   Date
@@ -183,14 +196,14 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
                   }`}
                 >
                   {/* Item Name */}
-                  <td className="px-4 py-3">
-                    <div className="max-w-[300px]">
-                      <span className="font-medium text-[var(--text-primary)] line-clamp-1">
+                  <td className="px-4 py-3 align-top">
+                    <div className="space-y-1">
+                      <span className="font-semibold text-[var(--text-primary)] leading-6 line-clamp-2 break-words">
                         {item.name}
                       </span>
                       {item.notes && (
                         <span
-                          className="text-xs text-[var(--text-muted)] line-clamp-1 mt-0.5 block"
+                          className="text-sm text-[var(--text-secondary)] leading-5 line-clamp-2 block break-words"
                           title={item.notes}
                         >
                           {item.notes}
@@ -200,9 +213,9 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
                   </td>
 
                   {/* SKU */}
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 align-top">
                     <div className="flex items-center gap-1.5">
-                      <code className="font-mono text-xs bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded select-all">
+                      <code className="font-mono text-sm bg-[var(--bg-elevated)] border border-[var(--border-default)] px-2 py-1 rounded select-all text-[var(--text-primary)]">
                         {item.sku}
                       </code>
                       <CopyButton sku={item.sku} />
@@ -210,21 +223,21 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
                   </td>
 
                   {/* Tier */}
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 align-top">
                     <TierBadge tier={item.tier} />
                   </td>
 
                   {/* States */}
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 align-top">
                     {stateCount > 0 ? (
                       <div
-                        className="flex flex-wrap gap-1"
+                        className="flex flex-wrap gap-1.5"
                         title={`Reported in ${stateCount} states`}
                       >
                         {topStates.map(([state]) => (
                           <span
                             key={state}
-                            className="px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-xs text-[var(--text-secondary)]"
+                            className="px-2 py-1 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-default)] text-xs font-semibold text-[var(--text-primary)]"
                             title={getStateName(state)}
                           >
                             {state}
@@ -237,21 +250,23 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
                         )}
                       </div>
                     ) : (
-                      <span className="text-xs text-[var(--text-muted)]">—</span>
+                      <span className="text-xs text-[var(--text-muted)]">-</span>
                     )}
                   </td>
 
                   {/* Reports */}
-                  <td className="px-4 py-3 tabular-nums">
+                  <td className="px-4 py-3 align-top tabular-nums">
                     {totalReports > 0 ? (
-                      <span className="text-[var(--text-primary)] font-medium">{totalReports}</span>
+                      <span className="text-[var(--text-primary)] font-semibold">
+                        {totalReports}
+                      </span>
                     ) : (
-                      <span className="text-[var(--text-muted)]">—</span>
+                      <span className="text-[var(--text-muted)]">-</span>
                     )}
                   </td>
 
                   {/* Date */}
-                  <td className="px-4 py-3 tabular-nums text-[var(--text-secondary)]">
+                  <td className="px-4 py-3 align-top tabular-nums text-[var(--text-primary)]">
                     <time dateTime={item.dateAdded}>{formatRelativeDate(item.dateAdded)}</time>
                   </td>
                 </tr>
