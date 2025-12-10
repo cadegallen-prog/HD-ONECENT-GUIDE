@@ -1,12 +1,13 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { Search, X, LayoutGrid, Table2 } from "lucide-react"
+import { Search, X, LayoutGrid, Table2, MapPin } from "lucide-react"
 import { US_STATES } from "@/lib/us-states"
 
 export type TierFilter = "all" | "Very Common" | "Common" | "Rare"
 export type SortOption = "newest" | "oldest" | "most-reports" | "alphabetical"
 export type ViewMode = "cards" | "table"
+export type DateRange = "7" | "14" | "30"
 
 interface PennyListFiltersProps {
   totalItems: number
@@ -21,6 +22,15 @@ interface PennyListFiltersProps {
   setSortOption: (sort: SortOption) => void
   viewMode: ViewMode
   setViewMode: (mode: ViewMode) => void
+  dateRange: DateRange
+  setDateRange: (range: DateRange) => void
+  userState?: string // For "My State" quick filter
+}
+
+// Get state name from code
+function getStateName(code: string): string {
+  const state = US_STATES.find((s) => s.code === code)
+  return state?.name || code
 }
 
 export function PennyListFilters({
@@ -36,6 +46,9 @@ export function PennyListFilters({
   setSortOption,
   viewMode,
   setViewMode,
+  dateRange,
+  setDateRange,
+  userState,
 }: PennyListFiltersProps) {
   const [localSearch, setLocalSearch] = useState(searchQuery)
 
@@ -47,8 +60,17 @@ export function PennyListFilters({
     return () => clearTimeout(timer)
   }, [localSearch, setSearchQuery])
 
+  // Sync local search with prop (for URL param changes)
+  useEffect(() => {
+    setLocalSearch(searchQuery)
+  }, [searchQuery])
+
   const hasActiveFilters =
-    stateFilter !== "" || tierFilter !== "all" || searchQuery !== "" || sortOption !== "newest"
+    stateFilter !== "" ||
+    tierFilter !== "all" ||
+    searchQuery !== "" ||
+    sortOption !== "newest" ||
+    dateRange !== "30"
 
   const clearAllFilters = useCallback(() => {
     setStateFilter("")
@@ -56,7 +78,8 @@ export function PennyListFilters({
     setSearchQuery("")
     setLocalSearch("")
     setSortOption("newest")
-  }, [setStateFilter, setTierFilter, setSearchQuery, setSortOption])
+    setDateRange("30")
+  }, [setStateFilter, setTierFilter, setSearchQuery, setSortOption, setDateRange])
 
   const tierOptions: { value: TierFilter; label: string; shortLabel: string }[] = [
     { value: "all", label: "All Tiers", shortLabel: "All" },
@@ -65,15 +88,69 @@ export function PennyListFilters({
     { value: "Rare", label: "Rare", shortLabel: "R" },
   ]
 
+  const dateOptions: { value: DateRange; label: string }[] = [
+    { value: "7", label: "7 days" },
+    { value: "14", label: "14 days" },
+    { value: "30", label: "30 days" },
+  ]
+
+  // Build active filter chips
+  const activeChips: { key: string; label: string; onRemove: () => void }[] = []
+
+  if (stateFilter) {
+    activeChips.push({
+      key: "state",
+      label: getStateName(stateFilter),
+      onRemove: () => setStateFilter(""),
+    })
+  }
+  if (tierFilter !== "all") {
+    activeChips.push({
+      key: "tier",
+      label: tierFilter,
+      onRemove: () => setTierFilter("all"),
+    })
+  }
+  if (searchQuery) {
+    activeChips.push({
+      key: "search",
+      label: `"${searchQuery}"`,
+      onRemove: () => {
+        setSearchQuery("")
+        setLocalSearch("")
+      },
+    })
+  }
+  if (dateRange !== "30") {
+    activeChips.push({
+      key: "date",
+      label: `Last ${dateRange} days`,
+      onRemove: () => setDateRange("30"),
+    })
+  }
+  if (sortOption !== "newest") {
+    const sortLabels: Record<SortOption, string> = {
+      newest: "Newest",
+      oldest: "Oldest",
+      "most-reports": "Most Reports",
+      alphabetical: "A-Z",
+    }
+    activeChips.push({
+      key: "sort",
+      label: `Sorted: ${sortLabels[sortOption]}`,
+      onRemove: () => setSortOption("newest"),
+    })
+  }
+
   return (
     <section
       aria-label="Filter penny list results"
-      className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl p-4 sm:p-6 mb-6"
+      className="sticky top-0 z-20 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl p-4 sm:p-6 mb-6 shadow-sm"
     >
-      {/* Row 1: State, Tier Toggles, View Mode */}
+      {/* Row 1: State, My State, Tier Toggles, View Mode */}
       <div className="flex flex-wrap gap-3 mb-4">
         {/* State Dropdown */}
-        <div className="flex-1 min-w-[200px]">
+        <div className="flex-1 min-w-[180px]">
           <label htmlFor="state-filter" className="sr-only">
             Filter by state
           </label>
@@ -95,6 +172,25 @@ export function PennyListFilters({
             Filter items by the state where they were reported
           </span>
         </div>
+
+        {/* My State Quick Filter */}
+        {userState && (
+          <button
+            type="button"
+            onClick={() => setStateFilter(stateFilter === userState ? "" : userState)}
+            aria-pressed={stateFilter === userState}
+            className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium min-h-[44px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
+              stateFilter === userState
+                ? "bg-[var(--cta-primary)] text-white"
+                : "border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]"
+            }`}
+            title={`Show only items in ${getStateName(userState)}`}
+          >
+            <MapPin className="w-4 h-4" aria-hidden="true" />
+            <span className="hidden sm:inline">My State</span>
+            <span className="sm:hidden">{userState}</span>
+          </button>
+        )}
 
         {/* Tier Toggle Buttons */}
         <fieldset className="flex-shrink-0">
@@ -157,10 +253,10 @@ export function PennyListFilters({
         </div>
       </div>
 
-      {/* Row 2: Search, Sort, Clear */}
+      {/* Row 2: Search, Date Range, Sort, Clear */}
       <div className="flex flex-wrap gap-3">
         {/* Search Input */}
-        <div className="flex-1 min-w-[200px] relative">
+        <div className="flex-1 min-w-[180px] relative">
           <label htmlFor="search-filter" className="sr-only">
             Search by item name or SKU
           </label>
@@ -182,8 +278,35 @@ export function PennyListFilters({
           </span>
         </div>
 
+        {/* Date Range Quick Filters */}
+        <fieldset className="flex-shrink-0">
+          <legend className="sr-only">Filter by date range</legend>
+          <div
+            className="flex rounded-lg border border-[var(--border-default)] overflow-hidden"
+            role="group"
+            aria-label="Date range filter"
+          >
+            {dateOptions.map((option, index) => (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => setDateRange(option.value)}
+                aria-pressed={dateRange === option.value ? "true" : "false"}
+                className={`px-3 py-2.5 text-sm font-medium min-h-[44px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
+                  dateRange === option.value
+                    ? "bg-[var(--cta-primary)] text-white"
+                    : "bg-[var(--bg-page)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]"
+                } ${index > 0 ? "border-l border-[var(--border-default)]" : ""}`}
+                title={`Show items from the last ${option.label}`}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </fieldset>
+
         {/* Sort Dropdown */}
-        <div className="flex-shrink-0 min-w-[160px]">
+        <div className="flex-shrink-0 min-w-[150px]">
           <label htmlFor="sort-filter" className="sr-only">
             Sort results
           </label>
@@ -214,6 +337,36 @@ export function PennyListFilters({
         )}
       </div>
 
+      {/* Active Filter Chips */}
+      {activeChips.length > 0 && (
+        <div className="mt-4 pt-4 border-t border-[var(--border-default)]">
+          <div className="flex flex-wrap gap-2 items-center">
+            <span className="text-xs font-medium text-[var(--text-muted)] mr-1">Active:</span>
+            {activeChips.map((chip) => (
+              <button
+                key={chip.key}
+                type="button"
+                onClick={chip.onRemove}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--cta-primary)]/10 text-[var(--cta-primary)] text-xs font-medium hover:bg-[var(--cta-primary)]/20 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] min-h-[28px]"
+                aria-label={`Remove filter: ${chip.label}`}
+              >
+                {chip.label}
+                <X className="w-3 h-3" aria-hidden="true" />
+              </button>
+            ))}
+            {activeChips.length > 1 && (
+              <button
+                type="button"
+                onClick={clearAllFilters}
+                className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] underline ml-2 min-h-[28px]"
+              >
+                Clear all
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Results Count - Live Region */}
       <div
         aria-live="polite"
@@ -231,8 +384,13 @@ export function PennyListFilters({
           </span>
         )}
         {stateFilter && (
-          <span className="ml-2">
-            in <strong className="text-[var(--text-primary)]">{stateFilter}</strong>
+          <span className="ml-1">
+            in <strong className="text-[var(--text-primary)]">{getStateName(stateFilter)}</strong>
+          </span>
+        )}
+        {dateRange !== "30" && (
+          <span className="ml-1">
+            from the last <strong className="text-[var(--text-primary)]">{dateRange}</strong> days
           </span>
         )}
       </div>

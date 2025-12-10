@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect, useCallback } from "react"
+import { useSearchParams, useRouter, usePathname } from "next/navigation"
 import { AlertTriangle, Package, Clock, CheckCircle2, Info } from "lucide-react"
 import { SUBMIT_FIND_FORM_URL, NEWSLETTER_URL } from "@/lib/constants"
 import { TrackableLink } from "@/components/trackable-link"
@@ -9,6 +10,7 @@ import {
   type TierFilter,
   type SortOption,
   type ViewMode,
+  type DateRange,
 } from "./penny-list-filters"
 import { PennyListCard, PennyListCardCompact } from "./penny-list-card"
 import { PennyListTable } from "./penny-list-table"
@@ -23,20 +25,130 @@ function getTotalReports(locations: Record<string, number>): number {
   return Object.values(locations).reduce((sum, count) => sum + count, 0)
 }
 
+// Storage key for user's preferred state
+const USER_STATE_KEY = "pennycentral_user_state"
+
 export function PennyListClient({ initialItems }: PennyListClientProps) {
-  const RECENT_WINDOW_DAYS = 30
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
   const HOT_WINDOW_DAYS = 14
 
-  // Filter state
-  const [stateFilter, setStateFilter] = useState("")
-  const [tierFilter, setTierFilter] = useState<TierFilter>("all")
-  const [searchQuery, setSearchQuery] = useState("")
-  const [sortOption, setSortOption] = useState<SortOption>("newest")
-  const [viewMode, setViewMode] = useState<ViewMode>("cards")
+  // Initialize state from URL params
+  const [stateFilter, setStateFilter] = useState(() => searchParams.get("state") || "")
+  const [tierFilter, setTierFilter] = useState<TierFilter>(
+    () => (searchParams.get("tier") as TierFilter) || "all"
+  )
+  const [searchQuery, setSearchQuery] = useState(() => searchParams.get("q") || "")
+  const [sortOption, setSortOption] = useState<SortOption>(
+    () => (searchParams.get("sort") as SortOption) || "newest"
+  )
+  const [viewMode, setViewMode] = useState<ViewMode>(
+    () => (searchParams.get("view") as ViewMode) || "cards"
+  )
+  const [dateRange, setDateRange] = useState<DateRange>(
+    () => (searchParams.get("days") as DateRange) || "30"
+  )
+
+  // User's saved state for "My State" button
+  const [userState, setUserState] = useState<string | undefined>(undefined)
+
+  // Load user's state from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem(USER_STATE_KEY)
+    if (saved) {
+      setUserState(saved)
+    }
+  }, [])
+
+  // Save state filter to localStorage when user selects a state
+  useEffect(() => {
+    if (stateFilter && stateFilter !== userState) {
+      localStorage.setItem(USER_STATE_KEY, stateFilter)
+      setUserState(stateFilter)
+    }
+  }, [stateFilter, userState])
+
+  // Sync filters to URL params
+  const updateURL = useCallback(
+    (updates: Record<string, string | null>) => {
+      const params = new URLSearchParams(searchParams.toString())
+
+      Object.entries(updates).forEach(([key, value]) => {
+        if (
+          value === null ||
+          value === "" ||
+          value === "all" ||
+          value === "newest" ||
+          value === "cards" ||
+          value === "30"
+        ) {
+          params.delete(key)
+        } else {
+          params.set(key, value)
+        }
+      })
+
+      const newURL = params.toString() ? `${pathname}?${params.toString()}` : pathname
+      router.replace(newURL, { scroll: false })
+    },
+    [searchParams, pathname, router]
+  )
+
+  // Wrapper setters that also update URL
+  const setStateFilterWithURL = useCallback(
+    (value: string) => {
+      setStateFilter(value)
+      updateURL({ state: value })
+    },
+    [updateURL]
+  )
+
+  const setTierFilterWithURL = useCallback(
+    (value: TierFilter) => {
+      setTierFilter(value)
+      updateURL({ tier: value === "all" ? null : value })
+    },
+    [updateURL]
+  )
+
+  const setSearchQueryWithURL = useCallback(
+    (value: string) => {
+      setSearchQuery(value)
+      updateURL({ q: value })
+    },
+    [updateURL]
+  )
+
+  const setSortOptionWithURL = useCallback(
+    (value: SortOption) => {
+      setSortOption(value)
+      updateURL({ sort: value === "newest" ? null : value })
+    },
+    [updateURL]
+  )
+
+  const setViewModeWithURL = useCallback(
+    (value: ViewMode) => {
+      setViewMode(value)
+      updateURL({ view: value === "cards" ? null : value })
+    },
+    [updateURL]
+  )
+
+  const setDateRangeWithURL = useCallback(
+    (value: DateRange) => {
+      setDateRange(value)
+      updateURL({ days: value === "30" ? null : value })
+    },
+    [updateURL]
+  )
 
   // Process and filter items
   const { recentItems, hotItems, filteredItems } = useMemo(() => {
     const today = new Date()
+    const dateWindowDays = parseInt(dateRange, 10)
 
     const normalizeDate = (value: string) => {
       const parsed = new Date(`${value}T00:00:00Z`)
@@ -58,12 +170,13 @@ export function PennyListClient({ initialItems }: PennyListClientProps) {
       }))
       .filter((item) => item.parsedDate)
 
-    const recent = withMeta
-      .filter((item) => item.parsedDate && isWithinDays(item.parsedDate, RECENT_WINDOW_DAYS))
+    // All items within 30 days (for total count)
+    const allRecent = withMeta
+      .filter((item) => item.parsedDate && isWithinDays(item.parsedDate, 30))
       .sort((a, b) => b.parsedDate!.getTime() - a.parsedDate!.getTime())
 
     // Hot items (Very Common in last 14 days) - unaffected by filters
-    const hot = recent
+    const hot = allRecent
       .filter(
         (item) =>
           item.tier === "Very Common" &&
@@ -72,8 +185,10 @@ export function PennyListClient({ initialItems }: PennyListClientProps) {
       )
       .slice(0, 6)
 
-    // Apply filters
-    let filtered = [...recent]
+    // Apply date range filter first
+    let filtered = allRecent.filter(
+      (item) => item.parsedDate && isWithinDays(item.parsedDate, dateWindowDays)
+    )
 
     // State filter
     if (stateFilter) {
@@ -119,13 +234,14 @@ export function PennyListClient({ initialItems }: PennyListClientProps) {
     }
 
     return {
-      recentItems: recent,
+      recentItems: allRecent,
       hotItems: hot,
       filteredItems: filtered,
     }
-  }, [initialItems, stateFilter, tierFilter, searchQuery, sortOption])
+  }, [initialItems, stateFilter, tierFilter, searchQuery, sortOption, dateRange])
 
-  const hasActiveFilters = stateFilter !== "" || tierFilter !== "all" || searchQuery !== ""
+  const hasActiveFilters =
+    stateFilter !== "" || tierFilter !== "all" || searchQuery !== "" || dateRange !== "30"
 
   return (
     <>
@@ -194,15 +310,18 @@ export function PennyListClient({ initialItems }: PennyListClientProps) {
         totalItems={recentItems.length}
         filteredCount={filteredItems.length}
         stateFilter={stateFilter}
-        setStateFilter={setStateFilter}
+        setStateFilter={setStateFilterWithURL}
         tierFilter={tierFilter}
-        setTierFilter={setTierFilter}
+        setTierFilter={setTierFilterWithURL}
         searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
+        setSearchQuery={setSearchQueryWithURL}
         sortOption={sortOption}
-        setSortOption={setSortOption}
+        setSortOption={setSortOptionWithURL}
         viewMode={viewMode}
-        setViewMode={setViewMode}
+        setViewMode={setViewModeWithURL}
+        dateRange={dateRange}
+        setDateRange={setDateRangeWithURL}
+        userState={userState}
       />
 
       {/* Results */}
@@ -219,15 +338,16 @@ export function PennyListClient({ initialItems }: PennyListClientProps) {
             <p className="text-[var(--text-secondary)] mb-4">
               {hasActiveFilters
                 ? "Try adjusting your filters or search terms."
-                : `No penny reports in the last ${RECENT_WINDOW_DAYS} days. Check back soon or submit a find!`}
+                : "No penny reports in the last 30 days. Check back soon or submit a find!"}
             </p>
             {hasActiveFilters && (
               <button
                 type="button"
                 onClick={() => {
-                  setStateFilter("")
-                  setTierFilter("all")
-                  setSearchQuery("")
+                  setStateFilterWithURL("")
+                  setTierFilterWithURL("all")
+                  setSearchQueryWithURL("")
+                  setDateRangeWithURL("30")
                 }}
                 className="px-4 py-2 rounded-lg bg-[var(--cta-primary)] text-white font-medium hover:bg-[var(--cta-hover)] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
               >
@@ -239,7 +359,7 @@ export function PennyListClient({ initialItems }: PennyListClientProps) {
           <PennyListTable
             items={filteredItems}
             sortOption={sortOption}
-            onSortChange={setSortOption}
+            onSortChange={setSortOptionWithURL}
           />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">

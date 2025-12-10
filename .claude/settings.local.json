@@ -21,7 +21,8 @@
       "Bash(npx eslint:*)",
       "Bash(timeout /t 8 /nobreak)",
       "Bash(npx lighthouse:*)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(cd:*)"
     ],
     "deny": [],
     "ask": []
