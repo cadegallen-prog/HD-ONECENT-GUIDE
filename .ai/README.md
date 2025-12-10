@@ -35,10 +35,14 @@ A structured system that lets Cade (non-coder) effectively manage PennyCentral.c
 ├── SESSION_TEMPLATES.md   ← Copy-paste prompts for sessions
 ├── CONTRACT.md            ← Collaboration agreement
 ├── DECISION_RIGHTS.md     ← What AI can decide vs. needs approval
-├── CONTEXT.md             ← Project background and community
 ├── CONSTRAINTS.md         ← Technical red lines (don't touch)
 ├── SESSION_LOG.md         ← Running history of AI work
-└── LEARNINGS.md           ← Accumulated knowledge
+├── LEARNINGS.md           ← Accumulated knowledge
+├── PENNY_LIST_PLAN.md     ← Active feature plan (penny list improvements)
+├── MCP_SERVERS.md         ← ⭐ Complete MCP tool reference
+├── AI-TOOLS-SETUP.md      ← Tool configuration & auto-loading
+├── TESTING_CHECKLIST.md   ← Comprehensive QA procedures
+└── STOPPING_RULES.md      ← When AI should stop working
 ```
 
 ---
@@ -72,12 +76,19 @@ A structured system that lets Cade (non-coder) effectively manage PennyCentral.c
 
 **Starting a session?**
 → Read all files in this directory (especially CONTRACT, DECISION_RIGHTS, CONSTRAINTS)
+→ Review `MCP_SERVERS.md` for available tools and best practices
 
 **Before modifying code?**
 → Check `CONSTRAINTS.md` for fragile areas
+→ Check `TESTING_CHECKLIST.md` for what to test
+
+**Before using MCP tools heavily?**
+→ Read `MCP_SERVERS.md` anti-patterns section
+→ Check `AI-TOOLS-SETUP.md` for configuration details
 
 **Completed a task?**
 → Update `SESSION_LOG.md` with summary
+→ Run testing checklist (`.ai/TESTING_CHECKLIST.md`)
 
 **Discovered something new?**
 → Add to `LEARNINGS.md`
@@ -160,6 +171,33 @@ A structured system that lets Cade (non-coder) effectively manage PennyCentral.c
 **Read when:** Working on a feature, encountering an issue
 **Key sections:** React-Leaflet hydration, Google Sheets as backend, build vs dev mode
 **Update:** When discovering something new or surprising
+
+---
+
+### 🔧 MCP_SERVERS.md
+**For:** AI (ChatGPT CodeX primarily)
+**Purpose:** Complete reference for all 6 Model Context Protocol servers
+**Read when:** Before using MCP tools extensively, when optimizing token usage
+**Key sections:** Server capabilities, best practices, anti-patterns, troubleshooting, token cost hierarchy
+**Update:** When adding/removing MCP servers, discovering new patterns
+
+---
+
+### ⚙️ AI-TOOLS-SETUP.md
+**For:** Both human and AI
+**Purpose:** Configuration details for all AI tools and auto-loading mechanism
+**Read when:** Setting up new AI tool, verifying auto-loading works, troubleshooting context issues
+**Key sections:** MCP configuration, auto-load verification checklist, update procedures
+**Update:** When changing config.toml, adding new instruction files, updating MCP setup
+
+---
+
+### ✅ TESTING_CHECKLIST.md
+**For:** AI
+**Purpose:** Comprehensive testing procedures for all code changes
+**Read when:** Before declaring work complete, after modifying shared files, before merging to main
+**Key sections:** Pre-deployment checklist, responsive testing, accessibility, performance, feature-specific scenarios
+**Update:** When discovering new bug patterns, adding new features requiring tests
 
 ---
 

@@ -39,26 +39,87 @@ Compact reference for AI agents. Describes what this project can do, where thing
 
 ## MCP Servers & Tooling
 
-| Server       | Purpose                  | When to Use                         | Avoid                                       |
-| ------------ | ------------------------ | ----------------------------------- | ------------------------------------------- |
-| `filesystem` | Read/write repo files    | Targeted file reads, edits          | Don't scan entire repo; read specific paths |
-| `git`        | Version control ops      | Check status, diffs, branches       | Don't run git commands for trivial checks   |
-| `github`     | GitHub API (PRs, issues) | Create PRs, manage issues, check CI | Don't poll repeatedly                       |
-| `vercel`     | Deployment management    | Check deploy status, debug prod     | Rarely needed for local dev                 |
+**Status:** 6 MCP servers active (filesystem, github, git, chrome-devtools, pylance, sequential-thinking)
+
+**Full Reference:** See `.ai/MCP_SERVERS.md` for complete capabilities, examples, and troubleshooting
+
+| Server                | Purpose                  | When to Use                         | Avoid                                        | Priority |
+| --------------------- | ------------------------ | ----------------------------------- | -------------------------------------------- | -------- |
+| `filesystem`          | Read/write repo files    | Targeted file reads/edits           | Scanning entire trees, repeated reads        | High     |
+| `github`              | GitHub API (PRs, issues) | Create PRs, request reviews, CI     | Polling repeatedly, using for local files    | Medium   |
+| `git`                 | Version control ops      | Check branch, status, diffs         | Complex ops (rebase), repeated status checks | Medium   |
+| `chrome-devtools`     | Browser automation       | Responsive tests, network debugging | Unit tests, long E2E flows                   | Low      |
+| `pylance`             | Python analysis          | Syntax validation, run snippets     | Long scripts, user input scripts             | Low      |
+| `sequential-thinking` | Extended reasoning       | Complex decisions, multi-step plans | Simple tasks, speed-critical operations      | Low      |
 
 **Dev Commands:**
 
 ```bash
-npm run dev      # Dev server (localhost:3000)
-npm run build    # Production build
+npm run dev      # Dev server (localhost:3001)
+npm run build    # Production build — ALWAYS run before done
 npm run lint     # ESLint check
+npm test:unit    # Run unit tests
 ```
 
-**Anti-patterns:**
+**MCP Best Practices:**
 
-- Listing entire directory trees repeatedly
-- Reading the same file multiple times in one session
-- Using MCP when you already have the info in context
+✅ **DO:**
+
+- Use specific file/line ranges when reading
+- Check git branch before declaring success
+- Cache information already retrieved
+- Use filesystem for local files, github for remote repos
+- Run `pylanceRunCodeSnippet` for Python instead of terminal
+- Batch operations when possible
+
+❌ **DON'T:**
+
+- List entire directory trees (use `file_search` with glob patterns)
+- Read same file multiple times
+- Poll GitHub API repeatedly (rate limits)
+- Use GitHub MCP for local file operations
+- Run long Python scripts via Pylance (use `run_in_terminal` with `isBackground=true`)
+- Declare changes live without verifying deployment to `main` branch
+
+**Token Cost Hierarchy** (most to least expensive):
+
+1. Sequential Thinking (deepest reasoning)
+2. Chrome DevTools (network requests, screenshots)
+3. GitHub API (JSON payloads)
+4. Filesystem (targeted reads)
+5. Git (status checks)
+6. Pylance (syntax validation)
+
+**Common MCP Anti-Patterns:**
+
+```typescript
+// ❌ BAD: Exploring entire codebase
+list_dir("/")
+list_dir("/app")
+list_dir("/app/about")
+// ... 50 more
+
+// ✅ GOOD: Use file_search
+file_search({ query: "**/*.tsx" })
+
+// ❌ BAD: Repeated reads
+read_file("README.md")
+// later...
+read_file("README.md")
+
+// ✅ GOOD: Cache in session
+// Read once, remember context
+
+// ❌ BAD: Wrong tool for local files
+github_get_file_contents({
+  owner: "cadegallen-prog",
+  repo: "HD-ONECENT-GUIDE",
+  path: "components/navbar.tsx",
+})
+
+// ✅ GOOD: Use filesystem
+read_file("components/navbar.tsx")
+```
 
 ---
 

@@ -157,10 +157,30 @@ When you start Claude Code, Copilot, or Codex, they automatically read:
    - `.ai/CONSTRAINTS.md` - What AI can't touch
    - `.ai/SESSION_LOG.md` - Recent work history
    - `.ai/LEARNINGS.md` - Past mistakes to avoid
+   - `.ai/MCP_SERVERS.md` - Available MCP tools (ChatGPT Codex)
+   - `.ai/TESTING_CHECKLIST.md` - QA procedures
+   - `.ai/STOPPING_RULES.md` - When to stop working
 
 3. **AI then asks you for GOAL / WHY / DONE**
 
 **You don't have to manage this. It just happens.**
+
+### For ChatGPT Codex: MCP Tools
+
+ChatGPT Codex additionally loads 6 MCP (Model Context Protocol) servers that give it superpowers:
+
+- **filesystem** - Read/write project files efficiently
+- **github** - Create PRs, request reviews, manage issues
+- **git** - Check branches, view diffs, understand history
+- **chrome-devtools** - Test in real browser, check performance
+- **pylance** - Validate and run Python code
+- **sequential-thinking** - Extended reasoning for complex problems
+
+**You don't configure this. It's already set up.**
+
+**AI uses these automatically when appropriate.**
+
+For details, AI can read `.ai/MCP_SERVERS.md` and `.ai/AI-TOOLS-SETUP.md`.
 
 ---
 

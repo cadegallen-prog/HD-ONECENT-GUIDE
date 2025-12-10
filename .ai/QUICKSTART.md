@@ -330,6 +330,81 @@ If your priorities shift or you learn something about the community, update CONT
 
 ---
 
+## Power Tools: MCP Servers (ChatGPT Codex Only)
+
+**What are MCPs?** Model Context Protocol servers give AI direct access to powerful tools.
+
+**Status:** You have 6 MCP servers already configured and working:
+
+| Server | What It Does | Example Use |
+|--------|--------------|-------------|
+| **filesystem** | Read/write project files efficiently | AI can read 10 files at once instead of asking you to paste code |
+| **github** | Create PRs, request code reviews | AI can open a PR and request Copilot review automatically |
+| **git** | Check branches, view history | AI verifies you're on `main` before declaring changes live |
+| **chrome-devtools** | Test in real browser | AI can test responsive design at different screen sizes |
+| **pylance** | Python validation/execution | AI can run Python scripts directly (if needed) |
+| **sequential-thinking** | Extended reasoning | AI can break down complex problems step-by-step |
+
+### You Don't Need to Know the Details
+
+- ✅ **Already configured** - Set up in `~/.codex/config.toml`
+- ✅ **Auto-loads** - ChatGPT Codex starts with these available
+- ✅ **AI uses automatically** - When appropriate, AI picks the right tool
+- ✅ **Fully documented** - AI can read `.ai/MCP_SERVERS.md` for details
+
+**You just work normally. AI has superpowers under the hood.**
+
+### Why This Matters
+
+**Before MCPs:**
+```
+You: "Can you check if we're on the main branch?"
+AI: "I can't check git directly. Can you run 'git branch' and paste the output?"
+You: [switches to terminal, runs command, copies, pastes]
+AI: "Thanks. Yes, you're on main."
+```
+
+**With MCPs:**
+```
+You: "Can you check if we're on the main branch?"
+AI: [uses git MCP] "Yes, you're on main branch. No uncommitted changes."
+```
+
+**10x faster. Zero context switching for you.**
+
+### When AI Uses MCPs (Examples)
+
+1. **You say:** "Fix the mobile overflow"
+   - AI uses **filesystem** to read the component
+   - AI uses **chrome-devtools** to test mobile viewport
+   - AI verifies the fix in real browser
+
+2. **You say:** "Create a PR for this feature"
+   - AI uses **git** to check branch status
+   - AI uses **github** to create the PR
+   - AI uses **github** to request Copilot review
+
+3. **You say:** "Is the penny list data loading correctly?"
+   - AI uses **filesystem** to read data files
+   - AI uses **pylance** to validate data structure (if Python)
+   - AI checks for common data issues
+
+**You don't tell AI which tool to use. AI chooses automatically based on the task.**
+
+### Advanced: MCP Best Practices (For AI)
+
+AI agents reading this should know:
+
+- **Read `.ai/MCP_SERVERS.md`** for complete tool reference
+- **Check `.ai/AI-TOOLS-SETUP.md`** for configuration details  
+- **Follow token cost hierarchy** - Use cheapest tool that works
+- **Avoid anti-patterns** - Don't scan entire repo, don't poll GitHub API
+- **Verify deployment branch** - Always check git branch before declaring success
+
+**For you (Cade):** You don't need to know this. Just know AI has these tools available.
+
+---
+
 ## Next Steps
 
 You're all set! Here's how to use this immediately:
@@ -338,6 +413,7 @@ You're all set! Here's how to use this immediately:
 2. **Start a task:** Pick something small (e.g., "add a link to the footer") and use the goal format
 3. **Review SESSION_LOG:** See the two entries already there (penny list + this system)
 4. **Customize as needed:** This is YOUR system — adjust CONTRACT, DECISION_RIGHTS, etc. as you learn what works
+5. **With ChatGPT Codex:** Try asking it to check the current git branch or create a test PR (uses MCPs automatically)
 
 ---
 

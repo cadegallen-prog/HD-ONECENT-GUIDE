@@ -1,6 +1,6 @@
 # PROJECT ROADMAP
 
-**Last updated:** Dec 7, 2025
+**Last updated:** Dec 10, 2025
 
 This file gives a high level view of what this project does, what is done, and what is planned.
 
@@ -104,6 +104,7 @@ Agents: keep this file short and useful. Update it when you actually finish or s
 - **Autonomous Penny List System** ✅ **Done Dec 7** — Live, tested, documented
 - Branch strategy (main + dev-next) ✅ **Done Dec 7** — Clean separation for ongoing development
 - **Penny List Phase 1 UI Polish** ✅ **Done Dec 10** — Enhanced table/card readability, improved contrast, mobile scroll hints, comprehensive test coverage
+- **MCP Documentation & Testing Infrastructure** ✅ **Done Dec 10** — Comprehensive documentation of all 6 MCP servers, testing checklist, and stopping rules to maximize future agent productivity
 
 ---
 
