@@ -33,7 +33,6 @@ const FIELD_ALIASES: Record<string, string[]> = {
   ],
   notes: ["notes (optional)", "notes", "note", "comments", "comment"],
   approved: ["approved", "is approved"],
-  tier: ["tier", "commonness"],
   status: ["status", "scope"],
   date_approved: ["date approved", "approved date"],
 }
@@ -50,6 +49,30 @@ function pickField(row: Record<string, string>, key: string): string {
     if (foundKey && row[foundKey]) return row[foundKey]
   }
   return ""
+}
+
+/**
+ * Auto-calculate tier based on report data
+ * - Very Common: 6+ total reports OR 4+ states
+ * - Common: 3-5 reports OR 2-3 states
+ * - Rare: 1-2 reports AND only 1 state
+ */
+function calculateTier(locations: Record<string, number>): PennyItem["tier"] {
+  const stateCount = Object.keys(locations).length
+  const totalReports = Object.values(locations).reduce((sum, count) => sum + count, 0)
+
+  // Very Common: widespread across states OR many reports
+  if (totalReports >= 6 || stateCount >= 4) {
+    return "Very Common"
+  }
+
+  // Common: moderate spread
+  if (totalReports >= 3 || stateCount >= 2) {
+    return "Common"
+  }
+
+  // Rare: limited reports in limited locations
+  return "Rare"
 }
 
 async function fetchPennyListRaw(): Promise<PennyItem[]> {
@@ -69,7 +92,7 @@ async function fetchPennyListRaw(): Promise<PennyItem[]> {
       skipEmptyLines: true,
     })
 
-    const grouped: Record<string, PennyItem> = {}
+    const grouped: Record<string, Omit<PennyItem, "tier"> & { tier?: PennyItem["tier"] }> = {}
 
     data.forEach((row) => {
       // 1. Parse basic fields
@@ -82,7 +105,6 @@ async function fetchPennyListRaw(): Promise<PennyItem[]> {
       const dateFound = pickField(row, "date_found").trim()
       const photo = pickField(row, "photo").trim()
       const notes = pickField(row, "notes").trim()
-      const tierRaw = pickField(row, "tier").trim()
       const status = pickField(row, "status").trim()
 
       // 2. Parse Date
@@ -109,7 +131,6 @@ async function fetchPennyListRaw(): Promise<PennyItem[]> {
           sku,
           price: 0.01,
           dateAdded,
-          tier: (tierRaw as PennyItem["tier"]) || "Rare",
           status,
           quantityFound: quantity,
           imageUrl: photo,
@@ -129,7 +150,13 @@ async function fetchPennyListRaw(): Promise<PennyItem[]> {
       }
     })
 
-    return Object.values(grouped)
+    // 5. Calculate tier for each item based on aggregated data
+    const items: PennyItem[] = Object.values(grouped).map((item) => ({
+      ...item,
+      tier: calculateTier(item.locations),
+    }))
+
+    return items
   } catch (error) {
     console.error("Error fetching penny list:", error)
     return []
