@@ -58,10 +58,10 @@ export default function AboutPage() {
 
         <div className="grid md:grid-cols-2 gap-6">
           {/* BeFrugal Card */}
-          <div className="bg-white dark:bg-stone-800 rounded-xl p-8 border-l-4 border-brand-copper border-t border-r border-b border-stone-200 dark:border-stone-700 hover:shadow-lg transition-all">
-            <div className="w-12 h-12 rounded-lg bg-stone-100 dark:bg-stone-700 flex items-center justify-center mb-6">
+          <div className="bg-[var(--bg-card)] rounded-xl p-8 border border-[var(--border-default)] border-l-4 border-l-[var(--border-strong)] hover:shadow-[var(--shadow-card-hover)] transition-shadow">
+            <div className="w-12 h-12 rounded-lg bg-[var(--bg-elevated)] flex items-center justify-center mb-6">
               <svg
-                className="w-6 h-6 text-brand-gunmetal dark:text-stone-400"
+                className="w-6 h-6 text-[var(--text-secondary)]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -74,15 +74,15 @@ export default function AboutPage() {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-stone-900 dark:text-stone-50 mb-3">
+            <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
               Activate BeFrugal Cashback
             </h3>
-            <p className="text-stone-700 dark:text-stone-300 mb-6 leading-relaxed">
+            <p className="text-[var(--text-secondary)] mb-6 leading-relaxed">
               This is the easiest win. Turn on cashback before normal purchases, earn money back,
               and when you clear $10 BeFrugal sends a referral bonus that keeps Penny Central
               running.
             </p>
-            <ul className="text-sm text-stone-700 dark:text-stone-300 space-y-2 mb-6">
+            <ul className="text-sm text-[var(--text-secondary)] space-y-2 mb-6">
               <li className="flex items-start">
                 <svg
                   className="w-5 h-5 text-color-success mr-2 flex-shrink-0 mt-0.5"
@@ -137,17 +137,17 @@ export default function AboutPage() {
               target="_blank"
               rel="noopener noreferrer"
               data-cta="befrugal"
-              className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-[var(--cta-hover)] hover:bg-[var(--cta-active)] text-[var(--cta-text)] font-semibold transition-colors transition-transform hover:-translate-y-0.5 hover:shadow-card-hover"
+              className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-[var(--cta-primary)] hover:bg-[var(--cta-hover)] text-[var(--cta-text)] font-semibold shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] transition-colors duration-150"
             >
               Activate BeFrugal Cashback
             </a>
           </div>
 
           {/* PayPal Card */}
-          <div className="bg-white dark:bg-stone-800 rounded-xl p-8 border-l-4 border-brand-copper border-t border-r border-b border-stone-200 dark:border-stone-700 hover:shadow-lg transition-all">
-            <div className="w-12 h-12 rounded-lg bg-stone-100 dark:bg-stone-700 flex items-center justify-center mb-6">
+          <div className="bg-[var(--bg-card)] rounded-xl p-8 border border-[var(--border-default)] border-l-4 border-l-[var(--border-strong)] hover:shadow-[var(--shadow-card-hover)] transition-shadow">
+            <div className="w-12 h-12 rounded-lg bg-[var(--bg-elevated)] flex items-center justify-center mb-6">
               <svg
-                className="w-6 h-6 text-brand-gunmetal dark:text-stone-400"
+                className="w-6 h-6 text-[var(--text-secondary)]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -160,14 +160,14 @@ export default function AboutPage() {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-stone-900 dark:text-stone-50 mb-3">
+            <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
               Buy Me a Coffee
             </h3>
-            <p className="text-stone-700 dark:text-stone-300 mb-6 leading-relaxed">
+            <p className="text-[var(--text-secondary)] mb-6 leading-relaxed">
               Hosting, APIs, map tiles, and in-store testing runs add up. If the guides helped you
               score a haul, buying me a coffee via PayPal keeps everything fast and free.
             </p>
-            <ul className="text-sm text-stone-700 dark:text-stone-300 space-y-2 mb-6">
+            <ul className="text-sm text-[var(--text-secondary)] space-y-2 mb-6">
               <li className="flex items-start">
                 <svg
                   className="w-5 h-5 text-color-success mr-2 flex-shrink-0 mt-0.5"
@@ -221,7 +221,7 @@ export default function AboutPage() {
               href="https://paypal.me/cadegallen"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-cta-primary hover:bg-cta-hover text-white font-semibold transition-all"
+              className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-[var(--cta-primary)] hover:bg-[var(--cta-hover)] text-[var(--cta-text)] font-semibold shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] transition-colors duration-150"
             >
               Buy Me a Coffee
             </a>

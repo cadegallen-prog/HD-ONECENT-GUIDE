@@ -1,5 +1,5 @@
 {
-  "baseUrl": "http://localhost:3001",
+  "baseUrl": "http://localhost:3000",
   "results": [
     {
       "route": "/",
@@ -8,7 +8,7 @@
       "selector": "body",
       "role": "text",
       "found": true,
-      "ratio": 17.72,
+      "ratio": 17.49,
       "threshold": 7,
       "pass": true
     },
@@ -162,7 +162,7 @@
       "selector": "body",
       "role": "text",
       "found": true,
-      "ratio": 17.72,
+      "ratio": 17.49,
       "threshold": 7,
       "pass": true
     },
@@ -173,7 +173,7 @@
       "selector": "[data-card], article",
       "role": "text",
       "found": true,
-      "ratio": 17.72,
+      "ratio": 16.74,
       "threshold": 7,
       "pass": true
     },
@@ -184,7 +184,7 @@
       "selector": "[data-card], article",
       "role": "border",
       "found": true,
-      "ratio": 11.99,
+      "ratio": 11.74,
       "threshold": 3,
       "pass": true
     },
@@ -216,10 +216,10 @@
       "name": "status-warning",
       "selector": ".text-amber-600, .text-amber-400",
       "role": "status",
-      "found": true,
-      "ratio": 3.19,
-      "threshold": 3,
-      "pass": true
+      "found": false,
+      "ratio": 0,
+      "pass": true,
+      "note": "selector not found"
     },
     {
       "route": "/penny-list",
@@ -272,7 +272,7 @@
       "selector": "[data-cta=\"befrugal\"]",
       "role": "cta",
       "found": true,
-      "ratio": 7.92,
+      "ratio": 6.06,
       "threshold": 3,
       "pass": true
     },
@@ -293,10 +293,10 @@
       "name": "status-warning",
       "selector": ".text-amber-600, .text-amber-400",
       "role": "status",
-      "found": true,
-      "ratio": 8.72,
-      "threshold": 3,
-      "pass": true
+      "found": false,
+      "ratio": 0,
+      "pass": true,
+      "note": "selector not found"
     },
     {
       "route": "/penny-list",
@@ -316,7 +316,7 @@
       "selector": "body",
       "role": "text",
       "found": true,
-      "ratio": 17.72,
+      "ratio": 17.49,
       "threshold": 7,
       "pass": true
     },
@@ -470,7 +470,7 @@
       "selector": "body",
       "role": "text",
       "found": true,
-      "ratio": 17.72,
+      "ratio": 17.49,
       "threshold": 7,
       "pass": true
     },
@@ -503,7 +503,7 @@
       "selector": "[data-cta=\"befrugal\"]",
       "role": "cta",
       "found": true,
-      "ratio": 8.72,
+      "ratio": 6.7,
       "threshold": 3,
       "pass": true
     },
@@ -580,7 +580,7 @@
       "selector": "[data-cta=\"befrugal\"]",
       "role": "cta",
       "found": true,
-      "ratio": 11.17,
+      "ratio": 6.7,
       "threshold": 3,
       "pass": true
     },

@@ -111,8 +111,8 @@ export default function ResourcesPage() {
           className="flex items-center justify-between p-5 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-lg hover:border-[var(--border-dark)] transition-colors group"
         >
           <div className="flex items-start gap-4">
-            <div className="w-10 h-10 rounded-full bg-[var(--brand-copper)]/10 flex items-center justify-center flex-shrink-0">
-              <Heart size={20} className="text-[var(--brand-copper)]" aria-hidden="true" />
+            <div className="w-10 h-10 rounded-full bg-[var(--cta-primary)]/10 flex items-center justify-center flex-shrink-0">
+              <Heart size={20} className="text-[var(--cta-primary)]" aria-hidden="true" />
             </div>
             <div>
               <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-1">

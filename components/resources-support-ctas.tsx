@@ -11,9 +11,9 @@ export function ResourcesSupportCtas() {
         target="_blank"
         rel="noopener noreferrer"
         onClick={() => trackEvent("coffee_click", { surface: "resources" })}
-        className="inline-flex items-center justify-center w-full px-4 py-3 rounded-lg bg-[var(--bg-elevated)] border border-[var(--border-default)] text-[var(--text-primary)] font-semibold min-h-[44px] hover:border-[var(--border-strong)] hover:-translate-y-[1px] hover:shadow-card-hover transition-colors transition-transform duration-120 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+        className="inline-flex items-center justify-center w-full px-4 py-3 rounded-lg bg-[var(--bg-elevated)] border border-[var(--border-default)] text-[var(--text-primary)] font-semibold min-h-[44px] hover:border-[var(--border-strong)] shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
       >
-        Buy me a coffee — if the guide saved you time.
+        Buy me a coffee - if the guide saved you time.
       </a>
       <a
         href={BEFRUGAL_REFERRAL_PATH}
@@ -21,9 +21,9 @@ export function ResourcesSupportCtas() {
         rel="noopener noreferrer"
         data-cta="befrugal"
         onClick={() => trackEvent("affiliate_click", { surface: "resources", linkId: "befrugal" })}
-        className="inline-flex items-center justify-center w-full px-4 py-3 rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold min-h-[44px] hover:bg-[var(--cta-hover)] hover:-translate-y-[1px] hover:shadow-card-hover transition-colors transition-transform duration-120 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+        className="inline-flex items-center justify-center w-full px-4 py-3 rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold min-h-[44px] hover:bg-[var(--cta-hover)] shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
       >
-        Activate BeFrugal cashback — supports Penny Central at no extra cost.
+        Activate BeFrugal cashback - supports Penny Central at no extra cost.
       </a>
     </section>
   )

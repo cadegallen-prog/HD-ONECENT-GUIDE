@@ -27,7 +27,7 @@ export function PennyListCard({ item }: PennyListCardProps) {
     if (tier === "Very Common")
       return "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800"
     if (tier === "Common")
-      return "bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-400 border-amber-200 dark:border-amber-800"
+      return "bg-[var(--bg-elevated)] text-[var(--status-info)] border-[var(--border-strong)]"
     // Rare items use elevation-2 background for subtle distinction
     return "elevation-2 text-[var(--text-primary)] border-[var(--border-strong)]"
   }
@@ -129,7 +129,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
     if (tier === "Very Common")
       return "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800"
     if (tier === "Common")
-      return "bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-400 border-amber-200 dark:border-amber-800"
+      return "bg-[var(--bg-elevated)] text-[var(--status-info)] border-[var(--border-strong)]"
     return "elevation-2 text-[var(--text-primary)] border-[var(--border-strong)]"
   }
 

@@ -373,14 +373,14 @@ export function PennyListClient({
 
       {/* Disclaimer Card */}
       <div
-        className="bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-800 rounded-lg p-4 mb-6 flex gap-3 items-start"
+        className="bg-[var(--bg-elevated)] dark:bg-[var(--bg-hover)] border border-[var(--border-default)] border-l-4 border-l-[var(--status-warning)] rounded-lg p-4 mb-6 flex gap-3 items-start"
         role="alert"
       >
         <AlertTriangle
-          className="w-5 h-5 text-amber-600 dark:text-amber-500 flex-shrink-0 mt-0.5"
+          className="w-5 h-5 text-[var(--status-warning)] flex-shrink-0 mt-0.5"
           aria-hidden="true"
         />
-        <div className="text-sm text-amber-800 dark:text-amber-200">
+        <div className="text-sm text-[var(--text-secondary)]">
           <p className="font-semibold mb-2">Please Read:</p>
           <p className="mb-2">
             This page shows crowd-sourced reports from PennyCentral users. Submissions are added
@@ -408,9 +408,9 @@ export function PennyListClient({
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => trackEvent("coffee_click", { surface: "penny-list" })}
-          className="inline-flex items-center justify-center w-full px-4 py-3 rounded-lg bg-[var(--bg-elevated)] border border-[var(--border-default)] text-[var(--text-primary)] font-semibold min-h-[44px] transition-colors transition-transform hover:-translate-y-0.5 hover:shadow-card-hover hover:border-[var(--border-strong)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+          className="inline-flex items-center justify-center w-full px-4 py-3 rounded-lg bg-[var(--bg-elevated)] border border-[var(--border-default)] text-[var(--text-primary)] font-semibold min-h-[44px] hover:border-[var(--border-strong)] shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
         >
-          Buy me a coffee — optional tip if this helps you.
+          Buy me a coffee - optional tip if this helps you.
         </a>
         <a
           href="/go/befrugal"
@@ -420,9 +420,9 @@ export function PennyListClient({
           onClick={() =>
             trackEvent("affiliate_click", { surface: "penny-list", linkId: "befrugal" })
           }
-          className="inline-flex items-center justify-center w-full px-4 py-3 rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold min-h-[44px] hover:bg-[var(--cta-hover)] transition-colors transition-transform hover:-translate-y-0.5 hover:shadow-card-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+          className="inline-flex items-center justify-center w-full px-4 py-3 rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold min-h-[44px] hover:bg-[var(--cta-hover)] shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
         >
-          Activate BeFrugal cashback — supports the site at no extra cost.
+          Activate BeFrugal cashback - supports the site at no extra cost.
         </a>
       </div>
 
@@ -535,11 +535,8 @@ export function PennyListClient({
 
           {/* Item 3: Unverified (highlighted) */}
           <div className="flex gap-3 items-start">
-            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
-              <AlertTriangle
-                className="w-4 h-4 text-amber-600 dark:text-amber-400"
-                aria-hidden="true"
-              />
+            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[var(--bg-elevated)] border border-[var(--status-warning)] flex items-center justify-center">
+              <AlertTriangle className="w-4 h-4 text-[var(--status-warning)]" aria-hidden="true" />
             </div>
             <div className="flex-1">
               <p className="text-sm text-[var(--text-primary)] font-semibold leading-relaxed">
@@ -593,7 +590,7 @@ export function PennyListClient({
             href={SUBMIT_FIND_FORM_URL}
             eventName="find_submit"
             eventParams={{ location: "penny-list" }}
-            className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-lg bg-[var(--cta-hover)] text-[var(--cta-text)] font-medium transition-all duration-120 hover:bg-[var(--cta-active)] hover:-translate-y-[1px] hover:shadow-card-hover active:translate-y-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] min-h-[44px]"
+            className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-medium transition-colors duration-150 hover:bg-[var(--cta-hover)] shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] min-h-[44px]"
             aria-label="Submit a penny find to the community"
           >
             Submit a Find
@@ -616,7 +613,7 @@ export function PennyListClient({
             rel="noopener noreferrer"
             eventName="newsletter_click"
             eventParams={{ location: "penny-list" }}
-            className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-lg bg-[var(--cta-hover)] text-[var(--cta-text)] font-medium transition-all duration-120 hover:bg-[var(--cta-active)] hover:-translate-y-[1px] hover:shadow-card-hover active:translate-y-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] min-h-[44px]"
+            className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-medium transition-colors duration-150 hover:bg-[var(--cta-hover)] shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] min-h-[44px]"
             aria-label="Subscribe to weekly penny alerts newsletter"
           >
             Subscribe to Alerts

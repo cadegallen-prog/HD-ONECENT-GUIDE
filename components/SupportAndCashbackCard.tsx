@@ -11,15 +11,15 @@ export function SupportAndCashbackCard({ className }: SupportAndCashbackCardProp
   return (
     <div
       className={cn(
-        "bg-white dark:bg-stone-800 rounded-xl p-6 border-l-4 border-brand-copper border-t border-r border-b border-stone-200 dark:border-stone-700",
+        "bg-[var(--bg-card)] dark:bg-[var(--bg-card)] rounded-xl p-6 border border-[var(--border-default)] border-l-4 border-l-[var(--border-strong)]",
         className
       )}
     >
-      <h3 className="text-lg font-semibold text-stone-900 dark:text-stone-50 mb-3">
+      <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
         Support the Site (Optional)
       </h3>
 
-      <div className="text-sm text-stone-600 dark:text-stone-400 space-y-3 mb-5">
+      <div className="text-sm text-[var(--text-secondary)] space-y-3 mb-5">
         <p>
           Penny Central stays ad-free on purpose. If the guides saved you time or gas money, here
           are two low-effort ways to keep it running:
@@ -36,7 +36,7 @@ export function SupportAndCashbackCard({ className }: SupportAndCashbackCardProp
           </li>
         </ul>
 
-        <p className="text-xs text-stone-400 dark:text-stone-400">
+        <p className="text-xs text-[var(--text-muted)]">
           BeFrugal doesn&apos;t reveal penny items. It only levels up the everyday orders{" "}
           you&apos;re already placing.
         </p>
@@ -48,7 +48,7 @@ export function SupportAndCashbackCard({ className }: SupportAndCashbackCardProp
           target="_blank"
           rel="noopener noreferrer"
           data-cta="befrugal"
-          className="inline-flex items-center justify-center px-4 py-2.5 bg-cta-primary hover:bg-cta-hover text-white text-sm font-medium rounded-lg transition-colors transition-transform hover:-translate-y-0.5 hover:shadow-card-hover"
+          className="inline-flex items-center justify-center px-4 py-2.5 bg-[var(--cta-primary)] hover:bg-[var(--cta-hover)] text-white text-sm font-medium rounded-lg shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] transition-colors"
           onClick={() =>
             trackEvent("affiliate_click", { surface: "support-card", linkId: "befrugal" })
           }
@@ -59,7 +59,7 @@ export function SupportAndCashbackCard({ className }: SupportAndCashbackCardProp
           href="https://paypal.me/cadegallen"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center px-4 py-2.5 bg-stone-100 dark:bg-stone-700 hover:bg-stone-200 dark:hover:bg-stone-600 text-stone-700 dark:text-stone-200 text-sm font-medium rounded-lg transition-colors transition-transform hover:-translate-y-0.5 hover:shadow-card-hover border border-stone-300 dark:border-stone-600"
+          className="inline-flex items-center justify-center px-4 py-2.5 bg-[var(--bg-elevated)] dark:bg-[var(--bg-hover)] hover:bg-[var(--bg-hover)] text-[var(--text-primary)] text-sm font-medium rounded-lg border border-[var(--border-default)] shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] transition-colors"
           onClick={() => trackEvent("coffee_click", { surface: "support-card" })}
         >
           Buy Me a Coffee (optional tip)

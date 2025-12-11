@@ -127,9 +127,9 @@ export default function AdminDashboard() {
             <p className="text-sm text-[var(--text-muted)] mb-1">Total</p>
             <p className="text-2xl font-bold text-[var(--text-primary)]">{submissions.length}</p>
           </div>
-          <div className="bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
-            <p className="text-sm text-amber-700 dark:text-amber-300 mb-1">Pending</p>
-            <p className="text-2xl font-bold text-amber-800 dark:text-amber-200">{pendingCount}</p>
+          <div className="bg-[var(--bg-elevated)] dark:bg-[var(--bg-hover)] border border-[var(--border-default)] border-l-4 border-l-[var(--status-warning)] rounded-lg p-4">
+            <p className="text-sm text-[var(--status-warning)] mb-1">Pending</p>
+            <p className="text-2xl font-bold text-[var(--text-primary)]">{pendingCount}</p>
           </div>
           <div className="bg-green-50 dark:bg-green-900/10 border border-green-200 dark:border-green-800 rounded-lg p-4">
             <p className="text-sm text-green-700 dark:text-green-300 mb-1">Approved</p>
@@ -178,24 +178,24 @@ export default function AdminDashboard() {
                         SKU: {submission.sku}
                       </span>
                       <span
-                        className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        className={`px-2 py-1 rounded-full text-xs font-medium border ${
                           submission.status === "pending"
-                            ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300"
+                            ? "bg-[var(--bg-elevated)] text-[var(--status-warning)] border-[var(--status-warning)]"
                             : submission.status === "approved"
-                              ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300"
-                              : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300"
+                              ? "bg-[var(--bg-elevated)] text-[var(--status-success)] border-[var(--status-success)]"
+                              : "bg-[var(--bg-elevated)] text-[var(--status-error)] border-[var(--status-error)]"
                         }`}
                       >
                         {submission.status}
                       </span>
                       {submission.validationScore !== undefined && (
                         <span
-                          className={`px-2 py-1 rounded text-xs font-medium ${
+                          className={`px-2 py-1 rounded text-xs font-medium border ${
                             submission.validationScore >= 60
-                              ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300"
+                              ? "bg-[var(--bg-elevated)] text-[var(--status-success)] border-[var(--status-success)]"
                               : submission.validationScore >= 40
-                                ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300"
-                                : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300"
+                                ? "bg-[var(--bg-elevated)] text-[var(--status-warning)] border-[var(--status-warning)]"
+                                : "bg-[var(--bg-elevated)] text-[var(--status-error)] border-[var(--status-error)]"
                           }`}
                         >
                           Score: {submission.validationScore}

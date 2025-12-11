@@ -101,10 +101,12 @@ function SortButton({
 
 function TierBadge({ tier }: { tier?: string }) {
   const colorClasses = (() => {
-    if (tier === "Very Common")
+    if (tier === "Very Common") {
       return "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300"
-    if (tier === "Common")
-      return "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-200"
+    }
+    if (tier === "Common") {
+      return "bg-[var(--bg-elevated)] text-[var(--status-info)]"
+    }
     return "bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
   })()
 

@@ -18,7 +18,7 @@ function PennyLogo({ className = "" }: { className?: string }) {
         fill="none"
         stroke="currentColor"
         strokeWidth="2"
-        className="text-brand-copper"
+        className="text-[var(--text-secondary)]"
       />
       {/* Inner coin detail */}
       <circle
@@ -28,7 +28,7 @@ function PennyLogo({ className = "" }: { className?: string }) {
         fill="none"
         stroke="currentColor"
         strokeWidth="1.5"
-        className="text-brand-bronze"
+        className="text-[var(--text-muted)]"
       />
       {/* Center "1" for one cent */}
       <text

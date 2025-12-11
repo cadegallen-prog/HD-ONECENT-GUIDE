@@ -73,8 +73,8 @@ const config: Config = {
         brand: {
           gunmetal: "var(--brand-gunmetal)",
           "gunmetal-light": "var(--brand-gunmetal-light)",
-          copper: "#B87333",
-          bronze: "#CD7F32",
+          copper: "var(--brand-copper)",
+          bronze: "var(--brand-bronze)",
         },
 
         // CTA colors (CSS variable-based for theme switching)
@@ -114,9 +114,9 @@ const config: Config = {
         },
       },
       animation: {
-        "fade-up": "fade-up 0.6s ease-out forwards",
-        "fade-in": "fade-in 0.4s ease-out forwards",
-        "slide-in": "slide-in 0.4s ease-out forwards",
+        "fade-up": "fade-up 0.18s ease-out forwards",
+        "fade-in": "fade-in 0.15s ease-out forwards",
+        "slide-in": "slide-in 0.18s ease-out forwards",
       },
     },
   },

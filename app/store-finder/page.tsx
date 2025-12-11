@@ -738,7 +738,7 @@ export default function StoreFinderPage() {
           >
             {loadingStores ? (
               <span className="flex items-center gap-1.5">
-                <span className="inline-block w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
+                <span className="inline-block w-2 h-2 bg-[var(--status-info)] rounded-full animate-pulse" />
                 Loading all {allLoadedStores.length.toLocaleString()}+ stores...
               </span>
             ) : (

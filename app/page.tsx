@@ -31,11 +31,8 @@ export default function Home() {
           ============================================ */}
       <section className="section-padding px-4 sm:px-6 bg-[var(--bg-elevated)] dark:bg-[var(--bg-page)]">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--bg-card)] border border-[var(--border-default)] shadow-sm mb-4 transition-all duration-200 hover:shadow-card-hover hover:-translate-y-0.5">
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-radar absolute inline-flex h-full w-full rounded-full bg-amber-500"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
-            </span>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--bg-card)] border border-[var(--border-default)] shadow-sm mb-4 transition-all duration-150 hover:shadow-[var(--shadow-card-hover)]">
+            <span className="live-dot animate-radar" aria-hidden="true"></span>
             <span className="text-sm font-medium text-[var(--text-secondary)]">
               Join over {COMMUNITY_MEMBER_COUNT_DISPLAY} penny hunters
             </span>
@@ -61,14 +58,14 @@ export default function Home() {
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
             <Link
               href="/store-finder"
-              className="btn-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg bg-[var(--cta-hover)] text-[var(--cta-text)] font-semibold shadow-md hover:bg-[var(--cta-active)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)] transition-transform duration-150 hover:-translate-y-[1px]"
+              className="btn-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold shadow-md hover:bg-[var(--cta-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
             >
               <MapPin className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
               Find Stores Near You
             </Link>
             <Link
               href="/guide"
-              className="btn-secondary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg border-2 border-[var(--border-default)] dark:border-[var(--border-strong)] bg-transparent text-[var(--text-primary)] font-semibold hover:bg-[var(--bg-elevated)] hover:border-[var(--border-strong)] dark:hover:bg-[var(--bg-elevated)] transition-transform duration-150 hover:-translate-y-[1px] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
+              className="btn-secondary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg border-2 border-[var(--border-default)] dark:border-[var(--border-strong)] bg-transparent text-[var(--text-primary)] font-semibold hover:bg-[var(--bg-elevated)] hover:border-[var(--border-strong)] dark:hover:bg-[var(--bg-elevated)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
             >
               <BookOpen className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
               Read the Guide

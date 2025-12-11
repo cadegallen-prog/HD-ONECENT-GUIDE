@@ -16,8 +16,8 @@
        Consistent animation timing across components
        =============================================== */
     --duration-fast: 150ms;
-    --duration-normal: 200ms;
-    --duration-slow: 300ms;
+    --duration-normal: 180ms;
+    --duration-slow: 240ms;
     --ease-default: cubic-bezier(0.16, 1, 0.3, 1);
     --ease-hover: ease-out;
     --ease-tap: ease-in;
@@ -32,25 +32,26 @@
 
     /* 60% - NEUTRAL BASE (backgrounds, text) */
     --bg-primary: #ffffff;
-    --bg-secondary: #fafafa;
-    --bg-tertiary: #f4f4f5;
+    --bg-secondary: #fafaf9;
+    --bg-tertiary: #f5f5f4;
+    --bg-hover: #f0efed;
     --bg-dark: #18181b;
 
     /* WCAG AAA compliant text colors (7:1+ contrast) */
-    --text-primary: #18181b; /* 17.4:1 on white */
-    --text-secondary: #3f3f46; /* 10.1:1 on white */
-    --text-muted: #52525b; /* 7.2:1 on white - AAA minimum */
+    --text-primary: #1c1917; /* 15.4:1 on white */
+    --text-secondary: #44403c; /* 9.7:1 on white */
+    --text-muted: #57534e; /* 7.1:1 on white */
     --text-inverse: #fafafa;
 
-    --border-default: #e4e4e7;
-    --border-strong: #d4d4d8;
-    --border-dark: #71717a;
+    --border-default: #e7e5e4;
+    --border-strong: #d6d3d1;
+    --border-dark: #d6d3d1;
 
     /* 30% - BRAND COLORS (headers, accents, icons) */
-    --brand-gunmetal: #374151;
-    --brand-gunmetal-light: #4b5563;
-    --brand-copper: #b87333;
-    --brand-bronze: #cd7f32;
+    --brand-gunmetal: #3f3f46;
+    --brand-gunmetal-light: #52525b;
+    --brand-copper: #3f3f46; /* mapped to neutral to avoid warm accent drift */
+    --brand-bronze: #52525b;
 
     /* 10% - CTA ACCENT (clickable elements ONLY) */
     --cta-primary: #1d4ed8; /* 8.6:1 contrast - AAA */
@@ -59,32 +60,40 @@
     --cta-text: #ffffff;
 
     /* SYSTEM COLORS */
-    --color-success: #16a34a;
-    --color-warning: #d97706;
-    --color-error: #dc2626;
-    --color-info: #2563eb;
+    --color-success: #15803d;
+    --color-warning: #a16207;
+    --color-error: #b91c1c;
+    --color-info: #1d4ed8;
 
     /* Page backgrounds */
     --bg-page: #ffffff;
-    --bg-card: #ffffff;
-    --bg-elevated: #fafafa;
+    --bg-card: #fafaf9;
+    --bg-elevated: #fafaf9;
 
     /* Legacy variables for compatibility */
-    --accent: #374151;
+    --accent: #3f3f46;
     --accent-hover: #1c1917;
     --accent-muted: #f5f5f4;
     --accent-emphasis: #1c1917;
 
     /* Shadows */
     --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08);
-    --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --shadow-card-hover: 0 3px 8px rgba(0, 0, 0, 0.12);
     --shadow-button: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --shadow-button-hover: 0 4px 12px rgba(29, 78, 216, 0.25);
+    --shadow-button-hover: 0 3px 8px rgba(29, 78, 216, 0.18);
 
     /* Status colors - functional only */
-    --success: #16a34a;
-    --error: #dc2626;
-    --warning: #d97706;
+    --success: #15803d;
+    --error: #b91c1c;
+    --warning: #a16207;
+    --status-success: #15803d;
+    --status-warning: #a16207;
+    --status-error: #b91c1c;
+    --status-info: #1d4ed8;
+
+    /* Live indicator */
+    --live-indicator: #d97706;
+    --live-glow: rgba(217, 119, 6, 0.4);
 
     /* shadcn/ui compatibility */
     --background: var(--bg-page);
@@ -148,7 +157,7 @@
     --text-muted: #9a9a9a; /* 6.2:1 on #1a1a1a (AA+) */
 
     /* Inverse text for light buttons */
-    --text-inverse: #121212;
+    --text-inverse: #030712;
 
     /* UI COMPONENT BORDERS (3:1 minimum against adjacent surfaces)
        Cards on base: border must have 3:1 against #121212 */
@@ -159,6 +168,8 @@
     /* Dark mode brand - desaturated */
     --brand-gunmetal: #9ca3af;
     --brand-gunmetal-light: #d1d5db;
+    --brand-copper: #9ca3af;
+    --brand-bronze: #d1d5db;
 
     /* CTA ACCENT - Desaturated blue for 4.5:1 text contrast
        Must work as text color on dark surfaces AND as button background */
@@ -175,7 +186,7 @@
 
     /* LIVE INDICATOR - Special case, decorative element */
     --live-indicator: #fbbf24; /* Amber 400 - warm, energetic */
-    --live-glow: rgba(251, 191, 36, 0.3);
+    --live-glow: rgba(251, 191, 36, 0.4);
 
     /* Legacy compatibility */
     --accent: #9ca3af;
@@ -185,9 +196,9 @@
 
     /* Dark mode shadows - Subtle, 8px max blur per design system */
     --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.5);
-    --shadow-card-hover: 0 4px 8px rgba(0, 0, 0, 0.6);
+    --shadow-card-hover: 0 3px 8px rgba(0, 0, 0, 0.5);
     --shadow-button: 0 1px 2px rgba(0, 0, 0, 0.3);
-    --shadow-button-hover: 0 4px 8px rgba(96, 165, 250, 0.25);
+    --shadow-button-hover: 0 3px 8px rgba(96, 165, 250, 0.25);
 
     /* shadcn/ui compatibility - dark mode with elevation system */
     --background: var(--bg-page); /* Level 0 */
@@ -407,19 +418,19 @@
      =============================================== */
 
   .btn-primary {
+    box-shadow: var(--shadow-button);
     transition:
-      transform var(--duration-fast) var(--ease-hover),
-      box-shadow var(--duration-fast) var(--ease-hover),
-      background-color var(--duration-fast) var(--ease-hover);
+      background-color var(--duration-fast) var(--ease-hover),
+      box-shadow var(--duration-fast) var(--ease-hover);
   }
 
   .btn-primary:hover {
-    transform: translateY(-2px);
+    background-color: var(--cta-hover);
     box-shadow: var(--shadow-button-hover);
   }
 
   .btn-primary:active {
-    transform: translateY(1px);
+    background-color: var(--cta-active);
     box-shadow: var(--shadow-button);
   }
 
@@ -431,25 +442,26 @@
   /* Secondary/Outline Button */
   .btn-secondary {
     transition:
-      transform var(--duration-fast) var(--ease-hover),
-      box-shadow var(--duration-fast) var(--ease-hover),
       background-color var(--duration-fast) var(--ease-hover),
-      border-color var(--duration-fast) var(--ease-hover);
+      border-color var(--duration-fast) var(--ease-hover),
+      box-shadow var(--duration-fast) var(--ease-hover);
   }
 
   .btn-secondary:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    background-color: var(--bg-hover);
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-card);
   }
 
   .dark .btn-secondary:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    background-color: var(--bg-hover);
     border-color: var(--border-strong);
+    box-shadow: var(--shadow-card-hover);
   }
 
   .btn-secondary:active {
-    transform: translateY(0);
-    box-shadow: none;
+    background-color: var(--bg-elevated);
+    box-shadow: var(--shadow-card);
   }
 
   .btn-secondary:focus-visible {
@@ -483,22 +495,19 @@
     transition:
       box-shadow var(--duration-fast) var(--ease-default),
       border-color var(--duration-fast) var(--ease-default),
-      background-color var(--duration-fast) var(--ease-default),
-      transform var(--duration-fast) var(--ease-default);
+      background-color var(--duration-fast) var(--ease-default);
     cursor: pointer;
   }
 
   .card-interactive:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--shadow-card-hover);
     border-color: var(--border-strong);
     background-color: var(--bg-elevated);
-    transform: translateY(-1px);
   }
 
   .dark .card-interactive:hover {
     border-color: var(--border-strong);
     background-color: var(--bg-hover);
-    transform: translateY(-1px);
   }
 
   .card-interactive:focus-visible {
@@ -508,7 +517,7 @@
 
   /* Card with lift effect (optional, use .card-lift) */
   .card-lift:hover {
-    transform: translateY(-2px);
+    box-shadow: var(--shadow-card-hover);
   }
 
   /* ===============================================
@@ -524,8 +533,8 @@
   .map-marker-default svg,
   .map-marker-selected svg {
     transition:
-      transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-      filter 0.2s ease;
+      transform var(--duration-normal) cubic-bezier(0.175, 0.885, 0.32, 1.275),
+      filter var(--duration-normal) ease;
     transform-origin: bottom center;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
   }
@@ -585,7 +594,7 @@
   @keyframes mobile-menu-in {
     from {
       opacity: 0;
-      transform: translateY(-16px);
+      transform: translateY(-12px);
     }
     to {
       opacity: 1;
@@ -594,7 +603,7 @@
   }
 
   .mobile-menu-animate {
-    animation: mobile-menu-in var(--duration-normal) var(--ease-default) forwards;
+    animation: mobile-menu-in var(--duration-fast) var(--ease-default) forwards;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -621,7 +630,7 @@
   }
 
   .animate-fade-in {
-    animation: fade-in 0.6s var(--ease-default) forwards;
+    animation: fade-in var(--duration-fast) var(--ease-default) forwards;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -776,8 +785,10 @@
   }
 
   .badge-clearance {
-    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold;
-    @apply bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300;
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border;
+    background-color: var(--bg-elevated);
+    color: var(--status-warning);
+    border-color: var(--status-warning);
   }
 
   .badge-markdown {
@@ -892,7 +903,9 @@
   }
 
   .callout-amber {
-    @apply bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800;
+    background-color: var(--bg-elevated);
+    border-color: var(--status-warning);
+    color: var(--text-secondary);
   }
 
   .callout-emerald {
@@ -978,7 +991,7 @@
   }
 
   .status-medium {
-    @apply text-amber-600 dark:text-amber-400 font-medium;
+    @apply text-[var(--status-warning)] font-medium;
   }
 
   .status-low {
@@ -997,7 +1010,10 @@
   }
 
   .priority-badge.medium {
-    @apply bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300;
+    @apply border;
+    background-color: var(--bg-elevated);
+    color: var(--status-warning);
+    border-color: var(--status-warning);
   }
 
   .priority-badge.low {
@@ -1114,28 +1130,42 @@
    ANIMATIONS
    =============================================== */
 
-@keyframes radar {
-  0% {
-    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
-  }
+/* Live indicator styles */
+.live-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
 
-  50% {
-    box-shadow: 0 0 0 10px rgba(245, 158, 11, 0);
-  }
+.live-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--live-indicator);
+  border-radius: 50%;
+  animation: live-pulse 2s ease-in-out infinite;
+}
 
+@keyframes live-pulse {
+  0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
+    opacity: 1;
+    box-shadow: 0 0 0 0 var(--live-glow);
+  }
+  50% {
+    opacity: 0.85;
+    box-shadow: 0 0 0 8px transparent;
   }
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .animate-radar {
-    animation: radar 2s infinite;
+    animation: live-pulse 2s ease-in-out infinite;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-radar {
+  .animate-radar,
+  .live-dot {
     animation: none;
   }
 }

@@ -13,7 +13,7 @@
     "test:e2e": "playwright test",
     "test:unit": "npx tsx --test tests/**/*.test.ts",
     "check-contrast": "cross-env BASE_URL=http://localhost:3000 node scripts/check-contrast.js",
-    "check-axe": "npx @axe-core/cli http://localhost:3000 --output reports/axe-report.json --exit"
+    "check-axe": "npx @axe-core/cli http://localhost:3000 --save reports/axe-report.json --exit"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

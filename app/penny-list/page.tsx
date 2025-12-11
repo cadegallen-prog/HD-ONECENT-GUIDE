@@ -68,7 +68,7 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-[var(--text-secondary)] text-sm font-medium mb-4">
             <span
-              className="inline-flex h-2 w-2 rounded-full bg-amber-500"
+              className="inline-flex h-2 w-2 rounded-full bg-[var(--status-info)]"
               aria-hidden="true"
             ></span>
             Crowd reports (last 30 days)
@@ -140,12 +140,12 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
           {feedUnavailable && (
             <div
               role="status"
-              className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-800 dark:bg-amber-900/10 dark:text-amber-100"
+              className="mb-6 rounded-lg border border-[var(--border-default)] border-l-4 border-l-[var(--status-warning)] bg-[var(--bg-elevated)] p-4 text-sm text-[var(--text-primary)] dark:bg-[var(--bg-hover)]"
             >
-              <h2 className="mb-1 font-semibold text-amber-900 dark:text-amber-100">
+              <h2 className="mb-1 font-semibold text-[var(--status-warning)]">
                 Live penny list feed is temporarily unavailable
               </h2>
-              <p className="text-amber-800 dark:text-amber-200">
+              <p className="text-[var(--text-secondary)]">
                 Our data source didn&apos;t return any items just now. Try again in a few minutes.
                 If you recently submitted a find, it&apos;s still in the queue and will appear once
                 the feed refreshes.

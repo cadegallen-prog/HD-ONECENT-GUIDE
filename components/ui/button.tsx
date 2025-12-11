@@ -12,27 +12,24 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 /**
- * Button Component with Enhanced Interactions
+ * Button Component with Smooth, WCAG-friendly interactions
  *
  * Interaction Design Principles:
- * - Micro-lift on hover (-translate-y) for tactile feedback
- * - Shadow increase on hover reinforces depth
- * - 150ms transitions feel responsive but smooth
- * - Dark mode needs stronger contrast on hover states
- * - Primary: darker on hover, secondary: visible bg change (not lighter)
- * - Reduced lift effect (0.5 → 1px) to keep layout stable on mobile
+ * - Color + shadow only (no motion) to avoid clunky hover shifts
+ * - 150-180ms transitions for responsiveness
+ * - Consistent focus ring using CTA color
  */
 const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
   ({ className, variant = "secondary", size = "default", href, type, ...props }, ref) => {
     const classes = cn(
       // Base styles with improved transitions
-      "inline-flex items-center justify-center rounded-md font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cta-primary)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-      // Variant-specific styles - reduced translate-y for mobile stability
+      "inline-flex items-center justify-center rounded-md font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cta-primary)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+      // Variant-specific styles
       {
         primary:
-          "bg-[var(--cta-primary)] hover:bg-[var(--cta-hover)] text-[var(--cta-text)] shadow-md hover:shadow-lg hover:-translate-y-px active:translate-y-0",
+          "bg-[var(--cta-primary)] hover:bg-[var(--cta-hover)] text-[var(--cta-text)] shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)]",
         secondary:
-          "bg-transparent border-2 border-[var(--border-default)] dark:border-[var(--border-dark)] hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-elevated)] hover:border-[var(--text-muted)] text-[var(--text-primary)] hover:-translate-y-px active:translate-y-0",
+          "bg-transparent border-2 border-[var(--border-default)] dark:border-[var(--border-dark)] hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-elevated)] hover:border-[var(--border-strong)] text-[var(--text-primary)] shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)]",
         ghost:
           "bg-transparent text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)]",
       }[variant],
