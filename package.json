@@ -12,7 +12,7 @@
     "export": "next build && next export",
     "test:e2e": "playwright test",
     "test:unit": "npx tsx --test tests/**/*.test.ts",
-    "check-contrast": "cross-env BASE_URL=http://localhost:3000 node scripts/check-contrast.js",
+    "check-contrast": "node scripts/check-contrast.js",
     "check-axe": "npx @axe-core/cli http://localhost:3000 --save reports/axe-report.json --exit"
   },
   "dependencies": {
