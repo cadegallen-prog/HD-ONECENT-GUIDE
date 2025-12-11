@@ -6,6 +6,8 @@ import { AlertTriangle, Package, Clock, CheckCircle2, Info } from "lucide-react"
 import { SUBMIT_FIND_FORM_URL, NEWSLETTER_URL } from "@/lib/constants"
 import { TrackableLink } from "@/components/trackable-link"
 import { filterValidPennyItems } from "@/lib/penny-list-utils"
+import { trackEvent } from "@/lib/analytics"
+import { FeedbackWidget } from "@/components/feedback-widget"
 import {
   PennyListFilters,
   type TierFilter,
@@ -20,6 +22,7 @@ import type { PennyItem } from "@/lib/fetch-penny-data"
 interface PennyListClientProps {
   initialItems: PennyItem[]
   initialSearchParams?: Record<string, string | string[] | undefined>
+  whatsNewCount?: number
 }
 
 // Get total reports across all states
@@ -48,7 +51,11 @@ function toURLSearchParams(
 // Storage key for user's preferred state
 const USER_STATE_KEY = "pennycentral_user_state"
 
-export function PennyListClient({ initialItems, initialSearchParams }: PennyListClientProps) {
+export function PennyListClient({
+  initialItems,
+  initialSearchParams,
+  whatsNewCount = 0,
+}: PennyListClientProps) {
   const router = useRouter()
   const pathname = usePathname()
 
@@ -56,6 +63,8 @@ export function PennyListClient({ initialItems, initialSearchParams }: PennyList
 
   const initialParams = useMemo(() => toURLSearchParams(initialSearchParams), [initialSearchParams])
   const paramsRef = useRef<URLSearchParams>(initialParams)
+  const hasMountedRef = useRef(false)
+  const hasTrackedViewRef = useRef(false)
 
   const getInitialParam = (key: string) => initialParams.get(key) || ""
 
@@ -84,7 +93,24 @@ export function PennyListClient({ initialItems, initialSearchParams }: PennyList
   // User's saved state for "My State" button
   const [userState, setUserState] = useState<string | undefined>(undefined)
 
+  useEffect(() => {
+    hasMountedRef.current = true
+  }, [])
+
   const validRows = useMemo(() => filterValidPennyItems(initialItems), [initialItems])
+  const latestTimestamp = useMemo(() => {
+    const timestamps = validRows
+      .map((item) => new Date(item.dateAdded).getTime())
+      .filter((time) => !Number.isNaN(time))
+    if (timestamps.length === 0) return null
+    return Math.max(...timestamps)
+  }, [validRows])
+
+  const freshnessHours = useMemo(() => {
+    if (!latestTimestamp) return null
+    const diffMs = Date.now() - latestTimestamp
+    return Math.max(0, Math.round(diffMs / (1000 * 60 * 60)))
+  }, [latestTimestamp])
 
   // Load user's state from localStorage on mount
   useEffect(() => {
@@ -129,21 +155,31 @@ export function PennyListClient({ initialItems, initialSearchParams }: PennyList
     [pathname, router]
   )
 
+  const trackFilterChange = useCallback(
+    (filter: string, value: string, action: "apply" | "clear") => {
+      if (!hasMountedRef.current) return
+      trackEvent("penny_list_filter", { filter, value, action })
+    },
+    []
+  )
+
   // Wrapper setters that also update URL
   const setStateFilterWithURL = useCallback(
     (value: string) => {
       setStateFilter(value)
       updateURL({ state: value })
+      trackFilterChange("state", value || "all", value ? "apply" : "clear")
     },
-    [updateURL]
+    [trackFilterChange, updateURL]
   )
 
   const setTierFilterWithURL = useCallback(
     (value: TierFilter) => {
       setTierFilter(value)
       updateURL({ tier: value === "all" ? null : value })
+      trackFilterChange("tier", value, value === "all" ? "clear" : "apply")
     },
-    [updateURL]
+    [trackFilterChange, updateURL]
   )
 
   const setSearchQueryWithURL = useCallback(
@@ -158,8 +194,9 @@ export function PennyListClient({ initialItems, initialSearchParams }: PennyList
     (value: SortOption) => {
       setSortOption(value)
       updateURL({ sort: value === "newest" ? null : value })
+      trackFilterChange("sort", value, value === "newest" ? "clear" : "apply")
     },
-    [updateURL]
+    [trackFilterChange, updateURL]
   )
 
   const setViewModeWithURL = useCallback(
@@ -174,8 +211,9 @@ export function PennyListClient({ initialItems, initialSearchParams }: PennyList
     (value: DateRange) => {
       setDateRange(value)
       updateURL({ days: value === "30" ? null : value })
+      trackFilterChange("date_range", value, value === "30" ? "clear" : "apply")
     },
-    [updateURL]
+    [trackFilterChange, updateURL]
   )
 
   // Process and filter items
@@ -273,8 +311,33 @@ export function PennyListClient({ initialItems, initialSearchParams }: PennyList
     }
   }, [validRows, stateFilter, tierFilter, searchQuery, sortOption, dateRange])
 
+  const previousSearchRef = useRef(searchQuery)
+
+  useEffect(() => {
+    if (!hasMountedRef.current) return
+    if (searchQuery === previousSearchRef.current) return
+    previousSearchRef.current = searchQuery
+    trackEvent("penny_list_search", {
+      termLength: searchQuery.trim().length,
+      hasResults: filteredItems.length > 0,
+    })
+  }, [filteredItems.length, searchQuery])
+
   const hasActiveFilters =
     stateFilter !== "" || tierFilter !== "all" || searchQuery !== "" || dateRange !== "30"
+
+  useEffect(() => {
+    if (!hasMountedRef.current || hasTrackedViewRef.current) return
+    hasTrackedViewRef.current = true
+    trackEvent("penny_list_view", {
+      page: "/penny-list",
+      itemsVisible: filteredItems.length,
+      hasFilter: hasActiveFilters,
+      hasSearch: searchQuery.trim().length > 0,
+      freshnessHours: freshnessHours ?? undefined,
+      whatsNewCount,
+    })
+  }, [filteredItems.length, freshnessHours, hasActiveFilters, searchQuery, whatsNewCount])
 
   return (
     <>
@@ -336,6 +399,31 @@ export function PennyListClient({ initialItems, initialSearchParams }: PennyList
             conversation. This list is a fast, experimental radar for possible leads.
           </p>
         </div>
+      </div>
+
+      {/* Monetization CTAs */}
+      <div className="mb-6 grid gap-3 sm:grid-cols-2">
+        <a
+          href="https://paypal.me/cadegallen"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => trackEvent("coffee_click", { surface: "penny-list" })}
+          className="inline-flex items-center justify-center w-full px-4 py-3 rounded-lg bg-[var(--bg-elevated)] border border-[var(--border-default)] text-[var(--text-primary)] font-semibold min-h-[44px] transition-colors transition-transform hover:-translate-y-0.5 hover:shadow-card-hover hover:border-[var(--border-strong)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+        >
+          Buy me a coffee — optional tip if this helps you.
+        </a>
+        <a
+          href="/go/befrugal"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-cta="befrugal"
+          onClick={() =>
+            trackEvent("affiliate_click", { surface: "penny-list", linkId: "befrugal" })
+          }
+          className="inline-flex items-center justify-center w-full px-4 py-3 rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold min-h-[44px] hover:bg-[var(--cta-hover)] transition-colors transition-transform hover:-translate-y-0.5 hover:shadow-card-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+        >
+          Activate BeFrugal cashback — supports the site at no extra cost.
+        </a>
       </div>
 
       {/* Filter Bar */}
@@ -403,6 +491,8 @@ export function PennyListClient({ initialItems, initialSearchParams }: PennyList
         )}
       </section>
 
+      <FeedbackWidget />
+
       {/* About This List */}
       <section
         aria-labelledby="how-it-works-heading"
@@ -463,11 +553,8 @@ export function PennyListClient({ initialItems, initialSearchParams }: PennyList
 
           {/* Item 4: Facebook verification */}
           <div className="flex gap-3 items-start">
-            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-              <CheckCircle2
-                className="w-4 h-4 text-purple-600 dark:text-purple-400"
-                aria-hidden="true"
-              />
+            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-default)] flex items-center justify-center">
+              <CheckCircle2 className="w-4 h-4 text-[var(--text-secondary)]" aria-hidden="true" />
             </div>
             <div className="flex-1">
               <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
@@ -506,7 +593,7 @@ export function PennyListClient({ initialItems, initialSearchParams }: PennyList
             href={SUBMIT_FIND_FORM_URL}
             eventName="find_submit"
             eventParams={{ location: "penny-list" }}
-            className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-medium transition-all duration-200 hover:bg-[var(--cta-hover)] hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] min-h-[44px]"
+            className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-lg bg-[var(--cta-hover)] text-[var(--cta-text)] font-medium transition-all duration-150 hover:bg-[var(--cta-active)] hover:-translate-y-0.5 hover:shadow-card-hover active:translate-y-0 active:shadow-button focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] min-h-[44px]"
             aria-label="Submit a penny find to the community"
           >
             Submit a Find
@@ -529,7 +616,7 @@ export function PennyListClient({ initialItems, initialSearchParams }: PennyList
             rel="noopener noreferrer"
             eventName="newsletter_click"
             eventParams={{ location: "penny-list" }}
-            className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-medium transition-all duration-200 hover:bg-[var(--cta-hover)] hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] min-h-[44px]"
+            className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-lg bg-[var(--cta-hover)] text-[var(--cta-text)] font-medium transition-all duration-150 hover:bg-[var(--cta-active)] hover:-translate-y-0.5 hover:shadow-card-hover active:translate-y-0 active:shadow-button focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] min-h-[44px]"
             aria-label="Subscribe to weekly penny alerts newsletter"
           >
             Subscribe to Alerts

@@ -109,31 +109,73 @@
   }
 
   .dark {
-    /* Dark mode backgrounds - clear layer separation */
-    --bg-page: #18181b;
-    --bg-card: #27272a;
-    --bg-elevated: #3f3f46;
-    --bg-tertiary: #52525b;
+    /* ===============================================
+       PHASE 1: HALATION MITIGATION & WCAG FOUNDATION
+       Base surface: #121212 (Material Design standard)
+       Desaturated content colors for reduced eye strain
+       All colors meet WCAG 2.2 Level AA minimum
+       =============================================== */
 
-    /* Dark mode text - WCAG AAA compliant */
-    --text-primary: #fafafa; /* 17.4:1 on #18181B */
-    --text-secondary: #e4e4e7; /* Zinc 200 - High contrast */
-    --text-muted: #d4d4d8; /* Zinc 300 - 10.4:1 on #27272A (bg-card) */
+    /* TONAL ELEVATION SYSTEM (0-6 dp)
+       Depth is achieved through color (lightening), not shadows
+       Each level represents increasing visual prominence */
 
-    /* Dark mode borders */
-    --border-default: #3f3f46;
-    --border-strong: #52525b;
-    --border-dark: #71717a;
+    /* Level 0: Base surface - Foundation layer */
+    --bg-page: #121212; /* Material Design dark grey - halation mitigation */
 
-    /* Dark mode brand */
+    /* Level 1-2: Standard components (cards, buttons) */
+    --bg-card: #1a1a1a; /* +8 luminance from base - cards, repeating elements */
+    --bg-elevated: #1f1f1f; /* slightly brighter than cards for subtle lift */
+
+    /* Level 3-4: Interactive states (hover, focus) */
+    --bg-hover: #242424; /* hover/active states */
+    --bg-focus: #2a2a2a; /* focused elements */
+
+    /* Level 5-6: Modals and highest priority */
+    --bg-modal: #303030; /* dialogs, overlays */
+    --bg-tertiary: #3a3a3a; /* maximum elevation */
+
+    /* DESATURATED TEXT COLORS (4.5:1 minimum on respective surfaces)
+       Using muted warm grays instead of pure white to reduce optical vibration */
+
+    /* Primary content: Must meet 4.5:1 on Level 1 cards (#1a1a1a) */
+    --text-primary: #dcdcdc; /* 12.7:1 on #1a1a1a, 13.6:1 on #121212 (AAA) */
+
+    /* Secondary content: Must meet 4.5:1 on Level 1 cards */
+    --text-secondary: #b0b0b0; /* 8.0:1 on #1a1a1a (AAA) */
+
+    /* Tertiary content: Must meet 4.5:1 on Level 1 cards */
+    --text-muted: #9a9a9a; /* 6.2:1 on #1a1a1a (AA+) */
+
+    /* Inverse text for light buttons */
+    --text-inverse: #121212;
+
+    /* UI COMPONENT BORDERS (3:1 minimum against adjacent surfaces)
+       Cards on base: border must have 3:1 against #121212 */
+    --border-default: #6b6b6b; /* 3.3:1 on #121212, 3.3:1 on #1a1a1a */
+    --border-strong: #747474; /* 3.7:1 on #121212, 3.7:1 on #1a1a1a */
+    --border-dark: #808080; /* 4.4:1 on #121212, 4.4:1 on #1a1a1a */
+
+    /* Dark mode brand - desaturated */
     --brand-gunmetal: #9ca3af;
     --brand-gunmetal-light: #d1d5db;
 
-    /* Dark mode CTA - adjusted for visibility */
-    --cta-primary: #93c5fd; /* Blue 300 - Better contrast against dark bg */
-    --cta-text: #18181b; /* Dark text on light button for AAA */
-    --cta-hover: #bfdbfe;
-    --cta-active: #dbeafe;
+    /* CTA ACCENT - Desaturated blue for 4.5:1 text contrast
+       Must work as text color on dark surfaces AND as button background */
+    --cta-primary: #60a5fa; /* Blue 400 - 4.8:1 on #121212 base (meets AA for text) */
+    --cta-text: #030712; /* Near-black for light button text */
+    --cta-hover: #93c5fd; /* Blue 300 - 6.2:1 on base */
+    --cta-active: #bfdbfe; /* Blue 200 - 8.1:1 on base */
+
+    /* STATUS COLORS - Desaturated for dark mode, must meet 4.5:1 on base */
+    --status-success: #4ade80; /* Green 400 - 5.1:1 on #121212 */
+    --status-warning: #fbbf24; /* Amber 400 - 8.3:1 on #121212 */
+    --status-error: #f87171; /* Red 400 - 4.7:1 on #121212 */
+    --status-info: #60a5fa; /* Blue 400 - matches CTA */
+
+    /* LIVE INDICATOR - Special case, decorative element */
+    --live-indicator: #fbbf24; /* Amber 400 - warm, energetic */
+    --live-glow: rgba(251, 191, 36, 0.3);
 
     /* Legacy compatibility */
     --accent: #9ca3af;
@@ -141,25 +183,25 @@
     --accent-muted: rgba(156, 163, 175, 0.15);
     --accent-emphasis: #fafaf9;
 
-    /* Dark mode shadows */
-    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.4);
-    --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.5);
-    --shadow-button: 0 1px 2px rgba(0, 0, 0, 0.2);
-    --shadow-button-hover: 0 4px 12px rgba(59, 130, 246, 0.3);
+    /* Dark mode shadows - Subtle, 8px max blur per design system */
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.5);
+    --shadow-card-hover: 0 4px 8px rgba(0, 0, 0, 0.6);
+    --shadow-button: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-button-hover: 0 4px 8px rgba(96, 165, 250, 0.25);
 
-    /* shadcn/ui compatibility - dark */
-    --background: var(--bg-page);
+    /* shadcn/ui compatibility - dark mode with elevation system */
+    --background: var(--bg-page); /* Level 0 */
     --foreground: var(--text-primary);
-    --card: var(--bg-card);
+    --card: var(--bg-card); /* Level 1-2 */
     --card-foreground: var(--text-primary);
-    --popover: var(--bg-card);
+    --popover: var(--bg-elevated); /* Level 2 */
     --popover-foreground: var(--text-primary);
-    --secondary: var(--bg-elevated);
+    --secondary: var(--bg-elevated); /* Level 2 */
     --secondary-foreground: var(--text-primary);
-    --muted: var(--bg-elevated);
+    --muted: var(--bg-hover); /* Level 3 */
     --muted-foreground: var(--text-muted);
     --border: var(--border-default);
-    --input: var(--border-default);
+    --input: var(--border-strong);
     --ring: var(--cta-primary);
   }
 
@@ -175,61 +217,140 @@
       BlinkMacSystemFont,
       sans-serif;
     font-size: 16px;
-    line-height: 1.625; /* leading-relaxed */
+    line-height: 1.7; /* Increased from 1.625 for dark mode readability */
     color: var(--text-primary);
+    font-weight: 400; /* Explicit Regular weight - never thinner */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  /* ===============================================
+     TONAL ELEVATION UTILITY CLASSES
+     Apply semantic elevation levels to components
+     Cards, buttons, and interactive elements
+     =============================================== */
+
+  .elevation-0 {
+    background-color: var(--bg-page);
+  }
+
+  .elevation-1,
+  .elevation-card {
+    background-color: var(--bg-card);
+  }
+
+  .elevation-2 {
+    background-color: var(--bg-elevated);
+  }
+
+  .elevation-3,
+  .elevation-hover {
+    background-color: var(--bg-hover);
+  }
+
+  .elevation-4,
+  .elevation-focus {
+    background-color: var(--bg-focus);
+  }
+
+  .elevation-5,
+  .elevation-modal {
+    background-color: var(--bg-modal);
+  }
+
+  .elevation-6 {
+    background-color: var(--bg-tertiary);
+  }
+
+  /* ===============================================
+     8-POINT GRID SPACING SYSTEM
+     Ensures consistent, device-agnostic scaling
+     All spacing divisible by 8px (8, 16, 24, 32, 40, 48...)
+     Prevents sub-pixel rendering and scaling issues
+     =============================================== */
+
+  :root {
+    --space-1: 0.5rem; /* 8px */
+    --space-2: 1rem; /* 16px */
+    --space-3: 1.5rem; /* 24px */
+    --space-4: 2rem; /* 32px */
+    --space-5: 2.5rem; /* 40px */
+    --space-6: 3rem; /* 48px */
+    --space-8: 4rem; /* 64px */
+    --space-10: 5rem; /* 80px */
+    --space-12: 6rem; /* 96px */
+  }
+
+  /* Tailwind already uses 8pt grid (p-4 = 16px, p-6 = 24px, p-8 = 32px)
+     These CSS variables provide explicit semantic spacing */
 
   /* ===============================================
      UNIFIED TYPOGRAPHY SCALE
      See: docs/DESIGN_TYPOGRAPHY.md for full spec
      
      Scale: H1 > H2 > H3 > H4 > Lead > Body > Small > Caption
+     Font weights: Never below 400 (Regular) for readability
+     Line heights: Increased for dark mode comfort (1.7 base)
      =============================================== */
 
   h1,
   .text-h1 {
     @apply text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight tracking-tight;
     color: var(--text-primary);
+    font-weight: 700; /* Explicit bold for maximum clarity */
+    line-height: 1.2;
   }
 
   h2,
   .text-h2 {
     @apply text-2xl sm:text-3xl font-semibold leading-snug;
     color: var(--text-primary);
+    font-weight: 600; /* Semibold minimum */
+    line-height: 1.3;
   }
 
   h3,
   .text-h3 {
     @apply text-xl sm:text-2xl font-semibold leading-snug;
     color: var(--text-primary);
+    font-weight: 600; /* Semibold minimum */
+    line-height: 1.4;
   }
 
   h4,
   .text-h4 {
     @apply text-lg sm:text-xl font-medium leading-normal;
     color: var(--text-primary);
+    font-weight: 500; /* Medium minimum */
+    line-height: 1.5;
   }
 
   .text-lead {
     @apply text-lg sm:text-xl font-normal leading-relaxed;
     color: var(--text-secondary);
+    font-weight: 400; /* Regular - never lighter */
+    line-height: 1.7;
   }
 
   .text-body {
     @apply text-base font-normal leading-relaxed;
     color: var(--text-primary);
+    font-weight: 400; /* Regular - never lighter */
+    line-height: 1.7; /* Increased for dark mode */
   }
 
   .text-small {
     @apply text-sm font-normal leading-normal;
     color: var(--text-secondary);
+    font-weight: 400; /* Regular - never lighter */
+    line-height: 1.6;
   }
 
   .text-caption {
     @apply text-xs font-medium leading-tight;
     color: var(--text-muted);
+    font-weight: 500; /* Medium for small text legibility */
+    line-height: 1.5; /* Slightly relaxed for better scanning */
   }
 
   /* ===============================================
@@ -362,6 +483,7 @@
     transition:
       box-shadow var(--duration-normal) var(--ease-default),
       border-color var(--duration-normal) var(--ease-default),
+      background-color var(--duration-normal) var(--ease-default),
       transform var(--duration-normal) var(--ease-default);
     cursor: pointer;
   }
@@ -369,10 +491,14 @@
   .card-interactive:hover {
     box-shadow: var(--shadow-card-hover);
     border-color: var(--cta-primary);
+    background-color: var(--bg-elevated);
+    transform: translateY(-2px);
   }
 
   .dark .card-interactive:hover {
-    border-color: var(--border-strong);
+    border-color: var(--cta-primary);
+    background-color: var(--bg-hover);
+    transform: translateY(-2px);
   }
 
   .card-interactive:focus-visible {

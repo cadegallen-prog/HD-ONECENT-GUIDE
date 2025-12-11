@@ -69,7 +69,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm text-zinc-400 hover:text-white transition-colors"
-                  onClick={() => trackEvent("donation_click", { location: "footer" })}
+                  onClick={() => trackEvent("coffee_click", { surface: "footer" })}
                 >
                   Buy Me a Coffee
                 </a>
@@ -80,7 +80,9 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm text-zinc-400 hover:text-white transition-colors"
-                  onClick={() => trackEvent("befrugal_click", { location: "footer" })}
+                  onClick={() =>
+                    trackEvent("affiliate_click", { surface: "footer", linkId: "befrugal" })
+                  }
                 >
                   BeFrugal Cashback
                 </a>

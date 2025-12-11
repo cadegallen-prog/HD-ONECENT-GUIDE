@@ -8,6 +8,7 @@ import { getStoreUrl, normalizeDayHours, mergeConsecutiveDays, getStoreTitle } f
 import type { StoreLocation } from "@/lib/stores"
 import { Navigation, Info } from "lucide-react"
 import "./store-map.css"
+import { trackEvent } from "@/lib/analytics"
 
 interface StoreMapProps {
   stores: StoreLocation[]
@@ -24,6 +25,8 @@ function MapController({ selectedStore }: { selectedStore?: StoreLocation | null
   const lastSelectedIdRef = React.useRef<string | null>(null)
   const hasInvalidatedRef = React.useRef(false)
   const userHasInteractedRef = React.useRef(false)
+  const panTrackedRef = React.useRef(false)
+  const zoomTrackedRef = React.useRef(false)
 
   // Invalidate map size on first mount to ensure tiles load properly
   // Use multiple delays to handle various container rendering timings
@@ -55,9 +58,17 @@ function MapController({ selectedStore }: { selectedStore?: StoreLocation | null
   React.useEffect(() => {
     const onDragStart = () => {
       userHasInteractedRef.current = true
+      if (!panTrackedRef.current) {
+        panTrackedRef.current = true
+        trackEvent("map_interact", { action: "pan" })
+      }
     }
     const onZoomStart = () => {
       userHasInteractedRef.current = true
+      if (!zoomTrackedRef.current) {
+        zoomTrackedRef.current = true
+        trackEvent("map_interact", { action: "zoom" })
+      }
     }
 
     map.on("dragstart", onDragStart)
@@ -238,7 +249,10 @@ export const StoreMap = React.memo(function StoreMap({
               position={[store.lat, store.lng]}
               icon={(isSelected ? selectedIcon : defaultIcon) || undefined}
               eventHandlers={{
-                click: () => onSelect?.(store),
+                click: () => {
+                  trackEvent("map_interact", { action: "marker", markerState: store.state })
+                  onSelect?.(store)
+                },
               }}
               ref={(marker) => {
                 if (marker) {
@@ -309,6 +323,9 @@ export const StoreMap = React.memo(function StoreMap({
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex-1 text-center bg-[var(--cta-primary)] text-[var(--cta-text)] text-sm font-semibold py-2 min-h-[44px] rounded hover:bg-[var(--cta-hover)] transition-colors flex items-center justify-center gap-1.5 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cta-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-elevated)]"
+                      onClick={() =>
+                        trackEvent("directions_click", { storeId: store.id, state: store.state })
+                      }
                     >
                       <Navigation className="w-3 h-3" />
                       Directions

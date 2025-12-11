@@ -11,6 +11,7 @@
 A structured system that lets Cade (non-coder) effectively manage PennyCentral.com by orchestrating AI assistants across multiple tools and sessions.
 
 **Problem it solves:**
+
 - Context loss between AI sessions
 - Inconsistent quality across different AI tools
 - Unclear decision boundaries (what AI should decide vs. ask about)
@@ -18,6 +19,7 @@ A structured system that lets Cade (non-coder) effectively manage PennyCentral.c
 - Difficulty handing off between Claude, ChatGPT, and Copilot
 
 **How it works:**
+
 - All documentation in tool-agnostic markdown
 - Clear contracts and decision rights
 - Session logs for continuity
@@ -101,6 +103,7 @@ A structured system that lets Cade (non-coder) effectively manage PennyCentral.c
 ## The Files Explained
 
 ### ⭐ USAGE.md
+
 **For:** Cade
 **Purpose:** Ultra-simple daily workflow guide
 **Read when:** Every day, until the three habits become automatic
@@ -109,6 +112,7 @@ A structured system that lets Cade (non-coder) effectively manage PennyCentral.c
 ---
 
 ### 📋 QUICKSTART.md
+
 **For:** Cade
 **Purpose:** Deeper explanation with scenarios and examples
 **Read when:** First time, or when you want to understand the "why" behind the system
@@ -117,6 +121,7 @@ A structured system that lets Cade (non-coder) effectively manage PennyCentral.c
 ---
 
 ### 📝 SESSION_TEMPLATES.md
+
 **For:** Cade
 **Purpose:** Copy-paste prompts for starting, working, and ending sessions
 **Read when:** When you need the exact prompt to paste
@@ -125,6 +130,7 @@ A structured system that lets Cade (non-coder) effectively manage PennyCentral.c
 ---
 
 ### 🤝 CONTRACT.md
+
 **For:** Both human and AI
 **Purpose:** Define the collaboration agreement
 **Read when:** Starting a new AI session or tool
@@ -133,6 +139,7 @@ A structured system that lets Cade (non-coder) effectively manage PennyCentral.c
 ---
 
 ### ⚖️ DECISION_RIGHTS.md
+
 **For:** Both human and AI
 **Purpose:** Clear boundaries for autonomous decisions vs. approval needed
 **Read when:** AI is unsure if it should proceed or ask; Cade wonders why AI is asking
@@ -141,6 +148,7 @@ A structured system that lets Cade (non-coder) effectively manage PennyCentral.c
 ---
 
 ### 🎯 CONTEXT.md
+
 **For:** AI (but Cade can update)
 **Purpose:** Understand WHY this project exists and WHO it serves
 **Read when:** Starting work, making UX decisions, prioritizing features
@@ -149,6 +157,7 @@ A structured system that lets Cade (non-coder) effectively manage PennyCentral.c
 ---
 
 ### 🚫 CONSTRAINTS.md
+
 **For:** AI
 **Purpose:** Technical red lines that must NOT be crossed
 **Read when:** Before modifying code, especially fragile areas
@@ -157,6 +166,7 @@ A structured system that lets Cade (non-coder) effectively manage PennyCentral.c
 ---
 
 ### 📝 SESSION_LOG.md
+
 **For:** Both human and AI
 **Purpose:** Running history of what AI assistants have done
 **Read when:** Starting a new session, handing off between tools
@@ -166,6 +176,7 @@ A structured system that lets Cade (non-coder) effectively manage PennyCentral.c
 ---
 
 ### 💡 LEARNINGS.md
+
 **For:** Both human and AI
 **Purpose:** Lessons learned the hard way (don't repeat mistakes)
 **Read when:** Working on a feature, encountering an issue
@@ -175,6 +186,7 @@ A structured system that lets Cade (non-coder) effectively manage PennyCentral.c
 ---
 
 ### 🔧 MCP_SERVERS.md
+
 **For:** AI (ChatGPT CodeX primarily)
 **Purpose:** Complete reference for all 6 Model Context Protocol servers
 **Read when:** Before using MCP tools extensively, when optimizing token usage
@@ -184,6 +196,7 @@ A structured system that lets Cade (non-coder) effectively manage PennyCentral.c
 ---
 
 ### ⚙️ AI-TOOLS-SETUP.md
+
 **For:** Both human and AI
 **Purpose:** Configuration details for all AI tools and auto-loading mechanism
 **Read when:** Setting up new AI tool, verifying auto-loading works, troubleshooting context issues
@@ -193,6 +206,7 @@ A structured system that lets Cade (non-coder) effectively manage PennyCentral.c
 ---
 
 ### ✅ TESTING_CHECKLIST.md
+
 **For:** AI
 **Purpose:** Comprehensive testing procedures for all code changes
 **Read when:** Before declaring work complete, after modifying shared files, before merging to main
@@ -204,6 +218,7 @@ A structured system that lets Cade (non-coder) effectively manage PennyCentral.c
 ## How It Works (The Big Picture)
 
 ### Traditional AI Coding (Fragile)
+
 ```
 Human: "Add a filter"
 AI: *implements something*
@@ -214,6 +229,7 @@ AI: *tries again*
 ```
 
 ### With This System (Robust)
+
 ```
 Human: "Read .ai/ directory first"
 AI: *reads CONTRACT, DECISION_RIGHTS, CONTEXT, CONSTRAINTS, SESSION_LOG, LEARNINGS*
@@ -235,6 +251,7 @@ AI: "Done. Test it at /penny-list"
 ## Benefits
 
 ### For Cade
+
 - ✅ Manage technical project without knowing code
 - ✅ Consistent quality across AI tools
 - ✅ No context loss between sessions
@@ -242,12 +259,14 @@ AI: "Done. Test it at /penny-list"
 - ✅ Confidence to ship features
 
 ### For AI Assistants
+
 - ✅ Clear decision boundaries
 - ✅ Project context (WHY things matter)
 - ✅ Learn from past mistakes (LEARNINGS)
 - ✅ Smooth handoffs between sessions
 
 ### For the Project
+
 - ✅ Stability (CONSTRAINTS prevent breaking things)
 - ✅ Quality (CONTRACT enforces testing)
 - ✅ Maintainability (everything documented)
@@ -260,16 +279,19 @@ AI: "Done. Test it at /penny-list"
 This `.ai/` directory is **automatically loaded** by all three AI tools:
 
 ### Claude Code
+
 - Reads `CLAUDE.md` on startup
 - CLAUDE.md says: "Read all files in .ai/ directory first"
 - ✅ Automatic
 
 ### GitHub Copilot
+
 - Reads `.github/copilot-instructions.md` on startup
 - That file says: "Read all files in .ai/ directory first"
 - ✅ Automatic
 
 ### ChatGPT Codex
+
 - Reads `.github/copilot-instructions.md` via `~/.codex/config.toml`
 - That file says: "Read all files in .ai/ directory first"
 - ✅ Automatic
@@ -283,6 +305,7 @@ If auto-load fails (rare), use SESSION_TEMPLATES.md backup prompts.
 ## Getting Started
 
 ### If You're Cade:
+
 1. Read `USAGE.md` (dead simple daily guide)
 2. Or read `QUICKSTART.md` (deeper explanation)
 3. Try a small task using the GOAL/WHY/DONE format
@@ -290,6 +313,7 @@ If auto-load fails (rare), use SESSION_TEMPLATES.md backup prompts.
 5. Review `SESSION_LOG.md` to see what's been accomplished
 
 ### If You're an AI Assistant:
+
 1. You've already auto-loaded this directory (via CLAUDE.md or copilot-instructions.md)
 2. Ask Cade: "What's the GOAL / WHY / DONE for this session?"
 3. Follow CONTRACT and DECISION_RIGHTS protocols

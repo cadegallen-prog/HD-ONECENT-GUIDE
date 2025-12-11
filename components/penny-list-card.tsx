@@ -23,11 +23,13 @@ function getTotalReports(locations: Record<string, number>): number {
 
 export function PennyListCard({ item }: PennyListCardProps) {
   const commonnessTone = (tier?: string) => {
+    // Using CSS variables that automatically adapt to light/dark mode
     if (tier === "Very Common")
-      return "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300"
+      return "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800"
     if (tier === "Common")
-      return "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-200"
-    return "bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
+      return "bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-400 border-amber-200 dark:border-amber-800"
+    // Rare items use elevation-2 background for subtle distinction
+    return "elevation-2 text-[var(--text-primary)] border-[var(--border-strong)]"
   }
 
   const totalReports = item.locations ? getTotalReports(item.locations) : 0
@@ -35,14 +37,15 @@ export function PennyListCard({ item }: PennyListCardProps) {
 
   return (
     <article
-      className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow h-full flex flex-col"
+      className="elevation-card border border-[var(--border-strong)] rounded-xl overflow-hidden shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow h-full flex flex-col"
       aria-labelledby={`item-${item.id}-name`}
     >
-      <div className="p-5 flex flex-col flex-1 space-y-3">
+      {/* 8pt grid: p-5 = 20px, space-y-4 = 16px between elements */}
+      <div className="p-5 flex flex-col flex-1 space-y-4">
         <div className="flex justify-between items-start gap-3">
           <div className="flex items-center gap-2 flex-wrap">
             {item.status && item.status !== item.tier && (
-              <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-[var(--text-primary)]">
+              <span className="text-xs font-semibold px-2.5 py-1 rounded-full elevation-2 border border-[var(--border-strong)] text-[var(--text-primary)]">
                 {item.status}
               </span>
             )}
@@ -61,14 +64,14 @@ export function PennyListCard({ item }: PennyListCardProps) {
 
         <h3
           id={`item-${item.id}-name`}
-          className="font-semibold text-lg text-[var(--text-primary)] leading-[1.4] line-clamp-2"
+          className="font-semibold text-lg text-[var(--text-primary)] leading-[1.5] line-clamp-2"
         >
           {item.name}
         </h3>
 
-        <div className="flex items-center gap-2 text-sm text-[var(--text-primary)] font-mono bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 px-2.5 py-1.5 rounded w-fit font-medium">
+        <div className="flex items-center gap-2 text-sm text-[var(--text-primary)] font-mono elevation-2 border border-[var(--border-strong)] px-2.5 py-1.5 rounded w-fit font-medium">
           <span className="select-all">SKU: {item.sku}</span>
-          <CopySkuButton sku={item.sku} />
+          <CopySkuButton sku={item.sku} source="card" />
         </div>
 
         {item.quantityFound && (
@@ -79,7 +82,7 @@ export function PennyListCard({ item }: PennyListCardProps) {
         )}
 
         {item.notes && (
-          <p className="text-base text-[var(--text-primary)] leading-[1.6] line-clamp-3">
+          <p className="text-base text-[var(--text-primary)] leading-[1.7] line-clamp-3">
             {item.notes}
           </p>
         )}
@@ -96,7 +99,7 @@ export function PennyListCard({ item }: PennyListCardProps) {
                   <span
                     key={state}
                     role="listitem"
-                    className="px-2.5 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-[var(--text-primary)] text-xs font-semibold min-h-[28px] flex items-center"
+                    className="px-2.5 py-1 rounded-full elevation-2 border border-[var(--border-strong)] text-[var(--text-primary)] text-xs font-semibold min-h-[28px] flex items-center"
                     title={`${getStateName(state)}: ${count} ${count === 1 ? "report" : "reports"}`}
                     aria-label={`${getStateName(state)}: ${count} ${count === 1 ? "report" : "reports"}`}
                   >
@@ -114,7 +117,7 @@ export function PennyListCard({ item }: PennyListCardProps) {
 
         <div className="pt-4 border-t border-[var(--border-default)] flex items-center justify-between mt-auto">
           <span className="text-sm text-[var(--text-secondary)]">Unverified report</span>
-          <span className="text-emerald-600 dark:text-emerald-400 font-bold text-lg">$0.01</span>
+          <span className="font-bold text-lg text-[var(--status-success)]">$0.01</span>
         </div>
       </div>
     </article>
@@ -124,15 +127,15 @@ export function PennyListCard({ item }: PennyListCardProps) {
 export function PennyListCardCompact({ item }: PennyListCardProps) {
   const commonnessTone = (tier?: string) => {
     if (tier === "Very Common")
-      return "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300"
+      return "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800"
     if (tier === "Common")
-      return "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-200"
-    return "bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
+      return "bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-400 border-amber-200 dark:border-amber-800"
+    return "elevation-2 text-[var(--text-primary)] border-[var(--border-strong)]"
   }
 
   return (
     <article
-      className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] p-4"
+      className="rounded-lg border border-[var(--border-strong)] elevation-card p-4"
       aria-labelledby={`hot-item-${item.id}-name`}
     >
       <div className="flex items-center justify-between mb-2 gap-2">
@@ -149,11 +152,11 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
       </div>
       <h3
         id={`hot-item-${item.id}-name`}
-        className="text-sm font-semibold text-[var(--text-primary)] leading-[1.4] line-clamp-2"
+        className="text-sm font-semibold text-[var(--text-primary)] leading-[1.5] line-clamp-2"
       >
         {item.name}
       </h3>
-      <div className="mt-2 flex items-center gap-2 text-xs text-[var(--text-primary)] font-mono bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 px-2 py-1 rounded w-fit font-medium">
+      <div className="mt-2 flex items-center gap-2 text-xs text-[var(--text-primary)] font-mono elevation-2 border border-[var(--border-strong)] px-2 py-1 rounded w-fit font-medium">
         SKU: {item.sku}
       </div>
       {item.locations && Object.keys(item.locations).length > 0 && (
@@ -165,7 +168,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
               <span
                 key={`${item.id}-${state}`}
                 role="listitem"
-                className="px-2 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-[var(--text-primary)] text-xs font-semibold"
+                className="px-2 py-1 rounded-full elevation-2 border border-[var(--border-strong)] text-[var(--text-primary)] text-xs font-semibold"
                 aria-label={`${state}: ${count} ${count === 1 ? "report" : "reports"}`}
               >
                 {state} · {count}

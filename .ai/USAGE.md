@@ -7,7 +7,9 @@
 ## The Three-Habit System
 
 ### Habit 1: Start Your Session
+
 ### Habit 2: Define Each Task
+
 ### Habit 3: End Your Session
 
 That's it. Three copy-paste actions.
@@ -17,24 +19,31 @@ That's it. Three copy-paste actions.
 ## Habit 1: Start Your Session
 
 ### With Claude Code
+
 ✅ **Auto-loads** - Just start working
+
 - Claude Code reads `CLAUDE.md` automatically
 - CLAUDE.md tells it to read `.ai/` directory
 - No prompt needed
 
 ### With GitHub Copilot
+
 ✅ **Auto-loads** - Just start working
+
 - Copilot reads `.github/copilot-instructions.md` automatically
 - That file tells it to read `.ai/` directory
 - No prompt needed
 
 ### With ChatGPT Codex
+
 ✅ **Auto-loads** - Just start working
+
 - Codex reads `.github/copilot-instructions.md` via your config
 - That file tells it to read `.ai/` directory
 - No prompt needed
 
 ### If Auto-Load Fails (Rare)
+
 Use this backup prompt from `SESSION_TEMPLATES.md`:
 
 ```
@@ -101,6 +110,7 @@ Before we end this session:
 ### Why This Matters
 
 This forces AI to:
+
 - **Confess** what's incomplete (no hiding blockers)
 - **Write future prompts** for you (no context loss)
 - **Document** the session (persistent memory)
@@ -187,18 +197,22 @@ For details, AI can read `.ai/MCP_SERVERS.md` and `.ai/AI-TOOLS-SETUP.md`.
 ## Troubleshooting
 
 ### "AI doesn't seem to know about .ai/ directory"
+
 - Use the backup prompt from Habit 1 (SESSION_TEMPLATES.md)
 - Check that AI actually read CLAUDE.md or copilot-instructions.md
 
 ### "AI is doing things without asking"
+
 - Check `.ai/DECISION_RIGHTS.md` - might be in the "AI Can Decide" zone
 - If it shouldn't be, tell AI: "Per DECISION_RIGHTS.md, you should ask first"
 
 ### "AI made changes to globals.css or other fragile areas"
+
 - Check `.ai/CONSTRAINTS.md` - those are in the "NEVER" list
 - Tell AI: "You violated CONSTRAINTS.md. Revert this and propose instead."
 
 ### "I forgot what happened last session"
+
 - Read `.ai/SESSION_LOG.md` - recent entries show what was done
 - Look for "Unfinished Items" and "Future Prompts" sections
 

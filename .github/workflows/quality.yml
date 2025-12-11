@@ -1,0 +1,51 @@
+name: Quality Checks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Start server
+        run: |
+          npm run start -- --hostname 0.0.0.0 --port 3000 >/tmp/next.log 2>&1 &
+          for i in {1..20}; do
+            if curl -fsS http://localhost:3000 >/dev/null; then
+              echo "Server is up"
+              break
+            fi
+            sleep 2
+          done
+
+      - name: Contrast check
+        env:
+          BASE_URL: http://localhost:3000
+        run: npm run check-contrast
+
+      - name: Axe check
+        run: npm run check-axe
+
+      - name: Upload reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-reports
+          path: reports/

@@ -6,6 +6,7 @@ import { US_STATES } from "@/lib/us-states"
 import { formatRelativeDate } from "@/lib/penny-list-utils"
 import type { PennyItem } from "@/lib/fetch-penny-data"
 import type { SortOption } from "./penny-list-filters"
+import { trackEvent } from "@/lib/analytics"
 
 interface PennyListTableProps {
   items: (PennyItem & { parsedDate?: Date | null })[]
@@ -29,6 +30,8 @@ function CopyButton({ sku }: { sku: string }) {
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(sku)
+    const skuMasked = sku.slice(-4)
+    trackEvent("sku_copy", { skuMasked, source: "table" })
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
@@ -36,7 +39,7 @@ function CopyButton({ sku }: { sku: string }) {
   return (
     <button
       onClick={handleCopy}
-      className="p-1 rounded hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors focus-visible:outline-2 focus-visible:outline-[var(--cta-primary)]"
+      className="px-2 py-1 rounded hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors focus-visible:outline-2 focus-visible:outline-[var(--cta-primary)] min-h-[36px]"
       aria-label={copied ? "SKU copied" : `Copy SKU ${sku}`}
       title={copied ? "Copied!" : "Copy SKU"}
     >

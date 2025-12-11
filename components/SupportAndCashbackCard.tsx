@@ -1,6 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
+import { trackEvent } from "@/lib/analytics"
 
 interface SupportAndCashbackCardProps {
   className?: string
@@ -27,7 +28,7 @@ export function SupportAndCashbackCard({ className }: SupportAndCashbackCardProp
         <ul className="list-disc pl-5 space-y-1">
           <li>
             Activate free cashback with BeFrugal before normal purchases. When you earn $10+ in
-            cashback, they send me a referral bonus.
+            cashback, they send me a referral bonus (no extra cost to you).
           </li>
           <li>
             Buy me a coffee via PayPal if the playbook helped you score a haul. It goes straight to
@@ -46,7 +47,11 @@ export function SupportAndCashbackCard({ className }: SupportAndCashbackCardProp
           href="/go/befrugal"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center px-4 py-2.5 bg-cta-primary hover:bg-cta-hover text-white text-sm font-medium rounded-lg transition-colors"
+          data-cta="befrugal"
+          className="inline-flex items-center justify-center px-4 py-2.5 bg-cta-primary hover:bg-cta-hover text-white text-sm font-medium rounded-lg transition-colors transition-transform hover:-translate-y-0.5 hover:shadow-card-hover"
+          onClick={() =>
+            trackEvent("affiliate_click", { surface: "support-card", linkId: "befrugal" })
+          }
         >
           Activate BeFrugal Cashback
         </a>
@@ -54,9 +59,10 @@ export function SupportAndCashbackCard({ className }: SupportAndCashbackCardProp
           href="https://paypal.me/cadegallen"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center px-4 py-2.5 bg-stone-100 dark:bg-stone-700 hover:bg-stone-200 dark:hover:bg-stone-600 text-stone-700 dark:text-stone-200 text-sm font-medium rounded-lg transition-colors border border-stone-300 dark:border-stone-600"
+          className="inline-flex items-center justify-center px-4 py-2.5 bg-stone-100 dark:bg-stone-700 hover:bg-stone-200 dark:hover:bg-stone-600 text-stone-700 dark:text-stone-200 text-sm font-medium rounded-lg transition-colors transition-transform hover:-translate-y-0.5 hover:shadow-card-hover border border-stone-300 dark:border-stone-600"
+          onClick={() => trackEvent("coffee_click", { surface: "support-card" })}
         >
-          Buy Me a Coffee
+          Buy Me a Coffee (optional tip)
         </a>
       </div>
     </div>

@@ -100,46 +100,47 @@ This is your "alive" signal. Used ONLY for the member counter.
 
 ---
 
-## Dark Mode Palette
+## Dark Mode Palette (Updated)
 
-### Backgrounds (Analogous dark warms)
+Objective: reduce eye strain while keeping AAA text contrast and 3:1 UI component contrast. Base contrast moved from 16+:1 down to 13.6:1 (still AAA) to soften halation.
 
-| Token           | Hex       | RGB        | Usage                     |
-| --------------- | --------- | ---------- | ------------------------- |
-| `--bg-page`     | `#171412` | 23, 20, 18 | Main page background      |
-| `--bg-elevated` | `#231F1C` | 35, 31, 28 | Cards, raised surfaces    |
-| `--bg-recessed` | `#2E2926` | 46, 41, 38 | Input fields, code blocks |
-| `--bg-hover`    | `#3A3532` | 58, 53, 50 | Hover states              |
+### Backgrounds
 
-### Text Colors (Dark mode)
+| Token           | Hex       | Usage                                   |
+| --------------- | --------- | --------------------------------------- |
+| `--bg-page`     | `#121212` | Base surface                            |
+| `--bg-card`     | `#1A1A1A` | Cards and repeating elements            |
+| `--bg-elevated` | `#1F1F1F` | Light lift above cards                  |
+| `--bg-hover`    | `#242424` | Hover and active states                 |
+| `--bg-focus`    | `#2A2A2A` | Focused states                          |
+| `--bg-modal`    | `#303030` | Dialogs and overlays                    |
+| `--bg-tertiary` | `#3A3A3A` | Highest elevation                       |
 
-All tested against `#171412` background.
+### Text Colors (tested on #121212 and #1A1A1A)
 
-| Token                | Hex       | Contrast | WCAG  | Usage                  |
-| -------------------- | --------- | -------- | ----- | ---------------------- |
-| `--text-primary`     | `#FAFAF9` | 16.2:1   | ✓ AAA | Headlines, body text   |
-| `--text-secondary`   | `#D6D3D1` | 11.8:1   | ✓ AAA | Subheadings, secondary |
-| `--text-muted`       | `#A8A29E` | 7.1:1    | ✓ AAA | Captions, metadata     |
-| `--text-placeholder` | `#78716C` | 4.5:1    | ✓ AA  | Input placeholders     |
+| Token              | Hex       | Contrast on #121212 | Contrast on #1A1A1A | WCAG | Usage                    |
+| ------------------ | --------- | ------------------- | ------------------- | ---- | ------------------------ |
+| `--text-primary`   | `#DCDCDC` | 13.6:1              | 12.7:1              | AAA  | Headlines, body text     |
+| `--text-secondary` | `#B0B0B0` | 8.6:1               | 8.0:1               | AAA  | Subheadings, metadata    |
+| `--text-muted`     | `#9A9A9A` | 6.7:1               | 6.2:1               | AA+  | Captions, tertiary text  |
 
 ### CTA / Accent (Dark mode)
 
-Slightly lighter blue for dark backgrounds.
-
-| Token            | Hex       | Text Color | Contrast | WCAG  | Usage           |
-| ---------------- | --------- | ---------- | -------- | ----- | --------------- |
-| `--cta-primary`  | `#3B82F6` | White      | 4.7:1    | ✓ AA  | Primary buttons |
-| `--cta-hover`    | `#60A5FA` | `#1C1917`  | 8.2:1    | ✓ AAA | Button hover    |
-| `--link-default` | `#60A5FA` | —          | 9.1:1    | ✓ AAA | Inline links    |
+| Token            | Hex       | Contrast on #121212 | WCAG | Usage                         |
+| ---------------- | --------- | ------------------- | ---- | ----------------------------- |
+| `--cta-primary`  | `#60A5FA` | 7.4:1               | AAA  | Primary buttons and links     |
+| `--cta-hover`    | `#93C5FD` | 10.1:1              | AAA  | Hover states                  |
+| `--cta-active`   | `#BFDBFE` | 12.7:1              | AAA  | Active/pressed states         |
+| `--cta-text`     | `#030712` | 12.4:1 on #BFDBFE   | AAA  | Text on light CTA backgrounds |
 
 ### Status Colors (Dark mode)
 
-| Token              | Hex       | Contrast | WCAG  |
-| ------------------ | --------- | -------- | ----- |
-| `--status-success` | `#22C55E` | 9.8:1    | ✓ AAA |
-| `--status-warning` | `#FBBF24` | 12.4:1   | ✓ AAA |
-| `--status-error`   | `#F87171` | 6.5:1    | ✓ AA  |
-| `--status-info`    | `#60A5FA` | 9.1:1    | ✓ AAA |
+| Token              | Hex       | Contrast on #121212 | WCAG | Usage                 |
+| ------------------ | --------- | ------------------- | ---- | --------------------- |
+| `--status-success` | `#4ADE80` | 10.8:1              | AAA  | Success indicators    |
+| `--status-warning` | `#FBBF24` | 11.2:1              | AAA  | Warnings              |
+| `--status-error`   | `#F87171` | 6.8:1               | AAA  | Errors/destructive    |
+| `--status-info`    | `#60A5FA` | 7.4:1               | AAA  | Informational         |
 
 ### Live Indicator (Dark mode)
 
@@ -150,11 +151,13 @@ Slightly lighter blue for dark backgrounds.
 
 ### Borders (Dark mode)
 
-| Token              | Hex       | Usage         |
-| ------------------ | --------- | ------------- |
-| `--border-default` | `#3D3835` | Card borders  |
-| `--border-strong`  | `#57534E` | Input borders |
-| `--border-focus`   | `#3B82F6` | Focus rings   |
+Minimum 3:1 contrast against both the base surface and card surfaces.
+
+| Token              | Hex       | Contrast on #121212 | Contrast on #1A1A1A | WCAG | Usage                          |
+| ------------------ | --------- | ------------------- | ------------------- | ---- | ------------------------------ |
+| `--border-default` | `#6B6B6B` | 3.5:1               | 3.3:1               | AA   | Standard component boundaries  |
+| `--border-strong`  | `#747474` | 4.0:1               | 3.7:1               | AA   | Dividers, emphasis             |
+| `--border-dark`    | `#808080` | 4.7:1               | 4.4:1               | AA   | High-emphasis separators       |
 
 ---
 

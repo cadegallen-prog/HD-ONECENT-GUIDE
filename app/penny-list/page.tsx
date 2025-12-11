@@ -1,6 +1,10 @@
 import type { Metadata } from "next"
 import { getPennyList } from "@/lib/fetch-penny-data"
-import { computeFreshnessMetrics, filterValidPennyItems } from "@/lib/penny-list-utils"
+import {
+  computeFreshnessMetrics,
+  filterValidPennyItems,
+  formatRelativeDate,
+} from "@/lib/penny-list-utils"
 import { PennyListClient } from "@/components/penny-list-client"
 
 export const metadata: Metadata = {
@@ -21,6 +25,38 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
   const validItems = filterValidPennyItems(pennyItems)
   const feedUnavailable = validItems.length === 0
   const { newLast24h, totalLast30d } = computeFreshnessMetrics(validItems)
+  const latestTimestamp = validItems
+    .map((item) => new Date(item.dateAdded).getTime())
+    .filter((time) => !Number.isNaN(time))
+    .sort((a, b) => b - a)[0]
+  const updatedHoursAgo =
+    latestTimestamp !== undefined
+      ? Math.max(0, Math.round((Date.now() - latestTimestamp) / 3600000))
+      : null
+  const lastUpdatedLabel =
+    updatedHoursAgo === null
+      ? "Update time unavailable"
+      : updatedHoursAgo === 0
+        ? "Updated just now"
+        : `Updated ${updatedHoursAgo} hour${updatedHoursAgo === 1 ? "" : "s"} ago`
+  const confidence = validItems.reduce(
+    (acc, item) => {
+      const totalReports = Object.values(item.locations || {}).reduce(
+        (sum, count) => sum + count,
+        0
+      )
+      if (totalReports > 1) {
+        acc.verified += 1
+      } else {
+        acc.unverified += 1
+      }
+      return acc
+    },
+    { verified: 0, unverified: 0 }
+  )
+  const whatsNew = [...validItems]
+    .sort((a, b) => new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime())
+    .slice(0, 10)
 
   return (
     <div className="min-h-screen bg-[var(--bg-page)]">
@@ -54,13 +90,53 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
       <section className="section-padding px-4 sm:px-6">
         <div className="container-wide">
           <div className="mb-6 rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] p-4 sm:p-5">
-            <p className="text-sm text-[var(--text-secondary)]">
-              <span className="font-semibold text-[var(--text-primary)]">{newLast24h}</span> new
-              reports in the last 24 hours;{" "}
-              <span className="font-semibold text-[var(--text-primary)]">{totalLast30d}</span> total
-              in 30 days.
-            </p>
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm text-[var(--text-secondary)]">
+                <span className="font-semibold text-[var(--text-primary)]">{newLast24h}</span> new
+                reports in the last 24 hours;{" "}
+                <span className="font-semibold text-[var(--text-primary)]">{totalLast30d}</span>{" "}
+                total in 30 days.
+              </p>
+              <p className="text-xs text-[var(--text-muted)]">{lastUpdatedLabel}</p>
+            </div>
+            <div className="mt-3 flex flex-wrap gap-3">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--border-default)] bg-[var(--bg-page)] px-3 py-1.5 text-xs font-semibold text-[var(--text-secondary)]">
+                Verified: <span className="text-[var(--text-primary)]">{confidence.verified}</span>
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--border-default)] bg-[var(--bg-page)] px-3 py-1.5 text-xs font-semibold text-[var(--text-secondary)]">
+                Unverified:{" "}
+                <span className="text-[var(--text-primary)]">{confidence.unverified}</span>
+              </span>
+            </div>
           </div>
+          {whatsNew.length > 0 && (
+            <div className="mb-8 rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] p-4 sm:p-5">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
+                <h2 className="text-base font-semibold text-[var(--text-primary)]">
+                  What’s new this week (top 10)
+                </h2>
+                <span className="text-xs text-[var(--text-muted)]">{lastUpdatedLabel}</span>
+              </div>
+              <ul className="divide-y divide-[var(--border-default)]">
+                {whatsNew.map((item) => (
+                  <li
+                    key={item.id}
+                    className="py-2 flex items-center justify-between gap-3 text-sm"
+                  >
+                    <div className="min-w-0">
+                      <p className="font-semibold text-[var(--text-primary)] truncate">
+                        {item.name}
+                      </p>
+                      <p className="text-[var(--text-muted)] text-xs">SKU {item.sku}</p>
+                    </div>
+                    <div className="text-right text-xs text-[var(--text-secondary)] whitespace-nowrap">
+                      <time dateTime={item.dateAdded}>{formatRelativeDate(item.dateAdded)}</time>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           {feedUnavailable && (
             <div
               role="status"
@@ -76,7 +152,11 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
               </p>
             </div>
           )}
-          <PennyListClient initialItems={validItems} initialSearchParams={resolvedSearchParams} />
+          <PennyListClient
+            initialItems={validItems}
+            initialSearchParams={resolvedSearchParams}
+            whatsNewCount={whatsNew.length}
+          />
         </div>
       </section>
     </div>

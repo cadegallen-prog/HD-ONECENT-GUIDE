@@ -136,7 +136,8 @@ export default function AboutPage() {
               href="/go/befrugal"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-cta-primary hover:bg-cta-hover text-white font-semibold transition-all"
+              data-cta="befrugal"
+              className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-[var(--cta-hover)] hover:bg-[var(--cta-active)] text-[var(--cta-text)] font-semibold transition-colors transition-transform hover:-translate-y-0.5 hover:shadow-card-hover"
             >
               Activate BeFrugal Cashback
             </a>

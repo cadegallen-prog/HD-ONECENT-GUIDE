@@ -11,7 +11,9 @@
     "lint:colors": "npx tsx scripts/lint-colors.ts",
     "export": "next build && next export",
     "test:e2e": "playwright test",
-    "test:unit": "npx tsx --test tests/**/*.test.ts"
+    "test:unit": "npx tsx --test tests/**/*.test.ts",
+    "check-contrast": "cross-env BASE_URL=http://localhost:3000 node scripts/check-contrast.js",
+    "check-axe": "npx @axe-core/cli http://localhost:3000 --output reports/axe-report.json --exit"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
@@ -38,6 +40,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@axe-core/cli": "^4.11.0",
     "@eslint/js": "^9.39.1",
     "@playwright/test": "^1.56.1",
     "@tailwindcss/forms": "^0.5.9",

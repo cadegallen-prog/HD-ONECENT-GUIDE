@@ -72,54 +72,62 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
       )}
 
       {/* Command palette */}
-      <Command
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="command-palette-title"
         className={`fixed top-1/4 left-1/2 -translate-x-1/2 w-full max-w-2xl bg-background border border-border rounded-lg shadow-2xl z-50 overflow-hidden transition-all ${
           open ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"
         }`}
       >
-        <div className="flex items-center border-b border-border px-4">
-          <Search className="w-5 h-5 text-muted-foreground mr-3" />
-          <Command.Input
-            value={search}
-            onValueChange={setSearch}
-            placeholder="Search pages... (⌘K)"
-            className="flex h-12 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
-          />
-        </div>
-
-        <Command.List className="max-h-[400px] overflow-y-auto p-2">
-          <Command.Empty className="py-6 text-center text-sm text-muted-foreground">
-            No results found.
-          </Command.Empty>
-
-          {Object.entries(groupedPages).map(([group, items]) => (
-            <Command.Group
-              key={group}
-              heading={group}
-              className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground"
-            >
-              {items.map((page) => (
-                <Command.Item
-                  key={page.path}
-                  value={`${page.label} ${page.path}`}
-                  onSelect={() => handleSelect(page.path)}
-                  className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-2 text-sm outline-none hover:bg-accent hover:text-accent-foreground data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
-                >
-                  <page.icon className="mr-3 h-4 w-4" />
-                  <span>{page.label}</span>
-                </Command.Item>
-              ))}
-            </Command.Group>
-          ))}
-        </Command.List>
-
-        <div className="border-t border-border px-4 py-2 text-xs text-muted-foreground">
-          <div className="flex items-center justify-between">
-            <span>Press ESC to close</span>
-            <span>Navigate with ↑↓</span>
+        <Command>
+          <div className="sr-only" id="command-palette-title">
+            Quick navigation
           </div>
-        </div>
-      </Command>
+          <div className="flex items-center border-b border-border px-4">
+            <Search className="w-5 h-5 text-muted-foreground mr-3" />
+            <Command.Input
+              value={search}
+              onValueChange={setSearch}
+              placeholder="Search pages... (⌘K)"
+              className="flex h-12 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+            />
+          </div>
+
+          <Command.List className="max-h-[400px] overflow-y-auto p-2">
+            <Command.Empty className="py-6 text-center text-sm text-muted-foreground">
+              No results found.
+            </Command.Empty>
+
+            {Object.entries(groupedPages).map(([group, items]) => (
+              <Command.Group
+                key={group}
+                heading={group}
+                className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground"
+              >
+                {items.map((page) => (
+                  <Command.Item
+                    key={page.path}
+                    value={`${page.label} ${page.path}`}
+                    onSelect={() => handleSelect(page.path)}
+                    className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-2 text-sm outline-none hover:bg-accent hover:text-accent-foreground data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
+                  >
+                    <page.icon className="mr-3 h-4 w-4" />
+                    <span>{page.label}</span>
+                  </Command.Item>
+                ))}
+              </Command.Group>
+            ))}
+          </Command.List>
+
+          <div className="border-t border-border px-4 py-2 text-xs text-muted-foreground">
+            <div className="flex items-center justify-between">
+              <span>Press ESC to close</span>
+              <span>Navigate with ↑↓</span>
+            </div>
+          </div>
+        </Command>
+      </div>
     </>
   )
 }

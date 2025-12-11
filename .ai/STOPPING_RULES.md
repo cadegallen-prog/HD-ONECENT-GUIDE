@@ -19,39 +19,52 @@ Don't add "bonus" improvements unless explicitly requested. Don't refactor worki
 ## Quality Gates (Must Pass Before Stopping)
 
 ### 1. Build Verification
+
 ```powershell
 npm run build
 ```
+
 **Must:** Complete with 0 errors
 
 ### 2. Lint Check
+
 ```powershell
 npm run lint
 ```
+
 **Must:** 0 warnings, 0 errors
 
 ### 3. Type Check
+
 **Must:** 0 TypeScript errors (caught by build)
 
 ### 4. Unit Tests (if exist)
+
 ```powershell
 npm run test:unit
 ```
+
 **Must:** 100% pass rate
 
 ### 5. Git Branch Check
+
 **Must:** Verify which branch changes are on
+
 - If testing in `dev` locally, explicitly tell user changes need merge to `main` to deploy
 - If user expects changes live but they're in `dev`, that's the problem
 
 ### 6. Feature Completeness
+
 **Must:** User's stated goal accomplished
+
 - If goal was "fix X", is X fixed?
 - If goal was "add Y", does Y exist and work?
 - If goal was "improve Z", is Z measurably better?
 
 ### 7. Documentation Updated
+
 **Must:** Update relevant docs
+
 - `PROJECT_ROADMAP.md` if features/priorities changed
 - `CHANGELOG.md` for significant work
 - `SESSION_LOG.md` for all work (brief summary)
@@ -61,25 +74,30 @@ npm run test:unit
 ## When to STOP Working
 
 ### ✅ STOP if:
+
 1. User's goal accomplished
 2. All quality gates passed
 3. Documentation updated
 4. User informed of what was done and next steps
 
 ### ⚠️ PROPOSE NEXT STEPS (but don't do them) if:
+
 1. You notice related improvements that could be made
 2. You see technical debt that should be addressed
 3. You identify testing gaps
 
 **How to propose:**
+
 > "I've completed [goal]. Here are optional next steps if you want to continue:
+>
 > 1. [Related improvement]
 > 2. [Technical debt item]
 > 3. [Testing recommendation]
-> 
+>
 > Want me to proceed with any of these?"
 
 ### ❌ DON'T keep working if:
+
 1. User's goal complete but you think of "nice to haves"
 2. Code works but isn't "perfect"
 3. You want to add tests "just in case"
@@ -93,6 +111,7 @@ npm run test:unit
 When user says "utilize maximum capacity" or "work until you run out of tokens":
 
 **WRONG interpretation:**
+
 - Keep coding until token limit
 - Add every possible improvement
 - Refactor everything you see
@@ -100,6 +119,7 @@ When user says "utilize maximum capacity" or "work until you run out of tokens":
 - Test every edge case imaginable
 
 **CORRECT interpretation:**
+
 - Maximize VALUE per token, not just token usage
 - Focus on high-impact work first
 - Stop when user's goal accomplished + quality gates passed
@@ -115,6 +135,7 @@ When user says "utilize maximum capacity" or "work until you run out of tokens":
 If you've delivered the 80%, STOP and ask before doing the 20%.
 
 **Example:**
+
 - User asks: "Fix the penny list table contrast"
 - You do: Improve contrast, update colors, verify WCAG AAA compliance
 - You DON'T do: Refactor entire table component, add sorting animations, rewrite tests
@@ -149,6 +170,7 @@ Before ending your turn:
 ## Warning Signs You're Over-Optimizing
 
 ### 🚩 Red Flags:
+
 - You're on iteration 5+ of the same file
 - You're adding features user didn't mention
 - You're refactoring working code "because it could be better"
@@ -158,6 +180,7 @@ Before ending your turn:
 - You're thinking "just one more improvement..."
 
 ### 🛑 If you notice these, STOP and ask:
+
 > "I've completed [original goal]. I'm noticing [additional improvements I could make]. Should I proceed with those, or is the original goal sufficient?"
 
 ---
@@ -169,6 +192,7 @@ Before ending your turn:
 **User says:** "Fix the table overflow on mobile"
 
 **You should:**
+
 1. Identify the overflow cause
 2. Fix it
 3. Test mobile viewport
@@ -177,6 +201,7 @@ Before ending your turn:
 6. STOP
 
 **You should NOT:**
+
 - Refactor entire table component
 - Add responsive utilities to every page
 - Rewrite mobile CSS architecture
@@ -187,6 +212,7 @@ Before ending your turn:
 **User says:** "Add a filter to penny list"
 
 **You should:**
+
 1. Add filter dropdown
 2. Implement filtering logic
 3. Test filtering works
@@ -195,6 +221,7 @@ Before ending your turn:
 6. STOP
 
 **You should NOT:**
+
 - Add advanced filtering (unless requested)
 - Refactor existing filters
 - Add filter presets
@@ -205,6 +232,7 @@ Before ending your turn:
 **User says:** "Document the MCP servers"
 
 **You should:**
+
 1. Create comprehensive MCP_SERVERS.md
 2. Update AI-TOOLS-SETUP.md with MCP references
 3. Update SKILLS.md with MCP quick reference
@@ -213,6 +241,7 @@ Before ending your turn:
 6. STOP
 
 **You should NOT:**
+
 - Rewrite all existing documentation
 - Create 50 new documentation files
 - Add examples to every doc file
@@ -236,22 +265,26 @@ If all 4 are YES, you're done. STOP.
 ## Exception: "Hack Away" Sessions
 
 When user explicitly says:
+
 - "Work until you run out of tokens"
 - "Do as much as possible"
 - "Hack away at [large task]"
 
 **Then you may:**
+
 - Work through multiple related tasks
 - Go beyond immediate goal IF related to stated task
 - Make broader improvements IF within scope
 
 **But you must STILL:**
+
 - Pass quality gates for each change
 - Update docs as you go
 - Not manufacture unrelated work
 - Provide periodic status updates if working long
 
 **And you should NOT:**
+
 - Change unrelated systems
 - Violate CONSTRAINTS.md
 - Skip testing
@@ -262,18 +295,21 @@ When user explicitly says:
 ## The Founder Relationship Rule
 
 Remember: The founder is **not** a coder. They trust you to:
+
 1. Solve problems efficiently
 2. Not create new problems
 3. Be honest about tradeoffs
 4. STOP when done (don't waste their time)
 
 **They would rather you:**
+
 - Deliver quickly and move on
 - Ask when uncertain
 - Propose improvements rather than implement them
 - Respect their time and cognitive load
 
 **They do NOT want:**
+
 - Endless iterations
 - Over-engineered solutions
 - Surprise refactors
@@ -284,6 +320,7 @@ Remember: The founder is **not** a coder. They trust you to:
 ## Calibration: What "Done" Looks Like
 
 ### ✅ Good "Done"
+
 ```
 Task: Fix mobile menu bug
 Work done:
@@ -297,6 +334,7 @@ Result: Mobile menu works. Deployed. Move on.
 ```
 
 ### ❌ Bad "Done" (Over-optimization)
+
 ```
 Task: Fix mobile menu bug
 Work done:

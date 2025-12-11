@@ -9,6 +9,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { CommandPaletteProvider } from "@/components/command-palette-provider"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
+import { AnalyticsSessionTracker } from "@/components/analytics-session"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -136,6 +137,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <AnalyticsSessionTracker />
           <CommandPaletteProvider>
             {/* Navbar with full mobile functionality */}
             <Navbar />

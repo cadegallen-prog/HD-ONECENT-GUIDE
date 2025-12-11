@@ -8,6 +8,7 @@ import {
   COMMUNITY_MEMBER_COUNT_DISPLAY,
   FACEBOOK_GROUP_URL,
 } from "@/lib/constants"
+import { ResourcesSupportCtas } from "@/components/resources-support-ctas"
 
 export const metadata: Metadata = {
   title: "Resources | Penny Central",
@@ -129,6 +130,8 @@ export default function ResourcesPage() {
           />
         </Link>
       </section>
+
+      <ResourcesSupportCtas />
     </div>
   )
 }

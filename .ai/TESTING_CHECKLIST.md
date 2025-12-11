@@ -12,19 +12,38 @@
 
 Use this checklist before any `dev` → `main` merge:
 
+### 0. Guardrails & Roles (must confirm before testing)
+
+- Review `.ai/GUARDRAILS.md` (mobile-first, AAA/3:1, touch ≥44px, affiliate anchor rules, dev→main discipline, CI green).
+- Respect role handoffs: Planner → Developer → Auditor → Summarizer (playbooks in `.ai/PLANNER_PLAYBOOK.md`, `.ai/DEVELOPER_PLAYBOOK.md`, `.ai/AUDITOR_PLAYBOOK.md`, `.ai/SUMMARIZER_PLAYBOOK.md`). Dev work does not start without Planner AC + test steps.
+
 ### 1. Build & Lint Validation
+
 ```powershell
 # Must pass with 0 errors, 0 warnings
 npm run build
 npm run lint
 npm run test:unit  # If unit tests exist
+
+# Start server for accessibility checks
+# Preferred (reuse dev): npm run dev (port 3001) and set BASE_URL=http://localhost:3001
+# Alternate: npm run start -- --hostname 0.0.0.0 --port 3000
+
+# Accessibility + visual smoke (requires server running)
+npm run check-contrast  # Uses BASE_URL in package.json (override if using 3001)
+npm run check-axe
+npm run test:e2e  # Playwright visual smoke (artifacts in reports/playwright)
 ```
 
 **Success criteria:**
+
 - ✅ Build: All routes compile successfully
 - ✅ Lint: 0 ESLint warnings
 - ✅ Tests: 100% pass rate (if tests exist)
 - ✅ TypeScript: No type errors
+- ✅ Contrast: `npm run check-contrast` passes
+- ✅ Axe: `npm run check-axe` passes
+- ✅ Playwright: `npm run test:e2e` passes; artifacts written to `reports/playwright/`
 
 ---
 
@@ -33,6 +52,7 @@ npm run test:unit  # If unit tests exist
 #### 2.1 Desktop Testing (1920×1080)
 
 **Browser: Chrome**
+
 ```
 1. Load http://localhost:3001
 2. Navigate through all main pages:
@@ -54,6 +74,7 @@ npm run test:unit  # If unit tests exist
 ```
 
 **Expected:**
+
 - No console errors
 - All pages load in <3 seconds
 - Navigation smooth
@@ -63,6 +84,7 @@ npm run test:unit  # If unit tests exist
 #### 2.2 Mobile Testing (375×667 - iPhone SE)
 
 **Using Chrome DevTools:**
+
 ```
 1. Open DevTools (F12)
 2. Toggle device toolbar (Ctrl+Shift+M)
@@ -75,6 +97,7 @@ npm run test:unit  # If unit tests exist
 ```
 
 **Expected:**
+
 - No horizontal overflow (except intentional table scroll)
 - Touch targets adequately sized
 - Text readable without zoom
@@ -84,6 +107,7 @@ npm run test:unit  # If unit tests exist
 #### 2.3 Tablet Testing (768×1024 - iPad)
 
 **Using Chrome DevTools:**
+
 ```
 1. Select "iPad" preset
 2. Test landscape and portrait
@@ -97,17 +121,18 @@ npm run test:unit  # If unit tests exist
 
 Test at specific widths to catch breakpoint issues:
 
-| Width | Device Class | Key Checks                           |
-|-------|--------------|--------------------------------------|
-| 320px | Small phone  | Content visible, no overflow         |
-| 375px | iPhone SE    | Most common mobile, all features work|
-| 414px | Large phone  | Comfortable reading                  |
-| 768px | Tablet       | Layout transitions correctly         |
-| 1024px| Small laptop | Desktop layout starts                |
-| 1280px| Laptop       | Optimal desktop experience           |
-| 1920px| Desktop      | No excessive whitespace              |
+| Width  | Device Class | Key Checks                            |
+| ------ | ------------ | ------------------------------------- |
+| 320px  | Small phone  | Content visible, no overflow          |
+| 375px  | iPhone SE    | Most common mobile, all features work |
+| 414px  | Large phone  | Comfortable reading                   |
+| 768px  | Tablet       | Layout transitions correctly          |
+| 1024px | Small laptop | Desktop layout starts                 |
+| 1280px | Laptop       | Optimal desktop experience            |
+| 1920px | Desktop      | No excessive whitespace               |
 
 **How to test:**
+
 ```typescript
 // Use Chrome DevTools MCP
 chr_new_page({ url: "http://localhost:3001" })
@@ -134,6 +159,7 @@ chr_list_network_requests()
 ```
 
 **Check for:**
+
 - Loading states visible
 - No layout shift as content loads
 - Images use correct sizes (no 4K images on mobile)
@@ -150,6 +176,7 @@ chr_emulate({ networkConditions: "Fast 3G" })
 ```
 
 **Expected:**
+
 - Page interactive in <5 seconds
 - No blocking resources
 - Progressive enhancement working
@@ -161,6 +188,7 @@ chr_emulate({ networkConditions: "Fast 3G" })
 #### 5.1 Keyboard Navigation
 
 **Manual test:**
+
 ```
 1. Tab through entire page (no mouse)
 2. Verify focus indicator visible on ALL elements
@@ -171,6 +199,7 @@ chr_emulate({ networkConditions: "Fast 3G" })
 ```
 
 **Success criteria:**
+
 - All interactive elements reachable via keyboard
 - Focus indicator WCAG AAA compliant (3:1 contrast)
 - No focus traps
@@ -179,6 +208,7 @@ chr_emulate({ networkConditions: "Fast 3G" })
 #### 5.2 Screen Reader Testing
 
 **Windows + NVDA (free):**
+
 ```
 1. Install NVDA screen reader
 2. Navigate site with screen reader on
@@ -192,6 +222,7 @@ chr_emulate({ networkConditions: "Fast 3G" })
 ```
 
 **Success criteria:**
+
 - All images have descriptive alt text (or role="presentation" if decorative)
 - Links describe destination ("Learn about penny items", not "Click here")
 - Form fields have labels
@@ -201,6 +232,7 @@ chr_emulate({ networkConditions: "Fast 3G" })
 #### 5.3 Color Contrast
 
 **Manual check:**
+
 ```
 1. Open page in light mode
 2. Verify all text meets WCAG AAA (7:1 normal, 4.5:1 large)
@@ -212,6 +244,7 @@ chr_emulate({ networkConditions: "Fast 3G" })
 **Use browser extension:** "WCAG Color Contrast Checker"
 
 **Expected:**
+
 - All text passes WCAG AAA
 - Focus indicators pass WCAG AA (3:1)
 - UI components pass WCAG AA (3:1)
@@ -221,27 +254,32 @@ chr_emulate({ networkConditions: "Fast 3G" })
 ### 6. Cross-Browser Testing
 
 #### 6.1 Chrome (Primary)
+
 - Latest version
 - Most users use this
 - Test all features here first
 
 #### 6.2 Firefox
+
 - Latest version
 - Test CSS Grid/Flexbox edge cases
 - Verify font rendering
 
 #### 6.3 Safari (macOS/iOS)
+
 - Latest version
 - Test webkit-specific CSS
 - Verify date inputs work
 - Check -webkit-line-clamp
 
 #### 6.4 Edge
+
 - Latest version
 - Usually same as Chrome
 - Quick sanity check
 
 **Testing priority:**
+
 1. Chrome (80% of users)
 2. Safari (15% of users)
 3. Firefox (3% of users)
@@ -252,6 +290,7 @@ chr_emulate({ networkConditions: "Fast 3G" })
 ### 7. Core Web Vitals Testing
 
 **Manual Lighthouse audit:**
+
 ```powershell
 # Run production build locally
 npm run build
@@ -263,22 +302,23 @@ npm start  # If start script exists, else deploy to Vercel
 
 **Target scores:**
 
-| Metric | Target | Critical |
-|--------|--------|----------|
-| Performance | 90+ | 80+ |
-| Accessibility | 100 | 95+ |
-| Best Practices | 100 | 95+ |
-| SEO | 100 | 95+ |
+| Metric         | Target | Critical |
+| -------------- | ------ | -------- |
+| Performance    | 90+    | 80+      |
+| Accessibility  | 100    | 95+      |
+| Best Practices | 100    | 95+      |
+| SEO            | 100    | 95+      |
 
 **Core Web Vitals:**
 
-| Metric | Target | Critical |
-|--------|--------|----------|
-| LCP (Largest Contentful Paint) | <2.5s | <4.0s |
-| FID (First Input Delay) | <100ms | <300ms |
-| CLS (Cumulative Layout Shift) | <0.1 | <0.25 |
+| Metric                         | Target | Critical |
+| ------------------------------ | ------ | -------- |
+| LCP (Largest Contentful Paint) | <2.5s  | <4.0s    |
+| FID (First Input Delay)        | <100ms | <300ms   |
+| CLS (Cumulative Layout Shift)  | <0.1   | <0.25    |
 
 **If scores drop:**
+
 - Identify regression in Lighthouse report
 - Check network tab for slow resources
 - Verify images optimized
@@ -291,6 +331,7 @@ npm start  # If start script exists, else deploy to Vercel
 #### 8.1 Penny List Table/Cards
 
 **Test scenarios:**
+
 ```
 1. Load /penny-list
 2. Verify data loads (check for 50+ items)
@@ -312,6 +353,7 @@ npm start  # If start script exists, else deploy to Vercel
 ```
 
 **Expected behavior:**
+
 - Sorting instant (<100ms perceived)
 - Filtering instant
 - Copy button works reliably
@@ -321,6 +363,7 @@ npm start  # If start script exists, else deploy to Vercel
 #### 8.2 Store Finder Map
 
 **Test scenarios:**
+
 ```
 1. Load /store-finder
 2. Verify map renders with markers
@@ -341,6 +384,7 @@ npm start  # If start script exists, else deploy to Vercel
 ```
 
 **Expected behavior:**
+
 - Map loads in <3 seconds
 - Search geocodes correctly
 - Markers cluster at low zoom
@@ -350,6 +394,7 @@ npm start  # If start script exists, else deploy to Vercel
 #### 8.3 Theme Toggle
 
 **Test scenarios:**
+
 ```
 1. Load site (default theme)
 2. Click theme toggle
@@ -366,6 +411,7 @@ npm start  # If start script exists, else deploy to Vercel
 ```
 
 **Expected behavior:**
+
 - Toggle instant (<50ms)
 - No layout shift
 - Theme persists across pages
@@ -374,6 +420,7 @@ npm start  # If start script exists, else deploy to Vercel
 #### 8.4 Affiliate Links (BeFrugal)
 
 **Test scenarios:**
+
 ```
 1. Navigate to /cashback
 2. Click "Activate Cashback" button
@@ -391,6 +438,7 @@ npm start  # If start script exists, else deploy to Vercel
 ```
 
 **Expected behavior:**
+
 - Link opens in new tab
 - URL: /go/befrugal with proper redirect
 - No CORS errors (link is <a>, not fetch)
@@ -404,11 +452,13 @@ npm start  # If start script exists, else deploy to Vercel
 #### 9.1 Penny List Data Quality
 
 **Run unit tests:**
+
 ```powershell
 npm run test:unit
 ```
 
 **Manual spot checks:**
+
 ```
 1. Load penny list
 2. Check first 10 items:
@@ -423,6 +473,7 @@ npm run test:unit
 ```
 
 **Expected:**
+
 - All dates formatted correctly ("2 days ago", "3 weeks ago")
 - No "NaN" or "undefined" displayed
 - Freshness badges accurate (24h = "Hot", 7d = "Fresh", 30d = "Active")
@@ -430,6 +481,7 @@ npm run test:unit
 #### 9.2 Store Data Quality
 
 **Spot checks:**
+
 ```
 1. Open /store-finder
 2. Search for known store (e.g., "Hollywood")
@@ -451,6 +503,7 @@ npm run test:unit
 #### 10.1 Network Errors
 
 **Simulate offline:**
+
 ```typescript
 // Using Chrome DevTools
 chr_emulate({ networkConditions: "Offline" })
@@ -458,6 +511,7 @@ chr_navigate_page({ url: "http://localhost:3001/penny-list" })
 ```
 
 **Expected:**
+
 - Graceful error message ("Unable to load data")
 - No crash or blank screen
 - Retry option available
@@ -465,6 +519,7 @@ chr_navigate_page({ url: "http://localhost:3001/penny-list" })
 #### 10.2 Invalid URLs
 
 **Test:**
+
 ```
 1. Navigate to /nonexistent-page
 2. Verify 404 page renders
@@ -477,6 +532,7 @@ chr_navigate_page({ url: "http://localhost:3001/penny-list" })
 #### 10.3 Form Validation
 
 **Test:**
+
 ```
 1. Find any form (e.g., report submission)
 2. Submit empty form
@@ -498,6 +554,7 @@ chr_navigate_page({ url: "http://localhost:3001/penny-list" })
 ### 11. SEO & Meta Tags Testing
 
 **Manual checks:**
+
 ```
 1. View page source (Ctrl+U)
 2. Verify present:
@@ -512,6 +569,7 @@ chr_navigate_page({ url: "http://localhost:3001/penny-list" })
 ```
 
 **Tools:**
+
 - Facebook Sharing Debugger
 - Twitter Card Validator
 - LinkedIn Post Inspector
@@ -523,6 +581,7 @@ chr_navigate_page({ url: "http://localhost:3001/penny-list" })
 After merging `dev` → `main` and deploying to Vercel:
 
 **Deployment checks:**
+
 ```
 1. Visit https://pennycentral.com
 2. Verify changes live
@@ -539,6 +598,7 @@ After merging `dev` → `main` and deploying to Vercel:
 ```
 
 **Rollback procedure if broken:**
+
 ```
 1. Go to Vercel dashboard
 2. Find previous successful deployment
@@ -553,14 +613,14 @@ After merging `dev` → `main` and deploying to Vercel:
 
 **After any change to:**
 
-| Component Changed | Test These Areas                              |
-|-------------------|-----------------------------------------------|
-| globals.css       | All pages (colors, typography, layout)        |
-| layout.tsx        | Navigation, theme, fonts on all pages         |
-| navbar.tsx        | Navigation menu, mobile menu, theme toggle    |
-| penny-list-*.tsx  | Penny list table, cards, sorting, filtering   |
-| store-map.tsx     | Store finder map, search, markers             |
-| constants.ts      | Any component using changed constant          |
+| Component Changed | Test These Areas                            |
+| ----------------- | ------------------------------------------- |
+| globals.css       | All pages (colors, typography, layout)      |
+| layout.tsx        | Navigation, theme, fonts on all pages       |
+| navbar.tsx        | Navigation menu, mobile menu, theme toggle  |
+| penny-list-\*.tsx | Penny list table, cards, sorting, filtering |
+| store-map.tsx     | Store finder map, search, markers           |
+| constants.ts      | Any component using changed constant        |
 
 **Principle:** If you change a shared file, test all consumers.
 
@@ -571,18 +631,21 @@ After merging `dev` → `main` and deploying to Vercel:
 ### Baseline Metrics (Record After Each Major Change)
 
 **Desktop (1920×1080, Fast WiFi):**
-- Home page load: _____ms
-- Penny list load: _____ms
-- Store finder load: _____ms
-- Lighthouse Performance: ____/100
+
+- Home page load: **\_**ms
+- Penny list load: **\_**ms
+- Store finder load: **\_**ms
+- Lighthouse Performance: \_\_\_\_/100
 
 **Mobile (iPhone SE, Fast 3G):**
-- Home page load: _____ms
-- Penny list load: _____ms
-- Store finder load: _____ms
-- Lighthouse Performance: ____/100
+
+- Home page load: **\_**ms
+- Penny list load: **\_**ms
+- Store finder load: **\_**ms
+- Lighthouse Performance: \_\_\_\_/100
 
 **How to measure:**
+
 ```
 1. Open DevTools → Network tab
 2. Enable throttling (if testing mobile)
@@ -592,6 +655,7 @@ After merging `dev` → `main` and deploying to Vercel:
 ```
 
 **Compare against baseline:**
+
 - Performance regression >10%: Investigate before merging
 - Performance improvement: Celebrate and document
 
@@ -602,6 +666,7 @@ After merging `dev` → `main` and deploying to Vercel:
 **Since automated visual regression testing not available, use manual checklist:**
 
 ### Before Change (Screenshots)
+
 ```
 1. Take screenshots of affected pages:
    - Full page (scroll capture)
@@ -612,6 +677,7 @@ After merging `dev` → `main` and deploying to Vercel:
 ```
 
 ### After Change (Comparison)
+
 ```
 1. Take same screenshots
 2. Compare side-by-side:
@@ -624,6 +690,7 @@ After merging `dev` → `main` and deploying to Vercel:
 ```
 
 **Tools:**
+
 - Windows Snipping Tool
 - Chrome Full Page Screenshot extension
 - Manual side-by-side in image viewer
@@ -633,13 +700,15 @@ After merging `dev` → `main` and deploying to Vercel:
 ## Automated Testing Future
 
 **When to add automated tests:**
+
 - Critical user flows (penny list, store finder)
 - Complex logic (data validation, filtering)
 - Frequently broken areas
 - Before major refactors
 
 **Test types to consider:**
-- Unit tests (lib/*, existing pattern)
+
+- Unit tests (lib/\*, existing pattern)
 - Integration tests (Playwright, existing setup)
 - Visual regression (Percy, Chromatic — if budget allows)
 - Performance tests (Lighthouse CI)
@@ -685,30 +754,37 @@ After merging `dev` → `main` and deploying to Vercel:
 ## Testing Anti-Patterns (What NOT to Do)
 
 ❌ **Skip build verification**
+
 - Always run `npm run build` before declaring done
 - Catches TypeScript errors dev mode misses
 
 ❌ **Test only desktop**
+
 - Mobile is 60%+ of traffic
 - Test mobile-first
 
 ❌ **Assume dark mode works**
+
 - Dark mode color variables can differ
 - Test both modes explicitly
 
 ❌ **Ignore console errors**
+
 - Every console.error is a bug
 - Fix warnings before they become errors
 
 ❌ **Test only happy path**
+
 - Edge cases break first
 - Test empty states, errors, extreme values
 
 ❌ **Change multiple things at once**
+
 - Hard to identify what broke
 - Make small, testable changes
 
 ❌ **Trust localhost === production**
+
 - Production has different caching, CDN, env vars
 - Always verify on live site after deploy
 
@@ -717,22 +793,26 @@ After merging `dev` → `main` and deploying to Vercel:
 ## Appendix: Testing Tools Reference
 
 ### Built-in Tools
+
 - **npm scripts**: `build`, `lint`, `test:unit`
 - **TypeScript compiler**: Type checking
 - **ESLint**: Code quality
 - **Prettier**: Code formatting
 
 ### Browser Tools
+
 - **Chrome DevTools**: Network, Performance, Lighthouse
 - **Firefox Developer Tools**: CSS Grid inspector
 - **Safari Web Inspector**: Webkit-specific debugging
 
 ### MCP Tools (Available via ChatGPT CodeX)
+
 - **chrome-devtools MCP**: Automated browser testing
 - **pylance MCP**: Python script validation
 - **git MCP**: Version control checks
 
 ### External Tools (Optional)
+
 - **NVDA**: Free screen reader (Windows)
 - **WAVE**: Browser extension for accessibility
 - **Lighthouse CI**: Automated performance tracking

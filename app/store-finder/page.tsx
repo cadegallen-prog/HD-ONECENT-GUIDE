@@ -377,12 +377,15 @@ export default function StoreFinderPage() {
   const handleSearch = useCallback(async () => {
     const storesSource = await ensureStoresLoaded()
     const trimmedQuery = searchQuery.trim()
+    let queryType: "zip" | "city" | "state" | "other" | "none" = "none"
 
     // Track search events (only when there's a query)
     if (trimmedQuery) {
-      trackEvent("store_search", {
-        event_label: trimmedQuery.length <= 5 ? "zip_or_store" : "city_or_address",
-      })
+      queryType = /^\d{3,5}$/.test(trimmedQuery)
+        ? "zip"
+        : STATE_ABBREV_MAP[trimmedQuery.toLowerCase()]
+          ? "state"
+          : "city"
     }
 
     if (!trimmedQuery) {
@@ -392,6 +395,10 @@ export default function StoreFinderPage() {
       if (initialStores.length > 0) {
         setSelectedStore(initialStores[0])
       }
+      trackEvent("store_finder_search", {
+        queryType,
+        hasResults: initialStores.length > 0,
+      })
       return
     }
 
@@ -404,6 +411,10 @@ export default function StoreFinderPage() {
         setDisplayedStores(closestStores)
         setMapCenter([lat, lng])
         setSelectedStore(closestStores[0] || null)
+        trackEvent("store_finder_search", {
+          queryType: "other",
+          hasResults: closestStores.length > 0,
+        })
       }
       return
     }
@@ -420,6 +431,10 @@ export default function StoreFinderPage() {
         setDisplayedStores(closestStores)
         setMapCenter([matchedStore.lat, matchedStore.lng])
         setSelectedStore(closestStores[0] || matchedStore)
+        trackEvent("store_finder_search", {
+          queryType: "zip",
+          hasResults: closestStores.length > 0,
+        })
         return
       }
     }
@@ -437,6 +452,10 @@ export default function StoreFinderPage() {
         setDisplayedStores(closestStores)
         setMapCenter([centerStore.lat, centerStore.lng])
         setSelectedStore(closestStores[0] || centerStore)
+        trackEvent("store_finder_search", {
+          queryType: "zip",
+          hasResults: closestStores.length > 0,
+        })
         return
       }
 
@@ -455,6 +474,10 @@ export default function StoreFinderPage() {
               setDisplayedStores(closestStores)
               setMapCenter([lat, lng])
               setSelectedStore(closestStores[0] || null)
+              trackEvent("store_finder_search", {
+                queryType: "zip",
+                hasResults: closestStores.length > 0,
+              })
               return
             }
           }
@@ -476,16 +499,22 @@ export default function StoreFinderPage() {
             setDisplayedStores(closestStores)
             setMapCenter([lat, lng])
             setSelectedStore(closestStores[0] || null)
+            trackEvent("store_finder_search", {
+              queryType: "zip",
+              hasResults: closestStores.length > 0,
+            })
           } else {
             // ZIP not found via any geocoding - show no results
             setDisplayedStores([])
             setSelectedStore(null)
+            trackEvent("store_finder_search", { queryType: "zip", hasResults: false })
           }
         } catch (error) {
           console.error("Geocoding error:", error)
           // Silently fail - user can try city search instead
           setDisplayedStores([])
           setSelectedStore(null)
+          trackEvent("store_finder_search", { queryType: "zip", hasResults: false })
         }
       }
       geocodeZip()
@@ -553,11 +582,19 @@ export default function StoreFinderPage() {
       setDisplayedStores(closestStores)
       setMapCenter([centerPoint.lat, centerPoint.lng])
       setSelectedStore(closestStores[0] || null)
+      trackEvent("store_finder_search", {
+        queryType: tokens.some((token) => STATE_ABBREV_MAP[token]) ? "state" : "city",
+        hasResults: closestStores.length > 0,
+      })
     } else {
       setDisplayedStores([])
       setSelectedStore(null)
+      trackEvent("store_finder_search", {
+        queryType: tokens.some((token) => STATE_ABBREV_MAP[token]) ? "state" : "city",
+        hasResults: false,
+      })
     }
-  }, [searchQuery, allLoadedStores])
+  }, [allLoadedStores, ensureStoresLoaded, searchQuery])
 
   // Handle search on Enter key
   const handleKeyDown = (e: React.KeyboardEvent) => {

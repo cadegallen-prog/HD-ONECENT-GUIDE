@@ -4,6 +4,48 @@ Brief log of completed work. Most recent at top.
 
 ---
 
+## 2025-12-11 - CTA polish, hover balance, and accessibility checks
+
+Objective: Reduce visual harshness, balance hover lift across CTAs, tighten copy, and ensure analytics/accessibility remain intact.
+
+What changed:
+- Softened hero and card hover states (lighter lift, balanced shadows) across light/dark; adjusted CTA base colors to avoid “feminine blue” feel and bright glare.
+- Toned down Penny List “Submit a Find” / “Subscribe to Alerts” lift; updated CTA copy (coffee = optional tip; BeFrugal = supports at no extra cost).
+- Added data-cta attribute and balanced BeFrugal CTA colors on About page; kept GA tag in `app/layout.tsx` head unchanged.
+
+Testing:
+- `npm run lint` ✅
+- `npm run build` ✅
+- Contrast: `npx cross-env BASE_URL=http://localhost:3001 node scripts/check-contrast.js` ✅
+- Axe: `npx @axe-core/cli http://localhost:3001 --save reports/axe-report.json --exit` ✅
+
+---
+
+## 2025-12-10 - Dark Mode Readability Remediation (in progress)
+
+Objective: Reduce eye strain in dark mode and tighten WCAG conformance on the Penny List page.
+
+What changed:
+
+- Updated dark palette to #121212 base with tonal elevations through #3A3A3A.
+- Raised border contrast to >=3:1 on base and cards; text remains AAA.
+- Enforced minimum font weight 400 in dark mode; body line height increased to 1.7.
+- Penny list cards now use elevation tokens and corrected status color binding.
+- Design system doc realigned to the new dark palette; elevation guide refreshed.
+
+Evidence (measured):
+
+- Text primary: 13.6:1 on #121212, 12.7:1 on #1A1A1A.
+- Borders: 3.5–4.7:1 on base, 3.3–4.4:1 on cards.
+- CTA primary: 7.4:1 on base; status success: 10.8:1 on base.
+
+Testing:
+
+- `npm run build` ✅
+- `npm run lint` ✅
+
+---
+
 ## 2025-12-10 - MCP Documentation & Testing Infrastructure
 
 **Objective:** Create comprehensive documentation for all MCP servers, auto-loading mechanisms, testing procedures, and stopping rules to maximize future agent productivity.
