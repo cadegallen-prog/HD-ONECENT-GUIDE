@@ -481,24 +481,24 @@
 
   .card-interactive {
     transition:
-      box-shadow var(--duration-normal) var(--ease-default),
-      border-color var(--duration-normal) var(--ease-default),
-      background-color var(--duration-normal) var(--ease-default),
-      transform var(--duration-normal) var(--ease-default);
+      box-shadow var(--duration-fast) var(--ease-default),
+      border-color var(--duration-fast) var(--ease-default),
+      background-color var(--duration-fast) var(--ease-default),
+      transform var(--duration-fast) var(--ease-default);
     cursor: pointer;
   }
 
   .card-interactive:hover {
-    box-shadow: var(--shadow-card-hover);
-    border-color: var(--cta-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    border-color: var(--border-strong);
     background-color: var(--bg-elevated);
-    transform: translateY(-2px);
+    transform: translateY(-1px);
   }
 
   .dark .card-interactive:hover {
-    border-color: var(--cta-primary);
+    border-color: var(--border-strong);
     background-color: var(--bg-hover);
-    transform: translateY(-2px);
+    transform: translateY(-1px);
   }
 
   .card-interactive:focus-visible {

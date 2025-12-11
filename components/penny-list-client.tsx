@@ -593,7 +593,7 @@ export function PennyListClient({
             href={SUBMIT_FIND_FORM_URL}
             eventName="find_submit"
             eventParams={{ location: "penny-list" }}
-            className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-lg bg-[var(--cta-hover)] text-[var(--cta-text)] font-medium transition-all duration-150 hover:bg-[var(--cta-active)] hover:-translate-y-0.5 hover:shadow-card-hover active:translate-y-0 active:shadow-button focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] min-h-[44px]"
+            className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-lg bg-[var(--cta-hover)] text-[var(--cta-text)] font-medium transition-all duration-120 hover:bg-[var(--cta-active)] hover:-translate-y-[1px] hover:shadow-card-hover active:translate-y-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] min-h-[44px]"
             aria-label="Submit a penny find to the community"
           >
             Submit a Find
@@ -616,7 +616,7 @@ export function PennyListClient({
             rel="noopener noreferrer"
             eventName="newsletter_click"
             eventParams={{ location: "penny-list" }}
-            className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-lg bg-[var(--cta-hover)] text-[var(--cta-text)] font-medium transition-all duration-150 hover:bg-[var(--cta-active)] hover:-translate-y-0.5 hover:shadow-card-hover active:translate-y-0 active:shadow-button focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] min-h-[44px]"
+            className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-lg bg-[var(--cta-hover)] text-[var(--cta-text)] font-medium transition-all duration-120 hover:bg-[var(--cta-active)] hover:-translate-y-[1px] hover:shadow-card-hover active:translate-y-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] min-h-[44px]"
             aria-label="Subscribe to weekly penny alerts newsletter"
           >
             Subscribe to Alerts
