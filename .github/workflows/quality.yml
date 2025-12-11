@@ -26,23 +26,27 @@ jobs:
         run: npm run build
 
       - name: Start server
+        env:
+          PORT: 3001
         run: |
-          npm run start -- --hostname 0.0.0.0 --port 3000 >/tmp/next.log 2>&1 &
+          npm run start -- --hostname 0.0.0.0 --port $PORT >/tmp/next.log 2>&1 &
           for i in {1..20}; do
-            if curl -fsS http://localhost:3000 >/dev/null; then
+            if curl -fsS http://localhost:$PORT >/dev/null; then
               echo "Server is up"
               break
             fi
             sleep 2
           done
+          echo "Server log tail:"
+          tail -n 20 /tmp/next.log
 
       - name: Contrast check
         env:
-          BASE_URL: http://localhost:3000
+          BASE_URL: http://localhost:3001
         run: npm run check-contrast
 
       - name: Axe check
-        run: npm run check-axe
+        run: npx @axe-core/cli http://localhost:3001 --save reports/axe-report.json --exit
 
       - name: Upload reports
         uses: actions/upload-artifact@v4
