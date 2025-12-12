@@ -14,6 +14,7 @@ export const metadata: Metadata = {
 export default async function PennyListPage() {
   const pennyItems = await getPennyList()
 
+  const NEWSLETTER_VISIBLE = false
   const RECENT_WINDOW_DAYS = 30
   const HOT_WINDOW_DAYS = 14
   const today = new Date()
@@ -271,7 +272,11 @@ export default async function PennyListPage() {
           </div>
 
           {/* Call to Action Section */}
-          <div className="mt-16 grid md:grid-cols-2 gap-8">
+          <div
+            className={`mt-16 grid ${
+              NEWSLETTER_VISIBLE ? "md:grid-cols-2" : "md:grid-cols-1"
+            } gap-8`}
+          >
             {/* Submit a Find */}
             <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl p-6 sm:p-8">
               <h3 className="text-xl font-bold text-[var(--text-primary)] mb-2">
@@ -292,26 +297,28 @@ export default async function PennyListPage() {
             </div>
 
             {/* Newsletter */}
-            <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl p-6 sm:p-8">
-              <h3 className="text-xl font-bold text-[var(--text-primary)] mb-2">
-                Get Penny Alerts
-              </h3>
-              <p className="text-[var(--text-secondary)] mb-6">
-                Don't miss out. Get the weekly list of confirmed penny items delivered to your
-                inbox.
-              </p>
-              <a
-                href={NEWSLETTER_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-lg bg-[var(--text-primary)] text-[var(--bg-page)] font-medium hover:opacity-90 transition-opacity"
-              >
-                Subscribe to Alerts
-              </a>
-              <p className="text-xs text-[var(--text-muted)] mt-3">
-                We respect your inbox. No spam, ever.
-              </p>
-            </div>
+            {NEWSLETTER_VISIBLE && (
+              <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl p-6 sm:p-8">
+                <h3 className="text-xl font-bold text-[var(--text-primary)] mb-2">
+                  Get Penny Alerts
+                </h3>
+                <p className="text-[var(--text-secondary)] mb-6">
+                  Don't miss out. Get the weekly list of confirmed penny items delivered to your
+                  inbox.
+                </p>
+                <a
+                  href={NEWSLETTER_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-lg bg-[var(--text-primary)] text-[var(--bg-page)] font-medium hover:opacity-90 transition-opacity"
+                >
+                  Subscribe to Alerts
+                </a>
+                <p className="text-xs text-[var(--text-muted)] mt-3">
+                  We respect your inbox. No spam, ever.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </section>
