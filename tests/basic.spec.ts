@@ -13,5 +13,9 @@ test('navbar shows Report a Find link after hydration', async ({ page }) => {
     await page.getByRole('button', { name: /toggle menu/i }).click();
   }
 
-  await expect(page.getByRole('link', { name: 'Report a Find' })).toBeVisible();
+  const reportLink = page
+    .getByRole('navigation')
+    .getByRole('link', { name: 'Report a Find' })
+    .first();
+  await expect(reportLink).toBeVisible();
 });

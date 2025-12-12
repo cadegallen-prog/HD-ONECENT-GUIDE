@@ -119,16 +119,15 @@ public/                 # Static assets
 
 ## Branch Strategy
 
-- **`main`** - Production branch. Live on Vercel. Protected.
-- **`dev-next`** - Development branch. All feature work happens here. Merged to main when ready.
+- **`main`** — the only branch used locally and on remote. Every push deploys to Vercel.
 
 **Workflow:**
 
-1. Work on `dev-next`
-2. Commit + lint/build check
-3. Merge `dev-next → main` when stable
-4. Push main to remote (auto-deploys to Vercel)
-5. Continue on `dev-next`
+1. Pull latest `main`
+2. Make changes on `main`
+3. Run `npm run lint` and `npm run build`
+4. Commit to `main` with a clear message
+5. Push `main` to deploy
 
 ---
 

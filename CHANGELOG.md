@@ -4,6 +4,21 @@ Brief log of completed work. Most recent at top.
 
 ---
 
+## 2025-12-12 - Penny List rescue, validation hardening, thumbnails, main-only workflow
+
+Objective: Make Penny List + Report Find a cohesive, trustworthy core product, tighten data quality, refresh visual system, and simplify deployment to main-only.
+
+What changed:
+- Phase A: Added shared SKU validation (`lib/sku.ts`) with 6/9/10-digit rules, garbage/repeating-pattern rejection, server honeypot + rate limiting in `app/api/submit-find/route.ts`, improved client inline SKU errors in `app/report-find/page.tsx`, simplified Penny List copy and reduced disclaimers, removed Penny Alerts UI, and improved scan UX.
+- Phase B: Refreshed light palette to neutral zinc scale in `app/globals.css`, replaced logo with clean “PennyCentral” wordmark in `components/navbar.tsx`, made Penny List the first nav/home CTA, and updated footer links.
+- Phase C: Added thumbnails (existing photo URLs + consistent placeholder) to Penny List cards/table, added “Has photo” filter, and created SEO-friendly SKU detail pages at `/sku/[sku]` linked from the list.
+
+Testing:
+- `npm run lint` ✅
+- `npm run build` ✅
+
+---
+
 ## 2025-12-11 - CTA polish, hover balance, and accessibility checks
 
 Objective: Reduce visual harshness, balance hover lift across CTAs, tighten copy, and ensure analytics/accessibility remain intact.

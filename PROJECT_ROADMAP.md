@@ -102,7 +102,7 @@ Agents: keep this file short and useful. Update it when you actually finish or s
 - Documentation alignment (consolidating agent instruction files) ✅ Done Dec 6
 - Map popup UX improvements ✅ Done Dec 6
 - **Autonomous Penny List System** ✅ **Done Dec 7** — Live, tested, documented
-- Branch strategy (main + dev-next) ✅ **Done Dec 7** — Clean separation for ongoing development
+- Branch strategy simplified to main-only ✅ **Done Dec 12** — Single-branch workflow for stability and deploy clarity
 - **Penny List Phase 1 UI Polish** ✅ **Done Dec 10** — Enhanced table/card readability, improved contrast, mobile scroll hints, comprehensive test coverage
 - **MCP Documentation & Testing Infrastructure** ✅ **Done Dec 10** — Comprehensive documentation of all 6 MCP servers, testing checklist, and stopping rules to maximize future agent productivity
 
