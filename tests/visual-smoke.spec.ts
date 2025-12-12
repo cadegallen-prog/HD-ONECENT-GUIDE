@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test"
 
-const paths = ["/", "/penny-list", "/store-finder", "/about"]
+const paths = ["/", "/penny-list", "/report-find", "/store-finder", "/about"]
 const FIXED_NOW = new Date("2025-12-10T12:00:00Z").getTime()
 
 test.describe("visual smoke (light/dark, mobile/desktop)", () => {
