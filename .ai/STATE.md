@@ -12,6 +12,7 @@ Every AI session must update this after meaningful work.
 - **Phase:** Stabilization + Community Intake
 - **Traffic reality:** early launch volatility is normal; focus on retention loop first.
 - Foundation Contract added at `.ai/FOUNDATION_CONTRACT.md` (tokens/Tailwind/layout/nav/gates) and `ROUTE-TREE.txt` refreshed (includes framework 404).
+- Color drift ratchet in place: `npm run lint:colors` compares against `checks/lint-colors.baseline.json` (47 warnings baseline) and fails if count rises.
 
 ---
 

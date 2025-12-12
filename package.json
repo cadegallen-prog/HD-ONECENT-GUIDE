@@ -9,6 +9,7 @@
     "start": "next start -p 3001",
     "lint": "eslint app components lib --ext .ts,.tsx --max-warnings=0",
     "lint:colors": "npx tsx scripts/lint-colors.ts",
+    "lint:colors:update-baseline": "npx tsx scripts/lint-colors.ts --update-baseline",
     "export": "next build && next export",
     "test:e2e": "playwright test",
     "test:unit": "npx tsx --test tests/**/*.test.ts",

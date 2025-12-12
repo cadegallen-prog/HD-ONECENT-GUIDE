@@ -12,6 +12,10 @@
 import * as fs from "fs"
 import * as path from "path"
 
+const rootDir = process.cwd()
+const baselinePath = path.join(rootDir, "checks", "lint-colors.baseline.json")
+const updateBaseline = process.argv.includes("--update-baseline")
+
 // Allowed CSS variable patterns (from design system)
 const ALLOWED_PATTERNS = [
   /var\(--[\w-]+\)/, // CSS variables
@@ -180,7 +184,6 @@ function findTsxFiles(dir: string): string[] {
 }
 
 function main() {
-  const rootDir = process.cwd()
   const appDir = path.join(rootDir, "app")
   const componentsDir = path.join(rootDir, "components")
 
@@ -225,16 +228,64 @@ function main() {
   console.log("════════════════════════════════════════")
   console.log(`Errors: ${errors.length} | Warnings: ${warnings.length}`)
 
+  // Summaries for baseline comparison
+  const summary = {
+    generatedAt: new Date().toISOString(),
+    errorsCount: errors.length,
+    warningsCount: warnings.length,
+    warnings: warnings.map((v) => ({
+      file: path.relative(rootDir, v.file),
+      line: v.line,
+      column: v.column,
+      match: v.match,
+      reason: v.reason,
+    })),
+  }
+
   if (errors.length === 0 && warnings.length === 0) {
     console.log("✅ All colors comply with design system!\n")
     process.exit(0)
-  } else if (errors.length > 0) {
+  }
+
+  if (errors.length > 0) {
     console.log("❌ Fix errors before deploying.\n")
+    if (updateBaseline) {
+      console.log("Baseline not updated because errors are present.")
+    }
     process.exit(1)
-  } else {
-    console.log("⚠️  Review warnings when possible.\n")
+  }
+
+  if (updateBaseline) {
+    fs.mkdirSync(path.dirname(baselinePath), { recursive: true })
+    fs.writeFileSync(baselinePath, JSON.stringify(summary, null, 2))
+    console.log(`📌 Baseline updated at ${path.relative(rootDir, baselinePath)} with ${warnings.length} warnings.`)
     process.exit(0)
   }
+
+  if (!fs.existsSync(baselinePath)) {
+    console.error(`❌ Baseline missing at ${path.relative(rootDir, baselinePath)}. Run "npm run lint:colors:update-baseline" to create it.`)
+    process.exit(1)
+  }
+
+  const baseline = JSON.parse(fs.readFileSync(baselinePath, "utf8"))
+  const baselineWarnings = baseline.warningsCount ?? (Array.isArray(baseline.warnings) ? baseline.warnings.length : 0)
+
+  if (warnings.length > baselineWarnings) {
+    console.error(
+      `❌ Color drift detected: warnings increased from ${baselineWarnings} to ${warnings.length}. Fix new raw colors or intentionally update the baseline.`
+    )
+    process.exit(1)
+  }
+
+  if (warnings.length < baselineWarnings) {
+    console.log(
+      `✅ Warning count reduced from baseline (${baselineWarnings} -> ${warnings.length}). Consider updating the baseline once verified.`
+    )
+  } else {
+    console.log("⚠️  Warnings match baseline; no new drift detected.")
+  }
+
+  process.exit(0)
 }
 
 main()

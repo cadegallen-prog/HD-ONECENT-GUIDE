@@ -16,6 +16,9 @@ export default defineConfig([
       prettier: eslintPluginPrettier,
     },
     rules: {
+      // Hard stop on duplicate JSX props and object keys (metadata/config safety)
+      "react/jsx-no-duplicate-props": "error",
+      "no-dupe-keys": "error",
       "react/react-in-jsx-scope": "off",
       "react/no-unescaped-entities": "off",
       "react/prop-types": "off",

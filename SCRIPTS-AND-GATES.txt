@@ -11,6 +11,7 @@ Core gates (required before pushing to `main`)
 - Lint: `npm run lint`
 - Unit tests: `npm run test:unit`
 - E2E tests: `npm run test:e2e`
+- Color drift ratchet: `npm run lint:colors` (fails if warnings exceed baseline in `checks/lint-colors.baseline.json`; update baseline intentionally via `npm run lint:colors:update-baseline` after reviewing changes)
 
 ---
 
@@ -33,6 +34,7 @@ Examples (PowerShell):
 - `$env:BASE_URL='http://localhost:3001'; pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/run-audit.ps1`
 
 If `BASE_URL` is not set, the audit scripts infer the port from `package.json` (`scripts.dev` / `scripts.start`).
+`scripts/check-contrast.js` and `scripts/check-axe.js` both use `scripts/get-base-url.js` for this resolution.
 
 ---
 
@@ -46,4 +48,3 @@ These require a server running at `BASE_URL` (typically `npm run dev` in a separ
   - Output: `reports/contrast-computed.json`
 - Lighthouse (JSON audits): `pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/run-audit.ps1`
   - Output: `test-results/lighthouse-*-mobile.json`, `test-results/lighthouse-*-desktop.json`
-

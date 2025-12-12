@@ -1,0 +1,336 @@
+{
+  "generatedAt": "2025-12-12T23:56:54.386Z",
+  "errorsCount": 0,
+  "warningsCount": 47,
+  "warnings": [
+    {
+      "file": "app\\about\\page.tsx",
+      "line": 267,
+      "column": 68,
+      "match": "text-blue-400",
+      "reason": "Use text-[--cta-primary] for links"
+    },
+    {
+      "file": "app\\admin\\dashboard\\page.tsx",
+      "line": 285,
+      "column": 31,
+      "match": "bg-blue-50",
+      "reason": "Use bg-cta-primary for CTAs, stone for neutrals"
+    },
+    {
+      "file": "app\\admin\\dashboard\\page.tsx",
+      "line": 286,
+      "column": 46,
+      "match": "text-blue-600",
+      "reason": "Use text-[--cta-primary] for links"
+    },
+    {
+      "file": "app\\admin\\dashboard\\page.tsx",
+      "line": 287,
+      "column": 36,
+      "match": "text-blue-800",
+      "reason": "Use text-[--cta-primary] for links"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 16,
+      "column": 58,
+      "match": "text-slate-900",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 23,
+      "column": 24,
+      "match": "text-slate-700",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 46,
+      "column": 45,
+      "match": "text-slate-900",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 49,
+      "column": 24,
+      "match": "text-slate-700",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 68,
+      "column": 36,
+      "match": "text-slate-900",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 85,
+      "column": 45,
+      "match": "text-slate-900",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 88,
+      "column": 24,
+      "match": "text-slate-700",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 90,
+      "column": 38,
+      "match": "text-slate-900",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 99,
+      "column": 27,
+      "match": "text-slate-700",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 108,
+      "column": 38,
+      "match": "text-slate-900",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 119,
+      "column": 38,
+      "match": "text-slate-900",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 132,
+      "column": 38,
+      "match": "text-slate-900",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 142,
+      "column": 38,
+      "match": "text-slate-900",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 154,
+      "column": 38,
+      "match": "text-slate-900",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 162,
+      "column": 38,
+      "match": "text-slate-900",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 179,
+      "column": 38,
+      "match": "text-slate-900",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 190,
+      "column": 45,
+      "match": "text-slate-900",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 193,
+      "column": 24,
+      "match": "text-slate-700",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 230,
+      "column": 45,
+      "match": "text-slate-900",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 233,
+      "column": 24,
+      "match": "text-slate-700",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 270,
+      "column": 45,
+      "match": "text-slate-900",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 273,
+      "column": 24,
+      "match": "text-slate-700",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 274,
+      "column": 36,
+      "match": "text-slate-900",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 284,
+      "column": 36,
+      "match": "text-slate-900",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 305,
+      "column": 45,
+      "match": "text-slate-900",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 308,
+      "column": 24,
+      "match": "text-slate-700",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 336,
+      "column": 45,
+      "match": "text-slate-900",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 339,
+      "column": 24,
+      "match": "text-slate-700",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 367,
+      "column": 45,
+      "match": "text-slate-900",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 370,
+      "column": 24,
+      "match": "text-slate-700",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\cashback\\page.tsx",
+      "line": 395,
+      "column": 29,
+      "match": "text-slate-700",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\clearance-lifecycle\\page.tsx",
+      "line": 27,
+      "column": 44,
+      "match": "bg-slate-900",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\clearance-lifecycle\\page.tsx",
+      "line": 31,
+      "column": 39,
+      "match": "text-slate-700",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "app\\report-find\\page.tsx",
+      "line": 162,
+      "column": 80,
+      "match": "bg-blue-100",
+      "reason": "Use bg-cta-primary for CTAs, stone for neutrals"
+    },
+    {
+      "file": "app\\report-find\\page.tsx",
+      "line": 162,
+      "column": 112,
+      "match": "text-blue-700",
+      "reason": "Use text-[--cta-primary] for links"
+    },
+    {
+      "file": "app\\report-find\\page.tsx",
+      "line": 175,
+      "column": 24,
+      "match": "bg-blue-50",
+      "reason": "Use bg-cta-primary for CTAs, stone for neutrals"
+    },
+    {
+      "file": "app\\report-find\\page.tsx",
+      "line": 176,
+      "column": 35,
+      "match": "text-blue-600",
+      "reason": "Use text-[--cta-primary] for links"
+    },
+    {
+      "file": "app\\report-find\\page.tsx",
+      "line": 177,
+      "column": 34,
+      "match": "text-blue-800",
+      "reason": "Use text-[--cta-primary] for links"
+    },
+    {
+      "file": "components\\GuideContent.tsx",
+      "line": 924,
+      "column": 49,
+      "match": "text-blue-700",
+      "reason": "Use text-[--cta-primary] for links"
+    },
+    {
+      "file": "components\\penny-list-client.tsx",
+      "line": 523,
+      "column": 63,
+      "match": "bg-blue-100",
+      "reason": "Use bg-cta-primary for CTAs, stone for neutrals"
+    },
+    {
+      "file": "components\\penny-list-client.tsx",
+      "line": 524,
+      "column": 42,
+      "match": "text-blue-600",
+      "reason": "Use text-[--cta-primary] for links"
+    },
+    {
+      "file": "components\\penny-list-client.tsx",
+      "line": 573,
+      "column": 63,
+      "match": "bg-slate-100",
+      "reason": "Use stone palette instead of slate"
+    },
+    {
+      "file": "components\\penny-list-client.tsx",
+      "line": 574,
+      "column": 39,
+      "match": "text-slate-600",
+      "reason": "Use stone palette instead of slate"
+    }
+  ]
+}

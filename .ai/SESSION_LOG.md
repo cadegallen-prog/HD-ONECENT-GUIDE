@@ -11,6 +11,42 @@
 
 ---
 
+## 2025-12-12 - ChatGPT Codex - Lint Hardening + Color Ratchet
+
+**AI:** ChatGPT Codex (GPT-5)  
+**Goal:** Prevent duplicate prop/key regressions and ratchet raw color drift; keep audit docs aligned with BASE_URL usage.
+
+**Work completed:**
+
+- ESLint: enforced `react/jsx-no-duplicate-props` and `no-dupe-keys` as errors in `eslint.config.mjs` (covers JSX props and metadata/config objects).
+- Color drift ratchet: added baseline at `checks/lint-colors.baseline.json` (47 warnings) and a new command `npm run lint:colors:update-baseline`. `npm run lint:colors` now fails if warnings exceed the baseline and keeps errors as blocking.
+- Docs: updated `SCRIPTS-AND-GATES.txt` to document the ratchet, baseline path, update flow, and reaffirm BASE_URL resolution via `scripts/get-base-url.js` for axe/contrast audits.
+
+**Outcome:** ✅ Success
+
+**Completed Items:**
+
+- Duplicate props/keys lint guards elevated to errors
+- Color lint ratchet with baseline and update command
+- Scripts/doc alignment for BASE_URL + new color workflow
+- All gates green: `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e`
+
+**Unfinished Items:**
+
+- None (component tree remains untracked by design; no changes made)
+
+**Notes:**
+
+- `npm run test:e2e` still logs Next.js source map warnings and store-finder fallback to local data on 404; tests pass.
+- Baseline currently allows 47 color warnings; any new raw colors will increase the count and fail lint:colors until baseline is intentionally updated.
+
+**For Next AI:**
+
+- If reducing color warnings, run `npm run lint:colors` to confirm count drops, then update baseline intentionally with `npm run lint:colors:update-baseline` after review.
+- Keep BASE_URL set (or rely on dev/start port inference) when running axe/contrast/lighthouse scripts; docs are now aligned.
+
+---
+
 ## 2025-12-12 - ChatGPT Codex - Foundation Contract + Route Tree Refresh
 
 **AI:** ChatGPT Codex (GPT-5)  
