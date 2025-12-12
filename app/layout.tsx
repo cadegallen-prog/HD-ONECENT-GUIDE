@@ -76,8 +76,22 @@ export default function RootLayout({
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
+            const GA_MEASUREMENT_ID = 'G-DJ4RJRX05E';
+            const sanitizedPath = (() => {
+              try {
+                const url = new URL(window.location.href);
+                return url.pathname || '/';
+              } catch (error) {
+                return window.location.pathname || '/';
+              }
+            })();
             gtag('js', new Date());
-            gtag('config', 'G-DJ4RJRX05E');
+            gtag('config', GA_MEASUREMENT_ID, {
+              page_path: sanitizedPath,
+              anonymize_ip: true,
+              allow_google_signals: false,
+              allow_ad_personalization_signals: false,
+            });
           `}
         </Script>
 
