@@ -11,9 +11,40 @@
 
 ---
 
-## 2025-12-12 — ChatGPT Codex — Agent Infrastructure Overhaul + Hydration Hardening
+## 2025-12-12 - ChatGPT Codex - Foundation Contract + Route Tree Refresh
 
-**AI:** ChatGPT Codex (GPT‑5.2)  
+**AI:** ChatGPT Codex (GPT-5)  
+**Goal:** Capture foundation rules in a single contract and ensure the route inventory matches the built site.
+
+**Work completed:**
+
+- Added `.ai/FOUNDATION_CONTRACT.md` outlining token usage, Tailwind allowances, layout primitives, nav/IA expectations, and required regression gates.
+- Regenerated `ROUTE-TREE.txt` from `next build` output (includes framework 404 route and rendering types; documents `/go/befrugal`, `/penny-list`, `/sku/[sku]` as dynamic).
+- Updated `.ai/STATE.md` to reference the new contract and refreshed route tree.
+- Gates run on final state: `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e` (pass). Playwright logs show recurring Next.js source-map warnings and store-finder fallback to local store data on remote 404—no test failures.
+
+**Outcome:** ? Success
+
+**Completed Items:**
+
+- Foundation Contract doc with design/token/layout/nav rules
+- Route tree aligned with current build output
+- Quality gates all green
+
+**Unfinished Items:**
+
+- None.
+
+**For Next AI:**
+
+- Use `.ai/FOUNDATION_CONTRACT.md` as the quick ruleset for tokens/layout/nav when editing UI.
+- If touching store-finder data fetch, be aware E2E logs show fallback to local data on remote 404 (expected in tests).
+
+---
+
+## 2025-12-12 - ChatGPT Codex - Agent Infrastructure Overhaul + Hydration Hardening
+
+**AI:** ChatGPT Codex (GPT-5.2)  
 **Goal:** Eliminate navbar hydration flicker and build a stronger, self‑propelling AI collaboration system.  
 **Outcome:** ✅ Success
 

@@ -11,6 +11,7 @@ Every AI session must update this after meaningful work.
 - **Site:** live at https://pennycentral.com
 - **Phase:** Stabilization + Community Intake
 - **Traffic reality:** early launch volatility is normal; focus on retention loop first.
+- Foundation Contract added at `.ai/FOUNDATION_CONTRACT.md` (tokens/Tailwind/layout/nav/gates) and `ROUTE-TREE.txt` refreshed (includes framework 404).
 
 ---
 
@@ -69,4 +70,3 @@ Default rule: **AI should pull the top P0 item and propose it unless Cade gives 
 - Streamlined Report Find form and improved Penny List reward signals.
 - Fixed navbar hydration flicker; added hydration regression test.
 - Hardened Playwright visual smoke (fixtures + frozen time); CI now runs lint + e2e.
-
