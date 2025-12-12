@@ -5,7 +5,7 @@ const { getBaseUrl } = require("./get-base-url")
 
 const baseUrl = getBaseUrl()
 const reportDir = path.join(process.cwd(), "reports")
-const reportPath = path.join(reportDir, "axe-report.json")
+const reportPath = "reports/axe-report.json"
 
 if (!fs.existsSync(reportDir)) fs.mkdirSync(reportDir, { recursive: true })
 
@@ -16,4 +16,3 @@ const result = spawnSync(
 )
 
 process.exit(typeof result.status === "number" ? result.status : 1)
-

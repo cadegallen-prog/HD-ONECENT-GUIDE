@@ -1,5 +1,5 @@
 {
-  "baseUrl": "http://localhost:3000",
+  "baseUrl": "http://localhost:3001",
   "results": [
     {
       "route": "/",
@@ -8,7 +8,7 @@
       "selector": "body",
       "role": "text",
       "found": true,
-      "ratio": 17.49,
+      "ratio": 17.72,
       "threshold": 7,
       "pass": true
     },
@@ -162,7 +162,7 @@
       "selector": "body",
       "role": "text",
       "found": true,
-      "ratio": 17.49,
+      "ratio": 17.72,
       "threshold": 7,
       "pass": true
     },
@@ -173,7 +173,7 @@
       "selector": "[data-card], article",
       "role": "text",
       "found": true,
-      "ratio": 16.74,
+      "ratio": 17.72,
       "threshold": 7,
       "pass": true
     },
@@ -184,7 +184,7 @@
       "selector": "[data-card], article",
       "role": "border",
       "found": true,
-      "ratio": 11.74,
+      "ratio": 11.99,
       "threshold": 3,
       "pass": true
     },
@@ -272,7 +272,7 @@
       "selector": "[data-cta=\"befrugal\"]",
       "role": "cta",
       "found": true,
-      "ratio": 6.06,
+      "ratio": 6.7,
       "threshold": 3,
       "pass": true
     },
@@ -316,7 +316,7 @@
       "selector": "body",
       "role": "text",
       "found": true,
-      "ratio": 17.49,
+      "ratio": 17.72,
       "threshold": 7,
       "pass": true
     },
@@ -470,7 +470,7 @@
       "selector": "body",
       "role": "text",
       "found": true,
-      "ratio": 17.49,
+      "ratio": 17.72,
       "threshold": 7,
       "pass": true
     },
