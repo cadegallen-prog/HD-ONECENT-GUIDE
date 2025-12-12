@@ -8,7 +8,8 @@ $pages = @(
     "/cashback"
 )
 
-$baseUrl = "http://localhost:3001"
+$printBaseUrl = Join-Path $PSScriptRoot "print-base-url.js"
+$baseUrl = (node $printBaseUrl).TrimEnd("/")
 $outputDir = "test-results"
 
 # Ensure output directory exists

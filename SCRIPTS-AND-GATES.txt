@@ -1,0 +1,49 @@
+SCRIPTS & GATES (PennyCentral)
+
+This file documents the project’s local quality gates and how to run them.
+
+---
+
+Core gates (required before pushing to `main`)
+
+- Install deps: `npm install` (preferred on Windows) or `npm ci` (clean installs)
+- Build: `npm run build`
+- Lint: `npm run lint`
+- Unit tests: `npm run test:unit`
+- E2E tests: `npm run test:e2e`
+
+---
+
+Dev server
+
+- Dev port: `3001`
+- Start: `npm run dev`
+- Prod-like start (after build): `npm run start`
+
+---
+
+Audit base URL (no hardcoded ports)
+
+All audits read `BASE_URL` (preferred) and fall back to inferring the port from `package.json` scripts.
+
+Examples (PowerShell):
+
+- `$env:BASE_URL='http://localhost:3001'; npm run check-axe`
+- `$env:BASE_URL='http://localhost:3001'; npm run check-contrast`
+- `$env:BASE_URL='http://localhost:3001'; pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/run-audit.ps1`
+
+If `BASE_URL` is not set, the audit scripts infer the port from `package.json` (`scripts.dev` / `scripts.start`).
+
+---
+
+Accessibility & performance audits (local)
+
+These require a server running at `BASE_URL` (typically `npm run dev` in a separate terminal).
+
+- Axe: `npm run check-axe`
+  - Output: `reports/axe-report.json`
+- Contrast (computed): `npm run check-contrast`
+  - Output: `reports/contrast-computed.json`
+- Lighthouse (JSON audits): `pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/run-audit.ps1`
+  - Output: `test-results/lighthouse-*-mobile.json`, `test-results/lighthouse-*-desktop.json`
+

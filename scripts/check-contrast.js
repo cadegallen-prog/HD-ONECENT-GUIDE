@@ -5,7 +5,8 @@ const { chromium } = require("playwright")
 const fs = require("fs")
 const path = require("path")
 
-const BASE_URL = process.env.BASE_URL || "http://localhost:3001"
+const { getBaseUrl } = require("./get-base-url")
+const BASE_URL = getBaseUrl()
 const routesPath = path.join(__dirname, "..", "checks", "routes.json")
 const selectorsPath = path.join(__dirname, "..", "checks", "selectors.json")
 const reportDir = path.join(process.cwd(), "reports")
