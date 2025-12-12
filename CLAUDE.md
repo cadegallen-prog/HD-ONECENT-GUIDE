@@ -3,22 +3,25 @@
 ⚠️ **BEFORE DOING ANYTHING:** Read ALL files in the `.ai/` directory for the collaboration protocol:
 - `.ai/CONTRACT.md` - Collaboration rules (what Cade provides, what you provide)
 - `.ai/DECISION_RIGHTS.md` - What you can decide vs. must get approval for
+- `.ai/STATE.md` - Current project snapshot (read first)
+- `.ai/BACKLOG.md` - Ordered next tasks (default work source)
 - `.ai/CONSTRAINTS.md` - Fragile areas you must NOT touch
 - `.ai/SESSION_LOG.md` - Recent work history and context
 - `.ai/LEARNINGS.md` - Past mistakes to avoid
-
+- `.ai/CONTEXT.md` - Stable mission and audience
+ 
 Then ask Cade for **GOAL / WHY / DONE** for this session.
 
 ---
 
 ## Project Overview
 
-PennyCentral.com is a Next.js 15 app serving the Home Depot penny hunting community.
+PennyCentral.com is a Next.js 16 app serving the Home Depot penny hunting community.
 It's the official resource for a 40,000+ member Facebook group.
 
 ## Tech Stack
 
-- Next.js 15 with App Router
+- Next.js 16 with App Router
 - TypeScript (strict mode)
 - Tailwind CSS with custom design tokens
 - React-Leaflet for store finder map

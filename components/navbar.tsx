@@ -69,7 +69,7 @@ export function Navbar() {
   const navItems = [
     { href: "/", label: "Home", icon: Home },
     { href: "/penny-list", label: "Penny List", icon: Star },
-    { href: "/report-find", label: "Report Find", icon: BookOpen },
+    { href: "/report-find", label: "Report a Find", icon: BookOpen },
     { href: "/guide", label: "Guide", icon: Book },
     { href: "/store-finder", label: "Store Finder", icon: Map },
     // { href: "/trip-tracker", label: "Trip Tracker", icon: Clock }, // Hidden: Not production-ready
@@ -98,7 +98,7 @@ export function Navbar() {
                 - Consistent across all items including About */}
             <div className="hidden md:flex items-center gap-1">
               {navItems.map((item) => {
-                const isActive = pathname === item.href
+                const isActive = mounted ? pathname === item.href : false
                 return (
                   <Link
                     key={item.href}
@@ -154,7 +154,7 @@ export function Navbar() {
             <nav className="space-y-1">
               {navItems.map((item) => {
                 const Icon = item.icon
-                const isActive = pathname === item.href
+                const isActive = mounted ? pathname === item.href : false
                 return (
                   <Link
                     key={item.href}

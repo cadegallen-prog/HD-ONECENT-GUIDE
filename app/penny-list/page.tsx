@@ -24,14 +24,17 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
   const pennyItems = await getPennyList()
   const validItems = filterValidPennyItems(pennyItems)
   const feedUnavailable = validItems.length === 0
-  const { newLast24h, totalLast30d } = computeFreshnessMetrics(validItems)
+  const nowMs =
+    process.env.PLAYWRIGHT === "1" ? new Date("2025-12-10T12:00:00Z").getTime() : Date.now()
+  const nowDate = new Date(nowMs)
+  const { newLast24h, totalLast30d } = computeFreshnessMetrics(validItems, nowMs)
   const latestTimestamp = validItems
     .map((item) => new Date(item.dateAdded).getTime())
     .filter((time) => !Number.isNaN(time))
     .sort((a, b) => b - a)[0]
   const updatedHoursAgo =
     latestTimestamp !== undefined
-      ? Math.max(0, Math.round((Date.now() - latestTimestamp) / 3600000))
+      ? Math.max(0, Math.round((nowMs - latestTimestamp) / 3600000))
       : null
   const lastUpdatedLabel =
     updatedHoursAgo === null
@@ -130,7 +133,9 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
                       <p className="text-[var(--text-muted)] text-xs">SKU {item.sku}</p>
                     </div>
                     <div className="text-right text-xs text-[var(--text-secondary)] whitespace-nowrap">
-                      <time dateTime={item.dateAdded}>{formatRelativeDate(item.dateAdded)}</time>
+                      <time dateTime={item.dateAdded}>
+                        {formatRelativeDate(item.dateAdded, nowDate)}
+                      </time>
                     </div>
                   </li>
                 ))}

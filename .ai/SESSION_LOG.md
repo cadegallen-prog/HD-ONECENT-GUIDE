@@ -11,6 +11,34 @@
 
 ---
 
+## 2025-12-12 — ChatGPT Codex — Agent Infrastructure Overhaul + Hydration Hardening
+
+**AI:** ChatGPT Codex (GPT‑5.2)  
+**Goal:** Eliminate navbar hydration flicker and build a stronger, self‑propelling AI collaboration system.  
+**Outcome:** ✅ Success
+
+**Work completed:**
+
+- Fixed SSR/client mismatch in `components/navbar.tsx` by gating active‑link state on `mounted`.
+- Added Playwright hydration regression test (`tests/basic.spec.ts`).
+- Hardened visual smoke:
+  - Stable fixture load when `PLAYWRIGHT=1` (`lib/fetch-penny-data.ts`).
+  - Frozen server/client time for snapshots (`app/penny-list/page.tsx`, `tests/visual-smoke.spec.ts`).
+  - Blocked Leaflet tiles and relaxed diff tolerance only for `/store-finder`.
+- Added persistent state docs:
+  - `.ai/CONTEXT.md` (stable mission/audience)
+  - `.ai/STATE.md` (living snapshot)
+  - `.ai/BACKLOG.md` (ordered next tasks)
+- Updated all AI entrypoints/templates to reference and require updating STATE/BACKLOG:
+  - `.ai/README.md`, `.ai/USAGE.md`, `.ai/QUICKSTART.md`, `.ai/SESSION_TEMPLATES.md`, `.ai/AI-TOOLS-SETUP.md`, `.ai/CONTRACT.md`, `.ai/STOPPING_RULES.md`, `.ai/GUARDRAILS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, `AGENTS.md`.
+- Updated CI to run lint + Playwright smoke with fixtures (`.github/workflows/quality.yml`).
+- Aligned docs to Next.js 16 across repo.
+
+**Next (see `.ai/BACKLOG.md`):**
+
+1. Add tiny “30‑second submit” callout on `/penny-list`.
+2. Set up weekly digest (no‑code Zapier/Kit).
+
 ## December 10, 2025 - GitHub Copilot - MCP Documentation & Testing Infrastructure
 
 **AI:** GitHub Copilot (Claude Sonnet 4.5)
@@ -252,7 +280,7 @@ User requested "download the mcps, add the settings and parameters, update the r
 
 - Google Sheets can serve as simple backend (publish as CSV)
 - Field aliases handle column name variations gracefully
-- Next.js 15 ISR (revalidation) works perfectly for this use case
+- Next.js ISR (revalidation) works perfectly for this use case
 - No database needed for this feature
 
 **For Next AI:**
@@ -847,7 +875,7 @@ _Enhanced Client Component (`penny-list-client.tsx`):_
   - `?view=table` - view mode
   - `?days=7` - date range
 - Added **localStorage persistence** for user's preferred state
-- Wrapped in `<Suspense>` for `useSearchParams()` (Next.js 15 requirement)
+- Wrapped in `<Suspense>` for `useSearchParams()` (Next.js App Router requirement)
 
 _Enhanced Page (`app/penny-list/page.tsx`):_
 

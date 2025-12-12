@@ -46,6 +46,8 @@ A complete collaboration framework that works across all AI tools:
 | `CONTRACT.md`        | The "rules of engagement"                       | Share with new AI to set expectations   |
 | `DECISION_RIGHTS.md` | What AI can decide vs. what needs your approval | Reference when AI asks for permission   |
 | `CONTEXT.md`         | Why this project exists, who it serves          | Helps AI understand your goals          |
+| `STATE.md`           | Current project snapshot                        | First thing AI reads every session      |
+| `BACKLOG.md`         | Ordered next tasks                              | AI picks top P0 by default              |
 | `CONSTRAINTS.md`     | Technical red lines (don't touch this!)         | Prevents AI from breaking fragile areas |
 | `SESSION_LOG.md`     | Running history of AI work                      | See what was done, hand off to next AI  |
 | `LEARNINGS.md`       | Lessons learned the hard way                    | Avoid repeating mistakes                |
@@ -228,10 +230,11 @@ Not sure what that looks like. Ideas?"
 
 **AI will:**
 
-1. Read CONTEXT.md → understand the community and goals
-2. Read DECISION_RIGHTS → know what it can suggest vs. implement
-3. Propose 3-5 ideas with pros/cons
-4. Wait for your direction
+1. Read `STATE.md` → understand current phase and reality
+2. Read `CONTEXT.md` → understand the community and mission
+3. Read `DECISION_RIGHTS.md` → know what it can suggest vs. implement
+4. Propose 3–5 ideas with pros/cons
+5. Wait for your direction
 
 **You do:**
 
@@ -240,7 +243,8 @@ Not sure what that looks like. Ideas?"
 
 **Why this works:**
 
-- AI understands the community from CONTEXT.md
+- AI is grounded in current reality (`STATE.md`)
+- AI understands the community (`CONTEXT.md`)
 - You don't need to know what's technically possible
 - Collaboration feels like brainstorming, not programming
 

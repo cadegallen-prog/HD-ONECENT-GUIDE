@@ -4,7 +4,7 @@ Purpose: hard requirements for any change. Applies to all roles and branches.
 
 Scope & Principles
 - Mobile-first; respect existing design system (no new colors/typography without approval).
-- Favor smallest viable change; no surprise refactors or new dependencies unless justified.
+- Favor the highest‑leverage change; refactors are allowed when they clearly reduce maintenance, risk, or user friction. New dependencies still require justification.
 
 Non-Negotiables
 - Typography & touch: body text ≥16px, line-height ≥1.6; touch targets ≥44×44px; never add text <12px.

@@ -1,4 +1,6 @@
 import Papa from "papaparse"
+import { readFile } from "node:fs/promises"
+import path from "node:path"
 import { extractStateFromLocation } from "./penny-list-utils"
 
 // Define the shape of your penny item
@@ -85,6 +87,18 @@ function calculateTier(locations: Record<string, number>): PennyItem["tier"] {
 }
 
 async function fetchPennyListRaw(): Promise<PennyItem[]> {
+  // Playwright visual smoke uses a stable local fixture to avoid snapshot drift.
+  if (process.env.PLAYWRIGHT === "1") {
+    try {
+      const fixturePath = path.join(process.cwd(), "data", "penny-list.json")
+      const fixtureText = await readFile(fixturePath, "utf8")
+      const fixtureItems = JSON.parse(fixtureText) as PennyItem[]
+      return fixtureItems
+    } catch (error) {
+      console.warn("Playwright fixture load failed, falling back to live sheet.", error)
+    }
+  }
+
   const sheetUrl = process.env.GOOGLE_SHEET_URL
   if (!sheetUrl) {
     console.warn("GOOGLE_SHEET_URL is not set. Returning empty list.")

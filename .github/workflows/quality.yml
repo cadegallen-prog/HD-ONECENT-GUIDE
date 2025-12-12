@@ -28,9 +28,13 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Lint
+        run: npm run lint
+
       - name: Start server
         env:
           PORT: 3001
+          PLAYWRIGHT: "1"
         run: |
           npm run start -- --hostname 0.0.0.0 --port $PORT >/tmp/next.log 2>&1 &
           server_up=0
@@ -57,6 +61,11 @@ jobs:
 
       - name: Axe check
         run: npx @axe-core/cli http://localhost:3001 --save reports/axe-report.json --exit
+
+      - name: Playwright smoke
+        env:
+          PLAYWRIGHT: "1"
+        run: npm run test:e2e
 
       - name: Upload reports
         uses: actions/upload-artifact@v4

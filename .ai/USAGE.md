@@ -105,6 +105,7 @@ Before we end this session:
    I can give to another AI to finish it
 4. Update .ai/SESSION_LOG.md with this session's work
 5. If we learned something new, add it to .ai/LEARNINGS.md
+6. Update .ai/STATE.md and .ai/BACKLOG.md so the next AI starts from reality
 ```
 
 ### Why This Matters

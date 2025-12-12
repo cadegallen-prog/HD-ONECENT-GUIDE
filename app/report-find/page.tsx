@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { AlertCircle, CheckCircle2, MapPin, Package, Calendar, Info } from "lucide-react"
 import { trackEvent } from "@/lib/analytics"
@@ -33,11 +33,12 @@ function isValidSku(rawSku: string): boolean {
   return rawSku.length === 6 || rawSku.length === 10
 }
 
+const USER_STATE_KEY = "pennycentral_user_state"
+
 export default function ReportFindPage() {
   const [formData, setFormData] = useState({
     itemName: "",
     sku: "",
-    storeName: "",
     storeCity: "",
     storeState: "",
     dateFound: new Date().toLocaleDateString("en-CA"),
@@ -52,6 +53,27 @@ export default function ReportFindPage() {
     success: boolean
     message: string
   } | null>(null)
+
+  // Prefill state from user's last selection (saved on Penny List or here)
+  useEffect(() => {
+    try {
+      const savedState = localStorage.getItem(USER_STATE_KEY)
+      if (!savedState) return
+      setFormData((prev) => (prev.storeState ? prev : { ...prev, storeState: savedState }))
+    } catch {
+      // ignore storage failures
+    }
+  }, [])
+
+  // Persist selected state for next time
+  useEffect(() => {
+    if (!formData.storeState) return
+    try {
+      localStorage.setItem(USER_STATE_KEY, formData.storeState)
+    } catch {
+      // ignore storage failures
+    }
+  }, [formData.storeState])
 
   const handleSkuChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value
@@ -109,7 +131,6 @@ export default function ReportFindPage() {
         setFormData({
           itemName: "",
           sku: "",
-          storeName: "",
           storeCity: "",
           storeState: "",
           dateFound: new Date().toLocaleDateString("en-CA"),
@@ -147,7 +168,7 @@ export default function ReportFindPage() {
             Report a Penny Find
           </h1>
           <p className="text-lg text-[var(--text-secondary)] max-w-xl mx-auto">
-            Share what you found to help other hunters in your area.
+            Takes about 30 seconds. Required: item name, SKU, state, quantity.
           </p>
         </div>
 
@@ -156,7 +177,9 @@ export default function ReportFindPage() {
           <Info className="w-5 h-5 text-blue-600 dark:text-blue-500 flex-shrink-0 mt-0.5" />
           <div className="text-sm text-blue-800 dark:text-blue-200">
             <p className="font-semibold mb-2">About This Form</p>
-            <p className="mb-2">This form is for quick, crowd-sourced reports of penny finds.</p>
+            <p className="mb-2">
+              Your report shows up on the Penny List automatically (usually within an hour).
+            </p>
             <ul className="list-disc pl-4 space-y-1">
               <li>Submissions are not individually verified.</li>
               <li>The Penny List may contain mistakes, sold-out items, or prices that changed.</li>
@@ -242,69 +265,36 @@ export default function ReportFindPage() {
             )}
           </div>
 
-          {/* Store Name (now optional) */}
+          {/* State (required) */}
           <div>
             <label
-              htmlFor="storeName"
+              htmlFor="storeState"
               className="block text-sm font-medium text-[var(--text-primary)] mb-2"
             >
-              Store Name/Number (optional)
+              State{" "}
+              <span className="text-red-500" aria-hidden="true">
+                *
+              </span>
+              <span className="sr-only">(required)</span>
             </label>
-            <input
-              type="text"
-              id="storeName"
-              value={formData.storeName}
-              onChange={(e) => setFormData({ ...formData, storeName: e.target.value })}
-              placeholder="e.g., Home Depot #1234 or Brandon"
+            <select
+              id="storeState"
+              required
+              aria-required="true"
+              value={formData.storeState}
+              onChange={(e) => setFormData({ ...formData, storeState: e.target.value })}
               className="w-full px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent"
-            />
-          </div>
-
-          {/* Location - City & State */}
-          <div className="grid sm:grid-cols-2 gap-4">
-            <div>
-              <label
-                htmlFor="storeCity"
-                className="block text-sm font-medium text-[var(--text-primary)] mb-2"
-              >
-                City (optional)
-              </label>
-              <input
-                type="text"
-                id="storeCity"
-                value={formData.storeCity}
-                onChange={(e) => setFormData({ ...formData, storeCity: e.target.value })}
-                placeholder="e.g., Tampa"
-                className="w-full px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="storeState"
-                className="block text-sm font-medium text-[var(--text-primary)] mb-2"
-              >
-                State{" "}
-                <span className="text-red-500" aria-hidden="true">
-                  *
-                </span>
-                <span className="sr-only">(required)</span>
-              </label>
-              <select
-                id="storeState"
-                required
-                aria-required="true"
-                value={formData.storeState}
-                onChange={(e) => setFormData({ ...formData, storeState: e.target.value })}
-                className="w-full px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent"
-              >
-                <option value="">Select state...</option>
-                {US_STATES.map((state) => (
-                  <option key={state.code} value={state.code}>
-                    {state.name} ({state.code})
-                  </option>
-                ))}
-              </select>
-            </div>
+            >
+              <option value="">Select state...</option>
+              {US_STATES.map((state) => (
+                <option key={state.code} value={state.code}>
+                  {state.name} ({state.code})
+                </option>
+              ))}
+            </select>
+            <p className="mt-1 text-xs text-[var(--text-muted)]">
+              We use state to show regional patterns.
+            </p>
           </div>
 
           {/* Date Found */}
@@ -326,6 +316,48 @@ export default function ReportFindPage() {
               className="w-full px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent"
             />
           </div>
+
+          {/* Optional details (collapsed by default) */}
+          <details className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] px-4 py-3">
+            <summary className="cursor-pointer text-sm font-medium text-[var(--text-primary)]">
+              Add optional details (city, notes)
+            </summary>
+            <div className="mt-4 space-y-4">
+              <div>
+                <label
+                  htmlFor="storeCity"
+                  className="block text-sm font-medium text-[var(--text-primary)] mb-2"
+                >
+                  City (optional)
+                </label>
+                <input
+                  type="text"
+                  id="storeCity"
+                  value={formData.storeCity}
+                  onChange={(e) => setFormData({ ...formData, storeCity: e.target.value })}
+                  placeholder="e.g., Tampa"
+                  className="w-full px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="notes"
+                  className="block text-sm font-medium text-[var(--text-primary)] mb-2"
+                >
+                  Additional Notes (optional)
+                </label>
+                <textarea
+                  id="notes"
+                  value={formData.notes}
+                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                  placeholder="e.g., Found in clearance aisle, back corner near garden..."
+                  rows={3}
+                  className="w-full px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent resize-none"
+                />
+              </div>
+            </div>
+          </details>
 
           {/* Quantity (required) */}
           <div>
@@ -353,24 +385,6 @@ export default function ReportFindPage() {
               className="w-full px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent"
             />
             <p className="mt-1 text-xs text-[var(--text-muted)]">How many did you find? (1-99)</p>
-          </div>
-
-          {/* Notes (optional) */}
-          <div>
-            <label
-              htmlFor="notes"
-              className="block text-sm font-medium text-[var(--text-primary)] mb-2"
-            >
-              Additional Notes (optional)
-            </label>
-            <textarea
-              id="notes"
-              value={formData.notes}
-              onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-              placeholder="e.g., Found in clearance aisle, back corner near garden..."
-              rows={3}
-              className="w-full px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent resize-none"
-            />
           </div>
 
           {/* Submit Button */}

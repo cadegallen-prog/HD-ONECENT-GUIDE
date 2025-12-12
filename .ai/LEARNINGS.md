@@ -124,7 +124,7 @@ Not clear when to use "use client" vs server components
 - Trial and error (broke things frequently)
 
 ### What We Learned
-- Next.js 15 App Router defaults to server components
+- Next.js App Router defaults to server components
 - "use client" needed for:
   - React hooks (useState, useEffect, useContext)
   - Event handlers (onClick, onChange)

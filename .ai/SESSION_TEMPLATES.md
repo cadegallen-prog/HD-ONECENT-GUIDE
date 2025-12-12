@@ -107,6 +107,10 @@ Before we end this session, do the following:
 5. UPDATE LEARNINGS.md (if applicable)
    If we discovered something new, surprising, or made a mistake,
    add it to .ai/LEARNINGS.md using the template in that file.
+
+6. UPDATE STATE + BACKLOG
+   - Refresh `.ai/STATE.md` (current snapshot)
+   - Mark done / add next tasks in `.ai/BACKLOG.md`
 ```
 
 ---

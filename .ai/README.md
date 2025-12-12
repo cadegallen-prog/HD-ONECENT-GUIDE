@@ -37,6 +37,9 @@ A structured system that lets Cade (non-coder) effectively manage PennyCentral.c
 ├── SESSION_TEMPLATES.md   ← Copy-paste prompts for sessions
 ├── CONTRACT.md            ← Collaboration agreement
 ├── DECISION_RIGHTS.md     ← What AI can decide vs. needs approval
+├── CONTEXT.md             ← Stable mission / audience / non-goals
+├── STATE.md               ← ⭐ Living snapshot of current status
+├── BACKLOG.md             ← ⭐ Ordered next tasks for AI
 ├── CONSTRAINTS.md         ← Technical red lines (don't touch)
 ├── SESSION_LOG.md         ← Running history of AI work
 ├── LEARNINGS.md           ← Accumulated knowledge
@@ -153,6 +156,25 @@ A structured system that lets Cade (non-coder) effectively manage PennyCentral.c
 **Purpose:** Understand WHY this project exists and WHO it serves
 **Read when:** Starting work, making UX decisions, prioritizing features
 **Key sections:** The community, the problem this solves, the vision, current state
+
+---
+
+### 🧭 STATE.md
+
+**For:** AI
+**Purpose:** Single living snapshot of “where we are right now”
+**Read when:** Every session start (before picking work)
+**Update:** After meaningful work
+**Key sections:** current phase, what’s working, risks, required env vars, next moves
+
+---
+
+### 🗂️ BACKLOG.md
+
+**For:** AI (Cade can skim)
+**Purpose:** Ruthlessly ordered tasks for the next iteration
+**Read when:** After STATE.md, before proposing work
+**Update:** Every session (mark done/add new)
 
 ---
 

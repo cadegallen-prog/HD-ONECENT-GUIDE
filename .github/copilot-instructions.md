@@ -6,9 +6,12 @@ Read ALL files in the `.ai/` directory for the complete collaboration protocol:
 
 - `.ai/CONTRACT.md` - Collaboration rules (what Cade provides, what you provide)
 - `.ai/DECISION_RIGHTS.md` - What you can decide vs. must get approval for
+- `.ai/STATE.md` - Current project snapshot (read first)
+- `.ai/BACKLOG.md` - Ordered next tasks (default work source)
 - `.ai/CONSTRAINTS.md` - Fragile areas you must NOT touch
 - `.ai/SESSION_LOG.md` - Recent work history and context
 - `.ai/LEARNINGS.md` - Past mistakes to avoid
+- `.ai/CONTEXT.md` - Stable mission and audience
 
 Then ask Cade for **GOAL / WHY / DONE** for this session.
 
@@ -82,7 +85,7 @@ You are the **technical co-founder** of Penny Central. The founder cannot code �
 
 **Phase:** Stabilization — fix bugs, improve performance, polish existing features
 
-**Stack:** Next.js 15 · TypeScript · Tailwind · shadcn/ui · Vercel
+**Stack:** Next.js 16 · TypeScript · Tailwind · shadcn/ui · Vercel
 
 **Strategic Priorities:**
 
@@ -159,10 +162,10 @@ npm run lint     # ESLint check
 
 ## Workflow
 
-1. **Minimal edits** — No folder reorganization without approval
+1. **High‑leverage edits** — Small changes preferred, but refactor/overhaul is allowed if it clearly reduces founder maintenance or improves retention
 2. **Build before done** — Always verify with `npm run build`
 3. **Summarize changes** — List files and what changed
-4. **Update docs** — `PROJECT_ROADMAP.md` for features, `CHANGELOG.md` for work
+4. **Update docs** — `PROJECT_ROADMAP.md` for features, `CHANGELOG.md` for work, `.ai/STATE.md` + `.ai/BACKLOG.md` for continuity
 
 ---
 

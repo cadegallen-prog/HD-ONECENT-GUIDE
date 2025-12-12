@@ -71,7 +71,7 @@ Reads instruction file (CLAUDE.md or copilot-instructions.md)
     ↓
 Instruction file says: "Read ALL files in .ai/ directory FIRST"
     ↓
-AI reads: CONTRACT.md, DECISION_RIGHTS.md, CONSTRAINTS.md, SESSION_LOG.md, LEARNINGS.md
+AI reads core set first: STATE.md, CONTRACT.md, DECISION_RIGHTS.md, CONSTRAINTS.md, SESSION_LOG.md, LEARNINGS.md, CONTEXT.md, BACKLOG.md
     ↓
 AI understands full project context and collaboration rules
     ↓
@@ -190,6 +190,9 @@ mcp_paths = [
   "C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE\\.github\\copilot-instructions.md",
   "C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE\\AGENTS.md",
   "C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE\\SKILLS.md",
+  "C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE\\.ai\\STATE.md",
+  "C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE\\.ai\\BACKLOG.md",
+  "C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE\\.ai\\CONTEXT.md",
   "C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE\\.ai\\CONTRACT.md",
   "C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE\\.ai\\DECISION_RIGHTS.md",
   "C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE\\.ai\\CONSTRAINTS.md",

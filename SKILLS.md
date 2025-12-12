@@ -10,7 +10,7 @@ Compact reference for AI agents. Describes what this project can do, where thing
 
 | Skill               | Description                              | Key Locations                               | Typical Tasks                         |
 | ------------------- | ---------------------------------------- | ------------------------------------------- | ------------------------------------- |
-| **Next.js 15**      | App Router with server/client components | `app/`, `layout.tsx`, `page.tsx`            | Add pages, fix routing, SSR issues    |
+| **Next.js 16**      | App Router with server/client components | `app/`, `layout.tsx`, `page.tsx`            | Add pages, fix routing, hydration/SSR |
 | **TypeScript**      | Strict typing throughout                 | `*.tsx`, `*.ts`, `tsconfig.json`            | Type errors, interfaces, props        |
 | **Tailwind CSS**    | Utility-first styling                    | `globals.css`, `tailwind.config.ts`         | Styling, responsive design, dark mode |
 | **shadcn/ui**       | Pre-built accessible components          | `components/ui/`                            | Buttons, cards, dialogs, inputs       |

@@ -69,7 +69,7 @@ Ask yourself:
 
 ## 4. General Behavior Rules
 
-1. **Minimal disruption** — Prefer small, targeted changes. No restructuring unless explicitly asked.
+1. **High‑leverage changes** — Prefer small, targeted fixes when they solve the problem, but restructure/refactor is allowed when it clearly reduces founder maintenance, risk, or user friction.
 
 2. **Explain what you did** — After changes, summarize: which files, what each change does.
 
@@ -182,7 +182,7 @@ Everything else is noise until these are solid.
 
 ### Tech Stack
 
-- **Framework:** Next.js 15 (App Router)
+- **Framework:** Next.js 16 (App Router)
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS
 - **Components:** shadcn/ui

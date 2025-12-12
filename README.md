@@ -19,7 +19,7 @@ The official companion site for the "Home Depot One Cent Items" Facebook communi
 
 ## Tech Stack
 
-- **Framework:** Next.js 15 (App Router)
+- **Framework:** Next.js 16 (App Router)
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS + CSS Variables
 - **Components:** shadcn/ui

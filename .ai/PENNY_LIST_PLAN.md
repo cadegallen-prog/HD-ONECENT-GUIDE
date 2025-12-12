@@ -2,13 +2,13 @@
 
 > **Goal:** Make the Penny List the fastest, clearest way to see "what’s new for me" – driving daily check-ins that beat scrolling Facebook – without adding ongoing maintenance for Cade.
 
-**Status:** Phase 1 not yet implemented. This file defines how to implement it and how to encourage real usage.
+**Status:** Phase 1 implemented (Dec 2025). This file now documents what shipped and the optional Phase 2+ backlog.
 
 ---
 
 ## 1. Quick Summary
 
-**What we’re building _now_ (Phase 1 – Freshness & Trust)**
+**What we built in Phase 1 (Freshness & Trust)**
 
 1. **Data validation + gating:** Only show rows with SKU, name, and a valid date; everything else is dropped. If nothing valid remains, show the existing feed-unavailable banner.
 2. **One freshness summary at the top:**  
@@ -50,7 +50,7 @@ This document only adds: relative timestamps and some concrete engineering steps
 
 ---
 
-## 3. Phase 1: Freshness & Trust (NOW)
+## 3. Phase 1: Freshness & Trust (Shipped)
 
 ### 3.1 Validation & Gating (Phase 1a)
 

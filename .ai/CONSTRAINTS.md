@@ -67,7 +67,7 @@
 ### 3. "use client" Directives
 
 **Why They Exist:**
-- Next.js 15 App Router requires explicit client component marking
+- Next.js App Router requires explicit client component marking
 - Removing them breaks interactivity or causes hydration errors
 - They're there for a reason (often learned the hard way)
 
@@ -219,7 +219,7 @@
 ## Dependencies Policy
 
 ### Current Stack (Don't Remove)
-- Next.js 15
+- Next.js 16
 - TypeScript
 - Tailwind CSS
 - React-Leaflet

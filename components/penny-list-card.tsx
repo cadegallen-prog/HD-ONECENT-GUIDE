@@ -107,9 +107,9 @@ export function PennyListCard({ item }: PennyListCardProps) {
                   </span>
                 ))}
             </div>
-            {totalReports > 1 && (
+            {totalReports > 0 && (
               <p className="text-sm text-[var(--text-secondary)]">
-                {totalReports} total {totalReports === 1 ? "report" : "reports"}
+                {totalReports} total {totalReports === 1 ? "report so far" : "reports"}
               </p>
             )}
           </div>
@@ -132,6 +132,9 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
       return "bg-[var(--bg-elevated)] text-[var(--status-info)] border-[var(--border-strong)]"
     return "elevation-2 text-[var(--text-primary)] border-[var(--border-strong)]"
   }
+
+  const totalReports = item.locations ? getTotalReports(item.locations) : 0
+  const stateCount = item.locations ? Object.keys(item.locations).length : 0
 
   return (
     <article
@@ -159,6 +162,12 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
       <div className="mt-2 flex items-center gap-2 text-xs text-[var(--text-primary)] font-mono elevation-2 border border-[var(--border-strong)] px-2 py-1 rounded w-fit font-medium">
         SKU: {item.sku}
       </div>
+      {totalReports > 0 && (
+        <p className="mt-2 text-xs text-[var(--text-secondary)]">
+          {totalReports} {totalReports === 1 ? "report" : "reports"} · {stateCount}{" "}
+          {stateCount === 1 ? "state" : "states"}
+        </p>
+      )}
       {item.locations && Object.keys(item.locations).length > 0 && (
         <div className="mt-3 flex flex-wrap gap-1.5" role="list" aria-label="States with reports">
           {Object.entries(item.locations)

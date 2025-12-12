@@ -72,6 +72,11 @@ Tradeoff: Simple dropdown vs. fancy multi-select. I recommend simple for now. Ap
 - ✅ Note any learnings or surprises
 - ✅ Flag anything the next AI session should know
 
+### 3b. Update STATE.md and BACKLOG.md
+- ✅ Refresh `.ai/STATE.md` with the new current snapshot
+- ✅ Mark completed items / add next tasks in `.ai/BACKLOG.md`
+- ✅ Keep continuity so Cade never has to re-explain history
+
 ### 4. Proactive Risk Flagging
 - ✅ Warn about fragile areas before touching them
 - ✅ Flag potential security issues (XSS, injection, exposed secrets)

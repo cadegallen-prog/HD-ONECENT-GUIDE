@@ -34,11 +34,27 @@ npm run lint
 
 **Must:** 0 warnings, 0 errors
 
-### 3. Type Check
+### 3. E2E Smoke (when UI/shared components change)
+
+```powershell
+npm run test:e2e
+```
+
+**Must:** Playwright passes on desktop + mobile (light/dark).
+
+**Trigger:** Any change to shared UI or layout files, especially:
+
+- `components/navbar.tsx`, `components/footer.tsx`, `app/layout.tsx`
+- Table/card UI in `components/penny-list-*.tsx`
+- Global styling in `app/globals.css`
+
+This is how we catch hydration flicker and responsive regressions that build/lint won’t flag.
+
+### 4. Type Check
 
 **Must:** 0 TypeScript errors (caught by build)
 
-### 4. Unit Tests (if exist)
+### 5. Unit Tests (if exist)
 
 ```powershell
 npm run test:unit
@@ -46,14 +62,14 @@ npm run test:unit
 
 **Must:** 100% pass rate
 
-### 5. Git Branch Check
+### 6. Git Branch Check
 
 **Must:** Verify which branch changes are on
 
 - If testing in `dev` locally, explicitly tell user changes need merge to `main` to deploy
 - If user expects changes live but they're in `dev`, that's the problem
 
-### 6. Feature Completeness
+### 7. Feature Completeness
 
 **Must:** User's stated goal accomplished
 
@@ -61,13 +77,14 @@ npm run test:unit
 - If goal was "add Y", does Y exist and work?
 - If goal was "improve Z", is Z measurably better?
 
-### 7. Documentation Updated
+### 8. Documentation Updated
 
 **Must:** Update relevant docs
 
 - `PROJECT_ROADMAP.md` if features/priorities changed
 - `CHANGELOG.md` for significant work
 - `SESSION_LOG.md` for all work (brief summary)
+- `STATE.md` and `BACKLOG.md` for continuity
 
 ---
 
