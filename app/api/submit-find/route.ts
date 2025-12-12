@@ -1,54 +1,88 @@
 import { NextRequest, NextResponse } from "next/server"
+import { z } from "zod"
+import { validateSku } from "@/lib/sku"
 
-// Basic SKU validation - must be exactly 6 or 10 digits
-function validateSKU(sku: string): boolean {
-  const cleaned = sku.replace(/\D/g, "")
-  return cleaned.length === 6 || cleaned.length === 10
+const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000 // 1 hour
+const RATE_LIMIT_MAX = 5
+
+type RateBucket = number[]
+const rateLimitMap: Map<string, RateBucket> =
+  (globalThis as unknown as { __pennyRateLimit?: Map<string, RateBucket> }).__pennyRateLimit ??
+  new Map()
+;(globalThis as unknown as { __pennyRateLimit?: Map<string, RateBucket> }).__pennyRateLimit =
+  rateLimitMap
+
+const submissionSchema = z.object({
+  itemName: z.string().min(1).max(75),
+  sku: z.string(),
+  storeCity: z.string().optional(),
+  storeState: z.string().min(2).max(2),
+  dateFound: z.string(),
+  quantity: z.string().min(1),
+  notes: z.string().optional(),
+  website: z.string().optional(), // honeypot
+})
+
+function getClientIp(request: NextRequest) {
+  const forwarded = request.headers.get("x-forwarded-for")
+  if (forwarded) return forwarded.split(",")[0].trim()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (request as any).ip || "unknown"
+}
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now()
+  const bucket = rateLimitMap.get(ip) ?? []
+  const recent = bucket.filter((ts) => now - ts < RATE_LIMIT_WINDOW_MS)
+  if (recent.length >= RATE_LIMIT_MAX) return false
+  recent.push(now)
+  rateLimitMap.set(ip, recent)
+  return true
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-
-    // Validate required fields (storeName is optional)
-    if (!body.itemName || !body.sku || !body.storeState || !body.dateFound || !body.quantity) {
+    const ip = getClientIp(request)
+    if (!checkRateLimit(ip)) {
       return NextResponse.json(
-        { error: "Missing required fields: itemName, sku, storeState, dateFound, quantity" },
+        { error: "Too many submissions from this device. Please try again later." },
+        { status: 429 }
+      )
+    }
+
+    const parsed = submissionSchema.safeParse(await request.json())
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: "Missing or invalid required fields. Please check the form and try again." },
         { status: 400 }
       )
     }
 
-    // Validate Item Name length
-    if (body.itemName.trim().length === 0 || body.itemName.trim().length > 75) {
-      return NextResponse.json(
-        { error: "Item name must be between 1 and 75 characters." },
-        { status: 400 }
-      )
+    const body = parsed.data
+
+    if (body.website && body.website.trim().length > 0) {
+      return NextResponse.json({ error: "Spam detected." }, { status: 400 })
     }
 
-    // Validate SKU format
-    if (!validateSKU(body.sku)) {
-      return NextResponse.json(
-        { error: "Invalid SKU format. Must be 6 or 10 digits." },
-        { status: 400 }
-      )
+    const skuCheck = validateSku(body.sku)
+    if (skuCheck.error) {
+      return NextResponse.json({ error: skuCheck.error }, { status: 400 })
     }
 
-    // Validate state is 2 characters
-    if (body.storeState.length !== 2) {
-      return NextResponse.json({ error: "State must be a 2-letter code." }, { status: 400 })
-    }
+    const normalizedSku = skuCheck.normalized
 
     // Validate quantity (must be a number between 1 and 99)
-    const qty = parseInt(body.quantity, 10)
-    if (isNaN(qty) || qty < 1 || qty > 99) {
+    const qty = Number.parseInt(body.quantity, 10)
+    if (Number.isNaN(qty) || qty < 1 || qty > 99) {
       return NextResponse.json(
         { error: "Quantity must be a number between 1 and 99." },
         { status: 400 }
       )
     }
 
-    const cleanedSku = body.sku.replace(/\D/g, "")
+    // Validate state is 2 characters
+    if (body.storeState.length !== 2) {
+      return NextResponse.json({ error: "State must be a 2‑letter code." }, { status: 400 })
+    }
 
     // Format location as "City, State" for Google Sheets
     const city = body.storeCity?.trim() || ""
@@ -58,16 +92,14 @@ export async function POST(request: NextRequest) {
     // Prepare payload for Google Apps Script
     const sheetPayload = {
       "Item Name": body.itemName.trim(),
-      SKU: cleanedSku,
+      SKU: normalizedSku,
       "Store (City, State)": location,
       "Purchase Date": body.dateFound,
-      "Exact Quantity Found": body.quantity?.trim() || "",
+      "Exact Quantity Found": String(qty),
       "Notes (optional)": body.notes?.trim() || "",
     }
 
-    // POST to Google Apps Script webhook
     const appsScriptUrl = process.env.GOOGLE_APPS_SCRIPT_URL
-
     if (!appsScriptUrl) {
       console.error("GOOGLE_APPS_SCRIPT_URL is not configured")
       return NextResponse.json(
@@ -92,7 +124,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: "Thanks! Your find has been added to the Penny List.",
+      message: "Thanks — your find is in the review queue.",
     })
   } catch (error) {
     console.error("Error submitting find:", error)

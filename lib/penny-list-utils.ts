@@ -1,5 +1,6 @@
 import { US_STATES } from "./us-states"
 import type { PennyItem } from "./fetch-penny-data"
+import { validateSku } from "./sku"
 
 const DAY_MS = 24 * 60 * 60 * 1000
 const THIRTY_DAYS_MS = 30 * DAY_MS
@@ -24,17 +25,25 @@ export function filterValidPennyItems(items: PennyItem[]): PennyItem[] {
   return items
     .map((item) => {
       const name = normalizeString(item.name)
-      const sku = normalizeString(item.sku)
+      const skuRaw = normalizeString(item.sku)
+      const skuCheck = validateSku(skuRaw)
       const dateAdded = normalizeString(item.dateAdded)
 
       return {
-        ...item,
-        name,
-        sku,
-        dateAdded,
+        item: {
+          ...item,
+          name,
+          sku: skuCheck.normalized || skuRaw,
+          dateAdded,
+        },
+        skuError: skuCheck.error,
       }
     })
-    .filter((item) => item.name !== "" && item.sku !== "" && isValidDate(item.dateAdded))
+    .filter(
+      ({ item, skuError }) =>
+        item.name !== "" && item.sku !== "" && !skuError && isValidDate(item.dateAdded)
+    )
+    .map(({ item }) => item)
 }
 
 /**

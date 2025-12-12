@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { AlertCircle, CheckCircle2, MapPin, Package, Calendar, Info } from "lucide-react"
 import { trackEvent } from "@/lib/analytics"
 import { US_STATES } from "@/lib/us-states"
+import { validateSku } from "@/lib/sku"
 
 // Format SKU for display: 123456 -> 123-456, 1234567890 -> 1234-567-890
 function formatSkuForDisplay(rawSku: string): string {
@@ -13,24 +14,18 @@ function formatSkuForDisplay(rawSku: string): string {
   if (digits.length <= 6) {
     return `${digits.slice(0, 3)}-${digits.slice(3)}`
   }
-  if (digits.length <= 7) {
-    return `${digits.slice(0, 4)}-${digits.slice(4)}`
+  if (digits.length <= 9) {
+    return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`
   }
   if (digits.length <= 10) {
     return `${digits.slice(0, 4)}-${digits.slice(4, 7)}-${digits.slice(7)}`
   }
-  // More than 10 digits - just show first 10 formatted
   return `${digits.slice(0, 4)}-${digits.slice(4, 7)}-${digits.slice(7, 10)}`
 }
 
 // Get raw digits from SKU input
 function getRawSku(input: string): string {
   return input.replace(/\D/g, "")
-}
-
-// Validate SKU is exactly 6 or 10 digits
-function isValidSku(rawSku: string): boolean {
-  return rawSku.length === 6 || rawSku.length === 10
 }
 
 const USER_STATE_KEY = "pennycentral_user_state"
@@ -44,6 +39,7 @@ export default function ReportFindPage() {
     dateFound: new Date().toLocaleDateString("en-CA"),
     quantity: "",
     notes: "",
+    website: "",
   })
 
   const [skuDisplay, setSkuDisplay] = useState("")
@@ -89,19 +85,21 @@ export default function ReportFindPage() {
     setFormData({ ...formData, sku: limitedDigits })
 
     // Validate and show error if needed
-    if (limitedDigits.length > 0 && limitedDigits.length !== 6 && limitedDigits.length !== 10) {
-      setSkuError("SKU must be 6 or 10 digits")
-    } else {
+    if (limitedDigits.length < 6) {
       setSkuError("")
+      return
     }
+    const check = validateSku(limitedDigits)
+    setSkuError(check.error || "")
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     // Final SKU validation
-    if (!isValidSku(formData.sku)) {
-      setSkuError("SKU must be 6 or 10 digits")
+    const skuCheck = validateSku(formData.sku)
+    if (skuCheck.error) {
+      setSkuError(skuCheck.error)
       return
     }
 
@@ -136,6 +134,7 @@ export default function ReportFindPage() {
           dateFound: new Date().toLocaleDateString("en-CA"),
           quantity: "",
           notes: "",
+          website: "",
         })
         setSkuDisplay("")
         setSkuError("")
@@ -245,7 +244,7 @@ export default function ReportFindPage() {
               aria-errormessage={skuError ? "sku-error" : undefined}
               value={skuDisplay}
               onChange={handleSkuChange}
-              placeholder="e.g., 123-456 or 1234-567-890"
+              placeholder="e.g., 123456, 123456789, or 1001234567"
               className={`w-full px-4 py-2 rounded-lg border bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent font-mono ${
                 skuError ? "border-red-500 dark:border-red-400" : "border-[var(--border-default)]"
               }`}
@@ -260,9 +259,22 @@ export default function ReportFindPage() {
               </p>
             ) : (
               <p id="sku-hint" className="mt-1 text-xs text-[var(--text-muted)]">
-                6 or 10 digit SKU from receipt or Home Depot app
+                6, 9, or 10 digit SKU from receipt or Home Depot app
               </p>
             )}
+          </div>
+
+          {/* Honeypot field for bots */}
+          <div className="hidden" aria-hidden="true">
+            <label htmlFor="website">Website</label>
+            <input
+              id="website"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              value={formData.website}
+              onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+            />
           </div>
 
           {/* State (required) */}

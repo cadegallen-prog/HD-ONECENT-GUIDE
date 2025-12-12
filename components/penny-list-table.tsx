@@ -209,14 +209,6 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
                       <div className="font-semibold text-[var(--text-primary)] leading-[1.4] break-words line-clamp-2-table">
                         {item.name}
                       </div>
-                      {item.notes && (
-                        <div
-                          className="text-sm text-[var(--text-secondary)] leading-[1.5] break-words line-clamp-2-table"
-                          title={item.notes}
-                        >
-                          {item.notes}
-                        </div>
-                      )}
                     </div>
                   </td>
 

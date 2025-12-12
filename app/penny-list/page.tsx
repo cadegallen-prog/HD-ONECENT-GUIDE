@@ -8,9 +8,9 @@ import {
 import { PennyListClient } from "@/components/penny-list-client"
 
 export const metadata: Metadata = {
-  title: "Crowd Reports: Penny Leads - Penny Central",
+  title: "Penny List: Latest Community Leads - Penny Central",
   description:
-    "Unverified crowd-sourced reports of penny items at Home Depot stores. Filter by state, tier, and more. YMMV - always verify in store.",
+    "Latest community‑reported penny leads at Home Depot. Search and filter by state, tier, and date. Always verify in store — YMMV.",
 }
 
 export const revalidate = 3600
@@ -80,11 +80,10 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
             id="page-heading"
             className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)] mb-4"
           >
-            Crowd Reports: Recent Penny Leads (Unverified)
+            Penny List: Latest Community Leads
           </h1>
           <p className="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
-            Recent penny finds reported by PennyCentral users. These are unverified leads —{" "}
-            <strong>YMMV (Your Mileage May Vary)</strong>.
+            Community‑reported penny leads. Verify in store — YMMV.
           </p>
         </div>
       </section>

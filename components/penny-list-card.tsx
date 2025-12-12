@@ -81,12 +81,6 @@ export function PennyListCard({ item }: PennyListCardProps) {
           </div>
         )}
 
-        {item.notes && (
-          <p className="text-base text-[var(--text-primary)] leading-[1.7] line-clamp-3">
-            {item.notes}
-          </p>
-        )}
-
         {item.locations && Object.keys(item.locations).length > 0 && (
           <div className="mt-auto space-y-2">
             <p className="text-sm font-semibold text-[var(--text-primary)]">
@@ -103,7 +97,7 @@ export function PennyListCard({ item }: PennyListCardProps) {
                     title={`${getStateName(state)}: ${count} ${count === 1 ? "report" : "reports"}`}
                     aria-label={`${getStateName(state)}: ${count} ${count === 1 ? "report" : "reports"}`}
                   >
-                    {state} · {count}
+                    {state} × {count}
                   </span>
                 ))}
             </div>
@@ -116,7 +110,7 @@ export function PennyListCard({ item }: PennyListCardProps) {
         )}
 
         <div className="pt-4 border-t border-[var(--border-default)] flex items-center justify-between mt-auto">
-          <span className="text-sm text-[var(--text-secondary)]">Unverified report</span>
+          <span className="text-sm text-[var(--text-secondary)]">Community lead</span>
           <span className="font-bold text-lg text-[var(--status-success)]">$0.01</span>
         </div>
       </div>
@@ -164,7 +158,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
       </div>
       {totalReports > 0 && (
         <p className="mt-2 text-xs text-[var(--text-secondary)]">
-          {totalReports} {totalReports === 1 ? "report" : "reports"} · {stateCount}{" "}
+          {totalReports} {totalReports === 1 ? "report" : "reports"} × {stateCount}{" "}
           {stateCount === 1 ? "state" : "states"}
         </p>
       )}
@@ -180,7 +174,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
                 className="px-2 py-1 rounded-full elevation-2 border border-[var(--border-strong)] text-[var(--text-primary)] text-xs font-semibold"
                 aria-label={`${state}: ${count} ${count === 1 ? "report" : "reports"}`}
               >
-                {state} · {count}
+                {state} × {count}
               </span>
             ))}
           {Object.keys(item.locations).length > 5 && (
