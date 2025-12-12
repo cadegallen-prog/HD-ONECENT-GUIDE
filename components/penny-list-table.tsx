@@ -1,9 +1,11 @@
 "use client"
 
+import Link from "next/link"
 import { ArrowUpDown, ArrowUp, ArrowDown, Copy, Check } from "lucide-react"
 import { useState } from "react"
 import { US_STATES } from "@/lib/us-states"
 import { formatRelativeDate } from "@/lib/penny-list-utils"
+import { PennyThumbnail } from "@/components/penny-thumbnail"
 import type { PennyItem } from "@/lib/fetch-penny-data"
 import type { SortOption } from "./penny-list-filters"
 import { trackEvent } from "@/lib/analytics"
@@ -128,20 +130,27 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
       </div>
       <div className="overflow-x-auto">
         <table
-          className="w-full text-sm table-fixed min-w-[900px]"
+          className="w-full text-sm table-fixed min-w-[980px]"
           role="table"
           aria-label="Penny list items"
         >
           <colgroup>
-            <col className="w-[30%]" />
+            <col className="w-[8%]" />
+            <col className="w-[28%]" />
             <col className="w-[14%]" />
-            <col className="w-[13%]" />
+            <col className="w-[12%]" />
             <col className="w-[16%]" />
-            <col className="w-[11%]" />
-            <col className="w-[16%]" />
+            <col className="w-[10%]" />
+            <col className="w-[12%]" />
           </colgroup>
           <thead>
             <tr className="border-b border-[var(--border-default)] bg-zinc-50 dark:bg-zinc-900/50">
+              <th
+                scope="col"
+                className="text-left px-4 py-3 font-semibold text-[var(--text-primary)]"
+              >
+                Photo
+              </th>
               <th
                 scope="col"
                 className="text-left px-4 py-3 font-semibold text-[var(--text-primary)]"
@@ -203,12 +212,19 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
                     index % 2 === 0 ? "bg-transparent" : "bg-zinc-50/50 dark:bg-zinc-900/20"
                   }`}
                 >
+                  {/* Thumbnail */}
+                  <td className="px-4 py-3 align-top">
+                    <PennyThumbnail src={item.imageUrl} alt={item.name} size={40} />
+                  </td>
                   {/* Item Name */}
                   <td className="px-4 py-3 align-top">
                     <div className="space-y-1.5">
-                      <div className="font-semibold text-[var(--text-primary)] leading-[1.4] break-words line-clamp-2-table">
+                      <Link
+                        href={`/sku/${item.sku}`}
+                        className="font-semibold text-[var(--text-primary)] leading-[1.4] break-words line-clamp-2-table hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+                      >
                         {item.name}
-                      </div>
+                      </Link>
                     </div>
                   </td>
 

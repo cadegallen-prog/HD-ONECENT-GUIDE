@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { Search, X, LayoutGrid, Table2, MapPin } from "lucide-react"
+import { Search, X, LayoutGrid, Table2, MapPin, Image } from "lucide-react"
 import { US_STATES } from "@/lib/us-states"
 
 export type TierFilter = "all" | "Very Common" | "Common" | "Rare"
@@ -16,6 +16,8 @@ interface PennyListFiltersProps {
   setStateFilter: (state: string) => void
   tierFilter: TierFilter
   setTierFilter: (tier: TierFilter) => void
+  hasPhotoOnly: boolean
+  setHasPhotoOnly: (value: boolean) => void
   searchQuery: string
   setSearchQuery: (query: string) => void
   sortOption: SortOption
@@ -40,6 +42,8 @@ export function PennyListFilters({
   setStateFilter,
   tierFilter,
   setTierFilter,
+  hasPhotoOnly,
+  setHasPhotoOnly,
   searchQuery,
   setSearchQuery,
   sortOption,
@@ -68,6 +72,7 @@ export function PennyListFilters({
   const hasActiveFilters =
     stateFilter !== "" ||
     tierFilter !== "all" ||
+    hasPhotoOnly ||
     searchQuery !== "" ||
     sortOption !== "newest" ||
     dateRange !== "30"
@@ -75,11 +80,12 @@ export function PennyListFilters({
   const clearAllFilters = useCallback(() => {
     setStateFilter("")
     setTierFilter("all")
+    setHasPhotoOnly(false)
     setSearchQuery("")
     setLocalSearch("")
     setSortOption("newest")
     setDateRange("30")
-  }, [setStateFilter, setTierFilter, setSearchQuery, setSortOption, setDateRange])
+  }, [setStateFilter, setTierFilter, setHasPhotoOnly, setSearchQuery, setSortOption, setDateRange])
 
   const tierOptions: { value: TierFilter; label: string; shortLabel: string }[] = [
     { value: "all", label: "All Tiers", shortLabel: "All" },
@@ -109,6 +115,13 @@ export function PennyListFilters({
       key: "tier",
       label: tierFilter,
       onRemove: () => setTierFilter("all"),
+    })
+  }
+  if (hasPhotoOnly) {
+    activeChips.push({
+      key: "photo",
+      label: "Has photo",
+      onRemove: () => setHasPhotoOnly(false),
     })
   }
   if (searchQuery) {
@@ -219,6 +232,22 @@ export function PennyListFilters({
             ))}
           </div>
         </fieldset>
+
+        {/* Has Photo Toggle */}
+        <button
+          type="button"
+          onClick={() => setHasPhotoOnly(!hasPhotoOnly)}
+          aria-pressed={hasPhotoOnly}
+          className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium min-h-[44px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
+            hasPhotoOnly
+              ? "bg-[var(--cta-primary)] text-white"
+              : "border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]"
+          }`}
+          title="Show only items with photos"
+        >
+          <Image className="w-4 h-4" aria-hidden="true" />
+          Has photo
+        </button>
 
         {/* View Mode Toggle (Desktop Only) */}
         <div className="hidden lg:flex rounded-lg border border-[var(--border-default)] overflow-hidden">

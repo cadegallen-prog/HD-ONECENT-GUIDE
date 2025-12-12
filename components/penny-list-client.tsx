@@ -73,6 +73,7 @@ export function PennyListClient({
     const value = getInitialParam("tier") as TierFilter
     return value === "Very Common" || value === "Common" || value === "Rare" ? value : "all"
   })
+  const [hasPhotoOnly, setHasPhotoOnly] = useState(() => getInitialParam("photo") === "1")
   const [searchQuery, setSearchQuery] = useState(() => getInitialParam("q"))
   const [sortOption, setSortOption] = useState<SortOption>(() => {
     const value = getInitialParam("sort") as SortOption
@@ -181,6 +182,15 @@ export function PennyListClient({
     [trackFilterChange, updateURL]
   )
 
+  const setHasPhotoOnlyWithURL = useCallback(
+    (value: boolean) => {
+      setHasPhotoOnly(value)
+      updateURL({ photo: value ? "1" : null })
+      trackFilterChange("photo", value ? "with" : "all", value ? "apply" : "clear")
+    },
+    [trackFilterChange, updateURL]
+  )
+
   const setSearchQueryWithURL = useCallback(
     (value: string) => {
       setSearchQuery(value)
@@ -272,6 +282,11 @@ export function PennyListClient({
       filtered = filtered.filter((item) => item.tier === tierFilter)
     }
 
+    // Photo filter
+    if (hasPhotoOnly) {
+      filtered = filtered.filter((item) => Boolean(item.imageUrl?.trim()))
+    }
+
     // Search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase()
@@ -308,7 +323,7 @@ export function PennyListClient({
       hotItems: hot,
       filteredItems: filtered,
     }
-  }, [validRows, stateFilter, tierFilter, searchQuery, sortOption, dateRange])
+  }, [validRows, stateFilter, tierFilter, hasPhotoOnly, searchQuery, sortOption, dateRange])
 
   const previousSearchRef = useRef(searchQuery)
 
@@ -323,7 +338,11 @@ export function PennyListClient({
   }, [filteredItems.length, searchQuery])
 
   const hasActiveFilters =
-    stateFilter !== "" || tierFilter !== "all" || searchQuery !== "" || dateRange !== "30"
+    stateFilter !== "" ||
+    tierFilter !== "all" ||
+    hasPhotoOnly ||
+    searchQuery !== "" ||
+    dateRange !== "30"
 
   useEffect(() => {
     if (!hasMountedRef.current || hasTrackedViewRef.current) return
@@ -433,6 +452,8 @@ export function PennyListClient({
         setStateFilter={setStateFilterWithURL}
         tierFilter={tierFilter}
         setTierFilter={setTierFilterWithURL}
+        hasPhotoOnly={hasPhotoOnly}
+        setHasPhotoOnly={setHasPhotoOnlyWithURL}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQueryWithURL}
         sortOption={sortOption}
