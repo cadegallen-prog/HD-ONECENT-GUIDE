@@ -32,20 +32,20 @@
 
     /* 60% - NEUTRAL BASE (backgrounds, text) */
     --bg-primary: #ffffff;
-    --bg-secondary: #fafaf9;
-    --bg-tertiary: #f5f5f4;
-    --bg-hover: #f0efed;
+    --bg-secondary: #fafafa;
+    --bg-tertiary: #f4f4f5;
+    --bg-hover: #f4f4f5;
     --bg-dark: #18181b;
 
     /* WCAG AAA compliant text colors (7:1+ contrast) */
-    --text-primary: #1c1917; /* 15.4:1 on white */
-    --text-secondary: #44403c; /* 9.7:1 on white */
-    --text-muted: #57534e; /* 7.1:1 on white */
+    --text-primary: #18181b; /* 17.4:1 on white */
+    --text-secondary: #3f3f46; /* 10.1:1 on white */
+    --text-muted: #52525b; /* 7.2:1 on white */
     --text-inverse: #fafafa;
 
-    --border-default: #e7e5e4;
-    --border-strong: #d6d3d1;
-    --border-dark: #d6d3d1;
+    --border-default: #e4e4e7;
+    --border-strong: #d4d4d8;
+    --border-dark: #a1a1aa;
 
     /* 30% - BRAND COLORS (headers, accents, icons) */
     --brand-gunmetal: #3f3f46;
@@ -67,13 +67,13 @@
 
     /* Page backgrounds */
     --bg-page: #ffffff;
-    --bg-card: #fafaf9;
-    --bg-elevated: #fafaf9;
+    --bg-card: #ffffff;
+    --bg-elevated: #fafafa;
 
     /* Legacy variables for compatibility */
     --accent: #3f3f46;
     --accent-hover: #1c1917;
-    --accent-muted: #f5f5f4;
+    --accent-muted: #f4f4f5;
     --accent-emphasis: #1c1917;
 
     /* Shadows */

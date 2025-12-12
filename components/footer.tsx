@@ -14,7 +14,7 @@ export function Footer() {
               href="/"
               className="text-lg font-bold text-white hover:text-zinc-200 transition-colors"
             >
-              Penny Central
+              PennyCentral
             </Link>
             <p className="mt-3 text-sm text-zinc-400 leading-relaxed">
               The complete guide to finding $0.01 items at Home Depot.
@@ -26,16 +26,19 @@ export function Footer() {
             <h3 className="text-sm font-semibold text-zinc-100 mb-4">Quick Links</h3>
             <ul className="space-y-2.5">
               <li>
-                <Link href="/" className="text-sm text-zinc-400 hover:text-white transition-colors">
-                  Home
+                <Link
+                  href="/penny-list"
+                  className="text-sm text-zinc-400 hover:text-white transition-colors"
+                >
+                  Penny List
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/guide"
+                  href="/report-find"
                   className="text-sm text-zinc-400 hover:text-white transition-colors"
                 >
-                  Guide
+                  Report a Find
                 </Link>
               </li>
               <li>
@@ -44,6 +47,14 @@ export function Footer() {
                   className="text-sm text-zinc-400 hover:text-white transition-colors"
                 >
                   Store Finder
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/guide"
+                  className="text-sm text-zinc-400 hover:text-white transition-colors"
+                >
+                  Guide
                 </Link>
               </li>
               <li>

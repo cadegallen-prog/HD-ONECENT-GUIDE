@@ -3,53 +3,31 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, Map, BookOpen, User, Moon, Sun, Book, Menu, X, Star } from "lucide-react"
+import { Map, BookOpen, User, Moon, Sun, Book, Menu, X, Star } from "lucide-react"
 import { useTheme } from "@/components/theme-provider"
 
 // Professional Penny Logo component
 function PennyLogo({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 32 32" className={className} aria-hidden="true">
-      {/* Outer coin ring */}
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
       <circle
-        cx="16"
-        cy="16"
-        r="14"
+        cx="12"
+        cy="12"
+        r="9"
         fill="none"
         stroke="currentColor"
         strokeWidth="2"
         className="text-[var(--text-secondary)]"
       />
-      {/* Inner coin detail */}
       <circle
-        cx="16"
-        cy="16"
-        r="11"
+        cx="12"
+        cy="12"
+        r="4"
         fill="none"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="2"
         className="text-[var(--text-muted)]"
       />
-      {/* Center "1" for one cent */}
-      <text
-        x="16"
-        y="21"
-        textAnchor="middle"
-        className="text-zinc-800 dark:text-[var(--text-secondary)] font-bold text-sm"
-        fill="currentColor"
-      >
-        1
-      </text>
-      {/* Small cent symbol */}
-      <text
-        x="23"
-        y="12"
-        textAnchor="middle"
-        className="text-zinc-700 dark:text-zinc-400 text-xs"
-        fill="currentColor"
-      >
-        ¢
-      </text>
     </svg>
   )
 }
@@ -67,11 +45,10 @@ export function Navbar() {
   const isDark = mounted && document.documentElement.classList.contains("dark")
 
   const navItems = [
-    { href: "/", label: "Home", icon: Home },
     { href: "/penny-list", label: "Penny List", icon: Star },
     { href: "/report-find", label: "Report a Find", icon: BookOpen },
-    { href: "/guide", label: "Guide", icon: Book },
     { href: "/store-finder", label: "Store Finder", icon: Map },
+    { href: "/guide", label: "Guide", icon: Book },
     // { href: "/trip-tracker", label: "Trip Tracker", icon: Clock }, // Hidden: Not production-ready
     { href: "/about", label: "About", icon: User },
   ]
@@ -86,7 +63,7 @@ export function Navbar() {
             <Link href="/" className="flex items-center gap-2.5 group">
               <PennyLogo className="w-8 h-8 transition-transform group-hover:scale-105" />
               <span className="text-lg font-bold tracking-tight text-[var(--text-primary)]">
-                Penny Central
+                PennyCentral
               </span>
             </Link>
 
