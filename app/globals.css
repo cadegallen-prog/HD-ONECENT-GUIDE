@@ -709,6 +709,30 @@
     text-decoration-thickness: 2px;
   }
 
+  /* Footer navigation links - underline on hover only */
+  footer a {
+    text-decoration: none;
+    transition:
+      color var(--duration-normal) var(--ease-hover),
+      text-decoration-color var(--duration-normal) var(--ease-hover);
+  }
+
+  footer a:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--cta-primary);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.15em;
+  }
+
+  footer a:focus-visible {
+    outline: 2px solid var(--cta-primary);
+    outline-offset: 2px;
+    text-decoration: underline;
+    text-decoration-color: var(--cta-primary);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.15em;
+  }
+
   /* Focus ring for accessibility - all interactive elements */
   a:focus-visible,
   button:focus-visible,

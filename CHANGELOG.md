@@ -2,134 +2,274 @@
 
 Brief log of completed work. Most recent at top.
 
+Dates are recorded in America/New_York time.
+
 ---
 
-## 2025-12-14 - Browser compatibility cleanup
+## 2025-12-13 - Layout primitives rollout (partial)
 
-Objective: Remove unsupported CSS helpers, keep compatibility hints happy, and document the small follow-up touches after the core loop refresh.
+Objective: Make every route feel like the same website by standardizing structure, spacing, and CTA placement, without redesigning copy.
+
+Prompt summary:
+
+- Fix or replace `components/page-templates.tsx` to match the token contract.
+- Implement primitives: PageShell, PageHeader, Section, Prose.
+- Apply primitives incrementally across routes with full gates after each chunk.
 
 What changed:
-- Removed `color-mix` usages from `app/globals.css` selection styles and chip tokens so the codebase relies on solid fallbacks that work on Chrome <111.
-- Reordered `.line-clamp-2-table` to emit the standard `line-clamp` after the vendor-prefixed `-webkit-line-clamp`, satisfying the Edge Tools prefix-order rule.
-- Documented the recent CSS/validation sweep and testing flow for future agents to reference in this changelog section.
+
+- Rebuilt `components/page-templates.tsx` with server-friendly primitives:
+  - PageShell, PageHeader, Section, Prose
+  - Uses design tokens consistently and sets consistent max widths, rhythm, and CTA handling.
+- Migrated the first set of content routes onto the new primitives without changing copy:
+  - `app/about/page.tsx`
+  - `app/cashback/page.tsx`
+  - `app/resources/page.tsx`
+  - `app/clearance-lifecycle/page.tsx`
+  - `app/guide/page.tsx`
+- Normalized typography and colors to `var(--*)` tokens; aligned header and CTA placement.
+- Added consistent sections and long-form list/prose styling; standardized card treatments for support/download areas.
+- Color lint improved (warnings dropped to 13 vs baseline 47; no new violations introduced).
 
 Testing:
+
 - `npm run lint` ✅
+- `npm run test:unit` ✅
+- `npm run lint:colors` ✅
 - `npm run build` ✅
-
----
-
-## 2025-12-13 - Duplicate-regression lint hardening + color drift ratchet
-
-Objective: Prevent “broken merge” regressions Cade can’t spot (duplicate JSX props / duplicate object keys) and stop token drift from getting worse over time without forcing a full color refactor today.
-
-What changed:
-- ESLint now errors on:
-  - Duplicate JSX props via `react/jsx-no-duplicate-props` (prevents patterns like two `href` props).
-  - Duplicate object keys via `no-dupe-keys` (catches duplicate keys in object literals, including metadata/config objects).
-  - Config: `eslint.config.mjs`.
-- Color drift ratchet added on top of existing `lint:colors`:
-  - Baseline stored at `checks/lint-colors.baseline.json` (current baseline: 47 warnings).
-  - `npm run lint:colors` now fails only if warning count increases vs baseline (errors still fail immediately).
-  - Intentional baseline refresh command: `npm run lint:colors:update-baseline`.
-  - Code: `scripts/lint-colors.ts`, `package.json` scripts.
-- Docs updated to match reality:
-  - `SCRIPTS-AND-GATES.txt` documents the ratchet + baseline update flow and reaffirms audits resolve `BASE_URL` consistently via `scripts/get-base-url.js`.
-- Scope inventory refreshed:
-  - `ROUTE-TREE.txt` regenerated from `next build` output (includes framework `/_not-found`; marks dynamic/API routes).
-  - Foundation rules captured for future agents in `.ai/FOUNDATION_CONTRACT.md` (tokens/Tailwind/layout/nav/gates).
-
-Notes for future agents:
-- If you reduce raw Tailwind colors, `npm run lint:colors` should show fewer warnings than baseline; once you verify the change is intentional and safe, update the baseline with `npm run lint:colors:update-baseline`.
-- `COMPONENT-TREE.txt` may exist locally but is currently not tracked by git (do not assume it’s authoritative unless explicitly generated/committed).
-
-Testing:
-- `npm run lint`
-- `npm run build`
-- `npm run test:unit`
-- `npm run test:e2e`
-
-## 2025-12-13 - Layout primitives + consistent route frames
-
-Objective: Standardize spacing, token usage, and CTA placement across early routes before rolling the primitives site-wide.
-
-What changed:
-- Rebuilt `components/page-templates.tsx` into server-friendly `PageShell`, `PageHeader`, `Section`, and `Prose` primitives that honor the neutral token contract (`var(--bg-*)`, `var(--text-*)`, `var(--cta-primary)`, etc.) and enforce consistent max-width/padding/rhythm rules.
-- Migrated `/about`, `/cashback`, `/resources`, `/clearance-lifecycle`, and `/guide` onto the new primitives, keeping copy untouched while aligning spacing, CTA positioning, and long-form prose structure.
-- Added section treatments and CTA groupings for downloads/support cards so the pages now share the same visual frame before continuing route coverage.
-- Color linter warnings dropped from 47 to 13 thanks to the token cleanup; the remaining warnings are legacy (admin/report-find/penny-list surfaces).
-- Playwright visual smoke now fails because the page structure/layout changed; see `reports/playwright/results/...` for the diffs (home, penny-list, report-find, store-finder, about across light/dark/mobile/desktop).
+- `npm run test:e2e` ❌ (visual snapshot diffs expected from layout updates; baselines not updated)
 
 Notes:
-- Future agents should keep adding routes to the new primitives and update the visual baselines only after verifying the diffs are intended.
 
-Testing:
-- `npm run lint`
-- `npm run build`
-- `npm run test:unit`
-- `npm run lint:colors`
-- `npm run test:e2e` *(fails on updated snapshots for home, penny-list, report-find, store-finder, about in several projects/viewport combinations)*
-
-## 2025-12-13 - Gate wiring, audit baseline, and documentation
-
-Objective: Lock down the audit gate wiring, baseline health run, and docs/route inventories so future agents know what passed and where to start.
-
-What changed:
-- Added a shared `scripts/get-base-url.js` + helper to infer ports from `package.json`, wired it into saga scripts (`check-contrast.js`, `check-axe.js`, `run-audit.ps1`) so everything hits the same dev server (default `3001` via `next dev -p 3001`).
-- Created `scripts/check-axe.js`, `scripts/print-base-url.js`, and updated `SCRIPTS-AND-GATES.txt` to reflect the real commands (no stale package.json blob) plus documented the audit workflow (BASE_URL + Lighthouse script).
-- Generated `.ai/BASELINE_AUDIT.md` & `.ai/FOUNDATION_PLAN.md`, refreshed Playwright penny-list snapshots, and persisted recent Axe/contrast reports so gate output reflects `BASE_URL=http://localhost:3001`.
-- Captured `ROUTE-TREE.txt` and `COMPONENT-TREE.txt` inventories for future audits.
-
-Testing:
-- `npm run build`
-- `npm run lint`
-- `npm run test:unit`
-- `npm run test:e2e`
-- With `BASE_URL=http://localhost:3001`: `npm run check-axe`
-- With `BASE_URL=http://localhost:3001`: `npm run check-contrast`
+- Next step is to review diffs and update Playwright baselines for affected routes, or adjust layouts if the diffs reveal unintended changes.
 
 ---
 
-## 2025-12-13 - Token unification & palette cleanup
+## 2025-12-13 - Token alignment + shadcn variable bridging (visual baselines pending)
 
-Objective: Establish a single token system everywhere, replace stray Tailwind palette usage, and document the updated rules so new tokens drive every surface (including shadcn UI).
+Objective: Move toward one token system used everywhere, align with DESIGN-SYSTEM-AAA, and reduce raw Tailwind palette usage in global utilities.
+
+Prompt summary:
+
+- Map token usage vs docs and identify conflicts.
+- Bridge shadcn semantic variables (background, foreground, border, ring, etc) to project tokens.
+- Replace raw Tailwind palette usage in `globals.css` utilities and Leaflet styling with token-based values.
+- Add a token usage guide to `.ai/FOUNDATION_CONTRACT.md`.
+- Run contrast and axe audits against BASE_URL.
 
 What changed:
-- Reconciled `app/globals.css` with `docs/DESIGN-SYSTEM-AAA.md`, refreshed light/dark colors, ensured `--background`, `--foreground`, `--card`, `--popover`, `--muted`, `--secondary`, `--border`, `--ring`, and `--destructive` alias the PennyCentral palette, and tightened legacy alias coverage.
-- Replaced all Tailwind palette usages inside the global utilities/Leaflet overrides (badges, callouts, tooltips, tables, priority chips, popups, selection colors) with `var(--token)` colors so light/dark mode cohere, and refreshed the footer to rely solely on token values.
-- Documented the new token usage guidance in `.ai/FOUNDATION_CONTRACT.md` so future agents stick to `bg/text/border-[var(--token)]` and the aliased shadcn classes instead of palette classes.
+
+- Rebased `app/globals.css` tokens to match `docs/DESIGN-SYSTEM-AAA.md`:
+  - Added tokens like `--bg-recessed`, `--bg-focus`, `--text-placeholder`, `--link-*`
+  - Refreshed light/dark text, border, CTA, status, and live indicator values.
+- Bridged shadcn variables to the token system so shadcn semantic classes inherit PennyCentral palette automatically:
+  - `background`, `foreground`, `card`, `popover`, `muted`, `secondary`, `border`, `ring`, `destructive`, `accent`.
+- Replaced raw Tailwind palette usage in global utilities (badges, callouts, tooltips, tables, chips, Leaflet popups, selection colors) with token-based colors.
+- Updated footer to use tokenized backgrounds/text/links and consistent underline treatment.
+- Added “Token Usage Guide” to `.ai/FOUNDATION_CONTRACT.md`:
+  - Allowed: token utilities (`bg-[var(--token)]`, `text-[var(--token)]`, `border-[var(--token)]`) and shadcn semantics (after aliasing).
+  - Disallowed: raw palette classes (`bg-slate-*`, `text-zinc-*`, etc).
 
 Testing:
-- `npm run lint`
-- `npm run build`
-- `npm run test:unit`
-- `npm run test:e2e` *(fails: visual smoke snapshots (light desktop/mobile) were expected to shift after the palette update; 10 comparisons against the stored baseline now differ — update the Playwright baselines if the new palette is approved)*
-- With `BASE_URL=http://localhost:3001`: `npm run check-contrast`
-- With `BASE_URL=http://localhost:3001`: `npm run check-axe`
 
-## 2025-12-13 - SKU validation narrowing
+- `npm run lint` ✅
+- `npm run build` ✅
+- `npm run test:unit` ✅
+- `npm run check-contrast` ✅ (writes `reports/contrast-computed.json`)
+- `npm run check-axe` ✅ (writes `reports/axe-report.json`)
+- `npm run test:e2e` ❌ (10 visual snapshot diffs after palette/token changes)
+
+Open items / risks:
+
+- Many pages and components still use raw palette classes and should be migrated to tokens for full consistency and stable contrast.
+- Legacy aliases (example: `--bg-primary/--bg-secondary` and `--success|--error|--warning` aliases) remain for compatibility and can be retired after consumers migrate.
+- DESIGN-SYSTEM-AAA contains conflicting dark palette blocks; ensure a single source of truth before finalizing the dark palette.
+
+---
+
+## 2025-12-13 - ESLint duplicate bug prevention + color drift ratchet
+
+Objective: Prevent the class of bugs Cade cannot detect (duplicate JSX props, duplicate object keys) and stop raw Tailwind color drift from getting worse.
+
+Prompt summary:
+
+- ESLint hardening: enforce `react/jsx-no-duplicate-props` and `no-dupe-keys` as errors.
+- Implement a “color drift ratchet” so new raw Tailwind colors cannot be introduced without intentionally updating a reviewed baseline.
+- Confirm BASE_URL consistency and update docs to match reality.
+
+What changed:
+
+- Enforced duplicate-prop and duplicate-key prevention as errors in `eslint.config.mjs`:
+  - `react/jsx-no-duplicate-props`
+  - `no-dupe-keys`
+- Added a color drift ratchet:
+  - Baseline file: `checks/lint-colors.baseline.json` (47 warnings baseline)
+  - `npm run lint:colors` now fails only if warnings increase compared to baseline.
+  - New helper script: `npm run lint:colors:update-baseline` to refresh the baseline intentionally after review.
+- Updated `SCRIPTS-AND-GATES.txt` to document the ratchet and confirm BASE_URL resolution path for audits.
+- Recorded baseline/reference in `.ai/STATE.md` and logged the session.
+
+Testing:
+
+- `npm run lint` ✅
+- `npm run build` ✅
+- `npm run test:unit` ✅
+- `npm run test:e2e` ✅
+
+Notes:
+
+- `COMPONENT-TREE.txt` left untouched and untracked in this pass.
+
+---
+
+## 2025-12-13 - Foundation contract + route inventory refresh
+
+Objective: Create a repo-level “foundation contract” so changes remain safe and verifiable for a non-coder workflow, and refresh route scope.
+
+Prompt summary:
+
+- Cover the entire site using `ROUTE-TREE.txt` as scope (regenerate if stale).
+- Read AGENTS/CLAUDE/SKILLS/DESIGN-SYSTEM-AAA + globals and inventory docs.
+- Write `.ai/FOUNDATION_CONTRACT.md` (tokens, Tailwind rules, layout primitives, nav rules, regression gates).
+
+What changed:
+
+- Added `.ai/FOUNDATION_CONTRACT.md` capturing:
+  - token rules
+  - allowed Tailwind usage
+  - layout primitives expectations
+  - nav/IA expectations
+  - required regression gates
+- Refreshed `ROUTE-TREE.txt` from the latest Next build (includes framework 404 and marks dynamic/API routes).
+- Updated `.ai/STATE.md` and `.ai/SESSION_LOG.md` to reflect the new contract and route inventory.
+- Commit created on main: “Add foundation contract and refresh route list.”
+
+Testing:
+
+- `npm run lint` ✅
+- `npm run build` ✅
+- `npm run test:unit` ✅
+- `npm run test:e2e` ✅
+
+Notes:
+
+- Playwright logs still show Next.js “Invalid source map” warnings and store-finder falling back to local data on remote 404, but no test failures.
+
+---
+
+## 2025-12-12 - Repo truth verification + Windows axe report save fix
+
+Objective: Verify what is actually true in the repo (ports, scripts, docs), remove hardcoded ports, and confirm all gates pass.
+
+Prompt summary:
+
+- Confirm dev port and ensure audits target the same running server via BASE_URL.
+- Remove any hardcoded `http://localhost:3000` usage.
+- Fix documentation drift in `SCRIPTS-AND-GATES.txt`.
+- Run build/lint/unit/e2e and run axe/contrast against BASE_URL.
+
+What changed:
+
+- Confirmed `package.json` dev and start port is 3001 and `check-axe` is `node scripts/check-axe.js` (no hardcoded `http://localhost:3000`).
+- Confirmed audits share the same base URL logic:
+  - Axe: `scripts/check-axe.js` -> `scripts/get-base-url.js`
+  - Contrast: `scripts/check-contrast.js` -> `scripts/get-base-url.js`
+  - Lighthouse: `scripts/run-audit.ps1` -> `scripts/print-base-url.js` -> `scripts/get-base-url.js`
+- Fixed a real repo bug on Windows:
+  - `scripts/check-axe.js` now passes a relative `--save` path so `@axe-core/cli` can write the report reliably.
+- Regenerated audit outputs so they reflect `http://localhost:3001`:
+  - `reports/axe-report.json`
+  - `reports/contrast-computed.json`
+
+Testing:
+
+- `npm run build` ✅
+- `npm run lint` ✅
+- `npm run test:unit` ✅
+- `npm run test:e2e` ✅
+- With server running:
+  - `$env:BASE_URL='http://localhost:3001'; npm run check-axe` ✅
+  - `$env:BASE_URL='http://localhost:3001'; npm run check-contrast` ✅
+
+---
+
+## 2025-12-12 - Baseline audit + gate wiring (BASE_URL) and audit docs
+
+Objective: Stabilize build and quality gates site-wide before any styling or content refactors.
+
+Prompt summary:
+
+- Run baseline build health across all routes.
+- Fix gate wiring and hardcoded ports by using a shared BASE_URL for audits.
+- Write `.ai/BASELINE_AUDIT.md` and `.ai/FOUNDATION_PLAN.md`.
+- Stop after gates are correct and docs are written.
+
+What changed:
+
+- Fixed audit gate wiring to use BASE_URL (no hardcoded ports):
+  - `package.json`
+  - `scripts/check-axe.js`
+  - `scripts/check-contrast.js`
+  - `scripts/run-audit.ps1`
+  - `scripts/get-base-url.js`
+  - `scripts/print-base-url.js`
+- Unblocked baseline health by updating Playwright visual snapshots for `/penny-list` so `npm run test:e2e` passes again.
+- Wrote the required docs:
+  - `.ai/BASELINE_AUDIT.md`
+  - `.ai/FOUNDATION_PLAN.md`
+- Updated `SCRIPTS-AND-GATES.txt` to reflect the gates and new BASE_URL behavior.
+
+Testing:
+
+- `npm run build` ✅
+- `npm run lint` ✅
+- `npm run test:unit` ✅
+- `npm run test:e2e` ✅
+
+How to run audits (2 terminals):
+
+- Terminal A: `npm run dev`
+- Terminal B (PowerShell):
+  - `$env:BASE_URL='http://localhost:3001'; npm run check-axe`
+  - `$env:BASE_URL='http://localhost:3001'; npm run check-contrast`
+  - `pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/run-audit.ps1`
+
+What was explicitly not done:
+
+- No styling/token refactors across pages
+- No nav/content changes
+- No new dependencies
+- No redesign work
+
+---
+
+## 2025-12-12 - SKU validation narrowing
 
 Objective: Align SKU validation with latest business rule (6 or 10 digits only) and document the change.
 
 What changed:
+
 - Updated SKU validation to accept only 6 or 10 digits; removed 9-digit support for consistency across client, server, and form helpers (`lib/sku.ts`, `app/report-find/page.tsx`). Note: existing 9-digit submissions must be normalized/migrated before enforcing this in production.
 
 Testing:
+
 - `npm run lint` ✅
 - `npm run build` ✅
 
 ---
 
-## 2025-12-12 - Penny List rescue, validation hardening, thumbnails, main-only workflow
+## 2025-12-11 - Penny List rescue, validation hardening, thumbnails, main-only workflow
 
-Objective: Make Penny List + Report Find a cohesive, trustworthy core product, tighten data quality, refresh visual system, and simplify deployment to main-only.
+Objective: Make Penny List and Report Find a cohesive, trustworthy core product, tighten data quality, refresh visual system, and simplify deployment to main-only.
 
 What changed:
-- Phase A: Added shared SKU validation (`lib/sku.ts`) with 6/9/10-digit rules, garbage/repeating-pattern rejection, server honeypot + rate limiting in `app/api/submit-find/route.ts`, improved client inline SKU errors in `app/report-find/page.tsx`, simplified Penny List copy and reduced disclaimers, removed Penny Alerts UI, and improved scan UX.
+
+- Phase A: Added shared SKU validation (`lib/sku.ts`) with 6/9/10-digit rules, garbage/repeating-pattern rejection, server honeypot and rate limiting in `app/api/submit-find/route.ts`, improved client inline SKU errors in `app/report-find/page.tsx`, simplified Penny List copy and reduced disclaimers, removed Penny Alerts UI, and improved scan UX.
 - Phase B: Refreshed light palette to neutral zinc scale in `app/globals.css`, replaced logo with clean “PennyCentral” wordmark in `components/navbar.tsx`, made Penny List the first nav/home CTA, and updated footer links.
-- Phase C: Added thumbnails (existing photo URLs + consistent placeholder) to Penny List cards/table, added “Has photo” filter, and created SEO-friendly SKU detail pages at `/sku/[sku]` linked from the list.
+- Phase C: Added thumbnails (existing photo URLs plus consistent placeholder) to Penny List cards/table, added “Has photo” filter, and created SEO-friendly SKU detail pages at `/sku/[sku]` linked from the list.
 
 Testing:
+
 - `npm run lint` ✅
 - `npm run build` ✅
 
@@ -137,14 +277,16 @@ Testing:
 
 ## 2025-12-11 - CTA polish, hover balance, and accessibility checks
 
-Objective: Reduce visual harshness, balance hover lift across CTAs, tighten copy, and ensure analytics/accessibility remain intact.
+Objective: Reduce visual harshness, balance hover lift across CTAs, tighten copy, and ensure analytics and accessibility remain intact.
 
 What changed:
-- Softened hero and card hover states (lighter lift, balanced shadows) across light/dark; adjusted CTA base colors to avoid “feminine blue” feel and bright glare.
-- Toned down Penny List “Submit a Find” / “Subscribe to Alerts” lift; updated CTA copy (coffee = optional tip; BeFrugal = supports at no extra cost).
+
+- Softened hero and card hover states (lighter lift, balanced shadows) across light/dark; adjusted CTA base colors to avoid bright glare.
+- Toned down Penny List “Submit a Find” and “Subscribe to Alerts” lift; updated CTA copy (coffee = optional tip; BeFrugal = supports at no extra cost).
 - Added data-cta attribute and balanced BeFrugal CTA colors on About page; kept GA tag in `app/layout.tsx` head unchanged.
 
 Testing:
+
 - `npm run lint` ✅
 - `npm run build` ✅
 - Contrast: `npx cross-env BASE_URL=http://localhost:3001 node scripts/check-contrast.js` ✅
@@ -167,7 +309,7 @@ What changed:
 Evidence (measured):
 
 - Text primary: 13.6:1 on #121212, 12.7:1 on #1A1A1A.
-- Borders: 3.5–4.7:1 on base, 3.3–4.4:1 on cards.
+- Borders: 3.5 to 4.7:1 on base, 3.3 to 4.4:1 on cards.
 - CTA primary: 7.4:1 on base; status success: 10.8:1 on base.
 
 Testing:
@@ -177,280 +319,150 @@ Testing:
 
 ---
 
-## 2025-12-10 - MCP Documentation & Testing Infrastructure
+## 2025-12-10 - MCP documentation and testing infrastructure
 
-**Objective:** Create comprehensive documentation for all MCP servers, auto-loading mechanisms, testing procedures, and stopping rules to maximize future agent productivity.
+Objective: Create comprehensive documentation for MCP servers, auto-loading, testing procedures, and stopping rules to maximize future agent productivity.
 
-**New Documentation Created:**
+What changed:
 
-- **`.ai/MCP_SERVERS.md`** (Full MCP reference)
-  - Complete documentation of all 6 MCP servers (filesystem, github, git, chrome-devtools, pylance, sequential-thinking)
-  - Best practices and anti-patterns for each server
-  - Token usage optimization guidelines
-  - Troubleshooting procedures
-  - Example workflows and use cases
+- New docs created:
+  - `.ai/MCP_SERVERS.md` (full MCP reference for filesystem, github, git, chrome-devtools, pylance, sequential-thinking)
+  - `.ai/TESTING_CHECKLIST.md` (QA procedures: build/lint/tests, devices, breakpoints, performance, accessibility, cross-browser, SEO, production verification)
+  - `.ai/STOPPING_RULES.md` (stop criteria, quality gates, anti-over-optimization guardrails)
+- Docs updated:
+  - `.ai/AI-TOOLS-SETUP.md` (comprehensive MCP section)
+  - `.ai/USAGE.md` (MCP tools section)
+  - `.ai/QUICKSTART.md` (Power Tools: MCP Servers)
+  - `.ai/README.md` (file structure and AI assistant reference updated)
+  - `SKILLS.md` (expanded MCP guidance and anti-patterns)
 
-- **`.ai/TESTING_CHECKLIST.md`** (Comprehensive QA procedures)
-  - Pre-deployment checklist (build, lint, tests, git branch verification)
-  - Device testing (desktop, mobile, tablet)
-  - Responsive breakpoint testing at 7 screen sizes
-  - Network performance testing (Slow 3G, Fast 3G)
-  - Accessibility testing (keyboard nav, screen readers, contrast)
-  - Cross-browser testing (Chrome, Firefox, Safari, Edge)
-  - Core Web Vitals targets and measurement procedures
-  - Feature-specific test scenarios for penny list and store finder
-  - Data validation procedures
-  - Error handling testing
-  - SEO/meta tags verification
-  - Production deployment verification
-  - Visual regression manual checklist
-  - Common bug patterns to check
-  - Testing anti-patterns to avoid
-
-- **`.ai/STOPPING_RULES.md`** (When to stop working)
-  - Clear stopping criteria and quality gates
-  - How to interpret "maximum capacity" instructions correctly
-  - Warning signs of over-optimization
-  - Common scenarios with dos/don'ts
-  - Session end checklist
-  - The "Is This Done?" test
-
-**Documentation Updates:**
-
-- **`.ai/AI-TOOLS-SETUP.md`** - Added comprehensive MCP section
-  - MCP quick reference table
-  - Configuration examples
-  - Usage examples for each server
-  - Best practices summary
-  - Verification procedures
-  - Troubleshooting guide
-
-- **`.ai/USAGE.md`** - Added MCP tools section
-  - Explained 6 MCP servers for ChatGPT Codex
-  - Clarified auto-loading mechanism
-  - Provided context for non-technical users
-
-- **`.ai/QUICKSTART.md`** - Added "Power Tools: MCP Servers" section
-  - User-friendly explanation of MCP capabilities
-  - Before/after examples showing efficiency gains
-  - When AI uses MCPs automatically
-  - Advanced best practices for AI agents
-
-- **`.ai/README.md`** - Updated file structure
-  - Added MCP_SERVERS.md, TESTING_CHECKLIST.md, STOPPING_RULES.md to directory listing
-  - Updated "For AI Assistants" quick reference with MCP guidance
-  - Added file descriptions for new documentation
-
-- **`SKILLS.md`** - Enhanced MCP section
-  - Expanded MCP server table with priority levels
-  - Added best practices dos/don'ts
-  - Added token cost hierarchy
-  - Added common MCP anti-patterns with examples
-
-**Status:** ✅ Complete - All MCPs documented, testing procedures established, stopping rules clarified
-
-**Impact:**
-
-- Future agents can immediately leverage MCP tools with best practices
-- Comprehensive testing checklist ensures quality across all dimensions
-- Clear stopping rules prevent over-optimization and wasted tokens
-- All documentation cross-referenced and consistent
+Status: Complete - MCPs documented, testing procedures established, stopping rules clarified.
 
 ---
 
-## 2025-12-10 - Penny List Phase 1: UI Polish & Testing
+## 2025-12-10 - Penny List Phase 1: UI polish and testing
 
-**Objective:** Implement Phase 1 of PENNY_LIST_PLAN.md - enhance table/card readability, verify validation logic, and add comprehensive test coverage.
+Objective: Enhance table and card readability, verify validation logic, and add test coverage.
 
-**UI/UX Improvements:**
+What changed:
 
-- **Table Enhancements:**
-  - Added `.line-clamp-2-table` CSS utility for proper 2-line text wrapping (ESLint compliant)
-  - Rebalanced column widths for better space utilization (30%, 14%, 13%, 16%, 11%, 16%)
-  - Improved line-heights throughout: 1.4 for headings, 1.5 for supporting text
-  - Enhanced contrast for SKUs, badges, and state chips using zinc palette (zinc-100/800 bg, zinc-300/700 borders)
-  - Added tabular-nums to numeric columns for clean alignment
-  - Added mobile scroll hint banner for horizontal table scrolling
+- Table enhancements:
+  - Added `.line-clamp-2-table` CSS utility for 2-line wrapping.
+  - Rebalanced column widths and improved line-heights for readability.
+  - Improved contrast for SKUs, badges, and chips using zinc palette.
+  - Added tabular-nums to numeric columns.
+  - Added mobile scroll hint banner for horizontal table scrolling.
+- Card layout:
+  - Increased font-weight on dates/times for scannability.
+  - Standardized badge padding and improved line-heights.
+  - Updated SKU displays with zinc backgrounds and borders.
+- Testing and quality:
+  - Added edge case tests for freshness metrics and validation.
+  - Fixed CSS syntax and formatting issues.
+  - Production build verified.
 
-- **Card Layout:**
-  - Increased font-weight on dates/times from regular to medium for better scannability
-  - Applied consistent zinc palette to all badges and state chips for improved contrast
-  - Updated SKU displays with zinc backgrounds/borders
-  - Standardized badge padding to 2.5px for better touch targets
-  - Improved line-heights: 1.4 for titles, 1.6 for notes
+Files modified:
 
-**Testing & Quality:**
+- `components/penny-list-table.tsx`
+- `components/penny-list-card.tsx`
+- `app/globals.css`
+- `tests/penny-list-utils.test.ts`
 
-- **Enhanced Unit Tests:**
-  - Added edge case tests for freshness metrics (invalid dates, 30-day boundaries, future dates)
-  - Added comprehensive validation tests (whitespace handling, empty strings, malformed dates)
-  - Added relative date formatting edge cases
-  - All tests passing ✅
-
-- **Build Quality:**
-  - Fixed CSS syntax error in globals.css
-  - Fixed prettier formatting issues
-  - All lint checks passing (0 warnings)
-  - Production build successful (25/25 routes)
-
-**Files Modified:**
-
-- `components/penny-list-table.tsx` - Table layout and contrast improvements
-- `components/penny-list-card.tsx` - Card layout and readability enhancements
-- `app/globals.css` - Added `.line-clamp-2-table` utility class
-- `tests/penny-list-utils.test.ts` - Comprehensive edge case coverage
-
-**Design System Compliance:**
-
-- All changes respect WCAG AAA constraints
-- No new accent colors introduced
-- Max 3 accent elements per viewport maintained
-- Touch targets all 44px minimum
-
-**Status:** ✅ Phase 1 Complete - Production Ready
+Status: Phase 1 complete.
 
 ---
 
-## 2025-12-09 - Support CTA Messaging Refresh
+## 2025-12-09 - Support CTA messaging refresh
 
-- Replaced every "Leave a Tip" reference with the more personable "Buy Me a Coffee" CTA across the homepage, About page, footer, SupportAndCashbackCard, and global support copy.
-- Reworded BeFrugal explanations to highlight the benefit for users and call out the referral bonus so visitors understand why activating cashback matters.
-- Updated Resources page support blurb and AGENTS instructions to match the new terminology.
+What changed:
 
----
-
-## 2024-12-03 - Design System Refinement: 60-30-10 Rule
-
-- **Color System Overhaul:** Implemented 60-30-10 color rule for better visual hierarchy
-  - 60% Neutral: Stone grays for backgrounds and text (WCAG AA compliant)
-  - 30% Brand: Gunmetal (#374151) for headers, Copper (#B87333) for decorative accents
-  - 10% CTA: Blue (#1D4ED8) for primary action buttons ONLY
-- **Homepage Redesign:**
-  - Hero section with clear social proof badge and blue CTAs
-  - "How It Works" section: 4-step grid layout with copper-bordered number circles
-  - NEW "Support the Site" section prominently featuring tip jar and BeFrugal affiliate
-  - Refined Tools section with hover effects
-  - Community section with dark background
-- **Footer Redesign:**
-  - 4-column layout: Brand, Quick Links, Support, Legal
-  - Dark background (#1C1917) matching design system
-  - Prominent support/affiliate links
-- **Component Updates:**
-  - `SupportAndCashbackCard`: Copper left-border accent, blue CTA buttons
-  - `Navbar`: Blue active state, copper penny logo accent
-  - About page: Cards with copper left-border accent, blue action buttons
-- **Files Updated:**
-  - `tailwind.config.ts`: Added brand, cta, surface, content color tokens
-  - `globals.css`: New CSS custom properties with 60-30-10 palette
-  - `app/page.tsx`: Complete homepage redesign
-  - `components/footer.tsx`: Full footer redesign
-  - `components/navbar.tsx`: Blue active states, copper logo
-  - `components/SupportAndCashbackCard.tsx`: Copper accent, blue buttons
-  - `app/about/page.tsx`: Updated color scheme and button styling
-- **Monetization:** Tip/affiliate links prominently displayed on homepage, footer, and key pages
-- **Result:** Clean, professional design with clear visual hierarchy and accessible contrast
+- Replaced “Leave a Tip” references with “Buy Me a Coffee” across homepage, About, footer, SupportAndCashbackCard, and global support copy.
+- Reworded BeFrugal explanations to clarify user benefit and referral bonus.
+- Updated Resources page support blurb and AGENTS instructions to match new terminology.
 
 ---
 
-## 2024-12-04 — Design System Overhaul: Slate Steel
+## 2024-12-04 - Design system overhaul: Slate Steel
 
-- **Color Palette Change:** Replaced "Crisp Arctic Indigo" with new "Slate Steel" palette
-  - Accent colors changed from indigo-500/600 to slate-600/700
-  - More neutral, professional appearance per user feedback
-  - NO orange, copper, brown, or purple colors used
-- **Files Updated:**
-  - `globals.css`: Complete CSS variable rewrite with new slate accent colors
-  - `navbar.tsx`: Added inline SVG penny logo (professional 1¢ coin design)
-  - `store-finder/page.tsx`: Removed redundant text, full-width map layout, removed tips section
-  - `store-map.tsx`: Updated marker colors from indigo to slate-600
-  - `page.tsx` (home): Updated hero, value props, how-it-works, community, tools sections
-  - `about/page.tsx`: Updated cards and links to slate colors
-  - `resources/page.tsx`: Updated support card styling
-  - `trip-tracker/page.tsx`: Updated icon styling
-  - `cashback/page.tsx`: Updated link colors
-  - `components/SupportAndCashbackCard.tsx`: Updated button styling
-  - `components/ui/button.tsx`: Updated primary button variant
-  - `AGENTS.md`: Updated design system section with Slate Steel palette
-  - `SKILLS.md`: Updated design system reference
-- **Logo:** Created professional penny/coin logo with "1¢" mark in slate colors
-- **Result:** Clean, neutral, professional design that "exudes confidence and authority"
+What changed:
+
+- Color palette change: replaced prior palette with Slate Steel.
+  - Accent colors changed to slate-600/700 for a more neutral, professional appearance per user feedback.
+  - No orange, copper, brown, or purple colors used.
+- Files updated:
+  - `globals.css` (CSS variable rewrite)
+  - `components/navbar.tsx` (inline SVG penny logo)
+  - `app/store-finder/page.tsx` (map layout changes, removed tips section)
+  - `components/store-map.tsx` (marker colors updated)
+  - `app/page.tsx`, `app/about/page.tsx`, `app/resources/page.tsx`, `app/trip-tracker/page.tsx`, `app/cashback/page.tsx`
+  - `components/SupportAndCashbackCard.tsx`
+  - `components/ui/button.tsx`
+  - `AGENTS.md`, `SKILLS.md`
+
+Result: Clean, neutral, professional design.
 
 ---
 
-## 2024-12-03 — Store Finder Map Popup Dark Mode Fix
+## 2024-12-03 - Design system refinement: 60-30-10 rule
 
-- Fixed map popup styling in dark mode (was showing white background with dark text)
-- Added comprehensive dark mode CSS overrides to `globals.css`:
-  - `.leaflet-popup-content-wrapper`: slate-800 background
-  - `.leaflet-popup-tip`: matching dark border color
-  - `.leaflet-popup-close-button`: light text with hover state
-- Updated `store-map.tsx` popup content with `dark:` Tailwind variants for all text, links, and borders
-- Increased `autoPanPadding` from [60,60] to [80,80] to reduce edge clipping
-- Fixed SKILLS.md Cashback description: clarified BeFrugal is for site monetization (affiliate income), not resale guidance
-- **Result:** Uniform popup appearance in both light and dark modes, consistent with Crisp Arctic Indigo design system
+What changed:
 
-## 2024-12-02 — Project Brain: SKILLS.md
+- Implemented 60-30-10 visual hierarchy:
+  - 60% neutral backgrounds and text
+  - 30% brand accents (gunmetal and copper)
+  - 10% CTA blue for primary actions only
+- Homepage redesign (hero, how-it-works, support section, tools, community).
+- Footer redesign (4-column layout, dark background, prominent support links).
+- Component updates across Navbar, SupportAndCashbackCard, About page, buttons, and token config.
+- Monetization: tip and affiliate links placed across homepage, footer, and key pages.
 
-- Created `SKILLS.md` at repo root — compact reference for AI agents covering:
+Result: Cleaner hierarchy and improved accessibility.
+
+---
+
+## 2024-12-03 - Store Finder map popup dark mode fix
+
+What changed:
+
+- Fixed map popup styling in dark mode via `globals.css` overrides and `store-map.tsx` popup content updates.
+- Increased `autoPanPadding` to reduce popup clipping near edges.
+- Updated `SKILLS.md` Cashback description for clarity.
+
+Result: Uniform popup appearance in light and dark modes.
+
+---
+
+## 2024-12-02 - Project Brain: SKILLS.md
+
+What changed:
+
+- Created `SKILLS.md` as a compact reference for AI agents:
   - Technical skills table (Next.js, TypeScript, Tailwind, Leaflet, etc.)
   - Domain skills table (penny items, store finder, trip tracker, value guidance)
-  - MCP servers & tooling with usage guidance and anti-patterns
-  - Agent playbook for efficient session starts
-- Updated `AGENTS.md`:
-  - Replaced verbose Section 9 with pointer to SKILLS.md
-  - Added SKILLS.md to documentation structure table
-- Updated `CLAUDE.md`: Restructured as clean pointer doc (~15 lines)
-- Updated `.github/copilot-instructions.md`: Restructured as clean pointer doc (~25 lines)
-- **Result:** Eliminated duplication, reduced context bloat, centralized skills reference
+  - MCP server guidance with best practices and anti-patterns
+  - Agent playbook to start sessions efficiently
+- Updated `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md` to reduce duplication and point to SKILLS.md.
 
-## 2024-12-01 — Phase 3: Remove Empty Artifacts
+Result: Reduced context bloat and centralized agent guidance.
 
-- Deleted empty `mcp-proxy/` folder at repo root
-- Deleted `nul` Windows artifact file at repo root
-- Verified build succeeds after deletions
-- Updated `TO_DELETE.md` to mark Phase 3 complete
+---
 
-## 2024-12-01 — Documentation and Repo Cleanup Phase 1
+## 2024-12-01 - Repo cleanup and documentation alignment
 
-- Added "Skills and Tools" section to `AGENTS.md` (section 9)
-- Added "Handling Unclear Requests" section to `AGENTS.md` (section 10)
-- Added "Product Context" section to `PROJECT_ROADMAP.md` (non-goals, success metrics)
-- Created `archive/legacy-static-experiments/` folder (empty, ready for file moves)
-- Created `TO_DELETE.md` with 20+ archive candidates and JSON usage report
-- Verified orphaned JSON files: CONTEXT.json, internal-links.json, navigation-structure.json, search-index.json, structured-data.json (none imported by Next.js code)
+What changed:
 
-## 2024-12-01 — Documentation and Agent Alignment
+- Deleted empty `mcp-proxy/` folder and removed Windows `nul` artifact file; verified build succeeds.
+- Added sections to `AGENTS.md` (skills/tools, handling unclear requests).
+- Created `TO_DELETE.md` and an archive directory for legacy experiments.
+- Updated `PROJECT_ROADMAP.md` and added `CHANGELOG.md` to documentation structure.
+- Created `/cashback` page and integrated BeFrugal support card into multiple pages.
+- Improved map popup UX (autopan, contrast, spacing) and added Leaflet popup CSS overrides.
+- Configured VS Code developer tooling (format-on-save, Prettier/ESLint integration).
 
-- Added Copilot credit-awareness guidance to `AGENTS.md`
-- Expanded project mission to include resale and value guidance
-- Added `CHANGELOG.md` to documentation structure
-- Updated `PROJECT_ROADMAP.md` with completed features and refined backlog
+---
 
-## 2024-12-01 — BeFrugal Cashback Integration
+## Earlier work
 
-- Created `/cashback` page with full BeFrugal education guide
-- Created `SupportAndCashbackCard` reusable component
-- Integrated support card into About page and Guide page
-- Added "How This Site Stays Free" section to About page
-
-## 2024-12-01 — Map Popup UX Improvements
-
-- Fixed popup clipping near map edges (autoPan, autoPanPadding)
-- Improved text contrast and font weight for store name and distance
-- Added clear hover states to action links (phone, directions, store page)
-- Improved vertical spacing and readability
-- Added Leaflet popup CSS overrides in globals.css
-
-## 2024-12-01 — Developer Tooling Setup
-
-- Configured VS Code settings for auto-format on save
-- Added Prettier and ESLint-Prettier integration
-- Created `.vscode/extensions.json` with recommended extensions
-- Added `.prettierrc` config file
-
-## Earlier Work
-
-- Initial site launch with Penny Guide, Store Finder, Trip Tracker, Resources, About pages
-- Store data integration with 2000+ Home Depot locations
-- Dark mode support
-- Mobile-responsive design
+- Initial site launch with Penny Guide, Store Finder, Trip Tracker, Resources, About pages.
+- Store data integration with 2000+ Home Depot locations.
+- Dark mode support and mobile responsiveness.

@@ -108,7 +108,11 @@ export const getStoreUrl = (store: StoreLocation): string => {
 }
 
 export const hasValidCoordinates = (store: Pick<StoreLocation, "lat" | "lng">): boolean => {
-  return Number.isFinite(store.lat) && Number.isFinite(store.lng)
+  const isFinite = Number.isFinite(store.lat) && Number.isFinite(store.lng)
+  const inValidRange = store.lat >= -90 && store.lat <= 90 && store.lng >= -180 && store.lng <= 180
+  const notZeroZero = !(store.lat === 0 && store.lng === 0)
+
+  return isFinite && inValidRange && notZeroZero
 }
 
 export interface DayHours {

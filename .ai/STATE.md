@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 12, 2025  
+**Last updated:** Dec 13, 2025  
 This file is the **single living snapshot** of where the project is right now.  
 Every AI session must update this after meaningful work.
 
@@ -12,7 +12,7 @@ Every AI session must update this after meaningful work.
 - **Phase:** Stabilization + Community Intake
 - **Traffic reality:** early launch volatility is normal; focus on retention loop first.
 - Foundation Contract added at `.ai/FOUNDATION_CONTRACT.md` (tokens/Tailwind/layout/nav/gates) and `ROUTE-TREE.txt` refreshed (includes framework 404).
-- Color drift ratchet in place: `npm run lint:colors` compares against `checks/lint-colors.baseline.json` (47 warnings baseline) and fails if count rises.
+- Color drift ratchet in place: `npm run lint:colors` compares against `checks/lint-colors.baseline.json` (47 warnings baseline) and fails if count rises; refresh the reference only with `npm run lint:colors:update-baseline` after an intentional color change.
 
 ---
 
@@ -68,6 +68,6 @@ Default rule: **AI should pull the top P0 item and propose it unless Cade gives 
 
 ## 7. Last Session Summary
 
-- Streamlined Report Find form and improved Penny List reward signals.
-- Fixed navbar hydration flicker; added hydration regression test.
-- Hardened Playwright visual smoke (fixtures + frozen time); CI now runs lint + e2e.
+- Enforced duplicate-prop/key lint rules (`react/jsx-no-duplicate-props`, `no-dupe-keys`) so metadata/JSX cannot ship duplicates.
+- Ratcheted color drift: `npm run lint:colors` now breaks if warnings exceed `checks/lint-colors.baseline.json` (47) and we record that baseline/reference in `.ai/STATE.md`.
+- Logged the session, updated `SCRIPTS-AND-GATES.txt`, and refreshed the audit docs/fixtures so everyone knows the new gate workflow.

@@ -236,8 +236,8 @@ export const StoreMap = React.memo(function StoreMap({
   const tileUrl = React.useMemo(
     () =>
       isDarkMode
-        ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-        : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+        ? "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png"
+        : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     [isDarkMode]
   )
 
@@ -270,14 +270,14 @@ export const StoreMap = React.memo(function StoreMap({
       aria-label="Interactive store map"
     >
       <MapContainer
-        key="store-finder-map"
+        key={`store-finder-map-${isDarkMode ? "dark" : "light"}`}
         center={center}
         zoom={zoom}
         style={{ height: "100%", width: "100%", minHeight: "300px" }}
         scrollWheelZoom={true}
       >
         <MapController selectedStore={selectedStore} />
-        <TileLayer attribution={TILE_ATTRIBUTION} url={tileUrl} subdomains={["a", "b", "c", "d"]} />
+        <TileLayer attribution={TILE_ATTRIBUTION} url={tileUrl} subdomains={["a", "b", "c"]} />
 
         {/* User location indicator */}
         {userLocation && (
@@ -324,7 +324,7 @@ export const StoreMap = React.memo(function StoreMap({
                 autoPanPadding={[50, 50]}
                 keepInView={false}
                 maxWidth={260}
-                minWidth={220}
+                minWidth={260}
                 closeButton={false}
               >
                 <div className="text-left p-4 bg-[var(--bg-elevated)] text-[var(--text-primary)] rounded-lg shadow-md border border-[var(--border-default)]">

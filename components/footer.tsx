@@ -12,7 +12,7 @@ export function Footer() {
           <div className="col-span-2 md:col-span-1">
             <Link
               href="/"
-              className="text-lg font-bold text-[var(--text-primary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-secondary)] transition-colors"
+              className="text-lg font-bold text-[var(--text-primary)] hover:text-[var(--text-secondary)] transition-colors"
             >
               PennyCentral
             </Link>
@@ -28,7 +28,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/penny-list"
-                  className="text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors"
+                  className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
                 >
                   Penny List
                 </Link>
@@ -36,7 +36,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/report-find"
-                  className="text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors"
+                  className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
                 >
                   Report a Find
                 </Link>
@@ -44,7 +44,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/store-finder"
-                  className="text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors"
+                  className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
                 >
                   Store Finder
                 </Link>
@@ -52,7 +52,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/guide"
-                  className="text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors"
+                  className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
                 >
                   Guide
                 </Link>
@@ -62,7 +62,7 @@ export function Footer() {
                   href="https://www.facebook.com/groups/homedepotonecent"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors"
+                  className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
                 >
                   Community
                 </a>
@@ -79,7 +79,7 @@ export function Footer() {
                   href="https://paypal.me/cadegallen"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors"
+                  className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
                   onClick={() => trackEvent("coffee_click", { surface: "footer" })}
                 >
                   Buy Me a Coffee
@@ -90,7 +90,7 @@ export function Footer() {
                   href="/go/befrugal"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors"
+                  className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
                   onClick={() =>
                     trackEvent("affiliate_click", { surface: "footer", linkId: "befrugal" })
                   }
@@ -101,7 +101,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/cashback"
-                  className="text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors"
+                  className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
                 >
                   Cashback Info
                 </Link>
@@ -116,7 +116,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/about"
-                  className="text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors"
+                  className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
                 >
                   About Us
                 </Link>

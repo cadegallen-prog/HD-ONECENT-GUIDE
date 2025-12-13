@@ -123,8 +123,21 @@ const isValidStore = (name?: string) => {
 }
 
 const normalizeStore = (s: StoreLocation): StoreLocation => {
-  const lat = typeof s.lat === "number" ? s.lat : Number(s.lat)
-  const lng = typeof s.lng === "number" ? s.lng : Number(s.lng)
+  let lat = typeof s.lat === "number" ? s.lat : Number(s.lat)
+  let lng = typeof s.lng === "number" ? s.lng : Number(s.lng)
+
+  // Detect swapped coordinates: if lat is outside [-90, 90] but lng is within that range
+  if ((lat < -90 || lat > 90) && lng >= -90 && lng <= 90) {
+    // Likely swapped - swap them back
+    const temp = lat
+    lat = lng
+    lng = temp
+
+    if (process.env.NODE_ENV === "development") {
+      console.warn(`Swapped lat/lng for store ${s.name}: (${s.lat}, ${s.lng}) → (${lat}, ${lng})`)
+    }
+  }
+
   return {
     ...s,
     name: cleanStoreName(s.name),
