@@ -19,7 +19,7 @@ import {
   cleanStoreName,
   getStoreTitle,
   getStoreUrl,
-  normalizeCoordinates,
+  applyCoordinateOverrides,
   hasValidCoordinates,
   formatStoreHours,
   normalizeDayHours,
@@ -124,7 +124,7 @@ const isValidStore = (name?: string) => {
 }
 
 const normalizeStore = (s: StoreLocation): StoreLocation => {
-  const { lat, lng } = normalizeCoordinates(s.lat, s.lng, s.name)
+  const { lat, lng } = applyCoordinateOverrides(s.number, s.lat, s.lng, s.name)
 
   return {
     ...s,

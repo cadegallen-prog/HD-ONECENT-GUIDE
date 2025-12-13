@@ -6,6 +6,14 @@ Dates are recorded in America/New_York time.
 
 ---
 
+## 2025-12-13 - Store Finder Visual Enhancements and Data Accuracy
+
+- Implemented coordinate override for store #0106 to correct inaccurate location data (lat: 34.009693, lng: -84.564690).
+- Switched map tiles to CARTO voyager for improved mid-contrast in both light and dark themes.
+- Unified popup styling in CSS for better readability, consistency, and theme support.
+- Removed unused Suspense import in layout.tsx to resolve lint error.
+- All gates passing: lint, build, unit tests, e2e tests.
+
 ## 2025-12-13 - Layout primitives rollout (partial)
 
 Objective: Make every route feel like the same website by standardizing structure, spacing, and CTA placement, without redesigning copy.

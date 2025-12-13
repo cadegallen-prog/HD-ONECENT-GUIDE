@@ -11,17 +11,15 @@ import "./store-map.css"
 import { trackEvent } from "@/lib/analytics"
 import { useTheme } from "@/components/theme-provider"
 
+const TILE_BASE = {
+  url: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+  attribution:
+    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+}
+
 const TILE_CONFIG = {
-  light: {
-    url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-  },
-  dark: {
-    url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-  },
+  light: TILE_BASE,
+  dark: TILE_BASE,
 }
 
 interface StoreMapProps {
@@ -338,7 +336,7 @@ export const StoreMap = React.memo(function StoreMap({
                 minWidth={260}
                 closeButton={false}
               >
-                <div className="store-popup-card text-left p-4 bg-[var(--bg-elevated)] text-[var(--text-primary)] rounded-lg shadow-md border border-[var(--border-default)]">
+                <div className="store-popup-card text-left">
                   <div className="mb-3 pr-8 relative">
                     <h3 className="font-bold text-sm leading-tight">{getStoreTitle(store)}</h3>
                     <div className="absolute -top-1 -right-1 bg-[var(--cta-primary)] text-[var(--cta-text)] text-xs leading-none font-bold px-1.5 py-0.5 rounded-full shadow-sm">

@@ -3,7 +3,9 @@
  */
 
 .map-marker-default svg path {
-  transition: fill 150ms ease, stroke 150ms ease;
+  transition:
+    fill 150ms ease,
+    stroke 150ms ease;
 }
 
 .map-marker-default svg circle {
@@ -20,7 +22,9 @@
 
 /* Ensure selected marker remains visually distinct and readable */
 .map-marker-selected svg path {
-  transition: transform 150ms ease, box-shadow 150ms ease;
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease;
 }
 
 .map-marker-selected:hover svg path {
@@ -64,6 +68,15 @@
   max-height: 340px;
   overflow-y: auto;
   box-sizing: border-box;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-default);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .store-popup-card::-webkit-scrollbar {
@@ -80,6 +93,5 @@
 }
 
 .leaflet-container {
-  background: var(--bg-card);
+  background: var(--bg-elevated);
 }
-

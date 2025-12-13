@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import Script from "next/script"
 import { Inter } from "next/font/google"
 import { Analytics } from "@vercel/analytics/react"
-import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
@@ -10,6 +9,7 @@ import { CommandPaletteProvider } from "@/components/command-palette-provider"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { AnalyticsSessionTracker } from "@/components/analytics-session"
+import { SpeedInsightsClient } from "@/components/speed-insights-client"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -167,7 +167,7 @@ export default function RootLayout({
         </ThemeProvider>
         {/* Vercel Analytics - loads in production */}
         {process.env.NODE_ENV === "production" && <Analytics />}
-        <SpeedInsights />
+        <SpeedInsightsClient />
       </body>
     </html>
   )

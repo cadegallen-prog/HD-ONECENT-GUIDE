@@ -11,6 +11,22 @@
 
 ---
 
+## 2025-12-13 - GitHub Copilot - Store Finder Visual Enhancements and Data Correction
+
+**AI:** GitHub Copilot  
+**Goal:** Improve /store-finder visuals (mid-contrast tiles for both themes, popup polish) and correct store 0106 coordinates without new dependencies; ensure all gates pass.  
+**Work completed:**
+
+- Implemented coordinate override for store #0106 in `lib/stores.ts` with `COORD_OVERRIDES` and `applyCoordinateOverrides` helper, applied in API (`app/api/stores/route.ts`) and client (`app/store-finder/page.tsx`) normalization with dev warning for overrides.
+- Switched map tiles to CARTO voyager for mid-contrast in both light and dark themes in `components/store-map.tsx`.
+- Unified popup styling in `components/store-map.css` for consistent background, border, shadow, padding, and gap; updated map background to elevated token.
+- Removed unused Suspense import in `app/layout.tsx` to fix lint error.
+- Ran gates: `npm run lint`, `npm run build`, `npm run test:unit`, and `npm run test:e2e` all pass.
+
+**Outcome:** ✅ Success  
+**Unfinished Items:** None.  
+**Notes:** E2E tests passed without updating snapshots; source map warnings in dev logs but not blocking.
+
 ## 2025-12-13 - GitHub Copilot - Store Finder Map Readability + Footer Links
 
 **AI:** GitHub Copilot (GPT-5.1-Codex-Max (Preview))  

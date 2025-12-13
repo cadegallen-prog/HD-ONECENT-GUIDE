@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import fs from "fs"
 import path from "path"
-import { sanitizeText, normalizeCoordinates, hasValidCoordinates } from "@/lib/stores"
+import { sanitizeText, applyCoordinateOverrides, hasValidCoordinates } from "@/lib/stores"
 
 const DATA_PATH = path.join(process.cwd(), "data", "stores", "store_directory.master.json")
 const REMOTE_URL =
@@ -67,7 +67,7 @@ function normalizeStore(item: FlexibleStore): Store {
   const idBase =
     rawNumber || item.id || `${item.store_name || item.name}-${item.city}-${item.state}`
 
-  const { lat, lng } = normalizeCoordinates(latInput, lngInput, idBase)
+  const { lat, lng } = applyCoordinateOverrides(rawNumber, latInput, lngInput, idBase)
 
   let parsedHours: Store["hours"] = undefined
   if (item.hours) {

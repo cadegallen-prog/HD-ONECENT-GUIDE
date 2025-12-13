@@ -68,6 +68,6 @@ Default rule: **AI should pull the top P0 item and propose it unless Cade gives 
 
 ## 7. Last Session Summary
 
-- Store-finder: added US bounds + swap detection for coordinates (rejects out-of-range points), theme-specific tiles with remount key, and fixed-width scrollable popups for readability.
-- Footer: links now default to no underline, underline on hover/focus-visible with clear focus ring, scoped to footer only.
-- Gates: `npm run lint`, `npm run build`, `npm run test:unit`, and `npm run test:e2e` all pass after refreshing Playwright visual baselines.
+- Store-finder: implemented coordinate override for store #0106 (lat 34.009693, lng -84.564690), switched tiles to CARTO voyager mid-contrast for both themes, unified popup styling in CSS for consistency and readability.
+- Layout: removed unused Suspense import in layout.tsx.
+- Gates: `npm run lint`, `npm run build`, `npm run test:unit`, and `npm run test:e2e` all pass.

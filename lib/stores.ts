@@ -34,6 +34,10 @@ const US_BOUNDS = {
   lng: { min: -179, max: -60 },
 }
 
+const COORD_OVERRIDES: Record<string, { lat: number; lng: number }> = {
+  "0106": { lat: 34.009693, lng: -84.56469 },
+}
+
 // Store naming overrides for special locations that need clearer labels
 const STORE_NAME_OVERRIDES_BY_NUMBER: Record<string, string> = {
   "3203": "SW Omaha",
@@ -125,6 +129,28 @@ export const hasValidStoreNumber = (num?: string): boolean => {
 export const formatStoreNumber = (num?: string): string => {
   if (!hasValidStoreNumber(num)) return ""
   return num!.trim().padStart(4, "0")
+}
+
+export const applyCoordinateOverrides = (
+  storeNumber?: string,
+  latInput?: unknown,
+  lngInput?: unknown,
+  context?: string
+): { lat: number; lng: number; overridden: boolean } => {
+  const formatted = formatStoreNumber(storeNumber)
+  const override = formatted ? COORD_OVERRIDES[formatted] : undefined
+
+  if (override) {
+    if (process.env.NODE_ENV === "development") {
+      console.warn(
+        `Applied coordinate override for store #${formatted}${context ? ` (${context})` : ""}: (${latInput}, ${lngInput}) → (${override.lat}, ${override.lng})`
+      )
+    }
+    return { ...override, overridden: true }
+  }
+
+  const normalized = normalizeCoordinates(latInput, lngInput, context ?? formatted)
+  return { ...normalized, overridden: false }
 }
 
 export const getStoreUrlNumber = (num?: string): string => {
