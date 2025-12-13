@@ -29,9 +29,55 @@ export interface StoreLocation {
   rank?: number
 }
 
+const US_BOUNDS = {
+  lat: { min: 18, max: 72 },
+  lng: { min: -179, max: -60 },
+}
+
 // Store naming overrides for special locations that need clearer labels
 const STORE_NAME_OVERRIDES_BY_NUMBER: Record<string, string> = {
   "3203": "SW Omaha",
+}
+
+const isWithinUsBounds = (lat: number, lng: number): boolean => {
+  return (
+    Number.isFinite(lat) &&
+    Number.isFinite(lng) &&
+    lat >= US_BOUNDS.lat.min &&
+    lat <= US_BOUNDS.lat.max &&
+    lng >= US_BOUNDS.lng.min &&
+    lng <= US_BOUNDS.lng.max
+  )
+}
+
+export const normalizeCoordinates = (
+  latInput: unknown,
+  lngInput: unknown,
+  context?: string
+): { lat: number; lng: number; valid: boolean; swapped: boolean } => {
+  const lat = Number(latInput)
+  const lng = Number(lngInput)
+
+  if (isWithinUsBounds(lat, lng)) {
+    return { lat, lng, valid: true, swapped: false }
+  }
+
+  if (isWithinUsBounds(lng, lat)) {
+    if (process.env.NODE_ENV === "development") {
+      console.warn(
+        `Swapped lat/lng${context ? ` for ${context}` : ""}: (${latInput}, ${lngInput}) → (${lng}, ${lat})`
+      )
+    }
+    return { lat: lng, lng: lat, valid: true, swapped: true }
+  }
+
+  if (process.env.NODE_ENV === "development") {
+    console.warn(
+      `Rejected coordinates${context ? ` for ${context}` : ""}: (${latInput}, ${lngInput}) outside US bounds`
+    )
+  }
+
+  return { lat, lng, valid: false, swapped: false }
 }
 
 export const sanitizeText = (value?: string): string => {
@@ -108,11 +154,7 @@ export const getStoreUrl = (store: StoreLocation): string => {
 }
 
 export const hasValidCoordinates = (store: Pick<StoreLocation, "lat" | "lng">): boolean => {
-  const isFinite = Number.isFinite(store.lat) && Number.isFinite(store.lng)
-  const inValidRange = store.lat >= -90 && store.lat <= 90 && store.lng >= -180 && store.lng <= 180
-  const notZeroZero = !(store.lat === 0 && store.lng === 0)
-
-  return isFinite && inValidRange && notZeroZero
+  return isWithinUsBounds(store.lat, store.lng)
 }
 
 export interface DayHours {

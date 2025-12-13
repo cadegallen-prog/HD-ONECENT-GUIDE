@@ -11,6 +11,24 @@
 
 ---
 
+## 2025-12-13 - GitHub Copilot - Store Finder Map Readability + Footer Links
+
+**AI:** GitHub Copilot (GPT-5.1-Codex-Max (Preview))  
+**Goal:** Restore /store-finder usability (tiles/readability, coordinate sanity) and stop footer links from being permanently underlined.  
+**Work completed:**
+
+- Added US bounding-box validation with safe lat/lng swap detection; invalid coords are rejected (dev warnings) and no longer default to 0,0. Applied to API store normalization and client normalization.
+- Swapped tile providers to theme-specific CARTO light/dark tiles and force-remount the map on theme change; set map background token to improve legibility while tiles load.
+- Standardized popups to fixed 260px width with scrollable content, consistent tokens, and scrollbar styling for readability in both themes.
+- Scoped footer link styling: no underline by default; underline on hover/focus-visible with explicit focus ring, without impacting long-form content underlines.
+- Ran gates: `npm run lint`, `npm run build`, `npm run test:unit`, and `npm run test:e2e` all pass after refreshing Playwright visual snapshots.
+
+**Outcome:** ✅ Success (visual baselines refreshed to match new map/footer visuals).  
+**Unfinished Items:** None.  
+**Notes:** Map API still logs fallback to local store data on 404 during tests (expected). Source map warnings from Next remain in Playwright logs.
+
+---
+
 ## 2025-12-12 - ChatGPT Codex - Lint Hardening + Color Ratchet
 
 **AI:** ChatGPT Codex (GPT-5)  

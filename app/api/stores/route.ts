@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import fs from "fs"
 import path from "path"
-import { sanitizeText } from "@/lib/stores"
+import { sanitizeText, normalizeCoordinates, hasValidCoordinates } from "@/lib/stores"
 
 const DATA_PATH = path.join(process.cwd(), "data", "stores", "store_directory.master.json")
 const REMOTE_URL =
@@ -61,11 +61,13 @@ const CACHE_TTL_MS = 30 * 60 * 1000 // 30 minutes
 
 function normalizeStore(item: FlexibleStore): Store {
   const rawNumber = (item.store_number ?? item.number ?? "").toString().trim()
-  const lat = item.lat ?? item.latitude
-  const lng = item.lng ?? item.longitude
+  const latInput = item.lat ?? item.latitude
+  const lngInput = item.lng ?? item.longitude
 
   const idBase =
     rawNumber || item.id || `${item.store_name || item.name}-${item.city}-${item.state}`
+
+  const { lat, lng } = normalizeCoordinates(latInput, lngInput, idBase)
 
   let parsedHours: Store["hours"] = undefined
   if (item.hours) {
@@ -89,8 +91,8 @@ function normalizeStore(item: FlexibleStore): Store {
     state: sanitizeText(item.state),
     zip: sanitizeText(item.zip),
     phone: sanitizeText(item.phone),
-    lat: Number(lat),
-    lng: Number(lng),
+    lat,
+    lng,
     hours: parsedHours,
   }
 }
@@ -112,9 +114,7 @@ async function loadStores(): Promise<Store[]> {
       }
       const json = (await res.json()) as FlexibleStore[]
       if (Array.isArray(json)) {
-        const normalized = json
-          .map(normalizeStore)
-          .filter((s) => Number.isFinite(s.lat) && Number.isFinite(s.lng))
+        const normalized = json.map(normalizeStore).filter((s) => hasValidCoordinates(s))
         if (normalized.length > 0) {
           storeCache = normalized
           storeCacheTimestamp = now
@@ -137,7 +137,7 @@ async function loadStores(): Promise<Store[]> {
   }
   storeCache = parsed
     .map((item) => normalizeStore(item as StoreDirectoryItem))
-    .filter((s) => Number.isFinite(s.lat) && Number.isFinite(s.lng))
+    .filter((s) => hasValidCoordinates(s))
   storeCacheTimestamp = now
   return storeCache
 }

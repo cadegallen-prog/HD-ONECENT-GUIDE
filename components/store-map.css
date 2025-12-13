@@ -53,3 +53,33 @@
   display: none;
 }
 
+.store-popup .leaflet-popup-content,
+.store-popup .leaflet-popup-content-wrapper {
+  width: 260px !important;
+  max-width: 260px;
+}
+
+.store-popup-card {
+  width: 100%;
+  max-height: 340px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.store-popup-card::-webkit-scrollbar {
+  width: 8px;
+}
+
+.store-popup-card::-webkit-scrollbar-thumb {
+  background-color: var(--border-default);
+  border-radius: 9999px;
+}
+
+.store-popup-card::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.leaflet-container {
+  background: var(--bg-card);
+}
+

@@ -4,16 +4,20 @@ import Link from "next/link"
 import { trackEvent } from "@/lib/analytics"
 
 export function Footer() {
+  const brandLinkClass =
+    "text-lg font-bold text-[var(--text-primary)] hover:text-[var(--text-secondary)] transition-colors no-underline hover:underline focus-visible:underline focus-visible:outline-2 focus-visible:outline-[var(--cta-primary)] focus-visible:outline-offset-2"
+  const navLinkClass =
+    "text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors no-underline hover:underline focus-visible:underline focus-visible:outline-2 focus-visible:outline-[var(--cta-primary)] focus-visible:outline-offset-2"
+  const iconLinkClass =
+    "text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors p-2 no-underline hover:underline focus-visible:underline focus-visible:outline-2 focus-visible:outline-[var(--cta-primary)] focus-visible:outline-offset-2"
+
   return (
     <footer className="bg-[var(--bg-elevated)] dark:bg-[var(--bg-card)] border-t border-[var(--border-default)] mt-auto">
       <div className="container-wide py-12 sm:py-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {/* Brand Column */}
           <div className="col-span-2 md:col-span-1">
-            <Link
-              href="/"
-              className="text-lg font-bold text-[var(--text-primary)] hover:text-[var(--text-secondary)] transition-colors"
-            >
+            <Link href="/" className={brandLinkClass}>
               PennyCentral
             </Link>
             <p className="mt-3 text-sm text-[var(--text-muted)] leading-relaxed">
@@ -26,34 +30,22 @@ export function Footer() {
             <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Quick Links</h3>
             <ul className="space-y-2.5">
               <li>
-                <Link
-                  href="/penny-list"
-                  className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-                >
+                <Link href="/penny-list" className={navLinkClass}>
                   Penny List
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/report-find"
-                  className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-                >
+                <Link href="/report-find" className={navLinkClass}>
                   Report a Find
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/store-finder"
-                  className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-                >
+                <Link href="/store-finder" className={navLinkClass}>
                   Store Finder
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/guide"
-                  className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-                >
+                <Link href="/guide" className={navLinkClass}>
                   Guide
                 </Link>
               </li>
@@ -62,7 +54,7 @@ export function Footer() {
                   href="https://www.facebook.com/groups/homedepotonecent"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                  className={navLinkClass}
                 >
                   Community
                 </a>
@@ -79,7 +71,7 @@ export function Footer() {
                   href="https://paypal.me/cadegallen"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                  className={navLinkClass}
                   onClick={() => trackEvent("coffee_click", { surface: "footer" })}
                 >
                   Buy Me a Coffee
@@ -90,7 +82,7 @@ export function Footer() {
                   href="/go/befrugal"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                  className={navLinkClass}
                   onClick={() =>
                     trackEvent("affiliate_click", { surface: "footer", linkId: "befrugal" })
                   }
@@ -99,10 +91,7 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <Link
-                  href="/cashback"
-                  className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-                >
+                <Link href="/cashback" className={navLinkClass}>
                   Cashback Info
                 </Link>
               </li>
@@ -114,10 +103,7 @@ export function Footer() {
             <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">About</h3>
             <ul className="space-y-2.5">
               <li>
-                <Link
-                  href="/about"
-                  className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-                >
+                <Link href="/about" className={navLinkClass}>
                   About Us
                 </Link>
               </li>
@@ -141,7 +127,7 @@ export function Footer() {
                 href="https://www.facebook.com/groups/homedepotonecent"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors p-2"
+                className={iconLinkClass}
                 aria-label="Facebook Group"
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">

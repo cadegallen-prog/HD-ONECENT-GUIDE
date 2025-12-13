@@ -11,8 +11,18 @@ import "./store-map.css"
 import { trackEvent } from "@/lib/analytics"
 import { useTheme } from "@/components/theme-provider"
 
-const TILE_ATTRIBUTION =
-  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+const TILE_CONFIG = {
+  light: {
+    url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+  },
+  dark: {
+    url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+  },
+}
 
 interface StoreMapProps {
   stores: StoreLocation[]
@@ -233,11 +243,8 @@ export const StoreMap = React.memo(function StoreMap({
     return () => media.removeEventListener("change", handleChange)
   }, [theme])
 
-  const tileUrl = React.useMemo(
-    () =>
-      isDarkMode
-        ? "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png"
-        : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  const tileConfig = React.useMemo(
+    () => (isDarkMode ? TILE_CONFIG.dark : TILE_CONFIG.light),
     [isDarkMode]
   )
 
@@ -265,19 +272,23 @@ export const StoreMap = React.memo(function StoreMap({
 
   return (
     <div
-      className="w-full h-full min-h-[300px] rounded-lg overflow-hidden border border-border"
+      className="w-full h-full min-h-[300px] rounded-lg overflow-hidden border border-border bg-[var(--bg-card)]"
       role="application"
       aria-label="Interactive store map"
     >
       <MapContainer
-        key={`store-finder-map-${isDarkMode ? "dark" : "light"}`}
+        key={`store-finder-map-${tileConfig.url}`}
         center={center}
         zoom={zoom}
         style={{ height: "100%", width: "100%", minHeight: "300px" }}
         scrollWheelZoom={true}
       >
         <MapController selectedStore={selectedStore} />
-        <TileLayer attribution={TILE_ATTRIBUTION} url={tileUrl} subdomains={["a", "b", "c"]} />
+        <TileLayer
+          attribution={tileConfig.attribution}
+          url={tileConfig.url}
+          subdomains={["a", "b", "c"]}
+        />
 
         {/* User location indicator */}
         {userLocation && (
@@ -327,7 +338,7 @@ export const StoreMap = React.memo(function StoreMap({
                 minWidth={260}
                 closeButton={false}
               >
-                <div className="text-left p-4 bg-[var(--bg-elevated)] text-[var(--text-primary)] rounded-lg shadow-md border border-[var(--border-default)]">
+                <div className="store-popup-card text-left p-4 bg-[var(--bg-elevated)] text-[var(--text-primary)] rounded-lg shadow-md border border-[var(--border-default)]">
                   <div className="mb-3 pr-8 relative">
                     <h3 className="font-bold text-sm leading-tight">{getStoreTitle(store)}</h3>
                     <div className="absolute -top-1 -right-1 bg-[var(--cta-primary)] text-[var(--cta-text)] text-xs leading-none font-bold px-1.5 py-0.5 rounded-full shadow-sm">

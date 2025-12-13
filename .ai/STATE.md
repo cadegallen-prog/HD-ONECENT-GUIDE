@@ -19,7 +19,7 @@ Every AI session must update this after meaningful work.
 ## 2. What’s Working
 
 - `/guide` and supporting strategy pages are stable and mobile‑friendly.
-- `/store-finder` works reliably; map hydration issues are guarded.
+- `/store-finder` map hydrates cleanly; tiles now swap per theme and popups are constrained for readability.
 - **Crowd Reports system is live:**
   - `/report-find` posts to Google Sheet via Apps Script.
   - `/penny-list` pulls hourly, aggregates by SKU, counts by state, auto‑tiers.
@@ -43,7 +43,7 @@ Testing‑only flag:
 
 - **Cold start:** Penny List looks empty until seeded + habit forms.
 - **Data quality:** duplicates and junk will rise only after volume; solve later with simple moderation if needed.
-- **Hydration drift:** any shared UI change requires Playwright smoke.
+- **Hydration drift:** any shared UI change requires Playwright smoke; Playwright visual baselines refreshed on Dec 13 after store-finder/footer fixes (be mindful of intentional visual changes).
 
 ---
 
@@ -68,6 +68,6 @@ Default rule: **AI should pull the top P0 item and propose it unless Cade gives 
 
 ## 7. Last Session Summary
 
-- Enforced duplicate-prop/key lint rules (`react/jsx-no-duplicate-props`, `no-dupe-keys`) so metadata/JSX cannot ship duplicates.
-- Ratcheted color drift: `npm run lint:colors` now breaks if warnings exceed `checks/lint-colors.baseline.json` (47) and we record that baseline/reference in `.ai/STATE.md`.
-- Logged the session, updated `SCRIPTS-AND-GATES.txt`, and refreshed the audit docs/fixtures so everyone knows the new gate workflow.
+- Store-finder: added US bounds + swap detection for coordinates (rejects out-of-range points), theme-specific tiles with remount key, and fixed-width scrollable popups for readability.
+- Footer: links now default to no underline, underline on hover/focus-visible with clear focus ring, scoped to footer only.
+- Gates: `npm run lint`, `npm run build`, `npm run test:unit`, and `npm run test:e2e` all pass after refreshing Playwright visual baselines.

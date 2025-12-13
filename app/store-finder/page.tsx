@@ -19,6 +19,7 @@ import {
   cleanStoreName,
   getStoreTitle,
   getStoreUrl,
+  normalizeCoordinates,
   hasValidCoordinates,
   formatStoreHours,
   normalizeDayHours,
@@ -123,20 +124,7 @@ const isValidStore = (name?: string) => {
 }
 
 const normalizeStore = (s: StoreLocation): StoreLocation => {
-  let lat = typeof s.lat === "number" ? s.lat : Number(s.lat)
-  let lng = typeof s.lng === "number" ? s.lng : Number(s.lng)
-
-  // Detect swapped coordinates: if lat is outside [-90, 90] but lng is within that range
-  if ((lat < -90 || lat > 90) && lng >= -90 && lng <= 90) {
-    // Likely swapped - swap them back
-    const temp = lat
-    lat = lng
-    lng = temp
-
-    if (process.env.NODE_ENV === "development") {
-      console.warn(`Swapped lat/lng for store ${s.name}: (${s.lat}, ${s.lng}) → (${lat}, ${lng})`)
-    }
-  }
+  const { lat, lng } = normalizeCoordinates(s.lat, s.lng, s.name)
 
   return {
     ...s,
@@ -146,8 +134,8 @@ const normalizeStore = (s: StoreLocation): StoreLocation => {
     state: sanitizeText(s.state),
     zip: sanitizeText(s.zip),
     phone: sanitizeText(s.phone),
-    lat: Number.isFinite(lat) ? lat : 0,
-    lng: Number.isFinite(lng) ? lng : 0,
+    lat,
+    lng,
     hours: {
       weekday: sanitizeText(s.hours?.weekday) || "",
       weekend: sanitizeText(s.hours?.weekend) || "",
