@@ -1,14 +1,15 @@
 import { ExternalLink, Heart, Download, Wrench } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
 import Link from "next/link"
 import type { Metadata } from "next"
+import { PageHeader, PageShell, Section } from "@/components/page-templates"
+import { ResourcesSupportCtas } from "@/components/resources-support-ctas"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
 import {
   BEFRUGAL_REFERRAL_PATH,
   COMMUNITY_MEMBER_COUNT_DISPLAY,
   FACEBOOK_GROUP_URL,
 } from "@/lib/constants"
-import { ResourcesSupportCtas } from "@/components/resources-support-ctas"
 
 export const metadata: Metadata = {
   title: "Resources | Penny Central",
@@ -41,40 +42,46 @@ export default function ResourcesPage() {
   ]
 
   return (
-    <div className="container-narrow py-12 sm:py-16">
-      {/* Header */}
-      <header className="mb-10">
-        <h1 className="text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug">
-          Resources
-        </h1>
-        <p className="mt-2 text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed">
-          Essential tools for penny hunting success
-        </p>
-      </header>
+    <PageShell width="default">
+      <PageHeader
+        title="Resources"
+        subtitle="Essential tools for penny hunting success."
+        primaryAction={{ label: "Check the Penny List", href: "/penny-list" }}
+        secondaryActions={[{ label: "Report a find", href: "/report-find" }]}
+        align="left"
+      />
 
-      {/* PDF Download */}
-      <Card className="mb-10 bg-[var(--bg-card)] border-[var(--border-default)]">
-        <CardContent className="py-6 flex items-center gap-4">
-          <Download size={24} className="text-[var(--cta-primary)] flex-shrink-0" />
-          <div className="flex-1">
-            <h2 className="text-base font-semibold text-[var(--text-primary)]">PDF Guide</h2>
-            <p className="mt-1 text-sm text-[var(--text-secondary)]">
-              Study guide to learn penny hunting basics before you shop
-            </p>
-          </div>
-          <Button variant="primary" asChild className="min-h-[44px]">
-            <a href="/Home-Depot-Penny-Guide.pdf" download>
-              Download
-            </a>
-          </Button>
-        </CardContent>
-      </Card>
+      <Section>
+        <Card className="bg-[var(--bg-card)] border-[var(--border-default)]">
+          <CardContent className="flex flex-col items-start gap-4 py-6 sm:flex-row sm:items-center">
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[var(--bg-elevated)]">
+                <Download size={24} className="text-[var(--cta-primary)]" aria-hidden="true" />
+              </div>
+              <div>
+                <h2 className="text-base font-semibold text-[var(--text-primary)]">PDF Guide</h2>
+                <p className="mt-1 text-sm text-[var(--text-secondary)]">
+                  Study guide to learn penny hunting basics before you shop
+                </p>
+              </div>
+            </div>
+            <div className="flex-1 sm:text-right">
+              <Button variant="primary" asChild size="lg">
+                <a href="/Home-Depot-Penny-Guide.pdf" download>
+                  Download
+                </a>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </Section>
 
-      {/* External Tools */}
-      <section>
-        <div className="flex items-center gap-2 mb-6">
-          <Wrench size={20} className="text-[var(--cta-primary)]" />
-          <h2 className="text-xl font-semibold text-[var(--text-primary)]">External Tools</h2>
+      <Section title="External Tools">
+        <div className="flex items-center gap-2 text-[var(--text-secondary)]">
+          <Wrench size={20} className="text-[var(--cta-primary)]" aria-hidden="true" />
+          <p className="text-sm font-medium uppercase tracking-[0.08em] text-[var(--text-muted)]">
+            Trusted links
+          </p>
         </div>
 
         <div className="space-y-4">
@@ -84,7 +91,7 @@ export default function ResourcesPage() {
               href={tool.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="card-interactive flex items-center justify-between p-5 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-xl group"
+              className="card-interactive group flex items-center justify-between rounded-xl border border-[var(--border-default)] bg-[var(--bg-card)] p-5 transition-colors"
             >
               <div>
                 <h3 className="text-base font-semibold text-[var(--text-primary)] leading-snug">
@@ -96,42 +103,43 @@ export default function ResourcesPage() {
               </div>
               <ExternalLink
                 size={20}
-                className="text-[var(--text-muted)] group-hover:text-[var(--cta-primary)] flex-shrink-0 ml-4 transition-colors"
+                className="ml-4 flex-shrink-0 text-[var(--text-muted)] transition-colors group-hover:text-[var(--cta-primary)]"
                 aria-hidden="true"
               />
             </a>
           ))}
         </div>
-      </section>
+      </Section>
 
-      {/* Support Card */}
-      <section className="mt-10">
+      <Section title="Support Penny Central" subtitle="Keep the tools free for everyone.">
         <Link
           href="/about#support"
-          className="flex items-center justify-between p-5 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-lg hover:border-[var(--border-dark)] transition-colors group"
+          className="group flex items-center justify-between rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] p-5 transition-colors hover:border-[var(--border-dark)]"
         >
           <div className="flex items-start gap-4">
-            <div className="w-10 h-10 rounded-full bg-[var(--cta-primary)]/10 flex items-center justify-center flex-shrink-0">
+            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[var(--cta-primary)]/10">
               <Heart size={20} className="text-[var(--cta-primary)]" aria-hidden="true" />
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-1">
+              <h3 className="text-sm font-semibold text-[var(--text-primary)]">
                 Support Penny Central
               </h3>
               <p className="text-sm text-[var(--text-muted)]">
-                Activate BeFrugal cashback or buy me a coffee to keep the tools free for everyone
+                Activate BeFrugal cashback or buy me a coffee to keep the tools free for everyone.
               </p>
             </div>
           </div>
           <ExternalLink
             size={18}
-            className="text-[var(--text-muted)] group-hover:text-[var(--text-primary)] flex-shrink-0 ml-4 transition-colors"
+            className="ml-4 flex-shrink-0 text-[var(--text-muted)] transition-colors group-hover:text-[var(--text-primary)]"
             aria-hidden="true"
           />
         </Link>
-      </section>
+      </Section>
 
-      <ResourcesSupportCtas />
-    </div>
+      <Section spacing="md">
+        <ResourcesSupportCtas />
+      </Section>
+    </PageShell>
   )
 }

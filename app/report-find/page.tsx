@@ -244,22 +244,22 @@ export default function ReportFindPage() {
               aria-errormessage={skuError ? "sku-error" : undefined}
               value={skuDisplay}
               onChange={handleSkuChange}
-              placeholder="e.g., 123456, 123456789, or 1001234567"
+              placeholder="e.g., 123456 or 1001234567"
               className={`w-full px-4 py-2 rounded-lg border bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent font-mono ${
-                skuError ? "border-red-500 dark:border-red-400" : "border-[var(--border-default)]"
+                skuError ? "border-[var(--status-error)]" : "border-[var(--border-default)]"
               }`}
             />
             {skuError ? (
               <p
                 id="sku-error"
-                className="mt-1 text-xs text-red-600 dark:text-red-400 flex items-center gap-1"
+                className="mt-1 text-xs text-[var(--status-error)] flex items-center gap-1"
               >
                 <AlertCircle className="w-3 h-3" />
                 {skuError}
               </p>
             ) : (
               <p id="sku-hint" className="mt-1 text-xs text-[var(--text-muted)]">
-                6, 9, or 10 digit SKU from receipt or Home Depot app
+                6 or 10 digit SKU from receipt or Home Depot app
               </p>
             )}
           </div>

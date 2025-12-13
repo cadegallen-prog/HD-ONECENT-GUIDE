@@ -1,10 +1,6 @@
 import type { Metadata } from "next"
 import { getPennyList } from "@/lib/fetch-penny-data"
-import {
-  computeFreshnessMetrics,
-  filterValidPennyItems,
-  formatRelativeDate,
-} from "@/lib/penny-list-utils"
+import { computeFreshnessMetrics, filterValidPennyItems } from "@/lib/penny-list-utils"
 import { PennyListClient } from "@/components/penny-list-client"
 
 export const metadata: Metadata = {
@@ -26,7 +22,6 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
   const feedUnavailable = validItems.length === 0
   const nowMs =
     process.env.PLAYWRIGHT === "1" ? new Date("2025-12-10T12:00:00Z").getTime() : Date.now()
-  const nowDate = new Date(nowMs)
   const { newLast24h, totalLast30d } = computeFreshnessMetrics(validItems, nowMs)
   const latestTimestamp = validItems
     .map((item) => new Date(item.dateAdded).getTime())
@@ -66,10 +61,10 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
       {/* Header Section */}
       <section
         aria-labelledby="page-heading"
-        className="section-padding px-4 sm:px-6 border-b border-[var(--border-default)] bg-[var(--bg-elevated)]"
+        className="section-padding-sm px-4 sm:px-6 border-b border-[var(--border-default)] bg-[var(--bg-elevated)]"
       >
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 text-[var(--text-secondary)] text-sm font-medium mb-4">
+          <div className="pill pill-muted mx-auto w-fit mb-4">
             <span
               className="inline-flex h-2 w-2 rounded-full bg-[var(--status-info)]"
               aria-hidden="true"
@@ -94,53 +89,18 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
           <div className="mb-6 rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] p-4 sm:p-5">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-[var(--text-secondary)]">
-                <span className="font-semibold text-[var(--text-primary)]">{newLast24h}</span> new
-                reports in the last 24 hours;{" "}
-                <span className="font-semibold text-[var(--text-primary)]">{totalLast30d}</span>{" "}
-                total in 30 days.
+                <span className="pill pill-strong mr-2 sm:mr-3">
+                  {newLast24h} new reports (24h)
+                </span>
+                <span className="pill pill-muted">Total last 30 days: {totalLast30d}</span>
               </p>
               <p className="text-xs text-[var(--text-muted)]">{lastUpdatedLabel}</p>
             </div>
             <div className="mt-3 flex flex-wrap gap-3">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--border-default)] bg-[var(--bg-page)] px-3 py-1.5 text-xs font-semibold text-[var(--text-secondary)]">
-                Verified: <span className="text-[var(--text-primary)]">{confidence.verified}</span>
-              </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--border-default)] bg-[var(--bg-page)] px-3 py-1.5 text-xs font-semibold text-[var(--text-secondary)]">
-                Unverified:{" "}
-                <span className="text-[var(--text-primary)]">{confidence.unverified}</span>
-              </span>
+              <span className="pill pill-strong">Verified: {confidence.verified}</span>
+              <span className="pill pill-muted">Unverified: {confidence.unverified}</span>
             </div>
           </div>
-          {whatsNew.length > 0 && (
-            <div className="mb-8 rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] p-4 sm:p-5">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
-                <h2 className="text-base font-semibold text-[var(--text-primary)]">
-                  What’s new this week (top 10)
-                </h2>
-                <span className="text-xs text-[var(--text-muted)]">{lastUpdatedLabel}</span>
-              </div>
-              <ul className="divide-y divide-[var(--border-default)]">
-                {whatsNew.map((item) => (
-                  <li
-                    key={item.id}
-                    className="py-2 flex items-center justify-between gap-3 text-sm"
-                  >
-                    <div className="min-w-0">
-                      <p className="font-semibold text-[var(--text-primary)] truncate">
-                        {item.name}
-                      </p>
-                      <p className="text-[var(--text-muted)] text-xs">SKU {item.sku}</p>
-                    </div>
-                    <div className="text-right text-xs text-[var(--text-secondary)] whitespace-nowrap">
-                      <time dateTime={item.dateAdded}>
-                        {formatRelativeDate(item.dateAdded, nowDate)}
-                      </time>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
           {feedUnavailable && (
             <div
               role="status"
@@ -160,6 +120,8 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
             initialItems={validItems}
             initialSearchParams={resolvedSearchParams}
             whatsNewCount={whatsNew.length}
+            whatsNewItems={whatsNew}
+            lastUpdatedLabel={lastUpdatedLabel}
           />
         </div>
       </section>

@@ -1,388 +1,249 @@
-"use client"
-
 import Link from "next/link"
 import { ReactNode } from "react"
-import { ArrowRight } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
-// ============================================================================
-// PAGE TEMPLATE COMPONENTS
-// ============================================================================
-// Reusable layout patterns for consistent page structure across PennyCentral.
-// Uses the WCAG AAA color system from docs/COLOR-SYSTEM.md
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// HERO SECTION
-// ----------------------------------------------------------------------------
-// Use at the top of every page. Provides consistent spacing and structure.
-
-interface HeroProps {
-  /** Badge text shown above headline (optional) */
-  badge?: string
-  /** Main headline - keep under 10 words */
-  headline: string
-  /** Optional highlighted word in headline (will use brand color) */
-  highlightWord?: string
-  /** Subtitle - 1-2 sentences max */
-  subtitle: string
-  /** Primary CTA button */
-  primaryCTA?: {
-    text: string
-    href: string
-  }
-  /** Secondary CTA button (optional) */
-  secondaryCTA?: {
-    text: string
-    href: string
-  }
-  /** Center content (default) or left-align */
-  align?: "center" | "left"
-  /** Compact hero for subpages */
-  compact?: boolean
+type HeaderAction = {
+  label: string
+  href: string
+  target?: string
+  rel?: string
+  external?: boolean
 }
 
-export function Hero({
-  badge,
-  headline,
-  highlightWord,
-  subtitle,
-  primaryCTA,
-  secondaryCTA,
-  align = "center",
-  compact = false,
-}: HeroProps) {
-  // Split headline to highlight specific word
-  const renderHeadline = () => {
-    if (!highlightWord) {
-      return headline
-    }
-    const parts = headline.split(highlightWord)
-    return (
-      <>
-        {parts[0]}
-        <span className="text-[--cta-primary]">{highlightWord}</span>
-        {parts[1]}
-      </>
-    )
-  }
+type PageShellProps = {
+  children: ReactNode
+  /** Max-width of the content column */
+  width?: "narrow" | "default" | "wide"
+  /** Vertical padding for the page band */
+  padding?: "sm" | "lg"
+  /** Background surface for the section */
+  background?: "page" | "muted" | "card"
+  /** Vertical rhythm between children */
+  gap?: "md" | "lg"
+  /** Semantic element wrapper */
+  as?: keyof JSX.IntrinsicElements
+  className?: string
+}
+
+export function PageShell({
+  children,
+  width = "default",
+  padding = "lg",
+  background = "page",
+  gap = "lg",
+  as: Component = "section",
+  className,
+}: PageShellProps) {
+  const widthClass = {
+    narrow: "max-w-4xl",
+    default: "max-w-5xl",
+    wide: "max-w-6xl",
+  }[width]
+
+  const paddingClass = {
+    sm: "py-8 sm:py-12",
+    lg: "py-12 sm:py-16 lg:py-20",
+  }[padding]
+
+  const backgroundClass = {
+    page: "bg-[var(--bg-page)]",
+    muted: "bg-[var(--bg-elevated)]",
+    card: "bg-[var(--bg-card)]",
+  }[background]
+
+  const gapClass = {
+    md: "gap-10 sm:gap-12",
+    lg: "gap-12 sm:gap-14",
+  }[gap]
 
   return (
-    <section
-      className={`
-        ${compact ? "py-12 md:py-16" : "min-h-[60vh] py-16 md:py-24"}
-        flex flex-col ${align === "center" ? "items-center text-center" : "items-start text-left"}
-        justify-center px-6
-        bg-[--bg-primary]
-      `}
-    >
-      <div className={`max-w-4xl ${align === "center" ? "mx-auto" : ""}`}>
-        {/* Badge */}
-        {badge && (
-          <div
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full 
-                       bg-[--bg-elevated] text-[--text-secondary] 
-                       text-sm font-medium mb-6 border border-[--border-default]"
-          >
-            {badge}
-          </div>
-        )}
-
-        {/* Headline */}
-        <h1
-          className={`
-            ${compact ? "text-3xl md:text-4xl" : "text-4xl md:text-5xl"}
-            font-semibold tracking-tight text-[--text-primary] leading-tight
-          `}
-        >
-          {renderHeadline()}
-        </h1>
-
-        {/* Subtitle */}
-        <p
-          className={`
-            mt-4 md:mt-6 text-lg md:text-xl text-[--text-secondary] 
-            ${align === "center" ? "max-w-2xl mx-auto" : "max-w-2xl"}
-          `}
-        >
-          {subtitle}
-        </p>
-
-        {/* CTAs */}
-        {(primaryCTA || secondaryCTA) && (
-          <div
-            className={`
-              mt-8 flex flex-col sm:flex-row gap-4
-              ${align === "center" ? "justify-center" : "justify-start"}
-            `}
-          >
-            {primaryCTA && (
-              <Link
-                href={primaryCTA.href}
-                className="inline-flex items-center justify-center px-6 py-3 rounded-lg 
-                         bg-[--cta-primary] hover:bg-[--cta-hover] text-white 
-                         font-medium text-base transition-colors
-                         focus:outline-none focus:ring-2 focus:ring-[--cta-primary] focus:ring-offset-2"
-              >
-                {primaryCTA.text}
-                <ArrowRight className="ml-2 w-4 h-4" />
-              </Link>
-            )}
-            {secondaryCTA && (
-              <Link
-                href={secondaryCTA.href}
-                className="inline-flex items-center justify-center px-6 py-3 rounded-lg 
-                         bg-transparent border-2 border-[--border-strong]
-                         hover:bg-[--bg-elevated] text-[--text-primary]
-                         font-medium text-base transition-colors"
-              >
-                {secondaryCTA.text}
-              </Link>
-            )}
-          </div>
-        )}
+    <Component className={cn(backgroundClass, paddingClass)}>
+      <div className={cn("mx-auto flex flex-col px-4 sm:px-6", widthClass, gapClass, className)}>
+        {children}
       </div>
-    </section>
+    </Component>
   )
 }
 
-// ----------------------------------------------------------------------------
-// SECTION
-// ----------------------------------------------------------------------------
-// Use to wrap content sections. Provides consistent spacing and backgrounds.
+type PageHeaderProps = {
+  title: string
+  subtitle?: ReactNode
+  eyebrow?: string
+  primaryAction?: HeaderAction
+  secondaryActions?: HeaderAction[]
+  align?: "left" | "center"
+  children?: ReactNode
+}
 
-interface SectionProps {
-  /** Section heading */
+export function PageHeader({
+  title,
+  subtitle,
+  eyebrow,
+  primaryAction,
+  secondaryActions = [],
+  align = "left",
+  children,
+}: PageHeaderProps) {
+  const alignment = align === "center" ? "items-center text-center" : "items-start text-left"
+  const descriptionWidth = align === "center" ? "max-w-3xl" : "max-w-2xl"
+
+  return (
+    <header className={cn("flex flex-col gap-4 sm:gap-5", alignment)}>
+      {eyebrow && (
+        <p className="text-sm font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)]">
+          {eyebrow}
+        </p>
+      )}
+
+      <div className="space-y-3 sm:space-y-4">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight text-[var(--text-primary)]">
+          {title}
+        </h1>
+        {subtitle && (
+          <div
+            className={cn(
+              "text-lg sm:text-xl text-[var(--text-secondary)] leading-relaxed",
+              descriptionWidth
+            )}
+          >
+            {subtitle}
+          </div>
+        )}
+      </div>
+
+      {children}
+
+      {(primaryAction || secondaryActions.length > 0) && (
+        <div
+          className={cn(
+            "flex flex-col sm:flex-row gap-3 sm:gap-4",
+            align === "center" ? "justify-center" : "justify-start"
+          )}
+        >
+          {primaryAction && <HeaderButton action={primaryAction} variant="primary" />}
+          {secondaryActions.map((action) => (
+            <HeaderButton
+              key={`${action.href}-${action.label}`}
+              action={action}
+              variant="secondary"
+            />
+          ))}
+        </div>
+      )}
+    </header>
+  )
+}
+
+type SectionProps = {
   title?: string
-  /** Optional subtitle under heading */
-  subtitle?: string
-  /** Section content */
+  subtitle?: ReactNode
+  kicker?: string
   children: ReactNode
-  /** Background variant */
-  variant?: "default" | "muted" | "card"
-  /** Padding size */
-  padding?: "sm" | "md" | "lg"
-  /** Maximum width constraint */
-  maxWidth?: "sm" | "md" | "lg" | "xl" | "full"
-  /** Optional ID for anchor links */
   id?: string
+  align?: "left" | "center"
+  spacing?: "md" | "lg"
+  className?: string
 }
 
 export function Section({
   title,
   subtitle,
+  kicker,
   children,
-  variant = "default",
-  padding = "md",
-  maxWidth = "lg",
   id,
+  align = "left",
+  spacing = "lg",
+  className,
 }: SectionProps) {
-  const bgClasses = {
-    default: "bg-[--bg-primary]",
-    muted: "bg-[--bg-elevated]",
-    card: "bg-[--bg-secondary]",
-  }
-
-  const paddingClasses = {
-    sm: "py-8 md:py-12",
-    md: "py-12 md:py-16",
-    lg: "py-16 md:py-24",
-  }
-
-  const maxWidthClasses = {
-    sm: "max-w-2xl",
-    md: "max-w-4xl",
-    lg: "max-w-6xl",
-    xl: "max-w-7xl",
-    full: "max-w-full",
-  }
+  const contentSpacing = {
+    md: "space-y-5",
+    lg: "space-y-6",
+  }[spacing]
 
   return (
-    <section id={id} className={`${bgClasses[variant]} ${paddingClasses[padding]} px-6`}>
-      <div className={`${maxWidthClasses[maxWidth]} mx-auto`}>
-        {(title || subtitle) && (
-          <div className="mb-8 md:mb-12">
-            {title && (
-              <h2 className="text-2xl md:text-3xl font-semibold text-[--text-primary] tracking-tight">
-                {title}
-              </h2>
-            )}
-            {subtitle && (
-              <p className="mt-3 text-lg text-[--text-secondary] max-w-3xl">{subtitle}</p>
-            )}
-          </div>
-        )}
-        {children}
-      </div>
-    </section>
-  )
-}
-
-// ----------------------------------------------------------------------------
-// FEATURE CARD
-// ----------------------------------------------------------------------------
-// Use in grids to showcase features, benefits, or navigation options.
-
-interface FeatureCardProps {
-  /** Card title */
-  title: string
-  /** Card description - keep to 2-3 sentences */
-  description: string
-  /** Icon component (from lucide-react) */
-  icon?: ReactNode
-  /** Optional link - makes entire card clickable */
-  href?: string
-  /** Optional action button text */
-  actionText?: string
-}
-
-export function FeatureCard({ title, description, icon, href, actionText }: FeatureCardProps) {
-  const content = (
-    <>
-      {icon && (
+    <section id={id} className={cn("w-full", className)}>
+      {(kicker || title || subtitle) && (
         <div
-          className="w-10 h-10 rounded-lg bg-[--bg-elevated] flex items-center justify-center mb-4
-                      text-[--text-secondary]"
+          className={cn(
+            "mb-4 sm:mb-6 flex flex-col gap-2",
+            align === "center" ? "items-center text-center" : "text-left"
+          )}
         >
-          {icon}
+          {kicker && (
+            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)]">
+              {kicker}
+            </p>
+          )}
+          {title && (
+            <h2 className="text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug">
+              {title}
+            </h2>
+          )}
+          {subtitle && (
+            <div className="text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed max-w-3xl">
+              {subtitle}
+            </div>
+          )}
         </div>
       )}
-      <h3 className="text-lg font-semibold text-[--text-primary] mb-2">{title}</h3>
-      <p className="text-[--text-secondary] text-sm leading-relaxed">{description}</p>
-      {actionText && (
-        <span
-          className="inline-flex items-center mt-4 text-sm font-medium 
-                      text-[--cta-primary] underline underline-offset-2"
-        >
-          {actionText}
-          <ArrowRight className="ml-1 w-4 h-4" />
-        </span>
-      )}
-    </>
-  )
-
-  const cardClasses = `
-    block p-6 rounded-lg border border-[--border-default]
-    bg-[--bg-card] hover:border-[--border-strong]
-    transition-colors
-    ${href ? "cursor-pointer" : ""}
-  `
-
-  if (href) {
-    return (
-      <Link href={href} className={cardClasses}>
-        {content}
-      </Link>
-    )
-  }
-
-  return <div className={cardClasses}>{content}</div>
-}
-
-// ----------------------------------------------------------------------------
-// CTA BANNER
-// ----------------------------------------------------------------------------
-// Use at the end of pages to drive a single action.
-
-interface CTABannerProps {
-  /** Banner headline */
-  headline: string
-  /** Brief description */
-  description?: string
-  /** Button text */
-  buttonText: string
-  /** Button link */
-  buttonHref: string
-  /** Visual variant */
-  variant?: "default" | "muted"
-}
-
-export function CTABanner({
-  headline,
-  description,
-  buttonText,
-  buttonHref,
-  variant = "default",
-}: CTABannerProps) {
-  return (
-    <section
-      className={`
-        py-12 md:py-16 px-6
-        ${variant === "muted" ? "bg-[--bg-elevated]" : "bg-[--bg-primary]"}
-      `}
-    >
-      <div
-        className="max-w-4xl mx-auto text-center p-8 md:p-12 rounded-xl
-                    border border-[--border-default] bg-[--bg-card]"
-      >
-        <h2 className="text-2xl md:text-3xl font-semibold text-[--text-primary] mb-4">
-          {headline}
-        </h2>
-        {description && (
-          <p className="text-[--text-secondary] mb-6 max-w-xl mx-auto">{description}</p>
-        )}
-        <Link
-          href={buttonHref}
-          className="inline-flex items-center justify-center px-6 py-3 rounded-lg 
-                   bg-[--cta-primary] hover:bg-[--cta-hover] text-white 
-                   font-medium text-base transition-colors
-                   focus:outline-none focus:ring-2 focus:ring-[--cta-primary] focus:ring-offset-2"
-        >
-          {buttonText}
-          <ArrowRight className="ml-2 w-4 h-4" />
-        </Link>
-      </div>
+      <div className={contentSpacing}>{children}</div>
     </section>
   )
 }
 
-// ----------------------------------------------------------------------------
-// PROSE CONTAINER
-// ----------------------------------------------------------------------------
-// Use for long-form content. Enforces readable line lengths.
-
-interface ProseProps {
+type ProseProps = {
   children: ReactNode
-  /** Optional className overrides */
   className?: string
 }
 
-export function Prose({ children, className = "" }: ProseProps) {
+export function Prose({ children, className }: ProseProps) {
   return (
     <div
-      className={`
-        prose prose-stone dark:prose-invert
-        max-w-prose mx-auto
-        prose-headings:font-semibold prose-headings:tracking-tight
-        prose-h2:text-2xl prose-h3:text-xl
-        prose-p:text-[--text-primary] prose-p:leading-relaxed
-        prose-a:text-[--cta-primary] prose-a:underline prose-a:underline-offset-2
-        prose-strong:text-[--text-primary] prose-strong:font-semibold
-        prose-li:text-[--text-primary]
-        ${className}
-      `}
+      className={cn(
+        "space-y-4 text-[var(--text-secondary)] leading-relaxed",
+        "[&_p]:text-[var(--text-secondary)]",
+        "[&_p]:leading-relaxed",
+        "[&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:text-[var(--text-primary)] [&_h2]:leading-snug",
+        "[&_h3]:text-xl [&_h3]:font-semibold [&_h3]:text-[var(--text-primary)]",
+        "[&_strong]:text-[var(--text-primary)] [&_strong]:font-semibold",
+        "[&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-2",
+        "[&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:space-y-2",
+        "[&_li]:text-[var(--text-secondary)] [&_li]:leading-relaxed",
+        "[&_a]:font-semibold",
+        "[&_code]:font-mono [&_code]:text-sm [&_code]:bg-[var(--bg-elevated)] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded",
+        className
+      )}
     >
       {children}
     </div>
   )
 }
 
-// ----------------------------------------------------------------------------
-// CARD GRID
-// ----------------------------------------------------------------------------
-// Responsive grid for FeatureCards or similar items.
+function HeaderButton({
+  action,
+  variant,
+}: {
+  action: HeaderAction
+  variant: "primary" | "secondary"
+}) {
+  const isExternal = action.external ?? /^https?:\/\//.test(action.href)
+  const rel = action.rel ?? (action.target === "_blank" ? "noopener noreferrer" : undefined)
+  const ariaLabel = action.target === "_blank" ? `${action.label} (opens in a new tab)` : undefined
 
-interface CardGridProps {
-  children: ReactNode
-  /** Number of columns at desktop */
-  columns?: 2 | 3 | 4
-}
-
-export function CardGrid({ children, columns = 3 }: CardGridProps) {
-  const colClasses = {
-    2: "md:grid-cols-2",
-    3: "md:grid-cols-2 lg:grid-cols-3",
-    4: "md:grid-cols-2 lg:grid-cols-4",
+  if (isExternal) {
+    return (
+      <Button asChild variant={variant} size="lg">
+        <a href={action.href} target={action.target} rel={rel} aria-label={ariaLabel}>
+          {action.label}
+        </a>
+      </Button>
+    )
   }
 
-  return <div className={`grid gap-6 ${colClasses[columns]}`}>{children}</div>
+  return (
+    <Button asChild variant={variant} size="lg">
+      <Link href={action.href}>{action.label}</Link>
+    </Button>
+  )
 }

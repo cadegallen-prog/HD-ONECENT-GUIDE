@@ -41,12 +41,12 @@ function CopyButton({ sku }: { sku: string }) {
   return (
     <button
       onClick={handleCopy}
-      className="px-2 py-1 rounded hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors focus-visible:outline-2 focus-visible:outline-[var(--cta-primary)] min-h-[36px]"
+      className="px-2 py-1 rounded transition-colors focus-visible:outline-2 focus-visible:outline-[var(--cta-primary)] min-h-[36px] hover:bg-[var(--bg-hover)]"
       aria-label={copied ? "SKU copied" : `Copy SKU ${sku}`}
       title={copied ? "Copied!" : "Copy SKU"}
     >
       {copied ? (
-        <Check className="w-3.5 h-3.5 text-emerald-600" aria-hidden="true" />
+        <Check className="w-3.5 h-3.5 text-[var(--status-success)]" aria-hidden="true" />
       ) : (
         <Copy className="w-3.5 h-3.5 text-[var(--text-muted)]" aria-hidden="true" />
       )}
@@ -104,28 +104,22 @@ function SortButton({
 function TierBadge({ tier }: { tier?: string }) {
   const colorClasses = (() => {
     if (tier === "Very Common") {
-      return "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300"
+      return "pill pill-success"
     }
     if (tier === "Common") {
-      return "bg-[var(--bg-elevated)] text-[var(--status-info)]"
+      return "pill pill-accent"
     }
-    return "bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
+    return "pill pill-strong"
   })()
 
-  return (
-    <span
-      className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${colorClasses}`}
-    >
-      {tier || "Rare"}
-    </span>
-  )
+  return <span className={colorClasses}>{tier || "Rare"}</span>
 }
 
 export function PennyListTable({ items, sortOption, onSortChange }: PennyListTableProps) {
   return (
     <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl overflow-hidden">
       {/* Mobile scroll hint */}
-      <div className="lg:hidden px-4 py-2 bg-zinc-50 dark:bg-zinc-900/30 border-b border-[var(--border-default)] text-xs text-[var(--text-muted)] text-center">
+      <div className="lg:hidden px-4 py-2 bg-[var(--bg-hover)] border-b border-[var(--border-default)] text-xs text-[var(--text-muted)] text-center">
         ← Scroll horizontally to see all columns →
       </div>
       <div className="overflow-x-auto">
@@ -144,7 +138,7 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
             <col className="w-[12%]" />
           </colgroup>
           <thead>
-            <tr className="border-b border-[var(--border-default)] bg-zinc-50 dark:bg-zinc-900/50">
+            <tr className="border-b border-[var(--border-default)] bg-[var(--bg-recessed)]">
               <th
                 scope="col"
                 className="text-left px-4 py-3 font-semibold text-[var(--text-primary)]"
@@ -208,9 +202,13 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
               return (
                 <tr
                   key={item.id}
-                  className={`border-b border-[var(--border-default)] last:border-b-0 hover:bg-[var(--bg-page)] transition-colors ${
-                    index % 2 === 0 ? "bg-transparent" : "bg-zinc-50/50 dark:bg-zinc-900/20"
-                  }`}
+                  style={{
+                    backgroundColor:
+                      index % 2 === 0
+                        ? "transparent"
+                        : "color-mix(in srgb, var(--bg-elevated) 55%, var(--bg-page))",
+                  }}
+                  className="border-b border-[var(--border-default)] last:border-b-0 hover:bg-[var(--bg-hover)] transition-colors"
                 >
                   {/* Thumbnail */}
                   <td className="px-4 py-3 align-top">
@@ -231,7 +229,7 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
                   {/* SKU */}
                   <td className="px-4 py-3 align-top">
                     <div className="flex items-center gap-1.5">
-                      <code className="font-mono text-sm bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 px-2.5 py-1.5 rounded select-all text-[var(--text-primary)] font-medium">
+                      <code className="font-mono text-sm bg-[var(--bg-elevated)] border border-[var(--border-default)] px-2.5 py-1.5 rounded select-all text-[var(--text-primary)] font-medium">
                         {item.sku}
                       </code>
                       <CopyButton sku={item.sku} />
@@ -253,7 +251,7 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
                         {topStates.map(([state]) => (
                           <span
                             key={state}
-                            className="px-2.5 py-1 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-xs font-semibold text-[var(--text-primary)]"
+                            className="pill pill-strong"
                             title={getStateName(state)}
                           >
                             {state}

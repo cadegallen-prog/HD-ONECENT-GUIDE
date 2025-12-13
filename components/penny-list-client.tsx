@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect, useCallback, useRef } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import { AlertTriangle, Package, Clock, CheckCircle2, Info } from "lucide-react"
 import { TrackableLink } from "@/components/trackable-link"
-import { filterValidPennyItems } from "@/lib/penny-list-utils"
+import { filterValidPennyItems, formatRelativeDate } from "@/lib/penny-list-utils"
 import { trackEvent } from "@/lib/analytics"
 import { FeedbackWidget } from "@/components/feedback-widget"
 import {
@@ -22,6 +22,8 @@ interface PennyListClientProps {
   initialItems: PennyItem[]
   initialSearchParams?: Record<string, string | string[] | undefined>
   whatsNewCount?: number
+  whatsNewItems?: PennyItem[]
+  lastUpdatedLabel?: string
 }
 
 // Get total reports across all states
@@ -54,6 +56,8 @@ export function PennyListClient({
   initialItems,
   initialSearchParams,
   whatsNewCount = 0,
+  whatsNewItems = [],
+  lastUpdatedLabel,
 }: PennyListClientProps) {
   const router = useRouter()
   const pathname = usePathname()
@@ -359,6 +363,27 @@ export function PennyListClient({
 
   return (
     <>
+      {/* Filter Bar */}
+      <PennyListFilters
+        totalItems={recentItems.length}
+        filteredCount={filteredItems.length}
+        stateFilter={stateFilter}
+        setStateFilter={setStateFilterWithURL}
+        tierFilter={tierFilter}
+        setTierFilter={setTierFilterWithURL}
+        hasPhotoOnly={hasPhotoOnly}
+        setHasPhotoOnly={setHasPhotoOnlyWithURL}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQueryWithURL}
+        sortOption={sortOption}
+        setSortOption={setSortOptionWithURL}
+        viewMode={viewMode}
+        setViewMode={setViewModeWithURL}
+        dateRange={dateRange}
+        setDateRange={setDateRangeWithURL}
+        userState={userState}
+      />
+
       {/* Hot Right Now - Only show if no filters active */}
       {!hasActiveFilters && hotItems.length > 0 && (
         <section
@@ -377,15 +402,41 @@ export function PennyListClient({
                 Very Common finds reported in the last {HOT_WINDOW_DAYS} days. YMMV.
               </p>
             </div>
-            <span className="text-xs font-medium rounded-full px-3 py-1 bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200">
-              Fresh signal
-            </span>
+            <span className="pill pill-success">Fresh signal</span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {hotItems.map((item) => (
               <PennyListCardCompact key={`hot-${item.id}`} item={item} />
             ))}
           </div>
+        </section>
+      )}
+
+      {whatsNewItems.length > 0 && (
+        <section className="mb-8 rounded-xl border border-[var(--border-default)] bg-[var(--bg-elevated)] p-4 sm:p-5">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
+            <h2 className="text-base font-semibold text-[var(--text-primary)]">
+              What’s new this week (top 10)
+            </h2>
+            {lastUpdatedLabel && (
+              <span className="text-xs text-[var(--text-muted)]">{lastUpdatedLabel}</span>
+            )}
+          </div>
+          <ul className="divide-y divide-[var(--border-default)]">
+            {whatsNewItems.map((item) => (
+              <li key={item.id} className="py-2 flex items-center justify-between gap-3 text-sm">
+                <div className="min-w-0">
+                  <p className="font-semibold text-[var(--text-primary)] truncate">{item.name}</p>
+                  <p className="text-[var(--text-muted)] text-xs">SKU {item.sku}</p>
+                </div>
+                <div className="text-right text-xs text-[var(--text-secondary)] whitespace-nowrap">
+                  <time dateTime={item.dateAdded}>
+                    {formatRelativeDate(item.dateAdded, new Date())}
+                  </time>
+                </div>
+              </li>
+            ))}
+          </ul>
         </section>
       )}
 
@@ -444,27 +495,6 @@ export function PennyListClient({
         </a>
       </div>
 
-      {/* Filter Bar */}
-      <PennyListFilters
-        totalItems={recentItems.length}
-        filteredCount={filteredItems.length}
-        stateFilter={stateFilter}
-        setStateFilter={setStateFilterWithURL}
-        tierFilter={tierFilter}
-        setTierFilter={setTierFilterWithURL}
-        hasPhotoOnly={hasPhotoOnly}
-        setHasPhotoOnly={setHasPhotoOnlyWithURL}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQueryWithURL}
-        sortOption={sortOption}
-        setSortOption={setSortOptionWithURL}
-        viewMode={viewMode}
-        setViewMode={setViewModeWithURL}
-        dateRange={dateRange}
-        setDateRange={setDateRangeWithURL}
-        userState={userState}
-      />
-
       {/* Results */}
       <section aria-label="Penny list results">
         {filteredItems.length === 0 ? (
@@ -520,8 +550,8 @@ export function PennyListClient({
         </summary>
         <div className="mt-4 space-y-4">
           <div className="flex gap-3 items-start">
-            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-              <Package className="w-4 h-4 text-blue-600 dark:text-blue-400" aria-hidden="true" />
+            <div className="flex-shrink-0 w-8 h-8 rounded-full border border-[var(--chip-accent-border)] bg-[var(--chip-accent-surface)] flex items-center justify-center">
+              <Package className="w-4 h-4 text-[var(--cta-primary)]" aria-hidden="true" />
             </div>
             <div className="flex-1">
               <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
@@ -531,11 +561,8 @@ export function PennyListClient({
           </div>
 
           <div className="flex gap-3 items-start">
-            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
-              <Clock
-                className="w-4 h-4 text-emerald-600 dark:text-emerald-400"
-                aria-hidden="true"
-              />
+            <div className="flex-shrink-0 w-8 h-8 rounded-full border border-[var(--chip-success-border)] bg-[var(--chip-success-surface)] flex items-center justify-center">
+              <Clock className="w-4 h-4 text-[var(--status-success)]" aria-hidden="true" />
             </div>
             <div className="flex-1">
               <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
@@ -570,8 +597,8 @@ export function PennyListClient({
           </div>
 
           <div className="flex gap-3 items-start">
-            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-              <Info className="w-4 h-4 text-slate-600 dark:text-slate-400" aria-hidden="true" />
+            <div className="flex-shrink-0 w-8 h-8 rounded-full border border-[var(--chip-muted-border)] bg-[var(--chip-muted-surface)] flex items-center justify-center">
+              <Info className="w-4 h-4 text-[var(--text-secondary)]" aria-hidden="true" />
             </div>
             <div className="flex-1">
               <p className="text-sm text-[var(--text-secondary)] leading-relaxed">

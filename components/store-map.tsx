@@ -2,13 +2,17 @@
 
 import * as React from "react"
 import { MapContainer, TileLayer, Marker, CircleMarker, useMap, Popup } from "react-leaflet"
-import type { Marker as LeafletMarker } from "leaflet"
+import type { Marker as LeafletMarker, DivIcon } from "leaflet"
 import "leaflet/dist/leaflet.css"
 import { getStoreUrl, normalizeDayHours, mergeConsecutiveDays, getStoreTitle } from "@/lib/stores"
 import type { StoreLocation } from "@/lib/stores"
 import { Navigation, Info } from "lucide-react"
 import "./store-map.css"
 import { trackEvent } from "@/lib/analytics"
+import { useTheme } from "@/components/theme-provider"
+
+const TILE_ATTRIBUTION =
+  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
 
 interface StoreMapProps {
   stores: StoreLocation[]
@@ -134,6 +138,8 @@ export const StoreMap = React.memo(function StoreMap({
   userLocation,
 }: StoreMapProps) {
   const [mounted, setMounted] = React.useState(false)
+  const { theme } = useTheme()
+  const [isDarkMode, setIsDarkMode] = React.useState(false)
   const markersRef = React.useRef<Record<string, LeafletMarker | null>>({})
 
   // Keep original store order - do NOT reorder based on selection
@@ -141,46 +147,99 @@ export const StoreMap = React.memo(function StoreMap({
   const orderedStores = stores
 
   // Load Leaflet and create icons only on the client after mount to avoid SSR/dynamic import issues
-  const { defaultIcon, selectedIcon } = React.useMemo(() => {
-    if (typeof window === "undefined") return { defaultIcon: null, selectedIcon: null }
-    // `require` is used intentionally here because leaflet expects to be loaded on the client.
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const L = require("leaflet")
+  const buildMarkerIcon = React.useCallback(
+    ({
+      className,
+      size,
+      anchor,
+      popupAnchor,
+      variant,
+    }: {
+      className: string
+      size: [number, number]
+      anchor: [number, number]
+      popupAnchor: [number, number]
+      variant: "default" | "selected"
+    }): DivIcon | null => {
+      if (typeof window === "undefined") return null
+      // `require` is used intentionally here because leaflet expects to be loaded on the client.
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const L = require("leaflet")
 
-    const baseIcon = new L.DivIcon({
-      className: "map-marker-default",
-      html: `
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 36" width="24" height="36" style="display: block; width: 100%; height: 100%;">
-          <path fill="var(--brand-gunmetal)" stroke="#ffffff" stroke-width="1.5" d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z"/>
-          <circle fill="#ffffff" cx="12" cy="12" r="5"/>
+      const html =
+        variant === "selected"
+          ? `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 48" width="${size[0]}" height="${size[1]}" style="display: block; width: 100%; height: 100%;">
+          <ellipse cx="16" cy="46" rx="8" ry="2" fill="var(--map-marker-selected)" fill-opacity="0.18"/>
+          <path fill="var(--map-marker-selected)" stroke="var(--map-marker-outline)" stroke-width="2" d="M16 0C7.2 0 0 7.2 0 16c0 12 16 32 16 32s16-20 16-32c0-8.8-7.2-16-16-16z"/>
+          <circle fill="var(--map-marker-core)" cx="16" cy="16" r="7"/>
+          <circle fill="var(--map-marker-selected)" cx="16" cy="16" r="4"/>
         </svg>
-      `,
-      iconSize: [24, 36],
-      iconAnchor: [12, 36],
-      popupAnchor: [0, -36],
-    })
-
-    const highlightedIcon = new L.DivIcon({
-      className: "map-marker-selected",
-      html: `
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 48" width="32" height="48" style="display: block; width: 100%; height: 100%;">
-          <ellipse cx="16" cy="46" rx="8" ry="2" fill="rgba(15,23,42,0.3)"/>
-          <path fill="var(--cta-primary)" stroke="#ffffff" stroke-width="2" d="M16 0C7.2 0 0 7.2 0 16c0 12 16 32 16 32s16-20 16-32c0-8.8-7.2-16-16-16z"/>
-          <circle fill="#ffffff" cx="16" cy="16" r="7"/>
-          <circle fill="var(--cta-primary)" cx="16" cy="16" r="4"/>
+      `
+          : `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 36" width="${size[0]}" height="${size[1]}" style="display: block; width: 100%; height: 100%;">
+          <path fill="var(--map-marker-default)" stroke="var(--map-marker-outline)" stroke-width="1.5" d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z"/>
+          <circle fill="var(--map-marker-core)" cx="12" cy="12" r="5"/>
         </svg>
-      `,
-      iconSize: [32, 48],
-      iconAnchor: [16, 48],
-      popupAnchor: [0, -48],
-    })
+      `
 
-    return { defaultIcon: baseIcon, selectedIcon: highlightedIcon }
-  }, [])
+      return new L.DivIcon({
+        className,
+        html,
+        iconSize: size,
+        iconAnchor: anchor,
+        popupAnchor,
+      })
+    },
+    []
+  )
+
+  const { defaultIcon, selectedIcon } = React.useMemo(
+    () => ({
+      defaultIcon: buildMarkerIcon({
+        className: "map-marker-default",
+        size: [24, 36],
+        anchor: [12, 36],
+        popupAnchor: [0, -36],
+        variant: "default",
+      }),
+      selectedIcon: buildMarkerIcon({
+        className: "map-marker-selected",
+        size: [32, 48],
+        anchor: [16, 48],
+        popupAnchor: [0, -48],
+        variant: "selected",
+      }),
+    }),
+    [buildMarkerIcon]
+  )
 
   React.useEffect(() => {
     setMounted(true)
   }, [])
+
+  React.useEffect(() => {
+    const resolveDark = () => {
+      if (typeof window === "undefined") return false
+      const media = window.matchMedia("(prefers-color-scheme: dark)")
+      return theme === "dark" || (theme === "system" && media.matches)
+    }
+    setIsDarkMode(resolveDark())
+
+    if (typeof window === "undefined") return undefined
+    const media = window.matchMedia("(prefers-color-scheme: dark)")
+    const handleChange = () => setIsDarkMode(resolveDark())
+    media.addEventListener("change", handleChange)
+    return () => media.removeEventListener("change", handleChange)
+  }, [theme])
+
+  const tileUrl = React.useMemo(
+    () =>
+      isDarkMode
+        ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+        : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+    [isDarkMode]
+  )
 
   React.useEffect(() => {
     if (selectedStore) {
@@ -218,10 +277,7 @@ export const StoreMap = React.memo(function StoreMap({
         scrollWheelZoom={true}
       >
         <MapController selectedStore={selectedStore} />
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+        <TileLayer attribution={TILE_ATTRIBUTION} url={tileUrl} subdomains={["a", "b", "c", "d"]} />
 
         {/* User location indicator */}
         {userLocation && (

@@ -25,13 +25,9 @@ function getTotalReports(locations: Record<string, number>): number {
 
 export function PennyListCard({ item }: PennyListCardProps) {
   const commonnessTone = (tier?: string) => {
-    // Using CSS variables that automatically adapt to light/dark mode
-    if (tier === "Very Common")
-      return "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800"
-    if (tier === "Common")
-      return "bg-[var(--bg-elevated)] text-[var(--status-info)] border-[var(--border-strong)]"
-    // Rare items use elevation-2 background for subtle distinction
-    return "elevation-2 text-[var(--text-primary)] border-[var(--border-strong)]"
+    if (tier === "Very Common") return "pill pill-success"
+    if (tier === "Common") return "pill pill-accent"
+    return "pill pill-strong"
   }
 
   const totalReports = item.locations ? getTotalReports(item.locations) : 0
@@ -47,12 +43,10 @@ export function PennyListCard({ item }: PennyListCardProps) {
         <div className="flex justify-between items-start gap-3">
           <div className="flex items-center gap-2 flex-wrap">
             {item.status && item.status !== item.tier && (
-              <span className="text-xs font-semibold px-2.5 py-1 rounded-full elevation-2 border border-[var(--border-strong)] text-[var(--text-primary)]">
-                {item.status}
-              </span>
+              <span className="pill pill-strong">{item.status}</span>
             )}
             <span
-              className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${commonnessTone(item.tier)}`}
+              className={commonnessTone(item.tier)}
               aria-label={`Commonness: ${item.tier || "Rare"}`}
             >
               {item.tier || "Rare"}
@@ -105,7 +99,7 @@ export function PennyListCard({ item }: PennyListCardProps) {
                   <span
                     key={state}
                     role="listitem"
-                    className="px-2.5 py-1 rounded-full elevation-2 border border-[var(--border-strong)] text-[var(--text-primary)] text-xs font-semibold min-h-[28px] flex items-center"
+                    className="pill pill-strong min-h-[28px] flex items-center"
                     title={`${getStateName(state)}: ${count} ${count === 1 ? "report" : "reports"}`}
                     aria-label={`${getStateName(state)}: ${count} ${count === 1 ? "report" : "reports"}`}
                   >
@@ -132,11 +126,9 @@ export function PennyListCard({ item }: PennyListCardProps) {
 
 export function PennyListCardCompact({ item }: PennyListCardProps) {
   const commonnessTone = (tier?: string) => {
-    if (tier === "Very Common")
-      return "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800"
-    if (tier === "Common")
-      return "bg-[var(--bg-elevated)] text-[var(--status-info)] border-[var(--border-strong)]"
-    return "elevation-2 text-[var(--text-primary)] border-[var(--border-strong)]"
+    if (tier === "Very Common") return "pill pill-success"
+    if (tier === "Common") return "pill pill-accent"
+    return "pill pill-strong"
   }
 
   const totalReports = item.locations ? getTotalReports(item.locations) : 0
@@ -149,7 +141,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
     >
       <div className="flex items-center justify-between mb-2 gap-2">
         <span
-          className={`text-xs font-semibold px-2.5 py-1 rounded-full ${commonnessTone(item.tier)}`}
+          className={commonnessTone(item.tier)}
           aria-label={`Commonness: ${item.tier || "Rare"}`}
         >
           {item.tier || "Rare"}
@@ -193,7 +185,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
               <span
                 key={`${item.id}-${state}`}
                 role="listitem"
-                className="px-2 py-1 rounded-full elevation-2 border border-[var(--border-strong)] text-[var(--text-primary)] text-xs font-semibold"
+                className="pill pill-strong"
                 aria-label={`${state}: ${count} ${count === 1 ? "report" : "reports"}`}
               >
                 {state} × {count}

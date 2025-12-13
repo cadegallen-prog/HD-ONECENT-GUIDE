@@ -4,6 +4,19 @@ Brief log of completed work. Most recent at top.
 
 ---
 
+## 2025-12-13 - SKU validation narrowing
+
+Objective: Align SKU validation with latest business rule (6 or 10 digits only) and document the change.
+
+What changed:
+- Updated SKU validation to accept only 6 or 10 digits; removed 9-digit support for consistency across client, server, and form helpers (`lib/sku.ts`, `app/report-find/page.tsx`). Note: existing 9-digit submissions must be normalized/migrated before enforcing this in production.
+
+Testing:
+- `npm run lint` ✅
+- `npm run build` ✅
+
+---
+
 ## 2025-12-12 - Penny List rescue, validation hardening, thumbnails, main-only workflow
 
 Objective: Make Penny List + Report Find a cohesive, trustworthy core product, tighten data quality, refresh visual system, and simplify deployment to main-only.

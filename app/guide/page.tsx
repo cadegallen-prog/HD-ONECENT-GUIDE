@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { GuideContent } from "@/components/GuideContent"
 import { SupportAndCashbackCard } from "@/components/SupportAndCashbackCard"
+import { PageHeader, PageShell, Section } from "@/components/page-templates"
 
 export const metadata: Metadata = {
   title: "Complete Guide | Penny Central",
@@ -10,11 +11,25 @@ export const metadata: Metadata = {
 
 export default function GuidePage() {
   return (
-    <div className="container mx-auto px-4 sm:px-6 py-8 max-w-4xl">
-      <GuideContent />
+    <PageShell width="wide">
+      <PageHeader
+        title="Complete Guide"
+        subtitle="Master the art of finding $0.01 clearance items at Home Depot. Learn the clearance lifecycle, digital pre-hunt strategies, in-store tactics, and checkout procedures."
+        primaryAction={{ label: "Check the Penny List", href: "/penny-list" }}
+        secondaryActions={[
+          { label: "Report a find", href: "/report-find" },
+          { label: "Open store finder", href: "/store-finder" },
+        ]}
+        align="left"
+      />
 
-      {/* Support Card */}
-      <SupportAndCashbackCard className="mt-12" />
-    </div>
+      <Section>
+        <GuideContent />
+      </Section>
+
+      <Section spacing="md">
+        <SupportAndCashbackCard />
+      </Section>
+    </PageShell>
   )
 }

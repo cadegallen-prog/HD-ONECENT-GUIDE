@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-export const ALLOWED_SKU_LENGTHS = [6, 9, 10] as const
+export const ALLOWED_SKU_LENGTHS = [6, 10] as const
 
 export function normalizeSku(input: string): string {
   return (input ?? "").replace(/\D/g, "")
@@ -32,7 +32,7 @@ export function validateSku(rawSku: string): { normalized: string; error?: strin
   }
 
   if (!ALLOWED_SKU_LENGTHS.includes(normalized.length as (typeof ALLOWED_SKU_LENGTHS)[number])) {
-    return { normalized, error: "SKU must be 6, 9, or 10 digits." }
+    return { normalized, error: "SKU must be 6 or 10 digits." }
   }
 
   if (isAllSameDigit(normalized) || /^0+$/.test(normalized)) {

@@ -14,7 +14,7 @@
       "orientationAngle": 0,
       "orientationType": "landscape-primary"
     },
-    "timestamp": "2025-12-12T23:17:41.591Z",
+    "timestamp": "2025-12-13T04:21:06.967Z",
     "url": "http://localhost:3001/",
     "toolOptions": {
       "reporter": "v1"
@@ -861,7 +861,7 @@
               }
             ],
             "impact": null,
-            "html": "<a href=\"https://www.facebook.com/groups/homedepotonecent\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-zinc-400 hover:text-white transition-colors p-2\" aria-label=\"Facebook Group\">",
+            "html": "<a href=\"https://www.facebook.com/groups/homedepotonecent\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors p-2\" aria-label=\"Facebook Group\">",
             "target": [
               "a[aria-label=\"Facebook Group\"]"
             ]
@@ -1938,7 +1938,7 @@
             ],
             "none": [],
             "impact": null,
-            "html": "<a href=\"https://www.facebook.com/groups/homedepotonecent\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-zinc-400 hover:text-white transition-colors p-2\" aria-label=\"Facebook Group\">",
+            "html": "<a href=\"https://www.facebook.com/groups/homedepotonecent\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors p-2\" aria-label=\"Facebook Group\">",
             "target": [
               "a[aria-label=\"Facebook Group\"]"
             ]
@@ -3233,7 +3233,7 @@
             "impact": null,
             "html": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link w-4 h-4 flex-shrink-0\" aria-hidden=\"true\">",
             "target": [
-              ".block.dark\\:bg-\\[var\\(--bg-card\\)\\][href$=\"cadegallen\"] > .mt-4.gap-2.inline-flex > .lucide-external-link.flex-shrink-0.w-4"
+              ".block.card-interactive[href$=\"cadegallen\"] > .mt-4.gap-2.inline-flex > .lucide-external-link.flex-shrink-0.w-4"
             ]
           },
           {
@@ -3297,7 +3297,7 @@
             "impact": null,
             "html": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link w-4 h-4 flex-shrink-0\" aria-hidden=\"true\">",
             "target": [
-              ".block.dark\\:bg-\\[var\\(--bg-card\\)\\][href$=\"befrugal\"] > .mt-4.gap-2.inline-flex > .lucide-external-link.flex-shrink-0.w-4"
+              ".block.card-interactive[href$=\"befrugal\"] > .mt-4.gap-2.inline-flex > .lucide-external-link.flex-shrink-0.w-4"
             ]
           },
           {
@@ -3515,7 +3515,7 @@
               }
             ],
             "impact": null,
-            "html": "<a href=\"https://www.facebook.com/groups/homedepotonecent\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-zinc-400 hover:text-white transition-colors p-2\" aria-label=\"Facebook Group\">",
+            "html": "<a href=\"https://www.facebook.com/groups/homedepotonecent\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors p-2\" aria-label=\"Facebook Group\">",
             "target": [
               "a[aria-label=\"Facebook Group\"]"
             ]
@@ -5929,7 +5929,7 @@
             ],
             "none": [],
             "impact": null,
-            "html": "<a href=\"https://www.facebook.com/groups/homedepotonecent\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-zinc-400 hover:text-white transition-colors p-2\" aria-label=\"Facebook Group\">",
+            "html": "<a href=\"https://www.facebook.com/groups/homedepotonecent\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors p-2\" aria-label=\"Facebook Group\">",
             "target": [
               "a[aria-label=\"Facebook Group\"]"
             ]
@@ -6690,7 +6690,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<a href=\"https://www.facebook.com/groups/homedepotonecent\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-zinc-400 hover:text-white transition-colors p-2\" aria-label=\"Facebook Group\">",
+            "html": "<a href=\"https://www.facebook.com/groups/homedepotonecent\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors p-2\" aria-label=\"Facebook Group\">",
             "target": [
               "a[aria-label=\"Facebook Group\"]"
             ]
@@ -7265,7 +7265,7 @@
                   {
                     "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug\">Penny Hunting Tools</h2>",
                     "target": [
-                      ".dark\\:bg-\\[var\\(--bg-card\\)\\].section-padding:nth-child(2) > .container-wide > .mb-10.text-center > h2"
+                      ".section-padding.dark\\:bg-\\[var\\(--bg-card\\)\\]:nth-child(2) > .container-wide > .mb-10.text-center > h2"
                     ]
                   },
                   {
@@ -7331,31 +7331,31 @@
                   {
                     "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Buy Me a Coffee</h3>",
                     "target": [
-                      ".block.dark\\:bg-\\[var\\(--bg-card\\)\\][href$=\"cadegallen\"] > .text-lg"
+                      ".block.card-interactive[href$=\"cadegallen\"] > .text-lg"
                     ]
                   },
                   {
                     "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Activate BeFrugal Cashback</h3>",
                     "target": [
-                      ".block.dark\\:bg-\\[var\\(--bg-card\\)\\][href$=\"befrugal\"] > .text-lg"
+                      ".block.card-interactive[href$=\"befrugal\"] > .text-lg"
                     ]
                   },
                   {
-                    "html": "<h3 class=\"text-sm font-semibold text-zinc-100 mb-4\">Quick Links</h3>",
+                    "html": "<h3 class=\"text-sm font-semibold text-[var(--text-primary)] mb-4\">Quick Links</h3>",
                     "target": [
-                      "div:nth-child(2) > .text-zinc-100.mb-4"
+                      "div:nth-child(2) > .mb-4"
                     ]
                   },
                   {
-                    "html": "<h3 class=\"text-sm font-semibold text-zinc-100 mb-4\">Support</h3>",
+                    "html": "<h3 class=\"text-sm font-semibold text-[var(--text-primary)] mb-4\">Support</h3>",
                     "target": [
-                      "div:nth-child(3) > .text-zinc-100.mb-4"
+                      "div:nth-child(3) > .mb-4"
                     ]
                   },
                   {
-                    "html": "<h3 class=\"text-sm font-semibold text-zinc-100 mb-4\">About</h3>",
+                    "html": "<h3 class=\"text-sm font-semibold text-[var(--text-primary)] mb-4\">About</h3>",
                     "target": [
-                      "div:nth-child(4) > .text-zinc-100.mb-4"
+                      "div:nth-child(4) > .mb-4"
                     ]
                   }
                 ],
@@ -7453,7 +7453,7 @@
             "impact": null,
             "html": "<span class=\"text-sm font-medium text-[var(--text-secondary)]\">Join over <!-- -->40,000+ and counting<!-- --> penny hunters</span>",
             "target": [
-              ".py-1\\.5 > .font-medium.text-\\[var\\(--text-secondary\\)\\]"
+              ".py-1\\.5 > .font-medium"
             ]
           },
           {
@@ -7603,7 +7603,7 @@
             "impact": null,
             "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug\">Penny Hunting Tools</h2>",
             "target": [
-              ".dark\\:bg-\\[var\\(--bg-card\\)\\].section-padding:nth-child(2) > .container-wide > .mb-10.text-center > h2"
+              ".section-padding.dark\\:bg-\\[var\\(--bg-card\\)\\]:nth-child(2) > .container-wide > .mb-10.text-center > h2"
             ]
           },
           {
@@ -7628,7 +7628,7 @@
             "impact": null,
             "html": "<p class=\"mt-2 text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed\">Everything you need to plan and execute successful hunts</p>",
             "target": [
-              ".dark\\:bg-\\[var\\(--bg-card\\)\\].section-padding:nth-child(2) > .container-wide > .mb-10.text-center > .sm\\:text-lg.mt-2.text-base"
+              ".section-padding.dark\\:bg-\\[var\\(--bg-card\\)\\]:nth-child(2) > .container-wide > .mb-10.text-center > .sm\\:text-lg.mt-2.text-base"
             ]
           },
           {
@@ -8278,7 +8278,7 @@
             "impact": null,
             "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Buy Me a Coffee</h3>",
             "target": [
-              ".block.dark\\:bg-\\[var\\(--bg-card\\)\\][href$=\"cadegallen\"] > .text-lg"
+              ".block.card-interactive[href$=\"cadegallen\"] > .text-lg"
             ]
           },
           {
@@ -8303,7 +8303,7 @@
             "impact": null,
             "html": "<p class=\"mt-2 text-sm text-[var(--text-secondary)] leading-relaxed\">If the guide saved you time or gas money, a one-time PayPal coffee covers hosting, APIs, and the odd scouting trip.</p>",
             "target": [
-              ".block.dark\\:bg-\\[var\\(--bg-card\\)\\][href$=\"cadegallen\"] > .mt-2"
+              ".block.card-interactive[href$=\"cadegallen\"] > .mt-2"
             ]
           },
           {
@@ -8328,7 +8328,7 @@
             "impact": null,
             "html": "<div class=\"mt-4 inline-flex items-center gap-2 text-[var(--cta-primary)] font-medium\">",
             "target": [
-              ".block.dark\\:bg-\\[var\\(--bg-card\\)\\][href$=\"cadegallen\"] > .mt-4.gap-2.inline-flex"
+              ".block.card-interactive[href$=\"cadegallen\"] > .mt-4.gap-2.inline-flex"
             ]
           },
           {
@@ -8353,7 +8353,7 @@
             "impact": null,
             "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Activate BeFrugal Cashback</h3>",
             "target": [
-              ".block.dark\\:bg-\\[var\\(--bg-card\\)\\][href$=\"befrugal\"] > .text-lg"
+              ".block.card-interactive[href$=\"befrugal\"] > .text-lg"
             ]
           },
           {
@@ -8378,7 +8378,7 @@
             "impact": null,
             "html": "<p class=\"mt-2 text-sm text-[var(--text-secondary)] leading-relaxed\">Turn on free cashback before normal Home Depot orders. When you earn $10+ BeFrugal sends a referral bonus that keeps the site free.</p>",
             "target": [
-              ".block.dark\\:bg-\\[var\\(--bg-card\\)\\][href$=\"befrugal\"] > .mt-2"
+              ".block.card-interactive[href$=\"befrugal\"] > .mt-2"
             ]
           },
           {
@@ -8403,7 +8403,7 @@
             "impact": null,
             "html": "<div class=\"mt-4 inline-flex items-center gap-2 text-[var(--cta-primary)] font-medium\">",
             "target": [
-              ".block.dark\\:bg-\\[var\\(--bg-card\\)\\][href$=\"befrugal\"] > .mt-4.gap-2.inline-flex"
+              ".block.card-interactive[href$=\"befrugal\"] > .mt-4.gap-2.inline-flex"
             ]
           },
           {
@@ -8411,24 +8411,24 @@
               {
                 "id": "color-contrast",
                 "data": {
-                  "fgColor": "#ffffff",
-                  "bgColor": "#121212",
-                  "contrastRatio": 18.73,
+                  "fgColor": "#dcdcdc",
+                  "bgColor": "#1a1a1a",
+                  "contrastRatio": 12.69,
                   "fontSize": "13.5pt (18px)",
                   "fontWeight": "bold",
                   "expectedContrastRatio": "4.5:1"
                 },
                 "relatedNodes": [],
                 "impact": "serious",
-                "message": "Element has sufficient color contrast of 18.73"
+                "message": "Element has sufficient color contrast of 12.69"
               }
             ],
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<a class=\"text-lg font-bold text-white hover:text-zinc-200 transition-colors\" href=\"/\">PennyCentral</a>",
+            "html": "<a class=\"text-lg font-bold text-[var(--text-primary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-secondary)] transition-colors\" href=\"/\">PennyCentral</a>",
             "target": [
-              ".text-white"
+              ".hover\\:text-\\[var\\(--text-secondary\\)\\]"
             ]
           },
           {
@@ -8436,24 +8436,24 @@
               {
                 "id": "color-contrast",
                 "data": {
-                  "fgColor": "#a1a1aa",
-                  "bgColor": "#121212",
-                  "contrastRatio": 7.3,
+                  "fgColor": "#9a9a9a",
+                  "bgColor": "#1a1a1a",
+                  "contrastRatio": 6.18,
                   "fontSize": "10.5pt (14px)",
                   "fontWeight": "normal",
                   "expectedContrastRatio": "4.5:1"
                 },
                 "relatedNodes": [],
                 "impact": "serious",
-                "message": "Element has sufficient color contrast of 7.3"
+                "message": "Element has sufficient color contrast of 6.18"
               }
             ],
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<p class=\"mt-3 text-sm text-zinc-400 leading-relaxed\">The complete guide to finding $0.01 items at Home Depot.</p>",
+            "html": "<p class=\"mt-3 text-sm text-[var(--text-muted)] leading-relaxed\">The complete guide to finding $0.01 items at Home Depot.</p>",
             "target": [
-              ".mt-3.text-zinc-400"
+              ".mt-3.text-\\[var\\(--text-muted\\)\\]"
             ]
           },
           {
@@ -8461,24 +8461,24 @@
               {
                 "id": "color-contrast",
                 "data": {
-                  "fgColor": "#f4f4f5",
-                  "bgColor": "#121212",
-                  "contrastRatio": 17.04,
+                  "fgColor": "#dcdcdc",
+                  "bgColor": "#1a1a1a",
+                  "contrastRatio": 12.69,
                   "fontSize": "10.5pt (14px)",
                   "fontWeight": "normal",
                   "expectedContrastRatio": "4.5:1"
                 },
                 "relatedNodes": [],
                 "impact": "serious",
-                "message": "Element has sufficient color contrast of 17.04"
+                "message": "Element has sufficient color contrast of 12.69"
               }
             ],
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<h3 class=\"text-sm font-semibold text-zinc-100 mb-4\">Quick Links</h3>",
+            "html": "<h3 class=\"text-sm font-semibold text-[var(--text-primary)] mb-4\">Quick Links</h3>",
             "target": [
-              "div:nth-child(2) > .text-zinc-100.mb-4"
+              "div:nth-child(2) > .mb-4"
             ]
           },
           {
@@ -8486,24 +8486,24 @@
               {
                 "id": "color-contrast",
                 "data": {
-                  "fgColor": "#a1a1aa",
-                  "bgColor": "#121212",
-                  "contrastRatio": 7.3,
+                  "fgColor": "#b0b0b0",
+                  "bgColor": "#1a1a1a",
+                  "contrastRatio": 8.02,
                   "fontSize": "10.5pt (14px)",
                   "fontWeight": "normal",
                   "expectedContrastRatio": "4.5:1"
                 },
                 "relatedNodes": [],
                 "impact": "serious",
-                "message": "Element has sufficient color contrast of 7.3"
+                "message": "Element has sufficient color contrast of 8.02"
               }
             ],
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/penny-list\">Penny List</a>",
+            "html": "<a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/penny-list\">Penny List</a>",
             "target": [
-              ".hover\\:text-white.text-zinc-400[href$=\"penny-list\"]"
+              ".underline.decoration-\\[var\\(--cta-primary\\)\\][href$=\"penny-list\"]"
             ]
           },
           {
@@ -8511,24 +8511,24 @@
               {
                 "id": "color-contrast",
                 "data": {
-                  "fgColor": "#a1a1aa",
-                  "bgColor": "#121212",
-                  "contrastRatio": 7.3,
+                  "fgColor": "#b0b0b0",
+                  "bgColor": "#1a1a1a",
+                  "contrastRatio": 8.02,
                   "fontSize": "10.5pt (14px)",
                   "fontWeight": "normal",
                   "expectedContrastRatio": "4.5:1"
                 },
                 "relatedNodes": [],
                 "impact": "serious",
-                "message": "Element has sufficient color contrast of 7.3"
+                "message": "Element has sufficient color contrast of 8.02"
               }
             ],
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/report-find\">Report a Find</a>",
+            "html": "<a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/report-find\">Report a Find</a>",
             "target": [
-              ".hover\\:text-white.text-zinc-400[href$=\"report-find\"]"
+              ".underline.decoration-\\[var\\(--cta-primary\\)\\][href$=\"report-find\"]"
             ]
           },
           {
@@ -8536,24 +8536,24 @@
               {
                 "id": "color-contrast",
                 "data": {
-                  "fgColor": "#a1a1aa",
-                  "bgColor": "#121212",
-                  "contrastRatio": 7.3,
+                  "fgColor": "#b0b0b0",
+                  "bgColor": "#1a1a1a",
+                  "contrastRatio": 8.02,
                   "fontSize": "10.5pt (14px)",
                   "fontWeight": "normal",
                   "expectedContrastRatio": "4.5:1"
                 },
                 "relatedNodes": [],
                 "impact": "serious",
-                "message": "Element has sufficient color contrast of 7.3"
+                "message": "Element has sufficient color contrast of 8.02"
               }
             ],
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/store-finder\">Store Finder</a>",
+            "html": "<a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/store-finder\">Store Finder</a>",
             "target": [
-              ".hover\\:text-white.text-zinc-400[href$=\"store-finder\"]"
+              ".underline.decoration-\\[var\\(--cta-primary\\)\\][href$=\"store-finder\"]"
             ]
           },
           {
@@ -8561,24 +8561,24 @@
               {
                 "id": "color-contrast",
                 "data": {
-                  "fgColor": "#a1a1aa",
-                  "bgColor": "#121212",
-                  "contrastRatio": 7.3,
+                  "fgColor": "#b0b0b0",
+                  "bgColor": "#1a1a1a",
+                  "contrastRatio": 8.02,
                   "fontSize": "10.5pt (14px)",
                   "fontWeight": "normal",
                   "expectedContrastRatio": "4.5:1"
                 },
                 "relatedNodes": [],
                 "impact": "serious",
-                "message": "Element has sufficient color contrast of 7.3"
+                "message": "Element has sufficient color contrast of 8.02"
               }
             ],
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/guide\">Guide</a>",
+            "html": "<a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/guide\">Guide</a>",
             "target": [
-              ".hover\\:text-white.text-zinc-400[href$=\"guide\"]"
+              ".underline.decoration-\\[var\\(--cta-primary\\)\\][href$=\"guide\"]"
             ]
           },
           {
@@ -8586,24 +8586,24 @@
               {
                 "id": "color-contrast",
                 "data": {
-                  "fgColor": "#a1a1aa",
-                  "bgColor": "#121212",
-                  "contrastRatio": 7.3,
+                  "fgColor": "#b0b0b0",
+                  "bgColor": "#1a1a1a",
+                  "contrastRatio": 8.02,
                   "fontSize": "10.5pt (14px)",
                   "fontWeight": "normal",
                   "expectedContrastRatio": "4.5:1"
                 },
                 "relatedNodes": [],
                 "impact": "serious",
-                "message": "Element has sufficient color contrast of 7.3"
+                "message": "Element has sufficient color contrast of 8.02"
               }
             ],
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<a href=\"https://www.facebook.com/groups/homedepotonecent\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-zinc-400 hover:text-white transition-colors\">Community</a>",
+            "html": "<a href=\"https://www.facebook.com/groups/homedepotonecent\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\">Community</a>",
             "target": [
-              "li:nth-child(5) > .hover\\:text-white[target=\"_blank\"][rel=\"noopener noreferrer\"]"
+              "li:nth-child(5) > .underline[target=\"_blank\"][rel=\"noopener noreferrer\"]"
             ]
           },
           {
@@ -8611,24 +8611,24 @@
               {
                 "id": "color-contrast",
                 "data": {
-                  "fgColor": "#f4f4f5",
-                  "bgColor": "#121212",
-                  "contrastRatio": 17.04,
+                  "fgColor": "#dcdcdc",
+                  "bgColor": "#1a1a1a",
+                  "contrastRatio": 12.69,
                   "fontSize": "10.5pt (14px)",
                   "fontWeight": "normal",
                   "expectedContrastRatio": "4.5:1"
                 },
                 "relatedNodes": [],
                 "impact": "serious",
-                "message": "Element has sufficient color contrast of 17.04"
+                "message": "Element has sufficient color contrast of 12.69"
               }
             ],
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<h3 class=\"text-sm font-semibold text-zinc-100 mb-4\">Support</h3>",
+            "html": "<h3 class=\"text-sm font-semibold text-[var(--text-primary)] mb-4\">Support</h3>",
             "target": [
-              "div:nth-child(3) > .text-zinc-100.mb-4"
+              "div:nth-child(3) > .mb-4"
             ]
           },
           {
@@ -8636,22 +8636,22 @@
               {
                 "id": "color-contrast",
                 "data": {
-                  "fgColor": "#a1a1aa",
-                  "bgColor": "#121212",
-                  "contrastRatio": 7.3,
+                  "fgColor": "#b0b0b0",
+                  "bgColor": "#1a1a1a",
+                  "contrastRatio": 8.02,
                   "fontSize": "10.5pt (14px)",
                   "fontWeight": "normal",
                   "expectedContrastRatio": "4.5:1"
                 },
                 "relatedNodes": [],
                 "impact": "serious",
-                "message": "Element has sufficient color contrast of 7.3"
+                "message": "Element has sufficient color contrast of 8.02"
               }
             ],
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<a href=\"https://paypal.me/cadegallen\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-zinc-400 hover:text-white transition-colors\">Buy Me a Coffee</a>",
+            "html": "<a href=\"https://paypal.me/cadegallen\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\">Buy Me a Coffee</a>",
             "target": [
               "li:nth-child(1) > a[href$=\"cadegallen\"][target=\"_blank\"][rel=\"noopener noreferrer\"]"
             ]
@@ -8661,22 +8661,22 @@
               {
                 "id": "color-contrast",
                 "data": {
-                  "fgColor": "#a1a1aa",
-                  "bgColor": "#121212",
-                  "contrastRatio": 7.3,
+                  "fgColor": "#b0b0b0",
+                  "bgColor": "#1a1a1a",
+                  "contrastRatio": 8.02,
                   "fontSize": "10.5pt (14px)",
                   "fontWeight": "normal",
                   "expectedContrastRatio": "4.5:1"
                 },
                 "relatedNodes": [],
                 "impact": "serious",
-                "message": "Element has sufficient color contrast of 7.3"
+                "message": "Element has sufficient color contrast of 8.02"
               }
             ],
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<a href=\"/go/befrugal\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-zinc-400 hover:text-white transition-colors\">BeFrugal Cashback</a>",
+            "html": "<a href=\"/go/befrugal\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\">BeFrugal Cashback</a>",
             "target": [
               "li:nth-child(2) > a[href$=\"befrugal\"][target=\"_blank\"][rel=\"noopener noreferrer\"]"
             ]
@@ -8686,22 +8686,22 @@
               {
                 "id": "color-contrast",
                 "data": {
-                  "fgColor": "#a1a1aa",
-                  "bgColor": "#121212",
-                  "contrastRatio": 7.3,
+                  "fgColor": "#b0b0b0",
+                  "bgColor": "#1a1a1a",
+                  "contrastRatio": 8.02,
                   "fontSize": "10.5pt (14px)",
                   "fontWeight": "normal",
                   "expectedContrastRatio": "4.5:1"
                 },
                 "relatedNodes": [],
                 "impact": "serious",
-                "message": "Element has sufficient color contrast of 7.3"
+                "message": "Element has sufficient color contrast of 8.02"
               }
             ],
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/cashback\">Cashback Info</a>",
+            "html": "<a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/cashback\">Cashback Info</a>",
             "target": [
               "a[href$=\"cashback\"]"
             ]
@@ -8711,24 +8711,24 @@
               {
                 "id": "color-contrast",
                 "data": {
-                  "fgColor": "#f4f4f5",
-                  "bgColor": "#121212",
-                  "contrastRatio": 17.04,
+                  "fgColor": "#dcdcdc",
+                  "bgColor": "#1a1a1a",
+                  "contrastRatio": 12.69,
                   "fontSize": "10.5pt (14px)",
                   "fontWeight": "normal",
                   "expectedContrastRatio": "4.5:1"
                 },
                 "relatedNodes": [],
                 "impact": "serious",
-                "message": "Element has sufficient color contrast of 17.04"
+                "message": "Element has sufficient color contrast of 12.69"
               }
             ],
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<h3 class=\"text-sm font-semibold text-zinc-100 mb-4\">About</h3>",
+            "html": "<h3 class=\"text-sm font-semibold text-[var(--text-primary)] mb-4\">About</h3>",
             "target": [
-              "div:nth-child(4) > .text-zinc-100.mb-4"
+              "div:nth-child(4) > .mb-4"
             ]
           },
           {
@@ -8736,24 +8736,24 @@
               {
                 "id": "color-contrast",
                 "data": {
-                  "fgColor": "#a1a1aa",
-                  "bgColor": "#121212",
-                  "contrastRatio": 7.3,
+                  "fgColor": "#b0b0b0",
+                  "bgColor": "#1a1a1a",
+                  "contrastRatio": 8.02,
                   "fontSize": "10.5pt (14px)",
                   "fontWeight": "normal",
                   "expectedContrastRatio": "4.5:1"
                 },
                 "relatedNodes": [],
                 "impact": "serious",
-                "message": "Element has sufficient color contrast of 7.3"
+                "message": "Element has sufficient color contrast of 8.02"
               }
             ],
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/about\">About Us</a>",
+            "html": "<a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/about\">About Us</a>",
             "target": [
-              ".hover\\:text-white.text-zinc-400[href$=\"about\"]"
+              ".underline.decoration-\\[var\\(--cta-primary\\)\\][href$=\"about\"]"
             ]
           },
           {
@@ -8761,24 +8761,24 @@
               {
                 "id": "color-contrast",
                 "data": {
-                  "fgColor": "#a1a1aa",
-                  "bgColor": "#121212",
-                  "contrastRatio": 7.3,
+                  "fgColor": "#b0b0b0",
+                  "bgColor": "#1a1a1a",
+                  "contrastRatio": 8.02,
                   "fontSize": "10.5pt (14px)",
                   "fontWeight": "normal",
                   "expectedContrastRatio": "4.5:1"
                 },
                 "relatedNodes": [],
                 "impact": "serious",
-                "message": "Element has sufficient color contrast of 7.3"
+                "message": "Element has sufficient color contrast of 8.02"
               }
             ],
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<span class=\"text-sm text-zinc-400 leading-relaxed block\">Not affiliated with Home Depot</span>",
+            "html": "<span class=\"text-sm text-[var(--text-secondary)] leading-relaxed block\">Not affiliated with Home Depot</span>",
             "target": [
-              ".block.text-zinc-400.leading-relaxed"
+              ".block.leading-relaxed"
             ]
           },
           {
@@ -8786,22 +8786,22 @@
               {
                 "id": "color-contrast",
                 "data": {
-                  "fgColor": "#a1a1aa",
-                  "bgColor": "#121212",
-                  "contrastRatio": 7.3,
+                  "fgColor": "#9a9a9a",
+                  "bgColor": "#1a1a1a",
+                  "contrastRatio": 6.18,
                   "fontSize": "9.0pt (12px)",
                   "fontWeight": "normal",
                   "expectedContrastRatio": "4.5:1"
                 },
                 "relatedNodes": [],
                 "impact": "serious",
-                "message": "Element has sufficient color contrast of 7.3"
+                "message": "Element has sufficient color contrast of 6.18"
               }
             ],
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<p class=\"text-xs text-zinc-400 order-2 sm:order-1\">© 2025 Penny Central. Educational use only.</p>",
+            "html": "<p class=\"text-xs text-[var(--text-muted)] order-2 sm:order-1\">© 2025 Penny Central. Educational use only.</p>",
             "target": [
               ".order-2"
             ]
@@ -9055,7 +9055,7 @@
             "impact": null,
             "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug\">Penny Hunting Tools</h2>",
             "target": [
-              ".dark\\:bg-\\[var\\(--bg-card\\)\\].section-padding:nth-child(2) > .container-wide > .mb-10.text-center > h2"
+              ".section-padding.dark\\:bg-\\[var\\(--bg-card\\)\\]:nth-child(2) > .container-wide > .mb-10.text-center > h2"
             ]
           },
           {
@@ -9253,7 +9253,7 @@
             "impact": null,
             "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Buy Me a Coffee</h3>",
             "target": [
-              ".block.dark\\:bg-\\[var\\(--bg-card\\)\\][href$=\"cadegallen\"] > .text-lg"
+              ".block.card-interactive[href$=\"cadegallen\"] > .text-lg"
             ]
           },
           {
@@ -9271,7 +9271,7 @@
             "impact": null,
             "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Activate BeFrugal Cashback</h3>",
             "target": [
-              ".block.dark\\:bg-\\[var\\(--bg-card\\)\\][href$=\"befrugal\"] > .text-lg"
+              ".block.card-interactive[href$=\"befrugal\"] > .text-lg"
             ]
           },
           {
@@ -9287,9 +9287,9 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<h3 class=\"text-sm font-semibold text-zinc-100 mb-4\">Quick Links</h3>",
+            "html": "<h3 class=\"text-sm font-semibold text-[var(--text-primary)] mb-4\">Quick Links</h3>",
             "target": [
-              "div:nth-child(2) > .text-zinc-100.mb-4"
+              "div:nth-child(2) > .mb-4"
             ]
           },
           {
@@ -9305,9 +9305,9 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<h3 class=\"text-sm font-semibold text-zinc-100 mb-4\">Support</h3>",
+            "html": "<h3 class=\"text-sm font-semibold text-[var(--text-primary)] mb-4\">Support</h3>",
             "target": [
-              "div:nth-child(3) > .text-zinc-100.mb-4"
+              "div:nth-child(3) > .mb-4"
             ]
           },
           {
@@ -9323,9 +9323,9 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<h3 class=\"text-sm font-semibold text-zinc-100 mb-4\">About</h3>",
+            "html": "<h3 class=\"text-sm font-semibold text-[var(--text-primary)] mb-4\">About</h3>",
             "target": [
-              "div:nth-child(4) > .text-zinc-100.mb-4"
+              "div:nth-child(4) > .mb-4"
             ]
           }
         ]
@@ -9524,7 +9524,7 @@
             "impact": null,
             "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug\">Penny Hunting Tools</h2>",
             "target": [
-              ".dark\\:bg-\\[var\\(--bg-card\\)\\].section-padding:nth-child(2) > .container-wide > .mb-10.text-center > h2"
+              ".section-padding.dark\\:bg-\\[var\\(--bg-card\\)\\]:nth-child(2) > .container-wide > .mb-10.text-center > h2"
             ]
           },
           {
@@ -9722,7 +9722,7 @@
             "impact": null,
             "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Buy Me a Coffee</h3>",
             "target": [
-              ".block.dark\\:bg-\\[var\\(--bg-card\\)\\][href$=\"cadegallen\"] > .text-lg"
+              ".block.card-interactive[href$=\"cadegallen\"] > .text-lg"
             ]
           },
           {
@@ -9740,7 +9740,7 @@
             "impact": null,
             "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Activate BeFrugal Cashback</h3>",
             "target": [
-              ".block.dark\\:bg-\\[var\\(--bg-card\\)\\][href$=\"befrugal\"] > .text-lg"
+              ".block.card-interactive[href$=\"befrugal\"] > .text-lg"
             ]
           },
           {
@@ -9756,9 +9756,9 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<h3 class=\"text-sm font-semibold text-zinc-100 mb-4\">Quick Links</h3>",
+            "html": "<h3 class=\"text-sm font-semibold text-[var(--text-primary)] mb-4\">Quick Links</h3>",
             "target": [
-              "div:nth-child(2) > .text-zinc-100.mb-4"
+              "div:nth-child(2) > .mb-4"
             ]
           },
           {
@@ -9774,9 +9774,9 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<h3 class=\"text-sm font-semibold text-zinc-100 mb-4\">Support</h3>",
+            "html": "<h3 class=\"text-sm font-semibold text-[var(--text-primary)] mb-4\">Support</h3>",
             "target": [
-              "div:nth-child(3) > .text-zinc-100.mb-4"
+              "div:nth-child(3) > .mb-4"
             ]
           },
           {
@@ -9792,9 +9792,9 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<h3 class=\"text-sm font-semibold text-zinc-100 mb-4\">About</h3>",
+            "html": "<h3 class=\"text-sm font-semibold text-[var(--text-primary)] mb-4\">About</h3>",
             "target": [
-              "div:nth-child(4) > .text-zinc-100.mb-4"
+              "div:nth-child(4) > .mb-4"
             ]
           }
         ]
@@ -10028,7 +10028,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<footer class=\"bg-[var(--bg-dark)] dark:bg-[var(--bg-page)] border-t border-[var(--border-dark)] dark:border-[var(--border-default)] mt-auto\">",
+            "html": "<footer class=\"bg-[var(--bg-elevated)] dark:bg-[var(--bg-card)] border-t border-[var(--border-default)] mt-auto\">",
             "target": [
               "footer"
             ]
@@ -10226,11 +10226,25 @@
           {
             "any": [
               {
+                "id": "link-in-text-block",
+                "data": null,
+                "relatedNodes": [
+                  {
+                    "html": "<div class=\"col-span-2 md:col-span-1\">",
+                    "target": [
+                      ".col-span-2"
+                    ]
+                  }
+                ],
+                "impact": "serious",
+                "message": "Links can be distinguished from surrounding text in some way other than by color"
+              },
+              {
                 "id": "link-in-text-block-style",
                 "data": null,
                 "relatedNodes": [
                   {
-                    "html": "<div class=\"col-span-2 md:col-span-1\"><a class=\"text-lg font-bold text-white hover:text-zinc-200 transition-colors\" href=\"/\">PennyCentral</a><p class=\"mt-3 text-sm text-zinc-400 leading-relaxed\">The complete guide to finding $0.01 items at Home Depot.</p></div>",
+                    "html": "<div class=\"col-span-2 md:col-span-1\">",
                     "target": [
                       ".col-span-2"
                     ]
@@ -10243,9 +10257,9 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<a class=\"text-lg font-bold text-white hover:text-zinc-200 transition-colors\" href=\"/\">PennyCentral</a>",
+            "html": "<a class=\"text-lg font-bold text-[var(--text-primary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-secondary)] transition-colors\" href=\"/\">PennyCentral</a>",
             "target": [
-              ".text-white"
+              ".hover\\:text-\\[var\\(--text-secondary\\)\\]"
             ]
           }
         ]
@@ -10530,7 +10544,7 @@
             "impact": null,
             "html": "<a href=\"https://paypal.me/cadegallen\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"card-interactive bg-[var(--bg-elevated)] dark:bg-[var(--bg-card)] rounded-xl p-6 border border-[var(--border-default)] block\">",
             "target": [
-              ".block.dark\\:bg-\\[var\\(--bg-card\\)\\][href$=\"cadegallen\"]"
+              ".block.card-interactive[href$=\"cadegallen\"]"
             ]
           },
           {
@@ -10556,7 +10570,7 @@
             "impact": null,
             "html": "<a href=\"/go/befrugal\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"card-interactive bg-[var(--bg-elevated)] dark:bg-[var(--bg-card)] rounded-xl p-6 border border-[var(--border-default)] block\">",
             "target": [
-              ".block.dark\\:bg-\\[var\\(--bg-card\\)\\][href$=\"befrugal\"]"
+              ".block.card-interactive[href$=\"befrugal\"]"
             ]
           },
           {
@@ -10580,9 +10594,9 @@
               }
             ],
             "impact": null,
-            "html": "<a class=\"text-lg font-bold text-white hover:text-zinc-200 transition-colors\" href=\"/\">PennyCentral</a>",
+            "html": "<a class=\"text-lg font-bold text-[var(--text-primary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-secondary)] transition-colors\" href=\"/\">PennyCentral</a>",
             "target": [
-              ".text-white"
+              ".hover\\:text-\\[var\\(--text-secondary\\)\\]"
             ]
           },
           {
@@ -10606,9 +10620,9 @@
               }
             ],
             "impact": null,
-            "html": "<a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/penny-list\">Penny List</a>",
+            "html": "<a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/penny-list\">Penny List</a>",
             "target": [
-              ".hover\\:text-white.text-zinc-400[href$=\"penny-list\"]"
+              ".underline.decoration-\\[var\\(--cta-primary\\)\\][href$=\"penny-list\"]"
             ]
           },
           {
@@ -10632,9 +10646,9 @@
               }
             ],
             "impact": null,
-            "html": "<a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/report-find\">Report a Find</a>",
+            "html": "<a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/report-find\">Report a Find</a>",
             "target": [
-              ".hover\\:text-white.text-zinc-400[href$=\"report-find\"]"
+              ".underline.decoration-\\[var\\(--cta-primary\\)\\][href$=\"report-find\"]"
             ]
           },
           {
@@ -10658,9 +10672,9 @@
               }
             ],
             "impact": null,
-            "html": "<a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/store-finder\">Store Finder</a>",
+            "html": "<a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/store-finder\">Store Finder</a>",
             "target": [
-              ".hover\\:text-white.text-zinc-400[href$=\"store-finder\"]"
+              ".underline.decoration-\\[var\\(--cta-primary\\)\\][href$=\"store-finder\"]"
             ]
           },
           {
@@ -10684,9 +10698,9 @@
               }
             ],
             "impact": null,
-            "html": "<a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/guide\">Guide</a>",
+            "html": "<a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/guide\">Guide</a>",
             "target": [
-              ".hover\\:text-white.text-zinc-400[href$=\"guide\"]"
+              ".underline.decoration-\\[var\\(--cta-primary\\)\\][href$=\"guide\"]"
             ]
           },
           {
@@ -10710,9 +10724,9 @@
               }
             ],
             "impact": null,
-            "html": "<a href=\"https://www.facebook.com/groups/homedepotonecent\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-zinc-400 hover:text-white transition-colors\">Community</a>",
+            "html": "<a href=\"https://www.facebook.com/groups/homedepotonecent\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\">Community</a>",
             "target": [
-              "li:nth-child(5) > .hover\\:text-white[target=\"_blank\"][rel=\"noopener noreferrer\"]"
+              "li:nth-child(5) > .underline[target=\"_blank\"][rel=\"noopener noreferrer\"]"
             ]
           },
           {
@@ -10736,7 +10750,7 @@
               }
             ],
             "impact": null,
-            "html": "<a href=\"https://paypal.me/cadegallen\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-zinc-400 hover:text-white transition-colors\">Buy Me a Coffee</a>",
+            "html": "<a href=\"https://paypal.me/cadegallen\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\">Buy Me a Coffee</a>",
             "target": [
               "li:nth-child(1) > a[href$=\"cadegallen\"][target=\"_blank\"][rel=\"noopener noreferrer\"]"
             ]
@@ -10762,7 +10776,7 @@
               }
             ],
             "impact": null,
-            "html": "<a href=\"/go/befrugal\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-zinc-400 hover:text-white transition-colors\">BeFrugal Cashback</a>",
+            "html": "<a href=\"/go/befrugal\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\">BeFrugal Cashback</a>",
             "target": [
               "li:nth-child(2) > a[href$=\"befrugal\"][target=\"_blank\"][rel=\"noopener noreferrer\"]"
             ]
@@ -10788,7 +10802,7 @@
               }
             ],
             "impact": null,
-            "html": "<a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/cashback\">Cashback Info</a>",
+            "html": "<a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/cashback\">Cashback Info</a>",
             "target": [
               "a[href$=\"cashback\"]"
             ]
@@ -10814,9 +10828,9 @@
               }
             ],
             "impact": null,
-            "html": "<a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/about\">About Us</a>",
+            "html": "<a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/about\">About Us</a>",
             "target": [
-              ".hover\\:text-white.text-zinc-400[href$=\"about\"]"
+              ".underline.decoration-\\[var\\(--cta-primary\\)\\][href$=\"about\"]"
             ]
           },
           {
@@ -10840,7 +10854,7 @@
               }
             ],
             "impact": null,
-            "html": "<a href=\"https://www.facebook.com/groups/homedepotonecent\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-zinc-400 hover:text-white transition-colors p-2\" aria-label=\"Facebook Group\">",
+            "html": "<a href=\"https://www.facebook.com/groups/homedepotonecent\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors p-2\" aria-label=\"Facebook Group\">",
             "target": [
               "a[aria-label=\"Facebook Group\"]"
             ]
@@ -10912,7 +10926,7 @@
               }
             ],
             "impact": null,
-            "html": "<ul class=\"space-y-2.5\"><li><a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/about\">About Us</a></li><li><span class=\"text-sm text-zinc-400 leading-relaxed block\">Not affiliated with Home Depot</span></li></ul>",
+            "html": "<ul class=\"space-y-2.5\">",
             "target": [
               "div:nth-child(4) > ul"
             ]
@@ -10948,7 +10962,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<li><a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/penny-list\">Penny List</a></li>",
+            "html": "<li><a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/penny-list\">Penny List</a></li>",
             "target": [
               "div:nth-child(2) > ul > li:nth-child(1)"
             ]
@@ -10966,7 +10980,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<li><a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/report-find\">Report a Find</a></li>",
+            "html": "<li><a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/report-find\">Report a Find</a></li>",
             "target": [
               "div:nth-child(2) > ul > li:nth-child(2)"
             ]
@@ -10984,7 +10998,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<li><a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/store-finder\">Store Finder</a></li>",
+            "html": "<li><a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/store-finder\">Store Finder</a></li>",
             "target": [
               "div:nth-child(2) > ul > li:nth-child(3)"
             ]
@@ -11002,7 +11016,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<li><a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/guide\">Guide</a></li>",
+            "html": "<li><a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/guide\">Guide</a></li>",
             "target": [
               "li:nth-child(4)"
             ]
@@ -11020,7 +11034,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<li><a href=\"https://www.facebook.com/groups/homedepotonecent\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-zinc-400 hover:text-white transition-colors\">Community</a></li>",
+            "html": "<li><a href=\"https://www.facebook.com/groups/homedepotonecent\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\">Community</a></li>",
             "target": [
               "li:nth-child(5)"
             ]
@@ -11038,7 +11052,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<li><a href=\"https://paypal.me/cadegallen\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-zinc-400 hover:text-white transition-colors\">Buy Me a Coffee</a></li>",
+            "html": "<li><a href=\"https://paypal.me/cadegallen\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\">Buy Me a Coffee</a></li>",
             "target": [
               "div:nth-child(3) > ul > li:nth-child(1)"
             ]
@@ -11056,7 +11070,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<li><a href=\"/go/befrugal\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-zinc-400 hover:text-white transition-colors\">BeFrugal Cashback</a></li>",
+            "html": "<li><a href=\"/go/befrugal\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\">BeFrugal Cashback</a></li>",
             "target": [
               "div:nth-child(3) > ul > li:nth-child(2)"
             ]
@@ -11074,7 +11088,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<li><a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/cashback\">Cashback Info</a></li>",
+            "html": "<li><a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/cashback\">Cashback Info</a></li>",
             "target": [
               "div:nth-child(3) > ul > li:nth-child(3)"
             ]
@@ -11092,7 +11106,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<li><a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/about\">About Us</a></li>",
+            "html": "<li><a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/about\">About Us</a></li>",
             "target": [
               "div:nth-child(4) > ul > li:nth-child(1)"
             ]
@@ -11110,7 +11124,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<li><span class=\"text-sm text-zinc-400 leading-relaxed block\">Not affiliated with Home Depot</span></li>",
+            "html": "<li><span class=\"text-sm text-[var(--text-secondary)] leading-relaxed block\">Not affiliated with Home Depot</span></li>",
             "target": [
               "div:nth-child(4) > ul > li:nth-child(2)"
             ]
@@ -11843,7 +11857,7 @@
             "impact": null,
             "html": "<span class=\"text-sm font-medium text-[var(--text-secondary)]\">Join over <!-- -->40,000+ and counting<!-- --> penny hunters</span>",
             "target": [
-              ".py-1\\.5 > .font-medium.text-\\[var\\(--text-secondary\\)\\]"
+              ".py-1\\.5 > .font-medium"
             ]
           },
           {
@@ -11983,7 +11997,7 @@
             "impact": null,
             "html": "<section class=\"section-padding px-4 sm:px-6 bg-[var(--bg-elevated)] dark:bg-[var(--bg-card)]\">",
             "target": [
-              ".dark\\:bg-\\[var\\(--bg-card\\)\\].section-padding:nth-child(2)"
+              ".section-padding.dark\\:bg-\\[var\\(--bg-card\\)\\]:nth-child(2)"
             ]
           },
           {
@@ -12003,7 +12017,7 @@
             "impact": null,
             "html": "<div class=\"container-wide\">",
             "target": [
-              ".dark\\:bg-\\[var\\(--bg-card\\)\\].section-padding:nth-child(2) > .container-wide"
+              ".section-padding.dark\\:bg-\\[var\\(--bg-card\\)\\]:nth-child(2) > .container-wide"
             ]
           },
           {
@@ -12023,7 +12037,7 @@
             "impact": null,
             "html": "<div class=\"text-center mb-10\"><h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug\">Penny Hunting Tools</h2><p class=\"mt-2 text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed\">Everything you need to plan and execute successful hunts</p></div>",
             "target": [
-              ".dark\\:bg-\\[var\\(--bg-card\\)\\].section-padding:nth-child(2) > .container-wide > .mb-10.text-center"
+              ".section-padding.dark\\:bg-\\[var\\(--bg-card\\)\\]:nth-child(2) > .container-wide > .mb-10.text-center"
             ]
           },
           {
@@ -12043,7 +12057,7 @@
             "impact": null,
             "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug\">Penny Hunting Tools</h2>",
             "target": [
-              ".dark\\:bg-\\[var\\(--bg-card\\)\\].section-padding:nth-child(2) > .container-wide > .mb-10.text-center > h2"
+              ".section-padding.dark\\:bg-\\[var\\(--bg-card\\)\\]:nth-child(2) > .container-wide > .mb-10.text-center > h2"
             ]
           },
           {
@@ -12063,7 +12077,7 @@
             "impact": null,
             "html": "<p class=\"mt-2 text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed\">Everything you need to plan and execute successful hunts</p>",
             "target": [
-              ".dark\\:bg-\\[var\\(--bg-card\\)\\].section-padding:nth-child(2) > .container-wide > .mb-10.text-center > .sm\\:text-lg.mt-2.text-base"
+              ".section-padding.dark\\:bg-\\[var\\(--bg-card\\)\\]:nth-child(2) > .container-wide > .mb-10.text-center > .sm\\:text-lg.mt-2.text-base"
             ]
           },
           {
@@ -12963,7 +12977,7 @@
             "impact": null,
             "html": "<section class=\"section-padding px-4 sm:px-6 bg-[var(--bg-elevated)] dark:bg-[var(--bg-card)]\">",
             "target": [
-              ".dark\\:bg-\\[var\\(--bg-card\\)\\].section-padding:nth-child(4)"
+              ".section-padding.dark\\:bg-\\[var\\(--bg-card\\)\\]:nth-child(4)"
             ]
           },
           {
@@ -13203,7 +13217,7 @@
             "impact": null,
             "html": "<a href=\"https://paypal.me/cadegallen\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"card-interactive bg-[var(--bg-elevated)] dark:bg-[var(--bg-card)] rounded-xl p-6 border border-[var(--border-default)] block\">",
             "target": [
-              ".block.dark\\:bg-\\[var\\(--bg-card\\)\\][href$=\"cadegallen\"]"
+              ".block.card-interactive[href$=\"cadegallen\"]"
             ]
           },
           {
@@ -13223,7 +13237,7 @@
             "impact": null,
             "html": "<div class=\"w-12 h-12 rounded-xl bg-white dark:bg-[var(--bg-elevated)] flex items-center justify-center mb-4 border border-[var(--border-default)]\">",
             "target": [
-              ".block.dark\\:bg-\\[var\\(--bg-card\\)\\][href$=\"cadegallen\"] > .dark\\:bg-\\[var\\(--bg-elevated\\)\\].bg-white.w-12"
+              ".block.card-interactive[href$=\"cadegallen\"] > .dark\\:bg-\\[var\\(--bg-elevated\\)\\].bg-white.w-12"
             ]
           },
           {
@@ -13243,7 +13257,7 @@
             "impact": null,
             "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Buy Me a Coffee</h3>",
             "target": [
-              ".block.dark\\:bg-\\[var\\(--bg-card\\)\\][href$=\"cadegallen\"] > .text-lg"
+              ".block.card-interactive[href$=\"cadegallen\"] > .text-lg"
             ]
           },
           {
@@ -13263,7 +13277,7 @@
             "impact": null,
             "html": "<p class=\"mt-2 text-sm text-[var(--text-secondary)] leading-relaxed\">If the guide saved you time or gas money, a one-time PayPal coffee covers hosting, APIs, and the odd scouting trip.</p>",
             "target": [
-              ".block.dark\\:bg-\\[var\\(--bg-card\\)\\][href$=\"cadegallen\"] > .mt-2"
+              ".block.card-interactive[href$=\"cadegallen\"] > .mt-2"
             ]
           },
           {
@@ -13283,7 +13297,7 @@
             "impact": null,
             "html": "<div class=\"mt-4 inline-flex items-center gap-2 text-[var(--cta-primary)] font-medium\">",
             "target": [
-              ".block.dark\\:bg-\\[var\\(--bg-card\\)\\][href$=\"cadegallen\"] > .mt-4.gap-2.inline-flex"
+              ".block.card-interactive[href$=\"cadegallen\"] > .mt-4.gap-2.inline-flex"
             ]
           },
           {
@@ -13303,7 +13317,7 @@
             "impact": null,
             "html": "<a href=\"/go/befrugal\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"card-interactive bg-[var(--bg-elevated)] dark:bg-[var(--bg-card)] rounded-xl p-6 border border-[var(--border-default)] block\">",
             "target": [
-              ".block.dark\\:bg-\\[var\\(--bg-card\\)\\][href$=\"befrugal\"]"
+              ".block.card-interactive[href$=\"befrugal\"]"
             ]
           },
           {
@@ -13323,7 +13337,7 @@
             "impact": null,
             "html": "<div class=\"w-12 h-12 rounded-xl bg-white dark:bg-[var(--bg-elevated)] flex items-center justify-center mb-4 border border-[var(--border-default)]\">",
             "target": [
-              ".block.dark\\:bg-\\[var\\(--bg-card\\)\\][href$=\"befrugal\"] > .dark\\:bg-\\[var\\(--bg-elevated\\)\\].bg-white.w-12"
+              ".block.card-interactive[href$=\"befrugal\"] > .dark\\:bg-\\[var\\(--bg-elevated\\)\\].bg-white.w-12"
             ]
           },
           {
@@ -13343,7 +13357,7 @@
             "impact": null,
             "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Activate BeFrugal Cashback</h3>",
             "target": [
-              ".block.dark\\:bg-\\[var\\(--bg-card\\)\\][href$=\"befrugal\"] > .text-lg"
+              ".block.card-interactive[href$=\"befrugal\"] > .text-lg"
             ]
           },
           {
@@ -13363,7 +13377,7 @@
             "impact": null,
             "html": "<p class=\"mt-2 text-sm text-[var(--text-secondary)] leading-relaxed\">Turn on free cashback before normal Home Depot orders. When you earn $10+ BeFrugal sends a referral bonus that keeps the site free.</p>",
             "target": [
-              ".block.dark\\:bg-\\[var\\(--bg-card\\)\\][href$=\"befrugal\"] > .mt-2"
+              ".block.card-interactive[href$=\"befrugal\"] > .mt-2"
             ]
           },
           {
@@ -13383,7 +13397,7 @@
             "impact": null,
             "html": "<div class=\"mt-4 inline-flex items-center gap-2 text-[var(--cta-primary)] font-medium\">",
             "target": [
-              ".block.dark\\:bg-\\[var\\(--bg-card\\)\\][href$=\"befrugal\"] > .mt-4.gap-2.inline-flex"
+              ".block.card-interactive[href$=\"befrugal\"] > .mt-4.gap-2.inline-flex"
             ]
           },
           {
@@ -13401,7 +13415,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<footer class=\"bg-[var(--bg-dark)] dark:bg-[var(--bg-page)] border-t border-[var(--border-dark)] dark:border-[var(--border-default)] mt-auto\">",
+            "html": "<footer class=\"bg-[var(--bg-elevated)] dark:bg-[var(--bg-card)] border-t border-[var(--border-default)] mt-auto\">",
             "target": [
               "footer"
             ]
@@ -13461,7 +13475,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<div class=\"col-span-2 md:col-span-1\"><a class=\"text-lg font-bold text-white hover:text-zinc-200 transition-colors\" href=\"/\">PennyCentral</a><p class=\"mt-3 text-sm text-zinc-400 leading-relaxed\">The complete guide to finding $0.01 items at Home Depot.</p></div>",
+            "html": "<div class=\"col-span-2 md:col-span-1\">",
             "target": [
               ".col-span-2"
             ]
@@ -13481,9 +13495,9 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<a class=\"text-lg font-bold text-white hover:text-zinc-200 transition-colors\" href=\"/\">PennyCentral</a>",
+            "html": "<a class=\"text-lg font-bold text-[var(--text-primary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-secondary)] transition-colors\" href=\"/\">PennyCentral</a>",
             "target": [
-              ".text-white"
+              ".hover\\:text-\\[var\\(--text-secondary\\)\\]"
             ]
           },
           {
@@ -13501,9 +13515,9 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<p class=\"mt-3 text-sm text-zinc-400 leading-relaxed\">The complete guide to finding $0.01 items at Home Depot.</p>",
+            "html": "<p class=\"mt-3 text-sm text-[var(--text-muted)] leading-relaxed\">The complete guide to finding $0.01 items at Home Depot.</p>",
             "target": [
-              ".mt-3.text-zinc-400"
+              ".mt-3.text-\\[var\\(--text-muted\\)\\]"
             ]
           },
           {
@@ -13541,9 +13555,9 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<h3 class=\"text-sm font-semibold text-zinc-100 mb-4\">Quick Links</h3>",
+            "html": "<h3 class=\"text-sm font-semibold text-[var(--text-primary)] mb-4\">Quick Links</h3>",
             "target": [
-              "div:nth-child(2) > .text-zinc-100.mb-4"
+              "div:nth-child(2) > .mb-4"
             ]
           },
           {
@@ -13581,7 +13595,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<li><a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/penny-list\">Penny List</a></li>",
+            "html": "<li><a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/penny-list\">Penny List</a></li>",
             "target": [
               "div:nth-child(2) > ul > li:nth-child(1)"
             ]
@@ -13601,9 +13615,9 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/penny-list\">Penny List</a>",
+            "html": "<a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/penny-list\">Penny List</a>",
             "target": [
-              ".hover\\:text-white.text-zinc-400[href$=\"penny-list\"]"
+              ".underline.decoration-\\[var\\(--cta-primary\\)\\][href$=\"penny-list\"]"
             ]
           },
           {
@@ -13621,7 +13635,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<li><a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/report-find\">Report a Find</a></li>",
+            "html": "<li><a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/report-find\">Report a Find</a></li>",
             "target": [
               "div:nth-child(2) > ul > li:nth-child(2)"
             ]
@@ -13641,9 +13655,9 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/report-find\">Report a Find</a>",
+            "html": "<a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/report-find\">Report a Find</a>",
             "target": [
-              ".hover\\:text-white.text-zinc-400[href$=\"report-find\"]"
+              ".underline.decoration-\\[var\\(--cta-primary\\)\\][href$=\"report-find\"]"
             ]
           },
           {
@@ -13661,7 +13675,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<li><a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/store-finder\">Store Finder</a></li>",
+            "html": "<li><a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/store-finder\">Store Finder</a></li>",
             "target": [
               "div:nth-child(2) > ul > li:nth-child(3)"
             ]
@@ -13681,9 +13695,9 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/store-finder\">Store Finder</a>",
+            "html": "<a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/store-finder\">Store Finder</a>",
             "target": [
-              ".hover\\:text-white.text-zinc-400[href$=\"store-finder\"]"
+              ".underline.decoration-\\[var\\(--cta-primary\\)\\][href$=\"store-finder\"]"
             ]
           },
           {
@@ -13701,7 +13715,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<li><a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/guide\">Guide</a></li>",
+            "html": "<li><a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/guide\">Guide</a></li>",
             "target": [
               "li:nth-child(4)"
             ]
@@ -13721,9 +13735,9 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/guide\">Guide</a>",
+            "html": "<a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/guide\">Guide</a>",
             "target": [
-              ".hover\\:text-white.text-zinc-400[href$=\"guide\"]"
+              ".underline.decoration-\\[var\\(--cta-primary\\)\\][href$=\"guide\"]"
             ]
           },
           {
@@ -13741,7 +13755,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<li><a href=\"https://www.facebook.com/groups/homedepotonecent\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-zinc-400 hover:text-white transition-colors\">Community</a></li>",
+            "html": "<li><a href=\"https://www.facebook.com/groups/homedepotonecent\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\">Community</a></li>",
             "target": [
               "li:nth-child(5)"
             ]
@@ -13761,9 +13775,9 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<a href=\"https://www.facebook.com/groups/homedepotonecent\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-zinc-400 hover:text-white transition-colors\">Community</a>",
+            "html": "<a href=\"https://www.facebook.com/groups/homedepotonecent\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\">Community</a>",
             "target": [
-              "li:nth-child(5) > .hover\\:text-white[target=\"_blank\"][rel=\"noopener noreferrer\"]"
+              "li:nth-child(5) > .underline[target=\"_blank\"][rel=\"noopener noreferrer\"]"
             ]
           },
           {
@@ -13801,9 +13815,9 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<h3 class=\"text-sm font-semibold text-zinc-100 mb-4\">Support</h3>",
+            "html": "<h3 class=\"text-sm font-semibold text-[var(--text-primary)] mb-4\">Support</h3>",
             "target": [
-              "div:nth-child(3) > .text-zinc-100.mb-4"
+              "div:nth-child(3) > .mb-4"
             ]
           },
           {
@@ -13841,7 +13855,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<li><a href=\"https://paypal.me/cadegallen\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-zinc-400 hover:text-white transition-colors\">Buy Me a Coffee</a></li>",
+            "html": "<li><a href=\"https://paypal.me/cadegallen\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\">Buy Me a Coffee</a></li>",
             "target": [
               "div:nth-child(3) > ul > li:nth-child(1)"
             ]
@@ -13861,7 +13875,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<a href=\"https://paypal.me/cadegallen\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-zinc-400 hover:text-white transition-colors\">Buy Me a Coffee</a>",
+            "html": "<a href=\"https://paypal.me/cadegallen\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\">Buy Me a Coffee</a>",
             "target": [
               "li:nth-child(1) > a[href$=\"cadegallen\"][target=\"_blank\"][rel=\"noopener noreferrer\"]"
             ]
@@ -13881,7 +13895,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<li><a href=\"/go/befrugal\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-zinc-400 hover:text-white transition-colors\">BeFrugal Cashback</a></li>",
+            "html": "<li><a href=\"/go/befrugal\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\">BeFrugal Cashback</a></li>",
             "target": [
               "div:nth-child(3) > ul > li:nth-child(2)"
             ]
@@ -13901,7 +13915,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<a href=\"/go/befrugal\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-zinc-400 hover:text-white transition-colors\">BeFrugal Cashback</a>",
+            "html": "<a href=\"/go/befrugal\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\">BeFrugal Cashback</a>",
             "target": [
               "li:nth-child(2) > a[href$=\"befrugal\"][target=\"_blank\"][rel=\"noopener noreferrer\"]"
             ]
@@ -13921,7 +13935,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<li><a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/cashback\">Cashback Info</a></li>",
+            "html": "<li><a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/cashback\">Cashback Info</a></li>",
             "target": [
               "div:nth-child(3) > ul > li:nth-child(3)"
             ]
@@ -13941,7 +13955,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/cashback\">Cashback Info</a>",
+            "html": "<a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/cashback\">Cashback Info</a>",
             "target": [
               "a[href$=\"cashback\"]"
             ]
@@ -13981,9 +13995,9 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<h3 class=\"text-sm font-semibold text-zinc-100 mb-4\">About</h3>",
+            "html": "<h3 class=\"text-sm font-semibold text-[var(--text-primary)] mb-4\">About</h3>",
             "target": [
-              "div:nth-child(4) > .text-zinc-100.mb-4"
+              "div:nth-child(4) > .mb-4"
             ]
           },
           {
@@ -14001,7 +14015,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<ul class=\"space-y-2.5\"><li><a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/about\">About Us</a></li><li><span class=\"text-sm text-zinc-400 leading-relaxed block\">Not affiliated with Home Depot</span></li></ul>",
+            "html": "<ul class=\"space-y-2.5\">",
             "target": [
               "div:nth-child(4) > ul"
             ]
@@ -14021,7 +14035,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<li><a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/about\">About Us</a></li>",
+            "html": "<li><a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/about\">About Us</a></li>",
             "target": [
               "div:nth-child(4) > ul > li:nth-child(1)"
             ]
@@ -14041,9 +14055,9 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<a class=\"text-sm text-zinc-400 hover:text-white transition-colors\" href=\"/about\">About Us</a>",
+            "html": "<a class=\"text-sm text-[var(--text-secondary)] underline decoration-[var(--cta-primary)] decoration-1 underline-offset-2 hover:text-[var(--text-primary)] transition-colors\" href=\"/about\">About Us</a>",
             "target": [
-              ".hover\\:text-white.text-zinc-400[href$=\"about\"]"
+              ".underline.decoration-\\[var\\(--cta-primary\\)\\][href$=\"about\"]"
             ]
           },
           {
@@ -14061,7 +14075,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<li><span class=\"text-sm text-zinc-400 leading-relaxed block\">Not affiliated with Home Depot</span></li>",
+            "html": "<li><span class=\"text-sm text-[var(--text-secondary)] leading-relaxed block\">Not affiliated with Home Depot</span></li>",
             "target": [
               "div:nth-child(4) > ul > li:nth-child(2)"
             ]
@@ -14081,9 +14095,9 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<span class=\"text-sm text-zinc-400 leading-relaxed block\">Not affiliated with Home Depot</span>",
+            "html": "<span class=\"text-sm text-[var(--text-secondary)] leading-relaxed block\">Not affiliated with Home Depot</span>",
             "target": [
-              ".block.text-zinc-400.leading-relaxed"
+              ".block.leading-relaxed"
             ]
           },
           {
@@ -14101,7 +14115,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<div class=\"mt-10 pt-8 border-t border-[var(--border-dark)] dark:border-[var(--border-default)]\">",
+            "html": "<div class=\"mt-10 pt-8 border-t border-[var(--border-default)]\">",
             "target": [
               ".mt-10"
             ]
@@ -14141,7 +14155,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<p class=\"text-xs text-zinc-400 order-2 sm:order-1\">© 2025 Penny Central. Educational use only.</p>",
+            "html": "<p class=\"text-xs text-[var(--text-muted)] order-2 sm:order-1\">© 2025 Penny Central. Educational use only.</p>",
             "target": [
               ".order-2"
             ]
@@ -14181,7 +14195,7 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<a href=\"https://www.facebook.com/groups/homedepotonecent\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-zinc-400 hover:text-white transition-colors p-2\" aria-label=\"Facebook Group\">",
+            "html": "<a href=\"https://www.facebook.com/groups/homedepotonecent\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors p-2\" aria-label=\"Facebook Group\">",
             "target": [
               "a[aria-label=\"Facebook Group\"]"
             ]

@@ -9,6 +9,10 @@ Purpose: working agreement for layout + styling consistency across every route i
 - Spacing: 8pt grid (`p-2/4/6/8`, `gap-2/4/6`, `section-padding`/`section-padding-sm`). Minimum body text 16px; minimum touch target 44x44px; never use text <12px.
 - Dark mode: rely on existing CSS variables; no hard-coded dark mode colors.
 
+## Token Usage Guide
+- Allowed: `bg-[var(--token)]`, `text-[var(--token)]`, `border-[var(--token)]`, and shadcn semantic utilities (`bg-background`, `text-foreground`, `border-border`, `bg-card`, `bg-muted`, etc.) now aliased to the PennyCentral tokens.
+- Disallowed: raw Tailwind palette classes (`bg-slate-*`, `text-zinc-*`, `text-blue-*`, etc.) unless a temporary hotfix is documented and replaced with tokens immediately after.
+
 ## Allowed Tailwind Usage
 - Prefer variable-backed utilities from `tailwind.config.ts` (`bg-card`, `text-text-*`, `border-border`, `bg-elevated`, `text-muted`, `bg-page`).
 - Avoid raw palette classes (slate/stone/zinc/emerald/etc.) unless mapped to tokens; if an exception is unavoidable, document rationale and align to AAA contrast.

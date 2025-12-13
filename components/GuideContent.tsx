@@ -1,5 +1,3 @@
-"use client"
-
 import { Badge } from "@/components/ui/badge"
 import {
   Table,
@@ -45,7 +43,7 @@ export function GuideContent() {
           <div className="flex items-start gap-3">
             <span className="text-lg leading-none">⚠️</span>
             <div>
-              <div className="font-bold text-accent-900 dark:text-accent-200 flex items-center gap-2 mb-2">
+              <div className="font-bold text-[var(--cta-primary)] flex items-center gap-2 mb-2">
                 <span>Important:</span>
               </div>
               <p className="text-[var(--text-secondary)] mt-2 leading-relaxed">
@@ -255,11 +253,11 @@ export function GuideContent() {
           </TableBody>
         </Table>
 
-        <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] border-l-4 border-l-accent-500 dark:border-l-accent-400 rounded-lg p-5 my-10">
+        <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] border-l-4 border-l-[var(--cta-primary)] rounded-lg p-5 my-10">
           <div className="flex items-start gap-3">
             <span className="text-lg leading-none">💡</span>
             <div>
-              <div className="font-bold text-accent-900 dark:text-accent-200 flex items-center gap-2 mb-2">
+              <div className="font-bold text-[var(--cta-primary)] flex items-center gap-2 mb-2">
                 <span>Key Takeaways:</span>
               </div>
               <p className="text-[var(--text-secondary)] mt-2 leading-relaxed">
@@ -345,11 +343,11 @@ export function GuideContent() {
           </TableBody>
         </Table>
 
-        <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] border-l-4 border-l-accent-500 dark:border-l-accent-400 rounded-lg p-5 my-10">
+        <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] border-l-4 border-l-[var(--cta-primary)] rounded-lg p-5 my-10">
           <div className="flex items-start gap-3">
             <span className="text-lg leading-none">⚠️</span>
             <div>
-              <div className="font-bold text-accent-900 dark:text-accent-200 flex items-center gap-2 mb-2">
+              <div className="font-bold text-[var(--cta-primary)] flex items-center gap-2 mb-2">
                 <span>Important:</span>
               </div>
               <p className="text-[var(--text-secondary)] mt-2 leading-relaxed">
@@ -399,9 +397,7 @@ export function GuideContent() {
 
         <div className="grid md:grid-cols-2 gap-6 my-6">
           <div className="bg-[var(--bg-card)] p-4 rounded-lg border border-[var(--border-default)]">
-            <h4 className="font-semibold mb-3 text-accent-700 dark:text-accent-400">
-              Primary Hotspots
-            </h4>
+            <h4 className="font-semibold mb-3 text-[var(--cta-primary)]">Primary Hotspots</h4>
             <ul className="space-y-3 text-sm">
               <li>Clearance endcaps</li>
               <li>Aisles with yellow tags</li>
@@ -435,7 +431,7 @@ export function GuideContent() {
           <div className="flex items-start gap-3">
             <span className="text-lg leading-none">💡</span>
             <div>
-              <div className="font-bold text-accent-800 dark:text-accent-200">Tip:</div>
+              <div className="font-bold text-[var(--cta-primary)]">Tip:</div>
               <p className="callout-body">
                 Watch for "known penny items" discussed in online communities - these often go
                 chain-wide. "Store-specific" pennies usually result from returns, overstock, or
@@ -448,7 +444,7 @@ export function GuideContent() {
         <h3 className="text-xl font-semibold mt-8 mb-4">How to Check the Price (Discreetly)</h3>
 
         <div className="content-panel space-y-4 my-6">
-          <h4 className="font-semibold text-green-700 dark:text-green-400">
+          <h4 className="font-semibold text-[var(--status-success)]">
             Best Method: Self-Checkout (SCO)
           </h4>
           <ol className="space-y-2">
@@ -464,7 +460,7 @@ export function GuideContent() {
             <div className="flex items-start gap-3">
               <span className="text-lg leading-none">⚠️</span>
               <div>
-                <div className="font-bold text-accent-900 dark:text-accent-200 flex items-center gap-2 mb-2">
+                <div className="font-bold text-[var(--cta-primary)] flex items-center gap-2 mb-2">
                   <span>Warning:</span>
                 </div>
                 <p className="text-[var(--text-secondary)] mt-2 leading-relaxed">
@@ -518,7 +514,7 @@ export function GuideContent() {
             <div className="flex items-start gap-3">
               <span className="text-lg leading-none">💡</span>
               <div>
-                <div className="font-bold text-accent-800 dark:text-accent-200">Pro Tip:</div>
+                <div className="font-bold text-[var(--cta-primary)]">Pro Tip:</div>
                 <p className="callout-body">
                   If you ask an employee to retrieve an overhead item, there's a 50/50 chance
                   they'll scan it first. If it scans at $0.01, they'll likely say "This can't be
@@ -545,7 +541,7 @@ export function GuideContent() {
         </p>
 
         <div className="bg-[var(--bg-elevated)] p-6 rounded-lg border border-[var(--border-default)] my-6">
-          <h3 className="text-lg font-semibold text-green-700 dark:text-green-400 mb-4">
+          <h3 className="text-lg font-semibold text-[var(--status-success)] mb-4">
             Preferred Method: Self-Checkout (SCO)
           </h3>
           <ol className="space-y-2">
@@ -614,7 +610,7 @@ export function GuideContent() {
 
         <div className="grid md:grid-cols-2 gap-4 my-6">
           <div className="p-4 rounded-lg border bg-[var(--bg-elevated)] border-[var(--border-default)]">
-            <h4 className="font-semibold text-green-700 dark:text-green-400 mb-3 flex items-center gap-2">
+            <h4 className="font-semibold text-[var(--status-success)] mb-3 flex items-center gap-2">
               <CheckCircle2 className="h-4 w-4" /> Do This
             </h4>
             <ul className="space-y-3 text-sm">
@@ -627,7 +623,7 @@ export function GuideContent() {
             </ul>
           </div>
           <div className="p-4 rounded-lg border bg-[var(--bg-elevated)] border-[var(--border-default)]">
-            <h4 className="font-semibold text-red-700 dark:text-red-400 mb-3 flex items-center gap-2">
+            <h4 className="font-semibold text-[var(--status-error)] mb-3 flex items-center gap-2">
               <XCircle className="h-4 w-4" /> Don't Do This
             </h4>
             <ul className="space-y-3 text-sm">
@@ -675,11 +671,11 @@ export function GuideContent() {
           <li>System flags it for removal from shelves - but sometimes it gets missed</li>
         </ul>
 
-        <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] border-l-4 border-l-accent-500 dark:border-l-accent-400 rounded-lg p-5 my-10">
+        <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] border-l-4 border-l-[var(--cta-primary)] rounded-lg p-5 my-10">
           <div className="flex items-start gap-3">
             <span className="text-lg leading-none">ℹ️</span>
             <div>
-              <div className="font-bold text-accent-900 dark:text-accent-200 flex items-center gap-2 mb-2">
+              <div className="font-bold text-[var(--cta-primary)] flex items-center gap-2 mb-2">
                 <span>Key Takeaway:</span>
               </div>
               <p className="text-[var(--text-secondary)] mt-2 leading-relaxed">
@@ -888,11 +884,11 @@ export function GuideContent() {
           </div>
         </div>
 
-        <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] border-l-4 border-l-accent-500 dark:border-l-accent-400 rounded-lg p-5 my-10">
+        <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] border-l-4 border-l-[var(--cta-primary)] rounded-lg p-5 my-10">
           <div className="flex items-start gap-3">
             <span className="text-lg leading-none">⚠️</span>
             <div>
-              <div className="font-bold text-accent-900 dark:text-accent-200 flex items-center gap-2 mb-2">
+              <div className="font-bold text-[var(--cta-primary)] flex items-center gap-2 mb-2">
                 <span>Reality Check:</span>
               </div>
               <p className="text-[var(--text-secondary)] mt-2 leading-relaxed">
@@ -921,7 +917,7 @@ export function GuideContent() {
         <div className="grid md:grid-cols-2 gap-6 my-8">
           {/* Beginners */}
           <div className="bg-[var(--bg-card)] p-6 rounded-lg border border-[var(--border-default)]">
-            <h3 className="text-lg font-semibold text-blue-700 dark:text-blue-400 mb-4">
+            <h3 className="text-lg font-semibold text-[var(--cta-primary)] mb-4">
               For Beginners: Start Here
             </h3>
 
@@ -952,12 +948,12 @@ export function GuideContent() {
 
           {/* Experienced */}
           <div className="bg-[var(--bg-card)] p-6 rounded-lg border border-[var(--border-default)]">
-            <h3 className="text-lg font-semibold text-accent-700 dark:text-accent-400 mb-4">
+            <h3 className="text-lg font-semibold text-[var(--cta-primary)] mb-4">
               For Experienced Hunters: Refine Your Game
             </h3>
 
             <h4 className="font-medium mt-4 mb-2">Know the Clearance Cadences</h4>
-            <div className="text-sm space-y-3 font-mono bg-white/50 dark:bg-black/20 p-3 rounded">
+            <div className="text-sm space-y-3 font-mono bg-[var(--bg-elevated)] border border-[var(--border-default)] p-3 rounded">
               <div className="flex flex-wrap items-center gap-2">
                 <span>Cadence A:</span>
                 <span className="price-chip">.00</span>
@@ -1008,7 +1004,7 @@ export function GuideContent() {
             But remember: one person's unruly behavior can ruin it for everyone. Stay sharp, stay
             respectful, and help keep the game alive.
           </p>
-          <p className="text-lg font-semibold text-accent-600 dark:text-accent-400 mt-4">
+          <p className="text-lg font-semibold text-[var(--cta-primary)] mt-4">
             Penny hunting is part luck, part hustle, and all strategy. Treat it like a skill - not a
             shortcut.
           </p>
