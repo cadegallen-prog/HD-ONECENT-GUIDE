@@ -4,6 +4,109 @@ Brief log of completed work. Most recent at top.
 
 ---
 
+## 2025-12-14 - Browser compatibility cleanup
+
+Objective: Remove unsupported CSS helpers, keep compatibility hints happy, and document the small follow-up touches after the core loop refresh.
+
+What changed:
+- Removed `color-mix` usages from `app/globals.css` selection styles and chip tokens so the codebase relies on solid fallbacks that work on Chrome <111.
+- Reordered `.line-clamp-2-table` to emit the standard `line-clamp` after the vendor-prefixed `-webkit-line-clamp`, satisfying the Edge Tools prefix-order rule.
+- Documented the recent CSS/validation sweep and testing flow for future agents to reference in this changelog section.
+
+Testing:
+- `npm run lint` ✅
+- `npm run build` ✅
+
+---
+
+## 2025-12-13 - Duplicate-regression lint hardening + color drift ratchet
+
+Objective: Prevent “broken merge” regressions Cade can’t spot (duplicate JSX props / duplicate object keys) and stop token drift from getting worse over time without forcing a full color refactor today.
+
+What changed:
+- ESLint now errors on:
+  - Duplicate JSX props via `react/jsx-no-duplicate-props` (prevents patterns like two `href` props).
+  - Duplicate object keys via `no-dupe-keys` (catches duplicate keys in object literals, including metadata/config objects).
+  - Config: `eslint.config.mjs`.
+- Color drift ratchet added on top of existing `lint:colors`:
+  - Baseline stored at `checks/lint-colors.baseline.json` (current baseline: 47 warnings).
+  - `npm run lint:colors` now fails only if warning count increases vs baseline (errors still fail immediately).
+  - Intentional baseline refresh command: `npm run lint:colors:update-baseline`.
+  - Code: `scripts/lint-colors.ts`, `package.json` scripts.
+- Docs updated to match reality:
+  - `SCRIPTS-AND-GATES.txt` documents the ratchet + baseline update flow and reaffirms audits resolve `BASE_URL` consistently via `scripts/get-base-url.js`.
+- Scope inventory refreshed:
+  - `ROUTE-TREE.txt` regenerated from `next build` output (includes framework `/_not-found`; marks dynamic/API routes).
+  - Foundation rules captured for future agents in `.ai/FOUNDATION_CONTRACT.md` (tokens/Tailwind/layout/nav/gates).
+
+Notes for future agents:
+- If you reduce raw Tailwind colors, `npm run lint:colors` should show fewer warnings than baseline; once you verify the change is intentional and safe, update the baseline with `npm run lint:colors:update-baseline`.
+- `COMPONENT-TREE.txt` may exist locally but is currently not tracked by git (do not assume it’s authoritative unless explicitly generated/committed).
+
+Testing:
+- `npm run lint`
+- `npm run build`
+- `npm run test:unit`
+- `npm run test:e2e`
+
+## 2025-12-13 - Layout primitives + consistent route frames
+
+Objective: Standardize spacing, token usage, and CTA placement across early routes before rolling the primitives site-wide.
+
+What changed:
+- Rebuilt `components/page-templates.tsx` into server-friendly `PageShell`, `PageHeader`, `Section`, and `Prose` primitives that honor the neutral token contract (`var(--bg-*)`, `var(--text-*)`, `var(--cta-primary)`, etc.) and enforce consistent max-width/padding/rhythm rules.
+- Migrated `/about`, `/cashback`, `/resources`, `/clearance-lifecycle`, and `/guide` onto the new primitives, keeping copy untouched while aligning spacing, CTA positioning, and long-form prose structure.
+- Added section treatments and CTA groupings for downloads/support cards so the pages now share the same visual frame before continuing route coverage.
+- Color linter warnings dropped from 47 to 13 thanks to the token cleanup; the remaining warnings are legacy (admin/report-find/penny-list surfaces).
+- Playwright visual smoke now fails because the page structure/layout changed; see `reports/playwright/results/...` for the diffs (home, penny-list, report-find, store-finder, about across light/dark/mobile/desktop).
+
+Notes:
+- Future agents should keep adding routes to the new primitives and update the visual baselines only after verifying the diffs are intended.
+
+Testing:
+- `npm run lint`
+- `npm run build`
+- `npm run test:unit`
+- `npm run lint:colors`
+- `npm run test:e2e` *(fails on updated snapshots for home, penny-list, report-find, store-finder, about in several projects/viewport combinations)*
+
+## 2025-12-13 - Gate wiring, audit baseline, and documentation
+
+Objective: Lock down the audit gate wiring, baseline health run, and docs/route inventories so future agents know what passed and where to start.
+
+What changed:
+- Added a shared `scripts/get-base-url.js` + helper to infer ports from `package.json`, wired it into saga scripts (`check-contrast.js`, `check-axe.js`, `run-audit.ps1`) so everything hits the same dev server (default `3001` via `next dev -p 3001`).
+- Created `scripts/check-axe.js`, `scripts/print-base-url.js`, and updated `SCRIPTS-AND-GATES.txt` to reflect the real commands (no stale package.json blob) plus documented the audit workflow (BASE_URL + Lighthouse script).
+- Generated `.ai/BASELINE_AUDIT.md` & `.ai/FOUNDATION_PLAN.md`, refreshed Playwright penny-list snapshots, and persisted recent Axe/contrast reports so gate output reflects `BASE_URL=http://localhost:3001`.
+- Captured `ROUTE-TREE.txt` and `COMPONENT-TREE.txt` inventories for future audits.
+
+Testing:
+- `npm run build`
+- `npm run lint`
+- `npm run test:unit`
+- `npm run test:e2e`
+- With `BASE_URL=http://localhost:3001`: `npm run check-axe`
+- With `BASE_URL=http://localhost:3001`: `npm run check-contrast`
+
+---
+
+## 2025-12-13 - Token unification & palette cleanup
+
+Objective: Establish a single token system everywhere, replace stray Tailwind palette usage, and document the updated rules so new tokens drive every surface (including shadcn UI).
+
+What changed:
+- Reconciled `app/globals.css` with `docs/DESIGN-SYSTEM-AAA.md`, refreshed light/dark colors, ensured `--background`, `--foreground`, `--card`, `--popover`, `--muted`, `--secondary`, `--border`, `--ring`, and `--destructive` alias the PennyCentral palette, and tightened legacy alias coverage.
+- Replaced all Tailwind palette usages inside the global utilities/Leaflet overrides (badges, callouts, tooltips, tables, priority chips, popups, selection colors) with `var(--token)` colors so light/dark mode cohere, and refreshed the footer to rely solely on token values.
+- Documented the new token usage guidance in `.ai/FOUNDATION_CONTRACT.md` so future agents stick to `bg/text/border-[var(--token)]` and the aliased shadcn classes instead of palette classes.
+
+Testing:
+- `npm run lint`
+- `npm run build`
+- `npm run test:unit`
+- `npm run test:e2e` *(fails: visual smoke snapshots (light desktop/mobile) were expected to shift after the palette update; 10 comparisons against the stored baseline now differ — update the Playwright baselines if the new palette is approved)*
+- With `BASE_URL=http://localhost:3001`: `npm run check-contrast`
+- With `BASE_URL=http://localhost:3001`: `npm run check-axe`
+
 ## 2025-12-13 - SKU validation narrowing
 
 Objective: Align SKU validation with latest business rule (6 or 10 digits only) and document the change.
