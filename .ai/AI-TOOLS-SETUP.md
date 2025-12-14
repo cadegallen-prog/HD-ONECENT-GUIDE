@@ -157,20 +157,25 @@ Update instruction files when you:
 
 ## MCP Servers (Model Context Protocol)
 
-**Status:** 6 MCP servers active and configured for ChatGPT CodeX
+**Status:** 9 MCP servers active and configured for all AI tools (Claude Code, GitHub Copilot, ChatGPT CodeX)
 
 ### Quick Reference
 
-| Server                | Purpose                     | Priority | Status |
-| --------------------- | --------------------------- | -------- | ------ |
-| `filesystem`          | Read/write project files    | High     | ✅     |
-| `github`              | PR/issue/repo management    | Medium   | ✅     |
-| `git`                 | Local version control       | Medium   | ✅     |
-| `chrome-devtools`     | Browser testing/automation  | Low      | ✅     |
-| `pylance`             | Python validation/execution | Low      | ✅     |
-| `sequential-thinking` | Extended reasoning          | Low      | ✅     |
+| Server                | Purpose                              | Priority | Status |
+| --------------------- | ------------------------------------ | -------- | ------ |
+| `sequential-thinking` | Structured reasoning (MANDATORY)     | ⭐ HIGH  | ✅     |
+| `memory`              | Cross-session memory (MANDATORY)     | ⭐ HIGH  | ✅     |
+| `memory-keeper`       | Project context persistence          | ⭐ HIGH  | ✅     |
+| `next-devtools`       | Next.js runtime/build errors         | ⭐ HIGH  | ✅     |
+| `playwright`          | Browser automation & testing         | ⭐ HIGH  | ✅     |
+| `context7`            | Up-to-date library documentation     | Medium   | ✅     |
+| `filesystem`          | Read/write project files             | Medium   | ✅     |
+| `github`              | PR/issue/repo management             | Medium   | ✅     |
+| `git`                 | Local version control                | Medium   | ✅     |
 
-**Full Documentation:** See `.ai/MCP_SERVERS.md` for complete capabilities, best practices, and troubleshooting
+**REMOVED:** `chrome-devtools` (replaced by Playwright), `pylance` (not needed for this project)
+
+**Full Documentation:** See `.ai/MCP_SERVERS.md` for complete capabilities, MANDATORY usage rules, and troubleshooting
 
 ### MCP Configuration
 
@@ -181,31 +186,33 @@ mcp_enabled = [
   "filesystem",
   "github",
   "git",
-  "chrome-devtools",
-  "pylance",
-  "sequential-thinking"
+  "sequential-thinking",
+  "memory",
+  "memory-keeper",
+  "next-devtools",
+  "playwright",
+  "context7"
 ]
 
 mcp_paths = [
   "C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE\\.github\\copilot-instructions.md",
   "C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE\\AGENTS.md",
-  "C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE\\SKILLS.md",
-  "C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE\\.ai\\STATE.md",
-  "C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE\\.ai\\BACKLOG.md",
-  "C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE\\.ai\\CONTEXT.md",
   "C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE\\.ai\\CONTRACT.md",
   "C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE\\.ai\\DECISION_RIGHTS.md",
   "C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE\\.ai\\CONSTRAINTS.md",
-  "C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE\\.ai\\SESSION_LOG.md"
+  "C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE\\.ai\\LEARNINGS.md",
+  "C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE\\.ai\\SESSION_LOG.md",
+  "C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE\\.ai\\MCP_SERVERS.md"
 ]
 ```
 
-**This means:** When ChatGPT CodeX starts, it:
+**This means:** When any AI tool starts, it:
 
-1. Loads all 6 MCP servers (tools become available)
-2. Auto-reads all 7 instruction files (project context loaded)
+1. Loads all 9 MCP servers (tools become available)
+2. Auto-reads all instruction files (project context loaded)
 3. Has immediate access to project rules + MCP capabilities
-4. No manual setup needed per session
+4. MUST use MCPs proactively (see MCP_SERVERS.md for mandatory usage rules)
+5. No manual setup needed per session
 
 ### Quick Usage Examples
 
@@ -269,21 +276,26 @@ pylanceRunCodeSnippet({
 })
 ```
 
-### MCP Best Practices
+### ⚠️ CRITICAL MCP Usage Rules
 
-**DO:**
-✅ Read `.ai/MCP_SERVERS.md` before heavy MCP usage  
-✅ Use specific file/line ranges when reading  
-✅ Check git branch before declaring work complete  
-✅ Use filesystem MCP for local files, GitHub MCP for remote repos  
-✅ Run `pylanceRunCodeSnippet` instead of terminal Python for snippets
+**MANDATORY - AGENTS MUST:**
+✅ **Read `.ai/MCP_SERVERS.md` at session start** - Contains mandatory usage rules
+✅ **Use Sequential Thinking for complex tasks** - NOT optional for planning
+✅ **Check Memory MCPs at session start** - Don't repeat past mistakes
+✅ **Use Next-Devtools before and after changes** - Catch errors early
+✅ **Use Playwright for UI changes** - Screenshots required
+✅ **Use Context7 to verify current library docs** - Your training data is outdated
+✅ **Check git branch before declaring work complete** - Verify correct branch
+✅ **Save context to Memory MCPs at session end** - Persist learnings
 
-**DON'T:**
-❌ Scan entire directory trees (use `file_search` instead)  
-❌ Poll GitHub API repeatedly (rate limits)  
-❌ Use Chrome DevTools for unit tests (use for integration/E2E only)  
-❌ Run long Python scripts via Pylance (use `run_in_terminal` with `isBackground=true`)  
-❌ Assume changes are live without verifying deployment branch
+**FORBIDDEN - AGENTS MUST NOT:**
+❌ Skip MCPs to "save time" or "move faster" - Cost of bugs > cost of MCP usage
+❌ Assume you know current library patterns - Always verify with Context7
+❌ Ship UI changes without Playwright testing - Browser validation required
+❌ Skip Sequential Thinking for "simple" tasks - Validate that assumption
+❌ Ignore Next-Devtools errors - They're real, not "just dev server"
+
+**See `.ai/MCP_SERVERS.md` for complete mandatory usage rules and anti-patterns.**
 
 ### Verification: MCPs Working
 
@@ -329,9 +341,11 @@ read_file("README.md", lines: 1-10)  // Should work immediately
 
 - **v1.0 (Dec 7, 2025):** Initial setup - all three AI tools configured to read `.ai/` directory
 - **v1.1 (Dec 8, 2025):** Added this documentation file to explain the setup
-- **v2.0 (Dec 10, 2025):** Added comprehensive MCP server documentation
-  - Documented 6 active MCP servers
-  - Added quick reference table
-  - Added configuration details
-  - Added usage examples
-  - Added verification and troubleshooting
+- **v2.0 (Dec 10, 2025):** Added comprehensive MCP server documentation (6 servers)
+- **v3.0 (Dec 14, 2025):** Major MCP overhaul - 9 servers active
+  - Added: Sequential Thinking, Memory, Memory-Keeper, Next-Devtools, Playwright, Context7
+  - Removed: chrome-devtools (unstable), pylance (not needed)
+  - Added MANDATORY usage rules and anti-patterns
+  - Emphasized proactive MCP usage (no laziness allowed)
+  - Updated all AI tool configs (Claude Code, Copilot, Codex)
+  - Added MCP_SERVERS.md to mcp_paths for auto-loading

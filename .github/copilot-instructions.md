@@ -12,8 +12,25 @@ Read ALL files in the `.ai/` directory for the complete collaboration protocol:
 - `.ai/SESSION_LOG.md` - Recent work history and context
 - `.ai/LEARNINGS.md` - Past mistakes to avoid
 - `.ai/CONTEXT.md` - Stable mission and audience
+- ⭐ `.ai/MCP_SERVERS.md` - **MANDATORY MCP usage rules** (9 servers available)
 
 Then ask Cade for **GOAL / WHY / DONE** for this session.
+
+---
+
+## ⚠️ CRITICAL: MCP Usage Requirements
+
+You have access to 9 Model Context Protocol (MCP) servers. **You MUST use them proactively**:
+
+1. **Sequential Thinking** - Use for ANY complex task, planning, or multi-step problem. NOT optional.
+2. **Memory + Memory-Keeper** - Check at session start. Save context at session end. NO EXCEPTIONS.
+3. **Next-Devtools** - Check for errors BEFORE and AFTER changes. Required for task completion.
+4. **Playwright** - Test UI changes in browser. Screenshots required for user-facing changes.
+5. **Context7** - Verify current library docs. Your training data is outdated for Next.js 16, React 19.
+
+**Read `.ai/MCP_SERVERS.md` immediately for complete mandatory usage rules and anti-patterns.**
+
+**NO SHORTCUTS. NO LAZINESS. NO EXCUSES.**
 
 ---
 

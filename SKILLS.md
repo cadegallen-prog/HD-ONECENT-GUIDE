@@ -39,18 +39,23 @@ Compact reference for AI agents. Describes what this project can do, where thing
 
 ## MCP Servers & Tooling
 
-**Status:** 6 MCP servers active (filesystem, github, git, chrome-devtools, pylance, sequential-thinking)
+**Status:** 9 MCP servers active - **MANDATORY usage rules apply**
 
-**Full Reference:** See `.ai/MCP_SERVERS.md` for complete capabilities, examples, and troubleshooting
+**Full Reference:** See `.ai/MCP_SERVERS.md` for complete capabilities, mandatory usage patterns, and anti-patterns
 
-| Server                | Purpose                  | When to Use                         | Avoid                                        | Priority |
-| --------------------- | ------------------------ | ----------------------------------- | -------------------------------------------- | -------- |
-| `filesystem`          | Read/write repo files    | Targeted file reads/edits           | Scanning entire trees, repeated reads        | High     |
-| `github`              | GitHub API (PRs, issues) | Create PRs, request reviews, CI     | Polling repeatedly, using for local files    | Medium   |
-| `git`                 | Version control ops      | Check branch, status, diffs         | Complex ops (rebase), repeated status checks | Medium   |
-| `chrome-devtools`     | Browser automation       | Responsive tests, network debugging | Unit tests, long E2E flows                   | Low      |
-| `pylance`             | Python analysis          | Syntax validation, run snippets     | Long scripts, user input scripts             | Low      |
-| `sequential-thinking` | Extended reasoning       | Complex decisions, multi-step plans | Simple tasks, speed-critical operations      | Low      |
+| Server                | Purpose                      | MANDATORY Usage                                  | Priority    |
+| --------------------- | ---------------------------- | ------------------------------------------------ | ----------- |
+| `sequential-thinking` | Structured reasoning         | ANY complex task, planning, multi-step problems  | ⭐ CRITICAL |
+| `memory`              | Cross-session memory         | Check at session start, save at session end      | ⭐ CRITICAL |
+| `memory-keeper`       | Project context persistence  | Check before structural changes                  | ⭐ CRITICAL |
+| `next-devtools`       | Next.js runtime/build errors | BEFORE and AFTER every change                    | ⭐ CRITICAL |
+| `playwright`          | Browser automation           | ALL UI changes (screenshots required)            | ⭐ CRITICAL |
+| `context7`            | Up-to-date library docs      | Verify Next.js 16, React 19, Tailwind patterns   | High        |
+| `filesystem`          | Read/write repo files        | Targeted file reads/edits                        | Medium      |
+| `github`              | GitHub API (PRs, issues)     | Create PRs, request reviews, CI                  | Medium      |
+| `git`                 | Version control ops          | Check branch before declaring work complete      | Medium      |
+
+**REMOVED:** `chrome-devtools` (replaced by Playwright), `pylance` (not needed)
 
 **Dev Commands:**
 
@@ -61,34 +66,31 @@ npm run lint     # ESLint check
 npm test:unit    # Run unit tests
 ```
 
-**MCP Best Practices:**
+**⚠️ CRITICAL MCP Usage Rules:**
 
-✅ **DO:**
+**MANDATORY - YOU MUST:**
+✅ Read `.ai/MCP_SERVERS.md` at session start (contains full mandatory rules)
+✅ Use Sequential Thinking for complex tasks (NOT optional)
+✅ Check Memory MCPs at session start (don't repeat past mistakes)
+✅ Use Next-Devtools BEFORE and AFTER changes (catch errors early)
+✅ Use Playwright for ALL UI changes (screenshots required)
+✅ Use Context7 to verify current library docs (your training is outdated)
+✅ Check git branch before declaring work complete
+✅ Save context to Memory MCPs at session end
 
-- Use specific file/line ranges when reading
-- Check git branch before declaring success
-- Cache information already retrieved
-- Use filesystem for local files, github for remote repos
-- Run `pylanceRunCodeSnippet` for Python instead of terminal
-- Batch operations when possible
+**FORBIDDEN - YOU MUST NOT:**
+❌ Skip MCPs to "save time" - bugs cost more than MCP usage
+❌ Assume you know current library patterns - verify with Context7
+❌ Ship UI changes without Playwright testing - browser validation required
+❌ Skip Sequential Thinking for "simple" tasks - validate that assumption
+❌ Ignore Next-Devtools errors - they're real, not "just dev server"
+❌ List entire directory trees - use glob patterns instead
+❌ Poll GitHub API repeatedly - rate limits apply
 
-❌ **DON'T:**
-
-- List entire directory trees (use `file_search` with glob patterns)
-- Read same file multiple times
-- Poll GitHub API repeatedly (rate limits)
-- Use GitHub MCP for local file operations
-- Run long Python scripts via Pylance (use `run_in_terminal` with `isBackground=true`)
-- Declare changes live without verifying deployment to `main` branch
-
-**Token Cost Hierarchy** (most to least expensive):
-
-1. Sequential Thinking (deepest reasoning)
-2. Chrome DevTools (network requests, screenshots)
-3. GitHub API (JSON payloads)
-4. Filesystem (targeted reads)
-5. Git (status checks)
-6. Pylance (syntax validation)
+**Session Workflow Checklist:**
+1. Session start: Check Memory MCPs, read `.ai/MCP_SERVERS.md`
+2. During work: Use Sequential Thinking → Context7 → Next-Devtools → Playwright
+3. Session end: Next-devtools check → Playwright test → Memory save → docs update
 
 **Common MCP Anti-Patterns:**
 
