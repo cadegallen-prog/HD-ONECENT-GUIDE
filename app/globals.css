@@ -113,8 +113,8 @@
     --chip-success-border: #b8d6c4;
     --chip-muted-surface: var(--bg-recessed);
     --chip-muted-border: var(--border-default);
-    --map-marker-default: var(--brand-gunmetal);
-    --map-marker-selected: var(--cta-primary);
+    --map-marker-default: color-mix(in srgb, var(--text-primary) 82%, var(--bg-card) 18%);
+    --map-marker-selected: color-mix(in srgb, var(--cta-primary) 78%, var(--bg-card) 22%);
     --map-marker-outline: #ffffff;
     --map-marker-core: var(--bg-page);
 
@@ -231,6 +231,8 @@
     --chip-success-border: #7bd49a;
     --chip-muted-surface: var(--bg-hover);
     --chip-muted-border: var(--border-strong);
+    --map-marker-default: color-mix(in srgb, var(--text-primary) 80%, var(--bg-card) 20%);
+    --map-marker-selected: color-mix(in srgb, var(--cta-primary) 76%, var(--bg-card) 24%);
     --map-marker-outline: #f3f4f6;
     --map-marker-core: var(--bg-card);
 
