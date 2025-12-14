@@ -151,6 +151,7 @@ export const StoreMap = React.memo(function StoreMap({
   const [mounted, setMounted] = React.useState(false)
   const { theme } = useTheme()
   const [isDarkMode, setIsDarkMode] = React.useState(false)
+  const [popupWidth, setPopupWidth] = React.useState({ minWidth: 260, maxWidth: 260 })
   const markersRef = React.useRef<Record<string, LeafletMarker | null>>({})
 
   // Keep original store order - do NOT reorder based on selection
@@ -244,6 +245,26 @@ export const StoreMap = React.memo(function StoreMap({
     return () => media.removeEventListener("change", handleChange)
   }, [theme])
 
+  React.useEffect(() => {
+    if (typeof window === "undefined") return undefined
+
+    const calculatePopupWidth = () => {
+      const viewportWidth = window.innerWidth
+      const safePadding = 48
+      const availableWidth = Math.max(viewportWidth - safePadding, 220)
+
+      const minWidth = Math.min(260, availableWidth)
+      const maxWidth = Math.min(320, availableWidth)
+
+      setPopupWidth({ minWidth, maxWidth })
+    }
+
+    calculatePopupWidth()
+    window.addEventListener("resize", calculatePopupWidth)
+
+    return () => window.removeEventListener("resize", calculatePopupWidth)
+  }, [])
+
   const tileConfig = React.useMemo(
     () => (isDarkMode ? TILE_CONFIG.dark : TILE_CONFIG.light),
     [isDarkMode]
@@ -335,8 +356,8 @@ export const StoreMap = React.memo(function StoreMap({
                 autoPan={true}
                 autoPanPadding={[50, 50]}
                 keepInView={false}
-                maxWidth={260}
-                minWidth={260}
+                maxWidth={popupWidth.maxWidth}
+                minWidth={popupWidth.minWidth}
                 closeButton={false}
               >
                 <div className="store-popup-card">

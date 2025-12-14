@@ -17,6 +17,7 @@
     "check-axe": "node scripts/check-axe.js"
   },
   "dependencies": {
+    "@fontsource-variable/inter": "^5.2.8",
     "@hookform/resolvers": "^3.9.1",
     "@types/leaflet": "^1.9.21",
     "@vercel/analytics": "^1.5.0",
