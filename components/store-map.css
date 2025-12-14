@@ -13,11 +13,11 @@
 }
 
 .map-marker-default:hover svg path {
-  fill: var(--map-marker-selected);
+  fill: var(--map-marker-hover);
 }
 
 .map-marker-default:hover svg circle {
-  fill: #ffffff;
+  fill: var(--map-marker-outline);
 }
 
 /* Ensure selected marker remains visually distinct and readable */
@@ -27,8 +27,31 @@
     box-shadow 150ms ease;
 }
 
+.map-marker-selected svg circle {
+  transition: fill 150ms ease;
+}
+
 .map-marker-selected:hover svg path {
   transform: translateY(-1px);
+}
+
+.map-marker-selected:hover svg circle {
+  fill: var(--map-marker-outline);
+}
+
+.leaflet-marker-icon.leaflet-interactive:focus-visible,
+.leaflet-marker-icon.leaflet-interactive:active {
+  outline: 3px solid var(--border-focus);
+  outline-offset: 3px;
+  border-radius: 999px;
+  box-shadow: none;
+}
+
+@supports (color-mix(in srgb, transparent 0%)) {
+  .leaflet-marker-icon.leaflet-interactive:focus-visible,
+  .leaflet-marker-icon.leaflet-interactive:active {
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--map-marker-selected) 28%, transparent);
+  }
 }
 
 /* Leaflet popup chrome override for store popups
