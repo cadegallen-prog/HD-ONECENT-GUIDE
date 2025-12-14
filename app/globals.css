@@ -113,8 +113,12 @@
     --chip-success-border: #b8d6c4;
     --chip-muted-surface: var(--bg-recessed);
     --chip-muted-border: var(--border-default);
-    --map-marker-default: var(--brand-gunmetal);
-    --map-marker-selected: var(--cta-primary);
+    --map-marker-base: #4b5563; /* Neutral slate for default pins on light tiles */
+    --map-marker-accent: #ea580c; /* Warm amber for high-visibility states on light tiles */
+    --map-marker-accent-strong: #c2410c; /* Deeper amber for hover/active emphasis */
+    --map-marker-default: var(--map-marker-base);
+    --map-marker-hover: var(--map-marker-accent-strong);
+    --map-marker-selected: var(--map-marker-accent);
     --map-marker-outline: #ffffff;
     --map-marker-core: var(--bg-page);
 
@@ -231,7 +235,13 @@
     --chip-success-border: #7bd49a;
     --chip-muted-surface: var(--bg-hover);
     --chip-muted-border: var(--border-strong);
-    --map-marker-outline: #f3f4f6;
+    --map-marker-base: #e5e7eb; /* Light neutral for contrast against dark tiles */
+    --map-marker-accent: #f59e0b; /* Warm amber tuned for dark tiles */
+    --map-marker-accent-strong: #d97706; /* Stronger amber for hover/active */
+    --map-marker-default: var(--map-marker-base);
+    --map-marker-hover: var(--map-marker-accent-strong);
+    --map-marker-selected: var(--map-marker-accent);
+    --map-marker-outline: #0f172a;
     --map-marker-core: var(--bg-card);
 
     /* Dark mode shadows - Subtle, 8px max blur per design system */
