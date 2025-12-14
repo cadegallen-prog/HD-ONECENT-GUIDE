@@ -13,7 +13,7 @@
 }
 
 .map-marker-default:hover svg path {
-  fill: var(--cta-primary);
+  fill: var(--map-marker-selected);
 }
 
 .map-marker-default:hover svg circle {
@@ -223,29 +223,33 @@
     box-shadow 150ms ease,
     color 150ms ease,
     outline-color 150ms ease;
+  box-shadow: var(--shadow-button);
   min-height: 44px;
 }
 
 .store-popup-button-primary {
-  background: var(--cta-primary);
+  background: color-mix(in srgb, var(--cta-primary) 90%, var(--bg-card) 10%);
   color: var(--cta-text);
   border: 1px solid var(--cta-primary);
 }
 
 .store-popup-button-primary:hover {
-  background: color-mix(in srgb, var(--cta-primary) 88%, var(--bg-page));
-  border-color: color-mix(in srgb, var(--cta-primary) 88%, var(--bg-page));
+  background: color-mix(in srgb, var(--cta-hover) 88%, var(--bg-card) 12%);
+  border-color: var(--cta-hover);
+  box-shadow: var(--shadow-button-hover);
 }
 
 .store-popup-button-secondary {
-  background: var(--bg-recessed);
+  background: var(--bg-elevated);
   color: var(--text-primary);
-  border: 1px solid color-mix(in srgb, var(--border-strong) 88%, var(--bg-card));
+  border: 1px solid var(--border-strong);
 }
 
 .store-popup-button-secondary:hover {
-  background: color-mix(in srgb, var(--bg-hover) 90%, var(--bg-card));
-  border-color: color-mix(in srgb, var(--border-strong) 94%, var(--bg-card));
+  background: var(--bg-hover);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-button-hover);
 }
 
 .store-popup-button:focus-visible {
@@ -258,16 +262,24 @@
 .map-shell {
   width: 100%;
   height: 100%;
+  position: relative;
 }
 
 .map-shell--light {
-  /* Light theme map adjustments if needed */
+  /* Tone down harsh whites and add subtle contrast for legibility */
+  --map-tile-filter: saturate(0.9) brightness(0.96) contrast(0.96);
 }
 
 .map-shell--dark {
-  /* Dark theme map adjustments if needed */
+  /* Lift dark tiles to avoid near-black loss of detail */
+  --map-tile-filter: saturate(0.92) brightness(1.1) contrast(1.05);
 }
 
 .leaflet-container {
   background: var(--bg-elevated);
+}
+
+.map-shell .leaflet-tile-pane {
+  filter: var(--map-tile-filter, none);
+  transition: filter 150ms ease;
 }

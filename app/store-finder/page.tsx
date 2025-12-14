@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useRef, useCallback, forwardRef } from "react"
+import { useEffect, useState, useRef, useCallback, forwardRef, useMemo } from "react"
 import dynamic from "next/dynamic"
 import {
   MapPin,
@@ -20,6 +20,7 @@ import {
   getStoreTitle,
   getStoreUrl,
   applyCoordinateOverrides,
+  normalizeCoordinates,
   hasValidCoordinates,
   formatStoreHours,
   normalizeDayHours,
@@ -160,12 +161,23 @@ const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: numbe
 }
 
 // Calculate distances and return sorted list limited to MAX_STORES
-const getClosestStores = (stores: StoreLocation[], lat: number, lng: number): StoreLocation[] => {
+const getClosestStores = (
+  stores: StoreLocation[],
+  lat: number,
+  lng: number,
+  corrections?: Record<string, { lat: number; lng: number }>
+): StoreLocation[] => {
   const limit = PROOF_OF_CONCEPT_MODE ? stores.length : MAX_STORES
   const storesWithDistance = stores
     .map((store) => ({
       ...store,
-      distance: calculateDistance(lat, lng, store.lat, store.lng),
+      ...(corrections?.[store.id] ?? {}),
+      distance: calculateDistance(
+        lat,
+        lng,
+        corrections?.[store.id]?.lat ?? store.lat,
+        corrections?.[store.id]?.lng ?? store.lng
+      ),
     }))
     .sort((a, b) => (a.distance || 0) - (b.distance || 0))
     .slice(0, limit)
@@ -212,6 +224,10 @@ export default function StoreFinderPage() {
   )
   const [favorites, setFavorites] = useState<string[]>([])
   const [allLoadedStores, setAllLoadedStores] = useState<StoreLocation[]>(allStores)
+  const [coordinateCorrections, setCoordinateCorrections] = useState<
+    Record<string, { lat: number; lng: number }>
+  >({})
+  const geocodeCache = useRef<Map<string, { lat: number; lng: number }>>(new Map())
   const allStoresRef = useRef<StoreLocation[]>(allStores)
   const storesToRender =
     PROOF_OF_CONCEPT_MODE && displayedStores.length === 0 ? allLoadedStores : displayedStores
@@ -224,14 +240,19 @@ export default function StoreFinderPage() {
     // Only recalculate if we actually have new data (length changed significantly)
     if (allLoadedStores.length > allStores.length) {
       // Remote data loaded, recalculate closest stores using current map center
-      const newStores = getClosestStores(allLoadedStores, mapCenter[0], mapCenter[1])
+      const newStores = getClosestStores(
+        allLoadedStores,
+        mapCenter[0],
+        mapCenter[1],
+        coordinateCorrections
+      )
       setDisplayedStores(newStores)
       if (newStores.length > 0) {
         // Only set an initial selection; don't override the user's choice
         setSelectedStore((current) => current ?? newStores[0])
       }
     }
-  }, [allLoadedStores.length])
+  }, [allLoadedStores.length, coordinateCorrections, mapCenter])
 
   // Load remote store data via cached API route
   // Initial load is limited to 300 stores for faster LCP; full dataset loads on demand
@@ -286,6 +307,95 @@ export default function StoreFinderPage() {
     return allStoresRef.current
   }, [])
 
+  const geocodeLocation = useCallback(
+    async (query: string, cacheKey?: string): Promise<{ lat: number; lng: number } | null> => {
+      const trimmed = query.trim()
+      if (!trimmed) return null
+
+      const key = (cacheKey || trimmed.toLowerCase()).slice(0, 200)
+      if (geocodeCache.current.has(key)) {
+        return geocodeCache.current.get(key) || null
+      }
+
+      try {
+        const url = `https://nominatim.openstreetmap.org/search?${new URLSearchParams({
+          q: trimmed,
+          format: "json",
+          limit: "1",
+          countrycodes: "us",
+        }).toString()}`
+
+        const response = await fetch(url, {
+          headers: {
+            "User-Agent": "PennyCentral Store Finder",
+          },
+        })
+
+        if (!response.ok) return null
+
+        const data = await response.json()
+        if (Array.isArray(data) && data[0]?.lat && data[0]?.lon) {
+          const { lat, lng, valid } = normalizeCoordinates(
+            parseFloat(data[0].lat),
+            parseFloat(data[0].lon),
+            `geocode:${trimmed}`
+          )
+          if (valid) {
+            const coords = { lat, lng }
+            geocodeCache.current.set(key, coords)
+            return coords
+          }
+        }
+      } catch {
+        // ignore geocoding failures
+      }
+
+      return null
+    },
+    []
+  )
+
+  const validateStoreCoordinates = useCallback(
+    async (store: StoreLocation) => {
+      const addressQuery = `${store.address}, ${store.city}, ${store.state} ${store.zip || ""}`
+      const geocoded = await geocodeLocation(addressQuery, store.id)
+      if (!geocoded) return
+
+      const driftMiles = calculateDistance(store.lat, store.lng, geocoded.lat, geocoded.lng)
+      if (driftMiles > 0.25) {
+        setCoordinateCorrections((prev) => {
+          const existing = prev[store.id]
+          if (existing) return prev
+          return { ...prev, [store.id]: geocoded }
+        })
+      }
+    },
+    [geocodeLocation]
+  )
+
+  const applyCoordinateCorrection = useCallback(
+    (store: StoreLocation): StoreLocation => {
+      const correction = coordinateCorrections[store.id]
+      if (!correction) return store
+      return {
+        ...store,
+        lat: correction.lat,
+        lng: correction.lng,
+      }
+    },
+    [coordinateCorrections]
+  )
+
+  const correctedStoresToRender = useMemo(
+    () => storesToRender.map((store) => applyCoordinateCorrection(store)),
+    [applyCoordinateCorrection, storesToRender]
+  )
+
+  const correctedSelectedStore = useMemo(
+    () => (selectedStore ? applyCoordinateCorrection(selectedStore) : null),
+    [applyCoordinateCorrection, selectedStore]
+  )
+
   // Load favorites from localStorage
   useEffect(() => {
     const saved = localStorage.getItem("hd-penny-favorites")
@@ -319,8 +429,17 @@ export default function StoreFinderPage() {
       setLocatingUser(true)
       navigator.geolocation.getCurrentPosition(
         async (position) => {
-          const lat = position.coords.latitude
-          const lng = position.coords.longitude
+          const { lat, lng, valid } = normalizeCoordinates(
+            position.coords.latitude,
+            position.coords.longitude,
+            "user geolocation"
+          )
+          if (!valid) {
+            setLocatingUser(false)
+            setGeolocationResolved(false)
+            alert("Could not validate your location. Please try searching by ZIP code instead.")
+            return
+          }
           setUserLocation({ lat, lng })
           setGeolocationResolved(true)
           setMapCenter([lat, lng])
@@ -333,24 +452,32 @@ export default function StoreFinderPage() {
               const normalized = serverStores
                 .map(normalizeStore)
                 .filter((s) => isValidStore(s.name) && hasValidCoordinates(s))
-              setDisplayedStores(normalized)
-              if (normalized.length > 0) {
-                setSelectedStore(normalized[0])
+              const corrected = normalized.map(applyCoordinateCorrection)
+              setDisplayedStores(corrected)
+              if (corrected.length > 0) {
+                setSelectedStore(corrected[0])
               }
             } else {
               // Fallback to client-side calculation
-              const closestStores = getClosestStores(allLoadedStores, lat, lng)
-              setDisplayedStores(closestStores)
-              if (closestStores.length > 0) {
-                setSelectedStore(closestStores[0])
+              const closestStores = getClosestStores(
+                allLoadedStores,
+                lat,
+                lng,
+                coordinateCorrections
+              )
+              const corrected = closestStores.map(applyCoordinateCorrection)
+              setDisplayedStores(corrected)
+              if (corrected.length > 0) {
+                setSelectedStore(corrected[0])
               }
             }
           } catch {
             // Fallback to client-side calculation
-            const closestStores = getClosestStores(allLoadedStores, lat, lng)
-            setDisplayedStores(closestStores)
-            if (closestStores.length > 0) {
-              setSelectedStore(closestStores[0])
+            const closestStores = getClosestStores(allLoadedStores, lat, lng, coordinateCorrections)
+            const corrected = closestStores.map(applyCoordinateCorrection)
+            setDisplayedStores(corrected)
+            if (corrected.length > 0) {
+              setSelectedStore(corrected[0])
             }
           }
           setLocatingUser(false)
@@ -360,10 +487,15 @@ export default function StoreFinderPage() {
           setLocatingUser(false)
           setGeolocationResolved(false)
           alert("Could not get your location. Please try searching by ZIP code instead.")
+        },
+        {
+          enableHighAccuracy: true,
+          maximumAge: 0,
+          timeout: 15000,
         }
       )
     }
-  }, [allLoadedStores])
+  }, [allLoadedStores, applyCoordinateCorrection, coordinateCorrections])
 
   // Auto-request user location on page load (runs once)
   useEffect(() => {
@@ -390,8 +522,13 @@ export default function StoreFinderPage() {
     }
 
     if (!trimmedQuery) {
-      const initialStores = getClosestStores(storesSource, DEFAULT_CENTER[0], DEFAULT_CENTER[1])
-      setDisplayedStores(initialStores)
+      const initialStores = getClosestStores(
+        storesSource,
+        DEFAULT_CENTER[0],
+        DEFAULT_CENTER[1],
+        coordinateCorrections
+      )
+      setDisplayedStores(initialStores.map(applyCoordinateCorrection))
       setMapCenter(DEFAULT_CENTER)
       if (initialStores.length > 0) {
         setSelectedStore(initialStores[0])
@@ -408,8 +545,8 @@ export default function StoreFinderPage() {
       const lat = parseFloat(latLngMatch[1])
       const lng = parseFloat(latLngMatch[3])
       if (!Number.isNaN(lat) && !Number.isNaN(lng)) {
-        const closestStores = getClosestStores(storesSource, lat, lng)
-        setDisplayedStores(closestStores)
+        const closestStores = getClosestStores(storesSource, lat, lng, coordinateCorrections)
+        setDisplayedStores(closestStores.map(applyCoordinateCorrection))
         setMapCenter([lat, lng])
         setSelectedStore(closestStores[0] || null)
         trackEvent("store_finder_search", {
@@ -428,8 +565,13 @@ export default function StoreFinderPage() {
       )
 
       if (matchedStore) {
-        const closestStores = getClosestStores(storesSource, matchedStore.lat, matchedStore.lng)
-        setDisplayedStores(closestStores)
+        const closestStores = getClosestStores(
+          storesSource,
+          matchedStore.lat,
+          matchedStore.lng,
+          coordinateCorrections
+        )
+        setDisplayedStores(closestStores.map(applyCoordinateCorrection))
         setMapCenter([matchedStore.lat, matchedStore.lng])
         setSelectedStore(closestStores[0] || matchedStore)
         trackEvent("store_finder_search", {
@@ -449,8 +591,13 @@ export default function StoreFinderPage() {
       if (storesWithZip.length > 0) {
         // Found exact match - use that store's location as center
         const centerStore = storesWithZip[0]
-        const closestStores = getClosestStores(storesSource, centerStore.lat, centerStore.lng)
-        setDisplayedStores(closestStores)
+        const closestStores = getClosestStores(
+          storesSource,
+          centerStore.lat,
+          centerStore.lng,
+          coordinateCorrections
+        )
+        setDisplayedStores(closestStores.map(applyCoordinateCorrection))
         setMapCenter([centerStore.lat, centerStore.lng])
         setSelectedStore(closestStores[0] || centerStore)
         trackEvent("store_finder_search", {
@@ -469,17 +616,27 @@ export default function StoreFinderPage() {
           if (zipResponse.ok) {
             const zipData = await zipResponse.json()
             if (zipData && zipData.places && zipData.places.length > 0) {
-              const lat = parseFloat(zipData.places[0].latitude)
-              const lng = parseFloat(zipData.places[0].longitude)
-              const closestStores = getClosestStores(storesSource, lat, lng)
-              setDisplayedStores(closestStores)
-              setMapCenter([lat, lng])
-              setSelectedStore(closestStores[0] || null)
-              trackEvent("store_finder_search", {
-                queryType: "zip",
-                hasResults: closestStores.length > 0,
-              })
-              return
+              const { lat, lng, valid } = normalizeCoordinates(
+                parseFloat(zipData.places[0].latitude),
+                parseFloat(zipData.places[0].longitude),
+                `zip:${trimmedQuery}`
+              )
+              if (valid) {
+                const closestStores = getClosestStores(
+                  storesSource,
+                  lat,
+                  lng,
+                  coordinateCorrections
+                )
+                setDisplayedStores(closestStores.map(applyCoordinateCorrection))
+                setMapCenter([lat, lng])
+                setSelectedStore(closestStores[0] || null)
+                trackEvent("store_finder_search", {
+                  queryType: "zip",
+                  hasResults: closestStores.length > 0,
+                })
+                return
+              }
             }
           }
 
@@ -494,16 +651,21 @@ export default function StoreFinderPage() {
           )
           const nomData = await nomResponse.json()
           if (nomData && nomData.length > 0) {
-            const lat = parseFloat(nomData[0].lat)
-            const lng = parseFloat(nomData[0].lon)
-            const closestStores = getClosestStores(storesSource, lat, lng)
-            setDisplayedStores(closestStores)
-            setMapCenter([lat, lng])
-            setSelectedStore(closestStores[0] || null)
-            trackEvent("store_finder_search", {
-              queryType: "zip",
-              hasResults: closestStores.length > 0,
-            })
+            const { lat, lng, valid } = normalizeCoordinates(
+              parseFloat(nomData[0].lat),
+              parseFloat(nomData[0].lon),
+              `zip:${trimmedQuery}`
+            )
+            if (valid) {
+              const closestStores = getClosestStores(storesSource, lat, lng, coordinateCorrections)
+              setDisplayedStores(closestStores.map(applyCoordinateCorrection))
+              setMapCenter([lat, lng])
+              setSelectedStore(closestStores[0] || null)
+              trackEvent("store_finder_search", {
+                queryType: "zip",
+                hasResults: closestStores.length > 0,
+              })
+            }
           } else {
             // ZIP not found via any geocoding - show no results
             setDisplayedStores([])
@@ -579,23 +741,55 @@ export default function StoreFinderPage() {
           ? { lat: referenceStores[0].lat, lng: referenceStores[0].lng }
           : getAverageCoordinates(referenceStores)
 
-      const closestStores = getClosestStores(storesSource, centerPoint.lat, centerPoint.lng)
-      setDisplayedStores(closestStores)
+      const closestStores = getClosestStores(
+        storesSource,
+        centerPoint.lat,
+        centerPoint.lng,
+        coordinateCorrections
+      )
+      setDisplayedStores(closestStores.map(applyCoordinateCorrection))
       setMapCenter([centerPoint.lat, centerPoint.lng])
       setSelectedStore(closestStores[0] || null)
       trackEvent("store_finder_search", {
         queryType: tokens.some((token) => STATE_ABBREV_MAP[token]) ? "state" : "city",
         hasResults: closestStores.length > 0,
       })
-    } else {
-      setDisplayedStores([])
-      setSelectedStore(null)
-      trackEvent("store_finder_search", {
-        queryType: tokens.some((token) => STATE_ABBREV_MAP[token]) ? "state" : "city",
-        hasResults: false,
-      })
+      return
     }
-  }, [allLoadedStores, ensureStoresLoaded, searchQuery])
+
+    // Final fallback: geocode arbitrary address or city strings to ensure accurate centering
+    const geocoded = await geocodeLocation(trimmedQuery)
+    if (geocoded) {
+      const closestStores = getClosestStores(
+        storesSource,
+        geocoded.lat,
+        geocoded.lng,
+        coordinateCorrections
+      )
+      setDisplayedStores(closestStores.map(applyCoordinateCorrection))
+      setMapCenter([geocoded.lat, geocoded.lng])
+      setSelectedStore(closestStores[0] || null)
+      trackEvent("store_finder_search", {
+        queryType: "city",
+        hasResults: closestStores.length > 0,
+      })
+      return
+    }
+
+    setDisplayedStores([])
+    setSelectedStore(null)
+    trackEvent("store_finder_search", {
+      queryType: tokens.some((token) => STATE_ABBREV_MAP[token]) ? "state" : "city",
+      hasResults: false,
+    })
+  }, [
+    allLoadedStores,
+    applyCoordinateCorrection,
+    coordinateCorrections,
+    ensureStoresLoaded,
+    geocodeLocation,
+    searchQuery,
+  ])
 
   // Handle search on Enter key
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -605,10 +799,15 @@ export default function StoreFinderPage() {
   }
 
   // Select a store
-  const selectStore = useCallback((store: StoreLocation) => {
-    setSelectedStore(store)
-    setMapCenter([store.lat, store.lng])
-  }, [])
+  const selectStore = useCallback(
+    (store: StoreLocation) => {
+      const corrected = applyCoordinateCorrection(store)
+      setSelectedStore(corrected)
+      setMapCenter([corrected.lat, corrected.lng])
+      validateStoreCoordinates(store)
+    },
+    [applyCoordinateCorrection, validateStoreCoordinates]
+  )
 
   // Toggle favorite
   const toggleFavorite = useCallback((storeId: string, e?: React.MouseEvent) => {
@@ -626,6 +825,19 @@ export default function StoreFinderPage() {
       storeRefs.current.delete(id)
     }
   }, [])
+
+  useEffect(() => {
+    if (selectedStore) {
+      validateStoreCoordinates(selectedStore)
+    }
+  }, [selectedStore, validateStoreCoordinates])
+
+  useEffect(() => {
+    if (selectedStore && coordinateCorrections[selectedStore.id]) {
+      const corrected = coordinateCorrections[selectedStore.id]
+      setMapCenter([corrected.lat, corrected.lng])
+    }
+  }, [coordinateCorrections, selectedStore])
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -744,8 +956,8 @@ export default function StoreFinderPage() {
               </span>
             ) : (
               <>
-                Showing {storesToRender.length} of {allLoadedStores.length.toLocaleString()} stores
-                - Hours may vary
+                Showing {correctedStoresToRender.length} of{" "}
+                {allLoadedStores.length.toLocaleString()} stores - Hours may vary
               </>
             )}
           </p>
@@ -767,25 +979,25 @@ export default function StoreFinderPage() {
                 ref={listContainerRef}
                 className="flex-1 lg:flex-none lg:w-80 xl:w-96 min-h-[200px] lg:min-h-0 lg:h-full overflow-y-auto border-t lg:border-t-0 lg:border-r border-border bg-card order-2 lg:order-1"
               >
-                {loadingStores && storesToRender.length === 0 ? (
+                {loadingStores && correctedStoresToRender.length === 0 ? (
                   <div className="p-4 space-y-3">
                     {[...Array(5)].map((_, i) => (
                       <div key={i} className="h-20 bg-muted/30 rounded-lg animate-pulse" />
                     ))}
                   </div>
-                ) : storesToRender.length === 0 ? (
+                ) : correctedStoresToRender.length === 0 ? (
                   <div className="p-6 sm:p-8 text-center">
                     <MapPin className="h-8 w-8 sm:h-10 sm:w-10 text-muted-foreground mx-auto mb-3" />
                     <p className="text-sm text-muted-foreground">No stores found</p>
                   </div>
                 ) : (
                   <div className="divide-y divide-border">
-                    {storesToRender.map((store, index) => (
+                    {correctedStoresToRender.map((store, index) => (
                       <StoreListItem
                         key={store.id}
                         store={store}
                         index={store.rank ?? index + 1}
-                        isSelected={selectedStore?.id === store.id}
+                        isSelected={correctedSelectedStore?.id === store.id}
                         isFavorite={favorites.includes(store.id)}
                         onSelect={() => selectStore(store)}
                         onToggleFavorite={(e) => toggleFavorite(store.id, e)}
@@ -799,9 +1011,9 @@ export default function StoreFinderPage() {
               {/* Map Panel - Constrained on mobile, flex on desktop */}
               <div className="h-[280px] sm:h-[320px] lg:flex-1 lg:h-full order-1 lg:order-2 relative z-0">
                 <StoreMap
-                  stores={storesToRender}
+                  stores={correctedStoresToRender}
                   center={mapCenter}
-                  selectedStore={selectedStore}
+                  selectedStore={correctedSelectedStore}
                   onSelect={selectStore}
                   userLocation={userLocation}
                 />
@@ -813,13 +1025,13 @@ export default function StoreFinderPage() {
         {/* List View */}
         {viewMode === "list" && (
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-            {loadingStores && storesToRender.length === 0 ? (
+            {loadingStores && correctedStoresToRender.length === 0 ? (
               <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
                 {[...Array(6)].map((_, i) => (
                   <div key={i} className="h-40 bg-muted/30 rounded-xl animate-pulse" />
                 ))}
               </div>
-            ) : storesToRender.length === 0 ? (
+            ) : correctedStoresToRender.length === 0 ? (
               <div className="text-center py-16 bg-card border border-border rounded-xl">
                 <MapPin className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                 <h2 className="text-lg font-semibold mb-2 text-foreground">No stores found</h2>
@@ -827,7 +1039,7 @@ export default function StoreFinderPage() {
               </div>
             ) : (
               <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
-                {storesToRender.map((store, index) => (
+                {correctedStoresToRender.map((store, index) => (
                   <StoreCard
                     key={store.id}
                     store={store}
