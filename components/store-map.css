@@ -294,12 +294,12 @@
 
 .map-shell--light {
   /* Tone down harsh whites and add subtle contrast for legibility */
-  --map-tile-filter: saturate(0.9) brightness(0.96) contrast(0.96);
+  --map-tile-filter: saturate(0.85) brightness(0.93) contrast(0.98);
 }
 
 .map-shell--dark {
   /* Lift dark tiles to avoid near-black loss of detail */
-  --map-tile-filter: saturate(0.92) brightness(1.1) contrast(1.05);
+  --map-tile-filter: saturate(0.9) brightness(1.18) contrast(1.08);
 }
 
 .leaflet-container {
