@@ -199,14 +199,14 @@
     --brand-copper: var(--text-secondary);
     --brand-bronze: var(--text-muted);
 
-    /* CTA ACCENT - Desaturated blue for 4.5:1 text contrast
-       Must work as text color on dark surfaces AND as button background */
-    --cta-primary: #60a5fa; /* Blue 400 - 4.8:1 on #121212 base (meets AA for text) */
-    --cta-text: #030712; /* Near-black for light button text */
-    --cta-hover: #93c5fd; /* Blue 300 - 6.2:1 on base */
-    --cta-active: #bfdbfe; /* Blue 200 - 8.1:1 on base */
-    --link-default: #60a5fa;
-    --link-hover: #93c5fd;
+    /* CTA ACCENT - Blue for buttons with white text in dark mode
+       Blue 600 provides 5.7:1 contrast with white text (exceeds 3:1 CTA threshold) */
+    --cta-primary: #2563eb; /* Blue 600 - darker for button backgrounds with white text */
+    --cta-text: #ffffff; /* Pure white for button backgrounds */
+    --cta-hover: #3b82f6; /* Blue 500 - 3.7:1 with white */
+    --cta-active: #60a5fa; /* Blue 400 - 2.5:1 with white (acceptable for active state) */
+    --link-default: #60a5fa; /* Blue 400 - 4.8:1 on dark background (good for link text) */
+    --link-hover: #93c5fd; /* Blue 300 - 6.2:1 on base */
 
     /* STATUS COLORS - Desaturated for dark mode, must meet 4.5:1 on base */
     --status-success: #4ade80; /* Green 400 - 5.1:1 on #121212 */
@@ -316,6 +316,19 @@
   }
 
   /* ===============================================
+     CTA ELEMENT STYLING
+     Ensures proper contrast on CTA buttons
+     Force white text on CTA elements regardless of context
+     =============================================== */
+
+  button[class*="bg-[var(--cta-primary)]"] a,
+  button[class*="bg-[var(--cta-primary)]"] *,
+  a[class*="bg-[var(--cta-primary)]"],
+  [data-cta] {
+    color: #ffffff !important;
+  }
+
+  /*  ===============================================
      8-POINT GRID SPACING SYSTEM
      Ensures consistent, device-agnostic scaling
      All spacing divisible by 8px (8, 16, 24, 32, 40, 48...)
@@ -1084,6 +1097,15 @@
 
   .guide-article tbody tr:hover {
     background-color: var(--bg-hover);
+  }
+
+  /* Penny list table alternating row colors */
+  .penny-list-table tbody tr:nth-child(even) {
+    background: color-mix(in srgb, var(--bg-elevated) 55%, var(--bg-page));
+  }
+
+  .penny-list-table tbody tr:nth-child(odd) {
+    background: transparent;
   }
 
   /* ===============================================

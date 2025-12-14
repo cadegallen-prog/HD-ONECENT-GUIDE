@@ -73,7 +73,7 @@ Default rule: **AI should pull the top P0 item and propose it unless Cade gives 
 
 - **Store Finder Root Cause Fix (Dec 13, 2025):**
   - Investigated store #106 coordinate issue - discovered source data was recently corrected from wrong address to correct one
-  - Removed erroneous coordinate override that was *causing* the problem (source data is now accurate at 34.0224, -84.6199)
+  - Removed erroneous coordinate override that was _causing_ the problem (source data is now accurate at 34.0224, -84.6199)
   - Key learning: "Suddenly broken" after working = check upstream data changes, not just code
   - Gates: `npm run lint`, `npm run build` all pass.
 - Canon consolidation: root README is the canon (with AI read order); .ai README is now a stub. DECISION_RIGHTS documents palette refresh permission and Lighthouse cadence; operational rules (no new deps, no orphan files, update SESSION_LOG/STATE) reaffirmed.

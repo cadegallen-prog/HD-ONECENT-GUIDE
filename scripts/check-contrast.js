@@ -109,8 +109,8 @@ async function run() {
 
           // Default to theme or CTA colors if transparent/invalid colors are encountered
           const fallbackBg = theme === "dark" ? [18, 18, 18] : [255, 255, 255]
-          const fallbackCtaBg = theme === "dark" ? [96, 165, 250] : [29, 78, 216] // matches design tokens
-          const fallbackCtaFg = theme === "dark" ? [3, 7, 18] : [255, 255, 255]
+          const fallbackCtaBg = theme === "dark" ? [37, 99, 235] : [29, 78, 216] // Blue 600 dark, Blue 700 light
+          const fallbackCtaFg = theme === "dark" ? [255, 255, 255] : [255, 255, 255]
 
           const safeFg = fg ?? (sel.role === "cta" ? fallbackCtaFg : [24, 24, 24])
           const safeBg = bg ?? (sel.role === "cta" ? fallbackCtaBg : fallbackBg)

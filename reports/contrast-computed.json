@@ -205,10 +205,10 @@
       "name": "status-success",
       "selector": ".text-emerald-600, .text-emerald-400",
       "role": "status",
-      "found": true,
-      "ratio": 3.77,
-      "threshold": 3,
-      "pass": true
+      "found": false,
+      "ratio": 0,
+      "pass": true,
+      "note": "selector not found"
     },
     {
       "route": "/penny-list",
@@ -272,7 +272,7 @@
       "selector": "[data-cta=\"befrugal\"]",
       "role": "cta",
       "found": true,
-      "ratio": 6.06,
+      "ratio": 6.49,
       "threshold": 3,
       "pass": true
     },
@@ -282,10 +282,10 @@
       "name": "status-success",
       "selector": ".text-emerald-600, .text-emerald-400",
       "role": "status",
-      "found": true,
-      "ratio": 9.74,
-      "threshold": 3,
-      "pass": true
+      "found": false,
+      "ratio": 0,
+      "pass": true,
+      "note": "selector not found"
     },
     {
       "route": "/penny-list",
@@ -580,7 +580,7 @@
       "selector": "[data-cta=\"befrugal\"]",
       "role": "cta",
       "found": true,
-      "ratio": 6.7,
+      "ratio": 5.17,
       "threshold": 3,
       "pass": true
     },

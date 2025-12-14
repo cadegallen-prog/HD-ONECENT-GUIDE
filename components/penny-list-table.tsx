@@ -124,7 +124,7 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
       </div>
       <div className="overflow-x-auto">
         <table
-          className="w-full text-sm table-fixed min-w-[980px]"
+          className="w-full text-sm table-fixed min-w-[980px] penny-list-table"
           role="table"
           aria-label="Penny list items"
         >
@@ -190,7 +190,7 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
             </tr>
           </thead>
           <tbody>
-            {items.map((item, index) => {
+            {items.map((item) => {
               const totalReports = item.locations ? getTotalReports(item.locations) : 0
               const stateCount = item.locations ? Object.keys(item.locations).length : 0
               const topStates = item.locations
@@ -202,12 +202,6 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
               return (
                 <tr
                   key={item.id}
-                  style={{
-                    backgroundColor:
-                      index % 2 === 0
-                        ? "transparent"
-                        : "color-mix(in srgb, var(--bg-elevated) 55%, var(--bg-page))",
-                  }}
                   className="border-b border-[var(--border-default)] last:border-b-0 hover:bg-[var(--bg-hover)] transition-colors"
                 >
                   {/* Thumbnail */}

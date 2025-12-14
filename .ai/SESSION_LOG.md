@@ -18,12 +18,14 @@
 **Outcome:** ✅ **Override was the problem** - Source data is correct, override was breaking it.
 
 **Root cause analysis:**
+
 - User reported store #106 at wrong location (only started ~2 days ago)
 - Git history revealed source data (`data/home-depot-stores.json`) was updated recently from `1655 Shiloh Road` (wrong) to `449 Roberts Ct NW` (correct) with accurate coordinates (34.0224, -84.6199)
-- Previous AI session added an override pointing to *yet another wrong location* (34.009693, -84.56469)
+- Previous AI session added an override pointing to _yet another wrong location_ (34.009693, -84.56469)
 - **Solution:** Remove the override entirely - source data is already correct
 
 **Files Modified:**
+
 - `lib/stores.ts` - Removed erroneous `COORD_OVERRIDES` entry for store #0106; kept override system in place for future user-reported issues
 
 **Key learning:** When something "suddenly breaks" after working fine, check what changed upstream, not just local code. In this case, the data source was corrected and our "fix" was actually causing the problem.
@@ -48,9 +50,10 @@
   - `npm run test:unit` ✅ (1/1 test suites passing)
   - `npm run test:e2e` ✅ (28/28 tests passing, no visual diffs)
 
-**Outcome:** ✅ Success - Store Finder coordinate fix and popup polish complete and deployed-ready.  
+**Outcome:** ✅ Success - Store Finder coordinate fix and popup polish complete and deployed-ready.
 
 **Files Modified:**
+
 - `lib/stores.ts` - Added data quality concern comment to COORD_OVERRIDES
 - `components/store-map.tsx` - Fixed duplicate/broken popup markup, added closing tags, formatted onClick handlers
 - `components/store-map.css` - Added complete styling for all popup classes + map-shell variants
@@ -58,16 +61,18 @@
 **Data Quality Issue:**  
 User reported ~1% error rate (20/2007 stores with coordinate issues). Cannot manually verify all locations. Defense: coordinate override system + normalizeCoordinates bounds checking. User-reported issues should be added to COORD_OVERRIDES in `lib/stores.ts`.
 
-**Unfinished Items:** None - all tasks complete.  
+**Unfinished Items:** None - all tasks complete.
 
-**Notes:**  
+**Notes:**
+
 - Store #106 (not #1777) was the incorrect one; user confirmed.
 - Popup now uses structured semantic layout with proper hierarchy.
 - All styling uses design tokens (var(--cta-primary), var(--border-default), etc.) - no raw colors added.
 - Touch targets meet 44px minimum (buttons are 44px min-height).
 - Phone links are proper tel: anchors with stripped non-digits.
 
-**For Next AI:**  
+**For Next AI:**
+
 - If more coordinate issues reported, add to COORD_OVERRIDES in `lib/stores.ts` using same pattern.
 - Popup styling is complete and token-based; no further changes needed unless design system changes.
 - E2E visual baselines are stable; any future popup changes should verify snapshots.
