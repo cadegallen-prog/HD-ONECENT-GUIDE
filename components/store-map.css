@@ -217,7 +217,12 @@
   font-size: 13px;
   font-weight: 600;
   text-decoration: none;
-  transition: all 150ms ease;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    box-shadow 150ms ease,
+    color 150ms ease,
+    outline-color 150ms ease;
   min-height: 44px;
 }
 
@@ -228,19 +233,25 @@
 }
 
 .store-popup-button-primary:hover {
-  background: var(--cta-hover);
-  border-color: var(--cta-hover);
+  background: color-mix(in srgb, var(--cta-primary) 88%, var(--bg-page));
+  border-color: color-mix(in srgb, var(--cta-primary) 88%, var(--bg-page));
 }
 
 .store-popup-button-secondary {
-  background: transparent;
-  color: var(--cta-primary);
-  border: 1px solid var(--border-default);
+  background: var(--bg-recessed);
+  color: var(--text-primary);
+  border: 1px solid color-mix(in srgb, var(--border-strong) 88%, var(--bg-card));
 }
 
 .store-popup-button-secondary:hover {
-  background: var(--bg-elevated);
-  border-color: var(--cta-primary);
+  background: color-mix(in srgb, var(--bg-hover) 90%, var(--bg-card));
+  border-color: color-mix(in srgb, var(--border-strong) 94%, var(--bg-card));
+}
+
+.store-popup-button:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--bg-card) 70%, transparent);
 }
 
 /* Map shell for theme-specific filtering */
