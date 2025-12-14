@@ -109,7 +109,7 @@ export default function Home() {
               <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed flex-grow">
                 See recent penny finds reported by the community. Fresh leads updated hourly.
               </p>
-              <span className="mt-4 inline-flex items-center text-[var(--cta-primary)] text-sm font-medium group-hover:underline">
+              <span className="mt-4 inline-flex items-center text-[var(--link-default)] text-sm font-medium group-hover:text-[var(--link-hover)] group-hover:underline">
                 View penny list →
               </span>
             </Link>
@@ -128,7 +128,7 @@ export default function Home() {
               <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed flex-grow">
                 Find Home Depot locations near you with hours, phone numbers, and directions.
               </p>
-              <span className="mt-4 inline-flex items-center text-[var(--cta-primary)] text-sm font-medium group-hover:underline">
+              <span className="mt-4 inline-flex items-center text-[var(--link-default)] text-sm font-medium group-hover:text-[var(--link-hover)] group-hover:underline">
                 Find stores →
               </span>
             </Link>
@@ -147,7 +147,7 @@ export default function Home() {
               <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed flex-grow">
                 Learn how penny items work, the markdown lifecycle, and proven hunting strategies.
               </p>
-              <span className="mt-4 inline-flex items-center text-[var(--cta-primary)] text-sm font-medium group-hover:underline">
+              <span className="mt-4 inline-flex items-center text-[var(--link-default)] text-sm font-medium group-hover:text-[var(--link-hover)] group-hover:underline">
                 Start learning →
               </span>
             </Link>
@@ -230,7 +230,7 @@ export default function Home() {
           <div className="mt-8 text-center">
             <Link
               href="/guide"
-              className="inline-flex items-center gap-2 text-[var(--cta-primary)] font-medium hover:underline"
+              className="inline-flex items-center gap-2 text-[var(--link-default)] font-medium hover:underline hover:text-[var(--link-hover)]"
             >
               Learn more in the full guide →
             </Link>
@@ -301,7 +301,7 @@ export default function Home() {
                 If the guide saved you time or gas money, a one-time PayPal coffee covers hosting,
                 APIs, and the odd scouting trip.
               </p>
-              <div className="mt-4 inline-flex items-center gap-2 text-[var(--cta-primary)] font-medium">
+              <div className="mt-4 inline-flex items-center gap-2 text-[var(--link-default)] font-medium">
                 Buy me a coffee
                 <ExternalLink className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
               </div>
@@ -324,7 +324,7 @@ export default function Home() {
                 Turn on free cashback before normal Home Depot orders. When you earn $10+ BeFrugal
                 sends a referral bonus that keeps the site free.
               </p>
-              <div className="mt-4 inline-flex items-center gap-2 text-[var(--cta-primary)] font-medium">
+              <div className="mt-4 inline-flex items-center gap-2 text-[var(--link-default)] font-medium">
                 Activate BeFrugal cashback
                 <ExternalLink className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
               </div>

@@ -69,6 +69,10 @@
     --cta-active: #1e3a8a;
     --cta-text: #ffffff;
 
+    /* Link colors (defaults to CTA in light mode) */
+    --link-default: var(--cta-primary);
+    --link-hover: var(--cta-hover);
+
     /* SYSTEM COLORS */
     --status-success: #15803d;
     --status-warning: #a16207;
@@ -707,7 +711,7 @@
   article a,
   p a,
   .prose a {
-    color: var(--cta-primary);
+    color: var(--link-default);
     text-decoration: underline;
     text-underline-offset: 0.15em;
     text-decoration-thickness: 1px;
@@ -719,6 +723,7 @@
   article a:hover,
   p a:hover,
   .prose a:hover {
+    color: var(--link-hover);
     text-decoration-thickness: 2px;
   }
 
