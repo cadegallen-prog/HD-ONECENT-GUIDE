@@ -20,7 +20,10 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
  * - Consistent focus ring using CTA color
  */
 const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
-  ({ className, variant = "secondary", size = "default", href, type, ...props }, ref) => {
+  (
+    { className, variant = "secondary", size = "default", href, type, asChild, children, ...props },
+    ref
+  ) => {
     const classes = cn(
       // Base styles with improved transitions
       "inline-flex items-center justify-center rounded-md font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cta-primary)] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
@@ -42,6 +45,15 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
       className
     )
 
+    if (asChild) {
+      const child = React.Children.only(children) as React.ReactElement<Record<string, unknown>>
+      return React.cloneElement(child, {
+        ...props,
+        className: cn(classes, (child.props as { className?: string }).className),
+        ref: ref as unknown,
+      })
+    }
+
     if (href) {
       const anchorProps = props
       return (
@@ -60,7 +72,9 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
         className={classes}
         ref={ref as React.ForwardedRef<HTMLButtonElement>}
         {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}
-      />
+      >
+        {children}
+      </button>
     )
   }
 )

@@ -31,12 +31,13 @@ function getRawSku(input: string): string {
 const USER_STATE_KEY = "pennycentral_user_state"
 
 export default function ReportFindPage() {
+  const [todayIso, setTodayIso] = useState("")
   const [formData, setFormData] = useState({
     itemName: "",
     sku: "",
     storeCity: "",
     storeState: "",
-    dateFound: new Date().toLocaleDateString("en-CA"),
+    dateFound: "",
     quantity: "",
     notes: "",
     website: "",
@@ -49,6 +50,12 @@ export default function ReportFindPage() {
     success: boolean
     message: string
   } | null>(null)
+
+  useEffect(() => {
+    const today = new Date().toLocaleDateString("en-CA")
+    setTodayIso(today)
+    setFormData((prev) => (prev.dateFound ? prev : { ...prev, dateFound: today }))
+  }, [])
 
   // Prefill state from user's last selection (saved on Penny List or here)
   useEffect(() => {
@@ -126,12 +133,13 @@ export default function ReportFindPage() {
           message: data.message,
         })
         // Reset form
+        const today = todayIso || new Date().toLocaleDateString("en-CA")
         setFormData({
           itemName: "",
           sku: "",
           storeCity: "",
           storeState: "",
-          dateFound: new Date().toLocaleDateString("en-CA"),
+          dateFound: today,
           quantity: "",
           notes: "",
           website: "",
@@ -324,7 +332,7 @@ export default function ReportFindPage() {
               required
               value={formData.dateFound}
               onChange={(e) => setFormData({ ...formData, dateFound: e.target.value })}
-              max={new Date().toLocaleDateString("en-CA")}
+              max={todayIso || undefined}
               className="w-full px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent"
             />
           </div>
