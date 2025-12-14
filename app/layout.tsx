@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Script from "next/script"
-import { Inter } from "next/font/google"
+import localFont from "next/font/local"
 import { Analytics } from "@vercel/analytics/react"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -11,9 +11,19 @@ import { Footer } from "@/components/footer"
 import { AnalyticsSessionTracker } from "@/components/analytics-session"
 import { SpeedInsightsClient } from "@/components/speed-insights-client"
 
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
+const inter = localFont({
+  src: [
+    {
+      path: "../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2",
+      style: "normal",
+      weight: "100 900",
+    },
+    {
+      path: "../node_modules/@fontsource-variable/inter/files/inter-latin-wght-italic.woff2",
+      style: "italic",
+      weight: "100 900",
+    },
+  ],
   display: "swap",
   variable: "--font-inter",
   preload: true,
@@ -97,8 +107,6 @@ export default function RootLayout({
 
         {/* Preconnect hints for faster resource loading */}
         <link rel="preconnect" href="https://www.googletagmanager.com" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 
         {/* JSON-LD Structured Data */}
         <script

@@ -59,14 +59,12 @@
 
 .store-popup .leaflet-popup-content,
 .store-popup .leaflet-popup-content-wrapper {
-  width: 260px !important;
-  max-width: 260px;
+  width: 100% !important;
+  max-width: none;
 }
 
 .store-popup-card {
   width: 100%;
-  max-height: 340px;
-  overflow-y: auto;
   box-sizing: border-box;
   background: var(--bg-card);
   color: var(--text-primary);
