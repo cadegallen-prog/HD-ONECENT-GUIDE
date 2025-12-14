@@ -106,6 +106,12 @@ public/                 # Static assets
 | `docs/GOOGLE-FORM-PENNY-LIST.md`  | Penny list form setup, CSV export, automation                       |
 | `docs/PENNY-LIST-STRATEGY.md`     | Community intake strategy, low-effort moderation                    |
 
+### AI Canon & Read Order (canonical entrypoint)
+
+- Start here. The `.ai/README.md` file is now a stub that points back to this section.
+- Read order before work: `STATE.md` → `BACKLOG.md` → `CONTRACT.md` + `DECISION_RIGHTS.md` → `CONSTRAINTS.md` + `FOUNDATION_CONTRACT.md` + `GUARDRAILS.md` → latest `SESSION_LOG.md` → `CONTEXT.md` when making product calls.
+- Rules: default **no new dependencies**; avoid orphan one-off files (if you add, prune or merge an obsolete one and log it); run gates on meaningful changes (`npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e`) and record results in `SESSION_LOG.md`; work on `main` and note it.
+
 ---
 
 ## Affiliate Links & Redirects

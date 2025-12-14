@@ -174,3 +174,12 @@ If AI believes something in the "NEVER" category absolutely must be done:
 ## Version History
 
 - **v1.0 (Dec 7, 2025):** Initial decision rights matrix
+
+---
+
+## Decisions (2025-12-13)
+
+- Canonical entrypoint: root [README.md](../README.md) is the single canon for humans and AI; `.ai/README.md` is a stub that points back to it.
+- Palette refresh permission: future “Palette Refresh” may update tokens/colors only if WCAG AA minimum (target AAA) is preserved and before/after screenshots (light/dark, key routes) are captured; update lint:colors baseline when intentional.
+- Lighthouse cadence: only re-run Lighthouse when making performance-critical or visual/token/layout changes, or during scheduled reviews; record outputs in [LIGHTHOUSE_RESULTS.md](../LIGHTHOUSE_RESULTS.md) and associated artifacts under `test-results/` (mobile JSON currently `lighthouse-mobile.json`).
+- Operational rules reaffirmed: default to no new dependencies; avoid orphan one-off files (add only when retiring or merging an obsolete one and log it); update `SESSION_LOG.md` and refresh `STATE.md` (and `BACKLOG.md` if priorities move) at the end of meaningful work.

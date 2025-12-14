@@ -34,8 +34,27 @@ const US_BOUNDS = {
   lng: { min: -179, max: -60 },
 }
 
+/**
+ * Manual coordinate overrides for stores with known incorrect source data.
+ *
+ * NOTE: This was originally created to fix ~1% of stores with bad coordinates,
+ * but the upstream data source has been corrected. Keeping this system in place
+ * for future user-reported issues, but currently empty.
+ */
 const COORD_OVERRIDES: Record<string, { lat: number; lng: number }> = {
-  "0106": { lat: 34.009693, lng: -84.56469 },
+  // Add user-reported coordinate fixes here using format:
+  // "STORE_NUMBER": { lat: XX.XXXX, lng: -XX.XXXX }, // Comment explaining source/reason
+}
+
+const haversineMiles = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
+  const toRad = (deg: number) => (deg * Math.PI) / 180
+  const dLat = toRad(lat2 - lat1)
+  const dLon = toRad(lon2 - lon1)
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2)
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+  return 3958.8 * c
 }
 
 // Store naming overrides for special locations that need clearer labels
@@ -139,17 +158,21 @@ export const applyCoordinateOverrides = (
 ): { lat: number; lng: number; overridden: boolean } => {
   const formatted = formatStoreNumber(storeNumber)
   const override = formatted ? COORD_OVERRIDES[formatted] : undefined
+  const normalized = normalizeCoordinates(latInput, lngInput, context ?? formatted)
 
   if (override) {
     if (process.env.NODE_ENV === "development") {
+      const deltaMiles = normalized.valid
+        ? haversineMiles(normalized.lat, normalized.lng, override.lat, override.lng)
+        : null
+      const deltaNote = deltaMiles ? ` (~${deltaMiles.toFixed(1)}mi shift)` : ""
       console.warn(
-        `Applied coordinate override for store #${formatted}${context ? ` (${context})` : ""}: (${latInput}, ${lngInput}) → (${override.lat}, ${override.lng})`
+        `Applied coordinate override for store #${formatted}${context ? ` (${context})` : ""}: (${latInput}, ${lngInput}) → (${override.lat}, ${override.lng})${deltaNote}`
       )
     }
     return { ...override, overridden: true }
   }
 
-  const normalized = normalizeCoordinates(latInput, lngInput, context ?? formatted)
   return { ...normalized, overridden: false }
 }
 

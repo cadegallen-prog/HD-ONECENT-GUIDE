@@ -27,8 +27,11 @@ export function useCommandPalette() {
 
 export function CommandPaletteProvider({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = React.useState(false)
+  const [mounted, setMounted] = React.useState(false)
 
   React.useEffect(() => {
+    setMounted(true)
+
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault()
@@ -43,7 +46,7 @@ export function CommandPaletteProvider({ children }: { children: React.ReactNode
   return (
     <CommandPaletteContext.Provider value={{ open, setOpen }}>
       {children}
-      <CommandPalette open={open} onOpenChange={setOpen} />
+      {mounted && <CommandPalette open={open} onOpenChange={setOpen} />}
     </CommandPaletteContext.Provider>
   )
 }

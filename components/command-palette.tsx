@@ -9,7 +9,7 @@ import {
   Map,
   Clock,
   Info,
-  HelpCircle,
+  CircleHelp as HelpCircle,
   Lightbulb,
   ShoppingCart,
   AlertCircle,
@@ -68,6 +68,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
         <div
           className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm"
           onClick={() => onOpenChange(false)}
+          suppressHydrationWarning
         />
       )}
 
@@ -79,6 +80,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
         className={`fixed top-1/4 left-1/2 -translate-x-1/2 w-full max-w-2xl bg-background border border-border rounded-lg shadow-2xl z-50 overflow-hidden transition-all ${
           open ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"
         }`}
+        suppressHydrationWarning
       >
         <Command>
           <div className="sr-only" id="command-palette-title">

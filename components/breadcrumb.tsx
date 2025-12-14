@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { ChevronRight, Home } from "lucide-react"
+import { ChevronRight, House as Home } from "lucide-react"
 import { usePathname } from "next/navigation"
 
 export function Breadcrumb() {

@@ -11,15 +11,18 @@ import "./store-map.css"
 import { trackEvent } from "@/lib/analytics"
 import { useTheme } from "@/components/theme-provider"
 
-const TILE_BASE = {
-  url: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
-  attribution:
-    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-}
+const TILE_ATTRIBUTION =
+  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
 
 const TILE_CONFIG = {
-  light: TILE_BASE,
-  dark: TILE_BASE,
+  light: {
+    url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+    attribution: TILE_ATTRIBUTION,
+  },
+  dark: {
+    url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+    attribution: TILE_ATTRIBUTION,
+  },
 }
 
 interface StoreMapProps {
@@ -270,7 +273,7 @@ export const StoreMap = React.memo(function StoreMap({
 
   return (
     <div
-      className="w-full h-full min-h-[300px] rounded-lg overflow-hidden border border-border bg-[var(--bg-card)]"
+      className={`w-full h-full min-h-[300px] rounded-lg overflow-hidden border border-border bg-[var(--bg-card)] map-shell ${isDarkMode ? "map-shell--dark" : "map-shell--light"}`}
       role="application"
       aria-label="Interactive store map"
     >
@@ -336,72 +339,89 @@ export const StoreMap = React.memo(function StoreMap({
                 minWidth={260}
                 closeButton={false}
               >
-                <div className="store-popup-card text-left">
-                  <div className="mb-3 pr-8 relative">
-                    <h3 className="font-bold text-sm leading-tight">{getStoreTitle(store)}</h3>
-                    <div className="absolute -top-1 -right-1 bg-[var(--cta-primary)] text-[var(--cta-text)] text-xs leading-none font-bold px-1.5 py-0.5 rounded-full shadow-sm">
+                <div className="store-popup-card">
+                  <div className="store-popup-header">
+                    <div className="store-popup-heading">
+                      <p className="store-popup-label">Store</p>
+                      <h3 className="store-popup-title">{getStoreTitle(store)}</h3>
+                      <p className="store-popup-subtext">
+                        {store.city}, {store.state} {store.zip}
+                      </p>
+                    </div>
+                    <div className="store-popup-rank" aria-label={`Rank ${rank}`}>
                       #{rank}
                     </div>
                   </div>
-                  <div className="text-xs text-[var(--text-secondary)] mb-3 leading-snug">
-                    <p>{store.address}</p>
-                    <p>
+
+                  <div className="store-popup-meta">
+                    <div>{store.address}</div>
+                    <div>
                       {store.city}, {store.state} {store.zip}
-                    </p>
-                    {store.phone && <p>{store.phone}</p>}
-                  </div>
-                  <div className="text-xs text-[var(--text-primary)] mb-4 space-y-0.5">
-                    <div className="font-semibold text-[var(--text-secondary)] text-xs uppercase tracking-wider mb-1">
-                      Hours
                     </div>
-                    {mergedHours.isExpanded
-                      ? // Show all 7 days for irregular hours
-                        (() => {
-                          const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-                          const dayValues = [
-                            dayHours.monday,
-                            dayHours.tuesday,
-                            dayHours.wednesday,
-                            dayHours.thursday,
-                            dayHours.friday,
-                            dayHours.saturday,
-                            dayHours.sunday,
-                          ]
-                          return dayLabels.map((label, index) => (
-                            <div key={label} className="flex justify-between">
-                              <span className="w-8">{label}</span>
-                              <span className="flex-1 text-right">{dayValues[index]}</span>
-                            </div>
-                          ))
-                        })()
-                      : // Show merged ranges for standard hours
-                        mergedHours.ranges.map((range) => (
-                          <div key={range.days} className="flex justify-between gap-2">
-                            <span className="font-medium">{range.days}</span>
-                            <span className="text-right">{range.hours}</span>
-                          </div>
-                        ))}
+                    {store.phone && (
+                      <a
+                        href={`tel:${store.phone.replace(/[^0-9]/g, "")}`}
+                        className="store-popup-phone"
+                      >
+                        {store.phone}
+                      </a>
+                    )}
                   </div>
-                  <div className="flex gap-2">
+
+                  <div className="store-popup-section">
+                    <div className="store-popup-section-label">Hours</div>
+                    <div className="store-popup-hours">
+                      {mergedHours.isExpanded
+                        ? (() => {
+                            const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+                            const dayValues = [
+                              dayHours.monday,
+                              dayHours.tuesday,
+                              dayHours.wednesday,
+                              dayHours.thursday,
+                              dayHours.friday,
+                              dayHours.saturday,
+                              dayHours.sunday,
+                            ]
+                            return dayLabels.map((label, index) => (
+                              <div key={label} className="store-popup-hour-row">
+                                <span className="store-popup-hour-day">{label}</span>
+                                <span className="store-popup-hour-value">{dayValues[index]}</span>
+                              </div>
+                            ))
+                          })()
+                        : mergedHours.ranges.map((range) => (
+                            <div key={range.days} className="store-popup-hour-row">
+                              <span className="store-popup-hour-day">{range.days}</span>
+                              <span className="store-popup-hour-value">{range.hours}</span>
+                            </div>
+                          ))}
+                    </div>
+                  </div>
+
+                  <div className="store-popup-actions">
                     <a
                       href={`https://www.google.com/maps/dir/?api=1&destination=${store.lat},${store.lng}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 text-center bg-[var(--cta-primary)] text-[var(--cta-text)] text-sm font-semibold py-2 min-h-[44px] rounded hover:bg-[var(--cta-hover)] transition-colors flex items-center justify-center gap-1.5 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cta-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-elevated)]"
+                      className="store-popup-button store-popup-button-primary"
                       onClick={() =>
                         trackEvent("directions_click", { storeId: store.id, state: store.state })
                       }
                     >
-                      <Navigation className="w-3 h-3" />
+                      <Navigation className="w-4 h-4" />
                       Directions
                     </a>
                     <a
                       href={getStoreUrl(store)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 text-center border border-[var(--border-default)] bg-[var(--bg-elevated)] text-[var(--text-primary)] text-sm font-semibold py-2 min-h-[44px] rounded hover:bg-[var(--bg-page)] hover:text-[var(--text-primary)] transition-colors flex items-center justify-center gap-1.5 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cta-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-elevated)]"
+                      className="store-popup-button store-popup-button-secondary"
+                      onClick={() =>
+                        trackEvent("map_interact", { action: "marker", markerState: store.state })
+                      }
                     >
-                      <Info className="w-3 h-3" />
+                      <Info className="w-4 h-4" />
                       Details
                     </a>
                   </div>
