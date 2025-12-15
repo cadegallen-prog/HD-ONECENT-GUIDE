@@ -410,8 +410,8 @@ export const StoreMap = React.memo(function StoreMap({
               <Popup
                 className="store-popup"
                 autoPan={true}
-                autoPanPadding={[50, 50]}
-                keepInView={false}
+                autoPanPadding={[50, 100]}
+                keepInView={true}
                 maxWidth={popupWidth.maxWidth}
                 minWidth={popupWidth.minWidth}
                 closeButton={false}
