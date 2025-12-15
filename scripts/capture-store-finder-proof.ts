@@ -92,7 +92,13 @@ async function waitForServerReady(child: ReturnType<typeof spawn>, timeoutMs: nu
   })
 }
 
-async function prepareContext(theme: Theme, viewport: Viewport): Promise<{ context: BrowserContext; page: Page }> {
+async function prepareContext(
+  
+ 
+
+  theme: Theme,
+  viewport: Viewport
+): Promise<{ context: BrowserContext; page: Page }> {
   const browser = await chromium.launch({ headless: true })
   const context = await browser.newContext({
     viewport: { width: viewport.width, height: viewport.height },
@@ -163,7 +169,6 @@ async function main() {
   await mkdir(OUT_DIR, { recursive: true })
 
   // Clean up any old proof images for today (avoid confusion)
-  const todayPrefix = `store-finder-`
   try {
     // Remove only the pngs we generate (best-effort)
     // eslint-disable-next-line no-console
@@ -177,7 +182,7 @@ async function main() {
 
   const hardTimeout = setTimeout(() => {
     // eslint-disable-next-line no-console
-    console.error(`HARD TIMEOUT after ${HARD_TIMEOUT_MS}ms`) 
+    console.error(`HARD TIMEOUT after ${HARD_TIMEOUT_MS}ms`)
     killProcessTree(child)
     process.exit(1)
   }, HARD_TIMEOUT_MS)

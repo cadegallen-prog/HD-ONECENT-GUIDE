@@ -20,10 +20,8 @@ const axeBin = path.join(
   "cli.js"
 )
 
-const result = spawnSync(
-  process.execPath,
-  [axeBin, baseUrl, "--save", reportPath, "--exit"],
-  { stdio: "inherit" }
-)
+const result = spawnSync(process.execPath, [axeBin, baseUrl, "--save", reportPath, "--exit"], {
+  stdio: "inherit",
+})
 
 process.exit(typeof result.status === "number" ? result.status : 1)

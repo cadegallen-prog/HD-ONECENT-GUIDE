@@ -45,12 +45,14 @@
 5. **Created `reports/hang-audit.md`** documenting all changes and verification.
 
 **Learnings:**
+
 - `networkidle` is a hang trap for pages with maps/analytics—use `domcontentloaded` + explicit timeouts instead
 - `@axe-core/cli` entry point is in `dist/src/bin/cli.js`, not `bin/axe.js`
 - Windows process tree cleanup requires `taskkill /T /F`, not just `.kill()`
 - Global timeouts + cleanup in `finally` prevent zombie processes when partial failures occur
 
 **Next Steps:**
+
 - Commit hang-reduction changes to `main`
 - Monitor for reduced "command hangs / loops" incidents
 - If hangs persist, check for zombie `node` processes using `Get-Process | Where-Object {$_.Name -match "node|npm"}`
@@ -65,6 +67,7 @@
 
 **Context:**
 User wants to incentivize daily visits and build habit loop. Current challenges:
+
 - Crowdsourced penny list lacks visual engagement (text-only)
 - Quantity field is unverifiable noise
 - Considering separate "verified" list but unsure how to handle timing issues
@@ -107,6 +110,7 @@ User wants to incentivize daily visits and build habit loop. Current challenges:
    - Updated `.ai/STATE.md` with session summary and strategic insights
 
 **Key Decisions (Based on User Input):**
+
 - Product images: Web scraping (not API)
 - Image hosting: Vercel Blob Storage (free tier, no extra cost)
 - Quantity field: Keep in DB, hide from display
@@ -116,6 +120,7 @@ User wants to incentivize daily visits and build habit loop. Current challenges:
 **Outcome:** ✅ **Success - Planning Complete**
 
 **Completed Items:**
+
 - ✅ Explored submission/crowdsourcing system
 - ✅ Explored guide and content strategy
 - ✅ Analyzed strategic options (verified list, quantity field, images)
@@ -126,9 +131,11 @@ User wants to incentivize daily visits and build habit loop. Current challenges:
 - ✅ Plan ready for any AI agent (Claude Code, Copilot, Codex)
 
 **Unfinished Items:**
+
 - None (planning phase complete)
 
 **Strategic Insights:**
+
 1. **Visual engagement is #1 priority** - Text-only browsing is boring; Pinterest/Instagram prove visual discovery drives engagement
 2. **Don't fragment data** - Verification badges enrich existing list; separate list confuses users and hurts SEO
 3. **Quantity is noise** - Real value: "SKU found in X states on Y dates", not unverifiable quantity claims
@@ -136,6 +143,7 @@ User wants to incentivize daily visits and build habit loop. Current challenges:
 5. **Habit loop:** Visual reward (images) + immediate reward (Today's Finds) + automatic cue (daily check)
 
 **Learnings:**
+
 - User has sophisticated filtering system already in place (state, tier, date, search, sort)
 - Auto-aggregation by SKU is working well - don't touch it
 - Guide is genuinely best-in-class (1,015 lines, 9 sections) - lean into it for SEO
@@ -143,6 +151,7 @@ User wants to incentivize daily visits and build habit loop. Current challenges:
 - Old verified data (6+ months) is still valuable - shows historical patterns
 
 **For Next AI:**
+
 - Implementation plan at: `~/.claude/plans/sprightly-mixing-anchor.md`
 - Start with Sprint 1, Task 1: HD Product Image Scraper
 - Tech stack decisions made: web scraping (cheerio/puppeteer), Vercel Blob, free hosting
@@ -151,6 +160,7 @@ User wants to incentivize daily visits and build habit loop. Current challenges:
 - User has 1000+ SKU purchase history ready to import (Sprint 2)
 
 **Next Session Prompt:**
+
 ```
 GOAL: Implement Sprint 1, Task 1 - Home Depot Product Image Scraper
 WHY: Visual browsing is 10x more engaging than text-only lists
