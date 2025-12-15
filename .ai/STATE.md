@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 15, 2025 (12:30 PM - hang-reduction pass)  
+**Last updated:** Dec 15, 2025 (2:45 PM - Store Finder UX fixes)  
 This file is the **single living snapshot** of where the project is right now.  
 Every AI session must update this after meaningful work.
 
@@ -9,9 +9,14 @@ Every AI session must update this after meaningful work.
 ## 1. Where We Are
 
 - **Site:** live at https://pennycentral.com
-- **Phase:** Stabilization + Community Intake + Command Reliability
+- **Phase:** Stabilization + Community Intake + Command Reliability + Store Finder UX
 - **Traffic reality:** early launch volatility is normal; focus on retention loop first.
-- **Recent focus:** Eliminated repeated "command hangs / loops" by removing `npx` from execution paths and hardening scripts with timeouts + process cleanup.
+- **Recent focus (Dec 15 2:45 PM):** Fixed critical Store Finder UX bugs:
+  - **Re-ranking bug eliminated:** Clicking a store on the map no longer re-sorts the list; ranking is now decoupled from map panning via `rankingCenterRef`
+  - **Marker readability improved:** Pin numbers increased from font-size 11/12 to 13/15 with heavier stroke (4px) for better visibility
+  - **ARIA compliance verified:** All 6 `aria-pressed` attributes in penny-list-filters.tsx correctly use string literals ("true"/"false")
+  - **Store #106 coordinates:** Verified source data (34.007751688179, -84.56504430913) - coordinates are from upstream store directory and match JSON
+- **Command reliability (Dec 15 12:30 PM):** Eliminated repeated "command hangs / loops" by removing `npx` from execution paths and hardening scripts with timeouts + process cleanup.
 - Foundation Contract added at `.ai/FOUNDATION_CONTRACT.md` (tokens/Tailwind/layout/nav/gates) and `ROUTE-TREE.txt` refreshed (includes framework 404).
 - Color drift ratchet in place: `npm run lint:colors` compares against `checks/lint-colors.baseline.json` (8 warnings after recent cleanup) and fails if count rises; refresh the reference only with `npm run lint:colors:update-baseline` after an intentional color change.
 - Canonical entrypoint: root `README.md` now holds the AI canon + read order; `.ai/README.md` is a stub pointing back. Read order: STATE → BACKLOG → CONTRACT + DECISION_RIGHTS → CONSTRAINTS + FOUNDATION_CONTRACT + GUARDRAILS → latest SESSION_LOG → CONTEXT (for product calls).

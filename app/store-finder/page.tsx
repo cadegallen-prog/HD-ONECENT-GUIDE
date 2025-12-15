@@ -235,15 +235,29 @@ export default function StoreFinderPage() {
   const listContainerRef = useRef<HTMLDivElement>(null)
   const storeRefs = useRef<Map<string, HTMLDivElement>>(new Map())
 
+  // Track the reference point for ranking independently from map pan/zoom
+  // This ensures clicking a store on the map doesn't re-rank the list
+  const rankingCenterRef = useRef<[number, number]>(mapCenter)
+
+  // Helper to update displayed stores AND ranking center atomically
+  // This ensures ranking is stable unless explicitly changed by search/geolocation
+  const setDisplayedStoresAndRankingCenter = useCallback(
+    (stores: StoreLocation[], rankCenter: [number, number]) => {
+      setDisplayedStores(stores)
+      rankingCenterRef.current = rankCenter
+    },
+    []
+  )
+
   // Re-calculate displayed stores when remote data loads
   useEffect(() => {
     // Only recalculate if we actually have new data (length changed significantly)
     if (allLoadedStores.length > allStores.length) {
-      // Remote data loaded, recalculate closest stores using current map center
+      // Remote data loaded, recalculate closest stores using the RANKING center (not map pan center)
       const newStores = getClosestStores(
         allLoadedStores,
-        mapCenter[0],
-        mapCenter[1],
+        rankingCenterRef.current[0],
+        rankingCenterRef.current[1],
         coordinateCorrections
       )
       setDisplayedStores(newStores)
@@ -252,7 +266,7 @@ export default function StoreFinderPage() {
         setSelectedStore((current) => current ?? newStores[0])
       }
     }
-  }, [allLoadedStores.length, coordinateCorrections, mapCenter])
+  }, [allLoadedStores.length, coordinateCorrections])
 
   // Load remote store data via cached API route
   // Initial load is limited to 300 stores for faster LCP; full dataset loads on demand
@@ -457,7 +471,7 @@ export default function StoreFinderPage() {
                 .map(normalizeStore)
                 .filter((s) => isValidStore(s.name) && hasValidCoordinates(s))
               const corrected = normalized.map(applyCoordinateCorrection)
-              setDisplayedStores(corrected)
+              setDisplayedStoresAndRankingCenter(corrected, [lat, lng])
               if (corrected.length > 0) {
                 setSelectedStore(corrected[0])
               }
@@ -470,7 +484,7 @@ export default function StoreFinderPage() {
                 coordinateCorrections
               )
               const corrected = closestStores.map(applyCoordinateCorrection)
-              setDisplayedStores(corrected)
+              setDisplayedStoresAndRankingCenter(corrected, [lat, lng])
               if (corrected.length > 0) {
                 setSelectedStore(corrected[0])
               }
@@ -479,7 +493,7 @@ export default function StoreFinderPage() {
             // Fallback to client-side calculation
             const closestStores = getClosestStores(allLoadedStores, lat, lng, coordinateCorrections)
             const corrected = closestStores.map(applyCoordinateCorrection)
-            setDisplayedStores(corrected)
+            setDisplayedStoresAndRankingCenter(corrected, [lat, lng])
             if (corrected.length > 0) {
               setSelectedStore(corrected[0])
             }
@@ -532,8 +546,10 @@ export default function StoreFinderPage() {
         DEFAULT_CENTER[1],
         coordinateCorrections
       )
-      setDisplayedStores(initialStores.map(applyCoordinateCorrection))
-      setMapCenter(DEFAULT_CENTER)
+      setDisplayedStoresAndRankingCenter(
+        initialStores.map(applyCoordinateCorrection),
+        DEFAULT_CENTER
+      )
       if (initialStores.length > 0) {
         setSelectedStore(initialStores[0])
       }
@@ -550,8 +566,7 @@ export default function StoreFinderPage() {
       const lng = parseFloat(latLngMatch[3])
       if (!Number.isNaN(lat) && !Number.isNaN(lng)) {
         const closestStores = getClosestStores(storesSource, lat, lng, coordinateCorrections)
-        setDisplayedStores(closestStores.map(applyCoordinateCorrection))
-        setMapCenter([lat, lng])
+        setDisplayedStoresAndRankingCenter(closestStores.map(applyCoordinateCorrection), [lat, lng])
         setSelectedStore(closestStores[0] || null)
         trackEvent("store_finder_search", {
           queryType: "other",
@@ -575,8 +590,10 @@ export default function StoreFinderPage() {
           matchedStore.lng,
           coordinateCorrections
         )
-        setDisplayedStores(closestStores.map(applyCoordinateCorrection))
-        setMapCenter([matchedStore.lat, matchedStore.lng])
+        setDisplayedStoresAndRankingCenter(closestStores.map(applyCoordinateCorrection), [
+          matchedStore.lat,
+          matchedStore.lng,
+        ])
         setSelectedStore(closestStores[0] || matchedStore)
         trackEvent("store_finder_search", {
           queryType: "zip",
@@ -601,8 +618,10 @@ export default function StoreFinderPage() {
           centerStore.lng,
           coordinateCorrections
         )
-        setDisplayedStores(closestStores.map(applyCoordinateCorrection))
-        setMapCenter([centerStore.lat, centerStore.lng])
+        setDisplayedStoresAndRankingCenter(closestStores.map(applyCoordinateCorrection), [
+          centerStore.lat,
+          centerStore.lng,
+        ])
         setSelectedStore(closestStores[0] || centerStore)
         trackEvent("store_finder_search", {
           queryType: "zip",
@@ -632,8 +651,10 @@ export default function StoreFinderPage() {
                   lng,
                   coordinateCorrections
                 )
-                setDisplayedStores(closestStores.map(applyCoordinateCorrection))
-                setMapCenter([lat, lng])
+                setDisplayedStoresAndRankingCenter(closestStores.map(applyCoordinateCorrection), [
+                  lat,
+                  lng,
+                ])
                 setSelectedStore(closestStores[0] || null)
                 trackEvent("store_finder_search", {
                   queryType: "zip",
@@ -662,8 +683,10 @@ export default function StoreFinderPage() {
             )
             if (valid) {
               const closestStores = getClosestStores(storesSource, lat, lng, coordinateCorrections)
-              setDisplayedStores(closestStores.map(applyCoordinateCorrection))
-              setMapCenter([lat, lng])
+              setDisplayedStoresAndRankingCenter(closestStores.map(applyCoordinateCorrection), [
+                lat,
+                lng,
+              ])
               setSelectedStore(closestStores[0] || null)
               trackEvent("store_finder_search", {
                 queryType: "zip",
@@ -751,8 +774,10 @@ export default function StoreFinderPage() {
         centerPoint.lng,
         coordinateCorrections
       )
-      setDisplayedStores(closestStores.map(applyCoordinateCorrection))
-      setMapCenter([centerPoint.lat, centerPoint.lng])
+      setDisplayedStoresAndRankingCenter(closestStores.map(applyCoordinateCorrection), [
+        centerPoint.lat,
+        centerPoint.lng,
+      ])
       setSelectedStore(closestStores[0] || null)
       trackEvent("store_finder_search", {
         queryType: tokens.some((token) => STATE_ABBREV_MAP[token]) ? "state" : "city",
@@ -770,8 +795,10 @@ export default function StoreFinderPage() {
         geocoded.lng,
         coordinateCorrections
       )
-      setDisplayedStores(closestStores.map(applyCoordinateCorrection))
-      setMapCenter([geocoded.lat, geocoded.lng])
+      setDisplayedStoresAndRankingCenter(closestStores.map(applyCoordinateCorrection), [
+        geocoded.lat,
+        geocoded.lng,
+      ])
       setSelectedStore(closestStores[0] || null)
       trackEvent("store_finder_search", {
         queryType: "city",

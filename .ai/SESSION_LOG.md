@@ -11,6 +11,64 @@
 
 ---
 
+## 2025-12-15 (2:45 PM) - GitHub Copilot - Store Finder UX Fixes
+
+**AI:** GitHub Copilot
+**Goal:** Fix critical Store Finder UX issues: re-ranking bug, pin number readability, ARIA compliance, and store #106 coordinates
+
+**Work Completed:**
+
+1. **Fixed re-ranking bug (clicking store changes list order):**
+   - **Root cause:** `useEffect` watching `mapCenter` was triggering full re-rank on every map pan
+   - **Solution:** Decoupled "map pan center" from "ranking center":
+     - Added `rankingCenterRef` to track reference point for ranking independently
+     - Created `setDisplayedStoresAndRankingCenter()` helper to update both atomically
+     - Updated all 8 search handlers (getUserLocation, handleSearch variants) to use helper
+     - Removed `mapCenter` from useEffect dependencies
+   - **Result:** Clicking a store on map now only pans (doesn't re-sort list); ranking stable unless explicit search/geolocation
+
+2. **Improved marker pin number readability:**
+   - Increased font sizes: default 11→13, selected 12→15
+   - Increased stroke weight: 3px→4px for better contrast/outline
+   - Text remains white with dark outline for maximum visibility in both themes
+
+3. **Verified ARIA compliance:**
+   - Confirmed all 6 `aria-pressed` attributes in penny-list-filters.tsx correctly use string literals
+   - Lines 194, 221, 240, 257, 271, 323 all have `aria-pressed={condition ? "true" : "false"}`
+   - No boolean expressions (which are invalid per ARIA spec)
+
+4. **Store #106 coordinates investigation:**
+   - Verified source data: latitude 34.007751688179, longitude -84.56504430913
+   - Confirmed coordinates match upstream store directory JSON exactly
+   - No coordinate override exists (COORD_OVERRIDES is empty)
+   - Reverse geocode shows "Roberts Court, Cobb County, GA 30144" nearby
+   - **Note:** If user confirms pin is 5-10 miles off target, will need correct coordinates from Google Maps
+
+**Verification (all quality gates passing):**
+- `npm run lint` ✅ 0 errors (auto-fixed Prettier formatting)
+- `npm run build` ✅ Compiled successfully in 5.6s
+- `npm run test:unit` ✅ 1/1 passing
+- `npm run test:e2e` ✅ All 32 Playwright tests passing
+
+**Files Modified:**
+- `app/store-finder/page.tsx`: Added rankingCenterRef, helper function, updated 8 search paths
+- `components/store-map.tsx`: Increased font-size (13/15) and stroke-width (4px)
+- `.ai/STATE.md`: Updated to Dec 15 2:45 PM with Store Finder UX phase
+- `.ai/SESSION_LOG.md`: Added this entry
+
+**Learnings:**
+- `useEffect` with `mapCenter` in dependencies creates unwanted side-effect coupling
+- Ref-based state for "ranking anchor" prevents unintended re-computation
+- Font size + stroke weight are both critical for legibility on markers
+- ARIA `aria-pressed` must use string literals per W3C spec, not booleans
+
+**Next Steps:**
+- Commit Store Finder UX fixes to `main`
+- Push to origin and verify on production
+- If store #106 still shows in wrong location, get correct lat/lng from user
+
+---
+
 ## 2025-12-15 (12:30 PM) - GitHub Copilot - NPX Hang Reduction & Command Cleanup
 
 **AI:** GitHub Copilot
