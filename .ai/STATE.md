@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 13, 2025  
+**Last updated:** Dec 15, 2025  
 This file is the **single living snapshot** of where the project is right now.  
 Every AI session must update this after meaningful work.
 
@@ -26,6 +26,13 @@ Every AI session must update this after meaningful work.
 - **Crowd Reports system is live:**
   - `/report-find` posts to Google Sheet via Apps Script.
   - `/penny-list` pulls hourly, aggregates by SKU, counts by state, auto‑tiers.
+
+---
+
+## 2.1 CI / Quality Checks Notes
+
+- **CI Playwright console failures fixed:** Vercel Analytics + Speed Insights scripts were being injected in `next start` (CI) but 404’ing off-Vercel, producing generic console errors that Playwright treated as failures. These scripts now only load on Vercel and never during Playwright.
+- **Store Finder coordinate “autocorrection” is dev-only:** production no longer auto-geocodes and applies coordinate corrections (can shift pins inaccurately and adds flaky network calls).
 
 ---
 

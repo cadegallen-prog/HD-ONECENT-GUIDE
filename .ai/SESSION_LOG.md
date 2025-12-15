@@ -218,6 +218,27 @@
 
 - User reported store #106 at wrong location (only started ~2 days ago)
 - Git history revealed source data (`data/home-depot-stores.json`) was updated recently from `1655 Shiloh Road` (wrong) to `449 Roberts Ct NW` (correct) with accurate coordinates (34.0224, -84.6199)
+
+---
+
+## 2025-12-15 - GitHub Copilot (GPT-5.2 (Preview)) - CI Playwright 404 Console Failures + Marker Label Readability
+
+**Goal:** Stop GitHub Actions failures caused by Playwright asserting a clean console, and improve numbered-pin legibility.
+
+**Root cause (confirmed):**
+- In CI we run `next start` (production). That injected Vercel Analytics + Speed Insights.
+- Off-Vercel, those scripts 404 (e.g. `/_vercel/insights/script.js`, `/_vercel/speed-insights/script.js`).
+- Chrome logs a generic console error: `Failed to load resource: the server responded with a status of 404 (Not Found)` that does **not** include the URL, so our Playwright filters didn’t catch it.
+
+**Fixes shipped:**
+- Gate Vercel scripts to only run on Vercel, and never when `PLAYWRIGHT=1`.
+- Make Store Finder coordinate auto-geocoding dev-only (prevents unintended pin drift in prod).
+- Remove the store `#0106` coordinate override (it was redundant/confusing).
+- Increase marker rank label size + add outline stroke for readability.
+
+**Verification (local):**
+- Production-mode repro against `next start` confirmed 404 console errors disappeared after gating scripts.
+- Quality gates run: `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e`.
 - Previous AI session added an override pointing to _yet another wrong location_ (34.009693, -84.56469)
 - **Solution:** Remove the override entirely - source data is already correct
 

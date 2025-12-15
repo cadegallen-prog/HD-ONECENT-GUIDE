@@ -357,6 +357,10 @@ export default function StoreFinderPage() {
 
   const validateStoreCoordinates = useCallback(
     async (store: StoreLocation) => {
+      // Auto-geocoding is intentionally dev-only: it can introduce drift, is network-flaky,
+      // and relies on third-party services that we don't control.
+      if (process.env.NODE_ENV !== "development") return
+
       const addressQuery = `${store.address}, ${store.city}, ${store.state} ${store.zip || ""}`
       const geocoded = await geocodeLocation(addressQuery, store.id)
       if (!geocoded) return

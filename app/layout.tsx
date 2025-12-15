@@ -11,6 +11,11 @@ import { Footer } from "@/components/footer"
 import { AnalyticsSessionTracker } from "@/components/analytics-session"
 import { SpeedInsightsClient } from "@/components/speed-insights-client"
 
+const ENABLE_VERCEL_SCRIPTS =
+  process.env.NODE_ENV === "production" &&
+  process.env.PLAYWRIGHT !== "1" &&
+  (process.env.VERCEL === "1" || process.env.NEXT_PUBLIC_VERCEL_ENV)
+
 const inter = localFont({
   src: [
     {
@@ -183,9 +188,9 @@ export default function RootLayout({
             <Toaster />
           </CommandPaletteProvider>
         </ThemeProvider>
-        {/* Vercel Analytics - loads in production */}
-        {process.env.NODE_ENV === "production" && <Analytics />}
-        <SpeedInsightsClient />
+        {/* Vercel scripts should only run on Vercel (and never during Playwright/CI). */}
+        {ENABLE_VERCEL_SCRIPTS && <Analytics />}
+        {ENABLE_VERCEL_SCRIPTS && <SpeedInsightsClient />}
       </body>
     </html>
   )
