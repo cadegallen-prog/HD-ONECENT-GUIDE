@@ -72,14 +72,14 @@ assert.deepStrictEqual(edgeMetrics, { newLast24h: 2, totalLast30d: 3 })
 assert.strictEqual(formatRelativeDate("2025-12-10", new Date("2025-12-10")), "Today")
 assert.strictEqual(formatRelativeDate("2025-12-09", new Date("2025-12-10")), "Yesterday")
 assert.strictEqual(formatRelativeDate("2025-11-30", new Date("2025-12-10")), "10 days ago")
-assert.strictEqual(formatRelativeDate("2025-09-15", new Date("2025-12-10")), "Sep 14")
+assert.strictEqual(formatRelativeDate("2025-09-15", new Date("2025-12-10")), "Sep 15")
 
 // Relative date formatting - edge cases
 assert.strictEqual(formatRelativeDate("2025-12-08", new Date("2025-12-10")), "2 days ago")
 assert.strictEqual(formatRelativeDate("2025-11-26", new Date("2025-12-10")), "14 days ago")
-assert.strictEqual(formatRelativeDate("2025-11-25", new Date("2025-12-10")), "Nov 24")
+assert.strictEqual(formatRelativeDate("2025-11-25", new Date("2025-12-10")), "Nov 25")
 assert.strictEqual(formatRelativeDate("invalid-date", new Date("2025-12-10")), "invalid-date")
-assert.strictEqual(formatRelativeDate("2025-12-11", new Date("2025-12-10")), "Dec 10")
+assert.strictEqual(formatRelativeDate("2025-12-11", new Date("2025-12-10")), "Dec 11")
 
 // Validation - comprehensive edge cases
 const complexValidation = filterValidPennyItems([

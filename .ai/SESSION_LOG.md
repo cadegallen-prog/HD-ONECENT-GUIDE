@@ -54,7 +54,6 @@
 - `npm run test:unit` ✅
 - `npm run test:e2e` ✅
 
-
 ## 2025-12-13 - GitHub Copilot - Store Finder Root Cause Fix (Override Removal)
 
 **AI:** GitHub Copilot (Claude Sonnet 4.5)  

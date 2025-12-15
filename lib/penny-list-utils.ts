@@ -59,7 +59,7 @@ export function formatRelativeDate(dateStr: string, now: Date = new Date()): str
 
   const diffMs = now.getTime() - timestamp
   if (diffMs < 0) {
-    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" })
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" })
   }
 
   const diffDays = Math.floor(diffMs / DAY_MS)
@@ -68,7 +68,7 @@ export function formatRelativeDate(dateStr: string, now: Date = new Date()): str
   if (diffDays === 1) return "Yesterday"
   if (diffDays <= 14) return `${diffDays} days ago`
 
-  return date.toLocaleDateString("en-US", { month: "short", day: "numeric" })
+  return date.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" })
 }
 
 export function extractStateFromLocation(value: string): string {
