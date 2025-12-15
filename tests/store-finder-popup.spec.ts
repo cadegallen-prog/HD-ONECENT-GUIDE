@@ -13,6 +13,14 @@ test.describe("store finder popup (screenshots)", () => {
         consoleErrors.push(text)
       }
     })
+    page.on("response", (response) => {
+      if (response.status() === 404) {
+        const url = response.url()
+        if (!url.includes("_vercel/insights") && !url.includes("_vercel/speed-insights")) {
+          consoleErrors.push(`404: ${url}`)
+        }
+      }
+    })
 
     // Avoid GeolocationPositionError noise in headless runs.
     await context.grantPermissions(["geolocation"])
