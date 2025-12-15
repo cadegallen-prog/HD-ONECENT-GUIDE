@@ -272,7 +272,7 @@
       "selector": "[data-cta=\"befrugal\"]",
       "role": "cta",
       "found": true,
-      "ratio": 6.39,
+      "ratio": 5.17,
       "threshold": 3,
       "pass": true
     },
@@ -580,7 +580,7 @@
       "selector": "[data-cta=\"befrugal\"]",
       "role": "cta",
       "found": true,
-      "ratio": 6.7,
+      "ratio": 6.62,
       "threshold": 3,
       "pass": true
     },

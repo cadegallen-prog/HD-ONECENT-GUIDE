@@ -807,7 +807,6 @@ export default function StoreFinderPage() {
     (store: StoreLocation) => {
       const corrected = applyCoordinateCorrection(store)
       setSelectedStore(corrected)
-      setMapCenter([corrected.lat, corrected.lng])
       validateStoreCoordinates(store)
     },
     [applyCoordinateCorrection, validateStoreCoordinates]
@@ -835,13 +834,6 @@ export default function StoreFinderPage() {
       validateStoreCoordinates(selectedStore)
     }
   }, [selectedStore, validateStoreCoordinates])
-
-  useEffect(() => {
-    if (selectedStore && coordinateCorrections[selectedStore.id]) {
-      const corrected = coordinateCorrections[selectedStore.id]
-      setMapCenter([corrected.lat, corrected.lng])
-    }
-  }, [coordinateCorrections, selectedStore])
 
   return (
     <div className="min-h-screen flex flex-col">

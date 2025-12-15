@@ -9,10 +9,21 @@ const reportPath = "reports/axe-report.json"
 
 if (!fs.existsSync(reportDir)) fs.mkdirSync(reportDir, { recursive: true })
 
+const axeBin = path.join(
+  process.cwd(),
+  "node_modules",
+  "@axe-core",
+  "cli",
+  "dist",
+  "src",
+  "bin",
+  "cli.js"
+)
+
 const result = spawnSync(
-  "npx",
-  ["@axe-core/cli", baseUrl, "--save", reportPath, "--exit"],
-  { stdio: "inherit", shell: true }
+  process.execPath,
+  [axeBin, baseUrl, "--save", reportPath, "--exit"],
+  { stdio: "inherit" }
 )
 
 process.exit(typeof result.status === "number" ? result.status : 1)

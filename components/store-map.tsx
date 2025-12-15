@@ -190,7 +190,7 @@ export const StoreMap = React.memo(function StoreMap({
           <circle fill="var(--map-marker-selected)" cx="16" cy="16" r="4"/>
           ${
             label
-              ? `<text x="16" y="16" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="900" fill="var(--text-primary)" stroke="var(--bg-card)" stroke-width="3" paint-order="stroke">${label}</text>`
+              ? `<text x="16" y="16" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="900" fill="var(--bg-page)" stroke="var(--map-marker-outline)" stroke-width="3" paint-order="stroke">${label}</text>`
               : ""
           }
         </svg>
@@ -201,7 +201,7 @@ export const StoreMap = React.memo(function StoreMap({
           <circle fill="var(--map-marker-core)" cx="12" cy="12" r="5"/>
           ${
             label
-              ? `<text x="12" y="12" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="900" fill="var(--text-primary)" stroke="var(--bg-card)" stroke-width="3" paint-order="stroke">${label}</text>`
+              ? `<text x="12" y="12" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="900" fill="var(--bg-page)" stroke="var(--map-marker-outline)" stroke-width="3" paint-order="stroke">${label}</text>`
               : ""
           }
         </svg>
@@ -222,16 +222,16 @@ export const StoreMap = React.memo(function StoreMap({
     () => ({
       defaultIcon: buildMarkerIcon({
         className: "map-marker-default",
-        size: [24, 36],
-        anchor: [12, 36],
-        popupAnchor: [0, -36],
+        size: [30, 44],
+        anchor: [15, 44],
+        popupAnchor: [0, -44],
         variant: "default",
       }),
       selectedIcon: buildMarkerIcon({
         className: "map-marker-selected",
-        size: [32, 48],
-        anchor: [16, 48],
-        popupAnchor: [0, -48],
+        size: [40, 58],
+        anchor: [20, 58],
+        popupAnchor: [0, -58],
         variant: "selected",
       }),
     }),
@@ -260,17 +260,17 @@ export const StoreMap = React.memo(function StoreMap({
         variant === "selected"
           ? buildMarkerIcon({
               className: "map-marker-selected",
-              size: [32, 48],
-              anchor: [16, 48],
-              popupAnchor: [0, -48],
+              size: [40, 58],
+              anchor: [20, 58],
+              popupAnchor: [0, -58],
               variant: "selected",
               label,
             })
           : buildMarkerIcon({
               className: "map-marker-default",
-              size: [24, 36],
-              anchor: [12, 36],
-              popupAnchor: [0, -36],
+              size: [30, 44],
+              anchor: [15, 44],
+              popupAnchor: [0, -44],
               variant: "default",
               label,
             })

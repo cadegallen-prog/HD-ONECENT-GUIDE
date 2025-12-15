@@ -60,7 +60,7 @@ jobs:
         run: npm run check-contrast
 
       - name: Axe check
-        run: npx @axe-core/cli http://localhost:3001 --save reports/axe-report.json --exit
+        run: npm run check-axe
 
       - name: Playwright smoke
         env:

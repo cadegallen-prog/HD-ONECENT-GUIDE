@@ -8,11 +8,11 @@
     "build": "next build",
     "start": "next start -p 3001",
     "lint": "eslint app components lib --ext .ts,.tsx --max-warnings=0",
-    "lint:colors": "npx tsx scripts/lint-colors.ts",
-    "lint:colors:update-baseline": "npx tsx scripts/lint-colors.ts --update-baseline",
+    "lint:colors": "tsx scripts/lint-colors.ts",
+    "lint:colors:update-baseline": "tsx scripts/lint-colors.ts --update-baseline",
     "export": "next build && next export",
     "test:e2e": "playwright test",
-    "test:unit": "npx tsx --test tests/**/*.test.ts",
+    "test:unit": "tsx --test tests/**/*.test.ts",
     "check-contrast": "node scripts/check-contrast.js",
     "check-axe": "node scripts/check-axe.js"
   },
@@ -69,6 +69,7 @@
     "prettier": "^3.7.3",
     "tailwindcss": "^3.4.14",
     "tailwindcss-animate": "^1.0.7",
+    "tsx": "^4.21.0",
     "typescript": "^5.6.3",
     "typescript-eslint": "^8.48.0"
   },
@@ -76,3 +77,4 @@
     "node": "22.x"
   }
 }
+

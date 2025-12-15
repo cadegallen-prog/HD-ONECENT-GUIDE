@@ -11,6 +11,160 @@
 
 ---
 
+## 2025-12-15 (12:30 PM) - GitHub Copilot - NPX Hang Reduction & Command Cleanup
+
+**AI:** GitHub Copilot
+**Goal:** Eliminate repeated "command won't exit / loops after Ctrl+C" issues by removing `npx` from execution paths and hardening scripts with timeouts + process cleanup.
+
+**Work Completed:**
+
+1. **Removed npx from all local execution paths:**
+   - `scripts/check-axe.js`: Replaced `spawnSync("npx", [@axe-core/cli, ...])` with direct `node node_modules/@axe-core/cli/dist/src/bin/cli.js`
+   - `scripts/check-contrast.js`: Hardened with global hard timeout (120s), per-page timeouts (30s), changed `waitUntil: "networkidle"` → `"domcontentloaded"` to avoid map/analytics hangs
+   - `scripts/run-audit.ps1`: Replaced `npx lighthouse` calls with `node node_modules/lighthouse/cli/index.js ...` (Windows-safe)
+   - `.github/workflows/quality.yml`: Changed axe check to use `npm run check-axe` instead of direct `npx @axe-core/cli ...`
+
+2. **Hardened Store Finder capture script (`scripts/capture-store-finder-proof.ts`):**
+   - Removed `npx next dev` → now uses `process.execPath` + local Next.js binary
+   - Added global hard timeout (120s) with guaranteed cleanup
+   - Implemented Windows-safe process tree cleanup (`taskkill /T /F`)
+   - Added `try/finally` cleanup with proper signal handling
+   - Prints `DONE` on success for script verification
+
+3. **Verified all changes:**
+   - `npm run lint:colors` ✅ exits cleanly (0 errors, 8 warnings)
+   - `npm run test:unit` ✅ exits cleanly (1/1 passing)
+   - `npm run check-contrast` ✅ exits within hard timeout (passes)
+   - `npm run check-axe` ✅ exits cleanly (0 violations)
+
+4. **Verified remaining npx usage is acceptable:**
+   - Only in `.claude/settings.local.json` (MCP tool patterns—reference only)
+   - Only in `.github/workflows/quality.yml:26` (Playwright browser install—intentional)
+   - No executable `npx` calls remain in scripts, workflows, or local execution paths
+
+5. **Created `reports/hang-audit.md`** documenting all changes and verification.
+
+**Learnings:**
+- `networkidle` is a hang trap for pages with maps/analytics—use `domcontentloaded` + explicit timeouts instead
+- `@axe-core/cli` entry point is in `dist/src/bin/cli.js`, not `bin/axe.js`
+- Windows process tree cleanup requires `taskkill /T /F`, not just `.kill()`
+- Global timeouts + cleanup in `finally` prevent zombie processes when partial failures occur
+
+**Next Steps:**
+- Commit hang-reduction changes to `main`
+- Monitor for reduced "command hangs / loops" incidents
+- If hangs persist, check for zombie `node` processes using `Get-Process | Where-Object {$_.Name -match "node|npm"}`
+
+---
+
+## 2025-12-15 - Claude Code (Plan Mode) - Strategic Planning: Habitual Traffic & Visual Engagement
+
+**AI:** Claude Code (Sonnet 4.5)
+**Goal:** Create strategic plan to drive recurring/habitual traffic to Penny Central via visual engagement, verification system, and SEO expansion
+**Approach:** Deep codebase exploration → strategic analysis → prioritized 3-sprint implementation plan
+
+**Context:**
+User wants to incentivize daily visits and build habit loop. Current challenges:
+- Crowdsourced penny list lacks visual engagement (text-only)
+- Quantity field is unverifiable noise
+- Considering separate "verified" list but unsure how to handle timing issues
+- Want to leverage 1000+ SKU personal purchase history
+- Primary traffic goal: organic SEO + habitual daily checks
+
+**Work Completed:**
+
+1. **Codebase Exploration:**
+   - Analyzed submission system (Google Sheet → CSV hourly fetch → auto-aggregation)
+   - Analyzed comprehensive guide (1,015 lines, excellent SEO, priority 0.9 in sitemap)
+   - Current state: No image upload, sophisticated filtering, auto-tier calculation
+
+2. **Strategic Recommendations Created:**
+   - **Don't create separate verified list** - use badges on unified list to enrich data
+   - **Quantity field:** Keep in DB, hide from display (unverifiable, adds noise)
+   - **Product images:** #1 priority - visual browsing is 10x more engaging
+   - **Individual SKU pages:** Massive SEO opportunity (every SKU = landing page)
+
+3. **Implementation Plan Structure (3 Sprints):**
+
+   **Sprint 1 - Visual Engagement (Highest Priority):**
+   - Task 1.1: HD product image scraper (web scraping, Vercel Blob caching)
+   - Task 1.2: Hide quantity from display (keep in database)
+   - Task 1.3: Display images in penny list (Pinterest-style cards)
+
+   **Sprint 2 - Fresh Content & Verification:**
+   - Task 2.1: "Today's Penny Finds" homepage section
+   - Task 2.2: "Last Updated" timestamp
+   - Task 3.1: Verification badge system (admin-controlled)
+   - Task 3.2: Bulk import 1000+ SKU history
+
+   **Sprint 3 - SEO Expansion:**
+   - Task 4.1: Individual SKU pages (/sku/[id])
+   - Task 4.2: State landing pages (/pennies/[state])
+
+4. **Documentation Updates:**
+   - Created comprehensive plan at `~/.claude/plans/sprightly-mixing-anchor.md`
+   - Updated `.ai/BACKLOG.md` with prioritized task breakdown
+   - Updated `.ai/STATE.md` with session summary and strategic insights
+
+**Key Decisions (Based on User Input):**
+- Product images: Web scraping (not API)
+- Image hosting: Vercel Blob Storage (free tier, no extra cost)
+- Quantity field: Keep in DB, hide from display
+- Verification: Badges on unified list (NOT separate list)
+- Implementation: Claude builds 95%, user provides direction
+
+**Outcome:** ✅ **Success - Planning Complete**
+
+**Completed Items:**
+- ✅ Explored submission/crowdsourcing system
+- ✅ Explored guide and content strategy
+- ✅ Analyzed strategic options (verified list, quantity field, images)
+- ✅ Created prioritized 3-sprint plan
+- ✅ Answered user clarifying questions
+- ✅ Updated `.ai/BACKLOG.md` with actionable tasks
+- ✅ Updated `.ai/STATE.md` with session context
+- ✅ Plan ready for any AI agent (Claude Code, Copilot, Codex)
+
+**Unfinished Items:**
+- None (planning phase complete)
+
+**Strategic Insights:**
+1. **Visual engagement is #1 priority** - Text-only browsing is boring; Pinterest/Instagram prove visual discovery drives engagement
+2. **Don't fragment data** - Verification badges enrich existing list; separate list confuses users and hurts SEO
+3. **Quantity is noise** - Real value: "SKU found in X states on Y dates", not unverifiable quantity claims
+4. **SEO opportunity is massive** - Individual SKU pages could 10x organic traffic over 6-12 months
+5. **Habit loop:** Visual reward (images) + immediate reward (Today's Finds) + automatic cue (daily check)
+
+**Learnings:**
+- User has sophisticated filtering system already in place (state, tier, date, search, sort)
+- Auto-aggregation by SKU is working well - don't touch it
+- Guide is genuinely best-in-class (1,015 lines, 9 sections) - lean into it for SEO
+- Vercel Blob Storage free tier = 1GB = ~20,000 product images (sufficient for years)
+- Old verified data (6+ months) is still valuable - shows historical patterns
+
+**For Next AI:**
+- Implementation plan at: `~/.claude/plans/sprightly-mixing-anchor.md`
+- Start with Sprint 1, Task 1: HD Product Image Scraper
+- Tech stack decisions made: web scraping (cheerio/puppeteer), Vercel Blob, free hosting
+- Don't create separate verified list - use badges on unified list
+- Quantity field: hide from UI, keep in database
+- User has 1000+ SKU purchase history ready to import (Sprint 2)
+
+**Next Session Prompt:**
+```
+GOAL: Implement Sprint 1, Task 1 - Home Depot Product Image Scraper
+WHY: Visual browsing is 10x more engaging than text-only lists
+DONE MEANS:
+- lib/scrape-hd-image.ts created (fetch HD product page, extract og:image)
+- lib/image-cache.ts created (Vercel Blob caching layer)
+- lib/fetch-penny-data.ts modified (add image fetching to pipeline)
+- Rate limiting: 1 req/sec max
+- Fallback to placeholder on error
+- Build/lint/test pass
+```
+
+---
+
 ## 2025-12-14 - Claude Code - MCP Stack Simplification (from 9 to 3)
 
 **AI:** Claude Code (Sonnet 4.5)
@@ -20,6 +174,7 @@
 **Analysis Findings:**
 
 **Problem identified:**
+
 - 9 MCP servers configured with strict "MANDATORY" usage rules
 - 740 lines of prescriptive documentation ("YOU MUST USE", "NO EXCEPTIONS")
 - Agents consistently ignored mandatory rules (evidence: session logs)
@@ -27,6 +182,7 @@
 - Creating compliance theater without improving outcomes
 
 **Evidence from session logs:**
+
 - No Sequential Thinking usage despite "MANDATORY" documentation
 - No Memory/Memory-Keeper usage despite session start/end checklist
 - No Context7 usage in recent sessions
@@ -34,6 +190,7 @@
 - Minimal Playwright usage (E2E suite already covers this)
 
 **Root cause:**
+
 - **Wrong problem:** Trying to solve process problems (testing, context loss) with tools (MCPs)
 - **Duplicate systems:** 3 memory systems (Memory MCP, Memory-Keeper, .ai/ docs) creating confusion
 - **Compliance theater:** Rules agents ignored; user couldn't verify compliance
@@ -67,6 +224,7 @@
    - Evidence-based reasoning (session logs prove agents self-regulate)
 
 **Philosophy change:**
+
 - **Old:** Process compliance ("Did you use Sequential Thinking?")
 - **New:** Outcome verification ("Does npm run build pass?")
 - **Old:** 9 MCPs with mandatory usage
@@ -75,12 +233,14 @@
 - **New:** Trust + verification through quality gates
 
 **What actually works:**
+
 - Quality gates: `npm run build`, `npm run lint`, `npm run test:unit`, `npm run test:e2e`
 - File-based memory: SESSION_LOG.md, LEARNINGS.md, STATE.md
 - Clear decision rights: DECISION_RIGHTS.md
 - Trust agents to self-regulate
 
 **Impact:**
+
 - 75% reduction in MCP documentation (740 → 180 lines)
 - Dramatically lower cognitive load
 - Clearer mental model (tools, not compliance)
@@ -88,6 +248,7 @@
 - Expected: same quality (gates verify), smoother sessions (less overhead)
 
 **Files Modified:**
+
 - `~/.codex/config.toml`
 - `.ai/MCP_SERVERS.md`
 - `.ai/USAGE.md`
@@ -96,9 +257,11 @@
 - `.ai/STATE.md`
 
 **Gates:**
+
 - N/A (documentation changes only, no code changes)
 
 **For Next AI:**
+
 - 4 MCPs configured: filesystem, git, github, playwright
 - Use tools when they add value, not because they're "mandatory"
 - **Playwright is especially valuable:** reduces non-technical user's testing burden by letting agents autonomously verify browser behavior
@@ -106,6 +269,7 @@
 - Trust agents to self-regulate; session logs prove this works
 
 **Update (same session):**
+
 - User identified valid gap: without autonomous browser testing, they had to manually test and struggle to describe technical issues
 - Re-enabled Playwright MCP as pragmatic tool (not mandatory compliance)
 - Key insight: Playwright reduces user burden by giving agents "eyes on the browser"
@@ -114,6 +278,7 @@
 **Second update (same session - addressing frustration with false "done" claims):**
 
 **User frustration identified:**
+
 - Agents claim "done" when work isn't complete
 - Agents claim "tests pass" when tests actually fail on GitHub
 - Agents keep killing port 3001 (user's dev server)
@@ -121,6 +286,7 @@
 - Agents don't verify their work before claiming completion
 
 **Solution implemented:**
+
 1. Created `.ai/VERIFICATION_REQUIRED.md` - comprehensive verification requirements
    - Explicit "no proof = not done" rule
    - Template for claiming work is complete (with evidence)
@@ -152,11 +318,13 @@
    - Linked to VERIFICATION_REQUIRED.md
 
 **Philosophy:**
+
 - Old: Agents self-regulate, trust they'll verify
 - New: Trust but enforce - provide tools (Playwright, GitHub MCP) and REQUIRE their use
 - Focus: Stop false "done" claims that waste user's time
 
 **Expected impact:**
+
 - Agents MUST show proof before claiming done
 - Port 3001 won't be killed unnecessarily
 - Colors will be design-token-based, not generic Tailwind
@@ -226,17 +394,20 @@
 **Goal:** Stop GitHub Actions failures caused by Playwright asserting a clean console, and improve numbered-pin legibility.
 
 **Root cause (confirmed):**
+
 - In CI we run `next start` (production). That injected Vercel Analytics + Speed Insights.
 - Off-Vercel, those scripts 404 (e.g. `/_vercel/insights/script.js`, `/_vercel/speed-insights/script.js`).
 - Chrome logs a generic console error: `Failed to load resource: the server responded with a status of 404 (Not Found)` that does **not** include the URL, so our Playwright filters didn’t catch it.
 
 **Fixes shipped:**
+
 - Gate Vercel scripts to only run on Vercel, and never when `PLAYWRIGHT=1`.
 - Make Store Finder coordinate auto-geocoding dev-only (prevents unintended pin drift in prod).
 - Remove the store `#0106` coordinate override (it was redundant/confusing).
 - Increase marker rank label size + add outline stroke for readability.
 
 **Verification (local):**
+
 - Production-mode repro against `next start` confirmed 404 console errors disappeared after gating scripts.
 - Quality gates run: `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e`.
 - Previous AI session added an override pointing to _yet another wrong location_ (34.009693, -84.56469)

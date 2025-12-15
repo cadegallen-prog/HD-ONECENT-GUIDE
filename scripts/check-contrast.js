@@ -12,6 +12,9 @@ const selectorsPath = path.join(__dirname, "..", "checks", "selectors.json")
 const reportDir = path.join(process.cwd(), "reports")
 const reportPath = path.join(reportDir, "contrast-computed.json")
 
+const HARD_TIMEOUT_MS = 120_000
+const NAV_TIMEOUT_MS = 30_000
+
 function loadJson(filePath, fallback) {
   if (!fs.existsSync(filePath)) return fallback
   return JSON.parse(fs.readFileSync(filePath, "utf8"))
@@ -68,11 +71,19 @@ async function getStyles(page, selector) {
 async function run() {
   const browser = await chromium.launch({ headless: true })
   const results = []
+  const startedAt = Date.now()
   try {
     for (const route of routes) {
+      if (Date.now() - startedAt > HARD_TIMEOUT_MS) {
+        throw new Error(`Timed out after ${HARD_TIMEOUT_MS}ms`)
+      }
+
       const page = await browser.newPage()
+      page.setDefaultTimeout(NAV_TIMEOUT_MS)
+      page.setDefaultNavigationTimeout(NAV_TIMEOUT_MS)
       const url = `${BASE_URL}${route}`
-      await page.goto(url, { waitUntil: "networkidle" })
+      // Avoid "networkidle" because some routes (maps, analytics, etc.) can keep connections open.
+      await page.goto(url, { waitUntil: "domcontentloaded", timeout: NAV_TIMEOUT_MS })
 
       for (const theme of ["light", "dark"]) {
         // Force theme by toggling class on root; adjust if theme storage differs.

@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 15, 2025  
+**Last updated:** Dec 15, 2025 (12:30 PM - hang-reduction pass)  
 This file is the **single living snapshot** of where the project is right now.  
 Every AI session must update this after meaningful work.
 
@@ -9,10 +9,11 @@ Every AI session must update this after meaningful work.
 ## 1. Where We Are
 
 - **Site:** live at https://pennycentral.com
-- **Phase:** Stabilization + Community Intake
+- **Phase:** Stabilization + Community Intake + Command Reliability
 - **Traffic reality:** early launch volatility is normal; focus on retention loop first.
+- **Recent focus:** Eliminated repeated "command hangs / loops" by removing `npx` from execution paths and hardening scripts with timeouts + process cleanup.
 - Foundation Contract added at `.ai/FOUNDATION_CONTRACT.md` (tokens/Tailwind/layout/nav/gates) and `ROUTE-TREE.txt` refreshed (includes framework 404).
-- Color drift ratchet in place: `npm run lint:colors` compares against `checks/lint-colors.baseline.json` (47 warnings baseline) and fails if count rises; refresh the reference only with `npm run lint:colors:update-baseline` after an intentional color change.
+- Color drift ratchet in place: `npm run lint:colors` compares against `checks/lint-colors.baseline.json` (8 warnings after recent cleanup) and fails if count rises; refresh the reference only with `npm run lint:colors:update-baseline` after an intentional color change.
 - Canonical entrypoint: root `README.md` now holds the AI canon + read order; `.ai/README.md` is a stub pointing back. Read order: STATE → BACKLOG → CONTRACT + DECISION_RIGHTS → CONSTRAINTS + FOUNDATION_CONTRACT + GUARDRAILS → latest SESSION_LOG → CONTEXT (for product calls).
 - Palette refresh permission: allowed later if WCAG AA minimum (target AAA) with before/after screenshots (light/dark, key routes) and lint:colors baseline refresh when intentional.
 - Lighthouse policy: re-run only when visual/token/layout or performance-impacting changes ship, or during scheduled reviews; record outputs in `LIGHTHOUSE_RESULTS.md` and JSON artifacts in `test-results/` (mobile currently `lighthouse-mobile.json`).
@@ -26,6 +27,11 @@ Every AI session must update this after meaningful work.
 - **Crowd Reports system is live:**
   - `/report-find` posts to Google Sheet via Apps Script.
   - `/penny-list` pulls hourly, aggregates by SKU, counts by state, auto‑tiers.
+- **Command reliability (Dec 15, 12:30 PM):**
+  - All local scripts (`lint:colors`, `test:unit`, `check-axe`, `check-contrast`) now exit cleanly without hanging
+  - Removed `npx` from execution paths (only in CI Playwright install and docs)
+  - Hard timeouts (120s global, 30s per-page) prevent network-idle hangs on map pages
+  - Created `reports/hang-audit.md` for full audit trail
 
 ---
 
@@ -71,23 +77,33 @@ Weekly check:
 
 ## 6. Next 1–2 High‑Leverage Moves
 
-See `.ai/BACKLOG.md` for the ordered list.  
+See `.ai/BACKLOG.md` for the ordered list.
 Default rule: **AI should pull the top P0 item and propose it unless Cade gives a different GOAL.**
+
+**Current Focus (Sprint 1):** Visual Engagement - Product images, hide quantity, image display in penny list
 
 ---
 
 ## 7. Last Session Summary
 
-- **MCP Stack Simplification (Dec 14, 2025):**
-  - Evaluated 9-MCP setup with "MANDATORY" usage rules
-  - Found: agents ignored mandatory rules; quality stayed high without them
-  - Root cause: Compliance theater - trying to solve process problems with tools
-  - Solution: Simplified from 9 MCPs to 4 pragmatic MCPs
-  - Removed: sequential-thinking, memory, memory-keeper, next-devtools, context7, github_copilot
-  - Kept: filesystem, git, github, **playwright** (agents use these naturally)
-  - **Playwright refinement:** Re-enabled after user identified gap - it reduces non-technical user's testing burden by giving agents autonomous browser verification
-  - Documentation: 75% reduction (740 lines → 200 lines)
-  - Philosophy change: from "process compliance" to "outcome verification"
-  - Impact: Dramatically lower cognitive load; same quality (gates verify)
-  - Files: `~/.codex/config.toml`, `.ai/MCP_SERVERS.md`, `.ai/USAGE.md`, `.ai/LEARNINGS.md`
-  - Key learning: Trust agents to self-regulate; some MCPs (like Playwright) provide unique value by reducing user burden
+- **Strategic Planning Session (Dec 15, 2025):**
+  - **Goal:** Plan approach to drive habitual/recurring traffic to Penny Central
+  - **Context:** User wants to incentivize daily visits, build habitual engagement, leverage crowdsourced data
+  - **Outcome:** Comprehensive 3-sprint implementation plan created
+  - **Key Decisions:**
+    - Product images via Home Depot web scraping (not API)
+    - Quantity field: keep in database, hide from display (future analytics potential)
+    - Verification system: badges on unified list (NOT separate verified list)
+    - Image hosting: Vercel Blob Storage (free tier, no extra cost)
+    - Implementation: Claude does 95% of coding work
+  - **Strategic Insights:**
+    - Visual engagement (Pinterest-style) is #1 priority - text-only browsing is boring
+    - Don't create separate verified list - enriches existing data, prevents fragmentation
+    - Individual SKU pages = massive SEO opportunity (every SKU becomes a landing page)
+    - Quantity field is unverifiable noise - real value is "found in X states on Y dates"
+  - **Plan Structure:**
+    - **Sprint 1 (Current):** HD image scraper, hide quantity, display images
+    - **Sprint 2:** Today's Finds homepage, verification badges, import 1000+ SKU history
+    - **Sprint 3:** Individual SKU pages, state landing pages (long-term SEO)
+  - **Files:** Plan at `~/.claude/plans/sprightly-mixing-anchor.md`, updated `.ai/BACKLOG.md`
+  - **Key learning:** Visual discovery + daily freshness = habit loop. Lean into images, fresh content, verified data.
