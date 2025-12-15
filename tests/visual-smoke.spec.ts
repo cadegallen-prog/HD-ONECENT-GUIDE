@@ -14,7 +14,11 @@ test.describe("visual smoke (light/dark, mobile/desktop)", () => {
       const consoleErrors: string[] = []
       page.on("pageerror", (err) => consoleErrors.push(err.message))
       page.on("console", (msg) => {
-        if (msg.type() === "error") consoleErrors.push(msg.text())
+        if (msg.type() === "error") {
+          const text = msg.text()
+          if (text.includes("_vercel/insights") || text.includes("_vercel/speed-insights")) return
+          consoleErrors.push(text)
+        }
       })
 
       const theme = testInfo.project.name.includes("dark") ? "dark" : "light"
