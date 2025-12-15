@@ -62,7 +62,27 @@ This document defines the working relationship between Cade and any AI assistant
 
 ## What AI Provides
 
-### 1. Explain BEFORE Implementing
+### 1. VERIFY Before Claiming "Done"
+
+**⚠️ CRITICAL:** Read [VERIFICATION_REQUIRED.md](VERIFICATION_REQUIRED.md) - this is NON-NEGOTIABLE.
+
+**You CANNOT claim work is complete without PROOF:**
+- ✅ Screenshots (UI changes - use Playwright MCP)
+- ✅ Test output (lint, build, test:unit, test:e2e - ALL 4)
+- ✅ GitHub Actions status (paste URL if applicable)
+- ✅ Before/after comparison (show problem was actually fixed)
+
+**Common lies that break trust:**
+- ❌ "Tests pass" (without running them)
+- ❌ "Bug fixed" (without verifying)
+- ❌ "GitHub Actions green" (without checking)
+- ❌ "Looks professional" (using generic Tailwind colors)
+
+**If you claim done without proof → User wastes time verifying → Trust breaks → You redo work.**
+
+**Better:** Use the tools (Playwright, test commands, GitHub MCP) to verify FIRST.
+
+### 2. Explain BEFORE Implementing
 
 - ✅ Describe the approach in plain English
 - ✅ Explain tradeoffs (simple vs. fancy, fast vs. maintainable)
@@ -141,12 +161,28 @@ Tradeoff: Simple dropdown vs. fancy multi-select. I recommend simple for now. Ap
 
 ### "Done" Means:
 
-1. ✅ Code builds without errors (`npm run build` succeeds)
-2. ✅ No linting errors (`npm run lint` clean)
-3. ✅ Works on mobile (if user-facing)
-4. ✅ Tested by Cade (if user-facing feature)
+**⚠️ See [VERIFICATION_REQUIRED.md](VERIFICATION_REQUIRED.md) for complete requirements.**
+
+1. ✅ All 4 tests pass WITH OUTPUT PASTED:
+   - `npm run lint` - 0 errors
+   - `npm run build` - successful compilation
+   - `npm run test:unit` - all passing
+   - `npm run test:e2e` - all passing
+2. ✅ Playwright verification (for UI changes):
+   - Screenshots showing before/after
+   - Browser console errors checked
+   - Light and dark mode tested
+3. ✅ GitHub Actions verified (if applicable):
+   - Status is ✅ green (not yellow, not red)
+   - URL pasted as proof
+4. ✅ Problem actually fixed (not just code compiles):
+   - Reproduce original problem
+   - Show problem is gone
+   - Demonstrate with screenshots or output
 5. ✅ SESSION_LOG.md updated with summary
 6. ✅ Any new learnings added to LEARNINGS.md
+
+**No proof = not done. If you claim "done" without verification, user will waste time checking and trust will break.**
 
 ### "Blocked" Means:
 

@@ -71,11 +71,16 @@ Default rule: **AI should pull the top P0 item and propose it unless Cade gives 
 
 ## 7. Last Session Summary
 
-- **Store Finder Root Cause Fix (Dec 13, 2025):**
-  - Investigated store #106 coordinate issue - discovered source data was recently corrected from wrong address to correct one
-  - Removed erroneous coordinate override that was _causing_ the problem (source data is now accurate at 34.0224, -84.6199)
-  - Key learning: "Suddenly broken" after working = check upstream data changes, not just code
-  - Gates: `npm run lint`, `npm run build` all pass.
-- Canon consolidation: root README is the canon (with AI read order); .ai README is now a stub. DECISION_RIGHTS documents palette refresh permission and Lighthouse cadence; operational rules (no new deps, no orphan files, update SESSION_LOG/STATE) reaffirmed.
-- Bloat cleanup (prior pass): removed `temp_line.txt`, `New folder/Commands_for_wizard.txt` (+ deleted folder), and `nul` (unused placeholder files).
-- Gates: `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e` all pass.
+- **MCP Stack Simplification (Dec 14, 2025):**
+  - Evaluated 9-MCP setup with "MANDATORY" usage rules
+  - Found: agents ignored mandatory rules; quality stayed high without them
+  - Root cause: Compliance theater - trying to solve process problems with tools
+  - Solution: Simplified from 9 MCPs to 4 pragmatic MCPs
+  - Removed: sequential-thinking, memory, memory-keeper, next-devtools, context7, github_copilot
+  - Kept: filesystem, git, github, **playwright** (agents use these naturally)
+  - **Playwright refinement:** Re-enabled after user identified gap - it reduces non-technical user's testing burden by giving agents autonomous browser verification
+  - Documentation: 75% reduction (740 lines → 200 lines)
+  - Philosophy change: from "process compliance" to "outcome verification"
+  - Impact: Dramatically lower cognitive load; same quality (gates verify)
+  - Files: `~/.codex/config.toml`, `.ai/MCP_SERVERS.md`, `.ai/USAGE.md`, `.ai/LEARNINGS.md`
+  - Key learning: Trust agents to self-regulate; some MCPs (like Playwright) provide unique value by reducing user burden

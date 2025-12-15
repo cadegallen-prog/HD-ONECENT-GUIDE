@@ -9,6 +9,7 @@ Three habits keep every session consistent.
 - Auto-load should read CLAUDE.md or .github/copilot-instructions.md which point to the .ai/ order in README.md.
 - If auto-load fails, paste the backup prompt from SESSION_TEMPLATES.md to force reading: STATE, BACKLOG, CONTRACT, DECISION_RIGHTS, CONSTRAINTS, SESSION_LOG, LEARNINGS.
 - Check if the dev server is running on port 3001; if the port is already occupied, access http://localhost:3001 directly without restarting or killing any processes.
+- **Note:** MCP servers (filesystem, git, github) load automatically - no manual setup needed.
 
 ---
 
@@ -28,16 +29,31 @@ DONE MEANS:
 
 ---
 
-## Habit 3: End the Session (no exceptions)
+## Habit 3: Verify BEFORE Claiming "Done"
 
-1. List what was completed.
+**⛔ STOP:** Read [VERIFICATION_REQUIRED.md](.ai/VERIFICATION_REQUIRED.md) BEFORE claiming work is complete.
+
+**You CANNOT say "done" without PROOF:**
+1. ✅ Screenshots (for UI changes - use Playwright)
+2. ✅ Test output (all 4 commands: lint, build, test:unit, test:e2e)
+3. ✅ GitHub Actions status (if applicable - paste URL)
+4. ✅ Before/after comparison (show the problem was actually fixed)
+
+**If you claim "tests pass" without running them → User will be frustrated when they fail.**
+**If you claim "bug fixed" without verifying → User will waste time checking.**
+
+**See VERIFICATION_REQUIRED.md for detailed requirements.**
+
+## Habit 4: End the Session (no exceptions)
+
+1. List what was completed WITH PROOF (see VERIFICATION_REQUIRED.md).
 2. List what is unfinished.
 3. Write a copy-paste prompt for any unfinished item.
 4. Update .ai/SESSION_LOG.md.
 5. Refresh .ai/STATE.md (and BACKLOG.md if priorities changed).
 6. Add new learnings to .ai/LEARNINGS.md when relevant.
 7. Record gate results (lint, build, unit, e2e).
-8. Leave the dev server running on port 3001 so future agents can reuse it.
+8. **NEVER kill port 3001** - if it's running, the user is using it intentionally.
 
 ---
 

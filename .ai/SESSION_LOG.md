@@ -11,7 +11,161 @@
 
 ---
 
-## 2025-12-15 - GitHub Copilot - Store Finder “Ironclad” Verification + Popup/Map Cleanup
+## 2025-12-14 - Claude Code - MCP Stack Simplification (from 9 to 3)
+
+**AI:** Claude Code (Sonnet 4.5)
+**Goal:** Evaluate MCP stack and determine optimal configuration for maximum value with minimum overhead.
+**Outcome:** ✅ **Success** - Simplified from 9 MCPs to 3, removed compliance theater, focused on outcomes over process.
+
+**Analysis Findings:**
+
+**Problem identified:**
+- 9 MCP servers configured with strict "MANDATORY" usage rules
+- 740 lines of prescriptive documentation ("YOU MUST USE", "NO EXCEPTIONS")
+- Agents consistently ignored mandatory rules (evidence: session logs)
+- Quality remained high despite not using "mandatory" MCPs
+- Creating compliance theater without improving outcomes
+
+**Evidence from session logs:**
+- No Sequential Thinking usage despite "MANDATORY" documentation
+- No Memory/Memory-Keeper usage despite session start/end checklist
+- No Context7 usage in recent sessions
+- No Next-Devtools evidence
+- Minimal Playwright usage (E2E suite already covers this)
+
+**Root cause:**
+- **Wrong problem:** Trying to solve process problems (testing, context loss) with tools (MCPs)
+- **Duplicate systems:** 3 memory systems (Memory MCP, Memory-Keeper, .ai/ docs) creating confusion
+- **Compliance theater:** Rules agents ignored; user couldn't verify compliance
+- **Cognitive load:** 9 MCPs too complex for non-technical user to understand/manage
+
+**Work completed:**
+
+1. **Updated `~/.codex/config.toml`:**
+   - Kept 3 essential MCPs: filesystem, git, github
+   - Removed 6 overhead MCPs: sequential-thinking, memory, memory-keeper, next-devtools, context7, github_copilot
+   - Commented out Playwright (optional - E2E suite covers this)
+   - Added explanatory comments
+
+2. **Rewrote `.ai/MCP_SERVERS.md`:**
+   - Reduced from 740 lines to 180 lines (75% reduction)
+   - Removed all "MANDATORY" and "NO EXCEPTIONS" language
+   - Removed anti-pattern sections (compliance theater)
+   - Added "Philosophy: Outcomes Over Process" section
+   - Documented why each MCP was removed (with evidence)
+   - Added history section explaining the change
+   - Focus: quality gates verify outcomes, not process compliance
+
+3. **Updated `.ai/USAGE.md`:**
+   - Removed MCP checklist clutter
+   - Added simple note that MCPs load automatically
+
+4. **Updated `.ai/LEARNINGS.md`:**
+   - Added comprehensive "MCP Stack Simplification" learning
+   - Documented what was tried, what failed, why it failed
+   - Clear guidance on what to do instead
+   - Evidence-based reasoning (session logs prove agents self-regulate)
+
+**Philosophy change:**
+- **Old:** Process compliance ("Did you use Sequential Thinking?")
+- **New:** Outcome verification ("Does npm run build pass?")
+- **Old:** 9 MCPs with mandatory usage
+- **New:** 3 MCPs with natural usage
+- **Old:** Mistrust + enforcement
+- **New:** Trust + verification through quality gates
+
+**What actually works:**
+- Quality gates: `npm run build`, `npm run lint`, `npm run test:unit`, `npm run test:e2e`
+- File-based memory: SESSION_LOG.md, LEARNINGS.md, STATE.md
+- Clear decision rights: DECISION_RIGHTS.md
+- Trust agents to self-regulate
+
+**Impact:**
+- 75% reduction in MCP documentation (740 → 180 lines)
+- Dramatically lower cognitive load
+- Clearer mental model (tools, not compliance)
+- Easier for user to understand
+- Expected: same quality (gates verify), smoother sessions (less overhead)
+
+**Files Modified:**
+- `~/.codex/config.toml`
+- `.ai/MCP_SERVERS.md`
+- `.ai/USAGE.md`
+- `.ai/LEARNINGS.md`
+- `.ai/SESSION_LOG.md` (this file)
+- `.ai/STATE.md`
+
+**Gates:**
+- N/A (documentation changes only, no code changes)
+
+**For Next AI:**
+- 4 MCPs configured: filesystem, git, github, playwright
+- Use tools when they add value, not because they're "mandatory"
+- **Playwright is especially valuable:** reduces non-technical user's testing burden by letting agents autonomously verify browser behavior
+- Quality is verified through gates, not process compliance
+- Trust agents to self-regulate; session logs prove this works
+
+**Update (same session):**
+- User identified valid gap: without autonomous browser testing, they had to manually test and struggle to describe technical issues
+- Re-enabled Playwright MCP as pragmatic tool (not mandatory compliance)
+- Key insight: Playwright reduces user burden by giving agents "eyes on the browser"
+- Positioned as agent autonomy tool, not quality gate
+
+**Second update (same session - addressing frustration with false "done" claims):**
+
+**User frustration identified:**
+- Agents claim "done" when work isn't complete
+- Agents claim "tests pass" when tests actually fail on GitHub
+- Agents keep killing port 3001 (user's dev server)
+- Agents use generic/boring Tailwind colors repeatedly
+- Agents don't verify their work before claiming completion
+
+**Solution implemented:**
+1. Created `.ai/VERIFICATION_REQUIRED.md` - comprehensive verification requirements
+   - Explicit "no proof = not done" rule
+   - Template for claiming work is complete (with evidence)
+   - Port 3001 rule: NEVER kill it, check if running first
+   - Color palette rule: NEVER use generic Tailwind colors
+   - Tool usage requirements (when Playwright is mandatory)
+   - Examples of common "lies" agents tell and how to verify
+
+2. Updated `.ai/USAGE.md`:
+   - Added "Habit 3: Verify BEFORE Claiming Done"
+   - Made VERIFICATION_REQUIRED.md mandatory reading
+   - Added port 3001 rule to session end checklist
+
+3. Updated `.ai/CONSTRAINTS.md`:
+   - Added "MOST VIOLATED RULES" section at top
+   - Rule #1: NEVER Kill Port 3001
+   - Rule #2: NEVER Use Generic Tailwind Colors
+   - Rule #3: NEVER Claim "Done" Without Proof
+   - Put these BEFORE existing constraints (higher visibility)
+
+4. Updated `.ai/CONTRACT.md`:
+   - Made verification the #1 thing AI provides
+   - Redefined "Done" to require proof (test output, screenshots, GitHub status)
+   - Explicit list of "common lies that break trust"
+
+5. Updated `.ai/MCP_SERVERS.md`:
+   - Made Playwright usage mandatory (not optional) for UI changes
+   - Added explicit verification steps
+   - Linked to VERIFICATION_REQUIRED.md
+
+**Philosophy:**
+- Old: Agents self-regulate, trust they'll verify
+- New: Trust but enforce - provide tools (Playwright, GitHub MCP) and REQUIRE their use
+- Focus: Stop false "done" claims that waste user's time
+
+**Expected impact:**
+- Agents MUST show proof before claiming done
+- Port 3001 won't be killed unnecessarily
+- Colors will be design-token-based, not generic Tailwind
+- User won't waste time verifying agent claims that turn out false
+- Trust rebuilds through verified completions
+
+---
+
+## 2025-12-15 - GitHub Copilot - Store Finder "Ironclad" Verification + Popup/Map Cleanup
 
 **AI:** GitHub Copilot (GPT-5.2 (Preview))  
 **Goal:** Make Store Finder popups readable/consistent, make the map look “normal,” add numbered pins, protect store #0106 pin accuracy, and make verification reproducible (screenshots in one run).  

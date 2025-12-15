@@ -1,85 +1,85 @@
-# Penny Central Development Guide
+# Penny Central - Claude Guide
 
-⚠️ **BEFORE DOING ANYTHING:** Read ALL files in the `.ai/` directory for the collaboration protocol:
-- `.ai/CONTRACT.md` - Collaboration rules (what Cade provides, what you provide)
-- `.ai/DECISION_RIGHTS.md` - What you can decide vs. must get approval for
-- `.ai/STATE.md` - Current project snapshot (read first)
-- `.ai/BACKLOG.md` - Ordered next tasks (default work source)
-- `.ai/CONSTRAINTS.md` - Fragile areas you must NOT touch
-- `.ai/SESSION_LOG.md` - Recent work history and context
-- `.ai/LEARNINGS.md` - Past mistakes to avoid
-- `.ai/CONTEXT.md` - Stable mission and audience
-- ⭐ `.ai/MCP_SERVERS.md` - **MANDATORY MCP usage rules** (9 servers available)
+## Read First (in order)
 
-Then ask Cade for **GOAL / WHY / DONE** for this session.
+1. `.ai/VERIFICATION_REQUIRED.md` ⛔ NO PROOF = NOT DONE
+2. `.ai/CONSTRAINTS.md` - Most violated rules
+3. `.ai/STATE.md` - Current snapshot
+4. `.ai/BACKLOG.md` - What to work on
+
+**Then ask:** GOAL / WHY / DONE for this session.
 
 ---
 
-## ⚠️ CRITICAL: MCP Usage Requirements
+## Critical Rules
 
-You have access to 9 Model Context Protocol (MCP) servers. **You MUST use them proactively**:
+### Rule #1: Verification
+- **All 4 tests MUST pass** (lint, build, test:unit, test:e2e)
+- **Paste output** as proof
+- **Screenshots** for UI changes (Playwright)
+- **GitHub Actions** URL if applicable
 
-1. **Sequential Thinking** - Use for ANY complex task, planning, or multi-step problem. NOT optional.
-2. **Memory + Memory-Keeper** - Check at session start. Save context at session end. NO EXCEPTIONS.
-3. **Next-Devtools** - Check for errors BEFORE and AFTER changes. Required for task completion.
-4. **Playwright** - Test UI changes in browser. Screenshots required for user-facing changes.
-5. **Context7** - Verify current library docs. Your training data is outdated for Next.js 16, React 19.
+### Rule #2: Port 3001
+```bash
+netstat -ano | findstr :3001
+# IF RUNNING → use it (don't kill)
+# IF NOT → npm run dev
+```
 
-**Read `.ai/MCP_SERVERS.md` immediately for complete mandatory usage rules and anti-patterns.**
-
-**NO SHORTCUTS. NO LAZINESS. NO EXCUSES.**
+### Rule #3: Colors
+- ❌ NO raw Tailwind (`blue-500`, `gray-600`)
+- ✅ USE CSS variables (`var(--cta-primary)`)
+- ✅ OR get approval first
 
 ---
 
-## Project Overview
+## MCP Servers (4 available)
 
-PennyCentral.com is a Next.js 16 app serving the Home Depot penny hunting community.
-It's the official resource for a 40,000+ member Facebook group.
+1. **Filesystem** - files (use automatically)
+2. **Git** - version control (use automatically)
+3. **GitHub** - PRs/issues (use when needed)
+4. **Playwright** - browser testing (REQUIRED for UI)
+
+**Playwright required for:**
+- UI changes (buttons, forms, layouts, colors)
+- JavaScript changes (Store Finder, interactive)
+- "Bug fixed" claims (visual bugs)
+
+---
+
+## Quality Gates
+
+```bash
+npm run lint        # 0 errors
+npm run build       # successful
+npm run test:unit   # all passing
+npm run test:e2e    # all passing
+```
+
+**All 4 must pass. Paste output.**
+
+---
+
+## Never Touch
+
+- `globals.css` (without approval)
+- Port 3001 (check first, use if running)
+- `/components/store-map.tsx` (fragile)
+
+---
 
 ## Tech Stack
 
-- Next.js 16 with App Router
-- TypeScript (strict mode)
-- Tailwind CSS with custom design tokens
-- React-Leaflet for store finder map
-- Deployed on [Vercel/wherever]
+- Next.js 16 + TypeScript
+- Tailwind (custom tokens)
+- React-Leaflet
+- Vercel
 
-## Architecture Rules
+---
 
-### NEVER do these things:
+## See Also
 
-- Don't modify globals.css without explicit approval
-- Don't add new dependencies without documenting why
-- Don't change the map component (store-map.tsx) without testing all 51 store pins
-- Don't remove "use client" directives without understanding why they're there
-
-### ALWAYS do these things:
-
-- Run `npm run build` before considering any task complete
-- Run `npm run lint` and fix all errors
-- When fixing a bug, explain what caused it before implementing the fix
-- When adding features, describe the approach first and wait for approval
-
-## File Structure
-
-/app - Next.js app router pages
-/components - Reusable React components  
-/lib - Utility functions and data
-/public - Static assets
-
-## Known Fragile Areas
-
-- React-Leaflet hydration (must use dynamic imports with ssr: false)
-- Store finder search relies on Zippopotam API for ZIP geocoding (free, no key needed)
-
-## Current Priorities
-
-1. User retention anchors (daily/weekly return reasons)
-2. Stability over new features
-3. Mobile experience
-
-## What NOT to Work On
-
-- Automation/scraping systems (separate repo)
-- Facebook group management
-- Anything requiring new API integrations without discussion
+- `.ai/CONTRACT.md` - Collaboration rules
+- `.ai/DECISION_RIGHTS.md` - What needs approval
+- `.ai/LEARNINGS.md` - Past mistakes
+- `.ai/SESSION_LOG.md` - Recent work

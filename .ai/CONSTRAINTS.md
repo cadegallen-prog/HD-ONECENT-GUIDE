@@ -2,6 +2,104 @@
 
 **Purpose:** Hard boundaries that must NOT be crossed. These exist because they've caused problems before or pose unacceptable risk.
 
+**⚠️ CRITICAL: Read [VERIFICATION_REQUIRED.md](VERIFICATION_REQUIRED.md) before claiming any work is "done".**
+
+---
+
+## 🔴 MOST VIOLATED RULES (READ FIRST)
+
+### ⛔ Rule #1: NEVER Kill Port 3001
+
+**Problem:** Agents keep killing the dev server on port 3001 even though the user is intentionally running it.
+
+**What happens:**
+1. Agent notices port 3001 is in use
+2. Agent kills the process
+3. Agent starts `npm run dev` fresh
+4. **User's time wasted** - they were already previewing changes
+
+**CORRECT behavior:**
+```bash
+# Check if port 3001 is in use
+lsof -i :3001  # (or netstat on Windows)
+
+# IF PORT IS IN USE:
+# ✅ USE IT - navigate to http://localhost:3001 in Playwright
+# ✅ DO NOT kill the process
+# ✅ DO NOT restart npm run dev
+
+# IF PORT IS FREE:
+# ✅ NOW you can run: npm run dev
+```
+
+**Exception:** Only kill port 3001 if:
+- User explicitly asks you to restart it
+- Process is hung/broken (not responding)
+- You've asked user permission first
+
+**Default assumption:** If port 3001 is occupied = **user is running server intentionally. Use it.**
+
+---
+
+### ⛔ Rule #2: NEVER Use Generic Tailwind Colors
+
+**Problem:** Agents keep using boring, generic Tailwind colors that look cheap and unprofessional.
+
+**FORBIDDEN (DO NOT USE):**
+- ❌ `blue-500`, `blue-600`, `blue-700`
+- ❌ `gray-500`, `gray-600`, `gray-700`
+- ❌ `green-500`, `red-500`, `indigo-600`
+- ❌ ANY raw Tailwind color names
+
+**These look generic and lazy.**
+
+**REQUIRED APPROACH:**
+
+**Option 1: Use existing design tokens ONLY**
+```css
+/* ONLY use these from globals.css */
+--background, --foreground
+--card, --card-foreground
+--primary, --primary-foreground
+--cta-primary, --cta-secondary
+--border-default, --border-elevated
+```
+
+**Option 2: Get approval FIRST before adding new colors**
+```
+"This button needs a distinct color.
+
+Current option: Use existing --cta-primary
+Alternative: Introduce new accent color (requires approval)
+
+Which would you prefer?"
+```
+
+**Rule:** NEVER add colors without either:
+1. Using existing tokens from globals.css, OR
+2. Getting user approval with before/after screenshots
+
+---
+
+### ⛔ Rule #3: NEVER Claim "Done" Without Proof
+
+**Problem:** Agents claim "tests pass" or "bug fixed" without actually verifying.
+
+**What happens:**
+1. Agent: "All tests pass now!"
+2. User checks: Tests are failing
+3. **Trust broken, time wasted**
+
+**REQUIRED:** Read [VERIFICATION_REQUIRED.md](VERIFICATION_REQUIRED.md) for complete requirements.
+
+**Minimum proof for "done":**
+- ✅ Test output (lint, build, test:unit, test:e2e - ALL 4)
+- ✅ Screenshots (for UI changes - use Playwright)
+- ✅ GitHub Actions status (if applicable - paste URL)
+- ✅ Before/after comparison (show problem was actually fixed)
+
+**No proof = not done.**
+
 ---
 
 ## 🔴 NEVER Touch (Without Explicit Permission)
