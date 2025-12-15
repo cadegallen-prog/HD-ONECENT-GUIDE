@@ -22,7 +22,7 @@ Every AI session must update this after meaningful work.
 ## 2. What’s Working
 
 - `/guide` and supporting strategy pages are stable and mobile‑friendly.
-- `/store-finder` map hydrates cleanly; tiles now swap per theme and popups are constrained for readability.
+- `/store-finder` map hydrates cleanly; uses standard OpenStreetMap tiles (no filters) for a familiar look in light/dark; popups are compact/readable and marker pins include rank numbers for list-to-map matching.
 - **Crowd Reports system is live:**
   - `/report-find` posts to Google Sheet via Apps Script.
   - `/penny-list` pulls hourly, aggregates by SKU, counts by state, auto‑tiers.
@@ -46,7 +46,7 @@ Testing‑only flag:
 
 - **Cold start:** Penny List looks empty until seeded + habit forms.
 - **Data quality:** duplicates and junk will rise only after volume; solve later with simple moderation if needed.
-- **Hydration drift:** any shared UI change requires Playwright smoke; Playwright visual baselines refreshed on Dec 13 after store-finder/footer fixes (be mindful of intentional visual changes).
+- **Hydration drift:** any shared UI change requires Playwright smoke; Store Finder popup screenshots now have a dedicated Playwright spec to capture desktop/mobile × light/dark in one run.
 
 ---
 

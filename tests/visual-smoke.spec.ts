@@ -8,11 +8,9 @@ const routes = [
   { path: "/about", heading: "About Penny Central" },
 ] as const
 
-const FIXED_NOW = new Date("2025-12-10T12:00:00Z").getTime()
-
 test.describe("visual smoke (light/dark, mobile/desktop)", () => {
   for (const { path, heading } of routes) {
-    test(`renders ${path}`, async ({ page }, testInfo) => {
+    test(`renders ${path}`, async ({ page, context }, testInfo) => {
       const consoleErrors: string[] = []
       page.on("pageerror", (err) => consoleErrors.push(err.message))
       page.on("console", (msg) => {
@@ -28,29 +26,12 @@ test.describe("visual smoke (light/dark, mobile/desktop)", () => {
         }
       }, theme)
 
-      // Freeze time in the browser to avoid relative-date drift.
-      await page.addInitScript((fixedNow: number) => {
-        const RealDate = Date
-        class MockDate extends RealDate {
-          constructor(...args: ConstructorParameters<typeof RealDate>) {
-            if (args.length === 0) {
-              super(fixedNow)
-            } else {
-              super(...args)
-            }
-          }
-
-          static now() {
-            return fixedNow
-          }
-        }
-
-        // @ts-expect-error override Date for deterministic tests
-        window.Date = MockDate
-      }, FIXED_NOW)
-
       // Leaflet tiles are network/dynamic; block them to avoid noisy failures.
       if (path === "/store-finder") {
+        // Avoid GeolocationPositionError noise in headless runs.
+        await context.grantPermissions(["geolocation"])
+        await context.setGeolocation({ latitude: 39.8283, longitude: -98.5795 })
+
         await page.route("**/tile.openstreetmap.org/**", (route) => route.abort())
       }
 

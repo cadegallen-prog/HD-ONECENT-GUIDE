@@ -220,6 +220,32 @@ Losing context between AI sessions and tools (Claude Code, ChatGPT, Copilot)
 
 ---
 
+## Playwright: reuseExistingServer + Date Mocking
+
+### Problem
+Playwright E2E runs failed with hydration mismatch console errors (server-rendered relative dates didn’t match client) when a dev server was already running.
+
+### What We Tried
+- Mocked `window.Date` in the browser for deterministic tests.
+
+### What We Learned
+- If Playwright reuses an already-running `next dev` process, it may *not* have `PLAYWRIGHT=1` set.
+- Mocking Date only in the browser can create real hydration mismatches if the server HTML was rendered with real time.
+
+### What to Do Instead
+- Avoid browser-only Date mocking in smoke tests that assert “no console errors.”
+- Prefer deterministic fixtures/time on the server (via `PLAYWRIGHT=1`) only when Playwright starts the server itself.
+
+---
+
+## Playwright MCP install on Windows
+
+### Problem
+The Playwright MCP server install can fail on Windows due to permissions (global npm install trying to write under `C:\Program Files\Git\home`).
+
+### What We Learned
+`@playwright/test` via `npx playwright ...` is sufficient for browser verification and is more reliable in this environment.
+
 ## Template for New Learnings
 
 When you discover something new, add it here:

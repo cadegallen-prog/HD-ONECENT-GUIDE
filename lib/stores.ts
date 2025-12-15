@@ -44,6 +44,10 @@ const US_BOUNDS = {
 const COORD_OVERRIDES: Record<string, { lat: number; lng: number }> = {
   // Add user-reported coordinate fixes here using format:
   // "STORE_NUMBER": { lat: XX.XXXX, lng: -XX.XXXX }, // Comment explaining source/reason
+
+  // Store #0106 (Kennesaw, GA) - correct pin location for 449 Roberts Ct NW.
+  // This protects against bad upstream/remote coordinate sources.
+  "0106": { lat: 34.0224, lng: -84.6199 },
 }
 
 const haversineMiles = (lat1: number, lon1: number, lat2: number, lon2: number): number => {

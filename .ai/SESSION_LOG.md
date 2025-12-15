@@ -11,6 +11,50 @@
 
 ---
 
+## 2025-12-15 - GitHub Copilot - Store Finder “Ironclad” Verification + Popup/Map Cleanup
+
+**AI:** GitHub Copilot (GPT-5.2 (Preview))  
+**Goal:** Make Store Finder popups readable/consistent, make the map look “normal,” add numbered pins, protect store #0106 pin accuracy, and make verification reproducible (screenshots in one run).  
+**Outcome:** ✅ Store Finder UX updated and verification hardened; all gates pass.
+
+**Work completed:**
+
+- **Map tiles:** switched to standard OpenStreetMap tiles for a familiar “normal map” look in both light/dark.
+- **Popup polish:** removed the “Store” label and the redundant city/state line under the title; kept separators, hour boxes, and click-to-call phone.
+- **CTA color fix:** enforced popup button/link colors against Leaflet’s default anchor styling to prevent the “button text turns link-blue” clash.
+- **Ranked pins:** marker icons now include the 1-based rank number so list ↔ map matching is instant.
+- **#0106 protection:** added a coordinate override for store #0106 (Kennesaw, GA) matching the correct location (449 Roberts Ct NW) to guard against bad upstream coordinates.
+- **Manifest cleanup:** removed missing icon/screenshot references and validator-tripping related-app fields.
+
+**Verification / how to get screenshots “in one go”:**
+
+- Run: `npx playwright test tests/store-finder-popup.spec.ts`
+- Artifacts: `reports/playwright/results/` (attachments per project) and HTML report in `reports/playwright/html/`.
+- Open report: `npx playwright show-report reports/playwright/html`
+
+**Test hardening notes:**
+
+- `tests/visual-smoke.spec.ts` now avoids browser-only Date mocking (it can cause hydration mismatch if Playwright reuses an already-running dev server) and grants geolocation for `/store-finder` to prevent `GeolocationPositionError` console failures.
+- Playwright MCP install may fail on Windows without admin permissions; using `@playwright/test` via `npx playwright` works reliably.
+
+**Files Modified:**
+
+- `components/store-map.tsx`
+- `components/store-map.css`
+- `lib/stores.ts`
+- `site.webmanifest`
+- `tests/store-finder-popup.spec.ts`
+- `tests/visual-smoke.spec.ts`
+- `.ai/STATE.md`
+
+**Gates:**
+
+- `npm run lint` ✅
+- `npm run build` ✅
+- `npm run test:unit` ✅
+- `npm run test:e2e` ✅
+
+
 ## 2025-12-13 - GitHub Copilot - Store Finder Root Cause Fix (Override Removal)
 
 **AI:** GitHub Copilot (Claude Sonnet 4.5)  

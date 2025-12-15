@@ -6,6 +6,16 @@ Dates are recorded in America/New_York time.
 
 ---
 
+## 2025-12-15 - Store Finder Popup/Map Normalization + Screenshot Verification
+
+- Switched Store Finder to standard OpenStreetMap tiles (normal, familiar map look in both themes).
+- Cleaned popup header (removed “Store” label and redundant location line) while keeping separators, hour boxes, and click-to-call phone.
+- Fixed CTA/link color clashes caused by Leaflet default anchor styling.
+- Added rank numbers on map pins for quick list-to-map matching.
+- Added protective coordinate override for store #0106 (Kennesaw, GA) using the correct location (34.0224, -84.6199).
+- Simplified `site.webmanifest` to remove missing-asset references and validator issues.
+- Added a Playwright screenshot spec for Store Finder popup and hardened visual smoke tests; all gates passing (lint/build/unit/e2e).
+
 ## 2025-12-13 - Store Finder Visual Enhancements and Data Accuracy
 
 - Implemented coordinate override for store #0106 to correct inaccurate location data (lat: 34.009693, lng: -84.564690).

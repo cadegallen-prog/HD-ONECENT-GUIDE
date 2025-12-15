@@ -4,7 +4,12 @@ import * as React from "react"
 import { MapContainer, TileLayer, Marker, CircleMarker, useMap, Popup } from "react-leaflet"
 import type { Marker as LeafletMarker, DivIcon } from "leaflet"
 import "leaflet/dist/leaflet.css"
-import { getStoreUrl, normalizeDayHours, mergeConsecutiveDays, getStoreTitle } from "@/lib/stores"
+import {
+  getStoreUrl,
+  normalizeDayHours,
+  mergeConsecutiveDays,
+  formatStoreNumber,
+} from "@/lib/stores"
 import type { StoreLocation } from "@/lib/stores"
 import { Navigation, Info } from "lucide-react"
 import "./store-map.css"
@@ -12,17 +17,12 @@ import { trackEvent } from "@/lib/analytics"
 import { useTheme } from "@/components/theme-provider"
 
 const TILE_ATTRIBUTION =
-  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 
+// Use standard OpenStreetMap tiles for consistent, recognizable map style
 const TILE_CONFIG = {
-  light: {
-    url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-    attribution: TILE_ATTRIBUTION,
-  },
-  dark: {
-    url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-    attribution: TILE_ATTRIBUTION,
-  },
+  url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  attribution: TILE_ATTRIBUTION,
 }
 
 interface StoreMapProps {
@@ -166,12 +166,14 @@ export const StoreMap = React.memo(function StoreMap({
       anchor,
       popupAnchor,
       variant,
+      label,
     }: {
       className: string
       size: [number, number]
       anchor: [number, number]
       popupAnchor: [number, number]
       variant: "default" | "selected"
+      label?: string
     }): DivIcon | null => {
       if (typeof window === "undefined") return null
       // `require` is used intentionally here because leaflet expects to be loaded on the client.
@@ -186,12 +188,22 @@ export const StoreMap = React.memo(function StoreMap({
           <path fill="var(--map-marker-selected)" stroke="var(--map-marker-outline)" stroke-width="2" d="M16 0C7.2 0 0 7.2 0 16c0 12 16 32 16 32s16-20 16-32c0-8.8-7.2-16-16-16z"/>
           <circle fill="var(--map-marker-core)" cx="16" cy="16" r="7"/>
           <circle fill="var(--map-marker-selected)" cx="16" cy="16" r="4"/>
+          ${
+            label
+              ? `<text x="16" y="16" text-anchor="middle" dominant-baseline="middle" font-size="10" font-weight="800" fill="var(--text-primary)">${label}</text>`
+              : ""
+          }
         </svg>
       `
           : `
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 36" width="${size[0]}" height="${size[1]}" style="display: block; width: 100%; height: 100%;">
           <path fill="var(--map-marker-default)" stroke="var(--map-marker-outline)" stroke-width="1.5" d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24c0-6.6-5.4-12-12-12z"/>
           <circle fill="var(--map-marker-core)" cx="12" cy="12" r="5"/>
+          ${
+            label
+              ? `<text x="12" y="12" text-anchor="middle" dominant-baseline="middle" font-size="9" font-weight="800" fill="var(--text-primary)">${label}</text>`
+              : ""
+          }
         </svg>
       `
 
@@ -224,6 +236,49 @@ export const StoreMap = React.memo(function StoreMap({
       }),
     }),
     [buildMarkerIcon]
+  )
+
+  const markerIconCacheRef = React.useRef<Record<string, DivIcon | null>>({})
+
+  const getMarkerIcon = React.useCallback(
+    (variant: "default" | "selected", rank?: number) => {
+      // Rank is 1-based within the displayed result set (usually 1–20)
+      const label =
+        typeof rank === "number" && Number.isFinite(rank) && rank > 0 && rank <= 99
+          ? String(rank)
+          : undefined
+
+      if (!label) {
+        return variant === "selected" ? selectedIcon : defaultIcon
+      }
+
+      const key = `${variant}-${label}`
+      const cached = markerIconCacheRef.current[key]
+      if (cached) return cached
+
+      const icon =
+        variant === "selected"
+          ? buildMarkerIcon({
+              className: "map-marker-selected",
+              size: [32, 48],
+              anchor: [16, 48],
+              popupAnchor: [0, -48],
+              variant: "selected",
+              label,
+            })
+          : buildMarkerIcon({
+              className: "map-marker-default",
+              size: [24, 36],
+              anchor: [12, 36],
+              popupAnchor: [0, -36],
+              variant: "default",
+              label,
+            })
+
+      markerIconCacheRef.current[key] = icon
+      return icon
+    },
+    [buildMarkerIcon, defaultIcon, selectedIcon]
   )
 
   React.useEffect(() => {
@@ -265,10 +320,8 @@ export const StoreMap = React.memo(function StoreMap({
     return () => window.removeEventListener("resize", calculatePopupWidth)
   }, [])
 
-  const tileConfig = React.useMemo(
-    () => (isDarkMode ? TILE_CONFIG.dark : TILE_CONFIG.light),
-    [isDarkMode]
-  )
+  // Using standard OSM tiles for all themes
+  const tileConfig = TILE_CONFIG
 
   React.useEffect(() => {
     if (selectedStore) {
@@ -336,7 +389,10 @@ export const StoreMap = React.memo(function StoreMap({
             <Marker
               key={store.id}
               position={[store.lat, store.lng]}
-              icon={(isSelected ? selectedIcon : defaultIcon) || undefined}
+              icon={
+                (getMarkerIcon(isSelected ? "selected" : "default", rank) as DivIcon | null) ||
+                undefined
+              }
               eventHandlers={{
                 click: () => {
                   trackEvent("map_interact", { action: "marker", markerState: store.state })
@@ -363,14 +419,14 @@ export const StoreMap = React.memo(function StoreMap({
                 <div className="store-popup-card">
                   <div className="store-popup-header">
                     <div className="store-popup-heading">
-                      <p className="store-popup-label">Store</p>
-                      <h3 className="store-popup-title">{getStoreTitle(store)}</h3>
-                      <p className="store-popup-subtext">
-                        {store.city}, {store.state} {store.zip}
-                      </p>
-                    </div>
-                    <div className="store-popup-rank" aria-label={`Rank ${rank}`}>
-                      #{rank}
+                      <h3 className="store-popup-title">
+                        {store.name}
+                        {store.number ? (
+                          <span className="store-popup-store-number">
+                            #{formatStoreNumber(store.number)}
+                          </span>
+                        ) : null}
+                      </h3>
                     </div>
                   </div>
 
