@@ -8,6 +8,7 @@ Three habits keep every session consistent.
 
 - Auto-load should read CLAUDE.md or .github/copilot-instructions.md which point to the .ai/ order in README.md.
 - If auto-load fails, paste the backup prompt from SESSION_TEMPLATES.md to force reading: STATE, BACKLOG, CONTRACT, DECISION_RIGHTS, CONSTRAINTS, SESSION_LOG, LEARNINGS.
+- Check if the dev server is running on port 3001; if the port is already occupied, access http://localhost:3001 directly without restarting or killing any processes.
 
 ---
 
@@ -36,6 +37,7 @@ DONE MEANS:
 5. Refresh .ai/STATE.md (and BACKLOG.md if priorities changed).
 6. Add new learnings to .ai/LEARNINGS.md when relevant.
 7. Record gate results (lint, build, unit, e2e).
+8. Leave the dev server running on port 3001 so future agents can reuse it.
 
 ---
 

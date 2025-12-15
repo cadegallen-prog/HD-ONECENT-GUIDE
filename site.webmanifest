@@ -4,8 +4,8 @@
   "description": "Comprehensive guide to finding Home Depot penny items and mastering clearance hunting",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f8f9fa",
-  "theme_color": "#f96302",
+  "background_color": "#FFFFFF",
+  "theme_color": "#1D4ED8",
   "orientation": "portrait-primary",
   "scope": "/",
   "categories": ["shopping", "education", "lifestyle"],
@@ -16,7 +16,7 @@
       "src": "/icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }

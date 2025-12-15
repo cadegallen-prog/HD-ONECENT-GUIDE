@@ -284,6 +284,30 @@ The Playwright MCP server install can fail on Windows due to permissions (global
 
 `@playwright/test` via `npx playwright ...` is sufficient for browser verification and is more reliable in this environment.
 
+---
+
+## Dev Server Port Handling
+
+### Problem
+
+Agents restart or kill the dev server on port 3001 even when it is already running.
+
+### What We Tried
+
+- Running `npm run dev` blindly without checking whether another process already owns port 3001.
+
+### What We Learned
+
+- The server is intentionally kept running so future sessions can reuse it, and restarting or killing it disrupts that flow.
+
+### What to Do Instead
+
+- Always check if port 3001 is occupied (e.g., `lsof -i :3001` or `netstat`). If it is, access http://localhost:3001 directly for testing; do not kill processes or restart unless explicitly instructed.
+
+**Files:** /ai/MCP_SERVERS.md, /ai/USAGE.md
+
+**Rule:** Prioritize accessing running servers over starting new ones.
+
 ## Template for New Learnings
 
 When you discover something new, add it here:

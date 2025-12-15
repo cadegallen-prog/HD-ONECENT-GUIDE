@@ -12,7 +12,7 @@
 
 ###
 
- **YOU MUST use these MCPs proactively:**
+**YOU MUST use these MCPs proactively:**
 
 1. **Sequential Thinking** - Use for ANY complex task, architectural decision, or multi-step problem. NOT optional for planning.
 2. **Memory / Memory-Keeper** - ALWAYS check memory at session start. ALWAYS save context before session end.
@@ -35,6 +35,7 @@
 ## Configuration Locations
 
 ### Claude Code & GitHub Copilot
+
 **File:** `C:\Users\cadeg\AppData\Roaming\Code\User\mcp.json`
 
 ```json
@@ -79,6 +80,7 @@
 ```
 
 ### ChatGPT Codex
+
 **File:** `~/.codex/config.toml`
 
 ```toml
@@ -108,6 +110,7 @@ All servers use `npx` with `-y` flag for zero-install execution.
 ### What It Does
 
 Provides a cognitive scaffolding system that allows you to:
+
 - Break complex problems into numbered thinking steps
 - Revise and refine thoughts as understanding deepens
 - Branch into alternative reasoning paths
@@ -117,6 +120,7 @@ Provides a cognitive scaffolding system that allows you to:
 ### MANDATORY Usage
 
 **YOU MUST USE THIS FOR:**
+
 - ✅ Any architectural decision
 - ✅ Multi-file refactoring plans
 - ✅ Debugging complex issues
@@ -126,6 +130,7 @@ Provides a cognitive scaffolding system that allows you to:
 - ✅ Any task Cade describes as "I don't know technically what's wrong"
 
 **Example - Planning a Store Finder Fix:**
+
 ```
 Thought 1: Analyze the symptoms
 - Map tiles not loading
@@ -157,11 +162,13 @@ Thought 5: Validate approach won't break anything
 ### Best Practices
 
 ✅ **Use sequential thinking BEFORE implementing:**
+
 - Start with analysis, end with action plan
 - Explicitly consider multiple approaches
 - Document why you chose your approach
 
 ❌ **Don't skip it because:**
+
 - "Task seems simple" - validate that assumption
 - "Want to move fast" - slow thinking prevents rework
 - "Already know the answer" - verify your assumptions
@@ -177,6 +184,7 @@ Thought 5: Validate approach won't break anything
 ### What It Does
 
 Stores and retrieves conversational memory:
+
 - User preferences ("Cade prefers simple solutions over complex")
 - Project decisions ("We decided against using Redux")
 - Repeated patterns ("Cade always wants mobile tested")
@@ -185,6 +193,7 @@ Stores and retrieves conversational memory:
 ### MANDATORY Usage
 
 **SESSION START - CHECK MEMORY:**
+
 ```
 1. Query memory for "PennyCentral decisions"
 2. Query memory for "Cade preferences"
@@ -192,6 +201,7 @@ Stores and retrieves conversational memory:
 ```
 
 **SESSION END - SAVE CONTEXT:**
+
 ```
 1. Store key decisions made this session
 2. Store learnings from any mistakes
@@ -201,12 +211,14 @@ Stores and retrieves conversational memory:
 ### Best Practices
 
 ✅ **Store:**
+
 - Design decisions and rationale
 - User preferences discovered through conversation
 - Successful patterns
 - Failed approaches (what NOT to do)
 
 ❌ **Don't store:**
+
 - Temporary state
 - Code snippets (use files instead)
 - Overly specific details
@@ -223,6 +235,7 @@ Stores and retrieves conversational memory:
 ### What It Does
 
 Enhanced memory system with:
+
 - Project-specific memory graphs
 - Relationship mapping between concepts
 - Temporal analysis (what changed when)
@@ -239,6 +252,7 @@ Use BOTH. They serve different purposes.
 ### MANDATORY Usage
 
 **Before making structural changes:**
+
 ```
 1. Query: "What past decisions relate to [component]?"
 2. Query: "What mistakes were made with [pattern]?"
@@ -246,6 +260,7 @@ Use BOTH. They serve different purposes.
 ```
 
 **After completing features:**
+
 ```
 1. Store: Architectural decisions
 2. Store: Tradeoffs considered
@@ -263,6 +278,7 @@ Use BOTH. They serve different purposes.
 ### What It Does
 
 Connects to your running Next.js dev server (`localhost:3001`) and provides:
+
 - **Real-time build errors** (TypeScript, ESLint, build failures)
 - **Runtime errors** with stack traces
 - **Type errors** from TypeScript compiler
@@ -273,6 +289,7 @@ Connects to your running Next.js dev server (`localhost:3001`) and provides:
 ### MANDATORY Usage
 
 **BEFORE making changes:**
+
 ```
 1. Check current build status
 2. Verify no existing errors
@@ -280,6 +297,7 @@ Connects to your running Next.js dev server (`localhost:3001`) and provides:
 ```
 
 **AFTER making changes:**
+
 ```
 1. Check for new build errors
 2. Verify types still pass
@@ -292,12 +310,14 @@ Connects to your running Next.js dev server (`localhost:3001`) and provides:
 ### Best Practices
 
 ✅ **Use for:**
+
 - Pre-flight checks before coding
 - Post-change validation
 - Understanding route structure
 - Debugging "works in build but not dev" issues
 
 ❌ **Avoid:**
+
 - Using it as a replacement for `npm run build` (still run that)
 - Assuming errors are "just dev server" (they're real)
 
@@ -312,6 +332,7 @@ Connects to your running Next.js dev server (`localhost:3001`) and provides:
 ### What It Does
 
 **Microsoft's official browser automation for AI agents:**
+
 - Navigate pages, take snapshots
 - Interact with elements (click, fill, scroll)
 - Capture screenshots
@@ -323,6 +344,7 @@ Connects to your running Next.js dev server (`localhost:3001`) and provides:
 ### MANDATORY Usage
 
 **YOU MUST test in browser for:**
+
 - ✅ Any UI change
 - ✅ Form functionality
 - ✅ Responsive layout changes
@@ -331,6 +353,7 @@ Connects to your running Next.js dev server (`localhost:3001`) and provides:
 - ✅ Visual regressions
 
 **Required Evidence:**
+
 - Screenshot before change
 - Screenshot after change
 - Console error check
@@ -362,6 +385,7 @@ playwright_evaluate({ script: "console.error.toString()" })
 ### Best Practices
 
 ✅ **Use Playwright for:**
+
 - End-to-end user flows
 - Visual regression testing
 - Mobile viewport testing (resize to 375x667)
@@ -369,6 +393,7 @@ playwright_evaluate({ script: "console.error.toString()" })
 - Form submission testing
 
 ❌ **Don't use for:**
+
 - Unit testing (use Vitest)
 - API testing (use fetch/axios)
 - Build-time checks (use next-devtools)
@@ -384,6 +409,7 @@ playwright_evaluate({ script: "console.error.toString()" })
 ### What It Does
 
 Fetches current, version-specific documentation for:
+
 - Next.js (we use v16)
 - React (v19)
 - Tailwind CSS
@@ -396,6 +422,7 @@ Fetches current, version-specific documentation for:
 ### MANDATORY Usage
 
 **ALWAYS look up docs when:**
+
 - ✅ Using Next.js App Router patterns
 - ✅ Implementing React Server Components
 - ✅ Using Tailwind classes you're unsure about
@@ -412,30 +439,32 @@ Fetches current, version-specific documentation for:
 context7_get_docs({
   library: "/vercel/next.js/v16",
   topic: "data fetching",
-  maxTokens: 2000
+  maxTokens: 2000,
 })
 // Returns: Use async Server Components, not getServerSideProps
 
 // WRONG: Guessing Tailwind class names
-"I'll use text-gray-900..." // ❌ Might be outdated
+;("I'll use text-gray-900...") // ❌ Might be outdated
 
 // RIGHT: Look up current color palette
 context7_get_docs({
   library: "/tailwindcss",
   topic: "color palette",
-  maxTokens: 1000
+  maxTokens: 1000,
 })
 ```
 
 ### Best Practices
 
 ✅ **Look up BEFORE coding:**
+
 - API changes in libraries
 - Breaking changes between versions
 - Current best practices
 - Deprecated patterns
 
 ❌ **Don't assume:**
+
 - Your training data is current
 - Patterns haven't changed
 - Your memory is perfect
@@ -458,11 +487,13 @@ context7_get_docs({
 ### Best Practices
 
 ✅ **Use for:**
+
 - Targeted file reads (specific paths)
 - Batch file operations
 - Creating multiple related files
 
 ❌ **Avoid:**
+
 - Recursive directory scans (use glob patterns instead)
 - Reading same file multiple times
 - Exploratory browsing (wasteful)
@@ -477,17 +508,20 @@ context7_get_docs({
 ### Key Capabilities
 
 **Pull Requests:**
+
 - Create, update, merge PRs
 - Request Copilot code reviews
 - Add/view comments
 - Check CI status
 
 **Issues:**
+
 - Create/update issues
 - Add comments
 - Manage labels
 
 **Repository:**
+
 - Create branches
 - Push files
 - Read files from any repo
@@ -495,12 +529,14 @@ context7_get_docs({
 ### Best Practices
 
 ✅ **Use for:**
+
 - Creating PRs for significant changes
 - Requesting code reviews
 - Managing issues
 - Checking CI results
 
 ❌ **Avoid:**
+
 - Polling API repeatedly (rate limits)
 - Using for local file operations
 
@@ -606,6 +642,7 @@ RIGHT Agent: [Checks memory-keeper first]
 7. **Filesystem** - Very low (targeted reads)
 
 **Optimization:**
+
 - Cache info within session
 - Use specific queries, not broad scans
 - Batch operations when possible
@@ -622,6 +659,7 @@ RIGHT Agent: [Checks memory-keeper first]
 **Symptoms:** Tools not available, timeout errors
 
 **Fix:**
+
 1. Restart VS Code
 2. Check `mcp.json` or `config.toml` syntax
 3. Verify `npx` in PATH
@@ -633,6 +671,7 @@ RIGHT Agent: [Checks memory-keeper first]
 **Symptoms:** No memories found
 
 **Fix:**
+
 - Storage location: `~/mcp-data/memory-keeper/`
 - First run has no data (expected)
 - Save context explicitly to populate
@@ -642,16 +681,19 @@ RIGHT Agent: [Checks memory-keeper first]
 **Symptoms:** "No Next.js dev server found"
 
 **Fix:**
-1. Ensure dev server running: `npm run dev`
+
+1. Ensure dev server running: `npm run dev` (only when port 3001 is free)
 2. Check it's on correct port (3001)
-3. Verify Next.js 16+ installed
-4. Restart dev server
+3. If the dev server is already running on port 3001, do not restart it—access http://localhost:3001 directly for testing and use tools like `lsof -i :3001` or `netstat` to confirm without killing the process.
+4. Verify Next.js 16+ installed
+5. Restart dev server only if no process already owns port 3001
 
 ### Playwright Timeout
 
 **Symptoms:** "Waiting for selector timed out"
 
 **Fix:**
+
 1. Increase wait time
 2. Check selector is correct
 3. Verify element actually appears
@@ -666,7 +708,9 @@ RIGHT Agent: [Checks memory-keeper first]
 1. ✅ Check Memory MCPs for project context
 2. ✅ Read `.ai/STATE.md` and `.ai/SESSION_LOG.md`
 3. ✅ Check next-devtools for existing errors
-4. ✅ Ask Cade: GOAL / WHY / DONE
+4. ✅ Check if the dev server is running on port 3001 (e.g., via curl http://localhost:3001 or browser); if it is, use it directly—do not run `npm run dev` or kill any processes.
+5. ✅ Ask Cade: GOAL / WHY / DONE
+6. ✅ Ask Cade: GOAL / WHY / DONE
 
 ### During Work
 
