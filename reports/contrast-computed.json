@@ -239,7 +239,7 @@
       "selector": "body",
       "role": "text",
       "found": true,
-      "ratio": 13.66,
+      "ratio": 17.49,
       "threshold": 7,
       "pass": true
     },
@@ -250,7 +250,7 @@
       "selector": "[data-card], article",
       "role": "text",
       "found": true,
-      "ratio": 12.69,
+      "ratio": 16.74,
       "threshold": 7,
       "pass": true
     },
@@ -261,7 +261,7 @@
       "selector": "[data-card], article",
       "role": "border",
       "found": true,
-      "ratio": 3.41,
+      "ratio": 11.74,
       "threshold": 3,
       "pass": true
     },
@@ -272,7 +272,7 @@
       "selector": "[data-cta=\"befrugal\"]",
       "role": "cta",
       "found": true,
-      "ratio": 5.17,
+      "ratio": 6.7,
       "threshold": 3,
       "pass": true
     },
@@ -580,7 +580,7 @@
       "selector": "[data-cta=\"befrugal\"]",
       "role": "cta",
       "found": true,
-      "ratio": 6.62,
+      "ratio": 6.7,
       "threshold": 3,
       "pass": true
     },
