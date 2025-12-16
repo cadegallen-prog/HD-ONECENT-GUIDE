@@ -2,19 +2,25 @@ import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
-const badgeVariants = cva("inline-flex items-center px-2 py-0.5 text-xs font-medium rounded", {
-  variants: {
-    variant: {
-      default: "bg-elevated text-text-secondary",
-      success: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
-      error: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
-      warning: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
+const badgeVariants = cva(
+  "inline-flex items-center px-2 py-0.5 text-xs font-medium rounded border",
+  {
+    variants: {
+      variant: {
+        default:
+          "bg-[var(--bg-elevated)] text-[var(--text-secondary)] border-[var(--border-default)]",
+        success:
+          "bg-[var(--chip-success-surface)] text-[var(--status-success)] border-[var(--chip-success-border)]",
+        error: "bg-[var(--bg-elevated)] text-[var(--status-error)] border-[var(--status-error)]",
+        warning:
+          "bg-[var(--bg-elevated)] text-[var(--status-warning)] border-[var(--status-warning)]",
+      },
     },
-  },
-  defaultVariants: {
-    variant: "default",
-  },
-})
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+)
 
 export interface BadgeProps
   extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof badgeVariants> {}

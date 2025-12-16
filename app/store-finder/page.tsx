@@ -865,7 +865,7 @@ export default function StoreFinderPage() {
   return (
     <div className="min-h-screen flex flex-col">
       {PROOF_OF_CONCEPT_MODE && (
-        <div className="bg-red-700 text-white text-center px-4 py-3 text-sm font-semibold">
+        <div className="bg-[var(--status-error)] text-[var(--cta-text)] text-center px-4 py-3 text-sm font-semibold">
           PROOF OF CONCEPT - ALL ~{(allLoadedStores.length || 2007).toLocaleString()} STORES LOADED
           (mobile will be slow!)
         </div>
@@ -1136,7 +1136,7 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
                 aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
               >
                 <Heart
-                  className={`h-3.5 w-3.5 ${isFavorite ? "fill-red-500 text-red-500" : "text-muted-foreground"}`}
+                  className={`h-3.5 w-3.5 ${isFavorite ? "fill-[var(--status-error)] text-[var(--status-error)]" : "text-muted-foreground"}`}
                 />
               </button>
             </div>
@@ -1269,7 +1269,7 @@ function StoreCard({
           aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
         >
           <Heart
-            className={`h-4 w-4 ${isFavorite ? "fill-red-500 text-red-500" : "text-muted-foreground"}`}
+            className={`h-4 w-4 ${isFavorite ? "fill-[var(--status-error)] text-[var(--status-error)]" : "text-muted-foreground"}`}
           />
         </button>
       </div>

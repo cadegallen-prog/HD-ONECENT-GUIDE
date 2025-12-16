@@ -66,7 +66,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
       {/* Backdrop */}
       {open && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm"
+          className="fixed inset-0 bg-[var(--bg-hover)]/80 z-40 backdrop-blur-sm"
           onClick={() => onOpenChange(false)}
           suppressHydrationWarning
         />

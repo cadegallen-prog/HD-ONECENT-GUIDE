@@ -12,13 +12,22 @@ Dates are recorded in America/New_York time.
 - Cleaned popup header (removed “Store” label and redundant location line) while keeping separators, hour boxes, and click-to-call phone.
 - Fixed CTA/link color clashes caused by Leaflet default anchor styling.
 - Added rank numbers on map pins for quick list-to-map matching.
-- Added protective coordinate override for store #0106 (Kennesaw, GA) using the correct location (34.0224, -84.6199).
+- Kept the coordinate override system available for future user-reported issues; currently empty because upstream store data is now corrected.
 - Simplified `site.webmanifest` to remove missing-asset references and validator issues.
 - Added a Playwright screenshot spec for Store Finder popup and hardened visual smoke tests; all gates passing (lint/build/unit/e2e).
 
+## 2025-12-16 - Verified Pennies Launch + Homepage/Nav Refresh
+
+- Added a new curated route `/verified-pennies` for browsing confirmed penny items with images, search, and brand filtering.
+- Updated primary navigation to emphasize Verified + Penny List and shortened labels for clarity (Report, Stores).
+- Updated homepage hero + tools section to prioritize Verified Items and the Penny List; restored Store Finder as a secondary link.
+- Clarified what “Verified” means on `/verified-pennies` to reduce user-risk and set expectations about store-by-store variance.
+- Restored design-token compliance by removing raw Tailwind palette colors across UI surfaces (including modal backdrops and status treatments).
+- Enabled `next/image` support for Home Depot CDN images via `images.remotePatterns` (`images.thdstatic.com`).
+
 ## 2025-12-13 - Store Finder Visual Enhancements and Data Accuracy
 
-- Implemented coordinate override for store #0106 to correct inaccurate location data (lat: 34.009693, lng: -84.564690).
+- Implemented coordinate override support for user-reported store data issues (later cleared once upstream store data was corrected).
 - Switched map tiles to CARTO voyager for improved mid-contrast in both light and dark themes.
 - Unified popup styling in CSS for better readability, consistency, and theme support.
 - Removed unused Suspense import in layout.tsx to resolve lint error.

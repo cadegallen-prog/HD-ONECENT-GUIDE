@@ -520,7 +520,7 @@ export function PennyListClient({
                   setSearchQueryWithURL("")
                   setDateRangeWithURL("30")
                 }}
-                className="px-4 py-2 rounded-lg bg-[var(--cta-primary)] text-white font-medium hover:bg-[var(--cta-hover)] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+                className="px-4 py-2 rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-medium hover:bg-[var(--cta-hover)] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
               >
                 Clear all filters
               </button>

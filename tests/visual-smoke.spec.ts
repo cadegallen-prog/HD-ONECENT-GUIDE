@@ -2,7 +2,8 @@ import { test, expect } from "@playwright/test"
 
 const routes = [
   { path: "/", heading: "Find $0.01 Items at Home Depot" },
-  { path: "/penny-list", heading: "Penny List: Latest Community Leads" },
+  { path: "/verified-pennies", heading: "Verified Penny Items" },
+  { path: "/penny-list", heading: "Penny List" },
   { path: "/report-find", heading: "Report a Penny Find" },
   { path: "/store-finder", heading: "Store Finder" },
   { path: "/about", heading: "About Penny Central" },
@@ -42,6 +43,20 @@ test.describe("visual smoke (light/dark, mobile/desktop)", () => {
       await page.goto(path)
 
       await expect(page.getByRole("heading", { level: 1, name: heading })).toBeVisible()
+
+      await page.evaluate(() => {
+        const active = document.activeElement as HTMLElement | null
+        active?.blur?.()
+      })
+
+      await testInfo.attach(
+        `screenshot-${testInfo.project.name}-${path.replaceAll("/", "_") || "_"}`,
+        {
+          body: await page.screenshot({ caret: "initial" }),
+          contentType: "image/png",
+        }
+      )
+
       expect(consoleErrors, `Console errors on ${path}`).toEqual([])
     })
   }

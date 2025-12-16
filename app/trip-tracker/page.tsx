@@ -262,8 +262,8 @@ export default function TripTrackerPage() {
           </div>
           <div className="bg-card border border-border rounded-xl p-6">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-emerald-500/10 rounded-lg flex items-center justify-center">
-                <CheckCircle2 className="h-6 w-6 text-emerald-500" />
+              <div className="w-12 h-12 bg-[var(--chip-success-surface)] border border-[var(--chip-success-border)] rounded-lg flex items-center justify-center">
+                <CheckCircle2 className="h-6 w-6 text-[var(--status-success)]" />
               </div>
               <div>
                 <div className="text-2xl font-bold text-foreground">{completedTrips}</div>
@@ -286,7 +286,7 @@ export default function TripTrackerPage() {
 
         {/* New Trip Modal */}
         {showNewTrip && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-[var(--bg-hover)]/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
             <div className="bg-card border border-border rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
               <div className="p-6 border-b border-border">
                 <h2 className="text-2xl font-heading font-bold text-foreground">Plan New Trip</h2>
@@ -528,14 +528,14 @@ function TripCard({
 }) {
   return (
     <div
-      className={`bg-card border-2 rounded-xl p-6 transition-all ${trip.completed ? "border-emerald-500/50 bg-emerald-500/5" : "border-border"}`}
+      className={`bg-card border-2 rounded-xl p-6 transition-all ${trip.completed ? "border-[var(--status-success)] bg-[var(--chip-success-surface)]" : "border-border"}`}
     >
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-2">
             <h3 className="text-xl font-heading font-bold text-foreground">{trip.title}</h3>
             {trip.completed && (
-              <span className="px-2 py-1 bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 rounded-md text-xs font-medium">
+              <span className="px-2 py-1 bg-[var(--chip-success-surface)] text-[var(--status-success)] border border-[var(--chip-success-border)] rounded-md text-xs font-medium">
                 Completed
               </span>
             )}
@@ -561,7 +561,11 @@ function TripCard({
             variant="secondary"
             size="sm"
             onClick={() => onToggle(trip.id)}
-            className={trip.completed ? "bg-emerald-500/10" : ""}
+            className={
+              trip.completed
+                ? "bg-[var(--chip-success-surface)] border border-[var(--chip-success-border)]"
+                : ""
+            }
           >
             {trip.completed ? <CheckCircle2 className="h-4 w-4" /> : <Circle className="h-4 w-4" />}
           </Button>

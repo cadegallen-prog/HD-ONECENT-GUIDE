@@ -93,6 +93,9 @@ async function waitForServerReady(child: ReturnType<typeof spawn>, timeoutMs: nu
 }
 
 async function prepareContext(
+  theme: Theme,
+  viewport: Viewport
+): Promise<{ context: BrowserContext; page: Page }> {
   const browser = await chromium.launch({ headless: true })
   const context = await browser.newContext({
     viewport: { width: viewport.width, height: viewport.height },
@@ -153,7 +156,7 @@ async function capture(theme: Theme, viewport: Viewport) {
       // eslint-disable-next-line no-console
       console.log(`Console errors captured (${viewport.name}/${theme}):`, consoleErrors)
     }
-
+  } finally {
     await context.close()
     // context.close also closes the underlying browser
   }
@@ -178,7 +181,8 @@ async function main() {
     // eslint-disable-next-line no-console
     console.error(`HARD TIMEOUT after ${HARD_TIMEOUT_MS}ms`)
     killProcessTree(child)
-   oIMEOUT_MS)
+    process.exit(1)
+  }, HARD_TIMEOUT_MS)
 
   try {
     await waitForServerReady(child, SERVER_READY_TIMEOUT_MS)
@@ -194,13 +198,19 @@ async function main() {
 
     // Gracefully stop dev server
     killProcessTree(child)
+    clearTimeout(hardTimeout)
+  } catch (err) {
+    clearTimeout(hardTimeout)
+    killProcessTree(child)
+    throw err
   }
 }
 
 main().catch(async (err) => {
   // eslint-disable-next-line no-console
   console.error(err)
- but is empty, remove it to avoid noise.
+
+  // Clean up marker file if it exists but is empty, remove it to avoid noise.
   try {
     const marker = path.join(OUT_DIR, ".keep")
     await rm(marker, { force: true })

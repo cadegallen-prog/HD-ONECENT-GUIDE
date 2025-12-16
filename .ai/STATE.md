@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 15, 2025 (2:45 PM - Store Finder UX fixes)  
+**Last updated:** Dec 16, 2025 (Verified Pennies + Homepage/Nav refresh)  
 This file is the **single living snapshot** of where the project is right now.  
 Every AI session must update this after meaningful work.
 
@@ -11,6 +11,14 @@ Every AI session must update this after meaningful work.
 - **Site:** live at https://pennycentral.com
 - **Phase:** Stabilization + Community Intake + Command Reliability + Store Finder UX
 - **Traffic reality:** early launch volatility is normal; focus on retention loop first.
+- **Recent focus (Dec 16):** Launched Verified Pennies + refreshed homepage/nav:
+  - New curated route: `/verified-pennies` (search + brand filter + image-first grid)
+  - Nav prioritizes **Verified** and **Penny List**; shortened labels (**Report**, **Stores**)
+  - Homepage hero/tools now point first to Verified Items and the Penny List; Store Finder remains available as a secondary link
+  - Clarified what “Verified” means on `/verified-pennies` to set expectations (store-by-store variance, timing, proof sources)
+  - Restored token-only color usage across UI surfaces (removed remaining raw Tailwind palette classes and `text-white` usage)
+  - Enabled `next/image` external images for Home Depot CDN (`images.thdstatic.com`) via `next.config.js`
+
 - **Recent focus (Dec 15 2:45 PM):** Fixed critical Store Finder UX bugs:
   - **Re-ranking bug eliminated:** Clicking a store on the map no longer re-sorts the list; ranking is now decoupled from map panning via `rankingCenterRef`
   - **Marker readability improved:** Pin numbers increased from font-size 11/12 to 13/15 with heavier stroke (4px) for better visibility
@@ -32,6 +40,9 @@ Every AI session must update this after meaningful work.
 - **Crowd Reports system is live:**
   - `/report-find` posts to Google Sheet via Apps Script.
   - `/penny-list` pulls hourly, aggregates by SKU, counts by state, auto‑tiers.
+- **Verified Pennies database is live (curated):**
+  - `/verified-pennies` serves a curated catalog of confirmed penny items with product images.
+  - This is additive to Community Reports (does not replace the crowdsourced loop).
 - **Command reliability (Dec 15, 12:30 PM):**
   - All local scripts (`lint:colors`, `test:unit`, `check-axe`, `check-contrast`) now exit cleanly without hanging
   - Removed `npx` from execution paths (only in CI Playwright install and docs)

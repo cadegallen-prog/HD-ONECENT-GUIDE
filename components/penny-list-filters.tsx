@@ -194,7 +194,7 @@ export function PennyListFilters({
             aria-pressed={stateFilter === userState ? "true" : "false"}
             className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium min-h-[44px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
               stateFilter === userState
-                ? "bg-[var(--cta-primary)] text-white"
+                ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
                 : "border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]"
             }`}
             title={`Show only items in ${getStateName(userState)}`}
@@ -221,7 +221,7 @@ export function PennyListFilters({
                 aria-pressed={tierFilter === option.value ? "true" : "false"}
                 className={`px-3 sm:px-4 py-2.5 text-sm font-medium min-h-[44px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
                   tierFilter === option.value
-                    ? "bg-[var(--cta-primary)] text-white"
+                    ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
                     : "bg-[var(--bg-page)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]"
                 } ${option.value !== "all" ? "border-l border-[var(--border-default)]" : ""}`}
                 title={option.label}
@@ -240,7 +240,7 @@ export function PennyListFilters({
           aria-pressed={hasPhotoOnly ? "true" : "false"}
           className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium min-h-[44px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
             hasPhotoOnly
-              ? "bg-[var(--cta-primary)] text-white"
+              ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
               : "border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]"
           }`}
           title="Show only items with photos"
@@ -257,7 +257,7 @@ export function PennyListFilters({
             aria-pressed={viewMode === "cards" ? "true" : "false"}
             className={`px-3 py-2.5 min-h-[44px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
               viewMode === "cards"
-                ? "bg-[var(--cta-primary)] text-white"
+                ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
                 : "bg-[var(--bg-page)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]"
             }`}
             title="Card view"
@@ -271,7 +271,7 @@ export function PennyListFilters({
             aria-pressed={viewMode === "table" ? "true" : "false"}
             className={`px-3 py-2.5 min-h-[44px] border-l border-[var(--border-default)] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
               viewMode === "table"
-                ? "bg-[var(--cta-primary)] text-white"
+                ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
                 : "bg-[var(--bg-page)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]"
             }`}
             title="Table view"
@@ -323,7 +323,7 @@ export function PennyListFilters({
                 aria-pressed={dateRange === option.value ? "true" : "false"}
                 className={`px-3 py-2.5 text-sm font-medium min-h-[44px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
                   dateRange === option.value
-                    ? "bg-[var(--cta-primary)] text-white"
+                    ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
                     : "bg-[var(--bg-page)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]"
                 } ${index > 0 ? "border-l border-[var(--border-default)]" : ""}`}
                 title={`Show items from the last ${option.label}`}

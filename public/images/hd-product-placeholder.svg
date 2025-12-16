@@ -1,0 +1,31 @@
+<svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="400" height="400" fill="#F5F5F5"/>
+
+  <!-- Home Depot Orange Border -->
+  <rect x="40" y="40" width="320" height="320" fill="white" stroke="#F96302" stroke-width="4"/>
+
+  <!-- Home Depot Logo Colors (Orange) -->
+  <circle cx="200" cy="160" r="40" fill="#F96302" opacity="0.2"/>
+
+  <!-- Package/Box Icon -->
+  <g transform="translate(140, 140)">
+    <!-- Box base -->
+    <path d="M60 30 L100 50 L100 110 L60 90 L20 110 L20 50 Z" fill="#E0E0E0" stroke="#999" stroke-width="2"/>
+    <!-- Box top -->
+    <path d="M60 30 L100 50 L60 70 L20 50 Z" fill="#F5F5F5" stroke="#999" stroke-width="2"/>
+    <!-- Center line -->
+    <path d="M60 30 L60 90" stroke="#999" stroke-width="2"/>
+  </g>
+
+  <!-- Text -->
+  <text x="200" y="260" font-family="Arial, sans-serif" font-size="16" fill="#666" text-anchor="middle" font-weight="600">
+    Home Depot
+  </text>
+  <text x="200" y="285" font-family="Arial, sans-serif" font-size="14" fill="#999" text-anchor="middle">
+    Product Image
+  </text>
+  <text x="200" y="305" font-family="Arial, sans-serif" font-size="14" fill="#999" text-anchor="middle">
+    Not Available
+  </text>
+</svg>

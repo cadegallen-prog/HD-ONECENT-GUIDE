@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { MapPin, BookOpen, ExternalLink, Heart, DollarSign, Users, Star } from "lucide-react"
+import { BookOpen, ExternalLink, Heart, DollarSign, Users, BadgeCheck, Map } from "lucide-react"
 import {
   COMMUNITY_MEMBER_COUNT_DISPLAY,
   FACEBOOK_GROUP_URL,
@@ -50,25 +50,25 @@ export default function Home() {
 
           {/* Supporting text */}
           <p className="mt-4 text-base text-[var(--text-muted)] max-w-2xl mx-auto leading-relaxed">
-            Free tools and guides to help you find $0.01 clearance items. Learn the markdown system
-            and start hunting today.
+            Free tools and guides to help you find penny items. Learn the markdown system and start
+            hunting today.
           </p>
 
           {/* CTAs - Unified button system */}
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
             <Link
-              href="/penny-list"
+              href="/verified-pennies"
               className="btn-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold shadow-md hover:bg-[var(--cta-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
             >
-              <Star className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
-              Check the Penny List
+              <BadgeCheck className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
+              Browse Verified Items
             </Link>
             <Link
-              href="/store-finder"
+              href="/penny-list"
               className="btn-secondary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg border-2 border-[var(--border-default)] dark:border-[var(--border-strong)] bg-transparent text-[var(--text-primary)] font-semibold hover:bg-[var(--bg-elevated)] hover:border-[var(--border-strong)] dark:hover:bg-[var(--bg-elevated)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
             >
-              <MapPin className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
-              Find Stores Near You
+              <Users className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
+              Penny List
             </Link>
           </div>
         </div>
@@ -93,53 +93,53 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Tool cards grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {/* Penny List Card */}
+          {/* Tool cards grid - 3 main tools */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+            {/* Verified Pennies Card */}
+            <Link
+              href="/verified-pennies"
+              className="card-interactive group flex flex-col bg-[var(--bg-card)] rounded-xl p-6 border border-[var(--border-default)]"
+            >
+              <div className="w-12 h-12 rounded-xl bg-[var(--chip-success-surface)] border border-[var(--chip-success-border)] flex items-center justify-center mb-4">
+                <BadgeCheck className="w-6 h-6 text-[var(--status-success)]" aria-hidden="true" />
+              </div>
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
+                Verified Pennies
+              </h3>
+              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed flex-grow">
+                400+ confirmed penny items with product images. Your reference for penny shopping.
+              </p>
+              <span className="mt-4 inline-flex items-center text-[var(--link-default)] text-sm font-medium group-hover:text-[var(--link-hover)] group-hover:underline">
+                Browse verified items →
+              </span>
+            </Link>
+
+            {/* Community Reports Card */}
             <Link
               href="/penny-list"
-              className="card-interactive group flex flex-col bg-white dark:bg-[var(--bg-elevated)] rounded-xl p-6 border border-[var(--border-default)]"
+              className="card-interactive group flex flex-col bg-[var(--bg-card)] rounded-xl p-6 border border-[var(--border-default)]"
             >
-              <div className="w-12 h-12 rounded-xl bg-[var(--bg-elevated)] dark:bg-[var(--bg-tertiary)] flex items-center justify-center mb-4">
-                <Star className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
+              <div className="w-12 h-12 rounded-xl bg-[var(--chip-accent-surface)] border border-[var(--chip-accent-border)] flex items-center justify-center mb-4">
+                <Users className="w-6 h-6 text-[var(--status-info)]" aria-hidden="true" />
               </div>
               <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
                 Penny List
               </h3>
               <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed flex-grow">
-                See recent penny finds reported by the community. Fresh leads updated hourly.
+                Community-reported penny sightings with freshness and filters. Updated hourly.
               </p>
               <span className="mt-4 inline-flex items-center text-[var(--link-default)] text-sm font-medium group-hover:text-[var(--link-hover)] group-hover:underline">
                 View penny list →
               </span>
             </Link>
 
-            {/* Store Finder Card */}
-            <Link
-              href="/store-finder"
-              className="card-interactive group flex flex-col bg-white dark:bg-[var(--bg-elevated)] rounded-xl p-6 border border-[var(--border-default)]"
-            >
-              <div className="w-12 h-12 rounded-xl bg-[var(--bg-elevated)] dark:bg-[var(--bg-tertiary)] flex items-center justify-center mb-4">
-                <MapPin className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
-              </div>
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
-                Store Finder
-              </h3>
-              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed flex-grow">
-                Find Home Depot locations near you with hours, phone numbers, and directions.
-              </p>
-              <span className="mt-4 inline-flex items-center text-[var(--link-default)] text-sm font-medium group-hover:text-[var(--link-hover)] group-hover:underline">
-                Find stores →
-              </span>
-            </Link>
-
             {/* Penny Guide Card */}
             <Link
               href="/guide"
-              className="card-interactive group flex flex-col bg-white dark:bg-[var(--bg-elevated)] rounded-xl p-6 border border-[var(--border-default)]"
+              className="card-interactive group flex flex-col bg-[var(--bg-card)] rounded-xl p-6 border border-[var(--border-default)]"
             >
-              <div className="w-12 h-12 rounded-xl bg-[var(--bg-elevated)] dark:bg-[var(--bg-tertiary)] flex items-center justify-center mb-4">
-                <BookOpen className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
+              <div className="w-12 h-12 rounded-xl bg-[var(--chip-muted-surface)] border border-[var(--chip-muted-border)] flex items-center justify-center mb-4">
+                <BookOpen className="w-6 h-6 text-[var(--status-warning)]" aria-hidden="true" />
               </div>
               <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
                 Complete Guide
@@ -152,6 +152,16 @@ export default function Home() {
               </span>
             </Link>
           </div>
+
+          <div className="mt-6 flex items-center justify-center">
+            <Link
+              href="/store-finder"
+              className="inline-flex items-center gap-2 text-sm text-[var(--link-default)] hover:text-[var(--link-hover)] underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] rounded"
+            >
+              <Map className="w-4 h-4" aria-hidden="true" />
+              Store Finder (secondary tool)
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -159,7 +169,7 @@ export default function Home() {
           HOW IT WORKS SECTION
           Scannable steps with unified typography
           ============================================ */}
-      <section className="section-padding px-4 sm:px-6 bg-white dark:bg-[var(--bg-page)]">
+      <section className="section-padding px-4 sm:px-6 bg-[var(--bg-page)]">
         <div className="max-w-4xl mx-auto">
           {/* Section header */}
           <div className="text-center mb-10">
@@ -244,7 +254,7 @@ export default function Home() {
           ============================================ */}
       <section className="section-padding px-4 sm:px-6 bg-[var(--bg-elevated)] dark:bg-[var(--bg-card)]">
         <div className="max-w-3xl mx-auto text-center">
-          <div className="w-12 h-12 rounded-full bg-white dark:bg-[var(--bg-elevated)] mx-auto mb-4 flex items-center justify-center border border-[var(--border-default)]">
+          <div className="w-12 h-12 rounded-full bg-[var(--bg-page)] mx-auto mb-4 flex items-center justify-center border border-[var(--border-default)]">
             <Users className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
           </div>
           <h2 className="text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug">
@@ -270,7 +280,7 @@ export default function Home() {
           SUPPORT SECTION
           Secondary CTAs for tips and cashback
           ============================================ */}
-      <section className="section-padding px-4 sm:px-6 bg-white dark:bg-[var(--bg-page)]">
+      <section className="section-padding px-4 sm:px-6 bg-[var(--bg-page)]">
         <div className="container-wide">
           {/* Section header */}
           <div className="text-center mb-10">
@@ -291,7 +301,7 @@ export default function Home() {
               rel="noopener noreferrer"
               className="card-interactive bg-[var(--bg-elevated)] dark:bg-[var(--bg-card)] rounded-xl p-6 border border-[var(--border-default)] block"
             >
-              <div className="w-12 h-12 rounded-xl bg-white dark:bg-[var(--bg-elevated)] flex items-center justify-center mb-4 border border-[var(--border-default)]">
+              <div className="w-12 h-12 rounded-xl bg-[var(--bg-page)] flex items-center justify-center mb-4 border border-[var(--border-default)]">
                 <Heart className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
               </div>
               <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
@@ -314,7 +324,7 @@ export default function Home() {
               rel="noopener noreferrer"
               className="card-interactive bg-[var(--bg-elevated)] dark:bg-[var(--bg-card)] rounded-xl p-6 border border-[var(--border-default)] block"
             >
-              <div className="w-12 h-12 rounded-xl bg-white dark:bg-[var(--bg-elevated)] flex items-center justify-center mb-4 border border-[var(--border-default)]">
+              <div className="w-12 h-12 rounded-xl bg-[var(--bg-page)] flex items-center justify-center mb-4 border border-[var(--border-default)]">
                 <DollarSign className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
               </div>
               <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">

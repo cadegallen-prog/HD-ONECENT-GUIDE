@@ -11,6 +11,65 @@
 
 ---
 
+## 2025-12-16 - ChatGPT Codex (GPT-5.2) - Token Compliance Sweep + “Penny List” SEO + Verified Definition
+
+**AI:** ChatGPT Codex
+**Goal:** Verify recent Verified Pennies + nav/homepage changes are net-positive, remove quietly harmful issues (especially token violations), and keep docs accurate.
+
+**Changes Made:**
+
+- Clarified what “Verified” means on `/verified-pennies` (risk-reduction + expectation setting).
+- Restored “Penny List” wording for SEO intent (nav + homepage + `/penny-list` header/metadata) while keeping “Community Reports” framing in supporting copy.
+- Restored Store Finder discoverability on the homepage as a secondary link under Tools.
+- Removed remaining raw Tailwind palette usage (e.g. `text-white`, `bg-*-500`, `bg-black/50`) across interactive UI surfaces (Report Find, Admin Dashboard, Trip Tracker, Badge component, Store Finder favorite icon, Command Palette scrim).
+- Updated Playwright smoke spec to attach full-page screenshots for proof (all routes, light/dark, mobile/desktop).
+
+**Verification (paste proof):**
+
+- `npm run lint`: ✅ 0 warnings
+- `npm run build`: ✅ success
+- `npm run test:unit`: ✅ 1/1 passing
+- `npm run test:e2e`: ✅ 36/36 passing (includes screenshot attachments)
+- Playwright screenshots:
+  - Before: `reports/playwright/proof/2025-12-16-before/html/index.html`
+  - After: `reports/playwright/proof/2025-12-16-after/html/index.html`
+- Token colors: ✅ `npm run lint:colors` (0 warnings)
+
+## 2025-12-16 - GitHub Copilot - Verified Pennies + Token-Compliance Fixes
+
+**AI:** GitHub Copilot
+**Goal:** Scrutinize recent changes (Verified Pennies + homepage/nav), correct any issues against repo constraints, update docs, and re-run all gates with proof.
+
+**Work Completed:**
+
+1. **Verified Pennies route validated + hardened:**
+   - Confirmed `/verified-pennies` renders as a static route with search + brand filter and an image-first grid.
+   - Enabled `next/image` external images for Home Depot CDN via `images.remotePatterns` (`images.thdstatic.com`).
+
+2. **Color-token compliance restored (critical repo rule):**
+   - Removed raw Tailwind palette classes introduced for icon contrast.
+   - Replaced with existing design tokens (`--chip-*`, `--status-*`, `--bg-*`, `--text-*`).
+
+3. **Made data-import tooling portable:**
+   - Updated `scripts/convert-verified-data.ts` to accept CLI input/output paths (removed machine-specific absolute path).
+
+4. **E2E coverage extended:**
+   - Added `/verified-pennies` to `tests/visual-smoke.spec.ts`.
+
+5. **Kept deps clean:**
+   - Removed unused `@vercel/blob` dependency after confirming no code references.
+
+**Docs Updated:**
+
+- `.ai/STATE.md`, `.ai/BACKLOG.md`, `CHANGELOG.md`, `README.md`
+
+**Verification (all quality gates passing):**
+
+- `npm run lint` ✅
+- `npm run build` ✅
+- `npm run test:unit` ✅
+- `npm run test:e2e` ✅ (36/36)
+
 ## 2025-12-15 (2:45 PM) - GitHub Copilot - Store Finder UX Fixes
 
 **AI:** GitHub Copilot

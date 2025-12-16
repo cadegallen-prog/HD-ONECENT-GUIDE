@@ -8,7 +8,8 @@ The official companion site for the "Home Depot One Cent Items" Facebook communi
 
 ## What It Does
 
-- **Penny List** ⭐ NEW — Community-powered list of reported penny finds, updated hourly from Google Forms (no manual work)
+- **Verified Pennies** ⭐ NEW — Curated catalog of confirmed penny items with product images
+- **Penny List (Community Reports)** ⭐ NEW — Community-powered list of reported penny finds, updated hourly from Google Forms (no manual work)
 - **Penny Guide** — Complete reference on how clearance items reach penny status
 - **Store Finder** — Find nearby Home Depot locations with intelligent search (supports city, state name, ZIP code)
 - **Trip Tracker** — Plan and log penny hunting trips
@@ -39,6 +40,19 @@ npm run lint       # ESLint check
 
 ---
 
+## Definition of Done (Required)
+
+For any meaningful change (especially UI/copy/navigation):
+
+- Paste raw outputs for: `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e`
+- UI changes: capture Playwright screenshots (light/dark, mobile/desktop) and confirm browser console has no errors
+- Docs/memory updated: `README.md`, `.ai/STATE.md`, `.ai/BACKLOG.md`, `.ai/SESSION_LOG.md`, `CHANGELOG.md`
+- Token-only colors confirmed (no raw Tailwind palette); prefer `npm run lint:colors`
+
+See: `.ai/VERIFICATION_REQUIRED.md`
+
+---
+
 ## Design System
 
 **Full spec:** `docs/DESIGN-SYSTEM-AAA.md`
@@ -59,6 +73,7 @@ npm run lint       # ESLint check
 ```
 app/                    # Pages (App Router)
   page.tsx              # Homepage
+  verified-pennies/      # Curated verified penny catalog
   store-finder/         # Store Finder
   trip-tracker/         # Trip Tracker
   guide/                # Penny Guide
@@ -75,6 +90,14 @@ public/                 # Static assets
 ---
 
 ## Critical Dec 2025 Updates
+
+### Verified Pennies (Curated)
+
+- **Route:** `/verified-pennies`
+- **Data:** `data/verified-pennies.json`
+- **Code:** `lib/verified-pennies.ts`, `app/verified-pennies/*`, `components/verified-penny-card.tsx`
+- **Regenerate data (from a scraped JSON input):**
+  - `tsx scripts/convert-verified-data.ts <input.json> [output.json]`
 
 ### Autonomous Penny List (Live)
 

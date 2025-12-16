@@ -131,15 +131,15 @@ export default function AdminDashboard() {
             <p className="text-sm text-[var(--status-warning)] mb-1">Pending</p>
             <p className="text-2xl font-bold text-[var(--text-primary)]">{pendingCount}</p>
           </div>
-          <div className="bg-green-50 dark:bg-green-900/10 border border-green-200 dark:border-green-800 rounded-lg p-4">
-            <p className="text-sm text-green-700 dark:text-green-300 mb-1">Approved</p>
-            <p className="text-2xl font-bold text-green-800 dark:text-green-200">
+          <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] border-l-4 border-l-[var(--status-success)] rounded-lg p-4">
+            <p className="text-sm text-[var(--status-success)] mb-1">Approved</p>
+            <p className="text-2xl font-bold text-[var(--text-primary)]">
               {submissions.filter((s) => s.status === "approved").length}
             </p>
           </div>
-          <div className="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800 rounded-lg p-4">
-            <p className="text-sm text-red-700 dark:text-red-300 mb-1">Rejected</p>
-            <p className="text-2xl font-bold text-red-800 dark:text-red-200">
+          <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] border-l-4 border-l-[var(--status-error)] rounded-lg p-4">
+            <p className="text-sm text-[var(--status-error)] mb-1">Rejected</p>
+            <p className="text-2xl font-bold text-[var(--text-primary)]">
               {submissions.filter((s) => s.status === "rejected").length}
             </p>
           </div>
@@ -152,7 +152,7 @@ export default function AdminDashboard() {
               key={f}
               onClick={() => setFilter(f)}
               variant={filter === f ? "primary" : "ghost"}
-              className={filter === f ? "bg-[var(--cta-primary)] text-white" : ""}
+              className={filter === f ? "bg-[var(--cta-primary)] text-[var(--cta-text)]" : ""}
             >
               {f.charAt(0).toUpperCase() + f.slice(1)}
             </Button>
@@ -240,7 +240,7 @@ export default function AdminDashboard() {
                   <div className="flex gap-2 pt-4 border-t border-[var(--border-default)]">
                     <Button
                       onClick={() => handleApprove(submission.id)}
-                      className="bg-green-600 hover:bg-green-700 text-white"
+                      className="bg-[var(--status-success)] hover:opacity-90 text-[var(--cta-text)]"
                     >
                       <CheckCircle2 className="w-4 h-4 mr-2" />
                       Approve
@@ -248,7 +248,7 @@ export default function AdminDashboard() {
                     <Button
                       onClick={() => handleReject(submission.id)}
                       variant="ghost"
-                      className="border-red-300 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400"
+                      className="border border-[var(--status-error)] text-[var(--status-error)] hover:bg-[var(--bg-elevated)]"
                     >
                       <XCircle className="w-4 h-4 mr-2" />
                       Reject
@@ -282,9 +282,9 @@ export default function AdminDashboard() {
 
         {/* Warning */}
         {pendingCount > 0 && (
-          <div className="mt-8 bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800 rounded-lg p-4 flex gap-3">
-            <AlertTriangle className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
-            <div className="text-sm text-blue-800 dark:text-blue-200">
+          <div className="mt-8 bg-[var(--bg-elevated)] border border-[var(--border-default)] border-l-4 border-l-[var(--status-info)] rounded-lg p-4 flex gap-3">
+            <AlertTriangle className="w-5 h-5 text-[var(--status-info)] flex-shrink-0 mt-0.5" />
+            <div className="text-sm text-[var(--text-secondary)]">
               <p className="font-semibold mb-1">Next Steps:</p>
               <p>
                 Review pending submissions and approve legitimate finds. Approved items will need to

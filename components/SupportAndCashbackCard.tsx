@@ -48,7 +48,7 @@ export function SupportAndCashbackCard({ className }: SupportAndCashbackCardProp
           target="_blank"
           rel="noopener noreferrer"
           data-cta="befrugal"
-          className="inline-flex items-center justify-center px-4 py-2.5 bg-[var(--cta-primary)] hover:bg-[var(--cta-hover)] text-white text-sm font-medium rounded-lg shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] transition-colors"
+          className="inline-flex items-center justify-center px-4 py-2.5 bg-[var(--cta-primary)] hover:bg-[var(--cta-hover)] text-[var(--cta-text)] text-sm font-medium rounded-lg shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] transition-colors"
           onClick={() =>
             trackEvent("affiliate_click", { surface: "support-card", linkId: "befrugal" })
           }

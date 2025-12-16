@@ -13,17 +13,21 @@
    npm run test:unit # all passing
    npm run test:e2e  # all passing
    ```
+   **If you touched styles/colors:** also paste `npm run lint:colors` output and confirm no raw Tailwind palette colors were introduced.
 
 2. **Screenshots** (if UI changed):
    - Before/after
    - Light + dark mode
    - Browser console (no errors)
 
-3. **GitHub Actions** (if applicable):
+3. **Docs/memory updated** (if meaningful change):
+   - `README.md`, `.ai/STATE.md`, `.ai/BACKLOG.md`, `.ai/SESSION_LOG.md`, `CHANGELOG.md`
+
+4. **GitHub Actions** (if applicable):
    - Paste URL: `https://github.com/.../runs/{id}`
    - Status must be ✅ green
 
-4. **Proof problem is fixed**:
+5. **Proof problem is fixed**:
    - Show bug existed
    - Show bug is gone
 

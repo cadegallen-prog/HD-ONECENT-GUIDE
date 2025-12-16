@@ -3,31 +3,24 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Map, BookOpen, User, Moon, Sun, Book, Menu, X, Star } from "lucide-react"
+import { Map, BookOpen, User, Moon, Sun, Book, Menu, X, Users, BadgeCheck } from "lucide-react"
 import { useTheme } from "@/components/theme-provider"
 
-// Professional Penny Logo component
+// Penny logo - Simple coin with "1¢"
 function PennyLogo({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
-      <circle
-        cx="12"
-        cy="12"
-        r="9"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        className="text-[var(--text-secondary)]"
-      />
-      <circle
-        cx="12"
-        cy="12"
-        r="4"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        className="text-[var(--text-muted)]"
-      />
+      <circle cx="12" cy="12" r="10" fill="var(--cta-primary)" className="opacity-90" />
+      <text
+        x="12"
+        y="16"
+        textAnchor="middle"
+        fontSize="10"
+        fontWeight="bold"
+        fill="var(--cta-text)"
+      >
+        1¢
+      </text>
     </svg>
   )
 }
@@ -45,18 +38,18 @@ export function Navbar() {
   const isDark = mounted && document.documentElement.classList.contains("dark")
 
   const navItems = [
-    { href: "/penny-list", label: "Penny List", icon: Star },
-    { href: "/report-find", label: "Report a Find", icon: BookOpen },
-    { href: "/store-finder", label: "Store Finder", icon: Map },
+    { href: "/verified-pennies", label: "Verified", icon: BadgeCheck },
+    { href: "/penny-list", label: "Penny List", icon: Users },
+    { href: "/report-find", label: "Report", icon: BookOpen },
+    { href: "/store-finder", label: "Stores", icon: Map },
     { href: "/guide", label: "Guide", icon: Book },
-    // { href: "/trip-tracker", label: "Trip Tracker", icon: Clock }, // Hidden: Not production-ready
     { href: "/about", label: "About", icon: User },
   ]
 
   return (
     <>
       {/* Desktop & Mobile Navbar */}
-      <nav className="sticky top-0 z-50 backdrop-blur-lg bg-white/90 dark:bg-zinc-900/90 border-b border-[var(--border-default)]">
+      <nav className="sticky top-0 z-50 backdrop-blur-lg bg-[var(--bg-page)] border-b border-[var(--border-default)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}

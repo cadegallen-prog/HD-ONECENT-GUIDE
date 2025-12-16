@@ -4,9 +4,9 @@ import { computeFreshnessMetrics, filterValidPennyItems } from "@/lib/penny-list
 import { PennyListClient } from "@/components/penny-list-client"
 
 export const metadata: Metadata = {
-  title: "Penny List: Latest Community Leads - Penny Central",
+  title: "Penny List (Community Reports): Recent Penny Sightings - Penny Central",
   description:
-    "Latest community‑reported penny leads at Home Depot. Search and filter by state, tier, and date. Always verify in store — YMMV.",
+    "Penny List: latest community-reported penny sightings at Home Depot. Search and filter by state, tier, and date. Always verify in store - your mileage may vary.",
 }
 
 export const revalidate = 3600
@@ -37,20 +37,20 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
       : updatedHoursAgo === 0
         ? "Updated just now"
         : `Updated ${updatedHoursAgo} hour${updatedHoursAgo === 1 ? "" : "s"} ago`
-  const confidence = validItems.reduce(
+  const reportCounts = validItems.reduce(
     (acc, item) => {
       const totalReports = Object.values(item.locations || {}).reduce(
         (sum, count) => sum + count,
         0
       )
       if (totalReports > 1) {
-        acc.verified += 1
+        acc.multipleReports += 1
       } else {
-        acc.unverified += 1
+        acc.singleReport += 1
       }
       return acc
     },
-    { verified: 0, unverified: 0 }
+    { multipleReports: 0, singleReport: 0 }
   )
   const whatsNew = [...validItems]
     .sort((a, b) => new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime())
@@ -69,16 +69,17 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
               className="inline-flex h-2 w-2 rounded-full bg-[var(--status-info)]"
               aria-hidden="true"
             ></span>
-            Crowd reports (last 30 days)
+            Penny List (last 30 days)
           </div>
           <h1
             id="page-heading"
             className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)] mb-4"
           >
-            Penny List: Latest Community Leads
+            Penny List
           </h1>
           <p className="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
-            Community‑reported penny leads. Verify in store — YMMV.
+            Community reports of recent penny sightings. Your mileage may vary - always verify at
+            checkout.
           </p>
         </div>
       </section>
@@ -97,8 +98,10 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
               <p className="text-xs text-[var(--text-muted)]">{lastUpdatedLabel}</p>
             </div>
             <div className="mt-3 flex flex-wrap gap-3">
-              <span className="pill pill-strong">Verified: {confidence.verified}</span>
-              <span className="pill pill-muted">Unverified: {confidence.unverified}</span>
+              <span className="pill pill-strong">
+                Multiple reports: {reportCounts.multipleReports}
+              </span>
+              <span className="pill pill-muted">Single report: {reportCounts.singleReport}</span>
             </div>
           </div>
           {feedUnavailable && (

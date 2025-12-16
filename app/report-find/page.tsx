@@ -167,8 +167,8 @@ export default function ReportFindPage() {
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-medium mb-4">
-            <MapPin className="w-4 h-4" />
+          <div className="pill pill-muted mx-auto w-fit mb-4 inline-flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-[var(--status-info)]" aria-hidden="true" />
             Help the Community
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)] mb-4">
@@ -180,15 +180,15 @@ export default function ReportFindPage() {
         </div>
 
         {/* Info Box */}
-        <div className="bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-8 flex gap-3 items-start">
-          <Info className="w-5 h-5 text-blue-600 dark:text-blue-500 flex-shrink-0 mt-0.5" />
-          <div className="text-sm text-blue-800 dark:text-blue-200">
+        <div className="rounded-lg border border-[var(--border-default)] border-l-4 border-l-[var(--status-info)] bg-[var(--bg-elevated)] p-4 mb-8 flex gap-3 items-start">
+          <Info className="w-5 h-5 text-[var(--status-info)] flex-shrink-0 mt-0.5" />
+          <div className="text-sm text-[var(--text-secondary)]">
             <p className="font-semibold mb-2">About This Form</p>
             <p className="mb-2">
               Your report shows up on the Penny List automatically (usually within an hour).
             </p>
             <ul className="list-disc pl-4 space-y-1">
-              <li>Submissions are not individually verified.</li>
+              <li>Submissions are not individually confirmed.</li>
               <li>The Penny List may contain mistakes, sold-out items, or prices that changed.</li>
               <li>
                 For proof-of-purchase posts with receipts and discussion, always use the Facebook
@@ -210,7 +210,7 @@ export default function ReportFindPage() {
               className="block text-sm font-medium text-[var(--text-primary)] mb-2"
             >
               Item Name{" "}
-              <span className="text-red-500" aria-hidden="true">
+              <span className="text-[var(--status-error)]" aria-hidden="true">
                 *
               </span>
               <span className="sr-only">(required)</span>
@@ -238,7 +238,7 @@ export default function ReportFindPage() {
               className="block text-sm font-medium text-[var(--text-primary)] mb-2"
             >
               SKU Number{" "}
-              <span className="text-red-500" aria-hidden="true">
+              <span className="text-[var(--status-error)]" aria-hidden="true">
                 *
               </span>
               <span className="sr-only">(required)</span>
@@ -292,7 +292,7 @@ export default function ReportFindPage() {
               className="block text-sm font-medium text-[var(--text-primary)] mb-2"
             >
               State{" "}
-              <span className="text-red-500" aria-hidden="true">
+              <span className="text-[var(--status-error)]" aria-hidden="true">
                 *
               </span>
               <span className="sr-only">(required)</span>
@@ -324,7 +324,7 @@ export default function ReportFindPage() {
               className="block text-sm font-medium text-[var(--text-primary)] mb-2 flex items-center gap-2"
             >
               <Calendar className="w-4 h-4" />
-              Date Found <span className="text-red-500">*</span>
+              Date Found <span className="text-[var(--status-error)]">*</span>
             </label>
             <input
               type="date"
@@ -387,7 +387,7 @@ export default function ReportFindPage() {
             >
               <Package className="w-4 h-4" />
               Quantity Found{" "}
-              <span className="text-red-500" aria-hidden="true">
+              <span className="text-[var(--status-error)]" aria-hidden="true">
                 *
               </span>
               <span className="sr-only">(required)</span>
@@ -411,7 +411,7 @@ export default function ReportFindPage() {
           <Button
             type="submit"
             disabled={submitting || !!skuError}
-            className="w-full bg-[var(--cta-primary)] text-white hover:opacity-90 py-6 text-lg font-medium"
+            className="w-full bg-[var(--cta-primary)] text-[var(--cta-text)] hover:bg-[var(--cta-hover)] py-6 text-lg font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] disabled:opacity-60"
           >
             {submitting ? "Submitting..." : "Submit Find"}
           </Button>
@@ -419,29 +419,27 @@ export default function ReportFindPage() {
           {/* Result Message */}
           {result && (
             <div
-              className={`flex items-start gap-3 p-4 rounded-lg ${
+              className={`flex items-start gap-3 p-4 rounded-lg border border-[var(--border-default)] border-l-4 bg-[var(--bg-elevated)] ${
                 result.success
-                  ? "bg-green-50 dark:bg-green-900/10 border border-green-200 dark:border-green-800"
-                  : "bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800"
+                  ? "border-l-[var(--status-success)]"
+                  : "border-l-[var(--status-error)]"
               }`}
             >
               {result.success ? (
-                <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-5 h-5 text-[var(--status-success)] flex-shrink-0 mt-0.5" />
               ) : (
-                <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+                <AlertCircle className="w-5 h-5 text-[var(--status-error)] flex-shrink-0 mt-0.5" />
               )}
               <div>
                 <p
                   className={`text-sm font-medium ${
-                    result.success
-                      ? "text-green-800 dark:text-green-200"
-                      : "text-red-800 dark:text-red-200"
+                    result.success ? "text-[var(--text-primary)]" : "text-[var(--text-primary)]"
                   }`}
                 >
                   {result.message}
                 </p>
                 {result.success && (
-                  <p className="text-xs text-green-700 dark:text-green-300 mt-1">
+                  <p className="text-xs text-[var(--text-secondary)] mt-1">
                     Please post your haul with receipt photos in the Facebook group so the community
                     can confirm this find.
                   </p>
@@ -455,7 +453,7 @@ export default function ReportFindPage() {
         <div className="mt-8 text-center text-sm text-[var(--text-muted)]">
           <p>
             Submissions appear on the Penny List automatically. The Facebook group is the gold
-            standard for verified finds.
+            standard for receipt photos and discussion to confirm a find.
           </p>
         </div>
       </div>
