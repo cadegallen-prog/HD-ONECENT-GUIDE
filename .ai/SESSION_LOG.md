@@ -45,24 +45,28 @@
    - **Note:** If user confirms pin is 5-10 miles off target, will need correct coordinates from Google Maps
 
 **Verification (all quality gates passing):**
+
 - `npm run lint` ✅ 0 errors (auto-fixed Prettier formatting)
 - `npm run build` ✅ Compiled successfully in 5.6s
 - `npm run test:unit` ✅ 1/1 passing
 - `npm run test:e2e` ✅ All 32 Playwright tests passing
 
 **Files Modified:**
+
 - `app/store-finder/page.tsx`: Added rankingCenterRef, helper function, updated 8 search paths
 - `components/store-map.tsx`: Increased font-size (13/15) and stroke-width (4px)
 - `.ai/STATE.md`: Updated to Dec 15 2:45 PM with Store Finder UX phase
 - `.ai/SESSION_LOG.md`: Added this entry
 
 **Learnings:**
+
 - `useEffect` with `mapCenter` in dependencies creates unwanted side-effect coupling
 - Ref-based state for "ranking anchor" prevents unintended re-computation
 - Font size + stroke weight are both critical for legibility on markers
 - ARIA `aria-pressed` must use string literals per W3C spec, not booleans
 
 **Next Steps:**
+
 - Commit Store Finder UX fixes to `main`
 - Push to origin and verify on production
 - If store #106 still shows in wrong location, get correct lat/lng from user
