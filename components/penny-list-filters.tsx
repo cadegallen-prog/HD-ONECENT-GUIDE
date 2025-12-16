@@ -35,10 +35,6 @@ function getStateName(code: string): string {
   return state?.name || code
 }
 
-function toPressed(value: boolean): "true" | "false" {
-  return value ? "true" : "false"
-}
-
 export function PennyListFilters({
   totalItems,
   filteredCount,
@@ -159,6 +155,12 @@ export function PennyListFilters({
     })
   }
 
+  // Compute aria-pressed values for buttons
+  const myStatePressed = stateFilter === userState ? "true" : "false"
+  const hasPhotoPressed = hasPhotoOnly ? "true" : "false"
+  const cardsViewPressed = viewMode === "cards" ? "true" : "false"
+  const tableViewPressed = viewMode === "table" ? "true" : "false"
+
   return (
     <section
       aria-label="Filter penny list results"
@@ -195,7 +197,7 @@ export function PennyListFilters({
           <button
             type="button"
             onClick={() => setStateFilter(stateFilter === userState ? "" : userState)}
-            aria-pressed={toPressed(stateFilter === userState)}
+            aria-pressed={myStatePressed}
             className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium min-h-[44px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
               stateFilter === userState
                 ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
@@ -217,23 +219,26 @@ export function PennyListFilters({
             role="group"
             aria-label="Tier filter"
           >
-            {tierOptions.map((option) => (
-              <button
-                key={option.value}
-                type="button"
-                onClick={() => setTierFilter(option.value)}
-                aria-pressed={toPressed(tierFilter === option.value)}
-                className={`px-3 sm:px-4 py-2.5 text-sm font-medium min-h-[44px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
-                  tierFilter === option.value
-                    ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
-                    : "bg-[var(--bg-page)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]"
-                } ${option.value !== "all" ? "border-l border-[var(--border-default)]" : ""}`}
-                title={option.label}
-              >
-                <span className="hidden sm:inline">{option.label}</span>
-                <span className="sm:hidden">{option.shortLabel}</span>
-              </button>
-            ))}
+            {tierOptions.map((option) => {
+              const tierPressed = tierFilter === option.value ? "true" : "false"
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => setTierFilter(option.value)}
+                  aria-pressed={tierPressed}
+                  className={`px-3 sm:px-4 py-2.5 text-sm font-medium min-h-[44px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
+                    tierFilter === option.value
+                      ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
+                      : "bg-[var(--bg-page)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]"
+                  } ${option.value !== "all" ? "border-l border-[var(--border-default)]" : ""}`}
+                  title={option.label}
+                >
+                  <span className="hidden sm:inline">{option.label}</span>
+                  <span className="sm:hidden">{option.shortLabel}</span>
+                </button>
+              )
+            })}
           </div>
         </fieldset>
 
@@ -241,7 +246,7 @@ export function PennyListFilters({
         <button
           type="button"
           onClick={() => setHasPhotoOnly(!hasPhotoOnly)}
-          aria-pressed={toPressed(hasPhotoOnly)}
+          aria-pressed={hasPhotoPressed}
           className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium min-h-[44px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
             hasPhotoOnly
               ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
@@ -258,7 +263,7 @@ export function PennyListFilters({
           <button
             type="button"
             onClick={() => setViewMode("cards")}
-            aria-pressed={toPressed(viewMode === "cards")}
+            aria-pressed={cardsViewPressed}
             className={`px-3 py-2.5 min-h-[44px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
               viewMode === "cards"
                 ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
@@ -272,7 +277,7 @@ export function PennyListFilters({
           <button
             type="button"
             onClick={() => setViewMode("table")}
-            aria-pressed={toPressed(viewMode === "table")}
+            aria-pressed={tableViewPressed}
             className={`px-3 py-2.5 min-h-[44px] border-l border-[var(--border-default)] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
               viewMode === "table"
                 ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
@@ -319,22 +324,25 @@ export function PennyListFilters({
             role="group"
             aria-label="Date range filter"
           >
-            {dateOptions.map((option, index) => (
-              <button
-                key={option.value}
-                type="button"
-                onClick={() => setDateRange(option.value)}
-                aria-pressed={toPressed(dateRange === option.value)}
-                className={`px-3 py-2.5 text-sm font-medium min-h-[44px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
-                  dateRange === option.value
-                    ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
-                    : "bg-[var(--bg-page)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]"
-                } ${index > 0 ? "border-l border-[var(--border-default)]" : ""}`}
-                title={`Show items from the last ${option.label}`}
-              >
-                {option.label}
-              </button>
-            ))}
+            {dateOptions.map((option, index) => {
+              const datePressed = dateRange === option.value ? "true" : "false"
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => setDateRange(option.value)}
+                  aria-pressed={datePressed}
+                  className={`px-3 py-2.5 text-sm font-medium min-h-[44px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
+                    dateRange === option.value
+                      ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
+                      : "bg-[var(--bg-page)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]"
+                  } ${index > 0 ? "border-l border-[var(--border-default)]" : ""}`}
+                  title={`Show items from the last ${option.label}`}
+                >
+                  {option.label}
+                </button>
+              )
+            })}
           </div>
         </fieldset>
 

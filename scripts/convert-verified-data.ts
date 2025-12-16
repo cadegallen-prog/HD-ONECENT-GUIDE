@@ -14,7 +14,11 @@ import path from "node:path"
 interface ScrapedItem {
   title: string
   sku: string
-  internet_sku?: string
+  internet_sku?: string | number
+  product_id?: string | number
+  productId?: string | number
+  internetSku?: string | number
+  internetNumber?: string | number
   brand?: string
   model?: string
   images?: string[]
@@ -52,6 +56,31 @@ function shortenName(title: string): string {
   return parts.join(" ").trim()
 }
 
+function normalizeInternetNumber(value: unknown): string {
+  const trimmed = String(value ?? "").trim()
+  if (!trimmed) return ""
+  const digitsOnly = trimmed.replace(/\D/g, "")
+  if (!digitsOnly || digitsOnly === "0") return ""
+  return digitsOnly
+}
+
+function pickInternetNumber(item: ScrapedItem): string {
+  const candidates: unknown[] = [
+    item.internet_sku,
+    item.product_id,
+    item.productId,
+    item.internetSku,
+    item.internetNumber,
+  ]
+
+  for (const candidate of candidates) {
+    const normalized = normalizeInternetNumber(candidate)
+    if (normalized) return normalized
+  }
+
+  return ""
+}
+
 async function main() {
   const inputArg = process.argv[2]
   const outputArg = process.argv[3]
@@ -87,7 +116,7 @@ async function main() {
 
     verifiedPennies[item.sku] = {
       sku: item.sku,
-      internetNumber: item.internet_sku || "",
+      internetNumber: pickInternetNumber(item),
       name: shortenName(item.title || "Unknown Product"),
       brand: item.brand || "",
       model: item.model || "",

@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { MapPin, Calendar, Package } from "lucide-react"
+import { MapPin, Calendar } from "lucide-react"
 import { getPennyList } from "@/lib/fetch-penny-data"
 import { filterValidPennyItems, formatRelativeDate } from "@/lib/penny-list-utils"
 import { validateSku } from "@/lib/sku"
@@ -64,12 +64,6 @@ export default async function SkuDetailPage({ params }: PageProps) {
                   <Calendar className="w-4 h-4" aria-hidden="true" />
                   Last reported {formatRelativeDate(item.dateAdded)}
                 </span>
-                {item.quantityFound && (
-                  <span className="inline-flex items-center gap-1.5">
-                    <Package className="w-4 h-4" aria-hidden="true" />
-                    {item.quantityFound}
-                  </span>
-                )}
                 <span className="inline-flex items-center gap-1.5">
                   <MapPin className="w-4 h-4" aria-hidden="true" />
                   {totalReports} {totalReports === 1 ? "report" : "reports"} across{" "}

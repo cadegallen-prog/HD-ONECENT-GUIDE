@@ -11,6 +11,35 @@
 
 ---
 
+## 2025-12-16 - ChatGPT Codex - Review unstaged items & verify quality gates
+
+**AI:** ChatGPT Codex
+**Goal:** Review every unstaged change, keep Playwright proof artifacts local, and verify the entire quality gate before committing.
+**Approach:** Audited modified pages/utility files, added documentation/checklist helpers, ran lint/build/unit/e2e/lint:colors, refreshed axe/contrast reports, and captured the necessary gitignore/regression tweaks.
+
+**Changes Made:**
+- Added `.github/pull_request_template.md`, `docs/COLOR-SYSTEM-IMPLEMENTATION.md`, `lib/home-depot.ts`, and an input-friendly `scripts/convert-verified-data.ts`, then ignored `reports/playwright/proof/` so the screenshot proof folder stays out of git.
+- Updated component/page UI touched earlier, refreshed `reports/axe-report.json` + `reports/contrast-computed.json`, and reran all gates (`lint`, `build`, `test:unit`, `test:e2e`, `lint:colors`).
+- Prepared verification artifacts for commit/push while noting Playwright warnings/resets so the founder can see where the tests decided to fall back to local store data.
+
+**Outcome:** ? Success — tests pass and docs/helper updates keep the repo tidy, although Playwright logs report invalid source maps and remote store fetch 404s (dev server falls back to local data as expected).
+
+**Completed Items:**
+- Quality gates (lint/build/test:unit/test:e2e/lint:colors) ✅
+- Added color system implementation doc + PR checklist + helper/script + gitignore cleanup ✅
+- Updated axe/contrast reports and re-verified visual smoke artifacts ✅
+
+**Unfinished Items:** None
+
+**Learnings:**
+- Source-map warnings from Next's dev server show up during Playwright runs; they don’t fail the suite but will keep repeating unless upstream fixes the emitted maps.
+- The store lookup falls back to local cache when the remote fetch responds with 404, which is why the logs note “Falling back to local store data” — this is expected when the remote URL is unreachable during e2e runs.
+
+**For Next AI:**
+- Continue guarding `reports/playwright/proof/` (and similar proof-output folders) via `.gitignore` so the repo stays clean.
+- Always re-run lint/build/unit/e2e/lint:colors before pushing and refresh `reports/axe-report.json` + `reports/contrast-computed.json` if anything affecting color/UX changes.
+- Keep an eye on the remote store fetch; it should keep failing in Playwright unless the live CSV is reachable, so the fallback message is normal for offline/dev runs.
+
 ## 2025-12-16 (Evening) - Claude Haiku - Color Palette & WCAG AAA Review
 
 **AI:** Claude Haiku (via Claude Code)

@@ -7,6 +7,7 @@
 /coverage
 /reports/playwright/results/
 /reports/playwright/html/
+/reports/playwright/proof/
 
 # next.js
 /.next/

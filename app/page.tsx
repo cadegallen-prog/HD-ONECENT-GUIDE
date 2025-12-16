@@ -29,11 +29,11 @@ export default function Home() {
           - H1 → Lead: mt-3
           - Lead → CTAs: mt-6
           ============================================ */}
-      <section className="section-padding px-4 sm:px-6 bg-[var(--bg-elevated)] dark:bg-[var(--bg-page)]">
+      <section className="section-padding px-4 sm:px-6 bg-[var(--bg-page)]">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--bg-card)] border border-[var(--border-default)] shadow-sm mb-4 transition-all duration-150 hover:shadow-[var(--shadow-card-hover)]">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--bg-page)] border border-[var(--border-strong)] shadow-sm mb-4 transition-all duration-150 hover:shadow-[var(--shadow-card-hover)]">
             <span className="live-dot animate-radar" aria-hidden="true"></span>
-            <span className="text-sm font-medium text-[var(--text-secondary)]">
+            <span className="text-sm font-semibold text-[var(--text-primary)]">
               Join over {COMMUNITY_MEMBER_COUNT_DISPLAY} penny hunters
             </span>
           </div>
@@ -61,7 +61,7 @@ export default function Home() {
               className="btn-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold shadow-md hover:bg-[var(--cta-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
             >
               <BadgeCheck className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
-              Browse Verified Items
+              Browse Curated Pennies
             </Link>
             <Link
               href="/penny-list"
@@ -81,7 +81,7 @@ export default function Home() {
           Typography: H2 + supporting text
           Cards: card-interactive class for hover states
           ============================================ */}
-      <section className="section-padding px-4 sm:px-6 bg-[var(--bg-elevated)] dark:bg-[var(--bg-card)]">
+      <section className="section-padding px-4 sm:px-6 bg-[var(--bg-page)]">
         <div className="container-wide">
           {/* Section header */}
           <div className="text-center mb-10">
@@ -98,29 +98,29 @@ export default function Home() {
             {/* Verified Pennies Card */}
             <Link
               href="/verified-pennies"
-              className="card-interactive group flex flex-col bg-[var(--bg-card)] rounded-xl p-6 border border-[var(--border-default)]"
+              className="card-interactive group flex flex-col bg-[var(--bg-elevated)] rounded-xl p-6 border border-[var(--border-default)]"
             >
-              <div className="w-12 h-12 rounded-xl bg-[var(--chip-success-surface)] border border-[var(--chip-success-border)] flex items-center justify-center mb-4">
-                <BadgeCheck className="w-6 h-6 text-[var(--status-success)]" aria-hidden="true" />
+              <div className="w-12 h-12 rounded-xl bg-[var(--bg-page)] border border-[var(--border-default)] flex items-center justify-center mb-4">
+                <BadgeCheck className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
               </div>
               <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
-                Verified Pennies
+                Curated Pennies
               </h3>
               <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed flex-grow">
-                400+ confirmed penny items with product images. Your reference for penny shopping.
+                Admin-reviewed penny items with product images. Your reference for penny shopping.
               </p>
               <span className="mt-4 inline-flex items-center text-[var(--link-default)] text-sm font-medium group-hover:text-[var(--link-hover)] group-hover:underline">
-                Browse verified items →
+                Browse curated list →
               </span>
             </Link>
 
             {/* Community Reports Card */}
             <Link
               href="/penny-list"
-              className="card-interactive group flex flex-col bg-[var(--bg-card)] rounded-xl p-6 border border-[var(--border-default)]"
+              className="card-interactive group flex flex-col bg-[var(--bg-elevated)] rounded-xl p-6 border border-[var(--border-default)]"
             >
-              <div className="w-12 h-12 rounded-xl bg-[var(--chip-accent-surface)] border border-[var(--chip-accent-border)] flex items-center justify-center mb-4">
-                <Users className="w-6 h-6 text-[var(--status-info)]" aria-hidden="true" />
+              <div className="w-12 h-12 rounded-xl bg-[var(--bg-page)] border border-[var(--border-default)] flex items-center justify-center mb-4">
+                <Users className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
               </div>
               <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
                 Penny List
@@ -136,10 +136,10 @@ export default function Home() {
             {/* Penny Guide Card */}
             <Link
               href="/guide"
-              className="card-interactive group flex flex-col bg-[var(--bg-card)] rounded-xl p-6 border border-[var(--border-default)]"
+              className="card-interactive group flex flex-col bg-[var(--bg-elevated)] rounded-xl p-6 border border-[var(--border-default)]"
             >
-              <div className="w-12 h-12 rounded-xl bg-[var(--chip-muted-surface)] border border-[var(--chip-muted-border)] flex items-center justify-center mb-4">
-                <BookOpen className="w-6 h-6 text-[var(--status-warning)]" aria-hidden="true" />
+              <div className="w-12 h-12 rounded-xl bg-[var(--bg-page)] border border-[var(--border-default)] flex items-center justify-center mb-4">
+                <BookOpen className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
               </div>
               <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
                 Complete Guide

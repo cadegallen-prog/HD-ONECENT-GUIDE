@@ -61,7 +61,7 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
       {/* Header Section */}
       <section
         aria-labelledby="page-heading"
-        className="section-padding-sm px-4 sm:px-6 border-b border-[var(--border-default)] bg-[var(--bg-elevated)]"
+        className="section-padding-sm px-4 sm:px-6 border-b border-[var(--border-default)] bg-[var(--bg-muted)]"
       >
         <div className="max-w-4xl mx-auto text-center">
           <div className="pill pill-muted mx-auto w-fit mb-4">

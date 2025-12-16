@@ -38,7 +38,7 @@ export function Navbar() {
   const isDark = mounted && document.documentElement.classList.contains("dark")
 
   const navItems = [
-    { href: "/verified-pennies", label: "Verified", icon: BadgeCheck },
+    { href: "/verified-pennies", label: "Curated", icon: BadgeCheck },
     { href: "/penny-list", label: "Penny List", icon: Users },
     { href: "/report-find", label: "Report", icon: BookOpen },
     { href: "/store-finder", label: "Stores", icon: Map },

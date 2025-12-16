@@ -200,22 +200,39 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
                     .sort(([, a], [, b]) => b - a)
                     .slice(0, 3)
                 : []
+              const homeDepotUrl = getHomeDepotProductUrl({ sku: item.sku })
+
+              const openHomeDepot = () => window.open(homeDepotUrl, "_blank", "noopener,noreferrer")
+
+              const handleRowKeyDown = (event: KeyboardEvent<HTMLTableRowElement>) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault()
+                  openHomeDepot()
+                }
+              }
 
               return (
                 <tr
                   key={item.id}
-                  className="border-b border-[var(--border-default)] last:border-b-0 hover:bg-[var(--bg-hover)] transition-colors"
+                  tabIndex={0}
+                  aria-label={`Open Home Depot page for ${item.name} (SKU ${item.sku})`}
+                  onClick={openHomeDepot}
+                  onKeyDown={handleRowKeyDown}
+                  className="border-b border-[var(--border-default)] last:border-b-0 hover:bg-[var(--bg-hover)] transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-[var(--cta-primary)] focus-visible:outline-offset-2"
                 >
                   {/* Thumbnail */}
                   <td className="px-4 py-3 align-top">
                     <PennyThumbnail src={item.imageUrl} alt={item.name} size={40} />
                   </td>
                   {/* Item Name */}
-                  <td className="px-4 py-3 align-top">
+                  <td className="px-4 py-3 align-top min-w-0">
                     <div className="space-y-1.5">
                       <Link
                         href={`/sku/${item.sku}`}
-                        className="font-semibold text-[var(--text-primary)] leading-[1.4] break-words line-clamp-2-table hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+                        className="font-semibold text-[var(--text-primary)] leading-[1.4] truncate hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+                        title={item.name}
+                        onClickCapture={(event) => event.stopPropagation()}
+                        onKeyDownCapture={(event) => event.stopPropagation()}
                       >
                         {item.name}
                       </Link>
@@ -224,7 +241,11 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
 
                   {/* SKU */}
                   <td className="px-4 py-3 align-top">
-                    <div className="flex items-center gap-1.5">
+                    <div
+                      className="flex items-center gap-1.5"
+                      onClickCapture={(event) => event.stopPropagation()}
+                      onKeyDownCapture={(event) => event.stopPropagation()}
+                    >
                       <code className="font-mono text-sm bg-[var(--bg-elevated)] border border-[var(--border-default)] px-2.5 py-1.5 rounded select-all text-[var(--text-primary)] font-medium">
                         {item.sku}
                       </code>

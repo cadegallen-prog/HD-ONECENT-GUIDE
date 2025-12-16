@@ -221,6 +221,31 @@ Worried about spam/junk submissions on penny list
 
 ---
 
+## Home Depot Product URLs
+
+### Problem
+
+Agents keep linking users to `https://www.homedepot.com/p/<SKU>` and it does not work.
+
+### What We Tried
+
+- Building Home Depot links with the retail SKU
+
+### What We Learned
+
+- Home Depot product pages use an **internet number / product id**, not the SKU.
+- `https://www.homedepot.com/p/<SKU>` is generally invalid.
+- Correct direct pattern is `https://www.homedepot.com/p/<internetNumber>`.
+- If internet number is missing, fall back to search: `https://www.homedepot.com/s/<SKU>?NCNI-5`.
+
+### What to Do Instead
+
+- Use the shared helper `getHomeDepotProductUrl()`.
+
+**Files:** `/lib/home-depot.ts`
+
+---
+
 ## Cross-AI Collaboration
 
 ### Problem
@@ -325,12 +350,14 @@ Had 9 MCP servers configured with strict "MANDATORY" usage rules that agents wer
 ### What We Learned
 
 **The "mandatory" rules didn't work:**
+
 - Session logs showed agents ignored these rules consistently
 - Quality remained high despite not using "mandatory" MCPs
 - No evidence of Sequential Thinking, Memory MCP, or Context7 usage in recent sessions
 - Agents self-regulated naturally and still produced good work
 
 **Why it failed:**
+
 1. **Compliance theater** - Created guilt/confusion without improving outcomes
 2. **Wrong problem** - MCPs are tools, not processes. The problems (testing, context loss, outdated knowledge) needed process solutions (quality gates, documentation), not more tools
 3. **Duplicate systems** - Three memory systems (Memory MCP + Memory-Keeper + .ai/ docs) created confusion instead of clarity
@@ -338,6 +365,7 @@ Had 9 MCP servers configured with strict "MANDATORY" usage rules that agents wer
 5. **Unverifiable** - User couldn't tell if agents followed rules, creating anxiety without benefit
 
 **What actually works:**
+
 - Quality gates (`npm run build`, `npm run lint`, `npm run test:unit`, `npm run test:e2e`)
 - File-based memory (.ai/ docs: SESSION_LOG.md, LEARNINGS.md, STATE.md)
 - Clear decision rights (DECISION_RIGHTS.md)
@@ -346,18 +374,21 @@ Had 9 MCP servers configured with strict "MANDATORY" usage rules that agents wer
 ### What to Do Instead
 
 **Keep 4 pragmatic MCPs:**
+
 - Filesystem (file operations)
 - Git (version control)
 - GitHub (PR/issue management)
 - **Playwright (autonomous browser verification)** - special case, reduces non-technical user's testing burden
 
 **Remove overhead MCPs:**
+
 - ❌ Sequential Thinking (agents already think)
 - ❌ Memory + Memory-Keeper (duplicate of .ai/ docs)
 - ❌ Next-Devtools (duplicate of `npm run build`)
 - ❌ Context7 (modern AI training data is current enough)
 
 **Why Playwright is different:**
+
 - Unlike the removed MCPs, Playwright solves a real user pain point
 - Non-technical user struggled to test browser behavior and describe technical issues
 - Playwright gives agents "eyes on the browser" - they can autonomously verify UI/JavaScript works
@@ -365,11 +396,13 @@ Had 9 MCP servers configured with strict "MANDATORY" usage rules that agents wer
 - **Position:** Pragmatic tool (use when valuable), NOT mandatory compliance (use every time)
 
 **Focus on outcomes, not process:**
+
 - Does the build pass? (quality gate)
 - Are docs updated? (session log)
 - Does it work for users? (testing)
 
 **Don't:**
+
 - Create "MANDATORY" tool usage rules
 - Build duplicate systems for the same problem
 - Add compliance overhead without clear ROI

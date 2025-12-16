@@ -1,12 +1,14 @@
 "use client"
 
 import Link from "next/link"
-import { Calendar, Package } from "lucide-react"
+import { Calendar, ExternalLink } from "lucide-react"
+import type { KeyboardEvent } from "react"
 import { CopySkuButton } from "@/components/copy-sku-button"
 import { PennyThumbnail } from "@/components/penny-thumbnail"
 import { US_STATES } from "@/lib/us-states"
 import { formatRelativeDate } from "@/lib/penny-list-utils"
 import type { PennyItem } from "@/lib/fetch-penny-data"
+import { getHomeDepotProductUrl } from "@/lib/home-depot"
 
 interface PennyListCardProps {
   item: PennyItem & { parsedDate?: Date | null }
@@ -32,10 +34,25 @@ export function PennyListCard({ item }: PennyListCardProps) {
 
   const totalReports = item.locations ? getTotalReports(item.locations) : 0
   const stateCount = item.locations ? Object.keys(item.locations).length : 0
+  const homeDepotUrl = getHomeDepotProductUrl({ sku: item.sku })
+
+  const openHomeDepot = () => window.open(homeDepotUrl, "_blank", "noopener,noreferrer")
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault()
+      openHomeDepot()
+    }
+  }
 
   return (
     <article
-      className="elevation-card border border-[var(--border-strong)] rounded-xl overflow-hidden shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow h-full flex flex-col"
+      role="link"
+      tabIndex={0}
+      aria-label={`Open Home Depot page for ${item.name} (SKU ${item.sku})`}
+      onClick={openHomeDepot}
+      onKeyDown={handleKeyDown}
+      className="elevation-card border border-[var(--border-strong)] rounded-xl overflow-hidden shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow h-full flex flex-col cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
       aria-labelledby={`item-${item.id}-name`}
     >
       {/* 8pt grid: p-5 = 20px, space-y-4 = 16px between elements */}
@@ -64,26 +81,26 @@ export function PennyListCard({ item }: PennyListCardProps) {
             <Link
               href={`/sku/${item.sku}`}
               className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] hover:underline"
+              onClickCapture={(event) => event.stopPropagation()}
+              onKeyDownCapture={(event) => event.stopPropagation()}
             >
               <h3
                 id={`item-${item.id}-name`}
-                className="font-semibold text-lg text-[var(--text-primary)] leading-[1.5] line-clamp-2"
+                className="font-semibold text-lg text-[var(--text-primary)] leading-[1.5] truncate"
+                title={item.name}
               >
                 {item.name}
               </h3>
             </Link>
 
-            <div className="flex items-center gap-2 text-sm text-[var(--text-primary)] font-mono elevation-2 border border-[var(--border-strong)] px-2.5 py-1.5 rounded w-fit font-medium">
+            <div
+              className="flex items-center gap-2 text-sm text-[var(--text-primary)] font-mono elevation-2 border border-[var(--border-strong)] px-2.5 py-1.5 rounded w-fit font-medium"
+              onClickCapture={(event) => event.stopPropagation()}
+              onKeyDownCapture={(event) => event.stopPropagation()}
+            >
               <span className="select-all">SKU: {item.sku}</span>
               <CopySkuButton sku={item.sku} source="card" />
             </div>
-
-            {item.quantityFound && (
-              <div className="flex items-center gap-2 text-sm font-semibold text-[var(--text-secondary)]">
-                <Package className="w-4 h-4" aria-hidden="true" />
-                <span>{item.quantityFound}</span>
-              </div>
-            )}
           </div>
         </div>
 
@@ -115,9 +132,15 @@ export function PennyListCard({ item }: PennyListCardProps) {
           </div>
         )}
 
-        <div className="pt-4 border-t border-[var(--border-default)] flex items-center justify-between mt-auto">
-          <span className="text-sm text-[var(--text-secondary)]">Community lead</span>
-          <span className="font-bold text-lg text-[var(--status-success)]">$0.01</span>
+        <div className="pt-4 border-t border-[var(--border-default)] flex items-center justify-between mt-auto text-sm text-[var(--text-secondary)]">
+          <span>Community lead</span>
+          <span className="inline-flex items-center gap-3 font-semibold text-[var(--text-primary)]">
+            <span className="text-[var(--status-success)]">$0.01</span>
+            <span className="inline-flex items-center gap-1">
+              <ExternalLink className="w-4 h-4" aria-hidden="true" />
+              homedepot.com
+            </span>
+          </span>
         </div>
       </div>
     </article>
@@ -133,10 +156,25 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
 
   const totalReports = item.locations ? getTotalReports(item.locations) : 0
   const stateCount = item.locations ? Object.keys(item.locations).length : 0
+  const homeDepotUrl = getHomeDepotProductUrl({ sku: item.sku })
+
+  const openHomeDepot = () => window.open(homeDepotUrl, "_blank", "noopener,noreferrer")
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault()
+      openHomeDepot()
+    }
+  }
 
   return (
     <article
-      className="rounded-lg border border-[var(--border-strong)] elevation-card p-4"
+      role="link"
+      tabIndex={0}
+      aria-label={`Open Home Depot page for ${item.name} (SKU ${item.sku})`}
+      onClick={openHomeDepot}
+      onKeyDown={handleKeyDown}
+      className="rounded-lg border border-[var(--border-strong)] elevation-card p-4 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
       aria-labelledby={`hot-item-${item.id}-name`}
     >
       <div className="flex items-center justify-between mb-2 gap-2">
@@ -157,10 +195,13 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
           <Link
             href={`/sku/${item.sku}`}
             className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] hover:underline"
+            onClickCapture={(event) => event.stopPropagation()}
+            onKeyDownCapture={(event) => event.stopPropagation()}
           >
             <h3
               id={`hot-item-${item.id}-name`}
-              className="text-sm font-semibold text-[var(--text-primary)] leading-[1.5] line-clamp-2"
+              className="text-sm font-semibold text-[var(--text-primary)] leading-[1.5] truncate"
+              title={item.name}
             >
               {item.name}
             </h3>

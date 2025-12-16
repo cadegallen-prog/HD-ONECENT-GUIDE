@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 16, 2025 (verification sweep: quality gates, contrast, Tailwind audit)  
+**Last updated:** Dec 16, 2025 (color doc + PR checklist + helper/script additions; quality gates + contrast + Playwright proof cleanup)  
 This file is the **single living snapshot** of where the project is right now.  
 Every AI session must update this after meaningful work.
 
@@ -12,13 +12,15 @@ Every AI session must update this after meaningful work.
 - **Phase:** Stabilization + Community Intake + Command Reliability + Store Finder UX
 - **Traffic reality:** early launch volatility is normal; focus on retention loop first.
 - **Recent focus (Dec 16):** Launched Verified Pennies + refreshed homepage/nav:
- - **Recent focus (Dec 16):** Launched Verified Pennies + refreshed homepage/nav:
-  - New curated route: `/verified-pennies` (search + brand filter + image-first grid)
-  - Nav prioritizes **Verified** and **Penny List**; shortened labels (**Report**, **Stores**)
-  - Homepage hero/tools now point first to Verified Items and the Penny List; Store Finder remains available as a secondary link
-  - Clarified what “Verified” means on `/verified-pennies` to set expectations (store-by-store variance, timing, proof sources)
-  - Restored token-only color usage across UI surfaces (removed remaining raw Tailwind palette classes and `text-white` usage)
-  - Enabled `next/image` external images for Home Depot CDN (`images.thdstatic.com`) via `next.config.js`
+- **New (Dec 16 PM):** Verified + community penny lists now use single-line ellipsis titles, Home Depot row click-through with keyboard/ARIA, quantity hidden from public views, muted badges/headers for faster scan; hero badge contrast fixed to satisfy axe.
+- New curated route: `/verified-pennies` (search + brand filter + image-first grid)
+- Nav prioritizes **Verified** and **Penny List**; shortened labels (**Report**, **Stores**)
+- Homepage hero/tools now point first to Verified Items and the Penny List; Store Finder remains available as a secondary link
+- Clarified what “Verified” means on `/verified-pennies` to set expectations (store-by-store variance, timing, proof sources)
+- Restored token-only color usage across UI surfaces (removed remaining raw Tailwind palette classes and `text-white` usage)
+- Enabled `next/image` external images for Home Depot CDN (`images.thdstatic.com`) via `next.config.js`
+
+- **Current add-ons (Dec 16):** Added `docs/COLOR-SYSTEM-IMPLEMENTATION.md`, `.github/pull_request_template.md`, `lib/home-depot.ts`, and the CLI-friendly `scripts/convert-verified-data.ts`, then ignored `reports/playwright/proof/` so the screenshot proof artifacts stay local.
 
 - **Recent focus (Dec 15 2:45 PM):** Fixed critical Store Finder UX bugs:
   - **Re-ranking bug eliminated:** Clicking a store on the map no longer re-sorts the list; ranking is now decoupled from map panning via `rankingCenterRef`
@@ -28,7 +30,7 @@ Every AI session must update this after meaningful work.
 - **Command reliability (Dec 15 12:30 PM):** Eliminated repeated "command hangs / loops" by removing `npx` from execution paths and hardening scripts with timeouts + process cleanup.
 - Foundation Contract added at `.ai/FOUNDATION_CONTRACT.md` (tokens/Tailwind/layout/nav/gates) and `ROUTE-TREE.txt` refreshed (includes framework 404).
 - Color drift ratchet in place: `npm run lint:colors` compares against `checks/lint-colors.baseline.json` (8 warnings after recent cleanup) and fails if count rises; refresh the reference only with `npm run lint:colors:update-baseline` after an intentional color change.
- - Verification sweep (Dec 16): ran full quality gates and contrast audit. Results: `lint` ✅, `build` ✅, `test:unit` ✅, `test:e2e` ✅ (36/36), `check-contrast` ✅. Tailwind palette scan found raw tokens only in docs; production components use CSS variables.
+- Verification sweep (Dec 16): ran full quality gates and contrast audit. Results: `lint` ✅, `build` ✅, `test:unit` ✅, `test:e2e` ✅ (36/36), `check-contrast` ✅. Tailwind palette scan found raw tokens only in docs; production components use CSS variables.
 - Canonical entrypoint: root `README.md` now holds the AI canon + read order; `.ai/README.md` is a stub pointing back. Read order: STATE → BACKLOG → CONTRACT + DECISION_RIGHTS → CONSTRAINTS + FOUNDATION_CONTRACT + GUARDRAILS → latest SESSION_LOG → CONTEXT (for product calls).
 - Palette refresh permission: allowed later if WCAG AA minimum (target AAA) with before/after screenshots (light/dark, key routes) and lint:colors baseline refresh when intentional.
 - Lighthouse policy: re-run only when visual/token/layout or performance-impacting changes ship, or during scheduled reviews; record outputs in `LIGHTHOUSE_RESULTS.md` and JSON artifacts in `test-results/` (mobile currently `lighthouse-mobile.json`).
@@ -56,7 +58,8 @@ Every AI session must update this after meaningful work.
 ## 2.1 CI / Quality Checks Notes
 
 - **CI Playwright console failures fixed:** Vercel Analytics + Speed Insights scripts were being injected in `next start` (CI) but 404’ing off-Vercel, producing generic console errors that Playwright treated as failures. These scripts now only load on Vercel and never during Playwright.
-- **Store Finder coordinate “autocorrection” is dev-only:** production no longer auto-geocodes and applies coordinate corrections (can shift pins inaccurately and adds flaky network calls).
+- **Store Finder coordinate "autocorrection" is dev-only:** production no longer auto-geocodes and applies coordinate corrections (can shift pins inaccurately and adds flaky network calls).
+- **Verification (Dec 16 03:36):** `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e`, and `npm run lint:colors` all succeeded; refreshed `reports/axe-report.json` and `reports/contrast-computed.json` to capture the latest runs.
 
 ---
 

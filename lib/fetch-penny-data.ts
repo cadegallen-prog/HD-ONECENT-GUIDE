@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises"
 import path from "node:path"
 import { extractStateFromLocation } from "./penny-list-utils"
 import { PLACEHOLDER_IMAGE_URL } from "./image-cache"
+import { getVerifiedPennyBySku } from "./verified-pennies"
 
 // Define the shape of your penny item
 export type PennyItem = {
@@ -172,11 +173,15 @@ async function fetchPennyListRaw(): Promise<PennyItem[]> {
 
     // 5. Calculate tier for each item based on aggregated data
     // Use placeholder for items without user-submitted photos
-    const items: PennyItem[] = Object.values(grouped).map((item) => ({
-      ...item,
-      tier: calculateTier(item.locations),
-      imageUrl: item.imageUrl || PLACEHOLDER_IMAGE_URL,
-    }))
+    const items: PennyItem[] = Object.values(grouped).map((item) => {
+      const verified = getVerifiedPennyBySku(item.sku)
+
+      return {
+        ...item,
+        tier: calculateTier(item.locations),
+        imageUrl: item.imageUrl || verified?.imageUrl || PLACEHOLDER_IMAGE_URL,
+      }
+    })
 
     return items
   } catch (error) {

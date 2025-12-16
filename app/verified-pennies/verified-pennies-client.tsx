@@ -44,10 +44,10 @@ export function VerifiedPenniesClient({ items, brands }: VerifiedPenniesClientPr
   const hasActiveFilters = searchQuery.trim() !== "" || selectedBrand !== null
 
   return (
-    <main className="section-padding px-4 sm:px-6">
+    <main className="section-padding-sm px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
         {/* Search and Filter Bar */}
-        <div className="mb-8 space-y-4">
+        <div className="mb-6 space-y-3">
           {/* Search Input */}
           <div className="relative max-w-xl mx-auto">
             <Search
@@ -109,7 +109,7 @@ export function VerifiedPenniesClient({ items, brands }: VerifiedPenniesClientPr
 
         {/* Results Grid */}
         {filteredItems.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
             {filteredItems.map((item) => (
               <VerifiedPennyCard key={item.sku} item={item} />
             ))}
