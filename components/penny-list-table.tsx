@@ -3,12 +3,14 @@
 import Link from "next/link"
 import { ArrowUpDown, ArrowUp, ArrowDown, Copy, Check } from "lucide-react"
 import { useState } from "react"
+import type { KeyboardEvent } from "react"
 import { US_STATES } from "@/lib/us-states"
 import { formatRelativeDate } from "@/lib/penny-list-utils"
 import { PennyThumbnail } from "@/components/penny-thumbnail"
 import type { PennyItem } from "@/lib/fetch-penny-data"
 import type { SortOption } from "./penny-list-filters"
 import { trackEvent } from "@/lib/analytics"
+import { getHomeDepotProductUrl } from "@/lib/home-depot"
 
 interface PennyListTableProps {
   items: (PennyItem & { parsedDate?: Date | null })[]
