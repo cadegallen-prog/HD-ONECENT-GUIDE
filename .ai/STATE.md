@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 16, 2025 (Verified Pennies + Homepage/Nav refresh)  
+**Last updated:** Dec 16, 2025 (verification sweep: quality gates, contrast, Tailwind audit)  
 This file is the **single living snapshot** of where the project is right now.  
 Every AI session must update this after meaningful work.
 
@@ -12,6 +12,7 @@ Every AI session must update this after meaningful work.
 - **Phase:** Stabilization + Community Intake + Command Reliability + Store Finder UX
 - **Traffic reality:** early launch volatility is normal; focus on retention loop first.
 - **Recent focus (Dec 16):** Launched Verified Pennies + refreshed homepage/nav:
+ - **Recent focus (Dec 16):** Launched Verified Pennies + refreshed homepage/nav:
   - New curated route: `/verified-pennies` (search + brand filter + image-first grid)
   - Nav prioritizes **Verified** and **Penny List**; shortened labels (**Report**, **Stores**)
   - Homepage hero/tools now point first to Verified Items and the Penny List; Store Finder remains available as a secondary link
@@ -27,6 +28,7 @@ Every AI session must update this after meaningful work.
 - **Command reliability (Dec 15 12:30 PM):** Eliminated repeated "command hangs / loops" by removing `npx` from execution paths and hardening scripts with timeouts + process cleanup.
 - Foundation Contract added at `.ai/FOUNDATION_CONTRACT.md` (tokens/Tailwind/layout/nav/gates) and `ROUTE-TREE.txt` refreshed (includes framework 404).
 - Color drift ratchet in place: `npm run lint:colors` compares against `checks/lint-colors.baseline.json` (8 warnings after recent cleanup) and fails if count rises; refresh the reference only with `npm run lint:colors:update-baseline` after an intentional color change.
+ - Verification sweep (Dec 16): ran full quality gates and contrast audit. Results: `lint` ✅, `build` ✅, `test:unit` ✅, `test:e2e` ✅ (36/36), `check-contrast` ✅. Tailwind palette scan found raw tokens only in docs; production components use CSS variables.
 - Canonical entrypoint: root `README.md` now holds the AI canon + read order; `.ai/README.md` is a stub pointing back. Read order: STATE → BACKLOG → CONTRACT + DECISION_RIGHTS → CONSTRAINTS + FOUNDATION_CONTRACT + GUARDRAILS → latest SESSION_LOG → CONTEXT (for product calls).
 - Palette refresh permission: allowed later if WCAG AA minimum (target AAA) with before/after screenshots (light/dark, key routes) and lint:colors baseline refresh when intentional.
 - Lighthouse policy: re-run only when visual/token/layout or performance-impacting changes ship, or during scheduled reviews; record outputs in `LIGHTHOUSE_RESULTS.md` and JSON artifacts in `test-results/` (mobile currently `lighthouse-mobile.json`).
