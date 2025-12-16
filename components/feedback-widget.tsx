@@ -43,6 +43,10 @@ export function FeedbackWidget() {
     localStorage.setItem(STORAGE_KEY, "true")
   }
 
+  function toPressed(value: boolean): "true" | "false" {
+    return value ? "true" : "false"
+  }
+
   if (dismissed) return null
 
   return (
@@ -74,7 +78,7 @@ export function FeedbackWidget() {
         <button
           type="button"
           onClick={() => handleVote("yes")}
-          aria-pressed={vote === "yes"}
+          aria-pressed={toPressed(vote === "yes")}
           className={`flex-1 min-h-[44px] rounded-lg border px-4 py-2 font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
             vote === "yes"
               ? "bg-[var(--cta-primary)] text-[var(--cta-text)] border-[var(--cta-primary)]"
@@ -86,7 +90,7 @@ export function FeedbackWidget() {
         <button
           type="button"
           onClick={() => handleVote("no")}
-          aria-pressed={vote === "no"}
+          aria-pressed={toPressed(vote === "no")}
           className={`flex-1 min-h-[44px] rounded-lg border px-4 py-2 font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
             vote === "no"
               ? "bg-[var(--bg-page)] text-[var(--cta-primary)] border-[var(--cta-primary)]"
