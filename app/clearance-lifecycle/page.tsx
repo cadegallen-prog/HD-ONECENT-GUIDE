@@ -2,6 +2,28 @@ import { Breadcrumb } from "@/components/breadcrumb"
 import { ClearanceLifecycleChart } from "@/components/clearance-lifecycle-chart"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
 import { Button } from "@/components/ui/button"
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Clearance Lifecycle - Understanding Home Depot Markdown Patterns | Penny Central",
+  description:
+    "Learn Home Depot's clearance markdown cadences, price ending codes, and timing patterns to predict when items will reach penny status. Master the $0.01 clearance cycle.",
+  keywords: [
+    "home depot clearance cycle",
+    "markdown cadence",
+    "price ending decoder",
+    "clearance lifecycle",
+    "penny item timing",
+    "clearance patterns",
+    "markdown schedule",
+  ],
+  openGraph: {
+    title: "Clearance Lifecycle - Home Depot Markdown Patterns",
+    description:
+      "Understand Home Depot's clearance markdown cadences and predict when items will reach penny status.",
+    images: ["/og-image.png"],
+  },
+}
 
 export default function ClearanceLifecyclePage() {
   return (

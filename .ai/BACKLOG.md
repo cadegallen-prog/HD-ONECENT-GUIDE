@@ -17,7 +17,58 @@ Each AI session should:
 - **Dec 15, 2025:** Strategic plan created for driving habitual traffic (visual engagement, verification system, SEO expansion)
 - **Dec 12, 2025:** Updated `.ai/PENNY_LIST_PLAN.md` to reflect Phase 1 shipped.
 - **Dec 12, 2025:** CI (`.github/workflows/quality.yml`) now runs lint + Playwright smoke with fixtures.
-- **Dec 16, 2025:** Added curated `/verified-pennies` route (image-first grid + search + brand filtering) and updated homepage/nav to prioritize Verified + Penny List; clarified “Verified” definition and cleaned up remaining raw Tailwind palette colors.
+- **Dec 16, 2025:** Added curated `/verified-pennies` route (image-first grid + search + brand filtering) and updated homepage/nav to prioritize Verified + Penny List; clarified "Verified" definition and cleaned up remaining raw Tailwind palette colors.
+- **Dec 16, 2025:** SEO improvements - Added metadata to 11 missing pages, created dynamic sitemap, created OG image template. All pages now Google-discoverable.
+
+---
+
+## By Goal (Growth-Focused)
+
+> **Note:** See `.ai/GROWTH_STRATEGY.md` for complete context on Cade's business goals and constraints.
+
+### SEO (Organic Growth) - HIGH PRIORITY
+
+- [x] Add metadata to /what-are-pennies
+- [x] Add metadata to /clearance-lifecycle
+- [x] Add metadata to /digital-pre-hunt
+- [x] Add metadata to /in-store-strategy
+- [x] Add metadata to /checkout-strategy
+- [x] Add metadata to /internal-systems
+- [x] Add metadata to /responsible-hunting
+- [x] Add metadata to /facts-vs-myths
+- [x] Add metadata to /report-find
+- [x] Add metadata to /trip-tracker
+- [x] Add metadata to /faq
+- [x] Create default OG image (SVG created, needs PNG conversion)
+- [x] Dynamic sitemap (auto-updates)
+- [ ] Convert OG image SVG to PNG (1200x630px)
+- [ ] Individual SKU pages (/sku/[id]) - Could 10x traffic
+- [ ] State landing pages (/pennies/[state]) - Geographic targeting
+- [ ] Add Article schema to guide pages
+- [ ] Add BreadcrumbList schema to navigation
+
+### Engagement (Time on Site) - MEDIUM PRIORITY
+
+- [ ] Social sharing buttons (drives traffic TO Facebook group AND lets users share site with friends)
+- [ ] Related items suggestions on penny cards
+- [ ] Cross-link guides ("You might also like")
+- [ ] "Today's Finds" homepage section (already in P1 below)
+
+**Shelved:**
+- Trip Tracker gamification - Requires user accounts to work properly; localStorage-only is too fragile
+- Trip Tracker page - Currently accessible but not prominently linked; keep for power users who find it
+
+### Revenue (Passive Income) - LOW PRIORITY, BE TASTEFUL
+
+- [ ] Penny hunting gear page (genuine recommendations only)
+- [ ] Amazon Associates integration
+- [ ] Rakuten as BeFrugal alternative
+- [ ] Expand BeFrugal visibility to more pages
+
+### Email Newsletter - DEFERRED
+
+- [ ] Make ConvertKit signup visible
+- **Why deferred:** No value prop yet. Revisit when fresh daily content exists (e.g., "Get notified of new verified pennies")
 
 ---
 

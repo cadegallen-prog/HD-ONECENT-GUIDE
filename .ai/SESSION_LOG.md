@@ -11,6 +11,35 @@
 
 ---
 
+## 2025-12-16 - Claude Code - SEO Improvements + Growth Strategy Documentation
+
+**AI:** Claude Code (Opus 4.5)
+**Goal:** Assess project for growth opportunities, implement SEO improvements, and create persistent documentation for future AI sessions.
+
+**Changes Made:**
+1. **SEO Metadata (11 pages):** Added title, description, keywords, OpenGraph to all guide redirect pages + report-find + trip-tracker
+2. **Dynamic Sitemap:** Created `app/sitemap.ts` that auto-updates with all pages
+3. **OG Image:** Created `public/og-image.svg` with copper penny theme (needs PNG conversion)
+4. **Documentation Created:**
+   - `.ai/GROWTH_STRATEGY.md` - Complete business context, goals, constraints, Facebook relationship
+   - Updated `.ai/BACKLOG.md` with goal-organized checkboxes
+   - Updated `CLAUDE.md` to reference growth strategy
+
+**Key Decisions Made:**
+- Guide redirect pages (`/what-are-pennies` → `/#introduction`) are GOOD for SEO - each ranks for specific keywords
+- Trip Tracker gamification SHELVED - requires user accounts, localStorage too fragile
+- Social sharing buttons APPROVED - drives traffic both TO Facebook group AND to website (symbiotic)
+- Email newsletter DEFERRED - no value prop yet, revisit when fresh daily content exists
+
+**Outcome:** ✅ All quality gates pass (lint, build, test:unit, test:e2e)
+
+**For Next Session:**
+- Convert OG image SVG to PNG (1200x630px)
+- P0 backlog items: Enrich penny list with verified images, hide quantity from display
+- Future SEO: Individual SKU pages, state landing pages
+
+---
+
 ## 2025-12-16 - ChatGPT Codex - Review unstaged items & verify quality gates
 
 **AI:** ChatGPT Codex

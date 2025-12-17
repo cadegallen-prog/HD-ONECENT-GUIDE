@@ -44,3 +44,4 @@ archive/
 next-env.d.ts
 .vercel
 .env*.local
+.cache/
