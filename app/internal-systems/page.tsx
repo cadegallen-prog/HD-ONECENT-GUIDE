@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation"
 import { Metadata } from "next"
+import { ogImageUrl } from "@/lib/og"
 
 export const metadata: Metadata = {
   title: "Home Depot Internal Systems - Understanding Store Operations | Penny Central",
@@ -16,7 +17,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Home Depot Internal Systems Explained",
     description: "Learn how Home Depot's internal systems work and how they affect penny hunting.",
-    images: ["/og-image.png"],
+    images: [ogImageUrl("Internal Systems")],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [ogImageUrl("Internal Systems")],
   },
 }
 

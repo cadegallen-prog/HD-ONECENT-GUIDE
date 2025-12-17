@@ -2,6 +2,7 @@ import { Breadcrumb } from "@/components/breadcrumb"
 import { ClearanceLifecycleChart } from "@/components/clearance-lifecycle-chart"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
 import { Button } from "@/components/ui/button"
+import { ogImageUrl } from "@/lib/og"
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -21,7 +22,11 @@ export const metadata: Metadata = {
     title: "Clearance Lifecycle - Home Depot Markdown Patterns",
     description:
       "Understand Home Depot's clearance markdown cadences and predict when items will reach penny status.",
-    images: ["/og-image.png"],
+    images: [ogImageUrl("Clearance Lifecycle")],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [ogImageUrl("Clearance Lifecycle")],
   },
 }
 

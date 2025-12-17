@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 16, 2025 (color doc + PR checklist + helper/script additions; quality gates + contrast + Playwright proof cleanup)  
+**Last updated:** Dec 17, 2025 (dynamic minimal OpenGraph images via `/api/og`; route-specific headlines; cache-busting `v` param + shorter CDN cache; disabled lucide-react import optimization to reduce Turbopack/HMR flakiness)  
 This file is the **single living snapshot** of where the project is right now.  
 Every AI session must update this after meaningful work.
 
@@ -47,6 +47,7 @@ Every AI session must update this after meaningful work.
 - **Verified Pennies database is live (curated):**
   - `/verified-pennies` serves a curated catalog of confirmed penny items with product images.
   - This is additive to Community Reports (does not replace the crowdsourced loop).
+- **OpenGraph previews are solid:** `GET /api/og?headline=...&v=1` generates minimal OG images; key routes set clear, route-specific headlines (Guide, Curated, Penny List, Store Finder, Report a Find). (CDN cache is now 1h with SWR; bump `v` to bust.)
 - **Command reliability (Dec 15, 12:30 PM):**
   - All local scripts (`lint:colors`, `test:unit`, `check-axe`, `check-contrast`) now exit cleanly without hanging
   - Removed `npx` from execution paths (only in CI Playwright install and docs)

@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation"
 import { Metadata } from "next"
+import { ogImageUrl } from "@/lib/og"
 
 export const metadata: Metadata = {
   title: "Facts vs Myths - Penny Hunting Misconceptions Debunked | Penny Central",
@@ -16,7 +17,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Facts vs Myths - Penny Hunting Misconceptions Debunked",
     description: "Learn the truth about penny hunting and avoid common misconceptions.",
-    images: ["/og-image.png"],
+    images: [ogImageUrl("Facts vs Myths")],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [ogImageUrl("Facts vs Myths")],
   },
 }
 

@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation"
 import { Metadata } from "next"
+import { ogImageUrl } from "@/lib/og"
 
 export const metadata: Metadata = {
   title: "Digital Pre-Hunt Tools - Scout Penny Items Before You Go | Penny Central",
@@ -16,7 +17,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Digital Pre-Hunt Tools - Scout Before You Go",
     description: "Learn to use digital tools to scout penny items before visiting stores.",
-    images: ["/og-image.png"],
+    images: [ogImageUrl("Digital Pre-Hunt Tools")],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [ogImageUrl("Digital Pre-Hunt Tools")],
   },
 }
 

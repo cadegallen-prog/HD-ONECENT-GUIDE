@@ -16,7 +16,7 @@ const nextConfig = {
     ],
   },
   experimental: {
-    optimizePackageImports: ["lucide-react", "framer-motion"],
+    optimizePackageImports: ["framer-motion"],
   },
   // Security and caching headers
   async headers() {

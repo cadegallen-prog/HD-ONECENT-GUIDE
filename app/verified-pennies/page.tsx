@@ -5,6 +5,7 @@ import {
   getVerifiedPennyCount,
 } from "@/lib/verified-pennies"
 import { VerifiedPenniesClient } from "./verified-pennies-client"
+import { ogImageUrl } from "@/lib/og"
 
 export const metadata: Metadata = {
   title: "Curated Penny Items - Confirmed Home Depot Penny Deals | Penny Central",
@@ -17,6 +18,16 @@ export const metadata: Metadata = {
     "penny shopping",
     "home depot one cent",
   ],
+  openGraph: {
+    title: "Curated $0.01 Items",
+    description:
+      "Browse curated Home Depot penny items with product images. Confirmed deals you can search by name, SKU, or brand.",
+    images: [ogImageUrl("Curated $0.01 Items")],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [ogImageUrl("Curated $0.01 Items")],
+  },
 }
 
 export default function VerifiedPenniesPage() {

@@ -1,4 +1,5 @@
 import { Metadata } from "next"
+import { ogImageUrl } from "@/lib/og"
 
 export const metadata: Metadata = {
   title: "Trip Tracker - Plan Your Penny Hunting Trips | Penny Central",
@@ -16,7 +17,11 @@ export const metadata: Metadata = {
     title: "Trip Tracker - Plan Your Penny Hunting Trips",
     description:
       "Organize your penny hunting trips with checklists, store lists, and success tracking.",
-    images: ["/og-image.png"],
+    images: [ogImageUrl("Trip Tracker")],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [ogImageUrl("Trip Tracker")],
   },
 }
 

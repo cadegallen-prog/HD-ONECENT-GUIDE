@@ -10,6 +10,7 @@ import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { AnalyticsSessionTracker } from "@/components/analytics-session"
 import { SpeedInsightsClient } from "@/components/speed-insights-client"
+import { ogImageUrl } from "@/lib/og"
 
 const ENABLE_VERCEL_SCRIPTS =
   process.env.NODE_ENV === "production" &&
@@ -55,6 +56,7 @@ export const metadata: Metadata = {
     title: "Penny Central: The Home Depot $0.01 Hunting Guide",
     description:
       "The complete guide to finding Home Depot penny items. Learn clearance cycles, in-store hunting strategies, checkout tips, and join 40,000+ penny hunters.",
+    images: [ogImageUrl("Find $0.01 Items.")],
     siteName: "Penny Central",
   },
   twitter: {
@@ -62,6 +64,7 @@ export const metadata: Metadata = {
     title: "Penny Central: The Home Depot $0.01 Hunting Guide",
     description:
       "The complete guide to finding Home Depot penny items. Learn clearance cycles, in-store hunting strategies, checkout tips, and join 40,000+ penny hunters.",
+    images: [ogImageUrl("Find $0.01 Items.")],
   },
   robots: {
     index: true,

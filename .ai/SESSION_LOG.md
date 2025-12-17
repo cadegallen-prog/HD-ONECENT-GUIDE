@@ -11,6 +11,27 @@
 
 ---
 
+## 2025-12-17 - ChatGPT Codex - Minimal Dynamic OG Images
+
+**AI:** ChatGPT Codex
+**Goal:** Fix broken OpenGraph previews and ship a timeless, minimal OG template that can be reused across routes.
+
+**Changes Made:**
+- Added dynamic OG image generator: `app/api/og/route.tsx` (`/api/og?headline=...`)
+- Added helper: `lib/og.ts` for consistent URL generation (includes `v=1` cache-buster)
+- Updated metadata to use route-specific OG images (and removed all references to non-existent `/og-image.png`) across:
+  - Key routes: `/guide`, `/verified-pennies`, `/penny-list`, `/store-finder`, `/report-find`
+  - SEO redirect pages: `/what-are-pennies`, `/faq`, `/digital-pre-hunt`, `/facts-vs-myths`, `/checkout-strategy`, `/in-store-strategy`, `/internal-systems`, `/clearance-lifecycle`, `/responsible-hunting`, `/trip-tracker`
+- Set default OG + Twitter image at the root layout via the same generator.
+- Reduced OG caching aggressiveness (1h CDN cache + SWR; no `immutable`) to make iteration safer.
+- Removed `lucide-react` from `experimental.optimizePackageImports` to reduce Turbopack/HMR flakiness in dev.
+
+**Outcome:** ✅ All quality gates pass (`npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e`, `npm run lint:colors`).
+
+**For Next Session:**
+- Decide final headline mapping + whether the copper accent line should be default-on or only for select OGs.
+- Optional cleanup: keep `public/og-image.svg` only as an archive/reference (dynamic OG is now the real source of truth).
+
 ## 2025-12-16 - Claude Code - SEO Improvements + Growth Strategy Documentation
 
 **AI:** Claude Code (Opus 4.5)

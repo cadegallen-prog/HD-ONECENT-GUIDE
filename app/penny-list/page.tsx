@@ -2,11 +2,22 @@ import type { Metadata } from "next"
 import { getPennyList } from "@/lib/fetch-penny-data"
 import { computeFreshnessMetrics, filterValidPennyItems } from "@/lib/penny-list-utils"
 import { PennyListClient } from "@/components/penny-list-client"
+import { ogImageUrl } from "@/lib/og"
 
 export const metadata: Metadata = {
   title: "Penny List (Community Reports): Recent Penny Sightings - Penny Central",
   description:
     "Penny List: latest community-reported penny sightings at Home Depot. Search and filter by state, tier, and date. Always verify in store - your mileage may vary.",
+  openGraph: {
+    title: "Community $0.01 Finds",
+    description:
+      "Latest community-reported penny sightings at Home Depot. Search and filter by state, tier, and date.",
+    images: [ogImageUrl("Community $0.01 Finds")],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [ogImageUrl("Community $0.01 Finds")],
+  },
 }
 
 export const revalidate = 3600

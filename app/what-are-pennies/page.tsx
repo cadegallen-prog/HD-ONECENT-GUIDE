@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation"
 import { Metadata } from "next"
+import { ogImageUrl } from "@/lib/og"
 
 export const metadata: Metadata = {
   title: "What Are Penny Items? - Home Depot $0.01 Clearance Explained | Penny Central",
@@ -15,7 +16,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "What Are Penny Items? - Home Depot $0.01 Clearance Explained",
     description: "Learn what Home Depot penny items are and how the $0.01 clearance system works.",
-    images: ["/og-image.png"],
+    images: [ogImageUrl("What Are Penny Items?")],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [ogImageUrl("What Are Penny Items?")],
   },
 }
 

@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation"
 import { Metadata } from "next"
+import { ogImageUrl } from "@/lib/og"
 
 export const metadata: Metadata = {
   title: "In-Store Hunting Strategy - Find Penny Items at Home Depot | Penny Central",
@@ -16,7 +17,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "In-Store Hunting Strategy - Find Penny Items",
     description: "Learn proven strategies for finding penny items in Home Depot stores.",
-    images: ["/og-image.png"],
+    images: [ogImageUrl("In-Store Strategy")],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [ogImageUrl("In-Store Strategy")],
   },
 }
 

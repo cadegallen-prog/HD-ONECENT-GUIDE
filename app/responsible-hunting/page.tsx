@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation"
 import { Metadata } from "next"
+import { ogImageUrl } from "@/lib/og"
 
 export const metadata: Metadata = {
   title: "Responsible Penny Hunting - Ethics and Best Practices | Penny Central",
@@ -16,7 +17,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Responsible Penny Hunting - Ethics & Best Practices",
     description: "Learn ethical practices to keep penny hunting sustainable and respectful.",
-    images: ["/og-image.png"],
+    images: [ogImageUrl("Responsible Hunting")],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [ogImageUrl("Responsible Hunting")],
   },
 }
 
