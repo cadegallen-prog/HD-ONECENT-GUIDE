@@ -12,6 +12,7 @@ export type EventName =
   | "penny_list_filter"
   | "penny_list_search"
   | "sku_copy"
+  | "share_click"
   | "directions_click"
   | "coffee_click"
   | "affiliate_click"

@@ -102,4 +102,6 @@ console.log(`\n💡 Next steps:`)
 console.log(`   1. Review changes: git diff data/verified-pennies.json`)
 console.log(`   2. Test the site: npm run dev`)
 console.log(`   3. Delete exported file: rm ${files[0]}`)
-console.log(`   4. Commit: git add data/verified-pennies.json && git commit -m "Add images for X pennies"`)
+console.log(
+  `   4. Commit: git add data/verified-pennies.json && git commit -m "Add images for X pennies"`
+)

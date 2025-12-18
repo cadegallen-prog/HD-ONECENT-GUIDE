@@ -41,11 +41,16 @@ export const metadata: Metadata = {
   description:
     "The complete guide to finding Home Depot penny items. Learn clearance cycles, in-store hunting strategies, checkout tips, and join 40,000+ penny hunters.",
   keywords: [
-    "home depot penny items guide",
+    "home depot penny items",
+    "penny items",
+    "penny guide",
+    "home depot penny list",
+    "home depot clearance",
     "one cent items",
     "clearance cadence",
     "price ending decoder",
     "self checkout penny items",
+    "penny shopping",
   ],
   authors: [{ name: "Home Depot One Cent Items Community" }],
   metadataBase: new URL("https://www.pennycentral.com"),

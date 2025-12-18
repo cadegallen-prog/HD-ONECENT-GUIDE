@@ -93,6 +93,27 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
           }),
         }}
       />
+      {/* Dataset Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Dataset",
+            name: "Home Depot Penny List",
+            description:
+              "A community-sourced list of items currently priced at $0.01 at Home Depot stores.",
+            url: "https://www.pennycentral.com/penny-list",
+            creator: {
+              "@type": "Organization",
+              name: "Penny Central",
+            },
+            isAccessibleForFree: true,
+            keywords: ["home depot penny items", "penny list", "clearance items"],
+            license: "https://creativecommons.org/licenses/by-sa/4.0/",
+          }),
+        }}
+      />
       {/* Header Section */}
       <section
         aria-labelledby="page-heading"

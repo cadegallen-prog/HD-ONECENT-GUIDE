@@ -18,11 +18,8 @@ test("verified pennies: SKU image loads", async ({ page }) => {
 
   const imgHandle = await img.elementHandle()
   expect(imgHandle).not.toBeNull()
-  await page.waitForFunction(
-    (el) => {
-      const imgEl = el as HTMLImageElement
-      return Boolean(imgEl && imgEl.complete && imgEl.naturalWidth > 0)
-    },
-    imgHandle
-  )
+  await page.waitForFunction((el) => {
+    const imgEl = el as HTMLImageElement
+    return Boolean(imgEl && imgEl.complete && imgEl.naturalWidth > 0)
+  }, imgHandle)
 })

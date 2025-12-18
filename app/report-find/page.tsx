@@ -175,7 +175,7 @@ export default function ReportFindPage() {
             Report a Penny Find
           </h1>
           <p className="text-lg text-[var(--text-secondary)] max-w-xl mx-auto">
-            Takes about 30 seconds. Required: item name, SKU, state, quantity.
+            Takes about 30 seconds. Required: item name, SKU, state.
           </p>
         </div>
 
@@ -379,7 +379,7 @@ export default function ReportFindPage() {
             </div>
           </details>
 
-          {/* Quantity (required) */}
+          {/* Quantity (optional) */}
           <div>
             <label
               htmlFor="quantity"
@@ -387,16 +387,11 @@ export default function ReportFindPage() {
             >
               <Package className="w-4 h-4" />
               Quantity Found{" "}
-              <span className="text-[var(--status-error)]" aria-hidden="true">
-                *
-              </span>
-              <span className="sr-only">(required)</span>
+              <span className="text-xs text-[var(--text-muted)] font-normal">(optional)</span>
             </label>
             <input
               type="number"
               id="quantity"
-              required
-              aria-required="true"
               min={1}
               max={99}
               value={formData.quantity}
@@ -404,7 +399,9 @@ export default function ReportFindPage() {
               placeholder="e.g., 3"
               className="w-full px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent"
             />
-            <p className="mt-1 text-xs text-[var(--text-muted)]">How many did you find? (1-99)</p>
+            <p className="mt-1 text-xs text-[var(--text-muted)]">
+              How many did you find? (1-99, leave blank if unsure)
+            </p>
           </div>
 
           {/* Submit Button */}

@@ -15,6 +15,35 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: "Penny Central",
+            url: "https://www.pennycentral.com",
+            potentialAction: {
+              "@type": "SearchAction",
+              target: "https://www.pennycentral.com/penny-list?q={search_term_string}",
+              "query-input": "required name=search_term_string",
+            },
+          }),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "Penny Central",
+            url: "https://www.pennycentral.com",
+            logo: "https://www.pennycentral.com/icon.svg",
+            sameAs: [FACEBOOK_GROUP_URL],
+          }),
+        }}
+      />
       {/* ============================================
           HERO SECTION
           
@@ -33,12 +62,12 @@ export default function Home() {
         <div className="max-w-4xl mx-auto text-center">
           {/* H1 - Unified type scale */}
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[var(--text-primary)] leading-tight">
-            Learn how to find $0.01 items at Home Depot
+            Find Home Depot Penny Items ($0.01)
           </h1>
 
           {/* Lead text */}
           <p className="mt-3 text-lg sm:text-xl text-[var(--text-secondary)] leading-relaxed">
-            A simple step-by-step guide + live lists to help you hunt smarter.
+            The ultimate penny guide + live lists to help you hunt smarter.
           </p>
 
           {/* CTAs - Unified button system */}

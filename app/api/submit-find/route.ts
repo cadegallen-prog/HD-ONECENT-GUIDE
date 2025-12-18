@@ -18,7 +18,7 @@ const submissionSchema = z.object({
   storeCity: z.string().optional(),
   storeState: z.string().min(2).max(2),
   dateFound: z.string(),
-  quantity: z.string().min(1),
+  quantity: z.string().optional(),
   notes: z.string().optional(),
   website: z.string().optional(), // honeypot
 })
@@ -70,13 +70,16 @@ export async function POST(request: NextRequest) {
 
     const normalizedSku = skuCheck.normalized
 
-    // Validate quantity (must be a number between 1 and 99)
-    const qty = Number.parseInt(body.quantity, 10)
-    if (Number.isNaN(qty) || qty < 1 || qty > 99) {
-      return NextResponse.json(
-        { error: "Quantity must be a number between 1 and 99." },
-        { status: 400 }
-      )
+    // Validate quantity (optional, but if provided must be 1-99)
+    let qty: number | undefined
+    if (body.quantity && body.quantity.trim().length > 0) {
+      qty = Number.parseInt(body.quantity, 10)
+      if (Number.isNaN(qty) || qty < 1 || qty > 99) {
+        return NextResponse.json(
+          { error: "Quantity must be a number between 1 and 99." },
+          { status: 400 }
+        )
+      }
     }
 
     // Validate state is 2 characters
@@ -95,7 +98,7 @@ export async function POST(request: NextRequest) {
       SKU: normalizedSku,
       "Store (City, State)": location,
       "Purchase Date": body.dateFound,
-      "Exact Quantity Found": String(qty),
+      "Exact Quantity Found": qty !== undefined ? String(qty) : "",
       "Notes (optional)": body.notes?.trim() || "",
     }
 

@@ -4,6 +4,7 @@ import Link from "next/link"
 import { Calendar, ExternalLink } from "lucide-react"
 import type { KeyboardEvent } from "react"
 import { CopySkuButton } from "@/components/copy-sku-button"
+import { ShareButton } from "@/components/share-button"
 import { PennyThumbnail } from "@/components/penny-thumbnail"
 import { US_STATES } from "@/lib/us-states"
 import { formatRelativeDate } from "@/lib/penny-list-utils"
@@ -139,6 +140,12 @@ export function PennyListCard({ item }: PennyListCardProps) {
             <span className="inline-flex items-center gap-1">
               <ExternalLink className="w-4 h-4" aria-hidden="true" />
               homedepot.com
+            </span>
+            <span
+              onClickCapture={(event) => event.stopPropagation()}
+              onKeyDownCapture={(event) => event.stopPropagation()}
+            >
+              <ShareButton sku={item.sku} itemName={item.name} source="card" />
             </span>
           </span>
         </div>
