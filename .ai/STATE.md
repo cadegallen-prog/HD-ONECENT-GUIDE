@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 18, 2025 (Final naming locked + theme polish: new AAA-friendly CTA palette, removed desktop-redundant Guide link, stabilized Playwright by defaulting e2e to 1 worker)
+**Last updated:** Dec 18, 2025 (CI fix: CTA text color now respects `--cta-text` so dark-mode CTAs pass axe `color-contrast`)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -22,7 +22,8 @@ Every AI session must update this after meaningful work.
   - Standardized labels: **Verified Pennies**, **Community Penny List**, **Store Finder** across nav, homepage CTAs/cards, footer, command palette, badges/pills.
   - Updated `/verified-pennies` and `/penny-list` metadata/headings for SEO clarity; adjusted visual smoke headings and README docs.
   - CTA palette softened to reduce halation (desaturated slate blue); dark mode CTA now uses dark text on a lighter CTA surface for comfort + AAA contrast.
-  - Removed redundant “Read the full guide” link on desktop (kept mobile-only).
+  - Fixed CI axe `color-contrast` failures in dark mode by removing a global “force white text on CTA” override; CTA elements now inherit `var(--cta-text)` as intended.
+  - Removed redundant "Read the full guide" link on desktop (kept mobile-only).
   - Store Finder popup test wait increased to 20s for marker visibility; `npm run test:e2e` now runs serial (`--workers=1`) to avoid Windows connection-reset flake; full gates green.
 - **Previous focus (Dec 17):** Landing page restructured for clarity—eliminated decision fatigue by reordering sections and consolidating CTAs.
   - **Hero:** Guide-first (primary CTA), Verified Pennies (secondary), Community Penny List link (tertiary small link)

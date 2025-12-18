@@ -326,15 +326,15 @@
 
   /* ===============================================
      CTA ELEMENT STYLING
-     Ensures proper contrast on CTA buttons
-     Force white text on CTA elements regardless of context
+     Keep CTA text color aligned with theme tokens.
+     (Dark mode uses darker CTA text to avoid glow.)
      =============================================== */
 
   button[class*="bg-[var(--cta-primary)]"] a,
   button[class*="bg-[var(--cta-primary)]"] *,
   a[class*="bg-[var(--cta-primary)]"],
   [data-cta] {
-    color: #ffffff !important;
+    color: var(--cta-text) !important;
   }
 
   /*  ===============================================

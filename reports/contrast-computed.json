@@ -195,7 +195,7 @@
       "selector": "[data-cta=\"befrugal\"]",
       "role": "cta",
       "found": true,
-      "ratio": 6.7,
+      "ratio": 8.61,
       "threshold": 3,
       "pass": true
     },
@@ -239,7 +239,7 @@
       "selector": "body",
       "role": "text",
       "found": true,
-      "ratio": 17.49,
+      "ratio": 13.66,
       "threshold": 7,
       "pass": true
     },
@@ -250,7 +250,7 @@
       "selector": "[data-card], article",
       "role": "text",
       "found": true,
-      "ratio": 16.74,
+      "ratio": 12.69,
       "threshold": 7,
       "pass": true
     },
@@ -261,7 +261,7 @@
       "selector": "[data-card], article",
       "role": "border",
       "found": true,
-      "ratio": 11.74,
+      "ratio": 3.41,
       "threshold": 3,
       "pass": true
     },
@@ -272,7 +272,7 @@
       "selector": "[data-cta=\"befrugal\"]",
       "role": "cta",
       "found": true,
-      "ratio": 6.7,
+      "ratio": 4.57,
       "threshold": 3,
       "pass": true
     },
@@ -503,7 +503,7 @@
       "selector": "[data-cta=\"befrugal\"]",
       "role": "cta",
       "found": true,
-      "ratio": 6.7,
+      "ratio": 8.61,
       "threshold": 3,
       "pass": true
     },
@@ -580,7 +580,7 @@
       "selector": "[data-cta=\"befrugal\"]",
       "role": "cta",
       "found": true,
-      "ratio": 6.62,
+      "ratio": 8.61,
       "threshold": 3,
       "pass": true
     },

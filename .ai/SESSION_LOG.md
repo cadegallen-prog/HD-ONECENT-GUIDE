@@ -2239,6 +2239,32 @@ Rare: 1-2 reports AND only 1 state
 
 ---
 
+## Dec 18, 2025 - ChatGPT Codex - Fix failing GitHub quality checks (axe color-contrast)
+
+**AI:** ChatGPT Codex (gpt-5.2)
+**Goal:** Stop GitHub “Quality Checks” from failing (specifically the axe accessibility gate).
+**Root cause:** `npm run check-axe` failed on the homepage in dark mode because `app/globals.css` forced CTA text to `#ffffff`, overriding the intended theme token `--cta-text` (white-on-`#8aa7c7` was only 2.49:1).
+
+**Changes Made:**
+
+- `app/globals.css`: CTA styling now uses `color: var(--cta-text) !important;` instead of hard-forcing white, restoring correct contrast in dark mode.
+
+**Outcome:** ✅ Success
+
+**Verification (local):**
+
+- `npm run lint`: ✅ 0 errors
+- `npm run lint:colors`: ✅ 0 errors / 0 warnings
+- `npm run build`: ✅ success
+- `npm run test:unit`: ✅ 1/1 passing
+- `npm run test:e2e`: ✅ 36/36 passing
+- `npm run check-contrast`: ✅ passed
+- `npm run check-axe`: ✅ 0 violations
+
+**Notes for Next AI:**
+
+- If CTA contrast regresses, search `app/globals.css` for any “force CTA text color” overrides and ensure they reference `--cta-text`, not a hard-coded color.
+
 ## Template for Future Entries
 
 Copy this template when adding new sessions:
