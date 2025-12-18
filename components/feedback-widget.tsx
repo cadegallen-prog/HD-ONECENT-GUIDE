@@ -45,9 +45,6 @@ export function FeedbackWidget() {
 
   if (dismissed) return null
 
-  const yesPressed = vote === "yes" ? "true" : "false"
-  const noPressed = vote === "no" ? "true" : "false"
-
   return (
     <section
       aria-labelledby="penny-feedback-heading"
@@ -77,7 +74,7 @@ export function FeedbackWidget() {
         <button
           type="button"
           onClick={() => handleVote("yes")}
-          aria-pressed={yesPressed}
+          {...({ "aria-pressed": vote === "yes" ? "true" : "false" } as Record<string, unknown>)}
           className={`flex-1 min-h-[44px] rounded-lg border px-4 py-2 font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
             vote === "yes"
               ? "bg-[var(--cta-primary)] text-[var(--cta-text)] border-[var(--cta-primary)]"
@@ -89,7 +86,7 @@ export function FeedbackWidget() {
         <button
           type="button"
           onClick={() => handleVote("no")}
-          aria-pressed={noPressed}
+          {...({ "aria-pressed": vote === "no" ? "true" : "false" } as Record<string, unknown>)}
           className={`flex-1 min-h-[44px] rounded-lg border px-4 py-2 font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
             vote === "no"
               ? "bg-[var(--bg-page)] text-[var(--cta-primary)] border-[var(--cta-primary)]"

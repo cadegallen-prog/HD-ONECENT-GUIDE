@@ -9,7 +9,7 @@ import {
   Map,
   Clock,
   Info,
-  CircleHelp as HelpCircle,
+  CircleHelp,
   Lightbulb,
   ShoppingCart,
   AlertCircle,
@@ -32,7 +32,7 @@ const pages = [
   { icon: FileText, label: "Internal Systems", path: "/#internal-operations", group: "Guide" },
   { icon: AlertCircle, label: "Facts vs Myths", path: "/#fact-vs-fiction", group: "Guide" },
   { icon: Lightbulb, label: "Responsible Hunting", path: "/#responsible-hunting", group: "Guide" },
-  { icon: HelpCircle, label: "FAQ", path: "/#faq", group: "Guide" },
+  { icon: CircleHelp, label: "FAQ", path: "/#faq", group: "Guide" },
   // Tools (actual pages)
   { icon: Map, label: "Store Finder", path: "/store-finder", group: "Tools" },
   { icon: Clock, label: "Trip Tracker", path: "/trip-tracker", group: "Tools" },

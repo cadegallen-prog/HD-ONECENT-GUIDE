@@ -58,9 +58,20 @@ test.describe("store finder popup (screenshots)", () => {
 
     await page.goto("/store-finder")
 
+    // Wait for stores to load (status text changes from "0 of 0")
+    await page.waitForFunction(
+      () => {
+        const statusEl = Array.from(document.querySelectorAll("p")).find((p) =>
+          p.textContent?.includes("stores")
+        )
+        return statusEl && statusEl.textContent && !statusEl.textContent.includes("0 of 0")
+      },
+      { timeout: 15000 }
+    )
+
     // Wait for the map to mount and at least one marker to render.
     const markers = page.locator(".leaflet-marker-icon")
-    await expect(markers.first()).toBeVisible()
+    await expect(markers.first()).toBeVisible({ timeout: 10000 })
 
     // Wait for at least one tile to load so the map look is representative.
     await page.locator(".leaflet-tile-loaded").first().waitFor({ timeout: 60000 })
