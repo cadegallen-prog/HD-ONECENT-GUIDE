@@ -69,17 +69,10 @@ export function VerifiedPennyCard({ item }: VerifiedPennyCardProps) {
               </span>
             )}
             <div className="flex flex-col gap-1 items-end">
-              {latestDate && latestDateLabel && (
-                <div className="text-xs text-[var(--text-muted)] text-right">
-                  <p className="leading-tight">Last verified</p>
-                  <time dateTime={latestDate} className="font-medium text-[var(--text-secondary)]">
-                    {latestDateLabel}
-                  </time>
-                </div>
-              )}
-              <span className="pill pill-muted inline-flex items-center gap-1 text-xs font-semibold">
-                <BadgeCheck className="w-3.5 h-3.5" aria-hidden="true" />
-                Verified
+              <span className="inline-flex items-center gap-1 text-xs text-[var(--text-muted)]">
+                <BadgeCheck className="w-3 h-3" aria-hidden="true" />
+                <span className="sr-only">Verified item</span>
+                <span className="text-[var(--text-muted)]">Verified</span>
               </span>
             </div>
           </div>
@@ -92,6 +85,15 @@ export function VerifiedPennyCard({ item }: VerifiedPennyCardProps) {
           >
             {item.name}
           </h3>
+
+          {latestDate && latestDateLabel && (
+            <div className="text-xs text-[var(--text-muted)] mt-1">
+              <span className="mr-1">Added on:</span>
+              <time dateTime={latestDate} className="font-medium text-[var(--text-secondary)]">
+                {latestDateLabel}
+              </time>
+            </div>
+          )}
 
           {/* SKU with copy button */}
           <div

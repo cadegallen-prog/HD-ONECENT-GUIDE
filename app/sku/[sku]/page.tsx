@@ -205,14 +205,7 @@ export default async function SkuDetailPage({ params }: PageProps) {
                 </div>
               )}
 
-              {verifiedItem && (
-                <div className="absolute top-4 left-4">
-                  <span className="pill pill-success flex items-center gap-1.5 shadow-sm">
-                    <BadgeCheck className="w-4 h-4" />
-                    Verified Penny
-                  </span>
-                </div>
-              )}
+              {/* Verified label moved to title area (subtle, non-intrusive) */}
             </div>
 
             {/* Info Section */}
@@ -226,6 +219,13 @@ export default async function SkuDetailPage({ params }: PageProps) {
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[var(--text-primary)] leading-tight mb-4">
                   {name}
                 </h1>
+
+                {verifiedItem && (
+                  <div className="text-xs text-[var(--text-muted)] mb-2 inline-flex items-center gap-2">
+                    <BadgeCheck className="w-4 h-4 opacity-80" />
+                    <span>Verified</span>
+                  </div>
+                )}
 
                 {freshness && (
                   <div className="flex items-center gap-2 mb-4">
@@ -255,9 +255,7 @@ export default async function SkuDetailPage({ params }: PageProps) {
                         <Calendar className="w-5 h-5" />
                       </div>
                       <div>
-                        <p className="text-xs font-medium text-[var(--text-muted)]">
-                          Last Verified
-                        </p>
+                        <p className="text-xs font-medium text-[var(--text-muted)]">Added on:</p>
                         <time
                           dateTime={latestDate}
                           className="text-sm font-semibold text-[var(--text-primary)]"
