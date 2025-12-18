@@ -222,8 +222,8 @@ export default async function SkuDetailPage({ params }: PageProps) {
 
                 {verifiedItem && (
                   <div className="text-xs text-[var(--text-muted)] mb-2 inline-flex items-center gap-2">
-                    <BadgeCheck className="w-4 h-4 opacity-80" />
-                    <span>Verified</span>
+                    <BadgeCheck className="w-4 h-4 opacity-60" aria-hidden="true" />
+                    <span className="sr-only">Verified item</span>
                   </div>
                 )}
 

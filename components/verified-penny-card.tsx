@@ -70,9 +70,8 @@ export function VerifiedPennyCard({ item }: VerifiedPennyCardProps) {
             )}
             <div className="flex flex-col gap-1 items-end">
               <span className="inline-flex items-center gap-1 text-xs text-[var(--text-muted)]">
-                <BadgeCheck className="w-3 h-3" aria-hidden="true" />
+                <BadgeCheck className="w-3 h-3 opacity-60" aria-hidden="true" />
                 <span className="sr-only">Verified item</span>
-                <span className="text-[var(--text-muted)]">Verified</span>
               </span>
             </div>
           </div>
