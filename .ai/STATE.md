@@ -25,6 +25,11 @@ Every AI session must update this after meaningful work.
   - Fixed CI axe `color-contrast` failures in dark mode by removing a global “force white text on CTA” override; CTA elements now inherit `var(--cta-text)` as intended.
   - Removed redundant "Read the full guide" link on desktop (kept mobile-only).
   - Store Finder popup test wait increased to 20s for marker visibility; `npm run test:e2e` now runs serial (`--workers=1`) to avoid Windows connection-reset flake; full gates green.
+- **Recent focus (Dec 18 PM):** Merged bookmarklet data - added 21 new penny entries with images.
+  - Bookmarklet extracted product data from Home Depot pages (sku, internetNumber, name, brand, model, imageUrl)
+  - Merge script safely combined data with backup creation
+  - Verified Pennies page shows images for 21 additional entries
+  - Added an E2E test to confirm a known newly-merged SKU image loads
 - **Previous focus (Dec 17):** Landing page restructured for clarity—eliminated decision fatigue by reordering sections and consolidating CTAs.
   - **Hero:** Guide-first (primary CTA), Verified Pennies (secondary), Community Penny List link (tertiary small link)
   - **Section order:** Hero → How It Works (moved up) → Tools → Community → Support

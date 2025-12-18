@@ -11,6 +11,49 @@
 
 ---
 
+## 2025-12-18 - GitHub Copilot - Bookmarklet Data Merge (21 New Penny Images)
+
+**AI:** GitHub Copilot
+**Goal:** Merge bookmarklet-exported data (verified_pennies_1766039118702.json) into verified-pennies.json to add images for 21 penny entries.
+
+**Changes Made:**
+
+- Fixed merge script sorting logic to correctly select the newest export file
+- Copied exported JSON from Downloads to project root
+- Ran merge script: added 21 new entries with image URLs
+- Created backup: verified-pennies.backup.2025-12-18T06-26-19.472Z.json
+- Committed changes: "Add images for 21 pennies"
+- Cleaned up: deleted exported file
+- Added Playwright E2E coverage to confirm a newly-merged SKU renders a loadable image
+
+**Files Modified:**
+
+- `scripts/merge-verified-pennies.js` (merge helper)
+- `data/verified-pennies.json` (added 21 entries with images)
+- `tests/verified-pennies-images.spec.ts` (E2E check for verified penny images)
+
+**Verification (all passing):**
+
+- `npm run lint` ✅ (0 errors)
+- `npm run build` ✅ (successful)
+- `npm run test:unit` ✅ (all passing)
+- `npm run test:e2e` ✅ (40/40 passing)
+
+**Learnings:**
+
+- Bookmarklet successfully extracts product data from HD pages
+- Merge script works reliably with backup safety
+- All 21 new entries have proper image URLs from THD
+- No conflicts or data corruption during merge
+
+**Notes for Next Session:**
+
+- Bookmarklet ready for continued use on HD pages
+- Penny list now has images for additional entries
+- Continue collecting/merging more entries as needed
+
+---
+
 ## 2025-12-17 - Claude Haiku - Landing Page Restructure (Learning-First Hierarchy)
 
 **AI:** Claude Haiku (Claude Code)
