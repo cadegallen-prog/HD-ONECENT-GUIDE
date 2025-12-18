@@ -47,5 +47,16 @@
     "workbench.startupEditor": "readme",
     "workbench.editor.enablePreview": false,
     "css.lint.unknownAtRules": "ignore",
+
+    // Generated Playwright HTML report (avoid noisy HTML validation/formatting)
+    "files.associations": {
+        "**/reports/playwright/html/index.html": "plaintext"
+    },
+    "files.watcherExclude": {
+        "**/reports/playwright/html/**": true
+    },
+    "search.exclude": {
+        "**/reports/playwright/html/**": true
+    },
     "security.workspace.trust.enabled": true
 }

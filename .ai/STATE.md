@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 18, 2025 (CI fix: CTA text color now respects `--cta-text` so dark-mode CTAs pass axe `color-contrast`)
+**Last updated:** Dec 18, 2025 (CI fix: pinned Next to stable `16.0.10` to unblock `npm ci`; CTA text color respects `--cta-text` so dark-mode CTAs pass axe `color-contrast`)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -84,7 +84,8 @@ Every AI session must update this after meaningful work.
 
 ## 2.1 CI / Quality Checks Notes
 
-- **CI Playwright console failures fixed:** Vercel Analytics + Speed Insights scripts were being injected in `next start` (CI) but 404’ing off-Vercel, producing generic console errors that Playwright treated as failures. These scripts now only load on Vercel and never during Playwright.
+- **CI Playwright console failures fixed:** Vercel Analytics + Speed Insights scripts were being injected in `next start` (CI) but 404'ing off-Vercel, producing generic console errors that Playwright treated as failures. These scripts now only load on Vercel and never during Playwright.
+- **CI `npm ci` dependency resolution fixed:** The repo no longer pins a Next canary prerelease (which broke `@vercel/analytics` peer resolution under npm); Next + `eslint-config-next` are pinned to stable `16.0.10`.
 - **Store Finder coordinate "autocorrection" is dev-only:** production no longer auto-geocodes and applies coordinate corrections (can shift pins inaccurately and adds flaky network calls).
 - **Verification (Dec 16 03:36):** `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e`, and `npm run lint:colors` all succeeded; refreshed `reports/axe-report.json` and `reports/contrast-computed.json` to capture the latest runs.
 

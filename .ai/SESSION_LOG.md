@@ -2263,7 +2263,36 @@ Rare: 1-2 reports AND only 1 state
 
 **Notes for Next AI:**
 
-- If CTA contrast regresses, search `app/globals.css` for any “force CTA text color” overrides and ensure they reference `--cta-text`, not a hard-coded color.
+- If CTA contrast regresses, search `app/globals.css` for any "force CTA text color" overrides and ensure they reference `--cta-text`, not a hard-coded color.
+
+---
+
+## Dec 18, 2025 - ChatGPT Codex - Fix CI `npm ci` failure (pin Next stable)
+
+**AI:** ChatGPT Codex (gpt-5.2)
+**Goal:** Get GitHub Actions “Quality Checks” to actually run (CI was failing before tests due to `npm ci` dependency resolution).
+**Root cause:** The repo pinned `next@16.1.0-canary.32`; npm’s semver does not treat prereleases as satisfying `@vercel/analytics`’s `peerOptional next@>=13`, so `npm ci` failed with `ERESOLVE`.
+
+**Changes Made:**
+
+- `package.json`: Pinned `next` to stable `16.0.10` (no canary) and aligned `eslint-config-next` to `16.0.10`.
+- `package-lock.json`: Refreshed to match the stable Next pin.
+- `playwright.config.ts`: Kept Playwright on `http://localhost:3001` (no port changes).
+
+**Outcome:** ✅ Success (local) / ✅ unblocks CI install
+
+**Verification (local):**
+
+- `npm run lint`: ✅ 0 errors
+- `npm run build`: ✅ success
+- `npm run test:unit`: ✅ 1/1 passing
+- `npm run test:e2e`: ✅ 36/36 passing
+
+**Notes:**
+
+- Windows may intermittently throw `EPERM` during `npm ci` if a native module file is locked (often antivirus). CI is Linux and uses a clean install, so this does not apply there.
+
+---
 
 ## Template for Future Entries
 
