@@ -11,6 +11,49 @@
 
 ---
 
+## 2025-12-18 - GitHub Copilot - Massive SEO Expansion (500+ SKU Pages)
+
+**AI:** GitHub Copilot
+**Goal:** Improve SEO by creating individual product pages for all 500+ penny items to capture long-tail search traffic.
+
+**Changes Made:**
+
+- **Architectural Shift:** Transformed `/sku/[sku]` into a full product detail page with merged data (verified + community).
+- **Static Generation:** Implemented `generateStaticParams` in `app/sku/[sku]/page.tsx` to pre-render 533 unique SKU paths.
+- **SEO Optimization:** Added dynamic metadata and `Product` JSON-LD structured data for every SKU.
+- **Internal Linking:** Refactored `VerifiedPennyCard` and `PennyListCard` to use Next.js `Link` for internal routing to SKU pages.
+- **Sitemap Expansion:** Updated `app/sitemap.ts` to dynamically include all 500+ SKU pages.
+- **Test Updates:** Updated `tests/verified-pennies-images.spec.ts` to match new DOM structure (Link/anchor instead of article[role="link"]).
+
+**Files Modified:**
+
+- `app/sku/[sku]/page.tsx` (Major overhaul)
+- `app/sitemap.ts` (Dynamic SKU inclusion)
+- `components/verified-penny-card.tsx` (Internal linking)
+- `components/penny-list-card.tsx` (Internal linking)
+- `tests/verified-pennies-images.spec.ts` (Selector update)
+
+**Verification (all passing):**
+
+- `npm run lint` ✅ (0 errors)
+- `npm run build` ✅ (Successful, 533 static paths generated)
+- `npm run test:unit` ✅ (All passing)
+- `npm run test:e2e` ✅ (40/40 passing)
+- **Visual Proof:** Verified `/sku/613231` in browser; screenshot taken.
+
+**Learnings:**
+
+- Large-scale SSG (500+ pages) is highly efficient in Next.js 15.
+- Internal linking to product pages creates a much stickier user experience than external links.
+- JSON-LD `Product` data is critical for Google Rich Snippets.
+
+**Notes for Next Session:**
+
+- Monitor indexing of new SKU pages in Search Console.
+- Consider adding "Related Items" or "Recently Viewed" to SKU pages to further improve internal linking.
+
+---
+
 ## 2025-12-18 - GitHub Copilot - Bookmarklet Data Merge (21 New Penny Images)
 
 **AI:** GitHub Copilot

@@ -1,6 +1,6 @@
 
 # Route Tree (Next.js App Router)
-# Generated: 2025-12-12 from `next build` output
+# Generated: 2025-12-18 from `next build` output
 
 Static pages (○)
 - / (app/page.tsx)
@@ -19,14 +19,22 @@ Static pages (○)
 - /report-find (app/report-find/page.tsx)
 - /resources (app/resources/page.tsx)
 - /responsible-hunting (app/responsible-hunting/page.tsx)
-- /store-finder (app/store-finder/page.tsx, layout at app/store-finder/layout.tsx)
+- /store-finder (app/store-finder/page.tsx)
 - /trip-tracker (app/trip-tracker/page.tsx)
+- /verified-pennies (app/verified-pennies/page.tsx)
 - /what-are-pennies (app/what-are-pennies/page.tsx)
+
+Static Generation (SSG) (●)
+- /sku/[sku] (app/sku/[sku]/page.tsx)
+  - /sku/108011
+  - /sku/145441
+  - ... (+531 more paths)
 
 Dynamic/SSR/API (ƒ)
 - /api/admin/submissions (app/api/admin/submissions/route.ts)
+- /api/og (app/api/og/route.tsx)
 - /api/stores (app/api/stores/route.ts)
 - /api/submit-find (app/api/submit-find/route.ts)
 - /go/befrugal (app/go/befrugal/route.ts)
 - /penny-list (app/penny-list/page.tsx)
-- /sku/[sku] (app/sku/[sku]/page.tsx)
+- /sitemap.xml (app/sitemap.ts)

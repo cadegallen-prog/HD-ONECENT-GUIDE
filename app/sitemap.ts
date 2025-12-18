@@ -1,10 +1,29 @@
 import { MetadataRoute } from "next"
+import { getVerifiedPennies } from "@/lib/verified-pennies"
+import { getPennyList } from "@/lib/fetch-penny-data"
+import { filterValidPennyItems } from "@/lib/penny-list-utils"
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://www.pennycentral.com"
   const currentDate = new Date().toISOString()
 
-  return [
+  // Get all SKUs for dynamic pages
+  const verifiedItems = getVerifiedPennies()
+  const communityItems = filterValidPennyItems(await getPennyList())
+
+  const allSkus = new Set([
+    ...verifiedItems.map((item) => item.sku),
+    ...communityItems.map((item) => item.sku),
+  ])
+
+  const skuPages: MetadataRoute.Sitemap = Array.from(allSkus).map((sku) => ({
+    url: `${baseUrl}/sku/${sku}`,
+    lastModified: currentDate,
+    changeFrequency: "weekly",
+    priority: 0.6,
+  }))
+
+  const staticPages: MetadataRoute.Sitemap = [
     // Home page - Highest priority
     {
       url: baseUrl,
@@ -75,4 +94,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.6,
     },
   ]
+
+  return [...staticPages, ...skuPages]
 }

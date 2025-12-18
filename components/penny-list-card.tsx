@@ -2,14 +2,12 @@
 
 import Link from "next/link"
 import { Calendar, ExternalLink } from "lucide-react"
-import type { KeyboardEvent } from "react"
 import { CopySkuButton } from "@/components/copy-sku-button"
 import { ShareButton } from "@/components/share-button"
 import { PennyThumbnail } from "@/components/penny-thumbnail"
 import { US_STATES } from "@/lib/us-states"
 import { formatRelativeDate } from "@/lib/penny-list-utils"
 import type { PennyItem } from "@/lib/fetch-penny-data"
-import { getHomeDepotProductUrl } from "@/lib/home-depot"
 
 interface PennyListCardProps {
   item: PennyItem & { parsedDate?: Date | null }
@@ -35,122 +33,106 @@ export function PennyListCard({ item }: PennyListCardProps) {
 
   const totalReports = item.locations ? getTotalReports(item.locations) : 0
   const stateCount = item.locations ? Object.keys(item.locations).length : 0
-  const homeDepotUrl = getHomeDepotProductUrl({ sku: item.sku })
-
-  const openHomeDepot = () => window.open(homeDepotUrl, "_blank", "noopener,noreferrer")
-
-  const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault()
-      openHomeDepot()
-    }
-  }
+  const skuUrl = `/sku/${item.sku}`
 
   return (
-    <article
-      role="link"
-      tabIndex={0}
-      aria-label={`Open Home Depot page for ${item.name} (SKU ${item.sku})`}
-      onClick={openHomeDepot}
-      onKeyDown={handleKeyDown}
-      className="elevation-card border border-[var(--border-strong)] rounded-xl overflow-hidden shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow h-full flex flex-col cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+    <Link
+      href={skuUrl}
+      className="elevation-card border border-[var(--border-strong)] rounded-xl overflow-hidden shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow h-full flex flex-col group cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
       aria-labelledby={`item-${item.id}-name`}
     >
-      {/* 8pt grid: p-5 = 20px, space-y-4 = 16px between elements */}
-      <div className="p-5 flex flex-col flex-1 space-y-4">
-        <div className="flex justify-between items-start gap-3">
-          <div className="flex items-center gap-2 flex-wrap">
-            {item.status && item.status !== item.tier && (
-              <span className="pill pill-strong">{item.status}</span>
-            )}
-            <span
-              className={commonnessTone(item.tier)}
-              aria-label={`Commonness: ${item.tier || "Rare"}`}
-            >
-              {item.tier || "Rare"}
+      <article className="flex flex-col h-full">
+        {/* 8pt grid: p-5 = 20px, space-y-4 = 16px between elements */}
+        <div className="p-5 flex flex-col flex-1 space-y-4">
+          <div className="flex justify-between items-start gap-3">
+            <div className="flex items-center gap-2 flex-wrap">
+              {item.status && item.status !== item.tier && (
+                <span className="pill pill-strong">{item.status}</span>
+              )}
+              <span
+                className={commonnessTone(item.tier)}
+                aria-label={`Commonness: ${item.tier || "Rare"}`}
+              >
+                {item.tier || "Rare"}
+              </span>
+            </div>
+            <span className="text-sm text-[var(--text-secondary)] font-medium flex items-center gap-1.5 flex-shrink-0">
+              <Calendar className="w-3.5 h-3.5" aria-hidden="true" />
+              <time dateTime={item.dateAdded}>{formatRelativeDate(item.dateAdded)}</time>
             </span>
           </div>
-          <span className="text-sm text-[var(--text-secondary)] font-medium flex items-center gap-1.5 flex-shrink-0">
-            <Calendar className="w-3.5 h-3.5" aria-hidden="true" />
-            <time dateTime={item.dateAdded}>{formatRelativeDate(item.dateAdded)}</time>
-          </span>
-        </div>
 
-        <div className="flex gap-4 items-start">
-          <PennyThumbnail src={item.imageUrl} alt={item.name} size={72} />
-          <div className="min-w-0 flex-1 space-y-3">
-            <Link
-              href={`/sku/${item.sku}`}
-              className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] hover:underline"
-              onClickCapture={(event) => event.stopPropagation()}
-              onKeyDownCapture={(event) => event.stopPropagation()}
-            >
+          <div className="flex gap-4 items-start">
+            <PennyThumbnail src={item.imageUrl} alt={item.name} size={72} />
+            <div className="min-w-0 flex-1 space-y-3">
               <h3
                 id={`item-${item.id}-name`}
-                className="font-semibold text-lg text-[var(--text-primary)] leading-[1.5] truncate"
+                className="font-semibold text-lg text-[var(--text-primary)] leading-[1.5] truncate group-hover:text-[var(--cta-primary)] transition-colors"
                 title={item.name}
               >
                 {item.name}
               </h3>
-            </Link>
 
-            <div
-              className="flex items-center gap-2 text-sm text-[var(--text-primary)] font-mono elevation-2 border border-[var(--border-strong)] px-2.5 py-1.5 rounded w-fit font-medium"
-              onClickCapture={(event) => event.stopPropagation()}
-              onKeyDownCapture={(event) => event.stopPropagation()}
-            >
-              <span className="select-all">SKU: {item.sku}</span>
-              <CopySkuButton sku={item.sku} source="card" />
+              <div
+                className="flex items-center gap-2 text-sm text-[var(--text-primary)] font-mono elevation-2 border border-[var(--border-strong)] px-2.5 py-1.5 rounded w-fit font-medium"
+                onClick={(e) => e.preventDefault()}
+              >
+                <span className="text-[var(--text-muted)]">SKU</span>
+                {item.sku}
+                <CopySkuButton sku={item.sku} source="card" />
+              </div>
             </div>
           </div>
-        </div>
 
-        {item.locations && Object.keys(item.locations).length > 0 && (
-          <div className="mt-auto space-y-2">
-            <p className="text-sm font-semibold text-[var(--text-primary)]">
-              Reported in {stateCount} {stateCount === 1 ? "state" : "states"}:
-            </p>
-            <div className="flex flex-wrap gap-1.5" role="list" aria-label="States with reports">
-              {Object.entries(item.locations)
-                .sort(([, a], [, b]) => b - a)
-                .map(([state, count]) => (
-                  <span
-                    key={state}
-                    role="listitem"
-                    className="pill pill-strong min-h-[28px] flex items-center"
-                    title={`${getStateName(state)}: ${count} ${count === 1 ? "report" : "reports"}`}
-                    aria-label={`${getStateName(state)}: ${count} ${count === 1 ? "report" : "reports"}`}
-                  >
-                    {state} × {count}
-                  </span>
-                ))}
-            </div>
-            {totalReports > 0 && (
-              <p className="text-sm text-[var(--text-secondary)]">
-                {totalReports} total {totalReports === 1 ? "report so far" : "reports"}
+          {item.locations && Object.keys(item.locations).length > 0 && (
+            <div className="mt-auto space-y-2">
+              <p className="text-sm font-semibold text-[var(--text-primary)]">
+                Reported in {stateCount} {stateCount === 1 ? "state" : "states"}:
               </p>
-            )}
-          </div>
-        )}
+              <div className="flex flex-wrap gap-1.5" role="list" aria-label="States with reports">
+                {Object.entries(item.locations)
+                  .sort(([, a], [, b]) => b - a)
+                  .map(([state, count]) => (
+                    <span
+                      key={state}
+                      role="listitem"
+                      className="pill pill-strong min-h-[28px] flex items-center"
+                      title={`${getStateName(state)}: ${count} ${count === 1 ? "report" : "reports"}`}
+                      aria-label={`${getStateName(state)}: ${count} ${count === 1 ? "report" : "reports"}`}
+                    >
+                      {state} × {count}
+                    </span>
+                  ))}
+              </div>
+              {totalReports > 0 && (
+                <p className="text-sm text-[var(--text-secondary)]">
+                  {totalReports} total {totalReports === 1 ? "report so far" : "reports"}
+                </p>
+              )}
+            </div>
+          )}
 
-        <div className="pt-4 border-t border-[var(--border-default)] flex items-center justify-between mt-auto text-sm text-[var(--text-secondary)]">
-          <span>Community lead</span>
-          <span className="inline-flex items-center gap-3 font-semibold text-[var(--text-primary)]">
-            <span className="text-[var(--status-success)]">$0.01</span>
-            <span className="inline-flex items-center gap-1">
-              <ExternalLink className="w-4 h-4" aria-hidden="true" />
-              homedepot.com
+          <div className="pt-4 border-t border-[var(--border-default)] flex items-center justify-between mt-auto text-sm text-[var(--text-secondary)]">
+            <span>Community lead</span>
+            <span className="inline-flex items-center gap-3 font-semibold text-[var(--text-primary)]">
+              <span className="text-[var(--status-success)]">$0.01</span>
+              <span className="inline-flex items-center gap-1">
+                View Details
+                <ExternalLink className="w-4 h-4" aria-hidden="true" />
+              </span>
+              <span
+                onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                }}
+              >
+                <ShareButton sku={item.sku} itemName={item.name} source="card" />
+              </span>
             </span>
-            <span
-              onClickCapture={(event) => event.stopPropagation()}
-              onKeyDownCapture={(event) => event.stopPropagation()}
-            >
-              <ShareButton sku={item.sku} itemName={item.name} source="card" />
-            </span>
-          </span>
+          </div>
         </div>
-      </div>
-    </article>
+      </article>
+    </Link>
   )
 }
 
@@ -163,89 +145,71 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
 
   const totalReports = item.locations ? getTotalReports(item.locations) : 0
   const stateCount = item.locations ? Object.keys(item.locations).length : 0
-  const homeDepotUrl = getHomeDepotProductUrl({ sku: item.sku })
-
-  const openHomeDepot = () => window.open(homeDepotUrl, "_blank", "noopener,noreferrer")
-
-  const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault()
-      openHomeDepot()
-    }
-  }
+  const skuUrl = `/sku/${item.sku}`
 
   return (
-    <article
-      role="link"
-      tabIndex={0}
-      aria-label={`Open Home Depot page for ${item.name} (SKU ${item.sku})`}
-      onClick={openHomeDepot}
-      onKeyDown={handleKeyDown}
-      className="rounded-lg border border-[var(--border-strong)] elevation-card p-4 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+    <Link
+      href={skuUrl}
+      className="rounded-lg border border-[var(--border-strong)] elevation-card p-4 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] group"
       aria-labelledby={`hot-item-${item.id}-name`}
     >
-      <div className="flex items-center justify-between mb-2 gap-2">
-        <span
-          className={commonnessTone(item.tier)}
-          aria-label={`Commonness: ${item.tier || "Rare"}`}
-        >
-          {item.tier || "Rare"}
-        </span>
-        <span className="text-xs text-[var(--text-secondary)] font-medium flex items-center gap-1 flex-shrink-0">
-          <Calendar className="w-3 h-3" aria-hidden="true" />
-          <time dateTime={item.dateAdded}>{formatRelativeDate(item.dateAdded)}</time>
-        </span>
-      </div>
-      <div className="flex gap-3 items-start">
-        <PennyThumbnail src={item.imageUrl} alt={item.name} size={48} />
-        <div className="min-w-0 flex-1">
-          <Link
-            href={`/sku/${item.sku}`}
-            className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] hover:underline"
-            onClickCapture={(event) => event.stopPropagation()}
-            onKeyDownCapture={(event) => event.stopPropagation()}
+      <article>
+        <div className="flex items-center justify-between mb-2 gap-2">
+          <span
+            className={commonnessTone(item.tier)}
+            aria-label={`Commonness: ${item.tier || "Rare"}`}
           >
+            {item.tier || "Rare"}
+          </span>
+          <span className="text-xs text-[var(--text-secondary)] font-medium flex items-center gap-1 flex-shrink-0">
+            <Calendar className="w-3 h-3" aria-hidden="true" />
+            <time dateTime={item.dateAdded}>{formatRelativeDate(item.dateAdded)}</time>
+          </span>
+        </div>
+        <div className="flex gap-3 items-start">
+          <PennyThumbnail src={item.imageUrl} alt={item.name} size={48} />
+          <div className="min-w-0 flex-1">
             <h3
               id={`hot-item-${item.id}-name`}
-              className="text-sm font-semibold text-[var(--text-primary)] leading-[1.5] truncate"
+              className="text-sm font-semibold text-[var(--text-primary)] leading-[1.5] truncate group-hover:text-[var(--cta-primary)] transition-colors"
               title={item.name}
             >
               {item.name}
             </h3>
-          </Link>
-          <div className="mt-2 flex items-center gap-2 text-xs text-[var(--text-primary)] font-mono elevation-2 border border-[var(--border-strong)] px-2 py-1 rounded w-fit font-medium">
-            SKU: {item.sku}
+            <div className="mt-2 flex items-center gap-2 text-xs text-[var(--text-primary)] font-mono elevation-2 border border-[var(--border-strong)] px-2 py-1 rounded w-fit font-medium">
+              SKU: {item.sku}
+            </div>
           </div>
         </div>
-      </div>
-      {totalReports > 0 && (
-        <p className="mt-2 text-xs text-[var(--text-secondary)]">
-          {totalReports} {totalReports === 1 ? "report" : "reports"} × {stateCount}{" "}
-          {stateCount === 1 ? "state" : "states"}
-        </p>
-      )}
-      {item.locations && Object.keys(item.locations).length > 0 && (
-        <div className="mt-3 flex flex-wrap gap-1.5" role="list" aria-label="States with reports">
-          {Object.entries(item.locations)
-            .sort(([, a], [, b]) => b - a)
-            .slice(0, 5)
-            .map(([state, count]) => (
-              <span
-                key={`${item.id}-${state}`}
-                role="listitem"
-                className="pill pill-strong"
-                aria-label={`${state}: ${count} ${count === 1 ? "report" : "reports"}`}
-              >
-                {state} × {count}
+        {totalReports > 0 && (
+          <p className="mt-2 text-xs text-[var(--text-secondary)]">
+            {totalReports} {totalReports === 1 ? "report" : "reports"} × {stateCount}{" "}
+            {stateCount === 1 ? "state" : "states"}
+          </p>
+        )}
+        {item.locations && Object.keys(item.locations).length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-1.5" role="list" aria-label="States with reports">
+            {Object.entries(item.locations)
+              .sort(([, a], [, b]) => b - a)
+              .slice(0, 5)
+              .map(([state, count]) => (
+                <span
+                  key={`${item.id}-${state}`}
+                  role="listitem"
+                  className="pill pill-strong"
+                  aria-label={`${state}: ${count} ${count === 1 ? "report" : "reports"}`}
+                >
+                  {state} × {count}
+                </span>
+              ))}
+            {Object.keys(item.locations).length > 5 && (
+              <span className="px-2 py-1 text-[var(--text-muted)] text-xs font-medium">
+                +{Object.keys(item.locations).length - 5} more
               </span>
-            ))}
-          {Object.keys(item.locations).length > 5 && (
-            <span className="px-2 py-1 text-[var(--text-muted)] text-xs font-medium">
-              +{Object.keys(item.locations).length - 5} more
-            </span>
-          )}
-        </div>
-      )}
-    </article>
+            )}
+          </div>
+        )}
+      </article>
+    </Link>
   )
 }

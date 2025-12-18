@@ -8,7 +8,7 @@ test("verified pennies: SKU image loads", async ({ page }) => {
 
   await search.fill("613231")
 
-  const card = page.locator('article[role="link"]', { hasText: "SKU: 613231" }).first()
+  const card = page.locator("a", { hasText: "SKU: 613231" }).first()
   await expect(card).toBeVisible()
 
   const img = card.locator("img").first()

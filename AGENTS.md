@@ -115,7 +115,15 @@ Rules:
 
 ---
 
-## 8. Code Change Rules
+## 8. SEO & Internal Linking
+
+- **Internal First**: Always link to internal `/sku/[sku]` pages for items, NOT external Home Depot links.
+- **Canonical**: Use `www.pennycentral.com` for all absolute URLs.
+- **Structured Data**: Ensure `Product` JSON-LD is present on all item pages.
+
+---
+
+## 9. Code Change Rules
 
 - Fix root causes rather than surface patches
 - Keep diffs focused on the user's objective
@@ -124,7 +132,7 @@ Rules:
 
 ---
 
-## 9. Session End Checklist
+## 10. Session End Checklist
 
 **BEFORE claiming "done":**
 
@@ -141,7 +149,7 @@ Rules:
 
 ---
 
-## 10. Session Memory
+## 11. Session Memory
 
 **Agents have NO persistent memory between sessions.**
 

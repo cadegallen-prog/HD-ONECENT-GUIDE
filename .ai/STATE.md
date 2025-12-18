@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 18, 2025 (Purchase dates imported from CSV; freshness filtering added to Verified Pennies; client-safe utilities created)
+**Last updated:** Dec 18, 2025 (Massive SEO Expansion: 500+ Dynamic SKU Pages)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -9,6 +9,13 @@ Every AI session must update this after meaningful work.
 ## 1. Where We Are
 
 - **Site:** live at https://www.pennycentral.com (Preferred canonical domain)
+- **Recent focus (Dec 18 PM):** Massive SEO Expansion (500+ Dynamic SKU Pages)
+  - Transformed `/sku/[sku]` from a stub into a robust, SEO-optimized product detail page.
+  - Implemented `generateStaticParams` to pre-render 533 unique SKU pages (SSG).
+  - Added `Product` JSON-LD structured data and dynamic metadata for every SKU to capture long-tail search traffic.
+  - Updated `app/sitemap.ts` to dynamically include all 500+ SKU pages.
+  - Refactored `VerifiedPennyCard` and `PennyListCard` to link internally to SKU pages instead of externally to Home Depot.
+  - All 4 quality gates passing (lint, build, test:unit, test:e2e - 40/40 tests).
 - **Recent focus (Dec 18 PM):** Purchase dates + freshness filtering
   - Imported 603 purchase dates from CSV across 476 verified pennies
   - Added freshness filtering: Recent (<2wk), Weeks Old (2wk-2mo), Months Old (2-6mo), Over 6 Months
