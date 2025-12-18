@@ -14,12 +14,15 @@ Each AI session should:
 
 ## Completed Recently
 
+- **Dec 18, 2025 PM:** Purchase dates imported from CSV (603 dates across 476 SKUs). Freshness filtering added to Verified Pennies (Recent, Weeks Old, Months Old, Over 6 Months). Created client-safe freshness-utils.ts. All quality gates passing.
+- **Dec 18, 2025 AM:** Social sharing buttons added to penny list cards (Facebook + Copy Link). Quantity field made optional in submission form. Documentation updated to reflect actual implementation state.
 - **Dec 17, 2025:** Landing page restructured for clarity—eliminated decision fatigue by reordering sections (How It Works moved to #2), consolidating redundant CTAs, simplifying Tools section (3 equal cards), reordering navigation (Guide first), and simplifying logo (wordmark only). All 36 e2e + unit tests passing.
 - **Dec 15, 2025:** Strategic plan created for driving habitual traffic (visual engagement, verification system, SEO expansion)
 - **Dec 12, 2025:** Updated `.ai/PENNY_LIST_PLAN.md` to reflect Phase 1 shipped.
 - **Dec 12, 2025:** CI (`.github/workflows/quality.yml`) now runs lint + Playwright smoke with fixtures.
 - **Dec 16, 2025:** Added curated `/verified-pennies` route (image-first grid + search + brand filtering) and updated homepage/nav to prioritize Verified + Penny List; clarified "Verified" definition and cleaned up remaining raw Tailwind palette colors.
 - **Dec 16, 2025:** SEO improvements - Added metadata to 11 missing pages, created dynamic sitemap, created OG image template. All pages now Google-discoverable.
+- **Dec 18, 2025:** Verified penny images system (ALREADY IMPLEMENTED) - penny-list items use verified-pennies.json images as fallback when user photos are unavailable (lib/fetch-penny-data.ts lines 176-184).
 
 ---
 
@@ -75,40 +78,13 @@ Each AI session should:
 
 ## P0 — Do Next (Sprint 1: Visual Engagement)
 
-### 1. **Enrich Community Reports with Verified Images**
+**NOTE:** Sprint 1 items are now COMPLETED. See "Completed Recently" section above.
 
-    - **Why:** Gets the Pinterest effect without scraping or new infra.
-    - **What:** When `/penny-list` items lack a user photo, look up SKU in `data/verified-pennies.json` and use its `imageUrl` as a fallback.
-    - **Done means:**
-       - No scraping added
-       - `/penny-list` shows images for items that exist in the curated verified dataset
-       - Placeholder only when neither user photo nor verified dataset image exists
-       - Build/lint/test pass
-    - **Files:** MODIFY: `lib/fetch-penny-data.ts` (and any UI components that render the image)
-
-### 2. **Hide Quantity from Display (Keep in Database)**
-
-- **Why:** Quantity is unverifiable noise; real value is "SKU found in X states on Y dates"
-- **What:** Remove quantity from all public-facing UI, retain in database for future analytics
-- **Done means:**
-  - Quantity removed from penny-list cards and table
-  - Quantity field still in submission form but optional/less prominent
-  - PennyItem type unchanged (keeps quantity field)
-  - Build/lint/test pass
-- **Files:** MODIFY: `components/penny-list-card.tsx`, `components/penny-list-card-compact.tsx`, `app/report-find/page.tsx`
-
-### 3. **Display Product Images in Penny List**
-
-- **Why:** Makes browsing addictive, easier to identify items visually
-- **What:** Show scraped images prominently in card/table views
-- **Done means:**
-  - Card view: Large image at top (Pinterest-style)
-  - Table view: Small thumbnail in first column
-  - Lazy loading for performance
-  - Skeleton loading state
-  - Fallback placeholder for missing images
-  - Build/lint/test pass
-- **Files:** MODIFY: `components/penny-list-card.tsx`, `components/penny-list-card-compact.tsx`, `app/penny-list/page.tsx`
+### Former P0 Items (Now Complete):
+- ✅ **Enrich Community Reports with Verified Images** - Already implemented in `lib/fetch-penny-data.ts`
+- ✅ **Hide Quantity from Display** - Quantity was never displayed; now optional in submission form
+- ✅ **Display Product Images in Penny List** - Already implemented with PennyThumbnail component
+- ✅ **Social Sharing Buttons** - Added Facebook + Copy Link sharing to penny cards (Dec 18, 2025)
 
 ---
 

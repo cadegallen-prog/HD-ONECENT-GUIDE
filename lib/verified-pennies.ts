@@ -15,6 +15,7 @@ export interface VerifiedPenny {
   brand: string
   model: string
   imageUrl: string
+  purchaseDates?: string[] // Optional: ISO 8601 dates (sorted newest first)
 }
 
 // Cache the data after first load
@@ -124,4 +125,49 @@ export function getVerifiedPenniesByBrand(): Record<string, VerifiedPenny[]> {
 export function getVerifiedBrands(): string[] {
   const byBrand = getVerifiedPenniesByBrand()
   return Object.keys(byBrand).sort()
+}
+
+/**
+ * Get the most recent purchase date for a verified penny
+ */
+export function getLatestPurchaseDate(item: VerifiedPenny): string | null {
+  if (!item.purchaseDates || item.purchaseDates.length === 0) {
+    return null
+  }
+  return item.purchaseDates[0] // Already sorted newest first
+}
+
+/**
+ * Get the count of times a penny has been purchased
+ */
+export function getPurchaseCount(item: VerifiedPenny): number {
+  return item.purchaseDates?.length ?? 0
+}
+
+/**
+ * Determine freshness category based on most recent purchase date
+ * fresh: < 30 days, moderate: 30-90 days, old: 90+ days
+ */
+export function getFreshnessCategory(
+  item: VerifiedPenny,
+  nowMs: number = Date.now()
+): "fresh" | "moderate" | "old" {
+  const latestDate = getLatestPurchaseDate(item)
+  if (!latestDate) {
+    return "old"
+  }
+
+  const itemDateMs = new Date(latestDate).getTime()
+  const ageMs = nowMs - itemDateMs
+
+  const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000
+  const NINETY_DAYS_MS = 90 * 24 * 60 * 60 * 1000
+
+  if (ageMs < THIRTY_DAYS_MS) {
+    return "fresh"
+  }
+  if (ageMs < NINETY_DAYS_MS) {
+    return "moderate"
+  }
+  return "old"
 }

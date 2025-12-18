@@ -33,6 +33,7 @@ interface VerifiedPenny {
   brand: string
   model: string
   imageUrl: string
+  purchaseDates?: string[] // Optional: ISO 8601 dates (sorted newest first)
 }
 
 function resolveCliPath(value: string): string {

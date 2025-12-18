@@ -6,6 +6,8 @@ import type { KeyboardEvent } from "react"
 import { BadgeCheck, ImageOff, ExternalLink } from "lucide-react"
 import { CopySkuButton } from "@/components/copy-sku-button"
 import type { VerifiedPenny } from "@/lib/verified-pennies"
+import { getLatestDateFromArray, getDateCount, getFreshness } from "@/lib/freshness-utils"
+import { formatRelativeDate } from "@/lib/penny-list-utils"
 import { getHomeDepotProductUrl } from "@/lib/home-depot"
 
 interface VerifiedPennyCardProps {
@@ -19,6 +21,16 @@ export function VerifiedPennyCard({ item }: VerifiedPennyCardProps) {
     sku: item.sku,
     internetNumber: item.internetNumber,
   })
+
+  const latestDate = getLatestDateFromArray(item.purchaseDates)
+  const purchaseCount = getDateCount(item.purchaseDates)
+  const freshness = getFreshness(latestDate)
+
+  const freshnessColorClass = {
+    fresh: "pill pill-success",
+    moderate: "pill pill-accent",
+    old: "pill pill-strong",
+  }[freshness]
 
   const openHomeDepot = () => {
     window.open(homeDepotUrl, "_blank", "noopener,noreferrer")
@@ -74,10 +86,21 @@ export function VerifiedPennyCard({ item }: VerifiedPennyCardProps) {
               {item.brand}
             </span>
           )}
-          <span className="pill pill-muted inline-flex items-center gap-1 text-xs font-semibold">
-            <BadgeCheck className="w-3.5 h-3.5" aria-hidden="true" />
-            Verified
-          </span>
+          <div className="flex flex-col gap-1 items-end">
+            {latestDate && (
+              <span
+                className={`${freshnessColorClass} text-xs font-semibold inline-flex items-center gap-1`}
+                title={`Verified on ${latestDate}${purchaseCount > 1 ? ` (found ${purchaseCount} times)` : ""}`}
+              >
+                {formatRelativeDate(latestDate)}
+                {purchaseCount > 1 && <span>({purchaseCount}×)</span>}
+              </span>
+            )}
+            <span className="pill pill-muted inline-flex items-center gap-1 text-xs font-semibold">
+              <BadgeCheck className="w-3.5 h-3.5" aria-hidden="true" />
+              Verified
+            </span>
+          </div>
         </div>
 
         {/* Product Name */}

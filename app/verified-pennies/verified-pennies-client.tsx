@@ -4,6 +4,7 @@ import { useState, useMemo } from "react"
 import { Search, Filter, X } from "lucide-react"
 import { VerifiedPennyCard } from "@/components/verified-penny-card"
 import type { VerifiedPenny } from "@/lib/verified-pennies"
+import { getFreshness, getLatestDateFromArray } from "@/lib/freshness-utils"
 
 interface VerifiedPenniesClientProps {
   items: VerifiedPenny[]
@@ -13,6 +14,10 @@ interface VerifiedPenniesClientProps {
 export function VerifiedPenniesClient({ items, brands }: VerifiedPenniesClientProps) {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null)
+  const [freshnessFilter, setFreshnessFilter] = useState<"all" | "fresh" | "recent" | "older">(
+    "all"
+  )
+  const [sortBy, setSortBy] = useState<"newest" | "oldest" | "name">("newest")
 
   const filteredItems = useMemo(() => {
     let result = items
@@ -33,15 +38,46 @@ export function VerifiedPenniesClient({ items, brands }: VerifiedPenniesClientPr
       result = result.filter((item) => item.brand === selectedBrand)
     }
 
+    // Filter by freshness
+    if (freshnessFilter !== "all") {
+      result = result.filter((item) => {
+        const latestDate = getLatestDateFromArray(item.purchaseDates)
+        const freshness = getFreshness(latestDate)
+        if (freshnessFilter === "fresh") return freshness === "fresh"
+        if (freshnessFilter === "recent") return freshness === "fresh" || freshness === "moderate"
+        if (freshnessFilter === "older") return freshness === "old"
+        return true
+      })
+    }
+
+    // Sort results
+    result.sort((a, b) => {
+      if (sortBy === "newest") {
+        const dateA = a.purchaseDates?.[0] ?? ""
+        const dateB = b.purchaseDates?.[0] ?? ""
+        return dateB.localeCompare(dateA)
+      } else if (sortBy === "oldest") {
+        const dateA = a.purchaseDates?.[a.purchaseDates.length - 1] ?? ""
+        const dateB = b.purchaseDates?.[b.purchaseDates.length - 1] ?? ""
+        return dateA.localeCompare(dateB)
+      } else {
+        // Sort by name (A-Z)
+        return a.name.localeCompare(b.name)
+      }
+    })
+
     return result
-  }, [items, searchQuery, selectedBrand])
+  }, [items, searchQuery, selectedBrand, freshnessFilter, sortBy])
 
   const clearFilters = () => {
     setSearchQuery("")
     setSelectedBrand(null)
+    setFreshnessFilter("all")
+    setSortBy("newest")
   }
 
-  const hasActiveFilters = searchQuery.trim() !== "" || selectedBrand !== null
+  const hasActiveFilters =
+    searchQuery.trim() !== "" || selectedBrand !== null || freshnessFilter !== "all"
 
   return (
     <main className="section-padding-sm px-4 sm:px-6">
@@ -73,23 +109,60 @@ export function VerifiedPenniesClient({ items, brands }: VerifiedPenniesClientPr
             )}
           </div>
 
-          {/* Brand Filter */}
-          <div className="flex flex-wrap items-center justify-center gap-2">
+          {/* Filters and Sort */}
+          <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2">
             <Filter className="w-4 h-4 text-[var(--text-muted)]" aria-hidden="true" />
-            <span className="text-sm text-[var(--text-secondary)] mr-2">Filter by brand:</span>
-            <select
-              value={selectedBrand || ""}
-              onChange={(e) => setSelectedBrand(e.target.value || null)}
-              className="px-3 py-1.5 rounded-lg border border-[var(--border-strong)] bg-[var(--bg-elevated)] text-[var(--text-primary)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)]"
-              aria-label="Filter by brand"
-            >
-              <option value="">All brands ({brands.length})</option>
-              {brands.map((brand) => (
-                <option key={brand} value={brand}>
-                  {brand}
-                </option>
-              ))}
-            </select>
+
+            {/* Brand Filter */}
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-[var(--text-secondary)]">Brand:</span>
+              <select
+                value={selectedBrand || ""}
+                onChange={(e) => setSelectedBrand(e.target.value || null)}
+                className="px-3 py-1.5 rounded-lg border border-[var(--border-strong)] bg-[var(--bg-elevated)] text-[var(--text-primary)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)]"
+                aria-label="Filter by brand"
+              >
+                <option value="">All</option>
+                {brands.map((brand) => (
+                  <option key={brand} value={brand}>
+                    {brand}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Freshness Filter */}
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-[var(--text-secondary)]">Freshness:</span>
+              <select
+                value={freshnessFilter}
+                onChange={(e) =>
+                  setFreshnessFilter(e.target.value as "all" | "fresh" | "recent" | "older")
+                }
+                className="px-3 py-1.5 rounded-lg border border-[var(--border-strong)] bg-[var(--bg-elevated)] text-[var(--text-primary)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)]"
+                aria-label="Filter by freshness"
+              >
+                <option value="all">All</option>
+                <option value="fresh">Fresh (30d)</option>
+                <option value="recent">Recent (90d)</option>
+                <option value="older">Older</option>
+              </select>
+            </div>
+
+            {/* Sort */}
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-[var(--text-secondary)]">Sort:</span>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as "newest" | "oldest" | "name")}
+                className="px-3 py-1.5 rounded-lg border border-[var(--border-strong)] bg-[var(--bg-elevated)] text-[var(--text-primary)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)]"
+                aria-label="Sort items"
+              >
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="name">Name (A-Z)</option>
+              </select>
+            </div>
 
             {hasActiveFilters && (
               <button

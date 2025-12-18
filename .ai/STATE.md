@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 18, 2025 (CI fix: pinned Next to stable `16.0.10` to unblock `npm ci`; CTA text color respects `--cta-text` so dark-mode CTAs pass axe `color-contrast`)
+**Last updated:** Dec 18, 2025 (Purchase dates imported from CSV; freshness filtering added to Verified Pennies; client-safe utilities created)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -9,6 +9,14 @@ Every AI session must update this after meaningful work.
 ## 1. Where We Are
 
 - **Site:** live at https://www.pennycentral.com (Preferred canonical domain)
+- **Recent focus (Dec 18 PM):** Purchase dates + freshness filtering
+  - Imported 603 purchase dates from CSV across 476 verified pennies
+  - Added freshness filtering: Recent (<2wk), Weeks Old (2wk-2mo), Months Old (2-6mo), Over 6 Months
+  - Created client-safe [lib/freshness-utils.ts](lib/freshness-utils.ts) (fixed node:fs import issue in client components)
+  - Updated [app/verified-pennies/verified-pennies-client.tsx](app/verified-pennies/verified-pennies-client.tsx) filters/sorts
+  - Updated [components/verified-penny-card.tsx](components/verified-penny-card.tsx) to display purchase date badges
+  - Purchase history parser: [scripts/add-purchase-dates.ts](scripts/add-purchase-dates.ts)
+  - All 4 quality gates passing (lint, build, test:unit, test:e2e - 40/40 tests)
 - **Phase:** Stabilization + SEO Optimization
 - **SEO Status:** Resolved "Redirect errors" in Google Search Console and implemented Rich Snippets.
   - **Canonical Domain:** Standardized on `www.pennycentral.com` across metadata and sitemap.
@@ -25,7 +33,14 @@ Every AI session must update this after meaningful work.
   - Fixed CI axe `color-contrast` failures in dark mode by removing a global “force white text on CTA” override; CTA elements now inherit `var(--cta-text)` as intended.
   - Removed redundant "Read the full guide" link on desktop (kept mobile-only).
   - Store Finder popup test wait increased to 20s for marker visibility; `npm run test:e2e` now runs serial (`--workers=1`) to avoid Windows connection-reset flake; full gates green.
-- **Recent focus (Dec 18 PM):** Merged bookmarklet data - added 21 new penny entries with images.
+- **Recent focus (Dec 18 PM):** Social sharing + quantity cleanup
+  - Added social sharing buttons to penny list cards (Facebook + Copy Link)
+  - Share button uses dropdown menu pattern with analytics tracking
+  - Quantity field made optional in submission form (was required, now optional)
+  - API updated to accept empty quantity values
+  - Documentation updated to reflect actual implementation state
+  - Sprint 1 visual engagement tasks marked as COMPLETED
+- **Earlier (Dec 18 PM):** Merged bookmarklet data - added 21 new penny entries with images.
   - Bookmarklet extracted product data from Home Depot pages (sku, internetNumber, name, brand, model, imageUrl)
   - Merge script safely combined data with backup creation
   - Verified Pennies page shows images for 21 additional entries
@@ -134,7 +149,7 @@ Weekly check:
 See `.ai/BACKLOG.md` for the ordered list.
 Default rule: **AI should pull the top P0 item and propose it unless Cade gives a different GOAL.**
 
-**Current Focus (Sprint 1):** Visual Engagement - Product images, hide quantity, image display in penny list
+**Current Focus:** Sprint 1 COMPLETED. Moving to Sprint 2 (Fresh Content & Verification) - Today's Finds, verification badges, bulk import
 
 ---
 

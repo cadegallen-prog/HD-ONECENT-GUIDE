@@ -2274,6 +2274,7 @@ Rare: 1-2 reports AND only 1 state
 **Outcome:** ✅ Success
 
 **Verification:**
+
 - `npm run lint`: ✅ 0 warnings/errors
 - `npm run lint:colors`: ✅ 0 warnings/errors
 - `npm run build`: ✅ success
@@ -2414,3 +2415,71 @@ If continuing [Unfinished Item 2], copy-paste:
 ## Version History
 
 - **v1.0 (Dec 7, 2025):** Initial session log created with two historical entries
+
+- Bookmarklet workflow is proven - can use for future data collection
+- Verified penny images now used as fallback in Community Penny List
+
+---
+
+## 2025-12-18 - Claude Code - Purchase Dates Import + Freshness Feature
+
+**AI:** Claude Code (Sonnet 4.5)
+**Goal:** Import purchase dates from CSV history and add "freshness" filtering to Verified Pennies page
+
+**Approach:**
+
+1. Created CSV parser script to extract purchase dates from Home Depot purchase history
+2. Added `purchaseDates` field to VerifiedPenny interface
+3. Updated Verified Pennies filters to include freshness categories (Recent, Weeks Old, Months Old, Over 6 Months)
+4. Updated verified penny cards to display purchase date badges
+5. Fixed build error where client components were importing server-only modules (node:fs)
+6. Created client-safe `lib/freshness-utils.ts` for browser-compatible date calculations
+
+**Changes Made:**
+
+- NEW: `scripts/add-purchase-dates.ts` (CSV parser to extract purchase dates by SKU)
+- NEW: `lib/freshness-utils.ts` (client-safe freshness calculations)
+- MODIFIED: `lib/verified-pennies.ts` (added purchaseDates field to interface)
+- MODIFIED: `app/verified-pennies/verified-pennies-client.tsx` (added freshness filtering)
+- MODIFIED: `components/verified-penny-card.tsx` (added purchase date badges)
+- MODIFIED: `scripts/convert-verified-data.ts` (handles purchaseDates in conversion)
+- MODIFIED: `data/verified-pennies.json` (added 603 purchase dates across 476 SKUs)
+
+**Outcome:** ✅ Success
+
+- Successfully imported 1,653 total penny purchases from CSV
+- Matched 476/489 unique SKUs to verified pennies (13 unmatched - likely removed items)
+- Added 603 purchase dates (some items purchased multiple times)
+- All quality gates passing
+
+**Verification:**
+
+- `npm run lint` ✅ (0 errors)
+- `npm run build` ✅ (successful)
+- `npm run test:unit` ✅ (all passing)
+- `npm run test:e2e` ✅ (40/40 passing)
+
+**Learnings:**
+
+- Home Depot purchase history CSV format: SKU, Order #, Delivery Date, Item Description, Quantity, Unit Price
+- Multiple purchase dates for same SKU are common (frequent buyers)
+- Client components cannot import from files that use node:fs - need separate client-safe utilities
+- Freshness categories help users prioritize recently-confirmed pennies
+
+**Technical Details:**
+
+- Parser uses csv-parse library to read purchase history
+- Groups purchases by SKU and collects all unique dates
+- Freshness calculation logic:
+  - Recent: < 2 weeks
+  - Weeks Old: 2 weeks - 2 months
+  - Months Old: 2-6 months
+  - Over 6 Months: > 6 months
+- Dates stored as ISO strings in JSON for portability
+
+**Notes for Next Session:**
+
+- Purchase dates are now live on Verified Pennies page
+- Freshness filter helps users find recently-confirmed items
+- Can add more purchase history CSVs in future to keep data fresh
+- Consider adding "Last purchased" timestamp to penny cards for more context
