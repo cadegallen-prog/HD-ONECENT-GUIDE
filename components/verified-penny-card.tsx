@@ -6,8 +6,7 @@ import { useState } from "react"
 import { BadgeCheck, ImageOff, ExternalLink } from "lucide-react"
 import { CopySkuButton } from "@/components/copy-sku-button"
 import type { VerifiedPenny } from "@/lib/verified-pennies"
-import { getLatestDateFromArray, getDateCount, getFreshness } from "@/lib/freshness-utils"
-import { formatRelativeDate } from "@/lib/penny-list-utils"
+import { getLatestDateFromArray } from "@/lib/freshness-utils"
 
 interface VerifiedPennyCardProps {
   item: VerifiedPenny
@@ -19,14 +18,15 @@ export function VerifiedPennyCard({ item }: VerifiedPennyCardProps) {
   const skuUrl = `/sku/${item.sku}`
 
   const latestDate = getLatestDateFromArray(item.purchaseDates)
-  const purchaseCount = getDateCount(item.purchaseDates)
-  const freshness = getFreshness(latestDate)
 
-  const freshnessColorClass = {
-    fresh: "pill pill-success",
-    moderate: "pill pill-accent",
-    old: "pill pill-strong",
-  }[freshness]
+  const latestDateLabel = latestDate
+    ? new Date(`${latestDate}T00:00:00Z`).toLocaleDateString("en-US", {
+        month: "2-digit",
+        day: "2-digit",
+        year: "2-digit",
+        timeZone: "America/New_York",
+      })
+    : null
 
   return (
     <Link
@@ -69,14 +69,13 @@ export function VerifiedPennyCard({ item }: VerifiedPennyCardProps) {
               </span>
             )}
             <div className="flex flex-col gap-1 items-end">
-              {latestDate && (
-                <span
-                  className={`${freshnessColorClass} text-xs font-semibold inline-flex items-center gap-1`}
-                  title={`Verified on ${latestDate}${purchaseCount > 1 ? ` (found ${purchaseCount} times)` : ""}`}
-                >
-                  {formatRelativeDate(latestDate)}
-                  {purchaseCount > 1 && <span>({purchaseCount}×)</span>}
-                </span>
+              {latestDate && latestDateLabel && (
+                <div className="text-xs text-[var(--text-muted)] text-right">
+                  <p className="leading-tight">Last verified</p>
+                  <time dateTime={latestDate} className="font-medium text-[var(--text-secondary)]">
+                    {latestDateLabel}
+                  </time>
+                </div>
               )}
               <span className="pill pill-muted inline-flex items-center gap-1 text-xs font-semibold">
                 <BadgeCheck className="w-3.5 h-3.5" aria-hidden="true" />
@@ -102,13 +101,6 @@ export function VerifiedPennyCard({ item }: VerifiedPennyCardProps) {
             <span className="select-all">SKU: {item.sku}</span>
             <CopySkuButton sku={item.sku} source="verified-card" />
           </div>
-
-          {/* Model number if available */}
-          {item.model && item.model !== item.sku && (
-            <p className="text-xs text-[var(--text-muted)] truncate" title={item.model}>
-              Model: {item.model}
-            </p>
-          )}
 
           <div className="flex items-center justify-between text-sm text-[var(--text-secondary)] pt-1 mt-auto">
             <span className="font-semibold text-[var(--status-success)]">$0.01</span>

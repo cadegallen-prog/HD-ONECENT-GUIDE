@@ -7,7 +7,7 @@ import { filterValidPennyItems, formatRelativeDate } from "@/lib/penny-list-util
 import { validateSku } from "@/lib/sku"
 import { getVerifiedPennyBySku, getVerifiedPennies } from "@/lib/verified-pennies"
 import { getHomeDepotProductUrl } from "@/lib/home-depot"
-import { getLatestDateFromArray, getDateCount, getFreshness } from "@/lib/freshness-utils"
+import { getLatestDateFromArray, getFreshness } from "@/lib/freshness-utils"
 import { ogImageUrl } from "@/lib/og"
 
 type PageProps = {
@@ -65,6 +65,7 @@ export default async function SkuDetailPage({ params }: PageProps) {
   if (skuCheck.error) notFound()
 
   const sku = skuCheck.normalized
+  const verifiedItems = getVerifiedPennies()
   const verifiedItem = getVerifiedPennyBySku(sku)
   const communityItems = filterValidPennyItems(await getPennyList())
   const communityItem = communityItems.find((i) => i.sku === sku)
@@ -75,7 +76,6 @@ export default async function SkuDetailPage({ params }: PageProps) {
   const name = verifiedItem?.name || communityItem?.name || "Unknown Item"
   const imageUrl = verifiedItem?.imageUrl || communityItem?.imageUrl
   const brand = verifiedItem?.brand
-  const model = verifiedItem?.model
   const internetNumber = verifiedItem?.internetNumber
 
   const homeDepotUrl = getHomeDepotProductUrl({
@@ -86,10 +86,19 @@ export default async function SkuDetailPage({ params }: PageProps) {
   const totalReports = communityItem?.locations
     ? Object.values(communityItem.locations).reduce((sum, count) => sum + count, 0)
     : 0
+  const stateCount = communityItem?.locations ? Object.keys(communityItem.locations).length : 0
 
   const latestDate = verifiedItem ? getLatestDateFromArray(verifiedItem.purchaseDates) : null
-  const purchaseCount = verifiedItem ? getDateCount(verifiedItem.purchaseDates) : 0
   const freshness = latestDate ? getFreshness(latestDate) : null
+
+  const latestDateLabel = latestDate
+    ? new Date(`${latestDate}T00:00:00Z`).toLocaleDateString("en-US", {
+        month: "2-digit",
+        day: "2-digit",
+        year: "2-digit",
+        timeZone: "America/New_York",
+      })
+    : null
 
   const freshnessColorClass = {
     fresh: "pill pill-success",
@@ -120,6 +129,46 @@ export default async function SkuDetailPage({ params }: PageProps) {
       availability: "https://schema.org/InStoreOnly",
     },
   }
+
+  const relatedItems = (() => {
+    type Related = { sku: string; name: string; brand?: string; imageUrl?: string | null }
+
+    const pool: Related[] = [
+      ...verifiedItems.map((item) => ({
+        sku: item.sku,
+        name: item.name,
+        brand: item.brand,
+        imageUrl: item.imageUrl,
+      })),
+      ...communityItems.map((item) => ({
+        sku: item.sku,
+        name: item.name,
+        brand: (item as { brand?: string }).brand,
+        imageUrl: (item as { imageUrl?: string | null }).imageUrl,
+      })),
+    ].filter((item) => item.sku !== sku)
+    const normalizedBrand = brand?.toLowerCase()
+    const byBrand = normalizedBrand
+      ? pool.filter((item) => item.brand && item.brand.toLowerCase() === normalizedBrand)
+      : []
+
+    const ordered = [...byBrand, ...pool]
+    const seen = new Set<string>()
+
+    return ordered
+      .filter((item) => {
+        if (seen.has(item.sku)) return false
+        seen.add(item.sku)
+        return true
+      })
+      .slice(0, 4)
+      .map((item) => ({
+        sku: item.sku,
+        name: item.name,
+        brand: item.brand,
+        imageUrl: item.imageUrl ?? undefined,
+      }))
+  })()
 
   return (
     <div className="min-h-screen bg-[var(--bg-page)] section-padding px-4 sm:px-6">
@@ -178,6 +227,18 @@ export default async function SkuDetailPage({ params }: PageProps) {
                   {name}
                 </h1>
 
+                {freshness && (
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className={`${freshnessColorClass} text-xs font-semibold`}>
+                      {freshness === "fresh"
+                        ? "Recent"
+                        : freshness === "moderate"
+                          ? "Weeks old"
+                          : "Months old"}
+                    </span>
+                  </div>
+                )}
+
                 <div className="flex flex-wrap gap-4 mb-8">
                   <div className="flex flex-col">
                     <span className="text-[10px] uppercase tracking-wider text-[var(--text-muted)] font-bold">
@@ -185,14 +246,6 @@ export default async function SkuDetailPage({ params }: PageProps) {
                     </span>
                     <span className="font-mono text-lg text-[var(--text-primary)]">{sku}</span>
                   </div>
-                  {model && (
-                    <div className="flex flex-col">
-                      <span className="text-[10px] uppercase tracking-wider text-[var(--text-muted)] font-bold">
-                        Model
-                      </span>
-                      <span className="text-[var(--text-primary)]">{model}</span>
-                    </div>
-                  )}
                 </div>
 
                 <div className="space-y-4 mb-8">
@@ -205,14 +258,12 @@ export default async function SkuDetailPage({ params }: PageProps) {
                         <p className="text-xs font-medium text-[var(--text-muted)]">
                           Last Verified
                         </p>
-                        <p className="text-sm font-semibold text-[var(--text-primary)]">
-                          {formatRelativeDate(latestDate)}
-                          {purchaseCount > 1 && (
-                            <span className="ml-1 text-[var(--text-muted)] font-normal">
-                              ({purchaseCount}× found)
-                            </span>
-                          )}
-                        </p>
+                        <time
+                          dateTime={latestDate}
+                          className="text-sm font-semibold text-[var(--text-primary)]"
+                        >
+                          {latestDateLabel ?? formatRelativeDate(latestDate)}
+                        </time>
                       </div>
                     </div>
                   )}
@@ -227,11 +278,7 @@ export default async function SkuDetailPage({ params }: PageProps) {
                           Community Reports
                         </p>
                         <p className="text-sm font-semibold text-[var(--text-primary)]">
-                          {totalReports} sightings in{" "}
-                          {communityItem?.locations
-                            ? Object.keys(communityItem.locations).length
-                            : 0}{" "}
-                          states
+                          {totalReports} sightings in {stateCount} states
                         </p>
                       </div>
                     </div>
@@ -280,6 +327,47 @@ export default async function SkuDetailPage({ params }: PageProps) {
                     </span>
                   </div>
                 ))}
+            </div>
+          </div>
+        )}
+
+        {relatedItems.length > 0 && (
+          <div className="mt-8 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl p-6 sm:p-8">
+            <h2 className="text-xl font-bold text-[var(--text-primary)] mb-6">
+              Related penny items
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
+              {relatedItems.map((item) => (
+                <Link
+                  key={item.sku}
+                  href={`/sku/${item.sku}`}
+                  className="flex gap-3 items-center p-4 rounded-xl border border-[var(--border-default)] bg-[var(--bg-elevated)] hover:border-[var(--cta-primary)] transition-colors"
+                >
+                  <div className="w-14 h-14 rounded-lg bg-[var(--bg-muted)] flex items-center justify-center overflow-hidden">
+                    {item.imageUrl ? (
+                      <img
+                        src={item.imageUrl}
+                        alt={item.name}
+                        className="object-contain w-full h-full"
+                        referrerPolicy="no-referrer"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <span className="text-xs text-[var(--text-muted)] px-2 text-center">
+                        No image
+                      </span>
+                    )}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-[var(--text-primary)] truncate">
+                      {item.name}
+                    </p>
+                    <p className="text-xs text-[var(--text-muted)] truncate">
+                      {item.brand ? `${item.brand} • ` : ""}SKU {item.sku}
+                    </p>
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
         )}

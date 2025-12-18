@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 import { getPennyList } from "@/lib/fetch-penny-data"
 import { computeFreshnessMetrics, filterValidPennyItems } from "@/lib/penny-list-utils"
 import { PennyListClient } from "@/components/penny-list-client"
@@ -67,6 +68,19 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
     .sort((a, b) => new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime())
     .slice(0, 10)
 
+  const trendingItems = [...validItems]
+    .map((item) => ({
+      ...item,
+      totalReports: Object.values(item.locations || {}).reduce((sum, count) => sum + count, 0),
+      stateCount: item.locations ? Object.keys(item.locations).length : 0,
+    }))
+    .sort(
+      (a, b) =>
+        b.totalReports - a.totalReports ||
+        new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime()
+    )
+    .slice(0, 4)
+
   return (
     <div className="min-h-screen bg-[var(--bg-page)]">
       {/* Breadcrumb Structured Data */}
@@ -125,7 +139,7 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
               className="inline-flex h-2 w-2 rounded-full bg-[var(--status-info)]"
               aria-hidden="true"
             ></span>
-            Community Penny List (last 30 days)
+            Community Penny List
           </div>
           <h1
             id="page-heading"
@@ -168,6 +182,36 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
               <span className="pill pill-muted">Single report: {reportCounts.singleReport}</span>
             </div>
           </div>
+
+          {trendingItems.length > 0 && (
+            <div className="mb-6 rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] p-4 sm:p-5">
+              <div className="flex items-center justify-between gap-2 mb-3">
+                <h2 className="text-lg font-bold text-[var(--text-primary)]">Trending SKUs</h2>
+                <span className="pill pill-muted text-xs">Top reports</span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                {trendingItems.map((item) => (
+                  <Link
+                    key={item.id}
+                    href={`/sku/${item.sku}`}
+                    className="p-3 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] hover:border-[var(--cta-primary)] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+                  >
+                    <p className="text-sm font-semibold text-[var(--text-primary)] truncate">
+                      {item.name}
+                    </p>
+                    <p className="text-xs text-[var(--text-muted)] font-mono mt-1">
+                      SKU {item.sku}
+                    </p>
+                    <p className="text-xs text-[var(--text-secondary)] mt-2">
+                      {item.totalReports} report{item.totalReports === 1 ? "" : "s"} ·{" "}
+                      {item.stateCount} state{item.stateCount === 1 ? "" : "s"}
+                    </p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
           {feedUnavailable && (
             <div
               role="status"

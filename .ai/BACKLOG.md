@@ -1,6 +1,6 @@
 # Backlog (AI‑Driven, Ordered)
 
-**Last updated:** Dec 16, 2025
+**Last updated:** Dec 18, 2025 (post-SKU expansion)
 Keep this list short and ruthless (≤10 items).
 Each AI session should:
 
@@ -14,6 +14,7 @@ Each AI session should:
 
 ## Completed Recently
 
+- **Dec 18, 2025 late:** Community-first refinement: Penny List date filter now month-based (1/3/6/12 months, default 6 months). Verified purchase dates de-emphasized (MM/DD/YY, no quantity). Removed Trending block from `/verified-pennies`.
 - **Dec 18, 2025 PM:** Purchase dates imported from CSV (603 dates across 476 SKUs). Freshness filtering added to Verified Pennies (Recent, Weeks Old, Months Old, Over 6 Months). Created client-safe freshness-utils.ts. All quality gates passing.
 - **Dec 18, 2025 AM:** Social sharing buttons added to penny list cards (Facebook + Copy Link). Quantity field made optional in submission form. Documentation updated to reflect actual implementation state.
 - **Dec 17, 2025:** Landing page restructured for clarity—eliminated decision fatigue by reordering sections (How It Works moved to #2), consolidating redundant CTAs, simplifying Tools section (3 equal cards), reordering navigation (Guide first), and simplifying logo (wordmark only). All 36 e2e + unit tests passing.
@@ -23,6 +24,30 @@ Each AI session should:
 - **Dec 16, 2025:** Added curated `/verified-pennies` route (image-first grid + search + brand filtering) and updated homepage/nav to prioritize Verified + Penny List; clarified "Verified" definition and cleaned up remaining raw Tailwind palette colors.
 - **Dec 16, 2025:** SEO improvements - Added metadata to 11 missing pages, created dynamic sitemap, created OG image template. All pages now Google-discoverable.
 - **Dec 18, 2025:** Verified penny images system (ALREADY IMPLEMENTED) - penny-list items use verified-pennies.json images as fallback when user photos are unavailable (lib/fetch-penny-data.ts lines 176-184).
+
+---
+
+## P0 — Do Next (Post-SKU Expansion, High Impact)
+
+1. **Related SKUs on SKU Pages**
+
+- Add a related items block on SKU detail pages (brand/category match, fallback to popular) linking internally to `/sku/[sku]`.
+- Acceptance: shows up to 4 items; hides cleanly if none; uses existing tokens and Link.
+
+2. **Trending SKUs on List Pages**
+
+- Surface top SKUs on `/penny-list` (most reported) and `/verified-pennies` (most purchased) as small link blocks.
+- Acceptance: minimal UI, mobile-safe, links prefetch to SKU pages.
+
+3. **Trust/Freshness Signals on SKU Pages**
+
+- Show “Seen in X stores / Y states” plus freshness badge (Recent/Weeks/Months) on SKU detail pages using existing freshness utils.
+- Acceptance: no crashes when data missing; badge reflects computed bucket.
+
+4. **Guide Visual Upgrade (Clearance Cadence)**
+
+- Add visual timeline and captioned tag examples in the existing Guide section; store assets in `/public`, reuse current layout.
+- Acceptance: responsive, alt text present, no new routes.
 
 ---
 
@@ -59,6 +84,7 @@ Each AI session should:
 - [ ] "Today's Finds" homepage section (already in P1 below)
 
 **Shelved:**
+
 - Trip Tracker gamification - Requires user accounts to work properly; localStorage-only is too fragile
 - Trip Tracker page - Currently accessible but not prominently linked; keep for power users who find it
 
@@ -81,6 +107,7 @@ Each AI session should:
 **NOTE:** Sprint 1 items are now COMPLETED. See "Completed Recently" section above.
 
 ### Former P0 Items (Now Complete):
+
 - ✅ **Enrich Community Reports with Verified Images** - Already implemented in `lib/fetch-penny-data.ts`
 - ✅ **Hide Quantity from Display** - Quantity was never displayed; now optional in submission form
 - ✅ **Display Product Images in Penny List** - Already implemented with PennyThumbnail component

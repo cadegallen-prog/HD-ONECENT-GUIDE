@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 18, 2025 (Massive SEO Expansion: 500+ Dynamic SKU Pages)
+**Last updated:** Dec 18, 2025 (Community-first refinement)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -16,12 +16,22 @@ Every AI session must update this after meaningful work.
   - Updated `app/sitemap.ts` to dynamically include all 500+ SKU pages.
   - Refactored `VerifiedPennyCard` and `PennyListCard` to link internally to SKU pages instead of externally to Home Depot.
   - All 4 quality gates passing (lint, build, test:unit, test:e2e - 40/40 tests).
+- **Recent focus (Dec 18 late):** Post-SKU uplift (internal recirculation + trust)
+  - Added related SKUs on SKU pages (brand/overall fallbacks) to keep users on-site.
+  - Added trending SKUs block to `/penny-list` (community reports).
+  - Surfaced trust signals on SKU pages (freshness badge).
+  - All 4 quality gates passing after changes (lint, build, test:unit, test:e2e - 40/40).
+- **Recent focus (Dec 18 late):** Community-first refinement (less noise, more digestible)
+  - Community Penny List time window filter is now month-based (1/3/6/12 months) with default = 6 months.
+  - Verified purchase dates are de-emphasized (subtle MM/DD/YY, no “× found” counts).
+  - Removed Trending from `/verified-pennies` (trending is a community-first signal).
+  - All 4 quality gates passing after changes (lint, build, test:unit, test:e2e - 40/40).
 - **Recent focus (Dec 18 PM):** Purchase dates + freshness filtering
   - Imported 603 purchase dates from CSV across 476 verified pennies
   - Added freshness filtering: Recent (<2wk), Weeks Old (2wk-2mo), Months Old (2-6mo), Over 6 Months
   - Created client-safe [lib/freshness-utils.ts](lib/freshness-utils.ts) (fixed node:fs import issue in client components)
   - Updated [app/verified-pennies/verified-pennies-client.tsx](app/verified-pennies/verified-pennies-client.tsx) filters/sorts
-  - Updated [components/verified-penny-card.tsx](components/verified-penny-card.tsx) to display purchase date badges
+  - Updated [components/verified-penny-card.tsx](components/verified-penny-card.tsx) to display purchase date (now de-emphasized)
   - Purchase history parser: [scripts/add-purchase-dates.ts](scripts/add-purchase-dates.ts)
   - All 4 quality gates passing (lint, build, test:unit, test:e2e - 40/40 tests)
 - **Phase:** Stabilization + SEO Optimization

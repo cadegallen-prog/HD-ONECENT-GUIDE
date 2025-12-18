@@ -7,7 +7,7 @@ import { US_STATES } from "@/lib/us-states"
 export type TierFilter = "all" | "Very Common" | "Common" | "Rare"
 export type SortOption = "newest" | "oldest" | "most-reports" | "alphabetical"
 export type ViewMode = "cards" | "table"
-export type DateRange = "7" | "14" | "30"
+export type DateRange = "1m" | "3m" | "6m" | "12m"
 
 interface PennyListFiltersProps {
   totalItems: number
@@ -75,7 +75,7 @@ export function PennyListFilters({
     hasPhotoOnly ||
     searchQuery !== "" ||
     sortOption !== "newest" ||
-    dateRange !== "30"
+    dateRange !== "6m"
 
   const clearAllFilters = useCallback(() => {
     setStateFilter("")
@@ -84,7 +84,7 @@ export function PennyListFilters({
     setSearchQuery("")
     setLocalSearch("")
     setSortOption("newest")
-    setDateRange("30")
+    setDateRange("6m")
   }, [setStateFilter, setTierFilter, setHasPhotoOnly, setSearchQuery, setSortOption, setDateRange])
 
   const tierOptions: { value: TierFilter; label: string; shortLabel: string }[] = [
@@ -95,10 +95,40 @@ export function PennyListFilters({
   ]
 
   const dateOptions: { value: DateRange; label: string }[] = [
-    { value: "7", label: "7 days" },
-    { value: "14", label: "14 days" },
-    { value: "30", label: "30 days" },
+    { value: "1m", label: "1 mo" },
+    { value: "3m", label: "3 mo" },
+    { value: "6m", label: "6 mo" },
+    { value: "12m", label: "12 mo" },
   ]
+
+  const getDateRangeChipLabel = (value: DateRange): string => {
+    const found = dateOptions.find((o) => o.value === value)
+    if (!found) return ""
+
+    switch (value) {
+      case "1m":
+        return "Last 1 month"
+      case "3m":
+        return "Last 3 months"
+      case "6m":
+        return "Last 6 months"
+      case "12m":
+        return "Last 12 months"
+    }
+  }
+
+  const getDateRangeWindowLabel = (value: DateRange): string => {
+    switch (value) {
+      case "1m":
+        return "1 month"
+      case "3m":
+        return "3 months"
+      case "6m":
+        return "6 months"
+      case "12m":
+        return "12 months"
+    }
+  }
 
   // Build active filter chips
   const activeChips: { key: string; label: string; onRemove: () => void }[] = []
@@ -134,11 +164,11 @@ export function PennyListFilters({
       },
     })
   }
-  if (dateRange !== "30") {
+  if (dateRange !== "6m") {
     activeChips.push({
       key: "date",
-      label: `Last ${dateRange} days`,
-      onRemove: () => setDateRange("30"),
+      label: getDateRangeChipLabel(dateRange),
+      onRemove: () => setDateRange("6m"),
     })
   }
   if (sortOption !== "newest") {
@@ -436,9 +466,12 @@ export function PennyListFilters({
             in <strong className="text-[var(--text-primary)]">{getStateName(stateFilter)}</strong>
           </span>
         )}
-        {dateRange !== "30" && (
+        {dateRange !== "6m" && (
           <span className="ml-1">
-            from the last <strong className="text-[var(--text-primary)]">{dateRange}</strong> days
+            from the last{" "}
+            <strong className="text-[var(--text-primary)]">
+              {getDateRangeWindowLabel(dateRange)}
+            </strong>
           </span>
         )}
       </div>

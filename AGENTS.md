@@ -23,6 +23,7 @@ If a request is unclear, ask **one** clarifying question. If it's misaligned, pr
 The Penny List + Report a Find flow is the compounding loop.
 
 Optimize in this order:
+
 1. Returning visitors (habit to check the list)
 2. High-quality submissions (low friction, trustworthy UX)
 3. **Verification** (no false "done" claims)
@@ -43,6 +44,7 @@ We run a single-branch workflow.
 - Every push to remote `main` deploys to Vercel
 
 Workflow:
+
 1. `git pull origin main`
 2. Make changes on `main`
 3. **Run all 4 quality gates** (lint, build, test:unit, test:e2e)
@@ -57,9 +59,11 @@ Never reference or create `dev`/`develop` branches.
 ## 4. Critical Rules (MOST VIOLATED)
 
 ### ⛔ Rule #1: Verification Required
+
 **Read `.ai/VERIFICATION_REQUIRED.md` BEFORE claiming "done"**
 
 You MUST provide:
+
 - All 4 test outputs (lint, build, test:unit, test:e2e)
 - Screenshots for UI changes (Playwright)
 - GitHub Actions URL (if applicable)
@@ -68,6 +72,7 @@ You MUST provide:
 **No proof = not done.**
 
 ### ⛔ Rule #2: Port 3001
+
 ```bash
 netstat -ano | findstr :3001
 # IF RUNNING → use it (don't kill)
@@ -77,6 +82,7 @@ netstat -ano | findstr :3001
 Never kill port 3001 unless user asks.
 
 ### ⛔ Rule #3: Colors
+
 - ❌ NO raw Tailwind (`blue-500`, `gray-600`)
 - ✅ USE CSS variables (`var(--cta-primary)`)
 - ✅ OR get approval first
@@ -88,6 +94,7 @@ Never kill port 3001 unless user asks.
 Tokens live in `app/globals.css`; Tailwind consumes them via CSS variables.
 
 Rules:
+
 - Prefer tokens (`var(--bg-*)`, `var(--text-*)`, `var(--cta-*)`) over hard-coded colors
 - Keep the palette neutral + blue CTA; avoid new accent colors unless essential
 - Use an 8-pt spacing grid
@@ -154,6 +161,7 @@ Rules:
 **Agents have NO persistent memory between sessions.**
 
 The `.ai/` folder IS the memory system:
+
 - `.ai/SESSION_LOG.md` - recent work history
 - `.ai/STATE.md` - current project snapshot
 - `.ai/LEARNINGS.md` - past mistakes to avoid

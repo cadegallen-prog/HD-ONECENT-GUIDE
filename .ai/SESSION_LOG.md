@@ -11,6 +11,74 @@
 
 ---
 
+## 2025-12-18 - GitHub Copilot - Community-First Refinement (Time Windows + Less Noise)
+
+**AI:** GitHub Copilot
+**Goal:** Make the Community Penny List more digestible (month-based windows) and reduce “quantity/badge” noise (especially around verified purchase dates).
+
+**Changes Made:**
+
+- Replaced day-based Community date filters (7/14/30) with month windows (1/3/6/12 months) and set default to 6 months.
+- De-emphasized verified purchase dates: now subtle numeric MM/DD/YY (no relative-date pill; no “× found” counts).
+- Removed “Trending SKUs” from `/verified-pennies` (trending remains a community-first signal on `/penny-list`).
+- Removed model display where it was only sometimes present to keep data presentation consistent.
+
+**Files Modified:**
+
+- `components/penny-list-filters.tsx`
+- `components/penny-list-client.tsx`
+- `components/verified-penny-card.tsx`
+- `app/sku/[sku]/page.tsx`
+- `app/verified-pennies/page.tsx`
+- `app/penny-list/page.tsx`
+
+**Verification (all passing):**
+
+- `npm run lint`
+- `npm run build`
+- `npm run test:unit`
+- `npm run test:e2e` (40/40)
+
+**Playwright Screenshot Proof:**
+
+- `reports/playwright/proof/2025-12-18-community-window-proof/penny-list.png`
+- `reports/playwright/proof/2025-12-18-community-window-proof/verified-pennies.png`
+- `reports/playwright/proof/2025-12-18-community-window-proof/sku-108011.png`
+
+---
+
+## 2025-12-18 - GitHub Copilot - Post-SKU Recirculation & Trust Uplift
+
+**AI:** GitHub Copilot
+**Goal:** Strengthen on-site recirculation and trust signals after the SKU expansion.
+
+**Changes Made:**
+
+- Added related SKUs section to SKU detail pages (brand-first, fallback popular) for internal loop-building.
+- Added trending SKUs blocks to `/penny-list` (most reported) and `/verified-pennies` (most purchased).
+- Surfaced trust/freshness signals on SKU pages: freshness badge + “seen in X stores / Y states”.
+
+**Files Modified:**
+
+- `app/sku/[sku]/page.tsx`
+- `app/penny-list/page.tsx`
+- `app/verified-pennies/page.tsx`
+- `.ai/BACKLOG.md` (P0 priorities updated)
+
+**Verification (all passing):**
+
+- `npm run lint`
+- `npm run build`
+- `npm run test:unit`
+- `npm run test:e2e -- --workers=1` (40/40)
+
+**Notes:**
+
+- Trending logic uses existing data (reports/purchase counts); no new data sources added.
+- Related block hides gracefully when no candidates exist.
+
+---
+
 ## 2025-12-18 - GitHub Copilot - Massive SEO Expansion (500+ SKU Pages)
 
 **AI:** GitHub Copilot

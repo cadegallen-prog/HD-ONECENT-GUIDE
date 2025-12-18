@@ -90,8 +90,16 @@ export function PennyListClient({
     return value === "table" ? value : "cards"
   })
   const [dateRange, setDateRange] = useState<DateRange>(() => {
-    const value = getInitialParam("days") as DateRange
-    return value === "7" || value === "14" ? value : "30"
+    const value = getInitialParam("days")
+
+    // Backward compatibility for old day-based links
+    if (value === "7" || value === "14" || value === "30") return "1m"
+
+    if (value === "1m" || value === "3m" || value === "6m" || value === "12m") {
+      return value
+    }
+
+    return "6m"
   })
 
   // User's saved state for "My State" button
@@ -144,7 +152,7 @@ export function PennyListClient({
           value === "all" ||
           value === "newest" ||
           value === "cards" ||
-          value === "30"
+          value === "6m"
         ) {
           params.delete(key)
         } else {
@@ -223,8 +231,8 @@ export function PennyListClient({
   const setDateRangeWithURL = useCallback(
     (value: DateRange) => {
       setDateRange(value)
-      updateURL({ days: value === "30" ? null : value })
-      trackFilterChange("date_range", value, value === "30" ? "clear" : "apply")
+      updateURL({ days: value === "6m" ? null : value })
+      trackFilterChange("date_range", value, value === "6m" ? "clear" : "apply")
     },
     [trackFilterChange, updateURL]
   )
@@ -232,7 +240,25 @@ export function PennyListClient({
   // Process and filter items
   const { recentItems, hotItems, filteredItems } = useMemo(() => {
     const today = new Date()
-    const dateWindowDays = parseInt(dateRange, 10)
+
+    const windowMonths = (() => {
+      switch (dateRange) {
+        case "1m":
+          return 1
+        case "3m":
+          return 3
+        case "6m":
+          return 6
+        case "12m":
+          return 12
+      }
+    })()
+
+    const windowStart = (() => {
+      const start = new Date(today)
+      start.setMonth(start.getMonth() - windowMonths)
+      return start
+    })()
 
     const normalizeDate = (value: string) => {
       const parsed = new Date(`${value}T00:00:00Z`)
@@ -245,6 +271,12 @@ export function PennyListClient({
       return days >= 0 && days <= window
     }
 
+    const isWithinWindow = (date: Date) => {
+      const time = date.getTime()
+      if (Number.isNaN(time)) return false
+      return time >= windowStart.getTime() && time <= today.getTime()
+    }
+
     // Add parsed dates and filter to recent window
     const withMeta = validRows
       .map((item) => ({
@@ -254,13 +286,13 @@ export function PennyListClient({
       }))
       .filter((item) => item.parsedDate)
 
-    // All items within 30 days (for total count)
-    const allRecent = withMeta
-      .filter((item) => item.parsedDate && isWithinDays(item.parsedDate, 30))
+    // Items within the selected window (for total count)
+    const windowItems = withMeta
+      .filter((item) => item.parsedDate && isWithinWindow(item.parsedDate))
       .sort((a, b) => b.parsedDate!.getTime() - a.parsedDate!.getTime())
 
     // Hot items (Very Common in last 14 days) - unaffected by filters
-    const hot = allRecent
+    const hot = windowItems
       .filter(
         (item) =>
           item.tier === "Very Common" &&
@@ -270,9 +302,7 @@ export function PennyListClient({
       .slice(0, 6)
 
     // Apply date range filter first
-    let filtered = allRecent.filter(
-      (item) => item.parsedDate && isWithinDays(item.parsedDate, dateWindowDays)
-    )
+    let filtered = [...windowItems]
 
     // State filter
     if (stateFilter) {
@@ -323,7 +353,7 @@ export function PennyListClient({
     }
 
     return {
-      recentItems: allRecent,
+      recentItems: windowItems,
       hotItems: hot,
       filteredItems: filtered,
     }
@@ -346,7 +376,7 @@ export function PennyListClient({
     tierFilter !== "all" ||
     hasPhotoOnly ||
     searchQuery !== "" ||
-    dateRange !== "30"
+    dateRange !== "6m"
 
   useEffect(() => {
     if (!hasMountedRef.current || hasTrackedViewRef.current) return
@@ -509,7 +539,7 @@ export function PennyListClient({
             <p className="text-[var(--text-secondary)] mb-4">
               {hasActiveFilters
                 ? "Try adjusting your filters or search terms."
-                : "No penny reports in the last 30 days. Check back soon or submit a find!"}
+                : "No penny reports in the last 6 months. Check back soon or submit a find!"}
             </p>
             {hasActiveFilters && (
               <button
@@ -518,7 +548,7 @@ export function PennyListClient({
                   setStateFilterWithURL("")
                   setTierFilterWithURL("all")
                   setSearchQueryWithURL("")
-                  setDateRangeWithURL("30")
+                  setDateRangeWithURL("6m")
                 }}
                 className="px-4 py-2 rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-medium hover:bg-[var(--cta-hover)] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
               >
