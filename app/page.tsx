@@ -31,135 +31,41 @@ export default function Home() {
           ============================================ */}
       <section className="section-padding px-4 sm:px-6 bg-[var(--bg-page)]">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--bg-page)] border border-[var(--border-strong)] shadow-sm mb-4 transition-all duration-150 hover:shadow-[var(--shadow-card-hover)]">
-            <span className="live-dot animate-radar" aria-hidden="true"></span>
-            <span className="text-sm font-semibold text-[var(--text-primary)]">
-              Join over {COMMUNITY_MEMBER_COUNT_DISPLAY} penny hunters
-            </span>
-          </div>
-
           {/* H1 - Unified type scale */}
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[var(--text-primary)] leading-tight">
-            Find $0.01 Items at Home Depot
+            Learn how to find $0.01 items at Home Depot
           </h1>
 
           {/* Lead text */}
           <p className="mt-3 text-lg sm:text-xl text-[var(--text-secondary)] leading-relaxed">
-            Your guide to finding penny items at Home Depot.
-          </p>
-
-          {/* Supporting text */}
-          <p className="mt-4 text-base text-[var(--text-muted)] max-w-2xl mx-auto leading-relaxed">
-            Free tools and guides to help you find penny items. Learn the markdown system and start
-            hunting today.
+            A simple step-by-step guide + live lists to help you hunt smarter.
           </p>
 
           {/* CTAs - Unified button system */}
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
             <Link
-              href="/verified-pennies"
+              href="/guide"
               className="btn-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold shadow-md hover:bg-[var(--cta-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
+            >
+              <BookOpen className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
+              Read the Guide
+            </Link>
+            <Link
+              href="/verified-pennies"
+              className="btn-secondary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg border-2 border-[var(--border-default)] dark:border-[var(--border-strong)] bg-transparent text-[var(--text-primary)] font-semibold hover:bg-[var(--bg-elevated)] hover:border-[var(--border-strong)] dark:hover:bg-[var(--bg-elevated)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
             >
               <BadgeCheck className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
               Browse Curated Pennies
             </Link>
+          </div>
+
+          {/* Tertiary link for experienced users */}
+          <div className="mt-4">
             <Link
               href="/penny-list"
-              className="btn-secondary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg border-2 border-[var(--border-default)] dark:border-[var(--border-strong)] bg-transparent text-[var(--text-primary)] font-semibold hover:bg-[var(--bg-elevated)] hover:border-[var(--border-strong)] dark:hover:bg-[var(--bg-elevated)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
+              className="inline-flex items-center gap-1 text-sm text-[var(--text-muted)] hover:text-[var(--text-secondary)] underline underline-offset-4 transition-colors"
             >
-              <Users className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
-              Penny List
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================
-          TOOLS SECTION
-          
-          Layout: Unified container + grid system
-          Typography: H2 + supporting text
-          Cards: card-interactive class for hover states
-          ============================================ */}
-      <section className="section-padding px-4 sm:px-6 bg-[var(--bg-page)]">
-        <div className="container-wide">
-          {/* Section header */}
-          <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug">
-              Penny Hunting Tools
-            </h2>
-            <p className="mt-2 text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed">
-              Everything you need to plan and execute successful hunts
-            </p>
-          </div>
-
-          {/* Tool cards grid - 3 main tools */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-            {/* Verified Pennies Card */}
-            <Link
-              href="/verified-pennies"
-              className="card-interactive group flex flex-col bg-[var(--bg-elevated)] rounded-xl p-6 border border-[var(--border-default)]"
-            >
-              <div className="w-12 h-12 rounded-xl bg-[var(--bg-page)] border border-[var(--border-default)] flex items-center justify-center mb-4">
-                <BadgeCheck className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
-              </div>
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
-                Curated Pennies
-              </h3>
-              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed flex-grow">
-                Admin-reviewed penny items with product images. Your reference for penny shopping.
-              </p>
-              <span className="mt-4 inline-flex items-center text-[var(--link-default)] text-sm font-medium group-hover:text-[var(--link-hover)] group-hover:underline">
-                Browse curated list →
-              </span>
-            </Link>
-
-            {/* Community Reports Card */}
-            <Link
-              href="/penny-list"
-              className="card-interactive group flex flex-col bg-[var(--bg-elevated)] rounded-xl p-6 border border-[var(--border-default)]"
-            >
-              <div className="w-12 h-12 rounded-xl bg-[var(--bg-page)] border border-[var(--border-default)] flex items-center justify-center mb-4">
-                <Users className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
-              </div>
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
-                Penny List
-              </h3>
-              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed flex-grow">
-                Community-reported penny sightings with freshness and filters. Updated hourly.
-              </p>
-              <span className="mt-4 inline-flex items-center text-[var(--link-default)] text-sm font-medium group-hover:text-[var(--link-hover)] group-hover:underline">
-                View penny list →
-              </span>
-            </Link>
-
-            {/* Penny Guide Card */}
-            <Link
-              href="/guide"
-              className="card-interactive group flex flex-col bg-[var(--bg-elevated)] rounded-xl p-6 border border-[var(--border-default)]"
-            >
-              <div className="w-12 h-12 rounded-xl bg-[var(--bg-page)] border border-[var(--border-default)] flex items-center justify-center mb-4">
-                <BookOpen className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
-              </div>
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
-                Complete Guide
-              </h3>
-              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed flex-grow">
-                Learn how penny items work, the markdown lifecycle, and proven hunting strategies.
-              </p>
-              <span className="mt-4 inline-flex items-center text-[var(--link-default)] text-sm font-medium group-hover:text-[var(--link-hover)] group-hover:underline">
-                Start learning →
-              </span>
-            </Link>
-          </div>
-
-          <div className="mt-6 flex items-center justify-center">
-            <Link
-              href="/store-finder"
-              className="inline-flex items-center gap-2 text-sm text-[var(--link-default)] hover:text-[var(--link-hover)] underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] rounded"
-            >
-              <Map className="w-4 h-4" aria-hidden="true" />
-              Store Finder (secondary tool)
+              Already hunting? View the Penny List →
             </Link>
           </div>
         </div>
@@ -192,7 +98,7 @@ export default function Home() {
                 Learn the Cycle
               </h3>
               <p className="mt-1 text-sm text-[var(--text-secondary)] leading-relaxed">
-                Items markdown from .00 → .06 → .03 → .01
+                Items markdown: .00 → .06 → .03 → .01
               </p>
             </div>
 
@@ -202,10 +108,10 @@ export default function Home() {
                 <span className="text-base font-bold text-[var(--cta-primary)]">2</span>
               </div>
               <h3 className="text-base font-semibold text-[var(--text-primary)] leading-snug">
-                Scout Digitally
+                Scout First
               </h3>
               <p className="mt-1 text-sm text-[var(--text-secondary)] leading-relaxed">
-                Use the HD app to check inventory before visiting
+                Check inventory in the Home Depot app before driving
               </p>
             </div>
 
@@ -218,7 +124,7 @@ export default function Home() {
                 Hunt Smart
               </h3>
               <p className="mt-1 text-sm text-[var(--text-secondary)] leading-relaxed">
-                Check endcaps, back corners, and overhead storage
+                Endcaps, back corners, overhead storage
               </p>
             </div>
 
@@ -231,7 +137,7 @@ export default function Home() {
                 Checkout
               </h3>
               <p className="mt-1 text-sm text-[var(--text-secondary)] leading-relaxed">
-                Self-checkout works best for penny items
+                Self-checkout works best
               </p>
             </div>
           </div>
@@ -242,7 +148,79 @@ export default function Home() {
               href="/guide"
               className="inline-flex items-center gap-2 text-[var(--link-default)] font-medium hover:underline hover:text-[var(--link-hover)]"
             >
-              Learn more in the full guide →
+              Read the full guide →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================
+          TOOLS SECTION
+
+          Layout: Unified container + grid system
+          Typography: H2 + supporting text
+          Cards: card-interactive class for hover states
+          ============================================ */}
+      <section className="section-padding px-4 sm:px-6 bg-[var(--bg-page)]">
+        <div className="container-wide">
+          {/* Section header */}
+          <div className="text-center mb-10">
+            <h2 className="text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug">
+              Tools
+            </h2>
+            <p className="mt-2 text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed">
+              Resources to help you plan trips and find penny items
+            </p>
+          </div>
+
+          {/* Tool cards grid - 3 tools */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+            {/* Curated Pennies Card */}
+            <Link
+              href="/verified-pennies"
+              className="card-interactive group flex flex-col bg-[var(--bg-elevated)] rounded-xl p-6 border border-[var(--border-default)]"
+            >
+              <div className="w-12 h-12 rounded-xl bg-[var(--bg-page)] border border-[var(--border-default)] flex items-center justify-center mb-4">
+                <BadgeCheck className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
+              </div>
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
+                Curated Pennies
+              </h3>
+              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed flex-grow">
+                Admin-reviewed items with photos. Fastest wins.
+              </p>
+            </Link>
+
+            {/* Penny List Card */}
+            <Link
+              href="/penny-list"
+              className="card-interactive group flex flex-col bg-[var(--bg-elevated)] rounded-xl p-6 border border-[var(--border-default)]"
+            >
+              <div className="w-12 h-12 rounded-xl bg-[var(--bg-page)] border border-[var(--border-default)] flex items-center justify-center mb-4">
+                <Users className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
+              </div>
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
+                Penny List
+              </h3>
+              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed flex-grow">
+                Community sightings, updated hourly. Freshest finds.
+              </p>
+            </Link>
+
+            {/* Store Finder Card */}
+            <Link
+              href="/store-finder"
+              className="card-interactive group flex flex-col bg-[var(--bg-elevated)] rounded-xl p-6 border border-[var(--border-default)]"
+            >
+              <div className="w-12 h-12 rounded-xl bg-[var(--bg-page)] border border-[var(--border-default)] flex items-center justify-center mb-4">
+                <Map className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
+              </div>
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
+                Store Finder
+              </h3>
+              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed flex-grow">
+                Check inventory by location. Plan your trips.
+              </p>
             </Link>
           </div>
         </div>

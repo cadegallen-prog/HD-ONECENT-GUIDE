@@ -14,6 +14,7 @@ Each AI session should:
 
 ## Completed Recently
 
+- **Dec 17, 2025:** Landing page restructured for clarity—eliminated decision fatigue by reordering sections (How It Works moved to #2), consolidating redundant CTAs, simplifying Tools section (3 equal cards), reordering navigation (Guide first), and simplifying logo (wordmark only). All 36 e2e + unit tests passing.
 - **Dec 15, 2025:** Strategic plan created for driving habitual traffic (visual engagement, verification system, SEO expansion)
 - **Dec 12, 2025:** Updated `.ai/PENNY_LIST_PLAN.md` to reflect Phase 1 shipped.
 - **Dec 12, 2025:** CI (`.github/workflows/quality.yml`) now runs lint + Playwright smoke with fixtures.

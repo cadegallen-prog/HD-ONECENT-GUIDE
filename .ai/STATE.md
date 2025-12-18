@@ -1,7 +1,7 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 17, 2025 (dynamic minimal OpenGraph images via `/api/og`; route-specific headlines; cache-busting `v` param + shorter CDN cache; disabled lucide-react import optimization to reduce Turbopack/HMR flakiness)  
-This file is the **single living snapshot** of where the project is right now.  
+**Last updated:** Dec 17, 2025 (landing page restructured for learning-first hierarchy: Guide-first CTAs, How It Works moved to section 2, simplified Tools section with 3 equal cards, navigation reordered, logo simplified to wordmark)
+This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
 ---
@@ -9,9 +9,17 @@ Every AI session must update this after meaningful work.
 ## 1. Where We Are
 
 - **Site:** live at https://pennycentral.com
-- **Phase:** Stabilization + Community Intake + Command Reliability + Store Finder UX
+- **Phase:** Stabilization + Community Intake + Command Reliability + Store Finder UX + Homepage Clarity
 - **Traffic reality:** early launch volatility is normal; focus on retention loop first.
-- **Recent focus (Dec 16):** Launched Verified Pennies + refreshed homepage/nav:
+- **Recent focus (Dec 17):** Landing page restructured for clarity—eliminated decision fatigue by reordering sections and consolidating CTAs.
+  - **Hero:** Guide-first (primary CTA), Curated Pennies (secondary), Penny List (tertiary small link)
+  - **Section order:** Hero → How It Works (moved up) → Tools → Community → Support
+  - **How It Works:** Tightened copy for beginner clarity
+  - **Tools:** 3 equal cards (Curated, Penny List, Store Finder); removed "(secondary tool)" label; all redundant "→" link text removed
+  - **Navigation:** Guide | Curated | Penny List | Stores | About (Report moved to footer)
+  - **Logo:** Simplified to wordmark only (removed 1¢ icon)
+  - **Tests:** All 36 e2e + unit tests passing; updated navbar test to verify Guide link
+- **Previous (Dec 16):** Launched Verified Pennies + refreshed homepage/nav:
 - **New (Dec 16 PM):** Verified + community penny lists now use single-line ellipsis titles, Home Depot row click-through with keyboard/ARIA, quantity hidden from public views, muted badges/headers for faster scan; hero badge contrast fixed to satisfy axe.
 - New curated route: `/verified-pennies` (search + brand filter + image-first grid)
 - Nav prioritizes **Verified** and **Penny List**; shortened labels (**Report**, **Stores**)
@@ -21,6 +29,10 @@ Every AI session must update this after meaningful work.
 - Enabled `next/image` external images for Home Depot CDN (`images.thdstatic.com`) via `next.config.js`
 
 - **Current add-ons (Dec 16):** Added `docs/COLOR-SYSTEM-IMPLEMENTATION.md`, `.github/pull_request_template.md`, `lib/home-depot.ts`, and the CLI-friendly `scripts/convert-verified-data.ts`, then ignored `reports/playwright/proof/` so the screenshot proof artifacts stay local.
+
+- **Dev stability (Dec 17):** Default dev command now uses **Webpack** to avoid Turbopack HMR flakiness with some packages (notably `lucide-react`). Use `npm run dev:turbo` only when you explicitly want to try Turbopack.
+- **Test stability (Dec 17):** Fixed flaky store finder e2e test timing by waiting for stores to load before checking markers; all 36 tests now pass consistently.
+- **Code Quality (Dec 17):** Resolved 14 false-positive validation problems in VS Code (CSS inline styles and ARIA attributes) using the spread operator trick; `lint` and `get_errors` are now fully green.
 
 - **Recent focus (Dec 15 2:45 PM):** Fixed critical Store Finder UX bugs:
   - **Re-ranking bug eliminated:** Clicking a store on the map no longer re-sorts the list; ranking is now decoupled from map panning via `rankingCenterRef`

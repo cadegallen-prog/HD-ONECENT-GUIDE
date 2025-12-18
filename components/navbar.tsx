@@ -3,27 +3,8 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Map, BookOpen, User, Moon, Sun, Book, Menu, X, Users, BadgeCheck } from "lucide-react"
+import { Map, User, Moon, Sun, Book, Menu, X, Users, BadgeCheck } from "lucide-react"
 import { useTheme } from "@/components/theme-provider"
-
-// Penny logo - Simple coin with "1¢"
-function PennyLogo({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
-      <circle cx="12" cy="12" r="10" fill="var(--cta-primary)" className="opacity-90" />
-      <text
-        x="12"
-        y="16"
-        textAnchor="middle"
-        fontSize="10"
-        fontWeight="bold"
-        fill="var(--cta-text)"
-      >
-        1¢
-      </text>
-    </svg>
-  )
-}
 
 export function Navbar() {
   const pathname = usePathname()
@@ -38,11 +19,10 @@ export function Navbar() {
   const isDark = mounted && document.documentElement.classList.contains("dark")
 
   const navItems = [
+    { href: "/guide", label: "Guide", icon: Book },
     { href: "/verified-pennies", label: "Curated", icon: BadgeCheck },
     { href: "/penny-list", label: "Penny List", icon: Users },
-    { href: "/report-find", label: "Report", icon: BookOpen },
     { href: "/store-finder", label: "Stores", icon: Map },
-    { href: "/guide", label: "Guide", icon: Book },
     { href: "/about", label: "About", icon: User },
   ]
 
@@ -53,9 +33,8 @@ export function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <PennyLogo className="w-8 h-8 transition-transform group-hover:scale-105" />
-              <span className="text-lg font-bold tracking-tight text-[var(--text-primary)]">
+            <Link href="/" className="group">
+              <span className="text-lg font-bold tracking-tight text-[var(--text-primary)] transition-colors group-hover:text-[var(--text-secondary)]">
                 PennyCentral
               </span>
             </Link>
