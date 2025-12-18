@@ -48,11 +48,11 @@ export const metadata: Metadata = {
     "self checkout penny items",
   ],
   authors: [{ name: "Home Depot One Cent Items Community" }],
-  metadataBase: new URL("https://pennycentral.com"),
+  metadataBase: new URL("https://www.pennycentral.com"),
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://pennycentral.com",
+    url: "https://www.pennycentral.com",
     title: "Penny Central: The Home Depot $0.01 Hunting Guide",
     description:
       "The complete guide to finding Home Depot penny items. Learn clearance cycles, in-store hunting strategies, checkout tips, and join 40,000+ penny hunters.",
@@ -134,14 +134,14 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebSite",
               name: "Penny Central",
-              url: "https://pennycentral.com",
+              url: "https://www.pennycentral.com",
               description:
                 "The complete guide to finding Home Depot penny items. Learn clearance cycles, in-store hunting strategies, checkout tips, and join 40,000+ penny hunters.",
               potentialAction: {
                 "@type": "SearchAction",
                 target: {
                   "@type": "EntryPoint",
-                  urlTemplate: "https://pennycentral.com/store-finder?q={search_term_string}",
+                  urlTemplate: "https://www.pennycentral.com/store-finder?q={search_term_string}",
                 },
                 "query-input": "required name=search_term_string",
               },
@@ -155,7 +155,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "Organization",
               name: "Penny Central",
-              url: "https://pennycentral.com",
+              url: "https://www.pennycentral.com",
               description:
                 "Community resource for Home Depot penny item hunters with 40,000+ members.",
               sameAs: ["https://www.facebook.com/groups/homedepotpennies"],

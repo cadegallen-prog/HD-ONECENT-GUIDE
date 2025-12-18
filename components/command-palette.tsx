@@ -13,6 +13,8 @@ import {
   Lightbulb,
   ShoppingCart,
   AlertCircle,
+  BadgeCheck,
+  Users,
 } from "lucide-react"
 
 interface CommandPaletteProps {
@@ -34,6 +36,8 @@ const pages = [
   { icon: Lightbulb, label: "Responsible Hunting", path: "/#responsible-hunting", group: "Guide" },
   { icon: CircleHelp, label: "FAQ", path: "/#faq", group: "Guide" },
   // Tools (actual pages)
+  { icon: BadgeCheck, label: "Verified Pennies", path: "/verified-pennies", group: "Tools" },
+  { icon: Users, label: "Community Penny List", path: "/penny-list", group: "Tools" },
   { icon: Map, label: "Store Finder", path: "/store-finder", group: "Tools" },
   { icon: Clock, label: "Trip Tracker", path: "/trip-tracker", group: "Tools" },
   // More

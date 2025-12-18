@@ -31,7 +31,7 @@ export function Footer() {
             <ul className="space-y-2.5">
               <li>
                 <Link href="/penny-list" className={navLinkClass}>
-                  Penny List
+                  Community Penny List
                 </Link>
               </li>
               <li>

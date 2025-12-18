@@ -18,6 +18,52 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ["framer-motion"],
   },
+  // SEO Strategy: Use www domain as canonical and redirect shortcut pages to guide sections.
+  // This prevents "Redirect error" in Google Search Console by providing clear 301 signals.
+  async redirects() {
+    return [
+      {
+        source: "/what-are-pennies",
+        destination: "/guide#introduction",
+        permanent: true,
+      },
+      {
+        source: "/digital-pre-hunt",
+        destination: "/guide#digital-tools",
+        permanent: true,
+      },
+      {
+        source: "/in-store-strategy",
+        destination: "/guide#in-store-hunting",
+        permanent: true,
+      },
+      {
+        source: "/checkout-strategy",
+        destination: "/guide#checkout",
+        permanent: true,
+      },
+      {
+        source: "/internal-systems",
+        destination: "/guide#internal-operations",
+        permanent: true,
+      },
+      {
+        source: "/responsible-hunting",
+        destination: "/guide#responsible-hunting",
+        permanent: true,
+      },
+      {
+        source: "/facts-vs-myths",
+        destination: "/guide#fact-vs-fiction",
+        permanent: true,
+      },
+      {
+        source: "/faq",
+        destination: "/guide#faq",
+        permanent: true,
+      },
+    ]
+  },
   // Security and caching headers
   async headers() {
     return [

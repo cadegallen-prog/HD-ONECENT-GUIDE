@@ -10,7 +10,7 @@ Disallow: /admin/
 Disallow: /api/
 
 # Sitemap location
-Sitemap: https://pennycentral.com/sitemap.xml
+Sitemap: https://www.pennycentral.com/sitemap.xml
 
 # Allow Google, Bing, and other major search engines (explicitly)
 User-agent: Googlebot

@@ -20,9 +20,9 @@ export function Navbar() {
 
   const navItems = [
     { href: "/guide", label: "Guide", icon: Book },
-    { href: "/verified-pennies", label: "Curated", icon: BadgeCheck },
+    { href: "/verified-pennies", label: "Verified Pennies", icon: BadgeCheck },
     { href: "/penny-list", label: "Penny List", icon: Users },
-    { href: "/store-finder", label: "Stores", icon: Map },
+    { href: "/store-finder", label: "Store Finder", icon: Map },
     { href: "/about", label: "About", icon: User },
   ]
 

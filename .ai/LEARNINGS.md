@@ -38,6 +38,34 @@ const StoreMap = dynamic(() => import("@/components/store-map"), {
 
 ---
 
+## SEO & Indexing Strategy
+
+### Problem
+
+Google only indexing 3/17 pages and reporting "Redirect errors".
+
+### What We Tried
+
+- Using non-www domain in metadata while Google preferred www.
+- Including "shortcut" pages (redirects to homepage sections) in sitemap.
+
+### What We Learned
+
+- Google prefers consistency between metadata, sitemap, and the actual crawled domain (www vs non-www).
+- Including redirecting URLs in the sitemap confuses Google and leads to "Redirect errors".
+- Pages that only redirect to homepage sections should be handled via 301 redirects in `next.config.js` and excluded from the sitemap.
+
+### What to Do Instead
+
+- Use `https://www.pennycentral.com` as the canonical domain in all metadata and sitemaps.
+- Only include "Real" content pages in `sitemap.ts`.
+- Use `robots: { index: false }` for defunct or private tools like `trip-tracker`.
+- Define permanent redirects in `next.config.js` for legacy or shortcut paths.
+
+**Files:** `app/layout.tsx`, `app/sitemap.ts`, `next.config.js`, `app/trip-tracker/layout.tsx`
+
+---
+
 ## Google Sheets as Backend
 
 ### Problem

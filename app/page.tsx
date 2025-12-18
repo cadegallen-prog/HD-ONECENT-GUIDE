@@ -8,8 +8,8 @@ import {
 } from "@/lib/constants"
 
 export const metadata: Metadata = {
-  title: "Penny Central - Your Guide to $0.01 Home Depot Items",
-  description: `The complete guide to finding Home Depot penny items. Tools, guides, and tips used by ${COMMUNITY_MEMBER_COUNT_DISPLAY} penny hunters.`,
+  title: "Home Depot Penny List & Shopping Guide | Penny Central",
+  description: `The complete guide to finding Home Depot penny items. Latest penny list, clearance cycles, and tips used by ${COMMUNITY_MEMBER_COUNT_DISPLAY} penny hunters.`,
 }
 
 export default function Home() {
@@ -55,7 +55,7 @@ export default function Home() {
               className="btn-secondary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg border-2 border-[var(--border-default)] dark:border-[var(--border-strong)] bg-transparent text-[var(--text-primary)] font-semibold hover:bg-[var(--bg-elevated)] hover:border-[var(--border-strong)] dark:hover:bg-[var(--bg-elevated)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
             >
               <BadgeCheck className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
-              Browse Curated Pennies
+              Browse Verified Pennies
             </Link>
           </div>
 
@@ -65,7 +65,7 @@ export default function Home() {
               href="/penny-list"
               className="inline-flex items-center gap-1 text-sm text-[var(--text-muted)] hover:text-[var(--text-secondary)] underline underline-offset-4 transition-colors"
             >
-              Already hunting? View the Penny List →
+              Already hunting? View the Community Penny List →
             </Link>
           </div>
         </div>
@@ -142,8 +142,8 @@ export default function Home() {
             </div>
           </div>
 
-          {/* CTA link */}
-          <div className="mt-8 text-center">
+          {/* CTA link (mobile-only; desktop already has the hero CTA in view) */}
+          <div className="mt-8 text-center sm:hidden">
             <Link
               href="/guide"
               className="inline-flex items-center gap-2 text-[var(--link-default)] font-medium hover:underline hover:text-[var(--link-hover)]"
@@ -175,7 +175,7 @@ export default function Home() {
 
           {/* Tool cards grid - 3 tools */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-            {/* Curated Pennies Card */}
+            {/* Verified Pennies Card */}
             <Link
               href="/verified-pennies"
               className="card-interactive group flex flex-col bg-[var(--bg-elevated)] rounded-xl p-6 border border-[var(--border-default)]"
@@ -184,10 +184,10 @@ export default function Home() {
                 <BadgeCheck className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
               </div>
               <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
-                Curated Pennies
+                Verified Pennies
               </h3>
               <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed flex-grow">
-                Admin-reviewed items with photos. Fastest wins.
+                Admin-verified items with photos. Confirmed penny deals.
               </p>
             </Link>
 
@@ -200,10 +200,10 @@ export default function Home() {
                 <Users className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
               </div>
               <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
-                Penny List
+                Community Penny List
               </h3>
               <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed flex-grow">
-                Community sightings, updated hourly. Freshest finds.
+                Crowdsourced sightings, updated hourly. Freshest finds.
               </p>
             </Link>
 
@@ -216,10 +216,10 @@ export default function Home() {
                 <Map className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
               </div>
               <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
-                Store Finder
+                Store Finder Map
               </h3>
               <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed flex-grow">
-                Check inventory by location. Plan your trips.
+                Locate nearby Home Depot stores and plan your trips.
               </p>
             </Link>
           </div>

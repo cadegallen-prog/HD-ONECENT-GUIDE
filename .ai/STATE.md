@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 17, 2025 (landing page restructured for learning-first hierarchy: Guide-first CTAs, How It Works moved to section 2, simplified Tools section with 3 equal cards, navigation reordered, logo simplified to wordmark)
+**Last updated:** Dec 18, 2025 (Final naming locked + theme polish: new AAA-friendly CTA palette, removed desktop-redundant Guide link, stabilized Playwright by defaulting e2e to 1 worker)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -8,15 +8,28 @@ Every AI session must update this after meaningful work.
 
 ## 1. Where We Are
 
-- **Site:** live at https://pennycentral.com
-- **Phase:** Stabilization + Community Intake + Command Reliability + Store Finder UX + Homepage Clarity
+- **Site:** live at https://www.pennycentral.com (Preferred canonical domain)
+- **Phase:** Stabilization + SEO Optimization
+- **SEO Status:** Resolved "Redirect errors" in Google Search Console and implemented Rich Snippets.
+  - **Canonical Domain:** Standardized on `www.pennycentral.com` across metadata and sitemap.
+  - **Sitemap:** Cleaned to only include 10 "Real" content pages; removed 8 shortcut redirects.
+  - **Redirects:** Moved shortcut logic (e.g., `/faq` -> `/guide#faq`) to `next.config.js` as permanent 301 redirects.
+  - **Noindex:** Added `noindex` to `/trip-tracker` to gracefully remove defunct tool from search results.
+  - **Rich Snippets:** Implemented `HowTo`, `FAQ`, and `Breadcrumb` structured data to maximize CTR and visibility.
+  - **Keyword Optimization:** Refined meta titles for high-intent keywords ("Home Depot Penny List").
 - **Traffic reality:** early launch volatility is normal; focus on retention loop first.
-- **Recent focus (Dec 17):** Landing page restructured for clarity—eliminated decision fatigue by reordering sections and consolidating CTAs.
-  - **Hero:** Guide-first (primary CTA), Curated Pennies (secondary), Penny List (tertiary small link)
+- **Recent focus (Dec 18):** Finalized tool naming and clarity.
+  - Standardized labels: **Verified Pennies**, **Community Penny List**, **Store Finder** across nav, homepage CTAs/cards, footer, command palette, badges/pills.
+  - Updated `/verified-pennies` and `/penny-list` metadata/headings for SEO clarity; adjusted visual smoke headings and README docs.
+  - CTA palette softened to reduce halation (desaturated slate blue); dark mode CTA now uses dark text on a lighter CTA surface for comfort + AAA contrast.
+  - Removed redundant “Read the full guide” link on desktop (kept mobile-only).
+  - Store Finder popup test wait increased to 20s for marker visibility; `npm run test:e2e` now runs serial (`--workers=1`) to avoid Windows connection-reset flake; full gates green.
+- **Previous focus (Dec 17):** Landing page restructured for clarity—eliminated decision fatigue by reordering sections and consolidating CTAs.
+  - **Hero:** Guide-first (primary CTA), Verified Pennies (secondary), Community Penny List link (tertiary small link)
   - **Section order:** Hero → How It Works (moved up) → Tools → Community → Support
   - **How It Works:** Tightened copy for beginner clarity
-  - **Tools:** 3 equal cards (Curated, Penny List, Store Finder); removed "(secondary tool)" label; all redundant "→" link text removed
-  - **Navigation:** Guide | Curated | Penny List | Stores | About (Report moved to footer)
+  - **Tools:** 3 equal cards (Verified, Community Penny List, Store Finder); removed "(secondary tool)" label; all redundant "→" link text removed
+  - **Navigation:** Guide | Verified Pennies | Penny List | Store Finder | About (Report moved to footer)
   - **Logo:** Simplified to wordmark only (removed 1¢ icon)
   - **Tests:** All 36 e2e + unit tests passing; updated navbar test to verify Guide link
 - **Previous (Dec 16):** Launched Verified Pennies + refreshed homepage/nav:

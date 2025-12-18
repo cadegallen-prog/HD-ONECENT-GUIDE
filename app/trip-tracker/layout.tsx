@@ -23,6 +23,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     images: [ogImageUrl("Trip Tracker")],
   },
+  robots: {
+    index: false,
+    follow: false,
+  },
 }
 
 export default function TripTrackerLayout({ children }: { children: React.ReactNode }) {

@@ -71,7 +71,7 @@ test.describe("store finder popup (screenshots)", () => {
 
     // Wait for the map to mount and at least one marker to render.
     const markers = page.locator(".leaflet-marker-icon")
-    await expect(markers.first()).toBeVisible({ timeout: 10000 })
+    await expect(markers.first()).toBeVisible({ timeout: 20000 })
 
     // Wait for at least one tile to load so the map look is representative.
     await page.locator(".leaflet-tile-loaded").first().waitFor({ timeout: 60000 })

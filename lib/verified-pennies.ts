@@ -1,7 +1,7 @@
 /**
  * Verified Pennies Data Access
  *
- * Provides access to the curated list of verified penny items
+ * Provides access to the admin-verified list of penny items
  * with product images from Home Depot.
  */
 

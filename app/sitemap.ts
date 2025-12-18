@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next"
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://pennycentral.com"
+  const baseUrl = "https://www.pennycentral.com"
   const currentDate = new Date().toISOString()
 
   return [
@@ -41,49 +41,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     // Guide Pages - High Priority
     {
-      url: `${baseUrl}/what-are-pennies`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
       url: `${baseUrl}/clearance-lifecycle`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/digital-pre-hunt`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/in-store-strategy`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/checkout-strategy`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/internal-systems`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/responsible-hunting`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/facts-vs-myths`,
       lastModified: currentDate,
       changeFrequency: "monthly",
       priority: 0.8,
@@ -97,12 +55,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/trip-tracker`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
       url: `${baseUrl}/resources`,
       lastModified: currentDate,
       changeFrequency: "monthly",
@@ -110,12 +62,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${baseUrl}/cashback`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/faq`,
       lastModified: currentDate,
       changeFrequency: "monthly",
       priority: 0.7,

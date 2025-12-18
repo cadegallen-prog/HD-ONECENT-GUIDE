@@ -12,7 +12,7 @@
     "lint:colors": "tsx scripts/lint-colors.ts",
     "lint:colors:update-baseline": "tsx scripts/lint-colors.ts --update-baseline",
     "export": "next build && next export",
-    "test:e2e": "playwright test",
+    "test:e2e": "playwright test --workers=1",
     "test:unit": "tsx --test tests/**/*.test.ts",
     "check-contrast": "node scripts/check-contrast.js",
     "check-axe": "node scripts/check-axe.js"

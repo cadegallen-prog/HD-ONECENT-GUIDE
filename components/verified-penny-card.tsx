@@ -76,7 +76,7 @@ export function VerifiedPennyCard({ item }: VerifiedPennyCardProps) {
           )}
           <span className="pill pill-muted inline-flex items-center gap-1 text-xs font-semibold">
             <BadgeCheck className="w-3.5 h-3.5" aria-hidden="true" />
-            Curated
+            Verified
           </span>
         </div>
 

@@ -18,7 +18,7 @@ Dates are recorded in America/New_York time.
 
 ## 2025-12-16 - Verified Pennies Launch + Homepage/Nav Refresh
 
-- Added a new curated route `/verified-pennies` for browsing confirmed penny items with images, search, and brand filtering.
+- Added a new verified route `/verified-pennies` for browsing confirmed penny items with images, search, and brand filtering.
 - Updated primary navigation to emphasize Verified + Penny List and shortened labels for clarity (Report, Stores).
 - Updated homepage hero + tools section to prioritize Verified Items and the Penny List; restored Store Finder as a secondary link.
 - Clarified what “Verified” means on `/verified-pennies` to reduce user-risk and set expectations about store-by-store variance.

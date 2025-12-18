@@ -5,18 +5,18 @@ import { PennyListClient } from "@/components/penny-list-client"
 import { ogImageUrl } from "@/lib/og"
 
 export const metadata: Metadata = {
-  title: "Penny List (Community Reports): Recent Penny Sightings - Penny Central",
+  title: "Home Depot Penny List: Latest $0.01 Item Sightings | Penny Central",
   description:
-    "Penny List: latest community-reported penny sightings at Home Depot. Search and filter by state, tier, and date. Always verify in store - your mileage may vary.",
+    "Latest community-reported Home Depot penny list. Search and filter by state, tier, and date. Updated hourly with the freshest penny sightings.",
   openGraph: {
-    title: "Community $0.01 Finds",
+    title: "Home Depot Penny List ($0.01 Finds)",
     description:
       "Latest community-reported penny sightings at Home Depot. Search and filter by state, tier, and date.",
-    images: [ogImageUrl("Community $0.01 Finds")],
+    images: [ogImageUrl("Community Penny List")],
   },
   twitter: {
     card: "summary_large_image",
-    images: [ogImageUrl("Community $0.01 Finds")],
+    images: [ogImageUrl("Community Penny List")],
   },
 }
 
@@ -69,6 +69,30 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
 
   return (
     <div className="min-h-screen bg-[var(--bg-page)]">
+      {/* Breadcrumb Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Home",
+                item: "https://www.pennycentral.com",
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: "Penny List",
+                item: "https://www.pennycentral.com/penny-list",
+              },
+            ],
+          }),
+        }}
+      />
       {/* Header Section */}
       <section
         aria-labelledby="page-heading"
@@ -80,18 +104,26 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
               className="inline-flex h-2 w-2 rounded-full bg-[var(--status-info)]"
               aria-hidden="true"
             ></span>
-            Penny List (last 30 days)
+            Community Penny List (last 30 days)
           </div>
           <h1
             id="page-heading"
             className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)] mb-4"
           >
-            Penny List
+            Community Penny List
           </h1>
           <p className="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
             Community reports of recent penny sightings. Your mileage may vary - always verify at
             checkout.
           </p>
+          <div className="mt-4">
+            <a
+              href="/guide"
+              className="inline-flex items-center gap-1 text-sm text-[var(--link-default)] hover:text-[var(--link-hover)] font-medium underline underline-offset-4"
+            >
+              New to penny hunting? Read the Complete Guide →
+            </a>
+          </div>
         </div>
       </section>
 

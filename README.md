@@ -8,8 +8,8 @@ The official companion site for the "Home Depot One Cent Items" Facebook communi
 
 ## What It Does
 
-- **Verified Pennies** ⭐ NEW — Curated catalog of confirmed penny items with product images
-- **Penny List (Community Reports)** ⭐ NEW — Community-powered list of reported penny finds, updated hourly from Google Forms (no manual work)
+- **Verified Pennies** ⭐ NEW — Admin-verified catalog of confirmed penny items with product images
+- **Community Penny List (Crowdsourced Reports)** ⭐ NEW — Community-powered list of reported penny finds, updated hourly from Google Forms (no manual work)
 - **Penny Guide** — Complete reference on how clearance items reach penny status
 - **Store Finder** — Find nearby Home Depot locations with intelligent search (supports city, state name, ZIP code)
 - **Trip Tracker** — Plan and log penny hunting trips
@@ -63,8 +63,8 @@ See: `.ai/VERIFICATION_REQUIRED.md`
 
 | Mode  | Background | Text      | CTA       | Live Indicator |
 | ----- | ---------- | --------- | --------- | -------------- |
-| Light | `#FFFFFF`  | `#18181B` | `#1D4ED8` | `#D97706`      |
-| Dark  | `#18181B`  | `#FAFAFA` | `#3B82F6` | `#FBBF24`      |
+| Light | `#FFFFFF`  | `#1C1917` | `#2B4C7E` | `#D97706`      |
+| Dark  | `#121212`  | `#DCDCDC` | `#8AA7C7` | `#FBBF24`      |
 
 ---
 
@@ -73,7 +73,7 @@ See: `.ai/VERIFICATION_REQUIRED.md`
 ```
 app/                    # Pages (App Router)
   page.tsx              # Homepage
-  verified-pennies/      # Curated verified penny catalog
+  verified-pennies/      # Verified penny catalog
   store-finder/         # Store Finder
   trip-tracker/         # Trip Tracker
   guide/                # Penny Guide
@@ -91,7 +91,7 @@ public/                 # Static assets
 
 ## Critical Dec 2025 Updates
 
-### Verified Pennies (Curated)
+### Verified Pennies (Admin Verified)
 
 - **Route:** `/verified-pennies`
 - **Data:** `data/verified-pennies.json`
