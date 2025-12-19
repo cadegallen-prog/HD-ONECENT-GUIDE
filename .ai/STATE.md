@@ -36,6 +36,10 @@ Every AI session must update this after meaningful work.
   - Updated penny-list-table to use `internetNumber` for HD links
   - Flow: when Internet SKU exists, HD links go to `/p/{internetNumber}` (direct product page); otherwise falls back to `/s/{sku}` (search)
   - All 4 quality gates passing (lint, build, test:unit, test:e2e - 32/32 tests)
+- **Recent focus (Dec 19, session 3):** Verified backup merge tooling
+  - Added `scripts/merge-verified-backup.py` to upsert verified backup into consolidated CSV with dedupe `(sku + contributor_id)` and fill-blanks-only enrichment (photos, internetSku, brand/model).
+  - Notes now store `Brand=...; Model=...` (no public “Verified” label); verification kept backend-only for possible future use.
+  - Regenerated `.local/merged-sheet-import.csv` plus headerless import for Sheets (898 rows) and audit log; all gates passing post-merge (lint, build, test:unit, test:e2e 32/32).
 - **Recent focus (Dec 19, session 1):** Purchase-history import hardening (privacy-first)
   - Added a repeatable purchase-history → Google Sheet import script (no store # / no purchaser fields).
   - Added `.gitignore` rules to prevent committing purchase-history exports or generated import artifacts.

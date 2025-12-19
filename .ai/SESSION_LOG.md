@@ -11,6 +11,27 @@
 
 ---
 
+## 2025-12-19 - ChatGPT Codex - Verified Backup Merge Tool + CSV Import
+
+**AI:** ChatGPT Codex  
+**Goal:** Restore verified backup data into the Sheet import, remove public “Verified” labels, and ship a repeatable merge script/output.
+
+**Changes Made:**
+
+- Added `scripts/merge-verified-backup.py` (ASCII-clean) to merge the verified backup into `.local/consolidated-import.csv` using dedupe key `(sku + contributor_id)` and fill blanks only.
+- Regenerated `.local/merged-sheet-import.csv` (898 rows) and a headerless `.local/merged-sheet-import.noheader.csv` for direct Google Sheets paste; audit log at `.local/merge-audit.txt`.
+- Notes now store `Brand=...; Model=...` (no “Verified:” prefix) to keep verification private/back-end only; all verified items enriched with photos + internetSku.
+
+**Verification:** `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e` (32/32 passing; store-finder falls back to local data when remote 404s in tests).  
+
+**Next Session Notes:**
+
+- Keep verification private; future UI flag can be added server-side without exposing “Verified” text.  
+- Import file to Sheets: use the headerless CSV if the sheet already has headers.  
+- Dedup logic is `(sku + contributor_id)`; existing non-empty cells remain untouched by the script. 
+
+---
+
 ## 2025-12-19 - GitHub Copilot - Internet SKU Policy + Docs Alignment
 
 **AI:** GitHub Copilot
