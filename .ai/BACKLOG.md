@@ -1,6 +1,6 @@
 # Backlog (AI‑Driven, Ordered)
 
-**Last updated:** Dec 18, 2025 (post-SKU expansion)
+**Last updated:** Dec 19, 2025 (Internet SKU integration completed)
 Keep this list short and ruthless (≤10 items).
 Each AI session should:
 
@@ -14,16 +14,15 @@ Each AI session should:
 
 ## Completed Recently
 
-- **Dec 18, 2025 late:** Community-first refinement: Penny List date filter now month-based (1/3/6/12 months, default 6 months). Verified purchase dates de-emphasized (MM/DD/YY, no quantity). Removed Trending block from `/verified-pennies`.
-- **Dec 18, 2025 PM:** Purchase dates imported from CSV (603 dates across 476 SKUs). Freshness filtering added to Verified Pennies (Recent, Weeks Old, Months Old, Over 6 Months). Created client-safe freshness-utils.ts. All quality gates passing.
+- **Dec 19, 2025 (session 2):** Internet SKU integration - Added `internetNumber` field parsing from Google Sheet; SKU pages and penny-list-table now use Internet SKU for better HD product links when available.
+- **Dec 19, 2025 (session 1):** Removed `/verified-pennies` and repo-stored verified data/scripts; `/verified-pennies` now permanently redirects to `/penny-list`.
 - **Dec 18, 2025 AM:** Social sharing buttons added to penny list cards (Facebook + Copy Link). Quantity field made optional in submission form. Documentation updated to reflect actual implementation state.
 - **Dec 17, 2025:** Landing page restructured for clarity—eliminated decision fatigue by reordering sections (How It Works moved to #2), consolidating redundant CTAs, simplifying Tools section (3 equal cards), reordering navigation (Guide first), and simplifying logo (wordmark only). All 36 e2e + unit tests passing.
 - **Dec 15, 2025:** Strategic plan created for driving habitual traffic (visual engagement, verification system, SEO expansion)
 - **Dec 12, 2025:** Updated `.ai/PENNY_LIST_PLAN.md` to reflect Phase 1 shipped.
 - **Dec 12, 2025:** CI (`.github/workflows/quality.yml`) now runs lint + Playwright smoke with fixtures.
-- **Dec 16, 2025:** Added curated `/verified-pennies` route (image-first grid + search + brand filtering) and updated homepage/nav to prioritize Verified + Penny List; clarified "Verified" definition and cleaned up remaining raw Tailwind palette colors.
+- **Dec 16, 2025:** (Historical) Verified Pennies was launched; feature has since been removed in favor of a single Penny List workflow.
 - **Dec 16, 2025:** SEO improvements - Added metadata to 11 missing pages, created dynamic sitemap, created OG image template. All pages now Google-discoverable.
-- **Dec 18, 2025:** Verified penny images system (ALREADY IMPLEMENTED) - penny-list items use verified-pennies.json images as fallback when user photos are unavailable (lib/fetch-penny-data.ts lines 176-184).
 
 ---
 
@@ -36,7 +35,7 @@ Each AI session should:
 
 2. **Trending SKUs on List Pages**
 
-- Surface top SKUs on `/penny-list` (most reported) and `/verified-pennies` (most purchased) as small link blocks.
+- Surface top SKUs on `/penny-list` (most reported) as a small link block.
 - Acceptance: minimal UI, mobile-safe, links prefetch to SKU pages.
 
 3. **Trust/Freshness Signals on SKU Pages**
@@ -48,6 +47,11 @@ Each AI session should:
 
 - Add visual timeline and captioned tag examples in the existing Guide section; store assets in `/public`, reuse current layout.
 - Acceptance: responsive, alt text present, no new routes.
+
+5. **Bookmarklet image harvest (support)**
+
+- Support Cade’s plan to collect image URLs via the bookmarklet for newly added items.
+- Acceptance: ingestion stays private (no exports committed), instructions updated if tooling changes, and new images flow into Penny List/SKU pages without exposing private inputs.
 
 ---
 

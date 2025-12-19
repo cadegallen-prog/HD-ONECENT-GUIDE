@@ -3,13 +3,13 @@ import { readFile } from "node:fs/promises"
 import path from "node:path"
 import { extractStateFromLocation } from "./penny-list-utils"
 import { PLACEHOLDER_IMAGE_URL } from "./image-cache"
-import { getVerifiedPennyBySku } from "./verified-pennies"
 
 // Define the shape of your penny item
 export type PennyItem = {
   id: string
   name: string
   sku: string
+  internetNumber?: string // For better Home Depot product links (backend only, never displayed)
   price: number
   dateAdded: string
   tier: "Very Common" | "Common" | "Rare"
@@ -26,6 +26,13 @@ const FIELD_ALIASES: Record<string, string[]> = {
   email: ["email address"],
   name: ["item name", "name", "product name", "item name"],
   sku: ["home depot sku (6 or 10 digits)", "sku", "item sku", "product sku"],
+  internet_sku: [
+    "internetsku (private, backend only)",
+    "internetsku",
+    "internet_sku",
+    "internetnumber",
+    "internet number",
+  ],
   quantity: ["exact quantity found", "quantity", "qty", "quantity seen"],
   city_state: ["store (city, state)", "store", "location"],
   date_found: ["purchase date", "date found", "found date", "date"],
@@ -125,6 +132,7 @@ async function fetchPennyListRaw(): Promise<PennyItem[]> {
       if (!sku) return
 
       const name = pickField(row, "name").trim()
+      const internetSku = pickField(row, "internet_sku").trim()
       const quantity = pickField(row, "quantity").trim()
       const cityState = pickField(row, "city_state").trim()
       const dateFound = pickField(row, "date_found").trim()
@@ -146,6 +154,7 @@ async function fetchPennyListRaw(): Promise<PennyItem[]> {
           id: sku,
           name,
           sku,
+          internetNumber: internetSku || undefined,
           price: 0.01,
           dateAdded,
           status,
@@ -154,6 +163,11 @@ async function fetchPennyListRaw(): Promise<PennyItem[]> {
           notes,
           locations: {},
         }
+      }
+
+      // Update internetNumber if this row has one and we don't yet
+      if (internetSku && !grouped[sku].internetNumber) {
+        grouped[sku].internetNumber = internetSku
       }
 
       // Update latest date
@@ -174,12 +188,10 @@ async function fetchPennyListRaw(): Promise<PennyItem[]> {
     // 5. Calculate tier for each item based on aggregated data
     // Use placeholder for items without user-submitted photos
     const items: PennyItem[] = Object.values(grouped).map((item) => {
-      const verified = getVerifiedPennyBySku(item.sku)
-
       return {
         ...item,
         tier: calculateTier(item.locations),
-        imageUrl: item.imageUrl || verified?.imageUrl || PLACEHOLDER_IMAGE_URL,
+        imageUrl: item.imageUrl || PLACEHOLDER_IMAGE_URL,
       }
     })
 

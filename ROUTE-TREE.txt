@@ -21,7 +21,6 @@ Static pages (○)
 - /responsible-hunting (app/responsible-hunting/page.tsx)
 - /store-finder (app/store-finder/page.tsx)
 - /trip-tracker (app/trip-tracker/page.tsx)
-- /verified-pennies (app/verified-pennies/page.tsx)
 - /what-are-pennies (app/what-are-pennies/page.tsx)
 
 Static Generation (SSG) (●)

@@ -11,6 +11,57 @@
 
 ---
 
+## 2025-12-19 - GitHub Copilot - Internet SKU Policy + Docs Alignment
+
+**AI:** GitHub Copilot
+**Goal:** Cement the rule that the internet-SKU map is backend-only (outbound links), never displayed, kept private with SKU fallback; prep for upcoming bookmarklet image harvest.
+
+**Changes Made:**
+
+- Added backend-only internet-SKU map rule (with SKU fallback and private storage) to Copilot + Claude instructions and the STATE snapshot.
+- Updated BACKLOG with P0 items for wiring the private map on the backend and supporting Cade's bookmarklet image collection.
+- Clarified purchase-history import docs and script docstring to emphasize private map handling and fallback behavior.
+
+**Verification:** Docs-only updates; no code execution or tests run.
+
+**Next Session Notes:**
+
+- When wiring the map, keep it in env/Blob/Drive; never display internet SKU; always fall back to regular SKU links. Support Cade's image URL harvest without committing inputs.
+
+---
+
+## 2025-12-19 - GitHub Copilot - Remove Verified Pennies (Privacy + Single Source)
+
+**AI:** GitHub Copilot
+**Goal:** Remove the Verified Pennies feature and any repo-stored verified datasets/scripts; make Penny List the single source of truth; keep old URLs working via redirect.
+
+**Changes Made:**
+
+- Removed the `/verified-pennies` route and all related UI entry points (nav, homepage, command palette).
+- Removed repo-stored verified datasets and related scripts/components/tests.
+- Updated SKU pages and sitemap generation to derive only from the Community Penny List feed.
+- Added permanent redirect `/verified-pennies` → `/penny-list` (SEO-safe).
+- Updated docs to reflect the new single-source workflow.
+
+**Verification (all passing):**
+
+- `npm run lint` ✅
+- `npm run build` ✅
+- `npm run test:unit` ✅
+- `npm run test:e2e` ✅ (32 passed)
+
+**Playwright Screenshot Proof:**
+
+- `reports/playwright/proof/2025-12-19-verified-removal-proof/home.png`
+- `reports/playwright/proof/2025-12-19-verified-removal-proof/verified-redirect-to-penny-list.png`
+
+**Next Session Notes:**
+
+- Do not reintroduce verified purchase datasets into the repo (privacy).
+- Keep internet SKU mapping backend-only; UI shows regular SKU only; always fallback to SKU links.
+
+---
+
 ## 2025-12-18 - GitHub Copilot - Community-First Refinement (Time Windows + Less Noise)
 
 **AI:** GitHub Copilot

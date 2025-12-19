@@ -8,7 +8,6 @@ The official companion site for the "Home Depot One Cent Items" Facebook communi
 
 ## What It Does
 
-- **Verified Pennies** ⭐ NEW — Admin-verified catalog of confirmed penny items with product images
 - **Community Penny List (Crowdsourced Reports)** ⭐ NEW — Community-powered list of reported penny finds, updated hourly from Google Forms (no manual work)
 - **Penny Guide** — Complete reference on how clearance items reach penny status
 - **Store Finder** — Find nearby Home Depot locations with intelligent search (supports city, state name, ZIP code)
@@ -73,7 +72,6 @@ See: `.ai/VERIFICATION_REQUIRED.md`
 ```
 app/                    # Pages (App Router)
   page.tsx              # Homepage
-  verified-pennies/      # Verified penny catalog
   store-finder/         # Store Finder
   trip-tracker/         # Trip Tracker
   guide/                # Penny Guide
@@ -90,14 +88,6 @@ public/                 # Static assets
 ---
 
 ## Critical Dec 2025 Updates
-
-### Verified Pennies (Admin Verified)
-
-- **Route:** `/verified-pennies`
-- **Data:** `data/verified-pennies.json`
-- **Code:** `lib/verified-pennies.ts`, `app/verified-pennies/*`, `components/verified-penny-card.tsx`
-- **Regenerate data (from a scraped JSON input):**
-  - `tsx scripts/convert-verified-data.ts <input.json> [output.json]`
 
 ### Autonomous Penny List (Live)
 

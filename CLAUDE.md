@@ -15,12 +15,14 @@
 ## Critical Rules
 
 ### Rule #1: Verification
+
 - **All 4 tests MUST pass** (lint, build, test:unit, test:e2e)
 - **Paste output** as proof
 - **Screenshots** for UI changes (Playwright)
 - **GitHub Actions** URL if applicable
 
 ### Rule #2: Port 3001
+
 ```bash
 netstat -ano | findstr :3001
 # IF RUNNING → use it (don't kill)
@@ -28,9 +30,17 @@ netstat -ano | findstr :3001
 ```
 
 ### Rule #3: Colors
+
 - ❌ NO raw Tailwind (`blue-500`, `gray-600`)
 - ✅ USE CSS variables (`var(--cta-primary)`)
 - ✅ OR get approval first
+
+### Rule #4: Internet SKU map (backend-only)
+
+- Use the private internet-SKU map only to generate outbound Home Depot product links on the backend.
+- The UI should continue showing the regular SKU only; internet SKU must stay private.
+- Keep the map in private storage (env/Blob/Drive) and never commit it.
+- Fallback: when a mapping is missing, build links from the regular SKU.
 
 ---
 
@@ -42,6 +52,7 @@ netstat -ano | findstr :3001
 4. **Playwright** - browser testing (REQUIRED for UI)
 
 **Playwright required for:**
+
 - UI changes (buttons, forms, layouts, colors)
 - JavaScript changes (Store Finder, interactive)
 - "Bug fixed" claims (visual bugs)

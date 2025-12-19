@@ -6,6 +6,13 @@ Dates are recorded in America/New_York time.
 
 ---
 
+## 2025-12-19 - Remove Verified Pennies + Internet SKU Integration
+
+- Removed the `/verified-pennies` feature and all repo-stored verified datasets/scripts.
+- Added a permanent redirect from `/verified-pennies` to `/penny-list`.
+- SKU pages and sitemap now derive from the Community Penny List only.
+- **Internet SKU Integration:** Added `internetNumber` field parsing from Google Sheet; SKU pages and penny-list-table now use Internet SKU for better HD product links when available (falls back to SKU search when missing).
+
 ## 2025-12-15 - Store Finder Popup/Map Normalization + Screenshot Verification
 
 - Switched Store Finder to standard OpenStreetMap tiles (normal, familiar map look in both themes).

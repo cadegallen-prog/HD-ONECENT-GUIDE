@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 18, 2025 (Community-first refinement)
+**Last updated:** Dec 19, 2025 (Internet SKU integration + Verified removal commit)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -9,12 +9,16 @@ Every AI session must update this after meaningful work.
 ## 1. Where We Are
 
 - **Site:** live at https://www.pennycentral.com (Preferred canonical domain)
+- **Current policy (Dec 19):** The Verified Pennies feature was removed.
+  - `/verified-pennies` permanently redirects to `/penny-list`
+  - No repo-stored verified datasets/scripts (privacy)
+  - SKU pages + sitemap derive from the Community Penny List only
 - **Recent focus (Dec 18 PM):** Massive SEO Expansion (500+ Dynamic SKU Pages)
   - Transformed `/sku/[sku]` from a stub into a robust, SEO-optimized product detail page.
   - Implemented `generateStaticParams` to pre-render 533 unique SKU pages (SSG).
   - Added `Product` JSON-LD structured data and dynamic metadata for every SKU to capture long-tail search traffic.
   - Updated `app/sitemap.ts` to dynamically include all 500+ SKU pages.
-  - Refactored `VerifiedPennyCard` and `PennyListCard` to link internally to SKU pages instead of externally to Home Depot.
+  - Refactored Penny List cards to link internally to SKU pages instead of externally to Home Depot.
   - All 4 quality gates passing (lint, build, test:unit, test:e2e - 40/40 tests).
 - **Recent focus (Dec 18 late):** Post-SKU uplift (internal recirculation + trust)
   - Added related SKUs on SKU pages (brand/overall fallbacks) to keep users on-site.
@@ -23,17 +27,23 @@ Every AI session must update this after meaningful work.
   - All 4 quality gates passing after changes (lint, build, test:unit, test:e2e - 40/40).
 - **Recent focus (Dec 18 late):** Community-first refinement (less noise, more digestible)
   - Community Penny List time window filter is now month-based (1/3/6/12 months) with default = 6 months.
-  - Verified purchase dates are de-emphasized (subtle MM/DD/YY, no “× found” counts).
-  - Removed Trending from `/verified-pennies` (trending is a community-first signal).
+  - Freshness badge remains a trust signal on SKU pages.
   - All 4 quality gates passing after changes (lint, build, test:unit, test:e2e - 40/40).
-- **Recent focus (Dec 18 PM):** Purchase dates + freshness filtering
-  - Imported 603 purchase dates from CSV across 476 verified pennies
-  - Added freshness filtering: Recent (<2wk), Weeks Old (2wk-2mo), Months Old (2-6mo), Over 6 Months
-  - Created client-safe [lib/freshness-utils.ts](lib/freshness-utils.ts) (fixed node:fs import issue in client components)
-  - Updated [app/verified-pennies/verified-pennies-client.tsx](app/verified-pennies/verified-pennies-client.tsx) filters/sorts
-  - Updated [components/verified-penny-card.tsx](components/verified-penny-card.tsx) to display purchase date (now de-emphasized)
-  - Purchase history parser: [scripts/add-purchase-dates.ts](scripts/add-purchase-dates.ts)
-  - All 4 quality gates passing (lint, build, test:unit, test:e2e - 40/40 tests)
+- **Recent focus (Dec 19, session 2):** Internet SKU integration
+  - Added `internetNumber` field to `PennyItem` type in `lib/fetch-penny-data.ts`
+  - Added field aliases for parsing `internetSku` column from Google Sheet CSV
+  - Updated SKU page (`app/sku/[sku]/page.tsx`) to pass `internetNumber` to `getHomeDepotProductUrl()`
+  - Updated penny-list-table to use `internetNumber` for HD links
+  - Flow: when Internet SKU exists, HD links go to `/p/{internetNumber}` (direct product page); otherwise falls back to `/s/{sku}` (search)
+  - All 4 quality gates passing (lint, build, test:unit, test:e2e - 32/32 tests)
+- **Recent focus (Dec 19, session 1):** Purchase-history import hardening (privacy-first)
+  - Added a repeatable purchase-history → Google Sheet import script (no store # / no purchaser fields).
+  - Added `.gitignore` rules to prevent committing purchase-history exports or generated import artifacts.
+  - Internet SKU map policy: backend-only for outbound Home Depot links, never displayed; store privately (env/Blob/Drive); always fall back to regular SKU links when a mapping is missing.
+  - Upcoming: Cade will gather product image URLs via bookmarklet for newly added items; keep using private inputs only.
+- **Recent focus (Dec 18 PM):** Purchase dates + freshness filtering (historical)
+  - Freshness utilities remain in use for SKU trust signals.
+  - Verified-purchase-date pipeline and related scripts were removed alongside the Verified Pennies feature.
 - **Phase:** Stabilization + SEO Optimization
 - **SEO Status:** Resolved "Redirect errors" in Google Search Console and implemented Rich Snippets.
   - **Canonical Domain:** Standardized on `www.pennycentral.com` across metadata and sitemap.
@@ -44,8 +54,8 @@ Every AI session must update this after meaningful work.
   - **Keyword Optimization:** Refined meta titles for high-intent keywords ("Home Depot Penny List").
 - **Traffic reality:** early launch volatility is normal; focus on retention loop first.
 - **Recent focus (Dec 18):** Finalized tool naming and clarity.
-  - Standardized labels: **Verified Pennies**, **Community Penny List**, **Store Finder** across nav, homepage CTAs/cards, footer, command palette, badges/pills.
-  - Updated `/verified-pennies` and `/penny-list` metadata/headings for SEO clarity; adjusted visual smoke headings and README docs.
+  - Standardized labels across nav + homepage CTAs/cards.
+  - Updated Penny List metadata/headings for SEO clarity; adjusted visual smoke headings and README docs.
   - CTA palette softened to reduce halation (desaturated slate blue); dark mode CTA now uses dark text on a lighter CTA surface for comfort + AAA contrast.
   - Fixed CI axe `color-contrast` failures in dark mode by removing a global “force white text on CTA” override; CTA elements now inherit `var(--cta-text)` as intended.
   - Removed redundant "Read the full guide" link on desktop (kept mobile-only).
@@ -107,9 +117,7 @@ Every AI session must update this after meaningful work.
 - **Crowd Reports system is live:**
   - `/report-find` posts to Google Sheet via Apps Script.
   - `/penny-list` pulls hourly, aggregates by SKU, counts by state, auto‑tiers.
-- **Verified Pennies database is live (curated):**
-  - `/verified-pennies` serves a curated catalog of confirmed penny items with product images.
-  - This is additive to Community Reports (does not replace the crowdsourced loop).
+- **Verified Pennies removed:** `/verified-pennies` permanently redirects to `/penny-list`.
 - **OpenGraph previews are solid:** `GET /api/og?headline=...&v=1` generates minimal OG images; key routes set clear, route-specific headlines (Guide, Curated, Penny List, Store Finder, Report a Find). (CDN cache is now 1h with SWR; bump `v` to bust.)
 - **Command reliability (Dec 15, 12:30 PM):**
   - All local scripts (`lint:colors`, `test:unit`, `check-axe`, `check-contrast`) now exit cleanly without hanging

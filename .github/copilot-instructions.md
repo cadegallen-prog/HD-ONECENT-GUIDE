@@ -14,12 +14,14 @@
 ## Critical Rules
 
 ### Rule #1: Verification
+
 - **All 4 tests MUST pass** (lint, build, test:unit, test:e2e)
 - **Paste output** as proof
 - **Screenshots** for UI changes (Playwright)
 - **GitHub Actions** URL if applicable
 
 ### Rule #2: Port 3001
+
 ```bash
 netstat -ano | findstr :3001
 # IF RUNNING → use it (don't kill)
@@ -27,9 +29,17 @@ netstat -ano | findstr :3001
 ```
 
 ### Rule #3: Colors
+
 - ❌ NO raw Tailwind (`blue-500`, `gray-600`)
 - ✅ USE CSS variables (`var(--cta-primary)`)
 - ✅ OR get approval first
+
+### Rule #4: Internet SKU map (backend-only)
+
+- Use the **private internet-SKU → product URL map** only on the backend to generate outbound Home Depot links.
+- UI displays the regular SKU only; never surface internet SKU publicly.
+- Store the map in private storage (env var, Vercel Blob, private Drive) and never commit it.
+- Always fall back to the regular SKU-based link when a mapping is missing.
 
 ---
 
@@ -41,6 +51,7 @@ netstat -ano | findstr :3001
 4. **Playwright** - browser testing (REQUIRED for UI)
 
 **Playwright required for:**
+
 - UI changes (buttons, forms, layouts, colors)
 - JavaScript changes (Store Finder, interactive)
 - "Bug fixed" claims (visual bugs)
@@ -65,6 +76,7 @@ npm run test:e2e    # all passing
 Technical co-founder. Founder can't code.
 
 **Your job:**
+
 1. Write working code (no stubs)
 2. **Verify before claiming done** (tests, screenshots, proof)
 3. Push back when needed
@@ -97,11 +109,13 @@ Technical co-founder. Founder can't code.
 **Signs:** "Tests failed again", "Same colors", "You said done but broken"
 
 **Usually means:**
+
 - You didn't run tests
 - You used generic colors (again)
 - You didn't verify
 
 **Response:**
+
 1. Acknowledge frustration
 2. **Actually verify** (run tests, take screenshots)
 3. Show proof

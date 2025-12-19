@@ -23,6 +23,11 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: "/verified-pennies",
+        destination: "/penny-list",
+        permanent: true,
+      },
+      {
         source: "/what-are-pennies",
         destination: "/guide#introduction",
         permanent: true,

@@ -1,13 +1,12 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { MapPin, Calendar, BadgeCheck, ExternalLink, ShoppingBag } from "lucide-react"
+import { MapPin, Calendar, ExternalLink, ShoppingBag } from "lucide-react"
 import { getPennyList } from "@/lib/fetch-penny-data"
 import { filterValidPennyItems, formatRelativeDate } from "@/lib/penny-list-utils"
 import { validateSku } from "@/lib/sku"
-import { getVerifiedPennyBySku, getVerifiedPennies } from "@/lib/verified-pennies"
 import { getHomeDepotProductUrl } from "@/lib/home-depot"
-import { getLatestDateFromArray, getFreshness } from "@/lib/freshness-utils"
+import { getFreshness } from "@/lib/freshness-utils"
 import { ogImageUrl } from "@/lib/og"
 
 type PageProps = {
@@ -15,14 +14,9 @@ type PageProps = {
 }
 
 export async function generateStaticParams() {
-  const verifiedItems = getVerifiedPennies()
   const communityItems = filterValidPennyItems(await getPennyList())
 
-  // Combine all unique SKUs
-  const allSkus = new Set([
-    ...verifiedItems.map((item) => item.sku),
-    ...communityItems.map((item) => item.sku),
-  ])
+  const allSkus = new Set(communityItems.map((item) => item.sku))
 
   return Array.from(allSkus).map((sku) => ({
     sku,
@@ -35,14 +29,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (skuCheck.error) return { title: "Invalid SKU" }
 
   const sku = skuCheck.normalized
-  const verifiedItem = getVerifiedPennyBySku(sku)
   const communityItems = filterValidPennyItems(await getPennyList())
   const communityItem = communityItems.find((i) => i.sku === sku)
 
-  const name = verifiedItem?.name || communityItem?.name || `SKU ${sku}`
-  const description = verifiedItem
-    ? `Verified Home Depot penny item: ${name}. SKU ${sku}. See photos and verification details.`
-    : `Community-reported Home Depot penny lead for ${name}. SKU ${sku}. Verify in store — YMMV.`
+  const name = communityItem?.name || `SKU ${sku}`
+  const description = `Community-reported Home Depot penny lead for ${name}. SKU ${sku}. Verify in store — YMMV.`
 
   return {
     title: `${name} - Home Depot Penny Item SKU ${sku} | Penny Central`,
@@ -65,30 +56,26 @@ export default async function SkuDetailPage({ params }: PageProps) {
   if (skuCheck.error) notFound()
 
   const sku = skuCheck.normalized
-  const verifiedItems = getVerifiedPennies()
-  const verifiedItem = getVerifiedPennyBySku(sku)
   const communityItems = filterValidPennyItems(await getPennyList())
   const communityItem = communityItems.find((i) => i.sku === sku)
 
-  if (!verifiedItem && !communityItem) notFound()
+  if (!communityItem) notFound()
 
   // Merge data
-  const name = verifiedItem?.name || communityItem?.name || "Unknown Item"
-  const imageUrl = verifiedItem?.imageUrl || communityItem?.imageUrl
-  const brand = verifiedItem?.brand
-  const internetNumber = verifiedItem?.internetNumber
+  const name = communityItem.name || "Unknown Item"
+  const imageUrl = communityItem.imageUrl
+  const brand = (communityItem as { brand?: string }).brand
+  const internetNumber = communityItem.internetNumber
 
-  const homeDepotUrl = getHomeDepotProductUrl({
-    sku,
-    internetNumber,
-  })
+  // Use internetNumber for better product links when available, fallback to SKU search
+  const homeDepotUrl = getHomeDepotProductUrl({ sku, internetNumber })
 
-  const totalReports = communityItem?.locations
+  const totalReports = communityItem.locations
     ? Object.values(communityItem.locations).reduce((sum, count) => sum + count, 0)
     : 0
-  const stateCount = communityItem?.locations ? Object.keys(communityItem.locations).length : 0
+  const stateCount = communityItem.locations ? Object.keys(communityItem.locations).length : 0
 
-  const latestDate = verifiedItem ? getLatestDateFromArray(verifiedItem.purchaseDates) : null
+  const latestDate = communityItem.dateAdded || null
   const freshness = latestDate ? getFreshness(latestDate) : null
 
   const latestDateLabel = latestDate
@@ -112,9 +99,7 @@ export default async function SkuDetailPage({ params }: PageProps) {
     "@type": "Product",
     name: name,
     image: imageUrl,
-    description: verifiedItem
-      ? `Verified Home Depot penny item: ${name}.`
-      : `Community-reported Home Depot penny lead for ${name}.`,
+    description: `Community-reported Home Depot penny lead for ${name}.`,
     sku: sku,
     brand: {
       "@type": "Brand",
@@ -133,20 +118,14 @@ export default async function SkuDetailPage({ params }: PageProps) {
   const relatedItems = (() => {
     type Related = { sku: string; name: string; brand?: string; imageUrl?: string | null }
 
-    const pool: Related[] = [
-      ...verifiedItems.map((item) => ({
-        sku: item.sku,
-        name: item.name,
-        brand: item.brand,
-        imageUrl: item.imageUrl,
-      })),
-      ...communityItems.map((item) => ({
+    const pool: Related[] = communityItems
+      .map((item) => ({
         sku: item.sku,
         name: item.name,
         brand: (item as { brand?: string }).brand,
         imageUrl: (item as { imageUrl?: string | null }).imageUrl,
-      })),
-    ].filter((item) => item.sku !== sku)
+      }))
+      .filter((item) => item.sku !== sku)
     const normalizedBrand = brand?.toLowerCase()
     const byBrand = normalizedBrand
       ? pool.filter((item) => item.brand && item.brand.toLowerCase() === normalizedBrand)
@@ -180,7 +159,7 @@ export default async function SkuDetailPage({ params }: PageProps) {
       <div className="container-wide max-w-4xl mx-auto">
         <nav className="mb-6">
           <Link
-            href="/verified-pennies"
+            href="/penny-list"
             className="text-sm text-[var(--cta-primary)] hover:underline inline-flex items-center gap-1"
           >
             ← Back to Browse
@@ -219,13 +198,6 @@ export default async function SkuDetailPage({ params }: PageProps) {
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[var(--text-primary)] leading-tight mb-4">
                   {name}
                 </h1>
-
-                {verifiedItem && (
-                  <div className="text-xs text-[var(--text-muted)] mb-2 inline-flex items-center gap-2">
-                    <BadgeCheck className="w-4 h-4 opacity-60" aria-hidden="true" />
-                    <span className="sr-only">Verified item</span>
-                  </div>
-                )}
 
                 {freshness && (
                   <div className="flex items-center gap-2 mb-4">

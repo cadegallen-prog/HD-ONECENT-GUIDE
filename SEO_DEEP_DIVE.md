@@ -32,7 +32,7 @@ Implemented structured data to help Google understand the content and display en
 
 - **HowTo Schema**: Added to the Guide page to show step-by-step instructions in search results.
 - **FAQPage Schema**: Added to the Guide page (with visible FAQ section) to trigger dropdowns in SERPs.
-- **BreadcrumbList Schema**: Added to all major pages (`/guide`, `/penny-list`, `/verified-pennies`) to show the site hierarchy in search results.
+- **BreadcrumbList Schema**: Added to all major pages (`/guide`, `/penny-list`) to show the site hierarchy in search results.
 
 ## 5. Meta Optimization
 
@@ -43,15 +43,15 @@ Implemented structured data to help Google understand the content and display en
 ## 6. Internal Linking
 
 - Added a "Ready to hunt?" CTA at the bottom of the Guide to link to the Penny List.
-- Added a "New to penny hunting?" link on the Penny List and Verified Pennies pages to guide users back to the educational content.
+- Added a "New to penny hunting?" link on the Penny List to guide users back to the educational content.
 - **Result**: Creates a "loop" that keeps users on the site and helps Google discover related content.
 
 ## 7. Massive SKU Expansion (Product Directory)
 
 - **Strategy**: Transformed the `/sku/[sku]` route from a simple lookup stub into a full-fledged product detail page for every item in our database.
-- **Scale**: Generated **533 individual static pages** (SSG) during build, one for each verified and community penny item.
+- **Scale**: Generated **500+ individual static pages** (SSG) during build, one for each community penny item.
 - **Structured Data**: Implemented `Product` JSON-LD on every SKU page to enable rich snippets (price, availability, images) in Google Search.
-- **Internal Linking**: Refactored `VerifiedPennyCard` and `PennyListCard` to link internally to these new SKU pages instead of sending users directly to Home Depot. This keeps users on our domain and passes link equity to our own long-tail pages.
+- **Internal Linking**: Refactored Penny List cards to link internally to these SKU pages instead of sending users directly to Home Depot. This keeps users on our domain and passes link equity to our own long-tail pages.
 - **Result**: Significantly increases the site's "surface area" for long-tail search queries (e.g., "Home Depot Penny Item 100613231").
 
 ## Verification

@@ -2,7 +2,7 @@
  * Image Cache - Simplified
  *
  * Returns placeholder for items without images.
- * Verified items get their images from verified-pennies.json
+ * Real images come from user-submitted photos in the Penny List.
  */
 
 /**
@@ -12,7 +12,7 @@ export const PLACEHOLDER_IMAGE_URL = "/images/hd-product-placeholder.svg"
 
 /**
  * Get product image - returns placeholder
- * Real images come from verified-pennies.json data
+ * Real images come from user-submitted photos in the Penny List.
  */
 export function getProductImage(): string {
   return PLACEHOLDER_IMAGE_URL
@@ -20,7 +20,7 @@ export function getProductImage(): string {
 
 /**
  * Batch get images - returns placeholders
- * Real images come from verified-pennies.json data
+ * Real images come from user-submitted photos in the Penny List.
  */
 export function getProductImageBatch(skus: string[]): Map<string, string> {
   const results = new Map<string, string>()

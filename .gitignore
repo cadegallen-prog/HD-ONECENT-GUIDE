@@ -50,3 +50,17 @@ next-env.d.ts
 .cache/
 
 .playwright-mcp/
+
+# privacy: never commit purchase-history exports or derived datasets
+**/*purchase*history*.csv
+**/*purchase_history*.csv
+**/*penny*export*.csv
+**/*penny exports*/
+**/*penny exports*/*
+**/*receipt*.csv
+
+# privacy: generated import artifacts (keep local)
+.local/
+data/penny-list-manual.json
+data/purchase-history-*.json
+data/purchase-history-*.csv

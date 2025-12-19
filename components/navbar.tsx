@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Map, User, Moon, Sun, Book, Menu, X, Users, BadgeCheck } from "lucide-react"
+import { Map, User, Moon, Sun, Book, Menu, X, Users } from "lucide-react"
 import { useTheme } from "@/components/theme-provider"
 
 export function Navbar() {
@@ -20,7 +20,6 @@ export function Navbar() {
 
   const navItems = [
     { href: "/guide", label: "Guide", icon: Book },
-    { href: "/verified-pennies", label: "Verified Pennies", icon: BadgeCheck },
     { href: "/penny-list", label: "Penny List", icon: Users },
     { href: "/store-finder", label: "Store Finder", icon: Map },
     { href: "/about", label: "About", icon: User },

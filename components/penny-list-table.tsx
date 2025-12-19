@@ -200,7 +200,10 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
                     .sort(([, a], [, b]) => b - a)
                     .slice(0, 3)
                 : []
-              const homeDepotUrl = getHomeDepotProductUrl({ sku: item.sku })
+              const homeDepotUrl = getHomeDepotProductUrl({
+                sku: item.sku,
+                internetNumber: item.internetNumber,
+              })
 
               const openHomeDepot = () => window.open(homeDepotUrl, "_blank", "noopener,noreferrer")
 

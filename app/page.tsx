@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { BookOpen, ExternalLink, Heart, DollarSign, Users, BadgeCheck, Map } from "lucide-react"
+import { BookOpen, ExternalLink, Heart, DollarSign, Users, Map } from "lucide-react"
 import {
   COMMUNITY_MEMBER_COUNT_DISPLAY,
   FACEBOOK_GROUP_URL,
@@ -80,11 +80,11 @@ export default function Home() {
               Read the Guide
             </Link>
             <Link
-              href="/verified-pennies"
+              href="/penny-list"
               className="btn-secondary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg border-2 border-[var(--border-default)] dark:border-[var(--border-strong)] bg-transparent text-[var(--text-primary)] font-semibold hover:bg-[var(--bg-elevated)] hover:border-[var(--border-strong)] dark:hover:bg-[var(--bg-elevated)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
             >
-              <BadgeCheck className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
-              Browse Verified Pennies
+              <Users className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
+              Browse Penny List
             </Link>
           </div>
 
@@ -202,24 +202,8 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Tool cards grid - 3 tools */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-            {/* Verified Pennies Card */}
-            <Link
-              href="/verified-pennies"
-              className="card-interactive group flex flex-col bg-[var(--bg-elevated)] rounded-xl p-6 border border-[var(--border-default)]"
-            >
-              <div className="w-12 h-12 rounded-xl bg-[var(--bg-page)] border border-[var(--border-default)] flex items-center justify-center mb-4">
-                <BadgeCheck className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
-              </div>
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
-                Verified Pennies
-              </h3>
-              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed flex-grow">
-                Admin-verified items with photos. Confirmed penny deals.
-              </p>
-            </Link>
-
+          {/* Tool cards grid - 2 tools */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
             {/* Penny List Card */}
             <Link
               href="/penny-list"
