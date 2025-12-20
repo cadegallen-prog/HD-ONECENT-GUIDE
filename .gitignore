@@ -39,6 +39,7 @@ data/home-depot-stores.json
 
 # local experiments / scratch
 experimental_scraper/
+Experimental_archive_test_pic_iteratation/
 nul
 archive/
 
