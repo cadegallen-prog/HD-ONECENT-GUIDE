@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 20, 2025 (Privacy cleanup + Sheet enrichment workflow)
+**Last updated:** Dec 20, 2025 (Privacy cleanup + CI contrast fix)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 

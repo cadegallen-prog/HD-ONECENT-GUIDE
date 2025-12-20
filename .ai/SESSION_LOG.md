@@ -11,6 +11,26 @@
 
 ---
 
+## 2025-12-20 - ChatGPT Codex - Fix CI Contrast Check (Theme Forcing)
+
+**AI:** ChatGPT Codex  
+**Goal:** Fix GitHub Actions failure where `npm run check-contrast` reported a false contrast failure on `/penny-list` in dark mode.
+
+**Root Cause:**
+
+- The contrast script tried to force dark mode by toggling the `dark` class on `<html>`, but the site’s ThemeProvider re-applied the stored/system theme after hydration, sometimes overriding the manual toggle during the scan.
+
+**Fix:**
+
+- `scripts/check-contrast.js`: force theme via `localStorage.setItem("theme", ...)` using `page.addInitScript()` before navigation, then wait for ThemeProvider to apply the theme class.
+
+**Outcome:** ✅ Success
+
+**Verification:**
+
+- `npm run check-contrast` (passes locally)
+- GitHub Actions “Quality Checks” should turn green on the next push
+
 ## 2025-12-20 - ChatGPT Codex - Privacy Cleanup + Enrichment Import Helper
 
 **AI:** ChatGPT Codex  

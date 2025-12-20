@@ -78,23 +78,30 @@ async function run() {
         throw new Error(`Timed out after ${HARD_TIMEOUT_MS}ms`)
       }
 
-      const page = await browser.newPage()
-      page.setDefaultTimeout(NAV_TIMEOUT_MS)
-      page.setDefaultNavigationTimeout(NAV_TIMEOUT_MS)
       const url = `${BASE_URL}${route}`
-      // Avoid "networkidle" because some routes (maps, analytics, etc.) can keep connections open.
-      await page.goto(url, { waitUntil: "domcontentloaded", timeout: NAV_TIMEOUT_MS })
-
       for (const theme of ["light", "dark"]) {
-        // Force theme by toggling class on root; adjust if theme storage differs.
-        await page.evaluate((nextTheme) => {
-          const root = document.documentElement
-          if (nextTheme === "dark") {
-            root.classList.add("dark")
-          } else {
-            root.classList.remove("dark")
+        const page = await browser.newPage()
+        page.setDefaultTimeout(NAV_TIMEOUT_MS)
+        page.setDefaultNavigationTimeout(NAV_TIMEOUT_MS)
+
+        // Force theme in the same way the app does (ThemeProvider reads localStorage("theme")).
+        await page.addInitScript((nextTheme) => {
+          try {
+            window.localStorage.setItem("theme", nextTheme)
+          } catch {
+            // ignore storage failures
           }
         }, theme)
+
+        // Avoid "networkidle" because some routes (maps, analytics, etc.) can keep connections open.
+        await page.goto(url, { waitUntil: "domcontentloaded", timeout: NAV_TIMEOUT_MS })
+
+        // Wait for ThemeProvider to apply the class (prevents it from "fighting" manual toggles).
+        await page.waitForFunction(
+          (nextTheme) => document.documentElement.classList.contains(nextTheme),
+          theme,
+          { timeout: 5000 }
+        )
 
         for (const sel of selectors) {
           const styles = await getStyles(page, sel.selector)
@@ -147,8 +154,9 @@ async function run() {
             pass: ratio >= threshold,
           })
         }
+
+        await page.close()
       }
-      await page.close()
     }
   } finally {
     await browser.close()

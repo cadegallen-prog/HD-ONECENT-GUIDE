@@ -10,6 +10,7 @@ Dates are recorded in America/New_York time.
 
 - Removed tracked files/content that leaked local machine paths (Windows username), and ignored the stray local Lighthouse output going forward.
 - Removed committed Google Form short-links from docs and clarified that the website submission flow does not depend on Google Forms.
+- Fixed GitHub Actions contrast gate to force the site theme via localStorage (avoids false dark-mode contrast failures during hydration).
 
 ## 2025-12-20 - Canonical enrichment headers + safe overlays
 
