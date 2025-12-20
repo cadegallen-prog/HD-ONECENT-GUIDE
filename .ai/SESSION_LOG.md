@@ -11,6 +11,39 @@
 
 ---
 
+## 2025-12-20 - ChatGPT Codex - Privacy Cleanup + Enrichment Import Helper
+
+**AI:** ChatGPT Codex  
+**Goal:** Ensure the repo contains no personal-identifying local paths and provide a safe enrichment-only CSV Cade can import into Google Sheets.
+
+**Changes Made:**
+
+- Removed/redacted Windows username paths in tracked docs:
+  - `LAUNCH_NOTES.md` (generic `C:\\path\\to\\...` example)
+  - `COMPONENT-TREE.txt` (converted to repo-relative paths)
+  - `.ai/MCP_SERVERS.md` (switched to `%APPDATA%` path)
+- Removed a tracked local Lighthouse report that embedded machine paths:
+  - Deleted `lighthouse-mobile.json` and added it to `.gitignore`.
+- Removed committed Google Form short-links and updated docs to reduce confusion:
+  - `docs/GOOGLE-FORM-SETUP.md` now keeps the form URL private and clarifies the website does not use Google Forms for submissions.
+  - Replaced `docs/CROWDSOURCE-SYSTEM.md` with an accurate description of the current live flow (Report a Find → Sheet → Penny List).
+- Generated a safe enrichment-only import file (not committed):
+  - `.local/enrichment-upload.csv` (SKU + `IMAGE URL` + `INTERNET SKU`), derived from `.local/merged-sheet-import.noheader.csv`.
+
+**Outcome:** ✅ Success
+
+**Verification (all passing):**
+
+- `npm run lint` (0 errors)
+- `npm run build` (success)
+- `npm run test:unit` (9/9 passing)
+- `npm run test:e2e` (32/32 passing)
+- `node scripts/security-scan-no-pii.mjs` (no findings)
+
+**Next Session Notes:**
+
+- If the repo is public and you want to remove the old PII from *git history*, you’ll need a history rewrite (more invasive than a normal commit).
+
 ## 2025-12-20 - GitHub Copilot - OG Image Font Embedding
 
 **AI:** GitHub Copilot  
@@ -25,6 +58,7 @@
 **Outcome:** ✅ Success - OG endpoint generates images with Inter font; all quality gates pass.
 
 **Verification (all passing):**
+
 - `npm run lint` (0 errors)
 - `npm run build` (success)
 - `npm run test:unit` (9/9 passing)
@@ -32,10 +66,12 @@
 - Local OG test: `curl http://localhost:3001/api/og?headline=Penny%20List&v=5` generates image successfully.
 
 **Learnings:**
+
 - WOFF2 embedding works in this Next.js/ImageResponse setup (previous attempt may have had env differences).
 - Inter is free under SIL OFL; no licensing fees required.
 
 **Next Session Notes:**
+
 - Deploy to production and test Facebook Sharing Debugger to confirm improved previews.
 - If WOFF2 issues recur in prod, consider TTF fallback.
 
@@ -52,6 +88,7 @@
 **Outcome:** ✅ Success
 
 **Verification (all passing):**
+
 - `npm run lint` (0 errors)
 - `npm run build` (success)
 - `npm run test:unit` (3/3 passing)
@@ -102,13 +139,13 @@
 - Regenerated `.local/merged-sheet-import.csv` (898 rows) and a headerless `.local/merged-sheet-import.noheader.csv` for direct Google Sheets paste; audit log at `.local/merge-audit.txt`.
 - Notes now store `Brand=...; Model=...` (no “Verified:” prefix) to keep verification private/back-end only; all verified items enriched with photos + internetSku.
 
-**Verification:** `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e` (32/32 passing; store-finder falls back to local data when remote 404s in tests).  
+**Verification:** `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e` (32/32 passing; store-finder falls back to local data when remote 404s in tests).
 
 **Next Session Notes:**
 
-- Keep verification private; future UI flag can be added server-side without exposing “Verified” text.  
-- Import file to Sheets: use the headerless CSV if the sheet already has headers.  
-- Dedup logic is `(sku + contributor_id)`; existing non-empty cells remain untouched by the script. 
+- Keep verification private; future UI flag can be added server-side without exposing “Verified” text.
+- Import file to Sheets: use the headerless CSV if the sheet already has headers.
+- Dedup logic is `(sku + contributor_id)`; existing non-empty cells remain untouched by the script.
 
 ---
 
@@ -2779,12 +2816,14 @@ If continuing [Unfinished Item 2], copy-paste:
 **Goal:** Lock enrichment fields to owner-only while keeping penny list links/images upgradeable via Sheet.
 
 **Changes:**
+
 - Standardized sheet headers to `IMAGE URL` + `INTERNET SKU`; parser now prefers these, reuses the first non-empty image per SKU, and optionally overlays a dedicated enrichment tab via `GOOGLE_SHEET_ENRICHMENT_URL` without overwriting community rows.
 - Submit API switched to `.strip()` and always blanks the enrichment columns so tampered payloads cannot set IMAGE/INTERNET data; added a unit test to verify the Apps Script payload stays blanked.
 - Penny list thumbnails now render the placeholder asset when IMAGE URL is missing; Home Depot links prefer INTERNET SKU and fall back to SKU search; added unit tests for both fallbacks.
 - Added `scripts/enrichment-json-to-csv.ts` to turn Cade’s bookmark JSON into a CSV with canonical headers for an enrichment tab, and updated docs (HOW-CADE-ADDS-STOCK-PHOTOS, GOOGLE-FORM-SETUP, PURCHASE-HISTORY-IMPORT, README, CHANGELOG).
 
 **Verification:**
+
 - `npm run lint` ✔
 - `npm run build` ✔
 - `npm run test:unit` ✔

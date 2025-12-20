@@ -145,7 +145,7 @@ This project focuses on **outcomes** (does the code work?) not **process complia
 
 **ChatGPT Codex:** `~/.codex/config.toml`
 
-**Claude Code / GitHub Copilot:** `C:\Users\cadeg\AppData\Roaming\Code\User\mcp.json`
+**Claude Code / GitHub Copilot:** `%APPDATA%\\Code\\User\\mcp.json`
 
 ---
 

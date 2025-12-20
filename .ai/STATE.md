@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 20, 2025 (Canonical IMAGE URL / INTERNET SKU + enrichment overlay)
+**Last updated:** Dec 20, 2025 (Privacy cleanup + Sheet enrichment workflow)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -23,6 +23,7 @@ Every AI session must update this after meaningful work.
   - Submit API strips tampered enrichment fields and forces blank IMAGE/INTERNET columns on community submissions.
   - Penny list thumbnails now render the placeholder asset when IMAGE URL is missing; Home Depot links prefer INTERNET SKU and fall back to SKU search.
   - Added `scripts/enrichment-json-to-csv.ts` plus docs for Cade’s bookmark JSON → Sheet import flow.
+  - Privacy cleanup: removed tracked local-path artifacts and removed committed Google Form short-links.
 - **Recent focus (Dec 18 PM):** Massive SEO Expansion (500+ Dynamic SKU Pages)
   - Transformed `/sku/[sku]` from a stub into a robust, SEO-optimized product detail page.
   - Implemented `generateStaticParams` to pre-render 533 unique SKU pages (SSG).
@@ -63,7 +64,7 @@ Every AI session must update this after meaningful work.
 - **Recent focus (Dec 19, session 1):** Purchase-history import hardening (privacy-first)
   - Added a repeatable purchase-history → Google Sheet import script (no store # / no purchaser fields).
   - Added `.gitignore` rules to prevent committing purchase-history exports or generated import artifacts.
-  - Added `--force-state` option for purchase-history exports whose filenames do not encode the state (e.g., Home Depot “Purchase_History_...” downloads).
+  - Added `--force-state` option for purchase-history exports whose filenames do not encode the state (e.g., Home Depot “Purchase*History*...” downloads).
   - Internet SKU map policy: backend-only for outbound Home Depot links, never displayed; store privately (env/Blob/Drive); always fall back to regular SKU links when a mapping is missing.
   - Upcoming: Cade will gather product image URLs via bookmarklet for newly added items; keep using private inputs only.
 - **Recent focus (Dec 18 PM):** Purchase dates + freshness filtering (historical)

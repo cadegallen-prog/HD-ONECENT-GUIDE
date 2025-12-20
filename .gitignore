@@ -64,3 +64,6 @@ next-env.d.ts
 data/penny-list-manual.json
 data/purchase-history-*.json
 data/purchase-history-*.csv
+
+# privacy: local Lighthouse runs can include machine paths
+lighthouse-mobile.json

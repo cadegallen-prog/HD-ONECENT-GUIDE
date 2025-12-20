@@ -75,7 +75,7 @@ location: https://www.befrugal.com/rs/NJIKJUB/
 ### Step 1: Build
 
 ```bash
-cd c:\Users\cadeg\Projects\HD-ONECENT-GUIDE
+cd C:\path\to\HD-ONECENT-GUIDE
 npm run build
 ```
 

@@ -6,6 +6,11 @@ Dates are recorded in America/New_York time.
 
 ---
 
+## 2025-12-20 - Privacy cleanup (no local paths in repo)
+
+- Removed tracked files/content that leaked local machine paths (Windows username), and ignored the stray local Lighthouse output going forward.
+- Removed committed Google Form short-links from docs and clarified that the website submission flow does not depend on Google Forms.
+
 ## 2025-12-20 - Canonical enrichment headers + safe overlays
 
 - Standardized the Google Sheet enrichment headers to `IMAGE URL` and `INTERNET SKU` (legacy photo/upload column names removed). Parsing now prefers these canonical labels and merges an optional `GOOGLE_SHEET_ENRICHMENT_URL` tab by SKU without overwriting community data.
