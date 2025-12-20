@@ -1,16 +1,16 @@
 "use client"
 
-import Link from "next/link"
 import { ArrowUpDown, ArrowUp, ArrowDown, Copy, Check } from "lucide-react"
 import { useState } from "react"
 import type { KeyboardEvent } from "react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { US_STATES } from "@/lib/us-states"
 import { formatRelativeDate } from "@/lib/penny-list-utils"
 import { PennyThumbnail } from "@/components/penny-thumbnail"
 import type { PennyItem } from "@/lib/fetch-penny-data"
 import type { SortOption } from "./penny-list-filters"
 import { trackEvent } from "@/lib/analytics"
-import { getHomeDepotProductUrl } from "@/lib/home-depot"
 
 interface PennyListTableProps {
   items: (PennyItem & { parsedDate?: Date | null })[]
@@ -118,6 +118,8 @@ function TierBadge({ tier }: { tier?: string }) {
 }
 
 export function PennyListTable({ items, sortOption, onSortChange }: PennyListTableProps) {
+  const router = useRouter()
+
   return (
     <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl overflow-hidden">
       {/* Mobile scroll hint */}
@@ -200,17 +202,14 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
                     .sort(([, a], [, b]) => b - a)
                     .slice(0, 3)
                 : []
-              const homeDepotUrl = getHomeDepotProductUrl({
-                sku: item.sku,
-                internetNumber: item.internetNumber,
-              })
+              const skuPageUrl = `/sku/${item.sku}`
 
-              const openHomeDepot = () => window.open(homeDepotUrl, "_blank", "noopener,noreferrer")
+              const openSkuPage = () => router.push(skuPageUrl)
 
               const handleRowKeyDown = (event: KeyboardEvent<HTMLTableRowElement>) => {
                 if (event.key === "Enter" || event.key === " ") {
                   event.preventDefault()
-                  openHomeDepot()
+                  openSkuPage()
                 }
               }
 
@@ -218,8 +217,8 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
                 <tr
                   key={item.id}
                   tabIndex={0}
-                  aria-label={`Open Home Depot page for ${item.name} (SKU ${item.sku})`}
-                  onClick={openHomeDepot}
+                  aria-label={`View details for ${item.name} (SKU ${item.sku})`}
+                  onClick={openSkuPage}
                   onKeyDown={handleRowKeyDown}
                   className="border-b border-[var(--border-default)] last:border-b-0 hover:bg-[var(--bg-hover)] transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-[var(--cta-primary)] focus-visible:outline-offset-2"
                 >
@@ -231,11 +230,11 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
                   <td className="px-4 py-3 align-top min-w-0">
                     <div className="space-y-1.5">
                       <Link
-                        href={`/sku/${item.sku}`}
+                        href={skuPageUrl}
                         className="font-semibold text-[var(--text-primary)] leading-[1.4] truncate hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
                         title={item.name}
-                        onClickCapture={(event) => event.stopPropagation()}
-                        onKeyDownCapture={(event) => event.stopPropagation()}
+                        onClick={(event) => event.stopPropagation()}
+                        onKeyDown={(event) => event.stopPropagation()}
                       >
                         {item.name}
                       </Link>

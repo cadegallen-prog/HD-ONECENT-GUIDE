@@ -7,7 +7,7 @@ import { US_STATES } from "@/lib/us-states"
 export type TierFilter = "all" | "Very Common" | "Common" | "Rare"
 export type SortOption = "newest" | "oldest" | "most-reports" | "alphabetical"
 export type ViewMode = "cards" | "table"
-export type DateRange = "1m" | "3m" | "6m" | "12m"
+export type DateRange = "1m" | "3m" | "6m" | "12m" | "18m" | "24m" | "all"
 
 interface PennyListFiltersProps {
   totalItems: number
@@ -99,6 +99,9 @@ export function PennyListFilters({
     { value: "3m", label: "3 mo" },
     { value: "6m", label: "6 mo" },
     { value: "12m", label: "12 mo" },
+    { value: "18m", label: "18 mo" },
+    { value: "24m", label: "24 mo" },
+    { value: "all", label: "All" },
   ]
 
   const getDateRangeChipLabel = (value: DateRange): string => {
@@ -114,6 +117,12 @@ export function PennyListFilters({
         return "Last 6 months"
       case "12m":
         return "Last 12 months"
+      case "18m":
+        return "Last 18 months"
+      case "24m":
+        return "Last 24 months"
+      case "all":
+        return "All time"
     }
   }
 
@@ -127,6 +136,12 @@ export function PennyListFilters({
         return "6 months"
       case "12m":
         return "12 months"
+      case "18m":
+        return "18 months"
+      case "24m":
+        return "24 months"
+      case "all":
+        return "all time"
     }
   }
 

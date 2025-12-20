@@ -36,6 +36,7 @@ export function ShareButton({ sku, itemName, source = "card" }: ShareButtonProps
   const shareText = `Found this penny item at Home Depot: ${itemName} (SKU ${sku})`
 
   const handleShareFacebook = (event: React.MouseEvent) => {
+    event.preventDefault()
     event.stopPropagation()
     const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`
     window.open(fbShareUrl, "_blank", "noopener,noreferrer,width=600,height=400")
@@ -44,6 +45,7 @@ export function ShareButton({ sku, itemName, source = "card" }: ShareButtonProps
   }
 
   const handleCopyLink = async (event: React.MouseEvent) => {
+    event.preventDefault()
     event.stopPropagation()
     try {
       await navigator.clipboard.writeText(shareUrl)
@@ -59,6 +61,7 @@ export function ShareButton({ sku, itemName, source = "card" }: ShareButtonProps
   }
 
   const toggleMenu = (event: React.MouseEvent) => {
+    event.preventDefault()
     event.stopPropagation()
     setShowMenu(!showMenu)
   }

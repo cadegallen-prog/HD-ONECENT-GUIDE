@@ -1,13 +1,16 @@
 "use client"
 
-import Link from "next/link"
 import { Calendar, ExternalLink } from "lucide-react"
+import Link from "next/link"
 import { CopySkuButton } from "@/components/copy-sku-button"
 import { ShareButton } from "@/components/share-button"
 import { PennyThumbnail } from "@/components/penny-thumbnail"
 import { US_STATES } from "@/lib/us-states"
 import { formatRelativeDate } from "@/lib/penny-list-utils"
 import type { PennyItem } from "@/lib/fetch-penny-data"
+import { getHomeDepotProductUrl } from "@/lib/home-depot"
+import type { KeyboardEvent } from "react"
+import { useRouter } from "next/navigation"
 
 interface PennyListCardProps {
   item: PennyItem & { parsedDate?: Date | null }
@@ -25,6 +28,7 @@ function getTotalReports(locations: Record<string, number>): number {
 }
 
 export function PennyListCard({ item }: PennyListCardProps) {
+  const router = useRouter()
   const commonnessTone = (tier?: string) => {
     if (tier === "Very Common") return "pill pill-success"
     if (tier === "Common") return "pill pill-accent"
@@ -33,12 +37,29 @@ export function PennyListCard({ item }: PennyListCardProps) {
 
   const totalReports = item.locations ? getTotalReports(item.locations) : 0
   const stateCount = item.locations ? Object.keys(item.locations).length : 0
-  const skuUrl = `/sku/${item.sku}`
+  const homeDepotUrl = getHomeDepotProductUrl({
+    sku: item.sku,
+    internetNumber: item.internetNumber,
+  })
+  const skuPageUrl = `/sku/${item.sku}`
+
+  const openSkuPage = () => router.push(skuPageUrl)
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault()
+      openSkuPage()
+    }
+  }
 
   return (
-    <Link
-      href={skuUrl}
+    <div
+      role="link"
+      tabIndex={0}
+      onClick={openSkuPage}
+      onKeyDown={handleKeyDown}
       className="elevation-card border border-[var(--border-strong)] rounded-xl overflow-hidden shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow h-full flex flex-col group cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+      aria-label={`View details for ${item.name} (SKU ${item.sku})`}
       aria-labelledby={`item-${item.id}-name`}
     >
       <article className="flex flex-col h-full">
@@ -63,19 +84,32 @@ export function PennyListCard({ item }: PennyListCardProps) {
           </div>
 
           <div className="flex gap-4 items-start">
-            <PennyThumbnail src={item.imageUrl} alt={item.name} size={72} />
+            <Link
+              href={skuPageUrl}
+              aria-label={`View details for ${item.name}`}
+              onClick={(e) => e.stopPropagation()}
+              className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] rounded"
+            >
+              <PennyThumbnail src={item.imageUrl} alt={item.name} size={72} />
+            </Link>
             <div className="min-w-0 flex-1 space-y-3">
-              <h3
-                id={`item-${item.id}-name`}
-                className="font-semibold text-lg text-[var(--text-primary)] leading-[1.5] truncate group-hover:text-[var(--cta-primary)] transition-colors"
-                title={item.name}
+              <Link
+                href={skuPageUrl}
+                onClick={(e) => e.stopPropagation()}
+                className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] rounded"
               >
-                {item.name}
-              </h3>
+                <h3
+                  id={`item-${item.id}-name`}
+                  className="font-semibold text-lg text-[var(--text-primary)] leading-[1.5] truncate group-hover:text-[var(--cta-primary)] transition-colors"
+                  title={item.name}
+                >
+                  {item.name}
+                </h3>
+              </Link>
 
               <div
                 className="flex items-center gap-2 text-sm text-[var(--text-primary)] font-mono elevation-2 border border-[var(--border-strong)] px-2.5 py-1.5 rounded w-fit font-medium"
-                onClick={(e) => e.preventDefault()}
+                onClick={(e) => e.stopPropagation()}
               >
                 <span className="text-[var(--text-muted)]">SKU</span>
                 {item.sku}
@@ -116,13 +150,18 @@ export function PennyListCard({ item }: PennyListCardProps) {
             <span>Community lead</span>
             <span className="inline-flex items-center gap-3 font-semibold text-[var(--text-primary)]">
               <span className="text-[var(--status-success)]">$0.01</span>
-              <span className="inline-flex items-center gap-1">
-                View Details
+              <a
+                href={homeDepotUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] rounded"
+                onClick={(e) => e.stopPropagation()}
+              >
+                View on Home Depot
                 <ExternalLink className="w-4 h-4" aria-hidden="true" />
-              </span>
+              </a>
               <span
                 onClick={(e) => {
-                  e.preventDefault()
                   e.stopPropagation()
                 }}
               >
@@ -132,11 +171,12 @@ export function PennyListCard({ item }: PennyListCardProps) {
           </div>
         </div>
       </article>
-    </Link>
+    </div>
   )
 }
 
 export function PennyListCardCompact({ item }: PennyListCardProps) {
+  const router = useRouter()
   const commonnessTone = (tier?: string) => {
     if (tier === "Very Common") return "pill pill-success"
     if (tier === "Common") return "pill pill-accent"
@@ -145,12 +185,25 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
 
   const totalReports = item.locations ? getTotalReports(item.locations) : 0
   const stateCount = item.locations ? Object.keys(item.locations).length : 0
-  const skuUrl = `/sku/${item.sku}`
+  const skuPageUrl = `/sku/${item.sku}`
+
+  const openSkuPage = () => router.push(skuPageUrl)
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault()
+      openSkuPage()
+    }
+  }
 
   return (
-    <Link
-      href={skuUrl}
+    <div
+      role="link"
+      tabIndex={0}
+      onClick={openSkuPage}
+      onKeyDown={handleKeyDown}
       className="rounded-lg border border-[var(--border-strong)] elevation-card p-4 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] group"
+      aria-label={`View details for ${item.name} (SKU ${item.sku})`}
       aria-labelledby={`hot-item-${item.id}-name`}
     >
       <article>
@@ -167,15 +220,28 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
           </span>
         </div>
         <div className="flex gap-3 items-start">
-          <PennyThumbnail src={item.imageUrl} alt={item.name} size={48} />
+          <Link
+            href={skuPageUrl}
+            aria-label={`View details for ${item.name}`}
+            onClick={(e) => e.stopPropagation()}
+            className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] rounded"
+          >
+            <PennyThumbnail src={item.imageUrl} alt={item.name} size={48} />
+          </Link>
           <div className="min-w-0 flex-1">
-            <h3
-              id={`hot-item-${item.id}-name`}
-              className="text-sm font-semibold text-[var(--text-primary)] leading-[1.5] truncate group-hover:text-[var(--cta-primary)] transition-colors"
-              title={item.name}
+            <Link
+              href={skuPageUrl}
+              onClick={(e) => e.stopPropagation()}
+              className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] rounded"
             >
-              {item.name}
-            </h3>
+              <h3
+                id={`hot-item-${item.id}-name`}
+                className="text-sm font-semibold text-[var(--text-primary)] leading-[1.5] truncate group-hover:text-[var(--cta-primary)] transition-colors"
+                title={item.name}
+              >
+                {item.name}
+              </h3>
+            </Link>
             <div className="mt-2 flex items-center gap-2 text-xs text-[var(--text-primary)] font-mono elevation-2 border border-[var(--border-strong)] px-2 py-1 rounded w-fit font-medium">
               SKU: {item.sku}
             </div>
@@ -210,6 +276,6 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
           </div>
         )}
       </article>
-    </Link>
+    </div>
   )
 }

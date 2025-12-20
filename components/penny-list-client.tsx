@@ -251,10 +251,17 @@ export function PennyListClient({
           return 6
         case "12m":
           return 12
+        case "18m":
+          return 18
+        case "24m":
+          return 24
+        case "all":
+          return null // No date filtering
       }
     })()
 
     const windowStart = (() => {
+      if (windowMonths === null) return null // "all" time - no date filter
       const start = new Date(today)
       start.setMonth(start.getMonth() - windowMonths)
       return start
@@ -274,6 +281,8 @@ export function PennyListClient({
     const isWithinWindow = (date: Date) => {
       const time = date.getTime()
       if (Number.isNaN(time)) return false
+      // If windowStart is null (all time), no date filtering
+      if (windowStart === null) return true
       return time >= windowStart.getTime() && time <= today.getTime()
     }
 
