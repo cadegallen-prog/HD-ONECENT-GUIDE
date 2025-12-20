@@ -1,0 +1,37 @@
+[
+  {
+    "id": "1001234567",
+    "name": "Test Hammer",
+    "sku": "1001234567",
+    "internetNumber": "123456789",
+    "price": 0.01,
+    "dateAdded": "2025-12-01",
+    "tier": "Common",
+    "status": "Active",
+    "quantityFound": "3",
+    "imageUrl": "https://via.placeholder.com/300x300.png?text=Test+Item",
+    "notes": "Playwright test fixture",
+    "locations": {
+      "GA": 2,
+      "TX": 1
+    }
+  },
+  {
+    "id": "1009876543",
+    "name": "Test Drill",
+    "sku": "1009876543",
+    "price": 0.01,
+    "dateAdded": "2025-11-15",
+    "tier": "Very Common",
+    "status": "Active",
+    "quantityFound": "5",
+    "imageUrl": "https://via.placeholder.com/300x300.png?text=Test+Drill",
+    "notes": "Another test item",
+    "locations": {
+      "CA": 3,
+      "FL": 2,
+      "NY": 1,
+      "TX": 2
+    }
+  }
+]

@@ -139,13 +139,13 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
               className="inline-flex h-2 w-2 rounded-full bg-[var(--status-info)]"
               aria-hidden="true"
             ></span>
-            Community Penny List
+            Penny List
           </div>
           <h1
             id="page-heading"
             className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)] mb-4"
           >
-            Community Penny List
+            Penny List
           </h1>
           <p className="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
             Community reports of recent penny sightings. Your mileage may vary - always verify at

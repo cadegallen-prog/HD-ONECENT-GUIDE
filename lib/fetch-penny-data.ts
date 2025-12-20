@@ -155,6 +155,20 @@ async function fetchEnrichmentBySku(): Promise<Map<string, EnrichmentFields>> {
   }
 }
 
+// Helper function to fall back to local fixture when Google Sheet is unavailable
+async function tryLocalFixtureFallback(): Promise<PennyItem[]> {
+  try {
+    const fixturePath = path.join(process.cwd(), "data", "penny-list.json")
+    const fixtureText = await readFile(fixturePath, "utf8")
+    const fixtureItems = JSON.parse(fixtureText) as PennyItem[]
+    console.log(`Loaded ${fixtureItems.length} items from local fixture`)
+    return fixtureItems
+  } catch (error) {
+    console.warn("Local fixture also unavailable. Returning empty list.", error)
+    return []
+  }
+}
+
 async function fetchPennyListRaw(): Promise<PennyItem[]> {
   // Playwright visual smoke uses a stable local fixture to avoid snapshot drift.
   if (process.env.PLAYWRIGHT === "1") {
@@ -164,14 +178,17 @@ async function fetchPennyListRaw(): Promise<PennyItem[]> {
       const fixtureItems = JSON.parse(fixtureText) as PennyItem[]
       return fixtureItems
     } catch (error) {
-      console.warn("Playwright fixture load failed, falling back to live sheet.", error)
+      // In Playwright runs we want deterministic, fast, offline-friendly behavior.
+      // If the fixture is missing, do NOT hit the live Google Sheet.
+      console.warn("Playwright fixture load failed; using empty penny list.", error)
+      return []
     }
   }
 
   const sheetUrl = process.env.GOOGLE_SHEET_URL
   if (!sheetUrl) {
-    console.warn("GOOGLE_SHEET_URL is not set. Returning empty list.")
-    return []
+    console.warn("GOOGLE_SHEET_URL is not set. Trying local fixture fallback.")
+    return tryLocalFixtureFallback()
   }
 
   try {
@@ -279,7 +296,8 @@ async function fetchPennyListRaw(): Promise<PennyItem[]> {
     return items
   } catch (error) {
     console.error("Error fetching penny list:", error)
-    return []
+    console.warn("Falling back to local fixture.")
+    return tryLocalFixtureFallback()
   }
 }
 

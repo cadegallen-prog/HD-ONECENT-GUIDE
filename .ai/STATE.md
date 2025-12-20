@@ -12,7 +12,7 @@ Every AI session must update this after meaningful work.
 - **Current policy (Dec 19):** The Verified Pennies feature was removed.
   - `/verified-pennies` permanently redirects to `/penny-list`
   - No repo-stored verified datasets/scripts (privacy)
-  - SKU pages + sitemap derive from the Community Penny List only
+  - SKU pages + sitemap derive from the Penny List only
 - **Recent focus (Dec 20, session 7):** OG image font embedding for brand consistency
   - Embedded Inter variable WOFF2 font in `/api/og` ImageResponse to match site hero logo typography.
   - Updated OG layout to prioritize Inter in font stack, centered "PennyCentral" brand and headline.
@@ -37,7 +37,7 @@ Every AI session must update this after meaningful work.
   - Surfaced trust signals on SKU pages (freshness badge).
   - All 4 quality gates passing after changes (lint, build, test:unit, test:e2e - 40/40).
 - **Recent focus (Dec 18 late):** Community-first refinement (less noise, more digestible)
-  - Community Penny List time window filter is now month-based (1/3/6/12 months) with default = 6 months.
+  - Penny List time window filter is now month-based (1/3/6/12 months) with default = 6 months.
   - Freshness badge remains a trust signal on SKU pages.
   - All 4 quality gates passing after changes (lint, build, test:unit, test:e2e - 40/40).
 - **Recent focus (Dec 19, session 2):** Internet SKU integration
@@ -99,10 +99,10 @@ Every AI session must update this after meaningful work.
   - Verified Pennies page shows images for 21 additional entries
   - Added an E2E test to confirm a known newly-merged SKU image loads
 - **Previous focus (Dec 17):** Landing page restructured for clarity—eliminated decision fatigue by reordering sections and consolidating CTAs.
-  - **Hero:** Guide-first (primary CTA), Verified Pennies (secondary), Community Penny List link (tertiary small link)
+  - **Hero:** Guide-first (primary CTA), Verified Pennies (secondary), Penny List link (tertiary small link)
   - **Section order:** Hero → How It Works (moved up) → Tools → Community → Support
   - **How It Works:** Tightened copy for beginner clarity
-  - **Tools:** 3 equal cards (Verified, Community Penny List, Store Finder); removed "(secondary tool)" label; all redundant "→" link text removed
+  - **Tools:** 3 equal cards (Verified, Penny List, Store Finder); removed "(secondary tool)" label; all redundant "→" link text removed
   - **Navigation:** Guide | Verified Pennies | Penny List | Store Finder | About (Report moved to footer)
   - **Logo:** Simplified to wordmark only (removed 1¢ icon)
   - **Tests:** All 36 e2e + unit tests passing; updated navbar test to verify Guide link

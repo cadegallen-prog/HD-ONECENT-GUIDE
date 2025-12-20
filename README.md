@@ -8,7 +8,7 @@ The official companion site for the "Home Depot One Cent Items" Facebook communi
 
 ## What It Does
 
-- **Community Penny List (Crowdsourced Reports)** ⭐ NEW — Community-powered list of reported penny finds, updated hourly from Google Forms (no manual work)
+- **Penny List (Crowdsourced Reports)** ⭐ NEW — Community-powered list of reported penny finds, updated hourly from Google Forms (no manual work)
 - **Penny Guide** — Complete reference on how clearance items reach penny status
 - **Store Finder** — Find nearby Home Depot locations with intelligent search (supports city, state name, ZIP code)
 - **Trip Tracker** — Plan and log penny hunting trips
