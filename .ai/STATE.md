@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 20, 2025 (Privacy cleanup + CI contrast fix)
+**Last updated:** Dec 20, 2025 (Dev server resilience + naming consistency)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -13,6 +13,14 @@ Every AI session must update this after meaningful work.
   - `/verified-pennies` permanently redirects to `/penny-list`
   - No repo-stored verified datasets/scripts (privacy)
   - SKU pages + sitemap derive from the Penny List only
+- **Recent focus (Dec 20, session 8):** Dev server resilience + naming consistency
+  - Fixed dev server infinite loop caused by expired Google Sheet URL + missing fallback
+  - Added smart fallback logic to `lib/fetch-penny-data.ts` - falls back to local fixture when Google Sheet unavailable
+  - Adjusted Playwright timeouts to balanced middle ground (60s server startup, 30s actions/navigation)
+  - Added `data/penny-list.json` test fixture for deterministic Playwright E2E tests
+  - Standardized all documentation: "Community Penny List" → "Penny List" (cleaner, less wordy)
+  - Republished Google Sheet with fresh CSV URL (old URL had expired)
+  - All 4 quality gates passing (lint, build [882 pages], test:unit [9/9], test:e2e [32/32])
 - **Recent focus (Dec 20, session 7):** OG image font embedding for brand consistency
   - Embedded Inter variable WOFF2 font in `/api/og` ImageResponse to match site hero logo typography.
   - Updated OG layout to prioritize Inter in font stack, centered "PennyCentral" brand and headline.

@@ -11,6 +11,53 @@
 
 ---
 
+## 2025-12-20 - Claude Code - Fix Dev Server Loop + Data Resilience
+
+**AI:** Claude Code (Sonnet 4.5)
+**Goal:** Investigate and resolve dev server infinite loop issue that prevented localhost:3001 from serving content
+
+**Root Causes Identified:**
+1. Google Sheet URL had expired (returning HTTP 400 Bad Request)
+2. Recent uncommitted changes removed fallback behavior - returned empty array instead of trying local fixture
+3. During server startup, `getPennyList()` fetch failed → empty data → `generateStaticParams()` stuck retrying → server hung
+4. Playwright timeouts were reduced too aggressively (30s server, 10s/15s actions) causing premature failures
+
+**Changes Made:**
+- **lib/fetch-penny-data.ts**: Added `tryLocalFixtureFallback()` helper function
+  - Smart fallback: when Google Sheet fails, falls back to local `data/penny-list.json` fixture
+  - Prevents infinite loops and maintains offline development capability
+- **playwright.config.ts**: Adjusted timeouts to balanced middle ground
+  - Server startup: 30s → 60s
+  - Actions/navigation: 10s/15s → 30s
+- **data/penny-list.json**: Added test fixture (2 test items) for deterministic Playwright E2E tests
+- **Documentation consistency**: Standardized "Community Penny List" → "Penny List" across:
+  - `.ai/STATE.md`, `README.md`, `app/penny-list/page.tsx`
+- **Google Sheet**: User republished with fresh CSV URL (updated in `.env.local` and Vercel)
+
+**Outcome:** ✅ Success
+
+**Verification:**
+- All 4 quality gates passing:
+  - ✓ `npm run lint` (0 errors)
+  - ✓ `npm run build` (882 pages generated, including 854 SKU pages)
+  - ✓ `npm run test:unit` (9/9 passed)
+  - ✓ `npm run test:e2e` (32/32 passed)
+- Dev server starts in ~2 seconds (no more looping)
+- Committed to GitHub: `f62143d` - "fix: resolve dev server loop and add resilient data fetching"
+
+**Learnings:**
+- Always include fallback mechanisms for external data dependencies
+- Test fixtures are critical for preventing flaky E2E tests
+- Timeout values should balance fast failure detection with stability
+- Previous agent got stuck in loop for 7-8 hours - plan mode investigation prevented similar waste
+
+**Next Session Notes:**
+- Enrichment sheet still not published/configured (optional feature for owner-added stock photos)
+- System is now resilient to Google Sheet outages
+- Naming is consistent across all documentation ("Penny List")
+
+---
+
 ## 2025-12-20 - ChatGPT Codex - Fix CI Contrast Check (Theme Forcing)
 
 **AI:** ChatGPT Codex  

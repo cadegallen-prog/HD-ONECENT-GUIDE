@@ -6,6 +6,62 @@
 
 ---
 
+## External Data Dependencies & Fallback Logic
+
+### Problem
+
+Dev server entered infinite loop and wouldn't serve content after Google Sheet URL expired.
+
+### What We Tried
+
+- Previous agent attempted fixes for 7-8 hours, getting stuck in the same loop
+- Making incremental changes without understanding root cause
+- Reducing timeouts to "fix" the issue (made it worse)
+
+### What We Learned
+
+- External data dependencies (Google Sheets, APIs) MUST have fallback mechanisms
+- When data fetching fails during server initialization (SSG/`generateStaticParams`), empty results can cause infinite retry loops
+- Aggressive timeout reductions mask problems instead of fixing them
+- Test fixtures are essential for offline development and deterministic E2E tests
+- Plan mode investigation prevents wasted time on trial-and-error approaches
+
+### What to Do Instead
+
+**Always implement smart fallbacks:**
+
+```typescript
+async function fetchData() {
+  try {
+    // Try primary data source
+    const res = await fetch(PRIMARY_URL)
+    if (!res.ok) throw new Error(`Failed: ${res.statusText}`)
+    return await res.json()
+  } catch (error) {
+    console.error("Primary source failed:", error)
+    console.warn("Falling back to local fixture")
+    // Fall back to local fixture
+    return tryLocalFallback()
+  }
+}
+```
+
+**Keep balanced timeouts:**
+- Don't reduce timeouts below 30s for network operations
+- 60s minimum for server startup in E2E tests
+- Timeout errors should trigger investigation, not timeout reduction
+
+**Always include test fixtures:**
+- Add local JSON fixtures for Playwright tests (`data/penny-list.json`)
+- Prevents flaky tests due to external dependencies
+- Enables offline development
+
+**Files:** `lib/fetch-penny-data.ts`, `playwright.config.ts`, `data/penny-list.json`
+
+**Date:** Dec 20, 2025
+
+---
+
 ## React-Leaflet & Hydration
 
 ### Problem
