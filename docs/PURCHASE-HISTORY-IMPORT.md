@@ -32,6 +32,26 @@ Outputs:
 - Import the CSV into that tab.
 - Ensure your published CSV (or export automation) includes that tab, or copy/paste rows into the tab that is published.
 
+## Avoid column shifting (Email Address column)
+
+Google Sheets will still keep a column even if it is **hidden**.
+
+If your published tab still has an **Email Address** column (visible or hidden), any CSV paste/import must include that column (even if it’s blank), otherwise every value shifts left and your data ends up in the wrong columns.
+
+- **Email Address column exists (even hidden):** use the 10-column import (email is blank). For the merge pipeline outputs, paste/import `./.local/merged-sheet-import.noheader.csv` under your existing header row.
+- **Email Address column truly removed (deleted):** use the 9-column import. For the merge pipeline outputs, paste/import `./.local/merged-sheet-import.noemail.noheader.csv` under your existing header row.
+
+## Sanity check after import
+
+- After you paste the rows, check the SKU column. It should be 6- or 10-digit numbers. If the column shows item names instead, you imported the wrong CSV variant (the Email Address column shifted everything left). Re-import with the correct file and try again.
+- Use the `merged-sheet-import.noheader.csv` variant (10 columns) whenever the Email Address column still exists (even if hidden); use the `noemail` file only when that column is deleted so the SKU column stays numeric.
+
+## Thumbnails (photo header)
+
+Your published Sheet must use the canonical photo header or the site won't detect it.
+
+- `IMAGE URL` (exact casing)
+
 ## Safety checks
 
 Before committing anything, run:

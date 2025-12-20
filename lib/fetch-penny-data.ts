@@ -4,6 +4,9 @@ import path from "node:path"
 import { extractStateFromLocation } from "./penny-list-utils"
 import { PLACEHOLDER_IMAGE_URL } from "./image-cache"
 
+const IMAGE_URL_FIELD = "IMAGE URL"
+const INTERNET_SKU_FIELD = "INTERNET SKU"
+
 // Define the shape of your penny item
 export type PennyItem = {
   id: string
@@ -27,39 +30,50 @@ const FIELD_ALIASES: Record<string, string[]> = {
   name: ["item name", "name", "product name", "item name"],
   sku: ["home depot sku (6 or 10 digits)", "sku", "item sku", "product sku"],
   internet_sku: [
+    INTERNET_SKU_FIELD,
+    "internet sku",
+    "internet number",
+    "internetnumber",
     "internetsku (private, backend only)",
+    "internetsku (private, backend only) (optional, for better hd links)",
     "internetsku",
     "internet_sku",
-    "internetnumber",
-    "internet number",
   ],
   quantity: ["exact quantity found", "quantity", "qty", "quantity seen"],
   city_state: ["store (city, state)", "store", "location"],
   date_found: ["purchase date", "date found", "found date", "date"],
-  photo: [
-    "upload photo(s) of item / shelf tag / receipt",
-    "photo proof",
-    "photo",
-    "image",
-    "upload",
-  ],
+  image_url: [IMAGE_URL_FIELD, "image url"],
   notes: ["notes (optional)", "notes", "note", "comments", "comment"],
   approved: ["approved", "is approved"],
   status: ["status", "scope"],
   date_approved: ["date approved", "approved date"],
 }
 
+function normalizeHeaderLabel(value: string): string {
+  return value.toLowerCase().replace(/_/g, " ").replace(/\s+/g, " ").trim()
+}
+
 function pickField(row: Record<string, string>, key: string): string {
   const aliases = FIELD_ALIASES[key] || []
+  const normalizedEntries = Object.entries(row).map(([header, value]) => ({
+    normalizedHeader: normalizeHeaderLabel(header),
+    value: typeof value === "string" ? value : "",
+  }))
+
   for (const alias of aliases) {
-    // Check exact match or trimmed match
-    if (row[alias]) return row[alias]
-    // Check keys in row for case-insensitive match
-    const foundKey = Object.keys(row).find(
-      (k) => k.toLowerCase().trim() === alias.toLowerCase().trim()
+    const normalizedAlias = normalizeHeaderLabel(alias)
+    const match = normalizedEntries.find(
+      (entry) =>
+        !!entry.value &&
+        (entry.normalizedHeader === normalizedAlias ||
+          entry.normalizedHeader.startsWith(`${normalizedAlias} `) ||
+          entry.normalizedHeader.startsWith(`${normalizedAlias}(`))
     )
-    if (foundKey && row[foundKey]) return row[foundKey]
+    if (match) {
+      return match.value
+    }
   }
+
   return ""
 }
 
@@ -95,6 +109,52 @@ function calculateTier(locations: Record<string, number>): PennyItem["tier"] {
   return "Rare"
 }
 
+type EnrichmentFields = {
+  imageUrl?: string
+  internetSku?: string
+}
+
+async function fetchEnrichmentBySku(): Promise<Map<string, EnrichmentFields>> {
+  const enrichmentUrl = process.env.GOOGLE_SHEET_ENRICHMENT_URL
+  if (!enrichmentUrl) return new Map()
+
+  try {
+    const res = await fetch(enrichmentUrl, { next: { revalidate: 3600 } })
+    if (!res.ok) throw new Error(`Failed to fetch enrichment sheet: ${res.statusText}`)
+    const csvText = await res.text()
+
+    const { data } = Papa.parse<Record<string, string>>(csvText, {
+      header: true,
+      skipEmptyLines: true,
+    })
+
+    const bySku = new Map<string, EnrichmentFields>()
+
+    data.forEach((row) => {
+      const sku = pickField(row, "sku").trim()
+      if (!sku) return
+
+      const imageUrl = pickField(row, "image_url").trim()
+      const internetSku = pickField(row, "internet_sku").trim()
+      if (!imageUrl && !internetSku) return
+
+      const existing = bySku.get(sku) ?? {}
+      if (imageUrl && !existing.imageUrl) {
+        existing.imageUrl = imageUrl
+      }
+      if (internetSku && !existing.internetSku) {
+        existing.internetSku = internetSku
+      }
+      bySku.set(sku, existing)
+    })
+
+    return bySku
+  } catch (error) {
+    console.error("Error fetching enrichment sheet:", error)
+    return new Map()
+  }
+}
+
 async function fetchPennyListRaw(): Promise<PennyItem[]> {
   // Playwright visual smoke uses a stable local fixture to avoid snapshot drift.
   if (process.env.PLAYWRIGHT === "1") {
@@ -115,6 +175,7 @@ async function fetchPennyListRaw(): Promise<PennyItem[]> {
   }
 
   try {
+    const enrichmentPromise = fetchEnrichmentBySku()
     const res = await fetch(sheetUrl, { next: { revalidate: 3600 } })
     if (!res.ok) throw new Error(`Failed to fetch sheet: ${res.statusText}`)
     const csvText = await res.text()
@@ -137,7 +198,7 @@ async function fetchPennyListRaw(): Promise<PennyItem[]> {
       const cityState = pickField(row, "city_state").trim()
       const dateFound = pickField(row, "date_found").trim()
       const timestamp = pickField(row, "timestamp").trim()
-      const photo = pickField(row, "photo").trim()
+      const imageUrl = pickField(row, "image_url").trim()
       const notes = pickField(row, "notes").trim()
       const status = pickField(row, "status").trim()
 
@@ -159,7 +220,7 @@ async function fetchPennyListRaw(): Promise<PennyItem[]> {
           dateAdded,
           status,
           quantityFound: quantity,
-          imageUrl: photo,
+          imageUrl,
           notes,
           locations: {},
         }
@@ -168,6 +229,12 @@ async function fetchPennyListRaw(): Promise<PennyItem[]> {
       // Update internetNumber if this row has one and we don't yet
       if (internetSku && !grouped[sku].internetNumber) {
         grouped[sku].internetNumber = internetSku
+      }
+
+      // Update imageUrl if this row has one and we don't yet
+      // Keep the first non-empty image URL across duplicate rows; blanks never override.
+      if (imageUrl && !grouped[sku].imageUrl) {
+        grouped[sku].imageUrl = imageUrl
       }
 
       // Update latest date
@@ -185,8 +252,22 @@ async function fetchPennyListRaw(): Promise<PennyItem[]> {
       }
     })
 
+    // Apply enrichment overlay (same SKU map from a dedicated tab, if present)
+    const enrichmentBySku = await enrichmentPromise
+    enrichmentBySku.forEach((enrichment, sku) => {
+      const existing = grouped[sku]
+      if (!existing) return
+
+      if (enrichment.internetSku && !existing.internetNumber) {
+        existing.internetNumber = enrichment.internetSku
+      }
+      if (enrichment.imageUrl && !existing.imageUrl) {
+        existing.imageUrl = enrichment.imageUrl
+      }
+    })
+
     // 5. Calculate tier for each item based on aggregated data
-    // Use placeholder for items without user-submitted photos
+    // Use placeholder for items without user-submitted/enriched photos
     const items: PennyItem[] = Object.values(grouped).map((item) => {
       return {
         ...item,

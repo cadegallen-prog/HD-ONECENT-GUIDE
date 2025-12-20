@@ -12,16 +12,21 @@ const rateLimitMap: Map<string, RateBucket> =
 ;(globalThis as unknown as { __pennyRateLimit?: Map<string, RateBucket> }).__pennyRateLimit =
   rateLimitMap
 
-const submissionSchema = z.object({
-  itemName: z.string().min(1).max(75),
-  sku: z.string(),
-  storeCity: z.string().optional(),
-  storeState: z.string().min(2).max(2),
-  dateFound: z.string(),
-  quantity: z.string().optional(),
-  notes: z.string().optional(),
-  website: z.string().optional(), // honeypot
-})
+const IMAGE_URL_FIELD = "IMAGE URL"
+const INTERNET_SKU_FIELD = "INTERNET SKU"
+
+const submissionSchema = z
+  .object({
+    itemName: z.string().min(1).max(75),
+    sku: z.string(),
+    storeCity: z.string().optional(),
+    storeState: z.string().min(2).max(2),
+    dateFound: z.string(),
+    quantity: z.string().optional(),
+    notes: z.string().optional(),
+    website: z.string().optional(), // honeypot
+  })
+  .strip() // Strip any extra fields (photoUrl/upload attempts are ignored).
 
 function getClientIp(request: NextRequest) {
   const forwarded = request.headers.get("x-forwarded-for")
@@ -93,12 +98,15 @@ export async function POST(request: NextRequest) {
     const location = city ? `${city}, ${state}` : state
 
     // Prepare payload for Google Apps Script
+    // Enrichment columns stay blank for client submissions; Cade populates them manually later.
     const sheetPayload = {
       "Item Name": body.itemName.trim(),
       SKU: normalizedSku,
       "Store (City, State)": location,
       "Purchase Date": body.dateFound,
       "Exact Quantity Found": qty !== undefined ? String(qty) : "",
+      [IMAGE_URL_FIELD]: "",
+      [INTERNET_SKU_FIELD]: "",
       "Notes (optional)": body.notes?.trim() || "",
     }
 

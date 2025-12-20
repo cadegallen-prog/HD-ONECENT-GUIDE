@@ -299,7 +299,7 @@ SHEET_HEADERS: list[str] = [
     "Purchase Date",
     "Exact Quantity Found",
     "Notes (optional)",
-    "internetSku (private, backend only)",
+    "INTERNET SKU",
 ]
 
 
@@ -313,7 +313,7 @@ def to_sheet_row(r: PurchaseRow) -> dict[str, str]:
         "Purchase Date": r.date_iso,
         "Exact Quantity Found": "",
         "Notes (optional)": "",
-        "internetSku (private, backend only)": r.internet_sku,
+        "INTERNET SKU": r.internet_sku,
     }
 
 
@@ -329,6 +329,12 @@ def main() -> int:
         default="",
         help="Optional: output JSON map of sku->internetSku (keep private; do NOT commit)",
     )
+    parser.add_argument(
+        "--force-state",
+        default="",
+        help="Optional: force a 2-letter state code for all rows (e.g., GA). "
+        "Useful when the filename does not encode the state.",
+    )
     parser.add_argument("csv", nargs="+", help="One or more purchase-history CSV files")
     args = parser.parse_args()
 
@@ -338,6 +344,19 @@ def main() -> int:
 
     for csv_path in args.csv:
         per_person_rows = parse_purchase_rows(csv_path)
+        if args.force_state:
+            forced = args.force_state.strip().upper()
+            per_person_rows = [
+                PurchaseRow(
+                    sku=r.sku,
+                    name=r.name,
+                    internet_sku=r.internet_sku,
+                    date_iso=r.date_iso,
+                    state=forced,
+                )
+                for r in per_person_rows
+            ]
+
         per_person_deduped = dedupe_within_person_keep_most_recent(per_person_rows)
         for r in per_person_deduped:
             sheet_rows.append(to_sheet_row(r))

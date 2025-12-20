@@ -11,10 +11,90 @@
 
 ---
 
+## 2025-12-20 - GitHub Copilot - OG Image Font Embedding
+
+**AI:** GitHub Copilot  
+**Goal:** Embed Inter font in OG image generator to match PennyCentral hero logo typography, ensuring Facebook previews use consistent branding.
+
+**Changes Made:**
+
+- `app/api/og/route.tsx`: Added font fetching for Inter WOFF2 from public/fonts, passed to ImageResponse fonts array; updated styles to prioritize Inter in fontFamily stacks.
+- `lib/og.ts`: Bumped OG_IMAGE_VERSION to "5" to force cache invalidation.
+- Fixed prettier lint issues (double quotes, line breaks).
+
+**Outcome:** ✅ Success - OG endpoint generates images with Inter font; all quality gates pass.
+
+**Verification (all passing):**
+- `npm run lint` (0 errors)
+- `npm run build` (success)
+- `npm run test:unit` (9/9 passing)
+- `npm run test:e2e` (32/32 passing)
+- Local OG test: `curl http://localhost:3001/api/og?headline=Penny%20List&v=5` generates image successfully.
+
+**Learnings:**
+- WOFF2 embedding works in this Next.js/ImageResponse setup (previous attempt may have had env differences).
+- Inter is free under SIL OFL; no licensing fees required.
+
+**Next Session Notes:**
+- Deploy to production and test Facebook Sharing Debugger to confirm improved previews.
+- If WOFF2 issues recur in prod, consider TTF fallback.
+
+**AI:** ChatGPT Codex  
+**Goal:** Keep image URLs owner-managed, ensure duplicate SKUs reuse the first non-empty photo, and lock down submissions so only blank photo cells reach the Sheet.
+
+**Changes Made:**
+
+- `lib/fetch-penny-data.ts`: normalized header matching and made sure the aggregator keeps the first non-empty photo per SKU, with a clarifying comment.
+- `tests/fetch-penny-data-aliases.test.ts`: added a shared mock helper plus a regression covering duplicate rows to prove a later photo still surfaces.
+- `app/api/submit-find/route.ts`: `.strict()` schema parsing, always writes a blank `Upload Photo(s) of Item / Shelf Tag / Receipt` column, and documented that the column stays owner-only.
+- Docs and state: added the SKU sanity-check note, `docs/HOW-CADE-ADDS-STOCK-PHOTOS.md`, a changelog bullet, and refreshed `.ai/STATE.md`.
+
+**Outcome:** ✅ Success
+
+**Verification (all passing):**
+- `npm run lint` (0 errors)
+- `npm run build` (success)
+- `npm run test:unit` (3/3 passing)
+- `npm run test:e2e` (32/32 passing; Playwright still emits the known invalid source-map + remote store 404 warnings while falling back to local data)
+
+**Next Session Notes:**
+
+- Continue ignoring the known Playwright source-map/store warnings unless they escalate into real test failures.
+
+## 2025-12-20 - ChatGPT Codex - Sheet Header + Import Alignment Hardening
+
+**AI:** ChatGPT Codex  
+**Goal:** Make thumbnails + `internetSku` parsing resilient to header text variations, and clarify which import CSV to use when `Email Address` is hidden in the Sheet.
+
+**Changes Made:**
+
+- Updated `lib/fetch-penny-data.ts` aliases to recognize:
+  - `Upload Photo(s) of Item / Shelf Tag / Receipt (photo URL)`
+  - `internetSku (private, backend only) (optional, for better HD links)`
+- Added `tests/fetch-penny-data-aliases.test.ts` to prove the header-variant parsing works without network access.
+- Updated `docs/PURCHASE-HISTORY-IMPORT.md` and `.ai/STATE.md` with a clear rule for avoiding column-shift when the Sheet still has a hidden `Email Address` column.
+- Updated `playwright.config.ts` to only run `tests/**/*.spec.ts` so Playwright does not execute unit test files.
+
+**Outcome:** ✅ Success
+
+**Verification (all passing):**
+
+- `npm run lint` (0 errors)
+- `npm run build` (success)
+- `npm run test:unit` (2/2 passing)
+- `npm run test:e2e` (32/32 passing)
+
+**Next Session Notes:**
+
+- If the published tab still has `Email Address` (even hidden), paste/import `./.local/merged-sheet-import.noheader.csv`.
+- If you delete the `Email Address` column entirely, paste/import `./.local/merged-sheet-import.noemail.noheader.csv` instead.
+
+---
+
 ## 2025-12-19 - ChatGPT Codex - Verified Backup Merge Tool + CSV Import
 
 **AI:** ChatGPT Codex  
-**Goal:** Restore verified backup data into the Sheet import, remove public “Verified” labels, and ship a repeatable merge script/output.
+**Goal:** Restore verified backup data into the Sheet import, remove public "Verified" labels, and ship a repeatable merge script/output.
 
 **Changes Made:**
 
@@ -29,6 +109,33 @@
 - Keep verification private; future UI flag can be added server-side without exposing “Verified” text.  
 - Import file to Sheets: use the headerless CSV if the sheet already has headers.  
 - Dedup logic is `(sku + contributor_id)`; existing non-empty cells remain untouched by the script. 
+
+---
+
+## 2025-12-19 - ChatGPT Codex - GA Purchase Dates from Purchase History
+
+**AI:** ChatGPT Codex  
+**Goal:** Fill missing Purchase Dates for Cade's GA verified items using Home Depot purchase-history export (keep most recent date per SKU).
+
+**Approach:**
+
+- Run `scripts/purchase-history-to-sheet-import.py` against the raw Home Depot export to output a penny-only, deduped (latest-per-SKU) sheet-style CSV (forced state = GA).
+- Run `scripts/merge-verified-backup.py` with `--purchase-history` to fill blank `Purchase Date` for `Cade (GA)` items during the verified-backup merge.
+- Regenerate `.local/merged-sheet-import.csv` and `.local/merged-sheet-import.noheader.csv` for Sheets paste/import.
+- Hardened frontend image selection: `lib/fetch-penny-data.ts` now fills `imageUrl` from any row for a SKU (not only the first row), so GA image URLs still show even when an older community row for that SKU appears earlier in the Sheet.
+
+**Outcome:** GA rows with purchase dates increased from **20 → 212** (blank decreased from **483 → 291**). Remaining blanks are SKUs not present in the provided purchase-history export date range.
+
+**Verification (all passing):**
+
+- `npm run lint` (0 errors)
+- `npm run build` (success)
+- `npm run test:unit` (1/1 passing)
+- `npm run test:e2e` (32/32 passing)
+
+**Next Session Notes:**
+
+- If you want dates for the remaining GA SKUs, export an older/larger purchase-history range (or multiple exports) and rerun the same pipeline.
 
 ---
 
@@ -2666,3 +2773,19 @@ If continuing [Unfinished Item 2], copy-paste:
 - Freshness filter helps users find recently-confirmed items
 - Can add more purchase history CSVs in future to keep data fresh
 - Consider adding "Last purchased" timestamp to penny cards for more context
+
+## 2025-12-20 - Canonical IMAGE URL / INTERNET SKU + enrichment overlay
+
+**Goal:** Lock enrichment fields to owner-only while keeping penny list links/images upgradeable via Sheet.
+
+**Changes:**
+- Standardized sheet headers to `IMAGE URL` + `INTERNET SKU`; parser now prefers these, reuses the first non-empty image per SKU, and optionally overlays a dedicated enrichment tab via `GOOGLE_SHEET_ENRICHMENT_URL` without overwriting community rows.
+- Submit API switched to `.strip()` and always blanks the enrichment columns so tampered payloads cannot set IMAGE/INTERNET data; added a unit test to verify the Apps Script payload stays blanked.
+- Penny list thumbnails now render the placeholder asset when IMAGE URL is missing; Home Depot links prefer INTERNET SKU and fall back to SKU search; added unit tests for both fallbacks.
+- Added `scripts/enrichment-json-to-csv.ts` to turn Cade’s bookmark JSON into a CSV with canonical headers for an enrichment tab, and updated docs (HOW-CADE-ADDS-STOCK-PHOTOS, GOOGLE-FORM-SETUP, PURCHASE-HISTORY-IMPORT, README, CHANGELOG).
+
+**Verification:**
+- `npm run lint` ✔
+- `npm run build` ✔
+- `npm run test:unit` ✔
+- `npm run test:e2e` ✔ (Playwright reused existing dev server; expected source-map warnings + store API fallback logs, tests still green)

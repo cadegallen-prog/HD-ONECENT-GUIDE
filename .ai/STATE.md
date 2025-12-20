@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 19, 2025 (Internet SKU integration + Verified removal commit)
+**Last updated:** Dec 20, 2025 (Canonical IMAGE URL / INTERNET SKU + enrichment overlay)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -13,6 +13,16 @@ Every AI session must update this after meaningful work.
   - `/verified-pennies` permanently redirects to `/penny-list`
   - No repo-stored verified datasets/scripts (privacy)
   - SKU pages + sitemap derive from the Community Penny List only
+- **Recent focus (Dec 20, session 7):** OG image font embedding for brand consistency
+  - Embedded Inter variable WOFF2 font in `/api/og` ImageResponse to match site hero logo typography.
+  - Updated OG layout to prioritize Inter in font stack, centered "PennyCentral" brand and headline.
+  - Bumped OG version to v=5 to force social media cache refresh.
+  - All 4 quality gates passing (lint, build, test:unit, test:e2e - 32/32 tests); local OG endpoint generates images successfully.
+  - Canonicalized sheet headers to `IMAGE URL` and `INTERNET SKU` (legacy photo/upload headers removed).
+  - Parser maps those headers, reuses the first non-empty image per SKU, and optionally overlays a dedicated enrichment tab via `GOOGLE_SHEET_ENRICHMENT_URL` without overwriting community rows.
+  - Submit API strips tampered enrichment fields and forces blank IMAGE/INTERNET columns on community submissions.
+  - Penny list thumbnails now render the placeholder asset when IMAGE URL is missing; Home Depot links prefer INTERNET SKU and fall back to SKU search.
+  - Added `scripts/enrichment-json-to-csv.ts` plus docs for Cade’s bookmark JSON → Sheet import flow.
 - **Recent focus (Dec 18 PM):** Massive SEO Expansion (500+ Dynamic SKU Pages)
   - Transformed `/sku/[sku]` from a stub into a robust, SEO-optimized product detail page.
   - Implemented `generateStaticParams` to pre-render 533 unique SKU pages (SSG).
@@ -38,11 +48,22 @@ Every AI session must update this after meaningful work.
   - All 4 quality gates passing (lint, build, test:unit, test:e2e - 32/32 tests)
 - **Recent focus (Dec 19, session 3):** Verified backup merge tooling
   - Added `scripts/merge-verified-backup.py` to upsert verified backup into consolidated CSV with dedupe `(sku + contributor_id)` and fill-blanks-only enrichment (photos, internetSku, brand/model).
-  - Notes now store `Brand=...; Model=...` (no public “Verified” label); verification kept backend-only for possible future use.
+  - Added optional GA purchase-date enrichment via `--purchase-history` (fills blank `Purchase Date` for `Cade (GA)` using latest purchase per SKU from the processed purchase-history CSV).
+  - Notes now store `Brand=...; Model=...` (no public "Verified" label); verification kept backend-only for possible future use.
   - Regenerated `.local/merged-sheet-import.csv` plus headerless import for Sheets (898 rows) and audit log; all gates passing post-merge (lint, build, test:unit, test:e2e 32/32).
+- **Recent focus (Dec 19, session 4):** Sheet image URL aggregation hardening
+  - Updated `lib/fetch-penny-data.ts` to fill `imageUrl` from any row for a SKU (not only the first row), so product thumbnails still show when a later row contains the image URL.
+- **Recent focus (Dec 20):** Sheet header + import alignment hardening
+  - Hardened `lib/fetch-penny-data.ts` field aliases so thumbnails and `internetSku` still parse when header cells include clarifying suffixes like `(photo URL)` and `(optional, for better HD links)`.
+  - Clarified which `.local/merged-sheet-import*.noheader.csv` file to paste depending on whether the Sheet still has an `Email Address` column (even if hidden).
+- **Recent focus (Dec 20, session 5):** Stock photo reuse + submission hardening
+  - Ensured the parser matches clarified photo/internetSku headers via normalized prefix matching and added tests proving duplicate SKUs reuse the first non-empty photo URL.
+  - Locked the submit-find API to `.strict()` schema parsing, strips extra fields (photo URLs/uploads), and writes a blank `Upload Photo(s) of Item / Shelf Tag / Receipt` column so only owner-managed entries contain URLs.
+  - Documented the import sanity check (SKU column should stay numeric) and added `docs/HOW-CADE-ADDS-STOCK-PHOTOS.md` to detail how the owner injects stock photos once per SKU.
 - **Recent focus (Dec 19, session 1):** Purchase-history import hardening (privacy-first)
   - Added a repeatable purchase-history → Google Sheet import script (no store # / no purchaser fields).
   - Added `.gitignore` rules to prevent committing purchase-history exports or generated import artifacts.
+  - Added `--force-state` option for purchase-history exports whose filenames do not encode the state (e.g., Home Depot “Purchase_History_...” downloads).
   - Internet SKU map policy: backend-only for outbound Home Depot links, never displayed; store privately (env/Blob/Drive); always fall back to regular SKU links when a mapping is missing.
   - Upcoming: Cade will gather product image URLs via bookmarklet for newly added items; keep using private inputs only.
 - **Recent focus (Dec 18 PM):** Purchase dates + freshness filtering (historical)
@@ -144,12 +165,13 @@ Every AI session must update this after meaningful work.
 
 These must be set in Vercel for the loop to work:
 
-- `GOOGLE_APPS_SCRIPT_URL` — webhook that writes Report Find submissions into the Sheet.
-- `GOOGLE_SHEET_URL` — published CSV feed for the Penny List.
+- `GOOGLE_APPS_SCRIPT_URL` - webhook that writes Report Find submissions into the Sheet.
+- `GOOGLE_SHEET_URL` - published CSV feed for the Penny List.
+- `GOOGLE_SHEET_ENRICHMENT_URL` (optional) - published CSV for a dedicated enrichment tab with `Home Depot SKU (6 or 10 digits)`, `IMAGE URL`, `INTERNET SKU` (merged by SKU to fill missing images/links; blanks never overwrite).
 
-Testing‑only flag:
+Testing-only flag:
 
-- `PLAYWRIGHT=1` — enables stable local fixtures for E2E visual tests.
+- `PLAYWRIGHT=1` - enables stable local fixtures for E2E visual tests.
 
 ---
 

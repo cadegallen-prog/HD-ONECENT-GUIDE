@@ -11,7 +11,7 @@ Output
 
 Privacy / policy
 - Store numbers and purchaser identifiers are NOT kept.
-- `internetSku (private, backend only)` is intended to stay private (backend-only usage).
+- `INTERNET SKU` is intended to stay private (backend-only usage).
 
 Dedupe rules
 - Purchase history: 1 unique SKU per input file/person is handled upstream by
@@ -45,9 +45,9 @@ FINAL_HEADERS: list[str] = [
     "Exact Quantity Found",
     "Store (City, State)",
     "Purchase Date",
-    "Upload Photo(s) of Item / Shelf Tag / Receipt",
+    "IMAGE URL",
     "Notes (Optional)",
-    "internetSku (private, backend only)",
+    "INTERNET SKU",
 ]
 
 
@@ -118,11 +118,9 @@ def build_rows_from_current_sheet(
                 "Exact Quantity Found": get_first(r, "Exact Quantity Found").strip(),
                 "Store (City, State)": get_first(r, "Store (City, State)").strip(),
                 "Purchase Date": get_first(r, "Purchase Date").strip(),
-                "Upload Photo(s) of Item / Shelf Tag / Receipt": get_first(
-                    r, "Upload Photo(s) of Item / Shelf Tag / Receipt"
-                ).strip(),
+                "IMAGE URL": get_first(r, "IMAGE URL").strip(),
                 "Notes (Optional)": get_first(r, "Notes (Optional)").strip(),
-                "internetSku (private, backend only)": internet_sku_map.get(sku, ""),
+                "INTERNET SKU": internet_sku_map.get(sku, ""),
             }
         )
 
@@ -174,13 +172,10 @@ def build_rows_from_purchase_sheet(
                 "Exact Quantity Found": get_first(r, "Exact Quantity Found").strip(),
                 "Store (City, State)": get_first(r, "Store (City, State)").strip(),
                 "Purchase Date": get_first(r, "Purchase Date").strip(),
-                "Upload Photo(s) of Item / Shelf Tag / Receipt": "",
+                "IMAGE URL": "",
                 # Force notes empty for purchase history items (removes "Imported from..." text)
                 "Notes (Optional)": "",
-                "internetSku (private, backend only)": (
-                    get_first(r, "internetSku (private, backend only)").strip()
-                    or internet_sku_map.get(sku, "")
-                ),
+                "INTERNET SKU": get_first(r, "INTERNET SKU").strip() or internet_sku_map.get(sku, ""),
             }
         )
 

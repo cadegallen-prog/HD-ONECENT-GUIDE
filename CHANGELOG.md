@@ -6,6 +6,23 @@ Dates are recorded in America/New_York time.
 
 ---
 
+## 2025-12-20 - Canonical enrichment headers + safe overlays
+
+- Standardized the Google Sheet enrichment headers to `IMAGE URL` and `INTERNET SKU` (legacy photo/upload column names removed). Parsing now prefers these canonical labels and merges an optional `GOOGLE_SHEET_ENRICHMENT_URL` tab by SKU without overwriting community data.
+- Added `scripts/enrichment-json-to-csv.ts` to turn Cade's bookmark JSON into a Sheet-ready CSV (SKU, IMAGE URL, INTERNET SKU) for a dedicated enrichment tab; docs updated with exact import steps and header rename instructions.
+- Penny list image fallback now renders the built-in placeholder asset when IMAGE URL is missing, while Home Depot links prefer INTERNET SKU and fall back to SKU search; added unit tests for both fallbacks plus API tamper-proofing.
+
+## 2025-12-20 - Stock photo reuse & submit API safety
+
+- Hardened CSV parsing so photo/internetSku headers still resolve even with clarifiers and added regression tests proving duplicate SKUs reuse the first non-empty photo URL while header variations still parse.
+- Submission API now strips any client photo/upload fields and always writes blank `IMAGE URL` and `INTERNET SKU` columns so only the owner-controlled sheet can carry enrichment data.
+- Documented the import sanity check (SKU column should stay numeric) and added `docs/HOW-CADE-ADDS-STOCK-PHOTOS.md` to guide how the owner injects stock image URLs once in the sheet.
+
+## 2025-12-20 - Sheet Header + Import Alignment Hardening
+
+- Hardened sheet CSV parsing so image thumbnails and `internetSku` still work when header cells include clarifying suffixes like `(photo URL)` and `(optional, for better HD links)`.
+- Documented how to avoid column shifting when the Sheet still has a hidden `Email Address` column (choose the correct `merged-sheet-import*.noheader.csv`).
+
 ## 2025-12-19 - Remove Verified Pennies + Internet SKU Integration
 
 - Removed the `/verified-pennies` feature and all repo-stored verified datasets/scripts.

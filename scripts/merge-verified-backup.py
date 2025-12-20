@@ -7,9 +7,9 @@ Applies contributor-aware deduplication: dedupe_key = (SKU + contributor_id)
 - Different people + same SKU -> multiple rows (allowed)
 
 Enriches missing fields from verified backup:
-- imageUrl -> "Upload Photo(s) of Item / Shelf Tag / Receipt"
-- internetNumber -> "internetSku (private, backend only)"
-- brand/model -> "Notes (Optional)" as "Verified: Brand=X; Model=Y"
+- imageUrl -> "IMAGE URL"
+- internetNumber -> "INTERNET SKU"
+- brand/model -> "Notes (Optional)" as "Brand=X; Model=Y"
 
 Never overwrites existing non-empty values.
 """
@@ -19,7 +19,7 @@ import csv
 import json
 import re
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 
 def normalize_sku(sku: str) -> str:
@@ -81,6 +81,58 @@ def merge_best_row(row1: Dict, row2: Dict) -> Dict:
     return merged
 
 
+def parse_date_maybe(date_str: str) -> Optional[datetime]:
+    """Parse a date string using common formats; return None if it cannot be parsed."""
+    date_str = date_str.strip()
+    if not date_str:
+        return None
+
+    formats = [
+        "%Y-%m-%d",
+        "%m/%d/%Y",
+        "%Y/%m/%d",
+    ]
+
+    for fmt in formats:
+        try:
+            return datetime.strptime(date_str, fmt)
+        except ValueError:
+            continue
+
+    return None
+
+
+def load_latest_purchase_dates(purchase_history_path: str) -> Dict[str, str]:
+    """
+    Load GA purchase history and return sku -> latest purchase date (YYYY-MM-DD).
+
+    Only considers rows where Store contains "GA".
+    """
+    latest: Dict[str, Tuple[datetime, str]] = {}
+
+    with open(purchase_history_path, "r", encoding="utf-8-sig", newline="") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            store = row.get("Store (City, State)", "").upper()
+            if "GA" not in store:
+                continue
+
+            sku = normalize_sku(row.get("Home Depot SKU (6 or 10 digits)", ""))
+            if not sku:
+                continue
+
+            raw_date = row.get("Purchase Date", "").strip()
+            parsed = parse_date_maybe(raw_date)
+            if not parsed:
+                continue
+
+            iso_date = parsed.strftime("%Y-%m-%d")
+            if sku not in latest or parsed > latest[sku][0]:
+                latest[sku] = (parsed, iso_date)
+
+    return {sku: iso for sku, (_, iso) in latest.items()}
+
+
 def load_verified_backup(backup_path: str) -> List[Dict]:
     """Load verified backup JSON and convert to list of items."""
     with open(backup_path, 'r', encoding='utf-8') as f:
@@ -135,6 +187,7 @@ def build_current_index(current_rows: List[Dict]) -> Dict[str, Dict]:
 def merge_verified_items(
     current_index: Dict[str, Dict],
     verified_items: List[Dict],
+    purchase_history_dates: Dict[str, str],
     verbose: bool = False
 ) -> tuple[Dict[str, Dict], Dict]:
     """
@@ -150,7 +203,8 @@ def merge_verified_items(
         'imageUrl_added': 0,
         'internetSku_added': 0,
         'brand_model_added': 0,
-        'name_added': 0
+        'name_added': 0,
+        'purchase_date_added': 0,
     }
 
     for verified_item in verified_items:
@@ -160,6 +214,7 @@ def merge_verified_items(
 
         contributor = "Cade (GA)"  # All verified items are from Cade
         key = make_dedupe_key(sku, contributor)
+        latest_ga_date = purchase_history_dates.get(sku, "")
 
         if key in current_index:
             # UPSERT: Enrich existing row (fill blanks only)
@@ -167,14 +222,14 @@ def merge_verified_items(
             updated = False
 
             # Enrich imageUrl (only if blank)
-            photo_field = 'Upload Photo(s) of Item / Shelf Tag / Receipt'
+            photo_field = 'IMAGE URL'
             if not existing_row.get(photo_field) and verified_item['imageUrl']:
                 existing_row[photo_field] = verified_item['imageUrl']
                 stats['imageUrl_added'] += 1
                 updated = True
 
             # Enrich internetSku (only if blank)
-            internet_field = 'internetSku (private, backend only)'
+            internet_field = 'INTERNET SKU'
             if not existing_row.get(internet_field) and verified_item['internetNumber']:
                 existing_row[internet_field] = verified_item['internetNumber']
                 stats['internetSku_added'] += 1
@@ -197,6 +252,12 @@ def merge_verified_items(
                 stats['name_added'] += 1
                 updated = True
 
+            # Fill purchase date if blank using latest GA purchase
+            if not existing_row.get('Purchase Date') and latest_ga_date:
+                existing_row['Purchase Date'] = latest_ga_date
+                stats['purchase_date_added'] += 1
+                updated = True
+
             if updated:
                 stats['upserted'] += 1
                 if verbose:
@@ -211,14 +272,18 @@ def merge_verified_items(
                 'Home Depot SKU (6 or 10 digits)': sku,
                 'Exact Quantity Found': '',
                 'Store (City, State)': 'GA',
-                'Purchase Date': verified_item['purchaseDates'][0] if verified_item['purchaseDates'] else '',
-                'Upload Photo(s) of Item / Shelf Tag / Receipt': verified_item['imageUrl'],
+                'Purchase Date': (
+                    verified_item['purchaseDates'][0]
+                    if verified_item['purchaseDates']
+                    else latest_ga_date
+                ),
+                'IMAGE URL': verified_item['imageUrl'],
                 'Notes (Optional)': (
                     f"Brand={verified_item['brand']}; Model={verified_item['model']}"
                     if verified_item['brand'] and verified_item['model']
                     else ''
                 ),
-                'internetSku (private, backend only)': verified_item['internetNumber']
+                'INTERNET SKU': verified_item['internetNumber']
             }
             current_index[key] = new_row
             stats['inserted'] += 1
@@ -229,6 +294,8 @@ def merge_verified_items(
                 stats['internetSku_added'] += 1
             if verified_item['brand'] and verified_item['model']:
                 stats['brand_model_added'] += 1
+            if latest_ga_date:
+                stats['purchase_date_added'] += 1
 
             if verbose:
                 print(f"  Inserted: {sku} ({contributor})")
@@ -269,9 +336,9 @@ def write_output_csv(output_path: str, final_rows: List[Dict]):
         'Exact Quantity Found',
         'Store (City, State)',
         'Purchase Date',
-        'Upload Photo(s) of Item / Shelf Tag / Receipt',
+        'IMAGE URL',
         'Notes (Optional)',
-        'internetSku (private, backend only)'
+        'INTERNET SKU'
     ]
 
     with open(output_path, 'w', newline='', encoding='utf-8') as f:
@@ -306,6 +373,7 @@ OPERATIONS:
   - Added internetSku: {stats['internetSku_added']}
   - Added brand/model to Notes: {stats['brand_model_added']}
   - Added item name: {stats['name_added']}
+  - Added purchase date: {stats['purchase_date_added']}
 - Inserted (new SKU+contributor): {stats['inserted']} rows
 
 OUTPUT:
@@ -344,6 +412,11 @@ def main():
         help='Path to output merged CSV'
     )
     parser.add_argument(
+        '--purchase-history',
+        default=None,
+        help='Optional path to purchase-history CSV for GA date enrichment'
+    )
+    parser.add_argument(
         '--audit',
         default=None,
         help='Path to audit log file (optional)'
@@ -369,6 +442,12 @@ def main():
     current_rows = load_current_csv(args.current_csv)
     print(f"  Loaded {len(current_rows)} current rows")
 
+    purchase_history_dates: Dict[str, str] = {}
+    if args.purchase_history:
+        print("\nLoading purchase history (GA latest dates)...")
+        purchase_history_dates = load_latest_purchase_dates(args.purchase_history)
+        print(f"  Loaded {len(purchase_history_dates)} GA SKUs with purchase dates")
+
     print("\nBuilding current index with deduplication...")
     current_index = build_current_index(current_rows)
     print(f"  Indexed {len(current_index)} unique (SKU + contributor_id) pairs")
@@ -377,6 +456,7 @@ def main():
     current_index, stats = merge_verified_items(
         current_index,
         verified_items,
+        purchase_history_dates,
         verbose=args.verbose
     )
 

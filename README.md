@@ -103,6 +103,7 @@ public/                 # Static assets
 2. Select **Form Responses 1** → **CSV** → Copy link
 3. Add to Vercel environment: `GOOGLE_SHEET_URL=<your-csv-link>`
 4. Site auto-fetches every hour; live in ~60 seconds
+5. **Optional enrichment overlay:** Publish a second tab with headers `Home Depot SKU (6 or 10 digits)`, `IMAGE URL`, `INTERNET SKU`, set `GOOGLE_SHEET_ENRICHMENT_URL=<enrichment-csv-link>`, and the site will fill missing images/links by SKU without touching community rows.
 
 ---
 

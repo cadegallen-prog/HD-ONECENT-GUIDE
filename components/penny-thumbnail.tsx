@@ -23,7 +23,10 @@ export function PennyThumbnail({
 }) {
   const [errored, setErrored] = useState(false)
   const normalizedSrc = src?.trim()
-  const showImage = normalizedSrc && /^https?:\/\//i.test(normalizedSrc) && !errored
+  const showImage =
+    normalizedSrc &&
+    !errored &&
+    (/^https?:\/\//i.test(normalizedSrc) || normalizedSrc.startsWith("/"))
   const normalizedSize = size ?? 64
   const sizeClass = sizeClassMap[normalizedSize]
   const wrapperClass = `flex items-center justify-center rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-default)] text-[var(--text-muted)] ${sizeClass}`
