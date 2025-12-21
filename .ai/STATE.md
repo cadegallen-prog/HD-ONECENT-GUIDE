@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 20, 2025 (Dev server resilience + naming consistency)
+**Last updated:** Dec 21, 2025 (OG images fixed + messaging tightened)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -13,6 +13,15 @@ Every AI session must update this after meaningful work.
   - `/verified-pennies` permanently redirects to `/penny-list`
   - No repo-stored verified datasets/scripts (privacy)
   - SKU pages + sitemap derive from the Penny List only
+- **Recent focus (Dec 21, session 9):** OG images fixed + messaging tightened
+  - Fixed broken dynamic OG generator with Google Fonts CDN + fallback to system fonts
+  - Improved OG layout for crop survival across Facebook/Discord/X (vertical safe zone, larger fonts)
+  - Added "Home Depot" trust anchor to all OG headlines for clarity and legitimacy
+  - Tightened homepage H1 from "Find Home Depot Penny Items ($0.01)" → "Find Home Depot Penny Items" (removed redundant parenthetical)
+  - Simplified subhead from "The ultimate penny guide + live lists to help you hunt smarter." → "Guide + community finds. 40,000 hunters strong." (social proof + brevity)
+  - Replaced redundant "Already hunting?" link with "Report a Find →" in hero (reduced friction)
+  - Bumped OG version to v6 to force scraper cache refresh
+  - All 4 quality gates passing (lint, build [882 pages], test:unit [9/9], test:e2e [32/32])
 - **Recent focus (Dec 20, session 8):** Dev server resilience + naming consistency
   - Fixed dev server infinite loop caused by expired Google Sheet URL + missing fallback
   - Added smart fallback logic to `lib/fetch-penny-data.ts` - falls back to local fixture when Google Sheet unavailable

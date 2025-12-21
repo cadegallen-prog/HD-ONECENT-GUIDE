@@ -11,6 +11,60 @@
 
 ---
 
+## 2025-12-21 - Claude Code - OG Images Fixed + Messaging Tightened
+
+**AI:** Claude Code (Sonnet 4.5)
+**Goal:** Fix broken dynamic OG image generator and improve site messaging for social media sharing
+
+**Context:**
+- User reported OG images weren't showing properly on Facebook/social platforms
+- Text was clipped (only 20% visible) in preview cards
+- Messaging felt too wordy and lacked context ("Find $0.01 Items" without "Home Depot")
+- User wanted deterministic dynamic OG system (NOT static images)
+
+**Changes Made:**
+- **app/api/og/route.tsx**: Fixed OG generator
+  - Font loading: Switched from local font to Google Fonts CDN with system font fallback
+  - Layout: Increased vertical padding (120px vs 80px) for crop-safe zone
+  - Headline positioning: Moved to vertical center (survives Facebook/Discord cropping)
+  - Font sizes: Increased from 72px max → 84px max for better readability
+  - Error handling: Wrapped in try/catch with proper 500 responses
+  - New fallback headline: "Home Depot $0.01 Finds" (was "Find $0.01 Items.")
+- **lib/og.ts**: Bumped OG_IMAGE_VERSION from "5" → "6" to force scraper cache refresh
+- **app/page.tsx**: Tightened homepage messaging
+  - H1: "Find Home Depot Penny Items ($0.01)" → "Find Home Depot Penny Items" (removed redundant parenthetical)
+  - Subhead: "The ultimate penny guide + live lists to help you hunt smarter." → "Guide + community finds. 40,000 hunters strong." (7 words vs 12, adds social proof)
+  - Hero CTA: Replaced redundant "Already hunting? View the Community Penny List →" link with "Report a Find →" (reduces friction for submissions)
+- **OG metadata updates**:
+  - Homepage: "Home Depot $0.01 Finds" (app/layout.tsx)
+  - Penny List: "Home Depot Penny List" (app/penny-list/page.tsx)
+  - Report Find: "Report a Penny Find" (app/report-find/layout.tsx)
+  - All now include "Home Depot" or "Penny" for context
+- **tests/visual-smoke.spec.ts**: Updated test expectations to match new H1 text
+
+**Outcome:** ✅ Success
+
+**Verification:**
+- All 4 quality gates passing:
+  - ✓ `npm run lint` (0 errors, 0 warnings)
+  - ✓ `npm run build` (882 pages generated)
+  - ✓ `npm run test:unit` (9/9 passed)
+  - ✓ `npm run test:e2e` (32/32 passed)
+- Committed to GitHub: `9a61fb4` - "feat: improve OG images and tighten site messaging"
+
+**Learnings:**
+- Dynamic OG systems need robust fallbacks (CDN fonts > local fonts, system fonts as last resort)
+- OG layout must account for aggressive platform cropping (Facebook clips ~15% top/bottom)
+- "Home Depot" is the legitimacy anchor - every OG should include it for trust
+- Less is more: "Guide + community finds. 40,000 hunters strong." beats verbose copy
+
+**Next Session Notes:**
+- OG images should now render reliably on all platforms
+- User should test Facebook Sharing Debugger to verify scraper refresh: https://developers.facebook.com/tools/debug/
+- May take 24-48 hours for full cache propagation across platforms
+
+---
+
 ## 2025-12-20 - Claude Code - Fix Dev Server Loop + Data Resilience
 
 **AI:** Claude Code (Sonnet 4.5)
