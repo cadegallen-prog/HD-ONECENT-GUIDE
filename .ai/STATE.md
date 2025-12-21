@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 21, 2025 (OG images fixed + messaging tightened)
+**Last updated:** Dec 21, 2025 (Homepage re-prioritized for engagement)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -13,6 +13,16 @@ Every AI session must update this after meaningful work.
   - `/verified-pennies` permanently redirects to `/penny-list`
   - No repo-stored verified datasets/scripts (privacy)
   - SKU pages + sitemap derive from the Penny List only
+- **Recent focus (Dec 21, session 10):** Homepage re-prioritized for habitual engagement
+  - **Data-driven decision:** Penny List gets 5-10x more traffic than Guide (analytics-confirmed)
+  - **Hero buttons swapped:** "Browse Penny List" is now primary CTA (was secondary), "Report a Find" elevated from tertiary link to secondary button (PlusCircle icon)
+  - **Tertiary link removed:** Eliminated "Report a Find →" link below buttons (now prominent secondary button)
+  - **Tools section updated:** Replaced "Community Penny List" card with "Read the Guide" card (BookOpen icon) - removes duplicate, keeps Guide accessible
+  - **Nav reordered:** Penny List | Report a Find | Guide | Store Finder | About (aligns with usage priority)
+  - **Strategic rationale:** Optimize for recurring traffic (Penny List = habit loop) vs one-time reads (Guide = learn once); elevate Report to boost submissions from ~1/day to 10+/day goal
+  - **Icon changes:** List icon for Penny List, PlusCircle for Report a Find (clear, intuitive)
+  - **Accessibility:** Added aria-labels to hero buttons ("Browse the community penny list", "Report a new penny find")
+  - All 4 quality gates passing (lint, build [882 pages], test:unit [9/9], test:e2e [32/32])
 - **Recent focus (Dec 21, session 9):** OG images fixed + messaging tightened
   - Fixed broken dynamic OG generator with Google Fonts CDN + fallback to system fonts
   - Improved OG layout for crop survival across Facebook/Discord/X (vertical safe zone, larger fonts)

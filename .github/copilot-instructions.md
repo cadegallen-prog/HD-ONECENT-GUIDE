@@ -4,8 +4,9 @@
 
 1. `.ai/VERIFICATION_REQUIRED.md` ⛔ NO PROOF = NOT DONE
 2. `.ai/CONSTRAINTS.md` - Most violated rules
-3. `.ai/STATE.md` - Current snapshot
-4. `.ai/BACKLOG.md` - What to work on
+3. `.ai/GROWTH_STRATEGY.md` - **Business goals & context**
+4. `.ai/STATE.md` - Current snapshot
+5. `.ai/BACKLOG.md` - What to work on
 
 **Then ask:** GOAL / WHY / DONE for this session.
 

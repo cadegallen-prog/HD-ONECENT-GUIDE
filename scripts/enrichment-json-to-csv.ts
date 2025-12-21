@@ -21,6 +21,7 @@ type EnrichmentInput = {
   sku?: string | number
   imageUrl?: string
   internetSku?: string | number
+  internetNumber?: string | number // Also support internetNumber field
 }
 
 type NormalizedRow = {
@@ -53,8 +54,15 @@ function normalizeRows(raw: unknown): NormalizedRow[] {
     const sku = toDigits(entry.sku)
     if (!sku) continue
 
-    const imageUrl = String(entry.imageUrl ?? "").trim()
-    const internetSku = toDigits(entry.internetSku)
+    // Optimize image URL: standardize to 400.jpg for good retina quality
+    // (thumbnails display at 72px, 400px is crisp on 2-3x retina without being wasteful)
+    let imageUrl = String(entry.imageUrl ?? "").trim()
+    if (imageUrl.includes("_1000.jpg")) {
+      imageUrl = imageUrl.replace("_1000.jpg", "_400.jpg")
+    }
+
+    // Support both internetSku and internetNumber field names
+    const internetSku = toDigits(entry.internetSku ?? entry.internetNumber)
     const existing = bySku.get(sku) ?? { sku, imageUrl: "", internetSku: "" }
 
     if (!existing.imageUrl && imageUrl) {

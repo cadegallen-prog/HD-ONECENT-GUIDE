@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Map, User, Moon, Sun, Book, Menu, X, Users } from "lucide-react"
+import { Map, User, Moon, Sun, Book, Menu, X, List, PlusCircle } from "lucide-react"
 import { useTheme } from "@/components/theme-provider"
 
 export function Navbar() {
@@ -19,8 +19,9 @@ export function Navbar() {
   const isDark = mounted && document.documentElement.classList.contains("dark")
 
   const navItems = [
+    { href: "/penny-list", label: "Penny List", icon: List },
+    { href: "/report-find", label: "Report a Find", icon: PlusCircle },
     { href: "/guide", label: "Guide", icon: Book },
-    { href: "/penny-list", label: "Penny List", icon: Users },
     { href: "/store-finder", label: "Store Finder", icon: Map },
     { href: "/about", label: "About", icon: User },
   ]

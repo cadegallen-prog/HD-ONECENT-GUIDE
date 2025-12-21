@@ -11,6 +11,77 @@
 
 ---
 
+## 2025-12-21 - Claude Code - Homepage Re-Prioritized for Habitual Engagement
+
+**AI:** Claude Code (Sonnet 4.5)
+**Goal:** Re-prioritize homepage to match actual usage data and drive recurring traffic/engagement
+
+**Context:**
+- **Usage data:** Penny List gets 5-10x more traffic than Guide (analytics-confirmed)
+- **User insight:** "The guide gets someone to visit to 'learn' but that's not a reliable source of traffic. The penny list encourages engagement, participation, recurring traffic."
+- **Growth goals:** Habituation, recurring traffic, lower bounce rate, more submissions (currently ~1/day, goal 10+/day)
+- **Strategic shift:** Optimize for the 70-90% of traffic already engaged (recurring hunters) vs 10-30% new learners
+
+**Changes Made:**
+1. **app/page.tsx** - Hero section buttons (lines 73-91):
+   - **Swapped button order:** "Browse Penny List" is now primary CTA (was secondary)
+   - **Elevated Report a Find:** From tertiary text link → prominent secondary button
+   - **Removed tertiary link:** Eliminated "Report a Find →" link below buttons (now button)
+   - **Icons updated:** List icon for Penny List (was Users), PlusCircle for Report a Find
+   - **Accessibility:** Added aria-labels ("Browse the community penny list", "Report a new penny find")
+
+2. **app/page.tsx** - Tools section (lines 199-230):
+   - **Replaced card:** "Community Penny List" → "Read the Guide" (BookOpen icon)
+   - **Rationale:** Removes duplicate (Penny List now in hero), keeps Guide accessible
+   - **Description:** "Step-by-step tips for the full penny hunting cycle."
+
+3. **components/navbar.tsx** - Navigation reorder (lines 21-27):
+   - **New order:** Penny List | Report a Find | Guide | Store Finder | About
+   - **Old order:** Guide | Penny List | Store Finder | About
+   - **Icons updated:** List icon for Penny List (was Users), PlusCircle for Report a Find
+   - **Rationale:** Aligns nav with usage priority and feature importance
+
+**Strategic Rationale:**
+- **Penny List** = habit loop (check back for fresh finds) → recurring traffic
+- **Guide** = one-time read (learn once, done) → not recurring
+- **Report a Find** elevation = drive UGC submissions → fresher content → more return visits
+- **Result:** Optimize for habitual engagement vs educational onboarding
+
+**Outcome:** ✅ Success
+
+**Verification:**
+- All 4 quality gates passing:
+  - ✓ `npm run lint` (0 errors, 0 warnings after prettier auto-fix)
+  - ✓ `npm run build` (882 pages generated)
+  - ✓ `npm run test:unit` (9/9 tests passing)
+  - ✓ `npm run test:e2e` (32/32 tests passing - all visual smoke tests captured new layout)
+- No test updates required (existing tests check for presence, not order/position)
+- Playwright visual smoke tests captured screenshots of new layout (light/dark, mobile/desktop)
+
+**Files Modified:**
+- `app/page.tsx` (hero buttons + tools section)
+- `components/navbar.tsx` (nav order + icons)
+
+**Impact:**
+- Lower bounce rate expected (browsing list > reading guide once)
+- More time on site expected (exploring penny finds vs one-time read)
+- More submissions expected (Report a Find now prominent secondary CTA)
+- Higher return visitor rate expected (habit loop forming around fresh list content)
+
+**Success Metrics to Watch (Post-Deploy):**
+- `find_submit` events (currently ~1/day, goal 10+/day)
+- `/penny-list` page views + time on page
+- Bounce rate (should decrease)
+- Pages per session (should increase: list → SKU pages → store finder)
+- Return visitor rate (should increase as habit forms)
+
+**Next Session Notes:**
+- Monitor GA metrics after deployment to validate hypothesis
+- If submissions don't increase after 2 weeks, consider adding incentive text ("Your finds help 40,000 hunters")
+- If Guide traffic drops below 5%, confirms data-driven decision was correct
+
+---
+
 ## 2025-12-21 - Claude Code - OG Images Fixed + Messaging Tightened
 
 **AI:** Claude Code (Sonnet 4.5)

@@ -1,6 +1,15 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { BookOpen, ExternalLink, Heart, DollarSign, Users, Map } from "lucide-react"
+import {
+  BookOpen,
+  ExternalLink,
+  Heart,
+  DollarSign,
+  Users,
+  Map,
+  List,
+  PlusCircle,
+} from "lucide-react"
 import {
   COMMUNITY_MEMBER_COUNT_DISPLAY,
   FACEBOOK_GROUP_URL,
@@ -73,28 +82,20 @@ export default function Home() {
           {/* CTAs - Unified button system */}
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
             <Link
-              href="/guide"
-              className="btn-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold shadow-md hover:bg-[var(--cta-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
-            >
-              <BookOpen className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
-              Read the Guide
-            </Link>
-            <Link
               href="/penny-list"
-              className="btn-secondary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg border-2 border-[var(--border-default)] dark:border-[var(--border-strong)] bg-transparent text-[var(--text-primary)] font-semibold hover:bg-[var(--bg-elevated)] hover:border-[var(--border-strong)] dark:hover:bg-[var(--bg-elevated)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
+              className="btn-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold shadow-md hover:bg-[var(--cta-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
+              aria-label="Browse the community penny list"
             >
-              <Users className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
+              <List className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
               Browse Penny List
             </Link>
-          </div>
-
-          {/* Tertiary link - Report a Find */}
-          <div className="mt-4">
             <Link
               href="/report-find"
-              className="inline-flex items-center gap-1 text-sm text-[var(--text-muted)] hover:text-[var(--text-secondary)] underline underline-offset-4 transition-colors"
+              className="btn-secondary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg border-2 border-[var(--border-default)] dark:border-[var(--border-strong)] bg-transparent text-[var(--text-primary)] font-semibold hover:bg-[var(--bg-elevated)] hover:border-[var(--border-strong)] dark:hover:bg-[var(--bg-elevated)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
+              aria-label="Report a new penny find"
             >
-              Report a Find →
+              <PlusCircle className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
+              Report a Find
             </Link>
           </div>
         </div>
@@ -204,19 +205,19 @@ export default function Home() {
 
           {/* Tool cards grid - 2 tools */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-            {/* Penny List Card */}
+            {/* Read the Guide Card */}
             <Link
-              href="/penny-list"
+              href="/guide"
               className="card-interactive group flex flex-col bg-[var(--bg-elevated)] rounded-xl p-6 border border-[var(--border-default)]"
             >
               <div className="w-12 h-12 rounded-xl bg-[var(--bg-page)] border border-[var(--border-default)] flex items-center justify-center mb-4">
-                <Users className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
+                <BookOpen className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
               </div>
               <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
-                Community Penny List
+                Read the Guide
               </h3>
               <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed flex-grow">
-                Crowdsourced sightings, updated hourly. Freshest finds.
+                Step-by-step tips for the full penny hunting cycle.
               </p>
             </Link>
 
