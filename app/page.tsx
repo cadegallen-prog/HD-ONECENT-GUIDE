@@ -62,12 +62,12 @@ export default function Home() {
         <div className="max-w-4xl mx-auto text-center">
           {/* H1 - Unified type scale */}
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[var(--text-primary)] leading-tight">
-            Find Home Depot Penny Items ($0.01)
+            Find Home Depot Penny Items
           </h1>
 
           {/* Lead text */}
           <p className="mt-3 text-lg sm:text-xl text-[var(--text-secondary)] leading-relaxed">
-            The ultimate penny guide + live lists to help you hunt smarter.
+            Guide + community finds. 40,000 hunters strong.
           </p>
 
           {/* CTAs - Unified button system */}
@@ -88,13 +88,13 @@ export default function Home() {
             </Link>
           </div>
 
-          {/* Tertiary link for experienced users */}
+          {/* Tertiary link - Report a Find */}
           <div className="mt-4">
             <Link
-              href="/penny-list"
+              href="/report-find"
               className="inline-flex items-center gap-1 text-sm text-[var(--text-muted)] hover:text-[var(--text-secondary)] underline underline-offset-4 transition-colors"
             >
-              Already hunting? View the Community Penny List →
+              Report a Find →
             </Link>
           </div>
         </div>

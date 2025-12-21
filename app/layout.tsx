@@ -61,7 +61,7 @@ export const metadata: Metadata = {
     title: "Penny Central: The Home Depot $0.01 Hunting Guide",
     description:
       "The complete guide to finding Home Depot penny items. Learn clearance cycles, in-store hunting strategies, checkout tips, and join 40,000+ penny hunters.",
-    images: [ogImageUrl("Find $0.01 Items.")],
+    images: [ogImageUrl("Home Depot $0.01 Finds")],
     siteName: "Penny Central",
   },
   twitter: {
@@ -69,7 +69,7 @@ export const metadata: Metadata = {
     title: "Penny Central: The Home Depot $0.01 Hunting Guide",
     description:
       "The complete guide to finding Home Depot penny items. Learn clearance cycles, in-store hunting strategies, checkout tips, and join 40,000+ penny hunters.",
-    images: [ogImageUrl("Find $0.01 Items.")],
+    images: [ogImageUrl("Home Depot $0.01 Finds")],
   },
   robots: {
     index: true,
