@@ -13,11 +13,11 @@ export const metadata: Metadata = {
     title: "Home Depot Penny List ($0.01 Finds)",
     description:
       "Latest community-reported penny sightings at Home Depot. Search and filter by state, tier, and date.",
-    images: [ogImageUrl("Home Depot Penny List")],
+    images: [ogImageUrl("penny-list")],
   },
   twitter: {
     card: "summary_large_image",
-    images: [ogImageUrl("Home Depot Penny List")],
+    images: [ogImageUrl("penny-list")],
   },
 }
 

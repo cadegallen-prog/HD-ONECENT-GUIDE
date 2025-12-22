@@ -12,11 +12,11 @@ export const metadata: Metadata = {
     title: "Home Depot Penny Shopping Guide",
     description:
       "Master the art of finding $0.01 clearance items at Home Depot. Learn the clearance lifecycle, digital pre-hunt strategies, in-store tactics, and checkout procedures.",
-    images: [ogImageUrl("Complete Guide")],
+    images: [ogImageUrl("guide")],
   },
   twitter: {
     card: "summary_large_image",
-    images: [ogImageUrl("Complete Guide")],
+    images: [ogImageUrl("guide")],
   },
 }
 

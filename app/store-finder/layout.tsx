@@ -9,11 +9,11 @@ export const metadata: Metadata = {
     title: "Store Finder | Penny Central",
     description:
       "Find Home Depot stores near you. Search by ZIP code, city, or use your location to find the closest stores for penny hunting.",
-    images: [ogImageUrl("Store Finder")],
+    images: [ogImageUrl("store-finder")],
   },
   twitter: {
     card: "summary_large_image",
-    images: [ogImageUrl("Store Finder")],
+    images: [ogImageUrl("store-finder")],
   },
 }
 

@@ -61,7 +61,7 @@ export const metadata: Metadata = {
     title: "Penny Central | Home Depot Penny List",
     description:
       "The searchable Home Depot penny list. Filter by state, date, and SKU. Community-reported $0.01 finds updated daily.",
-    images: [ogImageUrl("Home Depot Penny List")],
+    images: [ogImageUrl("homepage")],
     siteName: "Penny Central",
   },
   twitter: {
@@ -69,7 +69,7 @@ export const metadata: Metadata = {
     title: "Penny Central | Home Depot Penny List",
     description:
       "The searchable Home Depot penny list. Filter by state, date, and SKU. Community-reported $0.01 finds updated daily.",
-    images: [ogImageUrl("Home Depot Penny List")],
+    images: [ogImageUrl("homepage")],
   },
   robots: {
     index: true,
