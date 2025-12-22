@@ -30,4 +30,11 @@ export default defineConfig([
       },
     },
   },
+  {
+    // Ignore prettier line length for font data file (large base64 strings)
+    files: ["lib/inter-font-data.ts"],
+    rules: {
+      "prettier/prettier": "off",
+    },
+  },
 ]);
