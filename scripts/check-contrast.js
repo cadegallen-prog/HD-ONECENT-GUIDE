@@ -48,11 +48,31 @@ function contrastRatio(fg, bg) {
 }
 
 function parseColor(str) {
-  // Handles rgb(a) strings like "rgb(255, 255, 255)" or "rgba(255, 255, 255, 1)"
+  // Handles rgb(a) strings like:
+  // - "rgb(255, 255, 255)"
+  // - "rgba(255, 255, 255, 1)"
+  // - "rgb(255 255 255 / 1)"
   if (!str || str === "transparent" || str === "rgba(0, 0, 0, 0)") return null
-  const match = str.match(/rgba?\(\s*(\d+),\s*(\d+),\s*(\d+)/i)
+  const match = str.match(/rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/i)
   if (!match) return null
   return [parseInt(match[1], 10), parseInt(match[2], 10), parseInt(match[3], 10)]
+}
+
+function parseHexColor(str) {
+  const hex = (str || "").trim().toLowerCase()
+  const match = hex.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i)
+  if (!match) return null
+  const digits = match[1]
+  if (digits.length === 3) {
+    const r = parseInt(digits[0] + digits[0], 16)
+    const g = parseInt(digits[1] + digits[1], 16)
+    const b = parseInt(digits[2] + digits[2], 16)
+    return [r, g, b]
+  }
+  const r = parseInt(digits.slice(0, 2), 16)
+  const g = parseInt(digits.slice(2, 4), 16)
+  const b = parseInt(digits.slice(4, 6), 16)
+  return [r, g, b]
 }
 
 async function getStyles(page, selector) {
@@ -103,6 +123,35 @@ async function run() {
           { timeout: 5000 }
         )
 
+        // Ensure our design tokens are present and stable before measuring computed styles.
+        // (Prevents flaky reads when CSS hasn't fully applied yet.)
+        const expectedBgPage = theme === "dark" ? "#121212" : "#ffffff"
+        await page.waitForFunction(
+          (expected) =>
+            getComputedStyle(document.documentElement)
+              .getPropertyValue("--bg-page")
+              .trim()
+              .toLowerCase() === expected,
+          expectedBgPage,
+          { timeout: 5000 }
+        )
+
+        const tokens = await page.evaluate(() => {
+          const style = getComputedStyle(document.documentElement)
+          return {
+            bgPage: style.getPropertyValue("--bg-page").trim(),
+            ctaPrimary: style.getPropertyValue("--cta-primary").trim(),
+            ctaText: style.getPropertyValue("--cta-text").trim(),
+            textPrimary: style.getPropertyValue("--text-primary").trim(),
+          }
+        })
+
+        const tokenBg = parseHexColor(tokens.bgPage) ?? (theme === "dark" ? [18, 18, 18] : [255, 255, 255])
+        const tokenCtaBg =
+          parseHexColor(tokens.ctaPrimary) ?? (theme === "dark" ? [138, 167, 199] : [43, 76, 126])
+        const tokenCtaFg = parseHexColor(tokens.ctaText) ?? (theme === "dark" ? [3, 7, 18] : [255, 255, 255])
+        const tokenTextPrimary = parseHexColor(tokens.textPrimary) ?? (theme === "dark" ? [220, 220, 220] : [28, 25, 23])
+
         for (const sel of selectors) {
           const styles = await getStyles(page, sel.selector)
           if (!styles) {
@@ -125,13 +174,9 @@ async function run() {
           const bgSource = sel.role === "border" ? styles.borderColor : styles.backgroundColor
           const bg = parseColor(bgSource)
 
-          // Default to theme or CTA colors if transparent/invalid colors are encountered
-          const fallbackBg = theme === "dark" ? [18, 18, 18] : [255, 255, 255]
-          const fallbackCtaBg = theme === "dark" ? [37, 99, 235] : [29, 78, 216] // Blue 600 dark, Blue 700 light
-          const fallbackCtaFg = theme === "dark" ? [255, 255, 255] : [255, 255, 255]
-
-          const safeFg = fg ?? (sel.role === "cta" ? fallbackCtaFg : [24, 24, 24])
-          const safeBg = bg ?? (sel.role === "cta" ? fallbackCtaBg : fallbackBg)
+          // Default to token colors if transparent/invalid colors are encountered.
+          const safeFg = fg ?? (sel.role === "cta" ? tokenCtaFg : tokenTextPrimary)
+          const safeBg = bg ?? (sel.role === "cta" ? tokenCtaBg : tokenBg)
 
           const ratio = contrastRatio(safeFg, safeBg)
           const threshold =
