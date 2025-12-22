@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 22, 2025 (OG images: reliability + copy alignment)
+**Last updated:** Dec 21, 2025 (OG images: static implementation for reliability)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -13,6 +13,15 @@ Every AI session must update this after meaningful work.
   - `/verified-pennies` permanently redirects to `/penny-list`
   - No repo-stored verified datasets/scripts (privacy)
   - SKU pages + sitemap derive from the Penny List only
+- **Recent focus (Dec 21, session 11):** OG images switched to static for Facebook reliability
+  - **Problem:** Dynamic OG generation via Edge runtime kept failing on Facebook after 5-10 iterations (timeouts, font issues, zero-byte responses)
+  - **Solution:** Hybrid static + dynamic approach - main pages use static PNGs, SKU pages keep dynamic with caching enabled
+  - **Implementation:** Created Playwright script (`scripts/generate-og-images-playwright.ts`) that screenshots the current OG endpoint to generate 5 static PNGs (homepage, penny-list, report-find, store-finder, guide)
+  - **Static images:** Saved in `public/og/*.png` (48-52KB each, well under 300KB recommendation)
+  - **Code changes:** Modified `lib/og.ts` to return static paths for main pages (`/og/{page}.png`), fall back to dynamic API for other pages
+  - **Caching enabled:** Updated `app/api/og/route.tsx` to enable 24hr caching (`revalidate=86400`) for SKU page OG images
+  - **Reliability:** Static files are bulletproof - no generation time, no font issues, no Edge runtime failures, instant CDN caching
+  - All 4 quality gates passing (lint, build [885 pages], test:unit [9/9], test:e2e [32/32])
 - **Recent focus (Dec 21, session 10):** Homepage re-prioritized for habitual engagement
   - **Data-driven decision:** Penny List gets 5-10x more traffic than Guide (analytics-confirmed)
   - **Hero buttons swapped:** "Browse Penny List" is now primary CTA (was secondary), "Report a Find" elevated from tertiary link to secondary button (PlusCircle icon)

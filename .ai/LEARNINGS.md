@@ -6,6 +6,53 @@
 
 ---
 
+## Dynamic OG Image Generation for Social Media
+
+### Problem
+
+Open Graph images kept failing on Facebook despite 5-10 iterations. Dynamic OG generation via Edge runtime (`/api/og` with `ImageResponse`) was unreliable, causing:
+- Facebook crawler timeouts
+- "200 OK but zero-byte body" errors
+- Font rendering failures on Edge runtime
+- Inconsistent preview failures across different social platforms
+
+### What We Tried
+
+- Switched from dynamic to static OG images, then back to dynamic
+- Removed Google Fonts CDN and switched to system fonts
+- Disabled caching completely (`no-store, max-age=0`)
+- Bumped version querystring to force cache refresh (v1 → v7)
+- Multiple font embedding approaches (WOFF2, system fonts)
+
+### What We Learned
+
+- **Dynamic OG generation on Edge runtime is inherently fragile for social crawlers**
+  - Facebook's crawler has strict timeout limits (~1-2 seconds)
+  - Edge function cold starts can exceed this timeout
+  - Font handling in `ImageResponse` API is unreliable (WOFF2 issues, system font inconsistencies)
+  - Disabling caching makes it worse - every scrape regenerates from scratch
+- **Static images are bulletproof**
+  - No generation time = no timeout risk
+  - Automatic CDN caching
+  - Consistent rendering (no font issues)
+  - Facebook debugger always succeeds
+- **Hybrid approach is optimal**
+  - Main pages (homepage, penny-list, etc.) get frequent shares → use static PNGs
+  - SKU detail pages rarely shared individually → dynamic with caching is acceptable
+  - Static files are ~50KB each (well under 300KB recommendation)
+
+### What to Do Instead
+
+1. **Use static OG images for frequently-shared pages** - Generate PNGs once, commit to repo
+2. **Create generation script** - Use Playwright to screenshot the OG endpoint (`scripts/generate-og-images-playwright.ts`)
+   - Captures exact design without dealing with fonts/rendering
+   - Run when design changes, commit the new PNGs
+3. **Enable caching for dynamic OG** - If keeping dynamic for some pages, enable 24hr caching (`revalidate=86400`)
+4. **Test with Facebook Sharing Debugger** - https://developers.facebook.com/tools/debug/ before considering it "done"
+5. **Monitor file sizes** - Keep static OGs under 300KB for fast loading
+
+---
+
 ## External Data Dependencies & Fallback Logic
 
 ### Problem

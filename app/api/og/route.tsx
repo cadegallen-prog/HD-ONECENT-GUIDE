@@ -1,8 +1,8 @@
 import { ImageResponse } from "next/og"
 
 export const runtime = "edge"
-export const dynamic = "force-dynamic"
-export const revalidate = 0
+// Enable caching for SKU pages (main pages now use static images)
+export const revalidate = 86400 // 24 hours
 
 const OG_WIDTH = 1200
 const OG_HEIGHT = 630
@@ -143,7 +143,7 @@ export async function GET(request: Request) {
         width: OG_WIDTH,
         height: OG_HEIGHT,
         headers: {
-          "Cache-Control": "no-store, max-age=0",
+          "Cache-Control": "public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800",
         },
       }
     )
