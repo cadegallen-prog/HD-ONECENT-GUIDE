@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   description:
     "Master the art of finding $0.01 clearance items at Home Depot. Learn the clearance lifecycle, digital pre-hunt strategies, in-store tactics, and checkout procedures.",
   openGraph: {
+    type: "website",
+    url: "https://www.pennycentral.com/guide",
     title: "Home Depot Penny Shopping Guide",
     description:
       "Master the art of finding $0.01 clearance items at Home Depot. Learn the clearance lifecycle, digital pre-hunt strategies, in-store tactics, and checkout procedures.",

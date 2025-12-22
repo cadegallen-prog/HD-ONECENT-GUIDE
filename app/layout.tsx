@@ -39,7 +39,7 @@ const inter = localFont({
 export const metadata: Metadata = {
   title: "Penny Central | Home Depot Penny List",
   description:
-    "The searchable Home Depot penny list. Filter by state, date, and SKU. Community-reported $0.01 finds updated daily.",
+    "The searchable Home Depot penny list. Filter by state, date, and SKU. Community-reported $0.01 finds updated hourly.",
   keywords: [
     "home depot penny items",
     "penny items",
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
     url: "https://www.pennycentral.com",
     title: "Penny Central | Home Depot Penny List",
     description:
-      "The searchable Home Depot penny list. Filter by state, date, and SKU. Community-reported $0.01 finds updated daily.",
+      "The searchable Home Depot penny list. Filter by state, date, and SKU. Community-reported $0.01 finds updated hourly.",
     images: [ogImageUrl("homepage")],
     siteName: "Penny Central",
   },
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Penny Central | Home Depot Penny List",
     description:
-      "The searchable Home Depot penny list. Filter by state, date, and SKU. Community-reported $0.01 finds updated daily.",
+      "The searchable Home Depot penny list. Filter by state, date, and SKU. Community-reported $0.01 finds updated hourly.",
     images: [ogImageUrl("homepage")],
   },
   robots: {
@@ -131,6 +131,13 @@ export default function RootLayout({
         {/* Preconnect hints for faster resource loading */}
         <link rel="preconnect" href="https://www.googletagmanager.com" />
 
+        {/* Facebook App ID - Required for Meta sharing debugger validation
+            TODO: Set FACEBOOK_APP_ID environment variable in Vercel dashboard
+            This enables proper Open Graph validation and sharing preview optimization. */}
+        {process.env.NEXT_PUBLIC_FACEBOOK_APP_ID && (
+          <meta property="fb:app_id" content={process.env.NEXT_PUBLIC_FACEBOOK_APP_ID} />
+        )}
+
         {/* JSON-LD Structured Data */}
         <script
           type="application/ld+json"
@@ -141,7 +148,7 @@ export default function RootLayout({
               name: "Penny Central",
               url: "https://www.pennycentral.com",
               description:
-                "The searchable Home Depot penny list. Filter by state, date, and SKU. Community-reported $0.01 finds updated daily.",
+                "The searchable Home Depot penny list. Filter by state, date, and SKU. Community-reported $0.01 finds updated hourly.",
               potentialAction: {
                 "@type": "SearchAction",
                 target: {

@@ -88,7 +88,7 @@ function normalizeHeadline(raw: string | null) {
 }
 
 function normalizeSubhead(raw: string | null) {
-  const fallback = "Community-reported $0.01 finds, updated daily"
+  const fallback = "Community-reported $0.01 finds, updated hourly"
   const subhead = (raw ?? "").trim().replace(/\s+/g, " ")
   if (!subhead) return fallback
   return subhead.length > 110 ? `${subhead.slice(0, 109)}…` : subhead
@@ -136,7 +136,9 @@ export async function GET(request: Request) {
 
         <div {...({ style: styles.footer } as Record<string, unknown>)}>
           <div>Shareable preview image</div>
-          <div {...({ style: styles.footerUrl } as Record<string, unknown>)}>pennycentral.com</div>
+          <div {...({ style: styles.footerUrl } as Record<string, unknown>)}>
+            www.pennycentral.com
+          </div>
         </div>
       </div>,
       {

@@ -6,6 +6,8 @@ export const metadata: Metadata = {
   description:
     "Find Home Depot stores near you. Search by ZIP code, city, or use your location to find the closest stores for penny hunting.",
   openGraph: {
+    type: "website",
+    url: "https://www.pennycentral.com/store-finder",
     title: "Store Finder | Penny Central",
     description:
       "Find Home Depot stores near you. Search by ZIP code, city, or use your location to find the closest stores for penny hunting.",

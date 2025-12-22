@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   description:
     "Latest community-reported Home Depot penny list. Search and filter by state, tier, and date. Updated hourly with the freshest penny sightings.",
   openGraph: {
+    type: "website",
+    url: "https://www.pennycentral.com/penny-list",
     title: "Home Depot Penny List ($0.01 Finds)",
     description:
       "Latest community-reported penny sightings at Home Depot. Search and filter by state, tier, and date.",

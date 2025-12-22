@@ -14,6 +14,8 @@ export const metadata: Metadata = {
     "report clearance find",
   ],
   openGraph: {
+    type: "website",
+    url: "https://www.pennycentral.com/report-find",
     title: "Report a Penny Find - Help the Community",
     description:
       "Submit your Home Depot penny finds to the community Penny List. Quick and easy reporting.",
