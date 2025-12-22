@@ -1,6 +1,17 @@
 import { ImageResponse } from "next/og"
+import { INTER_FONT_BASE64 } from "@/lib/inter-font-data"
 
 export const runtime = "edge"
+
+// Decode base64 font to ArrayBuffer (no network request needed)
+function base64ToArrayBuffer(base64: string): ArrayBuffer {
+  const binaryString = atob(base64)
+  const bytes = new Uint8Array(binaryString.length)
+  for (let i = 0; i < binaryString.length; i++) {
+    bytes[i] = binaryString.charCodeAt(i)
+  }
+  return bytes.buffer
+}
 
 const OG_WIDTH = 1200
 const OG_HEIGHT = 630
@@ -66,29 +77,17 @@ export async function GET(request: Request) {
     const headline = normalizeHeadline(searchParams.get("headline") ?? searchParams.get("title"))
     const accent = searchParams.get("accent") !== "0"
 
-    // Fetch Inter font from own domain (faster than external Google Fonts)
-    let fontData: ArrayBuffer | null = null
-    try {
-      const fontUrl = new URL("/fonts/inter-latin-wght-normal.woff2", request.url).href
-      const fontResponse = await fetch(fontUrl)
-      if (fontResponse.ok) {
-        fontData = await fontResponse.arrayBuffer()
-      }
-    } catch (fontError) {
-      // Fallback to system fonts if font fetch fails
-      console.error("Font fetch failed, using system fonts:", fontError)
-    }
+    // Use embedded font (no network request - instant and reliable)
+    const fontData = base64ToArrayBuffer(INTER_FONT_BASE64)
 
-    const fontConfig = fontData
-      ? [
-          {
-            name: "Inter",
-            data: fontData,
-            weight: 600 as const,
-            style: "normal" as const,
-          },
-        ]
-      : undefined
+    const fontConfig = [
+      {
+        name: "Inter",
+        data: fontData,
+        weight: 600 as const,
+        style: "normal" as const,
+      },
+    ]
 
     return new ImageResponse(
       <div {...({ style: styles.container } as Record<string, unknown>)}>
