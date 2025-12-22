@@ -66,11 +66,10 @@ export async function GET(request: Request) {
     const headline = normalizeHeadline(searchParams.get("headline") ?? searchParams.get("title"))
     const accent = searchParams.get("accent") !== "0"
 
-    // Attempt to fetch Inter font - use Google Fonts for better edge reliability
+    // Fetch Inter font from own domain (faster than external Google Fonts)
     let fontData: ArrayBuffer | null = null
     try {
-      const fontUrl =
-        "https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff"
+      const fontUrl = new URL("/fonts/inter-latin-wght-normal.woff2", request.url).href
       const fontResponse = await fetch(fontUrl)
       if (fontResponse.ok) {
         fontData = await fontResponse.arrayBuffer()

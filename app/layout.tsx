@@ -37,9 +37,9 @@ const inter = localFont({
 })
 
 export const metadata: Metadata = {
-  title: "Penny Central: The Home Depot $0.01 Hunting Guide",
+  title: "Penny Central | Home Depot Penny List",
   description:
-    "The complete guide to finding Home Depot penny items. Learn clearance cycles, in-store hunting strategies, checkout tips, and join 40,000+ penny hunters.",
+    "The searchable Home Depot penny list. Filter by state, date, and SKU. Community-reported $0.01 finds updated daily.",
   keywords: [
     "home depot penny items",
     "penny items",
@@ -58,18 +58,18 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://www.pennycentral.com",
-    title: "Penny Central: The Home Depot $0.01 Hunting Guide",
+    title: "Penny Central | Home Depot Penny List",
     description:
-      "The complete guide to finding Home Depot penny items. Learn clearance cycles, in-store hunting strategies, checkout tips, and join 40,000+ penny hunters.",
-    images: [ogImageUrl("Home Depot $0.01 Finds")],
+      "The searchable Home Depot penny list. Filter by state, date, and SKU. Community-reported $0.01 finds updated daily.",
+    images: [ogImageUrl("Home Depot Penny List")],
     siteName: "Penny Central",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Penny Central: The Home Depot $0.01 Hunting Guide",
+    title: "Penny Central | Home Depot Penny List",
     description:
-      "The complete guide to finding Home Depot penny items. Learn clearance cycles, in-store hunting strategies, checkout tips, and join 40,000+ penny hunters.",
-    images: [ogImageUrl("Home Depot $0.01 Finds")],
+      "The searchable Home Depot penny list. Filter by state, date, and SKU. Community-reported $0.01 finds updated daily.",
+    images: [ogImageUrl("Home Depot Penny List")],
   },
   robots: {
     index: true,
@@ -141,7 +141,7 @@ export default function RootLayout({
               name: "Penny Central",
               url: "https://www.pennycentral.com",
               description:
-                "The complete guide to finding Home Depot penny items. Learn clearance cycles, in-store hunting strategies, checkout tips, and join 40,000+ penny hunters.",
+                "The searchable Home Depot penny list. Filter by state, date, and SKU. Community-reported $0.01 finds updated daily.",
               potentialAction: {
                 "@type": "SearchAction",
                 target: {
