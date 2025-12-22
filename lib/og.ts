@@ -1,12 +1,13 @@
-// Static OG images - no dynamic generation, maximum reliability
-const OG_IMAGES: Record<string, string> = {
-  homepage: "/og/og-homepage.png",
-  "penny-list": "/og/og-penny-list.png",
-  "report-find": "/og/og-report-find.png",
-  "store-finder": "/og/og-store-finder.png",
-  guide: "/og/og-guide.png",
+// Dynamic OG images via API route
+const OG_HEADLINES: Record<string, string> = {
+  homepage: "Penny Central",
+  "penny-list": "Home Depot Penny List",
+  "report-find": "Report a Penny Find",
+  "store-finder": "Store Finder",
+  guide: "Complete Guide",
 }
 
-export function ogImageUrl(page: keyof typeof OG_IMAGES | string): string {
-  return OG_IMAGES[page] || OG_IMAGES.homepage
+export function ogImageUrl(page: keyof typeof OG_HEADLINES | string): string {
+  const headline = OG_HEADLINES[page] || OG_HEADLINES.homepage
+  return `/api/og?headline=${encodeURIComponent(headline)}`
 }
