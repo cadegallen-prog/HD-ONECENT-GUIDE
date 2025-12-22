@@ -3046,5 +3046,8 @@ If continuing [Unfinished Item 2], copy-paste:
 - `npm run test:unit` ✅
 - `npm run test:e2e` ✅
 
+**CI Follow-up:**
+- Fixed GitHub Actions \"Quality Checks\" failures by stabilizing `scripts/check-contrast.js` (token readiness + CTA contrast computed from design tokens to avoid hydration timing flake).
+
 **Notes for Next Session:**
 - After deploy, re-check `curl -v https://www.pennycentral.com/api/og?...` shows non-zero bytes and rescrape in Facebook Sharing Debugger.
