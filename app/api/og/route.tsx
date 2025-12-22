@@ -1,73 +1,104 @@
 import { ImageResponse } from "next/og"
-import { INTER_FONT_BASE64 } from "@/lib/inter-font-data"
 
 export const runtime = "edge"
-
-// Decode base64 font to ArrayBuffer (no network request needed)
-function base64ToArrayBuffer(base64: string): ArrayBuffer {
-  const binaryString = atob(base64)
-  const bytes = new Uint8Array(binaryString.length)
-  for (let i = 0; i < binaryString.length; i++) {
-    bytes[i] = binaryString.charCodeAt(i)
-  }
-  return bytes.buffer
-}
+export const dynamic = "force-dynamic"
+export const revalidate = 0
 
 const OG_WIDTH = 1200
 const OG_HEIGHT = 630
 
-// Styles for the OG image to satisfy "no inline styles" linting
+const fontFamily =
+  "ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, 'Noto Sans', sans-serif"
+
 const styles = {
   container: {
     position: "relative",
     width: "100%",
     height: "100%",
-    background: "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)",
+    background: "linear-gradient(135deg, #ffffff 0%, #f5f5f4 100%)",
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
     justifyContent: "center",
-    padding: "120px 80px",
-    fontFamily:
-      "Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, 'Noto Sans', sans-serif",
+    padding: "96px 90px",
+    fontFamily,
+  },
+  brandRow: {
+    display: "flex",
+    alignItems: "center",
+    gap: 14,
+    marginBottom: 28,
   },
   brand: {
-    fontSize: 42,
-    fontWeight: 700,
-    color: "#FFFFFF",
-    letterSpacing: "-0.02em",
-    marginBottom: 36,
-    fontFamily:
-      "Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, 'Noto Sans', sans-serif",
+    fontSize: 44,
+    fontWeight: 800,
+    color: "#1c1917",
+    letterSpacing: "-0.03em",
   },
-  content: {
+  brandPill: {
     display: "flex",
-    flexDirection: "column",
     alignItems: "center",
-    gap: 28,
-    textAlign: "center",
-    maxWidth: 900,
+    padding: "10px 14px",
+    borderRadius: 999,
+    border: "1px solid rgba(43, 76, 126, 0.25)",
+    background: "rgba(43, 76, 126, 0.08)",
+    color: "#2b4c7e",
+    fontSize: 18,
+    fontWeight: 700,
+    letterSpacing: "-0.01em",
   },
-  accent: {
-    width: 200,
-    height: 6,
-    backgroundColor: "#B87333",
-    borderRadius: 3,
-    boxShadow: "0 4px 12px rgba(184, 115, 51, 0.3)",
+  headline: {
+    fontWeight: 850,
+    color: "#1c1917",
+    letterSpacing: "-0.03em",
+    lineHeight: 1.05,
+    maxWidth: 980,
+  },
+  subhead: {
+    marginTop: 18,
+    fontSize: 28,
+    fontWeight: 600,
+    color: "#44403c",
+    letterSpacing: "-0.02em",
+    maxWidth: 980,
+    lineHeight: 1.25,
+  },
+  footer: {
+    position: "absolute",
+    left: 90,
+    right: 90,
+    bottom: 60,
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    color: "#57534e",
+    fontSize: 20,
+    fontWeight: 650,
+    letterSpacing: "-0.01em",
+  },
+  footerUrl: {
+    color: "#2b4c7e",
   },
 } as const
 
 function normalizeHeadline(raw: string | null) {
-  const fallback = "Home Depot $0.01 Finds"
+  const fallback = "Home Depot Penny List"
   const headline = (raw ?? "").trim().replace(/\s+/g, " ")
   if (!headline) return fallback
-  return headline.length > 80 ? `${headline.slice(0, 79)}…` : headline
+  return headline.length > 92 ? `${headline.slice(0, 91)}…` : headline
+}
+
+function normalizeSubhead(raw: string | null) {
+  const fallback = "Community-reported $0.01 finds, updated daily"
+  const subhead = (raw ?? "").trim().replace(/\s+/g, " ")
+  if (!subhead) return fallback
+  return subhead.length > 110 ? `${subhead.slice(0, 109)}…` : subhead
 }
 
 function headlineFontSize(headline: string) {
-  if (headline.length <= 20) return 84
-  if (headline.length <= 28) return 72
-  if (headline.length <= 38) return 64
+  if (headline.length <= 22) return 92
+  if (headline.length <= 34) return 82
+  if (headline.length <= 48) return 72
+  if (headline.length <= 66) return 62
   return 56
 }
 
@@ -75,54 +106,45 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
     const headline = normalizeHeadline(searchParams.get("headline") ?? searchParams.get("title"))
-    const accent = searchParams.get("accent") !== "0"
-
-    // Use embedded font (no network request - instant and reliable)
-    const fontData = base64ToArrayBuffer(INTER_FONT_BASE64)
-
-    const fontConfig = [
-      {
-        name: "Inter",
-        data: fontData,
-        weight: 600 as const,
-        style: "normal" as const,
-      },
-    ]
+    const subhead = normalizeSubhead(searchParams.get("subhead"))
+    const showBrand = searchParams.get("brand") !== "0"
+    const showPill = searchParams.get("pill") !== "0"
 
     return new ImageResponse(
       <div {...({ style: styles.container } as Record<string, unknown>)}>
-        {/* Brand header - smaller and positioned at top */}
-        <div {...({ style: styles.brand } as Record<string, unknown>)}>PennyCentral</div>
-
-        {/* Centered content - headline is in vertical safe zone */}
-        <div {...({ style: styles.content } as Record<string, unknown>)}>
-          {accent ? <div {...({ style: styles.accent } as Record<string, unknown>)} /> : null}
-          <div
-            {...({
-              style: {
-                fontFamily:
-                  "Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, 'Noto Sans', sans-serif",
-                fontSize: headlineFontSize(headline),
-                fontWeight: 700,
-                color: "#FFFFFF",
-                letterSpacing: "-0.02em",
-                lineHeight: 1.1,
-                textShadow: "0 2px 12px rgba(0, 0, 0, 0.4)",
-                maxWidth: "100%",
-              },
-            } as Record<string, unknown>)}
-          >
-            {headline}
+        {showBrand ? (
+          <div {...({ style: styles.brandRow } as Record<string, unknown>)}>
+            <div {...({ style: styles.brand } as Record<string, unknown>)}>Penny Central</div>
+            {showPill ? (
+              <div {...({ style: styles.brandPill } as Record<string, unknown>)}>$0.01 Finds</div>
+            ) : null}
           </div>
+        ) : null}
+
+        <div
+          {...({
+            style: {
+              ...styles.headline,
+              fontSize: headlineFontSize(headline),
+            },
+          } as Record<string, unknown>)}
+        >
+          {headline}
+        </div>
+
+        <div {...({ style: styles.subhead } as Record<string, unknown>)}>{subhead}</div>
+
+        <div {...({ style: styles.footer } as Record<string, unknown>)}>
+          <div>Shareable preview image</div>
+          <div {...({ style: styles.footerUrl } as Record<string, unknown>)}>pennycentral.com</div>
         </div>
       </div>,
       {
         width: OG_WIDTH,
         height: OG_HEIGHT,
         headers: {
-          "Cache-Control": "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
+          "Cache-Control": "no-store, max-age=0",
         },
-        fonts: fontConfig,
       }
     )
   } catch (error) {

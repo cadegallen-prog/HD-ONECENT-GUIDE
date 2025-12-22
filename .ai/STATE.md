@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 21, 2025 (Homepage re-prioritized for engagement)
+**Last updated:** Dec 22, 2025 (OG images: reliability + copy alignment)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -171,7 +171,7 @@ Every AI session must update this after meaningful work.
   - `/report-find` posts to Google Sheet via Apps Script.
   - `/penny-list` pulls hourly, aggregates by SKU, counts by state, auto‑tiers.
 - **Verified Pennies removed:** `/verified-pennies` permanently redirects to `/penny-list`.
-- **OpenGraph previews are solid:** `GET /api/og?headline=...&v=1` generates minimal OG images; key routes set clear, route-specific headlines (Guide, Curated, Penny List, Store Finder, Report a Find). (CDN cache is now 1h with SWR; bump `v` to bust.)
+- **OpenGraph previews are solid:** `GET /api/og?headline=...&v=7` generates shareable OG images; key routes set clear, route-specific headlines. `/api/og` is now `force-dynamic` + `no-store` and no longer embeds a custom font (fixes the \"200 OK but zero-byte body\" failures seen in production).
 - **Command reliability (Dec 15, 12:30 PM):**
   - All local scripts (`lint:colors`, `test:unit`, `check-axe`, `check-contrast`) now exit cleanly without hanging
   - Removed `npx` from execution paths (only in CI Playwright install and docs)

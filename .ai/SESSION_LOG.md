@@ -3020,3 +3020,31 @@ If continuing [Unfinished Item 2], copy-paste:
 - `npm run build` ✔
 - `npm run test:unit` ✔
 - `npm run test:e2e` ✔ (Playwright reused existing dev server; expected source-map warnings + store API fallback logs, tests still green)
+
+---
+
+## 2025-12-22 - Codex CLI - OG Images: Fix Corruption + Align Homepage Copy
+
+**AI:** ChatGPT Codex (GPT-5.2)
+**Goal:** Fix Facebook OG image corruption and make homepage OG image copy coherent/professional.
+
+**Root Cause (Prod):**
+- `https://www.pennycentral.com/api/og?...` returned `200 OK` with `Content-Type: image/png` but `Content-Length: 0` (empty body), causing Facebook to treat the image as corrupt.
+- The embedded Inter font path was a likely trigger: `next/og` can fail during streaming render (after headers), producing an empty body with a 200.
+
+**Changes Made:**
+- `app/api/og/route.tsx`: Removed embedded font dependency and simplified the OG layout; enforced `dynamic = "force-dynamic"` + `revalidate = 0`; set `Cache-Control: no-store`.
+- `lib/og.ts`: Updated headline mappings (homepage now \"Home Depot Penny List & Guide\") and added `v=7` query param to bust scraper caches.
+
+**Screenshots (OG Image):**
+- Before: `test-results/og/home-before.png`
+- After: `test-results/og/home-after.png`
+
+**Verification:**
+- `npm run lint` ✅
+- `npm run build` ✅
+- `npm run test:unit` ✅
+- `npm run test:e2e` ✅
+
+**Notes for Next Session:**
+- After deploy, re-check `curl -v https://www.pennycentral.com/api/og?...` shows non-zero bytes and rescrape in Facebook Sharing Debugger.
