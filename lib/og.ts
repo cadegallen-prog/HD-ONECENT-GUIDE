@@ -9,7 +9,7 @@ const OG_HEADLINES: Record<string, string> = {
   guide: "How to Find Home Depot Penny Items",
 }
 
-const OG_IMAGE_VERSION = "7"
+const OG_IMAGE_VERSION = "8"
 
 export function ogImageUrl(page: keyof typeof OG_HEADLINES | string): string {
   // Use static images for main pages
