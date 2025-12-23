@@ -39,6 +39,27 @@ npm run lint       # ESLint check
 
 ---
 
+## OG Images (Facebook Reliable)
+
+Main pages use **static** OG PNGs for reliability on Facebook and other scrapers.
+
+- **Static files:** `public/og/*.png`
+- **Source template:** `app/api/og/route.tsx`
+- **Generator:** `scripts/generate-og-images-playwright.ts` (screenshots the OG endpoint)
+
+To regenerate after updating the OG template:
+
+1. Ensure the dev server is running on port 3001.
+2. Run:
+
+```bash
+tsx scripts/generate-og-images-playwright.ts
+```
+
+Then commit the updated `public/og/*.png` files.
+
+---
+
 ## Definition of Done (Required)
 
 For any meaningful change (especially UI/copy/navigation):

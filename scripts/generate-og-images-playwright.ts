@@ -1,31 +1,17 @@
 import { chromium } from "@playwright/test"
 import { mkdirSync } from "fs"
 import { join } from "path"
+import { OG_HEADLINES } from "../lib/og"
 
 const OG_WIDTH = 1200
 const OG_HEIGHT = 630
 
 const pages = [
-  {
-    id: "homepage",
-    headline: "Home Depot Penny List & Guide",
-  },
-  {
-    id: "penny-list",
-    headline: "Home Depot Penny List",
-  },
-  {
-    id: "report-find",
-    headline: "Report a Home Depot Penny Find",
-  },
-  {
-    id: "store-finder",
-    headline: "Find Nearby Home Depot Stores",
-  },
-  {
-    id: "guide",
-    headline: "How to Find Home Depot Penny Items",
-  },
+  { id: "homepage", headline: OG_HEADLINES.homepage },
+  { id: "penny-list", headline: OG_HEADLINES["penny-list"] },
+  { id: "report-find", headline: OG_HEADLINES["report-find"] },
+  { id: "store-finder", headline: OG_HEADLINES["store-finder"] },
+  { id: "guide", headline: OG_HEADLINES.guide },
 ]
 
 async function generateOGImage(page: (typeof pages)[number], baseUrl: string) {

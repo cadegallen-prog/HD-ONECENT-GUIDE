@@ -15,62 +15,119 @@ const styles = {
     position: "relative",
     width: "100%",
     height: "100%",
-    background: "linear-gradient(135deg, #ffffff 0%, #f5f5f4 100%)",
+    background: "#ffffff",
     display: "flex",
     flexDirection: "column",
+    alignItems: "center",
     justifyContent: "center",
-    padding: "96px 90px",
+    padding: "84px 90px",
     fontFamily,
   },
-  brandRow: {
+  watermarkWrap: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
     display: "flex",
     alignItems: "center",
-    gap: 14,
-    marginBottom: 28,
+    justifyContent: "center",
+    opacity: 0.13,
+  },
+  penny: {
+    position: "relative",
+    width: 360,
+    height: 360,
+    borderRadius: 9999,
+    background: "linear-gradient(135deg, #cd7f32 0%, #b87333 50%, #8b5a2b 100%)",
+    display: "flex",
+  },
+  pennyOuterRing: {
+    position: "absolute",
+    top: 14,
+    right: 14,
+    bottom: 14,
+    left: 14,
+    borderRadius: 9999,
+    border: "4px solid #8b5a2b",
+  },
+  pennyInnerRing: {
+    position: "absolute",
+    top: 58,
+    right: 58,
+    bottom: 58,
+    left: 58,
+    borderRadius: 9999,
+    border: "2px solid #ffffff",
+    opacity: 0.7,
+  },
+  pennyOne: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 122,
+    textAlign: "center",
+    fontSize: 160,
+    fontWeight: 900,
+    color: "#1c1917",
+    letterSpacing: "-0.05em",
+    lineHeight: 1,
+  },
+  pennyCent: {
+    position: "absolute",
+    top: 86,
+    right: 86,
+    fontSize: 80,
+    fontWeight: 700,
+    color: "#44403c",
+    lineHeight: 1,
+  },
+  brandWrap: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    marginBottom: 34,
   },
   brand: {
-    fontSize: 44,
-    fontWeight: 800,
-    color: "#1c1917",
+    fontSize: 54,
+    fontWeight: 900,
+    color: "#000000",
     letterSpacing: "-0.03em",
+    lineHeight: 1,
   },
-  separator: {
-    width: "100%",
-    height: 2,
-    background: "#d6d3d1",
-    marginBottom: 28,
+  underline: {
+    marginTop: 10,
+    width: 180,
+    height: 4,
+    borderRadius: 2,
+    background: "#e7e5e4",
   },
   headline: {
-    fontWeight: 850,
-    color: "#1c1917",
+    fontWeight: 900,
+    color: "#000000",
     letterSpacing: "-0.03em",
     lineHeight: 1.05,
-    maxWidth: 980,
+    maxWidth: 1040,
+    textAlign: "center",
   },
   subhead: {
     marginTop: 18,
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: 600,
-    color: "#44403c",
+    color: "#333333",
     letterSpacing: "-0.02em",
-    maxWidth: 980,
+    maxWidth: 1040,
     lineHeight: 1.25,
-  },
-  footer: {
-    position: "absolute",
-    left: 90,
-    right: 90,
-    bottom: 60,
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    color: "#57534e",
-    fontSize: 20,
-    fontWeight: 650,
-    letterSpacing: "-0.01em",
+    textAlign: "center",
   },
   footerUrl: {
+    position: "absolute",
+    right: 70,
+    bottom: 54,
     color: "#2b4c7e",
+    fontSize: 24,
+    fontWeight: 600,
+    letterSpacing: "-0.01em",
   },
 } as const
 
@@ -82,7 +139,7 @@ function normalizeHeadline(raw: string | null) {
 }
 
 function normalizeSubhead(raw: string | null) {
-  const fallback = "The community-reported $0.01 list, updated hourly."
+  const fallback = "Community-Reported $0.01 Finds – Updated Hourly"
   const subhead = (raw ?? "").trim().replace(/\s+/g, " ")
   if (!subhead) return fallback
   return subhead.length > 110 ? `${subhead.slice(0, 109)}…` : subhead
@@ -107,13 +164,20 @@ export async function GET(request: Request) {
 
     return new ImageResponse(
       <div {...({ style: styles.container } as Record<string, unknown>)}>
+        <div {...({ style: styles.watermarkWrap } as Record<string, unknown>)}>
+          <div {...({ style: styles.penny } as Record<string, unknown>)}>
+            <div {...({ style: styles.pennyOuterRing } as Record<string, unknown>)} />
+            <div {...({ style: styles.pennyInnerRing } as Record<string, unknown>)} />
+            <div {...({ style: styles.pennyOne } as Record<string, unknown>)}>1</div>
+            <div {...({ style: styles.pennyCent } as Record<string, unknown>)}>¢</div>
+          </div>
+        </div>
+
         {showBrand ? (
-          <>
-            <div {...({ style: styles.brandRow } as Record<string, unknown>)}>
-              <div {...({ style: styles.brand } as Record<string, unknown>)}>PennyCentral</div>
-            </div>
-            <div {...({ style: styles.separator } as Record<string, unknown>)} />
-          </>
+          <div {...({ style: styles.brandWrap } as Record<string, unknown>)}>
+            <div {...({ style: styles.brand } as Record<string, unknown>)}>PennyCentral</div>
+            <div {...({ style: styles.underline } as Record<string, unknown>)} />
+          </div>
         ) : null}
 
         <div
@@ -129,11 +193,8 @@ export async function GET(request: Request) {
 
         <div {...({ style: styles.subhead } as Record<string, unknown>)}>{subhead}</div>
 
-        <div {...({ style: styles.footer } as Record<string, unknown>)}>
-          <div>Shareable preview image</div>
-          <div {...({ style: styles.footerUrl } as Record<string, unknown>)}>
-            www.pennycentral.com
-          </div>
+        <div {...({ style: styles.footerUrl } as Record<string, unknown>)}>
+          www.pennycentral.com
         </div>
       </div>,
       {
@@ -144,7 +205,19 @@ export async function GET(request: Request) {
             name: "Inter",
             data: fontBuffer,
             style: "normal",
-            weight: 800,
+            weight: 400,
+          },
+          {
+            name: "Inter",
+            data: fontBuffer,
+            style: "normal",
+            weight: 600,
+          },
+          {
+            name: "Inter",
+            data: fontBuffer,
+            style: "normal",
+            weight: 900,
           },
         ],
         headers: {

@@ -11,6 +11,33 @@
 
 ---
 
+## 2025-12-23 - GitHub Copilot (GPT-5.2) - OG Image Refresh + Static Regeneration
+
+**AI:** GitHub Copilot (GPT-5.2)
+**Goal:** Refresh OG image design (brand match + better CTR) and ensure the *actual* live OG path (`/og/homepage.png`) is updated via the proper static regeneration workflow.
+
+**Changes Made:**
+- Updated OG template in `app/api/og/route.tsx`:
+   - Centered layout and improved spacing
+   - Bold `PennyCentral` brand with a short underline (not a full-width separator)
+   - Added a subtle penny watermark behind the headline
+   - Bottom-right URL only (removed left-side footer text)
+   - Embedded Inter weights needed for mixed typography
+- Kept static OG strategy: main pages use `public/og/*.png` and `lib/og.ts` returns `/og/{page}.png`.
+- Updated docs: added OG regeneration instructions to `README.md`.
+
+**Operational Step:**
+- Regenerated static OG PNGs using `scripts/generate-og-images-playwright.ts` (Playwright screenshots of `/api/og`).
+
+**Outcome:** ✅ Success
+
+**Verification:**
+- ✓ `npm run lint`
+- ✓ `npm run build`
+- ✓ `npm run test:unit`
+- ✓ `npm run test:e2e` (32/32)
+
+
 ## 2025-12-21 - Claude Code - Homepage Re-Prioritized for Habitual Engagement
 
 **AI:** Claude Code (Sonnet 4.5)

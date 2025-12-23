@@ -1,7 +1,7 @@
 // Static OG images for main pages, dynamic for others (e.g., SKU pages)
 const STATIC_OG_PAGES = ["homepage", "penny-list", "report-find", "store-finder", "guide"] as const
 
-const OG_HEADLINES: Record<string, string> = {
+export const OG_HEADLINES: Record<string, string> = {
   homepage: "Find Home Depot Penny Items",
   "penny-list": "Home Depot Penny List",
   "report-find": "Report a Home Depot Penny Find",

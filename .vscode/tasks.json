@@ -1,0 +1,41 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "lint",
+			"type": "shell",
+			"command": "npm run lint",
+			"isBackground": false,
+			"problemMatcher": [
+				"$eslint - stylish"
+			]
+		},
+		{
+			"label": "build",
+			"type": "shell",
+			"command": "npm run build",
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "test:unit",
+			"type": "shell",
+			"command": "npm run test:unit",
+			"isBackground": false
+		},
+		{
+			"label": "test:e2e",
+			"type": "shell",
+			"command": "npm run test:e2e",
+			"isBackground": false
+		},
+		{
+			"label": "build-clean",
+			"type": "shell",
+			"command": "npm run build",
+			"isBackground": false
+		}
+	]
+}
