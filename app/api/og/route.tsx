@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og"
+import { INTER_FONT_BASE64 } from "@/lib/inter-font-data"
 
 export const runtime = "edge"
 // Enable caching for SKU pages (main pages now use static images)
@@ -7,8 +8,7 @@ export const revalidate = 86400 // 24 hours
 const OG_WIDTH = 1200
 const OG_HEIGHT = 630
 
-const fontFamily =
-  "ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, 'Noto Sans', sans-serif"
+const fontFamily = "Inter"
 
 const styles = {
   container: {
@@ -33,6 +33,12 @@ const styles = {
     fontWeight: 800,
     color: "#1c1917",
     letterSpacing: "-0.03em",
+  },
+  separator: {
+    width: "100%",
+    height: 2,
+    background: "#d6d3d1",
+    marginBottom: 28,
   },
   headline: {
     fontWeight: 850,
@@ -76,7 +82,7 @@ function normalizeHeadline(raw: string | null) {
 }
 
 function normalizeSubhead(raw: string | null) {
-  const fallback = "Community-reported $0.01 finds, updated hourly"
+  const fallback = "The community-reported $0.01 list, updated hourly."
   const subhead = (raw ?? "").trim().replace(/\s+/g, " ")
   if (!subhead) return fallback
   return subhead.length > 110 ? `${subhead.slice(0, 109)}…` : subhead
@@ -97,12 +103,17 @@ export async function GET(request: Request) {
     const subhead = normalizeSubhead(searchParams.get("subhead"))
     const showBrand = searchParams.get("brand") !== "0"
 
+    const fontBuffer = Buffer.from(INTER_FONT_BASE64, "base64")
+
     return new ImageResponse(
       <div {...({ style: styles.container } as Record<string, unknown>)}>
         {showBrand ? (
-          <div {...({ style: styles.brandRow } as Record<string, unknown>)}>
-            <div {...({ style: styles.brand } as Record<string, unknown>)}>PennyCentral</div>
-          </div>
+          <>
+            <div {...({ style: styles.brandRow } as Record<string, unknown>)}>
+              <div {...({ style: styles.brand } as Record<string, unknown>)}>PennyCentral</div>
+            </div>
+            <div {...({ style: styles.separator } as Record<string, unknown>)} />
+          </>
         ) : null}
 
         <div
@@ -128,6 +139,14 @@ export async function GET(request: Request) {
       {
         width: OG_WIDTH,
         height: OG_HEIGHT,
+        fonts: [
+          {
+            name: "Inter",
+            data: fontBuffer,
+            style: "normal",
+            weight: 800,
+          },
+        ],
         headers: {
           "Cache-Control": "public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800",
         },

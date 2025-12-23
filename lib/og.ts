@@ -2,14 +2,14 @@
 const STATIC_OG_PAGES = ["homepage", "penny-list", "report-find", "store-finder", "guide"] as const
 
 const OG_HEADLINES: Record<string, string> = {
-  homepage: "Home Depot Penny List & Guide",
+  homepage: "Find Home Depot Penny Items",
   "penny-list": "Home Depot Penny List",
   "report-find": "Report a Home Depot Penny Find",
   "store-finder": "Find Nearby Home Depot Stores",
   guide: "How to Find Home Depot Penny Items",
 }
 
-const OG_IMAGE_VERSION = "8"
+const OG_IMAGE_VERSION = "9"
 
 export function ogImageUrl(page: keyof typeof OG_HEADLINES | string): string {
   // Use static images for main pages
