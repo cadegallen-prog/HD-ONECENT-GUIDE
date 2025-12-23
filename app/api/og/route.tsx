@@ -34,18 +34,6 @@ const styles = {
     color: "#1c1917",
     letterSpacing: "-0.03em",
   },
-  brandPill: {
-    display: "flex",
-    alignItems: "center",
-    padding: "10px 14px",
-    borderRadius: 999,
-    border: "1px solid rgba(43, 76, 126, 0.25)",
-    background: "rgba(43, 76, 126, 0.08)",
-    color: "#2b4c7e",
-    fontSize: 18,
-    fontWeight: 700,
-    letterSpacing: "-0.01em",
-  },
   headline: {
     fontWeight: 850,
     color: "#1c1917",
@@ -108,16 +96,12 @@ export async function GET(request: Request) {
     const headline = normalizeHeadline(searchParams.get("headline") ?? searchParams.get("title"))
     const subhead = normalizeSubhead(searchParams.get("subhead"))
     const showBrand = searchParams.get("brand") !== "0"
-    const showPill = searchParams.get("pill") !== "0"
 
     return new ImageResponse(
       <div {...({ style: styles.container } as Record<string, unknown>)}>
         {showBrand ? (
           <div {...({ style: styles.brandRow } as Record<string, unknown>)}>
-            <div {...({ style: styles.brand } as Record<string, unknown>)}>Penny Central</div>
-            {showPill ? (
-              <div {...({ style: styles.brandPill } as Record<string, unknown>)}>$0.01 Finds</div>
-            ) : null}
+            <div {...({ style: styles.brand } as Record<string, unknown>)}>PennyCentral</div>
           </div>
         ) : null}
 
