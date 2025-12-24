@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowUpDown, ArrowUp, ArrowDown, Copy, Check } from "lucide-react"
+import { ArrowUpDown, ArrowUp, ArrowDown, Copy, Check, PlusCircle } from "lucide-react"
 import { useState } from "react"
 import type { KeyboardEvent } from "react"
 import Link from "next/link"
@@ -11,6 +11,8 @@ import { PennyThumbnail } from "@/components/penny-thumbnail"
 import type { PennyItem } from "@/lib/fetch-penny-data"
 import type { SortOption } from "./penny-list-filters"
 import { trackEvent } from "@/lib/analytics"
+import { buildReportFindUrl } from "@/lib/report-find-link"
+import { Button } from "@/components/ui/button"
 
 interface PennyListTableProps {
   items: (PennyItem & { parsedDate?: Date | null })[]
@@ -128,18 +130,19 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
       </div>
       <div className="overflow-x-auto">
         <table
-          className="w-full text-sm table-fixed min-w-[980px] penny-list-table"
+          className="w-full text-sm table-fixed min-w-[1060px] penny-list-table"
           role="table"
           aria-label="Penny list items"
         >
           <colgroup>
-            <col className="w-[8%]" />
-            <col className="w-[28%]" />
+            <col className="w-[7%]" />
+            <col className="w-[26%]" />
+            <col className="w-[13%]" />
+            <col className="w-[11%]" />
             <col className="w-[14%]" />
-            <col className="w-[12%]" />
-            <col className="w-[16%]" />
-            <col className="w-[10%]" />
-            <col className="w-[12%]" />
+            <col className="w-[9%]" />
+            <col className="w-[11%]" />
+            <col className="w-[9%]" />
           </colgroup>
           <thead>
             <tr className="border-b border-[var(--border-default)] bg-[var(--bg-recessed)]">
@@ -190,6 +193,12 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
                 <SortButton column="newest" currentSort={sortOption} onSort={onSortChange}>
                   Date
                 </SortButton>
+              </th>
+              <th
+                scope="col"
+                className="text-left px-4 py-3 font-semibold text-[var(--text-primary)]"
+              >
+                Action
               </th>
             </tr>
           </thead>
@@ -306,6 +315,37 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
                     >
                       {formatRelativeDate(item.dateAdded)}
                     </time>
+                  </td>
+
+                  {/* Action */}
+                  <td
+                    className="px-4 py-3 align-top"
+                    onClick={(event) => event.stopPropagation()}
+                    onKeyDown={(event) => event.stopPropagation()}
+                  >
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        trackEvent("report_duplicate_click", {
+                          sku: item.sku,
+                          name: item.name,
+                          src: "table",
+                        })
+                        router.push(
+                          buildReportFindUrl({ sku: item.sku, name: item.name, src: "table" })
+                        )
+                      }}
+                      className="relative z-10 pointer-events-auto min-h-[44px] min-w-[44px]"
+                      aria-label={`Report finding ${item.name}`}
+                      title="Report this find"
+                    >
+                      <PlusCircle className="w-4 h-4" aria-hidden="true" />
+                      <span className="sr-only">Report</span>
+                    </Button>
                   </td>
                 </tr>
               )

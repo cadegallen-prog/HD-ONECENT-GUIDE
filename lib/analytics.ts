@@ -21,6 +21,8 @@ export type EventName =
   | "feedback_vote"
   | "feedback_comment"
   | "return_visit"
+  | "report_duplicate_click"
+  | "report_prefill_loaded"
   // Legacy/compat events (keep until removed from UI)
   | "newsletter_click"
   | "store_search"

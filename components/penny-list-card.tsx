@@ -1,6 +1,6 @@
 "use client"
 
-import { Calendar, ExternalLink } from "lucide-react"
+import { Calendar, ExternalLink, PlusCircle } from "lucide-react"
 import Link from "next/link"
 import { CopySkuButton } from "@/components/copy-sku-button"
 import { ShareButton } from "@/components/share-button"
@@ -9,8 +9,11 @@ import { US_STATES } from "@/lib/us-states"
 import { formatRelativeDate } from "@/lib/penny-list-utils"
 import type { PennyItem } from "@/lib/fetch-penny-data"
 import { getHomeDepotProductUrl } from "@/lib/home-depot"
+import { buildReportFindUrl } from "@/lib/report-find-link"
+import { trackEvent } from "@/lib/analytics"
 import type { KeyboardEvent } from "react"
 import { useRouter } from "next/navigation"
+import { Button } from "@/components/ui/button"
 
 interface PennyListCardProps {
   item: PennyItem & { parsedDate?: Date | null }
@@ -146,9 +149,9 @@ export function PennyListCard({ item }: PennyListCardProps) {
             </div>
           )}
 
-          <div className="pt-4 border-t border-[var(--border-default)] flex items-center justify-between mt-auto text-sm text-[var(--text-secondary)]">
+          <div className="pt-4 border-t border-[var(--border-default)] flex flex-col sm:flex-row sm:items-center justify-between gap-3 mt-auto text-sm text-[var(--text-secondary)]">
             <span>Community lead</span>
-            <span className="inline-flex items-center gap-3 font-semibold text-[var(--text-primary)]">
+            <span className="inline-flex items-center flex-wrap gap-3 font-semibold text-[var(--text-primary)]">
               <span className="text-[var(--status-success)]">$0.01</span>
               <a
                 href={homeDepotUrl}
@@ -167,6 +170,26 @@ export function PennyListCard({ item }: PennyListCardProps) {
               >
                 <ShareButton sku={item.sku} itemName={item.name} source="card" />
               </span>
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  trackEvent("report_duplicate_click", {
+                    sku: item.sku,
+                    name: item.name,
+                    src: "card",
+                  })
+                  router.push(buildReportFindUrl({ sku: item.sku, name: item.name, src: "card" }))
+                }}
+                className="relative z-10 pointer-events-auto"
+                aria-label={`Report finding ${item.name}`}
+              >
+                <PlusCircle className="w-4 h-4 mr-1.5" aria-hidden="true" />
+                Report this find
+              </Button>
             </span>
           </div>
         </div>
@@ -275,6 +298,30 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
             )}
           </div>
         )}
+        <div className="mt-3 pt-3 border-t border-[var(--border-default)]">
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              trackEvent("report_duplicate_click", {
+                sku: item.sku,
+                name: item.name,
+                src: "card-compact",
+              })
+              router.push(
+                buildReportFindUrl({ sku: item.sku, name: item.name, src: "card-compact" })
+              )
+            }}
+            className="relative z-10 pointer-events-auto w-full"
+            aria-label={`Report finding ${item.name}`}
+          >
+            <PlusCircle className="w-4 h-4 mr-1.5" aria-hidden="true" />
+            Report this find
+          </Button>
+        </div>
       </article>
     </div>
   )

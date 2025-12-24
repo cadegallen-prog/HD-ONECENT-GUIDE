@@ -1,6 +1,7 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { AlertCircle, CheckCircle2, MapPin, Package, Calendar, Info } from "lucide-react"
 import { trackEvent } from "@/lib/analytics"
@@ -30,7 +31,8 @@ function getRawSku(input: string): string {
 
 const USER_STATE_KEY = "pennycentral_user_state"
 
-export default function ReportFindPage() {
+function ReportFindForm() {
+  const searchParams = useSearchParams()
   const [todayIso, setTodayIso] = useState("")
   const [formData, setFormData] = useState({
     itemName: "",
@@ -77,6 +79,36 @@ export default function ReportFindPage() {
       // ignore storage failures
     }
   }, [formData.storeState])
+
+  // Prefill from query params (deep-link from Penny List)
+  useEffect(() => {
+    const skuParam = (searchParams.get("sku") ?? "").trim().slice(0, 32)
+    const nameParam = (searchParams.get("name") ?? "").trim().slice(0, 75)
+    const src = (searchParams.get("src") ?? "").trim().slice(0, 64)
+
+    let applied = false
+
+    // Only prefill if current field is empty (don't overwrite user edits)
+    if (skuParam && !formData.sku) {
+      const formattedSku = formatSkuForDisplay(skuParam)
+      setFormData((prev) => ({ ...prev, sku: skuParam }))
+      setSkuDisplay(formattedSku)
+      applied = true
+    }
+
+    if (nameParam && !formData.itemName) {
+      setFormData((prev) => ({ ...prev, itemName: nameParam }))
+      applied = true
+    }
+
+    if (applied) {
+      trackEvent("report_prefill_loaded", {
+        sku: skuParam,
+        name: nameParam,
+        src,
+      })
+    }
+  }, [searchParams, formData.sku, formData.itemName])
 
   const handleSkuChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value
@@ -455,5 +487,13 @@ export default function ReportFindPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function ReportFindPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[var(--bg-page)]" />}>
+      <ReportFindForm />
+    </Suspense>
   )
 }
