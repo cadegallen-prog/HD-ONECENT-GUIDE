@@ -1,18 +1,13 @@
 import { chromium } from "@playwright/test"
-import { mkdirSync } from "fs"
+import { mkdirSync, statSync } from "fs"
 import { join } from "path"
-import { OG_HEADLINES } from "../lib/og"
+import { OG_MAIN_PAGES, OG_VARIANTS } from "../lib/og"
 
 const OG_WIDTH = 1200
 const OG_HEIGHT = 630
+const JPEG_QUALITY = 90
 
-const pages = [
-  { id: "homepage", headline: OG_HEADLINES.homepage },
-  { id: "penny-list", headline: OG_HEADLINES["penny-list"] },
-  { id: "report-find", headline: OG_HEADLINES["report-find"] },
-  { id: "store-finder", headline: OG_HEADLINES["store-finder"] },
-  { id: "guide", headline: OG_HEADLINES.guide },
-]
+const pages = OG_MAIN_PAGES.map((id) => ({ id, ...OG_VARIANTS[id] }))
 
 async function generateOGImage(page: (typeof pages)[number], baseUrl: string) {
   console.log(`Generating OG image for ${page.id}...`)
@@ -24,19 +19,32 @@ async function generateOGImage(page: (typeof pages)[number], baseUrl: string) {
   const browserPage = await context.newPage()
 
   // Navigate to the OG endpoint
-  const url = `${baseUrl}/api/og?headline=${encodeURIComponent(page.headline)}`
+  const url = `${baseUrl}/api/og?page=${encodeURIComponent(page.id)}&headline=${encodeURIComponent(
+    page.headline
+  )}&subhead=${encodeURIComponent(page.subhead)}`
   await browserPage.goto(url, { waitUntil: "networkidle" })
 
   // Ensure output directory exists
   mkdirSync(join(process.cwd(), "public", "og"), { recursive: true })
 
-  // Take screenshot
-  const outputPath = join(process.cwd(), "public", "og", `${page.id}.png`)
-  await browserPage.screenshot({ path: outputPath })
+  // Take screenshot as JPEG for smaller file sizes
+  const outputPath = join(process.cwd(), "public", "og", `${page.id}.jpg`)
+  await browserPage.screenshot({
+    path: outputPath,
+    type: "jpeg",
+    quality: JPEG_QUALITY,
+  })
 
   await browser.close()
 
-  console.log(`✓ Generated ${page.id}.png`)
+  // Log file size
+  const stats = statSync(outputPath)
+  const sizeKB = Math.round(stats.size / 1024)
+  console.log(`✓ Generated ${page.id}.jpg (${sizeKB}KB)`)
+
+  if (sizeKB > 300) {
+    console.warn(`  ⚠ WARNING: ${page.id}.jpg exceeds 300KB recommendation!`)
+  }
 }
 
 async function main() {
@@ -57,7 +65,7 @@ async function main() {
   console.log("─".repeat(50))
   console.log(`✓ All ${pages.length} OG images generated successfully!`)
   console.log("\nFiles created:")
-  pages.forEach((page) => console.log(`  - public/og/${page.id}.png`))
+  pages.forEach((page) => console.log(`  - public/og/${page.id}.jpg`))
 }
 
 main().catch((error) => {

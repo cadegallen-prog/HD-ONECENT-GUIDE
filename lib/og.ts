@@ -1,23 +1,41 @@
-// Static OG images for main pages, dynamic for others (e.g., SKU pages)
-const STATIC_OG_PAGES = ["homepage", "penny-list", "report-find", "store-finder", "guide"] as const
+export const OG_MAIN_PAGES = [
+  "homepage",
+  "penny-list",
+  "report-find",
+  "store-finder",
+  "guide",
+] as const
 
-export const OG_HEADLINES: Record<string, string> = {
-  homepage: "Find Home Depot Penny Items",
-  "penny-list": "Home Depot Penny List",
-  "report-find": "Report a Home Depot Penny Find",
-  "store-finder": "Find Nearby Home Depot Stores",
-  guide: "How to Find Home Depot Penny Items",
+export type OgMainPageId = (typeof OG_MAIN_PAGES)[number]
+
+export const OG_VARIANTS: Record<OgMainPageId, { headline: string; subhead: string }> = {
+  homepage: {
+    headline: "Find Home Depot Penny Items",
+    subhead: "The community-reported $0.01 list, updated hourly.",
+  },
+  "penny-list": {
+    headline: "Home Depot Penny List",
+    subhead: "Filter by state, date, and SKU. Updated hourly.",
+  },
+  "report-find": {
+    headline: "Report a Penny Find",
+    subhead: "Submit your $0.01 item to update the list. Takes under a minute.",
+  },
+  "store-finder": {
+    headline: "Home Depot Store Finder",
+    subhead: "Find stores by state and zip. Check nearby locations fast.",
+  },
+  guide: {
+    headline: "Home Depot Penny Guide",
+    subhead: "Learn the markdown cadence and how $0.01 items happen.",
+  },
 }
 
-const OG_IMAGE_VERSION = "9"
+const OG_IMAGE_VERSION = "11"
 
-export function ogImageUrl(page: keyof typeof OG_HEADLINES | string): string {
-  // Use static images for main pages
-  if (STATIC_OG_PAGES.includes(page as (typeof STATIC_OG_PAGES)[number])) {
-    return `/og/${page}.png`
-  }
+export function ogImageUrl(page: OgMainPageId | string): string {
+  if (OG_MAIN_PAGES.includes(page as OgMainPageId)) return `/og/${page}.jpg`
 
-  // Fall back to dynamic generation for other pages (e.g., SKU detail pages)
-  const headline = OG_HEADLINES[page] || OG_HEADLINES.homepage
+  const headline = (page || "").trim() || OG_VARIANTS.homepage.headline
   return `/api/og?headline=${encodeURIComponent(headline)}&v=${OG_IMAGE_VERSION}`
 }
