@@ -35,11 +35,19 @@ export function validateSku(rawSku: string): { normalized: string; error?: strin
     return { normalized, error: "SKU must be 6 or 10 digits." }
   }
 
+  if (normalized.length === 10 && !normalized.startsWith("10")) {
+    return {
+      normalized,
+      error:
+        '10-digit SKUs should start with "10". If you used a receipt, you probably entered a UPC/barcode instead.',
+    }
+  }
+
   if (isAllSameDigit(normalized) || /^0+$/.test(normalized)) {
     return {
       normalized,
       error:
-        "That SKU looks like a placeholder (all the same digit). Please double‑check the real SKU.",
+        "That SKU looks like a placeholder (all the same digit). Please double-check the real SKU.",
     }
   }
 

@@ -1,106 +1,80 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test"
 
-test.describe('Report Find Prefill', () => {
-  test('prefills SKU and name from query params', async ({ page }) => {
-    // Navigate to report-find with query params
-    await page.goto('/report-find?sku=1234567890&name=Test%20Item&src=card');
+test.describe("Report Find Prefill", () => {
+  test("prefills SKU and name from query params", async ({ page }) => {
+    await page.goto("/report-find?sku=1001234567&name=Test%20Item&src=card")
 
-    // Wait for page to load and prefill
-    await page.waitForLoadState('networkidle');
+    const skuInput = page.getByLabel(/SKU Number/i)
+    const nameInput = page.getByLabel(/Item Name/i)
 
-    // Check that SKU field is prefilled (with formatting)
-    const skuInput = page.getByLabel(/SKU Number/i);
-    await expect(skuInput).toHaveValue('1234-567-890');
+    await expect(skuInput).toHaveValue("1001-234-567")
+    await expect(nameInput).toHaveValue("Test Item")
+  })
 
-    // Check that Item Name field is prefilled
-    const nameInput = page.getByLabel(/Item Name/i);
-    await expect(nameInput).toHaveValue('Test Item');
-  });
+  test("does not overwrite user edits after prefill", async ({ page }) => {
+    await page.goto("/report-find?sku=1001234567&name=Prefilled%20Item&src=card")
 
-  test('does not overwrite user-entered values', async ({ page }) => {
-    // First, navigate to the form and enter values manually
-    await page.goto('/report-find');
-    await page.waitForLoadState('networkidle');
+    const skuInput = page.getByLabel(/SKU Number/i)
+    const nameInput = page.getByLabel(/Item Name/i)
 
-    const skuInput = page.getByLabel(/SKU Number/i);
-    const nameInput = page.getByLabel(/Item Name/i);
+    await expect(skuInput).toHaveValue("1001-234-567")
+    await expect(nameInput).toHaveValue("Prefilled Item")
 
-    // User enters values
-    await nameInput.fill('User Entered Item');
-    await skuInput.fill('999999');
+    await nameInput.fill("User Entered Item")
+    await skuInput.fill("999999")
 
-    // Now navigate with query params (simulating clicking a prefill link)
-    await page.goto('/report-find?sku=1234567890&name=Prefilled%20Item&src=card');
-    await page.waitForLoadState('networkidle');
+    await expect(nameInput).toHaveValue("User Entered Item")
+    await expect(skuInput).toHaveValue("999-999")
+  })
 
-    // The user's values should NOT be overwritten
-    // Note: SKU will be overwritten because the form resets on navigation
-    // This test verifies the logic works correctly on initial load
-    await expect(skuInput).toHaveValue('1234-567-890');
-    await expect(nameInput).toHaveValue('Prefilled Item');
-  });
+  test("does not re-apply prefill after user clears a field", async ({ page }) => {
+    await page.goto("/report-find?sku=1001234567&name=Prefilled%20Item&src=card")
 
-  test('handles empty params gracefully', async ({ page }) => {
-    // Navigate without params
-    await page.goto('/report-find');
-    await page.waitForLoadState('networkidle');
+    const skuInput = page.getByLabel(/SKU Number/i)
+    await expect(skuInput).toHaveValue("1001-234-567")
 
-    // Fields should be empty (except date which auto-fills)
-    const skuInput = page.getByLabel(/SKU Number/i);
-    const nameInput = page.getByLabel(/Item Name/i);
+    await skuInput.fill("")
+    await expect(skuInput).toHaveValue("")
+  })
 
-    await expect(skuInput).toHaveValue('');
-    await expect(nameInput).toHaveValue('');
-  });
+  test("handles empty params gracefully", async ({ page }) => {
+    await page.goto("/report-find")
 
-  test('truncates overly long params', async ({ page }) => {
-    // Create a very long SKU (50 chars) and name (200 chars)
-    const longSku = '1'.repeat(50);
-    const longName = 'A'.repeat(200);
+    const skuInput = page.getByLabel(/SKU Number/i)
+    const nameInput = page.getByLabel(/Item Name/i)
 
-    await page.goto(`/report-find?sku=${longSku}&name=${longName}&src=card`);
-    await page.waitForLoadState('networkidle');
+    await expect(skuInput).toHaveValue("")
+    await expect(nameInput).toHaveValue("")
+  })
 
-    const nameInput = page.getByLabel(/Item Name/i);
-    const nameValue = await nameInput.inputValue();
+  test("truncates overly long params", async ({ page }) => {
+    const longSku = "1".repeat(50)
+    const longName = "A".repeat(200)
 
-    // Name should be truncated to 75 chars
-    expect(nameValue.length).toBeLessThanOrEqual(75);
-  });
+    await page.goto(`/report-find?sku=${longSku}&name=${longName}&src=card`)
 
-  test('validates prefilled SKU', async ({ page }) => {
-    // Navigate with valid SKU
-    await page.goto('/report-find?sku=1234567890&name=Test%20Item&src=card');
-    await page.waitForLoadState('networkidle');
+    const skuInput = page.getByLabel(/SKU Number/i)
+    const nameInput = page.getByLabel(/Item Name/i)
 
-    // No error should be shown
-    await expect(page.getByText(/must be 6 or 10 digits/i)).not.toBeVisible();
+    await expect(skuInput).toHaveValue("1111-111-111")
 
-    // Now test with invalid SKU (5 digits)
-    await page.goto('/report-find?sku=12345&name=Test%20Item&src=card');
-    await page.waitForLoadState('networkidle');
+    const nameValue = await nameInput.inputValue()
+    expect(nameValue.length).toBeLessThanOrEqual(75)
+  })
 
-    // The SKU should be prefilled but...
-    const skuInput = page.getByLabel(/SKU Number/i);
-    await expect(skuInput).toHaveValue('123-45');
+  test("does not show SKU error for valid 10-digit prefill", async ({ page }) => {
+    await page.goto("/report-find?sku=1001234567&name=Test%20Item&src=card")
 
-    // When user tries to submit, validation should kick in
-    // (The validation happens on blur or when reaching 6+ digits)
-    // For 5 digits, no error is shown until submit
-  });
+    await expect(page.locator("#sku-error")).toHaveCount(0)
+  })
 
-  test('handles special characters in name', async ({ page }) => {
-    const specialName = "Test's Item & \"Quotes\" <tag>";
-    const encoded = encodeURIComponent(specialName);
+  test("handles special characters in name", async ({ page }) => {
+    const specialName = `Test's Item & "Quotes" <tag>`
+    const encoded = encodeURIComponent(specialName)
 
-    await page.goto(`/report-find?sku=1234567890&name=${encoded}&src=card`);
-    await page.waitForLoadState('networkidle');
+    await page.goto(`/report-find?sku=1001234567&name=${encoded}&src=card`)
 
-    const nameInput = page.getByLabel(/Item Name/i);
-    await expect(nameInput).toHaveValue(specialName);
-  });
-});
-
-// Note: Button integration tests removed - functionality verified manually via screenshots
-// The core prefill logic is tested above. Button navigation requires live penny list data
-// which may not be available in test fixtures. Verified manually in screenshots instead.
+    const nameInput = page.getByLabel(/Item Name/i)
+    await expect(nameInput).toHaveValue(specialName)
+  })
+})

@@ -17,6 +17,7 @@
 **Goal:** Keep `/api/og` under Vercel’s 1 MB edge-function cap by moving the huge assets out of the bundle.
 
 **Changes Made:**
+
 - Removed the base64-heavy helpers (`lib/inter-font-data.ts`, `lib/og-background-base64.ts`) and the ESLint override that unblocked them.
 - Added `lib/og-fonts.ts` to fetch + cache the Inter 400/500/700 font blobs at runtime.
 - Updated `app/api/og/route.tsx` to use cached font buffers and load the background via the committed `/og/pennycentral-og-fixed-1200x630-balanced.jpg`.
@@ -25,6 +26,7 @@
 **Outcome:** `api/og` no longer bundles the ~1 MB blobs, so Vercel builds should now succeed even with the Edge-function size limit.
 
 **Verification:**
+
 - `npm run lint`
 - `npm run build`
 - `npm run test:unit`
@@ -38,6 +40,7 @@
 **Goal:** Address the remaining workspace diffs so the repo is ready for follow-up work.
 
 **Changes Made:**
+
 - Staged the committed OG background art (`public/og/pennycentral-og-fixed-1200x630-balanced.jpg/.png`) so the route's background URL resolves on Vercel.
 - Added the `dev` task to `.vscode/tasks.json` (the file already included it locally, so I kept it synced with repo).
 
@@ -53,16 +56,19 @@
 **Goal:** Overhaul OG layout to a left-aligned, UI-style column with page-specific headline/subhead and regenerate static PNGs.
 
 **Changes Made:**
+
 - Rebuilt OG template in `app/api/og/route.tsx` to match explicit layout rules (brand row with favicon, separator line, left-aligned headline/subhead, URL bottom-right).
 - Added OG variant copy per main page in `lib/og.ts` and bumped OG version for dynamic fallbacks.
 - Updated `scripts/generate-og-images-playwright.ts` to pass page + subhead and regenerated `public/og/*.png`.
 
 **Fixes:**
+
 - Resolved `@vercel/og` render crash by setting the headline wrapper to `display: flex` for multi-line children.
 
 **Outcome:** ✅ Success
 
 **Verification:**
+
 - `npm run lint` ✅
 - `npm run lint:colors` ✅
 - `npm run build` ✅
@@ -70,10 +76,12 @@
 - `npm run test:e2e` ✅ (32/32)
 
 **Screenshots:**
+
 - Before: `test-results/og/before/*.png`
 - After: `test-results/og/after/*.png`
 
 **Notes for Next Session:**
+
 - None.
 
 ## 2025-12-23 - Codex (GPT-5) - OG Polish: Better Coin + One-Line Headline Fit
@@ -82,6 +90,7 @@
 **Goal:** Improve brand mark quality and enforce single-line headline on homepage when possible (shrink before wrapping).
 
 **Changes Made:**
+
 - `app/api/og/route.tsx`: Replaced the “zoomed favicon” with a cleaner inlined coin SVG (no tiny text, better shading) and adjusted brand weights to better match the site’s Inter styling.
 - `app/api/og/route.tsx`: Added a simple “fit to width” heuristic so `Find Home Depot Penny Items` stays on one line by shrinking slightly before wrapping.
 - Regenerated static OG PNGs in `public/og/*.png`.
@@ -89,6 +98,7 @@
 **Outcome:** ✅ Success
 
 **Verification:**
+
 - `npm run lint` ✅
 - `npm run lint:colors` ✅
 - `npm run build` ✅
@@ -96,35 +106,38 @@
 - `npm run test:e2e` ✅ (32/32)
 
 **Screenshots:**
+
 - Before: `test-results/og/before-v2/*.png`
 - After: `test-results/og/after-v2/*.png`
 
 ## 2025-12-23 - GitHub Copilot (GPT-5.2) - OG Image Refresh + Static Regeneration
 
 **AI:** GitHub Copilot (GPT-5.2)
-**Goal:** Refresh OG image design (brand match + better CTR) and ensure the *actual* live OG path (`/og/homepage.png`) is updated via the proper static regeneration workflow.
+**Goal:** Refresh OG image design (brand match + better CTR) and ensure the _actual_ live OG path (`/og/homepage.png`) is updated via the proper static regeneration workflow.
 
 **Changes Made:**
+
 - Updated OG template in `app/api/og/route.tsx`:
-   - Centered layout and improved spacing
-   - Bold `PennyCentral` brand with a short underline (not a full-width separator)
-   - Added a subtle penny watermark behind the headline
-   - Bottom-right URL only (removed left-side footer text)
-   - Embedded Inter weights needed for mixed typography
+  - Centered layout and improved spacing
+  - Bold `PennyCentral` brand with a short underline (not a full-width separator)
+  - Added a subtle penny watermark behind the headline
+  - Bottom-right URL only (removed left-side footer text)
+  - Embedded Inter weights needed for mixed typography
 - Kept static OG strategy: main pages use `public/og/*.png` and `lib/og.ts` returns `/og/{page}.png`.
 - Updated docs: added OG regeneration instructions to `README.md`.
 
 **Operational Step:**
+
 - Regenerated static OG PNGs using `scripts/generate-og-images-playwright.ts` (Playwright screenshots of `/api/og`).
 
 **Outcome:** ✅ Success
 
 **Verification:**
+
 - ✓ `npm run lint`
 - ✓ `npm run build`
 - ✓ `npm run test:unit`
 - ✓ `npm run test:e2e` (32/32)
-
 
 ## 2025-12-21 - Claude Code - Homepage Re-Prioritized for Habitual Engagement
 
@@ -132,12 +145,14 @@
 **Goal:** Re-prioritize homepage to match actual usage data and drive recurring traffic/engagement
 
 **Context:**
+
 - **Usage data:** Penny List gets 5-10x more traffic than Guide (analytics-confirmed)
 - **User insight:** "The guide gets someone to visit to 'learn' but that's not a reliable source of traffic. The penny list encourages engagement, participation, recurring traffic."
 - **Growth goals:** Habituation, recurring traffic, lower bounce rate, more submissions (currently ~1/day, goal 10+/day)
 - **Strategic shift:** Optimize for the 70-90% of traffic already engaged (recurring hunters) vs 10-30% new learners
 
 **Changes Made:**
+
 1. **app/page.tsx** - Hero section buttons (lines 73-91):
    - **Swapped button order:** "Browse Penny List" is now primary CTA (was secondary)
    - **Elevated Report a Find:** From tertiary text link → prominent secondary button
@@ -157,6 +172,7 @@
    - **Rationale:** Aligns nav with usage priority and feature importance
 
 **Strategic Rationale:**
+
 - **Penny List** = habit loop (check back for fresh finds) → recurring traffic
 - **Guide** = one-time read (learn once, done) → not recurring
 - **Report a Find** elevation = drive UGC submissions → fresher content → more return visits
@@ -165,6 +181,7 @@
 **Outcome:** ✅ Success
 
 **Verification:**
+
 - All 4 quality gates passing:
   - ✓ `npm run lint` (0 errors, 0 warnings after prettier auto-fix)
   - ✓ `npm run build` (882 pages generated)
@@ -174,16 +191,19 @@
 - Playwright visual smoke tests captured screenshots of new layout (light/dark, mobile/desktop)
 
 **Files Modified:**
+
 - `app/page.tsx` (hero buttons + tools section)
 - `components/navbar.tsx` (nav order + icons)
 
 **Impact:**
+
 - Lower bounce rate expected (browsing list > reading guide once)
 - More time on site expected (exploring penny finds vs one-time read)
 - More submissions expected (Report a Find now prominent secondary CTA)
 - Higher return visitor rate expected (habit loop forming around fresh list content)
 
 **Success Metrics to Watch (Post-Deploy):**
+
 - `find_submit` events (currently ~1/day, goal 10+/day)
 - `/penny-list` page views + time on page
 - Bounce rate (should decrease)
@@ -191,6 +211,7 @@
 - Return visitor rate (should increase as habit forms)
 
 **Next Session Notes:**
+
 - Monitor GA metrics after deployment to validate hypothesis
 - If submissions don't increase after 2 weeks, consider adding incentive text ("Your finds help 40,000 hunters")
 - If Guide traffic drops below 5%, confirms data-driven decision was correct
@@ -203,12 +224,14 @@
 **Goal:** Fix broken dynamic OG image generator and improve site messaging for social media sharing
 
 **Context:**
+
 - User reported OG images weren't showing properly on Facebook/social platforms
 - Text was clipped (only 20% visible) in preview cards
 - Messaging felt too wordy and lacked context ("Find $0.01 Items" without "Home Depot")
 - User wanted deterministic dynamic OG system (NOT static images)
 
 **Changes Made:**
+
 - **app/api/og/route.tsx**: Fixed OG generator
   - Font loading: Switched from local font to Google Fonts CDN with system font fallback
   - Layout: Increased vertical padding (120px vs 80px) for crop-safe zone
@@ -231,6 +254,7 @@
 **Outcome:** ✅ Success
 
 **Verification:**
+
 - All 4 quality gates passing:
   - ✓ `npm run lint` (0 errors, 0 warnings)
   - ✓ `npm run build` (882 pages generated)
@@ -239,12 +263,14 @@
 - Committed to GitHub: `9a61fb4` - "feat: improve OG images and tighten site messaging"
 
 **Learnings:**
+
 - Dynamic OG systems need robust fallbacks (CDN fonts > local fonts, system fonts as last resort)
 - OG layout must account for aggressive platform cropping (Facebook clips ~15% top/bottom)
 - "Home Depot" is the legitimacy anchor - every OG should include it for trust
 - Less is more: "Guide + community finds. 40,000 hunters strong." beats verbose copy
 
 **Next Session Notes:**
+
 - OG images should now render reliably on all platforms
 - User should test Facebook Sharing Debugger to verify scraper refresh: https://developers.facebook.com/tools/debug/
 - May take 24-48 hours for full cache propagation across platforms
@@ -257,12 +283,14 @@
 **Goal:** Investigate and resolve dev server infinite loop issue that prevented localhost:3001 from serving content
 
 **Root Causes Identified:**
+
 1. Google Sheet URL had expired (returning HTTP 400 Bad Request)
 2. Recent uncommitted changes removed fallback behavior - returned empty array instead of trying local fixture
 3. During server startup, `getPennyList()` fetch failed → empty data → `generateStaticParams()` stuck retrying → server hung
 4. Playwright timeouts were reduced too aggressively (30s server, 10s/15s actions) causing premature failures
 
 **Changes Made:**
+
 - **lib/fetch-penny-data.ts**: Added `tryLocalFixtureFallback()` helper function
   - Smart fallback: when Google Sheet fails, falls back to local `data/penny-list.json` fixture
   - Prevents infinite loops and maintains offline development capability
@@ -277,6 +305,7 @@
 **Outcome:** ✅ Success
 
 **Verification:**
+
 - All 4 quality gates passing:
   - ✓ `npm run lint` (0 errors)
   - ✓ `npm run build` (882 pages generated, including 854 SKU pages)
@@ -286,12 +315,14 @@
 - Committed to GitHub: `f62143d` - "fix: resolve dev server loop and add resilient data fetching"
 
 **Learnings:**
+
 - Always include fallback mechanisms for external data dependencies
 - Test fixtures are critical for preventing flaky E2E tests
 - Timeout values should balance fast failure detection with stability
 - Previous agent got stuck in loop for 7-8 hours - plan mode investigation prevented similar waste
 
 **Next Session Notes:**
+
 - Enrichment sheet still not published/configured (optional feature for owner-added stock photos)
 - System is now resilient to Google Sheet outages
 - Naming is consistent across all documentation ("Penny List")
@@ -349,7 +380,7 @@
 
 **Next Session Notes:**
 
-- If the repo is public and you want to remove the old PII from *git history*, you’ll need a history rewrite (more invasive than a normal commit).
+- If the repo is public and you want to remove the old PII from _git history_, you’ll need a history rewrite (more invasive than a normal commit).
 
 ## 2025-12-20 - GitHub Copilot - OG Image Font Embedding
 
@@ -3144,25 +3175,71 @@ If continuing [Unfinished Item 2], copy-paste:
 **Goal:** Fix Facebook OG image corruption and make homepage OG image copy coherent/professional.
 
 **Root Cause (Prod):**
+
 - `https://www.pennycentral.com/api/og?...` returned `200 OK` with `Content-Type: image/png` but `Content-Length: 0` (empty body), causing Facebook to treat the image as corrupt.
 - The embedded Inter font path was a likely trigger: `next/og` can fail during streaming render (after headers), producing an empty body with a 200.
 
 **Changes Made:**
+
 - `app/api/og/route.tsx`: Removed embedded font dependency and simplified the OG layout; enforced `dynamic = "force-dynamic"` + `revalidate = 0`; set `Cache-Control: no-store`.
 - `lib/og.ts`: Updated headline mappings (homepage now \"Home Depot Penny List & Guide\") and added `v=7` query param to bust scraper caches.
 
 **Screenshots (OG Image):**
+
 - Before: `test-results/og/home-before.png`
 - After: `test-results/og/home-after.png`
 
 **Verification:**
+
 - `npm run lint` ✅
 - `npm run build` ✅
 - `npm run test:unit` ✅
 - `npm run test:e2e` ✅
 
 **CI Follow-up:**
+
 - Fixed GitHub Actions \"Quality Checks\" failures by stabilizing `scripts/check-contrast.js` (token readiness + CTA contrast computed from design tokens to avoid hydration timing flake).
 
 **Notes for Next Session:**
+
 - After deploy, re-check `curl -v https://www.pennycentral.com/api/og?...` shows non-zero bytes and rescrape in Facebook Sharing Debugger.
+
+---
+
+## 2025-12-24 - Codex CLI - Report Find Deep-Link: Prefill Hardening + Receipt Copy Fix
+
+**AI:** ChatGPT Codex (GPT-5.2)
+**Goal:** Fix deep-link prefill edge cases + correct SKU guidance (receipt shows UPC, not SKU).
+
+**Changes Made:**
+
+- `lib/report-find-link.ts`: Normalize SKU query param to digits-only and cap at 10 digits (aligns with `validateSku` + form behavior).
+- `app/report-find/page.tsx`: Prefill now normalizes SKU the same way and only handles a given query once (prevents “re-prefill” after the user clears/edits fields).
+- `app/report-find/page.tsx`: Updated SKU helper text to stop claiming the SKU is on the receipt; added a non-blocking warning for 10-digit IDs that don't start with `10` (receipt UPC confusion).
+- `tests/report-find-prefill.spec.ts`: Removed flaky `networkidle` waits, fixed misleading test naming/behavior, and added coverage for “no re-apply after clear”.
+
+**Screenshots (Report Find page):**
+
+- Before (light): `reports/verification/report-find-before-light.png`
+- Before (dark): `reports/verification/report-find-before-dark.png`
+- After (light): `reports/verification/report-find-after-light.png`
+- After (dark): `reports/verification/report-find-after-dark.png`
+
+**Verification:**
+
+- `npm run lint` ✅
+- `npm run build` ✅ (896 pages)
+- `npm run test:unit` ✅ (9/9)
+- `npm run test:e2e` ✅ (60/60)
+
+### Follow-up (same day): 10-digit SKU prefix rule
+
+**Change:**
+
+- `lib/sku.ts`: 10-digit SKUs must start with `"10"` (blocks common receipt UPC confusion like “84…”).
+- `tests/report-find-prefill.spec.ts`: Updated valid 10-digit examples to start with `"10"`.
+
+**Screenshots (invalid 10-digit example):**
+
+- `reports/verification/report-find-invalid-10digit-light.png`
+- `reports/verification/report-find-invalid-10digit-dark.png`

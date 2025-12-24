@@ -1,12 +1,12 @@
 "use client"
 
-import { useEffect, useState, Suspense } from "react"
+import { useEffect, useRef, useState, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { AlertCircle, CheckCircle2, MapPin, Package, Calendar, Info } from "lucide-react"
 import { trackEvent } from "@/lib/analytics"
 import { US_STATES } from "@/lib/us-states"
-import { validateSku } from "@/lib/sku"
+import { normalizeSku, validateSku } from "@/lib/sku"
 
 // Format SKU for display: 123456 -> 123-456, 1234567890 -> 1234-567-890
 function formatSkuForDisplay(rawSku: string): string {
@@ -33,6 +33,7 @@ const USER_STATE_KEY = "pennycentral_user_state"
 
 function ReportFindForm() {
   const searchParams = useSearchParams()
+  const handledPrefillKeyRef = useRef<string | null>(null)
   const [todayIso, setTodayIso] = useState("")
   const [formData, setFormData] = useState({
     itemName: "",
@@ -82,9 +83,15 @@ function ReportFindForm() {
 
   // Prefill from query params (deep-link from Penny List)
   useEffect(() => {
-    const skuParam = (searchParams.get("sku") ?? "").trim().slice(0, 32)
+    const skuParam = normalizeSku(searchParams.get("sku") ?? "").slice(0, 10)
     const nameParam = (searchParams.get("name") ?? "").trim().slice(0, 75)
     const src = (searchParams.get("src") ?? "").trim().slice(0, 64)
+
+    if (!skuParam && !nameParam) return
+
+    const prefillKey = `${skuParam}|${nameParam}|${src}`
+    if (handledPrefillKeyRef.current === prefillKey) return
+    handledPrefillKeyRef.current = prefillKey
 
     let applied = false
 
@@ -109,6 +116,11 @@ function ReportFindForm() {
       })
     }
   }, [searchParams, formData.sku, formData.itemName])
+
+  const skuWarning =
+    formData.sku.length === 10 && !formData.sku.startsWith("10")
+      ? 'Receipts usually show a UPC/barcode, not a SKU. A valid 10‑digit Home Depot SKU should start with "10" (format: 10xx‑xxx‑xxx).'
+      : ""
 
   const handleSkuChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value
@@ -299,7 +311,14 @@ function ReportFindForm() {
               </p>
             ) : (
               <p id="sku-hint" className="mt-1 text-xs text-[var(--text-muted)]">
-                6 or 10 digit SKU from receipt or Home Depot app
+                Use the 6‑digit shelf SKU or the Home Depot app. Receipts usually show a
+                UPC/barcode, not the SKU.
+              </p>
+            )}
+            {skuWarning && (
+              <p className="mt-1 text-xs text-[var(--status-warning)] flex items-start gap-1.5">
+                <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" aria-hidden="true" />
+                <span>{skuWarning}</span>
               </p>
             )}
           </div>

@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 23, 2025 (OG images: left-aligned UI layout + per-page copy)
+**Last updated:** Dec 24, 2025 (Report Find SKU validation: 10-digit must start with 10)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -43,6 +43,14 @@ Every AI session must update this after meaningful work.
   - **Solution:** Removed the inline base64 helpers, now fetch Inter 400/500/700 at runtime (`lib/og-fonts.ts`) and load the background from `/og/pennycentral-og-fixed-1200x630-balanced.jpg`. Updated the OG route and generation script to match the new flow.
   - **Verification:** `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e`.
   - **Artifacts:** Tracked the actual `public/og/pennycentral-og-fixed-1200x630-balanced.{jpg,png}` assets so the background URL resolves on Vercel and kept the `.vscode/tasks.json` dev task synced; the `test-results/og/` folder stays untracked for screenshot proofing.
+- **Recent focus (Dec 24):** Report Find deep-link prefill hardening + SKU receipt copy fix
+  - **Problem:** Prefill could re-apply after the user cleared fields; SKU helper text incorrectly told users to use a receipt SKU (receipt is typically UPC).
+  - **Fix:** Prefill now normalizes SKU to digits-only/max-10 and only handles a given query once; SKU helper text updated and a non-blocking warning added for suspicious 10-digit IDs.
+  - **Verification:** `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e`.
+- **Recent focus (Dec 24):** 10-digit SKU prefix enforcement
+  - **Rule:** 10-digit SKUs must start with `"10"` (format: `10xx-xxx-xxx`) to avoid receipt UPC confusion like “84…”.
+  - **Fix:** Added to `lib/sku.ts` (single source of truth) so client + server validations stay consistent.
+  - **Verification:** `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e`.
 - **Recent focus (Dec 21, session 10):** Homepage re-prioritized for habitual engagement
   - **Data-driven decision:** Penny List gets 5-10x more traffic than Guide (analytics-confirmed)
   - **Hero buttons swapped:** "Browse Penny List" is now primary CTA (was secondary), "Report a Find" elevated from tertiary link to secondary button (PlusCircle icon)

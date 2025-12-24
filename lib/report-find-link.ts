@@ -18,7 +18,7 @@ export function buildReportFindUrl(opts: {
   const params = new URLSearchParams()
 
   // Truncate and sanitize inputs to match form validation
-  const sku = (opts.sku ?? "").trim().slice(0, 32)
+  const sku = (opts.sku ?? "").replace(/\D/g, "").slice(0, 10)
   const name = (opts.name ?? "").trim().slice(0, 75) // Match form maxLength
   const src = (opts.src ?? "").trim().slice(0, 64)
 
