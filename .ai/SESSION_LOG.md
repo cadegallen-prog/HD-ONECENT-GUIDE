@@ -30,7 +30,22 @@
 - `npm run test:unit`
 - `npm run test:e2e`
 
-**Notes for Next Session:** Confirm the next deployment’s build log shows `api/og` staying within the 1 MB cap.
+**Notes for Next Session:** Confirm the next deployment's build log shows `api/og` staying within the 1 MB cap.
+
+## 2025-12-24 - Codex (GPT-5) - Track OG assets + workspace cleanup
+
+**AI:** Codex (GPT-5)
+**Goal:** Address the remaining workspace diffs so the repo is ready for follow-up work.
+
+**Changes Made:**
+- Staged the committed OG background art (`public/og/pennycentral-og-fixed-1200x630-balanced.jpg/.png`) so the route's background URL resolves on Vercel.
+- Added the `dev` task to `.vscode/tasks.json` (the file already included it locally, so I kept it synced with repo).
+
+**Outcome:** Git status is clean aside from purposely ignored screenshot artifacts in `test-results/og/`.
+
+**Verification:** manual inspection.
+
+**Notes for Next Session:** `test-results/og/` is intentionally left untracked to avoid committing screenshot proof artifacts.
 
 ## 2025-12-23 - Codex (GPT-5) - OG Images Left-Aligned UI Layout + Variants
 

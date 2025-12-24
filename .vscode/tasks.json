@@ -36,6 +36,12 @@
 			"type": "shell",
 			"command": "npm run build",
 			"isBackground": false
+		},
+		{
+			"label": "dev",
+			"type": "shell",
+			"command": "npm run dev",
+			"isBackground": true
 		}
 	]
 }

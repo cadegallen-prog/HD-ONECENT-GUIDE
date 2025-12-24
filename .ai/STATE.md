@@ -42,6 +42,7 @@ Every AI session must update this after meaningful work.
   - **Problem:** Vercel deployment logs showed `api/og` was 1.05 MB due to the embedded Inter font + background base64 data.
   - **Solution:** Removed the inline base64 helpers, now fetch Inter 400/500/700 at runtime (`lib/og-fonts.ts`) and load the background from `/og/pennycentral-og-fixed-1200x630-balanced.jpg`. Updated the OG route and generation script to match the new flow.
   - **Verification:** `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e`.
+  - **Artifacts:** Tracked the actual `public/og/pennycentral-og-fixed-1200x630-balanced.{jpg,png}` assets so the background URL resolves on Vercel and kept the `.vscode/tasks.json` dev task synced; the `test-results/og/` folder stays untracked for screenshot proofing.
 - **Recent focus (Dec 21, session 10):** Homepage re-prioritized for habitual engagement
   - **Data-driven decision:** Penny List gets 5-10x more traffic than Guide (analytics-confirmed)
   - **Hero buttons swapped:** "Browse Penny List" is now primary CTA (was secondary), "Report a Find" elevated from tertiary link to secondary button (PlusCircle icon)
