@@ -11,6 +11,79 @@
 
 ---
 
+## 2025-12-24 - Codex (GPT-5) - Slim OG Edge Bundle for Vercel Limits
+
+**AI:** Codex (GPT-5)
+**Goal:** Keep `/api/og` under Vercel’s 1 MB edge-function cap by moving the huge assets out of the bundle.
+
+**Changes Made:**
+- Removed the base64-heavy helpers (`lib/inter-font-data.ts`, `lib/og-background-base64.ts`) and the ESLint override that unblocked them.
+- Added `lib/og-fonts.ts` to fetch + cache the Inter 400/500/700 font blobs at runtime.
+- Updated `app/api/og/route.tsx` to use cached font buffers and load the background via the committed `/og/pennycentral-og-fixed-1200x630-balanced.jpg`.
+- Simplified `scripts/create-og-template.mjs` to only regenerate the masked background image.
+
+**Outcome:** `api/og` no longer bundles the ~1 MB blobs, so Vercel builds should now succeed even with the Edge-function size limit.
+
+**Verification:**
+- `npm run lint`
+- `npm run build`
+- `npm run test:unit`
+- `npm run test:e2e`
+
+**Notes for Next Session:** Confirm the next deployment’s build log shows `api/og` staying within the 1 MB cap.
+
+## 2025-12-23 - Codex (GPT-5) - OG Images Left-Aligned UI Layout + Variants
+
+**AI:** Codex (GPT-5)
+**Goal:** Overhaul OG layout to a left-aligned, UI-style column with page-specific headline/subhead and regenerate static PNGs.
+
+**Changes Made:**
+- Rebuilt OG template in `app/api/og/route.tsx` to match explicit layout rules (brand row with favicon, separator line, left-aligned headline/subhead, URL bottom-right).
+- Added OG variant copy per main page in `lib/og.ts` and bumped OG version for dynamic fallbacks.
+- Updated `scripts/generate-og-images-playwright.ts` to pass page + subhead and regenerated `public/og/*.png`.
+
+**Fixes:**
+- Resolved `@vercel/og` render crash by setting the headline wrapper to `display: flex` for multi-line children.
+
+**Outcome:** ✅ Success
+
+**Verification:**
+- `npm run lint` ✅
+- `npm run lint:colors` ✅
+- `npm run build` ✅
+- `npm run test:unit` ✅
+- `npm run test:e2e` ✅ (32/32)
+
+**Screenshots:**
+- Before: `test-results/og/before/*.png`
+- After: `test-results/og/after/*.png`
+
+**Notes for Next Session:**
+- None.
+
+## 2025-12-23 - Codex (GPT-5) - OG Polish: Better Coin + One-Line Headline Fit
+
+**AI:** Codex (GPT-5)
+**Goal:** Improve brand mark quality and enforce single-line headline on homepage when possible (shrink before wrapping).
+
+**Changes Made:**
+- `app/api/og/route.tsx`: Replaced the “zoomed favicon” with a cleaner inlined coin SVG (no tiny text, better shading) and adjusted brand weights to better match the site’s Inter styling.
+- `app/api/og/route.tsx`: Added a simple “fit to width” heuristic so `Find Home Depot Penny Items` stays on one line by shrinking slightly before wrapping.
+- Regenerated static OG PNGs in `public/og/*.png`.
+
+**Outcome:** ✅ Success
+
+**Verification:**
+- `npm run lint` ✅
+- `npm run lint:colors` ✅
+- `npm run build` ✅
+- `npm run test:unit` ✅
+- `npm run test:e2e` ✅ (32/32)
+
+**Screenshots:**
+- Before: `test-results/og/before-v2/*.png`
+- After: `test-results/og/after-v2/*.png`
+
 ## 2025-12-23 - GitHub Copilot (GPT-5.2) - OG Image Refresh + Static Regeneration
 
 **AI:** GitHub Copilot (GPT-5.2)

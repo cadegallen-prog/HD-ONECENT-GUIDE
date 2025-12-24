@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 23, 2025 (OG images: static implementation for reliability)
+**Last updated:** Dec 23, 2025 (OG images: left-aligned UI layout + per-page copy)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -22,11 +22,26 @@ Every AI session must update this after meaningful work.
   - **Caching enabled:** Updated `app/api/og/route.tsx` to enable 24hr caching (`revalidate=86400`) for SKU page OG images
   - **Reliability:** Static files are bulletproof - no generation time, no font issues, no Edge runtime failures, instant CDN caching
   - All 4 quality gates passing (lint, build [885 pages], test:unit [9/9], test:e2e [32/32])
+- **Recent focus (Dec 23):** OG images rebuilt to match explicit left-aligned UI layout
+  - **Goal:** Replace centered poster layout with a top-left, content-first hierarchy and page-specific copy
+  - **Change:** Reworked `app/api/og/route.tsx` to use a left-aligned column, favicon + brand row, thin separator, headline/subhead, URL bottom-right
+  - **Variants:** Added per-page headline/subhead mapping in `lib/og.ts` and wired the Playwright generator to pass page + subhead
+  - **Output:** Regenerated static OG images in `public/og/*.png` via `scripts/generate-og-images-playwright.ts`
+  - All 4 quality gates passing (lint, build, test:unit, test:e2e)
+- **Recent focus (Dec 23):** OG polish pass (coin quality + one-line headline)
+  - **Goal:** Improve perceived authority without overpromising and keep homepage headline on one line by default
+  - **Change:** Replaced the zoomed favicon with a cleaner inlined coin SVG (no micro-text) and added “shrink-to-fit” headline sizing before wrapping
+  - **Output:** Regenerated static OG images in `public/og/*.png`
+  - All 4 quality gates passing (lint, build, test:unit, test:e2e)
 - **Recent focus (Dec 23):** OG image design refreshed + static PNGs regenerated
   - **Goal:** Improve OG CTR and brand match (bold PennyCentral, underline in correct place, centered layout)
   - **Change:** Updated OG template (`app/api/og/route.tsx`) to match the new centered design and added a subtle penny watermark
   - **Output:** Regenerated static OG images in `public/og/*.png` via `scripts/generate-og-images-playwright.ts`
   - All 4 quality gates passing (lint, build, test:unit, test:e2e)
+- **Recent focus (Dec 24):** Keep `api/og` under Vercel’s 1 MB edge-function cap
+  - **Problem:** Vercel deployment logs showed `api/og` was 1.05 MB due to the embedded Inter font + background base64 data.
+  - **Solution:** Removed the inline base64 helpers, now fetch Inter 400/500/700 at runtime (`lib/og-fonts.ts`) and load the background from `/og/pennycentral-og-fixed-1200x630-balanced.jpg`. Updated the OG route and generation script to match the new flow.
+  - **Verification:** `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e`.
 - **Recent focus (Dec 21, session 10):** Homepage re-prioritized for habitual engagement
   - **Data-driven decision:** Penny List gets 5-10x more traffic than Guide (analytics-confirmed)
   - **Hero buttons swapped:** "Browse Penny List" is now primary CTA (was secondary), "Report a Find" elevated from tertiary link to secondary button (PlusCircle icon)

@@ -7,7 +7,7 @@ import eslintPluginPrettier from "eslint-plugin-prettier";
 import { defineConfig } from "eslint/config";
 
 export default defineConfig([
-  { files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"], plugins: { js }, extends: ["js/recommended"], languageOptions: { globals: globals.browser } },
+  { files: ["**/*.{js,mjs,cjs,jsx}"], plugins: { js }, extends: ["js/recommended"], languageOptions: { globals: globals.browser } },
   tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
   eslintConfigPrettier,
@@ -28,13 +28,6 @@ export default defineConfig([
       react: {
         version: "detect",
       },
-    },
-  },
-  {
-    // Ignore prettier line length for font data file (large base64 strings)
-    files: ["lib/inter-font-data.ts"],
-    rules: {
-      "prettier/prettier": "off",
     },
   },
 ]);

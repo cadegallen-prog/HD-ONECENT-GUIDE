@@ -1,6 +1,5 @@
 import { ImageResponse } from "next/og"
-import { INTER_FONT_BASE64 } from "@/lib/inter-font-data"
-import { OG_BACKGROUND_BASE64 } from "@/lib/og-background-base64"
+import { getOgFonts } from "@/lib/og-fonts"
 import { OG_MAIN_PAGES, OG_VARIANTS, type OgMainPageId } from "@/lib/og"
 
 export const runtime = "edge"
@@ -9,11 +8,13 @@ export const revalidate = 86400 // 24 hours
 
 const OG_WIDTH = 1200
 const OG_HEIGHT = 630
+const OG_BACKGROUND_URL =
+  "https://www.pennycentral.com/og/pennycentral-og-fixed-1200x630-balanced.jpg"
 
 const fontFamily = "Inter"
 
 // Background image data URL (pennies photo on right side)
-const BACKGROUND_DATA_URL = `data:image/jpeg;base64,${OG_BACKGROUND_BASE64}`
+const BACKGROUND_DATA_URL = OG_BACKGROUND_URL
 
 // Layout constants - text constrained to left 60% to avoid pennies
 const PAGE_PADDING_X = 72
@@ -218,7 +219,7 @@ export async function GET(request: Request) {
     const headlineLayout = layoutHeadline(headline)
     const subheadParts = renderSubheadParts(subhead)
 
-    const fontBuffer = Buffer.from(INTER_FONT_BASE64, "base64")
+    const ogFonts = await getOgFonts()
 
     return new ImageResponse(
       <div {...({ style: styles.container } as Record<string, unknown>)}>
@@ -273,19 +274,19 @@ export async function GET(request: Request) {
         fonts: [
           {
             name: "Inter",
-            data: fontBuffer,
+            data: ogFonts.regular.data,
             style: "normal",
             weight: 400,
           },
           {
             name: "Inter",
-            data: fontBuffer,
+            data: ogFonts.medium.data,
             style: "normal",
             weight: 500,
           },
           {
             name: "Inter",
-            data: fontBuffer,
+            data: ogFonts.bold.data,
             style: "normal",
             weight: 700,
           },
