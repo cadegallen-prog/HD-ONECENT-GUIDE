@@ -1,37 +1,56 @@
 [
   {
-    "id": "1001234567",
-    "name": "Test Hammer",
-    "sku": "1001234567",
-    "internetNumber": "123456789",
+    "id": "1000001234",
+    "name": "Milwaukee Hammer Drill Kit",
+    "sku": "1000001234",
+    "internetNumber": "987654321",
+    "homeDepotUrl": null,
     "price": 0.01,
-    "dateAdded": "2025-12-01",
+    "dateAdded": "2025-12-10T10:00:00.000Z",
     "tier": "Common",
-    "status": "Active",
-    "quantityFound": "3",
-    "imageUrl": "https://via.placeholder.com/300x300.png?text=Test+Item",
-    "notes": "Playwright test fixture",
+    "status": "",
+    "quantityFound": "2",
+    "imageUrl": "/images/hd-product-placeholder.svg",
+    "notes": "Found on endcap",
     "locations": {
       "GA": 2,
+      "FL": 1
+    }
+  },
+  {
+    "id": "654321",
+    "name": "Husky Small Parts Organizer",
+    "sku": "654321",
+    "internetNumber": "",
+    "homeDepotUrl": "https://www.homedepot.com/p/custom-organizer",
+    "price": 0.01,
+    "dateAdded": "2025-12-08T15:30:00.000Z",
+    "tier": "Rare",
+    "status": "",
+    "quantityFound": "",
+    "imageUrl": "/images/hd-product-placeholder.svg",
+    "notes": "",
+    "locations": {
       "TX": 1
     }
   },
   {
     "id": "1009876543",
-    "name": "Test Drill",
+    "name": "Ryobi Battery 2-Pack",
     "sku": "1009876543",
+    "internetNumber": "",
+    "homeDepotUrl": null,
     "price": 0.01,
-    "dateAdded": "2025-11-15",
+    "dateAdded": "2025-12-05T09:15:00.000Z",
     "tier": "Very Common",
-    "status": "Active",
+    "status": "",
     "quantityFound": "5",
-    "imageUrl": "https://via.placeholder.com/300x300.png?text=Test+Drill",
-    "notes": "Another test item",
+    "imageUrl": "/images/hd-product-placeholder.svg",
+    "notes": "Stacked near clearance",
     "locations": {
       "CA": 3,
-      "FL": 2,
-      "NY": 1,
-      "TX": 2
+      "NV": 2,
+      "AZ": 1
     }
   }
 ]

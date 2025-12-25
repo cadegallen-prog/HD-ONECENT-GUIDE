@@ -2,7 +2,8 @@ import sharp from "sharp"
 import { writeFileSync } from "fs"
 import { join } from "path"
 
-const SOURCE = join(process.cwd(), "public", "og", "pennycentral-background-1230x600-.jpg")
+const DEFAULT_SOURCE = join(process.cwd(), "public", "og", "og-background.jpg")
+const SOURCE = process.env.OG_BACKGROUND_SOURCE || DEFAULT_SOURCE
 const OUTPUT_JPG = join(process.cwd(), "public", "og", "og-background.jpg")
 const OUTPUT_BASE64 = join(process.cwd(), "lib", "og-background-base64.ts")
 
@@ -37,7 +38,7 @@ async function main() {
   const base64 = resizedBuffer.toString("base64")
   const tsContent = `// OG background image (pennies + textured background, no text)
 // Dimensions: ${OG_WIDTH}x${OG_HEIGHT}
-// Source: pennycentral-background-1230x600-.jpg
+// Source: ${SOURCE}
 // Generated: ${new Date().toISOString()}
 
 export const OG_BACKGROUND_BASE64 = "${base64}"

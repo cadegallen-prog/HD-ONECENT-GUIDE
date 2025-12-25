@@ -43,6 +43,7 @@ export function PennyListCard({ item }: PennyListCardProps) {
   const homeDepotUrl = getHomeDepotProductUrl({
     sku: item.sku,
     internetNumber: item.internetNumber,
+    homeDepotUrl: item.homeDepotUrl,
   })
   const skuPageUrl = `/sku/${item.sku}`
 

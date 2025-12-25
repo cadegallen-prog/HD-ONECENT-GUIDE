@@ -13,12 +13,16 @@ export function getHomeDepotProductUrl(args: {
   sku?: string | null
   internetNumber?: string | number | null
   productId?: string | number | null
+  homeDepotUrl?: string | null
 }): string {
+  const manualUrl = String(args.homeDepotUrl ?? "").trim()
+  if (manualUrl) return manualUrl
+
   const id = normalizeHomeDepotId(args.internetNumber ?? args.productId)
   if (id) return `https://www.homedepot.com/p/${id}`
 
   const sku = String(args.sku ?? "").trim()
-  if (sku) return `https://www.homedepot.com/s/${encodeURIComponent(sku)}?NCNI-5`
+  if (sku) return `https://www.homedepot.com/s/${encodeURIComponent(sku)}`
 
   return "https://www.homedepot.com/"
 }

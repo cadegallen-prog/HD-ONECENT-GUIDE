@@ -1,18 +1,38 @@
-import Papa from "papaparse"
+import "server-only"
 import { readFile } from "node:fs/promises"
 import path from "node:path"
+import { cache } from "react"
 import { extractStateFromLocation } from "./penny-list-utils"
 import { PLACEHOLDER_IMAGE_URL } from "./image-cache"
+import { getSupabaseClient, getSupabaseServiceRoleClient } from "./supabase/client"
+import { normalizeSku, validateSku } from "./sku"
 
-const IMAGE_URL_FIELD = "IMAGE URL"
-const INTERNET_SKU_FIELD = "INTERNET SKU"
+const envConfigured =
+  Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
+  Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
 
-// Define the shape of your penny item
+// TODO: Remove service role fallback once RLS allows anon reads without gaps.
+function allowServiceRoleFallbackEnabled() {
+  const v = process.env.SUPABASE_ALLOW_SERVICE_ROLE_FALLBACK
+  return (v ?? "true").toLowerCase() !== "false" && v !== "0"
+}
+
+const fetchWarningsLogged = {
+  anonEmpty: false,
+  serviceRoleEmpty: false,
+  fallbackDisabled: false,
+  enrichmentMissing: false,
+}
+
 export type PennyItem = {
   id: string
   name: string
   sku: string
-  internetNumber?: string // For better Home Depot product links (backend only, never displayed)
+  brand?: string
+  modelNumber?: string
+  upc?: string
+  internetNumber?: string
+  homeDepotUrl?: string | null
   price: number
   dateAdded: string
   tier: "Very Common" | "Common" | "Rare"
@@ -23,284 +43,452 @@ export type PennyItem = {
   locations: Record<string, number>
 }
 
-// Map your CSV columns to internal keys (normalized lowercase)
-const FIELD_ALIASES: Record<string, string[]> = {
-  timestamp: ["timestamp"],
-  email: ["email address"],
-  name: ["item name", "name", "product name", "item name"],
-  sku: ["home depot sku (6 or 10 digits)", "sku", "item sku", "product sku"],
-  internet_sku: [
-    INTERNET_SKU_FIELD,
-    "internet sku",
-    "internet number",
-    "internetnumber",
-    "internetsku (private, backend only)",
-    "internetsku (private, backend only) (optional, for better hd links)",
-    "internetsku",
-    "internet_sku",
-  ],
-  quantity: ["exact quantity found", "quantity", "qty", "quantity seen"],
-  city_state: ["store (city, state)", "store", "location"],
-  date_found: ["purchase date", "date found", "found date", "date"],
-  image_url: [IMAGE_URL_FIELD, "image url"],
-  notes: ["notes (optional)", "notes", "note", "comments", "comment"],
-  approved: ["approved", "is approved"],
-  status: ["status", "scope"],
-  date_approved: ["date approved", "approved date"],
+export type SupabasePennyRow = {
+  id: string
+  purchase_date: string | null
+  item_name: string | null
+  home_depot_sku_6_or_10_digits: string | number | null
+  exact_quantity_found: number | null
+  store_city_state: string | null
+  image_url: string | null
+  notes_optional: string | null
+  home_depot_url: string | null
+  internet_sku: number | null
+  timestamp: string | null
 }
 
-function normalizeHeaderLabel(value: string): string {
-  return value.toLowerCase().replace(/_/g, " ").replace(/\s+/g, " ").trim()
+export type SupabasePennyEnrichmentRow = {
+  sku: string | number | null
+  item_name: string | null
+  brand: string | null
+  model_number: string | null
+  upc: string | null
+  image_url: string | null
+  home_depot_url: string | null
+  internet_sku: number | null
+  updated_at: string | null
+  source: string | null
 }
 
-function pickField(row: Record<string, string>, key: string): string {
-  const aliases = FIELD_ALIASES[key] || []
-  const normalizedEntries = Object.entries(row).map(([header, value]) => ({
-    normalizedHeader: normalizeHeaderLabel(header),
-    value: typeof value === "string" ? value : "",
-  }))
+function normalizeSkuValue(value: string | number | null): string | null {
+  const normalized = normalizeSku(String(value ?? ""))
+  if (!normalized) return null
 
-  for (const alias of aliases) {
-    const normalizedAlias = normalizeHeaderLabel(alias)
-    const match = normalizedEntries.find(
-      (entry) =>
-        !!entry.value &&
-        (entry.normalizedHeader === normalizedAlias ||
-          entry.normalizedHeader.startsWith(`${normalizedAlias} `) ||
-          entry.normalizedHeader.startsWith(`${normalizedAlias}(`))
-    )
-    if (match) {
-      return match.value
+  const { error } = validateSku(normalized)
+  if (error) return null
+
+  return normalized
+}
+
+function normalizeIntToString(value: number | null): string | undefined {
+  if (value === null || value === undefined) return undefined
+  const digits = String(value).replace(/\D/g, "")
+  return digits || undefined
+}
+
+function normalizeOptionalText(value: string | number | null | undefined): string | undefined {
+  if (value === null || value === undefined) return undefined
+  const trimmed = String(value).trim()
+  return trimmed ? trimmed : undefined
+}
+
+type PennyItemEnrichment = {
+  sku: string
+  name?: string
+  brand?: string
+  modelNumber?: string
+  upc?: string
+  imageUrl?: string
+  internetNumber?: string
+  homeDepotUrl?: string
+  updatedAtMs: number
+}
+
+function normalizeEnrichmentRow(row: SupabasePennyEnrichmentRow): PennyItemEnrichment | null {
+  const sku = normalizeSkuValue(row.sku)
+  if (!sku) return null
+
+  const updatedAtText = normalizeOptionalText(row.updated_at)
+  const updatedAtMs = updatedAtText ? new Date(updatedAtText).getTime() : 0
+
+  return {
+    sku,
+    name: normalizeOptionalText(row.item_name),
+    brand: normalizeOptionalText(row.brand),
+    modelNumber: normalizeOptionalText(row.model_number),
+    upc: normalizeOptionalText(row.upc),
+    imageUrl: normalizeOptionalText(row.image_url),
+    internetNumber: normalizeIntToString(row.internet_sku),
+    homeDepotUrl: normalizeOptionalText(row.home_depot_url),
+    updatedAtMs: Number.isNaN(updatedAtMs) ? 0 : updatedAtMs,
+  }
+}
+
+function buildEnrichmentIndex(
+  rows: SupabasePennyEnrichmentRow[]
+): Map<string, PennyItemEnrichment> {
+  const index = new Map<string, PennyItemEnrichment>()
+
+  rows.forEach((row) => {
+    const normalized = normalizeEnrichmentRow(row)
+    if (!normalized) return
+
+    const existing = index.get(normalized.sku)
+    if (!existing || normalized.updatedAtMs >= existing.updatedAtMs) {
+      index.set(normalized.sku, normalized)
+    }
+  })
+
+  return index
+}
+
+export function applyEnrichment(
+  items: PennyItem[],
+  rows: SupabasePennyEnrichmentRow[] | null
+): PennyItem[] {
+  if (!rows || rows.length === 0) return items
+  const index = buildEnrichmentIndex(rows)
+  if (index.size === 0) return items
+
+  return items.map((item) => {
+    const enrichment = index.get(item.sku)
+    if (!enrichment) return item
+
+    return {
+      ...item,
+      name: enrichment.name ?? item.name,
+      brand: enrichment.brand ?? item.brand,
+      modelNumber: enrichment.modelNumber ?? item.modelNumber,
+      upc: enrichment.upc ?? item.upc,
+      imageUrl: enrichment.imageUrl ?? item.imageUrl,
+      internetNumber: enrichment.internetNumber ?? item.internetNumber,
+      homeDepotUrl: enrichment.homeDepotUrl ?? item.homeDepotUrl,
+    }
+  })
+}
+
+function pickBestDate(row: SupabasePennyRow): { iso: string; ms: number } | null {
+  const timestamp = row.timestamp ? new Date(row.timestamp) : null
+  if (timestamp && !Number.isNaN(timestamp.getTime())) {
+    return { iso: timestamp.toISOString(), ms: timestamp.getTime() }
+  }
+
+  if (row.purchase_date) {
+    const purchase = new Date(`${row.purchase_date}T00:00:00Z`)
+    if (!Number.isNaN(purchase.getTime())) {
+      return { iso: purchase.toISOString(), ms: purchase.getTime() }
     }
   }
 
-  return ""
+  return null
 }
 
-// Return ISO date (YYYY-MM-DD) when valid, otherwise null
-function parseDateToISO(value: string): string | null {
-  if (!value) return null
-  const parsed = new Date(value)
-  if (Number.isNaN(parsed.getTime())) return null
-  return parsed.toISOString().split("T")[0]
-}
-
-/**
- * Auto-calculate tier based on report data
- * - Very Common: 6+ total reports OR 4+ states
- * - Common: 3-5 reports OR 2-3 states
- * - Rare: 1-2 reports AND only 1 state
- */
 function calculateTier(locations: Record<string, number>): PennyItem["tier"] {
   const stateCount = Object.keys(locations).length
   const totalReports = Object.values(locations).reduce((sum, count) => sum + count, 0)
 
-  // Very Common: widespread across states OR many reports
-  if (totalReports >= 6 || stateCount >= 4) {
-    return "Very Common"
-  }
-
-  // Common: moderate spread
-  if (totalReports >= 3 || stateCount >= 2) {
-    return "Common"
-  }
-
-  // Rare: limited reports in limited locations
+  if (totalReports >= 6 || stateCount >= 4) return "Very Common"
+  if (totalReports >= 3 || stateCount >= 2) return "Common"
   return "Rare"
 }
 
-type EnrichmentFields = {
-  imageUrl?: string
-  internetSku?: string
-}
-
-async function fetchEnrichmentBySku(): Promise<Map<string, EnrichmentFields>> {
-  const enrichmentUrl = process.env.GOOGLE_SHEET_ENRICHMENT_URL
-  if (!enrichmentUrl) return new Map()
-
-  try {
-    const res = await fetch(enrichmentUrl, { next: { revalidate: 3600 } })
-    if (!res.ok) throw new Error(`Failed to fetch enrichment sheet: ${res.statusText}`)
-    const csvText = await res.text()
-
-    const { data } = Papa.parse<Record<string, string>>(csvText, {
-      header: true,
-      skipEmptyLines: true,
-    })
-
-    const bySku = new Map<string, EnrichmentFields>()
-
-    data.forEach((row) => {
-      const sku = pickField(row, "sku").trim()
-      if (!sku) return
-
-      const imageUrl = pickField(row, "image_url").trim()
-      const internetSku = pickField(row, "internet_sku").trim()
-      if (!imageUrl && !internetSku) return
-
-      const existing = bySku.get(sku) ?? {}
-      if (imageUrl && !existing.imageUrl) {
-        existing.imageUrl = imageUrl
-      }
-      if (internetSku && !existing.internetSku) {
-        existing.internetSku = internetSku
-      }
-      bySku.set(sku, existing)
-    })
-
-    return bySku
-  } catch (error) {
-    console.error("Error fetching enrichment sheet:", error)
-    return new Map()
-  }
-}
-
-// Helper function to fall back to local fixture when Google Sheet is unavailable
 async function tryLocalFixtureFallback(): Promise<PennyItem[]> {
   try {
     const fixturePath = path.join(process.cwd(), "data", "penny-list.json")
     const fixtureText = await readFile(fixturePath, "utf8")
     const fixtureItems = JSON.parse(fixtureText) as PennyItem[]
-    console.log(`Loaded ${fixtureItems.length} items from local fixture`)
     return fixtureItems
   } catch (error) {
-    console.warn("Local fixture also unavailable. Returning empty list.", error)
+    console.warn("Local fixture unavailable; returning empty list.", error)
     return []
   }
 }
 
-async function fetchPennyListRaw(): Promise<PennyItem[]> {
-  // Playwright visual smoke uses a stable local fixture to avoid snapshot drift.
-  if (process.env.PLAYWRIGHT === "1") {
-    try {
-      const fixturePath = path.join(process.cwd(), "data", "penny-list.json")
-      const fixtureText = await readFile(fixturePath, "utf8")
-      const fixtureItems = JSON.parse(fixtureText) as PennyItem[]
-      return fixtureItems
-    } catch (error) {
-      // In Playwright runs we want deterministic, fast, offline-friendly behavior.
-      // If the fixture is missing, do NOT hit the live Google Sheet.
-      console.warn("Playwright fixture load failed; using empty penny list.", error)
-      return []
+type AggregatedItem = Omit<PennyItem, "tier"> & {
+  tier?: PennyItem["tier"]
+  latestTimestampMs: number
+}
+
+export function buildPennyItemsFromRows(rows: SupabasePennyRow[]): PennyItem[] {
+  const grouped = new Map<string, AggregatedItem>()
+
+  rows.forEach((row) => {
+    const sku = normalizeSkuValue(row.home_depot_sku_6_or_10_digits)
+    if (!sku) return
+
+    const dateInfo = pickBestDate(row)
+    const timestampMs = dateInfo?.ms ?? 0
+
+    const state = extractStateFromLocation(row.store_city_state ?? "")
+    const quantity = row.exact_quantity_found ?? null
+    const imageUrl = row.image_url?.trim() || ""
+    const notes = row.notes_optional?.trim() || ""
+    const internetNumber = normalizeIntToString(row.internet_sku)
+    const homeDepotUrl = row.home_depot_url?.trim() || null
+    const name = row.item_name?.trim()
+
+    const existing = grouped.get(sku)
+
+    if (!existing) {
+      grouped.set(sku, {
+        id: sku,
+        sku,
+        name: name || `SKU ${sku}`,
+        internetNumber,
+        homeDepotUrl,
+        price: 0.01,
+        dateAdded: dateInfo?.iso || new Date().toISOString(),
+        status: "",
+        quantityFound: quantity !== null ? String(quantity) : "",
+        imageUrl,
+        notes,
+        locations: state ? { [state]: 1 } : {},
+        latestTimestampMs: timestampMs,
+      })
+      return
+    }
+
+    existing.latestTimestampMs = Math.max(existing.latestTimestampMs, timestampMs)
+
+    if (dateInfo && dateInfo.ms >= existing.latestTimestampMs) {
+      existing.dateAdded = dateInfo.iso
+    }
+
+    if (name && (!existing.name || timestampMs >= existing.latestTimestampMs)) {
+      existing.name = name
+    }
+
+    if (notes && (!existing.notes || timestampMs >= existing.latestTimestampMs)) {
+      existing.notes = notes
+    }
+
+    if (imageUrl && (!existing.imageUrl || existing.imageUrl === PLACEHOLDER_IMAGE_URL)) {
+      existing.imageUrl = imageUrl
+    }
+
+    if (internetNumber && !existing.internetNumber) {
+      existing.internetNumber = internetNumber
+    }
+
+    if (homeDepotUrl && !existing.homeDepotUrl) {
+      existing.homeDepotUrl = homeDepotUrl
+    }
+
+    if (quantity !== null && !existing.quantityFound) {
+      existing.quantityFound = String(quantity)
+    }
+
+    if (state) {
+      existing.locations[state] = (existing.locations[state] || 0) + 1
+    }
+  })
+
+  const items: PennyItem[] = Array.from(grouped.values()).map((item) => {
+    const { latestTimestampMs, ...rest } = item
+    void latestTimestampMs
+    return {
+      ...rest,
+      tier: calculateTier(rest.locations),
+      imageUrl: rest.imageUrl || PLACEHOLDER_IMAGE_URL,
+    }
+  })
+
+  return items
+}
+
+async function fetchRows(
+  client: ReturnType<typeof getSupabaseClient>,
+  label: "anon" | "service_role"
+): Promise<SupabasePennyRow[] | null> {
+  const { data, error } = await client
+    .from("Penny List")
+    .select(
+      "id,purchase_date,item_name,home_depot_sku_6_or_10_digits,exact_quantity_found,store_city_state,image_url,notes_optional,home_depot_url,internet_sku,timestamp"
+    )
+
+  if (error) {
+    console.error(`Error fetching penny list from Supabase (${label}):`, error)
+    return null
+  }
+
+  const rows = (data as SupabasePennyRow[] | null) ?? []
+
+  // Only warn in development mode - during builds, parallel workers may have timing issues
+  // that cause spurious empty results even when data exists
+  if (
+    envConfigured &&
+    rows.length === 0 &&
+    !fetchWarningsLogged.anonEmpty &&
+    process.env.NODE_ENV === "development"
+  ) {
+    console.warn(`Supabase (${label}) returned no penny list rows.`)
+    fetchWarningsLogged.anonEmpty = true
+  }
+
+  return rows
+}
+
+async function fetchEnrichmentRows(
+  client: ReturnType<typeof getSupabaseClient>,
+  label: "anon" | "service_role"
+): Promise<SupabasePennyEnrichmentRow[] | null> {
+  const { data, error } = await client
+    .from("penny_item_enrichment")
+    .select(
+      "sku,item_name,brand,model_number,upc,image_url,home_depot_url,internet_sku,updated_at,source"
+    )
+
+  if (error) {
+    const code = (error as { code?: unknown } | null)?.code
+    if (code === "PGRST205") {
+      if (!fetchWarningsLogged.enrichmentMissing && process.env.NODE_ENV === "development") {
+        console.warn(
+          `Supabase enrichment table is not available yet (penny_item_enrichment missing); skipping enrichment (${label}).`
+        )
+        fetchWarningsLogged.enrichmentMissing = true
+      }
+      return null
+    }
+
+    console.error(`Error fetching penny enrichment from Supabase (${label}):`, error)
+    return null
+  }
+
+  const rows = (data as SupabasePennyEnrichmentRow[] | null) ?? []
+  return rows
+}
+
+type SupabaseClientLike = ReturnType<typeof getSupabaseClient>
+
+function getSupabaseAnonReadClient(): SupabaseClientLike {
+  const override = (globalThis as { __supabaseAnonReadOverride?: SupabaseClientLike })
+    .__supabaseAnonReadOverride
+  if (override) return override
+  return getSupabaseClient()
+}
+
+function getSupabaseServiceRoleReadClient(): SupabaseClientLike | null {
+  const override = (globalThis as { __supabaseServiceRoleReadOverride?: SupabaseClientLike })
+    .__supabaseServiceRoleReadOverride
+  if (override) return override
+
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return null
+  return getSupabaseServiceRoleClient()
+}
+
+export async function fetchPennyItemsFromSupabase(): Promise<PennyItem[]> {
+  try {
+    const anonClient = getSupabaseAnonReadClient()
+    const anonRows = await fetchRows(anonClient, "anon")
+    const anonEnrichment = await fetchEnrichmentRows(anonClient, "anon")
+
+    if (anonRows && anonRows.length > 0) {
+      return applyEnrichment(buildPennyItemsFromRows(anonRows), anonEnrichment)
+    }
+
+    // Anon read returned empty or null - try service role fallback
+    if (!allowServiceRoleFallbackEnabled()) {
+      if (!fetchWarningsLogged.fallbackDisabled && envConfigured) {
+        console.warn(
+          "Service role read fallback disabled (SUPABASE_ALLOW_SERVICE_ROLE_FALLBACK=0 or false)."
+        )
+        fetchWarningsLogged.fallbackDisabled = true
+      }
+    } else if (process.env.NODE_ENV === "development") {
+      console.warn("Anon read empty/failed; attempting service role fallback")
+    }
+
+    const serviceRoleClient = allowServiceRoleFallbackEnabled()
+      ? getSupabaseServiceRoleReadClient()
+      : null
+    if (serviceRoleClient) {
+      const serviceRows = await fetchRows(serviceRoleClient, "service_role")
+      if (serviceRows && serviceRows.length > 0) {
+        if (process.env.NODE_ENV === "development") {
+          console.log("Service role fallback succeeded")
+        }
+        const serviceEnrichment = await fetchEnrichmentRows(serviceRoleClient, "service_role")
+        const fallbackEnrichment =
+          serviceEnrichment && serviceEnrichment.length > 0 ? serviceEnrichment : anonEnrichment
+        return applyEnrichment(buildPennyItemsFromRows(serviceRows), fallbackEnrichment)
+      }
+
+      if (
+        process.env.SUPABASE_SERVICE_ROLE_KEY &&
+        envConfigured &&
+        !fetchWarningsLogged.serviceRoleEmpty
+      ) {
+        console.warn("Supabase (service role) returned no penny list rows.")
+        fetchWarningsLogged.serviceRoleEmpty = true
+      }
+    }
+  } catch (error) {
+    // If Supabase is not configured or fails, we'll return empty
+    // so the caller can decide to use the fixture fallback.
+    // Only log if it's not the expected "env vars not set" error
+    const msg = error instanceof Error ? error.message : String(error)
+    if (!msg.includes("Supabase environment variables are not set")) {
+      console.warn("Supabase fetch failed:", msg)
     }
   }
 
-  const sheetUrl = process.env.GOOGLE_SHEET_URL
-  if (!sheetUrl) {
-    console.warn("GOOGLE_SHEET_URL is not set. Trying local fixture fallback.")
+  return []
+}
+
+// Global cache for dev mode to prevent Supabase hammering
+const GLOBAL_CACHE_DURATION = 60 * 1000 // 60 seconds
+let globalCache: { data: PennyItem[]; timestamp: number } | null = null
+
+const cacheFn =
+  typeof cache === "function"
+    ? cache
+    : <T extends (...args: unknown[]) => Promise<PennyItem[]>>(fn: T) =>
+        (...args: Parameters<T>) =>
+          fn(...args)
+
+export const getPennyList = cacheFn(async (): Promise<PennyItem[]> => {
+  // Check global cache first (useful for dev mode HMR)
+  // IMPORTANT: This cache is dev-only to prevent stale data in production
+  if (process.env.NODE_ENV === "development" && globalCache) {
+    const age = Date.now() - globalCache.timestamp
+    if (age < GLOBAL_CACHE_DURATION) {
+      console.log(`Using cached penny list (age: ${Math.round(age / 1000)}s)`)
+      return globalCache.data
+    }
+  }
+
+  if (process.env.PLAYWRIGHT === "1") {
     return tryLocalFixtureFallback()
   }
 
   try {
-    const enrichmentPromise = fetchEnrichmentBySku()
-    const res = await fetch(sheetUrl, { next: { revalidate: 3600 } })
-    if (!res.ok) throw new Error(`Failed to fetch sheet: ${res.statusText}`)
-    const csvText = await res.text()
+    const items = await fetchPennyItemsFromSupabase()
 
-    const { data } = Papa.parse<Record<string, string>>(csvText, {
-      header: true,
-      skipEmptyLines: true,
-    })
+    // Update global cache
+    if (items.length > 0) {
+      globalCache = { data: items, timestamp: Date.now() }
+    }
 
-    const grouped: Record<string, Omit<PennyItem, "tier"> & { tier?: PennyItem["tier"] }> = {}
-
-    data.forEach((row) => {
-      // 1. Parse basic fields
-      const sku = pickField(row, "sku").trim()
-      if (!sku) return
-
-      const name = pickField(row, "name").trim()
-      const internetSku = pickField(row, "internet_sku").trim()
-      const quantity = pickField(row, "quantity").trim()
-      const cityState = pickField(row, "city_state").trim()
-      const dateFound = pickField(row, "date_found").trim()
-      const timestamp = pickField(row, "timestamp").trim()
-      const imageUrl = pickField(row, "image_url").trim()
-      const notes = pickField(row, "notes").trim()
-      const status = pickField(row, "status").trim()
-
-      // 2. Parse Date
-      const parsedDate = parseDateToISO(dateFound) ?? parseDateToISO(timestamp)
-      const dateAdded = parsedDate ?? ""
-
-      // 3. Parse Location
-      const state = extractStateFromLocation(cityState)
-
-      // 4. Aggregate by SKU
-      if (!grouped[sku]) {
-        grouped[sku] = {
-          id: sku,
-          name,
-          sku,
-          internetNumber: internetSku || undefined,
-          price: 0.01,
-          dateAdded,
-          status,
-          quantityFound: quantity,
-          imageUrl,
-          notes,
-          locations: {},
+    if (items.length === 0) {
+      // If Supabase returns nothing (or failed), and we are in dev mode or explicitly asked,
+      // fall back to the local fixture so the app isn't empty.
+      if (process.env.NODE_ENV === "development" || process.env.USE_FIXTURE_FALLBACK === "1") {
+        console.warn("Supabase empty/failed; falling back to local fixture data.")
+        const fixtureItems = await tryLocalFixtureFallback()
+        // Cache the fixture too so we don't re-read disk constantly
+        if (fixtureItems.length > 0) {
+          globalCache = { data: fixtureItems, timestamp: Date.now() }
         }
+        return fixtureItems
       }
-
-      // Update internetNumber if this row has one and we don't yet
-      if (internetSku && !grouped[sku].internetNumber) {
-        grouped[sku].internetNumber = internetSku
-      }
-
-      // Update imageUrl if this row has one and we don't yet
-      // Keep the first non-empty image URL across duplicate rows; blanks never override.
-      if (imageUrl && !grouped[sku].imageUrl) {
-        grouped[sku].imageUrl = imageUrl
-      }
-
-      // Update latest date
-      if (
-        dateAdded &&
-        (!grouped[sku].dateAdded ||
-          new Date(dateAdded).getTime() > new Date(grouped[sku].dateAdded).getTime())
-      ) {
-        grouped[sku].dateAdded = dateAdded
-      }
-
-      // Add location count
-      if (state) {
-        grouped[sku].locations[state] = (grouped[sku].locations[state] || 0) + 1
-      }
-    })
-
-    // Apply enrichment overlay (same SKU map from a dedicated tab, if present)
-    const enrichmentBySku = await enrichmentPromise
-    enrichmentBySku.forEach((enrichment, sku) => {
-      const existing = grouped[sku]
-      if (!existing) return
-
-      if (enrichment.internetSku && !existing.internetNumber) {
-        existing.internetNumber = enrichment.internetSku
-      }
-      if (enrichment.imageUrl && !existing.imageUrl) {
-        existing.imageUrl = enrichment.imageUrl
-      }
-    })
-
-    // 5. Calculate tier for each item based on aggregated data
-    // Use placeholder for items without user-submitted/enriched photos
-    const items: PennyItem[] = Object.values(grouped).map((item) => {
-      return {
-        ...item,
-        tier: calculateTier(item.locations),
-        imageUrl: item.imageUrl || PLACEHOLDER_IMAGE_URL,
-      }
-    })
-
+    }
     return items
   } catch (error) {
-    console.error("Error fetching penny list:", error)
-    console.warn("Falling back to local fixture.")
-    return tryLocalFixtureFallback()
+    console.error("Unexpected error fetching penny list:", error)
+    // Final safety net: try fixture
+    if (process.env.NODE_ENV === "development") {
+      return tryLocalFixtureFallback()
+    }
+    return []
   }
-}
-
-export async function getPennyList(): Promise<PennyItem[]> {
-  return fetchPennyListRaw()
-}
+})

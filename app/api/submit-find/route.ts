@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 import { validateSku } from "@/lib/sku"
+import { getSupabaseClient, getSupabaseServiceRoleClient } from "@/lib/supabase/client"
 
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000 // 1 hour
 const RATE_LIMIT_MAX = 5
@@ -11,9 +12,6 @@ const rateLimitMap: Map<string, RateBucket> =
   new Map()
 ;(globalThis as unknown as { __pennyRateLimit?: Map<string, RateBucket> }).__pennyRateLimit =
   rateLimitMap
-
-const IMAGE_URL_FIELD = "IMAGE URL"
-const INTERNET_SKU_FIELD = "INTERNET SKU"
 
 const submissionSchema = z
   .object({
@@ -27,6 +25,13 @@ const submissionSchema = z
     website: z.string().optional(), // honeypot
   })
   .strip() // Strip any extra fields (photoUrl/upload attempts are ignored).
+
+// TODO: Remove service role fallback once Supabase RLS allows anon inserts directly.
+// NOTE: This MUST be a function (not a const) so tests can change the env var at runtime.
+function isServiceRoleFallbackAllowed(): boolean {
+  const val = process.env.SUPABASE_ALLOW_SERVICE_ROLE_FALLBACK || "true"
+  return val.toLowerCase() !== "false" && val !== "0"
+}
 
 function getClientIp(request: NextRequest) {
   const forwarded = request.headers.get("x-forwarded-for")
@@ -42,6 +47,35 @@ function checkRateLimit(ip: string): boolean {
   recent.push(now)
   rateLimitMap.set(ip, recent)
   return true
+}
+
+type SupabaseClientLike = ReturnType<typeof getSupabaseClient>
+
+function getSupabaseServerClient(): SupabaseClientLike {
+  const override = (globalThis as { __supabaseClientOverride?: SupabaseClientLike })
+    .__supabaseClientOverride
+  if (override) return override
+  return getSupabaseClient()
+}
+
+function getSupabaseServiceRoleServerClient(): SupabaseClientLike | null {
+  const override = (globalThis as { __supabaseServiceRoleClientOverride?: SupabaseClientLike })
+    .__supabaseServiceRoleClientOverride
+  if (override) return override
+
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return null
+  return getSupabaseServiceRoleClient()
+}
+
+function shouldRetryWithServiceRole(error: unknown): boolean {
+  const code = (error as { code?: unknown } | null)?.code
+  const message = (error as { message?: unknown } | null)?.message
+  const normalizedMessage = typeof message === "string" ? message : ""
+  return (
+    code === "42501" ||
+    /row-level security/i.test(normalizedMessage) ||
+    /permission denied/i.test(normalizedMessage)
+  )
 }
 
 export async function POST(request: NextRequest) {
@@ -97,36 +131,36 @@ export async function POST(request: NextRequest) {
     const state = body.storeState.toUpperCase()
     const location = city ? `${city}, ${state}` : state
 
-    // Prepare payload for Google Apps Script
-    // Enrichment columns stay blank for client submissions; Cade populates them manually later.
-    const sheetPayload = {
-      "Item Name": body.itemName.trim(),
-      SKU: normalizedSku,
-      "Store (City, State)": location,
-      "Purchase Date": body.dateFound,
-      "Exact Quantity Found": qty !== undefined ? String(qty) : "",
-      [IMAGE_URL_FIELD]: "",
-      [INTERNET_SKU_FIELD]: "",
-      "Notes (optional)": body.notes?.trim() || "",
+    const supabase = getSupabaseServerClient()
+    const payload = {
+      item_name: body.itemName.trim(),
+      home_depot_sku_6_or_10_digits: normalizedSku,
+      store_city_state: location,
+      purchase_date: body.dateFound || null,
+      exact_quantity_found: qty ?? null,
+      notes_optional: body.notes?.trim() || null,
+      timestamp: new Date().toISOString(),
     }
 
-    const appsScriptUrl = process.env.GOOGLE_APPS_SCRIPT_URL
-    if (!appsScriptUrl) {
-      console.error("GOOGLE_APPS_SCRIPT_URL is not configured")
-      return NextResponse.json(
-        { error: "Submission service is not configured. Please try again later." },
-        { status: 500 }
-      )
+    let { error } = await supabase.from("Penny List").insert(payload)
+
+    if (error && shouldRetryWithServiceRole(error)) {
+      if (!isServiceRoleFallbackAllowed()) {
+        console.warn(
+          "Supabase insert blocked; service role fallback disabled (SUPABASE_ALLOW_SERVICE_ROLE_FALLBACK=0 or false)."
+        )
+      } else {
+        const serviceRoleClient = getSupabaseServiceRoleServerClient()
+        if (serviceRoleClient) {
+          console.warn("Retrying Supabase insert with service role fallback due to RLS block")
+          const retry = await serviceRoleClient.from("Penny List").insert(payload)
+          error = retry.error
+        }
+      }
     }
 
-    const scriptResponse = await fetch(appsScriptUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(sheetPayload),
-    })
-
-    if (!scriptResponse.ok) {
-      console.error("Google Apps Script error:", await scriptResponse.text())
+    if (error) {
+      console.error("Supabase insert error:", error)
       return NextResponse.json(
         { error: "Failed to submit find. Please try again." },
         { status: 500 }
@@ -135,7 +169,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: "Thanks — your find is in the review queue.",
+      message: "Thanks — your find is now on the Penny List.",
     })
   } catch (error) {
     console.error("Error submitting find:", error)

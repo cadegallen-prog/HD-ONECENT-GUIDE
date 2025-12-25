@@ -268,8 +268,10 @@ export function PennyListClient({
     })()
 
     const normalizeDate = (value: string) => {
-      const parsed = new Date(`${value}T00:00:00Z`)
-      return Number.isNaN(parsed.getTime()) ? null : parsed
+      const direct = new Date(value)
+      if (!Number.isNaN(direct.getTime())) return direct
+      const fallback = new Date(`${value}T00:00:00Z`)
+      return Number.isNaN(fallback.getTime()) ? null : fallback
     }
 
     const isWithinDays = (date: Date, window: number) => {

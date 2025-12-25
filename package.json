@@ -13,7 +13,7 @@
     "lint:colors:update-baseline": "tsx scripts/lint-colors.ts --update-baseline",
     "export": "next build && next export",
     "test:e2e": "playwright test --workers=1",
-    "test:unit": "tsx --test tests/**/*.test.ts",
+    "test:unit": "tsx --import ./tests/setup.ts --test tests/**/*.test.ts",
     "check-contrast": "node scripts/check-contrast.js",
     "check-axe": "node scripts/check-axe.js",
     "security:scan": "node scripts/security-scan-no-pii.mjs"
@@ -21,6 +21,7 @@
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.8",
     "@hookform/resolvers": "^3.9.1",
+    "@supabase/supabase-js": "^2.89.0",
     "@types/leaflet": "^1.9.21",
     "@vercel/analytics": "^1.5.0",
     "@vercel/postgres": "^0.10.0",
@@ -39,6 +40,7 @@
     "react-hook-form": "^7.53.2",
     "react-leaflet": "^4.2.1",
     "recharts": "^3.4.1",
+    "server-only": "^0.0.1",
     "sonner": "^2.0.7",
     "tailwind-merge": "^2.5.4",
     "zod": "^3.23.8"

@@ -11,6 +11,28 @@
 
 ---
 
+## 2025-12-25 - GitHub Copilot (GPT-5.1-Codex-Max) - Supabase RLS guardrails + fallback toggle
+
+**AI:** GitHub Copilot (GPT-5.1-Codex-Max)
+**Goal:** Replace service-role fallback reliance by documenting RLS for anon SELECT/INSERT and gating fallbacks in code.
+
+**Changes Made:**
+
+- Added `docs/supabase-rls.md` with the SQL to enable RLS on `Penny List`, create a restricted `penny_list_public` view, enforce defaults (`status` pending, `timestamp` now()), and block anon UPDATE/DELETE. Included rollback-able verification steps for anon SELECT/INSERT without leaking PII.
+- Added `SUPABASE_ALLOW_SERVICE_ROLE_FALLBACK` toggle + logging around anon→service-role retries in both penny list reads and report-find writes (`lib/fetch-penny-data.ts`, `app/api/submit-find/route.ts`). Left TODOs to remove fallback once RLS is applied.
+- Updated `.ai/STATE.md` with the RLS plan and next action (apply SQL, run verification block, then disable fallback).
+
+**Outcome:** Code still falls back to service-role by default but is now observable and can be disabled centrally once RLS is live. RLS playbook is ready to run in Supabase.
+
+**Verification:**
+
+- `npm run lint`
+- `npm run build`
+- `npm run test:unit`
+- `npm run test:e2e` (64/64 passing; expected source-map + store fetch warnings only)
+
+**Notes for Next Session:** Apply the SQL in `docs/supabase-rls.md`, run the verification block, flip `SUPABASE_ALLOW_SERVICE_ROLE_FALLBACK` to false/0, and remove the fallback paths once Supabase confirms anon SELECT/INSERT succeed.
+
 ## 2025-12-24 - Codex (GPT-5) - Slim OG Edge Bundle for Vercel Limits
 
 **AI:** Codex (GPT-5)
@@ -3243,3 +3265,85 @@ If continuing [Unfinished Item 2], copy-paste:
 
 - `reports/verification/report-find-invalid-10digit-light.png`
 - `reports/verification/report-find-invalid-10digit-dark.png`
+
+---
+
+## 2025-12-25 - Codex CLI - Supabase migration kickoff
+
+**AI:** ChatGPT Codex (GPT-5.x)
+**Goal:** Move Penny List + Report Find off Google Sheets and onto Supabase.
+
+**Changes:**
+
+- Added Supabase clients (anon + service role) and rewired `getPennyList` to aggregate Supabase rows by SKU (state counts, latest timestamp, enrichment fields, Home Depot link priority). New fixture `data/penny-list.json` feeds Playwright when `PLAYWRIGHT=1`.
+- Swapped `/api/submit-find` to insert into Supabase with anon key (rate limit + honeypot intact) and added a test override hook for the Supabase client. Updated tests to cover Supabase aggregation + link logic.
+- Added `@supabase/supabase-js` dependency plus env keys (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`).
+
+**Verification:**
+
+- `npm run lint` ✅
+- `npm run build` ✅ (anon reads currently RLS-blocked; server fetch falls back to service_role so SSG can build)
+- `npm run test:unit` ✅
+- `npm run test:e2e` ❌ timed out — port 3001 is already occupied by an unresponsive `node.exe` (PID 193412); per rule, did not kill/restart, so Playwright could not reach the dev server.
+
+**Notes for Next Session:**
+
+- Run the Supabase SQL (enable RLS + public SELECT/INSERT policies) so anon reads/inserts work; then consider switching server fetch to anon-only.
+- Resolve the stuck dev server on port 3001 (PID 193412) before rerunning Playwright; need Cade’s approval to restart/kill.
+- After port fix, rerun `npm run test:e2e` (PLAYWRIGHT=1 fixture) to capture screenshots/console and confirm no regressions.
+
+## 2025-12-25 - Codex CLI - Supabase RLS Hardening + Better Related SKUs
+
+**AI:** ChatGPT Codex (GPT-5.x)
+**Goal:** Prevent “empty list” / “submit fails” when Supabase RLS isn’t configured yet, and improve SKU page internal-linking (related items) with verified screenshots.
+
+**Changes Made:**
+
+- `lib/fetch-penny-data.ts`: Added server-side read fallback from anon → service role (when configured), exported `fetchPennyItemsFromSupabase()`, and added test overrides for deterministic unit tests.
+- `app/api/submit-find/route.ts`: Added server-side insert retry using service role when anon insert fails with RLS/permission errors; added a test override hook for service role.
+- `lib/supabase/client.ts`: Marked as server-only to prevent accidental client bundling of Supabase server credentials.
+- `lib/fetch-penny-data.ts`: Treat missing `penny_item_enrichment` table as optional (avoids noisy builds until it exists).
+- `scripts/prepare-og-background.mjs`: Allow `OG_BACKGROUND_SOURCE` override (old `pennycentral-background-1230x600-.jpg` source asset was removed).
+- `package.json`: Removed unused `@supabase/ssr`.
+- `app/sku/[sku]/page.tsx`: Improved “Related penny items” to rank by name-token overlap (+ brand boost) with popularity fallback.
+- `.gitignore`: Ignore local proof screenshots under `reports/verification/`.
+- Tests:
+  - Added Supabase read fallback unit test (`tests/fetch-penny-data-supabase-fallback.test.ts`).
+  - Expanded aggregation unit tests (`tests/fetch-penny-data-aliases.test.ts`).
+  - Added insert fallback unit test (`tests/submit-find-route.test.ts`).
+  - Added Playwright screenshot spec for SKU related items (`tests/sku-related-items.spec.ts`).
+
+**Screenshots:**
+
+- `reports/verification/sku-related-items-chromium-desktop-light.png`
+- `reports/verification/sku-related-items-chromium-desktop-dark.png`
+- `reports/verification/sku-related-items-chromium-mobile-light.png`
+- `reports/verification/sku-related-items-chromium-mobile-dark.png`
+
+**Verification:**
+
+- `npm run lint` ✅
+- `npm run build` ✅ (900 pages)
+- `npm run test:unit` ✅ (20/20)
+- `npm run test:e2e` ✅ (64/64)
+
+---
+
+## 2025-12-25 - Codex CLI - SKU Enrichment Overlay (Accuracy Boost)
+
+**AI:** ChatGPT Codex (GPT-5.x)
+**Goal:** Ensure item metadata is correct by merging admin-controlled enrichment data (no scraping).
+
+**Changes Made:**
+
+- `lib/fetch-penny-data.ts`: Added enrichment row support, merge helper, and Supabase query for `penny_item_enrichment` with anon/service fallback.
+- `app/sku/[sku]/page.tsx`: Use typed brand field in related items (removes unsafe casts).
+- `tests/fetch-penny-data-aliases.test.ts`: Added coverage for enrichment overrides + invalid SKU ignore.
+- `docs/supabase-rls.md`: Documented enrichment table + RLS policy.
+
+**Verification:**
+
+- `npm run lint` ✅
+- `npm run build` ✅ (900 pages)
+- `npm run test:unit` ✅ (20/20)
+- `npm run test:e2e` ✅ (64/64)

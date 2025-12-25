@@ -64,11 +64,15 @@ export default async function SkuDetailPage({ params }: PageProps) {
   // Merge data
   const name = communityItem.name || "Unknown Item"
   const imageUrl = communityItem.imageUrl
-  const brand = (communityItem as { brand?: string }).brand
+  const brand = communityItem.brand
   const internetNumber = communityItem.internetNumber
 
   // Use internetNumber for better product links when available, fallback to SKU search
-  const homeDepotUrl = getHomeDepotProductUrl({ sku, internetNumber })
+  const homeDepotUrl = getHomeDepotProductUrl({
+    sku,
+    internetNumber,
+    homeDepotUrl: communityItem.homeDepotUrl,
+  })
 
   const totalReports = communityItem.locations
     ? Object.values(communityItem.locations).reduce((sum, count) => sum + count, 0)
@@ -78,8 +82,9 @@ export default async function SkuDetailPage({ params }: PageProps) {
   const latestDate = communityItem.dateAdded || null
   const freshness = latestDate ? getFreshness(latestDate) : null
 
-  const latestDateLabel = latestDate
-    ? new Date(`${latestDate}T00:00:00Z`).toLocaleDateString("en-US", {
+  const parsedLatestDate = latestDate ? new Date(latestDate) : null
+  const latestDateLabel = parsedLatestDate
+    ? parsedLatestDate.toLocaleDateString("en-US", {
         month: "2-digit",
         day: "2-digit",
         year: "2-digit",
@@ -116,37 +121,109 @@ export default async function SkuDetailPage({ params }: PageProps) {
   }
 
   const relatedItems = (() => {
-    type Related = { sku: string; name: string; brand?: string; imageUrl?: string | null }
+    type RelatedItem = { sku: string; name: string; brand?: string; imageUrl?: string | null }
 
-    const pool: Related[] = communityItems
-      .map((item) => ({
-        sku: item.sku,
-        name: item.name,
-        brand: (item as { brand?: string }).brand,
-        imageUrl: (item as { imageUrl?: string | null }).imageUrl,
-      }))
-      .filter((item) => item.sku !== sku)
-    const normalizedBrand = brand?.toLowerCase()
-    const byBrand = normalizedBrand
-      ? pool.filter((item) => item.brand && item.brand.toLowerCase() === normalizedBrand)
-      : []
+    type Candidate = RelatedItem & {
+      totalReports: number
+      stateCount: number
+      score: number
+    }
 
-    const ordered = [...byBrand, ...pool]
+    const stopWords = new Set([
+      "a",
+      "an",
+      "and",
+      "as",
+      "at",
+      "by",
+      "for",
+      "from",
+      "in",
+      "into",
+      "is",
+      "it",
+      "of",
+      "on",
+      "or",
+      "the",
+      "to",
+      "with",
+    ])
+
+    const tokenize = (value: string): string[] =>
+      value
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, " ")
+        .trim()
+        .split(/\s+/g)
+        .filter((t) => t.length >= 4 && !stopWords.has(t) && !/^\d+$/.test(t))
+
+    const currentTokens = new Set(tokenize(name))
+    const normalizedBrand = brand?.toLowerCase() ?? null
+
+    const pool: Candidate[] = communityItems
+      .map((item) => {
+        const locations = item.locations || {}
+        const totalReports = Object.values(locations).reduce((sum, count) => sum + count, 0)
+        const stateCount = Object.keys(locations).length
+        const candidateBrand = item.brand
+        const candidateName = item.name
+        const candidateTokens = tokenize(candidateName)
+        const overlap = candidateTokens.reduce(
+          (sum, token) => sum + (currentTokens.has(token) ? 1 : 0),
+          0
+        )
+        const brandMatch =
+          normalizedBrand && candidateBrand && candidateBrand.toLowerCase() === normalizedBrand
+            ? 1
+            : 0
+
+        return {
+          sku: item.sku,
+          name: candidateName,
+          brand: candidateBrand,
+          imageUrl: item.imageUrl,
+          totalReports,
+          stateCount,
+          score: overlap + (brandMatch ? 2 : 0),
+        }
+      })
+      .filter((c) => c.sku !== sku)
+
+    const byRelevance = pool
+      .filter((c) => c.score > 0)
+      .sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score
+        if (b.totalReports !== a.totalReports) return b.totalReports - a.totalReports
+        if (b.stateCount !== a.stateCount) return b.stateCount - a.stateCount
+        return a.name.localeCompare(b.name)
+      })
+
+    const byPopularity = pool.slice().sort((a, b) => {
+      if (b.totalReports !== a.totalReports) return b.totalReports - a.totalReports
+      if (b.stateCount !== a.stateCount) return b.stateCount - a.stateCount
+      return a.name.localeCompare(b.name)
+    })
+
+    const chosen: Candidate[] = []
     const seen = new Set<string>()
 
-    return ordered
-      .filter((item) => {
-        if (seen.has(item.sku)) return false
-        seen.add(item.sku)
-        return true
-      })
-      .slice(0, 4)
-      .map((item) => ({
-        sku: item.sku,
-        name: item.name,
-        brand: item.brand,
-        imageUrl: item.imageUrl ?? undefined,
-      }))
+    const add = (c: Candidate) => {
+      if (chosen.length >= 4) return
+      if (seen.has(c.sku)) return
+      seen.add(c.sku)
+      chosen.push(c)
+    }
+
+    byRelevance.forEach(add)
+    byPopularity.forEach(add)
+
+    return chosen.slice(0, 4).map((item) => ({
+      sku: item.sku,
+      name: item.name,
+      brand: item.brand,
+      imageUrl: item.imageUrl ?? undefined,
+    }))
   })()
 
   return (

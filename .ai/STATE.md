@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 24, 2025 (Report Find SKU validation: 10-digit must start with 10)
+**Last updated:** Dec 25, 2025 (Penny List enrichment overlay added)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -43,6 +43,21 @@ Every AI session must update this after meaningful work.
   - **Solution:** Removed the inline base64 helpers, now fetch Inter 400/500/700 at runtime (`lib/og-fonts.ts`) and load the background from `/og/pennycentral-og-fixed-1200x630-balanced.jpg`. Updated the OG route and generation script to match the new flow.
   - **Verification:** `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e`.
   - **Artifacts:** Tracked the actual `public/og/pennycentral-og-fixed-1200x630-balanced.{jpg,png}` assets so the background URL resolves on Vercel and kept the `.vscode/tasks.json` dev task synced; the `test-results/og/` folder stays untracked for screenshot proofing.
+- **Recent focus (Dec 25):** Supabase RLS hardening plan + fallback guardrails
+  - Documented RLS policy set for `Penny List` (anon SELECT via `penny_list_public` view only; anon INSERT with SKU/state/quantity checks; explicit deny on UPDATE/DELETE) at `docs/supabase-rls.md` including rollback-able verification steps.
+  - Added `SUPABASE_ALLOW_SERVICE_ROLE_FALLBACK` env toggle (default allow) and logging around anon→service-role retries for both penny list reads and report-find writes; TODOs left in code to remove fallback once RLS is live.
+  - Next action: apply the SQL in Supabase, run the verification block, then flip the fallback flag off.
+- **Recent focus (Dec 25):** Admin enrichment overlay for accurate SKU metadata
+  - Added `penny_item_enrichment` Supabase merge so authoritative fields (name/brand/model/UPC/image/link) override crowd rows.
+  - Enrichment is optional until the table exists; missing-table errors are handled without build spam.
+  - Added enrichment merge tests (override + invalid SKU ignored).
+  - Documented enrichment table + RLS policy in `docs/supabase-rls.md`.
+- **Recent focus (Dec 25):** Supabase migration for Penny List + Report Find
+  - **Data source:** `Penny List` Supabase table (anon key currently RLS-blocked; server fetch falls back to service_role key until policies are applied).
+  - **Aggregation:** Groups by `home_depot_sku_6_or_10_digits`, rolls up state counts, latest timestamp, and enrichment fields (`home_depot_url`, `internet_sku`, `image_url`). Home Depot links prefer `home_depot_url` → `internet_sku` → SKU search.
+  - **Submission:** `/api/submit-find` inserts with the anon key and retries with the service role client when RLS is blocking writes; honeypot + rate limiting intact; enrichment fields stay server-controlled. Added tests for allowed fields + fallback.
+  - **Security:** `lib/supabase/client.ts` is server-only (prevents accidental client-side imports of server credentials).
+  - **Testing:** `npm run lint`, `npm run build` (900 pages), `npm run test:unit` (20/20), `npm run test:e2e` (64/64). Playwright screenshots: `reports/verification/sku-related-items-chromium-desktop-light.png` (and variants).
 - **Recent focus (Dec 24):** Report Find deep-link prefill hardening + SKU receipt copy fix
   - **Problem:** Prefill could re-apply after the user cleared fields; SKU helper text incorrectly told users to use a receipt SKU (receipt is typically UPC).
   - **Fix:** Prefill now normalizes SKU to digits-only/max-10 and only handles a given query once; SKU helper text updated and a non-blocking warning added for suspicious 10-digit IDs.

@@ -14,10 +14,11 @@ Each AI session should:
 
 ## Completed Recently
 
+- **Dec 25, 2025:** Hardened Supabase read/write fallbacks (anon → service role when RLS blocks) and improved SKU pages with better “Related penny items” ranking + Playwright screenshot coverage.
 - **Dec 19, 2025 (session 2):** Internet SKU integration - Added `internetNumber` field parsing from Google Sheet; SKU pages and penny-list-table now use Internet SKU for better HD product links when available.
 - **Dec 19, 2025 (session 1):** Removed `/verified-pennies` and repo-stored verified data/scripts; `/verified-pennies` now permanently redirects to `/penny-list`.
 - **Dec 18, 2025 AM:** Social sharing buttons added to penny list cards (Facebook + Copy Link). Quantity field made optional in submission form. Documentation updated to reflect actual implementation state.
-- **Dec 17, 2025:** Landing page restructured for clarity—eliminated decision fatigue by reordering sections (How It Works moved to #2), consolidating redundant CTAs, simplifying Tools section (3 equal cards), reordering navigation (Guide first), and simplifying logo (wordmark only). All 36 e2e + unit tests passing.
+- **Dec 17, 2025:** Landing page restructured for clarity-eliminated decision fatigue by reordering sections (How It Works moved to #2), consolidating redundant CTAs, simplifying Tools section (3 equal cards), reordering navigation (Guide first), and simplifying logo (wordmark only). All 36 e2e + unit tests passing.
 - **Dec 15, 2025:** Strategic plan created for driving habitual traffic (visual engagement, verification system, SEO expansion)
 - **Dec 12, 2025:** Updated `.ai/PENNY_LIST_PLAN.md` to reflect Phase 1 shipped.
 - **Dec 12, 2025:** CI (`.github/workflows/quality.yml`) now runs lint + Playwright smoke with fixtures.
@@ -26,29 +27,14 @@ Each AI session should:
 
 ---
 
-## P0 — Do Next (Post-SKU Expansion, High Impact)
+## P0 - Do Next (Post-SKU Expansion, High Impact)
 
-1. **Related SKUs on SKU Pages**
-
-- Add a related items block on SKU detail pages (brand/category match, fallback to popular) linking internally to `/sku/[sku]`.
-- Acceptance: shows up to 4 items; hides cleanly if none; uses existing tokens and Link.
-
-2. **Trending SKUs on List Pages**
-
-- Surface top SKUs on `/penny-list` (most reported) as a small link block.
-- Acceptance: minimal UI, mobile-safe, links prefetch to SKU pages.
-
-3. **Trust/Freshness Signals on SKU Pages**
-
-- Show “Seen in X stores / Y states” plus freshness badge (Recent/Weeks/Months) on SKU detail pages using existing freshness utils.
-- Acceptance: no crashes when data missing; badge reflects computed bucket.
-
-4. **Guide Visual Upgrade (Clearance Cadence)**
+1. **Guide Visual Upgrade (Clearance Cadence)**
 
 - Add visual timeline and captioned tag examples in the existing Guide section; store assets in `/public`, reuse current layout.
 - Acceptance: responsive, alt text present, no new routes.
 
-5. **Bookmarklet image harvest (support)**
+2. **Bookmarklet image harvest (support)**
 
 - Support Cade’s plan to collect image URLs via the bookmarklet for newly added items.
 - Acceptance: ingestion stays private (no exports committed), instructions updated if tooling changes, and new images flow into Penny List/SKU pages without exposing private inputs.
