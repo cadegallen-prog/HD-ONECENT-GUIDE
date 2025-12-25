@@ -1,10 +1,7 @@
 import assert from "node:assert"
 import test from "node:test"
 import { NextRequest } from "next/server"
-import {
-  installSupabaseMocks,
-  clearSupabaseMocks,
-} from "./test-utils/supabase-mocks"
+import { installSupabaseMocks, clearSupabaseMocks } from "./test-utils/supabase-mocks"
 
 test("inserts only allowed fields into Supabase", async () => {
   const inserted: Record<string, unknown>[] = []

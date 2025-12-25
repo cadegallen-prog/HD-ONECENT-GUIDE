@@ -66,6 +66,8 @@ export default async function SkuDetailPage({ params }: PageProps) {
   const imageUrl = communityItem.imageUrl
   const brand = communityItem.brand
   const internetNumber = communityItem.internetNumber
+  const modelNumber = communityItem.modelNumber
+  const upc = communityItem.upc
 
   // Use internetNumber for better product links when available, fallback to SKU search
   const homeDepotUrl = getHomeDepotProductUrl({
@@ -296,6 +298,53 @@ export default async function SkuDetailPage({ params }: PageProps) {
                     <span className="font-mono text-lg text-[var(--text-primary)]">{sku}</span>
                   </div>
                 </div>
+
+                {/* Product Identifiers Section */}
+                {(upc || internetNumber || modelNumber) && (
+                  <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-lg p-4 mb-6">
+                    <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-3">
+                      Product Identifiers
+                    </h3>
+                    <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                      <div>
+                        <dt className="text-[var(--text-muted)] inline">SKU:</dt>
+                        <dd className="text-[var(--text-primary)] font-mono inline ml-2">{sku}</dd>
+                      </div>
+
+                      {internetNumber && (
+                        <div>
+                          <dt className="text-[var(--text-muted)] inline">Internet #:</dt>
+                          <dd className="text-[var(--text-primary)] font-mono inline ml-2">
+                            {internetNumber}
+                          </dd>
+                        </div>
+                      )}
+
+                      {upc && (
+                        <div>
+                          <dt className="text-[var(--text-muted)] inline">UPC:</dt>
+                          <dd className="text-[var(--text-primary)] font-mono inline ml-2">
+                            {upc}
+                          </dd>
+                        </div>
+                      )}
+
+                      {modelNumber && (
+                        <div>
+                          <dt className="text-[var(--text-muted)] inline">Model:</dt>
+                          <dd className="text-[var(--text-primary)] inline ml-2">{modelNumber}</dd>
+                        </div>
+                      )}
+
+                      {brand && (
+                        <div>
+                          <dt className="text-[var(--text-muted)] inline">Brand:</dt>
+                          <dd className="text-[var(--text-primary)] inline ml-2">{brand}</dd>
+                        </div>
+                      )}
+                    </dl>
+                  </div>
+                )}
 
                 <div className="space-y-4 mb-8">
                   {latestDate && (

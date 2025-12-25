@@ -11,6 +11,42 @@
 
 ---
 
+## 2025-12-25 - ChatGPT Codex - Penny List Pagination
+
+**AI:** ChatGPT Codex
+**Goal:** Limit the Penny List render to a bounded chunk while keeping the filters, sorting, and page state in sync with the URL so we stop dumping the entire dataset into the DOM.
+
+**Changes Made:**
+- Added `itemsPerPage`/`currentPage` state, plus URL-sync helpers so the dropdown and pagination controls can be deep-linked and filters always push you back to page 1.
+- Inserted a summary bar above the results that announces the current slice, exposes per-page controls, and wires up accessible Prev/Next buttons.
+- Updated the card grid and table to show only `paginatedItems`, applied the new effects, and documented the hands-on Playwright screenshots.
+- Captured `reports/verification/penny-list-before-light.png` and `...-after-light.png`; dark-mode capture attempts (before and after) repeatedly hit a 120s `page.goto` timeout because the dev server kept waiting on the remote store fetch (`page.goto` never reached `domcontentloaded`), so the dark variants remain pending.
+
+**Outcome:** ✅ Success — Penny List now pages the data client-side, exposes an items-per-page selector, and passes all quality gates (`npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e`). `test:e2e` still logs the known invalid source-map warnings and a repeated “Remote fetch failed: 404 → falling back to local store data” message; the dark screenshot script also reported the 120s timeout while waiting for the page load to finish.
+
+**Completed Items:**
+- Implemented client-side pagination controls and UI summary for `/penny-list`.
+- Captured light-mode before/after screenshots via Playwright.
+
+**Unfinished Items:**
+- Dark-mode before/after screenshots (shooting the page with the dark palette repeatedly times out at `page.goto` 120s).
+
+**Future Prompts (for unfinished items):**
+If the dark-mode screenshots are still needed once the store endpoint responds reliably, recreate the helper script (`tmp-playwright-screenshot.js`, see above) and rerun:
+```
+node tmp-playwright-screenshot.js dark reports/verification/penny-list-before-dark.png
+node tmp-playwright-screenshot.js dark reports/verification/penny-list-after-dark.png
+```
+
+**Learnings:**
+- Pagination reduces the rendering cost of the Penny List without losing the existing filters or sorting.
+- The remote store-fetch endpoint can block UI verification tasks, so the dark-mode screenshot is fragile until that dependency stabilizes.
+- Playwright still reports the invalid source-map warnings and the fetch fallback; these remain acceptable for now.
+
+**For Next AI:**
+- Consider mocking or caching the remote store service so screenshots (especially dark-mode) load quickly.
+- Revisit the dark-mode screenshots once the store fetch or retry logic completes within a reasonable timeout.
+
 ## 2025-12-25 - GitHub Copilot (GPT-5.1-Codex-Max) - Supabase RLS guardrails + fallback toggle
 
 **AI:** GitHub Copilot (GPT-5.1-Codex-Max)

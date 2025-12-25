@@ -58,6 +58,10 @@ Every AI session must update this after meaningful work.
   - **Submission:** `/api/submit-find` inserts with the anon key and retries with the service role client when RLS is blocking writes; honeypot + rate limiting intact; enrichment fields stay server-controlled. Added tests for allowed fields + fallback.
   - **Security:** `lib/supabase/client.ts` is server-only (prevents accidental client-side imports of server credentials).
   - **Testing:** `npm run lint`, `npm run build` (900 pages), `npm run test:unit` (20/20), `npm run test:e2e` (64/64). Playwright screenshots: `reports/verification/sku-related-items-chromium-desktop-light.png` (and variants).
+- **Recent focus (Dec 25):** Paginated Penny List with per-page controls
+  - Added client-side pagination plus a selectable items-per-page dropdown (25/50/100, default 50) so we load only the slice the user is viewing, and filters reset to page 1 while the URL stays in sync.
+  - Introduced an info bar that states "Showing X-Y of Z results" and provides accessible Previous/Next controls that guard against outdated page indexes plus the per-page selector.
+  - Captured light-mode "before" and "after" screenshots (`reports/verification/penny-list-before-light.png`, `reports/verification/penny-list-after-light.png`). Dark-mode captures (before and after) timed out because the dev server kept waiting on a remote data fetch (`page.goto` hit the 120s timeout); revisit once that endpoint responds reliably.
 - **Recent focus (Dec 24):** Report Find deep-link prefill hardening + SKU receipt copy fix
   - **Problem:** Prefill could re-apply after the user cleared fields; SKU helper text incorrectly told users to use a receipt SKU (receipt is typically UPC).
   - **Fix:** Prefill now normalizes SKU to digits-only/max-10 and only handles a given query once; SKU helper text updated and a non-blocking warning added for suspicious 10-digit IDs.

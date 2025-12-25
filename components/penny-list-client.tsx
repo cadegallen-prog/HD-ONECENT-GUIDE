@@ -52,6 +52,9 @@ function toURLSearchParams(
 // Storage key for user's preferred state
 const USER_STATE_KEY = "pennycentral_user_state"
 
+const ITEMS_PER_PAGE_OPTIONS = [25, 50, 100]
+const DEFAULT_ITEMS_PER_PAGE = 50
+
 export function PennyListClient({
   initialItems,
   initialSearchParams,
@@ -100,6 +103,28 @@ export function PennyListClient({
     }
 
     return "6m"
+  })
+
+  const [itemsPerPage, setItemsPerPage] = useState(() => {
+    const param = getInitialParam("perPage")
+    if (param) {
+      const parsed = Number(param)
+      if (ITEMS_PER_PAGE_OPTIONS.includes(parsed)) {
+        return parsed
+      }
+    }
+    return DEFAULT_ITEMS_PER_PAGE
+  })
+
+  const [currentPage, setCurrentPage] = useState(() => {
+    const param = getInitialParam("page")
+    if (param) {
+      const parsed = Number(param)
+      if (Number.isInteger(parsed) && parsed > 0) {
+        return parsed
+      }
+    }
+    return 1
   })
 
   // User's saved state for "My State" button
@@ -402,6 +427,59 @@ export function PennyListClient({
     })
   }, [filteredItems.length, freshnessHours, hasActiveFilters, searchQuery, whatsNewCount])
 
+  useEffect(() => {
+    if (currentPage === 1) return
+    setCurrentPage(1)
+    updateURL({ page: null })
+  }, [
+    currentPage,
+    dateRange,
+    hasPhotoOnly,
+    searchQuery,
+    sortOption,
+    stateFilter,
+    tierFilter,
+    updateURL,
+  ])
+
+  const totalItems = filteredItems.length
+  const pageCount = Math.max(1, Math.ceil(totalItems / itemsPerPage))
+  const clampedPage = Math.min(Math.max(currentPage, 1), pageCount)
+  const showingStartIndex = totalItems === 0 ? 0 : (clampedPage - 1) * itemsPerPage + 1
+  const showingEndIndex = Math.min(totalItems, clampedPage * itemsPerPage)
+  const resultsSummary =
+    totalItems === 0
+      ? "Showing 0 results"
+      : `Showing ${showingStartIndex}-${showingEndIndex} of ${totalItems} results`
+
+  const setItemsPerPageWithURL = useCallback(
+    (value: number) => {
+      setItemsPerPage(value)
+      setCurrentPage(1)
+      updateURL({
+        perPage: value === DEFAULT_ITEMS_PER_PAGE ? null : String(value),
+        page: null,
+      })
+    },
+    [updateURL]
+  )
+
+  const goToPage = useCallback(
+    (value: number) => {
+      const nextPage = Math.max(1, Math.min(value, pageCount))
+      setCurrentPage(nextPage)
+      updateURL({
+        page: nextPage === 1 ? null : String(nextPage),
+      })
+    },
+    [pageCount, updateURL]
+  )
+
+  const paginatedItems = useMemo(
+    () => filteredItems.slice((clampedPage - 1) * itemsPerPage, clampedPage * itemsPerPage),
+    [filteredItems, clampedPage, itemsPerPage]
+  )
+
   return (
     <>
       {/* Filter Bar */}
@@ -538,6 +616,52 @@ export function PennyListClient({
 
       {/* Results */}
       <section aria-label="Penny list results">
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm text-[var(--text-secondary)]">{resultsSummary}</p>
+          <div className="flex flex-wrap items-center gap-2">
+            <label
+              htmlFor="penny-list-items-per-page"
+              className="text-xs font-semibold text-[var(--text-muted)]"
+            >
+              Items per page
+            </label>
+            <select
+              id="penny-list-items-per-page"
+              value={itemsPerPage}
+              onChange={(event) => setItemsPerPageWithURL(Number(event.target.value))}
+              className="h-10 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] px-3 text-sm font-medium text-[var(--text-primary)] outline-none transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+            >
+              {ITEMS_PER_PAGE_OPTIONS.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => goToPage(clampedPage - 1)}
+              disabled={clampedPage === 1}
+              className="inline-flex items-center justify-center min-h-[44px] rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] px-3 py-2 text-xs font-semibold text-[var(--text-primary)] transition hover:border-[var(--cta-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] disabled:cursor-not-allowed disabled:opacity-50"
+              aria-label="Previous page"
+            >
+              Previous
+            </button>
+            <span className="text-xs text-[var(--text-muted)]">
+              Page {clampedPage} of {pageCount}
+            </span>
+            <button
+              type="button"
+              onClick={() => goToPage(clampedPage + 1)}
+              disabled={clampedPage === pageCount}
+              className="inline-flex items-center justify-center min-h-[44px] rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] px-3 py-2 text-xs font-semibold text-[var(--text-primary)] transition hover:border-[var(--cta-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] disabled:cursor-not-allowed disabled:opacity-50"
+              aria-label="Next page"
+            >
+              Next
+            </button>
+          </div>
+        </div>
         {filteredItems.length === 0 ? (
           <div className="rounded-xl border border-[var(--border-default)] bg-[var(--bg-elevated)] p-8 text-center">
             <Package
@@ -569,13 +693,13 @@ export function PennyListClient({
           </div>
         ) : viewMode === "table" ? (
           <PennyListTable
-            items={filteredItems}
+            items={paginatedItems}
             sortOption={sortOption}
             onSortChange={setSortOptionWithURL}
           />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {filteredItems.map((item) => (
+            {paginatedItems.map((item) => (
               <PennyListCard key={item.id} item={item} />
             ))}
           </div>

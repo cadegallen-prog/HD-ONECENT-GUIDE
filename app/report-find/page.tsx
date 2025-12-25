@@ -35,6 +35,7 @@ function ReportFindForm() {
   const searchParams = useSearchParams()
   const handledPrefillKeyRef = useRef<string | null>(null)
   const [todayIso, setTodayIso] = useState("")
+  const [productUrl, setProductUrl] = useState("")
   const [formData, setFormData] = useState({
     itemName: "",
     sku: "",
@@ -122,6 +123,36 @@ function ReportFindForm() {
       ? 'Receipts usually show a UPC/barcode, not a SKU. A valid 10‑digit Home Depot SKU should start with "10" (format: 10xx‑xxx‑xxx).'
       : ""
 
+  // Extract SKU from Home Depot URL
+  function extractSkuFromUrl(url: string): string | null {
+    // Match patterns:
+    // https://www.homedepot.com/p/product-name/1234567890
+    // https://www.homedepot.com/p/1234567890
+    // https://homedepot.com/p/some-product/123456
+    const match = url.match(/\/p\/(?:[^/]+\/)?(\d{6,10})(?:[/?]|$)/)
+    return match ? match[1] : null
+  }
+
+  const handleProductUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const url = e.target.value
+    setProductUrl(url)
+
+    if (!url.trim()) return
+
+    const extracted = extractSkuFromUrl(url)
+    if (extracted) {
+      const normalized = normalizeSku(extracted)
+      const check = validateSku(normalized)
+
+      if (!check.error) {
+        // Auto-fill SKU field
+        setFormData({ ...formData, sku: normalized })
+        setSkuDisplay(formatSkuForDisplay(normalized))
+        setSkuError("")
+      }
+    }
+  }
+
   const handleSkuChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value
     const rawDigits = getRawSku(input)
@@ -190,6 +221,7 @@ function ReportFindForm() {
         })
         setSkuDisplay("")
         setSkuError("")
+        setProductUrl("")
       } else {
         setResult({
           success: false,
@@ -275,6 +307,30 @@ function ReportFindForm() {
             </p>
           </div>
 
+          {/* Optional: Paste Home Depot URL */}
+          <div>
+            <label
+              htmlFor="productUrl"
+              className="block text-sm font-medium text-[var(--text-primary)] mb-2"
+            >
+              Have a Home Depot product link?{" "}
+              <span className="text-xs text-[var(--text-muted)] font-normal">
+                (optional shortcut)
+              </span>
+            </label>
+            <input
+              type="url"
+              id="productUrl"
+              value={productUrl}
+              onChange={handleProductUrlChange}
+              placeholder="https://www.homedepot.com/p/product-name/1234567890"
+              className="w-full px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent text-sm"
+            />
+            <p className="mt-1 text-xs text-[var(--text-muted)]">
+              Paste a product URL and we&apos;ll extract the SKU automatically
+            </p>
+          </div>
+
           {/* SKU */}
           <div>
             <label
@@ -287,6 +343,50 @@ function ReportFindForm() {
               </span>
               <span className="sr-only">(required)</span>
             </label>
+
+            {/* SKU Helper (Collapsible) */}
+            <details className="mb-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)]">
+              <summary className="cursor-pointer px-3 py-2 text-sm font-medium text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]">
+                How to find the SKU 🔍
+              </summary>
+              <div className="px-3 pb-3 pt-2 space-y-3">
+                <p className="text-sm text-[var(--text-secondary)]">
+                  The SKU is a 6 or 10-digit number found on the shelf tag or in the Home Depot app.
+                </p>
+
+                {/* Image grid - placeholder images for now */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="border border-[var(--border-default)] rounded-lg p-2">
+                    <div className="aspect-video bg-[var(--bg-elevated)] rounded flex items-center justify-center text-[var(--text-muted)] text-xs">
+                      [Shelf tag photo placeholder]
+                    </div>
+                    <p className="text-xs text-[var(--text-muted)] mt-1">
+                      Shelf tag: Look for 6-digit number
+                    </p>
+                  </div>
+                  <div className="border border-[var(--border-default)] rounded-lg p-2">
+                    <div className="aspect-video bg-[var(--bg-elevated)] rounded flex items-center justify-center text-[var(--text-muted)] text-xs">
+                      [HD app screenshot placeholder]
+                    </div>
+                    <p className="text-xs text-[var(--text-muted)] mt-1">
+                      Home Depot app: Find &quot;Model #&quot; or &quot;SKU&quot;
+                    </p>
+                  </div>
+                </div>
+
+                <div className="text-xs text-[var(--text-muted)] space-y-1">
+                  <p>
+                    ✅ <strong>SKU:</strong> 6 digits (e.g., 123-456) or 10 digits starting with
+                    &quot;10&quot; (e.g., 1001-234-567)
+                  </p>
+                  <p>
+                    ❌ <strong>UPC/Barcode:</strong> Usually 12-14 digits on receipts (NOT the same
+                    as SKU)
+                  </p>
+                </div>
+              </div>
+            </details>
+
             <input
               type="text"
               id="sku"
@@ -478,19 +578,58 @@ function ReportFindForm() {
               ) : (
                 <AlertCircle className="w-5 h-5 text-[var(--status-error)] flex-shrink-0 mt-0.5" />
               )}
-              <div>
-                <p
-                  className={`text-sm font-medium ${
-                    result.success ? "text-[var(--text-primary)]" : "text-[var(--text-primary)]"
-                  }`}
-                >
-                  {result.message}
+              <div className="flex-1">
+                <p className="text-sm font-medium text-[var(--text-primary)]">
+                  {result.success
+                    ? "✅ Thanks! Your find is live on the Penny List."
+                    : result.message}
                 </p>
                 {result.success && (
-                  <p className="text-xs text-[var(--text-secondary)] mt-1">
-                    Please post your haul with receipt photos in the Facebook group so the community
-                    can confirm this find.
-                  </p>
+                  <>
+                    <p className="text-xs text-[var(--text-secondary)] mt-1">
+                      Help the community by sharing your find in the Facebook group!
+                    </p>
+                    {/* Action CTAs */}
+                    <div className="mt-3 flex flex-col sm:flex-row gap-2">
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => {
+                          window.location.href = "/penny-list"
+                        }}
+                        className="flex-1"
+                      >
+                        View on Penny List →
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => {
+                          setResult(null)
+                        }}
+                        className="flex-1"
+                      >
+                        Report Another Find
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => {
+                          window.open(
+                            "https://www.facebook.com/groups/homedepotonecent",
+                            "_blank",
+                            "noopener,noreferrer"
+                          )
+                        }}
+                        className="flex-1"
+                      >
+                        Share to Facebook Group
+                      </Button>
+                    </div>
+                  </>
                 )}
               </div>
             </div>
