@@ -18,7 +18,7 @@ const BACKGROUND_DATA_URL = OG_BACKGROUND_URL
 
 // Layout constants - text constrained to left 60% to avoid pennies
 const PAGE_PADDING_X = 72
-const PAGE_PADDING_TOP = 64
+const PAGE_PADDING_TOP = 70
 
 const CONTENT_MAX_WIDTH = 680 // Left 56% of 1200px for text, pennies on right
 const TEXT_COLUMN_MAX_WIDTH = CONTENT_MAX_WIDTH
@@ -74,11 +74,18 @@ const styles = {
   headlineLine: {
     display: "block",
   },
+  underline: {
+    marginTop: 8,
+    height: 2,
+    width: "100%",
+    maxWidth: 600,
+    background: "#e0e0e0",
+  },
   subhead: {
-    marginTop: 20,
-    fontSize: 28,
+    marginTop: 16,
+    fontSize: 26,
     fontWeight: 400,
-    color: "#444444",
+    color: "#555555",
     letterSpacing: "-0.01em",
     lineHeight: 1.35,
     textAlign: "left",
@@ -150,8 +157,8 @@ function layoutHeadline(headline: string) {
   const normalized = headline.trim().replace(/\s+/g, " ")
 
   // Prefer single line: shrink font slightly before breaking.
-  const singleSize = chooseLargestFittingFontSize(normalized, maxWidth, 78, 56)
-  if (singleSize > 56) return { lines: [normalized], fontSize: singleSize }
+  const singleSize = chooseLargestFittingFontSize(normalized, maxWidth, 54, 44)
+  if (singleSize > 44) return { lines: [normalized], fontSize: singleSize }
 
   const lines = splitHeadline(normalized)
   if (lines.length === 1) return { lines, fontSize: singleSize }
@@ -252,6 +259,9 @@ export async function GET(request: Request) {
               </div>
             ))}
           </div>
+
+          {/* Underline */}
+          <div {...({ style: styles.underline } as Record<string, unknown>)} />
 
           {/* Subhead with $0.01 highlighted in copper */}
           <div {...({ style: styles.subhead } as Record<string, unknown>)}>
