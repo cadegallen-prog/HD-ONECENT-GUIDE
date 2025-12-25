@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og"
 import { getOgFonts } from "@/lib/og-fonts"
+import { OG_BACKGROUND_BASE64 } from "@/lib/og-background-base64"
 import { OG_MAIN_PAGES, OG_VARIANTS, type OgMainPageId } from "@/lib/og"
 
 export const runtime = "edge"
@@ -8,13 +9,11 @@ export const revalidate = 86400 // 24 hours
 
 const OG_WIDTH = 1200
 const OG_HEIGHT = 630
-const OG_BACKGROUND_URL =
-  "https://www.pennycentral.com/og/pennycentral-og-fixed-1200x630-balanced.jpg"
 
 const fontFamily = "Inter"
 
-// Background image data URL (pennies photo on right side)
-const BACKGROUND_DATA_URL = OG_BACKGROUND_URL
+// Background image as base64 data URL (pennies + texture, no text)
+const BACKGROUND_DATA_URL = `data:image/jpeg;base64,${OG_BACKGROUND_BASE64}`
 
 // Layout constants - text constrained to left 60% to avoid pennies
 const PAGE_PADDING_X = 72
