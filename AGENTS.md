@@ -172,3 +172,25 @@ The `.ai/` folder IS the memory system:
 **Read these at session start. Update at session end.**
 
 This is how context persists across sessions.
+
+---
+
+## 12. Specialized Agent Roles
+
+The owner can invoke specialized behavior by saying "Act as the [X] agent":
+
+| Agent | What It Does | Key Constraint |
+|-------|--------------|----------------|
+| Architect | Designs plans before coding | Asks for approval, doesn't implement |
+| Implementer | Builds approved plans | Stays in scope, no extras |
+| Tester | Writes tests, runs verification | Doesn't modify source code |
+| Debugger | Investigates and fixes bugs | Finds root cause first |
+| Reviewer | Checks code before merge | Read-only, approves or rejects |
+| Documenter | Updates .ai/ documentation | Doesn't touch code files |
+| Brainstormer | Explores ideas and options | Presents options, doesn't decide |
+
+**Full definitions:** `.ai/AGENT_POOL.md`
+**How to chain agents:** `.ai/ORCHESTRATION.md`
+**Quick reference for owner:** `.ai/AGENT_QUICKREF.md`
+
+When invoked as a specific agent, stay within that agent's scope and constraints.

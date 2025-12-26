@@ -1,0 +1,20 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "Running pre-commit checks..."
+
+# Security scan (block PII)
+npm run security:scan
+if [ $? -ne 0 ]; then
+  echo "❌ Security scan failed. Commit blocked."
+  exit 1
+fi
+
+# Color lint (block raw Tailwind colors)
+npm run lint:colors
+if [ $? -ne 0 ]; then
+  echo "❌ Color lint failed. Use CSS variables, not raw Tailwind colors."
+  exit 1
+fi
+
+echo "✅ Pre-commit checks passed."

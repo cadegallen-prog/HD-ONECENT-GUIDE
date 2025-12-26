@@ -39,17 +39,17 @@ Each session is self-contained. Mark checkboxes as you complete items.
 ```
 
 ### Session 3: Enforcement + Manifest
-**Status:** Not Started
+**Status:** ✅ Complete
 **Prerequisites:** Session 2 complete
 
 ```
-□ Install husky: npm install -D husky
-□ Initialize husky: npx husky init
-□ Create .husky/pre-commit hook
-□ Create .ai/TOOLING_MANIFEST.md
-□ Test: pre-commit hook blocks raw Tailwind colors
-□ Test: pre-commit hook runs security scan
-□ Update this file: mark Session 3 complete
+☑ Install husky: npm install -D husky
+☑ Initialize husky: npx husky init
+☑ Create .husky/pre-commit hook
+☑ Create .ai/TOOLING_MANIFEST.md
+☑ Test: pre-commit hook blocks raw Tailwind colors
+☑ Test: pre-commit hook runs security scan
+☑ Update this file: mark Session 3 complete
 ```
 
 ### Session 4: Documentation Cleanup

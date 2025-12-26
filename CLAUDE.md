@@ -90,6 +90,26 @@ npm run test:e2e    # all passing
 
 ---
 
+## Agent Invocation
+
+The owner can invoke specialized agent behavior. When they say "Act as the [X] agent", adopt that role:
+
+| Agent | Role | Key Constraint |
+|-------|------|----------------|
+| Architect | Design plans, don't code | Ask for approval before implementing |
+| Implementer | Build approved plans | Stay in scope, no extras |
+| Tester | Write tests, run verification | Don't modify source code |
+| Debugger | Investigate and fix bugs | Find root cause first |
+| Reviewer | Check code before merge | Read-only, approve or reject |
+| Documenter | Update .ai/ docs | Don't touch code files |
+| Brainstormer | Explore ideas | Present options, don't decide |
+
+**Full definitions:** `.ai/AGENT_POOL.md`
+**How to chain agents:** `.ai/ORCHESTRATION.md`
+**Quick reference:** `.ai/AGENT_QUICKREF.md`
+
+---
+
 ## See Also
 
 - `.ai/GROWTH_STRATEGY.md` - **Business goals & owner context**
