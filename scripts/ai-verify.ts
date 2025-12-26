@@ -3,6 +3,55 @@
 import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
+import net from 'net';
+
+// Check if server is healthy BEFORE running tests
+async function checkServerHealth(): Promise<{ ok: boolean; message: string }> {
+  // First check if port 3001 is in use
+  const portInUse = await new Promise<boolean>((resolve) => {
+    const server = net.createServer();
+    server.once('error', () => {
+      server.close();
+      resolve(true);
+    });
+    server.once('listening', () => {
+      server.close();
+      resolve(false);
+    });
+    server.listen(3001);
+  });
+
+  if (!portInUse) {
+    return {
+      ok: false,
+      message: 'Dev server not running. Start it with: npm run dev',
+    };
+  }
+
+  // Port is in use - check if server actually responds
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+    const response = await fetch('http://localhost:3001/', {
+      signal: controller.signal,
+    });
+    clearTimeout(timeout);
+
+    if (response.ok) {
+      return { ok: true, message: 'Server is healthy' };
+    } else {
+      return {
+        ok: false,
+        message: `Server error ${response.status}. Restart it: npx kill-port 3001 && npm run dev`,
+      };
+    }
+  } catch {
+    return {
+      ok: false,
+      message: 'Server CRASHED. Fix it: npx kill-port 3001 && npm run dev',
+    };
+  }
+}
 
 interface GateResult {
   name: string;
@@ -153,6 +202,19 @@ async function main() {
   console.log('═══════════════════════════════════════');
   console.log('   AI Verification Bundle');
   console.log('═══════════════════════════════════════\n');
+
+  // CRITICAL: Check server health BEFORE running tests
+  // This prevents infinite loops when server is crashed
+  console.log('Checking server health...');
+  const serverHealth = await checkServerHealth();
+  if (!serverHealth.ok) {
+    console.error('\n❌ SERVER HEALTH CHECK FAILED');
+    console.error(`   ${serverHealth.message}`);
+    console.error('\n   FIX THE SERVER BEFORE RETRYING.');
+    console.error('   DO NOT retry ai:verify until server is fixed.\n');
+    process.exit(1);
+  }
+  console.log('✅ Server is healthy\n');
 
   // Create timestamp and output directory
   const timestamp = new Date()

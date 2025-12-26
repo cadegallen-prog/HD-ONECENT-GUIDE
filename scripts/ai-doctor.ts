@@ -10,37 +10,59 @@ interface HealthCheck {
 }
 
 async function checkPort3001(): Promise<HealthCheck> {
-  return new Promise((resolve) => {
+  // First check if port is in use
+  const portInUse = await new Promise<boolean>((resolve) => {
     const server = net.createServer();
-
-    server.once('error', (err: NodeJS.ErrnoException) => {
-      if (err.code === 'EADDRINUSE') {
-        resolve({
-          name: 'Port 3001',
-          status: 'pass',
-          message: 'Running (reuse it)',
-        });
-      } else {
-        resolve({
-          name: 'Port 3001',
-          status: 'fail',
-          message: `Error: ${err.message}`,
-        });
-      }
+    server.once('error', () => {
       server.close();
+      resolve(true); // Port is in use
     });
-
     server.once('listening', () => {
       server.close();
-      resolve({
-        name: 'Port 3001',
-        status: 'warn',
-        message: 'Not running (run "npm run dev")',
-      });
+      resolve(false); // Port is free
     });
-
     server.listen(3001);
   });
+
+  if (!portInUse) {
+    return {
+      name: 'Port 3001',
+      status: 'warn',
+      message: 'Not running (run "npm run dev")',
+    };
+  }
+
+  // Port is in use - verify server is actually RESPONDING
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+
+    const response = await fetch('http://localhost:3001/', {
+      signal: controller.signal,
+    });
+    clearTimeout(timeout);
+
+    if (response.ok) {
+      return {
+        name: 'Port 3001',
+        status: 'pass',
+        message: 'Running and responding (reuse it)',
+      };
+    } else {
+      return {
+        name: 'Port 3001',
+        status: 'fail',
+        message: `Server error ${response.status} - restart it`,
+      };
+    }
+  } catch (err) {
+    // Server is on port but not responding - CRASHED
+    return {
+      name: 'Port 3001',
+      status: 'fail',
+      message: 'CRASHED - run "npx kill-port 3001" then "npm run dev"',
+    };
+  }
 }
 
 function checkEnvVars(): HealthCheck {

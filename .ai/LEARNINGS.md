@@ -547,6 +547,38 @@ Had 9 MCP servers configured with strict "MANDATORY" usage rules that agents wer
 
 ---
 
+## Dev Server Crashes and Agent Loops (Dec 26, 2025)
+
+### Problem
+
+The Next.js dev server crashes with "Jest worker encountered child process exceptions" and agents don't realize it. They keep running tests that timeout, creating infinite loops of retries.
+
+### What We Tried
+
+- Checking if port 3001 is "in use" (insufficient - crashed server still holds the port)
+- Adding "graceful skip" to tests (hides the problem, doesn't fix it)
+
+### What We Learned
+
+- A crashed server still occupies the port, so `netstat` shows it as "in use"
+- The `ai:doctor` must actually **HTTP request** the server to verify it responds
+- Tests timing out is usually a sign of crashed server, not bad tests
+- "Graceful skip" in tests hides real problems - tests should fail loudly
+
+### What to Do Instead
+
+1. **`ai:verify` now checks server health FIRST** - If server is crashed, it fails fast with a clear message instead of running tests that will timeout
+2. **`ai:doctor` checks if server responds** - Not just if the port is occupied
+3. **If server is crashed:** Run `npx kill-port 3001` then `npm run dev`
+4. **Don't add skips to tests** - if a test fails, fix the cause
+5. **Restart dev server periodically** - long-running servers accumulate memory issues
+
+**Files:** `scripts/ai-doctor.ts`, `scripts/ai-verify.ts`
+
+**Rule:** If `ai:verify` says "SERVER HEALTH CHECK FAILED", restart the server. Do NOT retry tests until server is fixed.
+
+---
+
 ## Template for New Learnings
 
 When you discover something new, add it here:

@@ -15,13 +15,17 @@ test.describe("SKU detail related items (screenshots)", () => {
 
     await page.goto("/penny-list")
 
+    // Wait for content to load
+    await page.waitForLoadState("networkidle")
+
     const firstSkuLink = page.locator('a[href^="/sku/"]').first()
-    await expect(firstSkuLink).toBeVisible()
+    await expect(firstSkuLink).toBeVisible({ timeout: 10000 })
+
     const href = await firstSkuLink.getAttribute("href")
     expect(href).toMatch(/^\/sku\//)
-    await page.goto(href!)
 
-    await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
+    await page.goto(href!)
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible({ timeout: 10000 })
     const relatedHeading = page.getByRole("heading", { name: "Related penny items" })
     await expect(relatedHeading).toBeVisible()
 
