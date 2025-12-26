@@ -1,6 +1,6 @@
 # Backlog (AI‑Driven, Ordered)
 
-**Last updated:** Dec 26, 2025 (Enablement blueprint + Penny List URL paging SSR fix)
+**Last updated:** Dec 26, 2025 (Session 1: Core Automation Scripts complete)
 Keep this list short and ruthless (≤10 items).
 Each AI session should:
 
@@ -13,6 +13,10 @@ Each AI session should:
 ---
 
 ## Completed Recently
+
+- **Dec 26, 2025:** Implemented Session 1: Core Automation Scripts. Added `scripts/ai-doctor.ts` (pre-flight health check) and `scripts/ai-verify.ts` (one-command verification bundle). Added npm scripts `ai:doctor` and `ai:verify`. All 4 quality gates passing (lint, build, unit:21/21, e2e:64/64).
+
+- **Dec 25, 2025:** Created `.ai/AI_AUTOMATION_SPECS.md` with full implementation specifications for ai:doctor, ai:verify, ai:proof scripts, slash commands, pre-commit hooks, parallel agent patterns, and session skills. Updated BACKLOG.md with 4 implementation sessions. (Session 0 complete)
 
 - **Dec 26, 2025:** Added `.ai/AI_ENABLEMENT_BLUEPRINT.md` and wired it into Codex/Claude/Copilot entrypoints; fixed Penny List SSR to compute the initial page slice from URL params; updated Penny List plan doc.
 
@@ -29,19 +33,47 @@ Each AI session should:
 
 ---
 
-## P0 - Do Next (Post-SKU Expansion, High Impact)
+## P0 - Do Next (AI Enablement Infrastructure)
 
-1. **Penny List performance: windowed Supabase reads**
+**Reference:** `.ai/AI_AUTOMATION_SPECS.md` for full implementation details.
+
+1. **Session 1: Core Automation Scripts** `[✓]` **COMPLETE**
+   - ✅ Created `scripts/ai-doctor.ts` (health check)
+   - ✅ Created `scripts/ai-verify.ts` (verification bundle)
+   - ✅ Added npm scripts to package.json
+   - ✅ Tested both scripts work correctly
+
+2. **Session 2: Screenshot Automation + Commands** `[ ]`
+   - Create `scripts/ai-proof.ts` (screenshot capture)
+   - Create `.claude/commands/doctor.md`
+   - Create `.claude/commands/verify.md`
+   - Create `.claude/commands/proof.md`
+
+3. **Session 3: Enforcement + Manifest** `[ ]`
+   - Install husky for pre-commit hooks
+   - Create `.husky/pre-commit` hook
+   - Create `.ai/TOOLING_MANIFEST.md`
+
+4. **Session 4: Documentation Cleanup** `[ ]`
+   - Archive unused playbooks to `.ai/archive/`
+   - Create `.ai/APPROVAL_MATRIX.md`
+   - Update stale docs (AI-TOOLS-SETUP.md)
+
+---
+
+## P1 - After AI Enablement (Product Features)
+
+5. **Penny List performance: windowed Supabase reads**
 
 - Stop fetching the entire `Penny List` table when the user is viewing a finite date window (e.g., 1m/6m/12m). Filter Supabase reads to the selected window *before* aggregating by SKU.
 - Acceptance: still returns correct totals/tiers for the selected window; API pagination unchanged; no regressions in unit/e2e; no new dependencies.
 
-2. **Guide Visual Upgrade (Clearance Cadence)**
+6. **Guide Visual Upgrade (Clearance Cadence)**
 
 - Add visual timeline and captioned tag examples in the existing Guide section; store assets in `/public`, reuse current layout.
 - Acceptance: responsive, alt text present, no new routes.
 
-3. **Bookmarklet image harvest (support)**
+7. **Bookmarklet image harvest (support)**
 
 - Support Cade's plan to collect image URLs via the bookmarklet for newly added items.
 - Acceptance: ingestion stays private (no exports committed), instructions updated if tooling changes, and new images flow into Penny List/SKU pages without exposing private inputs.

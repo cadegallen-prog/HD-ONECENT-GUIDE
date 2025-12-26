@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 26, 2025 (AI enablement blueprint + Penny List URL-param SSR paging)
+**Last updated:** Dec 26, 2025 (Session 1: Core Automation Scripts complete)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -13,9 +13,18 @@ Every AI session must update this after meaningful work.
   - `/verified-pennies` permanently redirects to `/penny-list`
   - No repo-stored verified datasets/scripts (privacy)
   - SKU pages + sitemap derive from the Penny List only
+- **Recent focus (Dec 26):** Session 1: Core Automation Scripts complete
+  - Implemented `scripts/ai-doctor.ts` (pre-flight health check: port 3001, env vars, Playwright, Node version)
+  - Implemented `scripts/ai-verify.ts` (one-command verification bundle: runs all 4 quality gates, saves proof to `reports/verification/`)
+  - Added npm scripts `ai:doctor` and `ai:verify` to package.json
+  - All 4 quality gates passing (lint, build, unit:21/21, e2e:64/64)
+  - Updated `.ai/AI_AUTOMATION_SPECS.md` to mark Session 1 complete
 - **Recent focus (Dec 26):** AI enablement blueprint + cross-agent entrypoint wiring
   - Added `.ai/AI_ENABLEMENT_BLUEPRINT.md` and linked it from `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, and `README.md`.
   - Updated `.ai/AI-TOOLS-SETUP.md` to point to the canonical read order (root README) and reference the blueprint for workflow/tooling sessions.
+- **Recent focus (Dec 26):** Enablement prompt pack for multi-session execution
+  - Added `.ai/enablement-prompts/README.md` plus prompt files for tooling inventory, doc alignment, proof workflow, automation scripts, Playwright harness, skills/commands, doc hygiene, cleanup audit, and idea pipeline.
+  - Linked the prompt pack from `.ai/AI_ENABLEMENT_BLUEPRINT.md` for discoverability.
 - **Recent focus (Dec 26):** Penny List SSR now respects URL params (reload/bookmark correctness)
   - `app/penny-list/page.tsx` now computes the initial page slice from URL params (`state`, `tier`, `photo`, `q`, `sort`, `days`, `page`, `perPage`).
   - Proof: `reports/verification/2025-12-26-proof.txt` (lint/build/unit/e2e).

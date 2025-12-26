@@ -9,6 +9,8 @@
 
 **Important:** More tooling/spend is **not** automatically better. We add things only when they reduce total cycle time, regressions, or back-and-forth.
 
+**Enablement prompt pack:** For multi-session enablement work, use `.ai/enablement-prompts/README.md`. Each prompt is scoped to one session and should be run in a fresh chat to avoid context drift.
+
 ---
 
 ## 0) Canonical Sources (Do Not Fork Reality)
