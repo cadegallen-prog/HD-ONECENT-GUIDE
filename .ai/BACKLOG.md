@@ -1,6 +1,6 @@
 # Backlog (AI‑Driven, Ordered)
 
-**Last updated:** Dec 19, 2025 (Internet SKU integration completed)
+**Last updated:** Dec 26, 2025 (Enablement blueprint + Penny List URL paging SSR fix)
 Keep this list short and ruthless (≤10 items).
 Each AI session should:
 
@@ -13,6 +13,8 @@ Each AI session should:
 ---
 
 ## Completed Recently
+
+- **Dec 26, 2025:** Added `.ai/AI_ENABLEMENT_BLUEPRINT.md` and wired it into Codex/Claude/Copilot entrypoints; fixed Penny List SSR to compute the initial page slice from URL params; updated Penny List plan doc.
 
 - **Dec 25, 2025:** Hardened Supabase read/write fallbacks (anon → service role when RLS blocks) and improved SKU pages with better “Related penny items” ranking + Playwright screenshot coverage.
 - **Dec 19, 2025 (session 2):** Internet SKU integration - Added `internetNumber` field parsing from Google Sheet; SKU pages and penny-list-table now use Internet SKU for better HD product links when available.
@@ -29,14 +31,19 @@ Each AI session should:
 
 ## P0 - Do Next (Post-SKU Expansion, High Impact)
 
-1. **Guide Visual Upgrade (Clearance Cadence)**
+1. **Penny List performance: windowed Supabase reads**
+
+- Stop fetching the entire `Penny List` table when the user is viewing a finite date window (e.g., 1m/6m/12m). Filter Supabase reads to the selected window *before* aggregating by SKU.
+- Acceptance: still returns correct totals/tiers for the selected window; API pagination unchanged; no regressions in unit/e2e; no new dependencies.
+
+2. **Guide Visual Upgrade (Clearance Cadence)**
 
 - Add visual timeline and captioned tag examples in the existing Guide section; store assets in `/public`, reuse current layout.
 - Acceptance: responsive, alt text present, no new routes.
 
-2. **Bookmarklet image harvest (support)**
+3. **Bookmarklet image harvest (support)**
 
-- Support Cade’s plan to collect image URLs via the bookmarklet for newly added items.
+- Support Cade's plan to collect image URLs via the bookmarklet for newly added items.
 - Acceptance: ingestion stays private (no exports committed), instructions updated if tooling changes, and new images flow into Penny List/SKU pages without exposing private inputs.
 
 ---

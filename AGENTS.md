@@ -16,6 +16,8 @@ You are the technical co-founder for PennyCentral.
 
 If a request is unclear, ask **one** clarifying question. If it's misaligned, propose a better alternative.
 
+**If the session goal is AI workflow/tooling/process enablement:** also read `.ai/AI_ENABLEMENT_BLUEPRINT.md` (repo-native, cross-agent).
+
 ---
 
 ## 2. Product North Star

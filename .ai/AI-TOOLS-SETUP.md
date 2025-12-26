@@ -2,6 +2,10 @@
 
 **Purpose:** Ensure all AI tools (Claude Code, GitHub Copilot, ChatGPT CodeX) follow the same collaboration protocol by reading the `.ai/` directory.
 
+**Canonical entrypoint:** The root `README.md` ("AI Canon & Read Order") is the source of truth. Use this file only as an operational checklist.
+
+**Enablement sessions:** If the session goal is AI workflow/tooling/verification/process, also read `.ai/AI_ENABLEMENT_BLUEPRINT.md`.
+
 ---
 
 ## Current Configuration Status
@@ -11,7 +15,7 @@
 **Instruction File:** `CLAUDE.md` (project root)
 
 ```markdown
-⚠️ **BEFORE DOING ANYTHING:** Read ALL files in the `.ai/` directory for the collaboration protocol:
+⚠️ **BEFORE DOING ANYTHING:** Read the root README ("AI Canon & Read Order"), then follow the required read order in `.ai/`:
 
 - `.ai/CONTRACT.md` - Collaboration rules
 - `.ai/DECISION_RIGHTS.md` - What you can decide vs. must get approval for
@@ -31,7 +35,7 @@
 ```markdown
 ⚠️ **CRITICAL: BEFORE DOING ANYTHING**
 
-Read ALL files in the `.ai/` directory for the complete collaboration protocol:
+Read the root README ("AI Canon & Read Order"), then follow the required read order in `.ai/`:
 
 - `.ai/CONTRACT.md` - Collaboration rules (what Cade provides, what you provide)
 - `.ai/DECISION_RIGHTS.md` - What you can decide vs. must get approval for
@@ -69,9 +73,9 @@ AI Tool Starts
     ↓
 Reads instruction file (CLAUDE.md or copilot-instructions.md)
     ↓
-Instruction file says: "Read ALL files in .ai/ directory FIRST"
+Instruction file says: "Read root README (AI Canon & Read Order)"
     ↓
-AI reads core set first: STATE.md, CONTRACT.md, DECISION_RIGHTS.md, CONSTRAINTS.md, SESSION_LOG.md, LEARNINGS.md, CONTEXT.md, BACKLOG.md
+AI follows the canonical read order: STATE -> BACKLOG -> CONTRACT/DECISION_RIGHTS -> CONSTRAINTS/FOUNDATION_CONTRACT/GUARDRAILS -> latest SESSION_LOG -> CONTEXT (product calls)
     ↓
 AI understands full project context and collaboration rules
     ↓

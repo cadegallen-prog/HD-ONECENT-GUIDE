@@ -7,6 +7,7 @@
 3. `.ai/GROWTH_STRATEGY.md` - **Business goals & context**
 4. `.ai/STATE.md` - Current snapshot
 5. `.ai/BACKLOG.md` - What to work on
+6. `.ai/AI_ENABLEMENT_BLUEPRINT.md` - Only when improving AI workflow/tooling/verification
 
 **Then ask:** GOAL / WHY / DONE for this session.
 

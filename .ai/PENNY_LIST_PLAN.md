@@ -19,10 +19,10 @@
 
 **What we are explicitly _not_ building yet**
 
-- Email capture prompt (Phase 2 – only if Phase 1 is working and not annoying).
+- Email capture prompt (Phase 2 - only if Phase 1 is working and not annoying).
 - `Approved` / moderation column (only if spam actually becomes a problem).
-- Pagination (only if the list grows to the point that it hurts UX/performance).
-- Per-item “NEW” badges or chips (deferred until metrics are healthy and design constraints allow it). Urgency treatments stay off in Phase 1; see “Future Phases” backlog for when to add them.
+- Database-level aggregation (only if Supabase row count grows enough that fetch+aggregate becomes a bottleneck).
+- Per-item "NEW" badges or chips (deferred until metrics are healthy and design constraints allow it). Urgency treatments stay off in Phase 1; see "Future Phases" backlog for when to add them.
 
 **Why this matters**
 
@@ -193,7 +193,35 @@ function formatRelativeDate(dateStr: string): string {
 
 ---
 
-## 4. Phase 2: Light Email Capture (LATER – Only if Phase 1 Works)
+## 3.4 Server-Side Pagination (Shipped)
+
+**Goal:** Show only a page slice in the browser (no full-dataset client loads), while keeping filters and shareable URLs.
+
+**Page size (same across all date ranges)**
+
+- Options: `25`, `50` (default), `100`
+- URL params: `?perPage=25|50|100` and `?page=1..N`
+- When any filter changes, reset back to page 1 to avoid stale “page 7” URLs after narrowing.
+
+**How it works (current implementation)**
+
+- SSR: `app/penny-list/page.tsx` computes the initial slice **from URL params** so reloads/bookmarks render the correct page.
+- API: `app/api/penny-list/route.ts` returns only the requested page slice: `{ items, total, pageCount, page, perPage }`.
+- Client: `components/penny-list-client.tsx` fetches from the API on filter/page changes instead of filtering a full client-side dataset.
+- Shared filter/sort/date-window logic: `lib/penny-list-query.ts` (used by SSR + API so they stay consistent).
+
+**Supported query params**
+
+`state`, `tier`, `photo=1`, `q`, `sort`, `days`, `page`, `perPage`
+
+**Acceptance criteria**
+
+- Reloading `/penny-list?...` shows results that match the URL (filters + page + per-page).
+- Browser receives only the current page slice (not the full dataset for large windows).
+
+---
+
+## 4. Phase 2: Light Email Capture (LATER - Only if Phase 1 Works)
 
 This is **optional** and must wait until:
 
@@ -226,9 +254,9 @@ These are **just options** for future phases if traffic and engagement justify i
 - **Per-item “NEW” chips** for items within the last 24h:
   - Only if we can do this without blowing up the “max 3 accents” rule.
   - Likely a subtle text/border treatment, not a bright new color.
-- **Simple, server-side pagination**:
-  - If row count grows into hundreds/thousands and affects UX/performance.
-  - No infinite scroll; keep page 1 SSR/ISR.
+- **Database windowing / pre-aggregation**:
+  - Only if Supabase row count grows enough that server-side fetch+aggregate becomes a bottleneck.
+  - Prefer filtering Supabase reads to the selected window before aggregating by SKU; consider a view/materialized view only if needed.
 
 ### Prioritized backlog from competitive analysis (post–Phase 1 only)
 
