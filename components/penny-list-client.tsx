@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect, useCallback, useRef } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import { AlertTriangle, Package, Clock, CheckCircle2, Info } from "lucide-react"
 import { TrackableLink } from "@/components/trackable-link"
-import { filterValidPennyItems, formatRelativeDate } from "@/lib/penny-list-utils"
+import { formatRelativeDate } from "@/lib/penny-list-utils"
 import { trackEvent } from "@/lib/analytics"
 import { FeedbackWidget } from "@/components/feedback-widget"
 import {
@@ -20,15 +20,12 @@ import type { PennyItem } from "@/lib/fetch-penny-data"
 
 interface PennyListClientProps {
   initialItems: PennyItem[]
+  initialTotal: number
+  hotItems?: PennyItem[]
   initialSearchParams?: Record<string, string | string[] | undefined>
   whatsNewCount?: number
   whatsNewItems?: PennyItem[]
   lastUpdatedLabel?: string
-}
-
-// Get total reports across all states
-function getTotalReports(locations: Record<string, number>): number {
-  return Object.values(locations).reduce((sum, count) => sum + count, 0)
 }
 
 function toURLSearchParams(
@@ -57,6 +54,8 @@ const DEFAULT_ITEMS_PER_PAGE = 50
 
 export function PennyListClient({
   initialItems,
+  initialTotal,
+  hotItems: serverHotItems = [],
   initialSearchParams,
   whatsNewCount = 0,
   whatsNewItems = [],
@@ -71,6 +70,7 @@ export function PennyListClient({
   const paramsRef = useRef<URLSearchParams>(initialParams)
   const hasMountedRef = useRef(false)
   const hasTrackedViewRef = useRef(false)
+  const isInitialRenderRef = useRef(true)
 
   const getInitialParam = (key: string) => initialParams.get(key) || ""
 
@@ -127,6 +127,12 @@ export function PennyListClient({
     return 1
   })
 
+  // Items state - uses initial data from server, then fetches from API
+  const [items, setItems] = useState<PennyItem[]>(initialItems)
+  const [total, setTotal] = useState(initialTotal)
+  const [isLoading, setIsLoading] = useState(false)
+  const [hotItems, setHotItems] = useState<PennyItem[]>(serverHotItems)
+
   // User's saved state for "My State" button
   const [userState, setUserState] = useState<string | undefined>(undefined)
 
@@ -134,20 +140,16 @@ export function PennyListClient({
     hasMountedRef.current = true
   }, [])
 
-  const validRows = useMemo(() => filterValidPennyItems(initialItems), [initialItems])
-  const latestTimestamp = useMemo(() => {
-    const timestamps = validRows
+  // Compute freshness from current items (for analytics)
+  const freshnessHours = useMemo(() => {
+    const timestamps = items
       .map((item) => new Date(item.dateAdded).getTime())
       .filter((time) => !Number.isNaN(time))
     if (timestamps.length === 0) return null
-    return Math.max(...timestamps)
-  }, [validRows])
-
-  const freshnessHours = useMemo(() => {
-    if (!latestTimestamp) return null
+    const latestTimestamp = Math.max(...timestamps)
     const diffMs = Date.now() - latestTimestamp
     return Math.max(0, Math.round(diffMs / (1000 * 60 * 60)))
-  }, [latestTimestamp])
+  }, [items])
 
   // Load user's state from localStorage on mount
   useEffect(() => {
@@ -262,138 +264,57 @@ export function PennyListClient({
     [trackFilterChange, updateURL]
   )
 
-  // Process and filter items
-  const { recentItems, hotItems, filteredItems } = useMemo(() => {
-    const today = new Date()
+  // Fetch items from API when filters change
+  const fetchItems = useCallback(async () => {
+    setIsLoading(true)
+    try {
+      const params = new URLSearchParams()
+      if (stateFilter) params.set("state", stateFilter)
+      if (tierFilter !== "all") params.set("tier", tierFilter)
+      if (hasPhotoOnly) params.set("photo", "1")
+      if (searchQuery) params.set("q", searchQuery)
+      if (sortOption !== "newest") params.set("sort", sortOption)
+      if (dateRange !== "6m") params.set("days", dateRange)
+      params.set("page", String(currentPage))
+      params.set("perPage", String(itemsPerPage))
+      // Include hot items only when no filters are active (for initial-like requests)
+      const noFiltersActive =
+        !stateFilter && tierFilter === "all" && !hasPhotoOnly && !searchQuery && dateRange === "6m"
+      if (noFiltersActive) params.set("includeHot", "1")
 
-    const windowMonths = (() => {
-      switch (dateRange) {
-        case "1m":
-          return 1
-        case "3m":
-          return 3
-        case "6m":
-          return 6
-        case "12m":
-          return 12
-        case "18m":
-          return 18
-        case "24m":
-          return 24
-        case "all":
-          return null // No date filtering
+      const response = await fetch(`/api/penny-list?${params.toString()}`)
+      if (!response.ok) throw new Error("Failed to fetch")
+
+      const data = await response.json()
+      setItems(data.items)
+      setTotal(data.total)
+      if (data.hotItems) {
+        setHotItems(data.hotItems)
       }
-    })()
-
-    const windowStart = (() => {
-      if (windowMonths === null) return null // "all" time - no date filter
-      const start = new Date(today)
-      start.setMonth(start.getMonth() - windowMonths)
-      return start
-    })()
-
-    const normalizeDate = (value: string) => {
-      const direct = new Date(value)
-      if (!Number.isNaN(direct.getTime())) return direct
-      const fallback = new Date(`${value}T00:00:00Z`)
-      return Number.isNaN(fallback.getTime()) ? null : fallback
+    } catch (error) {
+      console.error("Error fetching penny list:", error)
+    } finally {
+      setIsLoading(false)
     }
+  }, [
+    stateFilter,
+    tierFilter,
+    hasPhotoOnly,
+    searchQuery,
+    sortOption,
+    dateRange,
+    currentPage,
+    itemsPerPage,
+  ])
 
-    const isWithinDays = (date: Date, window: number) => {
-      const diffMs = today.getTime() - date.getTime()
-      const days = diffMs / (1000 * 60 * 60 * 24)
-      return days >= 0 && days <= window
+  // Fetch when params change (but not on initial render - we have server data)
+  useEffect(() => {
+    if (isInitialRenderRef.current) {
+      isInitialRenderRef.current = false
+      return
     }
-
-    const isWithinWindow = (date: Date) => {
-      const time = date.getTime()
-      if (Number.isNaN(time)) return false
-      // If windowStart is null (all time), no date filtering
-      if (windowStart === null) return true
-      return time >= windowStart.getTime() && time <= today.getTime()
-    }
-
-    // Add parsed dates and filter to recent window
-    const withMeta = validRows
-      .map((item) => ({
-        ...item,
-        parsedDate: normalizeDate(item.dateAdded),
-        tier: item.tier ?? "Rare",
-      }))
-      .filter((item) => item.parsedDate)
-
-    // Items within the selected window (for total count)
-    const windowItems = withMeta
-      .filter((item) => item.parsedDate && isWithinWindow(item.parsedDate))
-      .sort((a, b) => b.parsedDate!.getTime() - a.parsedDate!.getTime())
-
-    // Hot items (Very Common in last 14 days) - unaffected by filters
-    const hot = windowItems
-      .filter(
-        (item) =>
-          item.tier === "Very Common" &&
-          item.parsedDate &&
-          isWithinDays(item.parsedDate, HOT_WINDOW_DAYS)
-      )
-      .slice(0, 6)
-
-    // Apply date range filter first
-    let filtered = [...windowItems]
-
-    // State filter
-    if (stateFilter) {
-      filtered = filtered.filter(
-        (item) => item.locations && item.locations[stateFilter] !== undefined
-      )
-    }
-
-    // Tier filter
-    if (tierFilter !== "all") {
-      filtered = filtered.filter((item) => item.tier === tierFilter)
-    }
-
-    // Photo filter
-    if (hasPhotoOnly) {
-      filtered = filtered.filter((item) => Boolean(item.imageUrl?.trim()))
-    }
-
-    // Search filter
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase()
-      filtered = filtered.filter(
-        (item) =>
-          item.name.toLowerCase().includes(query) ||
-          item.sku.toLowerCase().includes(query) ||
-          (item.notes && item.notes.toLowerCase().includes(query))
-      )
-    }
-
-    // Sort
-    switch (sortOption) {
-      case "newest":
-        filtered.sort((a, b) => b.parsedDate!.getTime() - a.parsedDate!.getTime())
-        break
-      case "oldest":
-        filtered.sort((a, b) => a.parsedDate!.getTime() - b.parsedDate!.getTime())
-        break
-      case "most-reports":
-        filtered.sort((a, b) => {
-          const aReports = a.locations ? getTotalReports(a.locations) : 0
-          const bReports = b.locations ? getTotalReports(b.locations) : 0
-          return bReports - aReports
-        })
-        break
-      case "alphabetical":
-        filtered.sort((a, b) => a.name.localeCompare(b.name))
-        break
-    }
-
-    return {
-      recentItems: windowItems,
-      hotItems: hot,
-      filteredItems: filtered,
-    }
-  }, [validRows, stateFilter, tierFilter, hasPhotoOnly, searchQuery, sortOption, dateRange])
+    fetchItems()
+  }, [fetchItems])
 
   const previousSearchRef = useRef(searchQuery)
 
@@ -403,9 +324,9 @@ export function PennyListClient({
     previousSearchRef.current = searchQuery
     trackEvent("penny_list_search", {
       termLength: searchQuery.trim().length,
-      hasResults: filteredItems.length > 0,
+      hasResults: items.length > 0,
     })
-  }, [filteredItems.length, searchQuery])
+  }, [items.length, searchQuery])
 
   const hasActiveFilters =
     stateFilter !== "" ||
@@ -419,13 +340,13 @@ export function PennyListClient({
     hasTrackedViewRef.current = true
     trackEvent("penny_list_view", {
       page: "/penny-list",
-      itemsVisible: filteredItems.length,
+      itemsVisible: total,
       hasFilter: hasActiveFilters,
       hasSearch: searchQuery.trim().length > 0,
       freshnessHours: freshnessHours ?? undefined,
       whatsNewCount,
     })
-  }, [filteredItems.length, freshnessHours, hasActiveFilters, searchQuery, whatsNewCount])
+  }, [total, freshnessHours, hasActiveFilters, searchQuery, whatsNewCount])
 
   useEffect(() => {
     if (currentPage === 1) return
@@ -442,15 +363,15 @@ export function PennyListClient({
     updateURL,
   ])
 
-  const totalItems = filteredItems.length
-  const pageCount = Math.max(1, Math.ceil(totalItems / itemsPerPage))
+  // Pagination - API returns the page slice, so we just use total from state
+  const pageCount = Math.max(1, Math.ceil(total / itemsPerPage))
   const clampedPage = Math.min(Math.max(currentPage, 1), pageCount)
-  const showingStartIndex = totalItems === 0 ? 0 : (clampedPage - 1) * itemsPerPage + 1
-  const showingEndIndex = Math.min(totalItems, clampedPage * itemsPerPage)
+  const showingStartIndex = total === 0 ? 0 : (clampedPage - 1) * itemsPerPage + 1
+  const showingEndIndex = Math.min(total, clampedPage * itemsPerPage)
   const resultsSummary =
-    totalItems === 0
+    total === 0
       ? "Showing 0 results"
-      : `Showing ${showingStartIndex}-${showingEndIndex} of ${totalItems} results`
+      : `Showing ${showingStartIndex}-${showingEndIndex} of ${total} results`
 
   const setItemsPerPageWithURL = useCallback(
     (value: number) => {
@@ -475,17 +396,12 @@ export function PennyListClient({
     [pageCount, updateURL]
   )
 
-  const paginatedItems = useMemo(
-    () => filteredItems.slice((clampedPage - 1) * itemsPerPage, clampedPage * itemsPerPage),
-    [filteredItems, clampedPage, itemsPerPage]
-  )
-
   return (
     <>
       {/* Filter Bar */}
       <PennyListFilters
-        totalItems={recentItems.length}
-        filteredCount={filteredItems.length}
+        totalItems={total}
+        filteredCount={total}
         stateFilter={stateFilter}
         setStateFilter={setStateFilterWithURL}
         tierFilter={tierFilter}
@@ -617,7 +533,9 @@ export function PennyListClient({
       {/* Results */}
       <section aria-label="Penny list results">
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm text-[var(--text-secondary)]">{resultsSummary}</p>
+          <p className="text-sm text-[var(--text-secondary)]">
+            {isLoading ? "Loading..." : resultsSummary}
+          </p>
           <div className="flex flex-wrap items-center gap-2">
             <label
               htmlFor="penny-list-items-per-page"
@@ -662,7 +580,7 @@ export function PennyListClient({
             </button>
           </div>
         </div>
-        {filteredItems.length === 0 ? (
+        {total === 0 ? (
           <div className="rounded-xl border border-[var(--border-default)] bg-[var(--bg-elevated)] p-8 text-center">
             <Package
               className="w-12 h-12 mx-auto mb-4 text-[var(--text-muted)]"
@@ -693,13 +611,13 @@ export function PennyListClient({
           </div>
         ) : viewMode === "table" ? (
           <PennyListTable
-            items={paginatedItems}
+            items={items}
             sortOption={sortOption}
             onSortChange={setSortOptionWithURL}
           />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {paginatedItems.map((item) => (
+            {items.map((item) => (
               <PennyListCard key={item.id} item={item} />
             ))}
           </div>

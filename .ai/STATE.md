@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 25, 2025 (Penny List enrichment overlay added)
+**Last updated:** Dec 26, 2025 (AI enablement blueprint + Penny List URL-param SSR paging)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -13,6 +13,12 @@ Every AI session must update this after meaningful work.
   - `/verified-pennies` permanently redirects to `/penny-list`
   - No repo-stored verified datasets/scripts (privacy)
   - SKU pages + sitemap derive from the Penny List only
+- **Recent focus (Dec 26):** AI enablement blueprint + cross-agent entrypoint wiring
+  - Added `.ai/AI_ENABLEMENT_BLUEPRINT.md` and linked it from `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, and `README.md`.
+  - Updated `.ai/AI-TOOLS-SETUP.md` to point to the canonical read order (root README) and reference the blueprint for workflow/tooling sessions.
+- **Recent focus (Dec 26):** Penny List SSR now respects URL params (reload/bookmark correctness)
+  - `app/penny-list/page.tsx` now computes the initial page slice from URL params (`state`, `tier`, `photo`, `q`, `sort`, `days`, `page`, `perPage`).
+  - Proof: `reports/verification/2025-12-26-proof.txt` (lint/build/unit/e2e).
 - **Recent focus (Dec 21, session 11):** OG images switched to static for Facebook reliability
   - **Problem:** Dynamic OG generation via Edge runtime kept failing on Facebook after 5-10 iterations (timeouts, font issues, zero-byte responses)
   - **Solution:** Hybrid static + dynamic approach - main pages use static PNGs, SKU pages keep dynamic with caching enabled
@@ -58,10 +64,18 @@ Every AI session must update this after meaningful work.
   - **Submission:** `/api/submit-find` inserts with the anon key and retries with the service role client when RLS is blocking writes; honeypot + rate limiting intact; enrichment fields stay server-controlled. Added tests for allowed fields + fallback.
   - **Security:** `lib/supabase/client.ts` is server-only (prevents accidental client-side imports of server credentials).
   - **Testing:** `npm run lint`, `npm run build` (900 pages), `npm run test:unit` (20/20), `npm run test:e2e` (64/64). Playwright screenshots: `reports/verification/sku-related-items-chromium-desktop-light.png` (and variants).
-- **Recent focus (Dec 25):** Paginated Penny List with per-page controls
+- **Recent focus (Dec 25):** Server-side pagination for Penny List
+  - Moved filtering/sorting from client to server via new `/api/penny-list` endpoint.
+  - Client no longer loads full dataset - fetches only the current page slice.
+  - Created shared query helper (`lib/penny-list-query.ts`) for filter/sort/date-range logic.
+  - API returns `{ items, total, pageCount, page, perPage }` with 60s edge caching.
+  - Pagination UI (items per page dropdown, prev/next) wired to API fetches.
+  - Server still computes metrics (trending, what's new, freshness stats) from full data.
+  - Added unit tests for query helper (tests/penny-list-query.test.ts).
+  - All 4 quality gates passing (lint, build [902 pages], test:unit [21/21], test:e2e [64/64]).
+- **Previous (Dec 25):** Paginated Penny List with per-page controls
   - Added client-side pagination plus a selectable items-per-page dropdown (25/50/100, default 50) so we load only the slice the user is viewing, and filters reset to page 1 while the URL stays in sync.
   - Introduced an info bar that states "Showing X-Y of Z results" and provides accessible Previous/Next controls that guard against outdated page indexes plus the per-page selector.
-  - Captured light-mode "before" and "after" screenshots (`reports/verification/penny-list-before-light.png`, `reports/verification/penny-list-after-light.png`). Dark-mode captures (before and after) timed out because the dev server kept waiting on a remote data fetch (`page.goto` hit the 120s timeout); revisit once that endpoint responds reliably.
 - **Recent focus (Dec 24):** Report Find deep-link prefill hardening + SKU receipt copy fix
   - **Problem:** Prefill could re-apply after the user cleared fields; SKU helper text incorrectly told users to use a receipt SKU (receipt is typically UPC).
   - **Fix:** Prefill now normalizes SKU to digits-only/max-10 and only handles a given query once; SKU helper text updated and a non-blocking warning added for suspicious 10-digit IDs.

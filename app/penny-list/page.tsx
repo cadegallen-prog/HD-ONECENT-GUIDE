@@ -2,8 +2,12 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { getPennyList } from "@/lib/fetch-penny-data"
 import { computeFreshnessMetrics, filterValidPennyItems } from "@/lib/penny-list-utils"
+import { queryPennyItems, getHotItems } from "@/lib/penny-list-query"
 import { PennyListClient } from "@/components/penny-list-client"
 import { ogImageUrl } from "@/lib/og"
+
+const VALID_PER_PAGE = [25, 50, 100] as const
+const DEFAULT_PER_PAGE = 50
 
 export const metadata: Metadata = {
   title: "Home Depot Penny List: Latest $0.01 Item Sightings | Penny Central",
@@ -29,8 +33,63 @@ type PennyListPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>
 }
 
+function getFirstParam(
+  params: Record<string, string | string[] | undefined>,
+  key: string
+): string | null {
+  const value = params[key]
+  if (Array.isArray(value)) return value[0] ?? null
+  return typeof value === "string" ? value : null
+}
+
+function parsePerPage(value: string | null): number {
+  if (!value) return DEFAULT_PER_PAGE
+  const parsed = Number(value)
+  if (VALID_PER_PAGE.includes(parsed as (typeof VALID_PER_PAGE)[number])) return parsed
+  return DEFAULT_PER_PAGE
+}
+
+function parsePage(value: string | null): number {
+  if (!value) return 1
+  const parsed = Number(value)
+  if (Number.isInteger(parsed) && parsed >= 1) return parsed
+  return 1
+}
+
 export default async function PennyListPage({ searchParams }: PennyListPageProps) {
   const resolvedSearchParams = (await searchParams) ?? {}
+  const state = getFirstParam(resolvedSearchParams, "state") || undefined
+  const tierParam = getFirstParam(resolvedSearchParams, "tier")
+  const tier =
+    tierParam === "Very Common" || tierParam === "Common" || tierParam === "Rare"
+      ? tierParam
+      : "all"
+  const photo = getFirstParam(resolvedSearchParams, "photo") === "1"
+  const q = getFirstParam(resolvedSearchParams, "q") || undefined
+  const sortParam = getFirstParam(resolvedSearchParams, "sort")
+  const sort =
+    sortParam === "oldest" || sortParam === "most-reports" || sortParam === "alphabetical"
+      ? sortParam
+      : "newest"
+  const daysParam = getFirstParam(resolvedSearchParams, "days")
+  const days = (() => {
+    if (daysParam === "7" || daysParam === "14" || daysParam === "30") return "1m"
+    if (
+      daysParam === "1m" ||
+      daysParam === "3m" ||
+      daysParam === "6m" ||
+      daysParam === "12m" ||
+      daysParam === "18m" ||
+      daysParam === "24m" ||
+      daysParam === "all"
+    ) {
+      return daysParam
+    }
+    return "6m"
+  })()
+  const perPage = parsePerPage(getFirstParam(resolvedSearchParams, "perPage"))
+  const requestedPage = parsePage(getFirstParam(resolvedSearchParams, "page"))
+
   const pennyItems = await getPennyList()
   const validItems = filterValidPennyItems(pennyItems)
   const feedUnavailable = validItems.length === 0
@@ -82,6 +141,20 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
         new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime()
     )
     .slice(0, 4)
+
+  // Compute initial page slice from URL params (so reloads/bookmarks show the correct results)
+  const { items: filteredItems, total: initialTotal } = queryPennyItems(
+    validItems,
+    { state, tier, photo, q, sort, days },
+    nowMs
+  )
+  const pageCount = Math.max(1, Math.ceil(initialTotal / perPage))
+  const clampedPage = Math.min(Math.max(requestedPage, 1), pageCount)
+  const startIndex = (clampedPage - 1) * perPage
+  const initialSlice = filteredItems.slice(startIndex, startIndex + perPage)
+
+  // Compute hot items (Very Common in last 14 days)
+  const hotItems = getHotItems(validItems, 14, 6, nowMs)
 
   return (
     <div className="min-h-screen bg-[var(--bg-page)]">
@@ -230,7 +303,9 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
             </div>
           )}
           <PennyListClient
-            initialItems={validItems}
+            initialItems={initialSlice}
+            initialTotal={initialTotal}
+            hotItems={hotItems}
             initialSearchParams={resolvedSearchParams}
             whatsNewCount={whatsNew.length}
             whatsNewItems={whatsNew}
