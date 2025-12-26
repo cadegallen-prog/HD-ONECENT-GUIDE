@@ -36,14 +36,16 @@ args = ["-y", "@modelcontextprotocol/server-github"]
 
 [mcp_servers.supabase]
 command = "npx"
-args = ["-y", "@supabase-community/supabase-mcp"]
+args = ["-y", "@supabase/mcp-server-supabase"]
 
 [mcp_servers.supabase.env]
-SUPABASE_URL = "your-supabase-url-here"
-SUPABASE_SERVICE_ROLE_KEY = "your-service-role-key-here"
+SUPABASE_ACCESS_TOKEN = "your-supabase-access-token-here"
 ```
 
-**Important:** Replace the Supabase values with your actual credentials from `.env.local`.
+**Getting your Supabase Access Token:**
+1. Go to https://supabase.com/dashboard/account/tokens
+2. Generate a new access token
+3. Add it to your environment or the config above
 
 ---
 

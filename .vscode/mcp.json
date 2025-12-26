@@ -14,10 +14,9 @@
     },
     "supabase": {
       "command": "npx",
-      "args": ["-y", "@supabase-community/supabase-mcp"],
+      "args": ["-y", "@supabase/mcp-server-supabase"],
       "env": {
-        "SUPABASE_URL": "${env:NEXT_PUBLIC_SUPABASE_URL}",
-        "SUPABASE_SERVICE_ROLE_KEY": "${env:SUPABASE_SERVICE_ROLE_KEY}"
+        "SUPABASE_ACCESS_TOKEN": "${env:SUPABASE_ACCESS_TOKEN}"
       }
     }
   }
