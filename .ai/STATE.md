@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 26, 2025 (Session 1: Core Automation Scripts complete)
+**Last updated:** Dec 26, 2025 (Session 2: Screenshot Automation + Commands complete)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -13,6 +13,12 @@ Every AI session must update this after meaningful work.
   - `/verified-pennies` permanently redirects to `/penny-list`
   - No repo-stored verified datasets/scripts (privacy)
   - SKU pages + sitemap derive from the Penny List only
+- **Recent focus (Dec 26):** Session 2: Screenshot Automation + Commands complete
+  - Implemented `scripts/ai-proof.ts` (automated screenshot capture for light/dark mode UI verification)
+  - Created `.claude/commands/` directory with slash commands: doctor, verify, proof
+  - Added npm script `ai:proof` to package.json
+  - Tested successfully on Windows with MSYS_NO_PATHCONV=1 workaround for Git bash path conversion
+  - Updated `.ai/AI_AUTOMATION_SPECS.md` to mark Session 2 complete
 - **Recent focus (Dec 26):** Session 1: Core Automation Scripts complete
   - Implemented `scripts/ai-doctor.ts` (pre-flight health check: port 3001, env vars, Playwright, Node version)
   - Implemented `scripts/ai-verify.ts` (one-command verification bundle: runs all 4 quality gates, saves proof to `reports/verification/`)

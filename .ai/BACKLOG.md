@@ -1,6 +1,6 @@
 # Backlog (AI‑Driven, Ordered)
 
-**Last updated:** Dec 26, 2025 (Session 1: Core Automation Scripts complete)
+**Last updated:** Dec 26, 2025 (Session 2: Screenshot Automation + Commands complete)
 Keep this list short and ruthless (≤10 items).
 Each AI session should:
 
@@ -13,6 +13,8 @@ Each AI session should:
 ---
 
 ## Completed Recently
+
+- **Dec 26, 2025:** Implemented Session 2: Screenshot Automation + Commands. Added `scripts/ai-proof.ts` (automated screenshot capture for light/dark mode), `.claude/commands/` (doctor, verify, proof slash commands), and npm script `ai:proof`. Tested successfully with Windows workaround (MSYS_NO_PATHCONV=1).
 
 - **Dec 26, 2025:** Implemented Session 1: Core Automation Scripts. Added `scripts/ai-doctor.ts` (pre-flight health check) and `scripts/ai-verify.ts` (one-command verification bundle). Added npm scripts `ai:doctor` and `ai:verify`. All 4 quality gates passing (lint, build, unit:21/21, e2e:64/64).
 
@@ -43,11 +45,11 @@ Each AI session should:
    - ✅ Added npm scripts to package.json
    - ✅ Tested both scripts work correctly
 
-2. **Session 2: Screenshot Automation + Commands** `[ ]`
-   - Create `scripts/ai-proof.ts` (screenshot capture)
-   - Create `.claude/commands/doctor.md`
-   - Create `.claude/commands/verify.md`
-   - Create `.claude/commands/proof.md`
+2. **Session 2: Screenshot Automation + Commands** `[✓]` **COMPLETE**
+   - ✅ Created `scripts/ai-proof.ts` (screenshot capture)
+   - ✅ Created `.claude/commands/doctor.md`
+   - ✅ Created `.claude/commands/verify.md`
+   - ✅ Created `.claude/commands/proof.md`
 
 3. **Session 3: Enforcement + Manifest** `[ ]`
    - Install husky for pre-commit hooks
