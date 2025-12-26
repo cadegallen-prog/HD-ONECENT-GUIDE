@@ -26,14 +26,25 @@
 | /session-start | Start session with proper context |
 | /session-end | End session with verification |
 
-## MCP Servers (4 Active)
+## MCP Servers (5 Active - Unified Across All Tools)
+
+MCPs are configured for ALL THREE AI tools:
+
+| Config File | Tool |
+|-------------|------|
+| `.vscode/mcp.json` | VS Code Copilot |
+| `.claude/settings.json` | Claude Code |
+| `~/.codex/config.toml` | Codex (see `.ai/MCP_SETUP.md`) |
 
 | MCP | Purpose |
 |-----|---------|
 | Filesystem | Read/write project files |
 | Git | Version control operations |
 | GitHub | PRs, issues, actions |
-| Playwright | Browser automation (required for UI) |
+| Supabase | Direct database access, SQL queries |
+| Vercel | Deployment info (Claude only) |
+
+**Setup Guide:** `.ai/MCP_SETUP.md`
 
 ## Git Hooks (Husky)
 
