@@ -1,32 +1,30 @@
 # Penny Crowdsource System - Maintenance Strategy
 
-**Status:** Phase 1 (Live with lightweight review)  
+**Status:** Phase 1 (Live with lightweight review)
 **Maintenance Load:** ~15–30 min/week (sustainable)
 
 ---
 
 ## What This Is
 
-PennyCentral’s “compounding loop” is:
+PennyCentral's "compounding loop" is:
 
-1. Community reports finds
+1. Community reports finds via the website
 2. Those finds show up on the Penny List automatically
-3. Cade optionally improves (“enriches”) the best items later
+3. Cade optionally enriches the best items later (images, internet SKU)
 
 ---
 
-## The Current Data Flow (What Actually Powers the Site)
-
-This is the live, real system:
+## The Current Data Flow
 
 ```
 [Community submits via PennyCentral "Report a Find" page]
           ->
-[/api/submit-find appends a new row to Google Sheets]
+[/api/submit-find inserts into Supabase "Penny List" table]
           ->
-[Penny List reads from the published Google Sheet (about hourly refresh)]
+[Penny List reads from Supabase (real-time)]
           ->
-[Cade optionally adds IMAGE URL + INTERNET SKU later]
+[Enrichment table (penny_item_enrichment) overlays images/URLs by SKU]
 ```
 
 **Key privacy rule:** the website submission form does **not** collect email, proof photos, receipts, or uploads.
@@ -35,9 +33,9 @@ This is the live, real system:
 
 ## Weekly Workflow (15–30 min)
 
-### Step 1: Open the Sheet (2 min)
+### Step 1: Open Supabase Dashboard (2 min)
 
-Open your Google Sheet and sort by most recent.
+Go to your Supabase project dashboard and view the "Penny List" table.
 
 ### Step 2: Scan for High-Signal Items (10–20 min)
 
@@ -52,20 +50,22 @@ Skip:
 
 ### Step 3: Enrich the Best SKUs (optional, 3–10 min)
 
-For the items you care about most, fill in:
-- `IMAGE URL` (stock thumbnail)
-- `INTERNET SKU` (more reliable Home Depot product link)
+Add entries to the `penny_item_enrichment` table:
+- `sku` - the Home Depot SKU
+- `image_url` - stock thumbnail URL
+- `internet_sku` - for reliable Home Depot product links
+- `item_name`, `brand`, `model_number` - optional metadata
 
-The site updates automatically once those are filled in.
+The site updates automatically once those are added.
 
 ---
 
-## If You Also Keep a Google Form (Optional)
+## Data Tables
 
-Google Forms are **not required** for PennyCentral submissions. If you keep one anyway (as a separate intake channel), make sure:
-- Email collection is set to “Do not collect”
-- There are no file upload questions
-- The response sheet is not what you publish publicly (avoid accidental PII exposure)
+| Table | Purpose |
+|-------|---------|
+| `Penny List` | Community submissions (raw data) |
+| `penny_item_enrichment` | Admin enrichment overlay (images, internet SKU) |
 
 ---
 
@@ -73,20 +73,19 @@ Google Forms are **not required** for PennyCentral submissions. If you keep one 
 
 If submissions exceed ~20/week:
 - Do two shorter reviews per week, or
-- Start relying more on “duplicate SKU” signals and less manual review
+- Start relying more on "duplicate SKU" signals and less manual review
 
 If submissions exceed ~50/week:
-- Plan a more structured moderation layer (but only if it’s worth the effort)
+- Plan a more structured moderation layer (but only if it's worth the effort)
 
 ---
 
 ## Summary
 
-| Aspect          | Approach                                                |
-| --------------- | ------------------------------------------------------- |
-| Collection      | PennyCentral “Report a Find” page                        |
-| Storage         | Google Sheet (internal source of truth)                 |
-| Publishing      | Published Google Sheet CSV (`GOOGLE_SHEET_URL`)          |
-| Enrichment      | Cade fills `IMAGE URL` + `INTERNET SKU` later (optional) |
-| Time cost       | ~15–30 min/week                                         |
-
+| Aspect          | Approach                                        |
+| --------------- | ----------------------------------------------- |
+| Collection      | PennyCentral "Report a Find" page               |
+| Storage         | Supabase (Penny List + enrichment tables)       |
+| Publishing      | Real-time via Supabase reads                    |
+| Enrichment      | Admin fills enrichment table (optional)         |
+| Time cost       | ~15–30 min/week                                 |

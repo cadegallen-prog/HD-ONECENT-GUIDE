@@ -16,7 +16,8 @@ function git(args) {
 
 function main() {
   // Scan staged files only. This is the last line of defense before a commit.
-  const staged = git("diff --cached --name-only")
+  // Use --diff-filter=d to exclude deleted files (they can't contain new PII)
+  const staged = git("diff --cached --name-only --diff-filter=d")
   const files = staged ? staged.split(/\r?\n/).filter(Boolean) : []
 
   if (files.length === 0) {
