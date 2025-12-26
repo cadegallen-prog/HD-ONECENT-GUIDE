@@ -43,6 +43,11 @@ netstat -ano | findstr :3001
 - Store the map in private storage (env var, Vercel Blob, private Drive) and never commit it.
 - Always fall back to the regular SKU-based link when a mapping is missing.
 
+### Rule #5: Session Log Trim
+
+- After adding a session entry, if `.ai/SESSION_LOG.md` has more than 5 entries, trim to keep only the 3 most recent.
+- Git history preserves everything - trimming keeps the file readable and fast to load.
+
 ---
 
 ## MCP Servers (4 available)

@@ -43,6 +43,11 @@ netstat -ano | findstr :3001
 - Keep the map in private storage (env/Blob/Drive) and never commit it.
 - Fallback: when a mapping is missing, build links from the regular SKU.
 
+### Rule #5: Session Log Trim
+
+- After adding a session entry, if `.ai/SESSION_LOG.md` has more than 5 entries, trim to keep only the 3 most recent.
+- Git history preserves everything - trimming keeps the file readable and fast to load.
+
 ---
 
 ## MCP Servers (4 available)

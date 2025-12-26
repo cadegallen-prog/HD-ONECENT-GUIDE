@@ -198,6 +198,23 @@ function generateSummary(results: GateResult[], timestamp: string): string {
   return markdown;
 }
 
+function checkSessionLogSize(): void {
+  const sessionLogPath = path.join('.ai', 'SESSION_LOG.md');
+
+  if (!fs.existsSync(sessionLogPath)) {
+    return; // File doesn't exist, nothing to check
+  }
+
+  const content = fs.readFileSync(sessionLogPath, 'utf8');
+  // Count session entries (lines starting with "## " followed by a date)
+  const sessionEntries = content.match(/^## \d{4}-\d{2}-\d{2}/gm) || [];
+
+  if (sessionEntries.length > 5) {
+    console.log('⚠️  SESSION_LOG.md has', sessionEntries.length, 'entries');
+    console.log('   Trim to 3 per CLAUDE.md Rule #5. Git history preserves everything.\n');
+  }
+}
+
 async function main() {
   console.log('═══════════════════════════════════════');
   console.log('   AI Verification Bundle');
@@ -215,6 +232,9 @@ async function main() {
     process.exit(1);
   }
   console.log('✅ Server is healthy\n');
+
+  // Check session log size (warning only, doesn't block)
+  checkSessionLogSize();
 
   // Create timestamp and output directory
   const timestamp = new Date()
