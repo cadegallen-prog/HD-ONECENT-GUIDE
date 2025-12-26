@@ -25,17 +25,17 @@ Each session is self-contained. Mark checkboxes as you complete items.
 ```
 
 ### Session 2: Screenshot Automation + Commands
-**Status:** Not Started
+**Status:** ✅ Complete
 **Prerequisites:** Session 1 complete
 
 ```
-□ Create scripts/ai-proof.ts - screenshot capture
-□ Create .claude/commands/doctor.md
-□ Create .claude/commands/verify.md
-□ Create .claude/commands/proof.md
-□ Test: npm run ai:proof -- /penny-list captures screenshots
-□ Test: /doctor command works in Claude Code
-□ Update this file: mark Session 2 complete
+☑ Create scripts/ai-proof.ts - screenshot capture
+☑ Create .claude/commands/doctor.md
+☑ Create .claude/commands/verify.md
+☑ Create .claude/commands/proof.md
+☑ Test: npm run ai:proof -- /penny-list captures screenshots
+☑ Test: /doctor command works in Claude Code
+☑ Update this file: mark Session 2 complete
 ```
 
 ### Session 3: Enforcement + Manifest

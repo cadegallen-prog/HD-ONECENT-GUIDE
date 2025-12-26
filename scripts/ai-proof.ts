@@ -1,0 +1,133 @@
+#!/usr/bin/env tsx
+
+import { chromium } from 'playwright';
+import fs from 'fs';
+import path from 'path';
+import net from 'net';
+
+async function checkServerRunning(): Promise<boolean> {
+  return new Promise((resolve) => {
+    const server = net.createServer();
+
+    server.once('error', (err: NodeJS.ErrnoException) => {
+      if (err.code === 'EADDRINUSE') {
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+      server.close();
+    });
+
+    server.once('listening', () => {
+      server.close();
+      resolve(false);
+    });
+
+    server.listen(3001);
+  });
+}
+
+async function main() {
+  const routes = process.argv.slice(2);
+
+  if (routes.length === 0) {
+    console.error('❌ Error: No routes specified');
+    console.error('Usage: npm run ai:proof -- /penny-list /store-finder');
+    process.exit(1);
+  }
+
+  console.log('═══════════════════════════════════════');
+  console.log('   AI Proof Screenshot Capture');
+  console.log('═══════════════════════════════════════\n');
+
+  // Check if dev server is running
+  const serverRunning = await checkServerRunning();
+  if (!serverRunning) {
+    console.error(
+      '❌ Error: Dev server not running on port 3001\n' +
+        'Please run "npm run dev" in another terminal first.\n'
+    );
+    process.exit(1);
+  }
+
+  console.log('✅ Dev server detected on port 3001\n');
+
+  // Create timestamp and output directory
+  const timestamp = new Date()
+    .toISOString()
+    .replace(/[:.]/g, '-')
+    .slice(0, 19);
+  const outDir = path.join('reports', 'proof', timestamp);
+
+  fs.mkdirSync(outDir, { recursive: true });
+
+  console.log(`📁 Output directory: ${outDir}\n`);
+  console.log(`📸 Capturing screenshots for ${routes.length} route(s)...\n`);
+
+  // Launch browser
+  const browser = await chromium.launch();
+  const context = await browser.newContext();
+  const page = await context.newPage();
+
+  // Track console errors
+  const consoleErrors: string[] = [];
+  page.on('console', (msg) => {
+    if (msg.type() === 'error') {
+      consoleErrors.push(`[${msg.location().url}] ${msg.text()}`);
+    }
+  });
+
+  // Capture screenshots for each route
+  for (const route of routes) {
+    const slug = route.replace(/\//g, '-').slice(1) || 'home';
+
+    console.log(`  Processing ${route}...`);
+
+    try {
+      // Light mode
+      await page.goto(`http://localhost:3001${route}`, {
+        waitUntil: 'networkidle',
+      });
+      await page.screenshot({
+        path: path.join(outDir, `${slug}-light.png`),
+        fullPage: true,
+      });
+      console.log(`    ✅ ${slug}-light.png`);
+
+      // Dark mode
+      await page.emulateMedia({ colorScheme: 'dark' });
+      await page.screenshot({
+        path: path.join(outDir, `${slug}-dark.png`),
+        fullPage: true,
+      });
+      console.log(`    ✅ ${slug}-dark.png`);
+
+      // Reset to light mode for next route
+      await page.emulateMedia({ colorScheme: 'light' });
+    } catch (err: any) {
+      console.error(`    ❌ Error capturing ${route}: ${err.message}`);
+    }
+  }
+
+  // Save console errors
+  const errorsPath = path.join(outDir, 'console-errors.txt');
+  if (consoleErrors.length > 0) {
+    fs.writeFileSync(errorsPath, consoleErrors.join('\n'));
+    console.log(`\n⚠️  ${consoleErrors.length} console error(s) recorded`);
+  } else {
+    fs.writeFileSync(errorsPath, 'No console errors detected');
+    console.log(`\n✅ No console errors detected`);
+  }
+
+  await browser.close();
+
+  console.log('\n═══════════════════════════════════════');
+  console.log('   Screenshot Capture Complete');
+  console.log('═══════════════════════════════════════\n');
+  console.log(`📁 Outputs saved to: ${outDir}\n`);
+}
+
+main().catch((err) => {
+  console.error('Error running screenshot capture:', err);
+  process.exit(1);
+});

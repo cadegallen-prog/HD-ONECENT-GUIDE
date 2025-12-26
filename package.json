@@ -18,7 +18,8 @@
     "check-axe": "node scripts/check-axe.js",
     "security:scan": "node scripts/security-scan-no-pii.mjs",
     "ai:doctor": "tsx scripts/ai-doctor.ts",
-    "ai:verify": "tsx scripts/ai-verify.ts"
+    "ai:verify": "tsx scripts/ai-verify.ts",
+    "ai:proof": "tsx scripts/ai-proof.ts"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.8",
