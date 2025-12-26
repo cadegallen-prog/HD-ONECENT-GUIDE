@@ -8,6 +8,7 @@
 /reports/playwright/results/
 /reports/playwright/html/
 /reports/playwright/proof/
+/reports/proof/
 /reports/verification/
 /reports/verification-*.png
 /data/Intial_Supabase_and_Google_sheets_csv_conversion_12-24-25/
