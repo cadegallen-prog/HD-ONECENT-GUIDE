@@ -3,39 +3,41 @@ name: session-end
 description: End a coding session with verification and documentation
 ---
 
-End the session by completing these steps:
-
 ## 1. Run Verification
 
 Execute: `npm run ai:verify`
 
-If any gate fails:
-- Do NOT mark session complete
-- Report the failures
-- Fix them before ending
+**All 4 gates MUST pass.** If any fail, fix before ending.
 
 ## 2. Update SESSION_LOG.md
 
-Update the current session entry with:
-- **Status:** Complete (or Partial - [reason])
-- **What was done:** (bullet list)
-- **Files modified:** (list)
-- **Verification results:** (paste summary)
-- **Notes for next session:** (if any)
+Update current entry with:
+- **Outcome:** ✅ Success or ❌ Partial (reason)
+- **Changes Made:** (bullet list)
+- **Verification:** (summary)
+- **For Next AI:** (handoff notes)
 
-## 3. Update STATE.md
+## 3. Check Session Log Size
 
-If significant changes were made, update `.ai/STATE.md` to reflect the new current state.
+If > 5 entries, trim to 3 most recent (Rule #5).
 
-## 4. Update BACKLOG.md
+## 4. Update STATE.md
 
-- Mark completed tasks as done
-- Add any new tasks discovered during the session
+If significant changes, update current state snapshot.
 
-## 5. Check for Learnings
+## 5. Update BACKLOG.md
 
-If anything unexpected happened (bugs, gotchas, edge cases), add to `.ai/LEARNINGS.md`.
+- Mark completed tasks done
+- Add new tasks discovered
 
-## 6. Confirm Completion
+## 6. Check for Learnings
 
-Tell the user: "Session complete. All docs updated. Verification passed."
+If anything unexpected happened, add to `.ai/LEARNINGS.md`.
+
+## 7. Confirm Completion
+
+"Session complete. Verification passed. Docs updated."
+
+---
+
+**Never skip verification.** Cade cannot check your work - you must verify yourself.

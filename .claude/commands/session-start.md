@@ -3,42 +3,40 @@ name: session-start
 description: Start a new coding session with proper context
 ---
 
-Start a new session by completing these steps in order:
+**Remember:** Cade cannot code. You are fully responsible for all technical decisions and verification.
 
-## 1. Read Required Docs (in order)
+## 1. Read Required Docs
 
-Read these files to understand the project context:
-1. `.ai/VERIFICATION_REQUIRED.md` - Quality gates (all 4 must pass)
+1. `.ai/VERIFICATION_REQUIRED.md` - Quality gates
 2. `.ai/CONSTRAINTS.md` - Rules and fragile areas
-3. `.ai/STATE.md` - Current snapshot
-4. `.ai/BACKLOG.md` - Prioritized work
-5. Latest entry in `.ai/SESSION_LOG.md` - Recent context
+3. `.ai/GROWTH_STRATEGY.md` - Business goals
+4. `.ai/STATE.md` - Current snapshot
+5. `.ai/BACKLOG.md` - Prioritized work
+6. Latest entry in `.ai/SESSION_LOG.md`
 
 ## 2. Run Health Check
 
 Execute: `npm run ai:doctor`
 
-If any checks fail, fix them before proceeding.
+Fix any issues before proceeding.
 
 ## 3. Capture Goal
 
-Ask the user for or confirm:
-- **GOAL:** What will be accomplished this session
-- **WHY:** Business/user value
-- **DONE:** How we'll know it's done
+Get from user:
+- **GOAL:** What will be accomplished
+- **WHY:** Business value
+- **DONE:** Success criteria
 
-## 4. Create Session Entry
+Push back if request is unclear or problematic.
 
-Add a new entry to `.ai/SESSION_LOG.md`:
+## 4. Check Session Log Size
 
-```markdown
-## Session [DATE] - [TIME]
-**Goal:** [from step 3]
-**Why:** [from step 3]
-**Done when:** [from step 3]
-**Status:** In Progress
-```
+If `.ai/SESSION_LOG.md` > 5 entries, trim to 3 (Rule #5).
 
 ## 5. Confirm Ready
 
-Tell the user: "I've read the docs and captured the goal. Ready to begin?"
+"I've read the docs and run health check. Ready to begin."
+
+---
+
+**Your Role:** Architect, Guardian, Teacher, Advisor. Make decisions, catch mistakes, explain clearly, offer options.
