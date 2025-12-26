@@ -16,7 +16,9 @@
     "test:unit": "tsx --import ./tests/setup.ts --test tests/**/*.test.ts",
     "check-contrast": "node scripts/check-contrast.js",
     "check-axe": "node scripts/check-axe.js",
-    "security:scan": "node scripts/security-scan-no-pii.mjs"
+    "security:scan": "node scripts/security-scan-no-pii.mjs",
+    "ai:doctor": "tsx scripts/ai-doctor.ts",
+    "ai:verify": "tsx scripts/ai-verify.ts"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.8",
