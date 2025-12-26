@@ -11,6 +11,33 @@
 
 ---
 
+## 2025-12-26 - ChatGPT Codex (GPT-5.2) - Penny List UI Polish (Sticky Filters + Cleaner Cards)
+
+**AI:** ChatGPT Codex (GPT-5.2)
+**Goal:** Fix Penny List filter bar clipping while scrolling, fix the items-per-page dropdown arrow overlap, and reduce card clutter (remove tier/commonness + redundant “Community lead” label).
+
+**Changes Made:**
+- `components/penny-list-filters.tsx`: Sticky filter bar now uses `top-16` so it doesn’t hide behind the navbar.
+- `components/penny-list-client.tsx`: Items-per-page `<select>` now uses a custom chevron + padding; drops legacy `tier` param from URL syncing.
+- `components/penny-list-card.tsx`: Removed tier/commonness pill; removed redundant “Community lead” footer label.
+- `components/penny-list-table.tsx`: Removed Tier column.
+- `app/penny-list/page.tsx` + `app/api/penny-list/route.ts`: Tier param ignored (no hidden behavior).
+- `scripts/ai-proof.ts`: Added scrolled “UI” screenshots and ensured dark mode reload.
+
+**Outcome:** ✅ Success
+
+**Verification:**
+- Quality gates bundle: `reports/verification/2025-12-26T08-36-49/` (lint/build/unit/e2e all pass)
+- Color linter: `npm run lint:colors` ✅ 0 errors, 0 warnings
+- Playwright screenshots (before/after, light/dark, console):
+  - Before: `reports/proof/2025-12-26T08-31-04/` (1 hydration-mismatch console error captured)
+  - After: `reports/proof/2025-12-26T08-31-51/` (no console errors)
+
+**Notes:**
+- The “before” run captured a Next.js dev hydration-mismatch console error on the Penny List; it did not reproduce after the UI changes.
+
+---
+
 ## 2025-12-26 - ChatGPT Codex (GPT-5.2) - AI Enablement Blueprint + Penny List SSR Param Fix
 
 **AI:** ChatGPT Codex (GPT-5.2)
@@ -1332,7 +1359,7 @@ node tmp-playwright-screenshot.js dark reports/verification/penny-list-after-dar
 ## 2025-12-15 (2:45 PM) - GitHub Copilot - Store Finder UX Fixes
 
 **AI:** GitHub Copilot
-**Goal:** Fix critical Store Finder UX issues: re-ranking bug, pin number readability, ARIA compliance, and store #106 coordinates
+**Goal:** Fix critical Store Finder UX issues: re-ranking bug, pin number readability, ARIA compliance, and store 106 coordinates
 
 **Work Completed:**
 
@@ -1355,7 +1382,7 @@ node tmp-playwright-screenshot.js dark reports/verification/penny-list-after-dar
    - Lines 194, 221, 240, 257, 271, 323 all have `aria-pressed={condition ? "true" : "false"}`
    - No boolean expressions (which are invalid per ARIA spec)
 
-4. **Store #106 coordinates investigation:**
+4. **Store 106 coordinates investigation:**
    - Verified source data: latitude 34.007751688179, longitude -84.56504430913
    - Confirmed coordinates match upstream store directory JSON exactly
    - No coordinate override exists (COORD_OVERRIDES is empty)
@@ -1387,7 +1414,7 @@ node tmp-playwright-screenshot.js dark reports/verification/penny-list-after-dar
 
 - Commit Store Finder UX fixes to `main`
 - Push to origin and verify on production
-- If store #106 still shows in wrong location, get correct lat/lng from user
+- If store 106 still shows in wrong location, get correct lat/lng from user
 
 ---
 
@@ -1726,7 +1753,7 @@ DONE MEANS:
 ## 2025-12-15 - GitHub Copilot - Store Finder "Ironclad" Verification + Popup/Map Cleanup
 
 **AI:** GitHub Copilot (GPT-5.2 (Preview))  
-**Goal:** Make Store Finder popups readable/consistent, make the map look “normal,” add numbered pins, protect store #0106 pin accuracy, and make verification reproducible (screenshots in one run).  
+**Goal:** Make Store Finder popups readable/consistent, make the map look "normal," add numbered pins, protect store 0106 pin accuracy, and make verification reproducible (screenshots in one run).  
 **Outcome:** ✅ Store Finder UX updated and verification hardened; all gates pass.
 
 **Work completed:**
@@ -1735,7 +1762,7 @@ DONE MEANS:
 - **Popup polish:** removed the “Store” label and the redundant city/state line under the title; kept separators, hour boxes, and click-to-call phone.
 - **CTA color fix:** enforced popup button/link colors against Leaflet’s default anchor styling to prevent the “button text turns link-blue” clash.
 - **Ranked pins:** marker icons now include the 1-based rank number so list ↔ map matching is instant.
-- **#0106 protection:** added a coordinate override for store #0106 (Kennesaw, GA) matching the correct location (449 Roberts Ct NW) to guard against bad upstream coordinates.
+- **#0106 protection:** added a coordinate override for store 0106 (Kennesaw, GA) matching the correct location (449 Roberts Ct NW) to guard against bad upstream coordinates.
 - **Manifest cleanup:** removed missing icon/screenshot references and validator-tripping related-app fields.
 
 **Verification / how to get screenshots “in one go”:**
@@ -1769,12 +1796,12 @@ DONE MEANS:
 ## 2025-12-13 - GitHub Copilot - Store Finder Root Cause Fix (Override Removal)
 
 **AI:** GitHub Copilot (Claude Sonnet 4.5)  
-**Goal:** Investigate why store #106 coordinates were wrong and fix root cause.  
+**Goal:** Investigate why store 106 coordinates were wrong and fix root cause.  
 **Outcome:** ✅ **Override was the problem** - Source data is correct, override was breaking it.
 
 **Root cause analysis:**
 
-- User reported store #106 at wrong location (only started ~2 days ago)
+- User reported store 106 at wrong location (only started ~2 days ago)
 - Git history revealed source data (`data/home-depot-stores.json`) was updated recently from `1655 Shiloh Road` (wrong) to `449 Roberts Ct NW` (correct) with accurate coordinates (34.0224, -84.6199)
 
 ---
@@ -1805,7 +1832,7 @@ DONE MEANS:
 
 **Files Modified:**
 
-- `lib/stores.ts` - Removed erroneous `COORD_OVERRIDES` entry for store #0106; kept override system in place for future user-reported issues
+- `lib/stores.ts` - Removed erroneous `COORD_OVERRIDES` entry for store 0106; kept override system in place for future user-reported issues
 
 **Key learning:** When something "suddenly breaks" after working fine, check what changed upstream, not just local code. In this case, the data source was corrected and our "fix" was actually causing the problem.
 
@@ -1816,10 +1843,10 @@ DONE MEANS:
 ## 2025-12-13 - GitHub Copilot - Store Finder Coordinate Fix + Popup Polish (Complete)
 
 **AI:** GitHub Copilot (Claude Sonnet 4.5)  
-**Goal:** Fix Store #106 coordinate issue, add data quality documentation, complete popup refactor, polish styling, and pass all gates.  
+**Goal:** Fix Store 106 coordinate issue, add data quality documentation, complete popup refactor, polish styling, and pass all gates.  
 **Work completed:**
 
-- **Coordinate Fix:** Updated store #0106 override in `lib/stores.ts` (already in place from previous session) with user-provided correct address (449 Roberts Ct NW, Kennesaw GA). Added data quality concern comment noting ~1% of 2007 stores may have coordinate issues.
+- **Coordinate Fix:** Updated store 0106 override in `lib/stores.ts` (already in place from previous session) with user-provided correct address (449 Roberts Ct NW, Kennesaw GA). Added data quality concern comment noting ~1% of 2007 stores may have coordinate issues.
 - **Popup Refactor:** Completed the broken popup markup in `components/store-map.tsx` (was duplicate/unclosed from previous session). Restructured with semantic sections: header with rank badge, meta with address/phone link, hours grid, and action buttons.
 - **CSS Polish:** Added complete styling for new popup classes in `components/store-map.css`: `.store-popup-header`, `.store-popup-heading`, `.store-popup-label`, `.store-popup-title`, `.store-popup-subtext`, `.store-popup-rank`, `.store-popup-meta`, `.store-popup-phone`, `.store-popup-section`, `.store-popup-section-label`, `.store-popup-hours`, `.store-popup-hour-row`, `.store-popup-hour-day`, `.store-popup-hour-value`, `.store-popup-actions`, `.store-popup-button`, `.store-popup-button-primary`, `.store-popup-button-secondary`, `.map-shell`, `.map-shell--light`, `.map-shell--dark`. All use design tokens (no raw colors).
 - **Tile Config:** Theme-specific Carto tiles (light_all/dark_all) already in place from previous session.
@@ -1844,7 +1871,7 @@ User reported ~1% error rate (20/2007 stores with coordinate issues). Cannot man
 
 **Notes:**
 
-- Store #106 (not #1777) was the incorrect one; user confirmed.
+- Store 106 (not 1777) was the incorrect one; user confirmed.
 - Popup now uses structured semantic layout with proper hierarchy.
 - All styling uses design tokens (var(--cta-primary), var(--border-default), etc.) - no raw colors added.
 - Touch targets meet 44px minimum (buttons are 44px min-height).
@@ -1901,7 +1928,7 @@ User reported ~1% error rate (20/2007 stores with coordinate issues). Cannot man
 **Goal:** Improve /store-finder visuals (mid-contrast tiles for both themes, popup polish) and correct store 0106 coordinates without new dependencies; ensure all gates pass.  
 **Work completed:**
 
-- Implemented coordinate override for store #0106 in `lib/stores.ts` with `COORD_OVERRIDES` and `applyCoordinateOverrides` helper, applied in API (`app/api/stores/route.ts`) and client (`app/store-finder/page.tsx`) normalization with dev warning for overrides.
+- Implemented coordinate override for store 0106 in `lib/stores.ts` with `COORD_OVERRIDES` and `applyCoordinateOverrides` helper, applied in API (`app/api/stores/route.ts`) and client (`app/store-finder/page.tsx`) normalization with dev warning for overrides.
 - Switched map tiles to CARTO voyager for mid-contrast in both light and dark themes in `components/store-map.tsx`.
 - Unified popup styling in `components/store-map.css` for consistent background, border, shadow, padding, and gap; updated map background to elevated token.
 - Removed unused Suspense import in `app/layout.tsx` to fix lint error.

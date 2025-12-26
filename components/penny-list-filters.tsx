@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback } from "react"
 import { Search, X, LayoutGrid, Table2, MapPin, Image } from "lucide-react"
 import { US_STATES } from "@/lib/us-states"
 
-export type TierFilter = "all" | "Very Common" | "Common" | "Rare"
 export type SortOption = "newest" | "oldest" | "most-reports" | "alphabetical"
 export type ViewMode = "cards" | "table"
 export type DateRange = "1m" | "3m" | "6m" | "12m" | "18m" | "24m" | "all"
@@ -14,8 +13,6 @@ interface PennyListFiltersProps {
   filteredCount: number
   stateFilter: string
   setStateFilter: (state: string) => void
-  tierFilter: TierFilter
-  setTierFilter: (tier: TierFilter) => void
   hasPhotoOnly: boolean
   setHasPhotoOnly: (value: boolean) => void
   searchQuery: string
@@ -40,8 +37,6 @@ export function PennyListFilters({
   filteredCount,
   stateFilter,
   setStateFilter,
-  tierFilter,
-  setTierFilter,
   hasPhotoOnly,
   setHasPhotoOnly,
   searchQuery,
@@ -71,7 +66,6 @@ export function PennyListFilters({
 
   const hasActiveFilters =
     stateFilter !== "" ||
-    tierFilter !== "all" ||
     hasPhotoOnly ||
     searchQuery !== "" ||
     sortOption !== "newest" ||
@@ -79,20 +73,12 @@ export function PennyListFilters({
 
   const clearAllFilters = useCallback(() => {
     setStateFilter("")
-    setTierFilter("all")
     setHasPhotoOnly(false)
     setSearchQuery("")
     setLocalSearch("")
     setSortOption("newest")
     setDateRange("6m")
-  }, [setStateFilter, setTierFilter, setHasPhotoOnly, setSearchQuery, setSortOption, setDateRange])
-
-  const tierOptions: { value: TierFilter; label: string; shortLabel: string }[] = [
-    { value: "all", label: "All Tiers", shortLabel: "All" },
-    { value: "Very Common", label: "Very Common", shortLabel: "VC" },
-    { value: "Common", label: "Common", shortLabel: "C" },
-    { value: "Rare", label: "Rare", shortLabel: "R" },
-  ]
+  }, [setStateFilter, setHasPhotoOnly, setSearchQuery, setSortOption, setDateRange])
 
   const dateOptions: { value: DateRange; label: string }[] = [
     { value: "1m", label: "1 mo" },
@@ -155,13 +141,6 @@ export function PennyListFilters({
       onRemove: () => setStateFilter(""),
     })
   }
-  if (tierFilter !== "all") {
-    activeChips.push({
-      key: "tier",
-      label: tierFilter,
-      onRemove: () => setTierFilter("all"),
-    })
-  }
   if (hasPhotoOnly) {
     activeChips.push({
       key: "photo",
@@ -203,9 +182,9 @@ export function PennyListFilters({
   return (
     <section
       aria-label="Filter penny list results"
-      className="sticky top-0 z-20 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl p-4 sm:p-6 mb-6 shadow-sm"
+      className="sticky top-16 z-20 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl p-4 sm:p-6 mb-6 shadow-sm"
     >
-      {/* Row 1: State, My State, Tier Toggles, View Mode */}
+      {/* Row 1: State, My State, Photo, View Mode */}
       <div className="flex flex-wrap gap-3 mb-4">
         {/* State Dropdown */}
         <div className="flex-1 min-w-[180px]">
@@ -252,39 +231,6 @@ export function PennyListFilters({
             <span className="sm:hidden">{userState}</span>
           </button>
         )}
-
-        {/* Tier Toggle Buttons */}
-        <fieldset className="flex-shrink-0">
-          <legend className="sr-only">Filter by commonness tier</legend>
-          <div
-            className="flex rounded-lg border border-[var(--border-default)] overflow-hidden"
-            role="group"
-            aria-label="Tier filter"
-          >
-            {tierOptions.map((option) => {
-              return (
-                <button
-                  key={option.value}
-                  type="button"
-                  onClick={() => setTierFilter(option.value)}
-                  {...({ "aria-pressed": tierFilter === option.value ? "true" : "false" } as Record<
-                    string,
-                    unknown
-                  >)}
-                  className={`px-3 sm:px-4 py-2.5 text-sm font-medium min-h-[44px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
-                    tierFilter === option.value
-                      ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
-                      : "bg-[var(--bg-page)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]"
-                  } ${option.value !== "all" ? "border-l border-[var(--border-default)]" : ""}`}
-                  title={option.label}
-                >
-                  <span className="hidden sm:inline">{option.label}</span>
-                  <span className="sm:hidden">{option.shortLabel}</span>
-                </button>
-              )
-            })}
-          </div>
-        </fieldset>
 
         {/* Has Photo Toggle */}
         <button

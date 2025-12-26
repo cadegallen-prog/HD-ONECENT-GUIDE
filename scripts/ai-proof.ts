@@ -27,6 +27,32 @@ async function checkServerRunning(): Promise<boolean> {
   });
 }
 
+async function captureUiState(
+  page: any,
+  outDir: string,
+  slug: string,
+  mode: 'light' | 'dark'
+) {
+  const perPageSelect = page.locator('#penny-list-items-per-page');
+
+  try {
+    if ((await perPageSelect.count()) > 0) {
+      await perPageSelect.scrollIntoViewIfNeeded();
+      await page.waitForTimeout(200);
+    } else {
+      await page.evaluate(() => window.scrollTo(0, 700));
+      await page.waitForTimeout(200);
+    }
+  } catch {
+    // Best-effort only.
+  }
+
+  await page.screenshot({
+    path: path.join(outDir, `${slug}-ui-${mode}.png`),
+    fullPage: false,
+  });
+}
+
 async function main() {
   const routes = process.argv.slice(2);
 
@@ -66,7 +92,7 @@ async function main() {
 
   // Launch browser
   const browser = await chromium.launch();
-  const context = await browser.newContext();
+  const context = await browser.newContext({ viewport: { width: 1280, height: 720 } });
   const page = await context.newPage();
 
   // Track console errors
@@ -85,6 +111,7 @@ async function main() {
 
     try {
       // Light mode
+      await page.emulateMedia({ colorScheme: 'light' });
       await page.goto(`http://localhost:3001${route}`, {
         waitUntil: 'networkidle',
       });
@@ -93,17 +120,19 @@ async function main() {
         fullPage: true,
       });
       console.log(`    ✅ ${slug}-light.png`);
+      await captureUiState(page, outDir, slug, 'light');
+      console.log(`    ✅ ${slug}-ui-light.png`);
 
       // Dark mode
       await page.emulateMedia({ colorScheme: 'dark' });
+      await page.goto(`http://localhost:3001${route}`, { waitUntil: 'networkidle' });
       await page.screenshot({
         path: path.join(outDir, `${slug}-dark.png`),
         fullPage: true,
       });
       console.log(`    ✅ ${slug}-dark.png`);
-
-      // Reset to light mode for next route
-      await page.emulateMedia({ colorScheme: 'light' });
+      await captureUiState(page, outDir, slug, 'dark');
+      console.log(`    ✅ ${slug}-ui-dark.png`);
     } catch (err: any) {
       console.error(`    ❌ Error capturing ${route}: ${err.message}`);
     }

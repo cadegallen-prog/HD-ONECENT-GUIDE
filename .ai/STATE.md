@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 26, 2025 (Session 2: Screenshot Automation + Commands complete)
+**Last updated:** Dec 26, 2025 (Penny List UI polish complete)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -13,6 +13,17 @@ Every AI session must update this after meaningful work.
   - `/verified-pennies` permanently redirects to `/penny-list`
   - No repo-stored verified datasets/scripts (privacy)
   - SKU pages + sitemap derive from the Penny List only
+- **Recent focus (Dec 26): Penny List UI polish (filters + cards)**
+  - Sticky filter bar no longer clips under the navbar while scrolling
+  - Items-per-page dropdown chevron no longer overlaps the value
+  - Removed tier/commonness UI and redundant "Community lead" label for cleaner cards/table
+  - Enhanced `scripts/ai-proof.ts` to capture both full-page and scrolled UI screenshots (light + dark)
+- **Recent focus (Dec 26):** Documentation cleanup
+  - Deleted 11 deprecated files (old playbooks, Google Form docs, outdated MCP docs)
+  - Updated all docs to reflect Supabase as data source (was Google Sheets)
+  - Unified MCP configuration across Claude Code, Copilot, and Codex
+  - Created agent system (AGENT_POOL.md, ORCHESTRATION.md, AGENT_QUICKREF.md)
+  - Pre-commit hooks via Husky (security:scan + lint:colors)
 - **Recent focus (Dec 26):** Session 2: Screenshot Automation + Commands complete
   - Implemented `scripts/ai-proof.ts` (automated screenshot capture for light/dark mode UI verification)
   - Created `.claude/commands/` directory with slash commands: doctor, verify, proof
@@ -32,7 +43,7 @@ Every AI session must update this after meaningful work.
   - Added `.ai/enablement-prompts/README.md` plus prompt files for tooling inventory, doc alignment, proof workflow, automation scripts, Playwright harness, skills/commands, doc hygiene, cleanup audit, and idea pipeline.
   - Linked the prompt pack from `.ai/AI_ENABLEMENT_BLUEPRINT.md` for discoverability.
 - **Recent focus (Dec 26):** Penny List SSR now respects URL params (reload/bookmark correctness)
-  - `app/penny-list/page.tsx` now computes the initial page slice from URL params (`state`, `tier`, `photo`, `q`, `sort`, `days`, `page`, `perPage`).
+  - `app/penny-list/page.tsx` now computes the initial page slice from URL params (`state`, `photo`, `q`, `sort`, `days`, `page`, `perPage`).
   - Proof: `reports/verification/2025-12-26-proof.txt` (lint/build/unit/e2e).
 - **Recent focus (Dec 21, session 11):** OG images switched to static for Facebook reliability
   - **Problem:** Dynamic OG generation via Edge runtime kept failing on Facebook after 5-10 iterations (timeouts, font issues, zero-byte responses)
@@ -175,7 +186,7 @@ Every AI session must update this after meaningful work.
   - Locked the submit-find API to `.strict()` schema parsing, strips extra fields (photo URLs/uploads), and writes a blank `Upload Photo(s) of Item / Shelf Tag / Receipt` column so only owner-managed entries contain URLs.
   - Documented the import sanity check (SKU column should stay numeric) and added `docs/HOW-CADE-ADDS-STOCK-PHOTOS.md` to detail how the owner injects stock photos once per SKU.
 - **Recent focus (Dec 19, session 1):** Purchase-history import hardening (privacy-first)
-  - Added a repeatable purchase-history → Google Sheet import script (no store # / no purchaser fields).
+  - Added a repeatable purchase-history → Google Sheet import script (no store identifiers / no buyer-identifying fields).
   - Added `.gitignore` rules to prevent committing purchase-history exports or generated import artifacts.
   - Added `--force-state` option for purchase-history exports whose filenames do not encode the state (e.g., Home Depot “Purchase*History*...” downloads).
   - Internet SKU map policy: backend-only for outbound Home Depot links, never displayed; store privately (env/Blob/Drive); always fall back to regular SKU links when a mapping is missing.
@@ -238,7 +249,7 @@ Every AI session must update this after meaningful work.
   - **Re-ranking bug eliminated:** Clicking a store on the map no longer re-sorts the list; ranking is now decoupled from map panning via `rankingCenterRef`
   - **Marker readability improved:** Pin numbers increased from font-size 11/12 to 13/15 with heavier stroke (4px) for better visibility
   - **ARIA compliance verified:** All 6 `aria-pressed` attributes in penny-list-filters.tsx correctly use string literals ("true"/"false")
-  - **Store #106 coordinates:** Verified source data (34.007751688179, -84.56504430913) - coordinates are from upstream store directory and match JSON
+  - **Store 106 coordinates:** Verified source data (34.007751688179, -84.56504430913) - coordinates are from upstream store directory and match JSON
 - **Command reliability (Dec 15 12:30 PM):** Eliminated repeated "command hangs / loops" by removing `npx` from execution paths and hardening scripts with timeouts + process cleanup.
 - Foundation Contract added at `.ai/FOUNDATION_CONTRACT.md` (tokens/Tailwind/layout/nav/gates) and `ROUTE-TREE.txt` refreshed (includes framework 404).
 - Color drift ratchet in place: `npm run lint:colors` compares against `checks/lint-colors.baseline.json` (8 warnings after recent cleanup) and fails if count rises; refresh the reference only with `npm run lint:colors:update-baseline` after an intentional color change.
@@ -254,8 +265,8 @@ Every AI session must update this after meaningful work.
 - `/guide` and supporting strategy pages are stable and mobile‑friendly.
 - `/store-finder` map hydrates cleanly; uses standard OpenStreetMap tiles (no filters) for a familiar look in light/dark; popups are compact/readable and marker pins include rank numbers for list-to-map matching.
 - **Crowd Reports system is live:**
-  - `/report-find` posts to Google Sheet via Apps Script.
-  - `/penny-list` pulls hourly, aggregates by SKU, counts by state, auto‑tiers.
+  - `/report-find` posts directly to Supabase
+  - `/penny-list` fetches from Supabase, aggregates by SKU, counts by state, auto‑tiers
 - **Verified Pennies removed:** `/verified-pennies` permanently redirects to `/penny-list`.
 - **OpenGraph previews are solid:** `GET /api/og?headline=...&v=7` generates shareable OG images; key routes set clear, route-specific headlines. `/api/og` is now `force-dynamic` + `no-store` and no longer embeds a custom font (fixes the \"200 OK but zero-byte body\" failures seen in production).
 - **Command reliability (Dec 15, 12:30 PM):**
@@ -279,9 +290,9 @@ Every AI session must update this after meaningful work.
 
 These must be set in Vercel for the loop to work:
 
-- `GOOGLE_APPS_SCRIPT_URL` - webhook that writes Report Find submissions into the Sheet.
-- `GOOGLE_SHEET_URL` - published CSV feed for the Penny List.
-- `GOOGLE_SHEET_ENRICHMENT_URL` (optional) - published CSV for a dedicated enrichment tab with `Home Depot SKU (6 or 10 digits)`, `IMAGE URL`, `INTERNET SKU` (merged by SKU to fill missing images/links; blanks never overwrite).
+- `NEXT_PUBLIC_SUPABASE_URL` - Supabase project URL
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Supabase anonymous key (for client reads)
+- `SUPABASE_SERVICE_ROLE_KEY` - Supabase service role key (for server writes)
 
 Testing-only flag:
 

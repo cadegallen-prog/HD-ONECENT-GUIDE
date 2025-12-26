@@ -32,11 +32,6 @@ function getTotalReports(locations: Record<string, number>): number {
 
 export function PennyListCard({ item }: PennyListCardProps) {
   const router = useRouter()
-  const commonnessTone = (tier?: string) => {
-    if (tier === "Very Common") return "pill pill-success"
-    if (tier === "Common") return "pill pill-accent"
-    return "pill pill-strong"
-  }
 
   const totalReports = item.locations ? getTotalReports(item.locations) : 0
   const stateCount = item.locations ? Object.keys(item.locations).length : 0
@@ -69,19 +64,9 @@ export function PennyListCard({ item }: PennyListCardProps) {
       <article className="flex flex-col h-full">
         {/* 8pt grid: p-5 = 20px, space-y-4 = 16px between elements */}
         <div className="p-5 flex flex-col flex-1 space-y-4">
-          <div className="flex justify-between items-start gap-3">
-            <div className="flex items-center gap-2 flex-wrap">
-              {item.status && item.status !== item.tier && (
-                <span className="pill pill-strong">{item.status}</span>
-              )}
-              <span
-                className={commonnessTone(item.tier)}
-                aria-label={`Commonness: ${item.tier || "Rare"}`}
-              >
-                {item.tier || "Rare"}
-              </span>
-            </div>
-            <span className="text-sm text-[var(--text-secondary)] font-medium flex items-center gap-1.5 flex-shrink-0">
+          <div className="flex items-start gap-3">
+            {item.status && <span className="pill pill-strong">{item.status}</span>}
+            <span className="ml-auto text-sm text-[var(--text-secondary)] font-medium flex items-center gap-1.5 flex-shrink-0">
               <Calendar className="w-3.5 h-3.5" aria-hidden="true" />
               <time dateTime={item.dateAdded}>{formatRelativeDate(item.dateAdded)}</time>
             </span>
@@ -150,9 +135,8 @@ export function PennyListCard({ item }: PennyListCardProps) {
             </div>
           )}
 
-          <div className="pt-4 border-t border-[var(--border-default)] flex flex-col sm:flex-row sm:items-center justify-between gap-3 mt-auto text-sm text-[var(--text-secondary)]">
-            <span>Community lead</span>
-            <span className="inline-flex items-center flex-wrap gap-3 font-semibold text-[var(--text-primary)]">
+          <div className="pt-4 border-t border-[var(--border-default)] mt-auto">
+            <div className="flex items-center flex-wrap gap-3 text-sm font-semibold text-[var(--text-primary)]">
               <span className="text-[var(--status-success)]">$0.01</span>
               <a
                 href={homeDepotUrl}
@@ -191,7 +175,7 @@ export function PennyListCard({ item }: PennyListCardProps) {
                 <PlusCircle className="w-4 h-4 mr-1.5" aria-hidden="true" />
                 Report this find
               </Button>
-            </span>
+            </div>
           </div>
         </div>
       </article>
@@ -201,11 +185,6 @@ export function PennyListCard({ item }: PennyListCardProps) {
 
 export function PennyListCardCompact({ item }: PennyListCardProps) {
   const router = useRouter()
-  const commonnessTone = (tier?: string) => {
-    if (tier === "Very Common") return "pill pill-success"
-    if (tier === "Common") return "pill pill-accent"
-    return "pill pill-strong"
-  }
 
   const totalReports = item.locations ? getTotalReports(item.locations) : 0
   const stateCount = item.locations ? Object.keys(item.locations).length : 0
@@ -231,13 +210,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
       aria-labelledby={`hot-item-${item.id}-name`}
     >
       <article>
-        <div className="flex items-center justify-between mb-2 gap-2">
-          <span
-            className={commonnessTone(item.tier)}
-            aria-label={`Commonness: ${item.tier || "Rare"}`}
-          >
-            {item.tier || "Rare"}
-          </span>
+        <div className="flex items-center justify-end mb-2">
           <span className="text-xs text-[var(--text-secondary)] font-medium flex items-center gap-1 flex-shrink-0">
             <Calendar className="w-3 h-3" aria-hidden="true" />
             <time dateTime={item.dateAdded}>{formatRelativeDate(item.dateAdded)}</time>

@@ -4,7 +4,6 @@ import { filterValidPennyItems } from "@/lib/penny-list-utils"
 import {
   queryPennyItems,
   getHotItems,
-  type TierFilter,
   type SortOption,
   type DateRange,
 } from "@/lib/penny-list-query"
@@ -26,13 +25,6 @@ function parsePage(value: string | null): number {
   const parsed = Number(value)
   if (Number.isInteger(parsed) && parsed >= 1) return parsed
   return 1
-}
-
-function parseTier(value: string | null): TierFilter {
-  if (value === "Very Common" || value === "Common" || value === "Rare") {
-    return value
-  }
-  return "all"
 }
 
 function parseSort(value: string | null): SortOption {
@@ -70,7 +62,6 @@ export async function GET(request: Request) {
 
   // Parse query parameters
   const state = url.searchParams.get("state") || undefined
-  const tier = parseTier(url.searchParams.get("tier"))
   const photo = url.searchParams.get("photo") === "1"
   const q = url.searchParams.get("q") || undefined
   const sort = parseSort(url.searchParams.get("sort"))
@@ -90,7 +81,7 @@ export async function GET(request: Request) {
     // Apply filters and sorting
     const { items: filteredItems, total } = queryPennyItems(
       validItems,
-      { state, tier, photo, q, sort, days },
+      { state, photo, q, sort, days },
       nowMs
     )
 

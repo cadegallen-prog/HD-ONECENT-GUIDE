@@ -105,20 +105,6 @@ function SortButton({
   )
 }
 
-function TierBadge({ tier }: { tier?: string }) {
-  const colorClasses = (() => {
-    if (tier === "Very Common") {
-      return "pill pill-success"
-    }
-    if (tier === "Common") {
-      return "pill pill-accent"
-    }
-    return "pill pill-strong"
-  })()
-
-  return <span className={colorClasses}>{tier || "Rare"}</span>
-}
-
 export function PennyListTable({ items, sortOption, onSortChange }: PennyListTableProps) {
   const router = useRouter()
 
@@ -130,19 +116,18 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
       </div>
       <div className="overflow-x-auto">
         <table
-          className="w-full text-sm table-fixed min-w-[1060px] penny-list-table"
+          className="w-full text-sm table-fixed min-w-[980px] penny-list-table"
           role="table"
           aria-label="Penny list items"
         >
           <colgroup>
             <col className="w-[7%]" />
-            <col className="w-[26%]" />
+            <col className="w-[30%]" />
             <col className="w-[13%]" />
-            <col className="w-[11%]" />
-            <col className="w-[14%]" />
+            <col className="w-[18%]" />
             <col className="w-[9%]" />
-            <col className="w-[11%]" />
-            <col className="w-[9%]" />
+            <col className="w-[13%]" />
+            <col className="w-[10%]" />
           </colgroup>
           <thead>
             <tr className="border-b border-[var(--border-default)] bg-[var(--bg-recessed)]">
@@ -165,12 +150,6 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
                 className="text-left px-4 py-3 font-semibold text-[var(--text-primary)]"
               >
                 SKU
-              </th>
-              <th
-                scope="col"
-                className="text-left px-4 py-3 font-semibold text-[var(--text-primary)]"
-              >
-                Tier
               </th>
               <th
                 scope="col"
@@ -262,11 +241,6 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
                       </code>
                       <CopyButton sku={item.sku} />
                     </div>
-                  </td>
-
-                  {/* Tier */}
-                  <td className="px-4 py-3 align-top">
-                    <TierBadge tier={item.tier} />
                   </td>
 
                   {/* States */}

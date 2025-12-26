@@ -2,14 +2,13 @@
 
 import { useState, useMemo, useEffect, useCallback, useRef } from "react"
 import { useRouter, usePathname } from "next/navigation"
-import { AlertTriangle, Package, Clock, CheckCircle2, Info } from "lucide-react"
+import { AlertTriangle, Package, Clock, CheckCircle2, Info, ChevronDown } from "lucide-react"
 import { TrackableLink } from "@/components/trackable-link"
 import { formatRelativeDate } from "@/lib/penny-list-utils"
 import { trackEvent } from "@/lib/analytics"
 import { FeedbackWidget } from "@/components/feedback-widget"
 import {
   PennyListFilters,
-  type TierFilter,
   type SortOption,
   type ViewMode,
   type DateRange,
@@ -66,7 +65,12 @@ export function PennyListClient({
 
   const HOT_WINDOW_DAYS = 14
 
-  const initialParams = useMemo(() => toURLSearchParams(initialSearchParams), [initialSearchParams])
+  const { initialParams, initialParamsString, hadTierParam } = useMemo(() => {
+    const params = toURLSearchParams(initialSearchParams)
+    const hadTierParam = params.has("tier")
+    if (hadTierParam) params.delete("tier")
+    return { initialParams: params, initialParamsString: params.toString(), hadTierParam }
+  }, [initialSearchParams])
   const paramsRef = useRef<URLSearchParams>(initialParams)
   const hasMountedRef = useRef(false)
   const hasTrackedViewRef = useRef(false)
@@ -76,10 +80,6 @@ export function PennyListClient({
 
   // Initialize state from URL params
   const [stateFilter, setStateFilter] = useState(() => getInitialParam("state"))
-  const [tierFilter, setTierFilter] = useState<TierFilter>(() => {
-    const value = getInitialParam("tier") as TierFilter
-    return value === "Very Common" || value === "Common" || value === "Rare" ? value : "all"
-  })
   const [hasPhotoOnly, setHasPhotoOnly] = useState(() => getInitialParam("photo") === "1")
   const [searchQuery, setSearchQuery] = useState(() => getInitialParam("q"))
   const [sortOption, setSortOption] = useState<SortOption>(() => {
@@ -139,6 +139,12 @@ export function PennyListClient({
   useEffect(() => {
     hasMountedRef.current = true
   }, [])
+
+  useEffect(() => {
+    if (!hadTierParam) return
+    const newURL = initialParamsString ? `${pathname}?${initialParamsString}` : pathname
+    router.replace(newURL, { scroll: false })
+  }, [hadTierParam, initialParamsString, pathname, router])
 
   // Compute freshness from current items (for analytics)
   const freshnessHours = useMemo(() => {
@@ -212,15 +218,6 @@ export function PennyListClient({
     [trackFilterChange, updateURL]
   )
 
-  const setTierFilterWithURL = useCallback(
-    (value: TierFilter) => {
-      setTierFilter(value)
-      updateURL({ tier: value === "all" ? null : value })
-      trackFilterChange("tier", value, value === "all" ? "clear" : "apply")
-    },
-    [trackFilterChange, updateURL]
-  )
-
   const setHasPhotoOnlyWithURL = useCallback(
     (value: boolean) => {
       setHasPhotoOnly(value)
@@ -270,7 +267,6 @@ export function PennyListClient({
     try {
       const params = new URLSearchParams()
       if (stateFilter) params.set("state", stateFilter)
-      if (tierFilter !== "all") params.set("tier", tierFilter)
       if (hasPhotoOnly) params.set("photo", "1")
       if (searchQuery) params.set("q", searchQuery)
       if (sortOption !== "newest") params.set("sort", sortOption)
@@ -278,8 +274,7 @@ export function PennyListClient({
       params.set("page", String(currentPage))
       params.set("perPage", String(itemsPerPage))
       // Include hot items only when no filters are active (for initial-like requests)
-      const noFiltersActive =
-        !stateFilter && tierFilter === "all" && !hasPhotoOnly && !searchQuery && dateRange === "6m"
+      const noFiltersActive = !stateFilter && !hasPhotoOnly && !searchQuery && dateRange === "6m"
       if (noFiltersActive) params.set("includeHot", "1")
 
       const response = await fetch(`/api/penny-list?${params.toString()}`)
@@ -296,16 +291,7 @@ export function PennyListClient({
     } finally {
       setIsLoading(false)
     }
-  }, [
-    stateFilter,
-    tierFilter,
-    hasPhotoOnly,
-    searchQuery,
-    sortOption,
-    dateRange,
-    currentPage,
-    itemsPerPage,
-  ])
+  }, [stateFilter, hasPhotoOnly, searchQuery, sortOption, dateRange, currentPage, itemsPerPage])
 
   // Fetch when params change (but not on initial render - we have server data)
   useEffect(() => {
@@ -329,11 +315,7 @@ export function PennyListClient({
   }, [items.length, searchQuery])
 
   const hasActiveFilters =
-    stateFilter !== "" ||
-    tierFilter !== "all" ||
-    hasPhotoOnly ||
-    searchQuery !== "" ||
-    dateRange !== "6m"
+    stateFilter !== "" || hasPhotoOnly || searchQuery !== "" || dateRange !== "6m"
 
   useEffect(() => {
     if (!hasMountedRef.current || hasTrackedViewRef.current) return
@@ -352,16 +334,7 @@ export function PennyListClient({
     if (currentPage === 1) return
     setCurrentPage(1)
     updateURL({ page: null })
-  }, [
-    currentPage,
-    dateRange,
-    hasPhotoOnly,
-    searchQuery,
-    sortOption,
-    stateFilter,
-    tierFilter,
-    updateURL,
-  ])
+  }, [currentPage, dateRange, hasPhotoOnly, searchQuery, sortOption, stateFilter, updateURL])
 
   // Pagination - API returns the page slice, so we just use total from state
   const pageCount = Math.max(1, Math.ceil(total / itemsPerPage))
@@ -404,8 +377,6 @@ export function PennyListClient({
         filteredCount={total}
         stateFilter={stateFilter}
         setStateFilter={setStateFilterWithURL}
-        tierFilter={tierFilter}
-        setTierFilter={setTierFilterWithURL}
         hasPhotoOnly={hasPhotoOnly}
         setHasPhotoOnly={setHasPhotoOnlyWithURL}
         searchQuery={searchQuery}
@@ -434,7 +405,7 @@ export function PennyListClient({
                 Hot Right Now
               </h2>
               <p className="text-sm text-[var(--text-secondary)]">
-                Very Common finds reported in the last {HOT_WINDOW_DAYS} days. YMMV.
+                Frequently reported finds in the last {HOT_WINDOW_DAYS} days. YMMV.
               </p>
             </div>
             <span className="pill pill-success">Fresh signal</span>
@@ -543,18 +514,24 @@ export function PennyListClient({
             >
               Items per page
             </label>
-            <select
-              id="penny-list-items-per-page"
-              value={itemsPerPage}
-              onChange={(event) => setItemsPerPageWithURL(Number(event.target.value))}
-              className="h-10 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] px-3 text-sm font-medium text-[var(--text-primary)] outline-none transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
-            >
-              {ITEMS_PER_PAGE_OPTIONS.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
+            <div className="relative">
+              <select
+                id="penny-list-items-per-page"
+                value={itemsPerPage}
+                onChange={(event) => setItemsPerPageWithURL(Number(event.target.value))}
+                className="h-10 min-w-[88px] appearance-none rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] pl-3 pr-10 text-sm font-medium text-[var(--text-primary)] outline-none transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+              >
+                {ITEMS_PER_PAGE_OPTIONS.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown
+                className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-muted)]"
+                aria-hidden="true"
+              />
+            </div>
           </div>
           <div className="flex items-center gap-2">
             <button
@@ -599,7 +576,6 @@ export function PennyListClient({
                 type="button"
                 onClick={() => {
                   setStateFilterWithURL("")
-                  setTierFilterWithURL("all")
                   setSearchQueryWithURL("")
                   setDateRangeWithURL("6m")
                 }}

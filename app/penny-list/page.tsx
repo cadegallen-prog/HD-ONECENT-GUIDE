@@ -12,13 +12,13 @@ const DEFAULT_PER_PAGE = 50
 export const metadata: Metadata = {
   title: "Home Depot Penny List: Latest $0.01 Item Sightings | Penny Central",
   description:
-    "Latest community-reported Home Depot penny list. Search and filter by state, tier, and date. Updated hourly with the freshest penny sightings.",
+    "Latest community-reported Home Depot penny list. Search and filter by state, date, and SKU. Updated hourly with the freshest penny sightings.",
   openGraph: {
     type: "website",
     url: "https://www.pennycentral.com/penny-list",
     title: "Home Depot Penny List ($0.01 Finds)",
     description:
-      "Latest community-reported penny sightings at Home Depot. Search and filter by state, tier, and date.",
+      "Latest community-reported penny sightings at Home Depot. Search and filter by state, date, and SKU.",
     images: [ogImageUrl("penny-list")],
   },
   twitter: {
@@ -59,11 +59,6 @@ function parsePage(value: string | null): number {
 export default async function PennyListPage({ searchParams }: PennyListPageProps) {
   const resolvedSearchParams = (await searchParams) ?? {}
   const state = getFirstParam(resolvedSearchParams, "state") || undefined
-  const tierParam = getFirstParam(resolvedSearchParams, "tier")
-  const tier =
-    tierParam === "Very Common" || tierParam === "Common" || tierParam === "Rare"
-      ? tierParam
-      : "all"
   const photo = getFirstParam(resolvedSearchParams, "photo") === "1"
   const q = getFirstParam(resolvedSearchParams, "q") || undefined
   const sortParam = getFirstParam(resolvedSearchParams, "sort")
@@ -145,7 +140,7 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
   // Compute initial page slice from URL params (so reloads/bookmarks show the correct results)
   const { items: filteredItems, total: initialTotal } = queryPennyItems(
     validItems,
-    { state, tier, photo, q, sort, days },
+    { state, photo, q, sort, days },
     nowMs
   )
   const pageCount = Math.max(1, Math.ceil(initialTotal / perPage))
