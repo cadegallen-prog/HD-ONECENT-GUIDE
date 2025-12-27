@@ -248,17 +248,22 @@ export function buildPennyItemsFromRows(rows: SupabasePennyRow[]): PennyItem[] {
       return
     }
 
+    // Save the previous timestamp before updating
+    const previousTimestampMs = existing.latestTimestampMs
+
+    // Update to track the latest timestamp
     existing.latestTimestampMs = Math.max(existing.latestTimestampMs, timestampMs)
 
-    if (dateInfo && dateInfo.ms >= existing.latestTimestampMs) {
+    // Use the previous value for comparisons to ensure newer submissions win
+    if (dateInfo && dateInfo.ms > previousTimestampMs) {
       existing.dateAdded = dateInfo.iso
     }
 
-    if (name && (!existing.name || timestampMs >= existing.latestTimestampMs)) {
+    if (name && (!existing.name || timestampMs > previousTimestampMs)) {
       existing.name = name
     }
 
-    if (notes && (!existing.notes || timestampMs >= existing.latestTimestampMs)) {
+    if (notes && (!existing.notes || timestampMs > previousTimestampMs)) {
       existing.notes = notes
     }
 

@@ -4,19 +4,27 @@
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-filesystem", "${workspaceFolder}"]
     },
-    "git": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-git", "--repository", "${workspaceFolder}"]
-    },
     "github": {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-github"]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp-server"]
     },
     "supabase": {
       "command": "npx",
       "args": ["-y", "@supabase/mcp-server-supabase"],
       "env": {
+        "SUPABASE_URL": "${env:NEXT_PUBLIC_SUPABASE_URL}",
         "SUPABASE_ACCESS_TOKEN": "${env:SUPABASE_ACCESS_TOKEN}"
+      }
+    },
+    "vercel": {
+      "command": "npx",
+      "args": ["-y", "@open-mcp/vercel"],
+      "env": {
+        "VERCEL_ACCESS_TOKEN": "${env:VERCEL_ACCESS_TOKEN}"
       }
     }
   }

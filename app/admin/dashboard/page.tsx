@@ -223,7 +223,17 @@ export default function AdminDashboard() {
                         </div>
                       )}
                       <div className="flex items-center gap-2 text-[var(--text-muted)] text-xs">
-                        Submitted: {new Date(submission.submittedAt).toLocaleString()}
+                        Submitted:{" "}
+                        {new Date(submission.submittedAt).toLocaleString("en-US", {
+                          timeZone: "America/New_York",
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                          hour: "numeric",
+                          minute: "2-digit",
+                          hour12: true,
+                        })}{" "}
+                        EST
                       </div>
                     </div>
 

@@ -1,3 +1,5 @@
+const { withSentryConfig } = require("@sentry/nextjs");
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false, // Disabled due to Leaflet map initialization issues
@@ -104,7 +106,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: blob: https://*.tile.openstreetmap.org https://*.google-analytics.com https://*.googletagmanager.com https:",
-              "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://www.befrugal.com https://nominatim.openstreetmap.org",
+              "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://www.befrugal.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io",
               "frame-ancestors 'none'",
               "object-src 'none'",
               "base-uri 'self'",
@@ -146,4 +148,33 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
+module.exports = withSentryConfig(nextConfig, {
+  // Sentry build-time configuration options
+  org: "pennycentral",
+  project: "javascript-nextjs",
+
+  // Only print Sentry logs for errors
+  silent: true,
+
+  // Upload source maps in production builds only
+  widenClientFileUpload: true,
+
+  // Webpack-specific configuration
+  webpack: {
+    // Automatically annotate React components for better error messages
+    reactComponentAnnotation: {
+      enabled: true,
+    },
+    // Automatically tree-shake Sentry logger statements
+    treeshake: {
+      removeDebugLogging: true,
+    },
+  },
+
+  // Disable Sentry SDK bundling in development
+  disableServerWebpackPlugin: process.env.NODE_ENV === "development",
+  disableClientWebpackPlugin: process.env.NODE_ENV === "development",
+
+  // Hide source maps from generated client bundles
+  hideSourceMaps: true,
+})

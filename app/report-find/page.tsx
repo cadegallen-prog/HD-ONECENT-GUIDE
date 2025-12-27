@@ -313,9 +313,9 @@ function ReportFindForm() {
               htmlFor="productUrl"
               className="block text-sm font-medium text-[var(--text-primary)] mb-2"
             >
-              Have a Home Depot product link?{" "}
+              Home Depot product URL{" "}
               <span className="text-xs text-[var(--text-muted)] font-normal">
-                (optional shortcut)
+                (optional - auto-fills product details)
               </span>
             </label>
             <input
@@ -327,7 +327,7 @@ function ReportFindForm() {
               className="w-full px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent text-sm"
             />
             <p className="mt-1 text-xs text-[var(--text-muted)]">
-              Paste a product URL and we&apos;ll extract the SKU automatically
+              Paste a product URL to auto-fill item name and SKU
             </p>
           </div>
 

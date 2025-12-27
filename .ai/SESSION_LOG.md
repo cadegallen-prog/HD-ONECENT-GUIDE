@@ -12,6 +12,53 @@
 
 ---
 
+## 2025-12-27 - Claude Code (Sonnet 4.5) - Critical Bug Fixes + MCP Setup
+
+**AI:** Claude Code (Sonnet 4.5)
+**Goal:** Fix critical bugs from handoff (SKU aggregation, timezone display), update SKU validation, and configure all MCP servers.
+
+**Changes Made:**
+- **Bug #1 - SKU Aggregation:** Fixed `lib/fetch-penny-data.ts` so newest submissions properly override oldest (saved previous timestamp before comparison).
+- **Bug #2 - Timezone Display:** Fixed `app/admin/dashboard/page.tsx` and `scripts/check-recent-submissions.ts` to display EST instead of UTC.
+- **SKU Validation:** Updated `lib/sku.ts` - 10-digit SKUs must now start with "100" or "101" (not just "10").
+- **MCP Configuration:** Removed broken Git MCP, added Playwright + Vercel MCPs, configured Supabase MCP with URL + token.
+- **Test Updates:** Updated `tests/submit-find-route.test.ts` with valid test SKUs (1009876543).
+- **Lint Fixes:** Fixed unused error variables in admin API routes.
+
+**Outcome:** ✅ Success — All quality gates passing:
+- `npm run lint`: 0 errors
+- `npm run build`: successful (904 pages)
+- `npm run test:unit`: 21/21 passing
+- `npm run test:e2e`: 64/64 passing
+
+**Files Modified:**
+- `lib/fetch-penny-data.ts` - SKU aggregation logic
+- `lib/sku.ts` - 100/101 prefix validation
+- `app/admin/dashboard/page.tsx` - EST timezone
+- `scripts/check-recent-submissions.ts` - EST timezone
+- `.vscode/mcp.json` - MCP configuration (5 servers)
+- `.env.local` - Added VERCEL_ACCESS_TOKEN
+- `tests/submit-find-route.test.ts` - Updated test SKUs
+- `app/api/admin/*.ts` - Lint fixes
+
+**MCP Status (5 configured):**
+1. Filesystem ✅
+2. GitHub ✅
+3. Playwright ✅
+4. Supabase ✅ (needs VSCode restart)
+5. Vercel ✅ (needs VSCode restart)
+
+**Learnings:**
+- Git MCP package doesn't exist - Bash tool handles git operations fine.
+- Supabase MCP needs both SUPABASE_URL and SUPABASE_ACCESS_TOKEN env vars.
+- SKU aggregation bug was caused by updating latestTimestampMs before using it for comparisons.
+
+**For Next AI:**
+- If Supabase MCP still won't start after VSCode restart, it's optional - can be removed.
+- Test submissions with SKU 123456 should be cleaned up from database (spam test data).
+
+---
+
 ## 2025-12-26 - ChatGPT Codex (GPT-5.2) - Penny List UI Polish (Sticky Filters + Cleaner Cards)
 
 **AI:** ChatGPT Codex (GPT-5.2)

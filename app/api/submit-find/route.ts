@@ -109,6 +109,24 @@ export async function POST(request: NextRequest) {
 
     const normalizedSku = skuCheck.normalized
 
+    // Block obvious test/spam SKUs
+    const spamPatterns = [
+      /^1{10}$/, // 1111111111
+      /^(12345678|1234567890|123456789|12345|123456)$/, // Sequential
+      /^10{9,}$/, // 1000000000, 1000000001, etc.
+      /^(\d)\1{5,}$/, // 6+ repeating digits
+    ]
+
+    if (spamPatterns.some((pattern) => pattern.test(normalizedSku.toString()))) {
+      return NextResponse.json(
+        {
+          error:
+            "This SKU appears to be invalid. Please double-check and enter a real Home Depot SKU.",
+        },
+        { status: 400 }
+      )
+    }
+
     // Validate quantity (optional, but if provided must be 1-99)
     let qty: number | undefined
     if (body.quantity && body.quantity.trim().length > 0) {

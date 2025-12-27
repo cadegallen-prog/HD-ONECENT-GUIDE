@@ -35,11 +35,11 @@ export function validateSku(rawSku: string): { normalized: string; error?: strin
     return { normalized, error: "SKU must be 6 or 10 digits." }
   }
 
-  if (normalized.length === 10 && !normalized.startsWith("10")) {
+  if (normalized.length === 10 && !normalized.startsWith("101") && !normalized.startsWith("100")) {
     return {
       normalized,
       error:
-        '10-digit SKUs should start with "10". If you used a receipt, you probably entered a UPC/barcode instead.',
+        '10-digit SKUs should start with "100" or "101". If you used a receipt, you probably entered a UPC/barcode instead.',
     }
   }
 

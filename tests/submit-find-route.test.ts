@@ -20,7 +20,7 @@ test("inserts only allowed fields into Supabase", async () => {
     method: "POST",
     body: JSON.stringify({
       itemName: "Test Item",
-      sku: "123456",
+      sku: "1009876543",
       storeCity: "Atlanta",
       storeState: "GA",
       dateFound: "2025-12-01",
@@ -41,7 +41,7 @@ test("inserts only allowed fields into Supabase", async () => {
   const payload = inserted[0] as Record<string, unknown>
   assert.deepStrictEqual(payload, {
     item_name: "Test Item",
-    home_depot_sku_6_or_10_digits: "123456",
+    home_depot_sku_6_or_10_digits: "1009876543",
     store_city_state: "Atlanta, GA",
     purchase_date: "2025-12-01",
     exact_quantity_found: 2,
@@ -86,7 +86,7 @@ test("falls back to service role insert when anon is RLS-blocked", async () => {
     method: "POST",
     body: JSON.stringify({
       itemName: "Test Item",
-      sku: "123456",
+      sku: "1009876543",
       storeCity: "Atlanta",
       storeState: "GA",
       dateFound: "2025-12-01",
@@ -146,7 +146,7 @@ test("does not retry with service role when fallback disabled", async () => {
     method: "POST",
     body: JSON.stringify({
       itemName: "Test Item",
-      sku: "123456",
+      sku: "1009876543",
       storeCity: "Atlanta",
       storeState: "GA",
       dateFound: "2025-12-01",

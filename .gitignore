@@ -72,3 +72,7 @@ data/purchase-history-*.csv
 
 # privacy: local Lighthouse runs can include machine paths
 lighthouse-mobile.json
+
+# sentry
+.sentryclirc
+.env.sentry-build-plugin
