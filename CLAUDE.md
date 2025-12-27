@@ -88,18 +88,39 @@ netstat -ano | findstr :3001
 
 ---
 
-## MCP Servers (4 available)
+## MCP Servers (5 available)
 
-1. **Filesystem** - files (use automatically)
-2. **Git** - version control (use automatically)
-3. **GitHub** - PRs/issues (use when needed)
-4. **Playwright** - browser testing (REQUIRED for UI)
+**Configuration:** `.vscode/mcp.json` (for Claude Code only)
+
+1. **Filesystem** - File operations (use automatically)
+2. **GitHub** - PRs/issues/repo management (use when needed)
+3. **Playwright** - Browser testing & screenshots (REQUIRED for UI changes)
+4. **Supabase** - Database queries during development (optional, requires VSCode restart)
+5. **Vercel** - Deployment management (optional, requires VSCode restart)
 
 **Playwright required for:**
-
 - UI changes (buttons, forms, layouts, colors)
-- JavaScript changes (Store Finder, interactive)
-- "Bug fixed" claims (visual bugs)
+- JavaScript changes (Store Finder, interactive features)
+- "Bug fixed" claims (visual bugs need proof)
+
+**Note:** Git MCP removed (package doesn't exist) - use Bash tool for git operations instead.
+
+## AI Tool Differentiation
+
+**When user mentions "Copilot" or GitHub Copilot:**
+- Refers to GitHub Copilot Chat within VSCode
+- No MCP server support
+- Primarily code completion and inline chat
+
+**When user mentions "Codex" or ChatGPT Codex:**
+- Refers to the ChatGPT Codex VSCode extension (GPT-5.2)
+- Uses MCPs configured in `~/.codex/config.toml`
+- Full development agent with high reasoning effort
+
+**When user mentions "Claude" or Claude Code:**
+- Refers to Claude Code VSCode extension (Sonnet 4.5 or Opus 4.5)
+- Uses MCPs configured in `.vscode/mcp.json`
+- Full development agent with MCP server integration
 
 ---
 
