@@ -20,12 +20,14 @@
     "ai:doctor": "tsx scripts/ai-doctor.ts",
     "ai:verify": "tsx scripts/ai-verify.ts",
     "ai:proof": "tsx scripts/ai-proof.ts",
+    "enrich:auto": "tsx scripts/auto-enrich.ts",
     "prepare": "husky"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.8",
     "@hookform/resolvers": "^3.9.1",
     "@sentry/nextjs": "^10.32.1",
+    "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.89.0",
     "@types/leaflet": "^1.9.21",
     "@vercel/analytics": "^1.5.0",

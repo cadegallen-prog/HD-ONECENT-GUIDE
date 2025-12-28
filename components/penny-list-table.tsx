@@ -1,10 +1,11 @@
 "use client"
 
 import { ArrowUpDown, ArrowUp, ArrowDown, Copy, Check, PlusCircle } from "lucide-react"
-import { useState } from "react"
-import type { KeyboardEvent } from "react"
+import { useState, useCallback } from "react"
+import type { KeyboardEvent, MouseEvent } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 import { US_STATES } from "@/lib/us-states"
 import { formatRelativeDate } from "@/lib/penny-list-utils"
 import { PennyThumbnail } from "@/components/penny-thumbnail"
@@ -12,7 +13,9 @@ import type { PennyItem } from "@/lib/fetch-penny-data"
 import type { SortOption } from "./penny-list-filters"
 import { trackEvent } from "@/lib/analytics"
 import { buildReportFindUrl } from "@/lib/report-find-link"
+import { formatSkuForDisplay } from "@/lib/sku"
 import { Button } from "@/components/ui/button"
+import { copyToClipboard } from "@/components/copy-sku-button"
 
 interface PennyListTableProps {
   items: (PennyItem & { parsedDate?: Date | null })[]
@@ -34,16 +37,30 @@ function getTotalReports(locations: Record<string, number>): number {
 function CopyButton({ sku }: { sku: string }) {
   const [copied, setCopied] = useState(false)
 
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(sku)
-    const skuMasked = sku.slice(-4)
-    trackEvent("sku_copy", { skuMasked, source: "table" })
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
+  const handleCopy = useCallback(
+    async (e: MouseEvent) => {
+      e.preventDefault()
+      e.stopPropagation()
+
+      const success = await copyToClipboard(sku)
+      if (success) {
+        const skuMasked = sku.slice(-4)
+        trackEvent("sku_copy", { skuMasked, source: "table" })
+        setCopied(true)
+        toast.success(`Copied SKU ${formatSkuForDisplay(sku)}`, {
+          duration: 2000,
+        })
+        setTimeout(() => setCopied(false), 1500)
+      } else {
+        toast.error("Failed to copy SKU", { duration: 2000 })
+      }
+    },
+    [sku]
+  )
 
   return (
     <button
+      type="button"
       onClick={handleCopy}
       className="px-2 py-1 rounded transition-colors focus-visible:outline-2 focus-visible:outline-[var(--cta-primary)] min-h-[36px] hover:bg-[var(--bg-hover)]"
       aria-label={copied ? "SKU copied" : `Copy SKU ${sku}`}
@@ -85,6 +102,7 @@ function SortButton({
 
   return (
     <button
+      type="button"
       onClick={handleClick}
       className={`flex items-center gap-1 font-medium transition-colors hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-[var(--cta-primary)] ${
         isActive ? "text-[var(--cta-primary)]" : "text-[var(--text-muted)]"
@@ -237,7 +255,7 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
                       onKeyDownCapture={(event) => event.stopPropagation()}
                     >
                       <code className="font-mono text-sm bg-[var(--bg-elevated)] border border-[var(--border-default)] px-2.5 py-1.5 rounded select-all text-[var(--text-primary)] font-medium">
-                        {item.sku}
+                        {formatSkuForDisplay(item.sku)}
                       </code>
                       <CopyButton sku={item.sku} />
                     </div>

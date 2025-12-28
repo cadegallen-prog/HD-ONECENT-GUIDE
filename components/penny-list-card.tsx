@@ -1,17 +1,21 @@
 "use client"
 
-import { Calendar, ExternalLink, PlusCircle } from "lucide-react"
+import { useState, useCallback } from "react"
+import { Calendar, ExternalLink, PlusCircle, Copy, Check } from "lucide-react"
 import Link from "next/link"
-import { CopySkuButton } from "@/components/copy-sku-button"
+import { toast } from "sonner"
+import { copyToClipboard } from "@/components/copy-sku-button"
 import { ShareButton } from "@/components/share-button"
+import { AddToListButton } from "@/components/add-to-list-button"
 import { PennyThumbnail } from "@/components/penny-thumbnail"
 import { US_STATES } from "@/lib/us-states"
 import { formatRelativeDate } from "@/lib/penny-list-utils"
 import type { PennyItem } from "@/lib/fetch-penny-data"
 import { getHomeDepotProductUrl } from "@/lib/home-depot"
+import { formatSkuForDisplay } from "@/lib/sku"
 import { buildReportFindUrl } from "@/lib/report-find-link"
 import { trackEvent } from "@/lib/analytics"
-import type { KeyboardEvent } from "react"
+import type { KeyboardEvent, MouseEvent } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 
@@ -32,6 +36,7 @@ function getTotalReports(locations: Record<string, number>): number {
 
 export function PennyListCard({ item }: PennyListCardProps) {
   const router = useRouter()
+  const [copied, setCopied] = useState(false)
 
   const totalReports = item.locations ? getTotalReports(item.locations) : 0
   const stateCount = item.locations ? Object.keys(item.locations).length : 0
@@ -50,6 +55,27 @@ export function PennyListCard({ item }: PennyListCardProps) {
       openSkuPage()
     }
   }
+
+  const handleSkuCopy = useCallback(
+    async (e: MouseEvent) => {
+      e.preventDefault()
+      e.stopPropagation()
+
+      const success = await copyToClipboard(item.sku)
+      if (success) {
+        const skuMasked = item.sku.slice(-4)
+        trackEvent("sku_copy", { skuMasked, source: "card-pill" })
+        setCopied(true)
+        toast.success(`Copied SKU ${formatSkuForDisplay(item.sku)}`, {
+          duration: 2000,
+        })
+        setTimeout(() => setCopied(false), 1500)
+      } else {
+        toast.error("Failed to copy SKU", { duration: 2000 })
+      }
+    },
+    [item.sku]
+  )
 
   return (
     <div
@@ -96,14 +122,21 @@ export function PennyListCard({ item }: PennyListCardProps) {
                 </h3>
               </Link>
 
-              <div
-                className="flex items-center gap-2 text-sm text-[var(--text-primary)] font-mono elevation-2 border border-[var(--border-strong)] px-2.5 py-1.5 rounded w-fit font-medium"
-                onClick={(e) => e.stopPropagation()}
+              <button
+                type="button"
+                onClick={handleSkuCopy}
+                className="flex items-center gap-2 text-sm text-[var(--text-primary)] font-mono elevation-2 border border-[var(--border-strong)] px-3 py-2 rounded w-fit font-medium cursor-pointer hover:border-[var(--cta-primary)] hover:bg-[var(--bg-hover)] transition-colors min-h-[44px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+                aria-label={`Copy SKU ${item.sku} to clipboard`}
+                title="Tap to copy SKU"
               >
                 <span className="text-[var(--text-muted)]">SKU</span>
-                {item.sku}
-                <CopySkuButton sku={item.sku} source="card" />
-              </div>
+                <span className="font-semibold">{formatSkuForDisplay(item.sku)}</span>
+                {copied ? (
+                  <Check className="w-4 h-4 text-[var(--status-success)]" aria-hidden="true" />
+                ) : (
+                  <Copy className="w-4 h-4 text-[var(--text-muted)]" aria-hidden="true" />
+                )}
+              </button>
             </div>
           </div>
 
@@ -155,6 +188,13 @@ export function PennyListCard({ item }: PennyListCardProps) {
               >
                 <ShareButton sku={item.sku} itemName={item.name} source="card" />
               </span>
+              <span
+                onClick={(e) => {
+                  e.stopPropagation()
+                }}
+              >
+                <AddToListButton sku={item.sku} itemName={item.name} variant="icon" />
+              </span>
               <Button
                 type="button"
                 variant="secondary"
@@ -185,6 +225,7 @@ export function PennyListCard({ item }: PennyListCardProps) {
 
 export function PennyListCardCompact({ item }: PennyListCardProps) {
   const router = useRouter()
+  const [copied, setCopied] = useState(false)
 
   const totalReports = item.locations ? getTotalReports(item.locations) : 0
   const stateCount = item.locations ? Object.keys(item.locations).length : 0
@@ -198,6 +239,27 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
       openSkuPage()
     }
   }
+
+  const handleSkuCopy = useCallback(
+    async (e: MouseEvent) => {
+      e.preventDefault()
+      e.stopPropagation()
+
+      const success = await copyToClipboard(item.sku)
+      if (success) {
+        const skuMasked = item.sku.slice(-4)
+        trackEvent("sku_copy", { skuMasked, source: "card-compact-pill" })
+        setCopied(true)
+        toast.success(`Copied SKU ${formatSkuForDisplay(item.sku)}`, {
+          duration: 2000,
+        })
+        setTimeout(() => setCopied(false), 1500)
+      } else {
+        toast.error("Failed to copy SKU", { duration: 2000 })
+      }
+    },
+    [item.sku]
+  )
 
   return (
     <div
@@ -239,9 +301,21 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
                 {item.name}
               </h3>
             </Link>
-            <div className="mt-2 flex items-center gap-2 text-xs text-[var(--text-primary)] font-mono elevation-2 border border-[var(--border-strong)] px-2 py-1 rounded w-fit font-medium">
-              SKU: {item.sku}
-            </div>
+            <button
+              type="button"
+              onClick={handleSkuCopy}
+              className="mt-2 flex items-center gap-2 text-xs text-[var(--text-primary)] font-mono elevation-2 border border-[var(--border-strong)] px-2.5 py-1.5 rounded w-fit font-medium cursor-pointer hover:border-[var(--cta-primary)] hover:bg-[var(--bg-hover)] transition-colors min-h-[36px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+              aria-label={`Copy SKU ${item.sku} to clipboard`}
+              title="Tap to copy SKU"
+            >
+              <span>SKU:</span>
+              <span className="font-semibold">{formatSkuForDisplay(item.sku)}</span>
+              {copied ? (
+                <Check className="w-3.5 h-3.5 text-[var(--status-success)]" aria-hidden="true" />
+              ) : (
+                <Copy className="w-3.5 h-3.5 text-[var(--text-muted)]" aria-hidden="true" />
+              )}
+            </button>
           </div>
         </div>
         {totalReports > 0 && (
@@ -272,7 +346,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
             )}
           </div>
         )}
-        <div className="mt-3 pt-3 border-t border-[var(--border-default)]">
+        <div className="mt-3 pt-3 border-t border-[var(--border-default)] flex items-center gap-2">
           <Button
             type="button"
             variant="secondary"
@@ -289,12 +363,15 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
                 buildReportFindUrl({ sku: item.sku, name: item.name, src: "card-compact" })
               )
             }}
-            className="relative z-10 pointer-events-auto w-full"
+            className="relative z-10 pointer-events-auto flex-1"
             aria-label={`Report finding ${item.name}`}
           >
             <PlusCircle className="w-4 h-4 mr-1.5" aria-hidden="true" />
             Report this find
           </Button>
+          <span onClick={(e) => e.stopPropagation()}>
+            <AddToListButton sku={item.sku} itemName={item.name} variant="icon" />
+          </span>
         </div>
       </article>
     </div>

@@ -23,6 +23,20 @@ export type EventName =
   | "return_visit"
   | "report_duplicate_click"
   | "report_prefill_loaded"
+  // Personal list events
+  | "add_to_list_clicked"
+  | "add_to_list_completed"
+  | "list_item_removed"
+  | "priority_changed"
+  | "found_status_changed"
+  // Sharing events
+  | "share_link_copied"
+  | "shared_list_viewed"
+  | "save_copy_clicked"
+  | "save_copy_completed"
+  // In-store mode events
+  | "in_store_mode_enabled"
+  | "in_store_mode_disabled"
   // Legacy/compat events (keep until removed from UI)
   | "newsletter_click"
   | "store_search"

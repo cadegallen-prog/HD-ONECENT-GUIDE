@@ -3,26 +3,10 @@
 import { useEffect, useRef, useState, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { AlertCircle, CheckCircle2, MapPin, Package, Calendar, Info } from "lucide-react"
+import { AlertCircle, CheckCircle2, MapPin, Package, Calendar, Info, Pencil } from "lucide-react"
 import { trackEvent } from "@/lib/analytics"
 import { US_STATES } from "@/lib/us-states"
-import { normalizeSku, validateSku } from "@/lib/sku"
-
-// Format SKU for display: 123456 -> 123-456, 1234567890 -> 1234-567-890
-function formatSkuForDisplay(rawSku: string): string {
-  const digits = rawSku.replace(/\D/g, "")
-  if (digits.length <= 3) return digits
-  if (digits.length <= 6) {
-    return `${digits.slice(0, 3)}-${digits.slice(3)}`
-  }
-  if (digits.length <= 9) {
-    return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`
-  }
-  if (digits.length <= 10) {
-    return `${digits.slice(0, 4)}-${digits.slice(4, 7)}-${digits.slice(7)}`
-  }
-  return `${digits.slice(0, 4)}-${digits.slice(4, 7)}-${digits.slice(7, 10)}`
-}
+import { normalizeSku, validateSku, formatSkuForDisplay } from "@/lib/sku"
 
 // Get raw digits from SKU input
 function getRawSku(input: string): string {
@@ -49,6 +33,7 @@ function ReportFindForm() {
 
   const [skuDisplay, setSkuDisplay] = useState("")
   const [skuError, setSkuError] = useState("")
+  const [skuLocked, setSkuLocked] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [result, setResult] = useState<{
     success: boolean
@@ -101,6 +86,7 @@ function ReportFindForm() {
       const formattedSku = formatSkuForDisplay(skuParam)
       setFormData((prev) => ({ ...prev, sku: skuParam }))
       setSkuDisplay(formattedSku)
+      setSkuLocked(true) // Lock SKU when prefilled to prevent accidental edits
       applied = true
     }
 
@@ -221,6 +207,7 @@ function ReportFindForm() {
         })
         setSkuDisplay("")
         setSkuError("")
+        setSkuLocked(false)
         setProductUrl("")
       } else {
         setResult({
@@ -333,16 +320,26 @@ function ReportFindForm() {
 
           {/* SKU */}
           <div>
-            <label
-              htmlFor="sku"
-              className="block text-sm font-medium text-[var(--text-primary)] mb-2"
-            >
-              SKU Number{" "}
-              <span className="text-[var(--status-error)]" aria-hidden="true">
-                *
-              </span>
-              <span className="sr-only">(required)</span>
-            </label>
+            <div className="flex items-center justify-between mb-2">
+              <label htmlFor="sku" className="block text-sm font-medium text-[var(--text-primary)]">
+                SKU Number{" "}
+                <span className="text-[var(--status-error)]" aria-hidden="true">
+                  *
+                </span>
+                <span className="sr-only">(required)</span>
+              </label>
+              {skuLocked && (
+                <button
+                  type="button"
+                  onClick={() => setSkuLocked(false)}
+                  className="inline-flex items-center gap-1 text-sm text-[var(--link-default)] hover:text-[var(--link-hover)] hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+                  aria-label="Edit SKU number"
+                >
+                  <Pencil className="w-3.5 h-3.5" aria-hidden="true" />
+                  Edit
+                </button>
+              )}
+            </div>
 
             {/* SKU Helper (Collapsible) */}
             <details className="mb-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)]">
@@ -396,10 +393,13 @@ function ReportFindForm() {
               aria-errormessage={skuError ? "sku-error" : undefined}
               value={skuDisplay}
               onChange={handleSkuChange}
+              disabled={skuLocked}
               placeholder="e.g., 123456 or 1001234567"
-              className={`w-full px-4 py-2 rounded-lg border bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent font-mono ${
-                skuError ? "border-[var(--status-error)]" : "border-[var(--border-default)]"
-              }`}
+              className={`w-full px-4 py-2 rounded-lg border text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent font-mono ${
+                skuLocked
+                  ? "bg-[var(--bg-muted)] cursor-not-allowed opacity-75"
+                  : "bg-[var(--bg-page)]"
+              } ${skuError ? "border-[var(--status-error)]" : "border-[var(--border-default)]"}`}
             />
             {skuError ? (
               <p
@@ -648,9 +648,57 @@ function ReportFindForm() {
   )
 }
 
+function ReportFindSkeleton() {
+  return (
+    <div className="min-h-screen bg-[var(--bg-page)] py-12 px-4 sm:px-6">
+      <div className="max-w-2xl mx-auto animate-pulse">
+        {/* Header skeleton */}
+        <div className="text-center mb-8">
+          <div className="h-6 w-32 bg-[var(--bg-muted)] rounded-full mx-auto mb-4" />
+          <div className="h-10 w-64 bg-[var(--bg-muted)] rounded mx-auto mb-4" />
+          <div className="h-5 w-80 bg-[var(--bg-muted)] rounded mx-auto" />
+        </div>
+
+        {/* Info box skeleton */}
+        <div className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] p-4 mb-8">
+          <div className="h-4 w-24 bg-[var(--bg-muted)] rounded mb-2" />
+          <div className="h-3 w-full bg-[var(--bg-muted)] rounded mb-2" />
+          <div className="h-3 w-3/4 bg-[var(--bg-muted)] rounded" />
+        </div>
+
+        {/* Form skeleton */}
+        <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl p-6 sm:p-8 space-y-6">
+          {/* Field 1 */}
+          <div>
+            <div className="h-4 w-20 bg-[var(--bg-muted)] rounded mb-2" />
+            <div className="h-10 w-full bg-[var(--bg-muted)] rounded" />
+          </div>
+          {/* Field 2 */}
+          <div>
+            <div className="h-4 w-32 bg-[var(--bg-muted)] rounded mb-2" />
+            <div className="h-10 w-full bg-[var(--bg-muted)] rounded" />
+          </div>
+          {/* Field 3 */}
+          <div>
+            <div className="h-4 w-24 bg-[var(--bg-muted)] rounded mb-2" />
+            <div className="h-10 w-full bg-[var(--bg-muted)] rounded" />
+          </div>
+          {/* Field 4 */}
+          <div>
+            <div className="h-4 w-16 bg-[var(--bg-muted)] rounded mb-2" />
+            <div className="h-10 w-full bg-[var(--bg-muted)] rounded" />
+          </div>
+          {/* Submit button */}
+          <div className="h-14 w-full bg-[var(--bg-muted)] rounded" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function ReportFindPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[var(--bg-page)]" />}>
+    <Suspense fallback={<ReportFindSkeleton />}>
       <ReportFindForm />
     </Suspense>
   )

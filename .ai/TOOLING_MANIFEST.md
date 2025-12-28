@@ -1,6 +1,6 @@
 # Tooling Manifest
 
-**Last verified:** December 26, 2025
+**Last verified:** December 27, 2025
 
 ## npm Scripts
 
@@ -82,6 +82,16 @@ Playwright automatically sets `PLAYWRIGHT=1` when running tests (see `playwright
 | Reviewer | Check code before merge |
 | Documenter | Update .ai/ docs |
 | Brainstormer | Explore ideas |
+
+## Reusable Utilities
+
+| Utility | Location | Purpose |
+|---------|----------|---------|
+| `copyToClipboard(text)` | `components/copy-sku-button.tsx` | Cross-browser clipboard copy with iOS Safari + Android fallback. Returns `Promise<boolean>`. |
+| `formatSkuForDisplay(sku)` | `lib/sku.ts` | Format SKU with hyphens (6-digit: XXX-XXX, 10-digit: XXXX-XXX-XXX) |
+| `validateSku(rawSku)` | `lib/sku.ts` | Validate SKU format (6 or 10 digits, proper prefix, no patterns) |
+| `buildReportFindUrl(opts)` | `lib/report-find-link.ts` | Build prefilled /report-find URL with sku, name, src params |
+| `trackEvent(name, params)` | `lib/analytics.ts` | Send GA4 event |
 
 ## Parallel Agent Patterns
 

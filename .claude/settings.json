@@ -24,13 +24,6 @@
         "@modelcontextprotocol/server-github"
       ]
     },
-    "vercel": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-vercel"
-      ]
-    },
     "supabase": {
       "command": "npx",
       "args": [
@@ -38,6 +31,7 @@
         "@supabase/mcp-server-supabase"
       ],
       "env": {
+        "SUPABASE_URL": "${SUPABASE_URL}",
         "SUPABASE_ACCESS_TOKEN": "${SUPABASE_ACCESS_TOKEN}"
       }
     }

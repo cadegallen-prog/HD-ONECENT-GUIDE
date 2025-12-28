@@ -7,6 +7,7 @@ import "../sentry.client.config"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
 import { CommandPaletteProvider } from "@/components/command-palette-provider"
+import { AuthProvider } from "@/components/auth-provider"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { AnalyticsSessionTracker } from "@/components/analytics-session"
@@ -190,19 +191,21 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AnalyticsSessionTracker />
-          <CommandPaletteProvider>
-            {/* Navbar with full mobile functionality */}
-            <Navbar />
+          <AuthProvider>
+            <AnalyticsSessionTracker />
+            <CommandPaletteProvider>
+              {/* Navbar with full mobile functionality */}
+              <Navbar />
 
-            {/* Main content */}
-            <main id="main-content" className="min-h-screen">
-              {children}
-              <Footer />
-            </main>
+              {/* Main content */}
+              <main id="main-content" className="min-h-screen">
+                {children}
+                <Footer />
+              </main>
 
-            <Toaster />
-          </CommandPaletteProvider>
+              <Toaster />
+            </CommandPaletteProvider>
+          </AuthProvider>
         </ThemeProvider>
         {/* Vercel scripts should only run on Vercel (and never during Playwright/CI). */}
         {ENABLE_VERCEL_SCRIPTS && <Analytics />}

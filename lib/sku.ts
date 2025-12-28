@@ -70,3 +70,20 @@ export const skuSchema = z
       ctx.addIssue({ code: z.ZodIssueCode.custom, message: error })
     }
   })
+
+/**
+ * Format SKU for display with hyphens:
+ * - 6 digits: 000-000 (3-3)
+ * - 10 digits: 0000-000-000 (4-3-3)
+ */
+export function formatSkuForDisplay(rawSku: string): string {
+  const digits = normalizeSku(rawSku)
+  if (digits.length <= 3) return digits
+  if (digits.length <= 6) {
+    return `${digits.slice(0, 3)}-${digits.slice(3)}`
+  }
+  if (digits.length <= 10) {
+    return `${digits.slice(0, 4)}-${digits.slice(4, 7)}-${digits.slice(7)}`
+  }
+  return `${digits.slice(0, 4)}-${digits.slice(4, 7)}-${digits.slice(7, 10)}`
+}

@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 26, 2025 (Penny List UI polish complete)
+**Last updated:** Dec 28, 2025 (PR-3 Auth + Personal Lists + Sharing in progress)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -13,6 +13,31 @@ Every AI session must update this after meaningful work.
   - `/verified-pennies` permanently redirects to `/penny-list`
   - No repo-stored verified datasets/scripts (privacy)
   - SKU pages + sitemap derive from the Penny List only
+- **Recent focus (Dec 28): PR-3 Auth + Personal Lists + Sharing**
+  - Magic-link login flow at `/login` (Supabase OTP) with callback at `/auth/callback`; middleware refreshes sessions and gates `/lists`.
+  - Penny List cards now include “Save to list” via `AddToListButton` (smart add + picker). Personal lists live at `/lists`; list detail `/lists/[id]` supports priority/found status toggles, in-store mode, search/filter, and share links.
+  - Public shared list view at `/s/[token]` with “Save a copy” fork CTA. Analytics events added for add-to-list, sharing, and in-store mode toggles.
+  - Supabase migrations added: `001_create_lists_tables.sql`, `002_create_list_shares.sql`, `003_security_search_path.sql` (RLS, share RPCs, search_path hardening). New Supabase browser/server clients in `lib/supabase/`.
+- **Recent focus (Dec 28): Scraping auto-enrich workflow**
+  - Added `scripts/auto-enrich.ts` + `SCRAPING_IMPROVEMENT_PLAN.md`; reads `data/skus-to-enrich.txt`, runs headed Playwright scrape, writes `.local/enrichment-upload.csv`. New npm script `npm run enrich:auto`; input/output paths ignored by git.
+  - Added shared `formatSkuForDisplay` utility and upgraded SKU copy UX (toasts, consistent formatting) across cards, tables, SKU page, and report form; ensured new UI uses CSS variables (no raw Tailwind colors).
+- **Recent focus (Dec 27): PR-2: Report Find Prefill + Validation Hardening**
+  - When SKU is prefilled via query params, it's now read-only by default with an "Edit" button to unlock
+  - Added loading skeleton for better SSR/hydration (no blank page before client hydration)
+  - Updated E2E tests for new locked SKU behavior
+  - PR-1 and PR-2 of 6-PR roadmap complete
+- **Recent focus (Dec 27): MCP availability + env wiring**
+  - User-level env vars set for `SUPABASE_URL`, `SUPABASE_ACCESS_TOKEN`, `VERCEL_API_KEY`.
+  - `.claude/settings.json` wired for Supabase env vars.
+  - Vercel MCP disabled across Codex/Claude/VS Code to reduce tool noise; re-enable only when needed.
+  - Restart VS Code/Codex after env changes so MCPs can see the user-level vars.
+- **Recent focus (Dec 27): PR-1: Penny List Cards + Copy UX**
+  - SKU pill is now tappable for one-tap copy to clipboard (no separate button needed)
+  - Toast notifications show "Copied SKU XXX-XXX" on success using Sonner
+  - `copyToClipboard` utility handles iOS Safari + Android with fallback to `execCommand('copy')`
+  - 44px minimum touch targets for mobile accessibility
+  - `stopPropagation()` prevents accidental navigation when tapping SKU to copy
+  - 6-PR roadmap planned: Copy UX → Report Find hardening → Auth + Personal Lists → Sharing → In-Store Mode → Analytics
 - **Recent focus (Dec 26): Penny List UI polish (filters + cards)**
   - Sticky filter bar no longer clips under the navbar while scrolling
   - Items-per-page dropdown chevron no longer overlaps the value

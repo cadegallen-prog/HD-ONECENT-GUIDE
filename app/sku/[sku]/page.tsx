@@ -4,7 +4,7 @@ import { notFound } from "next/navigation"
 import { MapPin, Calendar, ExternalLink, ShoppingBag } from "lucide-react"
 import { getPennyList } from "@/lib/fetch-penny-data"
 import { filterValidPennyItems, formatRelativeDate } from "@/lib/penny-list-utils"
-import { validateSku } from "@/lib/sku"
+import { validateSku, formatSkuForDisplay } from "@/lib/sku"
 import { getHomeDepotProductUrl } from "@/lib/home-depot"
 import { getFreshness } from "@/lib/freshness-utils"
 import { ogImageUrl } from "@/lib/og"
@@ -295,7 +295,9 @@ export default async function SkuDetailPage({ params }: PageProps) {
                     <span className="text-[10px] uppercase tracking-wider text-[var(--text-muted)] font-bold">
                       SKU
                     </span>
-                    <span className="font-mono text-lg text-[var(--text-primary)]">{sku}</span>
+                    <span className="font-mono text-lg text-[var(--text-primary)]">
+                      {formatSkuForDisplay(sku)}
+                    </span>
                   </div>
                 </div>
 
@@ -308,7 +310,9 @@ export default async function SkuDetailPage({ params }: PageProps) {
                     <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm">
                       <div>
                         <dt className="text-[var(--text-muted)] inline">SKU:</dt>
-                        <dd className="text-[var(--text-primary)] font-mono inline ml-2">{sku}</dd>
+                        <dd className="text-[var(--text-primary)] font-mono inline ml-2">
+                          {formatSkuForDisplay(sku)}
+                        </dd>
                       </div>
 
                       {internetNumber && (
@@ -459,7 +463,7 @@ export default async function SkuDetailPage({ params }: PageProps) {
                       {item.name}
                     </p>
                     <p className="text-xs text-[var(--text-muted)] truncate">
-                      {item.brand ? `${item.brand} • ` : ""}SKU {item.sku}
+                      {item.brand ? `${item.brand} • ` : ""}SKU {formatSkuForDisplay(item.sku)}
                     </p>
                   </div>
                 </Link>

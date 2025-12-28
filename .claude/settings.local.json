@@ -23,7 +23,10 @@
       "Bash(npx lighthouse:*)",
       "Bash(findstr:*)",
       "Bash(cd:*)",
-      "Bash(npx:*)"
+      "Bash(npx:*)",
+      "Bash(setx:*)",
+      "Bash(powershell -Command \"$env:SUPABASE_ACCESS_TOKEN\")",
+      "Bash(powershell -Command:*)"
     ],
     "deny": [],
     "ask": []
