@@ -1,0 +1,19 @@
+[
+  {
+    "sku": "123456",
+    "item_name": "Example Product Name",
+    "brand": "Milwaukee",
+    "model_number": "2853-20",
+    "upc": "045242567890",
+    "image_url": "https://images.thdstatic.com/productImages/abc123/400.jpg",
+    "home_depot_url": "https://www.homedepot.com/p/Example-Product/123456789",
+    "internet_sku": 123456789
+  },
+  {
+    "sku": "1001234567",
+    "item_name": "Another Product (10-digit SKU)",
+    "brand": "DeWalt",
+    "model_number": "DCD771C2",
+    "image_url": "https://images.thdstatic.com/productImages/xyz789/400.jpg"
+  }
+]

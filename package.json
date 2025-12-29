@@ -21,6 +21,8 @@
     "ai:verify": "tsx scripts/ai-verify.ts",
     "ai:proof": "tsx scripts/ai-proof.ts",
     "enrich:auto": "tsx scripts/auto-enrich.ts",
+    "enrich:bulk": "tsx scripts/bulk-enrich.ts",
+    "enrich:stealth": "tsx scripts/stealth-enrich.ts",
     "prepare": "husky"
   },
   "dependencies": {
@@ -79,8 +81,10 @@
     "globals": "^16.5.0",
     "husky": "^9.1.7",
     "lighthouse": "^12.8.2",
+    "playwright-extra": "^4.3.6",
     "postcss": "^8.4.47",
     "prettier": "^3.7.3",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
     "satori": "^0.18.3",
     "sharp": "^0.34.5",
     "tailwindcss": "^3.4.14",

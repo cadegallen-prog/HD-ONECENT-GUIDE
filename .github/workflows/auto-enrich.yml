@@ -1,0 +1,71 @@
+# Auto-Enrichment Workflow
+# Runs the stealth scraper on a schedule to enrich penny items
+#
+# Cost: ~$5.49/mo (Webshare proxy) + FREE GitHub Actions minutes
+# Runs: Every 6 hours, processes ~20 SKUs per run
+#
+# Required secrets:
+#   - NEXT_PUBLIC_SUPABASE_URL
+#   - SUPABASE_SERVICE_ROLE_KEY
+#   - WEBSHARE_PROXY (format: http://user:pass@proxy.webshare.io:port)
+
+name: Auto Enrich
+
+on:
+  schedule:
+    # Run every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+    # Allow manual trigger
+    inputs:
+      limit:
+        description: 'Number of SKUs to process'
+        required: false
+        default: '20'
+
+jobs:
+  enrich:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium
+
+      - name: Get SKUs needing enrichment
+        id: get-skus
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          # Query Supabase for SKUs without enrichment
+          # This creates data/skus-to-enrich.txt
+          npx tsx scripts/get-unenriched-skus.ts --limit ${{ github.event.inputs.limit || '20' }}
+
+      - name: Run stealth enrichment
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          WEBSHARE_PROXY: ${{ secrets.WEBSHARE_PROXY }}
+        run: |
+          npx tsx scripts/stealth-enrich.ts --headless --limit ${{ github.event.inputs.limit || '20' }}
+
+      - name: Upload enrichment log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enrichment-log-${{ github.run_id }}
+          path: .local/stealth-enrichment.csv
+          retention-days: 7
