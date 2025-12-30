@@ -61,7 +61,6 @@ export function PennyListCard({ item }: PennyListCardProps) {
   const router = useRouter()
   const [copied, setCopied] = useState(false)
 
-
   // Normalize display values
   const displayBrand = normalizeBrand(item.brand)
   const displayName = normalizeProductName(item.name, { brand: item.brand })
@@ -147,7 +146,6 @@ export function PennyListCard({ item }: PennyListCardProps) {
                 className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] rounded"
               >
                 <div className="space-y-2">
-
                   {displayBrand && (
                     <p className="text-xs uppercase tracking-[0.08em] text-[var(--text-secondary)]">
                       {displayBrand}
@@ -156,7 +154,6 @@ export function PennyListCard({ item }: PennyListCardProps) {
                   <h3
                     id={`item-${item.id}-name`}
                     className="font-semibold text-base sm:text-lg text-[var(--text-primary)] leading-[1.5] line-clamp-2 group-hover:text-[var(--cta-primary)] transition-colors"
-
                     title={displayName}
                   >
                     {displayName}
@@ -303,7 +300,6 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
   const router = useRouter()
   const [copied, setCopied] = useState(false)
 
-
   // Normalize display values
   const displayBrand = normalizeBrand(item.brand)
   const displayName = normalizeProductName(item.name, { brand: item.brand })
@@ -380,7 +376,6 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
               className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] rounded"
             >
               <div className="space-y-2">
-
                 {displayBrand && (
                   <p className="text-xs uppercase tracking-[0.08em] text-[var(--text-secondary)]">
                     {displayBrand}
@@ -389,7 +384,6 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
                 <h3
                   id={`hot-item-${item.id}-name`}
                   className="text-sm sm:text-base font-semibold text-[var(--text-primary)] leading-[1.5] line-clamp-2 group-hover:text-[var(--cta-primary)] transition-colors"
-
                   title={displayName}
                 >
                   {displayName}
