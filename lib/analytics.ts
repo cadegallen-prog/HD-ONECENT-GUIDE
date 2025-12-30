@@ -1,6 +1,12 @@
 declare global {
   interface Window {
-    gtag?: (...args: unknown[]) => void
+    plausible?: (
+      event: string,
+      options?: {
+        props?: Record<string, unknown>
+        u?: string
+      }
+    ) => void
   }
 }
 
@@ -8,10 +14,12 @@ export type DeviceType = "mobile" | "desktop" | "unknown"
 export type ThemeName = "light" | "dark" | "unknown"
 
 export type EventName =
+  | "home_page_view"
   | "penny_list_view"
   | "penny_list_filter"
   | "penny_list_search"
   | "sku_copy"
+  | "home_depot_click"
   | "share_click"
   | "directions_click"
   | "coffee_click"
@@ -23,6 +31,7 @@ export type EventName =
   | "return_visit"
   | "report_duplicate_click"
   | "report_prefill_loaded"
+  | "report_find_click"
   // Personal list events
   | "add_to_list_clicked"
   | "add_to_list_completed"
@@ -88,20 +97,21 @@ function buildPayload(params?: EventParams): Record<string, unknown> {
 }
 
 /**
- * Track an event with Google Analytics.
- * Safe to call on server-side (no-op) or if gtag is not loaded.
+ * Track an event with the configured analytics provider.
+ * Safe to call on server-side (no-op) or if the provider is not loaded.
  */
 export function trackEvent(eventName: EventName, params?: EventParams): void {
   if (typeof window === "undefined") return
   const payload = buildPayload(params)
+  const provider = process.env.NEXT_PUBLIC_ANALYTICS_PROVIDER ?? "none"
 
   if (process.env.NODE_ENV !== "production") {
     // Dev-friendly log for verification
     console.info("[analytics]", eventName, payload)
   }
 
-  if (window.gtag) {
-    window.gtag("event", eventName, payload)
+  if (provider === "plausible" && window.plausible) {
+    window.plausible(eventName, { props: payload })
   }
 }
 
@@ -110,13 +120,15 @@ export function trackEvent(eventName: EventName, params?: EventParams): void {
  */
 export function trackPageView(url: string, title?: string): void {
   if (typeof window === "undefined") return
-  if (window.gtag) {
-    window.gtag("event", "page_view", {
-      page_path: url,
-      page_title: title,
-      device: getDeviceType(),
-      theme: getThemeName(),
-      ts: new Date().toISOString(),
-    })
-  }
+  const provider = process.env.NEXT_PUBLIC_ANALYTICS_PROVIDER ?? "none"
+  if (provider !== "plausible" || !window.plausible) return
+
+  window.plausible("pageview", {
+    u: url,
+    props: title
+      ? {
+          title,
+        }
+      : undefined,
+  })
 }

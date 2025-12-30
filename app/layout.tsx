@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import Script from "next/script"
 import localFont from "next/font/local"
 import { Analytics } from "@vercel/analytics/react"
 import "./globals.css"
@@ -14,10 +13,17 @@ import { AnalyticsSessionTracker } from "@/components/analytics-session"
 import { SpeedInsightsClient } from "@/components/speed-insights-client"
 import { ogImageUrl } from "@/lib/og"
 
+const ANALYTICS_PROVIDER = process.env.NEXT_PUBLIC_ANALYTICS_PROVIDER ?? "none"
+const ENABLE_PLAUSIBLE =
+  process.env.NODE_ENV === "production" &&
+  process.env.PLAYWRIGHT !== "1" &&
+  ANALYTICS_PROVIDER === "plausible" &&
+  Boolean(process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN)
 const ENABLE_VERCEL_SCRIPTS =
   process.env.NODE_ENV === "production" &&
   process.env.PLAYWRIGHT !== "1" &&
-  (process.env.VERCEL === "1" || process.env.NEXT_PUBLIC_VERCEL_ENV)
+  (process.env.VERCEL === "1" || process.env.NEXT_PUBLIC_VERCEL_ENV) &&
+  ANALYTICS_PROVIDER === "vercel"
 
 const inter = localFont({
   src: [
@@ -101,37 +107,16 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={inter.variable}>
       <head>
-        {/* Google Analytics - DO NOT MODIFY */}
-        <Script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-DJ4RJRX05E"
-          strategy="lazyOnload"
-        />
-        <Script id="google-analytics" strategy="lazyOnload">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            const GA_MEASUREMENT_ID = 'G-DJ4RJRX05E';
-            const sanitizedPath = (() => {
-              try {
-                const url = new URL(window.location.href);
-                return url.pathname || '/';
-              } catch (error) {
-                return window.location.pathname || '/';
-              }
-            })();
-            gtag('js', new Date());
-            gtag('config', GA_MEASUREMENT_ID, {
-              page_path: sanitizedPath,
-              anonymize_ip: true,
-              allow_google_signals: false,
-              allow_ad_personalization_signals: false,
-            });
-          `}
-        </Script>
-
-        {/* Preconnect hints for faster resource loading */}
-        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        {ENABLE_PLAUSIBLE && (
+          <script
+            defer
+            data-domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN}
+            data-api={process.env.NEXT_PUBLIC_PLAUSIBLE_API_HOST || undefined}
+            src={
+              process.env.NEXT_PUBLIC_PLAUSIBLE_SCRIPT_SRC ?? "https://plausible.io/js/script.js"
+            }
+          />
+        )}
 
         {/* Facebook App ID - Required for Meta sharing debugger validation
             TODO: Set FACEBOOK_APP_ID environment variable in Vercel dashboard

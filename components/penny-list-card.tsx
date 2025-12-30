@@ -252,7 +252,13 @@ export function PennyListCard({ item }: PennyListCardProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] rounded"
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  trackEvent("home_depot_click", {
+                    skuMasked: item.sku.slice(-4),
+                    source: "penny-list-card",
+                  })
+                }}
               >
                 View on Home Depot
                 <ExternalLink className="w-4 h-4" aria-hidden="true" />
