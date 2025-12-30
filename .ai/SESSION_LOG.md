@@ -37,6 +37,29 @@
 
 ---
 
+## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Penny List CTA Cleanup
+
+**AI:** ChatGPT Codex (GPT-5.2)  
+**Goal:** Remove PayPal CTA, move BeFrugal CTA lower while preserving affiliate tracking.
+
+**Changes Made:**
+- Removed the PayPal tip CTA and its click tracking from `components/penny-list-client.tsx`.
+- Moved the BeFrugal affiliate CTA near the footer card while keeping `affiliate_click` tracking.
+
+**Outcome:** ⚠️ Partial (tests not fully green)
+
+**Verification:**
+- lint: ✅ `npm run lint`
+- build: ✅ `npm run build` (Turbopack warnings about duplicate OpenTelemetry deps)
+- test:unit: ❌ `npm run test:unit` (tsx could not find `tests/**/*.test.ts`; glob did not expand)
+- test:e2e: ❌ `npm run test:e2e` (Playwright failures in report-find prefill + visual smoke; browser deps installed via `npx playwright install` + `npx playwright install-deps`)
+
+**For Next AI:**
+- Investigate Playwright failures in `tests/report-find-prefill.spec.ts` (SKU prefill not applied) and the visual smoke/spec failures; confirm expected query param behavior in `/report-find`.
+- Check why `npm run test:unit` fails to expand `tests/**/*.test.ts` in this shell; may need a globstar-compatible shell or script update.
+
+---
+
 ## 2025-12-27 - Claude Code (Opus 4.5) - PR-2: Report Find Prefill + Validation Hardening
 
 **AI:** Claude Code (Opus 4.5)  

@@ -1,6 +1,6 @@
 # Backlog (AI-Driven, Ordered)
 
-**Last updated:** Dec 26, 2025
+**Last updated:** Dec 28, 2025
 Keep this list short and ruthless (≤10 items).
 
 Each AI session should:
