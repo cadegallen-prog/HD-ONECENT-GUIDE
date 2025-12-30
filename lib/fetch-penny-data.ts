@@ -15,6 +15,7 @@ const envConfigured =
 const fetchWarningsLogged = {
   anonEmpty: false,
   enrichmentMissing: false,
+  pennyListMissing: false,
 }
 const PENNY_LIST_CACHE_SECONDS = 60
 
@@ -345,6 +346,17 @@ async function fetchRows(
   const { data, error } = await query
 
   if (error) {
+    const code = (error as { code?: unknown } | null)?.code
+    if (code === "PGRST205") {
+      if (!fetchWarningsLogged.pennyListMissing && process.env.NODE_ENV === "development") {
+        console.warn(
+          `Supabase view is not available yet (penny_list_public missing); falling back to fixture (${label}).`
+        )
+        fetchWarningsLogged.pennyListMissing = true
+      }
+      return null
+    }
+
     console.error(`Error fetching penny list from Supabase (${label}):`, error)
     return null
   }

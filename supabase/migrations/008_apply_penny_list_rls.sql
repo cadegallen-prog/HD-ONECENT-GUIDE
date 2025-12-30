@@ -40,8 +40,18 @@ GRANT SELECT ON public.penny_list_public TO anon;
 ALTER TABLE public."Penny List" ENABLE ROW LEVEL SECURITY;
 
 ALTER TABLE public."Penny List" ALTER COLUMN timestamp SET DEFAULT now();
-ALTER TABLE public."Penny List" ALTER COLUMN timestamp SET NOT NULL;
 ALTER TABLE public."Penny List" ADD COLUMN IF NOT EXISTS status TEXT;
+
+UPDATE public."Penny List"
+SET timestamp = now()
+WHERE timestamp IS NULL;
+
+ALTER TABLE public."Penny List" ALTER COLUMN timestamp SET NOT NULL;
+
+UPDATE public."Penny List"
+SET status = 'pending'
+WHERE status IS NULL;
+
 ALTER TABLE public."Penny List" ALTER COLUMN status SET DEFAULT 'pending';
 ALTER TABLE public."Penny List" ALTER COLUMN status SET NOT NULL;
 
