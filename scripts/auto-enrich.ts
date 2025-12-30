@@ -1,12 +1,16 @@
 import { chromium } from "playwright"
 import fs from "fs"
 import path from "path"
+import { normalizeSku, validateSku } from "../lib/sku"
 
 // Configuration
 const INPUT_FILE = path.join(process.cwd(), "data", "skus-to-enrich.txt")
 const OUTPUT_FILE = path.join(process.cwd(), ".local", "enrichment-upload.csv")
+const STATUS_FILE = path.join(process.cwd(), ".local", "enrichment-status.json")
+const SEARCH_URL_BASE = "https://www.homedepot.com/s"
 const MIN_DELAY_MS = 15000 // 15 seconds
 const MAX_DELAY_MS = 45000 // 45 seconds
+const MAX_ERROR_RETRIES = 1
 
 // Ensure directories exist
 if (!fs.existsSync(path.dirname(INPUT_FILE))) {
@@ -21,6 +25,61 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 const randomDelay = () =>
   Math.floor(Math.random() * (MAX_DELAY_MS - MIN_DELAY_MS + 1) + MIN_DELAY_MS)
 
+type StatusEntry = {
+  status: "enriched" | "not_found" | "error" | "invalid" | "mismatch"
+  attemptCount: number
+  lastAttemptedAt: string
+  lastReason?: string
+}
+
+type StatusCache = Record<string, StatusEntry>
+
+function loadStatusCache(): StatusCache {
+  if (!fs.existsSync(STATUS_FILE)) return {}
+  try {
+    const raw = fs.readFileSync(STATUS_FILE, "utf-8")
+    const parsed = JSON.parse(raw) as StatusCache
+    return parsed || {}
+  } catch (error) {
+    console.log(`⚠️ Could not read status cache: ${error}`)
+    return {}
+  }
+}
+
+function saveStatusCache(cache: StatusCache) {
+  fs.writeFileSync(STATUS_FILE, JSON.stringify(cache, null, 2))
+}
+
+function shouldSkipSku(entry?: StatusEntry): boolean {
+  if (!entry) return false
+  return (
+    entry.status === "enriched" ||
+    entry.status === "invalid" ||
+    entry.status === "not_found" ||
+    entry.status === "mismatch" ||
+    entry.status === "error"
+  )
+}
+
+function setStatus(
+  cache: StatusCache,
+  sku: string,
+  status: StatusEntry["status"],
+  reason: string
+) {
+  const existing = cache[sku]
+  const attemptCount = (existing?.attemptCount ?? 0) + 1
+  const entry: StatusEntry = {
+    status,
+    attemptCount,
+    lastAttemptedAt: new Date().toISOString(),
+    lastReason: reason,
+  }
+
+  cache[sku] = entry
+  saveStatusCache(cache)
+}
+
 async function main() {
   console.log("🚀 Starting Autonomous Enrichment Agent...")
 
@@ -31,11 +90,27 @@ async function main() {
     process.exit(1)
   }
 
+  const statusCache = loadStatusCache()
   const fileContent = fs.readFileSync(INPUT_FILE, "utf-8")
-  const skus = fileContent
-    .split("\n")
-    .map((s) => s.trim())
-    .filter((s) => s && /^\d+$/.test(s)) // Simple validation
+  const skus: string[] = []
+  const seen = new Set<string>()
+  const forceMode = process.argv.includes("--force")
+
+  for (const raw of fileContent.split("\n").map((line) => line.trim())) {
+    if (!raw) continue
+    const { normalized, error } = validateSku(raw)
+    if (error) {
+      console.log(`⚠️ Skipping invalid SKU "${raw}": ${error}`)
+      if (normalized) {
+        setStatus(statusCache, normalized, "invalid", error)
+      }
+      continue
+    }
+    if (!seen.has(normalized)) {
+      skus.push(normalized)
+      seen.add(normalized)
+    }
+  }
 
   if (skus.length === 0) {
     console.log("⚠️ No valid SKUs found in input file.")
@@ -57,34 +132,71 @@ async function main() {
   const page = await context.newPage()
 
   // 3. Process SKUs
-  let processedCount = 0
+  let enrichedCount = 0
+  let notFoundCount = 0
+  let errorCount = 0
+  let skippedCount = 0
+  let mismatchCount = 0
 
-  for (const sku of skus) {
-    console.log(`\n🔍 Processing SKU: ${sku} (${processedCount + 1}/${skus.length})`)
+  for (let index = 0; index < skus.length; index++) {
+    const sku = skus[index]
+    console.log(`\n🔍 Processing SKU: ${sku} (${index + 1}/${skus.length})`)
 
-    try {
-      // Check if already enriched (optional optimization, skipping for now to allow updates)
+    const cacheEntry = statusCache[sku]
+    if (!forceMode && shouldSkipSku(cacheEntry)) {
+      console.log(`   Skipping due to status: ${cacheEntry?.status}`)
+      skippedCount++
+      continue
+    }
 
-      // Navigate
-      const url = `https://www.homedepot.com/s/${sku}`
-      console.log(`   Navigating to: ${url}`)
-
-      await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 })
-
-      // Wait for some content to load
+    for (let attempt = 0; attempt <= MAX_ERROR_RETRIES; attempt++) {
       try {
-        await page.waitForSelector("h1", { timeout: 10000 })
-      } catch (e) {
-        console.log("   ⚠️ Timeout waiting for h1, page might be 404 or captcha.")
-      }
+        // Navigate
+        const url = `${SEARCH_URL_BASE}/${sku}?NCNI-5`
+        console.log(`   Searching: ${url}`)
 
-      // Human-like behavior: Scroll down a bit
-      await page.evaluate(() => window.scrollBy(0, 500))
-      await sleep(1000)
+        await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 })
 
-      // Extract Data (using logic ported from bookmarklet)
-      const data = await page.evaluate(() => {
-        // --- Bookmarklet Logic Start ---
+        // Wait for some content to load
+        try {
+          await page.waitForSelector("h1", { timeout: 10000 })
+        } catch (e) {
+          console.log("   ⚠️ Timeout waiting for h1, page might be 404 or captcha.")
+        }
+
+        const productUrl = await page.evaluate(() => {
+          const anchors = Array.from(document.querySelectorAll("a[href]"))
+          const candidates = anchors
+            .map((a) => a.getAttribute("href") || "")
+            .map((href) => {
+              try {
+                return new URL(href, window.location.origin).toString()
+              } catch {
+                return ""
+              }
+            })
+            .filter((href) => /\/p\/[^/]+\/\d{6,12}/.test(href))
+
+          return candidates[0] || ""
+        })
+
+        if (!productUrl) {
+          console.log("   ❌ No product link found from search results.")
+          setStatus(statusCache, sku, "not_found", "No product link in search results.")
+          notFoundCount++
+          break
+        }
+
+        console.log(`   Product page: ${productUrl}`)
+        await page.goto(productUrl, { waitUntil: "domcontentloaded", timeout: 60000 })
+
+        // Human-like behavior: Scroll down a bit
+        await page.evaluate(() => window.scrollBy(0, 500))
+        await sleep(1000)
+
+        // Extract Data (using logic ported from bookmarklet)
+        const data = await page.evaluate(() => {
+        // --- Product Extraction Start ---
         function text(sel: string) {
           var el = document.querySelector(sel)
           return el && el.textContent ? el.textContent.replace(/\s+/g, " ").trim() : ""
@@ -107,6 +219,26 @@ async function main() {
         function getInternetNumberFromUrl() {
           var m = (location.pathname || "").match(/\/p\/[^/]+\/(\d{6,12})/)
           return m ? m[1] : ""
+        }
+
+        function getJsonLdProduct() {
+          var scripts = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+          for (var i = 0; i < scripts.length; i++) {
+            try {
+              var json = JSON.parse(scripts[i].textContent || "")
+              var items = Array.isArray(json) ? json : [json]
+              for (var j = 0; j < items.length; j++) {
+                var item = items[j]
+                var type = item && item["@type"]
+                if (type && (type === "Product" || (Array.isArray(type) && type.includes("Product")))) {
+                  return item
+                }
+              }
+            } catch (e) {
+              // ignore parse errors
+            }
+          }
+          return null
         }
 
         function getSku() {
@@ -189,77 +321,120 @@ async function main() {
           ])
         }
 
-        // --- Bookmarklet Logic End ---
+        var jsonLdProduct = getJsonLdProduct()
+        var jsonLdBrand =
+          jsonLdProduct && jsonLdProduct.brand
+            ? typeof jsonLdProduct.brand === "string"
+              ? jsonLdProduct.brand
+              : jsonLdProduct.brand.name || ""
+            : ""
+        var jsonLdImage = ""
+        if (jsonLdProduct && jsonLdProduct.image) {
+          if (Array.isArray(jsonLdProduct.image)) {
+            jsonLdImage = jsonLdProduct.image[0] || ""
+          } else if (typeof jsonLdProduct.image === "object" && jsonLdProduct.image.url) {
+            jsonLdImage = jsonLdProduct.image.url
+          } else {
+            jsonLdImage = jsonLdProduct.image
+          }
+        }
+
+        // --- Product Extraction End ---
+
+        var imageUrl = jsonLdImage || getImageUrl()
+        if (imageUrl && imageUrl.indexOf("thdstatic.com") !== -1) {
+          imageUrl = imageUrl.replace(/\/\d+\.jpg(\?.*)?$/, "/1000.jpg")
+        }
 
         return {
-          sku: getSku(),
+          sku: (jsonLdProduct && jsonLdProduct.sku) || getSku(),
           internetSku: getInternetNumberFromUrl(),
-          name: getName(),
-          brand: getBrand(),
-          model: getModel(),
-          imageUrl: getImageUrl(),
+          name: (jsonLdProduct && jsonLdProduct.name) || getName(),
+          brand: jsonLdBrand || getBrand(),
+          model: (jsonLdProduct && (jsonLdProduct.mpn || jsonLdProduct.model)) || getModel(),
+          imageUrl: imageUrl,
         }
       })
 
-      if (data.sku) {
-        console.log(`   ✅ Found: ${data.name.substring(0, 40)}...`)
-        console.log(`      Image: ${data.imageUrl ? "Yes" : "No"}`)
-        console.log(`      Internet SKU: ${data.internetSku}`)
-
-        // Append to CSV
-        const csvRow = {
-          "Home Depot SKU (6 or 10 digits)": data.sku,
-          "IMAGE URL": data.imageUrl,
-          "INTERNET SKU": data.internetSku,
-          Name: data.name,
-          Brand: data.brand,
-          Model: data.model,
-          "Date Added": new Date().toISOString(),
+        const extractedSku = data.sku ? normalizeSku(data.sku) : ""
+        if (extractedSku && extractedSku !== sku) {
+          console.log(`   ❌ SKU mismatch. Expected ${sku}, got ${extractedSku}`)
+          setStatus(statusCache, sku, "mismatch", `SKU mismatch: ${extractedSku}`)
+          mismatchCount++
+          break
         }
 
-        // Check if file exists to determine if we need headers
-        const fileExists = fs.existsSync(OUTPUT_FILE)
-        let csvContent = ""
+        if (data.name && data.internetSku) {
+          console.log(`   ✅ Found: ${data.name.substring(0, 40)}...`)
+          console.log(`      Image: ${data.imageUrl ? "Yes" : "No"}`)
+          console.log(`      Internet SKU: ${data.internetSku}`)
 
-        // Simple CSV escaping
-        const escapeCsv = (val: string) => {
-          if (val === null || val === undefined) return ""
-          const str = String(val)
-          if (str.includes(",") || str.includes('"') || str.includes("\n")) {
-            return `"${str.replace(/"/g, '""')}"`
+          // Append to CSV
+          const csvRow = {
+            "Home Depot SKU (6 or 10 digits)": sku,
+            "IMAGE URL": data.imageUrl,
+            "INTERNET SKU": data.internetSku,
+            Name: data.name,
+            Brand: data.brand,
+            Model: data.model,
+            "Date Added": new Date().toISOString(),
           }
-          return str
-        }
 
-        const rowValues = [
-          csvRow["Home Depot SKU (6 or 10 digits)"],
-          csvRow["IMAGE URL"],
-          csvRow["INTERNET SKU"],
-          csvRow["Name"],
-          csvRow["Brand"],
-          csvRow["Model"],
-          csvRow["Date Added"],
-        ].map(escapeCsv)
+          // Check if file exists to determine if we need headers
+          const fileExists = fs.existsSync(OUTPUT_FILE)
+          let csvContent = ""
 
-        const headerValues = Object.keys(csvRow).map(escapeCsv)
+          // Simple CSV escaping
+          const escapeCsv = (val: string) => {
+            if (val === null || val === undefined) return ""
+            const str = String(val)
+            if (str.includes(",") || str.includes('"') || str.includes("\n")) {
+              return `"${str.replace(/"/g, '""')}"`
+            }
+            return str
+          }
 
-        if (!fileExists) {
-          csvContent = headerValues.join(",") + "\n" + rowValues.join(",") + "\n"
+          const rowValues = [
+            csvRow["Home Depot SKU (6 or 10 digits)"],
+            csvRow["IMAGE URL"],
+            csvRow["INTERNET SKU"],
+            csvRow["Name"],
+            csvRow["Brand"],
+            csvRow["Model"],
+            csvRow["Date Added"],
+          ].map(escapeCsv)
+
+          const headerValues = Object.keys(csvRow).map(escapeCsv)
+
+          if (!fileExists) {
+            csvContent = headerValues.join(",") + "\n" + rowValues.join(",") + "\n"
+          } else {
+            csvContent = rowValues.join(",") + "\n"
+          }
+
+          fs.appendFileSync(OUTPUT_FILE, csvContent)
+          console.log(`   💾 Saved to ${path.basename(OUTPUT_FILE)}`)
+          setStatus(statusCache, sku, "enriched", "Enriched successfully.")
+          enrichedCount++
         } else {
-          csvContent = rowValues.join(",") + "\n"
+          console.log("   ❌ Could not extract product data from page.")
+          setStatus(statusCache, sku, "not_found", "Missing name or internet SKU.")
+          notFoundCount++
         }
-
-        fs.appendFileSync(OUTPUT_FILE, csvContent)
-        console.log(`   💾 Saved to ${path.basename(OUTPUT_FILE)}`)
-      } else {
-        console.log("   ❌ Could not extract SKU/Data from page.")
+        break
+      } catch (error) {
+        console.error(`   ❌ Error processing SKU ${sku}:`, error)
+        if (attempt < MAX_ERROR_RETRIES) {
+          console.log("   ⚠️ Retrying once due to error...")
+          continue
+        }
+        setStatus(statusCache, sku, "error", `Error: ${error}`)
+        errorCount++
+        break
       }
-    } catch (error) {
-      console.error(`   ❌ Error processing SKU ${sku}:`, error)
     }
 
-    processedCount++
-    if (processedCount < skus.length) {
+    if (index < skus.length - 1) {
       const delay = randomDelay()
       console.log(`   ⏳ Waiting ${Math.round(delay / 1000)}s before next item...`)
       await sleep(delay)
@@ -267,6 +442,11 @@ async function main() {
   }
 
   console.log("\n🎉 Batch complete!")
+  console.log(`   Enriched: ${enrichedCount}`)
+  console.log(`   Not found: ${notFoundCount}`)
+  console.log(`   Mismatch: ${mismatchCount}`)
+  console.log(`   Errors: ${errorCount}`)
+  console.log(`   Skipped: ${skippedCount}`)
   await browser.close()
 }
 

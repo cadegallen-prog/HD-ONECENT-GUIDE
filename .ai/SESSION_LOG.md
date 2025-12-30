@@ -12,6 +12,43 @@
 
 ---
 
+## 2025-12-29 - ChatGPT Codex (GPT-5) - Auto-Enrich Reliability + Negative Cache
+
+**AI:** ChatGPT Codex (GPT-5)  
+**Goal:** Improve `scripts/auto-enrich.ts` accuracy and reduce wasted attempts.
+
+**Changes Made:**
+- Reused `lib/sku.ts` validation/normalization, deduped inputs, and skipped invalid SKUs.
+- Added local status cache at `.local/enrichment-status.json` to skip not-found/mismatch/error/invalid SKUs unless `--force` is used.
+- Added one immediate retry for transient errors, then marks as `error` to avoid repeat attempts.
+- Updated flow to resolve a product link from search results, then extract from the product page using JSON-LD + fallbacks.
+- Added SKU mismatch detection, enforced name + internet SKU before saving, and added summary counters.
+
+**Outcome:** ✅ Success (code changes applied)
+
+**Verification:** Not run (no tests executed).
+
+**For Next AI:**
+- If results still vary, consider adding a fixed store/zip context to stabilize search results.
+
+**Probe (SerpApi search):**
+- Sample SKUs: 1009926663, 1009926843, 1009964275
+- Zips tested: 10001, 30301, 90001
+- Result: 9/9 found, consistent product_id across zips
+- Estimated credits used: 9
+
+**Probe (SerpApi search, failed SKUs):**
+- Sample SKUs: 1009923959, 1009923970, 1009923974, 1009956798
+- Zips tested: 10001, 30301, 60601, 73301, 80202, 90001, 94105, 33101
+- Results:
+  - 1009923959: found only in 33101 (product_id 325718942), not found in other 7 zips
+  - 1009923970: found in 10001/60601/73301/90001/33101 (product_id 325718939), not found in 30301/80202/94105
+  - 1009923974: not found in all 8 zips
+  - 1009956798: not found in all 8 zips
+- Estimated credits used: 32
+
+---
+
 ## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Auth + Personal Lists + Sharing
 
 **AI:** ChatGPT Codex (GPT-5.2)  

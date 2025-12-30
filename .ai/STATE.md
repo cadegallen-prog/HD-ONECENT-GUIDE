@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 28, 2025 (PR-3 Auth + Personal Lists + Sharing in progress)
+**Last updated:** Dec 29, 2025 (Auto-enrich reliability updates)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -13,6 +13,10 @@ Every AI session must update this after meaningful work.
   - `/verified-pennies` permanently redirects to `/penny-list`
   - No repo-stored verified datasets/scripts (privacy)
   - SKU pages + sitemap derive from the Penny List only
+- **Recent focus (Dec 29): Auto-enrich reliability + negative cache**
+  - `scripts/auto-enrich.ts` now reuses `lib/sku.ts` validation, dedupes inputs, and skips invalid SKUs.
+  - Added `.local/enrichment-status.json` to track enriched/not-found/mismatch/errors and skip reattempts unless `--force` is used.
+  - Resolves a product link from search results, then extracts product data from the product page using JSON-LD + fallbacks.
 - **Recent focus (Dec 28): PR-3 Auth + Personal Lists + Sharing**
   - Magic-link login flow at `/login` (Supabase OTP) with callback at `/auth/callback`; middleware refreshes sessions and gates `/lists`.
   - Penny List cards now include “Save to list” via `AddToListButton` (smart add + picker). Personal lists live at `/lists`; list detail `/lists/[id]` supports priority/found status toggles, in-store mode, search/filter, and share links.
