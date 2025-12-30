@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 28, 2025 (PR-3 Auth + Personal Lists + Sharing in progress)
+**Last updated:** Dec 28, 2025 (Penny list grid density tweak)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -13,6 +13,8 @@ Every AI session must update this after meaningful work.
   - `/verified-pennies` permanently redirects to `/penny-list`
   - No repo-stored verified datasets/scripts (privacy)
   - SKU pages + sitemap derive from the Penny List only
+- **Recent focus (Dec 28): Penny list grid density tweak**
+  - Penny list card grid now expands to four columns at xl to improve desktop density while keeping spacing and touch targets consistent.
 - **Recent focus (Dec 28): PR-3 Auth + Personal Lists + Sharing**
   - Magic-link login flow at `/login` (Supabase OTP) with callback at `/auth/callback`; middleware refreshes sessions and gates `/lists`.
   - Penny List cards now include “Save to list” via `AddToListButton` (smart add + picker). Personal lists live at `/lists`; list detail `/lists/[id]` supports priority/found status toggles, in-store mode, search/filter, and share links.
