@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 28, 2025 (Penny thumbnail styling polish)
+**Last updated:** Dec 30, 2025 (RLS migration applied, Supabase CLI linked)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -8,6 +8,12 @@ Every AI session must update this after meaningful work.
 
 ## 1. Where We Are
 
+- **Supabase CLI:** Linked to project `supabase-red-river` (ref: `djtejotbcnzzjfsogzlc`). Run `npx supabase projects list` to verify.
+- **RLS Migration (Dec 30):** Applied `008_apply_penny_list_rls.sql` - created `penny_list_public` view, enabled RLS on `Penny List` and `penny_item_enrichment` tables. Anon can read via view, insert with validation, but cannot update/delete.
+- **Recent focus (Dec 30): Performance + SEO + RLS PRs merged**
+  - PR #63: Added `unstable_cache` (60s) for penny list fetching
+  - PR #64: Enforced Supabase RLS, removed service-role fallbacks
+  - PR #65: Added OpenGraph/Twitter metadata for all core pages
 - **Recent focus (Dec 28): Penny List identifiers row**
   - Added a compact "Identifiers" row under the SKU pill in `components/penny-list-card.tsx`.
   - Mobile now uses a `<details>` toggle to keep identifiers from cluttering the card.

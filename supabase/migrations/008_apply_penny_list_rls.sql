@@ -65,7 +65,7 @@ CREATE POLICY "anon-insert-penny-list"
   TO anon
   WITH CHECK (
     auth.role() = 'anon'
-    AND home_depot_sku_6_or_10_digits ~ '^(\\d{6}|10\\d{8})$'
+    AND home_depot_sku_6_or_10_digits::text ~ '^(\\d{6}|10\\d{8})$'
     AND char_length(trim(coalesce(item_name, ''))) BETWEEN 1 AND 75
     AND char_length(trim(coalesce(store_city_state, ''))) >= 2
     AND (exact_quantity_found IS NULL OR (exact_quantity_found BETWEEN 1 AND 99))
