@@ -107,19 +107,26 @@ export function PennyListCard({ item }: PennyListCardProps) {
             >
               <PennyThumbnail src={item.imageUrl} alt={item.name} size={72} />
             </Link>
-            <div className="min-w-0 flex-1 space-y-3">
+            <div className="min-w-0 flex-1 space-y-2">
               <Link
                 href={skuPageUrl}
                 onClick={(e) => e.stopPropagation()}
                 className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] rounded"
               >
-                <h3
-                  id={`item-${item.id}-name`}
-                  className="font-semibold text-lg text-[var(--text-primary)] leading-[1.5] truncate group-hover:text-[var(--cta-primary)] transition-colors"
-                  title={item.name}
-                >
-                  {item.name}
-                </h3>
+                <div className="space-y-2">
+                  {item.brand && (
+                    <p className="text-xs uppercase tracking-[0.08em] text-[var(--text-secondary)]">
+                      {item.brand}
+                    </p>
+                  )}
+                  <h3
+                    id={`item-${item.id}-name`}
+                    className="font-semibold text-base sm:text-lg text-[var(--text-primary)] leading-[1.5] line-clamp-2 group-hover:text-[var(--cta-primary)] transition-colors"
+                    title={item.name}
+                  >
+                    {item.name}
+                  </h3>
+                </div>
               </Link>
 
               <button
@@ -287,24 +294,31 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
           >
             <PennyThumbnail src={item.imageUrl} alt={item.name} size={48} />
           </Link>
-          <div className="min-w-0 flex-1">
+          <div className="min-w-0 flex-1 space-y-2">
             <Link
               href={skuPageUrl}
               onClick={(e) => e.stopPropagation()}
               className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] rounded"
             >
-              <h3
-                id={`hot-item-${item.id}-name`}
-                className="text-sm font-semibold text-[var(--text-primary)] leading-[1.5] truncate group-hover:text-[var(--cta-primary)] transition-colors"
-                title={item.name}
-              >
-                {item.name}
-              </h3>
+              <div className="space-y-2">
+                {item.brand && (
+                  <p className="text-xs uppercase tracking-[0.08em] text-[var(--text-secondary)]">
+                    {item.brand}
+                  </p>
+                )}
+                <h3
+                  id={`hot-item-${item.id}-name`}
+                  className="text-sm sm:text-base font-semibold text-[var(--text-primary)] leading-[1.5] line-clamp-2 group-hover:text-[var(--cta-primary)] transition-colors"
+                  title={item.name}
+                >
+                  {item.name}
+                </h3>
+              </div>
             </Link>
             <button
               type="button"
               onClick={handleSkuCopy}
-              className="mt-2 flex items-center gap-2 text-xs text-[var(--text-primary)] font-mono elevation-2 border border-[var(--border-strong)] px-2.5 py-1.5 rounded w-fit font-medium cursor-pointer hover:border-[var(--cta-primary)] hover:bg-[var(--bg-hover)] transition-colors min-h-[36px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+              className="flex items-center gap-2 text-xs text-[var(--text-primary)] font-mono elevation-2 border border-[var(--border-strong)] px-2.5 py-1.5 rounded w-fit font-medium cursor-pointer hover:border-[var(--cta-primary)] hover:bg-[var(--bg-hover)] transition-colors min-h-[36px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
               aria-label={`Copy SKU ${item.sku} to clipboard`}
               title="Tap to copy SKU"
             >
