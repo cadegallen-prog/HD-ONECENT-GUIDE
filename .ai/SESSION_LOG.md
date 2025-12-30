@@ -37,6 +37,26 @@
 
 ---
 
+## 2025-12-28 - ChatGPT Codex (GPT-5.2) - SKU Identifiers Cleanup
+
+**AI:** ChatGPT Codex (GPT-5.2)  
+**Goal:** Clarify SKU page identifiers and remove duplicate SKU display.
+
+**Changes Made:**
+- Consolidated SKU, internet number, UPC, and model into a single “Identifiers” block on `/sku/[sku]`.
+- Renamed the Internet # label to “Internet # (Home Depot listing)” for clarity.
+- Removed the redundant SKU callout above the identifiers block.
+
+**Outcome:** ✅ Success
+
+**Verification:**
+- Screenshots captured (before/after, light/dark) via Playwright.
+
+**For Next AI:**
+- None.
+
+---
+
 ## 2025-12-27 - Claude Code (Opus 4.5) - PR-2: Report Find Prefill + Validation Hardening
 
 **AI:** Claude Code (Opus 4.5)  

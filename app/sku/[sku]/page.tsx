@@ -290,65 +290,52 @@ export default async function SkuDetailPage({ params }: PageProps) {
                   </div>
                 )}
 
-                <div className="flex flex-wrap gap-4 mb-8">
-                  <div className="flex flex-col">
-                    <span className="text-[10px] uppercase tracking-wider text-[var(--text-muted)] font-bold">
-                      SKU
-                    </span>
-                    <span className="font-mono text-lg text-[var(--text-primary)]">
-                      {formatSkuForDisplay(sku)}
-                    </span>
-                  </div>
-                </div>
-
                 {/* Product Identifiers Section */}
-                {(upc || internetNumber || modelNumber) && (
-                  <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-lg p-4 mb-6">
-                    <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-3">
-                      Product Identifiers
-                    </h3>
-                    <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-lg p-4 mb-6">
+                  <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-3">
+                    Identifiers
+                  </h3>
+                  <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                    <div>
+                      <dt className="text-[var(--text-muted)] inline">SKU:</dt>
+                      <dd className="text-[var(--text-primary)] font-mono inline ml-2">
+                        {formatSkuForDisplay(sku)}
+                      </dd>
+                    </div>
+
+                    {internetNumber && (
                       <div>
-                        <dt className="text-[var(--text-muted)] inline">SKU:</dt>
+                        <dt className="text-[var(--text-muted)] inline">
+                          Internet # (Home Depot listing):
+                        </dt>
                         <dd className="text-[var(--text-primary)] font-mono inline ml-2">
-                          {formatSkuForDisplay(sku)}
+                          {internetNumber}
                         </dd>
                       </div>
+                    )}
 
-                      {internetNumber && (
-                        <div>
-                          <dt className="text-[var(--text-muted)] inline">Internet #:</dt>
-                          <dd className="text-[var(--text-primary)] font-mono inline ml-2">
-                            {internetNumber}
-                          </dd>
-                        </div>
-                      )}
+                    {upc && (
+                      <div>
+                        <dt className="text-[var(--text-muted)] inline">UPC:</dt>
+                        <dd className="text-[var(--text-primary)] font-mono inline ml-2">{upc}</dd>
+                      </div>
+                    )}
 
-                      {upc && (
-                        <div>
-                          <dt className="text-[var(--text-muted)] inline">UPC:</dt>
-                          <dd className="text-[var(--text-primary)] font-mono inline ml-2">
-                            {upc}
-                          </dd>
-                        </div>
-                      )}
+                    {modelNumber && (
+                      <div>
+                        <dt className="text-[var(--text-muted)] inline">Model:</dt>
+                        <dd className="text-[var(--text-primary)] inline ml-2">{modelNumber}</dd>
+                      </div>
+                    )}
 
-                      {modelNumber && (
-                        <div>
-                          <dt className="text-[var(--text-muted)] inline">Model:</dt>
-                          <dd className="text-[var(--text-primary)] inline ml-2">{modelNumber}</dd>
-                        </div>
-                      )}
-
-                      {brand && (
-                        <div>
-                          <dt className="text-[var(--text-muted)] inline">Brand:</dt>
-                          <dd className="text-[var(--text-primary)] inline ml-2">{brand}</dd>
-                        </div>
-                      )}
-                    </dl>
-                  </div>
-                )}
+                    {brand && (
+                      <div>
+                        <dt className="text-[var(--text-muted)] inline">Brand:</dt>
+                        <dd className="text-[var(--text-primary)] inline ml-2">{brand}</dd>
+                      </div>
+                    )}
+                  </dl>
+                </div>
 
                 <div className="space-y-4 mb-8">
                   {latestDate && (
