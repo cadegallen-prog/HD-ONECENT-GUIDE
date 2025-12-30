@@ -126,9 +126,7 @@
 - None.
 
 
----
-
-## 2025-12-27 - Claude Code (Opus 4.5) - PR-2: Report Find Prefill + Validation Hardening
+---## 2025-12-27 - Claude Code (Opus 4.5) - PR-2: Report Find Prefill + Validation Hardening
 
 **AI:** Claude Code (Opus 4.5)  
 **Goal:** Harden /report-find for low-friction reporting from penny-list and SKU pages. Prevent accidental SKU edits when prefilled.
