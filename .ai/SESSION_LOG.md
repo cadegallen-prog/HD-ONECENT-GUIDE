@@ -35,49 +35,50 @@
 - Investigate why `npm run test:unit` fails to resolve `tests/**/*.test.ts` in this environment.
 - Review Playwright failures (Report Find prefill, visual smoke, SKU related items, store finder popup) and check whether `PLAYWRIGHT=1` fixture mode or dev server state is impacting those results.
 
----
-## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Penny List Identifiers Row
+---## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Penny List Identifiers Row
 
 **AI:** ChatGPT Codex (GPT-5.2)  
 **Goal:** Add a compact identifiers row under the SKU pill and reduce mobile clutter.
 
 **Changes Made:**
-- Added an “Identifiers” row under the SKU pill in `components/penny-list-card.tsx`, showing Model/UPC only when present.
+- Added an "Identifiers" row under the SKU pill in `components/penny-list-card.tsx`, showing Model/UPC only when present.
 - Added a mobile-only `<details>` toggle to keep the identifiers row compact.
 - Updated `data/penny-list.json` fixture to include a sample model number and UPC for previewing the UI.
 
-**Outcome:** ✅ Success
+**Outcome:** ? Success
 
 **Verification:**
-- lint: ✅ `npm run lint`
-- build: ✅ `npm run build` (Turbopack warnings about duplicate OpenTelemetry deps)
-- test:unit: ❌ `npm run test:unit` (no matching tests glob)
-- test:e2e: ❌ `npm run test:e2e` (Playwright browsers missing; needs `npx playwright install`)
+- lint: ? `npm run lint`
+- build: ? `npm run build` (Turbopack warnings about duplicate OpenTelemetry deps)
+- test:unit: ? `npm run test:unit` (no matching tests glob)
+- test:e2e: ? `npm run test:e2e` (Playwright browsers missing; needs `npx playwright install`)
 
 ---
 
-## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Auth + Personal Lists + Sharing
+## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Penny Thumbnail Styling Polish
 
 **AI:** ChatGPT Codex (GPT-5.2)  
-**Goal:** Ship PR-3 foundations: Supabase auth, personal lists with sharing, and scraping automation.
+**Goal:** Improve penny thumbnail separation and padding to avoid edge blending.  
 
 **Changes Made:**
-- Added Supabase auth provider + middleware, magic-link login (`/login`), auth callback (`/auth/callback`), and guarded `/lists` routes. Layout now wraps in `AuthProvider`.
-- Implemented personal lists UI: add-to-list buttons on Penny List cards, lists index (`/lists`), list detail (`/lists/[id]`) with priority/found toggles, in-store mode, filtering/search, and share/fork view at `/s/[token]`.
-- Added Supabase clients + analytics events, and migrations `001_create_lists_tables.sql`, `002_create_list_shares.sql`, `003_security_search_path.sql` (RLS + RPCs). Added `scripts/auto-enrich.ts` + `SCRAPING_IMPROVEMENT_PLAN.md` and npm script `enrich:auto`; ignored `data/skus-to-enrich.txt` and `supabase/.temp/`.
-- Centralized `formatSkuForDisplay`, upgraded SKU copy UX (toasts, formatting) across cards/table/SKU/report-find, and enforced CSS variable colors in new UI.
+- Strengthened thumbnail background with `var(--bg-tertiary)` and `var(--border-strong)` plus an inset shadow.
+- Switched thumbnails to `object-contain` with padding to keep edges off the background.
 
-**Outcome:** ✅ Success
+**Outcome:** ? Success
 
 **Verification:**
-- lint: ✅ `npm run lint`
-- build: ✅ `npm run build`
-- test:unit: ✅ `npm run test:unit` (21/21)
-- test:e2e: ✅ `npm run test:e2e` (68/68; Next dev source-map warnings + known store API 404 fallback)
+- lint: ? `npm run lint`
+- build: ? `npm run build` (warnings about `import-in-the-middle` version mismatch)
+- test:unit: ? `npm run test:unit` (no tests matched glob: `tests/**/*.test.ts`)
+- test:e2e: ? `npm run test:e2e` (Playwright browsers missing; prompt to run `npx playwright install`)
+- lint:colors: ? `npm run lint:colors`
+- Playwright: before/after light/dark captured; after-light shows hydration warning in console.
 
 **For Next AI:**
-- Apply the new Supabase migrations to the project DB and wire env vars (`NEXT_PUBLIC_SUPABASE_URL`/`ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`) in Vercel if not already.
-- Confirm list sharing RPCs execute with correct role grants in Supabase; add tests if needed.
+- None.
+
+---
+
 
 ---
 
