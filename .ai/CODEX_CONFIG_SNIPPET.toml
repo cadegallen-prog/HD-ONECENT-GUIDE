@@ -1,0 +1,20 @@
+# Codex MCP Configuration (Paste into ~/.codex/config.toml)
+
+[mcpServers.filesystem]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-filesystem", "C:/Users/cadeg/Projects/HD-ONECENT-GUIDE"]
+
+[mcpServers.github]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-github"]
+
+[mcpServers.playwright]
+command = "npx"
+args = ["-y", "@playwright/mcp"]
+
+[mcpServers.supabase]
+command = "npx"
+args = ["-y", "@supabase/mcp-server-supabase"]
+[mcpServers.supabase.env]
+SUPABASE_URL = "${SUPABASE_URL}"
+SUPABASE_ACCESS_TOKEN = "${SUPABASE_ACCESS_TOKEN}"
