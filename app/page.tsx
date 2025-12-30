@@ -15,12 +15,26 @@ import {
   FACEBOOK_GROUP_URL,
   BEFRUGAL_REFERRAL_PATH,
 } from "@/lib/constants"
+import { ogImageUrl } from "@/lib/og"
 import { HomePageAnalytics } from "@/components/home-page-analytics"
 import { TrackableNextLink } from "@/components/trackable-next-link"
 
 export const metadata: Metadata = {
   title: "Home Depot Penny List & Shopping Guide | Penny Central",
   description: `The complete guide to finding Home Depot penny items. Latest penny list, clearance cycles, and tips used by ${COMMUNITY_MEMBER_COUNT_DISPLAY} penny hunters.`,
+  openGraph: {
+    type: "website",
+    url: "https://www.pennycentral.com",
+    title: "Home Depot Penny List & Shopping Guide | Penny Central",
+    description: `The complete guide to finding Home Depot penny items. Latest penny list, clearance cycles, and tips used by ${COMMUNITY_MEMBER_COUNT_DISPLAY} penny hunters.`,
+    images: [ogImageUrl("homepage")],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Home Depot Penny List & Shopping Guide | Penny Central",
+    description: `The complete guide to finding Home Depot penny items. Latest penny list, clearance cycles, and tips used by ${COMMUNITY_MEMBER_COUNT_DISPLAY} penny hunters.`,
+    images: [ogImageUrl("homepage")],
+  },
 }
 
 export default function Home() {
