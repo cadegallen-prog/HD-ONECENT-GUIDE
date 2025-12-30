@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { getPennyList } from "@/lib/fetch-penny-data"
+import { getPennyListFiltered } from "@/lib/fetch-penny-data"
 import { filterValidPennyItems } from "@/lib/penny-list-utils"
 import {
   queryPennyItems,
@@ -74,14 +74,16 @@ export async function GET(request: Request) {
     const nowMs =
       process.env.PLAYWRIGHT === "1" ? new Date("2025-12-10T12:00:00Z").getTime() : Date.now()
 
-    // Fetch and validate items
-    const pennyItems = await getPennyList()
+    // Fetch items with date window filtering at the database level for performance
+    // This reduces data transfer by only fetching rows within the selected time range
+    const pennyItems = await getPennyListFiltered(days, nowMs)
     const validItems = filterValidPennyItems(pennyItems)
 
-    // Apply filters and sorting
+    // Apply additional filters and sorting
+    // Note: date filtering is already done at DB level, so we pass days: "all" to skip redundant filtering
     const { items: filteredItems, total } = queryPennyItems(
       validItems,
-      { state, photo, q, sort, days },
+      { state, photo, q, sort, days: "all" },
       nowMs
     )
 

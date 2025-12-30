@@ -316,15 +316,39 @@ export function buildPennyItemsFromRows(rows: SupabasePennyRow[]): PennyItem[] {
   return items
 }
 
+/**
+ * Date window for filtering Supabase queries at the database level.
+ * Used to reduce data transfer by fetching only rows within a time range.
+ */
+export type DateWindow = {
+  /** ISO string for the start of the window (inclusive) */
+  startDate: string
+  /** ISO string for the end of the window (inclusive), defaults to now */
+  endDate?: string
+}
+
 async function fetchRows(
   client: ReturnType<typeof getSupabaseClient>,
-  label: "anon" | "service_role"
+  label: "anon" | "service_role",
+  dateWindow?: DateWindow
 ): Promise<SupabasePennyRow[] | null> {
-  const { data, error } = await client
+  let query = client
     .from("Penny List")
     .select(
       "id,purchase_date,item_name,home_depot_sku_6_or_10_digits,exact_quantity_found,store_city_state,image_url,notes_optional,home_depot_url,internet_sku,timestamp"
     )
+
+  // Apply date window filter at database level for performance
+  // Filter on timestamp column (the primary date field)
+  if (dateWindow) {
+    const { startDate, endDate } = dateWindow
+    query = query.gte("timestamp", startDate)
+    if (endDate) {
+      query = query.lte("timestamp", endDate)
+    }
+  }
+
+  const { data, error } = await query
 
   if (error) {
     console.error(`Error fetching penny list from Supabase (${label}):`, error)
@@ -396,10 +420,10 @@ function getSupabaseServiceRoleReadClient(): SupabaseClientLike | null {
   return getSupabaseServiceRoleClient()
 }
 
-export async function fetchPennyItemsFromSupabase(): Promise<PennyItem[]> {
+export async function fetchPennyItemsFromSupabase(dateWindow?: DateWindow): Promise<PennyItem[]> {
   try {
     const anonClient = getSupabaseAnonReadClient()
-    const anonRows = await fetchRows(anonClient, "anon")
+    const anonRows = await fetchRows(anonClient, "anon", dateWindow)
     const anonEnrichment = await fetchEnrichmentRows(anonClient, "anon")
 
     if (anonRows && anonRows.length > 0) {
@@ -422,7 +446,7 @@ export async function fetchPennyItemsFromSupabase(): Promise<PennyItem[]> {
       ? getSupabaseServiceRoleReadClient()
       : null
     if (serviceRoleClient) {
-      const serviceRows = await fetchRows(serviceRoleClient, "service_role")
+      const serviceRows = await fetchRows(serviceRoleClient, "service_role", dateWindow)
       if (serviceRows && serviceRows.length > 0) {
         if (process.env.NODE_ENV === "development") {
           console.log("Service role fallback succeeded")
@@ -512,3 +536,76 @@ export const getPennyList = cacheFn(async (): Promise<PennyItem[]> => {
     return []
   }
 })
+
+/**
+ * Converts a date range string (e.g., "1m", "6m", "all") to a DateWindow object.
+ * Used by getPennyListFiltered to translate UI filter to Supabase query.
+ */
+function dateRangeToWindow(
+  dateRange: "1m" | "3m" | "6m" | "12m" | "18m" | "24m" | "all",
+  nowMs: number = Date.now()
+): DateWindow | undefined {
+  if (dateRange === "all") return undefined
+
+  const months: Record<string, number> = {
+    "1m": 1,
+    "3m": 3,
+    "6m": 6,
+    "12m": 12,
+    "18m": 18,
+    "24m": 24,
+  }
+
+  const monthsBack = months[dateRange]
+  if (!monthsBack) return undefined
+
+  const startDate = new Date(nowMs)
+  startDate.setMonth(startDate.getMonth() - monthsBack)
+
+  return {
+    startDate: startDate.toISOString(),
+    endDate: new Date(nowMs).toISOString(),
+  }
+}
+
+/**
+ * Fetches penny list items with optional date window filtering at the database level.
+ * This is more efficient than getPennyList when displaying a filtered date range,
+ * as it reduces the amount of data transferred from Supabase.
+ *
+ * @param dateRange - Optional date range filter ("1m", "3m", "6m", "12m", "18m", "24m", "all")
+ * @param nowMs - Current timestamp in milliseconds (for date calculations)
+ * @returns Filtered penny items
+ */
+export async function getPennyListFiltered(
+  dateRange?: "1m" | "3m" | "6m" | "12m" | "18m" | "24m" | "all",
+  nowMs: number = Date.now()
+): Promise<PennyItem[]> {
+  // For Playwright tests, use fixture data (no date filtering needed for deterministic tests)
+  if (process.env.PLAYWRIGHT === "1") {
+    return tryLocalFixtureFallback()
+  }
+
+  // Convert date range to window, or undefined for "all"
+  const dateWindow = dateRange ? dateRangeToWindow(dateRange, nowMs) : undefined
+
+  try {
+    const items = await fetchPennyItemsFromSupabase(dateWindow)
+
+    if (items.length === 0) {
+      // Fall back to fixture in dev mode if windowed query returns nothing
+      if (process.env.NODE_ENV === "development" || process.env.USE_FIXTURE_FALLBACK === "1") {
+        console.warn("Supabase windowed query empty; falling back to local fixture data.")
+        return tryLocalFixtureFallback()
+      }
+    }
+
+    return items
+  } catch (error) {
+    console.error("Unexpected error fetching filtered penny list:", error)
+    if (process.env.NODE_ENV === "development") {
+      return tryLocalFixtureFallback()
+    }
+    return []
+  }
+}
