@@ -66,6 +66,20 @@ interface PennyItem {
   itemName: string | null
 }
 
+// Type for Penny List table rows
+interface PennyListRow {
+  home_depot_sku_6_or_10_digits: string | number | null
+  item_name: string | null
+}
+
+// Type for penny_item_enrichment table rows
+interface EnrichmentRow {
+  sku: string
+  status: string
+  retry_after: string | null
+  attempt_count: number
+}
+
 // Parse CLI args
 function parseArgs() {
   const args = process.argv.slice(2)
@@ -317,7 +331,7 @@ function extractProduct(
 
 // Get items that need enrichment (with negative cache awareness)
 async function getItemsToEnrich(
-  supabase: ReturnType<typeof createClient>,
+  supabase: ReturnType<typeof createClient<any, any, any>>,
   limit: number,
   retryMode: boolean
 ): Promise<PennyItem[]> {
@@ -349,12 +363,13 @@ async function getItemsToEnrich(
     { status: string; retryAfter: string | null; attemptCount: number }
   >()
   for (const item of enrichedItems || []) {
-    const sku = normalizeSku(item.sku)
+    const typedItem = item as unknown as EnrichmentRow
+    const sku = normalizeSku(typedItem.sku)
     if (sku) {
       enrichmentMap.set(sku, {
-        status: item.status || "enriched",
-        retryAfter: item.retry_after,
-        attemptCount: item.attempt_count || 1,
+        status: typedItem.status || "enriched",
+        retryAfter: typedItem.retry_after,
+        attemptCount: typedItem.attempt_count || 1,
       })
     }
   }
@@ -367,7 +382,8 @@ async function getItemsToEnrich(
   let skippedEnriched = 0
 
   for (const item of pennyItems || []) {
-    const sku = normalizeSku(item.home_depot_sku_6_or_10_digits)
+    const typedItem = item as unknown as PennyListRow
+    const sku = normalizeSku(typedItem.home_depot_sku_6_or_10_digits)
     if (!sku || seen.has(sku)) continue
     seen.add(sku)
 
@@ -375,7 +391,7 @@ async function getItemsToEnrich(
 
     if (!existing) {
       // Never tried before - enrich it
-      needsEnrichment.push({ sku, itemName: item.item_name })
+      needsEnrichment.push({ sku, itemName: typedItem.item_name })
     } else if (existing.status === "enriched") {
       // Already enriched successfully
       skippedEnriched++
@@ -385,7 +401,7 @@ async function getItemsToEnrich(
         const retryDate = new Date(existing.retryAfter)
         if (now >= retryDate) {
           console.log(`   ♻️ Retrying ${sku} (past retry window)`)
-          needsEnrichment.push({ sku, itemName: item.item_name })
+          needsEnrichment.push({ sku, itemName: typedItem.item_name })
         } else {
           skippedNotFound++
         }

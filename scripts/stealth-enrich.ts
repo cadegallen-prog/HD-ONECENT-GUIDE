@@ -13,7 +13,8 @@ import { config } from "dotenv"
 import { resolve } from "path"
 import { createClient } from "@supabase/supabase-js"
 import * as fs from "fs"
-import { chromium, Page } from "playwright-extra"
+import { chromium } from "playwright-extra"
+import type { Page } from "playwright"
 // @ts-expect-error - stealth plugin types are for puppeteer but works with playwright-extra
 import StealthPlugin from "puppeteer-extra-plugin-stealth"
 
