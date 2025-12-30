@@ -36,6 +36,9 @@ Every AI session must update this after meaningful work.
   - Added optional brand line above item titles, shifted titles to 2-line clamps, and tuned mobile sizing for `PennyListCard` + `PennyListCardCompact` to keep 8-pt spacing consistent.
 - **Recent focus (Dec 28): SKU page identifiers polish**
   - Removed the duplicate SKU line and rebuilt the identifiers section into a clean, aligned grid with a helper note clarifying the Internet #.
+- **Recent focus (Dec 28): Penny List CTA cleanup**
+  - Removed the PayPal tip CTA from the Penny List.
+  - Moved the BeFrugal affiliate CTA lower on the page (near the footer card) while keeping `affiliate_click` tracking.
 - **Recent focus (Dec 28): Scraping auto-enrich workflow**
   - Added `scripts/auto-enrich.ts` + `SCRAPING_IMPROVEMENT_PLAN.md`; reads `data/skus-to-enrich.txt`, runs headed Playwright scrape, writes `.local/enrichment-upload.csv`. New npm script `npm run enrich:auto`; input/output paths ignored by git.
   - Added shared `formatSkuForDisplay` utility and upgraded SKU copy UX (toasts, consistent formatting) across cards, tables, SKU page, and report form; ensured new UI uses CSS variables (no raw Tailwind colors).

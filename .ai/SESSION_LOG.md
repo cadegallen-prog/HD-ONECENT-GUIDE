@@ -91,19 +91,40 @@
 - Switched title truncation to `line-clamp-2` and reduced mobile title size while keeping 8-pt spacing.
 - Updated `.ai/STATE.md` with the latest UI change.
 
-**Outcome:** ✅ UI updates complete; verification partially blocked by environment.
+**Outcome:** ? UI updates complete; verification partially blocked by environment.
 
 **Verification:**
-- lint: ✅ `npm run lint`
-- build: ✅ `npm run build` (Turbopack warnings about duplicated `import-in-the-middle`/`require-in-the-middle`)
-- test:unit: ❌ `npm run test:unit` (script error: could not find `tests/**/*.test.ts`)
-- test:e2e: ❌ `npm run test:e2e` (Playwright browsers missing; requires `npx playwright install`)
+- lint: ? `npm run lint`
+- build: ? `npm run build` (Turbopack warnings about duplicated `import-in-the-middle`/`require-in-the-middle`)
+- test:unit: ? `npm run test:unit` (script error: could not find `tests/**/*.test.ts`)
+- test:e2e: ? `npm run test:e2e` (Playwright browsers missing; requires `npx playwright install`)
 - Playwright screenshots captured manually for `/penny-list` (light + dark). Console showed missing Supabase env vars and one hydration mismatch warning in dev.
 
 **For Next AI:**
 - Consider fixing the unit test glob if intended, or document expected path.
 - Install Playwright browsers in this environment before rerunning e2e tests.
+---
 
+## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Penny List CTA Cleanup
+
+**AI:** ChatGPT Codex (GPT-5.2)  
+**Goal:** Remove PayPal CTA, move BeFrugal CTA lower while preserving affiliate tracking.
+
+**Changes Made:**
+- Removed the PayPal tip CTA and its click tracking from `components/penny-list-client.tsx`.
+- Moved the BeFrugal affiliate CTA near the footer card while keeping `affiliate_click` tracking.
+
+**Outcome:** ?? Partial (tests not fully green)
+
+**Verification:**
+- lint: ? `npm run lint`
+- build: ? `npm run build` (Turbopack warnings about duplicate OpenTelemetry deps)
+- test:unit: ? `npm run test:unit` (tsx could not find `tests/**/*.test.ts`; glob did not expand)
+- test:e2e: ? `npm run test:e2e` (Playwright failures in report-find prefill + visual smoke; browser deps installed via `npx playwright install` + `npx playwright install-deps`)
+
+**For Next AI:**
+- Investigate Playwright failures in `tests/report-find-prefill.spec.ts` (SKU prefill not applied) and the visual smoke/spec failures; confirm expected query param behavior in `/report-find`.
+- Check why `npm run test:unit` fails to expand `tests/**/*.test.ts` in this shell; may need a globstar-compatible shell or script update.
 ---
 
 ## 2025-12-28 - ChatGPT Codex (GPT-5.2) - SKU Identifiers Cleanup
@@ -112,11 +133,11 @@
 **Goal:** Clarify SKU page identifiers and remove duplicate SKU display.
 
 **Changes Made:**
-- Consolidated SKU, internet number, UPC, and model into a single “Identifiers” block on `/sku/[sku]`.
-- Renamed the Internet # label to “Internet # (Home Depot listing)” for clarity.
+- Consolidated SKU, internet number, UPC, and model into a single "Identifiers" block on `/sku/[sku]`.
+- Renamed the Internet # label to "Internet # (Home Depot listing)" for clarity.
 - Removed the redundant SKU callout above the identifiers block.
 
-**Outcome:** ✅ Success
+**Outcome:** ? Success
 
 **Verification:**
 - Screenshots captured (before/after, light/dark) via Playwright.
@@ -124,8 +145,8 @@
 **For Next AI:**
 - None.
 
+---
 
----## 2025-12-27 - Claude Code (Opus 4.5) - PR-2: Report Find Prefill + Validation Hardening
 
 **AI:** Claude Code (Opus 4.5)  
 **Goal:** Harden /report-find for low-friction reporting from penny-list and SKU pages. Prevent accidental SKU edits when prefilled.
