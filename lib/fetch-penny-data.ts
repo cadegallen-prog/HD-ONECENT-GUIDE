@@ -1,6 +1,7 @@
 import "server-only"
 import { readFile } from "node:fs/promises"
 import path from "node:path"
+import { unstable_cache } from "next/cache"
 import { cache } from "react"
 import { extractStateFromLocation } from "./penny-list-utils"
 import { PLACEHOLDER_IMAGE_URL } from "./image-cache"
@@ -23,6 +24,7 @@ const fetchWarningsLogged = {
   fallbackDisabled: false,
   enrichmentMissing: false,
 }
+const PENNY_LIST_CACHE_SECONDS = 60
 
 export type PennyItem = {
   id: string
@@ -424,9 +426,9 @@ export async function fetchPennyItemsFromSupabase(dateWindow?: DateWindow): Prom
   try {
     const anonClient = getSupabaseAnonReadClient()
     const anonRows = await fetchRows(anonClient, "anon", dateWindow)
-    const anonEnrichment = await fetchEnrichmentRows(anonClient, "anon")
 
     if (anonRows && anonRows.length > 0) {
+      const anonEnrichment = await fetchEnrichmentRows(anonClient, "anon")
       return applyEnrichment(buildPennyItemsFromRows(anonRows), anonEnrichment)
     }
 
@@ -453,7 +455,7 @@ export async function fetchPennyItemsFromSupabase(dateWindow?: DateWindow): Prom
         }
         const serviceEnrichment = await fetchEnrichmentRows(serviceRoleClient, "service_role")
         const fallbackEnrichment =
-          serviceEnrichment && serviceEnrichment.length > 0 ? serviceEnrichment : anonEnrichment
+          serviceEnrichment && serviceEnrichment.length > 0 ? serviceEnrichment : null
         return applyEnrichment(buildPennyItemsFromRows(serviceRows), fallbackEnrichment)
       }
 
@@ -490,6 +492,33 @@ const cacheFn =
         (...args: Parameters<T>) =>
           fn(...args)
 
+const getPennyListSource = async (): Promise<PennyItem[]> => {
+  if (process.env.PLAYWRIGHT === "1") {
+    return tryLocalFixtureFallback()
+  }
+
+  const items = await fetchPennyItemsFromSupabase()
+
+  if (items.length === 0) {
+    // If Supabase returns nothing (or failed), and we are in dev mode or explicitly asked,
+    // fall back to the local fixture so the app isn't empty.
+    if (process.env.NODE_ENV === "development" || process.env.USE_FIXTURE_FALLBACK === "1") {
+      console.warn("Supabase empty/failed; falling back to local fixture data.")
+      const fixtureItems = await tryLocalFixtureFallback()
+      return fixtureItems
+    }
+  }
+
+  return items
+}
+
+const getPennyListCached =
+  typeof unstable_cache === "function"
+    ? unstable_cache(getPennyListSource, ["penny-list"], {
+        revalidate: PENNY_LIST_CACHE_SECONDS,
+      })
+    : getPennyListSource
+
 export const getPennyList = cacheFn(async (): Promise<PennyItem[]> => {
   // Check global cache first (useful for dev mode HMR)
   // IMPORTANT: This cache is dev-only to prevent stale data in production
@@ -501,30 +530,21 @@ export const getPennyList = cacheFn(async (): Promise<PennyItem[]> => {
     }
   }
 
-  if (process.env.PLAYWRIGHT === "1") {
-    return tryLocalFixtureFallback()
-  }
-
   try {
-    const items = await fetchPennyItemsFromSupabase()
+    const items = await getPennyListCached()
 
     // Update global cache
     if (items.length > 0) {
       globalCache = { data: items, timestamp: Date.now() }
     }
 
-    if (items.length === 0) {
-      // If Supabase returns nothing (or failed), and we are in dev mode or explicitly asked,
-      // fall back to the local fixture so the app isn't empty.
-      if (process.env.NODE_ENV === "development" || process.env.USE_FIXTURE_FALLBACK === "1") {
-        console.warn("Supabase empty/failed; falling back to local fixture data.")
-        const fixtureItems = await tryLocalFixtureFallback()
-        // Cache the fixture too so we don't re-read disk constantly
-        if (fixtureItems.length > 0) {
-          globalCache = { data: fixtureItems, timestamp: Date.now() }
-        }
-        return fixtureItems
+    if (items.length === 0 && process.env.NODE_ENV === "development") {
+      // Cache the fixture too so we don't re-read disk constantly
+      const fixtureItems = await tryLocalFixtureFallback()
+      if (fixtureItems.length > 0) {
+        globalCache = { data: fixtureItems, timestamp: Date.now() }
       }
+      return fixtureItems
     }
     return items
   } catch (error) {
