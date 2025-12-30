@@ -12,6 +12,7 @@
 
 ---
 
+
 ## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Penny List highlights cleanup
 
 **AI:** ChatGPT Codex (GPT-5.2)  
@@ -55,7 +56,6 @@
 - test:e2e: ❌ `npm run test:e2e` (Playwright browsers missing; needs `npx playwright install`)
 
 ---
-
 
 ## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Auth + Personal Lists + Sharing
 
