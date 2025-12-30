@@ -167,3 +167,23 @@
 
 **Notes:**
 - Restart VS Code/Codex to refresh tool lists after config changes.
+
+---
+
+## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Penny List Grid Density
+
+**AI:** ChatGPT Codex (GPT-5.2)  
+**Goal:** Increase penny list card grid density at desktop widths without reducing tap targets.
+
+**Changes Made:**
+- Updated the penny list card grid to show four columns at xl breakpoint.
+- Captured Playwright proof screenshots for light/dark modes before and after the change.
+
+**Outcome:** ✅ Success
+
+**Verification:**
+- Playwright screenshots captured for /penny-list (light + dark, before/after) with console logs saved in reports/proof.
+
+**Files Modified:**
+- `components/penny-list-client.tsx` - Adjusted grid columns at xl
+- `.ai/STATE.md` - Updated project snapshot
