@@ -12,6 +12,25 @@
 
 ---
 
+## 2025-12-28 - ChatGPT Codex (GPT-5.2) - SKU Identifiers Cleanup
+
+**AI:** ChatGPT Codex (GPT-5.2)  
+**Goal:** Remove duplicate SKU line and align the identifiers section on SKU pages.  
+
+**Changes Made:**
+- Removed the duplicate SKU line and rebuilt the identifiers section into a clean, two-column grid with aligned labels/values.
+- Added subtle helper text explaining the “Internet #” field.
+
+**Outcome:** ✅ Success  
+
+**Verification:**
+- Playwright screenshots captured (light/dark) for `/sku/1000001234`.
+
+**Next Notes:**
+- Run full quality gates before deploy if more changes follow.
+
+---
+
 ## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Auth + Personal Lists + Sharing
 
 **AI:** ChatGPT Codex (GPT-5.2)  
