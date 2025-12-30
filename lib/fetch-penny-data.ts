@@ -5,23 +5,15 @@ import { unstable_cache } from "next/cache"
 import { cache } from "react"
 import { extractStateFromLocation } from "./penny-list-utils"
 import { PLACEHOLDER_IMAGE_URL } from "./image-cache"
-import { getSupabaseClient, getSupabaseServiceRoleClient } from "./supabase/client"
+import { getSupabaseClient } from "./supabase/client"
 import { normalizeSku, validateSku } from "./sku"
 
 const envConfigured =
   Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
   Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
 
-// TODO: Remove service role fallback once RLS allows anon reads without gaps.
-function allowServiceRoleFallbackEnabled() {
-  const v = process.env.SUPABASE_ALLOW_SERVICE_ROLE_FALLBACK
-  return (v ?? "true").toLowerCase() !== "false" && v !== "0"
-}
-
 const fetchWarningsLogged = {
   anonEmpty: false,
-  serviceRoleEmpty: false,
-  fallbackDisabled: false,
   enrichmentMissing: false,
 }
 const PENNY_LIST_CACHE_SECONDS = 60
@@ -331,11 +323,11 @@ export type DateWindow = {
 
 async function fetchRows(
   client: ReturnType<typeof getSupabaseClient>,
-  label: "anon" | "service_role",
+  label: "anon",
   dateWindow?: DateWindow
 ): Promise<SupabasePennyRow[] | null> {
   let query = client
-    .from("Penny List")
+    .from("penny_list_public")
     .select(
       "id,purchase_date,item_name,home_depot_sku_6_or_10_digits,exact_quantity_found,store_city_state,image_url,notes_optional,home_depot_url,internet_sku,timestamp"
     )
@@ -376,7 +368,7 @@ async function fetchRows(
 
 async function fetchEnrichmentRows(
   client: ReturnType<typeof getSupabaseClient>,
-  label: "anon" | "service_role"
+  label: "anon"
 ): Promise<SupabasePennyEnrichmentRow[] | null> {
   const { data, error } = await client
     .from("penny_item_enrichment")
@@ -413,15 +405,6 @@ function getSupabaseAnonReadClient(): SupabaseClientLike {
   return getSupabaseClient()
 }
 
-function getSupabaseServiceRoleReadClient(): SupabaseClientLike | null {
-  const override = (globalThis as { __supabaseServiceRoleReadOverride?: SupabaseClientLike })
-    .__supabaseServiceRoleReadOverride
-  if (override) return override
-
-  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return null
-  return getSupabaseServiceRoleClient()
-}
-
 export async function fetchPennyItemsFromSupabase(dateWindow?: DateWindow): Promise<PennyItem[]> {
   try {
     const anonClient = getSupabaseAnonReadClient()
@@ -430,43 +413,6 @@ export async function fetchPennyItemsFromSupabase(dateWindow?: DateWindow): Prom
     if (anonRows && anonRows.length > 0) {
       const anonEnrichment = await fetchEnrichmentRows(anonClient, "anon")
       return applyEnrichment(buildPennyItemsFromRows(anonRows), anonEnrichment)
-    }
-
-    // Anon read returned empty or null - try service role fallback
-    if (!allowServiceRoleFallbackEnabled()) {
-      if (!fetchWarningsLogged.fallbackDisabled && envConfigured) {
-        console.warn(
-          "Service role read fallback disabled (SUPABASE_ALLOW_SERVICE_ROLE_FALLBACK=0 or false)."
-        )
-        fetchWarningsLogged.fallbackDisabled = true
-      }
-    } else if (process.env.NODE_ENV === "development") {
-      console.warn("Anon read empty/failed; attempting service role fallback")
-    }
-
-    const serviceRoleClient = allowServiceRoleFallbackEnabled()
-      ? getSupabaseServiceRoleReadClient()
-      : null
-    if (serviceRoleClient) {
-      const serviceRows = await fetchRows(serviceRoleClient, "service_role", dateWindow)
-      if (serviceRows && serviceRows.length > 0) {
-        if (process.env.NODE_ENV === "development") {
-          console.log("Service role fallback succeeded")
-        }
-        const serviceEnrichment = await fetchEnrichmentRows(serviceRoleClient, "service_role")
-        const fallbackEnrichment =
-          serviceEnrichment && serviceEnrichment.length > 0 ? serviceEnrichment : null
-        return applyEnrichment(buildPennyItemsFromRows(serviceRows), fallbackEnrichment)
-      }
-
-      if (
-        process.env.SUPABASE_SERVICE_ROLE_KEY &&
-        envConfigured &&
-        !fetchWarningsLogged.serviceRoleEmpty
-      ) {
-        console.warn("Supabase (service role) returned no penny list rows.")
-        fetchWarningsLogged.serviceRoleEmpty = true
-      }
     }
   } catch (error) {
     // If Supabase is not configured or fails, we'll return empty
