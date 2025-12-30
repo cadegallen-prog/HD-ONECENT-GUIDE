@@ -12,6 +12,26 @@
 
 ---
 
+## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Penny List Identifiers Row
+
+**AI:** ChatGPT Codex (GPT-5.2)  
+**Goal:** Add a compact identifiers row under the SKU pill and reduce mobile clutter.
+
+**Changes Made:**
+- Added an “Identifiers” row under the SKU pill in `components/penny-list-card.tsx`, showing Model/UPC only when present.
+- Added a mobile-only `<details>` toggle to keep the identifiers row compact.
+- Updated `data/penny-list.json` fixture to include a sample model number and UPC for previewing the UI.
+
+**Outcome:** ✅ Success
+
+**Verification:**
+- lint: ✅ `npm run lint`
+- build: ✅ `npm run build` (Turbopack warnings about duplicate OpenTelemetry deps)
+- test:unit: ❌ `npm run test:unit` (no matching tests glob)
+- test:e2e: ❌ `npm run test:e2e` (Playwright browsers missing; needs `npx playwright install`)
+
+---
+
 ## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Auth + Personal Lists + Sharing
 
 **AI:** ChatGPT Codex (GPT-5.2)  

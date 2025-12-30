@@ -38,6 +38,12 @@ export function PennyListCard({ item }: PennyListCardProps) {
   const router = useRouter()
   const [copied, setCopied] = useState(false)
 
+  const identifiers = [
+    { label: "Model", value: item.modelNumber },
+    { label: "UPC", value: item.upc },
+  ]
+  const hasIdentifiers = identifiers.some((identifier) => identifier.value)
+
   const totalReports = item.locations ? getTotalReports(item.locations) : 0
   const stateCount = item.locations ? Object.keys(item.locations).length : 0
   const homeDepotUrl = getHomeDepotProductUrl({
@@ -144,6 +150,40 @@ export function PennyListCard({ item }: PennyListCardProps) {
                   <Copy className="w-4 h-4 text-[var(--text-muted)]" aria-hidden="true" />
                 )}
               </button>
+              {hasIdentifiers && (
+                <>
+                  <div className="hidden sm:flex items-center flex-wrap gap-2 text-xs text-[var(--text-secondary)]">
+                    <span className="font-semibold text-[var(--text-muted)]">Identifiers:</span>
+                    {identifiers
+                      .filter((identifier) => identifier.value)
+                      .map((identifier) => (
+                        <span key={identifier.label} className="flex items-center gap-1">
+                          <span className="text-[var(--text-muted)]">{identifier.label}</span>
+                          <span className="text-[var(--text-primary)] font-medium">
+                            {identifier.value}
+                          </span>
+                        </span>
+                      ))}
+                  </div>
+                  <details className="sm:hidden">
+                    <summary className="text-xs font-semibold text-[var(--cta-primary)] underline decoration-[var(--cta-primary)] underline-offset-2">
+                      Details
+                    </summary>
+                    <div className="mt-2 flex flex-wrap gap-2 text-xs text-[var(--text-secondary)]">
+                      {identifiers
+                        .filter((identifier) => identifier.value)
+                        .map((identifier) => (
+                          <span key={identifier.label} className="flex items-center gap-1">
+                            <span className="text-[var(--text-muted)]">{identifier.label}</span>
+                            <span className="text-[var(--text-primary)] font-medium">
+                              {identifier.value}
+                            </span>
+                          </span>
+                        ))}
+                    </div>
+                  </details>
+                </>
+              )}
             </div>
           </div>
 
@@ -233,6 +273,12 @@ export function PennyListCard({ item }: PennyListCardProps) {
 export function PennyListCardCompact({ item }: PennyListCardProps) {
   const router = useRouter()
   const [copied, setCopied] = useState(false)
+
+  const identifiers = [
+    { label: "Model", value: item.modelNumber },
+    { label: "UPC", value: item.upc },
+  ]
+  const hasIdentifiers = identifiers.some((identifier) => identifier.value)
 
   const totalReports = item.locations ? getTotalReports(item.locations) : 0
   const stateCount = item.locations ? Object.keys(item.locations).length : 0
@@ -330,6 +376,21 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
                 <Copy className="w-3.5 h-3.5 text-[var(--text-muted)]" aria-hidden="true" />
               )}
             </button>
+            {hasIdentifiers && (
+              <div className="mt-2 flex flex-wrap gap-2 text-xs text-[var(--text-secondary)]">
+                <span className="font-semibold text-[var(--text-muted)]">Identifiers:</span>
+                {identifiers
+                  .filter((identifier) => identifier.value)
+                  .map((identifier) => (
+                    <span key={identifier.label} className="flex items-center gap-1">
+                      <span className="text-[var(--text-muted)]">{identifier.label}</span>
+                      <span className="text-[var(--text-primary)] font-medium">
+                        {identifier.value}
+                      </span>
+                    </span>
+                  ))}
+              </div>
+            )}
           </div>
         </div>
         {totalReports > 0 && (
