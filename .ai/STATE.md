@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 28, 2025 (Penny thumbnail styling polish)
+**Last updated:** Dec 30, 2025 (PR triage session - merged #62 thumbnail styling, #60 4-column grid)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -13,10 +13,15 @@ Every AI session must update this after meaningful work.
   - `/verified-pennies` permanently redirects to `/penny-list`
   - No repo-stored verified datasets/scripts (privacy)
   - SKU pages + sitemap derive from the Penny List only
+<<<<<<< HEAD
 - **Recent focus (Dec 29): Auto-enrich reliability + negative cache**
   - `scripts/auto-enrich.ts` now reuses `lib/sku.ts` validation, dedupes inputs, and skips invalid SKUs.
   - Added `.local/enrichment-status.json` to track enriched/not-found/mismatch/errors and skip reattempts unless `--force` is used.
   - Resolves a product link from search results, then extracts product data from the product page using JSON-LD + fallbacks.
+=======
+- **Recent focus (Dec 28): Penny list grid density tweak**
+  - Penny list card grid now expands to four columns at xl to improve desktop density while keeping spacing and touch targets consistent.
+>>>>>>> codex/update-card-grid-layout-in-penny-list-client
 - **Recent focus (Dec 28): PR-3 Auth + Personal Lists + Sharing**
   - Magic-link login flow at `/login` (Supabase OTP) with callback at `/auth/callback`; middleware refreshes sessions and gates `/lists`.
   - Penny List cards now include “Save to list” via `AddToListButton` (smart add + picker). Personal lists live at `/lists`; list detail `/lists/[id]` supports priority/found status toggles, in-store mode, search/filter, and share links.

@@ -89,3 +89,21 @@
 - Full 6-PR roadmap documented in `.claude/plans/cozy-mapping-sunset.md`
 
 ---
+
+## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Penny List Grid Density
+
+**AI:** ChatGPT Codex (GPT-5.2)
+**Goal:** Increase penny list card grid density at desktop widths without reducing tap targets.
+
+**Changes Made:**
+- Updated the penny list card grid to show four columns at xl breakpoint.
+
+**Outcome:** ✅ Success
+
+**Verification:**
+- All 4 quality gates: lint ✅, build ✅, test:unit 21/21 ✅, test:e2e 68/68 ✅
+
+**Files Modified:**
+- `components/penny-list-client.tsx` - Adjusted grid columns to xl:grid-cols-4
+
+---
