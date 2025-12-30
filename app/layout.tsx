@@ -113,8 +113,7 @@ export default function RootLayout({
             data-domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN}
             data-api={process.env.NEXT_PUBLIC_PLAUSIBLE_API_HOST || undefined}
             src={
-              process.env.NEXT_PUBLIC_PLAUSIBLE_SCRIPT_SRC ??
-              "https://plausible.io/js/script.js"
+              process.env.NEXT_PUBLIC_PLAUSIBLE_SCRIPT_SRC ?? "https://plausible.io/js/script.js"
             }
           />
         )}

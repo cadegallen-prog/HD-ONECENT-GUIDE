@@ -4,6 +4,7 @@ declare global {
       event: string,
       options?: {
         props?: Record<string, unknown>
+        u?: string
       }
     ) => void
   }

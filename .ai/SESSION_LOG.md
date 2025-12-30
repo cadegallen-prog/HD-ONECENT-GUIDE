@@ -74,3 +74,17 @@
 **For Next AI:**
 - Apply the new Supabase migrations to the project DB and wire env vars (`NEXT_PUBLIC_SUPABASE_URL`/`ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`) in Vercel if not already.
 - Confirm list sharing RPCs execute with correct role grants in Supabase; add tests if needed.
+
+---
+
+## 2025-12-30 - Codex - PR-66 fixes + QA verification
+
+**Changes:**
+- Allowed Plausible domains in CSP (`next.config.js`).
+- Fixed Plausible typing for `trackPageView` (allow `u` in options).
+
+**Verification:**
+- lint: PASS `npm run lint`
+- build: PASS `npm run build` (Turbopack duplicate OpenTelemetry warnings)
+- test:unit: PASS `npm run test:unit` (21/21)
+- test:e2e: PASS `npm run test:e2e` (68/68)
