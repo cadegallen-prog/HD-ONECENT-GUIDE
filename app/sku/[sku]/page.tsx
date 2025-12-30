@@ -8,6 +8,7 @@ import { validateSku, formatSkuForDisplay } from "@/lib/sku"
 import { getHomeDepotProductUrl } from "@/lib/home-depot"
 import { getFreshness } from "@/lib/freshness-utils"
 import { ogImageUrl } from "@/lib/og"
+import { TrackableLink } from "@/components/trackable-link"
 
 type PageProps = {
   params: Promise<{ sku: string }>
@@ -374,15 +375,17 @@ export default async function SkuDetailPage({ params }: PageProps) {
               </div>
 
               <div className="pt-6 border-t border-[var(--border-default)] flex flex-col gap-3">
-                <a
+                <TrackableLink
                   href={homeDepotUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-primary w-full flex items-center justify-center gap-2 py-4 rounded-xl font-bold text-lg shadow-lg hover:scale-[1.02] transition-transform"
+                  eventName="home_depot_click"
+                  eventParams={{ skuMasked: sku.slice(-4), source: "sku-page" }}
                 >
                   View on Home Depot
                   <ExternalLink className="w-5 h-5" />
-                </a>
+                </TrackableLink>
                 <p className="text-[10px] text-center text-[var(--text-muted)] px-4">
                   Prices and availability vary by store. Penny items are often removed from shelves
                   once they hit $0.01.

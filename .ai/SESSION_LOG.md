@@ -12,6 +12,26 @@
 
 ---
 
+## 2025-12-29 - ChatGPT Codex (GPT-5.2) - PR-06 Analytics Instrumentation
+
+**AI:** ChatGPT Codex (GPT-5.2)  
+**Goal:** Add privacy-friendly analytics (Plausible-ready), instrument key events, and document env vars.
+
+**Changes Made:**
+- Replaced Google Analytics with optional Plausible script injection (env-driven) and gated Vercel Analytics via `NEXT_PUBLIC_ANALYTICS_PROVIDER`.
+- Added event tracking for homepage views, "View on Home Depot" clicks, and Report a Find CTA clicks (hero + nav).
+- Documented analytics env vars and local disable path in `README.md` and `.ai/ENVIRONMENT_VARIABLES.md`; updated `.ai/ANALYTICS_MAP.md` and `.ai/STATE.md`.
+
+**Outcome:** ✅ Changes complete (verification pending).
+
+**Verification:**
+- lint: ⚠️ not run
+- build: ⚠️ not run
+- test:unit: ⚠️ not run
+- test:e2e: ⚠️ not run
+
+---
+
 ## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Penny List Identifiers Row
 
 **AI:** ChatGPT Codex (GPT-5.2)  
@@ -54,73 +74,3 @@
 **For Next AI:**
 - Apply the new Supabase migrations to the project DB and wire env vars (`NEXT_PUBLIC_SUPABASE_URL`/`ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`) in Vercel if not already.
 - Confirm list sharing RPCs execute with correct role grants in Supabase; add tests if needed.
-
----
-
-## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Penny List Card Typography Hierarchy
-
-**AI:** ChatGPT Codex (GPT-5.2)  
-**Goal:** Add brand line + two-line title clamping on Penny List cards and align mobile typography across compact/standard cards.
-
-**Changes Made:**
-- Added optional brand line above titles for `PennyListCard` and `PennyListCardCompact`.
-- Switched title truncation to `line-clamp-2` and reduced mobile title size while keeping 8-pt spacing.
-- Updated `.ai/STATE.md` with the latest UI change.
-
-**Outcome:** ✅ UI updates complete; verification partially blocked by environment.
-
-**Verification:**
-- lint: ✅ `npm run lint`
-- build: ✅ `npm run build` (Turbopack warnings about duplicated `import-in-the-middle`/`require-in-the-middle`)
-- test:unit: ❌ `npm run test:unit` (script error: could not find `tests/**/*.test.ts`)
-- test:e2e: ❌ `npm run test:e2e` (Playwright browsers missing; requires `npx playwright install`)
-- Playwright screenshots captured manually for `/penny-list` (light + dark). Console showed missing Supabase env vars and one hydration mismatch warning in dev.
-
-**For Next AI:**
-- Consider fixing the unit test glob if intended, or document expected path.
-- Install Playwright browsers in this environment before rerunning e2e tests.
-
----
-
-## 2025-12-27 - Claude Code (Opus 4.5) - PR-2: Report Find Prefill + Validation Hardening
-
-**AI:** Claude Code (Opus 4.5)  
-**Goal:** Harden /report-find for low-friction reporting from penny-list and SKU pages. Prevent accidental SKU edits when prefilled.
-
-**Changes Made:**
-- Added `skuLocked` state: when SKU is prefilled via query params, it's now read-only by default
-- Added "Edit" button (with Pencil icon) to unlock SKU field
-- Added loading skeleton (`ReportFindSkeleton`) for better SSR/hydration - shows form placeholder before client hydration
-- Updated E2E tests to use more specific selectors (`#sku`, `#itemName`) instead of label matching
-
-**Outcome:** ✅ Success
-
-**Verification:**
-- lint: ✅ 0 errors
-- build: ✅ success (903 pages)
-- test:unit: ✅ 21/21 passing
-- test:e2e: ✅ 16/17 passing (1 pre-existing failure in sku-related-items.spec.ts)
-
-**Files Modified:**
-- `app/report-find/page.tsx` - Added skuLocked state, Edit button, loading skeleton
-- `tests/report-find-prefill.spec.ts` - Updated selectors, added locked SKU test
-
-**For Next AI:**
-- PR-3 (Auth + Personal Lists) is next - requires Supabase tables and RLS policies
-- Full 6-PR roadmap documented in `.claude/plans/cozy-mapping-sunset.md`
-
----
-
-## 2025-12-27 - ChatGPT Codex (GPT-5.2) - MCP Set-and-Forget Prune
-
-**AI:** ChatGPT Codex (GPT-5.2)  
-**Goal:** Reduce MCP tool noise while keeping daily DB checks available.
-
-**Changes Made:**
-- Removed Vercel MCP from Codex (`C:\\Users\\cadeg\\.codex\\config.toml`), Claude (`.claude/settings.json`), and VS Code (`.vscode/mcp.json`).
-- Kept Supabase enabled for routine database checks.
-
-**Outcome:** ✅ Success
-
-**Notes:**
-- Restart VS Code/Codex to refresh tool lists after config changes.

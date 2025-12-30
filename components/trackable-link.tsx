@@ -10,7 +10,7 @@ interface TrackableLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 }
 
 /**
- * A link component that tracks clicks with Google Analytics
+ * A link component that tracks clicks with the configured analytics provider
  * Use this for CTAs where you want to track conversions
  */
 export function TrackableLink({

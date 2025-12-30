@@ -6,6 +6,12 @@ Dates are recorded in America/New_York time.
 
 ---
 
+## 2025-12-29 - Analytics instrumentation (Plausible-ready)
+
+- Replaced Google Analytics with privacy-friendly Plausible script injection (env-controlled) and kept Vercel Analytics optional via provider flag.
+- Added tracked events for homepage views, Home Depot outbound clicks, and Report a Find CTAs; kept existing filter/search and submission tracking intact.
+- Documented analytics environment variables and local disable flow in README and `.ai/ENVIRONMENT_VARIABLES.md`.
+
 ## 2025-12-20 - Privacy cleanup (no local paths in repo)
 
 - Removed tracked files/content that leaked local machine paths (Windows username), and ignored the stray local Lighthouse output going forward.

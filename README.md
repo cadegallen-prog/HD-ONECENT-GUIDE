@@ -39,6 +39,35 @@ npm run lint       # ESLint check
 
 ---
 
+## Analytics (Privacy-Friendly)
+
+Analytics are optional and controlled by environment variables. Supported providers: Plausible (recommended) or Vercel Analytics.
+
+**Environment variables:**
+
+```bash
+# Required to enable analytics (set to "plausible" or "vercel")
+NEXT_PUBLIC_ANALYTICS_PROVIDER=plausible
+
+# Plausible (required when provider is plausible)
+NEXT_PUBLIC_PLAUSIBLE_DOMAIN=www.pennycentral.com
+
+# Optional Plausible overrides (self-hosted)
+NEXT_PUBLIC_PLAUSIBLE_SCRIPT_SRC=https://plausible.io/js/script.js
+NEXT_PUBLIC_PLAUSIBLE_API_HOST=https://plausible.io/api/event
+```
+
+**Disable analytics locally:**
+
+```bash
+# .env.local
+NEXT_PUBLIC_ANALYTICS_PROVIDER=none
+```
+
+If `NEXT_PUBLIC_ANALYTICS_PROVIDER` is unset, analytics are disabled by default.
+
+---
+
 ## OG Images (Facebook Reliable)
 
 Main pages use **static** OG PNGs for reliability on Facebook and other scrapers.

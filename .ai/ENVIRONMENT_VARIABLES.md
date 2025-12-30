@@ -1,6 +1,6 @@
 # Environment Variables Reference
 
-**Last Updated:** 2025-12-27
+**Last Updated:** 2025-12-29
 **Purpose:** Track all environment variables for Penny Central project
 
 ---
@@ -73,6 +73,17 @@
 ## 🟡 OPTIONAL - Integration-Managed (Unused but Harmless)
 
 These were auto-created by the Supabase Vercel Integration but your code doesn't use them:
+
+### Analytics (privacy-friendly)
+
+| Variable | Where Set | Purpose | Used In |
+|----------|-----------|---------|---------|
+| `NEXT_PUBLIC_ANALYTICS_PROVIDER` | Vercel / `.env.local` | Analytics provider: `plausible`, `vercel`, or `none` | `app/layout.tsx`, `lib/analytics.ts` |
+| `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` | Vercel / `.env.local` | Plausible site domain (required for Plausible) | `app/layout.tsx` |
+| `NEXT_PUBLIC_PLAUSIBLE_SCRIPT_SRC` | Vercel / `.env.local` | Optional Plausible script override (self-host) | `app/layout.tsx` |
+| `NEXT_PUBLIC_PLAUSIBLE_API_HOST` | Vercel / `.env.local` | Optional Plausible API endpoint override (self-host) | `app/layout.tsx` |
+
+**Local disable:** set `NEXT_PUBLIC_ANALYTICS_PROVIDER=none` in `.env.local`.
 
 ### Supabase Duplicates
 - `SUPABASE_URL` - Duplicate of `NEXT_PUBLIC_SUPABASE_URL` (unused)

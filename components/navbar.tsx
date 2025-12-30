@@ -5,6 +5,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Map, User, Moon, Sun, Book, Menu, X, List, PlusCircle } from "lucide-react"
 import { useTheme } from "@/components/theme-provider"
+import { trackEvent } from "@/lib/analytics"
 
 export function Navbar() {
   const pathname = usePathname()
@@ -52,6 +53,11 @@ export function Navbar() {
                   <Link
                     key={item.href}
                     href={item.href}
+                    onClick={() => {
+                      if (item.href === "/report-find") {
+                        trackEvent("report_find_click", { source: "nav-desktop" })
+                      }
+                    }}
                     className={`
                       px-4 py-2 rounded-lg text-sm font-medium transition-all duration-150
                       ${
@@ -108,7 +114,12 @@ export function Navbar() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
+                    onClick={() => {
+                      if (item.href === "/report-find") {
+                        trackEvent("report_find_click", { source: "nav-mobile" })
+                      }
+                      setMobileMenuOpen(false)
+                    }}
                     className={`
                       flex items-center gap-3 px-4 py-3.5 min-h-[48px] rounded-lg text-base font-medium transition-all duration-150
                       ${

@@ -15,6 +15,8 @@ import {
   FACEBOOK_GROUP_URL,
   BEFRUGAL_REFERRAL_PATH,
 } from "@/lib/constants"
+import { HomePageAnalytics } from "@/components/home-page-analytics"
+import { TrackableNextLink } from "@/components/trackable-next-link"
 
 export const metadata: Metadata = {
   title: "Home Depot Penny List & Shopping Guide | Penny Central",
@@ -24,6 +26,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
+      <HomePageAnalytics />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -89,14 +92,16 @@ export default function Home() {
               <List className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
               Browse Penny List
             </Link>
-            <Link
+            <TrackableNextLink
               href="/report-find"
               className="btn-secondary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg border-2 border-[var(--border-default)] dark:border-[var(--border-strong)] bg-transparent text-[var(--text-primary)] font-semibold hover:bg-[var(--bg-elevated)] hover:border-[var(--border-strong)] dark:hover:bg-[var(--bg-elevated)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
               aria-label="Report a new penny find"
+              eventName="report_find_click"
+              eventParams={{ source: "home-hero" }}
             >
               <PlusCircle className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
               Report a Find
-            </Link>
+            </TrackableNextLink>
           </div>
         </div>
       </section>

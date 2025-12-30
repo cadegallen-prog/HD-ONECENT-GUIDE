@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 28, 2025 (Identifiers row on Penny List cards)
+**Last updated:** Dec 29, 2025 (Privacy-friendly analytics instrumentation)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -8,6 +8,10 @@ Every AI session must update this after meaningful work.
 
 ## 1. Where We Are
 
+- **Recent focus (Dec 29): Privacy-friendly analytics instrumentation**
+  - Replaced Google Analytics with optional Plausible script injection (env-driven) and gated Vercel Analytics via `NEXT_PUBLIC_ANALYTICS_PROVIDER`.
+  - Added events for homepage view, "View on Home Depot" clicks (card + SKU page), and Report a Find CTA clicks (hero + nav).
+  - Documented analytics environment variables and local disable path in README + `.ai/ENVIRONMENT_VARIABLES.md`.
 - **Recent focus (Dec 28): Penny List identifiers row**
   - Added a compact “Identifiers” row under the SKU pill in `components/penny-list-card.tsx`.
   - Mobile now uses a `<details>` toggle to keep identifiers from cluttering the card.
