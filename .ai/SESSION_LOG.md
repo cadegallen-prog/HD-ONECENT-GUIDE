@@ -12,6 +12,30 @@
 
 ---
 
+## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Penny List highlights cleanup
+
+**AI:** ChatGPT Codex (GPT-5.2)  
+**Goal:** Remove extra Penny List highlight modules and keep a single primary module.
+
+**Changes Made:**
+- Removed the “Trending SKUs” block from `/penny-list` and dropped its data plumbing.
+- Removed the “What’s New” module and props from `PennyListClient`, keeping “Hot Right Now” as the primary highlight.
+- Updated analytics payload to report `hotItemsCount` for the remaining highlight module.
+
+**Outcome:** ⚠️ Partial (tests failing)
+
+**Verification:**
+- lint: ✅ `npm run lint`
+- build: ✅ `npm run build` (Turbopack warnings about import-in-the-middle version mismatch)
+- test:unit: ❌ `npm run test:unit` (glob path not found: `tests/**/*.test.ts`)
+- test:e2e: ❌ `npm run test:e2e` (multiple Playwright failures across projects; see console output)
+
+**For Next AI:**
+- Investigate why `npm run test:unit` fails to resolve `tests/**/*.test.ts` in this environment.
+- Review Playwright failures (Report Find prefill, visual smoke, SKU related items, store finder popup) and check whether `PLAYWRIGHT=1` fixture mode or dev server state is impacting those results.
+
+---
+
 ## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Penny List Identifiers Row
 
 **AI:** ChatGPT Codex (GPT-5.2)  
@@ -31,6 +55,7 @@
 - test:e2e: ❌ `npm run test:e2e` (Playwright browsers missing; needs `npx playwright install`)
 
 ---
+
 
 ## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Auth + Personal Lists + Sharing
 

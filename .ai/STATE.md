@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 28, 2025 (Identifiers row on Penny List cards)
+**Last updated:** Dec 28, 2025 (Penny List highlights cleanup)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -17,6 +17,10 @@ Every AI session must update this after meaningful work.
   - `/verified-pennies` permanently redirects to `/penny-list`
   - No repo-stored verified datasets/scripts (privacy)
   - SKU pages + sitemap derive from the Penny List only
+- **Recent focus (Dec 28): Penny List highlights cleanup**
+  - Removed the "Trending SKUs" block and the "What's New" module, keeping "Hot Right Now" as the single highlight on `/penny-list`.
+  - Analytics now reports `hotItemsCount` with the Penny List view event.
+  - Verification status: lint/build passed; unit + e2e tests failed in this environment (see SESSION_LOG).
 - **Recent focus (Dec 28): SKU identifiers clarity**
   - Grouped SKU, internet number, UPC, and model into a single Identifiers cluster on SKU pages
   - Renamed Internet # label to clarify it is the Home Depot listing identifier
