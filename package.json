@@ -23,6 +23,7 @@
     "enrich:auto": "tsx scripts/auto-enrich.ts",
     "enrich:bulk": "tsx scripts/bulk-enrich.ts",
     "enrich:stealth": "tsx scripts/stealth-enrich.ts",
+    "enrich:serpapi": "tsx scripts/serpapi-enrich.ts",
     "prepare": "husky"
   },
   "dependencies": {

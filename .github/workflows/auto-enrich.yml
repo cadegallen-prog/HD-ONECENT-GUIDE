@@ -1,3 +1,9 @@
+# ⚠️ DEPRECATED - DO NOT USE
+# This workflow is disabled. Use serpapi-enrich.yml instead.
+# Reason: Stealth scraping is unreliable due to HD's TLS fingerprinting.
+# The Webshare proxy subscription (~$5.49/mo) is not worth it.
+#
+# --- Original description (for reference) ---
 # Auto-Enrichment Workflow
 # Runs the stealth scraper on a schedule to enrich penny items
 #
@@ -12,9 +18,9 @@
 name: Auto Enrich
 
 on:
-  schedule:
-    # Run every 6 hours
-    - cron: '0 */6 * * *'
+  # schedule:
+  #   # Run every 6 hours
+  #   - cron: '0 */6 * * *'
   workflow_dispatch:
     # Allow manual trigger
     inputs:

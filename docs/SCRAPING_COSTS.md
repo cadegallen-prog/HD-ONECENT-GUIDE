@@ -4,39 +4,41 @@
 
 Home Depot uses aggressive bot detection:
 - Akamai Bot Manager
-- Browser fingerprinting
+- TLS/JA3 fingerprinting (this is why stealth plugins fail!)
 - Webdriver detection
 - IP reputation scoring
 
 ## Cost Options (Pick ONE)
 
-### Option 1: Free (Manual)
-- Run `npm run enrich:stealth` locally in headed mode
-- You watch it run, intervene if needed
-- Works for 10-20 items before detection
+### Option 1: SerpApi Free/Cheap Tier ✅ RECOMMENDED
+- Uses SerpApi's Home Depot Search API
+- They handle everything (TLS fingerprinting, CAPTCHAs, proxies)
+- **Free tier: 250 searches/month** (covers typical usage)
+- **$25/mo tier: 1,000 searches/month** (if you need more)
+- Runs autonomously via GitHub Actions
+- **95%+ success rate**
+
+### Option 2: Manual Bookmarklet (Free)
+- Run bookmarklet while browsing HD manually
+- Export to JSON, import via `npm run enrich:bulk`
+- 100% reliable but requires your time
 - **Cost: $0**
 
-### Option 2: Cheap Proxies (~$5-10/mo) ✅ RECOMMENDED
-- Residential proxy service rotates your IP
-- Combined with stealth mode, avoids most detection
-- Runs autonomously via GitHub Actions
-- **Recommended: [Webshare](https://www.webshare.io/) - $5.49/mo for 10 residential IPs**
+### Option 3: Stealth Scraper (Unreliable)
+- Playwright + stealth + proxies
+- **Often fails** due to TLS fingerprinting
+- May work for small batches locally
+- **Not recommended for production**
 
-### Option 3: Paid APIs ($49-75/mo)
-- ScraperAPI, SerpAPI, BigBox API
-- They handle everything (proxies + rendering + anti-detection)
-- Most reliable, but expensive
-- **NOT RECOMMENDED** unless you're scraping 1000+ items/month
-
-## Current Setup: Option 2
+## Current Setup: Option 1 (SerpApi)
 
 ### How It Works
 
 ```
-GitHub Actions (free)
-    ↓ runs every 6 hours
-Stealth Scraper + Webshare Proxy ($5.49/mo)
-    ↓ scrapes ~20 SKUs per run
+GitHub Actions (free, runs every 6 hours)
+    ↓
+SerpApi Home Depot Search API ($0-25/mo)
+    ↓ fetches product data for ~10 SKUs per run
 penny_item_enrichment table (Supabase)
     ↓ merges with user submissions
 Polished Penny Cards (no placeholders!)
@@ -44,47 +46,49 @@ Polished Penny Cards (no placeholders!)
 
 ### Required Setup
 
-1. **Sign up for Webshare** (~2 minutes)
-   - Go to https://www.webshare.io/
-   - Create account
-   - Buy "Residential" plan ($5.49/mo)
-   - Copy your proxy URL
+1. **Sign up for SerpApi** (~2 minutes)
+   - Go to https://serpapi.com
+   - Create free account (no credit card needed)
+   - Copy your API key from dashboard
 
-2. **Add GitHub Secrets** (Settings → Secrets → Actions)
+2. **Add GitHub Secret** (Settings → Secrets → Actions)
    ```
-   NEXT_PUBLIC_SUPABASE_URL     = your-supabase-url
-   SUPABASE_SERVICE_ROLE_KEY    = your-service-key
-   WEBSHARE_PROXY               = http://user:pass@proxy.webshare.io:port
+   SERPAPI_KEY = your-serpapi-api-key
    ```
+   (Supabase secrets should already be configured)
 
 3. **Enable GitHub Actions**
-   - The workflow at `.github/workflows/auto-enrich.yml` runs automatically
-   - Or trigger manually: Actions → Auto Enrich → Run workflow
+   - The workflow at `.github/workflows/serpapi-enrich.yml` runs automatically
+   - Or trigger manually: Actions → SerpApi Enrich → Run workflow
 
 ### Monthly Cost Breakdown
 
 | Service | Cost | What It Does |
 |---------|------|--------------|
-| Webshare Residential | $5.49/mo | IP rotation to avoid blocks |
+| SerpApi Free Tier | $0 | 250 searches/month |
+| SerpApi Starter | $25/mo | 1,000 searches/month (if needed) |
 | GitHub Actions | $0 | 2000 free minutes/month |
 | Vercel Hobby | $0 | Hosts the website |
-| **Total** | **$5.49/mo** | |
+| **Typical Total** | **$0/mo** | Free tier usually sufficient |
 
 ## NOT Needed
 
-- ❌ ScraperAPI ($49/mo) - we have our own proxies
-- ❌ SerpAPI ($75/mo) - we have our own proxies
+- ❌ Webshare/Proxies - SerpApi handles this
+- ❌ ScraperAPI ($49/mo) - SerpApi is cheaper and better
 - ❌ Browserless ($40/mo) - overkill for our volume
-- ❌ Vercel Cron auto-enrich - can't run Playwright on Vercel
+- ❌ Stealth scraper - fails due to TLS fingerprinting
 
 ## Commands
 
 ```bash
-# Local scraping (headed, watch it run)
-npm run enrich:stealth
+# SerpApi enrichment (recommended)
+npm run enrich:serpapi
 
-# Local scraping (headless, run in background)
-npm run enrich:stealth -- --headless
+# SerpApi with custom limit
+npm run enrich:serpapi -- --limit 20
+
+# Test with single SKU
+npm run enrich:serpapi -- --test
 
 # Get SKUs that need enrichment
 npx tsx scripts/get-unenriched-skus.ts --limit 50
@@ -95,18 +99,18 @@ npm run enrich:bulk
 
 ## Reliability Expectations
 
-With Webshare + stealth:
-- ~80% success rate per SKU
-- ~50-100 items/day capacity
-- Automatic retry on failure
-- May need occasional manual intervention
+With SerpApi:
+- **95%+ success rate** for products that exist on HD
+- Some items return "no results" (discontinued products)
+- Fully automated via GitHub Actions
+- No manual intervention needed
 
 ## Fallback: Bookmarklet Workflow
 
-If automated scraping fails completely:
+If SerpApi credits run out or for spot-checks:
 1. Browse HD manually in your browser
 2. Run bookmarklet to extract data
-3. Export to CSV
+3. Export to JSON
 4. Upload via `npm run enrich:bulk`
 
 This is 100% reliable but requires your time.

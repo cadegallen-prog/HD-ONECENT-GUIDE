@@ -1,0 +1,50 @@
+# SerpApi Enrichment Workflow
+# Uses SerpApi's Home Depot API for reliable product data enrichment
+#
+# Cost: $0/mo (free tier: 250 searches) or $25/mo for 1000 searches
+# Runs: Every 6 hours, processes up to 10 SKUs per run
+#
+# Required secrets:
+#   - NEXT_PUBLIC_SUPABASE_URL
+#   - SUPABASE_SERVICE_ROLE_KEY
+#   - SERPAPI_KEY (get from https://serpapi.com)
+
+name: SerpApi Enrich
+
+on:
+  schedule:
+    # Run every 6 hours (4 times per day = ~1200 checks/month if all needed)
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+    # Allow manual trigger
+    inputs:
+      limit:
+        description: 'Number of SKUs to process'
+        required: false
+        default: '10'
+
+jobs:
+  enrich:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run SerpApi enrichment
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+        run: |
+          npx tsx scripts/serpapi-enrich.ts --limit ${{ github.event.inputs.limit || '10' }}
