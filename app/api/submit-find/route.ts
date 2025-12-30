@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 import { validateSku } from "@/lib/sku"
-import { getSupabaseClient, getSupabaseServiceRoleClient } from "@/lib/supabase/client"
+import { getSupabaseClient } from "@/lib/supabase/client"
 
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000 // 1 hour
 const RATE_LIMIT_MAX = 5
@@ -26,13 +26,6 @@ const submissionSchema = z
   })
   .strip() // Strip any extra fields (photoUrl/upload attempts are ignored).
 
-// TODO: Remove service role fallback once Supabase RLS allows anon inserts directly.
-// NOTE: This MUST be a function (not a const) so tests can change the env var at runtime.
-function isServiceRoleFallbackAllowed(): boolean {
-  const val = process.env.SUPABASE_ALLOW_SERVICE_ROLE_FALLBACK || "true"
-  return val.toLowerCase() !== "false" && val !== "0"
-}
-
 function getClientIp(request: NextRequest) {
   const forwarded = request.headers.get("x-forwarded-for")
   if (forwarded) return forwarded.split(",")[0].trim()
@@ -56,26 +49,6 @@ function getSupabaseServerClient(): SupabaseClientLike {
     .__supabaseClientOverride
   if (override) return override
   return getSupabaseClient()
-}
-
-function getSupabaseServiceRoleServerClient(): SupabaseClientLike | null {
-  const override = (globalThis as { __supabaseServiceRoleClientOverride?: SupabaseClientLike })
-    .__supabaseServiceRoleClientOverride
-  if (override) return override
-
-  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return null
-  return getSupabaseServiceRoleClient()
-}
-
-function shouldRetryWithServiceRole(error: unknown): boolean {
-  const code = (error as { code?: unknown } | null)?.code
-  const message = (error as { message?: unknown } | null)?.message
-  const normalizedMessage = typeof message === "string" ? message : ""
-  return (
-    code === "42501" ||
-    /row-level security/i.test(normalizedMessage) ||
-    /permission denied/i.test(normalizedMessage)
-  )
 }
 
 export async function POST(request: NextRequest) {
@@ -160,22 +133,7 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString(),
     }
 
-    let { error } = await supabase.from("Penny List").insert(payload)
-
-    if (error && shouldRetryWithServiceRole(error)) {
-      if (!isServiceRoleFallbackAllowed()) {
-        console.warn(
-          "Supabase insert blocked; service role fallback disabled (SUPABASE_ALLOW_SERVICE_ROLE_FALLBACK=0 or false)."
-        )
-      } else {
-        const serviceRoleClient = getSupabaseServiceRoleServerClient()
-        if (serviceRoleClient) {
-          console.warn("Retrying Supabase insert with service role fallback due to RLS block")
-          const retry = await serviceRoleClient.from("Penny List").insert(payload)
-          error = retry.error
-        }
-      }
-    }
+    const { error } = await supabase.from("Penny List").insert(payload)
 
     if (error) {
       console.error("Supabase insert error:", error)

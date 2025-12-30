@@ -52,14 +52,13 @@ test("inserts only allowed fields into Supabase", async () => {
   clearSupabaseMocks()
 })
 
-test("falls back to service role insert when anon is RLS-blocked", async () => {
+test("returns 500 when anon insert is RLS-blocked", async () => {
   const permissionError = {
     code: "42501",
     message: "new row violates row-level security policy for table Penny List",
   }
 
   const anonInserted: Record<string, unknown>[] = []
-  const serviceInserted: Record<string, unknown>[] = []
 
   const anonClient = {
     from: () => ({
@@ -70,16 +69,7 @@ test("falls back to service role insert when anon is RLS-blocked", async () => {
     }),
   }
 
-  const serviceClient = {
-    from: () => ({
-      insert: async (payload: Record<string, unknown>) => {
-        serviceInserted.push(payload)
-        return { error: null }
-      },
-    }),
-  }
-
-  installSupabaseMocks({ submitAnon: anonClient as any, submitServiceRole: serviceClient as any })
+  installSupabaseMocks({ submitAnon: anonClient as any })
 
   const { POST } = await import("../app/api/submit-find/route")
   const req = new NextRequest("http://localhost/api/submit-find", {
@@ -102,70 +92,8 @@ test("falls back to service role insert when anon is RLS-blocked", async () => {
   })
 
   const res = await POST(req)
-  assert.strictEqual(res.status, 200)
-  assert.strictEqual(anonInserted.length, 1)
-  assert.strictEqual(serviceInserted.length, 1)
-  assert.deepStrictEqual(serviceInserted[0], anonInserted[0])
-
-  clearSupabaseMocks()
-})
-
-test("does not retry with service role when fallback disabled", async () => {
-  process.env.SUPABASE_ALLOW_SERVICE_ROLE_FALLBACK = "0"
-
-  const permissionError = {
-    code: "42501",
-    message: "new row violates row-level security policy for table Penny List",
-  }
-
-  const anonInserted: Record<string, unknown>[] = []
-  const serviceInserted: Record<string, unknown>[] = []
-
-  const anonClient = {
-    from: () => ({
-      insert: async (payload: Record<string, unknown>) => {
-        anonInserted.push(payload)
-        return { error: permissionError }
-      },
-    }),
-  }
-
-  const serviceClient = {
-    from: () => ({
-      insert: async (payload: Record<string, unknown>) => {
-        serviceInserted.push(payload)
-        return { error: null }
-      },
-    }),
-  }
-
-  installSupabaseMocks({ submitAnon: anonClient as any, submitServiceRole: serviceClient as any })
-
-  const { POST } = await import("../app/api/submit-find/route")
-  const req = new NextRequest("http://localhost/api/submit-find", {
-    method: "POST",
-    body: JSON.stringify({
-      itemName: "Test Item",
-      sku: "1009876543",
-      storeCity: "Atlanta",
-      storeState: "GA",
-      dateFound: "2025-12-01",
-      quantity: "2",
-      notes: "Example note",
-      website: "",
-    }),
-    headers: {
-      "Content-Type": "application/json",
-      "x-forwarded-for": "203.0.113.12",
-    },
-  })
-
-  const res = await POST(req)
-  // When fallback disabled, the handler should not retry and should return 500
   assert.strictEqual(res.status, 500)
   assert.strictEqual(anonInserted.length, 1)
-  assert.strictEqual(serviceInserted.length, 0)
 
   clearSupabaseMocks()
-  delete process.env.SUPABASE_ALLOW_SERVICE_ROLE_FALLBACK
 })

@@ -141,5 +141,4 @@ ROLLBACK; -- throws away the inserted test row
 ```
 
 ## App fallbacks
-- Env toggle: `SUPABASE_ALLOW_SERVICE_ROLE_FALLBACK` (default: allow). Set to `false` or `0` to prevent the app from retrying with the service role when anon is blocked. Logs will show when the fallback is blocked or used.
-- TODO is documented in code to remove the service-role fallback once the SQL above is applied and verified.
+- Service-role fallbacks have been removed from API routes. Keep anon policies aligned with this doc.
