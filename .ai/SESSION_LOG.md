@@ -12,40 +12,27 @@
 
 ---
 
-## 2025-12-29 - ChatGPT Codex (GPT-5) - Auto-Enrich Reliability + Negative Cache
+## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Penny Thumbnail Styling Polish
 
-**AI:** ChatGPT Codex (GPT-5)  
-**Goal:** Improve `scripts/auto-enrich.ts` accuracy and reduce wasted attempts.
+**AI:** ChatGPT Codex (GPT-5.2)  
+**Goal:** Improve penny thumbnail separation and padding to avoid edge blending.  
 
 **Changes Made:**
-- Reused `lib/sku.ts` validation/normalization, deduped inputs, and skipped invalid SKUs.
-- Added local status cache at `.local/enrichment-status.json` to skip not-found/mismatch/error/invalid SKUs unless `--force` is used.
-- Added one immediate retry for transient errors, then marks as `error` to avoid repeat attempts.
-- Updated flow to resolve a product link from search results, then extract from the product page using JSON-LD + fallbacks.
-- Added SKU mismatch detection, enforced name + internet SKU before saving, and added summary counters.
+- Strengthened thumbnail background with `var(--bg-tertiary)` and `var(--border-strong)` plus an inset shadow.
+- Switched thumbnails to `object-contain` with padding to keep edges off the background.
 
-**Outcome:** ✅ Success (code changes applied)
+**Outcome:** ✅ Success
 
-**Verification:** Not run (no tests executed).
+**Verification:**
+- lint: ✅ `npm run lint`
+- build: ✅ `npm run build` (warnings about `import-in-the-middle` version mismatch)
+- test:unit: ❌ `npm run test:unit` (no tests matched glob: `tests/**/*.test.ts`)
+- test:e2e: ❌ `npm run test:e2e` (Playwright browsers missing; prompt to run `npx playwright install`)
+- lint:colors: ✅ `npm run lint:colors`
+- Playwright: before/after light/dark captured; after-light shows hydration warning in console.
 
 **For Next AI:**
-- If results still vary, consider adding a fixed store/zip context to stabilize search results.
-
-**Probe (SerpApi search):**
-- Sample SKUs: 1009926663, 1009926843, 1009964275
-- Zips tested: 10001, 30301, 90001
-- Result: 9/9 found, consistent product_id across zips
-- Estimated credits used: 9
-
-**Probe (SerpApi search, failed SKUs):**
-- Sample SKUs: 1009923959, 1009923970, 1009923974, 1009956798
-- Zips tested: 10001, 30301, 60601, 73301, 80202, 90001, 94105, 33101
-- Results:
-  - 1009923959: found only in 33101 (product_id 325718942), not found in other 7 zips
-  - 1009923970: found in 10001/60601/73301/90001/33101 (product_id 325718939), not found in 30301/80202/94105
-  - 1009923974: not found in all 8 zips
-  - 1009956798: not found in all 8 zips
-- Estimated credits used: 32
+- None.
 
 ---
 
@@ -102,17 +89,3 @@
 - Full 6-PR roadmap documented in `.claude/plans/cozy-mapping-sunset.md`
 
 ---
-
-## 2025-12-27 - ChatGPT Codex (GPT-5.2) - MCP Set-and-Forget Prune
-
-**AI:** ChatGPT Codex (GPT-5.2)  
-**Goal:** Reduce MCP tool noise while keeping daily DB checks available.
-
-**Changes Made:**
-- Removed Vercel MCP from Codex (`C:\\Users\\cadeg\\.codex\\config.toml`), Claude (`.claude/settings.json`), and VS Code (`.vscode/mcp.json`).
-- Kept Supabase enabled for routine database checks.
-
-**Outcome:** ✅ Success
-
-**Notes:**
-- Restart VS Code/Codex to refresh tool lists after config changes.

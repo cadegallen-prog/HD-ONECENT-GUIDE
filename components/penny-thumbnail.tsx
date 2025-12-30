@@ -29,7 +29,7 @@ export function PennyThumbnail({
     (/^https?:\/\//i.test(normalizedSrc) || normalizedSrc.startsWith("/"))
   const normalizedSize = size ?? 64
   const sizeClass = sizeClassMap[normalizedSize]
-  const wrapperClass = `flex items-center justify-center rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-default)] text-[var(--text-muted)] ${sizeClass}`
+  const wrapperClass = `flex items-center justify-center rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-strong)] shadow-[inset_0_0_0_1px_var(--border-strong)] text-[var(--text-muted)] ${sizeClass}`
 
   if (!showImage) {
     return (
@@ -46,7 +46,7 @@ export function PennyThumbnail({
       width={size}
       height={size}
       loading="lazy"
-      className={`${sizeClass} rounded-lg object-cover border border-[var(--border-default)] bg-[var(--bg-page)]`}
+      className={`${sizeClass} rounded-lg object-contain p-2 border border-[var(--border-strong)] bg-[var(--bg-tertiary)] shadow-[inset_0_0_0_1px_var(--border-strong)]`}
       onError={() => setErrored(true)}
       referrerPolicy="no-referrer"
     />
