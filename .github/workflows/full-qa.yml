@@ -9,12 +9,13 @@ on:
         required: false
         type: string
 
-  # Trigger when 'full-qa' label is added to PR
+  # Trigger when 'full-qa' label is added to a PR
   pull_request:
     types: [labeled]
 
-  # Auto-trigger on risky file changes
-  pull_request:
+  # Auto-trigger on risky file changes to main
+  push:
+    branches: [main]
     paths:
       # Auth & security
       - 'middleware.ts'
@@ -50,15 +51,15 @@ jobs:
     steps:
       - id: check
         run: |
-          # Run if: workflow_dispatch OR label is 'full-qa' OR path-triggered PR
+          # Run if: workflow_dispatch OR full-qa label OR push to main with risky paths
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             echo "Triggered by: manual dispatch"
             echo "should_run=true" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event_name }}" == "push" ]]; then
+            echo "Triggered by: push to main with risky file changes"
+            echo "should_run=true" >> $GITHUB_OUTPUT
           elif [[ "${{ github.event.action }}" == "labeled" && "${{ github.event.label.name }}" == "full-qa" ]]; then
             echo "Triggered by: full-qa label"
-            echo "should_run=true" >> $GITHUB_OUTPUT
-          elif [[ "${{ github.event_name }}" == "pull_request" && "${{ github.event.action }}" != "labeled" ]]; then
-            echo "Triggered by: path filter match"
             echo "should_run=true" >> $GITHUB_OUTPUT
           else
             echo "Trigger condition not met, skipping"
