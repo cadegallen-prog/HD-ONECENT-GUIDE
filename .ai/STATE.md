@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 28, 2025 (PR-3 Auth + Personal Lists + Sharing in progress)
+**Last updated:** Dec 28, 2025 (Penny thumbnail styling polish)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -26,6 +26,9 @@ Every AI session must update this after meaningful work.
   - Added loading skeleton for better SSR/hydration (no blank page before client hydration)
   - Updated E2E tests for new locked SKU behavior
   - PR-1 and PR-2 of 6-PR roadmap complete
+- **Recent focus (Dec 28): Penny thumbnail styling polish**
+  - Strengthened thumbnail background to `var(--bg-tertiary)` with stronger border token and inset shadow for better separation
+  - Switched images to `object-contain` with padding to prevent edges blending into the background
 - **Recent focus (Dec 27): MCP availability + env wiring**
   - User-level env vars set for `SUPABASE_URL`, `SUPABASE_ACCESS_TOKEN`, `VERCEL_API_KEY`.
   - `.claude/settings.json` wired for Supabase env vars.

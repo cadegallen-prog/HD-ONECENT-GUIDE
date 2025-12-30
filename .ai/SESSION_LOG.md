@@ -12,6 +12,30 @@
 
 ---
 
+## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Penny Thumbnail Styling Polish
+
+**AI:** ChatGPT Codex (GPT-5.2)  
+**Goal:** Improve penny thumbnail separation and padding to avoid edge blending.  
+
+**Changes Made:**
+- Strengthened thumbnail background with `var(--bg-tertiary)` and `var(--border-strong)` plus an inset shadow.
+- Switched thumbnails to `object-contain` with padding to keep edges off the background.
+
+**Outcome:** ✅ Success
+
+**Verification:**
+- lint: ✅ `npm run lint`
+- build: ✅ `npm run build` (warnings about `import-in-the-middle` version mismatch)
+- test:unit: ❌ `npm run test:unit` (no tests matched glob: `tests/**/*.test.ts`)
+- test:e2e: ❌ `npm run test:e2e` (Playwright browsers missing; prompt to run `npx playwright install`)
+- lint:colors: ✅ `npm run lint:colors`
+- Playwright: before/after light/dark captured; after-light shows hydration warning in console.
+
+**For Next AI:**
+- None.
+
+---
+
 ## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Auth + Personal Lists + Sharing
 
 **AI:** ChatGPT Codex (GPT-5.2)  
@@ -65,17 +89,3 @@
 - Full 6-PR roadmap documented in `.claude/plans/cozy-mapping-sunset.md`
 
 ---
-
-## 2025-12-27 - ChatGPT Codex (GPT-5.2) - MCP Set-and-Forget Prune
-
-**AI:** ChatGPT Codex (GPT-5.2)  
-**Goal:** Reduce MCP tool noise while keeping daily DB checks available.
-
-**Changes Made:**
-- Removed Vercel MCP from Codex (`C:\\Users\\cadeg\\.codex\\config.toml`), Claude (`.claude/settings.json`), and VS Code (`.vscode/mcp.json`).
-- Kept Supabase enabled for routine database checks.
-
-**Outcome:** ✅ Success
-
-**Notes:**
-- Restart VS Code/Codex to refresh tool lists after config changes.
