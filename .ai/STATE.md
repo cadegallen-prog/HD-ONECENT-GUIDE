@@ -9,9 +9,18 @@ Every AI session must update this after meaningful work.
 ## 1. Where We Are
 
 - **Recent focus (Dec 28): Penny List identifiers row**
-  - Added a compact “Identifiers” row under the SKU pill in `components/penny-list-card.tsx`.
+  - Added a compact "Identifiers" row under the SKU pill in `components/penny-list-card.tsx`.
   - Mobile now uses a `<details>` toggle to keep identifiers from cluttering the card.
   - Updated `data/penny-list.json` with a sample model/UPC for previewing the UI.
+- **Recent focus (Dec 30): Codex PR merges + QA rulebook**
+  - Landed every pending codex branch (identifiers, CTA placement, grid density, typography, thumbnails, CTA/bookmark clarifications) with clean merges and conflict resolutions.
+  - Reapplied the bookmark clarity tip card, CSP `connect-src` update, and tests patches that lived in the stalled stash.
+  - Added a `.ai/RULES.md` QA playbook and `.github/workflows/full-qa.yml` so the `qa:full` suite (lint/build/unit/e2e/contrast/axe) gets triggered for risky paths.
+- **Recent focus (Dec 30): Bookmark clarity on Penny List**
+  - Wrapped the bookmark icon in a `BookmarkAction` helper that surfaces an inline label, login hint, and consistent stop-propagation handling so hunters know it's a "save to list".
+    - Added a `Save it for later` tip card in `PennyListClient` explaining that the bookmark icon stores finds, prompts for sign-in, and links to `/lists`.
+    - Allowed `https://*.supabase.co` in the CSP `connect-src` policy so the login form can reach Supabase without a “Failed to fetch” failure (Playwright script now sees a 200 OTP response).
+    - The `tests/setup.ts` helper now loads `.env.local` before mocking `server-only`, so unit tests see the Supabase envs they expect when hitting the new auth-linked helpers.
 - **Site:** live at https://www.pennycentral.com (Preferred canonical domain)
 - **Current policy (Dec 19):** The Verified Pennies feature was removed.
   - `/verified-pennies` permanently redirects to `/penny-list`

@@ -24,7 +24,9 @@
     "enrich:bulk": "tsx scripts/bulk-enrich.ts",
     "enrich:stealth": "tsx scripts/stealth-enrich.ts",
     "enrich:serpapi": "tsx scripts/serpapi-enrich.ts",
-    "prepare": "husky"
+    "prepare": "husky",
+    "qa:fast": "npm run lint && npm run test:unit && npm run build",
+    "qa:full": "npm run qa:fast && npm run test:e2e && npm run check-contrast && npm run check-axe"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.8",

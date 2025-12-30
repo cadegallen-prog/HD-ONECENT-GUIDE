@@ -1,0 +1,136 @@
+name: Full QA Suite
+
+on:
+  # Manual trigger
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Git ref to check out (branch, tag, or SHA)'
+        required: false
+        type: string
+
+  # Trigger when 'full-qa' label is added to PR
+  pull_request:
+    types: [labeled]
+
+  # Auto-trigger on risky file changes
+  pull_request:
+    paths:
+      # Auth & security
+      - 'middleware.ts'
+      - 'app/auth/**'
+      - 'lib/supabase/**'
+
+      # Database
+      - 'supabase/migrations/**'
+      - 'lib/fetch-penny-data.ts'
+      - 'lib/penny-list-query.ts'
+
+      # API routes
+      - 'app/api/**'
+
+      # Infrastructure
+      - 'next.config.js'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'playwright.config.ts'
+      - '.github/workflows/**'
+
+      # Fragile components (per CLAUDE.md)
+      - 'components/store-map.tsx'
+      - 'app/**/layout.tsx'
+      - 'app/globals.css'
+
+jobs:
+  # Gate: Only run full QA if triggered correctly
+  check-trigger:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.check.outputs.should_run }}
+    steps:
+      - id: check
+        run: |
+          # Run if: workflow_dispatch OR label is 'full-qa' OR path-triggered PR
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "Triggered by: manual dispatch"
+            echo "should_run=true" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event.action }}" == "labeled" && "${{ github.event.label.name }}" == "full-qa" ]]; then
+            echo "Triggered by: full-qa label"
+            echo "should_run=true" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event_name }}" == "pull_request" && "${{ github.event.action }}" != "labeled" ]]; then
+            echo "Triggered by: path filter match"
+            echo "should_run=true" >> $GITHUB_OUTPUT
+          else
+            echo "Trigger condition not met, skipping"
+            echo "should_run=false" >> $GITHUB_OUTPUT
+          fi
+
+  full-qa:
+    needs: check-trigger
+    if: needs.check-trigger.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.ref || github.ref }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run fast QA first (lint + unit tests + build)
+        run: npm run qa:fast
+
+      - name: Start server for e2e tests
+        env:
+          PORT: 3001
+          PLAYWRIGHT: "1"
+        run: |
+          npm run start -- --hostname 0.0.0.0 --port $PORT >/tmp/next.log 2>&1 &
+          server_up=0
+          for i in {1..30}; do
+            if curl -fsS http://localhost:$PORT >/dev/null; then
+              echo "Server is up"
+              server_up=1
+              break
+            fi
+            sleep 2
+          done
+          if [ $server_up -ne 1 ]; then
+            echo "Server failed to start"
+            tail -n 50 /tmp/next.log || true
+            exit 1
+          fi
+          echo "Server log tail:"
+          tail -n 20 /tmp/next.log
+
+      - name: Run e2e tests
+        env:
+          PLAYWRIGHT: "1"
+        run: npm run test:e2e
+
+      - name: Run contrast check
+        env:
+          BASE_URL: http://localhost:3001
+        run: npm run check-contrast
+
+      - name: Run accessibility check (axe)
+        run: npm run check-axe
+
+      - name: Upload reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: full-qa-reports
+          path: reports/
+          retention-days: 14

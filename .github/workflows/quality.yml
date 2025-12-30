@@ -1,4 +1,4 @@
-name: Quality Checks
+name: Quality Checks (Fast)
 
 on:
   pull_request:
@@ -7,9 +7,10 @@ on:
       - main
 
 jobs:
-  quality:
+  quality-fast:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 10
+
     steps:
       - uses: actions/checkout@v4
 
@@ -22,53 +23,5 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
-
-      - name: Build
-        run: npm run build
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Start server
-        env:
-          PORT: 3001
-          PLAYWRIGHT: "1"
-        run: |
-          npm run start -- --hostname 0.0.0.0 --port $PORT >/tmp/next.log 2>&1 &
-          server_up=0
-          for i in {1..30}; do
-            if curl -fsS http://localhost:$PORT >/dev/null; then
-              echo "Server is up"
-              server_up=1
-              break
-            fi
-            sleep 2
-          done
-          if [ $server_up -ne 1 ]; then
-            echo "Server failed to start"
-            tail -n 50 /tmp/next.log || true
-            exit 1
-          fi
-          echo "Server log tail:"
-          tail -n 20 /tmp/next.log
-
-      - name: Contrast check
-        env:
-          BASE_URL: http://localhost:3001
-        run: npm run check-contrast
-
-      - name: Axe check
-        run: npm run check-axe
-
-      - name: Playwright smoke
-        env:
-          PLAYWRIGHT: "1"
-        run: npm run test:e2e
-
-      - name: Upload reports
-        uses: actions/upload-artifact@v4
-        with:
-          name: quality-reports
-          path: reports/
+      - name: Run fast QA (lint + unit tests + build)
+        run: npm run qa:fast

@@ -141,7 +141,8 @@ test("ignores enrichment rows with invalid SKUs", async () => {
     source: "manual",
   }
 
-  const enrichedItems = applyEnrichment(items, [enrichment])
+  // Use hideUnenriched: false since this test is about SKU validation, not filtering
+  const enrichedItems = applyEnrichment(items, [enrichment], { hideUnenriched: false })
 
   assert.strictEqual(enrichedItems[0].name, "Test Item")
   assert.strictEqual(enrichedItems[0].brand, undefined)

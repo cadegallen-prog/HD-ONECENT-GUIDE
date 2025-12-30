@@ -2,7 +2,15 @@
 
 import { useState, useMemo, useEffect, useCallback, useRef } from "react"
 import { useRouter, usePathname } from "next/navigation"
-import { AlertTriangle, Package, Clock, CheckCircle2, Info, ChevronDown } from "lucide-react"
+import {
+  AlertTriangle,
+  Bookmark,
+  Package,
+  Clock,
+  CheckCircle2,
+  Info,
+  ChevronDown,
+} from "lucide-react"
 import { TrackableLink } from "@/components/trackable-link"
 import { trackEvent } from "@/lib/analytics"
 import { FeedbackWidget } from "@/components/feedback-widget"
@@ -437,6 +445,32 @@ export function PennyListClient({
           <p>
             The Facebook group remains the gold standard for verified hauls, receipts, and
             conversation. This list is a fast, experimental radar for possible leads.
+          </p>
+        </div>
+      </div>
+
+      <div
+        className="mb-6 rounded-xl border border-[var(--border-default)] bg-[var(--bg-elevated)] p-4 flex items-start gap-3 text-sm text-[var(--text-secondary)]"
+        data-bookmark-tip="true"
+      >
+        <Bookmark
+          className="w-5 h-5 text-[var(--cta-primary)] flex-shrink-0 mt-0.5"
+          aria-hidden="true"
+        />
+        <div>
+          <p className="text-sm font-semibold text-[var(--text-primary)] mb-1">Save it for later</p>
+          <p className="leading-relaxed text-xs sm:text-sm">
+            Tap the bookmark icon on a card to save the find to your personal lists. It will prompt
+            you to sign in on first use, and you can review saved items on{" "}
+            <TrackableLink
+              href="/lists"
+              eventName="cta_click"
+              eventParams={{ location: "penny-list-bookmark-tip" }}
+              className="font-semibold text-[var(--cta-primary)] underline decoration-[var(--cta-primary)] underline-offset-2"
+            >
+              your lists
+            </TrackableLink>
+            .
           </p>
         </div>
       </div>

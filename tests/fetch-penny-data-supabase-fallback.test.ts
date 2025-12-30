@@ -1,12 +1,11 @@
 import assert from "node:assert"
 import test from "node:test"
 
-import type { SupabasePennyRow } from "../lib/fetch-penny-data"
+import type { SupabasePennyRow, SupabasePennyEnrichmentRow } from "../lib/fetch-penny-data"
 import {
   createThenableMock,
   installSupabaseMocks,
   clearSupabaseMocks,
-  createMockClient,
 } from "./test-utils/supabase-mocks"
 
 test("falls back to service role read when anon returns empty", async () => {
@@ -24,13 +23,35 @@ test("falls back to service role read when anon returns empty", async () => {
     timestamp: "2025-12-01T12:00:00Z",
   }
 
+  // Enrichment row matching the penny item SKU (required with hideUnenriched=true default)
+  const enrichmentRow: SupabasePennyEnrichmentRow = {
+    sku: "1000001234",
+    item_name: "Fallback Item",
+    brand: null,
+    model_number: null,
+    upc: null,
+    image_url: null,
+    home_depot_url: null,
+    internet_sku: null,
+    updated_at: "2025-12-01T12:00:00Z",
+    source: "manual",
+  }
+
+  // Create table-aware mock clients
+  const createTableAwareMock = (pennyData: unknown[], enrichmentData: unknown[]) => ({
+    from: (table: string) => ({
+      select: () =>
+        createThenableMock({
+          data: table === "penny_item_enrichment" ? enrichmentData : pennyData,
+          error: null,
+        }),
+      insert: async () => ({ error: null }),
+    }),
+  })
+
   installSupabaseMocks({
-    anon: createMockClient({
-      select: () => createThenableMock({ data: [], error: null }),
-    }),
-    serviceRole: createMockClient({
-      select: () => createThenableMock({ data: [row], error: null }),
-    }),
+    anon: createTableAwareMock([], []) as any,
+    serviceRole: createTableAwareMock([row], [enrichmentRow]) as any,
   })
 
   // Dynamic import AFTER mocks are installed to avoid server-only error

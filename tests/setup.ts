@@ -1,13 +1,13 @@
+import { config } from "dotenv"
+import Module from "node:module"
+
+config({ path: ".env.local", override: false })
+
 /**
  * Test setup file to mock server-only package.
  *
- * The server-only package throws when imported in non-React-Server-Component contexts.
- * Since tests run in Node.js (not RSC), we need to mock it globally.
- *
  * This file is loaded via tsx --import before test execution.
  */
-
-import Module from "node:module"
 
 const originalRequire = Module.prototype.require
 
