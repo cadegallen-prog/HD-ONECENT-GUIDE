@@ -144,27 +144,42 @@ function buildEnrichmentIndex(
 
 export function applyEnrichment(
   items: PennyItem[],
-  rows: SupabasePennyEnrichmentRow[] | null
+  rows: SupabasePennyEnrichmentRow[] | null,
+  options: { hideUnenriched?: boolean } = {}
 ): PennyItem[] {
-  if (!rows || rows.length === 0) return items
+  const { hideUnenriched = true } = options
+
+  // If no enrichment data and hiding unenriched, return empty list
+  if (!rows || rows.length === 0) {
+    return hideUnenriched ? [] : items
+  }
+
   const index = buildEnrichmentIndex(rows)
-  if (index.size === 0) return items
+  if (index.size === 0) {
+    return hideUnenriched ? [] : items
+  }
 
-  return items.map((item) => {
-    const enrichment = index.get(item.sku)
-    if (!enrichment) return item
+  // Map items and apply enrichment, then filter if hideUnenriched is true
+  const enrichedItems = items
+    .map((item) => {
+      const enrichment = index.get(item.sku)
+      if (!enrichment) return hideUnenriched ? null : item
 
-    return {
-      ...item,
-      name: enrichment.name ?? item.name,
-      brand: enrichment.brand ?? item.brand,
-      modelNumber: enrichment.modelNumber ?? item.modelNumber,
-      upc: enrichment.upc ?? item.upc,
-      imageUrl: enrichment.imageUrl ?? item.imageUrl,
-      internetNumber: enrichment.internetNumber ?? item.internetNumber,
-      homeDepotUrl: enrichment.homeDepotUrl ?? item.homeDepotUrl,
-    }
-  })
+      return {
+        ...item,
+        // Enriched data ALWAYS overrides user-submitted data when available
+        name: enrichment.name || item.name,
+        brand: enrichment.brand || item.brand,
+        modelNumber: enrichment.modelNumber || item.modelNumber,
+        upc: enrichment.upc || item.upc,
+        imageUrl: enrichment.imageUrl || item.imageUrl,
+        internetNumber: enrichment.internetNumber || item.internetNumber,
+        homeDepotUrl: enrichment.homeDepotUrl || item.homeDepotUrl,
+      }
+    })
+    .filter((item): item is PennyItem => item !== null)
+
+  return enrichedItems
 }
 
 function pickBestDate(row: SupabasePennyRow): { iso: string; ms: number } | null {

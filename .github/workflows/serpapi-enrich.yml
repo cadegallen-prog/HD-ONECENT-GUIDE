@@ -13,8 +13,8 @@ name: SerpApi Enrich
 
 on:
   schedule:
-    # Run every 6 hours (4 times per day = ~1200 checks/month if all needed)
-    - cron: '0 */6 * * *'
+    # Run every 30 minutes - aligns with page cache refresh
+    - cron: '*/30 * * * *'
   workflow_dispatch:
     # Allow manual trigger
     inputs:

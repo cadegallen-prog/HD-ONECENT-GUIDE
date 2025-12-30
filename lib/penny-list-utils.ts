@@ -3,6 +3,92 @@ import type { PennyItem } from "./fetch-penny-data"
 import { validateSku } from "./sku"
 
 const DAY_MS = 24 * 60 * 60 * 1000
+
+/**
+ * Normalizes a product name for consistent display.
+ * - Converts to Title Case
+ * - Trims excessive whitespace
+ * - Truncates for mobile display (with ellipsis)
+ * - Separates brand from item name if provided together
+ */
+export function normalizeProductName(
+  name: string,
+  options: { maxLength?: number; brand?: string } = {}
+): string {
+  const { maxLength = 80, brand } = options
+
+  if (!name) return ""
+
+  // Trim and collapse multiple whitespace
+  let normalized = name.replace(/\s+/g, " ").trim()
+
+  // Remove brand from beginning if it's duplicated
+  if (brand) {
+    const brandLower = brand.toLowerCase()
+    const nameLower = normalized.toLowerCase()
+    if (nameLower.startsWith(brandLower)) {
+      normalized = normalized
+        .slice(brand.length)
+        .replace(/^[\s\-–—:]+/, "")
+        .trim()
+    }
+  }
+
+  // Convert to Title Case (lowercase everything, then capitalize first letter of each word)
+  normalized = normalized.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase())
+
+  // Handle common abbreviations that should stay uppercase
+  const uppercaseWords = [
+    "HD",
+    "LED",
+    "USB",
+    "AC",
+    "DC",
+    "UV",
+    "PVC",
+    "ABS",
+    "HVAC",
+    "CFM",
+    "PSI",
+    "RPM",
+    "GPM",
+    "BTU",
+  ]
+  for (const word of uppercaseWords) {
+    const regex = new RegExp(`\\b${word}\\b`, "gi")
+    normalized = normalized.replace(regex, word)
+  }
+
+  // Handle common units that should stay lowercase
+  const lowercaseUnits = ["in", "ft", "mm", "cm", "oz", "lb", "gal", "qt", "pk", "ct", "sq"]
+  for (const unit of lowercaseUnits) {
+    // Match unit preceded by number and followed by word boundary or period
+    const regex = new RegExp(`(\\d)\\s*${unit}\\.?\\b`, "gi")
+    normalized = normalized.replace(regex, `$1 ${unit}.`)
+  }
+
+  // Truncate if needed
+  if (normalized.length > maxLength) {
+    normalized = normalized.slice(0, maxLength - 3).trim() + "..."
+  }
+
+  return normalized
+}
+
+/**
+ * Formats a brand name consistently.
+ */
+export function normalizeBrand(brand: string | undefined): string {
+  if (!brand) return ""
+
+  // Trim and collapse whitespace
+  let normalized = brand.replace(/\s+/g, " ").trim()
+
+  // Title case
+  normalized = normalized.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase())
+
+  return normalized
+}
 const THIRTY_DAYS_MS = 30 * DAY_MS
 const STATE_CODES = new Set(US_STATES.map((state) => state.code.toUpperCase()))
 const STATE_NAME_TO_CODE = new Map(US_STATES.map((state) => [state.name.toUpperCase(), state.code]))

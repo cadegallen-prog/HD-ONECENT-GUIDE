@@ -10,8 +10,8 @@ import {
 
 const VALID_PER_PAGE = [25, 50, 100]
 const DEFAULT_PER_PAGE = 50
-const CACHE_SECONDS = 60
-const STALE_SECONDS = 300
+const CACHE_SECONDS = 1800 // 30 minutes - aligned with SerpAPI enrichment schedule
+const STALE_SECONDS = 1800
 
 function parsePerPage(value: string | null): number {
   if (!value) return DEFAULT_PER_PAGE

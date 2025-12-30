@@ -78,6 +78,7 @@ interface EnrichmentRow {
   status: string
   retry_after: string | null
   attempt_count: number
+  image_url: string | null
 }
 
 // Parse CLI args
@@ -347,10 +348,10 @@ async function getItemsToEnrich(
     return []
   }
 
-  // Get enrichment status for all SKUs
+  // Get enrichment status for all SKUs (include image_url to skip already-enriched items)
   const { data: enrichedItems, error: enrichError } = await supabase
     .from("penny_item_enrichment")
-    .select("sku, status, retry_after, attempt_count")
+    .select("sku, status, retry_after, attempt_count, image_url")
 
   if (enrichError && enrichError.code !== "PGRST205") {
     console.error("❌ Failed to fetch enrichment:", enrichError.message)
@@ -360,7 +361,7 @@ async function getItemsToEnrich(
   // Build lookup map
   const enrichmentMap = new Map<
     string,
-    { status: string; retryAfter: string | null; attemptCount: number }
+    { status: string; retryAfter: string | null; attemptCount: number; hasImage: boolean }
   >()
   for (const item of enrichedItems || []) {
     const typedItem = item as unknown as EnrichmentRow
@@ -370,6 +371,7 @@ async function getItemsToEnrich(
         status: typedItem.status || "enriched",
         retryAfter: typedItem.retry_after,
         attemptCount: typedItem.attempt_count || 1,
+        hasImage: Boolean(typedItem.image_url && typedItem.image_url.trim()),
       })
     }
   }
@@ -379,7 +381,7 @@ async function getItemsToEnrich(
   const seen = new Set<string>()
 
   let skippedNotFound = 0
-  let skippedEnriched = 0
+  let skippedHasImage = 0
 
   for (const item of pennyItems || []) {
     const typedItem = item as unknown as PennyListRow
@@ -392,9 +394,12 @@ async function getItemsToEnrich(
     if (!existing) {
       // Never tried before - enrich it
       needsEnrichment.push({ sku, itemName: typedItem.item_name })
+    } else if (existing.hasImage) {
+      // Already has an image - no need to re-scrape (saves API credits)
+      skippedHasImage++
     } else if (existing.status === "enriched") {
-      // Already enriched successfully
-      skippedEnriched++
+      // Enriched but no image - try again
+      needsEnrichment.push({ sku, itemName: typedItem.item_name })
     } else if (existing.status === "not_found" || existing.status === "error") {
       // Failed before - check if retry window passed
       if (retryMode && existing.retryAfter) {
@@ -414,7 +419,7 @@ async function getItemsToEnrich(
   }
 
   console.log(`   📊 Penny List items: ${pennyItems?.length || 0}`)
-  console.log(`   ✅ Already enriched: ${skippedEnriched}`)
+  console.log(`   ✅ Already has image (skipped): ${skippedHasImage}`)
   console.log(`   ⏭️ Skipped (not_found, waiting): ${skippedNotFound}`)
   console.log(`   📦 To process: ${needsEnrichment.length}`)
 

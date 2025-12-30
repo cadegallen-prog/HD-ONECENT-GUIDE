@@ -1,1 +1,319 @@
-javascript:(function(){var STORAGE_KEY='pennycentral_verified_pennies_draft',PANEL_ID='pc-vp-panel',TOAST_ID='pc-vp-toast';function text(sel){var el=document.querySelector(sel);return el&&el.textContent?el.textContent.replace(/\s+/g,' ').trim():''}function attr(sel,a){var el=document.querySelector(sel);return el?el.getAttribute(a)||'':''}function pickFirstNonEmpty(arr){for(var i=0;i<arr.length;i++){if(arr[i])return arr[i]}return ''}function matchDigits(s,min,max){var m=(s||'').match(new RegExp('\\b\\d{'+min+','+max+'}\\b'));return m?m[0]:''}function getInternetNumberFromUrl(){var m=(location.pathname||'').match(/\/p\/[^/]+\/(\d{6,12})/);return m?m[1]:''}function getSku(){var candidates=[];candidates.push(matchDigits(text('[data-testid="product-sku"]'),6,10));candidates.push(matchDigits(text('.product-identifier__sku'),6,10));candidates.push(matchDigits(text('span[itemprop="sku"]'),6,10));var body=(document.body&&document.body.innerText)?document.body.innerText:'';var m=body.match(/Store\s*SKU\s*#?\s*(\d{6,10})/i);if(m&&m[1])candidates.push(m[1]);m=body.match(/\bSKU\b[^\d]{0,20}(\d{6,10})/i);if(m&&m[1])candidates.push(m[1]);return pickFirstNonEmpty(candidates)}function getName(){return pickFirstNonEmpty([text('h1[data-testid="product-title"]'),text('h1.product-details__title'),text('h1'),attr('meta[property="og:title"]','content')])}function getImageUrl(){var url=attr('meta[property="og:image"]','content');if(!url){var img=document.querySelector('img[src*="thdstatic.com"],img[data-src*="thdstatic.com"],img[srcset*="thdstatic.com"]');if(img){url=img.getAttribute('src')||img.getAttribute('data-src')||''}}if(url&&url.indexOf('thdstatic.com')!==-1){url=url.replace(/\/\d+\.jpg(\?.*)?$/,'/1000.jpg')}return url}function findSpecValue(label){var rows=document.querySelectorAll('tr,dt');for(var i=0;i<rows.length;i++){var row=rows[i];if(row.tagName&&row.tagName.toLowerCase()==='tr'){var cells=row.querySelectorAll('th,td');if(cells.length>=2){var k=(cells[0].textContent||'').replace(/\s+/g,' ').trim();if(k&&k.toLowerCase()===label.toLowerCase()){return (cells[1].textContent||'').replace(/\s+/g,' ').trim()}}}if(row.tagName&&row.tagName.toLowerCase()==='dt'){var key=(row.textContent||'').replace(/\s+/g,' ').trim();if(key&&key.toLowerCase()===label.toLowerCase()){var dd=row.nextElementSibling;if(dd&&dd.tagName&&dd.tagName.toLowerCase()==='dd'){return (dd.textContent||'').replace(/\s+/g,' ').trim()}}}}return ''}function getBrand(){return pickFirstNonEmpty([text('[data-testid="product-brand"]'),attr('meta[itemprop="brand"]','content'),findSpecValue('Brand'),findSpecValue('Manufacturer')])}function getModel(){return pickFirstNonEmpty([findSpecValue('Model'),findSpecValue('Model #'),findSpecValue('Model Number')])}function readStore(){try{var raw=localStorage.getItem(STORAGE_KEY);return raw?JSON.parse(raw):{}}catch(e){return {}}}function writeStore(obj){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(obj));return true}catch(e){return false}}function downloadJson(filename,obj){var json=JSON.stringify(obj,null,2);var blob=new Blob([json],{type:'application/json'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url)}function showToast(message,type){type=type||'info';var existing=document.getElementById(TOAST_ID);if(existing&&existing.parentNode)existing.parentNode.removeChild(existing);var toast=document.createElement('div');toast.id=TOAST_ID;var bg=type==='success'?'#10b981':type==='error'?'#ef4444':'#3b82f6';toast.style.cssText='position:fixed;top:18px;right:18px;background:'+bg+';color:#fff;padding:10px 12px;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,0.18);z-index:2147483647;font:13px/1.35 -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;max-width:360px;';toast.textContent=message;document.body.appendChild(toast);setTimeout(function(){if(toast&&toast.parentNode)toast.parentNode.removeChild(toast)},2200)}function ensurePanel(){var panel=document.getElementById(PANEL_ID);if(panel)return panel;panel=document.createElement('div');panel.id=PANEL_ID;panel.style.cssText='position:fixed;bottom:18px;right:18px;background:#111827;color:#fff;padding:12px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.22);z-index:2147483646;font:13px/1.35 -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;min-width:220px;';panel.innerHTML='<div style="font-weight:700;margin-bottom:8px;">PennyCentral Extractor</div><div id="pc-vp-count" style="color:#9ca3af;margin-bottom:10px;">Saved: 0</div><div style="display:flex;gap:8px;"><button id="pc-vp-export" style="flex:1;padding:8px;border:0;border-radius:8px;background:#2563eb;color:#fff;cursor:pointer;">Export</button><button id="pc-vp-view" style="flex:1;padding:8px;border:0;border-radius:8px;background:#374151;color:#fff;cursor:pointer;">View</button><button id="pc-vp-clear" style="flex:1;padding:8px;border:0;border-radius:8px;background:#dc2626;color:#fff;cursor:pointer;">Clear</button></div>';document.body.appendChild(panel);panel.setAttribute('data-init','1');panel.querySelector('#pc-vp-export').addEventListener('click',function(){var store=readStore();downloadJson('verified_pennies_'+Date.now()+'.json',store);showToast('Exported JSON.','success')});panel.querySelector('#pc-vp-view').addEventListener('click',function(){var store=readStore();var w=window.open('','_blank');if(!w){showToast('Popup blocked (allow popups to View).','error');return}w.document.open();w.document.write('<pre style="white-space:pre-wrap;word-break:break-word;font:12px/1.4 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;">'+String(JSON.stringify(store,null,2)).replace(/</g,'&lt;')+'</pre>');w.document.close()});panel.querySelector('#pc-vp-clear').addEventListener('click',function(){if(!confirm('Clear all saved extracted items?'))return;localStorage.removeItem(STORAGE_KEY);updatePanelCount(0);showToast('Cleared saved items.','success')});return panel}function updatePanelCount(count){var panel=ensurePanel();var el=panel.querySelector('#pc-vp-count');if(el)el.textContent='Saved: '+count}if(location.hostname.indexOf('homedepot.')===-1||location.href.indexOf('/p/')===-1){if(document.body)showToast('Open a Home Depot product /p/ page first.','error');return}if(!document.body){return}var sku=getSku();if(!sku){showToast('Could not find Store SKU on this page.','error');return}var entry={sku:String(sku),internetNumber:String(getInternetNumberFromUrl()||''),name:String(getName()||''),brand:String(getBrand()||''),model:String(getModel()||''),imageUrl:String(getImageUrl()||'')};if(!entry.imageUrl){showToast('Could not find image URL (og:image).','error');return}var store=readStore();store[entry.sku]=entry;if(!writeStore(store)){showToast('Failed to save (localStorage quota?).','error');return}updatePanelCount(Object.keys(store).length);showToast('Saved SKU '+entry.sku+'.','success')})();
+javascript:(function(){
+  var STORAGE_KEY = 'pennycentral_verified_pennies_draft';
+  var PANEL_ID = 'pc-vp-panel';
+  var TOAST_ID = 'pc-vp-toast';
+  var API_URL = 'https://www.pennycentral.com/api/enrich';
+  var API_KEY = 'penny-enrich-2024';
+
+  function text(sel) {
+    var el = document.querySelector(sel);
+    return el && el.textContent ? el.textContent.replace(/\s+/g, ' ').trim() : '';
+  }
+
+  function attr(sel, a) {
+    var el = document.querySelector(sel);
+    return el ? el.getAttribute(a) || '' : '';
+  }
+
+  function pickFirstNonEmpty(arr) {
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i]) return arr[i];
+    }
+    return '';
+  }
+
+  function matchDigits(s, min, max) {
+    var m = (s || '').match(new RegExp('\\b\\d{' + min + ',' + max + '}\\b'));
+    return m ? m[0] : '';
+  }
+
+  function getInternetNumberFromUrl() {
+    var m = (location.pathname || '').match(/\/p\/[^/]+\/(\d{6,12})/);
+    return m ? m[1] : '';
+  }
+
+  function getSku() {
+    var candidates = [];
+    candidates.push(matchDigits(text('[data-testid="product-sku"]'), 6, 10));
+    candidates.push(matchDigits(text('.product-identifier__sku'), 6, 10));
+    candidates.push(matchDigits(text('span[itemprop="sku"]'), 6, 10));
+    var body = (document.body && document.body.innerText) ? document.body.innerText : '';
+    var m = body.match(/Store\s*SKU\s*#?\s*(\d{6,10})/i);
+    if (m && m[1]) candidates.push(m[1]);
+    m = body.match(/\bSKU\b[^\d]{0,20}(\d{6,10})/i);
+    if (m && m[1]) candidates.push(m[1]);
+    return pickFirstNonEmpty(candidates);
+  }
+
+  function getName() {
+    return pickFirstNonEmpty([
+      text('h1[data-testid="product-title"]'),
+      text('h1.product-details__title'),
+      text('h1'),
+      attr('meta[property="og:title"]', 'content')
+    ]);
+  }
+
+  function getImageUrl() {
+    var url = attr('meta[property="og:image"]', 'content');
+    if (!url) {
+      var img = document.querySelector('img[src*="thdstatic.com"],img[data-src*="thdstatic.com"],img[srcset*="thdstatic.com"]');
+      if (img) {
+        url = img.getAttribute('src') || img.getAttribute('data-src') || '';
+      }
+    }
+    if (url && url.indexOf('thdstatic.com') !== -1) {
+      url = url.replace(/\/\d+\.jpg(\?.*)?$/, '/1000.jpg');
+    }
+    return url;
+  }
+
+  function findSpecValue(label) {
+    var rows = document.querySelectorAll('tr,dt');
+    for (var i = 0; i < rows.length; i++) {
+      var row = rows[i];
+      if (row.tagName && row.tagName.toLowerCase() === 'tr') {
+        var cells = row.querySelectorAll('th,td');
+        if (cells.length >= 2) {
+          var k = (cells[0].textContent || '').replace(/\s+/g, ' ').trim();
+          if (k && k.toLowerCase() === label.toLowerCase()) {
+            return (cells[1].textContent || '').replace(/\s+/g, ' ').trim();
+          }
+        }
+      }
+      if (row.tagName && row.tagName.toLowerCase() === 'dt') {
+        var key = (row.textContent || '').replace(/\s+/g, ' ').trim();
+        if (key && key.toLowerCase() === label.toLowerCase()) {
+          var dd = row.nextElementSibling;
+          if (dd && dd.tagName && dd.tagName.toLowerCase() === 'dd') {
+            return (dd.textContent || '').replace(/\s+/g, ' ').trim();
+          }
+        }
+      }
+    }
+    return '';
+  }
+
+  function getBrand() {
+    return pickFirstNonEmpty([
+      text('[data-testid="product-brand"]'),
+      attr('meta[itemprop="brand"]', 'content'),
+      findSpecValue('Brand'),
+      findSpecValue('Manufacturer')
+    ]);
+  }
+
+  function getModel() {
+    return pickFirstNonEmpty([
+      findSpecValue('Model'),
+      findSpecValue('Model #'),
+      findSpecValue('Model Number')
+    ]);
+  }
+
+  function getUPC() {
+    return pickFirstNonEmpty([
+      findSpecValue('UPC'),
+      findSpecValue('UPC Code'),
+      findSpecValue('Universal Product Code'),
+      findSpecValue('Barcode')
+    ]);
+  }
+
+  function getInternetSku() {
+    var fromUrl = getInternetNumberFromUrl();
+    if (fromUrl) return fromUrl;
+    return pickFirstNonEmpty([
+      findSpecValue('Internet #'),
+      findSpecValue('Internet Number'),
+      findSpecValue('Internet SKU')
+    ]);
+  }
+
+  function readStore() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function writeStore(obj) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function downloadJson(filename, obj) {
+    var json = JSON.stringify(obj, null, 2);
+    var blob = new Blob([json], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function copyToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text);
+      return true;
+    }
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;left:-9999px;';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+    return true;
+  }
+
+  function showToast(message, type) {
+    type = type || 'info';
+    var existing = document.getElementById(TOAST_ID);
+    if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
+    var toast = document.createElement('div');
+    toast.id = TOAST_ID;
+    var bg = type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6';
+    toast.style.cssText = 'position:fixed;top:18px;right:18px;background:' + bg + ';color:#fff;padding:12px 16px;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,0.18);z-index:2147483647;font:14px/1.35 -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;max-width:400px;';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(function() { if (toast && toast.parentNode) toast.parentNode.removeChild(toast); }, 3000);
+  }
+
+  function ensurePanel() {
+    var panel = document.getElementById(PANEL_ID);
+    if (panel) return panel;
+    panel = document.createElement('div');
+    panel.id = PANEL_ID;
+    panel.style.cssText = 'position:fixed;bottom:18px;right:18px;background:#111827;color:#fff;padding:14px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.22);z-index:2147483646;font:13px/1.4 -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;min-width:280px;max-width:350px;';
+    panel.innerHTML = '<div style="font-weight:700;font-size:15px;margin-bottom:10px;">PennyCentral Extractor</div><div id="pc-vp-preview" style="background:#1f2937;padding:10px;border-radius:8px;margin-bottom:10px;font-size:12px;max-height:200px;overflow:auto;"></div><div id="pc-vp-count" style="color:#9ca3af;margin-bottom:10px;font-size:12px;">Saved: 0</div><div style="display:flex;gap:8px;flex-wrap:wrap;"><button id="pc-vp-save" style="flex:1;padding:10px;border:0;border-radius:8px;background:#10b981;color:#fff;cursor:pointer;font-weight:600;">Save Local</button><button id="pc-vp-upload" style="flex:1;padding:10px;border:0;border-radius:8px;background:#8b5cf6;color:#fff;cursor:pointer;font-weight:600;">Upload</button><button id="pc-vp-copy" style="flex:1;padding:10px;border:0;border-radius:8px;background:#3b82f6;color:#fff;cursor:pointer;font-weight:600;">Copy JSON</button></div><div style="display:flex;gap:8px;margin-top:8px;"><button id="pc-vp-export" style="flex:1;padding:8px;border:0;border-radius:8px;background:#374151;color:#fff;cursor:pointer;">Export All</button><button id="pc-vp-clear" style="flex:1;padding:8px;border:0;border-radius:8px;background:#dc2626;color:#fff;cursor:pointer;">Clear</button></div>';
+    document.body.appendChild(panel);
+    return panel;
+  }
+
+  function updatePreview(entry) {
+    var panel = ensurePanel();
+    var preview = panel.querySelector('#pc-vp-preview');
+    if (!preview) return;
+    var fields = [
+      '<div><b>SKU:</b> ' + (entry.sku || 'N/A') + '</div>',
+      '<div><b>Internet #:</b> ' + (entry.internetNumber || 'N/A') + '</div>',
+      '<div><b>Name:</b> ' + (entry.name || 'N/A').substring(0, 60) + '</div>',
+      '<div><b>Brand:</b> ' + (entry.brand || 'N/A') + '</div>',
+      '<div><b>Model:</b> ' + (entry.model || 'N/A') + '</div>',
+      '<div><b>UPC:</b> ' + (entry.upc || 'N/A') + '</div>',
+      '<div><b>Image:</b> ' + (entry.imageUrl ? '✅' : '❌') + '</div>'
+    ];
+    preview.innerHTML = fields.join('');
+  }
+
+  function updatePanelCount(count) {
+    var panel = ensurePanel();
+    var el = panel.querySelector('#pc-vp-count');
+    if (el) el.textContent = 'Saved locally: ' + count;
+  }
+
+  if (location.hostname.indexOf('homedepot.') === -1 || location.href.indexOf('/p/') === -1) {
+    if (document.body) showToast('Open a Home Depot product /p/ page first.', 'error');
+    return;
+  }
+
+  if (!document.body) return;
+
+  var sku = getSku();
+  if (!sku) {
+    showToast('Could not find Store SKU on this page.', 'error');
+    return;
+  }
+
+  var entry = {
+    sku: String(sku),
+    internetNumber: String(getInternetSku() || ''),
+    name: String(getName() || ''),
+    brand: String(getBrand() || ''),
+    model: String(getModel() || ''),
+    upc: String(getUPC() || ''),
+    imageUrl: String(getImageUrl() || ''),
+    homeDepotUrl: location.href.split('?')[0]
+  };
+
+  var panel = ensurePanel();
+  var store = readStore();
+  updatePreview(entry);
+  updatePanelCount(Object.keys(store).length);
+
+  // Save Local button
+  panel.querySelector('#pc-vp-save').onclick = function() {
+    if (!entry.imageUrl) {
+      showToast('Warning: No image URL found. Saving anyway.', 'info');
+    }
+    store[entry.sku] = entry;
+    if (!writeStore(store)) {
+      showToast('Failed to save (localStorage quota?).', 'error');
+      return;
+    }
+    updatePanelCount(Object.keys(store).length);
+    showToast('Saved SKU ' + entry.sku + ' locally.', 'success');
+  };
+
+  // Upload button
+  panel.querySelector('#pc-vp-upload').onclick = function() {
+    if (!entry.sku) {
+      showToast('No SKU to upload.', 'error');
+      return;
+    }
+    showToast('Uploading SKU ' + entry.sku + '...', 'info');
+    fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': API_KEY
+      },
+      body: JSON.stringify(entry)
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data.success) {
+        showToast('Uploaded SKU ' + entry.sku + ' to PennyCentral!', 'success');
+      } else {
+        showToast('Upload failed: ' + (data.error || 'Unknown'), 'error');
+      }
+    })
+    .catch(function(err) {
+      showToast('Upload error: ' + err.message, 'error');
+    });
+  };
+
+  // Copy JSON button
+  panel.querySelector('#pc-vp-copy').onclick = function() {
+    var json = JSON.stringify(entry, null, 2);
+    copyToClipboard(json);
+    showToast('Copied JSON to clipboard!', 'success');
+  };
+
+  // Export All button
+  panel.querySelector('#pc-vp-export').onclick = function() {
+    downloadJson('verified_pennies_' + Date.now() + '.json', store);
+    showToast('Exported ' + Object.keys(store).length + ' items.', 'success');
+  };
+
+  // Clear button
+  panel.querySelector('#pc-vp-clear').onclick = function() {
+    if (!confirm('Clear all saved extracted items?')) return;
+    localStorage.removeItem(STORAGE_KEY);
+    store = {};
+    updatePanelCount(0);
+    showToast('Cleared saved items.', 'success');
+  };
+
+  showToast('Extracted SKU ' + entry.sku + (entry.upc ? ' (UPC: ' + entry.upc + ')' : ''), 'success');
+})();

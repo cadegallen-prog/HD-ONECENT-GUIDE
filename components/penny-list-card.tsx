@@ -7,9 +7,10 @@ import { toast } from "sonner"
 import { copyToClipboard } from "@/components/copy-sku-button"
 import { ShareButton } from "@/components/share-button"
 import { AddToListButton } from "@/components/add-to-list-button"
+import { useAuth } from "@/components/auth-provider"
 import { PennyThumbnail } from "@/components/penny-thumbnail"
 import { US_STATES } from "@/lib/us-states"
-import { formatRelativeDate } from "@/lib/penny-list-utils"
+import { formatRelativeDate, normalizeProductName, normalizeBrand } from "@/lib/penny-list-utils"
 import type { PennyItem } from "@/lib/fetch-penny-data"
 import { getHomeDepotProductUrl } from "@/lib/home-depot"
 import { formatSkuForDisplay } from "@/lib/sku"
@@ -34,9 +35,35 @@ function getTotalReports(locations: Record<string, number>): number {
   return Object.values(locations).reduce((sum, count) => sum + count, 0)
 }
 
+interface BookmarkActionProps {
+  sku: string
+  itemName: string
+}
+
+function BookmarkAction({ sku, itemName }: BookmarkActionProps) {
+  const { user } = useAuth()
+  return (
+    <div
+      onClick={(event) => event.stopPropagation()}
+      className="flex flex-col items-center gap-1 text-center text-[var(--text-secondary)] text-xs pointer-events-auto"
+      data-bookmark-action="true"
+    >
+      <AddToListButton sku={sku} itemName={itemName} variant="icon" />
+      <span className="text-xs font-semibold text-[var(--text-primary)]">Bookmark to save</span>
+      <span className="text-xs text-[var(--text-muted)] leading-tight">
+        {user ? "View saved items under your lists." : "Sign in to keep this find saved."}
+      </span>
+    </div>
+  )
+}
+
 export function PennyListCard({ item }: PennyListCardProps) {
   const router = useRouter()
   const [copied, setCopied] = useState(false)
+
+  // Normalize display values
+  const displayBrand = normalizeBrand(item.brand)
+  const displayName = normalizeProductName(item.name, { brand: item.brand })
 
   const identifiers = [
     { label: "Model", value: item.modelNumber },
@@ -120,17 +147,17 @@ export function PennyListCard({ item }: PennyListCardProps) {
                 className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] rounded"
               >
                 <div className="space-y-2">
-                  {item.brand && (
+                  {displayBrand && (
                     <p className="text-xs uppercase tracking-[0.08em] text-[var(--text-secondary)]">
-                      {item.brand}
+                      {displayBrand}
                     </p>
                   )}
                   <h3
                     id={`item-${item.id}-name`}
                     className="font-semibold text-base sm:text-lg text-[var(--text-primary)] leading-[1.5] line-clamp-2 group-hover:text-[var(--cta-primary)] transition-colors"
-                    title={item.name}
+                    title={displayName}
                   >
-                    {item.name}
+                    {displayName}
                   </h3>
                 </div>
               </Link>
@@ -235,13 +262,7 @@ export function PennyListCard({ item }: PennyListCardProps) {
               >
                 <ShareButton sku={item.sku} itemName={item.name} source="card" />
               </span>
-              <span
-                onClick={(e) => {
-                  e.stopPropagation()
-                }}
-              >
-                <AddToListButton sku={item.sku} itemName={item.name} variant="icon" />
-              </span>
+              <BookmarkAction sku={item.sku} itemName={item.name} />
               <Button
                 type="button"
                 variant="secondary"
@@ -273,6 +294,10 @@ export function PennyListCard({ item }: PennyListCardProps) {
 export function PennyListCardCompact({ item }: PennyListCardProps) {
   const router = useRouter()
   const [copied, setCopied] = useState(false)
+
+  // Normalize display values
+  const displayBrand = normalizeBrand(item.brand)
+  const displayName = normalizeProductName(item.name, { brand: item.brand })
 
   const identifiers = [
     { label: "Model", value: item.modelNumber },
@@ -347,17 +372,17 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
               className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] rounded"
             >
               <div className="space-y-2">
-                {item.brand && (
+                {displayBrand && (
                   <p className="text-xs uppercase tracking-[0.08em] text-[var(--text-secondary)]">
-                    {item.brand}
+                    {displayBrand}
                   </p>
                 )}
                 <h3
                   id={`hot-item-${item.id}-name`}
                   className="text-sm sm:text-base font-semibold text-[var(--text-primary)] leading-[1.5] line-clamp-2 group-hover:text-[var(--cta-primary)] transition-colors"
-                  title={item.name}
+                  title={displayName}
                 >
-                  {item.name}
+                  {displayName}
                 </h3>
               </div>
             </Link>
@@ -444,9 +469,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
             <PlusCircle className="w-4 h-4 mr-1.5" aria-hidden="true" />
             Report this find
           </Button>
-          <span onClick={(e) => e.stopPropagation()}>
-            <AddToListButton sku={item.sku} itemName={item.name} variant="icon" />
-          </span>
+          <BookmarkAction sku={item.sku} itemName={item.name} />
         </div>
       </article>
     </div>
