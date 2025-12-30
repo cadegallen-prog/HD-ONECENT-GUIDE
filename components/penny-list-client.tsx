@@ -4,7 +4,6 @@ import { useState, useMemo, useEffect, useCallback, useRef } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import { AlertTriangle, Package, Clock, CheckCircle2, Info, ChevronDown } from "lucide-react"
 import { TrackableLink } from "@/components/trackable-link"
-import { formatRelativeDate } from "@/lib/penny-list-utils"
 import { trackEvent } from "@/lib/analytics"
 import { FeedbackWidget } from "@/components/feedback-widget"
 import {
@@ -22,9 +21,6 @@ interface PennyListClientProps {
   initialTotal: number
   hotItems?: PennyItem[]
   initialSearchParams?: Record<string, string | string[] | undefined>
-  whatsNewCount?: number
-  whatsNewItems?: PennyItem[]
-  lastUpdatedLabel?: string
 }
 
 function toURLSearchParams(
@@ -56,9 +52,6 @@ export function PennyListClient({
   initialTotal,
   hotItems: serverHotItems = [],
   initialSearchParams,
-  whatsNewCount = 0,
-  whatsNewItems = [],
-  lastUpdatedLabel,
 }: PennyListClientProps) {
   const router = useRouter()
   const pathname = usePathname()
@@ -326,9 +319,9 @@ export function PennyListClient({
       hasFilter: hasActiveFilters,
       hasSearch: searchQuery.trim().length > 0,
       freshnessHours: freshnessHours ?? undefined,
-      whatsNewCount,
+      hotItemsCount: hotItems.length,
     })
-  }, [total, freshnessHours, hasActiveFilters, searchQuery, whatsNewCount])
+  }, [total, freshnessHours, hasActiveFilters, searchQuery, hotItems.length])
 
   useEffect(() => {
     if (currentPage === 1) return
@@ -415,34 +408,6 @@ export function PennyListClient({
               <PennyListCardCompact key={`hot-${item.id}`} item={item} />
             ))}
           </div>
-        </section>
-      )}
-
-      {whatsNewItems.length > 0 && (
-        <section className="mb-8 rounded-xl border border-[var(--border-default)] bg-[var(--bg-elevated)] p-4 sm:p-5">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
-            <h2 className="text-base font-semibold text-[var(--text-primary)]">
-              What’s new this week (top 10)
-            </h2>
-            {lastUpdatedLabel && (
-              <span className="text-xs text-[var(--text-muted)]">{lastUpdatedLabel}</span>
-            )}
-          </div>
-          <ul className="divide-y divide-[var(--border-default)]">
-            {whatsNewItems.map((item) => (
-              <li key={item.id} className="py-2 flex items-center justify-between gap-3 text-sm">
-                <div className="min-w-0">
-                  <p className="font-semibold text-[var(--text-primary)] truncate">{item.name}</p>
-                  <p className="text-[var(--text-muted)] text-xs">SKU {item.sku}</p>
-                </div>
-                <div className="text-right text-xs text-[var(--text-secondary)] whitespace-nowrap">
-                  <time dateTime={item.dateAdded}>
-                    {formatRelativeDate(item.dateAdded, new Date())}
-                  </time>
-                </div>
-              </li>
-            ))}
-          </ul>
         </section>
       )}
 

@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 import { getPennyList } from "@/lib/fetch-penny-data"
 import { computeFreshnessMetrics, filterValidPennyItems } from "@/lib/penny-list-utils"
 import { queryPennyItems, getHotItems } from "@/lib/penny-list-query"
@@ -120,23 +119,6 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
     },
     { multipleReports: 0, singleReport: 0 }
   )
-  const whatsNew = [...validItems]
-    .sort((a, b) => new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime())
-    .slice(0, 10)
-
-  const trendingItems = [...validItems]
-    .map((item) => ({
-      ...item,
-      totalReports: Object.values(item.locations || {}).reduce((sum, count) => sum + count, 0),
-      stateCount: item.locations ? Object.keys(item.locations).length : 0,
-    }))
-    .sort(
-      (a, b) =>
-        b.totalReports - a.totalReports ||
-        new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime()
-    )
-    .slice(0, 4)
-
   // Compute initial page slice from URL params (so reloads/bookmarks show the correct results)
   const { items: filteredItems, total: initialTotal } = queryPennyItems(
     validItems,
@@ -253,35 +235,6 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
             </div>
           </div>
 
-          {trendingItems.length > 0 && (
-            <div className="mb-6 rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] p-4 sm:p-5">
-              <div className="flex items-center justify-between gap-2 mb-3">
-                <h2 className="text-lg font-bold text-[var(--text-primary)]">Trending SKUs</h2>
-                <span className="pill pill-muted text-xs">Top reports</span>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                {trendingItems.map((item) => (
-                  <Link
-                    key={item.id}
-                    href={`/sku/${item.sku}`}
-                    className="p-3 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] hover:border-[var(--cta-primary)] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
-                  >
-                    <p className="text-sm font-semibold text-[var(--text-primary)] truncate">
-                      {item.name}
-                    </p>
-                    <p className="text-xs text-[var(--text-muted)] font-mono mt-1">
-                      SKU {item.sku}
-                    </p>
-                    <p className="text-xs text-[var(--text-secondary)] mt-2">
-                      {item.totalReports} report{item.totalReports === 1 ? "" : "s"} ·{" "}
-                      {item.stateCount} state{item.stateCount === 1 ? "" : "s"}
-                    </p>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          )}
-
           {feedUnavailable && (
             <div
               role="status"
@@ -302,9 +255,6 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
             initialTotal={initialTotal}
             hotItems={hotItems}
             initialSearchParams={resolvedSearchParams}
-            whatsNewCount={whatsNew.length}
-            whatsNewItems={whatsNew}
-            lastUpdatedLabel={lastUpdatedLabel}
           />
         </div>
       </section>

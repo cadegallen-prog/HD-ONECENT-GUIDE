@@ -12,29 +12,27 @@
 
 ---
 
-## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Penny Thumbnail Styling Polish
+## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Penny List highlights cleanup
 
 **AI:** ChatGPT Codex (GPT-5.2)  
-**Goal:** Improve penny thumbnail separation and padding to avoid edge blending.  
+**Goal:** Remove extra Penny List highlight modules and keep a single primary module.
 
 **Changes Made:**
-- Strengthened thumbnail background with `var(--bg-tertiary)` and `var(--border-strong)` plus an inset shadow.
-- Switched thumbnails to `object-contain` with padding to keep edges off the background.
+- Removed the “Trending SKUs” block from `/penny-list` and dropped its data plumbing.
+- Removed the “What’s New” module and props from `PennyListClient`, keeping “Hot Right Now” as the primary highlight.
+- Updated analytics payload to report `hotItemsCount` for the remaining highlight module.
 
-**Outcome:** ✅ Success
+**Outcome:** ⚠️ Partial (tests failing)
 
 **Verification:**
 - lint: ✅ `npm run lint`
-- build: ✅ `npm run build` (warnings about `import-in-the-middle` version mismatch)
-- test:unit: ❌ `npm run test:unit` (no tests matched glob: `tests/**/*.test.ts`)
-- test:e2e: ❌ `npm run test:e2e` (Playwright browsers missing; prompt to run `npx playwright install`)
-- lint:colors: ✅ `npm run lint:colors`
-- Playwright: before/after light/dark captured; after-light shows hydration warning in console.
+- build: ✅ `npm run build` (Turbopack warnings about import-in-the-middle version mismatch)
+- test:unit: ❌ `npm run test:unit` (glob path not found: `tests/**/*.test.ts`)
+- test:e2e: ❌ `npm run test:e2e` (multiple Playwright failures across projects; see console output)
 
 **For Next AI:**
-- None.
-
----
+- Investigate why `npm run test:unit` fails to resolve `tests/**/*.test.ts` in this environment.
+- Review Playwright failures (Report Find prefill, visual smoke, SKU related items, store finder popup) and check whether `PLAYWRIGHT=1` fixture mode or dev server state is impacting those results.
 
 ## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Auth + Personal Lists + Sharing
 
@@ -90,20 +88,16 @@
 
 ---
 
-## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Penny List Grid Density
+## 2025-12-27 - ChatGPT Codex (GPT-5.2) - MCP Set-and-Forget Prune
 
-**AI:** ChatGPT Codex (GPT-5.2)
-**Goal:** Increase penny list card grid density at desktop widths without reducing tap targets.
+**AI:** ChatGPT Codex (GPT-5.2)  
+**Goal:** Reduce MCP tool noise while keeping daily DB checks available.
 
 **Changes Made:**
-- Updated the penny list card grid to show four columns at xl breakpoint.
+- Removed Vercel MCP from Codex (`C:\\Users\\cadeg\\.codex\\config.toml`), Claude (`.claude/settings.json`), and VS Code (`.vscode/mcp.json`).
+- Kept Supabase enabled for routine database checks.
 
 **Outcome:** ✅ Success
 
-**Verification:**
-- All 4 quality gates: lint ✅, build ✅, test:unit 21/21 ✅, test:e2e 68/68 ✅
-
-**Files Modified:**
-- `components/penny-list-client.tsx` - Adjusted grid columns to xl:grid-cols-4
-
----
+**Notes:**
+- Restart VS Code/Codex to refresh tool lists after config changes.
