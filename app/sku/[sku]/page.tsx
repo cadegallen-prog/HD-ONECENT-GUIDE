@@ -290,7 +290,7 @@ export default async function SkuDetailPage({ params }: PageProps) {
                   </div>
                 )}
 
-                {/* Identifiers Section */}
+                {/* Product Identifiers Section */}
                 <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-lg p-4 mb-6">
                   <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-3">
                     Identifiers
