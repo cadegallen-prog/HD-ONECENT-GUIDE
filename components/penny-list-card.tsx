@@ -61,10 +61,10 @@ export function PennyListCard({ item }: PennyListCardProps) {
   const router = useRouter()
   const [copied, setCopied] = useState(false)
 
+
   // Normalize display values
   const displayBrand = normalizeBrand(item.brand)
   const displayName = normalizeProductName(item.name, { brand: item.brand })
-
   const identifiers = [
     { label: "Model", value: item.modelNumber },
     { label: "UPC", value: item.upc },
@@ -297,10 +297,10 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
   const router = useRouter()
   const [copied, setCopied] = useState(false)
 
+
   // Normalize display values
   const displayBrand = normalizeBrand(item.brand)
   const displayName = normalizeProductName(item.name, { brand: item.brand })
-
   const identifiers = [
     { label: "Model", value: item.modelNumber },
     { label: "UPC", value: item.upc },

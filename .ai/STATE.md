@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 28, 2025 (Penny list card typography hierarchy update)
+**Last updated:** Dec 28, 2025 (Identifiers row on Penny List cards)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 

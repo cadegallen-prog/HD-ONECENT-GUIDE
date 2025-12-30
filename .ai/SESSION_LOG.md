@@ -36,7 +36,6 @@
 - Review Playwright failures (Report Find prefill, visual smoke, SKU related items, store finder popup) and check whether `PLAYWRIGHT=1` fixture mode or dev server state is impacting those results.
 
 ---
-
 ## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Penny List Identifiers Row
 
 **AI:** ChatGPT Codex (GPT-5.2)  
