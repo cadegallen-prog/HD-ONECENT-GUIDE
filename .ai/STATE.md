@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 28, 2025 (PR-3 Auth + Personal Lists + Sharing in progress)
+**Last updated:** Dec 28, 2025 (Identifiers row on Penny List cards)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -8,6 +8,10 @@ Every AI session must update this after meaningful work.
 
 ## 1. Where We Are
 
+- **Recent focus (Dec 28): Penny List identifiers row**
+  - Added a compact “Identifiers” row under the SKU pill in `components/penny-list-card.tsx`.
+  - Mobile now uses a `<details>` toggle to keep identifiers from cluttering the card.
+  - Updated `data/penny-list.json` with a sample model/UPC for previewing the UI.
 - **Site:** live at https://www.pennycentral.com (Preferred canonical domain)
 - **Current policy (Dec 19):** The Verified Pennies feature was removed.
   - `/verified-pennies` permanently redirects to `/penny-list`
