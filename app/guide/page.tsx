@@ -18,6 +18,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+    title: "Home Depot Penny Shopping Guide",
+    description:
+      "Master the art of finding $0.01 clearance items at Home Depot. Learn the clearance lifecycle, digital pre-hunt strategies, in-store tactics, and checkout procedures.",
     images: [ogImageUrl("guide")],
   },
 }
