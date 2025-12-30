@@ -37,6 +37,31 @@
 
 ---
 
+## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Penny List Card Typography Hierarchy
+
+**AI:** ChatGPT Codex (GPT-5.2)  
+**Goal:** Add brand line + two-line title clamping on Penny List cards and align mobile typography across compact/standard cards.
+
+**Changes Made:**
+- Added optional brand line above titles for `PennyListCard` and `PennyListCardCompact`.
+- Switched title truncation to `line-clamp-2` and reduced mobile title size while keeping 8-pt spacing.
+- Updated `.ai/STATE.md` with the latest UI change.
+
+**Outcome:** ✅ UI updates complete; verification partially blocked by environment.
+
+**Verification:**
+- lint: ✅ `npm run lint`
+- build: ✅ `npm run build` (Turbopack warnings about duplicated `import-in-the-middle`/`require-in-the-middle`)
+- test:unit: ❌ `npm run test:unit` (script error: could not find `tests/**/*.test.ts`)
+- test:e2e: ❌ `npm run test:e2e` (Playwright browsers missing; requires `npx playwright install`)
+- Playwright screenshots captured manually for `/penny-list` (light + dark). Console showed missing Supabase env vars and one hydration mismatch warning in dev.
+
+**For Next AI:**
+- Consider fixing the unit test glob if intended, or document expected path.
+- Install Playwright browsers in this environment before rerunning e2e tests.
+
+---
+
 ## 2025-12-27 - Claude Code (Opus 4.5) - PR-2: Report Find Prefill + Validation Hardening
 
 **AI:** Claude Code (Opus 4.5)  

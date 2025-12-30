@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 28, 2025 (PR-3 Auth + Personal Lists + Sharing in progress)
+**Last updated:** Dec 28, 2025 (Penny list card typography hierarchy update)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -18,6 +18,8 @@ Every AI session must update this after meaningful work.
   - Penny List cards now include “Save to list” via `AddToListButton` (smart add + picker). Personal lists live at `/lists`; list detail `/lists/[id]` supports priority/found status toggles, in-store mode, search/filter, and share links.
   - Public shared list view at `/s/[token]` with “Save a copy” fork CTA. Analytics events added for add-to-list, sharing, and in-store mode toggles.
   - Supabase migrations added: `001_create_lists_tables.sql`, `002_create_list_shares.sql`, `003_security_search_path.sql` (RLS, share RPCs, search_path hardening). New Supabase browser/server clients in `lib/supabase/`.
+- **Recent focus (Dec 28): Penny list card typography hierarchy**
+  - Added optional brand line above item titles, shifted titles to 2-line clamps, and tuned mobile sizing for `PennyListCard` + `PennyListCardCompact` to keep 8-pt spacing consistent.
 - **Recent focus (Dec 28): Scraping auto-enrich workflow**
   - Added `scripts/auto-enrich.ts` + `SCRAPING_IMPROVEMENT_PLAN.md`; reads `data/skus-to-enrich.txt`, runs headed Playwright scrape, writes `.local/enrichment-upload.csv`. New npm script `npm run enrich:auto`; input/output paths ignored by git.
   - Added shared `formatSkuForDisplay` utility and upgraded SKU copy UX (toasts, consistent formatting) across cards, tables, SKU page, and report form; ensured new UI uses CSS variables (no raw Tailwind colors).
