@@ -1,62 +1,35 @@
 {
-    // Editor: Auto-format and fix on save
-    "editor.formatOnSave": true,
-    "editor.formatOnPaste": true,
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.codeActionsOnSave": {
-        "source.fixAll": "always"
-    },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  },
 
-    // JavaScript/TypeScript: Use Prettier
-    "[javascript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[typescript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[typescriptreact]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[javascriptreact]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[json]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[jsonc]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "typescript.tsserver.maxTsServerMemory": 4096,
 
-    // Python: Use Black formatter
-    "[python]": {
-        "editor.defaultFormatter": "ms-python.black-formatter",
-        "editor.formatOnSave": true,
-        "editor.codeActionsOnSave": {
-            "source.organizeImports": "explicit"
-        }
-    },
+  "files.eol": "\n",
 
-    // Python environment settings
-    "python-envs.defaultEnvManager": "ms-python.python:venv",
-    "python-envs.pythonProjects": [],
-    "python.useEnvironmentsExtension": true,
-    "python.defaultInterpreterPath": "C:\\Users\\cadeg\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
-    "python.terminal.activateEnvironment": true,
+  "workbench.startupEditor": "readme",
+  "workbench.editor.enablePreview": false,
+  "css.lint.unknownAtRules": "ignore",
 
-    // Workspace settings
-    "workbench.startupEditor": "readme",
-    "workbench.editor.enablePreview": false,
-    "css.lint.unknownAtRules": "ignore",
+  "files.associations": {
+    "**/reports/playwright/html/index.html": "plaintext"
+  },
+  "files.watcherExclude": {
+    "**/reports/playwright/html/**": true,
+    "**/.next/**": true,
+    "**/node_modules/**": true
+  },
+  "search.exclude": {
+    "**/reports/playwright/html/**": true,
+    "**/.next/**": true,
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/out/**": true,
+    "**/coverage/**": true
+  },
 
-    // Generated Playwright HTML report (avoid noisy HTML validation/formatting)
-    "files.associations": {
-        "**/reports/playwright/html/index.html": "plaintext"
-    },
-    "files.watcherExclude": {
-        "**/reports/playwright/html/**": true
-    },
-    "search.exclude": {
-        "**/reports/playwright/html/**": true
-    },
-    "security.workspace.trust.enabled": true
+  "security.workspace.trust.enabled": true
 }

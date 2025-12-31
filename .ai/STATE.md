@@ -1,12 +1,21 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 30, 2025 (RLS migration applied, Supabase CLI linked)
+**Last updated:** Dec 31, 2025 (proxy migration, OTel pin, state pages, guide timeline)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
 ---
 
 ## 1. Where We Are
+
+- **Proxy migration (Dec 31):** `middleware.ts` renamed to `proxy.ts` with `proxy` export (Next 16 deprecation resolved).
+- **OTel warning fix (Dec 31):** npm `overrides` pin `import-in-the-middle@2.0.1` and `require-in-the-middle@8.0.1`, silencing Turbopack warnings.
+- **State pages (Dec 31):** Added `app/pennies/[state]/page.tsx` + `lib/states.ts`; sitemap includes all state slugs; pages filter 6m penny finds by state.
+- **Guide timeline (Dec 31):** Added clearance cadence timeline + tag examples to `components/GuideContent.tsx`.
+- **Penny list API (Dec 31):** Date-window filtering at DB level across `timestamp`/`purchase_date` for 1m–24m windows; response shape unchanged.
+- **Homepage (Dec 31):** “Today’s Finds” module below hero using 48h `getRecentFinds`; mobile horizontal scroll, desktop grid, state badges, relative time, CTA to `/penny-list`.
+- **Analytics (Dec 31):** Provider is env-gated (`NEXT_PUBLIC_ANALYTICS_PROVIDER` = plausible/vercel/none). Key events already wired (home page view, penny-list filters/search, HD clicks, report submissions, store searches). No new deps added.
+- **Workspace/tests (Dec 31):** Playwright now defaults to port 3002 to avoid user’s 3001 server. All gates green (lint/build/unit/e2e); Next dev emits source-map warnings; store API falls back to local data in tests (404 remote fetch).
 
 - **Supabase CLI:** Linked to project `supabase-red-river` (ref: `djtejotbcnzzjfsogzlc`). Run `npx supabase projects list` to verify.
 - **RLS Migration (Dec 30):** Applied `008_apply_penny_list_rls.sql` - created `penny_list_public` view, enabled RLS on `Penny List` and `penny_item_enrichment` tables. Anon can read via view, insert with validation, but cannot update/delete.

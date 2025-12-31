@@ -12,112 +12,89 @@
 
 ---
 
-## 2025-12-30 - ChatGPT Codex (GPT-5.2) - Merge codex backlog + QA polish
+## 2025-12-31 - ChatGPT Codex (GPT-5.2) - Proxy migration, OTel pin, guide timeline, state pages, analytics check
 
-**AI:** ChatGPT Codex (GPT-5.2)  
-**Goal:** Review every outstanding codex PR branch, reapply the local bookmark/QA tweaks, and rerun the full verification gates.
+**Goal:** Remove noisy build warnings, finish backlog items #3-4, keep tests green while avoiding port 3001 collisions.
 
 **Changes Made:**
-- Sequentially merged the eight codex branches that had unique commits (typography tweaks, identifiers rows, grid density, CTA placement, thumbnail polish, etc.), resolving `.ai` STATE/SESSION_LOG` conflicts along the way.
-- Reapplied the local workspace stash so the bookmark clarity tip card, CSP adjustments, and Supabase mock fixes survived, and added `.ai/RULES.md` plus a `full-qa` workflow for documenting QA requirements.
-- Reformatted the affected components (`components/penny-list-card.tsx`, `app/sku/[sku]/page.tsx`) with Prettier, keeping the normalized display helpers and the new identifiers/CTA UI.
+- Renamed `middleware.ts` → `proxy.ts` and exported `proxy` (Next 16 deprecation fixed).
+- Added npm `overrides` for `import-in-the-middle@2.0.1` and `require-in-the-middle@8.0.1` to silence Turbopack OTel version skew warnings.
+- Added clearance cadence timeline + tag examples to `components/GuideContent.tsx`.
+- Added state landing pages `app/pennies/[state]/page.tsx` + `lib/states.ts`; sitemap now includes state pages.
+- Playwright now uses port 3002 by default (`PLAYWRIGHT_BASE_URL` + `--port 3002`) to avoid clashing with user’s 3001 server.
+- Analytics audit: kept provider fully env-gated (`NEXT_PUBLIC_ANALYTICS_PROVIDER` = plausible/vercel/none), confirmed key events already wired (page views, penny-list filters/search, HD clicks, report submissions, store searches). README already documents envs; no new deps added.
 
 **Verification:**
 - `npm run lint`
-- `npm run build` (Turbopack warnings for `import/require-in-the-middle`, same as before)
+- `npm run build` (clean; only standard edge runtime note)
 - `npm run test:unit`
-- `npm run test:e2e` (Playwright 68 tests via `--workers=1`)
+- `npm run test:e2e` (68/68 on port 3002; Next dev emits source-map warnings; store API fell back to local data with 404 in tests)
 
-**For Next AI:** Keep the QA rules/workflow in sync with the full QA automation (and rerun `npm run qa:full` if new risky paths change).
+**Notes:** Port 3001 left untouched for user. Analytics remains env-gated; no Plausible creds required. Remaining backlog: analytics pass (already env-gated, events largely wired) if still desired.
 
 
-## 2025-12-30 - ChatGPT Codex (GPT-5.2) - Bookmark clarity + login fix
+## 2025-12-31 - ChatGPT Codex (GPT-5.2) - Windowed Supabase reads
 
-**AI:** ChatGPT Codex (GPT-5.2)  
-**Goal:** Make the Penny List bookmark eyes-on, explain the save flow, and unblock OTP sign-in.
-
-**Changes Made:**
-- Added a `BookmarkAction` wrapper (with inline copy and login hint) to both Penny List card variants so the bookmark icon clearly saves to personal lists and stops the card click from firing.
-- Inserted a `Save it for later` tip card right above the penny results explaining what the bookmark does, that it triggers sign-in, and linking to `/lists` (with accessible data attributes for targeting).
-- Allowed `https://*.supabase.co` in the CSP `connect-src` header so `/login` can reach Supabase OTP endpoints again; a Playwright script now catches a 200 response for the OTP request instead of a CSP block.
-- Updated `tests/setup.ts` to load `.env.local` via `dotenv` before stubbing `server-only`, which keeps the Supabase envs available to the failing enrichment/fallback tests.
-- Captured fresh Playwright screenshots for the post-change UI (light + dark) and confirmed the browser console stayed error-free while loading `/penny-list`.
-
-**Outcome:** UI now spells out the bookmark/save flow and the login form can hit Supabase again, but the existing `fetch-penny-data` unit tests still fail (`ignores enrichment rows with invalid SKUs` and `falls back to service role read when anon returns empty`). Other gates pass (`lint`, `build`, `test:e2e`, `lint:colors`).
-
-**For Next AI:** Investigate the failing enrichment/fallback unit tests (invalid SKU filtering + service role lookup) so the verification gate can greenlight this change.
-
----
-
-## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Penny List highlights cleanup
-
-**AI:** ChatGPT Codex (GPT-5.2)  
-**Goal:** Remove extra Penny List highlight modules and keep a single primary module.
+**Goal:** Ensure penny list API fetches only rows inside the selected date window before aggregation/pagination.
 
 **Changes Made:**
-- Removed the "Trending SKUs" block from `/penny-list` and dropped its data plumbing.
-- Removed the "What's New" module and props from `PennyListClient`, keeping "Hot Right Now" as the primary highlight.
-- Updated analytics payload to report `hotItemsCount` for the remaining highlight module.
-
-**Outcome:** ?? Partial (tests failing)
+- Applied DB-level date window to both `timestamp` and `purchase_date` in Supabase `penny_list_public` query so 1m/3m/6m/12m/18m/24m windows filter before transfer.
+- Kept API response shape/pagination unchanged; linted `components/todays-finds.tsx` placeholder remains unwired.
 
 **Verification:**
-- lint: ? `npm run lint`
-- build: ? `npm run build` (Turbopack warnings about import-in-the-middle version mismatch)
-- test:unit: ? `npm run test:unit` (glob path not found: `tests/**/*.test.ts`)
-- test:e2e: ? `npm run test:e2e` (multiple Playwright failures across projects; see console output)
+- `npm run lint`
+- `npm run build` (Turbopack warnings about import/require-in-the-middle; Next middleware deprecation notice)
+- `npm run test:unit`
+- `npm run test:e2e` (68/68 with `--workers=1`)
 
-**For Next AI:**
-- Investigate why `npm run test:unit` fails to resolve `tests/**/*.test.ts` in this environment.
-- Review Playwright failures (Report Find prefill, visual smoke, SKU related items, store finder popup) and check whether `PLAYWRIGHT=1` fixture mode or dev server state is impacting those results.
+**For Next AI:** Proceed to backlog task #2 (Today’s Finds section on `/`) if in scope. Known build warnings are longstanding (OTel version skew, middleware deprecation).
 
----
 
-## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Penny List Identifiers Row
+## 2025-12-31 - ChatGPT Codex (GPT-5.2) - Today’s Finds homepage section
 
-**AI:** ChatGPT Codex (GPT-5.2)  
-**Goal:** Add a compact identifiers row under the SKU pill and reduce mobile clutter.
+**Goal:** Add a “Today’s Finds” module below the hero, showcasing items from the last 48 hours with mobile horizontal scroll and desktop grid.
 
 **Changes Made:**
-- Added an "Identifiers" row under the SKU pill in `components/penny-list-card.tsx`, showing Model/UPC only when present.
-- Added a mobile-only `<details>` toggle to keep the identifiers row compact.
-- Updated `data/penny-list.json` fixture to include a sample model number and UPC for previewing the UI.
-
-**Outcome:** ? Success
+- Added `getRecentFinds` helper (48h default) in `lib/fetch-penny-data.ts`, filters DB windowed results by timestamp/purchase_date and applies `filterValidPennyItems`.
+- Wired `TodaysFinds` component into `app/page.tsx` (async server component) after the hero; component now flex-scrolls on mobile with snap and grids on md+, shows state badges and “X hours ago,” CTA to `/penny-list`.
+- Kept CSS variable palette; reused existing thumbnail/button styles.
 
 **Verification:**
-- lint: ? `npm run lint`
-- build: ? `npm run build` (Turbopack warnings about duplicate OpenTelemetry deps)
-- test:unit: ? `npm run test:unit` (no matching tests glob)
-- test:e2e: ? `npm run test:e2e` (Playwright browsers missing; needs `npx playwright install`)
+- `npm run lint`
+- `npm run build` (Turbopack import/require-in-the-middle + middleware deprecation warnings persist)
+- `npm run test:unit`
+- `npm run test:e2e` (68/68, `--workers=1`)
 
-***
----
+**For Next AI:** Backlog tasks #3–#5 remain (state landing pages, guide timeline, analytics instrumentation). Build warnings are longstanding OTel/middleware notices.
 
-**AI:** ChatGPT Codex (GPT-5.2)  
-**Goal:** Add a compact identifiers row under the SKU pill and reduce mobile clutter.
 
-**Changes Made:**
-- Added an "Identifiers" row under the SKU pill in `components/penny-list-card.tsx`, showing Model/UPC only when present.
-- Added a mobile-only `<details>` toggle to keep the identifiers row compact.
-- Updated `data/penny-list.json` fixture to include a sample model number and UPC for previewing the UI.
+## 2025-12-31 - ChatGPT Codex (GPT-5.2) - VS Code config cleanup + QA run
 
-**Outcome:** ? Success
-
-**Verification:**
-- lint: ? `npm run lint`
-- build: ? `npm run build` (Turbopack warnings about duplicate OpenTelemetry deps)
-- test:unit: ? `npm run test:unit` (no matching tests glob)
-- test:e2e: ? `npm run test:e2e` (Playwright browsers missing; needs `npx playwright install`)
-
----
-
-## 2025-12-28 - ChatGPT Codex (GPT-5.2) - Penny Thumbnail Styling Polish
-
-**AI:** ChatGPT Codex (GPT-5.2)  
-**Goal:** Improve penny thumbnail separation and padding to avoid edge blending.  
+**Goal:** Refresh workspace configs (launch/settings/tasks/extensions), stop VS Code task errors, and ensure gates are green after cleanup.
 
 **Changes Made:**
+- Replaced Edge-only launch configs with Next.js dev + Edge open/attach presets (port 3001, inspect 9229).
+- Simplified workspace settings: Prettier + ESLint on save, LF EOL, search/watcher excludes for `.next`/`node_modules`/reports.
+- Fixed tasks: valid `$eslint-stylish` matcher, added `qa:fast`/`qa:full`, dedicated panels. Added Tailwind + Playwright recommendations.
+- Formatted/typed placeholder `components/todays-finds.tsx` so it no longer breaks lint/build (not wired into `/`).
+
+**Verification:** `npm run lint`; `npm run build` (Turbopack import/require-in-the-middle warnings, middleware deprecation); `npm run test:unit`; `npm run test:e2e` (68/68).
+
+**For Next AI:** Five backlog feature/SEO/analytics tasks remain; placeholder Today’s Finds component is available but unused.
+
+
+## 2025-12-30 - ChatGPT Codex (GPT-5.2) - Merge codex backlog + QA polish
+
+**Goal:** Merge pending codex branches, preserve bookmark/QA tweaks, and rerun gates.
+
+**Changes Made:**
+- Merged eight codex branches (typography, identifiers, grid density, CTA placement, thumbnails, bookmark clarity, etc.) resolving `.ai` conflicts.
+- Reapplied bookmark clarity tip, CSP adjustment, Supabase mock fixes; added `.ai/RULES.md` and `full-qa` workflow.
+- Reformatted `components/penny-list-card.tsx` and `app/sku/[sku]/page.tsx`.
+
+**Verification:** `npm run lint`; `npm run build` (Turbopack import/require-in-the-middle warnings); `npm run test:unit`; `npm run test:e2e` (68 tests with `--workers=1`).
+
+**For Next AI:** Keep QA rules/workflow aligned with `qa:full` automation.
 - Strengthened thumbnail background with `var(--bg-tertiary)` and `var(--border-strong)` plus an inset shadow.
 - Switched thumbnails to `object-contain` with padding to keep edges off the background.
 

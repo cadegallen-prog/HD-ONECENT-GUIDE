@@ -7,6 +7,7 @@ import { extractStateFromLocation } from "./penny-list-utils"
 import { PLACEHOLDER_IMAGE_URL } from "./image-cache"
 import { getSupabaseClient } from "./supabase/client"
 import { normalizeSku, validateSku } from "./sku"
+import { filterValidPennyItems } from "./penny-list-utils"
 
 const envConfigured =
   Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
@@ -337,10 +338,15 @@ async function fetchRows(
   // Filter on timestamp column (the primary date field)
   if (dateWindow) {
     const { startDate, endDate } = dateWindow
-    query = query.gte("timestamp", startDate)
-    if (endDate) {
-      query = query.lte("timestamp", endDate)
-    }
+    const start = startDate
+    const end = endDate
+    const orFilters = end
+      ? [
+          `and(timestamp.gte.${start},timestamp.lte.${end})`,
+          `and(purchase_date.gte.${start},purchase_date.lte.${end})`,
+        ].join(",")
+      : [`and(timestamp.gte.${start})`, `and(purchase_date.gte.${start})`].join(",")
+    query = query.or(orFilters)
   }
 
   const { data, error } = await query
@@ -468,6 +474,23 @@ const getPennyListSource = async (): Promise<PennyItem[]> => {
   }
 
   return items
+}
+
+/**
+ * Returns penny items added within the last N hours (default: 48).
+ * Uses a 3-month Supabase window to keep the upstream query small, then filters in-memory.
+ */
+export async function getRecentFinds(hours: number = 48, nowMs: number = Date.now()) {
+  const cutoffMs = nowMs - hours * 60 * 60 * 1000
+  const windowRange: "1m" | "3m" | "6m" = hours <= 720 ? "3m" : "6m" // cap at 6m for long windows
+  const items = await getPennyListFiltered(windowRange, nowMs)
+  const valid = filterValidPennyItems(items)
+  return valid
+    .filter((item) => {
+      const added = new Date(item.dateAdded).getTime()
+      return !Number.isNaN(added) && added >= cutoffMs && added <= nowMs
+    })
+    .sort((a, b) => new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime())
 }
 
 const getPennyListCached =

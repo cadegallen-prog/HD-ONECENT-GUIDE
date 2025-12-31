@@ -1,47 +1,77 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"label": "lint",
-			"type": "shell",
-			"command": "npm run lint",
-			"isBackground": false,
-			"problemMatcher": [
-				"$eslint - stylish"
-			]
-		},
-		{
-			"label": "build",
-			"type": "shell",
-			"command": "npm run build",
-			"isBackground": false,
-			"problemMatcher": [
-				"$tsc"
-			]
-		},
-		{
-			"label": "test:unit",
-			"type": "shell",
-			"command": "npm run test:unit",
-			"isBackground": false
-		},
-		{
-			"label": "test:e2e",
-			"type": "shell",
-			"command": "npm run test:e2e",
-			"isBackground": false
-		},
-		{
-			"label": "build-clean",
-			"type": "shell",
-			"command": "npm run build",
-			"isBackground": false
-		},
-		{
-			"label": "dev",
-			"type": "shell",
-			"command": "npm run dev",
-			"isBackground": true
-		}
-	]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "lint",
+      "type": "shell",
+      "command": "npm run lint",
+      "problemMatcher": ["$eslint-stylish"],
+      "presentation": {
+        "showReuseMessage": false,
+        "panel": "dedicated",
+        "reveal": "silent"
+      }
+    },
+    {
+      "label": "build",
+      "type": "shell",
+      "command": "npm run build",
+      "problemMatcher": ["$tsc"],
+      "presentation": {
+        "showReuseMessage": false,
+        "panel": "dedicated",
+        "reveal": "silent"
+      }
+    },
+    {
+      "label": "test:unit",
+      "type": "shell",
+      "command": "npm run test:unit",
+      "presentation": {
+        "showReuseMessage": false,
+        "panel": "dedicated",
+        "reveal": "silent"
+      }
+    },
+    {
+      "label": "test:e2e",
+      "type": "shell",
+      "command": "npm run test:e2e",
+      "presentation": {
+        "showReuseMessage": false,
+        "panel": "dedicated",
+        "reveal": "silent"
+      }
+    },
+    {
+      "label": "qa:fast",
+      "type": "shell",
+      "command": "npm run qa:fast",
+      "presentation": {
+        "showReuseMessage": false,
+        "panel": "dedicated",
+        "reveal": "silent"
+      }
+    },
+    {
+      "label": "qa:full",
+      "type": "shell",
+      "command": "npm run qa:full",
+      "presentation": {
+        "showReuseMessage": false,
+        "panel": "dedicated",
+        "reveal": "silent"
+      }
+    },
+    {
+      "label": "dev",
+      "type": "shell",
+      "command": "npm run dev",
+      "isBackground": true,
+      "presentation": {
+        "panel": "dedicated",
+        "reveal": "silent"
+      }
+    }
+  ]
 }

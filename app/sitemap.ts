@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next"
 import { getPennyList } from "@/lib/fetch-penny-data"
 import { filterValidPennyItems } from "@/lib/penny-list-utils"
+import { STATES } from "@/lib/states"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://www.pennycentral.com"
@@ -84,5 +85,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ]
 
-  return [...staticPages, ...skuPages]
+  const statePages: MetadataRoute.Sitemap = STATES.map((state) => ({
+    url: `${baseUrl}/pennies/${state.slug}`,
+    lastModified: currentDate,
+    changeFrequency: "weekly",
+    priority: 0.5,
+  }))
+
+  return [...staticPages, ...statePages, ...skuPages]
 }

@@ -128,18 +128,25 @@ async function loadStores(): Promise<Store[]> {
 
   // Fallback: local file packaged with the build
   if (!fs.existsSync(DATA_PATH)) {
-    throw new Error(`Missing store data at ${DATA_PATH}`)
+    console.error(`Missing store data at ${DATA_PATH}`)
+    return []
   }
-  const raw = fs.readFileSync(DATA_PATH, "utf8")
-  const parsed: unknown = JSON.parse(raw)
-  if (!Array.isArray(parsed)) {
-    throw new Error("Store directory JSON is not an array")
+  try {
+    const raw = fs.readFileSync(DATA_PATH, "utf8")
+    const parsed: unknown = JSON.parse(raw)
+    if (!Array.isArray(parsed)) {
+      console.error("Store directory JSON is not an array")
+      return []
+    }
+    storeCache = parsed
+      .map((item) => normalizeStore(item as StoreDirectoryItem))
+      .filter((s) => hasValidCoordinates(s))
+    storeCacheTimestamp = now
+    return storeCache
+  } catch (err) {
+    console.error("Failed to read local store data", err)
+    return []
   }
-  storeCache = parsed
-    .map((item) => normalizeStore(item as StoreDirectoryItem))
-    .filter((s) => hasValidCoordinates(s))
-  storeCacheTimestamp = now
-  return storeCache
 }
 
 function haversineMiles(lat1: number, lon1: number, lat2: number, lon2: number) {
@@ -202,14 +209,12 @@ export async function GET(request: Request) {
     })
   } catch (error) {
     console.error("Failed to load stores", error)
-    return NextResponse.json(
-      { error: "Failed to load stores" },
-      {
-        status: 500,
-        headers: {
-          "Cache-Control": "public, s-maxage=60",
-        },
-      }
-    )
+    return NextResponse.json([], {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "public, s-maxage=60",
+      },
+    })
   }
 }

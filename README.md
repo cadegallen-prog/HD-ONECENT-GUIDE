@@ -35,6 +35,7 @@ npm install        # Install dependencies
 npm run dev        # Dev server (localhost:3001)
 npm run build      # Production build
 npm run lint       # ESLint check
+npm run test:e2e   # Playwright (uses port 3002 by default to avoid clashing with your dev server)
 ```
 
 ---

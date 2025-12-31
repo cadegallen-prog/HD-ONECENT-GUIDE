@@ -271,6 +271,103 @@ export function GuideContent() {
       </section>
 
       {/* ============================================ */}
+      {/* SECTION II-A: VISUAL TIMELINE + TAG EXAMPLES */}
+      {/* ============================================ */}
+      <section id="clearance-timeline" className="scroll-mt-28 space-y-6">
+        <h2 className="section-heading">
+          <span className="text-[var(--text-primary)]">II-A.</span> Clearance Cadence Timeline
+        </h2>
+        <p className="text-[var(--text-secondary)]">
+          Typical markdown progression before items hit $0.01. Timing varies by store/category, but
+          the sequence stays consistent.
+        </p>
+
+        <div className="space-y-4">
+          {[
+            {
+              title: "Stage 1: .00 (enters clearance)",
+              duration: "~1–4 weeks",
+              desc: "First markdown; watch the tag date for the next drop.",
+            },
+            {
+              title: "Stage 2: .06 or .04",
+              duration: "~2–6 weeks",
+              desc: "Mid-clearance; seasonal items often move faster.",
+            },
+            {
+              title: "Stage 3: .03 or .02",
+              duration: "~1–3 weeks",
+              desc: "Last visible price before penny; check top/bottom shelves and endcaps.",
+            },
+            {
+              title: "System update: $0.01",
+              duration: "Internal",
+              desc: "If not pulled, the UPC scans at $0.01. Scan the UPC, not the yellow tag.",
+            },
+          ].map((step, idx) => (
+            <div
+              key={step.title}
+              className="flex items-start gap-3 rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] p-4"
+            >
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold">
+                {idx + 1}
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center justify-between gap-2">
+                  <h3 className="font-semibold text-[var(--text-primary)]">{step.title}</h3>
+                  <span className="text-xs font-semibold text-[var(--text-muted)]">
+                    {step.duration}
+                  </span>
+                </div>
+                <p className="text-sm text-[var(--text-secondary)] mt-1">{step.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          <figure className="p-4 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)]">
+            <div className="flex items-center justify-between text-xs uppercase tracking-[0.08em] text-[var(--text-muted)] mb-2">
+              <span>Clearance tag example</span>
+              <span className="font-semibold">Mid-stage</span>
+            </div>
+            <div className="rounded-md border border-[var(--border-strong)] bg-[var(--bg-elevated)] p-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-semibold text-[var(--text-primary)]">
+                  Price: $12.06
+                </span>
+                <span className="text-xs text-[var(--text-muted)]">Tag date: 11/04</span>
+              </div>
+              <p className="text-xs text-[var(--text-secondary)] mt-2">
+                Older tag dates often mean the next drop is coming soon.
+              </p>
+            </div>
+            <figcaption className="text-xs text-[var(--text-secondary)] mt-2">
+              Use the printed tag date to gauge how close it is to the next markdown.
+            </figcaption>
+          </figure>
+
+          <figure className="p-4 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)]">
+            <div className="flex items-center justify-between text-xs uppercase tracking-[0.08em] text-[var(--text-muted)] mb-2">
+              <span>“Unavailable” online</span>
+              <span className="font-semibold">Penny signal</span>
+            </div>
+            <div className="rounded-md border border-[var(--border-strong)] bg-[var(--bg-elevated)] p-3">
+              <p className="text-sm font-semibold text-[var(--text-primary)]">
+                App shows “Unavailable” / “Ship to Store”
+              </p>
+              <p className="text-xs text-[var(--text-secondary)] mt-2">
+                Common right before penny. Still verify in-store with the UPC scan.
+              </p>
+            </div>
+            <figcaption className="text-xs text-[var(--text-secondary)] mt-2">
+              Combine online “unavailable” with an old tag date for high-probability checks.
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      {/* ============================================ */}
       {/* SECTION III: PRE-HUNT INTELLIGENCE */}
       {/* ============================================ */}
       <section id="digital-tools" className="scroll-mt-28">

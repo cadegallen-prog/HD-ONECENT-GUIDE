@@ -7,7 +7,7 @@ export default defineConfig({
   snapshotDir: "reports/playwright/baseline",
   reporter: [["list"], ["html", { outputFolder: "reports/playwright/html", open: "never" }]],
   use: {
-    baseURL: "http://localhost:3001",
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || "http://localhost:3002",
     trace: "on-first-retry",
     actionTimeout: 30000,
     navigationTimeout: 30000,
@@ -47,9 +47,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "cross-env PLAYWRIGHT=1 npm run dev",
-    url: "http://localhost:3001",
+    command: "cross-env PLAYWRIGHT=1 npm run dev -- --port 3002",
+    url: process.env.PLAYWRIGHT_BASE_URL || "http://localhost:3002",
     reuseExistingServer: true,
-    timeout: 60000,
+    timeout: 120000,
   },
 })

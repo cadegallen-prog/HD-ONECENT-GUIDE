@@ -2,11 +2,11 @@ import { NextResponse, type NextRequest } from "next/server"
 import { createServerClient } from "@supabase/ssr"
 
 /**
- * Middleware for:
+ * Proxy (formerly middleware) for:
  * 1. Refreshing auth session (on every request)
  * 2. Protecting /lists routes (redirect to login if not authenticated)
  */
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 

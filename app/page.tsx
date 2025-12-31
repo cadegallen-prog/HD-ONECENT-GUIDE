@@ -18,6 +18,8 @@ import {
 import { ogImageUrl } from "@/lib/og"
 import { HomePageAnalytics } from "@/components/home-page-analytics"
 import { TrackableNextLink } from "@/components/trackable-next-link"
+import { TodaysFinds } from "@/components/todays-finds"
+import { getRecentFinds } from "@/lib/fetch-penny-data"
 
 export const metadata: Metadata = {
   title: "Home Depot Penny List & Shopping Guide | Penny Central",
@@ -37,7 +39,9 @@ export const metadata: Metadata = {
   },
 }
 
-export default function Home() {
+export default async function Home() {
+  const recentFinds = await getRecentFinds(48)
+
   return (
     <>
       <HomePageAnalytics />
@@ -119,6 +123,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <TodaysFinds items={recentFinds} />
 
       {/* ============================================
           HOW IT WORKS SECTION
