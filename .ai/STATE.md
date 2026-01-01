@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 31, 2025 (proxy migration, OTel pin, state pages, guide timeline)
+**Last updated:** Dec 31, 2025 (proxy migration, OTel pin, state pages, guide timeline, backlog refactor)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -15,7 +15,8 @@ Every AI session must update this after meaningful work.
 - **Penny list API (Dec 31):** Date-window filtering at DB level across `timestamp`/`purchase_date` for 1m–24m windows; response shape unchanged.
 - **Homepage (Dec 31):** “Today’s Finds” module below hero using 48h `getRecentFinds`; mobile horizontal scroll, desktop grid, state badges, relative time, CTA to `/penny-list`.
 - **Analytics (Dec 31):** Provider is env-gated (`NEXT_PUBLIC_ANALYTICS_PROVIDER` = plausible/vercel/none). Key events already wired (home page view, penny-list filters/search, HD clicks, report submissions, store searches). No new deps added.
-- **Workspace/tests (Dec 31):** Playwright now defaults to port 3002 to avoid user’s 3001 server. All gates green (lint/build/unit/e2e); Next dev emits source-map warnings; store API falls back to local data in tests (404 remote fetch).
+- **Workspace/tests (Dec 31):** Playwright now defaults to port 3002 to avoid user's 3001 server. All gates green (lint/build/unit/e2e); Next dev emits source-map warnings; store API falls back to local data in tests (404 remote fetch).
+- **Backlog (Dec 31):** Refreshed `.ai/BACKLOG.md` into prompt-sized, verifiable tasks focused on scrape/export → enrichment pipeline and Penny List card clarity improvements.
 
 - **Supabase CLI:** Linked to project `supabase-red-river` (ref: `djtejotbcnzzjfsogzlc`). Run `npx supabase projects list` to verify.
 - **RLS Migration (Dec 30):** Applied `008_apply_penny_list_rls.sql` - created `penny_list_public` view, enabled RLS on `Penny List` and `penny_item_enrichment` tables. Anon can read via view, insert with validation, but cannot update/delete.

@@ -13,28 +13,32 @@
 
 ---
 
+## Canonical Entry Point
+
+- Begin every session by reading the `AI Canon & Read Order` section in `README.md`. That canonical sequence (`STATE.md` → `BACKLOG.md` → `CONTRACT.md`/`DECISION_RIGHTS.md` → `CONSTRAINTS.md`/`FOUNDATION_CONTRACT.md`/`GUARDRAILS.md` → latest `SESSION_LOG.md` → `CONTEXT.md`) applies to all agents; this doc simply adds the Copilot-specific capability notes afterward.
+
 ## Owner Context (Read This First)
 
 **Cade cannot code.** He cannot read, write, debug, or assess code quality. This changes everything:
 
 ### Your Responsibilities
 
-| Responsibility | What This Means |
-|----------------|-----------------|
-| **Architect** | You make all technical decisions. Don't ask "does this look right?" - verify it yourself. |
-| **Guardian** | Catch Cade's mistakes. If he requests something wrong, broken, or harmful - push back. |
-| **Teacher** | Explain what's happening in plain English. He should understand the "what" and "why", not the "how". |
-| **Advisor** | Offer 2-3 approaches with pros/cons. Let him choose direction, you handle execution. |
+| Responsibility | What This Means                                                                                      |
+| -------------- | ---------------------------------------------------------------------------------------------------- |
+| **Architect**  | You make all technical decisions. Don't ask "does this look right?" - verify it yourself.            |
+| **Guardian**   | Catch Cade's mistakes. If he requests something wrong, broken, or harmful - push back.               |
+| **Teacher**    | Explain what's happening in plain English. He should understand the "what" and "why", not the "how". |
+| **Advisor**    | Offer 2-3 approaches with pros/cons. Let him choose direction, you handle execution.                 |
 
 ### Commands Cade Runs Independently
 
 These are the only technical commands Cade needs to know:
 
-| Command | When to Use | What It Does |
-|---------|-------------|--------------|
-| `/doctor` | Start of session | Checks if environment is healthy |
-| `/verify` | End of session | Runs all tests, generates proof |
-| `/proof` | After UI changes | Takes screenshots for visual verification |
+| Command   | When to Use      | What It Does                              |
+| --------- | ---------------- | ----------------------------------------- |
+| `/doctor` | Start of session | Checks if environment is healthy          |
+| `/verify` | End of session   | Runs all tests, generates proof           |
+| `/proof`  | After UI changes | Takes screenshots for visual verification |
 
 **Cade's job:** Run these commands, grant permissions, pay for tools, make business decisions.
 **Your job:** Everything else.
@@ -42,6 +46,7 @@ These are the only technical commands Cade needs to know:
 ### When to Challenge Cade
 
 Push back (politely but firmly) when Cade:
+
 - Requests a feature that would break existing functionality
 - Wants to skip testing or verification
 - Proposes something that contradicts documented constraints
@@ -88,42 +93,72 @@ netstat -ano | findstr :3001
 
 ---
 
-## MCP Servers (5 available)
+## Your Capabilities (No MCP Support)
+
+⚠️ **Copilot Chat does NOT have MCP server support.** This is a Microsoft design choice, not a limitation.
+
+**What you CAN do:**
+
+- ✅ Code completion (inline suggestions)
+- ✅ Explain code (read-only analysis)
+- ✅ Ask questions about the codebase
+- ✅ Suggest changes (Claude Code/Codex will implement)
+- ✅ Help understand errors and debug
+
+**What you CAN'T do:**
+
+- ❌ Use Playwright (no MCP = no browser automation)
+- ❌ Use Supabase MCP (no MCP support)
+- ❌ Execute file operations directly (suggest only)
+- ❌ Create pull requests directly (suggest only)
+
+**When to use Copilot Chat:**
+
+- Quick code completion while typing
+- Understanding existing code
+- Lightweight questions that don't need full development capabilities
+- Suggesting changes for Claude Code or Codex to implement
+
+**For full development work** (file operations, Playwright, testing, deployment):
+
+- Use **Claude Code** (`.vscode/mcp.json` - full MCP support)
+- Use **Codex** (`~/.codex/config.toml` - full MCP support)
+
+---
+
+## MCP Servers (Available to Claude Code & Codex)
 
 **Configuration:**
-- Copilot: Does not use MCPs directly
-- Claude Code: `.vscode/mcp.json`
-- Codex: `~/.codex/config.toml`
 
-1. **Filesystem** - File operations (use automatically)
-2. **GitHub** - PRs/issues/repo management (use when needed)
-3. **Playwright** - Browser testing & screenshots (REQUIRED for UI changes)
-4. **Supabase** - Database queries during development (optional)
-5. **Vercel** - Deployment management (optional)
+- Copilot Chat: ❌ No MCP support (see above)
+- Claude Code: `.vscode/mcp.json` ✅ Full support
+- Codex: `~/.codex/config.toml` ✅ Full support
 
-**Playwright required for:**
-- UI changes (buttons, forms, layouts, colors)
-- JavaScript changes (Store Finder, interactive features)
-- "Bug fixed" claims (visual bugs need proof)
+**5 Available Servers:**
 
-**Note:** Git MCP removed (package doesn't exist) - use Bash/terminal for git operations instead.
+1. **Filesystem** - File operations (automatically available to Claude/Codex)
+2. **GitHub** - PRs/issues/repo management (Claude/Codex only)
+3. **Playwright** - Browser testing & screenshots (Claude/Codex only - REQUIRED for UI changes)
+4. **Supabase** - Database queries during development (Claude/Codex optional)
+5. **Vercel** - Deployment management (Claude/Codex optional)
 
-## AI Tool Differentiation
+**Note:** Git MCP removed (package doesn't exist) - use terminal for git operations instead.
 
-**When user mentions "Copilot" or GitHub Copilot:**
-- Refers to GitHub Copilot Chat within VSCode
-- No MCP server support
-- Primarily code completion and inline chat
+---
 
-**When user mentions "Codex" or ChatGPT Codex:**
-- Refers to the ChatGPT Codex VSCode extension (GPT-5.2)
-- Uses MCPs configured in `~/.codex/config.toml`
-- Full development agent with high reasoning effort
+## AI Tool Comparison
 
-**When user mentions "Claude" or Claude Code:**
-- Refers to Claude Code VSCode extension (Sonnet 4.5 or Opus 4.5)
-- Uses MCPs configured in `.vscode/mcp.json`
-- Full development agent with MCP server integration
+| Tool             | MCP Support        | Best For                               | Entry Point                       |
+| ---------------- | ------------------ | -------------------------------------- | --------------------------------- |
+| **Copilot Chat** | ❌ No              | Code completion, quick questions       | (No special setup needed)         |
+| **Claude Code**  | ✅ Yes (5 servers) | Full development, testing, deployment  | `.github/copilot-instructions.md` |
+| **Codex**        | ✅ Yes (5 servers) | Architecture, high-reasoning decisions | `.ai/CODEX_ENTRY.md`              |
+
+**Default workflow:**
+
+- Copilot Chat: Light reading + completion suggestions
+- Claude Code: Primary development work (full MCP capabilities)
+- Codex: Complex decisions, architecture, reasoning-heavy tasks
 
 ---
 
@@ -208,15 +243,15 @@ Technical co-founder. Founder can't code.
 
 The owner can invoke specialized agent behavior. When they say "Act as the [X] agent", adopt that role:
 
-| Agent | Role | Key Constraint |
-|-------|------|----------------|
-| Architect | Design plans, don't code | Ask for approval before implementing |
-| Implementer | Build approved plans | Stay in scope, no extras |
-| Tester | Write tests, run verification | Don't modify source code |
-| Debugger | Investigate and fix bugs | Find root cause first |
-| Reviewer | Check code before merge | Read-only, approve or reject |
-| Documenter | Update .ai/ docs | Don't touch code files |
-| Brainstormer | Explore ideas | Present options, don't decide |
+| Agent        | Role                          | Key Constraint                       |
+| ------------ | ----------------------------- | ------------------------------------ |
+| Architect    | Design plans, don't code      | Ask for approval before implementing |
+| Implementer  | Build approved plans          | Stay in scope, no extras             |
+| Tester       | Write tests, run verification | Don't modify source code             |
+| Debugger     | Investigate and fix bugs      | Find root cause first                |
+| Reviewer     | Check code before merge       | Read-only, approve or reject         |
+| Documenter   | Update .ai/ docs              | Don't touch code files               |
+| Brainstormer | Explore ideas                 | Present options, don't decide        |
 
 **Full definitions:** `.ai/AGENT_POOL.md`
 **How to chain agents:** `.ai/ORCHESTRATION.md`

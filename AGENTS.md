@@ -18,6 +18,13 @@ If a request is unclear, ask **one** clarifying question. If it's misaligned, pr
 
 **If the session goal is AI workflow/tooling/process enablement:** also read `.ai/AI_ENABLEMENT_BLUEPRINT.md` (repo-native, cross-agent).
 
+
+## Canonical Entry Point
+
+- Start every session by reading the `AI Canon & Read Order` section in `README.md`. That section defines the official `STATE.md` → `BACKLOG.md` → `CONTRACT.md`/`DECISION_RIGHTS.md` → `CONSTRAINTS.md`/`FOUNDATION_CONTRACT.md`/`GUARDRAILS.md` → latest `SESSION_LOG.md` → `CONTEXT.md` sequence all agents follow.
+- This file codifies collaboration rules, but always defer to `README.md` for the canonical read order so Claude, Codex, and Copilot stay aligned.
+
+
 ---
 
 ## 2. Product North Star

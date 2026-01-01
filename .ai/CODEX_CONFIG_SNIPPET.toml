@@ -1,8 +1,12 @@
 # Codex MCP Configuration (Paste into ~/.codex/config.toml)
+#
+# IMPORTANT: Replace {PROJECT_PATH} with your actual project path
+# Example: C:/Users/cadeg/Projects/HD-ONECENT-GUIDE
+# Or use: ~/Projects/HD-ONECENT-GUIDE (if in home directory)
 
 [mcpServers.filesystem]
 command = "npx"
-args = ["-y", "@modelcontextprotocol/server-filesystem", "C:/Users/cadeg/Projects/HD-ONECENT-GUIDE"]
+args = ["-y", "@modelcontextprotocol/server-filesystem", "{PROJECT_PATH}"]
 
 [mcpServers.github]
 command = "npx"

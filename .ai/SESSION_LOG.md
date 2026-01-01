@@ -33,6 +33,17 @@
 **Notes:** Port 3001 left untouched for user. Analytics remains env-gated; no Plausible creds required. Remaining backlog: analytics pass (already env-gated, events largely wired) if still desired.
 
 
+## 2025-12-31 - ChatGPT Codex (GPT-5.2) - Backlog refactor: scrape/export pipeline + promptable tasks
+
+**Goal:** Turn the current open-tab artifacts (homepage, Today’s Finds, scrape JSON, missing export JSON, empty count script) into a methodical backlog of small, verifiable tasks so nothing is “one-shot”.
+
+**Outcome:**
+- Replaced `.ai/BACKLOG.md` with an updated, ≤10-item ordered list focused on (1) restoring a canonical PennyCentral export artifact, (2) validating/normalizing scrape JSON, (3) converting scrape → enrichment CSV with fill-blanks-only policy, (4) producing a diff report before uploads, (5) implementing the empty `scripts/print-penny-list-count.ts`, and (6–9) scoped Penny List UX improvements and homepage support CTA consistency.
+- Noted that `C:\Users\cadeg\Downloads\pennycentral_export_2025-12-31.json` could not be found in common directories; the new top P0 item makes restoring/standardizing this artifact explicit.
+
+**Verification:** (run below in this session)
+
+
 ## 2025-12-31 - ChatGPT Codex (GPT-5.2) - Windowed Supabase reads
 
 **Goal:** Ensure penny list API fetches only rows inside the selected date window before aggregation/pagination.

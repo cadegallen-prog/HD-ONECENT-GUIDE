@@ -41,7 +41,7 @@ Compact reference for AI agents. Describes what this project can do, where thing
 
 **Status:** 4 MCP servers active (filesystem, git, github, playwright)
 
-**Full Reference:** See `.ai/MCP_SERVERS.md`
+**Full Reference:** See `.ai/MCP_BASELINE.md` (details in `.ai/TOOLING_MANIFEST.md`)
 
 | Server | Purpose | When to Use |
 |--------|---------|-------------|

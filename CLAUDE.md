@@ -13,6 +13,11 @@
 
 ---
 
+## Canonical Entry Point
+
+- Read the `AI Canon & Read Order` section in `README.md` before diving into Claude-specific notes. That README delivers the shared `STATE.md` → `BACKLOG.md` → `CONTRACT.md`/`DECISION_RIGHTS.md` → `CONSTRAINTS.md`/`FOUNDATION_CONTRACT.md`/`GUARDRAILS.md` → `SESSION_LOG.md` → `CONTEXT.md` sequence referenced across every agent. This file simply layers Claude-specific tips on top of that canonical order.
+
+
 ## Owner Context (Read This First)
 
 **Cade cannot code.** He cannot read, write, debug, or assess code quality. This changes everything:
@@ -181,3 +186,5 @@ The owner can invoke specialized agent behavior. When they say "Act as the [X] a
 - `.ai/DECISION_RIGHTS.md` - What needs approval
 - `.ai/LEARNINGS.md` - Past mistakes
 - `.ai/SESSION_LOG.md` - Recent work
+- `.ai/CODEX_ENTRY.md` - If using Codex (alternative to Claude Code)
+- `copilot-instructions.md` - If using Copilot Chat (code completion, quick questions only)

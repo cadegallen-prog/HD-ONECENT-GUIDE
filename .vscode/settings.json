@@ -31,5 +31,7 @@
     "**/coverage/**": true
   },
 
+  "terminal.integrated.focusOnRun": false,
+
   "security.workspace.trust.enabled": true
 }

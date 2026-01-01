@@ -1,177 +1,141 @@
 # Backlog (AI-Driven, Ordered)
 
-**Last updated:** Dec 28, 2025
+**Last updated:** Dec 31, 2025  
 Keep this list short and ruthless (≤10 items).
 
 Each AI session should:
 1. Read `.ai/STATE.md`
 2. Take the top **P0** item (unless Cade gives a different GOAL)
-3. Propose approach in plain English
-4. Implement + test
-5. Update `.ai/SESSION_LOG.md`, `.ai/STATE.md`, and this file
+3. Implement + verify (proof required)
+4. Update `.ai/SESSION_LOG.md`, `.ai/STATE.md`, and this file
 
 ---
 
-## P0 - Do Next (Product Features)
+## P0 - Do Next (Foundation / Data Pipeline)
 
-### 1. Penny List performance: windowed Supabase reads
+### 1. Restore + standardize the “PennyCentral export” artifact (missing file)
 
-- Stop fetching the entire `Penny List` table when the user is viewing a finite date window (e.g., 1m/6m/12m). Filter Supabase reads to the selected window *before* aggregating by SKU.
-- Acceptance: still returns correct totals/tiers for the selected window; API pagination unchanged; no regressions in unit/e2e; no new dependencies.
+- **Problem:** The open-tab path `C:\Users\cadeg\Downloads\pennycentral_export_2025-12-31.json` is missing, so we can’t methodically diff/merge scraped metadata against PennyCentral’s current data.
+- **Done means:**
+  - Define a canonical schema for `pennycentral_export_*.json` (at minimum: `storeSku`, `internetNumber`, `name`, `brand`, `imageUrl`, `productUrl`, `upc`, timestamps).
+  - Implement `scripts/export-pennycentral-json.ts` that can generate the export from the real source of truth (Supabase/view) and/or fixture mode.
+  - Default output goes to `.local/` (never committed).
+- **Prompt/task for an agent (copy/paste):**
+  - GOAL: Create a repeatable PennyCentral export JSON generator.
+  - WHY: Enables safe diffs/merges vs scraped metadata; no one-shot manual comparisons.
+  - DONE: `npm run export:pennycentral` writes `.local/pennycentral_export_YYYY-MM-DD.json` and a short `.local/pennycentral_export_YYYY-MM-DD.summary.md`.
+  - FILES: `scripts/export-pennycentral-json.ts`, `package.json` (script), docs if needed.
+  - VERIFY: `npm run lint && npm run build && npm run test:unit && npm run test:e2e`.
 
-### 2. Guide Visual Upgrade (Clearance Cadence)
+### 2. Validate + normalize the scrape JSON (make ingestion safe)
 
-- Add visual timeline and captioned tag examples in the existing Guide section; store assets in `/public`, reuse current layout.
-- Acceptance: responsive, alt text present, no new routes.
+- **Input:** `C:\Users\cadeg\Downloads\penny_scrape_2025-12-31.json` (JSON object keyed by Home Depot URLs; values include `storeSku`, `internetNumber`, `name`, `brand`, `imageUrl`, `productUrl`, `upc`, `categories`, `scrapedAt`).
+- **Done means:**
+  - Implement `scripts/validate-scrape-json.ts` that:
+    - Validates and normalizes SKU formats using `lib/sku.ts`.
+    - Emits a deterministic summary (counts, missing fields, SKU-length histogram, % with images).
+    - Writes cleaned output to `.local/` (e.g., `.local/penny_scrape_clean_YYYY-MM-DD.json`).
+- **Prompt/task:**
+  - GOAL: Add a scrape validator + cleaner.
+  - WHY: Prevents “bad scrape” from polluting enrichment and makes downstream diffs reproducible.
+  - DONE: `npm run scrape:validate -- --in <path>` prints a summary + writes cleaned output under `.local/`.
+  - FILES: `scripts/validate-scrape-json.ts`, `package.json` (script), optionally tests.
+  - VERIFY: gates + include sample output in `.ai/SESSION_LOG.md`.
 
-### 3. Bookmarklet image harvest (support)
+### 3. Convert scrape-clean output to enrichment upload CSV (fill-blanks-only)
 
-- Support Cade's plan to collect image URLs via the bookmarklet for newly added items.
-- Acceptance: ingestion stays private (no exports committed), instructions updated if tooling changes, and new images flow into Penny List/SKU pages without exposing private inputs.
+- **Policy:** fill blanks only; never overwrite non-empty enrichment fields unless explicitly `--force`.
+- **Done means:**
+  - Implement `scripts/scrape-to-enrichment-csv.ts` that produces `.local/enrichment-upload.csv` compatible with the current enrichment pipeline/table.
+  - Deterministic ordering + stable headers for clean diffs.
+- **Prompt/task:**
+  - GOAL: Turn scrape JSON into a safe enrichment upload.
+  - WHY: Adds images/brand/name/UPC/internet# at scale without touching crowdsourced report signal.
+  - DONE: `npm run enrich:from-scrape -- --in <clean.json> --out .local/enrichment-upload.csv` works reliably.
+  - FILES: `scripts/scrape-to-enrichment-csv.ts`, `package.json`.
+  - VERIFY: gates + show row counts + top “missing field” stats.
+
+### 4. Create a diff report (scrape vs export) to review before uploading
+
+- **Done means:**
+  - Implement `scripts/enrichment-diff.ts` that compares scrape-clean output to the PennyCentral export artifact.
+  - Output markdown report to `.local/` (new SKUs, mismatches, missing images, suspicious UPC mismatches).
+- **Prompt/task:**
+  - GOAL: Produce a reviewable diff report before enrichment uploads.
+  - WHY: Prevents silent bad merges and makes changes auditable.
+  - DONE: `npm run enrich:diff -- --scrape <clean.json> --export <export.json>` writes `.local/enrichment-diff.md`.
+  - FILES: `scripts/enrichment-diff.ts`, `package.json`.
+  - VERIFY: gates + paste a snippet of the diff summary into `.ai/SESSION_LOG.md`.
+
+### 5. Implement `scripts/print-penny-list-count.ts` (currently empty)
+
+- **Done means:**
+  - Script prints: total distinct SKUs, total reports, top states by report count, and a “last updated” timestamp.
+  - Works in both normal mode (Supabase) and fixture mode (Playwright/local data).
+  - Add `npm run penny:count`.
+- **Prompt/task:**
+  - GOAL: Add a fast CLI sanity check for Penny List health.
+  - WHY: Daily checks catch regressions before they hit production.
+  - DONE: `npm run penny:count` prints a stable summary and exits 0.
+  - FILES: `scripts/print-penny-list-count.ts`, `package.json`.
+  - VERIFY: gates.
 
 ---
 
-## P1 - Fresh Content & Verification
+## P1 - UX Improvements (Card Density + Clarity, Token-Safe)
 
-### 4. "Today's Penny Finds" Homepage Section
+### 6. Penny List card hierarchy pass (status band + report pills)
 
-- **Why:** Daily fresh content = daily visits. Homepage should show what's new immediately.
-- **What:** Prominent section showing items added in last 24-48 hours
+- **Goal:** Borrow “dense dashboard” clarity without claiming stock/store/aisle data we don’t have.
 - **Done means:**
-  - Homepage has "Today's Finds" section after hero
-  - Horizontal carousel (mobile) / grid (desktop)
-  - Shows: image, item name, state badges, "X hours ago"
-  - CTA: "See all penny finds →"
-- **Files:** NEW: `components/todays-finds.tsx` | MODIFY: `app/page.tsx`, `lib/fetch-penny-data.ts`
+  - Add a clear top “fresh signal” band when reports are within 24h/48h.
+  - Render total reports as a pill badge; optionally color-code state pills by frequency (CSS variables only).
+  - Meet touch-target + a11y rules and keep primary navigation as the main tap target.
+- **Prompt/task:**
+  - GOAL: Improve card scanability via sections and badges.
+  - WHY: Faster scanning = higher retention and better “Penny List” habit loop.
+  - DONE: Cards show freshness + report pills; layout remains responsive.
+  - FILES: `components/penny-list-card.tsx`, `app/globals.css` (tokens/classes if needed).
+  - VERIFY: gates + Playwright screenshots before/after (light/dark) for `/penny-list`.
 
-### 5. Verification Badge System
+### 7. Icon-first card actions (tooltips + aria-labels)
 
-- **Why:** Add credibility without fragmenting data
-- **What:** Admin-controlled "Verified by Penny Central" badges on items Cade personally confirms
 - **Done means:**
-  - PennyItem type has `verified`, `verifiedDate`, `verifiedSource` fields
-  - Verified badge UI in cards
-  - "Verified only" filter option
-  - `data/verified-skus.json` file for Cade to populate
-  - Verification enriches existing crowdsourced list (not separate list)
-- **Files:** NEW: `data/verified-skus.json` | MODIFY: `lib/fetch-penny-data.ts`, `components/penny-list-card.tsx`, `components/penny-list-filters.tsx`
+  - Replace verbose action row text with icon buttons + accessible labels/tooltips.
+  - Focus rings remain visible and consistent.
+- **Prompt/task:**
+  - GOAL: Make card actions compact and modern.
+  - WHY: Reduces clutter without removing functionality.
+  - DONE: Icon actions are keyboard/screen-reader accessible.
+  - FILES: `components/penny-list-card.tsx`.
+  - VERIFY: gates + Playwright proof.
+
+### 8. Mobile filter ergonomics (bottom sheet/FAB)
+
+- **Done means:**
+  - Add a mobile-only launcher (FAB or bottom toolbar) that opens filter/sort controls.
+  - Desktop layout unchanged; a11y + ≥44px targets.
+- **Prompt/task:**
+  - GOAL: Reduce vertical bloat from filters on mobile.
+  - WHY: Improves browse speed and reduces bounce on small screens.
+  - DONE: Filters are reachable within one tap and fully keyboard accessible.
+  - FILES: `components/penny-list-client.tsx` (or relevant filter component), shared UI utilities if needed.
+  - VERIFY: gates + Playwright screenshots mobile/desktop.
 
 ---
 
-## P2 - SEO Expansion & AI Infrastructure
+## P2 - Cleanup / Consistency
 
-### 6. Individual SKU Pages
+### 9. Support CTA consistency on homepage (decision + alignment)
 
-- **Why:** Every SKU = unique page = massive SEO surface area (could 10x organic traffic)
-- **What:** `/sku/[id]` dynamic pages
+- **Observation:** `app/page.tsx` currently includes a PayPal “Buy Me a Coffee” card; prior work removed PayPal CTAs elsewhere.
 - **Done means:**
-  - Dynamic route: `/sku/1234567890`
-  - Page shows: product image, item name, all reports, state map, tier, verified badge
-  - SEO optimized title/description
-  - "Report this SKU" CTA
-  - Related items section
-- **Files:** NEW: `app/sku/[id]/page.tsx`, `app/sku/[id]/layout.tsx`
+  - Decide keep/remove (and where).
+  - Ensure tracking/copy is consistent with the monetization foundations strategy.
+- **Prompt/task:**
+  - GOAL: Align “Support Penny Central” CTAs across the site.
+  - WHY: Consistency reduces confusion and avoids accidental regressions.
+  - DONE: Decision applied and documented; UI proof captured if changed.
+  - FILES: `app/page.tsx` (and any other support CTA surfaces).
+  - VERIFY: gates + Playwright proof if UI changed.
 
-### 7. State Landing Pages
-
-- **Why:** Geographic SEO targeting ("florida home depot penny items")
-- **What:** `/pennies/[state]` pages
-- **Done means:**
-  - State-specific pages (e.g., `/pennies/florida`)
-  - Auto-filtered to show only that state's items
-  - State map with HD locations
-  - "X items found in Florida this week" stat
-  - SEO optimized
-- **Files:** NEW: `app/pennies/[state]/page.tsx`
-
-### 8. Parallel Agent Patterns (AI Infrastructure)
-
-- **Why:** Enable faster completion of multi-file tasks by coordinating multiple AI agents
-- **What:** Document when/how to split work across agents without conflicts
-- **Done means:**
-  - Clear guidance on task types suitable for parallelization
-  - File ownership rules to prevent conflicts
-  - Coordination protocol for handoffs
-- **Reference:** See git history of `.ai/AI_AUTOMATION_SPECS.md` for detailed patterns
-
-### 9. Session Start/End Skills
-
-- **Why:** Consistent session discipline across all AI tools
-- **What:** `/session-start` and `/session-end` slash commands
-- **Done means:**
-  - `/session-start`: Read docs, run ai:doctor, capture GOAL/WHY/DONE
-  - `/session-end`: Run ai:verify, update SESSION_LOG, update STATE
-- **Files:** NEW: `.claude/commands/session-start.md`, `.claude/commands/session-end.md`
-
-### 10. Fixture Mode Expansion
-
-- **Why:** Deterministic tests that don't depend on external services
-- **What:** Expand `PLAYWRIGHT=1` fixture mode to cover all external dependencies
-- **Done means:**
-  - All Supabase calls return fixtures when `PLAYWRIGHT=1`
-  - Geocoding returns cached coordinates
-  - No flaky tests due to network issues
-- **Reference:** See git history of `.ai/AI_AUTOMATION_SPECS.md` for implementation patterns
-
----
-
-## P3 - Later / Only If Metrics Justify
-
-### "Last Updated" Timestamp
-
-- **Why:** Builds trust, shows freshness
-- **What:** Display when penny list data was last refreshed
-- **Files:** MODIFY: `app/penny-list/page.tsx`, `lib/fetch-penny-data.ts`
-
-### Image Upload to Submission Form
-
-- **Why:** User-generated images = authenticity + social proof
-- **What:** Optional photo upload for receipts/products
-- **Done means:** Cloudinary/Uploadthing integration, moderation before public display
-- **Files:** MODIFY: `app/report-find/page.tsx`, NEW: image upload API
-
-### Optional moderation gate
-
-- Add "Approved" column in Sheet and filter server-side.
-- Only do this if spam/junk exceeds ~10%.
-
----
-
-## By Goal (Growth-Focused)
-
-> **Note:** See `.ai/GROWTH_STRATEGY.md` for complete context on Cade's business goals and constraints.
-
-### SEO (Organic Growth) - HIGH PRIORITY
-
-- [ ] Individual SKU pages (/sku/[id]) - Could 10x traffic
-- [ ] State landing pages (/pennies/[state]) - Geographic targeting
-- [ ] Add Article schema to guide pages
-- [ ] Add BreadcrumbList schema to navigation
-
-### Engagement (Time on Site) - MEDIUM PRIORITY
-
-- [ ] Related items suggestions on penny cards
-- [ ] Cross-link guides ("You might also like")
-- [ ] "Today's Finds" homepage section
-
-### Revenue (Passive Income) - LOW PRIORITY, BE TASTEFUL
-
-- [ ] Penny hunting gear page (genuine recommendations only)
-- [ ] Amazon Associates integration
-
-### Email Newsletter - DEFERRED
-
-- [ ] Make ConvertKit signup visible
-- **Why deferred:** No value prop yet. Revisit when fresh daily content exists.
-
----
-
-## Strategic Goal
-
-Convert one-time visitors into daily habitual users.
-
-**Key Metrics to Track:**
-- Returning visitors % (Goal: 30%+ in 6 months)
-- Pages per session (Goal: 5+)
-- Community submissions (Goal: 10+ per day)
-- Organic search traffic (Goal: 2x in 6 months)
