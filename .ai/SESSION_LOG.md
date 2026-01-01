@@ -12,6 +12,25 @@
 
 ---
 
+## 2026-01-01 - ChatGPT Codex (GPT-5) - Penny List card density pass
+
+**Goal:** Deliver a denser, scan-first Penny List card on mobile without breaking Save/Report/Share/HD actions.
+
+**Changes Made:**
+- Tightened card spacing/padding, reduced thumbnail size, and removed the mobile `<details>` identifiers toggle.
+- Added an always-visible UPC block (monospace numeric), kept model visible, and condensed state pills with a “+N more” tail.
+- Simplified the action row while preserving Save, Report, Share, and Home Depot links; increased share button to 44px touch target.
+
+**Verification:**
+- `npm run lint`
+- `npm run build`
+- `npm run test:unit`
+- `PLAYWRIGHT_BASE_URL=http://localhost:3001 npm run test:e2e`
+- `npm run check-contrast`
+- `npm run check-axe`
+
+**Notes:** Playwright reused the existing dev server on port 3001; no server restarts.
+
 ## 2026-01-01 - ChatGPT Codex (GPT-5) - Auto-enrich guardrails + scrape tooling
 
 **Goal:** Prevent null-name auto-enrich rows, keep scrape normalization consistent, and upload the latest partial scrape.

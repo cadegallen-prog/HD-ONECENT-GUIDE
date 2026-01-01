@@ -89,12 +89,12 @@ Each AI session should:
 - **Goal:** Max info density per vertical inch while staying scannable + accessible.
 - **Constraints:** token-only colors; no misleading store/stock claims; preserve existing deep-links + analytics; keep touch targets ≥44px.
 - **Checklist (ship in this order):**
-  - [ ] Define the “scan order” for mobile: title/brand → SKU → barcode/UPC → freshness → price → states/locations → actions.
-  - [ ] Make identifiers always visible on mobile (no hidden `<details>` for core identifiers).
-  - [ ] Add a barcode/UPC visual that is readable on-phone (pick 1 approach: SVG barcode vs monospaced numeric block) while keeping a11y text.
-  - [ ] Compact the layout: consistent spacing + fewer stacked rows; avoid wrapping chaos in pills.
-  - [ ] Keep the primary tap target clear (title/link region) and actions secondary.
-  - [ ] Preserve existing actions: internal SKU page, report-find, external HD link, share, save/bookmark.
+  - [x] Define the “scan order” for mobile: title/brand → SKU → barcode/UPC → freshness → price → states/locations → actions.
+  - [x] Make identifiers always visible on mobile (no hidden `<details>` for core identifiers).
+  - [x] Add a barcode/UPC visual that is readable on-phone (pick 1 approach: SVG barcode vs monospaced numeric block) while keeping a11y text.
+  - [x] Compact the layout: consistent spacing + fewer stacked rows; avoid wrapping chaos in pills.
+  - [x] Keep the primary tap target clear (title/link region) and actions secondary.
+  - [x] Preserve existing actions: internal SKU page, report-find, external HD link, share, save/bookmark.
 - **Done means:**
   - Mobile cards feel “dense but calm” (fast scan); no broken links; no regressions in Save/My Lists.
 - **Prompt/task (copy/paste):**

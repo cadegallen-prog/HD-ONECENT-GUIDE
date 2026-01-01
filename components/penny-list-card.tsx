@@ -7,7 +7,6 @@ import { toast } from "sonner"
 import { copyToClipboard } from "@/components/copy-sku-button"
 import { ShareButton } from "@/components/share-button"
 import { AddToListButton } from "@/components/add-to-list-button"
-import { useAuth } from "@/components/auth-provider"
 import { PennyThumbnail } from "@/components/penny-thumbnail"
 import { US_STATES } from "@/lib/us-states"
 import { formatRelativeDate, normalizeProductName, normalizeBrand } from "@/lib/penny-list-utils"
@@ -41,18 +40,19 @@ interface BookmarkActionProps {
 }
 
 function BookmarkAction({ sku, itemName }: BookmarkActionProps) {
-  const { user } = useAuth()
   return (
     <div
       onClick={(event) => event.stopPropagation()}
-      className="flex flex-col items-center gap-1 text-center text-[var(--text-secondary)] text-xs pointer-events-auto"
+      className="flex items-center gap-2 text-xs font-semibold text-[var(--text-primary)] pointer-events-auto"
       data-bookmark-action="true"
     >
-      <AddToListButton sku={sku} itemName={itemName} variant="icon" />
-      <span className="text-xs font-semibold text-[var(--text-primary)]">Bookmark to save</span>
-      <span className="text-xs text-[var(--text-muted)] leading-tight">
-        {user ? "View saved items under your lists." : "Sign in to keep this find saved."}
-      </span>
+      <AddToListButton
+        sku={sku}
+        itemName={itemName}
+        variant="icon"
+        className="min-h-[44px] min-w-[44px]"
+      />
+      <span>Save</span>
     </div>
   )
 }
@@ -64,14 +64,18 @@ export function PennyListCard({ item }: PennyListCardProps) {
   // Normalize display values
   const displayBrand = normalizeBrand(item.brand)
   const displayName = normalizeProductName(item.name, { brand: item.brand })
-  const identifiers = [
-    { label: "Model", value: item.modelNumber },
-    { label: "UPC", value: item.upc },
-  ]
-  const hasIdentifiers = identifiers.some((identifier) => identifier.value)
+  const modelNumber = item.modelNumber?.trim()
+  const upc = item.upc?.trim()
+  const hasModelNumber = Boolean(modelNumber)
+  const hasUpc = Boolean(upc)
 
   const totalReports = item.locations ? getTotalReports(item.locations) : 0
   const stateCount = item.locations ? Object.keys(item.locations).length : 0
+  const locationEntries = item.locations
+    ? Object.entries(item.locations).sort(([, a], [, b]) => b - a)
+    : []
+  const topLocations = locationEntries.slice(0, 4)
+  const remainingLocations = Math.max(0, locationEntries.length - topLocations.length)
   const homeDepotUrl = getHomeDepotProductUrl({
     sku: item.sku,
     internetNumber: item.internetNumber,
@@ -120,8 +124,8 @@ export function PennyListCard({ item }: PennyListCardProps) {
       aria-labelledby={`item-${item.id}-name`}
     >
       <article className="flex flex-col h-full">
-        {/* 8pt grid: p-5 = 20px, space-y-4 = 16px between elements */}
-        <div className="p-5 flex flex-col flex-1 space-y-4">
+        {/* Dense layout with tighter spacing for mobile scan speed */}
+        <div className="p-4 flex flex-col flex-1 space-y-3">
           <div className="flex items-start gap-3">
             {item.status && <span className="pill pill-strong">{item.status}</span>}
             <span className="ml-auto text-sm text-[var(--text-secondary)] font-medium flex items-center gap-1.5 flex-shrink-0">
@@ -130,14 +134,14 @@ export function PennyListCard({ item }: PennyListCardProps) {
             </span>
           </div>
 
-          <div className="flex gap-4 items-start">
+          <div className="flex gap-3 items-start">
             <Link
               href={skuPageUrl}
               aria-label={`View details for ${item.name}`}
               onClick={(e) => e.stopPropagation()}
               className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] rounded"
             >
-              <PennyThumbnail src={item.imageUrl} alt={item.name} size={72} />
+              <PennyThumbnail src={item.imageUrl} alt={item.name} size={64} />
             </Link>
             <div className="min-w-0 flex-1 space-y-2">
               <Link
@@ -161,94 +165,86 @@ export function PennyListCard({ item }: PennyListCardProps) {
                 </div>
               </Link>
 
-              <button
-                type="button"
-                onClick={handleSkuCopy}
-                className="flex items-center gap-2 text-sm text-[var(--text-primary)] font-mono elevation-2 border border-[var(--border-strong)] px-3 py-2 rounded w-fit font-medium cursor-pointer hover:border-[var(--cta-primary)] hover:bg-[var(--bg-hover)] transition-colors min-h-[44px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
-                aria-label={`Copy SKU ${item.sku} to clipboard`}
-                title="Tap to copy SKU"
-              >
-                <span className="text-[var(--text-muted)]">SKU</span>
-                <span className="font-semibold">{formatSkuForDisplay(item.sku)}</span>
-                {copied ? (
-                  <Check className="w-4 h-4 text-[var(--status-success)]" aria-hidden="true" />
-                ) : (
-                  <Copy className="w-4 h-4 text-[var(--text-muted)]" aria-hidden="true" />
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleSkuCopy}
+                  className="flex items-center gap-2 text-sm text-[var(--text-primary)] font-mono elevation-2 border border-[var(--border-strong)] px-3 py-2 rounded w-fit font-medium cursor-pointer hover:border-[var(--cta-primary)] hover:bg-[var(--bg-hover)] transition-colors min-h-[44px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+                  aria-label={`Copy SKU ${item.sku} to clipboard`}
+                  title="Tap to copy SKU"
+                >
+                  <span className="text-[var(--text-muted)]">SKU</span>
+                  <span className="font-semibold">{formatSkuForDisplay(item.sku)}</span>
+                  {copied ? (
+                    <Check className="w-4 h-4 text-[var(--status-success)]" aria-hidden="true" />
+                  ) : (
+                    <Copy className="w-4 h-4 text-[var(--text-muted)]" aria-hidden="true" />
+                  )}
+                </button>
+                {hasModelNumber && (
+                  <span className="flex items-center gap-1 text-xs text-[var(--text-secondary)]">
+                    <span className="font-semibold text-[var(--text-muted)]">Model</span>
+                    <span className="text-[var(--text-primary)] font-medium">{modelNumber}</span>
+                  </span>
                 )}
-              </button>
-              {hasIdentifiers && (
-                <>
-                  <div className="hidden sm:flex items-center flex-wrap gap-2 text-xs text-[var(--text-secondary)]">
-                    <span className="font-semibold text-[var(--text-muted)]">Identifiers:</span>
-                    {identifiers
-                      .filter((identifier) => identifier.value)
-                      .map((identifier) => (
-                        <span key={identifier.label} className="flex items-center gap-1">
-                          <span className="text-[var(--text-muted)]">{identifier.label}</span>
-                          <span className="text-[var(--text-primary)] font-medium">
-                            {identifier.value}
-                          </span>
-                        </span>
-                      ))}
-                  </div>
-                  <details className="sm:hidden">
-                    <summary className="text-xs font-semibold text-[var(--cta-primary)] underline decoration-[var(--cta-primary)] underline-offset-2">
-                      Details
-                    </summary>
-                    <div className="mt-2 flex flex-wrap gap-2 text-xs text-[var(--text-secondary)]">
-                      {identifiers
-                        .filter((identifier) => identifier.value)
-                        .map((identifier) => (
-                          <span key={identifier.label} className="flex items-center gap-1">
-                            <span className="text-[var(--text-muted)]">{identifier.label}</span>
-                            <span className="text-[var(--text-primary)] font-medium">
-                              {identifier.value}
-                            </span>
-                          </span>
-                        ))}
-                    </div>
-                  </details>
-                </>
+              </div>
+              {hasUpc && (
+                <div
+                  className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-muted)] px-3 py-2 text-center"
+                  aria-label={`UPC ${upc}`}
+                >
+                  <span className="block text-xs font-semibold text-[var(--text-muted)]">UPC</span>
+                  <span className="block font-mono text-xs tracking-[0.16em] text-[var(--text-primary)]">
+                    {upc}
+                  </span>
+                </div>
               )}
             </div>
           </div>
 
-          {item.locations && Object.keys(item.locations).length > 0 && (
+          {item.locations && locationEntries.length > 0 && (
             <div className="mt-auto space-y-2">
-              <p className="text-sm font-semibold text-[var(--text-primary)]">
-                Reported in {stateCount} {stateCount === 1 ? "state" : "states"}:
-              </p>
               <div className="flex flex-wrap gap-1.5" role="list" aria-label="States with reports">
-                {Object.entries(item.locations)
-                  .sort(([, a], [, b]) => b - a)
-                  .map(([state, count]) => (
-                    <span
-                      key={state}
-                      role="listitem"
-                      className="pill pill-strong min-h-[28px] flex items-center"
-                      title={`${getStateName(state)}: ${count} ${count === 1 ? "report" : "reports"}`}
-                      aria-label={`${getStateName(state)}: ${count} ${count === 1 ? "report" : "reports"}`}
-                    >
-                      {state} × {count}
-                    </span>
-                  ))}
+                {topLocations.map(([state, count]) => (
+                  <span
+                    key={state}
+                    role="listitem"
+                    className="pill pill-strong min-h-[28px] flex items-center"
+                    title={`${getStateName(state)}: ${count} ${count === 1 ? "report" : "reports"}`}
+                    aria-label={`${getStateName(state)}: ${count} ${count === 1 ? "report" : "reports"}`}
+                  >
+                    {state} x {count}
+                  </span>
+                ))}
+                {remainingLocations > 0 && (
+                  <span className="px-2 py-1 text-[var(--text-muted)] text-xs font-medium">
+                    +{remainingLocations} more
+                  </span>
+                )}
               </div>
-              {totalReports > 0 && (
-                <p className="text-sm text-[var(--text-secondary)]">
-                  {totalReports} total {totalReports === 1 ? "report so far" : "reports"}
-                </p>
-              )}
             </div>
           )}
 
-          <div className="pt-4 border-t border-[var(--border-default)] mt-auto">
-            <div className="flex items-center flex-wrap gap-3 text-sm font-semibold text-[var(--text-primary)]">
-              <span className="text-[var(--status-success)]">$0.01</span>
+          <div className="pt-3 border-t border-[var(--border-default)] mt-auto space-y-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-base font-semibold text-[var(--status-success)]">$0.01</span>
+              {totalReports > 0 && (
+                <span className="text-xs text-[var(--text-secondary)]">
+                  {totalReports} {totalReports === 1 ? "report" : "reports"}
+                </span>
+              )}
+              {stateCount > 0 && (
+                <span className="text-xs text-[var(--text-secondary)]">
+                  {stateCount} {stateCount === 1 ? "state" : "states"}
+                </span>
+              )}
+            </div>
+            <div className="flex items-center flex-wrap gap-2 text-xs font-semibold text-[var(--text-primary)]">
               <a
                 href={homeDepotUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] rounded"
+                className="inline-flex items-center gap-1 min-h-[44px] px-2 rounded text-[var(--cta-primary)] underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
                 onClick={(e) => {
                   e.stopPropagation()
                   trackEvent("home_depot_click", {
@@ -257,7 +253,7 @@ export function PennyListCard({ item }: PennyListCardProps) {
                   })
                 }}
               >
-                View on Home Depot
+                Home Depot
                 <ExternalLink className="w-4 h-4" aria-hidden="true" />
               </a>
               <span
@@ -282,11 +278,11 @@ export function PennyListCard({ item }: PennyListCardProps) {
                   })
                   router.push(buildReportFindUrl({ sku: item.sku, name: item.name, src: "card" }))
                 }}
-                className="relative z-10 pointer-events-auto"
+                className="relative z-10 pointer-events-auto min-h-[44px]"
                 aria-label={`Report finding ${item.name}`}
               >
                 <PlusCircle className="w-4 h-4 mr-1.5" aria-hidden="true" />
-                Report this find
+                Report find
               </Button>
             </div>
           </div>
@@ -393,7 +389,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
             <button
               type="button"
               onClick={handleSkuCopy}
-              className="flex items-center gap-2 text-xs text-[var(--text-primary)] font-mono elevation-2 border border-[var(--border-strong)] px-2.5 py-1.5 rounded w-fit font-medium cursor-pointer hover:border-[var(--cta-primary)] hover:bg-[var(--bg-hover)] transition-colors min-h-[36px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+              className="flex items-center gap-2 text-xs text-[var(--text-primary)] font-mono elevation-2 border border-[var(--border-strong)] px-2.5 py-1.5 rounded w-fit font-medium cursor-pointer hover:border-[var(--cta-primary)] hover:bg-[var(--bg-hover)] transition-colors min-h-[44px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
               aria-label={`Copy SKU ${item.sku} to clipboard`}
               title="Tap to copy SKU"
             >
@@ -467,7 +463,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
                 buildReportFindUrl({ sku: item.sku, name: item.name, src: "card-compact" })
               )
             }}
-            className="relative z-10 pointer-events-auto flex-1"
+            className="relative z-10 pointer-events-auto flex-1 min-h-[44px]"
             aria-label={`Report finding ${item.name}`}
           >
             <PlusCircle className="w-4 h-4 mr-1.5" aria-hidden="true" />
