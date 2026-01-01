@@ -12,6 +12,15 @@
 
 ---
 
+## 2026-01-01 - ChatGPT Codex (GPT-5) - Backlog plan capture (mobile bottom bar + sheets)
+
+**Goal:** Persist the next-step plan for the mobile bottom action bar + filter/sort sheets so it survives context resets.
+
+**Changes Made:**
+- Expanded backlog item #8 with a detailed, dependency-free implementation plan and acceptance criteria.
+
+**Verification:** Not run (documentation-only change).
+
 ## 2026-01-01 - ChatGPT Codex (GPT-5) - Penny List card density pass
 
 **Goal:** Deliver a denser, scan-first Penny List card on mobile without breaking Save/Report/Share/HD actions.

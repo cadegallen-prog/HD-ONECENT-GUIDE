@@ -125,8 +125,10 @@ Each AI session should:
 
 - **Goal:** Keep scanning space high while still making key actions reachable on mobile.
 - **Checklist:**
-  - [ ] Decide the minimal set of actions (e.g., Search, Filters, My Lists).
-  - [ ] Implement a mobile-only bar that doesn’t cover content (safe-area padding) and is keyboard accessible.
+  - [ ] Decide the minimal set of actions (recommended: Filters, Sort, My Lists, Report).
+  - [ ] Collapse the current top filter stack on mobile once the bar exists (keep desktop as-is).
+  - [ ] Implement a mobile-only bar that doesn't cover content (safe-area padding) and is keyboard accessible.
+  - [ ] Implement a lightweight bottom sheet (no new deps) for Filters + Sort using existing state.
   - [ ] Ensure desktop UI remains unchanged.
 - **Done means:**
   - Filters/search/lists remain easy to reach without adding vertical bloat to the list.
@@ -136,6 +138,15 @@ Each AI session should:
   - DONE: Mobile bottom bar exists and is a11y-correct; desktop unaffected.
   - FILES: `components/penny-list-client.tsx` (and minimal new component if required).
   - VERIFY: gates + Playwright screenshots (mobile).
+  - **Implementation plan (temporary, for next session):**
+    - Layout: add a `MobileActionBar` (fixed bottom, `sm:hidden`, safe-area padding) with 4 buttons: Filters, Sort, My Lists, Report Find.
+    - Sheets: implement two minimal bottom sheets (Filters/Sort) in `components/penny-list-client.tsx` with `role="dialog"`, `aria-modal="true"`, close button, overlay click to close, and `Escape` handling.
+    - Filters sheet content: reuse existing state (state, search, hasPhoto, dateRange, sort). No new logic; just relocate controls into the sheet on mobile.
+    - Sort sheet content: radio-like list using existing `sortOption` values; keep labels consistent with desktop.
+    - Desktop: keep `PennyListFilters` intact; wrap with `hidden sm:block` so it remains full on desktop/tablet.
+    - Mobile content padding: add bottom padding to the results container (`pb-[calc(80px+env(safe-area-inset-bottom))]`) so the bar never covers cards.
+    - Hot Right Now: keep as-is for desktop; consider moving below the list on mobile to reduce above-the-fold bloat (optional).
+    - Acceptance: first card visible without scrolling on 375×667, bar buttons ≥44×44, no console errors, URLs/filters still sync to query params.
 
 ---
 
