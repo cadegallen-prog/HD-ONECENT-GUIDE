@@ -20,6 +20,137 @@ import { createClient } from "@supabase/supabase-js"
 const BATCH_SIZE = 15 // SKUs per cron run
 const DELAY_MS = 5000 // 5 seconds between requests
 
+// Known brands that should stay uppercase
+const KNOWN_BRANDS = [
+  "DEWALT",
+  "MILWAUKEE",
+  "RIDGID",
+  "RYOBI",
+  "MAKITA",
+  "BOSCH",
+  "KOHLER",
+  "MOEN",
+  "DELTA",
+  "PFISTER",
+  "HUSKY",
+  "EVERBILT",
+  "HDX",
+  "GLACIER BAY",
+  "HAMPTON BAY",
+  "DEFIANT",
+  "COMMERCIAL ELECTRIC",
+  "VIGORO",
+  "BEHR",
+  "GLIDDEN",
+  "PPG",
+  "RUST-OLEUM",
+  "DAP",
+  "GE",
+  "LG",
+  "SAMSUNG",
+  "WHIRLPOOL",
+  "MAYTAG",
+  "FRIGIDAIRE",
+  "TORO",
+  "ECHO",
+  "EGO",
+  "STIHL",
+  "DIABLO",
+  "IRWIN",
+  "STANLEY",
+  "CRAFTSMAN",
+  "WERNER",
+  "GORILLA",
+  "3M",
+  "WD-40",
+  "CLR",
+  "ZINSSER",
+  "LIFEPROOF",
+  "TRAFFICMASTER",
+  "METALUX",
+  "HALO",
+  "LEVITON",
+]
+
+/**
+ * Normalizes a brand name for consistent display.
+ */
+function normalizeBrand(brand: string | null): string | null {
+  if (!brand) return null
+
+  const trimmed = brand.replace(/\s+/g, " ").trim()
+  const upper = trimmed.toUpperCase()
+
+  // Check if it's a known brand
+  for (const known of KNOWN_BRANDS) {
+    if (upper === known || upper === known.replace(/\s+/g, "")) {
+      return known
+    }
+  }
+
+  // Title case for unknown brands
+  return trimmed.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase())
+}
+
+/**
+ * Normalizes a product name for consistent display.
+ */
+function normalizeProductName(name: string | null, brand: string | null): string | null {
+  if (!name) return null
+
+  let normalized = name.replace(/\s+/g, " ").trim()
+
+  // Remove brand from beginning if duplicated
+  if (brand) {
+    const brandLower = brand.toLowerCase()
+    if (normalized.toLowerCase().startsWith(brandLower)) {
+      normalized = normalized
+        .slice(brand.length)
+        .replace(/^[\s-:]+/, "")
+        .trim()
+    }
+  }
+
+  // Title Case
+  normalized = normalized.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase())
+
+  // Keep abbreviations uppercase
+  const abbreviations = [
+    "HD",
+    "LED",
+    "USB",
+    "AC",
+    "DC",
+    "UV",
+    "PVC",
+    "ABS",
+    "HVAC",
+    "CFM",
+    "PSI",
+    "RPM",
+    "GPM",
+    "BTU",
+  ]
+  for (const abbr of abbreviations) {
+    normalized = normalized.replace(new RegExp(`\\b${abbr}\\b`, "gi"), abbr)
+  }
+
+  // Standardize units (lowercase with period)
+  const units = ["in", "ft", "mm", "cm", "oz", "lb", "gal", "qt", "pk", "ct", "sq"]
+  for (const unit of units) {
+    // First pass: match units WITH periods (to normalize spacing)
+    const withPeriod = new RegExp(`(\\d)\\s*${unit}\\.`, "gi")
+    normalized = normalized.replace(withPeriod, (_, digit) => `${digit} ${unit}.`)
+
+    // Second pass: match units WITHOUT periods (add period)
+    // Only match if followed by space or end, not if followed by another character
+    const withoutPeriod = new RegExp(`(\\d)\\s*${unit}(?=\\s|$)`, "gi")
+    normalized = normalized.replace(withoutPeriod, (_, digit) => `${digit} ${unit}.`)
+  }
+
+  return normalized
+}
+
 // Verify cron authorization
 function isAuthorized(request: Request): boolean {
   const authHeader = request.headers.get("authorization")
@@ -63,15 +194,17 @@ function parseProductPage(html: string, sku: string) {
     internet_sku: null,
   }
 
-  // Title
+  // Brand (extract first, needed for name normalization)
+  const brandMatch = html.match(/<[^>]*data-testid="product-brand"[^>]*>([^<]+)</)
+  const rawBrand = brandMatch ? brandMatch[1].trim() : null
+  result.brand = normalizeBrand(rawBrand)
+
+  // Title (normalize with brand context)
   const titleMatch =
     html.match(/<h1[^>]*data-testid="product-title"[^>]*>([^<]+)</) ||
     html.match(/<meta\s+property="og:title"\s+content="([^"]+)"/)
-  if (titleMatch) result.item_name = titleMatch[1].trim()
-
-  // Brand
-  const brandMatch = html.match(/<[^>]*data-testid="product-brand"[^>]*>([^<]+)</)
-  if (brandMatch) result.brand = brandMatch[1].trim()
+  const rawTitle = titleMatch ? titleMatch[1].trim() : null
+  result.item_name = normalizeProductName(rawTitle, result.brand as string | null)
 
   // Image
   const imageMatch = html.match(/<meta\s+property="og:image"\s+content="([^"]+)"/)
@@ -87,7 +220,7 @@ function parseProductPage(html: string, sku: string) {
   const canonicalMatch = html.match(/\/p\/[^/]+\/(\d{9,12})/)
   if (canonicalMatch) result.internet_sku = parseInt(canonicalMatch[1], 10)
 
-  // Home Depot URL
+  // Home Depot URL (use canonical URL for direct product link, not search)
   const urlMatch = html.match(/<link\s+rel="canonical"\s+href="([^"]+)"/)
   if (urlMatch) result.home_depot_url = urlMatch[1]
 
@@ -174,26 +307,27 @@ export async function GET(request: Request) {
     try {
       const data = await scrapeSKU(sku, scraperApiKey)
 
-      if (data.item_name || data.image_url) {
-        const { error: upsertError } = await supabase.from("penny_item_enrichment").upsert(
-          {
-            ...data,
-            source: "auto",
-            updated_at: new Date().toISOString(),
-          },
-          { onConflict: "sku" }
-        )
-
-        if (upsertError) {
-          results.push({ sku, success: false, error: upsertError.message })
-          failCount++
-        } else {
-          results.push({ sku, success: true })
-          successCount++
-        }
-      } else {
-        results.push({ sku, success: false, error: "No data found (blocked or 404)" })
+      const hasName = typeof data.item_name === "string" && Boolean(data.item_name.trim())
+      if (!hasName) {
+        results.push({ sku, success: false, error: "Missing item name (scrape failed)" })
         failCount++
+        continue
+      }
+      const { error: upsertError } = await supabase.from("penny_item_enrichment").upsert(
+        {
+          ...data,
+          source: "auto",
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: "sku" }
+      )
+
+      if (upsertError) {
+        results.push({ sku, success: false, error: upsertError.message })
+        failCount++
+      } else {
+        results.push({ sku, success: true })
+        successCount++
       }
     } catch (e) {
       results.push({ sku, success: false, error: String(e) })

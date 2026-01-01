@@ -1,6 +1,6 @@
 # Backlog (AI-Driven, Ordered)
 
-**Last updated:** Dec 31, 2025  
+**Last updated:** Jan 01, 2026  
 Keep this list short and ruthless (≤10 items).
 
 Each AI session should:
@@ -84,49 +84,77 @@ Each AI session should:
 
 ## P1 - UX Improvements (Card Density + Clarity, Token-Safe)
 
-### 6. Penny List card hierarchy pass (status band + report pills)
+### 6. Mobile Penny Card “Utilitarian Dense v2” (inspired by reference screenshots; not a clone)
 
-- **Goal:** Borrow “dense dashboard” clarity without claiming stock/store/aisle data we don’t have.
+- **Goal:** Max info density per vertical inch while staying scannable + accessible.
+- **Constraints:** token-only colors; no misleading store/stock claims; preserve existing deep-links + analytics; keep touch targets ≥44px.
+- **Checklist (ship in this order):**
+  - [ ] Define the “scan order” for mobile: title/brand → SKU → barcode/UPC → freshness → price → states/locations → actions.
+  - [ ] Make identifiers always visible on mobile (no hidden `<details>` for core identifiers).
+  - [ ] Add a barcode/UPC visual that is readable on-phone (pick 1 approach: SVG barcode vs monospaced numeric block) while keeping a11y text.
+  - [ ] Compact the layout: consistent spacing + fewer stacked rows; avoid wrapping chaos in pills.
+  - [ ] Keep the primary tap target clear (title/link region) and actions secondary.
+  - [ ] Preserve existing actions: internal SKU page, report-find, external HD link, share, save/bookmark.
 - **Done means:**
-  - Add a clear top “fresh signal” band when reports are within 24h/48h.
-  - Render total reports as a pill badge; optionally color-code state pills by frequency (CSS variables only).
-  - Meet touch-target + a11y rules and keep primary navigation as the main tap target.
-- **Prompt/task:**
-  - GOAL: Improve card scanability via sections and badges.
-  - WHY: Faster scanning = higher retention and better “Penny List” habit loop.
-  - DONE: Cards show freshness + report pills; layout remains responsive.
-  - FILES: `components/penny-list-card.tsx`, `app/globals.css` (tokens/classes if needed).
-  - VERIFY: gates + Playwright screenshots before/after (light/dark) for `/penny-list`.
+  - Mobile cards feel “dense but calm” (fast scan); no broken links; no regressions in Save/My Lists.
+- **Prompt/task (copy/paste):**
+  - GOAL: Implement a mobile-first dense Penny List card layout.
+  - WHY: In-store BOLO scanning depends on rapid visual matching.
+  - DONE: New card layout ships on `/penny-list` (mobile), with identifiers visible and actions preserved.
+  - FILES: `components/penny-list-card.tsx` (+ small helper components if needed).
+  - VERIFY: `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e`, plus Playwright screenshots for `/penny-list` (mobile light/dark).
 
-### 7. Icon-first card actions (tooltips + aria-labels)
+### 7. Protect + elevate the “Save” function (My Lists / BOLO driver)
 
+- **Goal:** Saving items to personal lists must stay front-and-center as card density increases.
+- **Checklist:**
+  - [ ] Confirm `AddToListButton` remains present and obvious on both `PennyListCard` variants.
+  - [ ] Ensure Save state is unambiguous (saved vs not saved) and doesn’t get lost in the dense layout.
+  - [ ] Confirm Save works from `/penny-list` and from `/sku/[sku]` contexts (no auth regressions, no runtime errors).
+  - [ ] Verify the “bookmark tip” copy still matches the UI (no stale instructions).
 - **Done means:**
-  - Replace verbose action row text with icon buttons + accessible labels/tooltips.
-  - Focus rings remain visible and consistent.
+  - Users can reliably build a BOLO list and recognize saved items at a glance.
 - **Prompt/task:**
-  - GOAL: Make card actions compact and modern.
-  - WHY: Reduces clutter without removing functionality.
-  - DONE: Icon actions are keyboard/screen-reader accessible.
-  - FILES: `components/penny-list-card.tsx`.
-  - VERIFY: gates + Playwright proof.
+  - GOAL: Make Save/My Lists a first-class action in the dense card UI.
+  - WHY: Personal lists are a retention + repeat-visit loop.
+  - DONE: Save is always reachable in ≤1 tap and visually distinct; behavior unchanged.
+  - FILES: `components/add-to-list-button.tsx`, `components/penny-list-card.tsx`, `components/penny-list-client.tsx`.
+  - VERIFY: gates + Playwright screenshots for `/penny-list`, `/lists`, and a sample `/lists/[id]`.
 
-### 8. Mobile filter ergonomics (bottom sheet/FAB)
+### 8. Mobile bottom action bar (only if it reduces clutter; no extra features)
 
+- **Goal:** Keep scanning space high while still making key actions reachable on mobile.
+- **Checklist:**
+  - [ ] Decide the minimal set of actions (e.g., Search, Filters, My Lists).
+  - [ ] Implement a mobile-only bar that doesn’t cover content (safe-area padding) and is keyboard accessible.
+  - [ ] Ensure desktop UI remains unchanged.
 - **Done means:**
-  - Add a mobile-only launcher (FAB or bottom toolbar) that opens filter/sort controls.
-  - Desktop layout unchanged; a11y + ≥44px targets.
+  - Filters/search/lists remain easy to reach without adding vertical bloat to the list.
 - **Prompt/task:**
-  - GOAL: Reduce vertical bloat from filters on mobile.
-  - WHY: Improves browse speed and reduces bounce on small screens.
-  - DONE: Filters are reachable within one tap and fully keyboard accessible.
-  - FILES: `components/penny-list-client.tsx` (or relevant filter component), shared UI utilities if needed.
-  - VERIFY: gates + Playwright screenshots mobile/desktop.
+  - GOAL: Add a minimal mobile bottom bar on `/penny-list`.
+  - WHY: Faster in-store browsing with less scroll friction.
+  - DONE: Mobile bottom bar exists and is a11y-correct; desktop unaffected.
+  - FILES: `components/penny-list-client.tsx` (and minimal new component if required).
+  - VERIFY: gates + Playwright screenshots (mobile).
 
 ---
 
 ## P2 - Cleanup / Consistency
 
-### 9. Support CTA consistency on homepage (decision + alignment)
+### 9. Optional: “Not on your list” / “On your list” affordance (avoid overkill)
+
+- **Idea:** When viewing `/penny-list` results, show a subtle badge if an item SKU matches something in a user’s saved lists.
+- **Important:** This is optional and should not ship until #6–#8 are stable.
+- **Done means:**
+  - If enabled, the badge is accurate, fast, and doesn’t add popups/modals.
+- **Prompt/task:**
+  - GOAL: Add an “On your list” indicator to Penny List cards.
+  - WHY: Helps users quickly rule-in/out BOLO items in-store.
+  - DONE: Cards can reflect list membership without impacting performance.
+  - FILES: `components/penny-list-client.tsx`, `lib/supabase/lists` (if needed).
+  - VERIFY: gates + Playwright proof.
+
+### 10. Support CTA consistency on homepage (decision + alignment)
 
 - **Observation:** `app/page.tsx` currently includes a PayPal “Buy Me a Coffee” card; prior work removed PayPal CTAs elsewhere.
 - **Done means:**
@@ -138,4 +166,3 @@ Each AI session should:
   - DONE: Decision applied and documented; UI proof captured if changed.
   - FILES: `app/page.tsx` (and any other support CTA surfaces).
   - VERIFY: gates + Playwright proof if UI changed.
-

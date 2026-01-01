@@ -70,6 +70,10 @@ next-env.d.ts
 data/penny-list-manual.json
 data/purchase-history-*.json
 data/purchase-history-*.csv
+data/enrichment-input.json
+data/skus-to-scrape-urls.json
+data/penny_scrape_*.json
+penny_scrape_*.json
 
 # privacy: local Lighthouse runs can include machine paths
 lighthouse-mobile.json

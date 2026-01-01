@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Dec 31, 2025 (proxy migration, OTel pin, state pages, guide timeline, backlog refactor)
+**Last updated:** Jan 01, 2026 (auto-enrich guardrails + scrape tooling)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -8,6 +8,7 @@ Every AI session must update this after meaningful work.
 
 ## 1. Where We Are
 
+- **Auto-enrich guardrails (Jan 01):** Cron normalizes brand/name, uses canonical HD URL, and skips upserts when `item_name` is missing; added scrape tooling (`scripts/transform-scrape.ts`, `scripts/analyze-scrape-coverage.ts`) and ignore rules for local scrape artifacts.
 - **Proxy migration (Dec 31):** `middleware.ts` renamed to `proxy.ts` with `proxy` export (Next 16 deprecation resolved).
 - **OTel warning fix (Dec 31):** npm `overrides` pin `import-in-the-middle@2.0.1` and `require-in-the-middle@8.0.1`, silencing Turbopack warnings.
 - **State pages (Dec 31):** Added `app/pennies/[state]/page.tsx` + `lib/states.ts`; sitemap includes all state slugs; pages filter 6m penny finds by state.
