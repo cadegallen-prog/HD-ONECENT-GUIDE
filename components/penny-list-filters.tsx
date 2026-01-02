@@ -306,6 +306,7 @@ export function PennyListFilters({
             placeholder="Search by name or SKU..."
             className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] text-sm min-h-[44px] placeholder:text-[var(--text-muted)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent transition-shadow"
             aria-describedby="search-filter-desc"
+            suppressHydrationWarning
           />
           <span id="search-filter-desc" className="sr-only">
             Type to filter items by name or SKU number

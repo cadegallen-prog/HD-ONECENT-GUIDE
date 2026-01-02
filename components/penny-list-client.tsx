@@ -10,6 +10,13 @@ import {
   CheckCircle2,
   Info,
   ChevronDown,
+  Search,
+  X,
+  Image,
+  MapPin,
+  SlidersHorizontal,
+  ArrowUpDown,
+  FilePlus,
 } from "lucide-react"
 import { TrackableLink } from "@/components/trackable-link"
 import { trackEvent } from "@/lib/analytics"
@@ -23,6 +30,7 @@ import {
 import { PennyListCard, PennyListCardCompact } from "./penny-list-card"
 import { PennyListTable } from "./penny-list-table"
 import type { PennyItem } from "@/lib/fetch-penny-data"
+import { US_STATES } from "@/lib/us-states"
 
 interface PennyListClientProps {
   initialItems: PennyItem[]
@@ -55,6 +63,28 @@ const USER_STATE_KEY = "pennycentral_user_state"
 const ITEMS_PER_PAGE_OPTIONS = [25, 50, 100]
 const DEFAULT_ITEMS_PER_PAGE = 50
 
+const DATE_OPTIONS: { value: DateRange; label: string }[] = [
+  { value: "1m", label: "1 mo" },
+  { value: "3m", label: "3 mo" },
+  { value: "6m", label: "6 mo" },
+  { value: "12m", label: "12 mo" },
+  { value: "18m", label: "18 mo" },
+  { value: "24m", label: "24 mo" },
+  { value: "all", label: "All" },
+]
+
+const SORT_OPTIONS: { value: SortOption; label: string }[] = [
+  { value: "newest", label: "Newest First" },
+  { value: "oldest", label: "Oldest First" },
+  { value: "most-reports", label: "Most Reports" },
+  { value: "alphabetical", label: "A-Z" },
+]
+
+function getStateName(code: string): string {
+  const state = US_STATES.find((item) => item.code === code)
+  return state?.name || code
+}
+
 export function PennyListClient({
   initialItems,
   initialTotal,
@@ -83,6 +113,7 @@ export function PennyListClient({
   const [stateFilter, setStateFilter] = useState(() => getInitialParam("state"))
   const [hasPhotoOnly, setHasPhotoOnly] = useState(() => getInitialParam("photo") === "1")
   const [searchQuery, setSearchQuery] = useState(() => getInitialParam("q"))
+  const [mobileSearch, setMobileSearch] = useState(() => getInitialParam("q"))
   const [sortOption, setSortOption] = useState<SortOption>(() => {
     const value = getInitialParam("sort") as SortOption
     return value === "oldest" || value === "most-reports" || value === "alphabetical"
@@ -136,6 +167,9 @@ export function PennyListClient({
 
   // User's saved state for "My State" button
   const [userState, setUserState] = useState<string | undefined>(undefined)
+
+  const [isFilterSheetOpen, setIsFilterSheetOpen] = useState(false)
+  const [isSortSheetOpen, setIsSortSheetOpen] = useState(false)
 
   useEffect(() => {
     hasMountedRef.current = true
@@ -262,6 +296,60 @@ export function PennyListClient({
     [trackFilterChange, updateURL]
   )
 
+  const closeSheets = useCallback(() => {
+    setIsFilterSheetOpen(false)
+    setIsSortSheetOpen(false)
+  }, [])
+
+  const openFilterSheet = useCallback(() => {
+    setIsFilterSheetOpen(true)
+    setIsSortSheetOpen(false)
+  }, [])
+
+  const openSortSheet = useCallback(() => {
+    setIsSortSheetOpen(true)
+    setIsFilterSheetOpen(false)
+  }, [])
+
+  const clearAllFilters = useCallback(() => {
+    setStateFilterWithURL("")
+    setHasPhotoOnlyWithURL(false)
+    setSearchQueryWithURL("")
+    setMobileSearch("")
+    setSortOptionWithURL("newest")
+    setDateRangeWithURL("6m")
+  }, [
+    setDateRangeWithURL,
+    setHasPhotoOnlyWithURL,
+    setSearchQueryWithURL,
+    setSortOptionWithURL,
+    setStateFilterWithURL,
+  ])
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (mobileSearch !== searchQuery) {
+        setSearchQueryWithURL(mobileSearch)
+      }
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [mobileSearch, searchQuery, setSearchQueryWithURL])
+
+  useEffect(() => {
+    setMobileSearch(searchQuery)
+  }, [searchQuery])
+
+  useEffect(() => {
+    if (!isFilterSheetOpen && !isSortSheetOpen) return
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeSheets()
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [closeSheets, isFilterSheetOpen, isSortSheetOpen])
+
   // Fetch items from API when filters change
   const fetchItems = useCallback(async () => {
     setIsLoading(true)
@@ -372,24 +460,313 @@ export function PennyListClient({
 
   return (
     <>
-      {/* Filter Bar */}
-      <PennyListFilters
-        totalItems={total}
-        filteredCount={total}
-        stateFilter={stateFilter}
-        setStateFilter={setStateFilterWithURL}
-        hasPhotoOnly={hasPhotoOnly}
-        setHasPhotoOnly={setHasPhotoOnlyWithURL}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQueryWithURL}
-        sortOption={sortOption}
-        setSortOption={setSortOptionWithURL}
-        viewMode={viewMode}
-        setViewMode={setViewModeWithURL}
-        dateRange={dateRange}
-        setDateRange={setDateRangeWithURL}
-        userState={userState}
-      />
+      {/* Filter Bar (Desktop) */}
+      <div className="hidden sm:block">
+        <PennyListFilters
+          totalItems={total}
+          filteredCount={total}
+          stateFilter={stateFilter}
+          setStateFilter={setStateFilterWithURL}
+          hasPhotoOnly={hasPhotoOnly}
+          setHasPhotoOnly={setHasPhotoOnlyWithURL}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQueryWithURL}
+          sortOption={sortOption}
+          setSortOption={setSortOptionWithURL}
+          viewMode={viewMode}
+          setViewMode={setViewModeWithURL}
+          dateRange={dateRange}
+          setDateRange={setDateRangeWithURL}
+          userState={userState}
+        />
+      </div>
+
+      {/* Mobile Action Bar + Sheets */}
+      <div className="sm:hidden">
+        <div className="fixed inset-x-0 bottom-0 z-30 border-t border-[var(--border-default)] bg-[var(--bg-elevated)]">
+          <div className="grid grid-cols-4 gap-2 px-3 pt-2 pb-[calc(8px+env(safe-area-inset-bottom))]">
+            <button
+              type="button"
+              onClick={openFilterSheet}
+              aria-expanded={isFilterSheetOpen}
+              aria-controls="penny-list-filter-sheet"
+              className={`flex min-h-[44px] w-full flex-col items-center justify-center gap-1 rounded-lg border text-xs font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
+                isFilterSheetOpen
+                  ? "border-[var(--cta-primary)] bg-[var(--bg-hover)] text-[var(--text-primary)]"
+                  : "border-[var(--border-default)] bg-[var(--bg-card)] text-[var(--text-secondary)]"
+              }`}
+            >
+              <SlidersHorizontal className="h-4 w-4" aria-hidden="true" />
+              Filters
+            </button>
+            <button
+              type="button"
+              onClick={openSortSheet}
+              aria-expanded={isSortSheetOpen}
+              aria-controls="penny-list-sort-sheet"
+              className={`flex min-h-[44px] w-full flex-col items-center justify-center gap-1 rounded-lg border text-xs font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
+                isSortSheetOpen
+                  ? "border-[var(--cta-primary)] bg-[var(--bg-hover)] text-[var(--text-primary)]"
+                  : "border-[var(--border-default)] bg-[var(--bg-card)] text-[var(--text-secondary)]"
+              }`}
+            >
+              <ArrowUpDown className="h-4 w-4" aria-hidden="true" />
+              Sort
+            </button>
+            <TrackableLink
+              href="/lists"
+              eventName="cta_click"
+              eventParams={{ location: "penny-list-mobile-bar-lists" }}
+              className="flex min-h-[44px] w-full flex-col items-center justify-center gap-1 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] text-xs font-semibold text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+            >
+              <Bookmark className="h-4 w-4" aria-hidden="true" />
+              My Lists
+            </TrackableLink>
+            <TrackableLink
+              href="/report-find"
+              eventName="find_submit"
+              eventParams={{ location: "penny-list-mobile-bar-report" }}
+              className="flex min-h-[44px] w-full flex-col items-center justify-center gap-1 rounded-lg bg-[var(--cta-primary)] text-xs font-semibold text-[var(--cta-text)] transition-colors hover:bg-[var(--cta-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+            >
+              <FilePlus className="h-4 w-4" aria-hidden="true" />
+              Report
+            </TrackableLink>
+          </div>
+        </div>
+
+        {isFilterSheetOpen && (
+          <>
+            <div
+              className="fixed inset-0 z-40 bg-[var(--bg-hover)] opacity-80"
+              onClick={closeSheets}
+              aria-hidden="true"
+            />
+            <div
+              id="penny-list-filter-sheet"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="penny-list-filter-title"
+              className="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-2xl border border-[var(--border-default)] bg-[var(--bg-elevated)] p-4 pb-[calc(16px+env(safe-area-inset-bottom))]"
+            >
+              <div className="mb-4 flex items-center justify-between">
+                <h2
+                  id="penny-list-filter-title"
+                  className="text-base font-semibold text-[var(--text-primary)]"
+                >
+                  Filters
+                </h2>
+                <button
+                  type="button"
+                  onClick={closeSheets}
+                  className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+                  aria-label="Close filters"
+                >
+                  <X className="h-4 w-4" aria-hidden="true" />
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label
+                    htmlFor="mobile-state-filter"
+                    className="text-sm font-semibold text-[var(--text-primary)]"
+                  >
+                    State
+                  </label>
+                  <select
+                    id="mobile-state-filter"
+                    value={stateFilter}
+                    onChange={(event) => setStateFilterWithURL(event.target.value)}
+                    className="w-full rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] px-3 py-2.5 text-sm text-[var(--text-primary)] min-h-[44px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+                  >
+                    <option value="">All States</option>
+                    {US_STATES.map((state) => (
+                      <option key={state.code} value={state.code}>
+                        {state.name} ({state.code})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {userState && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setStateFilterWithURL(stateFilter === userState ? "" : userState)
+                    }
+                    {...({ "aria-pressed": stateFilter === userState ? "true" : "false" } as Record<
+                      string,
+                      unknown
+                    >)}
+                    className={`flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg border px-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
+                      stateFilter === userState
+                        ? "border-[var(--cta-primary)] bg-[var(--cta-primary)] text-[var(--cta-text)]"
+                        : "border-[var(--border-default)] bg-[var(--bg-card)] text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]"
+                    }`}
+                    title={`Show only items in ${getStateName(userState)}`}
+                  >
+                    <MapPin className="h-4 w-4" aria-hidden="true" />
+                    My State
+                  </button>
+                )}
+
+                <button
+                  type="button"
+                  onClick={() => setHasPhotoOnlyWithURL(!hasPhotoOnly)}
+                  {...({ "aria-pressed": hasPhotoOnly ? "true" : "false" } as Record<
+                    string,
+                    unknown
+                  >)}
+                  className={`flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg border px-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
+                    hasPhotoOnly
+                      ? "border-[var(--cta-primary)] bg-[var(--cta-primary)] text-[var(--cta-text)]"
+                      : "border-[var(--border-default)] bg-[var(--bg-card)] text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]"
+                  }`}
+                  title="Show only items with photos"
+                >
+                  <Image className="h-4 w-4" aria-hidden="true" />
+                  Has photo
+                </button>
+
+                <div className="space-y-2">
+                  <label
+                    htmlFor="mobile-search-filter"
+                    className="text-sm font-semibold text-[var(--text-primary)]"
+                  >
+                    Search
+                  </label>
+                  <div className="relative">
+                    <Search
+                      className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-muted)]"
+                      aria-hidden="true"
+                    />
+                    <input
+                      id="mobile-search-filter"
+                      type="search"
+                      value={mobileSearch}
+                      onChange={(event) => setMobileSearch(event.target.value)}
+                      placeholder="Search by name or SKU..."
+                      className="w-full rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] py-2.5 pl-10 pr-3 text-sm text-[var(--text-primary)] min-h-[44px] placeholder:text-[var(--text-muted)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <span className="text-sm font-semibold text-[var(--text-primary)]">
+                    Date range
+                  </span>
+                  <div className="grid grid-cols-3 gap-2">
+                    {DATE_OPTIONS.map((option) => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => setDateRangeWithURL(option.value)}
+                        {...({
+                          "aria-pressed": dateRange === option.value ? "true" : "false",
+                        } as Record<string, unknown>)}
+                        className={`min-h-[44px] rounded-lg border px-2 text-xs font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
+                          dateRange === option.value
+                            ? "border-[var(--cta-primary)] bg-[var(--cta-primary)] text-[var(--cta-text)]"
+                            : "border-[var(--border-default)] bg-[var(--bg-card)] text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]"
+                        }`}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={openSortSheet}
+                  className="flex min-h-[44px] w-full items-center justify-between rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] px-3 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+                >
+                  <span>Sort</span>
+                  <span className="text-xs text-[var(--text-muted)]">
+                    {SORT_OPTIONS.find((option) => option.value === sortOption)?.label ??
+                      "Newest First"}
+                  </span>
+                </button>
+
+                {(stateFilter ||
+                  hasPhotoOnly ||
+                  searchQuery ||
+                  dateRange !== "6m" ||
+                  sortOption !== "newest") && (
+                  <button
+                    type="button"
+                    onClick={clearAllFilters}
+                    className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] px-3 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+                  >
+                    <X className="h-4 w-4" aria-hidden="true" />
+                    Clear filters
+                  </button>
+                )}
+              </div>
+            </div>
+          </>
+        )}
+
+        {isSortSheetOpen && (
+          <>
+            <div
+              className="fixed inset-0 z-40 bg-[var(--bg-hover)] opacity-80"
+              onClick={closeSheets}
+              aria-hidden="true"
+            />
+            <div
+              id="penny-list-sort-sheet"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="penny-list-sort-title"
+              className="fixed inset-x-0 bottom-0 z-50 max-h-[70vh] overflow-y-auto rounded-t-2xl border border-[var(--border-default)] bg-[var(--bg-elevated)] p-4 pb-[calc(16px+env(safe-area-inset-bottom))]"
+            >
+              <div className="mb-4 flex items-center justify-between">
+                <h2
+                  id="penny-list-sort-title"
+                  className="text-base font-semibold text-[var(--text-primary)]"
+                >
+                  Sort
+                </h2>
+                <button
+                  type="button"
+                  onClick={closeSheets}
+                  className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+                  aria-label="Close sort"
+                >
+                  <X className="h-4 w-4" aria-hidden="true" />
+                </button>
+              </div>
+
+              <div role="radiogroup" aria-labelledby="penny-list-sort-title" className="space-y-2">
+                {SORT_OPTIONS.map((option) => {
+                  const isSelected = sortOption === option.value
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      role="radio"
+                      aria-checked={isSelected}
+                      onClick={() => {
+                        setSortOptionWithURL(option.value)
+                        setIsSortSheetOpen(false)
+                      }}
+                      className={`flex min-h-[44px] w-full items-center justify-between rounded-lg border px-4 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
+                        isSelected
+                          ? "border-[var(--cta-primary)] bg-[var(--cta-primary)] text-[var(--cta-text)]"
+                          : "border-[var(--border-default)] bg-[var(--bg-card)] text-[var(--text-primary)] hover:bg-[var(--bg-hover)]"
+                      }`}
+                    >
+                      <span>{option.label}</span>
+                      {isSelected && <CheckCircle2 className="h-4 w-4" aria-hidden="true" />}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          </>
+        )}
+      </div>
 
       {/* Hot Right Now - Only show if no filters active */}
       {!hasActiveFilters && hotItems.length > 0 && (
@@ -476,7 +853,10 @@ export function PennyListClient({
       </div>
 
       {/* Results */}
-      <section aria-label="Penny list results">
+      <section
+        aria-label="Penny list results"
+        className="pb-[calc(80px+env(safe-area-inset-bottom))] sm:pb-0"
+      >
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-[var(--text-secondary)]">
             {isLoading ? "Loading..." : resultsSummary}
