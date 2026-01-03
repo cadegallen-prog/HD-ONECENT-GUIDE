@@ -56,11 +56,11 @@
       .btn-export {
         background: #10b981;
       }
-      .btn-export-failures {
-        background: #a855f7;
+      .btn-secondary {
+        background: #475569;
       }
-      .btn-export-failures-csv {
-        background: #7c3aed;
+      .btn-warning {
+        background: #f59e0b;
       }
       .btn-danger {
         background: #ef4444;
@@ -91,6 +91,10 @@
       .status-cooldown {
         background: #f59e0b;
         box-shadow: 0 0 10px #f59e0b;
+      }
+      .status-paused {
+        background: #f97316;
+        box-shadow: 0 0 10px #f97316;
       }
       h2 {
         margin: 0 0 15px 0;
@@ -157,13 +161,10 @@
       </div>
 
       <button id="start-btn" onclick="startScraping()">▶ START SESSION</button>
+      <button id="pause-btn" class="btn-warning" onclick="togglePause()">Pause</button>
+      <button id="stop-btn" class="btn-secondary" onclick="stopScraping()">Stop Session</button>
       <button class="btn-export" onclick="exportData()">💾 Export JSON</button>
-      <button class="btn-export-failures" onclick="exportFailuresJson()">
-        Export Failures JSON
-      </button>
-      <button class="btn-export-failures-csv" onclick="exportFailuresCsv()">
-        Export Failures CSV
-      </button>
+      <button class="btn-secondary" onclick="exportFailuresJson()">Export Failures JSON</button>
       <div style="margin-top: 8px">
         <button class="btn-export" id="set-export-folder-btn" onclick="chooseExportFolder()">
           📁 Set Export Folder
@@ -188,7 +189,8 @@
       let activeTabs = 0
       let sessionCount = 0
       let currentIndex = 0
-      let isPaused = false
+      let manualPause = false
+      let cooldownPause = false
       let urlsToScrape = [] // Will be filled with deduplicated URLs when scraping starts
 
       // On Load: Check database to see where we left off
@@ -203,24 +205,32 @@
         document.getElementById("start-index").value = count
         // Show stored export folder if available
         showExportFolderLabel()
+        updatePauseButton()
       }
 
       async function startScraping() {
+        manualPause = false
+        cooldownPause = false
+        updatePauseButton()
+
         // Deduplicate URLs before starting
         const originalCount = urls.length
         urlsToScrape = deduplicateUrls(urls)
         const uniqueCount = urlsToScrape.length
 
-        log(`📋 Deduplicated ${originalCount} URLs → ${uniqueCount} unique products (removed ${originalCount - uniqueCount} duplicates)`)
+        log(
+          `📋 Deduplicated ${originalCount} URLs → ${uniqueCount} unique products (removed ${originalCount - uniqueCount} duplicates)`
+        )
 
         currentIndex = parseInt(document.getElementById("start-index").value)
         document.getElementById("start-btn").disabled = true
+        setStatusActive()
         log(`🚀 Starting Parallel Session at Index ${currentIndex}...`)
         manageFlow()
       }
 
       async function manageFlow() {
-        if (isPaused) return
+        if (manualPause || cooldownPause) return
 
         const maxTabs = parseInt(document.getElementById("max-tabs").value)
         const batchLimit = parseInt(document.getElementById("batch-limit").value)
@@ -229,23 +239,45 @@
         // Trigger Cooldown
         if (sessionCount >= batchLimit) {
           log(`💤 [BATCH LIMIT] Pausing for ${cooldownMins} minutes...`)
-          isPaused = true
+          cooldownPause = true
           sessionCount = 0
-          document.getElementById("status-dot").className = "status-indicator status-cooldown"
+          setStatusCooldown()
           await new Promise((r) => setTimeout(r, cooldownMins * 60 * 1000))
-          isPaused = false
+          cooldownPause = false
+          if (manualPause) {
+            log("Cooldown finished, but manual pause is still active.")
+            setStatusPaused()
+            return
+          }
           log("🔄 Cooldown finished. Resuming flow...")
+          setStatusActive()
           manageFlow()
           return
         }
 
         // Fill parallel slots
-        while (activeTabs < maxTabs && currentIndex < urlsToScrape.length && !isPaused) {
+        while (
+          activeTabs < maxTabs &&
+          currentIndex < urlsToScrape.length &&
+          !manualPause &&
+          !cooldownPause
+        ) {
           const urlIndex = currentIndex
+          const urlToScrape = urlsToScrape[urlIndex]
           currentIndex++
-          sessionCount++
 
-          scrapeItem(urlsToScrape[urlIndex], urlIndex)
+          const urlSku = extractSkuFromUrl(urlToScrape)
+          if (urlSku && isAlreadyScraped(urlSku)) {
+            log(
+              `[${urlIndex + 1}] ⏭️  Already scraped (has price): ${urlToScrape.substring(
+                urlToScrape.lastIndexOf("/") + 1
+              )}`
+            )
+            continue
+          }
+
+          sessionCount++
+          scrapeItem(urlToScrape, urlIndex)
 
           // JITTER: Randomly wait 3 to 8 seconds before opening the next tab
           // This makes the staggered start look like human browsing
@@ -266,10 +298,105 @@
       }
 
       // Check if product SKU already exists in database
+      // Note: sku param might be Store SKU (from /s/ URLs) or Internet SKU (from /p/ URLs)
+      function hasValidRetailPrice(value) {
+        const price = Number(value)
+        return Number.isFinite(price) && price > 0
+      }
+
+      function buildHomeDepotUrl(data) {
+        const manual = String(data?.homeDepotUrl || "").trim()
+        if (manual) return manual
+
+        const internetNumber = String(data?.internetNumber || "").trim()
+        if (internetNumber) return `https://www.homedepot.com/p/${internetNumber}`
+
+        const storeSku = String(data?.storeSku || "").trim()
+        if (storeSku) return `https://www.homedepot.com/s/${storeSku}`
+
+        const productUrl = String(data?.productUrl || "").trim()
+        return productUrl || ""
+      }
+
+      function findExistingProductBySku(db, sku) {
+        if (!sku) return null
+
+        // Direct key match (often Store SKU)
+        if (db.hasOwnProperty(sku)) {
+          return { key: sku, product: db[sku] }
+        }
+
+        // Otherwise match by fields (internet/store sku)
+        for (const [key, product] of Object.entries(db)) {
+          if (!product) continue
+          if (product.internetNumber === sku || product.storeSku === sku) {
+            return { key, product }
+          }
+        }
+
+        return null
+      }
+
+      // “Already scraped” should mean “already has a usable retail price”,
+      // since the whole point of this controller is to fill missing prices.
       function isAlreadyScraped(sku) {
         if (!sku) return false
         const db = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}")
-        return db.hasOwnProperty(sku)
+        const found = findExistingProductBySku(db, sku)
+        return Boolean(found && hasValidRetailPrice(found.product?.retailPrice))
+      }
+
+      function togglePause() {
+        manualPause = !manualPause
+        updatePauseButton()
+
+        if (manualPause) {
+          setStatusPaused()
+          log("Manual pause enabled. No new tabs will open.")
+          return
+        }
+
+        if (cooldownPause) {
+          log("Cooldown still active. Resume will start after cooldown.")
+          setStatusCooldown()
+          return
+        }
+
+        setStatusActive()
+        log("Resuming...")
+        manageFlow()
+      }
+
+      function stopScraping() {
+        manualPause = true
+        cooldownPause = false
+        updatePauseButton()
+        setStatusPaused()
+        document.getElementById("start-btn").disabled = false
+        document.getElementById("start-index").value = String(currentIndex)
+        log("Session stopped. You can restart from the current index.")
+        if (activeTabs > 0) {
+          log("Note: existing tabs will finish unless you close them.")
+        }
+      }
+
+      function updatePauseButton() {
+        const btn = document.getElementById("pause-btn")
+        if (btn) {
+          btn.textContent = manualPause ? "Resume" : "Pause"
+        }
+      }
+
+      function setStatusActive() {
+        document.getElementById("status-dot").className = "status-indicator status-active"
+      }
+
+      function setStatusCooldown() {
+        document.getElementById("status-dot").className = "status-indicator status-cooldown"
+      }
+
+      function setStatusPaused() {
+        document.getElementById("status-dot").className = "status-indicator status-paused"
       }
 
       // Deduplicate URLs by extracting SKU and keeping first occurrence
@@ -291,17 +418,8 @@
       }
 
       function scrapeItem(url, index) {
-        // Pre-scrape check: Skip if already in database
-        const urlSku = extractSkuFromUrl(url)
-        if (urlSku && isAlreadyScraped(urlSku)) {
-          log(`[${index + 1}] ⏭️  Already scraped: ${url.substring(url.lastIndexOf("/") + 1)}`)
-          // Don't increment activeTabs since we're not opening a tab
-          manageFlow() // Trigger next item
-          return
-        }
-
         activeTabs++
-        document.getElementById("status-dot").className = "status-indicator status-active"
+        setStatusActive()
         log(`[${index + 1}] Opening: ${url.substring(url.lastIndexOf("/") + 1)}`)
 
         const tab = window.open(url, "_blank")
@@ -362,22 +480,58 @@
 
       function saveToDB(url, data) {
         const db = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}")
+        data.homeDepotUrl = buildHomeDepotUrl(data)
 
-        // Use best available unique identifier to deduplicate
-        // Priority: 1) Internet SKU, 2) Store SKU, 3) Product URL, 4) Input URL
-        const productKey = data.internetNumber || data.storeSku || data.productUrl || url
+        // Use Store SKU as primary identifier (all items have it, not all have internet SKU)
+        // Priority: 1) Store SKU (canonical DB identifier), 2) Internet SKU, 3) Product URL, 4) Input URL
+        const canonicalKey = data.storeSku || data.internetNumber || data.productUrl || url
 
-        // Check if this product was already saved (deduplication)
-        if (db[productKey]) {
-          const label = data.name || data.storeSku || productKey
-          log(`⏭️  Skipped duplicate: ${label}`)
+        // If we already have this product under a different key (or same key), merge updates.
+        // Important: allow upgrades when a new scrape finally yields a retail price.
+        const skuHint = data.storeSku || data.internetNumber || canonicalKey
+        const existingFound = findExistingProductBySku(db, skuHint)
+        const existingKey = existingFound?.key
+        const existing = existingFound?.product
+
+        if (existingKey) {
+          const merged = { ...existing }
+
+          for (const [field, value] of Object.entries(data || {})) {
+            if (value === null || value === undefined || value === "") continue
+
+            if (field === "retailPrice") {
+              if (hasValidRetailPrice(value) && !hasValidRetailPrice(existing?.retailPrice)) {
+                merged.retailPrice = Number(value)
+              }
+              continue
+            }
+
+            if (!merged[field]) {
+              merged[field] = value
+            }
+          }
+
+          // Canonicalize key to storeSku when possible to prevent duplicates.
+          const targetKey = data.storeSku || existing?.storeSku || existingKey
+          if (targetKey !== existingKey) {
+            delete db[existingKey]
+          }
+          db[targetKey] = merged
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(db))
+
+          const label = merged.name || merged.storeSku || targetKey
+          const priceNote = hasValidRetailPrice(merged.retailPrice)
+            ? `retail ${formatPrice(merged.retailPrice)}`
+            : "no price"
+          log(`🔁 Updated ${label} (${priceNote})`)
+          document.getElementById("db-count").textContent = Object.keys(db).length
           return
         }
 
-        // Store using productKey, not url
-        db[productKey] = data
+        // Brand new entry
+        db[canonicalKey] = data
         localStorage.setItem(STORAGE_KEY, JSON.stringify(db))
-        const label = data.name || data.storeSku || productKey
+        const label = data.name || data.storeSku || canonicalKey
         log(`📦 Saved ${label} (retail ${formatPrice(data.retailPrice)})`)
         document.getElementById("db-count").textContent = Object.keys(db).length
       }
@@ -556,43 +710,6 @@
         log(`💾 Downloaded Failures JSON → ${filename}`)
       }
 
-      function csvEscape(value) {
-        const raw = value === null || value === undefined ? "" : String(value)
-        return `"${raw.replace(/\"/g, '""')}"`
-      }
-
-      async function exportFailuresCsv() {
-        const existing = JSON.parse(localStorage.getItem(FAILURES_KEY) || "[]")
-        const failures = Array.isArray(existing) ? existing : []
-
-        const header = ["url", "reason", "detail", "at"].join(",")
-        const rows = failures.map((f) =>
-          [csvEscape(f.url), csvEscape(f.reason), csvEscape(f.detail), csvEscape(f.at)].join(",")
-        )
-        const csv = [header, ...rows].join("\n")
-        const filename = humanFilename("penny_scrape_failures", "csv")
-
-        // Try to write to the chosen folder first
-        try {
-          const dirHandle = await getStoredDirectoryHandle()
-          if (dirHandle && dirHandle.kind === "directory") {
-            await writeFileToDirectory(dirHandle, filename, csv)
-            log(`💾 Exported Failures CSV → ${filename}`)
-            return
-          }
-        } catch (e) {
-          console.warn("Write to directory failed", e)
-        }
-
-        // Fallback: browser download
-        const blob = new Blob([csv], { type: "text/csv" })
-        const a = document.createElement("a")
-        a.href = URL.createObjectURL(blob)
-        a.download = filename
-        a.click()
-        log(`💾 Downloaded Failures CSV → ${filename}`)
-      }
-
       function clearDatabase() {
         const db = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}")
         const count = Object.keys(db).length
@@ -618,426 +735,399 @@
        * --------------------------------------------------
        */
       const urls = [
-        "https://www.homedepot.com/s/1000003011",
-        "https://www.homedepot.com/p/203905882",
+        "https://www.homedepot.com/p/Husky-10-ft-x-1-in-Cam-Buckle-Tie-Down-Straps-with-S-Hook-2-Pack-FH0904/206802314",
+        "https://www.homedepot.com/s/1013692004",
+        "https://www.homedepot.com/p/Lifeproof-Clermont-Elm-22-mil-x-8-7-in-W-x-48-in-L-Click-Lock-Waterproof-Luxury-Vinyl-Plank-Flooring-20-1-sq-ft-case-IT2202015L/325477214",
+        "https://www.homedepot.com/p/Glacier-Bay-Calandine-Single-Handle-1-Spray-Tub-and-Shower-Faucet-in-Matte-Black-Valve-Included-HDQF12A0023BL/323987235",
+        "https://www.homedepot.com/p/Kreg-90-Degree-Pocket-Hole-Driver-Drill-Attachment-with-3-in-Square-Drive-Bit-KDRV-90DG/319433126",
+        "https://www.homedepot.com/p/HANDY-HEATER-450-Watt-Silver-and-Black-Electric-USB-Rechargeable-Personal-Wearable-Neckband-Heater-HTBS-PD24/322158597",
+        "https://www.homedepot.com/s/8335185954",
+        "https://www.homedepot.com/s/1450045081",
+        "https://www.homedepot.com/s/1006595010",
+        "https://www.homedepot.com/s/1004484475",
+        "https://www.homedepot.com/p/Glacier-Bay-Hemming-Single-Handle-Pull-Out-Sprayer-Kitchen-Faucet-Deckplate-Included-in-Matte-Black-HDQFP3C0001BL/318213103",
+        "https://www.homedepot.com/p/Glacier-Bay-Modern-1-Spray-7-9-in-Dual-Tub-Wall-Mount-Fixed-and-Handheld-Shower-Heads-1-8-GPM-in-Matte-Gold-HD58302-174405/324593576",
+        "https://www.homedepot.com/p/MOEN-Genta-8-in-Widespread-Double-Handle-Bathroom-Faucet-with-Drain-Kit-Included-in-Chrome-Valve-Included-84763/301421092",
+        "https://www.homedepot.com/s/1011621450",
+        "https://www.homedepot.com/s/1011545464",
+        "https://www.homedepot.com/p/Husky-7000-Lumen-Multi-Directional-LED-Tripod-Work-Light-DE002-H/308673396",
+        "https://www.homedepot.com/s/311192",
+        "https://www.homedepot.com/s/1007747487",
+        "https://www.homedepot.com/s/1004822869",
+        "https://www.homedepot.com/s/1010086378",
+        "https://www.homedepot.com/s/1007023651",
+        "https://www.homedepot.com/s/948300",
+        "https://www.homedepot.com/s/947310",
+        "https://www.homedepot.com/p/Husky-1-in-x-8-ft-Lashing-Strap-2-Pack-FH0911/206802158",
+        "https://www.homedepot.com/p/HDX-16-2-in-x-6-ft-Green-6-ft-x-12-ft-Extension-Cords-3-Pack-KAB-1-KAB-10F/320266818",
+        "https://www.homedepot.com/s/1002959047",
+        "https://www.homedepot.com/s/1002959050",
+        "https://www.homedepot.com/s/1013692975",
+        "https://www.homedepot.com/s/1010043087",
+        "https://www.homedepot.com/p/Kidde-Firex-Hardwired-Smoke-and-Carbon-Monoxide-Detector-AA-Battery-Backup-and-Voice-Alarm-3-Pack-21032084-21032084/324293761",
+        "https://www.homedepot.com/s/1011858104",
+        "https://www.homedepot.com/s/1012576303",
+        "https://www.homedepot.com/p/Commercial-Electric-15-ft-12-Outlet-Surge-Protector-Braided-Cord-in-Black-HDC1215NUC/319908313",
+        "https://www.homedepot.com/p/Milwaukee-X-Large-Lightweight-Work-Gloves-48-73-8523H/328689145",
+        "https://www.homedepot.com/p/PIPE-DECOR-1-2-in-Black-Iron-Mini-Black-Iron-Flange-Jar-of-8-366-FM-JR-12-8/315365094",
+        "https://www.homedepot.com/s/1007750179",
+        "https://www.homedepot.com/p/KOHLER-Easmor-Single-Handle-Pull-Down-Sprayer-Kitchen-Faucet-in-Polished-Chrome-K-R30573-SD-CP/318833919",
+        "https://www.homedepot.com/p/MOEN-Korek-8-in-Widespread-Double-Handle-High-Arc-Bathroom-Faucet-with-Valve-in-Matte-Black-84468BL/316694811",
+        "https://www.homedepot.com/s/718835",
+        "https://www.homedepot.com/p/Everbilt-1-in-x-1-in-x-1-2-in-Copper-Pressure-All-Cup-Reducing-Tee-Fitting-C611/100348372",
+        "https://www.homedepot.com/p/Everbilt-1-in-Copper-Tube-Strap-5-Pack-C624HD1/204583745",
+        "https://www.homedepot.com/p/Everbilt-1-2-in-Forged-Bronze-90-Degree-C-x-M-Elbow-C7074LFHD12/206458278",
+        "https://www.homedepot.com/p/MOEN-Genta-Single-Handle-Single-Hole-Bathroom-Faucet-with-Drain-Kit-Included-in-Chrome-WS84760/206942731",
+        "https://www.homedepot.com/s/1002835570",
+        "https://www.homedepot.com/s/701041",
+        "https://www.homedepot.com/p/Everbilt-1-2-in-Bronze-Silicon-Alloy-Lead-Free-Pressure-90-Degree-Drop-Ear-Cup-x-Cup-Elbow-Fitting-C7075LFHD12/204620414",
+        "https://www.homedepot.com/p/Everbilt-1-2-in-Forged-Bronze-Lead-Free-Pressure-90-Degree-Cup-x-FIP-Elbow-Fitting-C7073LFHD12/204620762",
+        "https://www.homedepot.com/p/Everbilt-1-2-in-Forged-Bronze-90-Degree-Cup-x-FIP-High-Set-Drop-Elbow-Fitting-C70735ALFHD12/206458282",
+        "https://www.homedepot.com/p/Husky-Build-Out-22-in-Modular-Tool-Storage-Large-Tool-Box-22843/322630767",
+        "https://www.homedepot.com/p/HDX-33-39-Gallon-Black-Heavy-Duty-Drawstring-Outdoor-Trash-Bags-50-Count-HDX3339/306713149",
+        "https://www.homedepot.com/p/HDX-39-Gallon-Clear-Flex-Drawstring-Outdoor-Trash-Bags-50-Count-TBD/306713143",
+        "https://www.homedepot.com/s/1002502473",
+        "https://www.homedepot.com/s/1004186374",
+        "https://www.homedepot.com/s/1004813352",
+        "https://www.homedepot.com/s/152354",
+        "https://www.homedepot.com/s/1005531842",
+        "https://www.homedepot.com/p/Decor-15-Amp-Tamper-Resistant-Outlet-with-Midway-Wall-Plate-White-10-Pack-2007A/319324526",
+        "https://www.homedepot.com/s/1009186909",
+        "https://www.homedepot.com/s/502734",
+        "https://www.homedepot.com/s/1006023742",
+        "https://www.homedepot.com/s/1006311922",
+        "https://www.homedepot.com/s/1007611508",
+        "https://www.homedepot.com/p/Commercial-Electric-1-ft-x-2-ft-25W-Dimmable-White-Integrated-LED-Edge-Lit-Flat-Panel-Flush-Mount-Light-with-Color-Changing-CCT-FP1X2-4WY-WH-HD/304258316",
+        "https://www.homedepot.com/p/Digz-Women-s-Medium-Nitrile-Coated-Garden-Gloves-79871-014/320038357",
+        "https://www.homedepot.com/p/Wal-Board-Tools-1-5-8-in-x-24-in-Knock-Down-Knife-033-024-HD/100377298",
+        "https://www.homedepot.com/p/Wal-Board-Tools-Fixed-Blade-Utility-Knife-015-001-HD/100314525",
+        "https://www.homedepot.com/p/Wal-Board-Tools-2-in-4-in-and-6-in-Plastic-Taping-Knife-Set-088-063-HD/202050855",
+        "https://www.homedepot.com/p/Wal-Board-Tools-6-in-x-6-in-Self-Adhesive-Drywall-Repair-Patch-054-006-HD/100036128",
+        "https://www.homedepot.com/p/Wal-Board-Tools-8-in-Taping-Knife-021-018-HD/100389860",
+        "https://www.homedepot.com/p/Char-Griller-Double-Play-Grill-Cover-18080/324538612",
+        "https://www.homedepot.com/s/1010287944",
+        "https://www.homedepot.com/p/RYOBI-4-Cycle-Spark-Plug-AC00164A/203222932",
+        "https://www.homedepot.com/p/Husky-6-Pocket-Black-Tool-Belt-Pouch-HD335088-TH/310338146",
+        "https://www.homedepot.com/p/Husky-Heavy-Duty-14-Pocket-Electrician-s-Tool-Belt-Pouch-in-Black-HD00143/304021303",
+        "https://www.homedepot.com/p/Husky-Drywall-Jab-Saw-6-in-SDJS-HD/328349109",
+        "https://www.homedepot.com/s/1006225099",
+        "https://www.homedepot.com/p/DEWALT-Mixer-5-in-Head-32-in-Shaft-DXTT-2-291/319247691",
+        "https://www.homedepot.com/p/Anvil-9-in-Metal-Radial-Pole-Sander-92572/328141949",
+        "https://www.homedepot.com/p/Anvil-3-1-4-in-x-9-1-4-in-Plastic-Pole-Sander-EPS-HD/328351531",
+        "https://www.homedepot.com/p/Oregon-20-in-Chainsaw-Bar-and-E70-Chain-Fits-Echo-Poulan-and-McCulloch-20D176E70-23/326905764",
+        "https://www.homedepot.com/p/Oregon-20-in-Chainsaw-Bar-E72-Chain-Fits-Husqvarna-and-others-20K095E72-20K095E72-23/326905769",
+        "https://www.homedepot.com/p/Milwaukee-M12-AIR-TIP-1-1-4-in-2-1-2-in-Wet-Dry-Shop-Vacuum-Utility-Nozzle-Attachment-1-Piece-0980-20/319166583",
+        "https://www.homedepot.com/p/Philips-Advance-60-Watt-F96T12-2-Lamp-T12-120-277V-High-Frequency-Electronic-Replacement-Ballast-ICN2P60N-520403/205719461",
+        "https://www.homedepot.com/p/Quikrete-20-lb-Anchoring-Cement-124520/100318500",
+        "https://www.homedepot.com/p/TrafficMaster-Emerson-4-MIL-x-6-in-W-x-36-in-L-Grip-Strip-Water-Resistant-Luxury-Vinyl-Plank-Flooring-24-sqft-case-103918/322631614",
+        "https://www.homedepot.com/p/KOHLER-Spark-Plug-for-XT6-XT6-5-XT6-75-Engines-490-250-K016/204684518",
+        "https://www.homedepot.com/p/KOHLER-Lively-4-Spray-Patterns-Wall-Mount-4-312-in-Handheld-Shower-Head-in-Vibrant-Brushed-Nickel-K-R26822-G-BN/317417499",
+        "https://www.homedepot.com/p/Orbit-5-Pattern-Thumb-Control-Garden-Spray-Hose-Nozzle-28173/326734787",
+        "https://www.homedepot.com/p/Quikrete-0-5-lb-FastSet-Concrete-Crack-Repair-865069/207102854",
+        "https://www.homedepot.com/p/Tapcon-1-4-in-x-1-3-4-in-Star-Flat-Head-Concrete-Anchors-225-Piece-28575/314110922",
+        "https://www.homedepot.com/p/Cub-Cadet-Original-Equipment-High-Lift-Blade-Set-for-Select-50-in-Riding-Lawn-Mowers-with-6-Point-Star-OE-942-05052-742-05052-490-110-C155/205696651",
+        "https://www.homedepot.com/p/Delta-Wilder-30-to-36-in-W-x-71-3-4-in-H-Frameless-Pivoting-Shower-Door-in-Nickel-with-1-4-in-Clear-Glass-SDWS036-NIK-R/326203889",
+        "https://www.homedepot.com/p/MOEN-Doherty-Single-Handle-Pull-Down-Sprayer-Kitchen-Faucet-with-Power-Clean-and-Reflex-in-Spot-Resist-Stainless-87260SRS/326882450",
+        "https://www.homedepot.com/p/Milwaukee-Large-Red-Nitrile-Level-1-Cut-Resistant-Dipped-Work-Gloves-6-Pack-48-22-8902P/309980823",
+        "https://www.homedepot.com/p/Hampton-Bay-1-Pack-Derby-Customized-1-Gang-Pure-White-Duplex-Outlet-Plastic-Wall-Plate-W45982C-PW-U/323044933",
+        "https://www.homedepot.com/p/Delta-29-3-4-in-x-67-3-4-in-x-1-4-in-6mm-Frameless-Sliding-Shower-Door-Glass-Panels-in-Tranquility-For-50-60-in-Doors-SDGS060-CLQ-R/203905882",
+        "https://www.homedepot.com/p/Delta-29-3-4-in-x-67-3-4-in-x-1-4-in-6mm-Frameless-Sliding-Shower-Door-Glass-Panels-in-Ingot-For-50-60-in-Doors-SDGS060-CLI-R/311256268",
+        "https://www.homedepot.com/p/Delta-23-53-in-W-x-67-75-in-H-Sliding-Frameless-Shower-Door-Glass-Panel-in-Clear-Glass-SDGS048-CLI-R/311255603",
+        "https://www.homedepot.com/p/Carlon-1-in-ENT-Threaded-Male-Adapter-A243F-CAR-A243F-CAR/202688847",
+        "https://www.homedepot.com/p/Husky-26-in-EPDM-Rubber-Strap-4-Pack-56262/327108473",
+        "https://www.homedepot.com/p/JEALOUS-DEVIL-430-cu-in-Premium-Smoke-Whiskey-Barrel-Wood-Blocks-100-Natural-Wood-Chunks-Ideal-for-Smokers-BBQ-and-Grilling-JDSMOKEWSKY430CU/326965480",
+        "https://www.homedepot.com/p/WeatherTech-Grey-Rear-FloorLiner-Mazda-Mazda-5-2008-2014-462742/308408362",
+        "https://www.homedepot.com/p/FIRM-GRIP-Large-Duck-Canvas-Hybrid-Leather-Work-Gloves-56327-010/320038343",
+        "https://www.homedepot.com/s/532519",
+        "https://www.homedepot.com/p/Orbit-Adjustable-30-ft-Spot-Sprinkle-on-Spike-with-Flow-Through-29945/326733517",
+        "https://www.homedepot.com/p/VELCRO-7-8-in-Sticky-Back-Squares-in-Black-20-Pack-VEL-30753-USA/319015606",
+        "https://www.homedepot.com/p/TriLink-Bar-Mount-Chainsaw-Sharpener-BMS2000PC2/206571756",
+        "https://www.homedepot.com/p/Digz-Women-s-Large-Comfort-Grip-Garden-Gloves-74877-014/320038340",
+        "https://www.homedepot.com/p/Werner-4-ft-Fiberglass-Step-Ladder-8-ft-Reach-Height-with-250-lb-Load-Capacity-Type-I-Duty-Rating-FS104/100658400",
+        "https://www.homedepot.com/p/Rino-Tuff-Universal-Fit-065-in-x-275-ft-Pro-Twisted-Replacement-Line-for-Corded-and-Cordless-String-Grass-Trimmer-Lawn-Edger-16913/205322667",
+        "https://www.homedepot.com/p/IDEAL-Twister-Al-Cu-Purple-Wire-Connector-Bag-of-10-30-1765S/202935623",
+        "https://www.homedepot.com/p/Digz-Women-s-Medium-Planter-Garden-Gloves-74611-010/320038346",
+        "https://www.homedepot.com/p/Digz-Waterproof-Gardening-Bucket-Bag-1DZ-788-08/332609482",
+        "https://www.homedepot.com/p/Digz-Duck-Canvas-Utility-Medium-Glove-1-Pack-78976-010/308428405",
+        "https://www.homedepot.com/p/Digz-Women-s-Medium-Outdoor-and-Work-Gardener-Gloves-74606-010/324651961",
+        "https://www.homedepot.com/p/Hampton-Bay-Jackson-Park-22-in-3-Light-Brushed-Nickel-Integrated-LED-Bathroom-Vanity-Light-Bar-with-Frosted-Glass-SMA030EKTDG18D/316664569",
+        "https://www.homedepot.com/p/Hampton-Bay-Wakefield-31-in-4-Light-Chrome-Modern-Vanity-with-Clear-Glass-Shades-HB3682-07/316691349",
+        "https://www.homedepot.com/p/Hampton-Bay-Hampton-Bay-10-in-2-Light-Matte-Black-Plug-In-or-Hardwire-Wall-Sconce-for-Bathroom-65742/319621412",
+        "https://www.homedepot.com/p/ARAUCO-1-in-x-4-ft-x-3-ft-Sanded-Plywood-Primed-Plybead-1789093/333758740",
+        "https://www.homedepot.com/p/BLACK-DECKER-0-080-in-x-30-ft-Replacement-Dual-Line-Automatic-Feed-Spool-AFS-for-GH1000-Electric-String-Grass-Trimmer-Lawn-Edger-DF-080-BKP-1/100576037",
+        "https://www.homedepot.com/p/Digz-Women-s-1-Size-Midnight-Floral-Low-Profile-Gardening-Knee-Pads-86737-010/322907308",
+        "https://www.homedepot.com/p/Digz-Duck-Canvas-Utility-Large-Glove-1-Pack-78977-010/308436295",
+        "https://www.homedepot.com/p/Digz-Women-s-1-Size-Gardening-Straw-Sun-Hat-86746-08/327669219",
+        "https://www.homedepot.com/p/Digz-Women-s-Large-Nitrile-Coated-Gloves-3-Pack-79882-024/301119896",
+        "https://www.homedepot.com/p/FIRM-GRIP-General-Purpose-Landscape-Large-Glove-1-Pack-55327-010/308469586",
+        "https://www.homedepot.com/p/IDEAL-Wing-Nut-Wire-Connector-451-Yellow-Jar-of-500-30-651J/202894296",
+        "https://www.homedepot.com/p/Unger-18-in-Swivel-Window-Scrubber-985520/323405346",
+        "https://www.homedepot.com/p/Hampton-Bay-Truitt-23-25-in-3-Light-Brushed-Nickel-Vanity-Light-with-Frosted-and-Clear-Edge-Glass-Shades-HB2577-35/205789425",
+        "https://www.homedepot.com/p/Hampton-Bay-Olgelthorpe-29-8-in-4-Light-Brushed-Nickel-Bathroom-Vanity-Light-Fixture-with-Bell-Shaped-Frosted-Glass-Shades-NB49302/205744536",
+        "https://www.homedepot.com/p/Home-Decorators-Collection-Tustna-4-Light-Brushed-Nickel-Bathroom-Vanity-Light-with-Opal-Glass-Shades-20367-001/302565659",
+        "https://www.homedepot.com/p/KOHLER-Rubicon-4-in-Centerset-Double-Handle-Bathroom-Faucet-in-Vibrant-Brushed-Nickel-R29403-4D-BN/323706204",
+        "https://www.homedepot.com/p/Tapcon-3-16-in-x-2-3-4-in-White-Ultrashield-Star-Flat-Head-Concrete-Anchors-75-Piece-28367/314120563",
+        "https://www.homedepot.com/p/Tapcon-1-4-in-x-2-3-4-in-Star-Flat-Head-Concrete-Anchors-150-Piece-28585/314121634",
+        "https://www.homedepot.com/p/Tapcon-3-16-in-x-2-3-4-in-Star-Flat-Head-Concrete-Anchors-225-Piece-28565/314121625",
+        "https://www.homedepot.com/p/Carlon-1-2-in-ENT-Threaded-Male-Adapter-A243D-6R-A243D-6R/100404127",
+        "https://www.homedepot.com/p/Home-Decorators-Collection-Evelyn-6-in-1-Light-Brushed-Nickel-Industrial-Wall-Sconce-with-Clear-Glass-Shade-HB2623-35/310852012",
+        "https://www.homedepot.com/p/Tapcon-1-4-in-x-2-1-4-in-Star-Flat-Head-Concrete-Anchors-25-Piece-28280/314113380",
+        "https://www.homedepot.com/p/Anvil-5-in-Heavy-Duty-Adjustable-Brass-Hose-Spray-Nozzle-28162/326259922",
+        "https://www.homedepot.com/p/Glacier-Bay-Round-Toilet-Seat-in-White-PVC-Sheet-SH05P-HD1/301637239",
+        "https://www.homedepot.com/p/Everbilt-4-ft-x-16-in-Fixed-Rod-Wire-Shelf-90324/314700850",
+        "https://www.homedepot.com/p/QEP-LASH360-1-16-in-Tile-Leveling-3-Corner-Stems-100-Pack-99736/320064827",
+        "https://www.homedepot.com/p/Unger-4-in-Window-Scraper-with-Steel-Blades-970260/206614118",
+        "https://www.homedepot.com/p/Home-Decorators-Collection-Cantora-60-in-Freestanding-Flatbottom-Single-Slipper-Soaking-Bathtub-with-Reversible-Drain-in-White-GBBA013/304905712",
+        "https://www.homedepot.com/p/Jeffrey-Court-Caldera-Charcoal-Blue-10-in-x-13-in-Hexagon-Gloss-Glass-Mosaic-Wall-Tile-0-902-Sq-Ft-Each-13160/325745626",
+        "https://www.homedepot.com/p/Jeffrey-Court-Hudson-Lais-Grey-11-875-in-x-11-875-in-Square-Polished-Marble-Mosaic-Wall-and-Floor-Tile-0-979-Sq-Ft-Each-13159/325745598",
+        "https://www.homedepot.com/p/Feit-Electric-20-Light-6-ft-Battery-Operated-Mini-LED-Indoor-Copper-Wire-Warm-White-Fairy-String-Light-1-Pack-FY6-20-CPR/315436852",
+        "https://www.homedepot.com/p/Feit-Electric-20-Light-6-ft-Battery-Operated-Mini-LED-Indoor-Silver-Wire-Warm-White-Fairy-String-Light-1-Pack-FY6-20-SLV/315438112",
+        "https://www.homedepot.com/p/Commercial-Electric-6-Outlet-2-USB-Power-Strip-White-LTS-6Z1320-2U/319526973",
+        "https://www.homedepot.com/p/Commercial-Electric-6-ft-7-Outlet-Surge-Protector-with-USB-in-White-HDC706UCW/319933210",
+        "https://www.homedepot.com/p/Commercial-Electric-6-Outlet-2-USB-Metal-Power-Strip-Black-LTS-6Z1320-2U/319526229",
+        "https://www.homedepot.com/p/Tzumi-Aura-LED-60-Watt-Equivalent-Smart-Integrated-LED-Outdoor-Indoor-16-ft-Plug-In-Wi-Fi-Enabled-Color-Changing-Rope-Light-8862HD/324812008",
+        "https://www.homedepot.com/p/Commercial-Electric-10-Outlet-2-USB-Heavy-Duty-Power-Strip-with-Circuit-Breaker-LTS-10Z2300-2U/319526965",
+        "https://www.homedepot.com/p/Husky-Soft-Cap-Gel-Flexible-Work-Knee-Pads-1-pair-HD11990/308736376",
+        "https://www.homedepot.com/p/9-x-2-1-4-in-Star-Drive-Serrated-Head-Cement-Board-Screws-100-Pack-23520/314498900",
+        "https://www.homedepot.com/p/Backer-On-9-x-1-1-4-in-Star-Drive-Serrated-Head-Cement-Board-Screws-750-Pack-23505/314498727",
+        "https://www.homedepot.com/p/Tzumi-Aura-LED-Hex-Glow-Battery-Operated-Light-6-Pack-8970HD/324795779",
+        "https://www.homedepot.com/p/Tzumi-Aura-LED-10-Watt-Equivalent-16-ft-Wifi-Enabled-Smart-LED-Night-Light-Strip-1-Strip-8753HD/320827784",
+        "https://www.homedepot.com/p/Tzumi-Aura-Integrated-LED-Color-Galaxy-Starlight-Night-Light-Bulb-7797HD/318234567",
+        "https://www.homedepot.com/p/HDX-75-Watt-Metal-Shield-Incandescent-Trouble-Work-Light-with-6-ft-Cord-FH-21A/301289368",
+        "https://www.homedepot.com/s/318611",
+        "https://www.homedepot.com/s/1007682139",
+        "https://www.homedepot.com/p/TP-LINK-Dual-Band-Wi-Fi-6-Wireless-Router-Adapter-Archer-AX1800/315076919",
+        "https://www.homedepot.com/s/768816",
+        "https://www.homedepot.com/p/Stairtek-5-in-x-12-in-Sturdy-Plastic-Tread-Template-STTRTO/203410479",
+        "https://www.homedepot.com/p/Kwikset-Round-Matte-Black-Single-Cylinder-Deadbolt-Featuring-SmartKey-Security-660RDT-514-SMT/321253863",
+        "https://www.homedepot.com/s/1005837549",
+        "https://www.homedepot.com/s/1008127312",
+        "https://www.homedepot.com/s/488493",
+        "https://www.homedepot.com/s/1002312164",
+        "https://www.homedepot.com/s/1001808241",
+        "https://www.homedepot.com/s/1005270940",
+        "https://www.homedepot.com/p/RYOBI-ONE-HP-18V-Cordless-Pet-Stick-Vacuum-Cleaner-Tool-Only-PBLSV716B/323830662",
+        "https://www.homedepot.com/p/Commercial-Electric-Wireless-Indoor-Remote-Control-AC-DC-Adapter-White-3-Pack-LA-YK08/329046003",
+        "https://www.homedepot.com/p/Lava-14-5-in-Silver-Vortex-Lamp-22100400SP/206165200",
+        "https://www.homedepot.com/s/1003540153",
+        "https://www.homedepot.com/s/1003540154",
+        "https://www.homedepot.com/p/HDX-Clear-Disposable-Vinyl-Cleaning-Gloves-200-Ct-One-Size-Fits-Most-583687/330043729",
+        "https://www.homedepot.com/p/HALO-CEZ-6-in-White-Recessed-Light-Canless-EZ-Trim-E26-Lamp-Based-Direct-Mount-CEZ6125E26WBICAT/318744293",
+        "https://www.homedepot.com/p/Legrand-Wiremold-500-and-700-Series-Metal-Raceway-15-16-In-Deep-1-Gang-Shallow-Switch-Receptacle-Box-Ivory-V5748S/202523810",
+        "https://www.homedepot.com/p/ARCTIC-AIR-100-CFM-Turbo-Chill-Tower-Evaporative-Space-Cooler-AATCT-PD6/334369361",
+        "https://www.homedepot.com/s/1004628131",
+        "https://www.homedepot.com/p/FIRM-GRIP-X-Large-Latex-Coated-Work-Gloves-63618-0120/314925505",
+        "https://www.homedepot.com/p/FIRM-GRIP-Large-Latex-Coated-Work-Gloves-63612-0120/314925494",
+        "https://www.homedepot.com/s/1013332455",
+        "https://www.homedepot.com/p/KOHLER-Capilano-Towel-Ring-in-Vibrant-Brushed-Nickel-K-R26684-BN/312924242",
+        "https://www.homedepot.com/s/1007114150",
+        "https://www.homedepot.com/s/1008665208",
+        "https://www.homedepot.com/s/1005954836",
+        "https://www.homedepot.com/p/Husky-1200-Lumens-LED-Corded-Handheld-Work-Light-K40365/319012025",
+        "https://www.homedepot.com/s/895946",
+        "https://www.homedepot.com/p/Bernzomatic-Digital-Fuel-Gauge-for-Propane-Gas-and-MAP-Pro-Gas-Cylinder-BZOFG/317387079",
+        "https://www.homedepot.com/p/The-Harris-Products-Group-3-oz-Lead-Free-Acid-Core-Solder-Wire-335191/310830000",
+        "https://www.homedepot.com/s/303622",
+        "https://www.homedepot.com/p/The-Harris-Products-Group-4-oz-Leaded-Rosin-Core-Solder-352837/309077354",
+        "https://www.homedepot.com/p/Rubbermaid-FastTrack-Garage-Rail-Hardware-Pack-1784975/202868026",
+        "https://www.homedepot.com/p/Rubbermaid-FastTrack-Garage-Wall-Storage-Magnetic-Strip-Slat-Panel-System-2001935/303077955",
+        "https://www.homedepot.com/p/Rubbermaid-Fasttrack-Garage-Utility-Hook-50-lbs-Capacity-Wall-Mounted-Storage-and-Organization-System-for-Home-Garage-1784461/100387751",
+        "https://www.homedepot.com/p/Rubbermaid-FastTrack-Garage-Wall-Storage-Slat-Panel-System-Cup-Organizer-2001936/303077956",
+        "https://www.homedepot.com/s/495681",
+        "https://www.homedepot.com/s/1003945186",
+        "https://www.homedepot.com/p/Daltile-Restore-Black-Marble-12-in-x-12-in-Glazed-Ceramic-Brick-Joint-Mosaic-Tile-0-83-sq-ft-Each-RE22BKJ24HDMT/321455216",
+        "https://www.homedepot.com/p/Glacier-Bay-Zale-16-in-Round-Vitreous-China-Vessel-Sink-in-White-13-0089-W/301165046",
+        "https://www.homedepot.com/p/KOHLER-Archer-19-9-in-x-13-in-Undermount-Bathroom-Sink-in-White-Vitreous-China-K-R2355-0/204149117",
+        "https://www.homedepot.com/s/1002961936",
+        "https://www.homedepot.com/p/Leviton-15-Amp-125-Volt-Wetguard-Straight-Blade-3-Wire-Connector-in-Yellow-15W47-YPB-R61-15W47-YPB/309621690",
+        "https://www.homedepot.com/p/Lutron-Caseta-Smart-Fan-Speed-Control-for-Pull-Chain-Fans-1-5-Amp-Single-Pole-White-PD-FSQN-WH-R-PD-FSQN-WH-R/308675064",
+        "https://www.homedepot.com/s/1011876171",
+        "https://www.homedepot.com/p/Home-Decorators-Collection-36-in-72-in-Telescoping-1-in-Single-Curtain-Rod-Kit-in-Oil-Rubbed-Bronze-with-Urn-Square-Finials-UORB72F1607K04/309786184",
+        "https://www.homedepot.com/s/1006839420",
+        "https://www.homedepot.com/p/Siemens-200-Amp-4-Jaw-No-Bypass-Overhead-Fed-Meter-Socket-SUAT317-0G/202315456",
+        "https://www.homedepot.com/s/1009493223",
+        "https://www.homedepot.com/p/KOHLER-Archer-22-6-in-x-19-43-in-Drop-In-Bathroom-Sink-in-White-Vitreous-China-K-R2356-8-0/202493976",
+        "https://www.homedepot.com/p/EcoSmart-200-Watt-Equivalent-A23-Energy-Star-Dimmable-LED-Light-Bulb-Daylight-1-Pack-FG-04251/318065166",
+        "https://www.homedepot.com/p/EcoSmart-150-Watt-Equivalent-A23-Energy-Star-Dimmable-LED-Light-Bulb-Daylight-1-Pack-FG-04248/318065311",
+        "https://www.homedepot.com/p/EcoSmart-200-Watt-Equivalent-A23-Energy-Star-Dimmable-LED-Light-Bulb-Bright-White-1-Pack-FG-04250/318065161",
+        "https://www.homedepot.com/p/SharkBite-Max-1-2-in-Push-to-Connect-x-1-2-in-MIP-Chrome-Plated-Brass-Quarter-Turn-Angle-Stop-Valve-UR24946/325998307",
+        "https://www.homedepot.com/p/SharkBite-Max-1-2-in-Push-to-Connect-x-1-2-in-MIP-Chrome-Plated-Brass-Quarter-Turn-Straight-Stop-Valve-UR24947/325998309",
+        "https://www.homedepot.com/s/1006839417",
+        "https://www.homedepot.com/s/1005884102",
+        "https://www.homedepot.com/s/359302",
+        "https://www.homedepot.com/p/Lithonia-Lighting-Contractor-Select-LQM-Series-120-277-Volt-Integrated-LED-White-and-Red-Exit-Sign-LQM-S-W-3-R-120-277-M6/100045025",
+        "https://www.homedepot.com/p/Commercial-Electric-1-Pack-4-ft-White-Integrated-LED-Wrap-Light-with-Motion-Sensor-and-Adjustable-CCT-plus-Night-Light-at-4000-Lumens-LM2n400042WNGTH/323775523",
+        "https://www.homedepot.com/p/Carlon-3-4-in-ENT-Threaded-Male-Adapter-A243E-6R-A243E-6R/100404128",
+        "https://www.homedepot.com/s/483420",
+        "https://www.homedepot.com/s/318650",
+        "https://www.homedepot.com/s/697843",
+        "https://www.homedepot.com/s/1009121993",
+        "https://www.homedepot.com/s/1003843567",
+        "https://www.homedepot.com/p/Commercial-Electric-12-ft-Braided-Cord-8-Outlet-Surge-Protector-with-1-USB-and-1-USB-C-Black-YLPT-131B/319526975",
+        "https://www.homedepot.com/p/Commercial-Electric-12-ft-Braided-Cord-8-Outlet-Surge-Protector-with-USB-White-YLPT-131/319526961",
+        "https://www.homedepot.com/s/198226",
+        "https://www.homedepot.com/s/1012825716",
+        "https://www.homedepot.com/s/1003315979",
+        "https://www.homedepot.com/p/Cerrowire-500-ft-14-Gauge-Orange-Stranded-Copper-THHN-Wire-112-3456J/202304709",
+        "https://www.homedepot.com/s/1004813976",
+        "https://www.homedepot.com/p/GE-Q-Line-20-Amp-2-in-Double-Pole-Circuit-Breaker-THQL2120/100356510",
+        "https://www.homedepot.com/s/198153",
+        "https://www.homedepot.com/p/Cerrowire-500-ft-3-0-Gauge-Black-Stranded-Copper-THHN-Wire-112-5401J/202304654",
+        "https://www.homedepot.com/s/1006839410",
+        "https://www.homedepot.com/p/GE-Q-Line-60-Amp-2-in-Double-Pole-Circuit-Breaker-THQL2160/100676698",
+        "https://www.homedepot.com/p/GE-30-Amp-Double-Pole-Ground-Fault-Breaker-with-Self-Test-THQL2130GFTP/206602329",
+        "https://www.homedepot.com/p/Southwire-300-ft-Blue-24-4-Solid-CU-CAT5e-CMP-Plenum-Data-Cable-56917748/313505336",
+        "https://www.homedepot.com/s/744666",
+        "https://www.homedepot.com/p/GE-Q-Line-30-Amp-1-in-Single-Pole-Circuit-Breaker-THQL1130/100356509",
+        "https://www.homedepot.com/s/652245",
+        "https://www.homedepot.com/p/GE-Q-Line-20-Amp-1-in-Single-Pole-Arc-Fault-Combination-Circuit-Breaker-THQL1120AFP2/100686307",
+        "https://www.homedepot.com/s/535389",
+        "https://www.homedepot.com/s/295868",
+        "https://www.homedepot.com/p/GE-Q-Line-15-Amp-1-Single-Pole-Circuit-Breaker-THQL1115/100356507",
+        "https://www.homedepot.com/p/GE-Q-Line-2-15-Amp-Single-Pole-Tandem-120-240-Volts-Circuit-Breaker-THQLT1515/328690377",
+        "https://www.homedepot.com/p/GE-Q-Line-20-Amp-1-in-Single-Pole-Circuit-Breaker-THQL1120/100356508",
+        "https://www.homedepot.com/s/198277",
+        "https://www.homedepot.com/s/1001797737",
+        "https://www.homedepot.com/p/Leviton-15-Amp-125-Volt-Straight-Blade-Connector-Black-and-White-5269-CS-R50-05269-0CS/300861777",
+        "https://www.homedepot.com/s/589572",
+        "https://www.homedepot.com/p/Leviton-30-Amp-125-250-Volt-Locking-Connector-Black-and-White-2713-CS-R50-02713-0CS/300862241",
+        "https://www.homedepot.com/p/Siemens-200-Amp-OH-UG-Fed-Side-Wired-Meter-Socket-SUAS917-XJCA/100211397",
+        "https://www.homedepot.com/p/Leviton-15-Amp-250-Volt-NEMA-6-15R-Straight-Blade-Connector-Black-and-White-5669-CS-R50-05669-0CS/300861956",
+        "https://www.homedepot.com/s/571865",
+        "https://www.homedepot.com/p/Commercial-Electric-Infiniedge-Integrated-LED-6-in-Round-Adj-Color-Temp-Canless-Recessed-Light-for-Kitchen-Bath-Living-rooms-White-92097/324324035",
+        "https://www.homedepot.com/p/Commercial-Electric-Slim-Baffle-Integrated-LED-6-in-Round-Adj-Color-Temp-Canless-Recessed-Light-for-Kitchen-Bath-Living-rooms-White-91479/310114087",
+        "https://www.homedepot.com/p/Commercial-Electric-Cable-Cutter-CE70801/202039344",
+        "https://www.homedepot.com/s/538971",
+        "https://www.homedepot.com/s/538443",
+        "https://www.homedepot.com/p/HALO-QuickLink-Low-Voltage-4-in-Selectable-CCT-2700-5000K-600-Lumens-Recessed-Canless-LED-Starter-Kit-4pack-Dimmable-LTQL4069S1EDM-4PK/320034814",
+        "https://www.homedepot.com/p/Leviton-120-277-Volt-Single-Pole-Occupancy-Sensor-Wall-Switch-PIR-Passive-Infrared-White-Antimicrobial-No-Neutral-Required-R60-ODS15-GHW/326480533",
+        "https://www.homedepot.com/s/705994",
+        "https://www.homedepot.com/s/1011554100",
+        "https://www.homedepot.com/s/1012665289",
+        "https://www.homedepot.com/p/Lithonia-Lighting-Contractor-Select-LHQM-Series-120-277-Volt-Integrated-LED-White-and-Red-Exit-Emergency-Combo-W-9-6V-BTRY-LHQM-LED-R-M6/202520046",
+        "https://www.homedepot.com/p/GE-Q-Line-20-Amp-1-Pole-Dual-Function-Arc-Fault-GFCI-Breaker-THQL1120DFP/206119509",
+        "https://www.homedepot.com/p/Lutron-Maestro-Countdown-Timer-Switch-for-Fans-and-Lights-3A-Fan-150W-LED-Single-Pole-Multi-Location-White-MA-T51MNH-WH-MA-T51MNH-WH/323079980",
+        "https://www.homedepot.com/p/HALO-H7-6-in-Aluminum-Recessed-Lighting-Housing-for-New-Construction-Ceiling-Insulation-Contact-H7ICT/203891777",
+        "https://www.homedepot.com/s/1009023287",
+        "https://www.homedepot.com/p/Siemens-125-Amp-Ringless-Underground-Fed-Meter-Socket-SUAT111-PG/202592543",
+        "https://www.homedepot.com/s/1002936677",
+        "https://www.homedepot.com/p/Commercial-Electric-3in-Integrated-LED-Canless-Recessed-Light-with-Brushed-Nickel-Trim-and-Silver-Reflector-with-CCT-1-Pack-NK01aA11CR1259E/310498862",
+        "https://www.homedepot.com/s/523138",
+        "https://www.homedepot.com/s/1007619831",
+        "https://www.homedepot.com/s/1002640555",
+        "https://www.homedepot.com/p/32-Watt-F32T12-3-or-4-Lamp-T8-4-ft-120-277V-Instant-Start-Electronic-Fluorescent-Replacement-Ballast-IOPA4P32N-520387/203751327",
+        "https://www.homedepot.com/s/1007189607",
+        "https://www.homedepot.com/s/1001223741",
+        "https://www.homedepot.com/p/Carlon-1-Gang-14-cu-in-Electrical-PVC-Old-Work-Electrical-Switch-and-Outlet-Box-B114RB-B114RB/100404027",
+        "https://www.homedepot.com/s/710257",
+        "https://www.homedepot.com/s/1006311908",
+        "https://www.homedepot.com/p/Home-Decorators-Collection-Mercer-52-in-Integrated-LED-Indoor-Brushed-Nickel-Ceiling-Fan-with-Light-Kit-and-Remote-Control-54725/300654436",
+        "https://www.homedepot.com/p/Leviton-2-Gang-Light-Almond-1-Toggle-1-Duplex-Outlet-Receptacle-Plastic-Standard-Wall-Plate-1-Pack-78005-T-R53-78005-00T/202077595",
+        "https://www.homedepot.com/p/Gardner-Bender-18-cu-in-1-Gang-New-Work-Electrical-Switch-Outlet-Box-BOX-NS18N/319478164",
+        "https://www.homedepot.com/p/Leviton-20-Amp-125-Volt-Straight-Plug-Black-and-White-R60-05366-0CS/300862055",
+        "https://www.homedepot.com/p/Southwire-500-ft-Gray-24-4-Solid-CU-CAT5e-CMR-Riser-Data-Cable-56917942/313505340",
+        "https://www.homedepot.com/p/Commercial-Electric-2-in-Furniture-Hole-Grommet-Black-DAPFGB-200-1/328352511",
+        "https://www.homedepot.com/p/Commercial-Electric-13-in-to-47-in-Full-Motion-Wall-Mount-for-TVs-XD2483-S/316266951",
+        "https://www.homedepot.com/p/Commercial-Electric-15-ft-Standard-HDMI-Cable-HD0774/300614636",
+        "https://www.homedepot.com/s/367478",
+        "https://www.homedepot.com/s/1005485166",
+        "https://www.homedepot.com/s/1001669557",
+        "https://www.homedepot.com/p/Commercial-Electric-Full-Motion-Wall-Mount-for-23-in-to-63-in-TVs-XD2615-1A/316266948",
+        "https://www.homedepot.com/p/3-4-in-Standard-Fitting-Non-Metallic-NM-Cable-Connector-5-Pack-27516/202077089",
+        "https://www.homedepot.com/p/Halex-3-8-in-Flexible-Metal-Conduit-FMC-Cut-In-Connector-5-Pack-25803/203674047",
+        "https://www.homedepot.com/p/Snap2It-3-4-in-90-LT-Push-On-Connector-Single-Pack-LT907-1/202284582",
+        "https://www.homedepot.com/p/EcoSmart-55-to-65-TV-RGB-Color-Sensing-Dimmable-Plug-In-LED-Black-TV-Backlight-with-Remote-Control-LR1321-RGB-TV/324308359",
+        "https://www.homedepot.com/s/1007810566",
+        "https://www.homedepot.com/p/Leviton-1-Gang-White-Antimicrobial-Toggle-Plastic-Standard-Wall-Plate-1-Pack-88001-2AW-RA2-88001-2AW/317232716",
+        "https://www.homedepot.com/p/Klein-Tools-600-Volt-Slim-Digital-Multimeter-TRMS-Auto-Ranging-with-Temp-MM450/320822819",
+        "https://www.homedepot.com/s/973646",
+        "https://www.homedepot.com/p/Leviton-2-Gang-Light-Almond-Duplex-Outlet-Receptacle-Plastic-Standard-Wall-Plate-1-Pack-78016-T-R56-78016-00T/202059757",
+        "https://www.homedepot.com/p/Leviton-2-Gang-Ivory-Duplex-Outlet-Receptacle-Plastic-Standard-Wall-Plate-1-Pack-86016-I-R51-86016-00I/100046108",
+        "https://www.homedepot.com/p/Leviton-Decora-Smart-600-Watt-Single-Pole-Dimmer-with-Z-Wave-Technology-White-DZ6HD-2RW-R52-DZ6HD-2RW/310275542",
+        "https://www.homedepot.com/s/1002099017",
+        "https://www.homedepot.com/s/120196",
+        "https://www.homedepot.com/p/Klein-Tools-Circuit-Breaker-Finder-Accessory-Kit-69411/202266613",
+        "https://www.homedepot.com/s/1007189591",
+        "https://www.homedepot.com/s/769325",
+        "https://www.homedepot.com/s/1004547921",
+        "https://www.homedepot.com/s/1007189599",
+        "https://www.homedepot.com/s/1007189606",
+        "https://www.homedepot.com/p/Leviton-Decora-Plus-15-Amp-125-V-Industrial-Grade-Duplex-Outlet-Receptacle-Light-Almond-1-Pack-16252-TS-R86-16252-0TS/202066688",
+        "https://www.homedepot.com/s/698733",
+        "https://www.homedepot.com/p/Leviton-1-Gang-Light-Almond-Decora-Rocker-Plastic-Standard-Wall-Plate-10-Pack-80401-TMP-M26-80401-TMP/100684051",
+        "https://www.homedepot.com/p/Leviton-1-Gang-Light-Almond-Duplex-Outlet-Receptacle-Plastic-Standard-Wall-Plate-10-Pack-78003-TMP-M56-78003-TMP/100684052",
+        "https://www.homedepot.com/s/1007804456",
+        "https://www.homedepot.com/p/Southwire-1-2-in-x-100-ft-Liquidtight-Flexible-Metallic-Titan-Steel-Conduit-55082603/202819638",
         "https://www.homedepot.com/s/1000010762",
-        "https://www.homedepot.com/p/204693753",
-        "https://www.homedepot.com/p/204684518",
+        "https://www.homedepot.com/p/Commercial-Electric-Gray-Outdoor-Flood-Light-Weatherproof-Lampholder-Kit-WCL233G-K/300854221",
+        "https://www.homedepot.com/s/1002373492",
+        "https://www.homedepot.com/p/Home-Decorators-Collection-Grandale-23-25-in-Contemporary-Chrome-Dimmable-LED-Bath-Vanity-Light-For-Bathroom-22732/310389220",
+        "https://www.homedepot.com/p/Home-Decorators-Collection-Grandale-17-25-in-Chrome-LED-Vanity-Light-22731/310389221",
+        "https://www.homedepot.com/s/1003240056",
+        "https://www.homedepot.com/s/1003240066",
+        "https://www.homedepot.com/p/Simpson-Strong-Tie-DTT-ZMAX-Galvanized-Deck-Tension-Tie-for-2x-Nominal-Lumber-with-1-1-2-in-SDS-Screws-2-Pack-DTT2Z-R2/100671103",
+        "https://www.homedepot.com/p/Rubbermaid-Fasttrack-Garage-Dual-Handle-Utility-Hook-50-lbs-Capacity-Wall-Mounted-Storage-and-Organization-System-for-Home-Garage-1784454/100387754",
+        "https://www.homedepot.com/p/GE-PowerMark-Gold-42-Hole-Grounding-Bar-Kit-TGK42CP/202046213",
+        "https://www.homedepot.com/p/Rubbermaid-FastTrack-Garage-Silver-Metallic-Compact-Hook-1784455/203419431",
+        "https://www.homedepot.com/p/GE-PowerMark-Plus-Equipment-Ground-Kit-for-General-Electric-Load-Centers-TGL2P/100157047",
+        "https://www.homedepot.com/p/Marathon-14-5-in-Flat-Free-Universal-Wheelbarrow-Wheel-00270/202327305",
+        "https://www.homedepot.com/p/GE-200-Amp-4-Space-8-Circuit-Outdoor-Combination-Main-Breaker-Ringless-Meter-Socket-Load-Center-TSMR420CSCUGP/204326726",
         "https://www.homedepot.com/p/204785718",
         "https://www.homedepot.com/p/204785746",
         "https://www.homedepot.com/p/204785753",
         "https://www.homedepot.com/p/204785793",
         "https://www.homedepot.com/p/204785805",
-        "https://www.homedepot.com/s/1000039946",
-        "https://www.homedepot.com/p/309621690",
-        "https://www.homedepot.com/p/205322667",
-        "https://www.homedepot.com/p/206165200",
-        "https://www.homedepot.com/p/205696651",
-        "https://www.homedepot.com/p/205744536",
-        "https://www.homedepot.com/s/1001223741",
-        "https://www.homedepot.com/p/205763057",
-        "https://www.homedepot.com/p/205789425",
-        "https://www.homedepot.com/p/206119508",
-        "https://www.homedepot.com/p/206119509",
-        "https://www.homedepot.com/p/325998307",
-        "https://www.homedepot.com/p/325998309",
-        "https://www.homedepot.com/s/1001353598",
-        "https://www.homedepot.com/p/206210816",
-        "https://www.homedepot.com/p/322319800",
-        "https://www.homedepot.com/p/206571756",
-        "https://www.homedepot.com/p/206614118",
-        "https://www.homedepot.com/s/1001669557",
-        "https://www.homedepot.com/p/203578658",
-        "https://www.homedepot.com/p/206802158",
-        "https://www.homedepot.com/p/206802314",
-        "https://www.homedepot.com/p/206942731",
-        "https://www.homedepot.com/s/1001797737",
-        "https://www.homedepot.com/s/1001808241",
-        "https://www.homedepot.com/p/206941299",
-        "https://www.homedepot.com/p/207102854",
-        "https://www.homedepot.com/p/206957471",
-        "https://www.homedepot.com/s/1002099017",
-        "https://www.homedepot.com/p/310275542",
-        "https://www.homedepot.com/p/328352511",
-        "https://www.homedepot.com/p/203410479",
-        "https://www.homedepot.com/p/300654436",
-        "https://www.homedepot.com/p/302565659",
-        "https://www.homedepot.com/p/300614636",
-        "https://www.homedepot.com/p/300796610",
-        "https://www.homedepot.com/s/1002312164",
-        "https://www.homedepot.com/p/301233991",
-        "https://www.homedepot.com/s/1002373492",
-        "https://www.homedepot.com/p/301165046",
-        "https://www.homedepot.com/p/301555251",
-        "https://www.homedepot.com/s/1002434173",
-        "https://www.homedepot.com/p/302085137",
-        "https://www.homedepot.com/p/301421092",
-        "https://www.homedepot.com/s/1002502473",
-        "https://www.homedepot.com/s/1002640555",
-        "https://www.homedepot.com/p/301909817",
-        "https://www.homedepot.com/p/303077955",
-        "https://www.homedepot.com/p/303077956",
-        "https://www.homedepot.com/s/1002818377",
-        "https://www.homedepot.com/p/302038911",
-        "https://www.homedepot.com/p/321353167",
-        "https://www.homedepot.com/s/1002936677",
-        "https://www.homedepot.com/p/301637239",
-        "https://www.homedepot.com/s/1002961936",
-        "https://www.homedepot.com/p/304217565",
-        "https://www.homedepot.com/p/324538612",
-        "https://www.homedepot.com/p/304258316",
-        "https://www.homedepot.com/p/310389220",
-        "https://www.homedepot.com/p/310389221",
-        "https://www.homedepot.com/p/304021303",
-        "https://www.homedepot.com/s/1003240056",
-        "https://www.homedepot.com/s/1003240066",
-        "https://www.homedepot.com/p/305237983",
-        "https://www.homedepot.com/s/1003315979",
-        "https://www.homedepot.com/s/1003540153",
-        "https://www.homedepot.com/s/1003540154",
-        "https://www.homedepot.com/p/306713149",
-        "https://www.homedepot.com/p/306713143",
-        "https://www.homedepot.com/s/1003843567",
-        "https://www.homedepot.com/p/306860677",
-        "https://www.homedepot.com/p/306860678",
-        "https://www.homedepot.com/p/307720513",
-        "https://www.homedepot.com/s/1003945186",
-        "https://www.homedepot.com/p/308675064",
-        "https://www.homedepot.com/p/308428405",
-        "https://www.homedepot.com/p/308439917",
-        "https://www.homedepot.com/p/308561422",
-        "https://www.homedepot.com/p/308709729",
-        "https://www.homedepot.com/p/308673396",
-        "https://www.homedepot.com/s/1004180001",
-        "https://www.homedepot.com/p/308469586",
-        "https://www.homedepot.com/p/308436295",
-        "https://www.homedepot.com/s/1004186374",
-        "https://www.homedepot.com/p/328349109",
-        "https://www.homedepot.com/p/328351531",
-        "https://www.homedepot.com/p/328141949",
-        "https://www.homedepot.com/p/308736376",
-        "https://www.homedepot.com/p/309786184",
-        "https://www.homedepot.com/p/309981567",
-        "https://www.homedepot.com/p/309980823",
-        "https://www.homedepot.com/p/301119896",
+        "https://www.homedepot.com/s/1000039783",
+        "https://www.homedepot.com/s/1000039793",
+        "https://www.homedepot.com/p/Broan-NuTone-QT-Series-130-CFM-Ceiling-Bathroom-Exhaust-Fan-with-LED-Light-and-Night-Light-ENERGY-STAR-QTN130LE1/205369502",
+        "https://www.homedepot.com/p/VELCRO-24-in-x-3-4-in-Sticky-Back-for-Fabrics-Tape-Black-VEL-91878-USA/205185864",
+        "https://www.homedepot.com/p/Masonite-24-in-x-80-in-10-Lite-Solid-Core-Smooth-Unfinished-Pine-Veneer-Composite-Interior-Door-Slab-255166/100015502",
+        "https://www.homedepot.com/p/Milwaukee-X-Large-Red-Nitrile-Level-1-Cut-Resistant-Dipped-Work-Gloves-12-Pack-48-22-8903B/307720513",
+        "https://www.homedepot.com/p/Rheem-Performance-30-Gal-Short-30-000-BTU-Natural-Gas-Water-Heater-with-6-Year-Warranty-XG30S06EC30U1/326590325",
+        "https://www.homedepot.com/p/GE-200-Amp-40-Space-80-Circuit-Main-Breaker-Indoor-Load-Center-Contractor-Load-Center-and-Breaker-Kit-TM4020C80K/301157960",
+        "https://www.homedepot.com/s/1002624841",
+        "https://www.homedepot.com/s/1002760041",
+        "https://www.homedepot.com/s/1002760068",
+        "https://www.homedepot.com/s/1002770454",
+        "https://www.homedepot.com/p/Husky-12-in-PVC-Pliers-17PL0309/304217565",
+        "https://www.homedepot.com/p/Coolaroo-Oatmeal-Cordless-Light-Filtering-Fade-Resistant-Fabric-Exterior-Roller-Shade-96-in-W-x-72-in-L-458379/307707901",
+        "https://www.homedepot.com/p/Wagner-Control-Pro-130-High-Efficiency-Airless-Power-Tank-Paint-and-Stain-Sprayer-580678/307653832",
+        "https://www.homedepot.com/p/Broan-NuTone-Roomside-Series-80-CFM-Ceiling-Bathroom-Exhaust-Fan-with-CleanCover-ENERGY-STAR-AERN80K/307749054",
         "https://www.homedepot.com/s/1004528967",
-        "https://www.homedepot.com/p/309976515",
-        "https://www.homedepot.com/s/1004547921",
-        "https://www.homedepot.com/p/310137848",
-        "https://www.homedepot.com/s/1004612908",
-        "https://www.homedepot.com/s/1004628131",
-        "https://www.homedepot.com/p/310114087",
-        "https://www.homedepot.com/p/310498862",
-        "https://www.homedepot.com/p/310852012",
-        "https://www.homedepot.com/p/310852176",
-        "https://www.homedepot.com/p/310395107",
-        "https://www.homedepot.com/s/1004813352",
-        "https://www.homedepot.com/s/1004813976",
-        "https://www.homedepot.com/p/311255603",
-        "https://www.homedepot.com/p/311256268",
-        "https://www.homedepot.com/p/311871814",
-        "https://www.homedepot.com/s/1005056147",
-        "https://www.homedepot.com/p/312924242",
-        "https://www.homedepot.com/s/1005270940",
-        "https://www.homedepot.com/p/313219902",
-        "https://www.homedepot.com/s/1005485166",
-        "https://www.homedepot.com/p/313184280",
-        "https://www.homedepot.com/s/1005519734",
-        "https://www.homedepot.com/s/1005531842",
-        "https://www.homedepot.com/p/313505340",
-        "https://www.homedepot.com/p/313505336",
-        "https://www.homedepot.com/p/314113155",
-        "https://www.homedepot.com/p/314113380",
-        "https://www.homedepot.com/p/314113301",
-        "https://www.homedepot.com/p/314120563",
-        "https://www.homedepot.com/p/314121634",
-        "https://www.homedepot.com/p/314110922",
-        "https://www.homedepot.com/p/314121625",
-        "https://www.homedepot.com/p/314713207",
-        "https://www.homedepot.com/p/314459834",
-        "https://www.homedepot.com/s/1005837549",
-        "https://www.homedepot.com/p/314498900",
-        "https://www.homedepot.com/p/314498727",
-        "https://www.homedepot.com/p/314759256",
-        "https://www.homedepot.com/s/1005871319",
-        "https://www.homedepot.com/p/314700850",
-        "https://www.homedepot.com/s/1005884102",
-        "https://www.homedepot.com/s/1005954836",
-        "https://www.homedepot.com/p/315436852",
-        "https://www.homedepot.com/p/315438112",
-        "https://www.homedepot.com/p/315076919",
-        "https://www.homedepot.com/p/315365094",
-        "https://www.homedepot.com/s/1006225099",
-        "https://www.homedepot.com/p/315605735",
-        "https://www.homedepot.com/p/315868467",
-        "https://www.homedepot.com/s/1006311908",
-        "https://www.homedepot.com/s/1006311922",
-        "https://www.homedepot.com/p/316266951",
-        "https://www.homedepot.com/p/316266948",
-        "https://www.homedepot.com/p/316691349",
-        "https://www.homedepot.com/p/316664569",
-        "https://www.homedepot.com/p/316691176",
-        "https://www.homedepot.com/p/316691113",
-        "https://www.homedepot.com/p/316723428",
-        "https://www.homedepot.com/p/316694811",
-        "https://www.homedepot.com/p/317232716",
-        "https://www.homedepot.com/p/317417499",
-        "https://www.homedepot.com/p/317387079",
-        "https://www.homedepot.com/p/318213103",
-        "https://www.homedepot.com/p/318234567",
-        "https://www.homedepot.com/p/318284751",
-        "https://www.homedepot.com/s/1006817882",
-        "https://www.homedepot.com/p/318429185",
-        "https://www.homedepot.com/s/1006839410",
-        "https://www.homedepot.com/p/318065161",
-        "https://www.homedepot.com/p/318065166",
-        "https://www.homedepot.com/s/1006839417",
-        "https://www.homedepot.com/s/1006839420",
-        "https://www.homedepot.com/p/318065311",
-        "https://www.homedepot.com/p/318065319",
-        "https://www.homedepot.com/p/326905556",
-        "https://www.homedepot.com/p/318833919",
-        "https://www.homedepot.com/p/318744293",
-        "https://www.homedepot.com/p/319012025",
-        "https://www.homedepot.com/s/1007023651",
-        "https://www.homedepot.com/p/319324526",
-        "https://www.homedepot.com/s/1007114150",
-        "https://www.homedepot.com/p/318754570",
-        "https://www.homedepot.com/p/319015606",
-        "https://www.homedepot.com/p/314925494",
-        "https://www.homedepot.com/p/314925505",
-        "https://www.homedepot.com/s/1007189591",
-        "https://www.homedepot.com/s/1007189599",
-        "https://www.homedepot.com/s/1007189606",
-        "https://www.homedepot.com/s/1007189607",
-        "https://www.homedepot.com/p/319526973",
-        "https://www.homedepot.com/p/319526229",
-        "https://www.homedepot.com/p/319526965",
-        "https://www.homedepot.com/p/319621412",
-        "https://www.homedepot.com/p/319478164",
-        "https://www.homedepot.com/p/319166583",
-        "https://www.homedepot.com/p/330043729",
-        "https://www.homedepot.com/p/319433126",
-        "https://www.homedepot.com/p/319933210",
-        "https://www.homedepot.com/p/319908313",
-        "https://www.homedepot.com/p/320034814",
-        "https://www.homedepot.com/p/320038340",
-        "https://www.homedepot.com/p/320038357",
-        "https://www.homedepot.com/p/320038343",
-        "https://www.homedepot.com/p/320038346",
-        "https://www.homedepot.com/p/319526975",
-        "https://www.homedepot.com/p/319526961",
-        "https://www.homedepot.com/s/1007611508",
-        "https://www.homedepot.com/p/319247691",
-        "https://www.homedepot.com/s/1007619831",
-        "https://www.homedepot.com/p/320266818",
-        "https://www.homedepot.com/p/320064827",
-        "https://www.homedepot.com/s/1007682139",
-        "https://www.homedepot.com/s/1007804456",
-        "https://www.homedepot.com/s/1007810566",
-        "https://www.homedepot.com/p/320827784",
-        "https://www.homedepot.com/p/304905712",
-        "https://www.homedepot.com/p/321455216",
-        "https://www.homedepot.com/p/321253863",
-        "https://www.homedepot.com/s/1008127312",
-        "https://www.homedepot.com/p/322158597",
-        "https://www.homedepot.com/p/320822819",
-        "https://www.homedepot.com/p/322631614",
-        "https://www.homedepot.com/p/322838913",
-        "https://www.homedepot.com/s/1008665208",
-        "https://www.homedepot.com/p/323079980",
-        "https://www.homedepot.com/p/322907308",
-        "https://www.homedepot.com/p/323044933",
-        "https://www.homedepot.com/p/323405299",
-        "https://www.homedepot.com/p/323405346",
-        "https://www.homedepot.com/p/323706204",
-        "https://www.homedepot.com/p/323775523",
-        "https://www.homedepot.com/p/322630767",
-        "https://www.homedepot.com/p/323420719",
-        "https://www.homedepot.com/s/1009023287",
-        "https://www.homedepot.com/p/323830662",
-        "https://www.homedepot.com/p/323987235",
-        "https://www.homedepot.com/s/1009121993",
-        "https://www.homedepot.com/p/324293761",
-        "https://www.homedepot.com/s/1009186909",
-        "https://www.homedepot.com/p/324593576",
-        "https://www.homedepot.com/p/324324035",
-        "https://www.homedepot.com/p/324651961",
-        "https://www.homedepot.com/p/324308359",
-        "https://www.homedepot.com/p/324812008",
-        "https://www.homedepot.com/p/324795779",
-        "https://www.homedepot.com/s/1009493223",
-        "https://www.homedepot.com/p/325477214",
-        "https://www.homedepot.com/p/324554365",
+        "https://www.homedepot.com/p/48-in-84-in-Cafe-Single-Curtain-Rod-in-Satin-Nickel-with-Finial-238827/309976911",
+        "https://www.homedepot.com/p/Oil-Rubbed-Bronze-Steel-Single-1-in-Projection-Curtain-Rod-Bracket-Set-of-2-936654/309976916",
+        "https://www.homedepot.com/p/Kwikset-HALO-Satin-Nickel-Keypad-WiFi-Electronic-Single-Cylinder-Smart-Lock-Deadbolt-featuring-SmartKey-Security-938WIFIKYPD15SM/311532380",
+        "https://www.homedepot.com/p/KOHLER-Carmichael-16-in-Grab-Bar-in-Polished-Chrome-K-R27235-CP/312230828",
+        "https://www.homedepot.com/p/KOHLER-Carmichael-9-in-Grab-Bar-in-Oil-Rubbed-Bronze-K-R27234-2BZ/312230845",
+        "https://www.homedepot.com/s/1005126669",
+        "https://www.homedepot.com/p/Legrand-radiant-450W-Rocker-Dimmer-for-LED-CFL-Halogen-Incandescent-Bulbs-3-Way-1-Pole-Nickel-RHCL453PNICCV4/313219902",
+        "https://www.homedepot.com/s/1005591795",
+        "https://www.homedepot.com/s/1005665275",
+        "https://www.homedepot.com/p/Husky-Build-Out-2-Pc-Hook-Set-HSKBO2AC001ST/323420719",
+        "https://www.homedepot.com/s/1006137124",
+        "https://www.homedepot.com/p/Milwaukee-X-Large-Black-Nitrile-Level-1-Cut-Resistant-Dipped-Work-Gloves-48-73-8903/316968642",
+        "https://www.homedepot.com/p/Digz-Women-s-Medium-Comfort-Grip-Garden-Gloves-74876-014/320038446",
+        "https://www.homedepot.com/p/HDX-Natural-Cream-Painters-Cotton-Spray-Sock-Hood-3-Pack-09305-12HDX/317733725",
+        "https://www.homedepot.com/p/Home-Decorators-Collection-Harmony-Denim-2-ft-x-7-ft-Indoor-Machine-Washable-Runner-Rug-607228/322198124",
+        "https://www.homedepot.com/p/DIABLO-9-in-10-TPI-AMPED-Steel-Demon-Carbide-Teeth-Reciprocating-Saw-Blades-for-Medium-Metal-DS0910CFA3/322838913",
+        "https://www.homedepot.com/s/1008631574",
+        "https://www.homedepot.com/p/GE-PowerMark-Gold-4-Hole-Grounding-Bar-Kit-TGK4CP/301233991",
+        "https://www.homedepot.com/p/Leviton-200-Amp-30-Space-30-Circuit-Indoor-Load-Center-with-Main-Lugs-Door-Included-LP322-LDR-RS0-LP322-LDR/323276275",
+        "https://www.homedepot.com/p/Leviton-200-Amp-42-Space-42-Circuit-Indoor-Load-Center-with-Main-Circuit-Breaker-Door-Included-LP420-BDR-RD0-LP420-BDR/323276278",
         "https://www.homedepot.com/s/1009595434",
-        "https://www.homedepot.com/p/325456886",
-        "https://www.homedepot.com/p/324195445",
-        "https://www.homedepot.com/p/325745626",
-        "https://www.homedepot.com/p/325745598",
+        "https://www.homedepot.com/p/GE-Load-Center-Equipment-Ground-Kit-TGL1P/100208442",
         "https://www.homedepot.com/s/1009923970",
-        "https://www.homedepot.com/p/326259922",
         "https://www.homedepot.com/s/1009959781",
-        "https://www.homedepot.com/p/326480533",
-        "https://www.homedepot.com/p/326203889",
-        "https://www.homedepot.com/s/1010043087",
-        "https://www.homedepot.com/s/1010086378",
-        "https://www.homedepot.com/p/326733517",
-        "https://www.homedepot.com/p/326734787",
-        "https://www.homedepot.com/p/326882450",
-        "https://www.homedepot.com/p/327163212",
-        "https://www.homedepot.com/s/1010287944",
-        "https://www.homedepot.com/p/327309596",
-        "https://www.homedepot.com/p/326965478",
-        "https://www.homedepot.com/p/326965480",
-        "https://www.homedepot.com/p/327108473",
-        "https://www.homedepot.com/p/326905764",
-        "https://www.homedepot.com/p/327534458",
-        "https://www.homedepot.com/p/326905769",
-        "https://www.homedepot.com/p/327669219",
-        "https://www.homedepot.com/p/327216863",
-        "https://www.homedepot.com/p/327959034",
-        "https://www.homedepot.com/p/328688486",
-        "https://www.homedepot.com/p/328689145",
-        "https://www.homedepot.com/p/328690377",
-        "https://www.homedepot.com/p/329046003",
-        "https://www.homedepot.com/p/329610616",
-        "https://www.homedepot.com/s/1011554100",
-        "https://www.homedepot.com/p/329776993",
-        "https://www.homedepot.com/p/329777025",
-        "https://www.homedepot.com/p/329777152",
-        "https://www.homedepot.com/p/330686103",
-        "https://www.homedepot.com/p/330725814",
-        "https://www.homedepot.com/s/1011876171",
-        "https://www.homedepot.com/p/331655764",
-        "https://www.homedepot.com/p/332102322",
-        "https://www.homedepot.com/s/1012665289",
-        "https://www.homedepot.com/s/1012825716",
-        "https://www.homedepot.com/p/333293834",
-        "https://www.homedepot.com/p/332609482",
-        "https://www.homedepot.com/s/1013332455",
-        "https://www.homedepot.com/p/333792836",
-        "https://www.homedepot.com/p/333554308",
-        "https://www.homedepot.com/p/333758740",
-        "https://www.homedepot.com/p/334369361",
-        "https://www.homedepot.com/s/1013692004",
-        "https://www.homedepot.com/s/120196",
-        "https://www.homedepot.com/s/126532",
-        "https://www.homedepot.com/p/202077595",
-        "https://www.homedepot.com/s/152354",
-        "https://www.homedepot.com/p/300283772",
-        "https://www.homedepot.com/p/202316240",
-        "https://www.homedepot.com/p/203717787",
-        "https://www.homedepot.com/p/100318500",
-        "https://www.homedepot.com/p/100356507",
-        "https://www.homedepot.com/p/100356508",
-        "https://www.homedepot.com/p/100356509",
-        "https://www.homedepot.com/p/100356510",
-        "https://www.homedepot.com/s/198153",
-        "https://www.homedepot.com/p/100676698",
-        "https://www.homedepot.com/s/198226",
-        "https://www.homedepot.com/s/198277",
-        "https://www.homedepot.com/p/100356518",
-        "https://www.homedepot.com/p/100356520",
-        "https://www.homedepot.com/p/206602317",
-        "https://www.homedepot.com/p/202046211",
-        "https://www.homedepot.com/p/100404027",
-        "https://www.homedepot.com/p/100046108",
-        "https://www.homedepot.com/p/100377298",
-        "https://www.homedepot.com/p/300854221",
-        "https://www.homedepot.com/p/100671103",
-        "https://www.homedepot.com/p/100674086",
-        "https://www.homedepot.com/p/100686307",
-        "https://www.homedepot.com/p/202059757",
-        "https://www.homedepot.com/p/202520046",
-        "https://www.homedepot.com/s/295868",
-        "https://www.homedepot.com/p/202592543",
-        "https://www.homedepot.com/p/202315456",
-        "https://www.homedepot.com/p/309077354",
-        "https://www.homedepot.com/p/100157047",
-        "https://www.homedepot.com/p/100142737",
-        "https://www.homedepot.com/s/303622",
-        "https://www.homedepot.com/p/310830000",
-        "https://www.homedepot.com/p/202284582",
-        "https://www.homedepot.com/s/318611",
-        "https://www.homedepot.com/s/318650",
-        "https://www.homedepot.com/p/202304654",
-        "https://www.homedepot.com/p/100389860",
-        "https://www.homedepot.com/p/310338146",
-        "https://www.homedepot.com/p/206602329",
-        "https://www.homedepot.com/p/100576037",
-        "https://www.homedepot.com/s/359302",
-        "https://www.homedepot.com/p/202266613",
-        "https://www.homedepot.com/s/367478",
-        "https://www.homedepot.com/p/100314525",
-        "https://www.homedepot.com/p/100211397",
-        "https://www.homedepot.com/p/203811492",
-        "https://www.homedepot.com/p/202688847",
-        "https://www.homedepot.com/p/308408362",
-        "https://www.homedepot.com/p/202077089",
-        "https://www.homedepot.com/p/203674047",
-        "https://www.homedepot.com/s/483420",
-        "https://www.homedepot.com/p/202523810",
-        "https://www.homedepot.com/s/488493",
-        "https://www.homedepot.com/s/495681",
-        "https://www.homedepot.com/p/100387751",
-        "https://www.homedepot.com/p/100387754",
-        "https://www.homedepot.com/s/523138",
-        "https://www.homedepot.com/p/300861777",
-        "https://www.homedepot.com/p/202868026",
-        "https://www.homedepot.com/s/532519",
-        "https://www.homedepot.com/s/535389",
-        "https://www.homedepot.com/p/202039344",
-        "https://www.homedepot.com/s/538443",
-        "https://www.homedepot.com/s/538971",
-        "https://www.homedepot.com/p/301289368",
-        "https://www.homedepot.com/p/300861956",
-        "https://www.homedepot.com/s/571865",
-        "https://www.homedepot.com/p/100404127",
-        "https://www.homedepot.com/p/100404128",
-        "https://www.homedepot.com/p/202304709",
-        "https://www.homedepot.com/p/300862241",
-        "https://www.homedepot.com/s/589572",
-        "https://www.homedepot.com/p/300862055",
-        "https://www.homedepot.com/p/202046213",
-        "https://www.homedepot.com/p/204583745",
-        "https://www.homedepot.com/p/100684051",
-        "https://www.homedepot.com/p/100208442",
-        "https://www.homedepot.com/p/202894296",
-        "https://www.homedepot.com/p/202935623",
-        "https://www.homedepot.com/p/202046215",
-        "https://www.homedepot.com/p/202819638",
-        "https://www.homedepot.com/s/652245",
-        "https://www.homedepot.com/p/204620762",
-        "https://www.homedepot.com/p/206458278",
-        "https://www.homedepot.com/s/697843",
-        "https://www.homedepot.com/s/698733",
-        "https://www.homedepot.com/p/100684052",
-        "https://www.homedepot.com/s/705994",
-        "https://www.homedepot.com/s/710257",
-        "https://www.homedepot.com/p/203419431",
-        "https://www.homedepot.com/p/100045025",
-        "https://www.homedepot.com/p/205719461",
-        "https://www.homedepot.com/p/202066688",
-        "https://www.homedepot.com/p/206458282",
-        "https://www.homedepot.com/s/744666",
-        "https://www.homedepot.com/p/100658400",
-        "https://www.homedepot.com/p/100658411",
-        "https://www.homedepot.com/s/768816",
-        "https://www.homedepot.com/s/769325",
-        "https://www.homedepot.com/p/204620414",
-        "https://www.homedepot.com/p/203891777",
-        "https://www.homedepot.com/p/203751327",
-        "https://www.homedepot.com/p/203222932",
-        "https://www.homedepot.com/p/100348372",
-        "https://www.homedepot.com/s/895946",
-        "https://www.homedepot.com/p/202050855",
-        "https://www.homedepot.com/p/100036128",
-        "https://www.homedepot.com/p/204149117",
-        "https://www.homedepot.com/p/202493976",
-        "https://www.homedepot.com/s/947310",
-        "https://www.homedepot.com/s/948300",
-        "https://www.homedepot.com/s/973646",
-        "https://www.homedepot.com/p/202327305"
+        "https://www.homedepot.com/p/HOOVER-Streamline-Corded-Wet-Dry-Hard-Floor-Cleaner-and-Vacuum-Cleaner-with-Self-Cleaning-System-for-Sealed-Hard-Floors-Black-FH46020V/327163212",
+        "https://www.homedepot.com/p/GE-PowerMark-Gold-32-Hole-Grounding-Bar-Kit-TGK32CP/202046215",
+        "https://www.homedepot.com/p/FIRM-GRIP-Extra-Large-Winter-Merino-Wool-Outdoor-and-Work-Gloves-67872-36/329610616",
+        "https://www.homedepot.com/p/DEWALT-18-in-Chainsaw-Chain-62-Drive-Link-DWO1DT618/318754570",
+        "https://www.homedepot.com/p/Unger-18-in-Swivel-Window-Squeegee-985510/323405299",
+        "https://www.homedepot.com/p/GE-1-in-Raintight-Hub-TC100P/100142737",
+        "https://www.homedepot.com/p/GE-1-1-2-in-Hub-TC150P/202046211",
+        "https://www.homedepot.com/p/Werner-6-ft-Fiberglass-Step-Ladder-10-ft-Reach-Height-with-250-lb-Load-Capacity-Type-I-Duty-Rating-FS106/100658411",
+        "https://www.homedepot.com/s/1004180001",
+        "https://www.homedepot.com/s/1000003011"
       ]
     </script>
   </body>

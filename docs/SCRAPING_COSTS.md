@@ -38,13 +38,17 @@ Home Depot uses aggressive bot detection:
 GitHub Actions (free, runs every 6 hours)
     ↓
 SerpApi Home Depot Search API ($0-25/mo)
-    ↓ fetches product data for ~10 SKUs per run
+    ↓ fetches product data for ~1 SKU per run by default (manual runs can raise the limit)
 penny_item_enrichment table (Supabase)
     ↓ merges with user submissions
 Polished Penny Cards (no placeholders!)
 ```
 
-This pipeline now also writes `retail_price` into the enrichment table so Penny List cards can show “was $X.XX / Save $Y.YY” savings messaging.
+Budget note: the script always spends **1 SerpApi search** per SKU (search by SKU), and may spend a **2nd search** (fallback by item name) when SKU search fails. The default schedule+limit is set to stay under the **250 searches/month** free tier even in the worst case.
+
+This pipeline writes enrichment fields (name/brand/model/image/link/internet_sku/retail_price) into `penny_item_enrichment` **fill-blanks-only by default** (no overwrites unless you use `--force`).
+
+UPC/barcode: SerpApi does not reliably return UPC. The script attempts a **best-effort UPC extract from the Home Depot product page (no SerpApi credits)** when it has a working `home_depot_url`, but it can still fail due to bot/region blocks.
 
 ### Required Setup
 
@@ -82,15 +86,23 @@ This pipeline now also writes `retail_price` into the enrichment table so Penny 
 
 ## Commands
 
+> Note (npm v11+): to pass flags to an npm script, use `npm run <script> -- -- --flag ...` (extra `--`).
+
 ```bash
 # SerpApi enrichment (recommended)
 npm run enrich:serpapi
 
 # SerpApi with custom limit
-npm run enrich:serpapi -- --limit 20
+npm run enrich:serpapi -- -- --limit 20
+
+# Overwrite existing enrichment fields (use carefully)
+npm run enrich:serpapi -- -- --sku 123456 --force
 
 # Test with single SKU
-npm run enrich:serpapi -- --test
+npm run enrich:serpapi -- -- --test
+
+# Retry "not_found" SKUs whose retry window passed
+npm run enrich:serpapi -- -- --retry
 
 # Get SKUs that need enrichment
 npx tsx scripts/get-unenriched-skus.ts --limit 50

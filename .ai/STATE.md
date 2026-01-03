@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Jan 03, 2026 (Scraper controller HTML hint cleanup)
+**Last updated:** Jan 03, 2026 (SerpApi fill-blanks + safer budget + docs cleanup)
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
 
@@ -8,6 +8,16 @@ Every AI session must update this after meaningful work.
 
 ## 1. Where We Are
 
+- **Reduced editor hint noise (Jan 03):** Disabled VS Code webhint diagnostics in `.vscode/settings.json` to avoid TSX false-positives; rely on repo verification (`check-axe`/Playwright) for real accessibility regressions.
+- **Supabase enrichment import (Jan 03):** Imported `scripts/GHETTO_SCRAPER/penny_scrape_2026-01-03T11-15-29-344Z.json` into `penny_item_enrichment` (processed 100; skipped 7 `$0.00` rows).
+- **Bulk enrichment safety (Jan 03):** `scripts/bulk-enrich.ts` now accepts Tampermonkey scrape JSON directly, defaults to fill-blanks-only merge, and hard-skips explicit `$0.00` retail prices.
+- **SerpApi fill-blanks enrichment (Jan 03):** `scripts/serpapi-enrich.ts` now enriches when any core fields are missing (not “image-only”), upserts fill-blanks-only by default (`--force` to overwrite), and avoids wiping fields on `not_found`.
+- **SerpApi Actions budget (Jan 03):** `.github/workflows/serpapi-enrich.yml` runs every 6 hours with default `--limit 1` (includes `--retry`) to stay within the 250 searches/mo free tier.
+- **Docs alignment (Jan 03):** `README.md`, `docs/CROWDSOURCE-SYSTEM.md`, and `docs/SCRAPING_COSTS.md` now reflect the current Supabase-based system (Google Sheets is legacy/deprecated).
+- **Playwright e2e reliability (Jan 03):** `playwright.config.ts` runs Playwright against `next start` (avoids `.next/dev/lock` conflicts when `next dev` is already running on port 3001).
+- **Scraper controller price-aware skipping (Jan 03):** `scripts/GHETTO_SCRAPER/pennycentral_scraper_controller_4to10s_resilient_retry.html` now only skips items that already have a valid `retailPrice`, and upgrades existing entries when a new scrape finally yields a price.
+- **Scraper controller pause/stop + exports (Jan 03):** Added Pause/Resume + Stop Session controls, kept main JSON export + failures JSON export, and ensured saved entries include a canonical Home Depot URL.
+- **Tampermonkey retries restored + failure export (Jan 03):** Userscript now redirects `/s/` searches to PDPs, retries when data is missing, reports bot/region blocks, and the controller gained a single “Export Failures JSON” button.
 - **Scraper controller HTML hint cleanup (Jan 03):** Added `lang`/`charset`/`viewport`, labeled form controls, and removed inline button styles in `scripts/GHETTO_SCRAPER/pennycentral_scraper_controller_4to10s_resilient_retry.html` to reduce VS Code Edge Tools noise.
 - **OCE protocol + proof workflow (Jan 02):** Embedded an "Objective Collaborative Engineering" protocol into `.ai/CONTRACT.md` + `.ai/DECISION_RIGHTS.md` + `.ai/USAGE.md`, added VS Code tasks for `ai:*`, and fixed `npm run ai:verify` to reuse the running dev server on port 3001 (avoids `.next/dev/lock` conflicts).
 - **Penny List card density (Jan 01):** Tightened mobile card layout, kept identifiers always visible, added UPC block, compacted state pills, and simplified actions while preserving Save/Report/Share/HD links.
@@ -22,8 +32,7 @@ Every AI session must update this after meaningful work.
 - **Homepage (Dec 31):** "Today's Finds" module below hero using 48h `getRecentFinds`; mobile horizontal scroll, desktop grid, state badges, relative time, CTA to `/penny-list`.
 - **Homepage Today’s Finds trust fix (Jan 02):** Filters out placeholder/unnamed items and hides the module unless ≥2 enriched finds exist (avoids the “single broken card” look).
 - **Penny List SKU nowrap (Jan 02):** Prevents SKU copy pills from wrapping/breaking onto multiple lines.
-- **Retail price + barcode overhaul (Jan 02):** Threaded 
-etail_price from scraper through enrichment/Supabase, updated enrichment tooling (scripts/bulk-enrich.ts, scripts/enrichment-json-to-csv.ts, scripts/serpapi-enrich.ts, scripts/stealth-enrich.ts), taught the Tampermonkey scraper + controller to capture/log the price, refreshed the Penny List cards (main + compact) with savings copy, larger thumbnails, and a UPC modal via jsbarcode, and added documentation + changelog notes plus Playwright proof assets.
+- **Retail price + barcode overhaul (Jan 02):** Threaded `retail_price` from scraper through enrichment/Supabase, updated enrichment tooling (scripts/bulk-enrich.ts, scripts/enrichment-json-to-csv.ts, scripts/serpapi-enrich.ts, scripts/stealth-enrich.ts), taught the Tampermonkey scraper + controller to capture/log the price, refreshed the Penny List cards (main + compact) with savings copy, larger thumbnails, and a UPC modal via jsbarcode, and added documentation + changelog notes plus Playwright proof assets.
 - **Analytics (Dec 31):** Provider is env-gated (`NEXT_PUBLIC_ANALYTICS_PROVIDER` = plausible/vercel/none). Key events already wired (home page view, penny-list filters/search, HD clicks, report submissions, store searches). No new deps added.
 - **Workspace/tests (Dec 31):** Playwright now defaults to port 3002 to avoid user's 3001 server. All gates green (lint/build/unit/e2e); Next dev emits source-map warnings; store API falls back to local data in tests (404 remote fetch).
 - **Backlog (Dec 31):** Refreshed `.ai/BACKLOG.md` into prompt-sized, verifiable tasks focused on scrape/export → enrichment pipeline and Penny List card clarity improvements.

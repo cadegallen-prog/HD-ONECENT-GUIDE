@@ -142,19 +142,19 @@ public/                 # Static assets
 
 ### Autonomous Penny List (Live)
 
-- **Live CSV Feed:** Google Form responses auto-published to site every hour
-- **Files:** `lib/fetch-penny-data.ts`, `app/penny-list/page.tsx`
-- **How it works:** Publish your Google Sheet as CSV → set `GOOGLE_SHEET_URL` in Vercel env → updates hourly with no manual work
-- **Privacy:** Emails/timestamps never sent to browser; only approved fields displayed
-- **Zero moderation overhead:** All submissions auto-include; delete bad rows in Sheet if needed
+- **Data source:** Supabase (`Penny List` + `penny_item_enrichment`)
+- **Files:** `lib/fetch-penny-data.ts`, `app/api/submit-find/route.ts`, `app/api/penny-list/route.ts`
+- **How it works:** Report Find inserts into `Penny List`; the site reads via `penny_list_public` (RLS-safe view) and overlays metadata from `penny_item_enrichment` by SKU.
+- **Why there are 5 tables:** `lists`, `list_items`, `list_shares` exist for the optional Save/My Lists feature (separate from scraping/enrichment).
+- **Legacy note:** The older Google Sheets pipeline is deprecated; docs remain for history at `docs/GOOGLE-FORM-PENNY-LIST.md`.
 
 ### Setup Required
 
-1. In your Google Sheet response, go **File → Share → Publish to web**
-2. Select **Form Responses 1** → **CSV** → Copy link
-3. Add to Vercel environment: `GOOGLE_SHEET_URL=<your-csv-link>`
-4. Site auto-fetches every hour; live in ~60 seconds
-5. **Optional enrichment overlay:** Publish a second tab with headers `Home Depot SKU (6 or 10 digits)`, `IMAGE URL`, `INTERNET SKU`, set `GOOGLE_SHEET_ENRICHMENT_URL=<enrichment-csv-link>`, and the site will fill missing images/links by SKU without touching community rows.
+1. Set environment/secrets:
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `SUPABASE_SERVICE_ROLE_KEY` (server-only; never exposed to the browser)
+2. Apply/verify Supabase RLS + the public read view: `docs/supabase-rls.md`
 
 ---
 
@@ -169,6 +169,9 @@ public/                 # Static assets
 | `.ai/AI_ENABLEMENT_BLUEPRINT.md`  | When the goal is AI workflow/tooling/verification enablement        |
 | `PROJECT_ROADMAP.md`              | Current priorities and feature status; **updated Dec 7, 2025**      |
 | `docs/DESIGN-SYSTEM-AAA.md`       | Complete color and typography specification                         |
+| `docs/CROWDSOURCE-SYSTEM.md`      | Current Supabase tables and roles (Penny List + enrichment + lists) |
+| `docs/supabase-rls.md`            | Supabase RLS + public view policy set (how reads/writes are secured) |
+| `docs/SCRAPING_COSTS.md`          | SerpApi enrichment budget + options                                |
 | `docs/GOOGLE-FORM-PENNY-LIST.md`  | Penny list form setup, CSV export, automation                       |
 | `docs/PENNY-LIST-STRATEGY.md`     | Community intake strategy, low-effort moderation                    |
 

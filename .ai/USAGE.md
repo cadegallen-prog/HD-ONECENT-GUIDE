@@ -10,6 +10,7 @@ Three habits keep every session consistent.
 - If auto-load fails, paste the backup prompt from SESSION_TEMPLATES.md to force reading: STATE, BACKLOG, CONTRACT, DECISION_RIGHTS, CONSTRAINTS, SESSION_LOG, LEARNINGS.
 - Check if the dev server is running on port 3001; if the port is already occupied, access http://localhost:3001 directly without restarting or killing any processes.
 - **Note:** MCP servers (filesystem, git, github) load automatically - no manual setup needed.
+- **Note (npm v11+):** To pass flags to an npm script, use `npm run <script> -- -- --flag ...` (extra `--`).
 
 ---
 

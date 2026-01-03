@@ -25,6 +25,8 @@ PennyCentral's "compounding loop" is:
 [Penny List reads from Supabase (real-time)]
           ->
 [Enrichment table (penny_item_enrichment) overlays images/URLs by SKU]
+          ->
+[Optional: users can Save items into personal lists (lists/list_items) and share them (list_shares)]
 ```
 
 **Key privacy rule:** the website submission form does **not** collect email, proof photos, receipts, or uploads.
@@ -63,10 +65,21 @@ The site updates automatically once those are added.
 
 ## Data Tables
 
+### Two-table mental model (what’s “sacred” vs “cache”)
+
+- **Sacred / source of truth for the live feed:** `Penny List` (raw community submissions; the site aggregates and displays this).
+- **Stockpile/cache for instant hydration:** `penny_item_enrichment` (pre-scraped/admin metadata keyed by SKU; can include SKUs that are *not* currently on the Penny List; it overlays/fills fields without touching community rows).
+
+The other 3 tables exist for the optional **Save/My Lists** feature (they are not part of scraping/enrichment).
+
 | Table | Purpose |
 |-------|---------|
 | `Penny List` | Community submissions (raw data) |
 | `penny_item_enrichment` | Admin enrichment overlay (images, internet SKU) |
+| `lists` | User-created personal lists (“Save” feature) |
+| `list_items` | SKUs saved into a user’s lists |
+| `list_shares` | Public share tokens for lists (`/s/[token]`) |
+| `penny_list_public` | Read-only view for safe public reads under RLS (not a separate dataset) |
 
 ---
 

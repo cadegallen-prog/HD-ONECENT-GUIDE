@@ -48,10 +48,13 @@ interface ScrapedItem {
   storeSku?: string
   name?: string
   brand?: string
+  model?: string
   upc?: string
   categories?: string
   imageUrl?: string
   productUrl?: string
+  homeDepotUrl?: string
+  retailPrice?: string | number
   scrapedAt?: string
 }
 
@@ -59,10 +62,12 @@ interface EnrichmentRow {
   sku: string
   item_name?: string | null
   brand?: string | null
+  model_number?: string | null
   upc?: string | null
   image_url?: string | null
   home_depot_url?: string | null
   internet_sku?: number | null
+  retail_price?: number | null
 }
 
 // Common abbreviations that should stay uppercase
@@ -199,6 +204,42 @@ function normalizeProductName(name: string, brand?: string): string {
   return normalized
 }
 
+function parsePriceInfo(value: string | number | undefined | null): {
+  cleaned: number | null
+  isExplicitZero: boolean
+} {
+  if (value === null || value === undefined) return { cleaned: null, isExplicitZero: false }
+  const text = String(value).trim()
+  if (!text) return { cleaned: null, isExplicitZero: false }
+  const digits = text.replace(/[^0-9.]/g, "")
+  if (!digits) return { cleaned: null, isExplicitZero: false }
+  const parsed = Number(digits)
+  if (!Number.isFinite(parsed)) return { cleaned: null, isExplicitZero: false }
+  if (parsed === 0) return { cleaned: null, isExplicitZero: true }
+  if (parsed < 0) return { cleaned: null, isExplicitZero: false }
+  return { cleaned: Math.round(parsed * 100) / 100, isExplicitZero: false }
+}
+
+function optimizeImageUrl(url: string | undefined): string | null {
+  const trimmed = String(url ?? "").trim()
+  if (!trimmed) return null
+  if (!trimmed.includes("thdstatic.com")) return trimmed
+  if (trimmed.includes("_1000.jpg")) return trimmed.replace("_1000.jpg", "_400.jpg")
+  if (trimmed.includes("_100.jpg")) return trimmed.replace("_100.jpg", "_400.jpg")
+  return trimmed.replace(/\/\d+\.jpg(\?.*)?$/, "/400.jpg")
+}
+
+function canonicalHomeDepotUrl(
+  sku: string,
+  internetSku: number | null,
+  providedUrl: string | undefined
+): string | null {
+  if (internetSku) return `https://www.homedepot.com/p/${internetSku}`
+  const trimmed = String(providedUrl ?? "").trim()
+  if (trimmed) return trimmed
+  return sku ? `https://www.homedepot.com/s/${sku}` : null
+}
+
 function parseArgs(): { input: string; output: string } {
   const args = process.argv.slice(2)
   let input = "data/penny_scrape_1767249116267.json"
@@ -237,47 +278,93 @@ function main() {
   const items = Object.values(scraped)
   console.log(`Found ${items.length} scraped items`)
 
-  // Deduplicate by SKU, keeping the most recently scraped version
-  const skuMap = new Map<string, { item: ScrapedItem; scrapedAt: number }>()
+  // Group by SKU and merge fields across versions (keep newest values, fill missing from older)
+  const skuGroups = new Map<string, ScrapedItem[]>()
   let noSku = 0
 
   for (const item of items) {
     const sku = item.storeSku?.trim()
-
     if (!sku) {
       noSku++
       continue
     }
 
-    const scrapedAt = item.scrapedAt ? new Date(item.scrapedAt).getTime() : 0
-    const existing = skuMap.get(sku)
+    const group = skuGroups.get(sku) ?? []
+    group.push(item)
+    skuGroups.set(sku, group)
+  }
 
-    if (!existing || scrapedAt > existing.scrapedAt) {
-      skuMap.set(sku, { item, scrapedAt })
+  const mergedBySku = new Map<string, ScrapedItem>()
+  let duplicatesMerged = 0
+  let skippedZeroPrice = 0
+
+  for (const [sku, versions] of skuGroups) {
+    if (versions.length > 1) duplicatesMerged += versions.length - 1
+
+    const sorted = versions
+      .slice()
+      .sort(
+        (a, b) =>
+          new Date(b.scrapedAt || 0).getTime() - new Date(a.scrapedAt || 0).getTime()
+      )
+
+    const merged: ScrapedItem = { ...sorted[0] }
+
+    let sawExplicitZeroPrice = false
+    let retailPrice: number | null = null
+
+    for (const v of sorted) {
+      const pickText = (current?: string, candidate?: string) =>
+        current?.trim() ? current : candidate?.trim() ? candidate.trim() : current
+
+      merged.internetNumber = pickText(merged.internetNumber, v.internetNumber)
+      merged.name = pickText(merged.name, v.name)
+      merged.brand = pickText(merged.brand, v.brand)
+      merged.model = pickText(merged.model, v.model)
+      merged.upc = pickText(merged.upc, v.upc)
+      merged.categories = pickText(merged.categories, v.categories)
+      merged.imageUrl = pickText(merged.imageUrl, v.imageUrl)
+      merged.productUrl = pickText(merged.productUrl, v.productUrl)
+      merged.homeDepotUrl = pickText(merged.homeDepotUrl, v.homeDepotUrl)
+
+      const priceInfo = parsePriceInfo(v.retailPrice ?? null)
+      if (priceInfo.isExplicitZero) sawExplicitZeroPrice = true
+      if (retailPrice === null && priceInfo.cleaned !== null) retailPrice = priceInfo.cleaned
     }
+
+    if (retailPrice === null && sawExplicitZeroPrice) {
+      skippedZeroPrice++
+      continue
+    }
+
+    if (retailPrice !== null) merged.retailPrice = retailPrice
+
+    mergedBySku.set(sku, merged)
   }
 
-  console.log(`Unique SKUs: ${skuMap.size}`)
-  console.log(`Duplicates merged: ${items.length - noSku - skuMap.size}`)
-  if (noSku > 0) {
-    console.log(`Skipped (no storeSku): ${noSku}`)
-  }
+  console.log(`Unique SKUs: ${mergedBySku.size}`)
+  console.log(`Duplicates merged: ${duplicatesMerged}`)
+  if (noSku > 0) console.log(`Skipped (no storeSku): ${noSku}`)
+  if (skippedZeroPrice > 0) console.log(`Skipped (retailPrice $0.00): ${skippedZeroPrice}`)
 
   // Convert to enrichment format with normalization
   const enrichmentRows: EnrichmentRow[] = []
 
-  for (const [sku, { item }] of skuMap) {
+  for (const [sku, item] of mergedBySku) {
     const normalizedBrand = normalizeBrand(item.brand)
     const normalizedName = normalizeProductName(item.name || "", normalizedBrand)
+    const internetSku = item.internetNumber ? parseInt(item.internetNumber, 10) || null : null
 
     const row: EnrichmentRow = {
       sku,
       item_name: normalizedName || null,
       brand: normalizedBrand || null,
+      model_number: item.model || null,
       upc: item.upc || null,
-      image_url: item.imageUrl || null,
-      home_depot_url: item.productUrl || null,
-      internet_sku: item.internetNumber ? parseInt(item.internetNumber, 10) || null : null,
+      image_url: optimizeImageUrl(item.imageUrl),
+      home_depot_url: canonicalHomeDepotUrl(sku, internetSku, item.homeDepotUrl || item.productUrl),
+      internet_sku: internetSku,
+      retail_price: item.retailPrice ? parsePriceInfo(item.retailPrice).cleaned : null,
     }
 
     enrichmentRows.push(row)

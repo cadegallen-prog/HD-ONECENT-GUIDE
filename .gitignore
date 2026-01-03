@@ -71,9 +71,12 @@ data/penny-list-manual.json
 data/purchase-history-*.json
 data/purchase-history-*.csv
 data/enrichment-input.json
+data/sku_price.csv
 data/skus-to-scrape-urls.json
 data/penny_scrape_*.json
 penny_scrape_*.json
+bulk_enrich_output.log
+temp_urls.js
 
 # privacy: local Lighthouse runs can include machine paths
 lighthouse-mobile.json

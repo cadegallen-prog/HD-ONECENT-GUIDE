@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PennyCentral Home Depot Scraper - FULL PRO
 // @namespace    http://tampermonkey.net/
-// @version      1.2
+// @version      1.4
 // @description  Full extraction + Handshake for Overnight Scraping
 // @author       You
 // @match        https://www.homedepot.com/p/*
@@ -10,350 +10,370 @@
 // @grant        GM_setValue
 // ==/UserScript==
 
-(function() {
-    'use strict';
+(function () {
+  "use strict"
 
-    const STORAGE_KEY = 'pennycentral_952_data';
-    const SEARCH_REDIRECT_FLAG = 'pennycentral_952_search_redirected';
-    const FAIL_SAFE_DELAY_MS = 1500;
-    const SECOND_PASS_DELAY_MS = 2000;
+  const STORAGE_KEY = "pennycentral_952_data"
+  const SEARCH_REDIRECT_FLAG = "pennycentral_952_search_redirected"
+  const FAIL_SAFE_DELAY_MS = 1500
+  const SECOND_PASS_DELAY_MS = 2000
 
-    // --- YOUR EXTRACTION UTILITIES ---
-    function clean(s) { return (s || '').replace(/\s+/g, ' ').trim(); }
-    function text(sel) { const el = document.querySelector(sel); return el ? clean(el.textContent) : ''; }
+  // --- UTILITIES ---
+  const clean = (s) => (s || "").replace(/\s+/g, " ").trim()
+  const text = (sel) => {
+    const el = document.querySelector(sel)
+    return el ? clean(el.textContent) : ""
+  }
 
-    function getJsonLd(type) {
-        try {
-            const scripts = document.querySelectorAll('script[type="application/ld+json"]');
-            for (let s of scripts) {
-                let raw = s.textContent.trim();
-                if (!raw) continue;
-                let data = JSON.parse(raw);
-                let nodes = Array.isArray(data) ? data : [data];
-                for (let n of nodes) {
-                    if (n['@graph']) {
-                        for (let g of n['@graph']) {
-                            if (String(g['@type'] || '').toLowerCase() === type.toLowerCase()) return g;
-                        }
-                    }
-                    if (String(n['@type'] || '').toLowerCase() === type.toLowerCase()) return n;
-                }
+  function getJsonLd(type) {
+    try {
+      const scripts = document.querySelectorAll('script[type="application/ld+json"]')
+      for (const s of scripts) {
+        const raw = s.textContent.trim()
+        if (!raw) continue
+        const data = JSON.parse(raw)
+        const nodes = Array.isArray(data) ? data : [data]
+        for (const n of nodes) {
+          if (n["@graph"]) {
+            for (const g of n["@graph"]) {
+              if (String(g["@type"] || "").toLowerCase() === type.toLowerCase()) return g
             }
-        } catch (e) {}
-        return null;
-    }
-
-    function getBreadcrumbs() {
-        const ld = getJsonLd('BreadcrumbList');
-        if (ld && ld.itemListElement) {
-            return ld.itemListElement.map(i => clean(i.name)).filter(Boolean).join(' > ');
+          }
+          if (String(n["@type"] || "").toLowerCase() === type.toLowerCase()) return n
         }
-        const bread = document.querySelector('.breadcrumbs, [data-testid="breadcrumb"], .pdp-breadcrumb');
-        if (bread) {
-            return Array.from(bread.querySelectorAll('a, li')).map(l => clean(l.textContent)).filter(t => t && t.toLowerCase() !== 'home').join(' > ');
-        }
-        return '';
+      }
+    } catch (e) {}
+    return null
+  }
+
+  function getBreadcrumbs() {
+    const ld = getJsonLd("BreadcrumbList")
+    if (ld && ld.itemListElement) {
+      return ld.itemListElement.map((i) => clean(i.name)).filter(Boolean).join(" > ")
+    }
+    const bread = document.querySelector(".breadcrumbs, [data-testid=\"breadcrumb\"], .pdp-breadcrumb")
+    if (bread) {
+      return Array.from(bread.querySelectorAll("a, li"))
+        .map((l) => clean(l.textContent))
+        .filter((t) => t && t.toLowerCase() !== "home")
+        .join(" > ")
+    }
+    return ""
+  }
+
+  function getInternetNumber() {
+    const m = location.pathname.match(/\/p\/[^/]+\/(\d{6,12})/)
+    if (m) return m[1]
+    const body = document.body.innerText || ""
+    const m2 = body.match(/Internet\s*#\s*#?\s*(\d{6,12})/i)
+    return m2 ? m2[1] : ""
+  }
+
+  function getStoreSku() {
+    const p = getJsonLd("Product")
+    const candidates = [
+      text("[data-testid=\"product-sku\"]"),
+      text(".product-identifier__sku"),
+      p && p.sku ? String(p.sku) : "",
+    ]
+      .map((s) => s.match(/\d{6,10}/))
+      .filter(Boolean)
+      .map((m) => m[0])
+    return candidates[0] || ""
+  }
+
+  function getName() {
+    const p = getJsonLd("Product")
+    return clean(
+      p?.name ||
+        text("h1[data-testid=\"product-title\"]") ||
+        text("h1.product-details__title") ||
+        text("h1")
+    )
+  }
+
+  function getBrand() {
+    const p = getJsonLd("Product")
+    const fromLd = p && p.brand ? (typeof p.brand === "string" ? p.brand : p.brand.name || "") : ""
+    return clean(fromLd || text("[data-testid=\"product-brand\"]"))
+  }
+
+  function getUpc() {
+    const p = getJsonLd("Product")
+    if (p) {
+      const ld = clean(String(p.gtin12 || p.gtin13 || p.gtin || ""))
+      if (ld.match(/\d{10,14}/)) return ld.match(/\d{10,14}/)[0]
+    }
+    return ""
+  }
+
+  function getImageUrl() {
+    const p = getJsonLd("Product")
+    let url = p && p.image ? (Array.isArray(p.image) ? p.image[0] : p.image) : ""
+    if (url) url = url.replace(/\/\d+\.jpg(\?.*)?$/, "/1000.jpg")
+    return url || clean(document.querySelector('meta[property="og:image"]')?.getAttribute("content") || "")
+  }
+
+  function parsePriceValue(value) {
+    if (value === null || value === undefined) return null
+    const digits = String(value).replace(/[^\d.]/g, "").trim()
+    const amount = Number(digits)
+    if (!Number.isFinite(amount) || amount <= 0) return null
+    return amount
+  }
+
+  function getRetailPrice() {
+    const p = getJsonLd("Product")
+    if (p && p.offers) {
+      const offers = Array.isArray(p.offers) ? p.offers : [p.offers]
+      for (const offer of offers) {
+        const priceCandidate =
+          offer.price || (offer.priceSpecification && offer.priceSpecification.price) || offer.price_amount
+        const parsed = parsePriceValue(priceCandidate)
+        if (parsed !== null) return parsed
+      }
     }
 
-    function getInternetNumber() {
-        const m = location.pathname.match(/\/p\/[^/]+\/(\d{6,12})/);
-        if (m) return m[1];
-        const body = document.body.innerText || '';
-        const m2 = body.match(/Internet\s*#\s*#?\s*(\d{6,12})/i);
-        return m2 ? m2[1] : '';
+    const selectors = [
+      "[data-testid=\"price-format\"] .price__dollars",
+      "[data-testid=\"product-price\"]",
+      ".price__dollars",
+      "[data-price]",
+    ]
+
+    for (const selector of selectors) {
+      const el = document.querySelector(selector)
+      if (!el) continue
+      const source = el.getAttribute("data-price") || el.textContent
+      const parsed = parsePriceValue(source)
+      if (parsed !== null) return parsed
     }
 
-    function getStoreSku() {
-        const p = getJsonLd('Product');
-        const candidates = [
-            text('[data-testid="product-sku"]'),
-            text('.product-identifier__sku'),
-            p && p.sku ? String(p.sku) : ''
-        ].map(s => s.match(/\d{6,10}/)).filter(Boolean).map(m => m[0]);
-        return candidates[0] || '';
+    const meta = document.querySelector('meta[property="product:price:amount"]')
+    if (meta) {
+      const parsed = parsePriceValue(meta.getAttribute("content"))
+      if (parsed !== null) return parsed
     }
 
-    function getName() {
-        const p = getJsonLd('Product');
-        return clean(p?.name || text('h1[data-testid="product-title"]') || text('h1.product-details__title') || text('h1'));
+    return null
+  }
+
+  function getModel() {
+    const p = getJsonLd("Product")
+    const modelFromLd = p && p.model ? clean(String(p.model)) : ""
+    if (modelFromLd) return modelFromLd
+
+    const modelFromText = text("[data-testid=\"product-model\"]") || text(".product-identifier__model")
+    if (modelFromText) return modelFromText
+
+    const body = document.body.innerText || ""
+    const match = body.match(/Model\s*#\s*#?\s*([A-Z0-9\-]+)/i)
+    return match ? clean(match[1]) : ""
+  }
+
+  // --- PDP REDIRECT HELPERS ---
+  const isSearchPage = () => /^\/s\/[^/]+/i.test(location.pathname)
+
+  function toAbsoluteUrl(href) {
+    try {
+      return new URL(href, location.origin).toString()
+    } catch {
+      return null
+    }
+  }
+
+  function looksLikePdpUrl(href) {
+    if (!href) return false
+    return /\/p\/[^/]+\/\d{6,12}(?:[/?#]|$)/i.test(href) || /\/p\/\d{6,12}(?:[/?#]|$)/i.test(href)
+  }
+
+  function scorePdpHref(href) {
+    let score = 0
+    if (!href) return score
+    if (looksLikePdpUrl(href)) score += 10
+    if (/\/\d{6,12}(?:[/?#]|$)/.test(href)) score += 3
+    if (href.includes("?")) score -= 1
+    if (href.length < 120) score += 1
+    return score
+  }
+
+  function findBestPdpUrlFromSearch() {
+    const candidates = []
+
+    document.querySelectorAll("a[href*=\"/p/\"]").forEach((a) => {
+      const href = a.getAttribute("href") || ""
+      if (!looksLikePdpUrl(href)) return
+      const abs = toAbsoluteUrl(href)
+      if (!abs) return
+      candidates.push(abs)
+    })
+
+    document
+      .querySelectorAll('[data-testid*="product"], [data-automation-id*="product"] a[href*="/p/"]')
+      .forEach((a) => {
+        const href = a.getAttribute("href") || ""
+        if (!looksLikePdpUrl(href)) return
+        const abs = toAbsoluteUrl(href)
+        if (!abs) return
+        candidates.push(abs)
+      })
+
+    if (candidates.length === 0) return null
+
+    const unique = Array.from(new Set(candidates))
+    unique.sort((a, b) => scorePdpHref(b) - scorePdpHref(a))
+    return unique[0] || null
+  }
+
+  function maybeRedirectSearchToPdp() {
+    if (!isSearchPage()) return false
+
+    const alreadyRedirected = sessionStorage.getItem(SEARCH_REDIRECT_FLAG) === "1"
+    if (alreadyRedirected) return false
+
+    const pdpUrl = findBestPdpUrlFromSearch()
+    if (!pdpUrl) return false
+
+    sessionStorage.setItem(SEARCH_REDIRECT_FLAG, "1")
+    location.href = pdpUrl
+    return true
+  }
+
+  // --- FAILURE DETECTION ---
+  const pageText = () => clean(document.body?.innerText || "")
+
+  function detectFailure() {
+    const title = clean(document.title || "").toLowerCase()
+    const body = pageText().toLowerCase()
+
+    if (
+      title.includes("access denied") ||
+      body.includes("pardon our interruption") ||
+      body.includes("request blocked") ||
+      body.includes("temporarily blocked") ||
+      (body.includes("why did this happen") && body.includes("access denied")) ||
+      (body.includes("bot") && body.includes("detected"))
+    ) {
+      return { reason: "blocked", detail: clean(document.title || "") }
     }
 
-    function getBrand() {
-        const p = getJsonLd('Product');
-        const fromLd = p && p.brand ? (typeof p.brand === 'string' ? p.brand : p.brand.name || '') : '';
-        return clean(fromLd || text('[data-testid="product-brand"]'));
+    if (
+      body.includes("not available in your area") ||
+      body.includes("not available for delivery") ||
+      body.includes("not sold in stores") ||
+      body.includes("not sold online") ||
+      body.includes("item is not available") ||
+      body.includes("this item is unavailable")
+    ) {
+      return { reason: "not_available", detail: clean(document.title || "") }
     }
 
-    function getUpc() {
-        const p = getJsonLd('Product');
-        if (p) {
-            const ld = clean(String(p.gtin12 || p.gtin13 || p.gtin || ''));
-            if (ld.match(/\d{10,14}/)) return ld.match(/\d{10,14}/)[0];
-        }
-        return '';
+    return null
+  }
+
+  function reportFailure(reason, meta) {
+    try {
+      const payload = {
+        reason,
+        meta: meta || {},
+        url: location.href,
+        at: new Date().toISOString(),
+      }
+
+      if (window.opener) {
+        window.opener.postMessage(
+          {
+            type: "SCRAPE_FAIL",
+            payload,
+          },
+          "*"
+        )
+      }
+    } catch (e) {}
+  }
+
+  // --- EXECUTION FLOW ---
+  if (maybeRedirectSearchToPdp()) return
+
+  // Early failure detection (bot/region blocks)
+  setTimeout(() => {
+    const failure = detectFailure()
+    if (failure) {
+      reportFailure(failure.reason, { detail: failure.detail })
     }
+  }, FAIL_SAFE_DELAY_MS)
 
-    function getImageUrl() {
-        const p = getJsonLd('Product');
-        let url = p && p.image ? (Array.isArray(p.image) ? p.image[0] : p.image) : '';
-        if (url) url = url.replace(/\/\d+\.jpg(\?.*)?$/, '/1000.jpg');
-        return url || clean(document.querySelector('meta[property="og:image"]')?.getAttribute('content') || '');
-    }
+  setTimeout(() => {
+    window.scrollBy(0, 500) // Trigger HD lazy-loading
 
-    function parsePriceValue(value) {
-        if (value === null || value === undefined) return null;
-        const digits = String(value).replace(/[^\d.]/g, '').trim();
-        const amount = Number(digits);
-        if (!Number.isFinite(amount) || amount <= 0) return null;
-        return amount;
-    }
-
-    function getRetailPrice() {
-        const productLd = getJsonLd('Product');
-        if (productLd && productLd.offers) {
-            const offers = Array.isArray(productLd.offers) ? productLd.offers : [productLd.offers];
-            for (const offer of offers) {
-                const priceCandidate =
-                    offer.price ||
-                    (offer.priceSpecification && offer.priceSpecification.price) ||
-                    offer.price_amount;
-                const parsed = parsePriceValue(priceCandidate);
-                if (parsed !== null) return parsed;
-            }
-        }
-
-        const selectors = [
-            '[data-testid="price-format"] .price__dollars',
-            '[data-testid="product-price"]',
-            '.price__dollars',
-            '[data-price]',
-        ];
-
-        for (const selector of selectors) {
-            const el = document.querySelector(selector);
-            if (!el) continue;
-            const source = el.getAttribute('data-price') || el.textContent;
-            const parsed = parsePriceValue(source);
-            if (parsed !== null) return parsed;
-        }
-
-        const meta = document.querySelector('meta[property="product:price:amount"]');
-        if (meta) {
-            const parsed = parsePriceValue(meta.getAttribute('content'));
-            if (parsed !== null) return parsed;
-        }
-
-        return null;
-    }
-
-    function isSearchPage() {
-        return /^\/s\/[^/]+/i.test(location.pathname);
-    }
-
-    function toAbsoluteUrl(href) {
-        try {
-            return new URL(href, location.origin).toString();
-        } catch {
-            return null;
-        }
-    }
-
-    function looksLikePdpUrl(href) {
-        if (!href) return false;
-        return /\/p\/[^/]+\/\d{6,12}(?:[/?#]|$)/i.test(href) || /\/p\/\d{6,12}(?:[/?#]|$)/i.test(href);
-    }
-
-    function scorePdpHref(href) {
-        // Higher score = better candidate.
-        // Prefer canonical PDP links that include an internet number and avoid noisy query params.
-        let score = 0;
-        if (!href) return score;
-        if (looksLikePdpUrl(href)) score += 10;
-        if (/\/\d{6,12}(?:[/?#]|$)/.test(href)) score += 3;
-        if (href.includes('?')) score -= 1;
-        if (href.length < 120) score += 1;
-        return score;
-    }
-
-    function findBestPdpUrlFromSearch() {
-        // Try multiple patterns; Home Depot changes DOM often.
-        const candidates = [];
-
-        // 1) Any anchor with /p/ in href (generic fallback).
-        document.querySelectorAll('a[href*="/p/"]').forEach((a) => {
-            const href = a.getAttribute('href') || '';
-            if (!looksLikePdpUrl(href)) return;
-            const abs = toAbsoluteUrl(href);
-            if (!abs) return;
-            candidates.push(abs);
-        });
-
-        // 2) Product cards / tiles (if present).
-        document
-            .querySelectorAll('[data-testid*="product"], [data-testid*="Product"], [data-automation-id*="product"] a[href*="/p/"]')
-            .forEach((a) => {
-                const href = a.getAttribute('href') || '';
-                if (!looksLikePdpUrl(href)) return;
-                const abs = toAbsoluteUrl(href);
-                if (!abs) return;
-                candidates.push(abs);
-            });
-
-        if (candidates.length === 0) return null;
-
-        // De-dupe while preserving “best” by score.
-        const unique = Array.from(new Set(candidates));
-        unique.sort((a, b) => scorePdpHref(b) - scorePdpHref(a));
-        return unique[0] || null;
-    }
-
-    function maybeRedirectSearchToPdp() {
-        if (!isSearchPage()) return false;
-
-        const alreadyRedirected = sessionStorage.getItem(SEARCH_REDIRECT_FLAG) === '1';
-        if (alreadyRedirected) return false;
-
-        const pdpUrl = findBestPdpUrlFromSearch();
-        if (!pdpUrl) return false;
-
-        sessionStorage.setItem(SEARCH_REDIRECT_FLAG, '1');
-        location.href = pdpUrl;
-        return true;
-    }
-
-    function pageText() {
-        return clean(document.body?.innerText || '');
-    }
-
-    function detectFailure() {
-        const title = clean(document.title || '').toLowerCase();
-        const body = pageText().toLowerCase();
-
-        // Bot / block pages
-        if (
-            title.includes('access denied') ||
-            body.includes('pardon our interruption') ||
-            body.includes('request blocked') ||
-            body.includes('temporarily blocked') ||
-            body.includes('why did this happen') && body.includes('access denied') ||
-            body.includes('bot') && body.includes('detected')
-        ) {
-            return { reason: 'blocked', detail: clean(document.title || '') };
-        }
-
-        // “Not available” / region-locked phrasing (varies a lot; keep it broad)
-        if (
-            body.includes('not available in your area') ||
-            body.includes('not available for delivery') ||
-            body.includes('not sold in stores') ||
-            body.includes('not sold online') ||
-            body.includes('item is not available') ||
-            body.includes('this item is unavailable')
-        ) {
-            return { reason: 'not_available', detail: clean(document.title || '') };
-        }
-
-        return null;
-    }
-
-    function reportFailure(reason, meta) {
-        try {
-            const payload = {
-                reason,
-                meta: meta || {},
-                url: location.href,
-                at: new Date().toISOString()
-            };
-
-            if (window.opener) {
-                window.opener.postMessage({
-                    type: 'SCRAPE_FAIL',
-                    payload
-                }, '*');
-            }
-        } catch (e) {}
-    }
-
-    // --- OVERNIGHT EXECUTION LOGIC ---
-    // If we landed on a search results page, try to navigate to the best real PDP first.
-    // This makes scraping price/name/brand more reliable and avoids emitting partial results.
-    if (maybeRedirectSearchToPdp()) return;
-
-    // If we got blocked / hit an availability wall, report it early so the controller can re-queue later.
     setTimeout(() => {
-        const failure = detectFailure();
+      const collectEntry = () => ({
+        internetNumber: getInternetNumber(),
+        storeSku: getStoreSku(),
+        name: getName(),
+        brand: getBrand(),
+        model: getModel(),
+        upc: getUpc(),
+        categories: getBreadcrumbs(),
+        imageUrl: getImageUrl(),
+        retailPrice: getRetailPrice(),
+        productUrl: location.href,
+        scrapedAt: new Date().toISOString(),
+      })
+
+      const finalizeEntry = (entry, attempt) => {
+        const failure = detectFailure()
         if (failure) {
-            reportFailure(failure.reason, { detail: failure.detail });
+          reportFailure(failure.reason, { detail: failure.detail, attempt })
+          return
         }
-    }, FAIL_SAFE_DELAY_MS);
 
-    setTimeout(() => {
-        window.scrollBy(0, 500); // Scroll to trigger HD lazy-loading
+        // Require name AND at least one SKU
+        if (!entry.name || (!entry.internetNumber && !entry.storeSku)) {
+          reportFailure("incomplete_data", { detail: "Missing name or SKU", attempt })
+          return
+        }
 
-        const collectEntry = () => ({
-            internetNumber: getInternetNumber(),
-            storeSku: getStoreSku(),
-            name: getName(),
-            brand: getBrand(),
-            upc: getUpc(),
-            categories: getBreadcrumbs(),
-            imageUrl: getImageUrl(),
-            retailPrice: getRetailPrice(),
-            productUrl: location.href,
-            scrapedAt: new Date().toISOString()
-        });
+        if (!entry.retailPrice) {
+          console.log(`⚠️ No price for: ${entry.name.substring(0, 50)}`)
+        }
 
-        const finalizeEntry = (entry, attempt) => {
-            const failure = detectFailure();
-            if (failure) {
-                reportFailure(failure.reason, { detail: failure.detail, attempt });
-                return;
-            }
+        // 1) Backup in Tampermonkey storage
+        const key = entry.internetNumber || entry.storeSku || entry.name.substring(0, 50)
+        const db = GM_getValue(STORAGE_KEY, {})
+        db[key] = entry
+        GM_setValue(STORAGE_KEY, db)
 
-            // Validate critical fields - require name AND at least one SKU
-            if (!entry.name || (!entry.internetNumber && !entry.storeSku)) {
-                reportFailure('incomplete_data', { detail: 'Missing name or SKU', attempt });
-                return;
-            }
+        const priceLabel = entry.retailPrice ? ` ($${entry.retailPrice.toFixed(2)})` : " (no price)"
+        const attemptNote = attempt > 1 ? ` (attempt ${attempt})` : ""
+        console.log(`✅ Scraped & Saved: ${entry.name.substring(0, 50)}${priceLabel}${attemptNote}`)
 
-            // Warn if price is missing or zero (but still save the product)
-            if (entry.retailPrice === null || entry.retailPrice === undefined || entry.retailPrice === 0) {
-                console.log(`⚠️ No price for: ${entry.name.substring(0, 50)}`);
-            }
+        // 2) Signal controller to move on
+        if (window.opener) {
+          window.opener.postMessage(
+            {
+              type: "SCRAPE_SUCCESS",
+              payload: entry,
+            },
+            "*"
+          )
+        }
+      }
 
-            // 1. Internal Backup (Tampermonkey Storage)
-            let db = GM_getValue(STORAGE_KEY, {});
-            const key = entry.internetNumber || entry.storeSku || entry.name.substring(0, 50);
-            db[key] = entry;
-            GM_setValue(STORAGE_KEY, db);
+      const attemptExtraction = (attempt, seedEntry) => {
+        const entry = seedEntry ? { ...seedEntry, ...collectEntry() } : collectEntry()
+        const needsRetry =
+          (!entry.retailPrice || !entry.name || !entry.brand || !entry.imageUrl) && attempt === 1
+        if (needsRetry) {
+          setTimeout(() => attemptExtraction(2, entry), SECOND_PASS_DELAY_MS)
+          return
+        }
 
-            const priceLabel = entry.retailPrice ? ` ($${entry.retailPrice.toFixed(2)})` : ' (no price)';
-            const attemptNote = attempt > 1 ? ` (attempt ${attempt})` : '';
-            console.log(`✅ Scraped & Saved: ${entry.name.substring(0, 50)}${priceLabel}${attemptNote}`);
+        finalizeEntry(entry, attempt)
+      }
 
-            // 2. THE SIGNAL (Tells the HTML Controller to move to next URL)
-            if (window.opener) {
-                window.opener.postMessage({
-                    type: 'SCRAPE_SUCCESS',
-                    payload: entry
-                }, '*');
-            }
-        };
+      setTimeout(() => attemptExtraction(1), 2500)
+    }, 1500)
+  }, 1500)
+})()
 
-        const attemptExtraction = (attempt, seedEntry) => {
-            const entry = seedEntry ? { ...seedEntry, ...collectEntry() } : collectEntry();
-
-            // If we lack price or other critical fields, try one extra pass before giving up.
-            const needsRetry = (!entry.retailPrice || !entry.name || !entry.brand || !entry.imageUrl) && attempt === 1;
-            if (needsRetry) {
-                setTimeout(() => attemptExtraction(2, entry), SECOND_PASS_DELAY_MS);
-                return;
-            }
-
-            finalizeEntry(entry, attempt);
-        };
-
-        // Initial extraction after DOM settles
-        setTimeout(() => attemptExtraction(1), 2500);
-    }, 1500);
-})();

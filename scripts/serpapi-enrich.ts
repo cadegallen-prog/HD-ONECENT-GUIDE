@@ -13,6 +13,7 @@
  *   npx tsx scripts/serpapi-enrich.ts --test       # Test with 1 item only
  *   npx tsx scripts/serpapi-enrich.ts --sku 123456 # Test specific SKU
  *   npx tsx scripts/serpapi-enrich.ts --retry      # Retry failed items past retry window
+ *   npx tsx scripts/serpapi-enrich.ts --force      # Overwrite existing fields when SerpApi returns values
  */
 
 import { config } from "dotenv"
@@ -76,11 +77,17 @@ interface PennyListRow {
 // Type for penny_item_enrichment table rows
 interface EnrichmentRow {
   sku: string
-  status: string
+  status: string | null
   retry_after: string | null
-  attempt_count: number
+  attempt_count: number | null
+  item_name: string | null
+  brand: string | null
+  model_number: string | null
+  upc: string | null
   image_url: string | null
-  retail_price?: number | null
+  home_depot_url: string | null
+  internet_sku: number | null
+  retail_price: number | null
 }
 
 // Parse CLI args
@@ -90,6 +97,7 @@ function parseArgs() {
   let testMode = false
   let specificSku: string | null = null
   let retryMode = false
+  let force = false
 
   for (let i = 0; i < args.length; i++) {
     if (args[i] === "--limit" && args[i + 1]) limit = parseInt(args[++i], 10)
@@ -102,9 +110,10 @@ function parseArgs() {
       limit = 1
     }
     if (args[i] === "--retry") retryMode = true
+    if (args[i] === "--force") force = true
   }
 
-  return { limit, testMode, specificSku, retryMode }
+  return { limit, testMode, specificSku, retryMode, force }
 }
 
 // Normalize SKU to valid format
@@ -114,6 +123,48 @@ function normalizeSku(sku: string | number | null): string | null {
   if (str.length === 6) return str
   if (str.length === 10 && (str.startsWith("100") || str.startsWith("101"))) return str
   return null
+}
+
+function hasNonEmptyText(value: unknown): boolean {
+  return typeof value === "string" && value.trim().length > 0
+}
+
+function hasValidInternetSku(value: unknown): boolean {
+  const n = typeof value === "number" ? value : Number(value)
+  return Number.isFinite(n) && n > 0
+}
+
+function hasValidRetailPrice(value: unknown): boolean {
+  const n = typeof value === "number" ? value : Number(value)
+  return Number.isFinite(n) && n > 0
+}
+
+function buildCanonicalHomeDepotUrl(params: {
+  sku: string
+  homeDepotUrl: string | null
+  internetSku: number | null
+}): string {
+  const manual = (params.homeDepotUrl || "").trim()
+  if (manual) return manual
+
+  if (hasValidInternetSku(params.internetSku)) {
+    return `https://www.homedepot.com/p/${Number(params.internetSku)}`
+  }
+
+  return `https://www.homedepot.com/s/${params.sku}`
+}
+
+function getMissingSerpApiFields(row: EnrichmentRow): string[] {
+  const missing: string[] = []
+  if (!hasNonEmptyText(row.item_name)) missing.push("item_name")
+  if (!hasNonEmptyText(row.brand)) missing.push("brand")
+  if (!hasNonEmptyText(row.model_number)) missing.push("model_number")
+  if (!hasNonEmptyText(row.image_url)) missing.push("image_url")
+  if (!hasNonEmptyText(row.home_depot_url) && !hasValidInternetSku(row.internet_sku)) {
+    missing.push("home_depot_url/internet_sku")
+  }
+  if (!hasValidRetailPrice(row.retail_price)) missing.push("retail_price")
+  return missing
 }
 
 // Clean item name for search (remove model numbers, adjectives, etc.)
@@ -153,6 +204,79 @@ function getRetryDate(attemptCount: number): string {
   const date = new Date()
   date.setDate(date.getDate() + days)
   return date.toISOString()
+}
+
+function normalizeUpcCandidate(value: unknown): string | null {
+  if (!value) return null
+  const digits = String(value).replace(/\D/g, "")
+  if (digits.length === 12 || digits.length === 13 || digits.length === 14) return digits
+  return null
+}
+
+function extractUpcFromJsonLd(data: unknown): string | null {
+  if (!data) return null
+
+  if (Array.isArray(data)) {
+    for (const item of data) {
+      const found = extractUpcFromJsonLd(item)
+      if (found) return found
+    }
+    return null
+  }
+
+  if (typeof data !== "object") return null
+
+  const record = data as Record<string, unknown>
+  const direct = normalizeUpcCandidate(record.gtin12 ?? record.gtin13 ?? record.gtin14 ?? record.upc)
+  if (direct) return direct
+
+  for (const value of Object.values(record)) {
+    const found = extractUpcFromJsonLd(value)
+    if (found) return found
+  }
+
+  return null
+}
+
+async function fetchUpcFromHomeDepotPage(homeDepotUrl: string): Promise<string | null> {
+  if (!hasNonEmptyText(homeDepotUrl)) return null
+
+  try {
+    const response = await fetch(homeDepotUrl, {
+      headers: {
+        "user-agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        accept: "text/html,application/xhtml+xml",
+      },
+    })
+
+    if (!response.ok) return null
+    const html = await response.text()
+
+    const jsonLdMatches = [...html.matchAll(
+      /<script[^>]+type=[\"']application\\/ld\\+json[\"'][^>]*>([\\s\\S]*?)<\\/script>/gi
+    )]
+
+    for (const match of jsonLdMatches) {
+      const payload = match[1]
+      if (!payload) continue
+      try {
+        const parsed = JSON.parse(payload)
+        const upc = extractUpcFromJsonLd(parsed)
+        if (upc) return upc
+      } catch {
+        // ignore malformed JSON-LD blocks
+      }
+    }
+
+    // Fallback heuristic: sometimes UPC appears in inline JSON
+    const inlineUpc = normalizeUpcCandidate(html.match(/\"(?:gtin12|gtin13|gtin14|upc)\"\\s*:\\s*\"(\\d{12,14})\"/i)?.[1])
+    if (inlineUpc) return inlineUpc
+
+    return null
+  } catch {
+    return null
+  }
 }
 
 // Search SerpApi with a query term
@@ -362,10 +486,12 @@ async function getItemsToEnrich(
     return []
   }
 
-  // Get enrichment status for all SKUs (include image_url to skip already-enriched items)
+  // Get enrichment rows for all SKUs (used to skip already-complete items and honor retry windows)
   const { data: enrichedItems, error: enrichError } = await supabase
     .from("penny_item_enrichment")
-    .select("sku, status, retry_after, attempt_count, image_url")
+    .select(
+      "sku,status,retry_after,attempt_count,item_name,brand,model_number,upc,image_url,home_depot_url,internet_sku,retail_price"
+    )
 
   if (enrichError && enrichError.code !== "PGRST205") {
     console.error("❌ Failed to fetch enrichment:", enrichError.message)
@@ -373,20 +499,12 @@ async function getItemsToEnrich(
   }
 
   // Build lookup map
-  const enrichmentMap = new Map<
-    string,
-    { status: string; retryAfter: string | null; attemptCount: number; hasImage: boolean }
-  >()
+  const enrichmentMap = new Map<string, EnrichmentRow>()
   for (const item of enrichedItems || []) {
     const typedItem = item as unknown as EnrichmentRow
     const sku = normalizeSku(typedItem.sku)
     if (sku) {
-      enrichmentMap.set(sku, {
-        status: typedItem.status || "enriched",
-        retryAfter: typedItem.retry_after,
-        attemptCount: typedItem.attempt_count || 1,
-        hasImage: Boolean(typedItem.image_url && typedItem.image_url.trim()),
-      })
+      enrichmentMap.set(sku, typedItem)
     }
   }
 
@@ -395,7 +513,7 @@ async function getItemsToEnrich(
   const seen = new Set<string>()
 
   let skippedNotFound = 0
-  let skippedHasImage = 0
+  let skippedComplete = 0
 
   for (const item of pennyItems || []) {
     const typedItem = item as unknown as PennyListRow
@@ -408,16 +526,16 @@ async function getItemsToEnrich(
     if (!existing) {
       // Never tried before - enrich it
       needsEnrichment.push({ sku, itemName: typedItem.item_name })
-    } else if (existing.hasImage) {
-      // Already has an image - no need to re-scrape (saves API credits)
-      skippedHasImage++
-    } else if (existing.status === "enriched") {
-      // Enriched but no image - try again
-      needsEnrichment.push({ sku, itemName: typedItem.item_name })
-    } else if (existing.status === "not_found" || existing.status === "error") {
+      if (needsEnrichment.length >= limit) break
+      continue
+    }
+
+    const status = existing.status || "enriched"
+
+    if (status === "not_found" || status === "error") {
       // Failed before - check if retry window passed
-      if (retryMode && existing.retryAfter) {
-        const retryDate = new Date(existing.retryAfter)
+      if (retryMode && existing.retry_after) {
+        const retryDate = new Date(existing.retry_after)
         if (now >= retryDate) {
           console.log(`   ♻️ Retrying ${sku} (past retry window)`)
           needsEnrichment.push({ sku, itemName: typedItem.item_name })
@@ -427,13 +545,23 @@ async function getItemsToEnrich(
       } else {
         skippedNotFound++
       }
+
+      if (needsEnrichment.length >= limit) break
+      continue
     }
 
+    const missing = getMissingSerpApiFields(existing)
+    if (missing.length === 0) {
+      skippedComplete++
+      continue
+    }
+
+    needsEnrichment.push({ sku, itemName: typedItem.item_name })
     if (needsEnrichment.length >= limit) break
   }
 
   console.log(`   📊 Penny List items: ${pennyItems?.length || 0}`)
-  console.log(`   ✅ Already has image (skipped): ${skippedHasImage}`)
+  console.log(`   ✅ Already complete (skipped): ${skippedComplete}`)
   console.log(`   ⏭️ Skipped (not_found, waiting): ${skippedNotFound}`)
   console.log(`   📦 To process: ${needsEnrichment.length}`)
 
@@ -441,11 +569,12 @@ async function getItemsToEnrich(
 }
 
 async function main() {
-  const { limit, testMode, specificSku, retryMode } = parseArgs()
+  const { limit, testMode, specificSku, retryMode, force } = parseArgs()
 
   console.log("🔍 SerpApi Home Depot Enrichment (v2 - credit-saving)")
   console.log(`   Mode: ${testMode ? "TEST (1 item)" : `Normal (up to ${limit} items)`}`)
   if (retryMode) console.log("   ♻️ Retry mode: Will retry failed items past their window")
+  if (force) console.log("   ⚠️ Force mode: Will overwrite existing fields when SerpApi returns values")
   if (specificSku) console.log(`   Specific SKU: ${specificSku}`)
   console.log()
 
@@ -498,6 +627,31 @@ async function main() {
     console.log(`[${i + 1}/${itemsToEnrich.length}] SKU: ${sku}`)
     if (itemName) console.log(`   📝 Item name: ${itemName.substring(0, 40)}...`)
 
+    const { data: existingRow, error: existingError } = await supabase
+      .from("penny_item_enrichment")
+      .select(
+        "sku,status,retry_after,attempt_count,item_name,brand,model_number,upc,image_url,home_depot_url,internet_sku,retail_price"
+      )
+      .eq("sku", sku)
+      .maybeSingle()
+
+    if (existingError && existingError.code !== "PGRST205") {
+      console.log(`   ⚠️ Failed to fetch existing enrichment row: ${existingError.message}`)
+    }
+
+    const existingTyped = (existingRow as unknown as EnrichmentRow | null) ?? null
+    if (existingTyped) {
+      const missing = getMissingSerpApiFields(existingTyped)
+      if (missing.length === 0 && !force) {
+        console.log("   ✅ Already complete (skipping)")
+        success++
+        continue
+      }
+      if (missing.length > 0) {
+        console.log(`   🧩 Missing: ${missing.join(", ")}`)
+      }
+    }
+
     const { result, searchTerm, creditsUsed } = await smartEnrich(sku, itemName, serpApiKey)
     totalCredits += creditsUsed
 
@@ -506,26 +660,58 @@ async function main() {
       console.log(`   📷 Image: ${result.image_url ? "Yes" : "No"}`)
       console.log(`   🔢 Internet SKU: ${result.internet_sku || "N/A"}`)
 
-      // Save successful enrichment
-      const { error } = await supabase.from("penny_item_enrichment").upsert(
-        {
-          sku: result.sku,
-          item_name: result.item_name,
-          brand: result.brand,
-          model_number: result.model_number,
-          image_url: result.image_url,
-          home_depot_url: result.home_depot_url,
-          internet_sku: result.internet_sku,
-          retail_price: result.retail_price,
-          source: "serpapi",
-          status: "enriched",
-          attempt_count: 1,
-          retry_after: null,
-          last_search_term: searchTerm,
-          updated_at: new Date().toISOString(),
-        },
-        { onConflict: "sku" }
-      )
+      const patch: Record<string, unknown> = {
+        sku: result.sku,
+        source: "serpapi",
+        status: "enriched",
+        attempt_count: 1,
+        retry_after: null,
+        last_search_term: searchTerm,
+        updated_at: new Date().toISOString(),
+      }
+
+      const current = existingTyped && normalizeSku(existingTyped.sku) === normalizeSku(result.sku) ? existingTyped : null
+
+      // Fill-blanks-only by default (overwrite only with --force)
+      if (hasNonEmptyText(result.item_name) && (force || !hasNonEmptyText(current?.item_name))) {
+        patch.item_name = result.item_name
+      }
+      if (hasNonEmptyText(result.brand) && (force || !hasNonEmptyText(current?.brand))) {
+        patch.brand = result.brand
+      }
+      if (hasNonEmptyText(result.model_number) && (force || !hasNonEmptyText(current?.model_number))) {
+        patch.model_number = result.model_number
+      }
+      if (hasNonEmptyText(result.image_url) && (force || !hasNonEmptyText(current?.image_url))) {
+        patch.image_url = result.image_url
+      }
+      if (hasValidInternetSku(result.internet_sku) && (force || !hasValidInternetSku(current?.internet_sku))) {
+        patch.internet_sku = result.internet_sku
+      }
+      if (hasValidRetailPrice(result.retail_price) && (force || !hasValidRetailPrice(current?.retail_price))) {
+        patch.retail_price = result.retail_price
+      }
+
+      // Always ensure a canonical Home Depot URL exists (but don't overwrite unless --force)
+      const canonicalHomeDepotUrl = buildCanonicalHomeDepotUrl({
+        sku: result.sku,
+        homeDepotUrl: result.home_depot_url || current?.home_depot_url || null,
+        internetSku: result.internet_sku ?? current?.internet_sku ?? null,
+      })
+      if (hasNonEmptyText(canonicalHomeDepotUrl) && (force || !hasNonEmptyText(current?.home_depot_url))) {
+        patch.home_depot_url = canonicalHomeDepotUrl
+      }
+
+      // Best-effort UPC fetch (does not cost SerpApi credits). Only fills blanks unless --force.
+      if (force || !hasNonEmptyText(current?.upc)) {
+        const upc = await fetchUpcFromHomeDepotPage(canonicalHomeDepotUrl)
+        if (hasNonEmptyText(upc) && (force || !hasNonEmptyText(current?.upc))) {
+          patch.upc = upc
+          console.log(`   🏷️ UPC: ${upc}`)
+        }
+      }
+
+      const { error } = await supabase.from("penny_item_enrichment").upsert(patch, { onConflict: "sku" })
 
       if (error) {
         console.log(`   ⚠️ DB error: ${error.message}`)
@@ -543,7 +729,7 @@ async function main() {
         .from("penny_item_enrichment")
         .select("attempt_count")
         .eq("sku", sku)
-        .single()
+        .maybeSingle()
 
       const attemptCount = (existing?.attempt_count || 0) + 1
       const retryAfter = getRetryDate(attemptCount)
@@ -551,7 +737,6 @@ async function main() {
       const { error } = await supabase.from("penny_item_enrichment").upsert(
         {
           sku,
-          retail_price: null,
           status: "not_found",
           attempt_count: attemptCount,
           retry_after: retryAfter,

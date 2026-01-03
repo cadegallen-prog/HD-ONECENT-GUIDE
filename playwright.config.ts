@@ -47,7 +47,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "cross-env PLAYWRIGHT=1 npm run dev -- --port 3002",
+    command: "cross-env PLAYWRIGHT=1 npm run start -- --port 3002",
     url: process.env.PLAYWRIGHT_BASE_URL || "http://localhost:3002",
     reuseExistingServer: true,
     timeout: 120000,

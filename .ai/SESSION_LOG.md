@@ -12,97 +12,116 @@
 
 ---
 
-## 2026-01-02 - ChatGPT Codex (GPT-5) - Penny List price pipeline & barcode refresh
+## 2026-01-03 - ChatGPT Codex (GPT-5.2) - SerpApi enrich: fill-blanks-only, no data wipes; safer Action budget; Supabase docs cleanup
 
-**Goal:** Capture retail price data end-to-end and refresh the Penny List card layout to highlight savings, a UPC barcode modal, and the leaner action row referenced by the Opus 4.5 notes.
+**Goal:** Ensure the SerpApi GitHub Action keeps collecting the right enrichment fields going forward (not “image-only”), while protecting existing Supabase data (fill blanks by default; no destructive overwrites).
 
-**Changes Made:**
-- Added `retail_price` to the `penny_item_enrichment` schema/migrations, ingestion scripts, and the Supabase overlay so `PennyItem` objects know the retailer cost.
-- Taught the Tampermonkey scraper/HTML controller to read/log the retail price and documented the new field for enrichment imports (`docs/CROWDSOURCE-SYSTEM.md`, `docs/HOW-CADE-ADDS-STOCK-PHOTOS.md`, `docs/SCRAPING_COSTS.md`, `docs/supabase-rls.md`).
-- Overhauled `components/penny-list-card.tsx`/`components/penny-list-card.tsx` compact variant to show penny price + savings, added a barcode modal (`components/barcode-modal.tsx`) powered by the new `jsbarcode` dependency, and rewired the action row (Home Depot → Report → Save).
-- Added `retailPrice` support in `lib/fetch-penny-data.ts`, `lib/penny-list-utils.ts`, and the enrichment tooling (`scripts/bulk-enrich.ts`, `scripts/enrichment-json-to-csv.ts`, `scripts/serpapi-enrich.ts`, `scripts/stealth-enrich.ts`); cleaned up Prettier/ESLint formatting.
+**Outcome:**
 
-**Proof (Playwright):**
-- Screenshots: `reports/proof/2026-01-02T09-28-36/penny-list-light.png`, `.../penny-list-ui-light.png`, `.../penny-list-dark.png`, `.../penny-list-ui-dark.png`
-
-**Verification:**
-- `npm run lint`
-- `npm run build` (Supabase warnings about `penny_item_enrichment.retail_price` expected until the real database adds the column)
-- `npm run test:unit`
-- `npm run test:e2e` *(fails because the live Supabase table still lacks `retail_price`, which floods the console and prevents the SKU-related-items visual assertion—see reports/playwright/results for failure details)*
-- `npm run lint:colors`
-- `npm run ai:proof -- /penny-list`
-
-**Notes:** Playwright visual/console checks currently fail due to the missing `retail_price` column on Supabase (`42703: column does not exist`)—once the migration is applied, `test:e2e` and the related smoke suites should pass.
-
-
-## 2026-01-02 - ChatGPT Codex (GPT-5) - Penny List hydration mismatch cleanup
-
-**Goal:** Eliminate the `/penny-list` hydration mismatch warning seen in Playwright console logs.
+- SerpApi enrichment now queues SKUs when **any core enrichment fields** are missing (name/brand/model/image/link/internet_sku/retail_price), not just `image_url`.
+- Upserts are **fill-blanks-only** by default; `--force` enables overwriting existing values when SerpApi returns data.
+- `not_found` writes no longer wipe fields (previously `retail_price: null` could clobber real data).
+- GitHub Action schedule/default limit updated to keep usage within the **250 searches/month** free tier in the worst case.
+- Docs updated so we don’t treat the deprecated Google Sheets pipeline as the current system.
 
 **Changes Made:**
-- Suppressed hydration warnings on the Penny List search input to stop dev-only console mismatch noise.
 
-**Verification:**
-- `npm run lint`
-- `npm run build`
-- `npm run test:unit`
-- `PLAYWRIGHT_BASE_URL=http://localhost:3001 npm run test:e2e`
-- `npm run ai:proof -- /penny-list`
-  - Before: `reports/proof/2026-01-02T00-14-49` (1 console hydration warning logged)
-  - After: `reports/proof/2026-01-02T03-06-18` (no console errors)
+- `scripts/serpapi-enrich.ts`: completeness-aware selection, fill-blanks upserts, safe not_found handling, `--force`, best-effort UPC fetch from PDP HTML (no SerpApi credits; may fail under bot/region blocks).
+- `.github/workflows/serpapi-enrich.yml`: runs every 6 hours, default `--limit 1`, includes `--retry`.
+- `docs/SCRAPING_COSTS.md`, `docs/CROWDSOURCE-SYSTEM.md`, `README.md`: document current Supabase tables/roles and SerpApi budgeting.
 
-**Notes:** Playwright reused the running dev server on port 3001; no restarts.
+**Verification (Proof):**
 
-## 2026-01-02 - ChatGPT Codex (GPT-5) - Penny List mobile bottom bar + filter/sort sheets
+- `npm run ai:verify` ✅
+- Outputs saved to: `reports/verification/2026-01-03T11-58-42/`
 
-**Goal:** Implement the backlog plan for a mobile bottom action bar with filter/sort sheets on `/penny-list` while keeping desktop unchanged.
+## 2026-01-03 - ChatGPT Codex (GPT-5) - Enrich Supabase from latest scrape JSON (skip $0 prices)
 
-**Changes Made:**
-- Added a mobile-only bottom action bar (Filters, Sort, My Lists, Report) with safe-area padding.
-- Moved mobile filter + sort controls into bottom sheets using existing state logic; desktop filter bar stays intact.
-- Added mobile-only bottom padding to the results container so cards are not covered by the fixed bar.
+**Goal:** Use `scripts/GHETTO_SCRAPER/penny_scrape_2026-01-03T11-15-29-344Z.json` to enrich Supabase (`penny_item_enrichment`) while ensuring any `$0.00` retail price rows are NOT used.
 
-**Verification:**
-- `npm run lint`
-- `npm run build`
-- `npm run test:unit`
-- `PLAYWRIGHT_BASE_URL=http://localhost:3001 npm run test:e2e`
-- `npm run ai:proof -- /penny-list`
-  - Before: `reports/proof/2026-01-01T23-57-51` (2 console hydration warnings logged)
-  - After: `reports/proof/2026-01-02T00-14-49` (1 console hydration warning logged)
+**Outcome:**
 
-**Notes:** Playwright reused the running dev server on port 3001; no restarts.
-
-## 2026-01-02 - GitHub Copilot - Fix "Dead" Homepage & Missing Enrichment
-
-**Goal:** Fix the "dead" look of the homepage caused by missing product enrichment data for recent finds, and resolve lint warnings causing verification failure.
+- Imported enrichment rows to Supabase successfully: **Processed 100**, **Errors 0**
+- Skipped explicit `$0.00` rows entirely (7 SKUs): `420215`, `1001965219`, `1006017959`, `1007297185`, `1008776570`, `1009907169`, `1009951215`
+- Post-import dry run shows **0 inserts / 0 updates** (fully up to date for this scrape file)
 
 **Changes Made:**
-- Transformed `penny_scrape_1767297939418.json` into `data/enrichment-input.json` using `scripts/transform-scrape.ts`.
-- Uploaded 23 enriched items to Supabase using `scripts/bulk-enrich.ts` (source: bookmarklet).
-- Fixed Prettier formatting issues in `components/todays-finds.tsx` and `components/penny-list-card.tsx` to pass lint.
 
-**Verification:**
-- `npm run ai:proof -- /` (Screenshots captured, no console errors)
-- `npm run ai:verify` (All gates passed: Lint, Build, Unit, E2E)
+- `scripts/bulk-enrich.ts`
+  - Accepts Tampermonkey scrape JSON directly (object/array) and maps fields into enrichment rows.
+  - Default **merge (fill blanks only)** behavior; `--force` enables overwrite mode.
+  - Hard-skips rows with explicit `$0.00` retail price.
+  - Canonicalizes `home_depot_url` to `https://www.homedepot.com/p/{internet_sku}` when available.
+  - Improves THD image URL optimization to `_400.jpg`/`/400.jpg` variants.
+- `scripts/transform-scrape.ts`
+  - Merges duplicate SKUs across scrape versions and carries `model_number` + `retail_price` + canonical URLs into output.
+- `playwright.config.ts`
+  - Playwright `webServer.command` now uses `npm run start` (avoids `.next/dev/lock` conflicts when `next dev` is already running on port 3001).
 
-**Notes:** The "buffet" was full (scrape file existed) but the plates were empty (database missing data). I moved the food to the plates. Homepage should now show enriched items.
+**Verification (Proof):**
 
-## 2026-01-03 - ChatGPT Codex (GPT-5) - Reduce VS Code "Edge Tools" noise (scraper HTML)
+- `npm run lint` ✅
+- `npm run build` ✅
+- `npm run test:unit` ✅
+- `npm run test:e2e` ✅
 
-**Goal:** Clear the specific VS Code diagnostics Cade pasted (meta/label/inline-style hints) for the local scraper controller HTML.
+## 2026-01-03 - ChatGPT Codex (GPT-5) - Restore Tampermonkey retries + failure handling; add failures export
+
+**Goal:** Undo regressions in the userscript so price scraping and failure reporting work again, and reintroduce a simple failures export in the controller.
 
 **Changes Made:**
-- Updated `scripts/GHETTO_SCRAPER/pennycentral_scraper_controller_4to10s_resilient_retry.html` with `lang`, `meta charset`, `meta viewport`.
-- Added accessible labels (`aria-label` + `title`) for numeric inputs.
-- Removed inline `style="background: ..."` on action buttons by moving those to CSS classes.
+
+- Tampermonkey: restored search→PDP redirect, broader price parsing, second-pass retry for missing fields, and bot/region failure detection that reports `SCRAPE_FAIL` to the controller.
+- Controller: added a single “Export Failures JSON” button (kept main JSON export and pause/stop controls).
+
+**Files Modified:**
+
+- `scripts/GHETTO_SCRAPER/Tampermonkey.txt`
+- `scripts/GHETTO_SCRAPER/pennycentral_scraper_controller_4to10s_resilient_retry.html`
 
 **Verification:**
-- `npm run lint` (pass)
-- `npm run build` (pass)
-- `npm run test:unit` (pass)
-- `PLAYWRIGHT_BASE_URL=http://localhost:3001 npm run test:e2e` (pass)
 
-**Notes:**
-- `npm run test:e2e` without `PLAYWRIGHT_BASE_URL` failed due to `.next/dev/lock` because `next dev` was already running on port 3001; per repo rules, we reused the existing server instead of restarting it.
+- Not run (script/HTML-only changes; no automated tests requested).
+
+## 2026-01-03 - ChatGPT Codex (GPT-5) - Scraper controller pause/stop + single export + HD URL
+
+**Goal:** Make the GHETTO_SCRAPER controller stop preemptive skips, simplify exports, add pause/stop controls, and ensure saved entries include a canonical Home Depot URL.
+
+**Changes Made:**
+
+- Added manual Pause/Resume + Stop Session controls with distinct status indicator states.
+- Removed failure export buttons and functions (single export remains).
+- Ensured each saved entry includes `homeDepotUrl` built from internet SKU (preferred) or store SKU fallback.
+
+**Files Modified:**
+
+- `scripts/GHETTO_SCRAPER/pennycentral_scraper_controller_4to10s_resilient_retry.html`
+
+**Verification:**
+
+- Not run (UI-only HTML change; no automated tests requested).
+
+## 2026-01-03 - GitHub Copilot (GPT-5.2) - Fix scraper skipping items missing retail price
+
+**Goal:** Stop the GHETTO_SCRAPER controller from skipping items that still need a retail price, and allow updating existing entries once a price becomes available.
+
+**Root Cause:**
+
+- The controller was treating any previously-saved item as "already scraped" even when `retailPrice` was `0`/missing.
+- `saveToDB` was deduping by key and refusing to update existing items, so even if you re-scraped, the price couldn't "upgrade" the existing record.
+
+**Changes Made:**
+
+- Pre-scrape skip is now **price-aware**: only skips when an existing entry has a valid `retailPrice`.
+- `saveToDB` now **merges/upgrades** existing entries when a new scrape provides a valid `retailPrice` (and fills other missing fields), and canonicalizes keys to Store SKU when possible.
+- Updated scraper README log expectations.
+
+**Files Modified:**
+
+- `scripts/GHETTO_SCRAPER/pennycentral_scraper_controller_4to10s_resilient_retry.html`
+- `scripts/GHETTO_SCRAPER/README.md`
+
+**Verification (Proof):**
+
+- `npm run ai:verify` ✅
+- Outputs saved to: `reports/verification/2026-01-03T09-58-35/`

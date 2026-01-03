@@ -39,7 +39,7 @@ Each AI session should:
 - **Prompt/task:**
   - GOAL: Add a scrape validator + cleaner.
   - WHY: Prevents “bad scrape” from polluting enrichment and makes downstream diffs reproducible.
-  - DONE: `npm run scrape:validate -- --in <path>` prints a summary + writes cleaned output under `.local/`.
+  - DONE: `npm run scrape:validate -- -- --in <path>` prints a summary + writes cleaned output under `.local/`.
   - FILES: `scripts/validate-scrape-json.ts`, `package.json` (script), optionally tests.
   - VERIFY: gates + include sample output in `.ai/SESSION_LOG.md`.
 
@@ -52,7 +52,7 @@ Each AI session should:
 - **Prompt/task:**
   - GOAL: Turn scrape JSON into a safe enrichment upload.
   - WHY: Adds images/brand/name/UPC/internet# at scale without touching crowdsourced report signal.
-  - DONE: `npm run enrich:from-scrape -- --in <clean.json> --out .local/enrichment-upload.csv` works reliably.
+  - DONE: `npm run enrich:from-scrape -- -- --in <clean.json> --out .local/enrichment-upload.csv` works reliably.
   - FILES: `scripts/scrape-to-enrichment-csv.ts`, `package.json`.
   - VERIFY: gates + show row counts + top “missing field” stats.
 
@@ -64,7 +64,7 @@ Each AI session should:
 - **Prompt/task:**
   - GOAL: Produce a reviewable diff report before enrichment uploads.
   - WHY: Prevents silent bad merges and makes changes auditable.
-  - DONE: `npm run enrich:diff -- --scrape <clean.json> --export <export.json>` writes `.local/enrichment-diff.md`.
+  - DONE: `npm run enrich:diff -- -- --scrape <clean.json> --export <export.json>` writes `.local/enrichment-diff.md`.
   - FILES: `scripts/enrichment-diff.ts`, `package.json`.
   - VERIFY: gates + paste a snippet of the diff summary into `.ai/SESSION_LOG.md`.
 

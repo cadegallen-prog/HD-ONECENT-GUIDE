@@ -40,9 +40,14 @@ Playwright E2E failed with:
 
 - Next.js dev uses a project-wide `.next/dev/lock` → you can't run a second `next dev`, even on a different port.
 - When port 3001 is already running, Playwright should reuse it by setting `PLAYWRIGHT_BASE_URL=http://localhost:3001`.
+- Reusing an already-running dev server may not have `PLAYWRIGHT=1`, which can make `/penny-list` empty and break specs that expect fixture data.
+- Safer default: run Playwright against `next start` on port 3002 (no `.next/dev/lock` conflict) with `PLAYWRIGHT=1` enabled for deterministic fixtures.
 
 ### What to Do Instead
 
+- Default local flow (recommended):
+  - `npm run build`
+  - `npm run test:e2e` (Playwright runs against `next start` on port 3002 with `PLAYWRIGHT=1`)
 - If port 3001 is running:
   - PowerShell: `$env:PLAYWRIGHT_BASE_URL='http://localhost:3001'; npm run test:e2e`
   - Bash: `PLAYWRIGHT_BASE_URL=http://localhost:3001 npm run test:e2e`
@@ -50,7 +55,7 @@ Playwright E2E failed with:
 
 **Files:** `playwright.config.ts`, `scripts/ai-verify.ts`
 
-**Date:** Jan 02, 2026
+**Date:** Jan 03, 2026
 
 ---
 

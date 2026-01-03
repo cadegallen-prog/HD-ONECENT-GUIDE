@@ -33,5 +33,7 @@
 
   "terminal.integrated.focusOnRun": false,
 
-  "security.workspace.trust.enabled": true
+  "security.workspace.trust.enabled": true,
+
+  "webhint.enable": false
 }
