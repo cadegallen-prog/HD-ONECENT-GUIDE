@@ -125,6 +125,64 @@ You → Architect → Reviewer (review plan) → [approval] → Implementer → 
 
 ---
 
+## Pattern F: Auto-Chain (DEFAULT - No Manual Invocation)
+
+Use for: Most work after Cade says "build it"
+
+```
+Cade: "Build X" → AI automatically chains:
+  Implementer → Tester → Reviewer → Documenter → Done
+```
+
+### Why this exists:
+
+The other patterns require Cade to manually invoke each agent ("Act as implementer...", "Act as tester..."). This creates friction and cognitive load.
+
+**Auto-Chain is the default.** When Cade says "build it" / "do it" / "go", the AI should:
+
+1. **Implement** the feature/fix
+2. **Run all 4 quality gates** (lint, build, test:unit, test:e2e)
+3. **Fix any failures** automatically (within green zone authority)
+4. **Check constraints** (colors, fragile areas, security)
+5. **Update docs** (SESSION_LOG, STATE, BACKLOG)
+6. **Report back** with proof: "Done. All gates pass. Here's the output."
+
+### When to break out of Auto-Chain:
+
+- A gate fails and the fix requires yellow/red zone changes → STOP, escalate to Cade
+- Touching fragile areas (globals.css, store-map.tsx) → STOP, confirm first
+- The scope expanded beyond original ask → STOP, confirm before continuing
+
+### Example:
+
+**Before (manual):**
+- Cade: "Add a filter to penny list"
+- AI: "I'll implement. Act as implementer?"
+- Cade: "Yes"
+- AI: [implements]
+- AI: "Done implementing. Act as tester?"
+- Cade: "Yes"
+- AI: [runs tests]
+- AI: "Tests pass. Act as reviewer?"
+- Cade: "Yes"
+- AI: [reviews]
+- Cade: "Ugh, 6 back-and-forths for one feature"
+
+**After (auto-chain):**
+- Cade: "Add a filter to penny list. Go."
+- AI: [implements] → [tests] → [reviews] → [updates docs]
+- AI: "Done. Filter implemented. All 4 gates pass. Here's proof: [output]. SESSION_LOG updated."
+- Cade: "Nice."
+
+### Rule:
+
+**Auto-Chain is ON by default.** Only fall back to manual patterns when:
+- Cade explicitly invokes an agent ("Act as the architect agent...")
+- The task is purely exploratory (Brainstormer mode)
+- Something goes wrong that needs human decision
+
+---
+
 ## File Ownership During Parallel Work
 
 When multiple agents work simultaneously, each owns specific files:

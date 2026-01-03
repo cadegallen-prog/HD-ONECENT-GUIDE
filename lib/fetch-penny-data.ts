@@ -30,6 +30,7 @@ export type PennyItem = {
   internetNumber?: string
   homeDepotUrl?: string | null
   price: number
+  retailPrice?: number | null
   dateAdded: string
   tier: "Very Common" | "Common" | "Rare"
   status: string
@@ -64,6 +65,7 @@ export type SupabasePennyEnrichmentRow = {
   internet_sku: number | null
   updated_at: string | null
   source: string | null
+  retail_price: string | number | null
 }
 
 function normalizeSkuValue(value: string | number | null): string | null {
@@ -88,6 +90,17 @@ function normalizeOptionalText(value: string | number | null | undefined): strin
   return trimmed ? trimmed : undefined
 }
 
+function parsePriceValue(value: string | number | null | undefined): number | undefined {
+  if (value === null || value === undefined) return undefined
+  const digits = String(value)
+    .trim()
+    .replace(/[^0-9.]/g, "")
+  if (!digits) return undefined
+  const parsed = Number(digits)
+  if (!Number.isFinite(parsed) || parsed <= 0) return undefined
+  return parsed
+}
+
 type PennyItemEnrichment = {
   sku: string
   name?: string
@@ -97,6 +110,7 @@ type PennyItemEnrichment = {
   imageUrl?: string
   internetNumber?: string
   homeDepotUrl?: string
+  retailPrice?: number
   updatedAtMs: number
 }
 
@@ -116,6 +130,7 @@ function normalizeEnrichmentRow(row: SupabasePennyEnrichmentRow): PennyItemEnric
     imageUrl: normalizeOptionalText(row.image_url),
     internetNumber: normalizeIntToString(row.internet_sku),
     homeDepotUrl: normalizeOptionalText(row.home_depot_url),
+    retailPrice: parsePriceValue(row.retail_price),
     updatedAtMs: Number.isNaN(updatedAtMs) ? 0 : updatedAtMs,
   }
 }
@@ -171,6 +186,7 @@ export function applyEnrichment(
         imageUrl: enrichment.imageUrl || item.imageUrl,
         internetNumber: enrichment.internetNumber || item.internetNumber,
         homeDepotUrl: enrichment.homeDepotUrl || item.homeDepotUrl,
+        retailPrice: enrichment.retailPrice ?? item.retailPrice,
       }
     })
     .filter((item): item is PennyItem => item !== null)
@@ -391,7 +407,7 @@ async function fetchEnrichmentRows(
   const { data, error } = await client
     .from("penny_item_enrichment")
     .select(
-      "sku,item_name,brand,model_number,upc,image_url,home_depot_url,internet_sku,updated_at,source"
+      "sku,item_name,brand,model_number,upc,image_url,home_depot_url,internet_sku,retail_price,updated_at,source"
     )
 
   if (error) {

@@ -3,7 +3,7 @@
 **Version:** 1.0
 **Date:** December 7, 2025
 **Project:** PennyCentral.com
-**Human:** Cade (Non-coder, AI orchestrator with 100+ hours directing AI)
+**Human:** Cade (solo founder; cannot code; uses VS Code)
 **AI Partners:** Claude Code, ChatGPT Codex, GitHub Copilot
 
 ---
@@ -24,6 +24,41 @@ This document defines the working relationship between Cade and any AI assistant
 - Default to **no new dependencies**; if one is unavoidable, propose first and keep it to a single addition with rationale logged.
 - No new one-off files: if you add a helper/data/doc, delete or merge an obsolete one and record it.
 - Run `npm run lint`, `npm run build`, `npm run test:unit`, and `npm run test:e2e` before calling a task done.
+
+---
+
+## Objective Collaborative Engineering (OCE) Protocol (Default)
+
+This is the "how we work together" layer on top of `.ai/DECISION_RIGHTS.md`, `.ai/CONSTRAINTS.md`, and `.ai/VERIFICATION_REQUIRED.md`.
+
+### 1) Reality First (No Ghost-Chasing)
+
+- Start with what is observably wrong (error, screenshot, user report, metric, failing test).
+- If there is no evidence, say so explicitly and propose the smallest safe experiment (or stop).
+
+### 2) Options A/B/C (When Approval Is Needed)
+
+For anything that needs Cade's approval (see `.ai/DECISION_RIGHTS.md`), provide:
+
+- Option A: fastest/safest
+- Option B: balanced default (usually recommended)
+- Option C: more ambitious (higher risk or higher upside)
+
+Each option includes: scope, risks, rollback plan, and what proof we'll use to verify.
+
+### 3) Alignment Checkpoint
+
+- Say: "My understanding is X. If that's wrong, correct me."
+- For approval-needed changes: wait for explicit "approve" before implementing.
+
+### 4) Truthfulness About Tooling & Evidence
+
+- Never imply real-time browsing, production inspection, tests, screenshots, or builds unless they were actually run.
+- When you do run them, include the exact command and where artifacts live (example: `reports/proof/...`).
+
+### 5) Language & Respect
+
+- Cade is one person. Refer to him as "you (Cade)" / "the founder" (singular), not "non-coders" (plural).
 
 ---
 
@@ -100,7 +135,7 @@ Tradeoff: Simple dropdown vs. fancy multi-select. I recommend simple for now. Ap
 
 ### 2. Plain English Summaries
 
-- ✅ Explain technical decisions in terms a non-coder can understand
+- ✅ Explain technical decisions in plain English
 - ✅ Describe what changed and why
 - ✅ Translate errors into actionable guidance ("The build broke because X. Here's how to fix it.")
 

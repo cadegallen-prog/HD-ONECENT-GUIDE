@@ -1,0 +1,1044 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PennyCentral 952 - Aggressive Parallel (URLs at Bottom)</title>
+    <style>
+      body {
+        font-family: "Segoe UI", monospace;
+        padding: 20px;
+        background: #0f172a;
+        color: #e2e8f0;
+      }
+      #panel {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #1e293b;
+        padding: 20px;
+        border-radius: 12px;
+        border: 1px solid #334155;
+        width: 320px;
+        z-index: 1000;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      }
+      .stat-box {
+        font-size: 13px;
+        margin-bottom: 8px;
+        display: flex;
+        justify-content: space-between;
+      }
+      .stat-value {
+        font-weight: bold;
+        color: #10b981;
+      }
+      input {
+        background: #020617;
+        border: 1px solid #334155;
+        color: #fff;
+        padding: 4px;
+        width: 55px;
+        border-radius: 4px;
+        text-align: center;
+      }
+      button {
+        padding: 10px;
+        background: #3b82f6;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 10px;
+        font-weight: bold;
+      }
+      .btn-export {
+        background: #10b981;
+      }
+      .btn-export-failures {
+        background: #a855f7;
+      }
+      .btn-export-failures-csv {
+        background: #7c3aed;
+      }
+      .btn-danger {
+        background: #ef4444;
+      }
+      #log {
+        height: 400px;
+        overflow-y: auto;
+        background: #020617;
+        padding: 15px;
+        border-radius: 8px;
+        font-size: 12px;
+        white-space: pre-wrap;
+        color: #94a3b8;
+        border: 1px solid #334155;
+      }
+      .status-indicator {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #64748b;
+        margin-right: 8px;
+      }
+      .status-active {
+        background: #10b981;
+        box-shadow: 0 0 10px #10b981;
+      }
+      .status-cooldown {
+        background: #f59e0b;
+        box-shadow: 0 0 10px #f59e0b;
+      }
+      h2 {
+        margin: 0 0 15px 0;
+        font-size: 18px;
+      }
+      hr {
+        border: 0;
+        border-top: 1px solid #334155;
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h2><span id="status-dot" class="status-indicator"></span> PennyCentral Parallel</h2>
+    <div id="log"></div>
+
+    <div id="panel">
+      <div class="stat-box">
+        <span>Database Total:</span> <span id="db-count" class="stat-value">0</span>
+      </div>
+      <div class="stat-box">
+        <span>Failures:</span> <span id="fail-count" class="stat-value">0</span>
+      </div>
+      <hr />
+      <div class="stat-box">
+        <span>Parallel Tabs:</span>
+        <input
+          type="number"
+          id="max-tabs"
+          value="3"
+          aria-label="Parallel tabs"
+          title="Parallel tabs"
+        />
+      </div>
+      <div class="stat-box">
+        <span>Batch Size:</span>
+        <input
+          type="number"
+          id="batch-limit"
+          value="250"
+          aria-label="Batch size"
+          title="Batch size"
+        />
+      </div>
+      <div class="stat-box">
+        <span>Cooldown (Mins):</span>
+        <input
+          type="number"
+          id="cooldown-mins"
+          value="20"
+          aria-label="Cooldown minutes"
+          title="Cooldown minutes"
+        />
+      </div>
+      <div class="stat-box">
+        <span>Start at Index:</span>
+        <input
+          type="number"
+          id="start-index"
+          value="0"
+          aria-label="Start index"
+          title="Start index"
+        />
+      </div>
+
+      <button id="start-btn" onclick="startScraping()">▶ START SESSION</button>
+      <button class="btn-export" onclick="exportData()">💾 Export JSON</button>
+      <button class="btn-export-failures" onclick="exportFailuresJson()">
+        Export Failures JSON
+      </button>
+      <button class="btn-export-failures-csv" onclick="exportFailuresCsv()">
+        Export Failures CSV
+      </button>
+      <div style="margin-top: 8px">
+        <button class="btn-export" id="set-export-folder-btn" onclick="chooseExportFolder()">
+          📁 Set Export Folder
+        </button>
+        <button class="btn-export" id="clear-export-folder-btn" onclick="clearExportFolder()">
+          🧹 Clear Folder
+        </button>
+        <div style="margin-top: 6px; font-size: 12px; color: #94a3b8">
+          Export Folder: <span id="export-folder-label">(not set)</span>
+        </div>
+      </div>
+      <button class="btn-danger" onclick="clearDatabase()">Clear Database</button>
+    </div>
+
+    <script>
+      /**
+       * SCRAPER LOGIC BLOCK
+       * --------------------------------------------------
+       */
+      const STORAGE_KEY = "pennycentral_952_master_data"
+      const FAILURES_KEY = "pennycentral_952_failures"
+      let activeTabs = 0
+      let sessionCount = 0
+      let currentIndex = 0
+      let isPaused = false
+      let urlsToScrape = [] // Will be filled with deduplicated URLs when scraping starts
+
+      // On Load: Check database to see where we left off
+      window.onload = () => {
+        const db = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}")
+        const failures = JSON.parse(localStorage.getItem(FAILURES_KEY) || "[]")
+        const count = Object.keys(db).length
+        document.getElementById("db-count").textContent = count
+        document.getElementById("fail-count").textContent = Array.isArray(failures)
+          ? failures.length
+          : 0
+        document.getElementById("start-index").value = count
+        // Show stored export folder if available
+        showExportFolderLabel()
+      }
+
+      async function startScraping() {
+        // Deduplicate URLs before starting
+        const originalCount = urls.length
+        urlsToScrape = deduplicateUrls(urls)
+        const uniqueCount = urlsToScrape.length
+
+        log(`📋 Deduplicated ${originalCount} URLs → ${uniqueCount} unique products (removed ${originalCount - uniqueCount} duplicates)`)
+
+        currentIndex = parseInt(document.getElementById("start-index").value)
+        document.getElementById("start-btn").disabled = true
+        log(`🚀 Starting Parallel Session at Index ${currentIndex}...`)
+        manageFlow()
+      }
+
+      async function manageFlow() {
+        if (isPaused) return
+
+        const maxTabs = parseInt(document.getElementById("max-tabs").value)
+        const batchLimit = parseInt(document.getElementById("batch-limit").value)
+        const cooldownMins = parseInt(document.getElementById("cooldown-mins").value)
+
+        // Trigger Cooldown
+        if (sessionCount >= batchLimit) {
+          log(`💤 [BATCH LIMIT] Pausing for ${cooldownMins} minutes...`)
+          isPaused = true
+          sessionCount = 0
+          document.getElementById("status-dot").className = "status-indicator status-cooldown"
+          await new Promise((r) => setTimeout(r, cooldownMins * 60 * 1000))
+          isPaused = false
+          log("🔄 Cooldown finished. Resuming flow...")
+          manageFlow()
+          return
+        }
+
+        // Fill parallel slots
+        while (activeTabs < maxTabs && currentIndex < urlsToScrape.length && !isPaused) {
+          const urlIndex = currentIndex
+          currentIndex++
+          sessionCount++
+
+          scrapeItem(urlsToScrape[urlIndex], urlIndex)
+
+          // JITTER: Randomly wait 3 to 8 seconds before opening the next tab
+          // This makes the staggered start look like human browsing
+          const jitter = Math.floor(Math.random() * 5000) + 3000
+          await new Promise((r) => setTimeout(r, jitter))
+        }
+      }
+
+      // Extract SKU from Home Depot URL (/p/XXXXXXX or /s/XXXXXXX)
+      function extractSkuFromUrl(url) {
+        const pMatch = url.match(/\/p\/[^/]*\/(\d{6,12})/)
+        if (pMatch) return pMatch[1] // Internet SKU from /p/ URL
+
+        const sMatch = url.match(/\/s\/(\d{6,10})/)
+        if (sMatch) return sMatch[1] // Store SKU from /s/ URL
+
+        return null
+      }
+
+      // Check if product SKU already exists in database
+      function isAlreadyScraped(sku) {
+        if (!sku) return false
+        const db = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}")
+        return db.hasOwnProperty(sku)
+      }
+
+      // Deduplicate URLs by extracting SKU and keeping first occurrence
+      function deduplicateUrls(urlList) {
+        const seen = new Set()
+        const unique = []
+
+        for (const url of urlList) {
+          const sku = extractSkuFromUrl(url)
+          const key = sku || url // Use SKU as key, fallback to full URL
+
+          if (!seen.has(key)) {
+            seen.add(key)
+            unique.push(url)
+          }
+        }
+
+        return unique
+      }
+
+      function scrapeItem(url, index) {
+        // Pre-scrape check: Skip if already in database
+        const urlSku = extractSkuFromUrl(url)
+        if (urlSku && isAlreadyScraped(urlSku)) {
+          log(`[${index + 1}] ⏭️  Already scraped: ${url.substring(url.lastIndexOf("/") + 1)}`)
+          // Don't increment activeTabs since we're not opening a tab
+          manageFlow() // Trigger next item
+          return
+        }
+
+        activeTabs++
+        document.getElementById("status-dot").className = "status-indicator status-active"
+        log(`[${index + 1}] Opening: ${url.substring(url.lastIndexOf("/") + 1)}`)
+
+        const tab = window.open(url, "_blank")
+        let responded = false
+
+        const onMessage = (event) => {
+          if (event.data && event.data.type === "SCRAPE_SUCCESS") {
+            responded = true
+            window.removeEventListener("message", onMessage)
+            saveToDB(url, event.data.payload)
+            activeTabs--
+            if (tab) tab.close()
+            manageFlow() // Trigger next item immediately
+          }
+
+          if (event.data && event.data.type === "SCRAPE_FAIL") {
+            responded = true
+            window.removeEventListener("message", onMessage)
+            recordFailure(url, event.data.payload)
+            activeTabs--
+            if (tab) tab.close()
+            manageFlow()
+          }
+        }
+        window.addEventListener("message", onMessage)
+
+        // Timeout if page fails to respond
+        setTimeout(() => {
+          if (!responded) {
+            window.removeEventListener("message", onMessage)
+            log(`⚠️ Timeout on item ${index + 1}. Skipping.`)
+            recordFailure(url, { reason: "timeout" })
+            if (tab) tab.close()
+            activeTabs--
+            setTimeout(manageFlow, 5000)
+          }
+        }, 45000)
+      }
+
+      function recordFailure(url, payload) {
+        const existing = JSON.parse(localStorage.getItem(FAILURES_KEY) || "[]")
+        const failures = Array.isArray(existing) ? existing : []
+
+        const entry = {
+          url,
+          reason: payload?.reason || "unknown",
+          detail: payload?.meta?.detail || payload?.detail || "",
+          at: payload?.at || new Date().toISOString(),
+        }
+
+        failures.push(entry)
+        localStorage.setItem(FAILURES_KEY, JSON.stringify(failures))
+        document.getElementById("fail-count").textContent = failures.length
+
+        const short = url.substring(url.lastIndexOf("/") + 1)
+        log(`⚠ Failed ${short} (${entry.reason})`)
+      }
+
+      function saveToDB(url, data) {
+        const db = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}")
+
+        // Use best available unique identifier to deduplicate
+        // Priority: 1) Internet SKU, 2) Store SKU, 3) Product URL, 4) Input URL
+        const productKey = data.internetNumber || data.storeSku || data.productUrl || url
+
+        // Check if this product was already saved (deduplication)
+        if (db[productKey]) {
+          const label = data.name || data.storeSku || productKey
+          log(`⏭️  Skipped duplicate: ${label}`)
+          return
+        }
+
+        // Store using productKey, not url
+        db[productKey] = data
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(db))
+        const label = data.name || data.storeSku || productKey
+        log(`📦 Saved ${label} (retail ${formatPrice(data.retailPrice)})`)
+        document.getElementById("db-count").textContent = Object.keys(db).length
+      }
+
+      function formatPrice(value) {
+        const price = Number(value)
+        if (!Number.isFinite(price)) return "n/a"
+        return `$${price.toFixed(2)}`
+      }
+
+      function log(msg) {
+        const l = document.getElementById("log")
+        l.innerHTML += `[${new Date().toLocaleTimeString()}] ${msg}\n`
+        l.scrollTop = l.scrollHeight
+      }
+
+      // ---------- Export helpers (safe write to user-chosen folder when supported) ----------
+      async function writeFileToDirectory(dirHandle, filename, contents) {
+        const fileHandle = await dirHandle.getFileHandle(filename, { create: true })
+        const writable = await fileHandle.createWritable()
+        await writable.write(contents)
+        await writable.close()
+      }
+
+      const DB_NAME = "penny_scraper_export_db"
+      const STORE_NAME = "handles"
+      const HANDLE_KEY = "export_directory"
+
+      function openIdb() {
+        return new Promise((resolve, reject) => {
+          const req = indexedDB.open(DB_NAME, 1)
+          req.onupgradeneeded = (e) => {
+            e.target.result.createObjectStore(STORE_NAME)
+          }
+          req.onsuccess = () => resolve(req.result)
+          req.onerror = () => reject(req.error)
+        })
+      }
+
+      async function saveDirectoryHandle(handle) {
+        try {
+          const db = await openIdb()
+          const tx = db.transaction(STORE_NAME, "readwrite")
+          tx.objectStore(STORE_NAME).put(handle, HANDLE_KEY)
+          await new Promise((res, rej) => {
+            tx.oncomplete = res
+            tx.onerror = rej
+          })
+          db.close()
+        } catch (e) {
+          console.warn("Could not persist directory handle:", e)
+        }
+      }
+
+      async function getStoredDirectoryHandle() {
+        try {
+          const db = await openIdb()
+          const tx = db.transaction(STORE_NAME, "readonly")
+          const val = tx.objectStore(STORE_NAME).get(HANDLE_KEY)
+          const handle = await new Promise((res, rej) => {
+            val.onsuccess = () => res(val.result)
+            val.onerror = rej
+          })
+          db.close()
+          return handle || null
+        } catch (e) {
+          return null
+        }
+      }
+
+      async function clearStoredDirectoryHandle() {
+        try {
+          const db = await openIdb()
+          const tx = db.transaction(STORE_NAME, "readwrite")
+          tx.objectStore(STORE_NAME).delete(HANDLE_KEY)
+          await new Promise((res, rej) => {
+            tx.oncomplete = res
+            tx.onerror = rej
+          })
+          db.close()
+        } catch (e) {}
+      }
+
+      function humanFilename(prefix, ext) {
+        const ts = new Date().toISOString().replace(/[:.]/g, "-")
+        return `${prefix}_${ts}.${ext}`
+      }
+
+      async function showExportFolderLabel() {
+        const el = document.getElementById("export-folder-label")
+        try {
+          const handle = await getStoredDirectoryHandle()
+          if (!handle) {
+            el.textContent = "(not set)"
+            return
+          }
+          el.textContent = handle.name || "(chosen folder)"
+        } catch (e) {
+          el.textContent = "(not set)"
+        }
+      }
+
+      async function chooseExportFolder() {
+        if (!window.showDirectoryPicker) {
+          alert(
+            "Your browser does not support the File System Access API. Fallback to downloads will be used."
+          )
+          return
+        }
+        try {
+          const dirHandle = await window.showDirectoryPicker({ mode: "readwrite" })
+          // Request permission to write without prompting later
+          const perm = await dirHandle.requestPermission({ mode: "readwrite" })
+          if (perm === "granted") {
+            await saveDirectoryHandle(dirHandle)
+            log("📁 Export folder saved.")
+            showExportFolderLabel()
+          } else {
+            log("⚠ Permission to write export folder was not granted.")
+          }
+        } catch (e) {
+          console.error("Folder pick cancelled or failed", e)
+        }
+      }
+
+      async function clearExportFolder() {
+        await clearStoredDirectoryHandle()
+        await showExportFolderLabel()
+        log("🧹 Export folder cleared; downloads will go to browser Downloads folder")
+      }
+
+      async function exportData() {
+        const data = localStorage.getItem(STORAGE_KEY) || "{}"
+        const filename = humanFilename("penny_scrape", "json")
+
+        // Preferred path: stored directory handle + writeFile
+        try {
+          const dirHandle = await getStoredDirectoryHandle()
+          if (dirHandle && dirHandle.kind === "directory") {
+            await writeFileToDirectory(dirHandle, filename, data)
+            log(`💾 Exported JSON → ${filename}`)
+            return
+          }
+        } catch (e) {
+          console.warn("Write to directory failed, falling back to download:", e)
+        }
+
+        // Fallback: browser download
+        const blob = new Blob([data], { type: "application/json" })
+        const a = document.createElement("a")
+        a.href = URL.createObjectURL(blob)
+        a.download = filename
+        a.click()
+        log(`💾 Downloaded JSON → ${filename}`)
+      }
+
+      async function exportFailuresJson() {
+        const data = localStorage.getItem(FAILURES_KEY) || "[]"
+        const filename = humanFilename("penny_scrape_failures", "json")
+        try {
+          const dirHandle = await getStoredDirectoryHandle()
+          if (dirHandle && dirHandle.kind === "directory") {
+            await writeFileToDirectory(dirHandle, filename, data)
+            log(`💾 Exported Failures JSON → ${filename}`)
+            return
+          }
+        } catch (e) {
+          console.warn(e)
+        }
+
+        const blob = new Blob([data], { type: "application/json" })
+        const a = document.createElement("a")
+        a.href = URL.createObjectURL(blob)
+        a.download = filename
+        a.click()
+        log(`💾 Downloaded Failures JSON → ${filename}`)
+      }
+
+      function csvEscape(value) {
+        const raw = value === null || value === undefined ? "" : String(value)
+        return `"${raw.replace(/\"/g, '""')}"`
+      }
+
+      async function exportFailuresCsv() {
+        const existing = JSON.parse(localStorage.getItem(FAILURES_KEY) || "[]")
+        const failures = Array.isArray(existing) ? existing : []
+
+        const header = ["url", "reason", "detail", "at"].join(",")
+        const rows = failures.map((f) =>
+          [csvEscape(f.url), csvEscape(f.reason), csvEscape(f.detail), csvEscape(f.at)].join(",")
+        )
+        const csv = [header, ...rows].join("\n")
+        const filename = humanFilename("penny_scrape_failures", "csv")
+
+        // Try to write to the chosen folder first
+        try {
+          const dirHandle = await getStoredDirectoryHandle()
+          if (dirHandle && dirHandle.kind === "directory") {
+            await writeFileToDirectory(dirHandle, filename, csv)
+            log(`💾 Exported Failures CSV → ${filename}`)
+            return
+          }
+        } catch (e) {
+          console.warn("Write to directory failed", e)
+        }
+
+        // Fallback: browser download
+        const blob = new Blob([csv], { type: "text/csv" })
+        const a = document.createElement("a")
+        a.href = URL.createObjectURL(blob)
+        a.download = filename
+        a.click()
+        log(`💾 Downloaded Failures CSV → ${filename}`)
+      }
+
+      function clearDatabase() {
+        const db = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}")
+        const count = Object.keys(db).length
+
+        if (count > 0) {
+          const ok = confirm(`Clear the local database (${count} items)?`)
+          if (!ok) return
+        }
+
+        localStorage.removeItem(STORAGE_KEY)
+        localStorage.removeItem(FAILURES_KEY)
+        document.getElementById("db-count").textContent = "0"
+        document.getElementById("fail-count").textContent = "0"
+        document.getElementById("start-index").value = "0"
+        log("Cleared local database.")
+      }
+
+      /**
+       * --------------------------------------------------
+       * PASTE YOUR URLS BELOW THIS LINE
+       * Updated to use internet SKU when available (70-80% coverage)
+       * Format: /p/{internet_sku} when available, /s/{sku} as fallback
+       * --------------------------------------------------
+       */
+      const urls = [
+        "https://www.homedepot.com/s/1000003011",
+        "https://www.homedepot.com/p/203905882",
+        "https://www.homedepot.com/s/1000010762",
+        "https://www.homedepot.com/p/204693753",
+        "https://www.homedepot.com/p/204684518",
+        "https://www.homedepot.com/p/204785718",
+        "https://www.homedepot.com/p/204785746",
+        "https://www.homedepot.com/p/204785753",
+        "https://www.homedepot.com/p/204785793",
+        "https://www.homedepot.com/p/204785805",
+        "https://www.homedepot.com/s/1000039946",
+        "https://www.homedepot.com/p/309621690",
+        "https://www.homedepot.com/p/205322667",
+        "https://www.homedepot.com/p/206165200",
+        "https://www.homedepot.com/p/205696651",
+        "https://www.homedepot.com/p/205744536",
+        "https://www.homedepot.com/s/1001223741",
+        "https://www.homedepot.com/p/205763057",
+        "https://www.homedepot.com/p/205789425",
+        "https://www.homedepot.com/p/206119508",
+        "https://www.homedepot.com/p/206119509",
+        "https://www.homedepot.com/p/325998307",
+        "https://www.homedepot.com/p/325998309",
+        "https://www.homedepot.com/s/1001353598",
+        "https://www.homedepot.com/p/206210816",
+        "https://www.homedepot.com/p/322319800",
+        "https://www.homedepot.com/p/206571756",
+        "https://www.homedepot.com/p/206614118",
+        "https://www.homedepot.com/s/1001669557",
+        "https://www.homedepot.com/p/203578658",
+        "https://www.homedepot.com/p/206802158",
+        "https://www.homedepot.com/p/206802314",
+        "https://www.homedepot.com/p/206942731",
+        "https://www.homedepot.com/s/1001797737",
+        "https://www.homedepot.com/s/1001808241",
+        "https://www.homedepot.com/p/206941299",
+        "https://www.homedepot.com/p/207102854",
+        "https://www.homedepot.com/p/206957471",
+        "https://www.homedepot.com/s/1002099017",
+        "https://www.homedepot.com/p/310275542",
+        "https://www.homedepot.com/p/328352511",
+        "https://www.homedepot.com/p/203410479",
+        "https://www.homedepot.com/p/300654436",
+        "https://www.homedepot.com/p/302565659",
+        "https://www.homedepot.com/p/300614636",
+        "https://www.homedepot.com/p/300796610",
+        "https://www.homedepot.com/s/1002312164",
+        "https://www.homedepot.com/p/301233991",
+        "https://www.homedepot.com/s/1002373492",
+        "https://www.homedepot.com/p/301165046",
+        "https://www.homedepot.com/p/301555251",
+        "https://www.homedepot.com/s/1002434173",
+        "https://www.homedepot.com/p/302085137",
+        "https://www.homedepot.com/p/301421092",
+        "https://www.homedepot.com/s/1002502473",
+        "https://www.homedepot.com/s/1002640555",
+        "https://www.homedepot.com/p/301909817",
+        "https://www.homedepot.com/p/303077955",
+        "https://www.homedepot.com/p/303077956",
+        "https://www.homedepot.com/s/1002818377",
+        "https://www.homedepot.com/p/302038911",
+        "https://www.homedepot.com/p/321353167",
+        "https://www.homedepot.com/s/1002936677",
+        "https://www.homedepot.com/p/301637239",
+        "https://www.homedepot.com/s/1002961936",
+        "https://www.homedepot.com/p/304217565",
+        "https://www.homedepot.com/p/324538612",
+        "https://www.homedepot.com/p/304258316",
+        "https://www.homedepot.com/p/310389220",
+        "https://www.homedepot.com/p/310389221",
+        "https://www.homedepot.com/p/304021303",
+        "https://www.homedepot.com/s/1003240056",
+        "https://www.homedepot.com/s/1003240066",
+        "https://www.homedepot.com/p/305237983",
+        "https://www.homedepot.com/s/1003315979",
+        "https://www.homedepot.com/s/1003540153",
+        "https://www.homedepot.com/s/1003540154",
+        "https://www.homedepot.com/p/306713149",
+        "https://www.homedepot.com/p/306713143",
+        "https://www.homedepot.com/s/1003843567",
+        "https://www.homedepot.com/p/306860677",
+        "https://www.homedepot.com/p/306860678",
+        "https://www.homedepot.com/p/307720513",
+        "https://www.homedepot.com/s/1003945186",
+        "https://www.homedepot.com/p/308675064",
+        "https://www.homedepot.com/p/308428405",
+        "https://www.homedepot.com/p/308439917",
+        "https://www.homedepot.com/p/308561422",
+        "https://www.homedepot.com/p/308709729",
+        "https://www.homedepot.com/p/308673396",
+        "https://www.homedepot.com/s/1004180001",
+        "https://www.homedepot.com/p/308469586",
+        "https://www.homedepot.com/p/308436295",
+        "https://www.homedepot.com/s/1004186374",
+        "https://www.homedepot.com/p/328349109",
+        "https://www.homedepot.com/p/328351531",
+        "https://www.homedepot.com/p/328141949",
+        "https://www.homedepot.com/p/308736376",
+        "https://www.homedepot.com/p/309786184",
+        "https://www.homedepot.com/p/309981567",
+        "https://www.homedepot.com/p/309980823",
+        "https://www.homedepot.com/p/301119896",
+        "https://www.homedepot.com/s/1004528967",
+        "https://www.homedepot.com/p/309976515",
+        "https://www.homedepot.com/s/1004547921",
+        "https://www.homedepot.com/p/310137848",
+        "https://www.homedepot.com/s/1004612908",
+        "https://www.homedepot.com/s/1004628131",
+        "https://www.homedepot.com/p/310114087",
+        "https://www.homedepot.com/p/310498862",
+        "https://www.homedepot.com/p/310852012",
+        "https://www.homedepot.com/p/310852176",
+        "https://www.homedepot.com/p/310395107",
+        "https://www.homedepot.com/s/1004813352",
+        "https://www.homedepot.com/s/1004813976",
+        "https://www.homedepot.com/p/311255603",
+        "https://www.homedepot.com/p/311256268",
+        "https://www.homedepot.com/p/311871814",
+        "https://www.homedepot.com/s/1005056147",
+        "https://www.homedepot.com/p/312924242",
+        "https://www.homedepot.com/s/1005270940",
+        "https://www.homedepot.com/p/313219902",
+        "https://www.homedepot.com/s/1005485166",
+        "https://www.homedepot.com/p/313184280",
+        "https://www.homedepot.com/s/1005519734",
+        "https://www.homedepot.com/s/1005531842",
+        "https://www.homedepot.com/p/313505340",
+        "https://www.homedepot.com/p/313505336",
+        "https://www.homedepot.com/p/314113155",
+        "https://www.homedepot.com/p/314113380",
+        "https://www.homedepot.com/p/314113301",
+        "https://www.homedepot.com/p/314120563",
+        "https://www.homedepot.com/p/314121634",
+        "https://www.homedepot.com/p/314110922",
+        "https://www.homedepot.com/p/314121625",
+        "https://www.homedepot.com/p/314713207",
+        "https://www.homedepot.com/p/314459834",
+        "https://www.homedepot.com/s/1005837549",
+        "https://www.homedepot.com/p/314498900",
+        "https://www.homedepot.com/p/314498727",
+        "https://www.homedepot.com/p/314759256",
+        "https://www.homedepot.com/s/1005871319",
+        "https://www.homedepot.com/p/314700850",
+        "https://www.homedepot.com/s/1005884102",
+        "https://www.homedepot.com/s/1005954836",
+        "https://www.homedepot.com/p/315436852",
+        "https://www.homedepot.com/p/315438112",
+        "https://www.homedepot.com/p/315076919",
+        "https://www.homedepot.com/p/315365094",
+        "https://www.homedepot.com/s/1006225099",
+        "https://www.homedepot.com/p/315605735",
+        "https://www.homedepot.com/p/315868467",
+        "https://www.homedepot.com/s/1006311908",
+        "https://www.homedepot.com/s/1006311922",
+        "https://www.homedepot.com/p/316266951",
+        "https://www.homedepot.com/p/316266948",
+        "https://www.homedepot.com/p/316691349",
+        "https://www.homedepot.com/p/316664569",
+        "https://www.homedepot.com/p/316691176",
+        "https://www.homedepot.com/p/316691113",
+        "https://www.homedepot.com/p/316723428",
+        "https://www.homedepot.com/p/316694811",
+        "https://www.homedepot.com/p/317232716",
+        "https://www.homedepot.com/p/317417499",
+        "https://www.homedepot.com/p/317387079",
+        "https://www.homedepot.com/p/318213103",
+        "https://www.homedepot.com/p/318234567",
+        "https://www.homedepot.com/p/318284751",
+        "https://www.homedepot.com/s/1006817882",
+        "https://www.homedepot.com/p/318429185",
+        "https://www.homedepot.com/s/1006839410",
+        "https://www.homedepot.com/p/318065161",
+        "https://www.homedepot.com/p/318065166",
+        "https://www.homedepot.com/s/1006839417",
+        "https://www.homedepot.com/s/1006839420",
+        "https://www.homedepot.com/p/318065311",
+        "https://www.homedepot.com/p/318065319",
+        "https://www.homedepot.com/p/326905556",
+        "https://www.homedepot.com/p/318833919",
+        "https://www.homedepot.com/p/318744293",
+        "https://www.homedepot.com/p/319012025",
+        "https://www.homedepot.com/s/1007023651",
+        "https://www.homedepot.com/p/319324526",
+        "https://www.homedepot.com/s/1007114150",
+        "https://www.homedepot.com/p/318754570",
+        "https://www.homedepot.com/p/319015606",
+        "https://www.homedepot.com/p/314925494",
+        "https://www.homedepot.com/p/314925505",
+        "https://www.homedepot.com/s/1007189591",
+        "https://www.homedepot.com/s/1007189599",
+        "https://www.homedepot.com/s/1007189606",
+        "https://www.homedepot.com/s/1007189607",
+        "https://www.homedepot.com/p/319526973",
+        "https://www.homedepot.com/p/319526229",
+        "https://www.homedepot.com/p/319526965",
+        "https://www.homedepot.com/p/319621412",
+        "https://www.homedepot.com/p/319478164",
+        "https://www.homedepot.com/p/319166583",
+        "https://www.homedepot.com/p/330043729",
+        "https://www.homedepot.com/p/319433126",
+        "https://www.homedepot.com/p/319933210",
+        "https://www.homedepot.com/p/319908313",
+        "https://www.homedepot.com/p/320034814",
+        "https://www.homedepot.com/p/320038340",
+        "https://www.homedepot.com/p/320038357",
+        "https://www.homedepot.com/p/320038343",
+        "https://www.homedepot.com/p/320038346",
+        "https://www.homedepot.com/p/319526975",
+        "https://www.homedepot.com/p/319526961",
+        "https://www.homedepot.com/s/1007611508",
+        "https://www.homedepot.com/p/319247691",
+        "https://www.homedepot.com/s/1007619831",
+        "https://www.homedepot.com/p/320266818",
+        "https://www.homedepot.com/p/320064827",
+        "https://www.homedepot.com/s/1007682139",
+        "https://www.homedepot.com/s/1007804456",
+        "https://www.homedepot.com/s/1007810566",
+        "https://www.homedepot.com/p/320827784",
+        "https://www.homedepot.com/p/304905712",
+        "https://www.homedepot.com/p/321455216",
+        "https://www.homedepot.com/p/321253863",
+        "https://www.homedepot.com/s/1008127312",
+        "https://www.homedepot.com/p/322158597",
+        "https://www.homedepot.com/p/320822819",
+        "https://www.homedepot.com/p/322631614",
+        "https://www.homedepot.com/p/322838913",
+        "https://www.homedepot.com/s/1008665208",
+        "https://www.homedepot.com/p/323079980",
+        "https://www.homedepot.com/p/322907308",
+        "https://www.homedepot.com/p/323044933",
+        "https://www.homedepot.com/p/323405299",
+        "https://www.homedepot.com/p/323405346",
+        "https://www.homedepot.com/p/323706204",
+        "https://www.homedepot.com/p/323775523",
+        "https://www.homedepot.com/p/322630767",
+        "https://www.homedepot.com/p/323420719",
+        "https://www.homedepot.com/s/1009023287",
+        "https://www.homedepot.com/p/323830662",
+        "https://www.homedepot.com/p/323987235",
+        "https://www.homedepot.com/s/1009121993",
+        "https://www.homedepot.com/p/324293761",
+        "https://www.homedepot.com/s/1009186909",
+        "https://www.homedepot.com/p/324593576",
+        "https://www.homedepot.com/p/324324035",
+        "https://www.homedepot.com/p/324651961",
+        "https://www.homedepot.com/p/324308359",
+        "https://www.homedepot.com/p/324812008",
+        "https://www.homedepot.com/p/324795779",
+        "https://www.homedepot.com/s/1009493223",
+        "https://www.homedepot.com/p/325477214",
+        "https://www.homedepot.com/p/324554365",
+        "https://www.homedepot.com/s/1009595434",
+        "https://www.homedepot.com/p/325456886",
+        "https://www.homedepot.com/p/324195445",
+        "https://www.homedepot.com/p/325745626",
+        "https://www.homedepot.com/p/325745598",
+        "https://www.homedepot.com/s/1009923970",
+        "https://www.homedepot.com/p/326259922",
+        "https://www.homedepot.com/s/1009959781",
+        "https://www.homedepot.com/p/326480533",
+        "https://www.homedepot.com/p/326203889",
+        "https://www.homedepot.com/s/1010043087",
+        "https://www.homedepot.com/s/1010086378",
+        "https://www.homedepot.com/p/326733517",
+        "https://www.homedepot.com/p/326734787",
+        "https://www.homedepot.com/p/326882450",
+        "https://www.homedepot.com/p/327163212",
+        "https://www.homedepot.com/s/1010287944",
+        "https://www.homedepot.com/p/327309596",
+        "https://www.homedepot.com/p/326965478",
+        "https://www.homedepot.com/p/326965480",
+        "https://www.homedepot.com/p/327108473",
+        "https://www.homedepot.com/p/326905764",
+        "https://www.homedepot.com/p/327534458",
+        "https://www.homedepot.com/p/326905769",
+        "https://www.homedepot.com/p/327669219",
+        "https://www.homedepot.com/p/327216863",
+        "https://www.homedepot.com/p/327959034",
+        "https://www.homedepot.com/p/328688486",
+        "https://www.homedepot.com/p/328689145",
+        "https://www.homedepot.com/p/328690377",
+        "https://www.homedepot.com/p/329046003",
+        "https://www.homedepot.com/p/329610616",
+        "https://www.homedepot.com/s/1011554100",
+        "https://www.homedepot.com/p/329776993",
+        "https://www.homedepot.com/p/329777025",
+        "https://www.homedepot.com/p/329777152",
+        "https://www.homedepot.com/p/330686103",
+        "https://www.homedepot.com/p/330725814",
+        "https://www.homedepot.com/s/1011876171",
+        "https://www.homedepot.com/p/331655764",
+        "https://www.homedepot.com/p/332102322",
+        "https://www.homedepot.com/s/1012665289",
+        "https://www.homedepot.com/s/1012825716",
+        "https://www.homedepot.com/p/333293834",
+        "https://www.homedepot.com/p/332609482",
+        "https://www.homedepot.com/s/1013332455",
+        "https://www.homedepot.com/p/333792836",
+        "https://www.homedepot.com/p/333554308",
+        "https://www.homedepot.com/p/333758740",
+        "https://www.homedepot.com/p/334369361",
+        "https://www.homedepot.com/s/1013692004",
+        "https://www.homedepot.com/s/120196",
+        "https://www.homedepot.com/s/126532",
+        "https://www.homedepot.com/p/202077595",
+        "https://www.homedepot.com/s/152354",
+        "https://www.homedepot.com/p/300283772",
+        "https://www.homedepot.com/p/202316240",
+        "https://www.homedepot.com/p/203717787",
+        "https://www.homedepot.com/p/100318500",
+        "https://www.homedepot.com/p/100356507",
+        "https://www.homedepot.com/p/100356508",
+        "https://www.homedepot.com/p/100356509",
+        "https://www.homedepot.com/p/100356510",
+        "https://www.homedepot.com/s/198153",
+        "https://www.homedepot.com/p/100676698",
+        "https://www.homedepot.com/s/198226",
+        "https://www.homedepot.com/s/198277",
+        "https://www.homedepot.com/p/100356518",
+        "https://www.homedepot.com/p/100356520",
+        "https://www.homedepot.com/p/206602317",
+        "https://www.homedepot.com/p/202046211",
+        "https://www.homedepot.com/p/100404027",
+        "https://www.homedepot.com/p/100046108",
+        "https://www.homedepot.com/p/100377298",
+        "https://www.homedepot.com/p/300854221",
+        "https://www.homedepot.com/p/100671103",
+        "https://www.homedepot.com/p/100674086",
+        "https://www.homedepot.com/p/100686307",
+        "https://www.homedepot.com/p/202059757",
+        "https://www.homedepot.com/p/202520046",
+        "https://www.homedepot.com/s/295868",
+        "https://www.homedepot.com/p/202592543",
+        "https://www.homedepot.com/p/202315456",
+        "https://www.homedepot.com/p/309077354",
+        "https://www.homedepot.com/p/100157047",
+        "https://www.homedepot.com/p/100142737",
+        "https://www.homedepot.com/s/303622",
+        "https://www.homedepot.com/p/310830000",
+        "https://www.homedepot.com/p/202284582",
+        "https://www.homedepot.com/s/318611",
+        "https://www.homedepot.com/s/318650",
+        "https://www.homedepot.com/p/202304654",
+        "https://www.homedepot.com/p/100389860",
+        "https://www.homedepot.com/p/310338146",
+        "https://www.homedepot.com/p/206602329",
+        "https://www.homedepot.com/p/100576037",
+        "https://www.homedepot.com/s/359302",
+        "https://www.homedepot.com/p/202266613",
+        "https://www.homedepot.com/s/367478",
+        "https://www.homedepot.com/p/100314525",
+        "https://www.homedepot.com/p/100211397",
+        "https://www.homedepot.com/p/203811492",
+        "https://www.homedepot.com/p/202688847",
+        "https://www.homedepot.com/p/308408362",
+        "https://www.homedepot.com/p/202077089",
+        "https://www.homedepot.com/p/203674047",
+        "https://www.homedepot.com/s/483420",
+        "https://www.homedepot.com/p/202523810",
+        "https://www.homedepot.com/s/488493",
+        "https://www.homedepot.com/s/495681",
+        "https://www.homedepot.com/p/100387751",
+        "https://www.homedepot.com/p/100387754",
+        "https://www.homedepot.com/s/523138",
+        "https://www.homedepot.com/p/300861777",
+        "https://www.homedepot.com/p/202868026",
+        "https://www.homedepot.com/s/532519",
+        "https://www.homedepot.com/s/535389",
+        "https://www.homedepot.com/p/202039344",
+        "https://www.homedepot.com/s/538443",
+        "https://www.homedepot.com/s/538971",
+        "https://www.homedepot.com/p/301289368",
+        "https://www.homedepot.com/p/300861956",
+        "https://www.homedepot.com/s/571865",
+        "https://www.homedepot.com/p/100404127",
+        "https://www.homedepot.com/p/100404128",
+        "https://www.homedepot.com/p/202304709",
+        "https://www.homedepot.com/p/300862241",
+        "https://www.homedepot.com/s/589572",
+        "https://www.homedepot.com/p/300862055",
+        "https://www.homedepot.com/p/202046213",
+        "https://www.homedepot.com/p/204583745",
+        "https://www.homedepot.com/p/100684051",
+        "https://www.homedepot.com/p/100208442",
+        "https://www.homedepot.com/p/202894296",
+        "https://www.homedepot.com/p/202935623",
+        "https://www.homedepot.com/p/202046215",
+        "https://www.homedepot.com/p/202819638",
+        "https://www.homedepot.com/s/652245",
+        "https://www.homedepot.com/p/204620762",
+        "https://www.homedepot.com/p/206458278",
+        "https://www.homedepot.com/s/697843",
+        "https://www.homedepot.com/s/698733",
+        "https://www.homedepot.com/p/100684052",
+        "https://www.homedepot.com/s/705994",
+        "https://www.homedepot.com/s/710257",
+        "https://www.homedepot.com/p/203419431",
+        "https://www.homedepot.com/p/100045025",
+        "https://www.homedepot.com/p/205719461",
+        "https://www.homedepot.com/p/202066688",
+        "https://www.homedepot.com/p/206458282",
+        "https://www.homedepot.com/s/744666",
+        "https://www.homedepot.com/p/100658400",
+        "https://www.homedepot.com/p/100658411",
+        "https://www.homedepot.com/s/768816",
+        "https://www.homedepot.com/s/769325",
+        "https://www.homedepot.com/p/204620414",
+        "https://www.homedepot.com/p/203891777",
+        "https://www.homedepot.com/p/203751327",
+        "https://www.homedepot.com/p/203222932",
+        "https://www.homedepot.com/p/100348372",
+        "https://www.homedepot.com/s/895946",
+        "https://www.homedepot.com/p/202050855",
+        "https://www.homedepot.com/p/100036128",
+        "https://www.homedepot.com/p/204149117",
+        "https://www.homedepot.com/p/202493976",
+        "https://www.homedepot.com/s/947310",
+        "https://www.homedepot.com/s/948300",
+        "https://www.homedepot.com/s/973646",
+        "https://www.homedepot.com/p/202327305"
+      ]
+    </script>
+  </body>
+</html>

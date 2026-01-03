@@ -3,7 +3,7 @@
 ## Tables involved
 - Base table (writes + privileged reads): `public."Penny List"` (crowd reports).
 - Public view (safe anon reads): `public.penny_list_public` (no emails/PII columns).
-- Admin-only enrichment table: `public.penny_item_enrichment` (authoritative SKU details: name/brand/model/UPC/image/link).
+- Admin-only enrichment table: `public.penny_item_enrichment` (authoritative SKU details: name/brand/model/UPC/image/link, plus retail price for savings messaging).
 
 ## Apply once (SQL)
 Run in the Supabase SQL editor or `psql` (adjust schema name if not `public`). The `BEGIN/COMMIT` block lets you review failures without partial changes.
@@ -22,6 +22,7 @@ create table if not exists public.penny_item_enrichment (
   image_url text,
   home_depot_url text,
   internet_sku bigint,
+  retail_price numeric(10,2),
   source text,
   updated_at timestamptz default now()
 );

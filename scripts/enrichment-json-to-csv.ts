@@ -22,12 +22,14 @@ type EnrichmentInput = {
   imageUrl?: string
   internetSku?: string | number
   internetNumber?: string | number // Also support internetNumber field
+  retailPrice?: string | number
 }
 
 type NormalizedRow = {
   sku: string
   imageUrl: string
   internetSku: string
+  retailPrice?: string
 }
 
 function toDigits(value: string | number | undefined): string {
@@ -71,6 +73,11 @@ function normalizeRows(raw: unknown): NormalizedRow[] {
     if (!existing.internetSku && internetSku) {
       existing.internetSku = internetSku
     }
+    if (!existing.retailPrice) {
+      const priceCandidate =
+        entry.retailPrice ?? entry.retail_price ?? entry.price ?? entry.retail ?? ""
+      existing.retailPrice = priceCandidate ? String(priceCandidate).trim() : ""
+    }
 
     bySku.set(sku, existing)
   }
@@ -79,12 +86,18 @@ function normalizeRows(raw: unknown): NormalizedRow[] {
 }
 
 function toCsv(rows: NormalizedRow[]): string {
-  const header = ["Home Depot SKU (6 or 10 digits)", "IMAGE URL", "INTERNET SKU"]
+  const header = [
+    "Home Depot SKU (6 or 10 digits)",
+    "IMAGE URL",
+    "INTERNET SKU",
+    "RETAIL PRICE",
+  ]
   const escape = (value: string) => `"${value.replace(/"/g, '""')}"`
   const lines = [header.join(",")]
 
   for (const row of rows) {
-    lines.push([row.sku, row.imageUrl, row.internetSku].map(escape).join(","))
+    const price = row.retailPrice ?? ""
+    lines.push([row.sku, row.imageUrl, row.internetSku, price].map(escape).join(","))
   }
 
   return lines.join("\n")
@@ -112,7 +125,9 @@ async function main() {
   await writeFile(outputPath, toCsv(normalized), "utf8")
 
   console.log(`Wrote ${normalized.length} enrichment row(s) to ${path.resolve(outputPath)}`)
-  console.log("Headers: Home Depot SKU (6 or 10 digits), IMAGE URL, INTERNET SKU")
+  console.log(
+    "Headers: Home Depot SKU (6 or 10 digits), IMAGE URL, INTERNET SKU, RETAIL PRICE"
+  )
 }
 
 void main()

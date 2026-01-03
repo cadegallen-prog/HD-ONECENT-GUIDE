@@ -20,6 +20,8 @@ Copy, fill, paste:
 ```
 GOAL: [specific ask]
 WHY: [who it helps / what it fixes]
+EVIDENCE: [error message / screenshot / link / metric — if none yet, say "none"]
+OPTIONS (if this needs approval): A) [fast/safe] B) [balanced] C) [ambitious]
 DONE MEANS:
 - [success criterion]
 - [success criterion]

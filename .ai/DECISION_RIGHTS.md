@@ -42,6 +42,8 @@
 
 ## 🟡 AI Should Propose First (Get Approval Before Implementing)
 
+**Proposal format (required):** Options **A/B/C** with tradeoffs (scope, time, risk), plus rollback plan and what proof will verify success.
+
 ### New Features
 - Adding any new user-facing functionality
 - Creating new pages or routes

@@ -18,10 +18,10 @@
       "name": "card-surface",
       "selector": "[data-card], article",
       "role": "text",
-      "found": true,
-      "ratio": 16.74,
-      "threshold": 7,
-      "pass": true
+      "found": false,
+      "ratio": 0,
+      "pass": true,
+      "note": "selector not found"
     },
     {
       "route": "/",
@@ -29,10 +29,10 @@
       "name": "card-border",
       "selector": "[data-card], article",
       "role": "border",
-      "found": true,
-      "ratio": 13.93,
-      "threshold": 3,
-      "pass": true
+      "found": false,
+      "ratio": 0,
+      "pass": true,
+      "note": "selector not found"
     },
     {
       "route": "/",
@@ -95,10 +95,10 @@
       "name": "card-surface",
       "selector": "[data-card], article",
       "role": "text",
-      "found": true,
-      "ratio": 12.69,
-      "threshold": 7,
-      "pass": true
+      "found": false,
+      "ratio": 0,
+      "pass": true,
+      "note": "selector not found"
     },
     {
       "route": "/",
@@ -106,10 +106,10 @@
       "name": "card-border",
       "selector": "[data-card], article",
       "role": "border",
-      "found": true,
-      "ratio": 3.89,
-      "threshold": 3,
-      "pass": true
+      "found": false,
+      "ratio": 0,
+      "pass": true,
+      "note": "selector not found"
     },
     {
       "route": "/",

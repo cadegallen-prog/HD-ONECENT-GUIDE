@@ -6,8 +6,19 @@ import path from 'path';
 import net from 'net';
 
 // Check if server is healthy BEFORE running tests
-async function checkServerHealth(): Promise<{ ok: boolean; message: string }> {
-  // First check if port 3001 is in use
+async function checkServerHealth(): Promise<{
+  ok: boolean;
+  message: string;
+  playwrightBaseUrl?: string;
+}> {
+  if (process.env.PLAYWRIGHT_BASE_URL) {
+    return {
+      ok: true,
+      message: `Using PLAYWRIGHT_BASE_URL=${process.env.PLAYWRIGHT_BASE_URL}`,
+      playwrightBaseUrl: process.env.PLAYWRIGHT_BASE_URL,
+    };
+  }
+
   const portInUse = await new Promise<boolean>((resolve) => {
     const server = net.createServer();
     server.once('error', () => {
@@ -21,36 +32,42 @@ async function checkServerHealth(): Promise<{ ok: boolean; message: string }> {
     server.listen(3001);
   });
 
-  if (!portInUse) {
-    return {
-      ok: false,
-      message: 'Dev server not running. Start it with: npm run dev',
-    };
-  }
+  // If 3001 is running, prefer it (never kill/restart it automatically)
+  if (portInUse) {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 5000);
+      const response = await fetch('http://localhost:3001/', {
+        signal: controller.signal,
+      });
+      clearTimeout(timeout);
 
-  // Port is in use - check if server actually responds
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 5000);
-    const response = await fetch('http://localhost:3001/', {
-      signal: controller.signal,
-    });
-    clearTimeout(timeout);
+      if (!response.ok) {
+        return {
+          ok: false,
+          message: `Dev server on port 3001 responded with ${response.status}. Restart it only if you intend to.`,
+        };
+      }
 
-    if (response.ok) {
-      return { ok: true, message: 'Server is healthy' };
-    } else {
+      return {
+        ok: true,
+        message: 'Dev server detected on port 3001 (Playwright will reuse it)',
+        playwrightBaseUrl: 'http://localhost:3001',
+      };
+    } catch {
       return {
         ok: false,
-        message: `Server error ${response.status}. Restart it: npx kill-port 3001 && npm run dev`,
+        message:
+          'Port 3001 is in use but the server did not respond. Restart it only if you intend to.',
       };
     }
-  } catch {
-    return {
-      ok: false,
-      message: 'Server CRASHED. Fix it: npx kill-port 3001 && npm run dev',
-    };
   }
+
+  return {
+    ok: true,
+    message:
+      'No dev server detected on port 3001 (Playwright will start its own server on port 3002)',
+  };
 }
 
 interface GateResult {
@@ -112,7 +129,8 @@ function parseGateOutput(name: string, output: string, pass: boolean): string {
 async function runGate(
   name: string,
   cmd: string,
-  outDir: string
+  outDir: string,
+  envOverride?: NodeJS.ProcessEnv
 ): Promise<GateResult> {
   console.log(`Running ${name}...`);
 
@@ -121,6 +139,7 @@ async function runGate(
       encoding: 'utf8',
       stdio: 'pipe',
       maxBuffer: 10 * 1024 * 1024, // 10MB buffer
+      env: envOverride ? { ...process.env, ...envOverride } : process.env,
     });
 
     const outputPath = path.join(outDir, `${name}.txt`);
@@ -170,7 +189,7 @@ function generateSummary(results: GateResult[], timestamp: string): string {
   let markdown = `## Verification Bundle - ${dateStr}\n\n`;
   markdown += `### Results\n`;
   markdown += `| Gate | Status | Details |\n`;
-  markdown += `|------|--------|---------|\\n`;
+  markdown += `|------|--------|---------|\n`;
 
   const gateNames: Record<string, string> = {
     lint: 'Lint',
@@ -231,7 +250,7 @@ async function main() {
     console.error('   DO NOT retry ai:verify until server is fixed.\n');
     process.exit(1);
   }
-  console.log('✅ Server is healthy\n');
+  console.log(`✅ ${serverHealth.message}\n`);
 
   // Check session log size (warning only, doesn't block)
   checkSessionLogSize();
@@ -245,19 +264,23 @@ async function main() {
 
   fs.mkdirSync(outDir, { recursive: true });
 
+  const e2eEnv = serverHealth.playwrightBaseUrl
+    ? { PLAYWRIGHT_BASE_URL: serverHealth.playwrightBaseUrl }
+    : undefined;
+
   // Define gates
-  const gates = [
+  const gates: Array<{ name: string; cmd: string; env?: NodeJS.ProcessEnv }> = [
     { name: 'lint', cmd: 'npm run lint' },
     { name: 'build', cmd: 'npm run build' },
     { name: 'unit', cmd: 'npm run test:unit' },
-    { name: 'e2e', cmd: 'npm run test:e2e' },
+    { name: 'e2e', cmd: 'npm run test:e2e', env: e2eEnv },
   ];
 
   // Run all gates
   const results: GateResult[] = [];
 
   for (const gate of gates) {
-    const result = await runGate(gate.name, gate.cmd, outDir);
+    const result = await runGate(gate.name, gate.cmd, outDir, gate.env);
     results.push(result);
   }
 

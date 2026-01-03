@@ -4,6 +4,7 @@
 Keep this list short and ruthless (≤10 items).
 
 Each AI session should:
+
 1. Read `.ai/STATE.md`
 2. Take the top **P0** item (unless Cade gives a different GOAL)
 3. Implement + verify (proof required)

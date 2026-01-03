@@ -57,6 +57,7 @@ interface EnrichmentResult {
   image_url: string | null
   home_depot_url: string | null
   internet_sku: number | null
+  retail_price: number | null
   source: string
   searchTerm: string // Track what search term worked
 }
@@ -79,6 +80,7 @@ interface EnrichmentRow {
   retry_after: string | null
   attempt_count: number
   image_url: string | null
+  retail_price?: number | null
 }
 
 // Parse CLI args
@@ -317,6 +319,17 @@ function extractProduct(
     homeDepotUrl = homeDepotUrl.replace("apionline.homedepot.com", "www.homedepot.com")
   }
 
+  let retailPrice: number | null = null
+  if (product.price !== undefined && product.price !== null) {
+    const candidate =
+      typeof product.price === "number"
+        ? product.price
+        : Number(String(product.price).replace(/[^0-9.]/g, ""))
+    if (!Number.isNaN(candidate) && Number.isFinite(candidate)) {
+      retailPrice = candidate
+    }
+  }
+
   return {
     sku: originalSku,
     item_name: product.title || null,
@@ -325,6 +338,7 @@ function extractProduct(
     image_url: optimizeImageUrl(imageUrl),
     home_depot_url: homeDepotUrl || null,
     internet_sku: internetSku,
+    retail_price: retailPrice,
     source: "serpapi",
     searchTerm,
   }
@@ -502,6 +516,7 @@ async function main() {
           image_url: result.image_url,
           home_depot_url: result.home_depot_url,
           internet_sku: result.internet_sku,
+          retail_price: result.retail_price,
           source: "serpapi",
           status: "enriched",
           attempt_count: 1,
@@ -536,6 +551,7 @@ async function main() {
       const { error } = await supabase.from("penny_item_enrichment").upsert(
         {
           sku,
+          retail_price: null,
           status: "not_found",
           attempt_count: attemptCount,
           retry_after: retryAfter,

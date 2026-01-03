@@ -89,6 +89,20 @@ export function normalizeBrand(brand: string | undefined): string {
 
   return normalized
 }
+
+const USD_FORMATTER = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+})
+
+export function formatCurrency(value: number | null | undefined): string {
+  if (value === null || value === undefined) return USD_FORMATTER.format(0)
+  const numeric = Number(value)
+  if (!Number.isFinite(numeric)) return USD_FORMATTER.format(0)
+  return USD_FORMATTER.format(numeric)
+}
 const THIRTY_DAYS_MS = 30 * DAY_MS
 const STATE_CODES = new Set(US_STATES.map((state) => state.code.toUpperCase()))
 const STATE_NAME_TO_CODE = new Map(US_STATES.map((state) => [state.name.toUpperCase(), state.code]))

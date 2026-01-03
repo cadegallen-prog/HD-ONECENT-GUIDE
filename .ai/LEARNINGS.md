@@ -6,6 +6,54 @@
 
 ---
 
+## Quick Anti-Patterns (NEVER DO THESE)
+
+Scan this FIRST before suggesting anything. If your idea matches an anti-pattern, STOP.
+
+| Anti-Pattern | Why It Fails | What to Do Instead |
+|--------------|--------------|---------------------|
+| ❌ Home Depot links with SKU | HD uses internet numbers, not SKUs | Use `getHomeDepotProductUrl()` helper |
+| ❌ Kill port 3001 if occupied | Server is intentionally kept running | Check if it responds, reuse it |
+| ❌ Remove "use client" directives | Breaks production builds | Keep them; add if you get hydration errors |
+| ❌ Modify globals.css without approval | Cascades unpredictably, breaks dark mode | Use existing tokens or get explicit approval |
+| ❌ Reduce timeouts to "fix" failures | Masks the real problem | Investigate root cause; keep balanced timeouts |
+| ❌ Dynamic OG images for main pages | Facebook crawler timeouts | Use static PNGs, generate with Playwright |
+| ❌ Trust dev mode as final test | Dev mode is more forgiving | ALWAYS run `npm run build` before done |
+| ❌ Skip reading LEARNINGS.md | You'll repeat documented failures | Read this file at session start |
+| ❌ Ask Cade for every tactical decision | Creates friction, wastes time | Auto-chain: Implement → Test → Review → Doc |
+| ❌ Suggest without conversation first | Builds wrong thing, hours wasted | Ask 1-2 questions before implementing |
+
+---
+
+## Playwright E2E + Next Dev Lock (Port 3001)
+
+### Problem
+
+Playwright E2E failed with:
+- `Unable to acquire lock at .next/dev/lock, is another instance of next dev running?`
+
+### What We Tried
+
+- Ran `npm run test:e2e` while a dev server was already running on port 3001.
+
+### What We Learned
+
+- Next.js dev uses a project-wide `.next/dev/lock` → you can't run a second `next dev`, even on a different port.
+- When port 3001 is already running, Playwright should reuse it by setting `PLAYWRIGHT_BASE_URL=http://localhost:3001`.
+
+### What to Do Instead
+
+- If port 3001 is running:
+  - PowerShell: `$env:PLAYWRIGHT_BASE_URL='http://localhost:3001'; npm run test:e2e`
+  - Bash: `PLAYWRIGHT_BASE_URL=http://localhost:3001 npm run test:e2e`
+- Prefer `npm run ai:verify` (it auto-detects port 3001 and sets `PLAYWRIGHT_BASE_URL` for E2E).
+
+**Files:** `playwright.config.ts`, `scripts/ai-verify.ts`
+
+**Date:** Jan 02, 2026
+
+---
+
 ## Dynamic OG Image Generation for Social Media
 
 ### Problem

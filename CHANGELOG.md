@@ -6,6 +6,12 @@ Dates are recorded in America/New_York time.
 
 ---
 
+## 2026-01-02 - Penny List price + barcode overhaul
+
+- Captured retail price from enrichment scrapes and threaded it through Supabase, the enrichment tooling (`scripts/bulk-enrich.ts`, `scripts/enrichment-json-to-csv.ts`, `scripts/serpapi-enrich.ts`) and the data layer (`lib/fetch-penny-data.ts`, new `penny_item_enrichment.retail_price` migration) so savings math is accurate.
+- Penny List cards now surface the real retail price, savings badge, and a clickable UPC button that launches a new `BarcodeModal` powered by `jsbarcode`; the actions row was cleaned up (HD link → Report → Save) and the share button was removed.
+- Tampermonkey + controller scripting captures the extra field, logs it for debugging, and the docs (`docs/CROWDSOURCE-SYSTEM.md`, `docs/HOW-CADE-ADDS-STOCK-PHOTOS.md`, `docs/SCRAPING_COSTS.md`, `docs/supabase-rls.md`) were updated to describe the pipeline plus the new `retail_price` column.
+
 ## 2025-12-29 - Analytics instrumentation (Plausible-ready)
 
 - Replaced Google Analytics with privacy-friendly Plausible script injection (env-controlled) and kept Vercel Analytics optional via provider flag.

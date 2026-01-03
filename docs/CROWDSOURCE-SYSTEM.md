@@ -55,6 +55,7 @@ Add entries to the `penny_item_enrichment` table:
 - `image_url` - stock thumbnail URL
 - `internet_sku` - for reliable Home Depot product links
 - `item_name`, `brand`, `model_number` - optional metadata
+- `retail_price` - optional numeric price captured from HD so cards can show “was $X.XX” savings
 
 The site updates automatically once those are added.
 

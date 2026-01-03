@@ -436,6 +436,7 @@ async function main() {
               image_url: optimizeImageUrl(data.imageUrl),
               home_depot_url: data.url,
               internet_sku: data.internetSku ? parseInt(data.internetSku, 10) : null,
+              retail_price: null,
               source: "stealth",
               updated_at: new Date().toISOString(),
             },

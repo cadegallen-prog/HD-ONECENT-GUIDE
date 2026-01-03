@@ -44,6 +44,8 @@ penny_item_enrichment table (Supabase)
 Polished Penny Cards (no placeholders!)
 ```
 
+This pipeline now also writes `retail_price` into the enrichment table so Penny List cards can show “was $X.XX / Save $Y.YY” savings messaging.
+
 ### Required Setup
 
 1. **Sign up for SerpApi** (~2 minutes)

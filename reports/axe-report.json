@@ -14,7 +14,7 @@
       "orientationAngle": 0,
       "orientationType": "landscape-primary"
     },
-    "timestamp": "2026-01-01T20:51:08.913Z",
+    "timestamp": "2026-01-02T07:11:03.460Z",
     "url": "http://localhost:3001/",
     "toolOptions": {
       "reporter": "v1"
@@ -459,6 +459,41 @@
         "description": "Ensure that HTML elements with both valid lang and xml:lang attributes agree on the base language of the page",
         "help": "HTML elements with lang and xml:lang must have the same base language",
         "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/html-xml-lang-mismatch?application=webdriverjs",
+        "nodes": []
+      },
+      {
+        "id": "image-alt",
+        "impact": null,
+        "tags": [
+          "cat.text-alternatives",
+          "wcag2a",
+          "wcag111",
+          "section508",
+          "section508.22.a",
+          "TTv5",
+          "TT7.a",
+          "TT7.b",
+          "EN-301-549",
+          "EN-9.1.1.1",
+          "ACT",
+          "RGAAv4",
+          "RGAA-1.1.1"
+        ],
+        "description": "Ensure <img> elements have alternative text or a role of none or presentation",
+        "help": "Images must have alternative text",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/image-alt?application=webdriverjs",
+        "nodes": []
+      },
+      {
+        "id": "image-redundant-alt",
+        "impact": null,
+        "tags": [
+          "cat.text-alternatives",
+          "best-practice"
+        ],
+        "description": "Ensure image alternative is not repeated as text",
+        "help": "Alternative text of images should not be repeated as text",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/image-redundant-alt?application=webdriverjs",
         "nodes": []
       },
       {
@@ -982,7 +1017,7 @@
             "impact": null,
             "html": "<a class=\"btn-primary w-full s...\" aria-label=\"Browse the community...\" href=\"/penny-list\">",
             "target": [
-              ".gap-3 > .bg-\\[var\\(--cta-primary\\)\\].text-\\[var\\(--cta-text\\)\\].shadow-md"
+              ".gap-3 > .btn-primary.bg-\\[var\\(--cta-primary\\)\\].text-\\[var\\(--cta-text\\)\\]"
             ]
           },
           {
@@ -1008,7 +1043,7 @@
             "impact": null,
             "html": "<a class=\"btn-secondary w-full...\" aria-label=\"Report a new penny f...\" href=\"/report-find\">",
             "target": [
-              ".border-2"
+              ".btn-secondary"
             ]
           },
           {
@@ -1034,7 +1069,7 @@
             "impact": null,
             "html": "<a href=\"https://www.facebook...\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-[var(--text-sec...\" aria-label=\"Facebook Group\">",
             "target": [
-              "a[aria-label=\"Facebook Group\"]"
+              ".order-1 > .p-2"
             ]
           },
           {
@@ -1177,7 +1212,7 @@
             "impact": null,
             "html": "<a class=\"btn-primary w-full s...\" aria-label=\"Browse the community...\" href=\"/penny-list\">",
             "target": [
-              ".gap-3 > .bg-\\[var\\(--cta-primary\\)\\].text-\\[var\\(--cta-text\\)\\].shadow-md"
+              ".gap-3 > .btn-primary.bg-\\[var\\(--cta-primary\\)\\].text-\\[var\\(--cta-text\\)\\]"
             ]
           },
           {
@@ -1195,7 +1230,7 @@
             "impact": null,
             "html": "<a class=\"btn-secondary w-full...\" aria-label=\"Report a new penny f...\" href=\"/report-find\">",
             "target": [
-              ".border-2"
+              ".btn-secondary"
             ]
           },
           {
@@ -1213,7 +1248,7 @@
             "impact": null,
             "html": "<a href=\"https://www.facebook...\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-[var(--text-sec...\" aria-label=\"Facebook Group\">",
             "target": [
-              "a[aria-label=\"Facebook Group\"]"
+              ".order-1 > .p-2"
             ]
           },
           {
@@ -1541,7 +1576,7 @@
             "impact": null,
             "html": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-map w-6 h-6 text-[var(--cta-primary)]\" aria-hidden=\"true\">",
             "target": [
-              ".rounded-xl.w-12.h-12 > .lucide-map"
+              ".rounded-xl.mb-4.w-12 > .lucide-map"
             ]
           },
           {
@@ -1573,7 +1608,7 @@
             "impact": null,
             "html": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-users w-6 h-6 text-[var(--cta-primary)]\" aria-hidden=\"true\">",
             "target": [
-              ".rounded-full.w-12.h-12 > .lucide-users"
+              ".rounded-full.mb-4.w-12 > .lucide-users"
             ]
           },
           {
@@ -1605,7 +1640,7 @@
             "impact": null,
             "html": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-external-link w-4 h-4 flex-shrink-0\" aria-hidden=\"true\">",
             "target": [
-              ".dark\\:focus\\:ring-offset-\\[var\\(--bg-card\\)\\] > .lucide-external-link.w-4.h-4"
+              ".mt-6 > .lucide-external-link.w-4.h-4"
             ]
           },
           {
@@ -1822,7 +1857,7 @@
             "impact": null,
             "html": "<a class=\"btn-primary w-full s...\" aria-label=\"Browse the community...\" href=\"/penny-list\">",
             "target": [
-              ".gap-3 > .bg-\\[var\\(--cta-primary\\)\\].text-\\[var\\(--cta-text\\)\\].shadow-md"
+              ".gap-3 > .btn-primary.bg-\\[var\\(--cta-primary\\)\\].text-\\[var\\(--cta-text\\)\\]"
             ]
           },
           {
@@ -1840,7 +1875,7 @@
             "impact": null,
             "html": "<a class=\"btn-secondary w-full...\" aria-label=\"Report a new penny f...\" href=\"/report-find\">",
             "target": [
-              ".border-2"
+              ".btn-secondary"
             ]
           },
           {
@@ -1858,7 +1893,7 @@
             "impact": null,
             "html": "<a href=\"https://www.facebook...\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-[var(--text-sec...\" aria-label=\"Facebook Group\">",
             "target": [
-              "a[aria-label=\"Facebook Group\"]"
+              ".order-1 > .p-2"
             ]
           },
           {
@@ -2071,7 +2106,7 @@
             "impact": null,
             "html": "<a class=\"btn-primary w-full s...\" aria-label=\"Browse the community...\" href=\"/penny-list\">",
             "target": [
-              ".gap-3 > .bg-\\[var\\(--cta-primary\\)\\].text-\\[var\\(--cta-text\\)\\].shadow-md"
+              ".gap-3 > .btn-primary.bg-\\[var\\(--cta-primary\\)\\].text-\\[var\\(--cta-text\\)\\]"
             ]
           },
           {
@@ -2103,7 +2138,7 @@
             "impact": null,
             "html": "<a class=\"btn-secondary w-full...\" aria-label=\"Report a new penny f...\" href=\"/report-find\">",
             "target": [
-              ".border-2"
+              ".btn-secondary"
             ]
           },
           {
@@ -2135,7 +2170,7 @@
             "impact": null,
             "html": "<a href=\"https://www.facebook...\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-[var(--text-sec...\" aria-label=\"Facebook Group\">",
             "target": [
-              "a[aria-label=\"Facebook Group\"]"
+              ".order-1 > .p-2"
             ]
           },
           {
@@ -2256,7 +2291,7 @@
             "impact": null,
             "html": "<a class=\"btn-primary w-full s...\" aria-label=\"Browse the community...\" href=\"/penny-list\">",
             "target": [
-              ".gap-3 > .bg-\\[var\\(--cta-primary\\)\\].text-\\[var\\(--cta-text\\)\\].shadow-md"
+              ".gap-3 > .btn-primary.bg-\\[var\\(--cta-primary\\)\\].text-\\[var\\(--cta-text\\)\\]"
             ]
           },
           {
@@ -2274,7 +2309,7 @@
             "impact": null,
             "html": "<a class=\"btn-secondary w-full...\" aria-label=\"Report a new penny f...\" href=\"/report-find\">",
             "target": [
-              ".border-2"
+              ".btn-secondary"
             ]
           },
           {
@@ -2292,7 +2327,7 @@
             "impact": null,
             "html": "<a href=\"https://www.facebook...\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-[var(--text-sec...\" aria-label=\"Facebook Group\">",
             "target": [
-              "a[aria-label=\"Facebook Group\"]"
+              ".order-1 > .p-2"
             ]
           },
           {
@@ -2466,24 +2501,6 @@
                     ]
                   },
                   {
-                    "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] mb-4\">Today's Finds</h2>",
-                    "target": [
-                      ".max-w-5xl > h2"
-                    ]
-                  },
-                  {
-                    "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] text-center mb-1 line-clamp-2\">Milwaukee Kneeling Pad</h3>",
-                    "target": [
-                      "article:nth-child(1) > .line-clamp-2.mb-1"
-                    ]
-                  },
-                  {
-                    "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] text-center mb-1 line-clamp-2\">10 ft. X 1 in. Cam Buckle Tie-Down Straps With S Hook (2-Pack) Fh0904</h3>",
-                    "target": [
-                      "article:nth-child(2) > .line-clamp-2.mb-1"
-                    ]
-                  },
-                  {
                     "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug\">How Penny Hunting Works</h2>",
                     "target": [
                       ".max-w-4xl.mx-auto > .mb-10.text-center > h2"
@@ -2492,67 +2509,67 @@
                   {
                     "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] leading-snug\">Learn the Cycle</h3>",
                     "target": [
-                      ".p-4.text-center:nth-child(1) > .leading-snug"
+                      ".p-4.text-center:nth-child(1) > h3"
                     ]
                   },
                   {
                     "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] leading-snug\">Scout First</h3>",
                     "target": [
-                      ".p-4.text-center:nth-child(2) > .leading-snug"
+                      ".p-4.text-center:nth-child(2) > h3"
                     ]
                   },
                   {
                     "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] leading-snug\">Hunt Smart</h3>",
                     "target": [
-                      ".p-4.text-center:nth-child(3) > .leading-snug"
+                      ".p-4.text-center:nth-child(3) > h3"
                     ]
                   },
                   {
                     "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] leading-snug\">Checkout</h3>",
                     "target": [
-                      ".p-4.text-center:nth-child(4) > .leading-snug"
+                      ".p-4.text-center:nth-child(4) > h3"
                     ]
                   },
                   {
                     "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug\">Tools</h2>",
                     "target": [
-                      ".section-padding:nth-child(6) > .container-wide > .mb-10.text-center > h2"
+                      ".section-padding:nth-child(5) > .container-wide > .mb-10.text-center > h2"
                     ]
                   },
                   {
                     "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Read the Guide</h3>",
                     "target": [
-                      ".group.card-interactive.p-6:nth-child(1) > .text-lg.leading-snug"
+                      ".group.card-interactive.flex-col:nth-child(1) > .text-lg"
                     ]
                   },
                   {
                     "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Store Finder Map</h3>",
                     "target": [
-                      ".group.card-interactive[href$=\"store-finder\"] > .text-lg.leading-snug"
+                      ".group.card-interactive[href$=\"store-finder\"] > .text-lg"
                     ]
                   },
                   {
                     "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug\">Join <!-- -->40,000+ and counting<!-- --> Penny Hunters</h2>",
                     "target": [
-                      ".max-w-3xl.mx-auto.text-center > h2"
+                      ".max-w-3xl.text-center.mx-auto > h2"
                     ]
                   },
                   {
                     "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug\">Support Penny Central</h2>",
                     "target": [
-                      ".section-padding:nth-child(8) > .container-wide > .mb-10.text-center > h2"
+                      ".section-padding:nth-child(7) > .container-wide > .mb-10.text-center > h2"
                     ]
                   },
                   {
                     "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Buy Me a Coffee</h3>",
                     "target": [
-                      ".block.card-interactive[href$=\"cadegallen\"] > .text-lg.leading-snug"
+                      ".block.card-interactive[href$=\"cadegallen\"] > .text-lg"
                     ]
                   },
                   {
                     "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Activate BeFrugal Cashback</h3>",
                     "target": [
-                      ".block.card-interactive[href$=\"befrugal\"] > .text-lg.leading-snug"
+                      ".block.card-interactive[href$=\"befrugal\"] > .text-lg"
                     ]
                   },
                   {
@@ -2718,7 +2735,7 @@
             "impact": null,
             "html": "<a class=\"btn-primary w-full s...\" aria-label=\"Browse the community...\" href=\"/penny-list\">",
             "target": [
-              ".gap-3 > .bg-\\[var\\(--cta-primary\\)\\].text-\\[var\\(--cta-text\\)\\].shadow-md"
+              ".gap-3 > .btn-primary.bg-\\[var\\(--cta-primary\\)\\].text-\\[var\\(--cta-text\\)\\]"
             ]
           },
           {
@@ -2743,307 +2760,7 @@
             "impact": null,
             "html": "<a class=\"btn-secondary w-full...\" aria-label=\"Report a new penny f...\" href=\"/report-find\">",
             "target": [
-              ".border-2"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "color-contrast",
-                "data": {
-                  "fgColor": "#dcdcdc",
-                  "bgColor": "#1f1f1f",
-                  "contrastRatio": 12.01,
-                  "fontSize": "22.5pt (30px)",
-                  "fontWeight": "normal",
-                  "expectedContrastRatio": "3:1"
-                },
-                "relatedNodes": [],
-                "impact": "serious",
-                "message": "Element has sufficient color contrast of 12.01"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] mb-4\">Today's Finds</h2>",
-            "target": [
-              ".max-w-5xl > h2"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "color-contrast",
-                "data": {
-                  "fgColor": "#dcdcdc",
-                  "bgColor": "#1a1a1a",
-                  "contrastRatio": 12.69,
-                  "fontSize": "12.0pt (16px)",
-                  "fontWeight": "normal",
-                  "expectedContrastRatio": "4.5:1"
-                },
-                "relatedNodes": [],
-                "impact": "serious",
-                "message": "Element has sufficient color contrast of 12.69"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] text-center mb-1 line-clamp-2\">Milwaukee Kneeling Pad</h3>",
-            "target": [
-              "article:nth-child(1) > .line-clamp-2.mb-1"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "color-contrast",
-                "data": {
-                  "fgColor": "#b0b0b0",
-                  "bgColor": "#3a3a3a",
-                  "contrastRatio": 5.24,
-                  "fontSize": "9.0pt (12px)",
-                  "fontWeight": "normal",
-                  "expectedContrastRatio": "4.5:1"
-                },
-                "relatedNodes": [],
-                "impact": "serious",
-                "message": "Element has sufficient color contrast of 5.24"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<span class=\"badge bg-[var(--bg-tertiary)] text-[var(--text-secondary)] px-2 py-0.5 rounded text-xs\">CT</span>",
-            "target": [
-              "article:nth-child(1) > .flex-wrap.gap-1.mb-1 > .badge.px-2.py-0\\.5"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "color-contrast",
-                "data": {
-                  "fgColor": "#9a9a9a",
-                  "bgColor": "#1a1a1a",
-                  "contrastRatio": 6.18,
-                  "fontSize": "9.0pt (12px)",
-                  "fontWeight": "normal",
-                  "expectedContrastRatio": "4.5:1"
-                },
-                "relatedNodes": [],
-                "impact": "serious",
-                "message": "Element has sufficient color contrast of 6.18"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<span class=\"text-xs text-[var(--text-muted)] mb-2\">Today</span>",
-            "target": [
-              "article:nth-child(1) > .mb-2.text-\\[var\\(--text-muted\\)\\].text-xs"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "color-contrast",
-                "data": {
-                  "fgColor": "#8fa3b8",
-                  "bgColor": "#1a1a1a",
-                  "contrastRatio": 6.71,
-                  "fontSize": "9.0pt (12px)",
-                  "fontWeight": "normal",
-                  "expectedContrastRatio": "4.5:1"
-                },
-                "relatedNodes": [],
-                "impact": "serious",
-                "message": "Element has sufficient color contrast of 6.71"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<a class=\"btn-secondary text-xs px-3 py-1 rounded mt-auto\" href=\"/sku/1013692004\">View details</a>",
-            "target": [
-              "a[href=\"/sku/1013692004\"]"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "color-contrast",
-                "data": {
-                  "fgColor": "#dcdcdc",
-                  "bgColor": "#1a1a1a",
-                  "contrastRatio": 12.69,
-                  "fontSize": "12.0pt (16px)",
-                  "fontWeight": "normal",
-                  "expectedContrastRatio": "4.5:1"
-                },
-                "relatedNodes": [],
-                "impact": "serious",
-                "message": "Element has sufficient color contrast of 12.69"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] text-center mb-1 line-clamp-2\">10 ft. X 1 in. Cam Buckle Tie-Down Straps With S Hook (2-Pack) Fh0904</h3>",
-            "target": [
-              "article:nth-child(2) > .line-clamp-2.mb-1"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "color-contrast",
-                "data": {
-                  "fgColor": "#b0b0b0",
-                  "bgColor": "#3a3a3a",
-                  "contrastRatio": 5.24,
-                  "fontSize": "9.0pt (12px)",
-                  "fontWeight": "normal",
-                  "expectedContrastRatio": "4.5:1"
-                },
-                "relatedNodes": [],
-                "impact": "serious",
-                "message": "Element has sufficient color contrast of 5.24"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<span class=\"badge bg-[var(--bg-tertiary)] text-[var(--text-secondary)] px-2 py-0.5 rounded text-xs\">NY</span>",
-            "target": [
-              "article:nth-child(2) > .flex-wrap.gap-1.mb-1 > .badge.px-2.py-0\\.5:nth-child(1)"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "color-contrast",
-                "data": {
-                  "fgColor": "#b0b0b0",
-                  "bgColor": "#3a3a3a",
-                  "contrastRatio": 5.24,
-                  "fontSize": "9.0pt (12px)",
-                  "fontWeight": "normal",
-                  "expectedContrastRatio": "4.5:1"
-                },
-                "relatedNodes": [],
-                "impact": "serious",
-                "message": "Element has sufficient color contrast of 5.24"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<span class=\"badge bg-[var(--bg-tertiary)] text-[var(--text-secondary)] px-2 py-0.5 rounded text-xs\">AZ</span>",
-            "target": [
-              ".badge.px-2.py-0\\.5:nth-child(2)"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "color-contrast",
-                "data": {
-                  "fgColor": "#b0b0b0",
-                  "bgColor": "#3a3a3a",
-                  "contrastRatio": 5.24,
-                  "fontSize": "9.0pt (12px)",
-                  "fontWeight": "normal",
-                  "expectedContrastRatio": "4.5:1"
-                },
-                "relatedNodes": [],
-                "impact": "serious",
-                "message": "Element has sufficient color contrast of 5.24"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<span class=\"badge bg-[var(--bg-tertiary)] text-[var(--text-secondary)] px-2 py-0.5 rounded text-xs\">TX</span>",
-            "target": [
-              ".badge.px-2.py-0\\.5:nth-child(3)"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "color-contrast",
-                "data": {
-                  "fgColor": "#9a9a9a",
-                  "bgColor": "#1a1a1a",
-                  "contrastRatio": 6.18,
-                  "fontSize": "9.0pt (12px)",
-                  "fontWeight": "normal",
-                  "expectedContrastRatio": "4.5:1"
-                },
-                "relatedNodes": [],
-                "impact": "serious",
-                "message": "Element has sufficient color contrast of 6.18"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<span class=\"text-xs text-[var(--text-muted)] mb-2\">Yesterday</span>",
-            "target": [
-              "article:nth-child(2) > .mb-2.text-\\[var\\(--text-muted\\)\\].text-xs"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "color-contrast",
-                "data": {
-                  "fgColor": "#8fa3b8",
-                  "bgColor": "#1a1a1a",
-                  "contrastRatio": 6.71,
-                  "fontSize": "9.0pt (12px)",
-                  "fontWeight": "normal",
-                  "expectedContrastRatio": "4.5:1"
-                },
-                "relatedNodes": [],
-                "impact": "serious",
-                "message": "Element has sufficient color contrast of 6.71"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<a class=\"btn-secondary text-xs px-3 py-1 rounded mt-auto\" href=\"/sku/1001755675\">View details</a>",
-            "target": [
-              "a[href=\"/sku/1001755675\"]"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "color-contrast",
-                "data": {
-                  "fgColor": "#dcdcdc",
-                  "bgColor": "#1f1f1f",
-                  "contrastRatio": 12.01,
-                  "fontSize": "12.0pt (16px)",
-                  "fontWeight": "normal",
-                  "expectedContrastRatio": "4.5:1"
-                },
-                "relatedNodes": [],
-                "impact": "serious",
-                "message": "Element has sufficient color contrast of 12.01"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<a class=\"btn-primary inline-block px-6 py-2 rounded font-semibold\" href=\"/penny-list\">See all penny finds →</a>",
-            "target": [
-              ".inline-block"
+              ".btn-secondary"
             ]
           },
           {
@@ -3118,7 +2835,7 @@
             "impact": null,
             "html": "<span class=\"text-base font-bold text-[var(--cta-primary)]\">1</span>",
             "target": [
-              ".p-4.text-center:nth-child(1) > .dark\\:bg-\\[var\\(--bg-tertiary\\)\\].mb-3.rounded-full > .font-bold.text-\\[var\\(--cta-primary\\)\\]"
+              ".p-4.text-center:nth-child(1) > .dark\\:bg-\\[var\\(--bg-tertiary\\)\\].mb-3.rounded-full > span"
             ]
           },
           {
@@ -3143,7 +2860,7 @@
             "impact": null,
             "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] leading-snug\">Learn the Cycle</h3>",
             "target": [
-              ".p-4.text-center:nth-child(1) > .leading-snug"
+              ".p-4.text-center:nth-child(1) > h3"
             ]
           },
           {
@@ -3193,7 +2910,7 @@
             "impact": null,
             "html": "<span class=\"text-base font-bold text-[var(--cta-primary)]\">2</span>",
             "target": [
-              ".p-4.text-center:nth-child(2) > .dark\\:bg-\\[var\\(--bg-tertiary\\)\\].mb-3.rounded-full > .font-bold.text-\\[var\\(--cta-primary\\)\\]"
+              ".p-4.text-center:nth-child(2) > .dark\\:bg-\\[var\\(--bg-tertiary\\)\\].mb-3.rounded-full > span"
             ]
           },
           {
@@ -3218,7 +2935,7 @@
             "impact": null,
             "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] leading-snug\">Scout First</h3>",
             "target": [
-              ".p-4.text-center:nth-child(2) > .leading-snug"
+              ".p-4.text-center:nth-child(2) > h3"
             ]
           },
           {
@@ -3268,7 +2985,7 @@
             "impact": null,
             "html": "<span class=\"text-base font-bold text-[var(--cta-primary)]\">3</span>",
             "target": [
-              ".p-4.text-center:nth-child(3) > .dark\\:bg-\\[var\\(--bg-tertiary\\)\\].mb-3.rounded-full > .font-bold.text-\\[var\\(--cta-primary\\)\\]"
+              ".p-4.text-center:nth-child(3) > .dark\\:bg-\\[var\\(--bg-tertiary\\)\\].mb-3.rounded-full > span"
             ]
           },
           {
@@ -3293,7 +3010,7 @@
             "impact": null,
             "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] leading-snug\">Hunt Smart</h3>",
             "target": [
-              ".p-4.text-center:nth-child(3) > .leading-snug"
+              ".p-4.text-center:nth-child(3) > h3"
             ]
           },
           {
@@ -3343,7 +3060,7 @@
             "impact": null,
             "html": "<span class=\"text-base font-bold text-[var(--cta-primary)]\">4</span>",
             "target": [
-              ".p-4.text-center:nth-child(4) > .dark\\:bg-\\[var\\(--bg-tertiary\\)\\].mb-3.rounded-full > .font-bold.text-\\[var\\(--cta-primary\\)\\]"
+              ".p-4.text-center:nth-child(4) > .dark\\:bg-\\[var\\(--bg-tertiary\\)\\].mb-3.rounded-full > span"
             ]
           },
           {
@@ -3368,7 +3085,7 @@
             "impact": null,
             "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] leading-snug\">Checkout</h3>",
             "target": [
-              ".p-4.text-center:nth-child(4) > .leading-snug"
+              ".p-4.text-center:nth-child(4) > h3"
             ]
           },
           {
@@ -3418,7 +3135,7 @@
             "impact": null,
             "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug\">Tools</h2>",
             "target": [
-              ".section-padding:nth-child(6) > .container-wide > .mb-10.text-center > h2"
+              ".section-padding:nth-child(5) > .container-wide > .mb-10.text-center > h2"
             ]
           },
           {
@@ -3443,7 +3160,7 @@
             "impact": null,
             "html": "<p class=\"mt-2 text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed\">Resources to help you plan trips and find penny items</p>",
             "target": [
-              ".section-padding:nth-child(6) > .container-wide > .mb-10.text-center > .sm\\:text-lg.mt-2.text-base"
+              ".section-padding:nth-child(5) > .container-wide > .mb-10.text-center > .sm\\:text-lg.mt-2.text-base"
             ]
           },
           {
@@ -3468,7 +3185,7 @@
             "impact": null,
             "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Read the Guide</h3>",
             "target": [
-              ".group.card-interactive.p-6:nth-child(1) > .text-lg.leading-snug"
+              ".group.card-interactive.flex-col:nth-child(1) > .text-lg"
             ]
           },
           {
@@ -3493,7 +3210,7 @@
             "impact": null,
             "html": "<p class=\"mt-2 text-sm text-[var(--text-secondary)] leading-relaxed flex-grow\">Step-by-step tips for the full penny hunting cycle.</p>",
             "target": [
-              ".group.card-interactive.p-6:nth-child(1) > .flex-grow.mt-2"
+              ".group.card-interactive.flex-col:nth-child(1) > .flex-grow.mt-2"
             ]
           },
           {
@@ -3518,7 +3235,7 @@
             "impact": null,
             "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Store Finder Map</h3>",
             "target": [
-              ".group.card-interactive[href$=\"store-finder\"] > .text-lg.leading-snug"
+              ".group.card-interactive[href$=\"store-finder\"] > .text-lg"
             ]
           },
           {
@@ -3568,7 +3285,7 @@
             "impact": null,
             "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug\">Join <!-- -->40,000+ and counting<!-- --> Penny Hunters</h2>",
             "target": [
-              ".max-w-3xl.mx-auto.text-center > h2"
+              ".max-w-3xl.text-center.mx-auto > h2"
             ]
           },
           {
@@ -3618,7 +3335,7 @@
             "impact": null,
             "html": "<a href=\"https://www.facebook...\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"btn-primary mt-6 w-f...\">",
             "target": [
-              ".dark\\:focus\\:ring-offset-\\[var\\(--bg-card\\)\\]"
+              ".mt-6"
             ]
           },
           {
@@ -3643,7 +3360,7 @@
             "impact": null,
             "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug\">Support Penny Central</h2>",
             "target": [
-              ".section-padding:nth-child(8) > .container-wide > .mb-10.text-center > h2"
+              ".section-padding:nth-child(7) > .container-wide > .mb-10.text-center > h2"
             ]
           },
           {
@@ -3693,7 +3410,7 @@
             "impact": null,
             "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Buy Me a Coffee</h3>",
             "target": [
-              ".block.card-interactive[href$=\"cadegallen\"] > .text-lg.leading-snug"
+              ".block.card-interactive[href$=\"cadegallen\"] > .text-lg"
             ]
           },
           {
@@ -3768,7 +3485,7 @@
             "impact": null,
             "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Activate BeFrugal Cashback</h3>",
             "target": [
-              ".block.card-interactive[href$=\"befrugal\"] > .text-lg.leading-snug"
+              ".block.card-interactive[href$=\"befrugal\"] > .text-lg"
             ]
           },
           {
@@ -4218,7 +3935,7 @@
             "impact": null,
             "html": "<p class=\"text-xs text-[var(--text-muted)] order-2 sm:order-1\">© 2025 Penny Central. Educational use only.</p>",
             "target": [
-              ".order-2"
+              ".sm\\:flex-row.justify-between.flex-col > .text-xs"
             ]
           }
         ]
@@ -4304,60 +4021,6 @@
             "all": [],
             "none": [],
             "impact": null,
-            "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] mb-4\">Today's Finds</h2>",
-            "target": [
-              ".max-w-5xl > h2"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "has-visible-text",
-                "data": null,
-                "relatedNodes": [],
-                "impact": "minor",
-                "message": "Element has text that is visible to screen readers"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] text-center mb-1 line-clamp-2\">Milwaukee Kneeling Pad</h3>",
-            "target": [
-              "article:nth-child(1) > .line-clamp-2.mb-1"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "has-visible-text",
-                "data": null,
-                "relatedNodes": [],
-                "impact": "minor",
-                "message": "Element has text that is visible to screen readers"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] text-center mb-1 line-clamp-2\">10 ft. X 1 in. Cam Buckle Tie-Down Straps With S Hook (2-Pack) Fh0904</h3>",
-            "target": [
-              "article:nth-child(2) > .line-clamp-2.mb-1"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "has-visible-text",
-                "data": null,
-                "relatedNodes": [],
-                "impact": "minor",
-                "message": "Element has text that is visible to screen readers"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
             "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug\">How Penny Hunting Works</h2>",
             "target": [
               ".max-w-4xl.mx-auto > .mb-10.text-center > h2"
@@ -4378,7 +4041,7 @@
             "impact": null,
             "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] leading-snug\">Learn the Cycle</h3>",
             "target": [
-              ".p-4.text-center:nth-child(1) > .leading-snug"
+              ".p-4.text-center:nth-child(1) > h3"
             ]
           },
           {
@@ -4396,7 +4059,7 @@
             "impact": null,
             "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] leading-snug\">Scout First</h3>",
             "target": [
-              ".p-4.text-center:nth-child(2) > .leading-snug"
+              ".p-4.text-center:nth-child(2) > h3"
             ]
           },
           {
@@ -4414,7 +4077,7 @@
             "impact": null,
             "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] leading-snug\">Hunt Smart</h3>",
             "target": [
-              ".p-4.text-center:nth-child(3) > .leading-snug"
+              ".p-4.text-center:nth-child(3) > h3"
             ]
           },
           {
@@ -4432,7 +4095,7 @@
             "impact": null,
             "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] leading-snug\">Checkout</h3>",
             "target": [
-              ".p-4.text-center:nth-child(4) > .leading-snug"
+              ".p-4.text-center:nth-child(4) > h3"
             ]
           },
           {
@@ -4450,7 +4113,7 @@
             "impact": null,
             "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug\">Tools</h2>",
             "target": [
-              ".section-padding:nth-child(6) > .container-wide > .mb-10.text-center > h2"
+              ".section-padding:nth-child(5) > .container-wide > .mb-10.text-center > h2"
             ]
           },
           {
@@ -4468,7 +4131,7 @@
             "impact": null,
             "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Read the Guide</h3>",
             "target": [
-              ".group.card-interactive.p-6:nth-child(1) > .text-lg.leading-snug"
+              ".group.card-interactive.flex-col:nth-child(1) > .text-lg"
             ]
           },
           {
@@ -4486,7 +4149,7 @@
             "impact": null,
             "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Store Finder Map</h3>",
             "target": [
-              ".group.card-interactive[href$=\"store-finder\"] > .text-lg.leading-snug"
+              ".group.card-interactive[href$=\"store-finder\"] > .text-lg"
             ]
           },
           {
@@ -4504,7 +4167,7 @@
             "impact": null,
             "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug\">Join <!-- -->40,000+ and counting<!-- --> Penny Hunters</h2>",
             "target": [
-              ".max-w-3xl.mx-auto.text-center > h2"
+              ".max-w-3xl.text-center.mx-auto > h2"
             ]
           },
           {
@@ -4522,7 +4185,7 @@
             "impact": null,
             "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug\">Support Penny Central</h2>",
             "target": [
-              ".section-padding:nth-child(8) > .container-wide > .mb-10.text-center > h2"
+              ".section-padding:nth-child(7) > .container-wide > .mb-10.text-center > h2"
             ]
           },
           {
@@ -4540,7 +4203,7 @@
             "impact": null,
             "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Buy Me a Coffee</h3>",
             "target": [
-              ".block.card-interactive[href$=\"cadegallen\"] > .text-lg.leading-snug"
+              ".block.card-interactive[href$=\"cadegallen\"] > .text-lg"
             ]
           },
           {
@@ -4558,7 +4221,7 @@
             "impact": null,
             "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Activate BeFrugal Cashback</h3>",
             "target": [
-              ".block.card-interactive[href$=\"befrugal\"] > .text-lg.leading-snug"
+              ".block.card-interactive[href$=\"befrugal\"] > .text-lg"
             ]
           },
           {
@@ -4642,19 +4305,31 @@
                     },
                     {
                       "ancestry": [
-                        "html > body > main:nth-child(4) > section:nth-child(4) > div > h2:nth-child(1)"
+                        "html > body > main:nth-child(4) > section:nth-child(4) > div > div:nth-child(1) > h2:nth-child(1)"
                       ],
                       "level": 2
                     },
                     {
                       "ancestry": [
-                        "html > body > main:nth-child(4) > section:nth-child(4) > div > div:nth-child(2) > article:nth-child(1) > h3:nth-child(2)"
+                        "html > body > main:nth-child(4) > section:nth-child(4) > div > div:nth-child(2) > div:nth-child(1) > h3:nth-child(2)"
                       ],
                       "level": 3
                     },
                     {
                       "ancestry": [
-                        "html > body > main:nth-child(4) > section:nth-child(4) > div > div:nth-child(2) > article:nth-child(2) > h3:nth-child(2)"
+                        "html > body > main:nth-child(4) > section:nth-child(4) > div > div:nth-child(2) > div:nth-child(2) > h3:nth-child(2)"
+                      ],
+                      "level": 3
+                    },
+                    {
+                      "ancestry": [
+                        "html > body > main:nth-child(4) > section:nth-child(4) > div > div:nth-child(2) > div:nth-child(3) > h3:nth-child(2)"
+                      ],
+                      "level": 3
+                    },
+                    {
+                      "ancestry": [
+                        "html > body > main:nth-child(4) > section:nth-child(4) > div > div:nth-child(2) > div:nth-child(4) > h3:nth-child(2)"
                       ],
                       "level": 3
                     },
@@ -4666,85 +4341,55 @@
                     },
                     {
                       "ancestry": [
-                        "html > body > main:nth-child(4) > section:nth-child(5) > div > div:nth-child(2) > div:nth-child(1) > h3:nth-child(2)"
+                        "html > body > main:nth-child(4) > section:nth-child(5) > div > div:nth-child(2) > a:nth-child(1) > h3:nth-child(2)"
                       ],
                       "level": 3
                     },
                     {
                       "ancestry": [
-                        "html > body > main:nth-child(4) > section:nth-child(5) > div > div:nth-child(2) > div:nth-child(2) > h3:nth-child(2)"
+                        "html > body > main:nth-child(4) > section:nth-child(5) > div > div:nth-child(2) > a:nth-child(2) > h3:nth-child(2)"
                       ],
                       "level": 3
                     },
                     {
                       "ancestry": [
-                        "html > body > main:nth-child(4) > section:nth-child(5) > div > div:nth-child(2) > div:nth-child(3) > h3:nth-child(2)"
-                      ],
-                      "level": 3
-                    },
-                    {
-                      "ancestry": [
-                        "html > body > main:nth-child(4) > section:nth-child(5) > div > div:nth-child(2) > div:nth-child(4) > h3:nth-child(2)"
-                      ],
-                      "level": 3
-                    },
-                    {
-                      "ancestry": [
-                        "html > body > main:nth-child(4) > section:nth-child(6) > div > div:nth-child(1) > h2:nth-child(1)"
+                        "html > body > main:nth-child(4) > section:nth-child(6) > div > h2:nth-child(2)"
                       ],
                       "level": 2
                     },
                     {
                       "ancestry": [
-                        "html > body > main:nth-child(4) > section:nth-child(6) > div > div:nth-child(2) > a:nth-child(1) > h3:nth-child(2)"
-                      ],
-                      "level": 3
-                    },
-                    {
-                      "ancestry": [
-                        "html > body > main:nth-child(4) > section:nth-child(6) > div > div:nth-child(2) > a:nth-child(2) > h3:nth-child(2)"
-                      ],
-                      "level": 3
-                    },
-                    {
-                      "ancestry": [
-                        "html > body > main:nth-child(4) > section:nth-child(7) > div > h2:nth-child(2)"
+                        "html > body > main:nth-child(4) > section:nth-child(7) > div > div:nth-child(1) > h2:nth-child(1)"
                       ],
                       "level": 2
                     },
                     {
                       "ancestry": [
-                        "html > body > main:nth-child(4) > section:nth-child(8) > div > div:nth-child(1) > h2:nth-child(1)"
-                      ],
-                      "level": 2
-                    },
-                    {
-                      "ancestry": [
-                        "html > body > main:nth-child(4) > section:nth-child(8) > div > div:nth-child(2) > a:nth-child(1) > h3:nth-child(2)"
+                        "html > body > main:nth-child(4) > section:nth-child(7) > div > div:nth-child(2) > a:nth-child(1) > h3:nth-child(2)"
                       ],
                       "level": 3
                     },
                     {
                       "ancestry": [
-                        "html > body > main:nth-child(4) > section:nth-child(8) > div > div:nth-child(2) > a:nth-child(2) > h3:nth-child(2)"
+                        "html > body > main:nth-child(4) > section:nth-child(7) > div > div:nth-child(2) > a:nth-child(2) > h3:nth-child(2)"
                       ],
                       "level": 3
                     },
                     {
                       "ancestry": [
-                        "html > body > main:nth-child(4) > footer:nth-child(9) > div > div:nth-child(1) > div:nth-child(2) > h3:nth-child(1)"
+                        "html > body > main:nth-child(4) > footer:nth-child(8) > div > div:nth-child(1) > div:nth-child(2) > h3:nth-child(1)"
                       ],
                       "level": 3
                     },
                     {
                       "ancestry": [
-                        "html > body > main:nth-child(4) > footer:nth-child(9) > div > div:nth-child(1) > div:nth-child(3) > h3:nth-child(1)"
+                        "html > body > main:nth-child(4) > footer:nth-child(8) > div > div:nth-child(1) > div:nth-child(3) > h3:nth-child(1)"
                       ],
                       "level": 3
                     },
                     {
                       "ancestry": [
-                        "html > body > main:nth-child(4) > footer:nth-child(9) > div > div:nth-child(1) > div:nth-child(4) > h3:nth-child(1)"
+                        "html > body > main:nth-child(4) > footer:nth-child(8) > div > div:nth-child(1) > div:nth-child(4) > h3:nth-child(1)"
                       ],
                       "level": 3
                     }
@@ -4761,60 +4406,6 @@
             "html": "<h1 class=\"text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[var(--text-primary)] leading-tight\">Find Home Depot Penny Items</h1>",
             "target": [
               "h1"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "heading-order",
-                "data": null,
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "Heading order valid"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] mb-4\">Today's Finds</h2>",
-            "target": [
-              ".max-w-5xl > h2"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "heading-order",
-                "data": null,
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "Heading order valid"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] text-center mb-1 line-clamp-2\">Milwaukee Kneeling Pad</h3>",
-            "target": [
-              "article:nth-child(1) > .line-clamp-2.mb-1"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "heading-order",
-                "data": null,
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "Heading order valid"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] text-center mb-1 line-clamp-2\">10 ft. X 1 in. Cam Buckle Tie-Down Straps With S Hook (2-Pack) Fh0904</h3>",
-            "target": [
-              "article:nth-child(2) > .line-clamp-2.mb-1"
             ]
           },
           {
@@ -4850,7 +4441,7 @@
             "impact": null,
             "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] leading-snug\">Learn the Cycle</h3>",
             "target": [
-              ".p-4.text-center:nth-child(1) > .leading-snug"
+              ".p-4.text-center:nth-child(1) > h3"
             ]
           },
           {
@@ -4868,7 +4459,7 @@
             "impact": null,
             "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] leading-snug\">Scout First</h3>",
             "target": [
-              ".p-4.text-center:nth-child(2) > .leading-snug"
+              ".p-4.text-center:nth-child(2) > h3"
             ]
           },
           {
@@ -4886,7 +4477,7 @@
             "impact": null,
             "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] leading-snug\">Hunt Smart</h3>",
             "target": [
-              ".p-4.text-center:nth-child(3) > .leading-snug"
+              ".p-4.text-center:nth-child(3) > h3"
             ]
           },
           {
@@ -4904,7 +4495,7 @@
             "impact": null,
             "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] leading-snug\">Checkout</h3>",
             "target": [
-              ".p-4.text-center:nth-child(4) > .leading-snug"
+              ".p-4.text-center:nth-child(4) > h3"
             ]
           },
           {
@@ -4922,7 +4513,7 @@
             "impact": null,
             "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug\">Tools</h2>",
             "target": [
-              ".section-padding:nth-child(6) > .container-wide > .mb-10.text-center > h2"
+              ".section-padding:nth-child(5) > .container-wide > .mb-10.text-center > h2"
             ]
           },
           {
@@ -4940,7 +4531,7 @@
             "impact": null,
             "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Read the Guide</h3>",
             "target": [
-              ".group.card-interactive.p-6:nth-child(1) > .text-lg.leading-snug"
+              ".group.card-interactive.flex-col:nth-child(1) > .text-lg"
             ]
           },
           {
@@ -4958,7 +4549,7 @@
             "impact": null,
             "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Store Finder Map</h3>",
             "target": [
-              ".group.card-interactive[href$=\"store-finder\"] > .text-lg.leading-snug"
+              ".group.card-interactive[href$=\"store-finder\"] > .text-lg"
             ]
           },
           {
@@ -4976,7 +4567,7 @@
             "impact": null,
             "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug\">Join <!-- -->40,000+ and counting<!-- --> Penny Hunters</h2>",
             "target": [
-              ".max-w-3xl.mx-auto.text-center > h2"
+              ".max-w-3xl.text-center.mx-auto > h2"
             ]
           },
           {
@@ -4994,7 +4585,7 @@
             "impact": null,
             "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug\">Support Penny Central</h2>",
             "target": [
-              ".section-padding:nth-child(8) > .container-wide > .mb-10.text-center > h2"
+              ".section-padding:nth-child(7) > .container-wide > .mb-10.text-center > h2"
             ]
           },
           {
@@ -5012,7 +4603,7 @@
             "impact": null,
             "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Buy Me a Coffee</h3>",
             "target": [
-              ".block.card-interactive[href$=\"cadegallen\"] > .text-lg.leading-snug"
+              ".block.card-interactive[href$=\"cadegallen\"] > .text-lg"
             ]
           },
           {
@@ -5030,7 +4621,7 @@
             "impact": null,
             "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Activate BeFrugal Cashback</h3>",
             "target": [
-              ".block.card-interactive[href$=\"befrugal\"] > .text-lg.leading-snug"
+              ".block.card-interactive[href$=\"befrugal\"] > .text-lg"
             ]
           },
           {
@@ -5163,131 +4754,6 @@
             "html": "<html lang=\"en\" class=\"__variable_d2b0e4 dark\">",
             "target": [
               "html"
-            ]
-          }
-        ]
-      },
-      {
-        "id": "image-alt",
-        "impact": null,
-        "tags": [
-          "cat.text-alternatives",
-          "wcag2a",
-          "wcag111",
-          "section508",
-          "section508.22.a",
-          "TTv5",
-          "TT7.a",
-          "TT7.b",
-          "EN-301-549",
-          "EN-9.1.1.1",
-          "ACT",
-          "RGAAv4",
-          "RGAA-1.1.1"
-        ],
-        "description": "Ensure <img> elements have alternative text or a role of none or presentation",
-        "help": "Images must have alternative text",
-        "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/image-alt?application=webdriverjs",
-        "nodes": [
-          {
-            "any": [
-              {
-                "id": "has-alt",
-                "data": null,
-                "relatedNodes": [],
-                "impact": "critical",
-                "message": "Element has an alt attribute"
-              }
-            ],
-            "all": [],
-            "none": [
-              {
-                "id": "alt-space-value",
-                "data": null,
-                "relatedNodes": [],
-                "impact": "critical",
-                "message": "Element has a valid alt attribute value"
-              }
-            ],
-            "impact": null,
-            "html": "<img src=\"/images/hd-product-p...\" alt=\"Milwaukee Kneeling P...\" width=\"72\" height=\"72\" loading=\"lazy\" class=\"w-[72px] h-[72px] ro...\" referrerpolicy=\"no-referrer\">",
-            "target": [
-              "img[alt=\"Milwaukee Kneeling Pad\"]"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "has-alt",
-                "data": null,
-                "relatedNodes": [],
-                "impact": "critical",
-                "message": "Element has an alt attribute"
-              }
-            ],
-            "all": [],
-            "none": [
-              {
-                "id": "alt-space-value",
-                "data": null,
-                "relatedNodes": [],
-                "impact": "critical",
-                "message": "Element has a valid alt attribute value"
-              }
-            ],
-            "impact": null,
-            "html": "<img src=\"https://images.thdst...\" alt=\"10 ft. X 1 in. Cam B...\" width=\"72\" height=\"72\" loading=\"lazy\" class=\"w-[72px] h-[72px] ro...\" referrerpolicy=\"no-referrer\">",
-            "target": [
-              "article:nth-child(2) > .mb-2:nth-child(1) > img"
-            ]
-          }
-        ]
-      },
-      {
-        "id": "image-redundant-alt",
-        "impact": null,
-        "tags": [
-          "cat.text-alternatives",
-          "best-practice"
-        ],
-        "description": "Ensure image alternative is not repeated as text",
-        "help": "Alternative text of images should not be repeated as text",
-        "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/image-redundant-alt?application=webdriverjs",
-        "nodes": [
-          {
-            "any": [],
-            "all": [],
-            "none": [
-              {
-                "id": "duplicate-img-label",
-                "data": null,
-                "relatedNodes": [],
-                "impact": "minor",
-                "message": "Element does not duplicate existing text in <img> alt text"
-              }
-            ],
-            "impact": null,
-            "html": "<img src=\"/images/hd-product-p...\" alt=\"Milwaukee Kneeling P...\" width=\"72\" height=\"72\" loading=\"lazy\" class=\"w-[72px] h-[72px] ro...\" referrerpolicy=\"no-referrer\">",
-            "target": [
-              "img[alt=\"Milwaukee Kneeling Pad\"]"
-            ]
-          },
-          {
-            "any": [],
-            "all": [],
-            "none": [
-              {
-                "id": "duplicate-img-label",
-                "data": null,
-                "relatedNodes": [],
-                "impact": "minor",
-                "message": "Element does not duplicate existing text in <img> alt text"
-              }
-            ],
-            "impact": null,
-            "html": "<img src=\"https://images.thdst...\" alt=\"10 ft. X 1 in. Cam B...\" width=\"72\" height=\"72\" loading=\"lazy\" class=\"w-[72px] h-[72px] ro...\" referrerpolicy=\"no-referrer\">",
-            "target": [
-              "article:nth-child(2) > .mb-2:nth-child(1) > img"
             ]
           }
         ]
@@ -5528,7 +4994,7 @@
                   {
                     "html": "<div class=\"max-w-3xl mx-auto text-center\">",
                     "target": [
-                      ".max-w-3xl.mx-auto.text-center"
+                      ".max-w-3xl.text-center.mx-auto"
                     ]
                   }
                 ],
@@ -5541,7 +5007,7 @@
             "impact": null,
             "html": "<a href=\"https://www.facebook...\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"btn-primary mt-6 w-f...\">",
             "target": [
-              ".dark\\:focus\\:ring-offset-\\[var\\(--bg-card\\)\\]"
+              ".mt-6"
             ]
           },
           {
@@ -5690,7 +5156,7 @@
             "impact": null,
             "html": "<a class=\"btn-primary w-full s...\" aria-label=\"Browse the community...\" href=\"/penny-list\">",
             "target": [
-              ".gap-3 > .bg-\\[var\\(--cta-primary\\)\\].text-\\[var\\(--cta-text\\)\\].shadow-md"
+              ".gap-3 > .btn-primary.bg-\\[var\\(--cta-primary\\)\\].text-\\[var\\(--cta-text\\)\\]"
             ]
           },
           {
@@ -5723,85 +5189,7 @@
             "impact": null,
             "html": "<a class=\"btn-secondary w-full...\" aria-label=\"Report a new penny f...\" href=\"/report-find\">",
             "target": [
-              ".border-2"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "has-visible-text",
-                "data": null,
-                "relatedNodes": [],
-                "impact": "serious",
-                "message": "Element has text that is visible to screen readers"
-              }
-            ],
-            "all": [],
-            "none": [
-              {
-                "id": "focusable-no-name",
-                "data": null,
-                "relatedNodes": [],
-                "impact": "serious",
-                "message": "Element is not in tab order or has accessible text"
-              }
-            ],
-            "impact": null,
-            "html": "<a class=\"btn-secondary text-xs px-3 py-1 rounded mt-auto\" href=\"/sku/1013692004\">View details</a>",
-            "target": [
-              "a[href=\"/sku/1013692004\"]"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "has-visible-text",
-                "data": null,
-                "relatedNodes": [],
-                "impact": "serious",
-                "message": "Element has text that is visible to screen readers"
-              }
-            ],
-            "all": [],
-            "none": [
-              {
-                "id": "focusable-no-name",
-                "data": null,
-                "relatedNodes": [],
-                "impact": "serious",
-                "message": "Element is not in tab order or has accessible text"
-              }
-            ],
-            "impact": null,
-            "html": "<a class=\"btn-secondary text-xs px-3 py-1 rounded mt-auto\" href=\"/sku/1001755675\">View details</a>",
-            "target": [
-              "a[href=\"/sku/1001755675\"]"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "has-visible-text",
-                "data": null,
-                "relatedNodes": [],
-                "impact": "serious",
-                "message": "Element has text that is visible to screen readers"
-              }
-            ],
-            "all": [],
-            "none": [
-              {
-                "id": "focusable-no-name",
-                "data": null,
-                "relatedNodes": [],
-                "impact": "serious",
-                "message": "Element is not in tab order or has accessible text"
-              }
-            ],
-            "impact": null,
-            "html": "<a class=\"btn-primary inline-block px-6 py-2 rounded font-semibold\" href=\"/penny-list\">See all penny finds →</a>",
-            "target": [
-              ".inline-block"
+              ".btn-secondary"
             ]
           },
           {
@@ -5827,7 +5215,7 @@
             "impact": null,
             "html": "<a class=\"card-interactive group flex flex-col bg-[var(--bg-elevated)] rounded-xl p-6 border border-[var(--border-default)]\" href=\"/guide\">",
             "target": [
-              ".group.card-interactive.p-6:nth-child(1)"
+              ".group.card-interactive.flex-col:nth-child(1)"
             ]
           },
           {
@@ -5879,7 +5267,7 @@
             "impact": null,
             "html": "<a href=\"https://www.facebook...\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"btn-primary mt-6 w-f...\">",
             "target": [
-              ".dark\\:focus\\:ring-offset-\\[var\\(--bg-card\\)\\]"
+              ".mt-6"
             ]
           },
           {
@@ -6217,7 +5605,7 @@
             "impact": null,
             "html": "<a href=\"https://www.facebook...\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-[var(--text-sec...\" aria-label=\"Facebook Group\">",
             "target": [
-              "a[aria-label=\"Facebook Group\"]"
+              ".order-1 > .p-2"
             ]
           }
         ]
@@ -6595,42 +5983,6 @@
             "target": [
               ".md\\:hidden"
             ]
-          },
-          {
-            "any": [
-              {
-                "id": "no-focusable-content",
-                "data": null,
-                "relatedNodes": [],
-                "impact": "serious",
-                "message": "Element does not have focusable descendants"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<img src=\"/images/hd-product-p...\" alt=\"Milwaukee Kneeling P...\" width=\"72\" height=\"72\" loading=\"lazy\" class=\"w-[72px] h-[72px] ro...\" referrerpolicy=\"no-referrer\">",
-            "target": [
-              "img[alt=\"Milwaukee Kneeling Pad\"]"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "no-focusable-content",
-                "data": null,
-                "relatedNodes": [],
-                "impact": "serious",
-                "message": "Element does not have focusable descendants"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<img src=\"https://images.thdst...\" alt=\"10 ft. X 1 in. Cam B...\" width=\"72\" height=\"72\" loading=\"lazy\" class=\"w-[72px] h-[72px] ro...\" referrerpolicy=\"no-referrer\">",
-            "target": [
-              "article:nth-child(2) > .mb-2:nth-child(1) > img"
-            ]
           }
         ]
       },
@@ -6882,7 +6234,7 @@
             "impact": null,
             "html": "<div class=\"max-w-4xl mx-auto text-center\">",
             "target": [
-              ".max-w-4xl.mx-auto.text-center"
+              ".max-w-4xl.text-center.mx-auto"
             ]
           },
           {
@@ -6962,7 +6314,7 @@
             "impact": null,
             "html": "<a class=\"btn-primary w-full s...\" aria-label=\"Browse the community...\" href=\"/penny-list\">",
             "target": [
-              ".gap-3 > .bg-\\[var\\(--cta-primary\\)\\].text-\\[var\\(--cta-text\\)\\].shadow-md"
+              ".gap-3 > .btn-primary.bg-\\[var\\(--cta-primary\\)\\].text-\\[var\\(--cta-text\\)\\]"
             ]
           },
           {
@@ -6982,487 +6334,7 @@
             "impact": null,
             "html": "<a class=\"btn-secondary w-full...\" aria-label=\"Report a new penny f...\" href=\"/report-find\">",
             "target": [
-              ".border-2"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "region",
-                "data": {
-                  "isIframe": false
-                },
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "All page content is contained by landmarks"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<section class=\"section-padding px-4 sm:px-6 bg-[var(--bg-elevated)]\">",
-            "target": [
-              ".section-padding:nth-child(4)"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "region",
-                "data": {
-                  "isIframe": false
-                },
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "All page content is contained by landmarks"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<div class=\"max-w-5xl mx-auto\">",
-            "target": [
-              ".max-w-5xl"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "region",
-                "data": {
-                  "isIframe": false
-                },
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "All page content is contained by landmarks"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] mb-4\">Today's Finds</h2>",
-            "target": [
-              ".max-w-5xl > h2"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "region",
-                "data": {
-                  "isIframe": false
-                },
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "All page content is contained by landmarks"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<div class=\"flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-4 md:overflow-visible\">",
-            "target": [
-              ".overflow-x-auto"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "region",
-                "data": {
-                  "isIframe": false
-                },
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "All page content is contained by landmarks"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<article class=\"rounded-lg bg-[var(--bg-card)] shadow p-4 flex flex-col items-center min-w-[240px] snap-start md:min-w-0\">",
-            "target": [
-              "article:nth-child(1)"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "region",
-                "data": {
-                  "isIframe": false
-                },
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "All page content is contained by landmarks"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<div class=\"mb-2\">",
-            "target": [
-              "article:nth-child(1) > .mb-2:nth-child(1)"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "region",
-                "data": {
-                  "isIframe": false
-                },
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "All page content is contained by landmarks"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<img src=\"/images/hd-product-p...\" alt=\"Milwaukee Kneeling P...\" width=\"72\" height=\"72\" loading=\"lazy\" class=\"w-[72px] h-[72px] ro...\" referrerpolicy=\"no-referrer\">",
-            "target": [
-              "img[alt=\"Milwaukee Kneeling Pad\"]"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "region",
-                "data": {
-                  "isIframe": false
-                },
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "All page content is contained by landmarks"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] text-center mb-1 line-clamp-2\">Milwaukee Kneeling Pad</h3>",
-            "target": [
-              "article:nth-child(1) > .line-clamp-2.mb-1"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "region",
-                "data": {
-                  "isIframe": false
-                },
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "All page content is contained by landmarks"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<div class=\"flex flex-wrap gap-1 justify-center mb-1\"><span class=\"badge bg-[var(--bg-tertiary)] text-[var(--text-secondary)] px-2 py-0.5 rounded text-xs\">CT</span></div>",
-            "target": [
-              "article:nth-child(1) > .flex-wrap.gap-1.mb-1"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "region",
-                "data": {
-                  "isIframe": false
-                },
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "All page content is contained by landmarks"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<span class=\"badge bg-[var(--bg-tertiary)] text-[var(--text-secondary)] px-2 py-0.5 rounded text-xs\">CT</span>",
-            "target": [
-              "article:nth-child(1) > .flex-wrap.gap-1.mb-1 > .badge.px-2.py-0\\.5"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "region",
-                "data": {
-                  "isIframe": false
-                },
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "All page content is contained by landmarks"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<span class=\"text-xs text-[var(--text-muted)] mb-2\">Today</span>",
-            "target": [
-              "article:nth-child(1) > .mb-2.text-\\[var\\(--text-muted\\)\\].text-xs"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "region",
-                "data": {
-                  "isIframe": false
-                },
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "All page content is contained by landmarks"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<a class=\"btn-secondary text-xs px-3 py-1 rounded mt-auto\" href=\"/sku/1013692004\">View details</a>",
-            "target": [
-              "a[href=\"/sku/1013692004\"]"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "region",
-                "data": {
-                  "isIframe": false
-                },
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "All page content is contained by landmarks"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<article class=\"rounded-lg bg-[var(--bg-card)] shadow p-4 flex flex-col items-center min-w-[240px] snap-start md:min-w-0\">",
-            "target": [
-              "article:nth-child(2)"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "region",
-                "data": {
-                  "isIframe": false
-                },
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "All page content is contained by landmarks"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<div class=\"mb-2\">",
-            "target": [
-              "article:nth-child(2) > .mb-2:nth-child(1)"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "region",
-                "data": {
-                  "isIframe": false
-                },
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "All page content is contained by landmarks"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<img src=\"https://images.thdst...\" alt=\"10 ft. X 1 in. Cam B...\" width=\"72\" height=\"72\" loading=\"lazy\" class=\"w-[72px] h-[72px] ro...\" referrerpolicy=\"no-referrer\">",
-            "target": [
-              "article:nth-child(2) > .mb-2:nth-child(1) > img"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "region",
-                "data": {
-                  "isIframe": false
-                },
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "All page content is contained by landmarks"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] text-center mb-1 line-clamp-2\">10 ft. X 1 in. Cam Buckle Tie-Down Straps With S Hook (2-Pack) Fh0904</h3>",
-            "target": [
-              "article:nth-child(2) > .line-clamp-2.mb-1"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "region",
-                "data": {
-                  "isIframe": false
-                },
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "All page content is contained by landmarks"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<div class=\"flex flex-wrap gap-1 justify-center mb-1\">",
-            "target": [
-              "article:nth-child(2) > .flex-wrap.gap-1.mb-1"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "region",
-                "data": {
-                  "isIframe": false
-                },
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "All page content is contained by landmarks"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<span class=\"badge bg-[var(--bg-tertiary)] text-[var(--text-secondary)] px-2 py-0.5 rounded text-xs\">NY</span>",
-            "target": [
-              "article:nth-child(2) > .flex-wrap.gap-1.mb-1 > .badge.px-2.py-0\\.5:nth-child(1)"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "region",
-                "data": {
-                  "isIframe": false
-                },
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "All page content is contained by landmarks"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<span class=\"badge bg-[var(--bg-tertiary)] text-[var(--text-secondary)] px-2 py-0.5 rounded text-xs\">AZ</span>",
-            "target": [
-              ".badge.px-2.py-0\\.5:nth-child(2)"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "region",
-                "data": {
-                  "isIframe": false
-                },
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "All page content is contained by landmarks"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<span class=\"badge bg-[var(--bg-tertiary)] text-[var(--text-secondary)] px-2 py-0.5 rounded text-xs\">TX</span>",
-            "target": [
-              ".badge.px-2.py-0\\.5:nth-child(3)"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "region",
-                "data": {
-                  "isIframe": false
-                },
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "All page content is contained by landmarks"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<span class=\"text-xs text-[var(--text-muted)] mb-2\">Yesterday</span>",
-            "target": [
-              "article:nth-child(2) > .mb-2.text-\\[var\\(--text-muted\\)\\].text-xs"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "region",
-                "data": {
-                  "isIframe": false
-                },
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "All page content is contained by landmarks"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<a class=\"btn-secondary text-xs px-3 py-1 rounded mt-auto\" href=\"/sku/1001755675\">View details</a>",
-            "target": [
-              "a[href=\"/sku/1001755675\"]"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "region",
-                "data": {
-                  "isIframe": false
-                },
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "All page content is contained by landmarks"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<div class=\"mt-6 text-center\"><a class=\"btn-primary inline-block px-6 py-2 rounded font-semibold\" href=\"/penny-list\">See all penny finds →</a></div>",
-            "target": [
-              ".mt-6.text-center"
-            ]
-          },
-          {
-            "any": [
-              {
-                "id": "region",
-                "data": {
-                  "isIframe": false
-                },
-                "relatedNodes": [],
-                "impact": "moderate",
-                "message": "All page content is contained by landmarks"
-              }
-            ],
-            "all": [],
-            "none": [],
-            "impact": null,
-            "html": "<a class=\"btn-primary inline-block px-6 py-2 rounded font-semibold\" href=\"/penny-list\">See all penny finds →</a>",
-            "target": [
-              ".inline-block"
+              ".btn-secondary"
             ]
           },
           {
@@ -7482,7 +6354,7 @@
             "impact": null,
             "html": "<section class=\"section-padding px-4 sm:px-6 bg-[var(--bg-page)]\">",
             "target": [
-              ".section-padding:nth-child(5)"
+              ".section-padding:nth-child(4)"
             ]
           },
           {
@@ -7502,7 +6374,7 @@
             "impact": null,
             "html": "<div class=\"max-w-4xl mx-auto\">",
             "target": [
-              ".section-padding:nth-child(5) > .max-w-4xl.mx-auto"
+              ".section-padding:nth-child(4) > .max-w-4xl.mx-auto"
             ]
           },
           {
@@ -7642,7 +6514,7 @@
             "impact": null,
             "html": "<span class=\"text-base font-bold text-[var(--cta-primary)]\">1</span>",
             "target": [
-              ".p-4.text-center:nth-child(1) > .dark\\:bg-\\[var\\(--bg-tertiary\\)\\].mb-3.rounded-full > .font-bold.text-\\[var\\(--cta-primary\\)\\]"
+              ".p-4.text-center:nth-child(1) > .dark\\:bg-\\[var\\(--bg-tertiary\\)\\].mb-3.rounded-full > span"
             ]
           },
           {
@@ -7662,7 +6534,7 @@
             "impact": null,
             "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] leading-snug\">Learn the Cycle</h3>",
             "target": [
-              ".p-4.text-center:nth-child(1) > .leading-snug"
+              ".p-4.text-center:nth-child(1) > h3"
             ]
           },
           {
@@ -7742,7 +6614,7 @@
             "impact": null,
             "html": "<span class=\"text-base font-bold text-[var(--cta-primary)]\">2</span>",
             "target": [
-              ".p-4.text-center:nth-child(2) > .dark\\:bg-\\[var\\(--bg-tertiary\\)\\].mb-3.rounded-full > .font-bold.text-\\[var\\(--cta-primary\\)\\]"
+              ".p-4.text-center:nth-child(2) > .dark\\:bg-\\[var\\(--bg-tertiary\\)\\].mb-3.rounded-full > span"
             ]
           },
           {
@@ -7762,7 +6634,7 @@
             "impact": null,
             "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] leading-snug\">Scout First</h3>",
             "target": [
-              ".p-4.text-center:nth-child(2) > .leading-snug"
+              ".p-4.text-center:nth-child(2) > h3"
             ]
           },
           {
@@ -7842,7 +6714,7 @@
             "impact": null,
             "html": "<span class=\"text-base font-bold text-[var(--cta-primary)]\">3</span>",
             "target": [
-              ".p-4.text-center:nth-child(3) > .dark\\:bg-\\[var\\(--bg-tertiary\\)\\].mb-3.rounded-full > .font-bold.text-\\[var\\(--cta-primary\\)\\]"
+              ".p-4.text-center:nth-child(3) > .dark\\:bg-\\[var\\(--bg-tertiary\\)\\].mb-3.rounded-full > span"
             ]
           },
           {
@@ -7862,7 +6734,7 @@
             "impact": null,
             "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] leading-snug\">Hunt Smart</h3>",
             "target": [
-              ".p-4.text-center:nth-child(3) > .leading-snug"
+              ".p-4.text-center:nth-child(3) > h3"
             ]
           },
           {
@@ -7942,7 +6814,7 @@
             "impact": null,
             "html": "<span class=\"text-base font-bold text-[var(--cta-primary)]\">4</span>",
             "target": [
-              ".p-4.text-center:nth-child(4) > .dark\\:bg-\\[var\\(--bg-tertiary\\)\\].mb-3.rounded-full > .font-bold.text-\\[var\\(--cta-primary\\)\\]"
+              ".p-4.text-center:nth-child(4) > .dark\\:bg-\\[var\\(--bg-tertiary\\)\\].mb-3.rounded-full > span"
             ]
           },
           {
@@ -7962,7 +6834,7 @@
             "impact": null,
             "html": "<h3 class=\"text-base font-semibold text-[var(--text-primary)] leading-snug\">Checkout</h3>",
             "target": [
-              ".p-4.text-center:nth-child(4) > .leading-snug"
+              ".p-4.text-center:nth-child(4) > h3"
             ]
           },
           {
@@ -8002,7 +6874,7 @@
             "impact": null,
             "html": "<section class=\"section-padding px-4 sm:px-6 bg-[var(--bg-page)]\">",
             "target": [
-              ".section-padding:nth-child(6)"
+              ".section-padding:nth-child(5)"
             ]
           },
           {
@@ -8022,7 +6894,7 @@
             "impact": null,
             "html": "<div class=\"container-wide\">",
             "target": [
-              ".section-padding:nth-child(6) > .container-wide"
+              ".section-padding:nth-child(5) > .container-wide"
             ]
           },
           {
@@ -8042,7 +6914,7 @@
             "impact": null,
             "html": "<div class=\"text-center mb-10\"><h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug\">Tools</h2><p class=\"mt-2 text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed\">Resources to help you plan trips and find penny items</p></div>",
             "target": [
-              ".section-padding:nth-child(6) > .container-wide > .mb-10.text-center"
+              ".section-padding:nth-child(5) > .container-wide > .mb-10.text-center"
             ]
           },
           {
@@ -8062,7 +6934,7 @@
             "impact": null,
             "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug\">Tools</h2>",
             "target": [
-              ".section-padding:nth-child(6) > .container-wide > .mb-10.text-center > h2"
+              ".section-padding:nth-child(5) > .container-wide > .mb-10.text-center > h2"
             ]
           },
           {
@@ -8082,7 +6954,7 @@
             "impact": null,
             "html": "<p class=\"mt-2 text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed\">Resources to help you plan trips and find penny items</p>",
             "target": [
-              ".section-padding:nth-child(6) > .container-wide > .mb-10.text-center > .sm\\:text-lg.mt-2.text-base"
+              ".section-padding:nth-child(5) > .container-wide > .mb-10.text-center > .sm\\:text-lg.mt-2.text-base"
             ]
           },
           {
@@ -8122,7 +6994,7 @@
             "impact": null,
             "html": "<a class=\"card-interactive group flex flex-col bg-[var(--bg-elevated)] rounded-xl p-6 border border-[var(--border-default)]\" href=\"/guide\">",
             "target": [
-              ".group.card-interactive.p-6:nth-child(1)"
+              ".group.card-interactive.flex-col:nth-child(1)"
             ]
           },
           {
@@ -8142,7 +7014,7 @@
             "impact": null,
             "html": "<div class=\"w-12 h-12 rounded-xl bg-[var(--bg-page)] border border-[var(--border-default)] flex items-center justify-center mb-4\">",
             "target": [
-              ".group.card-interactive.p-6:nth-child(1) > .rounded-xl.w-12.h-12"
+              ".group.card-interactive.flex-col:nth-child(1) > .rounded-xl.mb-4.w-12"
             ]
           },
           {
@@ -8162,7 +7034,7 @@
             "impact": null,
             "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Read the Guide</h3>",
             "target": [
-              ".group.card-interactive.p-6:nth-child(1) > .text-lg.leading-snug"
+              ".group.card-interactive.flex-col:nth-child(1) > .text-lg"
             ]
           },
           {
@@ -8182,7 +7054,7 @@
             "impact": null,
             "html": "<p class=\"mt-2 text-sm text-[var(--text-secondary)] leading-relaxed flex-grow\">Step-by-step tips for the full penny hunting cycle.</p>",
             "target": [
-              ".group.card-interactive.p-6:nth-child(1) > .flex-grow.mt-2"
+              ".group.card-interactive.flex-col:nth-child(1) > .flex-grow.mt-2"
             ]
           },
           {
@@ -8222,7 +7094,7 @@
             "impact": null,
             "html": "<div class=\"w-12 h-12 rounded-xl bg-[var(--bg-page)] border border-[var(--border-default)] flex items-center justify-center mb-4\">",
             "target": [
-              ".group.card-interactive[href$=\"store-finder\"] > .rounded-xl.w-12.h-12"
+              ".group.card-interactive[href$=\"store-finder\"] > .rounded-xl.mb-4.w-12"
             ]
           },
           {
@@ -8242,7 +7114,7 @@
             "impact": null,
             "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Store Finder Map</h3>",
             "target": [
-              ".group.card-interactive[href$=\"store-finder\"] > .text-lg.leading-snug"
+              ".group.card-interactive[href$=\"store-finder\"] > .text-lg"
             ]
           },
           {
@@ -8302,7 +7174,7 @@
             "impact": null,
             "html": "<div class=\"max-w-3xl mx-auto text-center\">",
             "target": [
-              ".max-w-3xl.mx-auto.text-center"
+              ".max-w-3xl.text-center.mx-auto"
             ]
           },
           {
@@ -8322,7 +7194,7 @@
             "impact": null,
             "html": "<div class=\"w-12 h-12 rounded-full bg-[var(--bg-page)] mx-auto mb-4 flex items-center justify-center border border-[var(--border-default)]\">",
             "target": [
-              ".max-w-3xl.mx-auto.text-center > .rounded-full.w-12.h-12"
+              ".rounded-full.mb-4.w-12"
             ]
           },
           {
@@ -8342,7 +7214,7 @@
             "impact": null,
             "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug\">Join <!-- -->40,000+ and counting<!-- --> Penny Hunters</h2>",
             "target": [
-              ".max-w-3xl.mx-auto.text-center > h2"
+              ".max-w-3xl.text-center.mx-auto > h2"
             ]
           },
           {
@@ -8382,7 +7254,7 @@
             "impact": null,
             "html": "<a href=\"https://www.facebook...\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"btn-primary mt-6 w-f...\">",
             "target": [
-              ".dark\\:focus\\:ring-offset-\\[var\\(--bg-card\\)\\]"
+              ".mt-6"
             ]
           },
           {
@@ -8402,7 +7274,7 @@
             "impact": null,
             "html": "<section class=\"section-padding px-4 sm:px-6 bg-[var(--bg-page)]\">",
             "target": [
-              ".section-padding:nth-child(8)"
+              ".section-padding:nth-child(7)"
             ]
           },
           {
@@ -8422,7 +7294,7 @@
             "impact": null,
             "html": "<div class=\"container-wide\">",
             "target": [
-              ".section-padding:nth-child(8) > .container-wide"
+              ".section-padding:nth-child(7) > .container-wide"
             ]
           },
           {
@@ -8442,7 +7314,7 @@
             "impact": null,
             "html": "<div class=\"text-center mb-10\">",
             "target": [
-              ".section-padding:nth-child(8) > .container-wide > .mb-10.text-center"
+              ".section-padding:nth-child(7) > .container-wide > .mb-10.text-center"
             ]
           },
           {
@@ -8462,7 +7334,7 @@
             "impact": null,
             "html": "<h2 class=\"text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug\">Support Penny Central</h2>",
             "target": [
-              ".section-padding:nth-child(8) > .container-wide > .mb-10.text-center > h2"
+              ".section-padding:nth-child(7) > .container-wide > .mb-10.text-center > h2"
             ]
           },
           {
@@ -8542,7 +7414,7 @@
             "impact": null,
             "html": "<div class=\"w-12 h-12 rounded-xl bg-[var(--bg-page)] flex items-center justify-center mb-4 border border-[var(--border-default)]\">",
             "target": [
-              ".block.card-interactive[href$=\"cadegallen\"] > .rounded-xl.w-12.h-12"
+              ".block.card-interactive[href$=\"cadegallen\"] > .rounded-xl.mb-4.w-12"
             ]
           },
           {
@@ -8562,7 +7434,7 @@
             "impact": null,
             "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Buy Me a Coffee</h3>",
             "target": [
-              ".block.card-interactive[href$=\"cadegallen\"] > .text-lg.leading-snug"
+              ".block.card-interactive[href$=\"cadegallen\"] > .text-lg"
             ]
           },
           {
@@ -8642,7 +7514,7 @@
             "impact": null,
             "html": "<div class=\"w-12 h-12 rounded-xl bg-[var(--bg-page)] flex items-center justify-center mb-4 border border-[var(--border-default)]\">",
             "target": [
-              ".block.card-interactive[href$=\"befrugal\"] > .rounded-xl.w-12.h-12"
+              ".block.card-interactive[href$=\"befrugal\"] > .rounded-xl.mb-4.w-12"
             ]
           },
           {
@@ -8662,7 +7534,7 @@
             "impact": null,
             "html": "<h3 class=\"text-lg font-semibold text-[var(--text-primary)] leading-snug\">Activate BeFrugal Cashback</h3>",
             "target": [
-              ".block.card-interactive[href$=\"befrugal\"] > .text-lg.leading-snug"
+              ".block.card-interactive[href$=\"befrugal\"] > .text-lg"
             ]
           },
           {
@@ -9442,7 +8314,7 @@
             "impact": null,
             "html": "<div class=\"flex flex-col sm:flex-row justify-between items-center gap-4\">",
             "target": [
-              ".sm\\:flex-row.justify-between.gap-4"
+              ".sm\\:flex-row.justify-between.flex-col"
             ]
           },
           {
@@ -9462,7 +8334,7 @@
             "impact": null,
             "html": "<p class=\"text-xs text-[var(--text-muted)] order-2 sm:order-1\">© 2025 Penny Central. Educational use only.</p>",
             "target": [
-              ".order-2"
+              ".sm\\:flex-row.justify-between.flex-col > .text-xs"
             ]
           },
           {
@@ -9502,7 +8374,7 @@
             "impact": null,
             "html": "<a href=\"https://www.facebook...\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-[var(--text-sec...\" aria-label=\"Facebook Group\">",
             "target": [
-              "a[aria-label=\"Facebook Group\"]"
+              ".order-1 > .p-2"
             ]
           },
           {

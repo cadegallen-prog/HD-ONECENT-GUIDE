@@ -59,6 +59,7 @@ interface EnrichmentRow {
   image_url?: string | null
   home_depot_url?: string | null
   internet_sku?: number | null
+  retail_price?: string | number | null
 }
 
 // Parse command line arguments
@@ -88,6 +89,15 @@ function normalizeSku(sku: string | number | null | undefined): string | null {
   if (str.length === 6) return str
   if (str.length === 10 && (str.startsWith("100") || str.startsWith("101"))) return str
   return null
+}
+
+function cleanPrice(value: string | number | undefined | null): number | null {
+  if (value === null || value === undefined) return null
+  const digits = String(value).trim().replace(/[^0-9.]/g, "")
+  if (!digits) return null
+  const parsed = Number(digits)
+  if (!Number.isFinite(parsed) || parsed <= 0) return null
+  return Math.round(parsed * 100) / 100
 }
 
 // Optimize image URL to 400px version
@@ -125,6 +135,13 @@ function parseCSV(content: string): EnrichmentRow[] {
       row["home_depot_sku_(6_or_10_digits)"]
     const internetSku =
       row.internet_sku || row.internet_number || row.internetnumber || row.internetsku
+    const retailPrice =
+      row.retail_price ||
+      row.retailprice ||
+      row["retail_price"] ||
+      row.price ||
+      row["retail price"] ||
+      row["price"]
 
     if (sku) {
       rows.push({
@@ -136,6 +153,7 @@ function parseCSV(content: string): EnrichmentRow[] {
         image_url: row.image_url || row.imageurl || row.image || null,
         home_depot_url: row.home_depot_url || row.url || row.homedepoturl || null,
         internet_sku: internetSku ? parseInt(internetSku, 10) || null : null,
+        retail_price: retailPrice || null,
       })
     }
   }
@@ -235,18 +253,19 @@ async function main() {
       continue
     }
 
-    validRows.push({
-      sku: normalized,
-      item_name: row.item_name || null,
-      brand: row.brand || null,
-      model_number: row.model_number || null,
-      upc: row.upc || null,
-      image_url: optimizeImageUrl(row.image_url),
-      home_depot_url: row.home_depot_url || null,
-      internet_sku: row.internet_sku || null,
-      source,
-      updated_at: new Date().toISOString(),
-    })
+      validRows.push({
+        sku: normalized,
+        item_name: row.item_name || null,
+        brand: row.brand || null,
+        model_number: row.model_number || null,
+        upc: row.upc || null,
+        image_url: optimizeImageUrl(row.image_url),
+        home_depot_url: row.home_depot_url || null,
+        internet_sku: row.internet_sku || null,
+        source,
+        retail_price: cleanPrice(row.retail_price),
+        updated_at: new Date().toISOString(),
+      })
   }
 
   console.log(`✅ Valid rows: ${validRows.length}`)

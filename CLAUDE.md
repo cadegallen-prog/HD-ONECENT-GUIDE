@@ -13,6 +13,53 @@
 
 ---
 
+## Alignment Mode (Default When Unclear)
+
+- If Cade is brainstorming or the request is ambiguous, ask **exactly one** clarifying question (non-technical) before writing code.
+- If Cade provides `GOAL / WHY / DONE MEANS` and says "go" / "build it", implement immediately.
+
+### Triggers
+
+- Clear `GOAL / WHY / DONE MEANS` + "go" → implement + verify
+- "What do you think..." / "I'm not sure..." → propose Options A/B/C first
+
+---
+
+## Session Start Protocol (MANDATORY)
+
+- Follow the canonical `AI Canon & Read Order` in the root `README.md`.
+- After reading, summarize: current state (`.ai/STATE.md`), top priority (`.ai/BACKLOG.md`), key constraints (`.ai/CONSTRAINTS.md` + `.ai/FOUNDATION_CONTRACT.md` + `.ai/GUARDRAILS.md`), and any recent notes (`.ai/SESSION_LOG.md`).
+
+---
+
+## Autonomy After "Go" (Default)
+
+Once Cade says "go" / "build it", do the full loop without extra prompts:
+
+1. Implement
+2. Verify (`npm run ai:verify` or lint/build/unit/e2e)
+3. Self-check against `.ai/DECISION_RIGHTS.md` + `.ai/CONSTRAINTS.md`
+4. Update `.ai/SESSION_LOG.md` + `.ai/STATE.md` (+ `.ai/BACKLOG.md` if priorities moved)
+5. Report back with proof
+
+---
+
+## Learning Loop (After Mistakes)
+
+When something doesn't work:
+
+1. STOP immediately
+2. Add to LEARNINGS.md:
+   - What problem we hit
+   - What we tried
+   - What we learned
+   - What to do instead
+3. THEN try a different approach
+
+If you try the same failed approach twice without documenting it, you've wasted Cade's time.
+
+---
+
 ## Canonical Entry Point
 
 - Read the `AI Canon & Read Order` section in `README.md` before diving into Claude-specific notes. That README delivers the shared `STATE.md` → `BACKLOG.md` → `CONTRACT.md`/`DECISION_RIGHTS.md` → `CONSTRAINTS.md`/`FOUNDATION_CONTRACT.md`/`GUARDRAILS.md` → `SESSION_LOG.md` → `CONTEXT.md` sequence referenced across every agent. This file simply layers Claude-specific tips on top of that canonical order.

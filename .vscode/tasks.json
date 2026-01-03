@@ -1,5 +1,13 @@
 {
   "version": "2.0.0",
+  "inputs": [
+    {
+      "id": "aiProofRoutes",
+      "type": "promptString",
+      "description": "Routes to capture (space-separated)",
+      "default": "/penny-list"
+    }
+  ],
   "tasks": [
     {
       "label": "lint",
@@ -57,6 +65,36 @@
       "label": "qa:full",
       "type": "shell",
       "command": "npm run qa:full",
+      "presentation": {
+        "showReuseMessage": false,
+        "panel": "dedicated",
+        "reveal": "silent"
+      }
+    },
+    {
+      "label": "ai:doctor",
+      "type": "shell",
+      "command": "npm run ai:doctor",
+      "presentation": {
+        "showReuseMessage": false,
+        "panel": "dedicated",
+        "reveal": "silent"
+      }
+    },
+    {
+      "label": "ai:verify",
+      "type": "shell",
+      "command": "npm run ai:verify",
+      "presentation": {
+        "showReuseMessage": false,
+        "panel": "dedicated",
+        "reveal": "silent"
+      }
+    },
+    {
+      "label": "ai:proof",
+      "type": "shell",
+      "command": "npm run ai:proof -- ${input:aiProofRoutes}",
       "presentation": {
         "showReuseMessage": false,
         "panel": "dedicated",
