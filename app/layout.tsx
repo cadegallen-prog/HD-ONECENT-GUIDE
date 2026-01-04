@@ -13,6 +13,8 @@ import { AnalyticsSessionTracker } from "@/components/analytics-session"
 import { SpeedInsightsClient } from "@/components/speed-insights-client"
 import { ogImageUrl } from "@/lib/og"
 
+const DEFAULT_OG_IMAGE = `https://www.pennycentral.com${ogImageUrl("homepage")}`
+
 const ANALYTICS_PROVIDER = process.env.NEXT_PUBLIC_ANALYTICS_PROVIDER ?? "none"
 const ENABLE_PLAUSIBLE =
   process.env.NODE_ENV === "production" &&
@@ -71,7 +73,7 @@ export const metadata: Metadata = {
       "The searchable Home Depot penny list. Filter by state, date, and SKU. Community-reported $0.01 finds updated hourly.",
     images: [
       {
-        url: "https://www.pennycentral.com/og-image-facebook.jpg",
+        url: DEFAULT_OG_IMAGE,
         width: 1200,
         height: 630,
         alt: "Penny Central",
@@ -84,7 +86,7 @@ export const metadata: Metadata = {
     title: "Penny Central | Home Depot Penny List",
     description:
       "The searchable Home Depot penny list. Filter by state, date, and SKU. Community-reported $0.01 finds updated hourly.",
-    images: ["https://www.pennycentral.com/og-image-facebook.jpg"],
+    images: [DEFAULT_OG_IMAGE],
   },
   robots: {
     index: true,
