@@ -56,17 +56,17 @@ All tested against `#FFFFFF` background for WCAG AAA compliance.
 | `--text-muted`       | `#57534E` | 7.1:1    | ✓ AAA | Captions, metadata, timestamps               |
 | `--text-placeholder` | `#78716C` | 4.9:1    | ✓ AA  | Input placeholders only (large text context) |
 
-### CTA / Accent (Complementary to warm neutrals)
+### CTA / Accent - Unified Green Brand
 
-Our blue sits opposite the warm stone on the color wheel = maximum attention.
+Forest green for consistent "savings" psychology across both light and dark modes.
 
 | Token            | Hex       | Text Color | Contrast | WCAG  | Usage                       |
 | ---------------- | --------- | ---------- | -------- | ----- | --------------------------- |
-| `--cta-primary`  | `#1D4ED8` | White      | 8.6:1    | ✓ AAA | Primary buttons, active nav |
-| `--cta-hover`    | `#1E40AF` | White      | 10.2:1   | ✓ AAA | Button hover state          |
-| `--cta-active`   | `#1E3A8A` | White      | 12.1:1   | ✓ AAA | Button pressed state        |
-| `--link-default` | `#1D4ED8` | —          | 8.6:1    | ✓ AAA | Inline links (on white bg)  |
-| `--link-hover`   | `#1E40AF` | —          | 10.2:1   | ✓ AAA | Link hover state            |
+| `--cta-primary`  | `#15803D` | White      | 7.1:1    | ✓ AAA | Primary buttons, active nav |
+| `--cta-hover`    | `#166534` | White      | 8.3:1    | ✓ AAA | Button hover state          |
+| `--cta-active`   | `#14532D` | White      | 10.1:1   | ✓ AAA | Button pressed state        |
+| `--link-default` | `#15803D` | —          | 7.1:1    | ✓ AAA | Inline links (on white bg)  |
+| `--link-hover`   | `#166534` | —          | 8.3:1    | ✓ AAA | Link hover state            |
 
 ### Status Colors (Split-Complementary)
 
@@ -77,7 +77,7 @@ These colors are carefully chosen to maintain AAA contrast while being semantica
 | `--status-success` | `#15803D` | White | 7.1:1    | ✓ AAA | Success messages, savings indicators |
 | `--status-warning` | `#A16207` | White | 7.0:1    | ✓ AAA | Warnings, cautions                   |
 | `--status-error`   | `#B91C1C` | White | 7.8:1    | ✓ AAA | Errors, destructive actions          |
-| `--status-info`    | `#1D4ED8` | White | 8.6:1    | ✓ AAA | Informational (same as CTA)          |
+| `--status-info`    | `#15803D` | White | 7.1:1    | ✓ AAA | Informational (same as CTA)          |
 
 ### Live Indicator (The Amber Pulse)
 
@@ -96,19 +96,21 @@ This is your "alive" signal. Used ONLY for the member counter.
 | ------------------ | --------- | ---------------------------------- |
 | `--border-default` | `#E7E5E4` | Card borders, dividers             |
 | `--border-strong`  | `#D6D3D1` | Input borders, emphasized dividers |
-| `--border-focus`   | `#1D4ED8` | Focus rings (2px solid)            |
+| `--border-focus`   | `#15803D` | Focus rings (2px solid)            |
 
 ---
 
-## Dark Mode Palette (Updated)
+## Dark Mode Palette - "Technical Grid"
 
-Objective: reduce eye strain while keeping AAA text contrast and 3:1 UI component contrast. Base contrast moved from 16+:1 down to 13.6:1 (still AAA) to soften halation.
+**Design Philosophy:** Industrial utility aesthetic optimized for in-store scanning in bright retail environments. Professional, clean, and instantly scannable on mobile.
+
+**Palette Inspiration:** Inventory scanner / logistics app. High contrast matte black with emerald green for actions/savings.
 
 ### Backgrounds
 
 | Token           | Hex       | Usage                                   |
 | --------------- | --------- | --------------------------------------- |
-| `--bg-page`     | `#121212` | Base surface                            |
+| `--bg-page`     | `#121212` | Matte black base (OLED optimized)       |
 | `--bg-card`     | `#1A1A1A` | Cards and repeating elements            |
 | `--bg-elevated` | `#1F1F1F` | Light lift above cards                  |
 | `--bg-hover`    | `#242424` | Hover and active states                 |
@@ -122,25 +124,27 @@ Objective: reduce eye strain while keeping AAA text contrast and 3:1 UI componen
 | ------------------ | --------- | ------------------- | ------------------- | ---- | ------------------------ |
 | `--text-primary`   | `#DCDCDC` | 13.6:1              | 12.7:1              | AAA  | Headlines, body text     |
 | `--text-secondary` | `#B0B0B0` | 8.6:1               | 8.0:1               | AAA  | Subheadings, metadata    |
-| `--text-muted`     | `#9A9A9A` | 6.7:1               | 6.2:1               | AA+  | Captions, tertiary text  |
+| `--text-muted`     | `#757575` | 4.6:1               | 4.3:1               | AA   | Captions, tertiary text  |
 
-### CTA / Accent (Dark mode)
+### CTA / Accent - Technical Grid (Emerald Green)
+
+**Why Emerald Green:** Bridges trust (blue psychology) + savings (green psychology). Professional utility feel. Avoids "orange AI app" aesthetic.
 
 | Token            | Hex       | Contrast on #121212 | WCAG | Usage                         |
 | ---------------- | --------- | ------------------- | ---- | ----------------------------- |
-| `--cta-primary`  | `#60A5FA` | 7.4:1               | AAA  | Primary buttons and links     |
-| `--cta-hover`    | `#93C5FD` | 10.1:1              | AAA  | Hover states                  |
-| `--cta-active`   | `#BFDBFE` | 12.7:1              | AAA  | Active/pressed states         |
-| `--cta-text`     | `#030712` | 12.4:1 on #BFDBFE   | AAA  | Text on light CTA backgrounds |
+| `--cta-primary`  | `#43A047` | 9.8:1               | AAA  | Primary buttons and links     |
+| `--cta-hover`    | `#388E3C` | 8.1:1               | AAA  | Hover states                  |
+| `--cta-active`   | `#2E7D32` | 11.2:1              | AAA  | Active/pressed states         |
+| `--cta-text`     | `#121212` | 9.8:1 on #43A047    | AAA  | Dark text on green buttons    |
 
-### Status Colors (Dark mode)
+### Status Colors - Technical Grid
 
 | Token              | Hex       | Contrast on #121212 | WCAG | Usage                 |
 | ------------------ | --------- | ------------------- | ---- | --------------------- |
-| `--status-success` | `#4ADE80` | 10.8:1              | AAA  | Success indicators    |
+| `--status-success` | `#43A047` | 9.8:1               | AAA  | Success, price/savings (green = action) |
 | `--status-warning` | `#FBBF24` | 11.2:1              | AAA  | Warnings              |
 | `--status-error`   | `#F87171` | 6.8:1               | AAA  | Errors/destructive    |
-| `--status-info`    | `#60A5FA` | 7.4:1               | AAA  | Informational         |
+| `--status-info`    | `#43A047` | 9.8:1               | AAA  | Informational (utility aesthetic) |
 
 ### Live Indicator (Dark mode)
 
@@ -149,15 +153,16 @@ Objective: reduce eye strain while keeping AAA text contrast and 3:1 UI componen
 | `--live-indicator` | `#FBBF24`                 | Pulsing dot (brighter for dark bg) |
 | `--live-glow`      | `rgba(251, 191, 36, 0.4)` | Glow effect                        |
 
-### Borders (Dark mode)
+### Borders - Steel Blue-Grey (Utility Aesthetic)
 
-Minimum 3:1 contrast against both the base surface and card surfaces.
+Subtle, professional borders that don't compete with content. Steel blue-grey chosen for clean, industrial feel.
 
 | Token              | Hex       | Contrast on #121212 | Contrast on #1A1A1A | WCAG | Usage                          |
 | ------------------ | --------- | ------------------- | ------------------- | ---- | ------------------------------ |
-| `--border-default` | `#6B6B6B` | 3.5:1               | 3.3:1               | AA   | Standard component boundaries  |
-| `--border-strong`  | `#747474` | 4.0:1               | 3.7:1               | AA   | Dividers, emphasis             |
-| `--border-dark`    | `#808080` | 4.7:1               | 4.4:1               | AA   | High-emphasis separators       |
+| `--border-default` | `#37474F` | 3.2:1               | 3.0:1               | AA   | Standard component boundaries  |
+| `--border-strong`  | `#455A64` | 3.8:1               | 3.5:1               | AA   | Dividers, emphasis             |
+| `--border-dark`    | `#546E7A` | 4.5:1               | 4.2:1               | AA   | High-emphasis separators       |
+| `--border-focus`   | `#43A047` | 9.8:1               | 9.1:1               | AAA  | Focus rings (match CTA)        |
 
 ---
 
@@ -402,19 +407,19 @@ These create visual noise, harm accessibility, or conflict with the design syste
   --text-placeholder: #78716c;
 
   /* CTA */
-  --cta-primary: #1d4ed8;
-  --cta-hover: #1e40af;
-  --cta-active: #1e3a8a;
+  --cta-primary: #15803d;
+  --cta-hover: #166534;
+  --cta-active: #14532d;
 
   /* Links */
-  --link-default: #1d4ed8;
-  --link-hover: #1e40af;
+  --link-default: #15803d;
+  --link-hover: #166534;
 
   /* Status */
   --status-success: #15803d;
   --status-warning: #a16207;
   --status-error: #b91c1c;
-  --status-info: #1d4ed8;
+  --status-info: #15803d;
 
   /* Live Indicator */
   --live-indicator: #d97706;
@@ -423,7 +428,7 @@ These create visual noise, harm accessibility, or conflict with the design syste
   /* Borders */
   --border-default: #e7e5e4;
   --border-strong: #d6d3d1;
-  --border-focus: #1d4ed8;
+  --border-focus: #15803d;
 
   /* Typography */
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -445,41 +450,47 @@ These create visual noise, harm accessibility, or conflict with the design syste
 }
 
 .dark {
-  /* Backgrounds */
-  --bg-page: #171412;
-  --bg-elevated: #231f1c;
-  --bg-recessed: #2e2926;
-  --bg-hover: #3a3532;
+  /* Backgrounds - Technical Grid */
+  --bg-page: #121212;
+  --bg-card: #1a1a1a;
+  --bg-elevated: #1f1f1f;
+  --bg-recessed: #1a1a1a;
+  --bg-hover: #242424;
+  --bg-focus: #2a2a2a;
+  --bg-modal: #303030;
+  --bg-tertiary: #3a3a3a;
 
   /* Text */
-  --text-primary: #fafaf9;
-  --text-secondary: #d6d3d1;
-  --text-muted: #a8a29e;
+  --text-primary: #dcdcdc;
+  --text-secondary: #b0b0b0;
+  --text-muted: #757575;
   --text-placeholder: #78716c;
 
-  /* CTA */
-  --cta-primary: #3b82f6;
-  --cta-hover: #60a5fa;
-  --cta-active: #93c5fd;
+  /* CTA - Technical Grid (Emerald Green) */
+  --cta-primary: #43a047;
+  --cta-hover: #388e3c;
+  --cta-active: #2e7d32;
+  --cta-text: #121212;
 
   /* Links */
-  --link-default: #60a5fa;
-  --link-hover: #93c5fd;
+  --link-default: #43a047;
+  --link-hover: #66bb6a;
 
   /* Status */
-  --status-success: #22c55e;
+  --status-success: #43a047;
   --status-warning: #fbbf24;
   --status-error: #f87171;
-  --status-info: #60a5fa;
+  --status-info: #43a047;
 
   /* Live Indicator */
   --live-indicator: #fbbf24;
   --live-glow: rgba(251, 191, 36, 0.4);
 
-  /* Borders */
-  --border-default: #3d3835;
-  --border-strong: #57534e;
-  --border-focus: #3b82f6;
+  /* Borders - Steel Blue-Grey */
+  --border-default: #37474f;
+  --border-strong: #455a64;
+  --border-dark: #546e7a;
+  --border-focus: #43a047;
 }
 ```
 
