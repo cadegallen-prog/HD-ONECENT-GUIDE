@@ -177,10 +177,12 @@ public/                 # Static assets
 
 ### AI Canon & Read Order (canonical entrypoint)
 
-- Start here. The `.ai/README.md` file is now a stub that points back to this section.
-- If the session goal is AI workflow/tooling/verification enablement, also read `.ai/AI_ENABLEMENT_BLUEPRINT.md` (after the read order).
-- Read order before work: `STATE.md` → `BACKLOG.md` → `CONTRACT.md` + `DECISION_RIGHTS.md` → `CONSTRAINTS.md` + `FOUNDATION_CONTRACT.md` + `GUARDRAILS.md` → latest `SESSION_LOG.md` → `CONTEXT.md` when making product calls.
-- Rules: default **no new dependencies**; avoid orphan one-off files (if you add, prune or merge an obsolete one and log it); run gates on meaningful changes (`npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e`) and record results in `SESSION_LOG.md`; work on `main` and note it.
+- **Start here:** Read `.ai/START_HERE.md` for the universal entry point and mandatory read order
+- The `.ai/README.md` file is now a stub that points back to this section
+- **Read sequence:** START_HERE.md → CRITICAL_RULES.md → STATE.md → BACKLOG.md → CONTRACT.md → DECISION_RIGHTS.md
+- **First session only:** Read `GROWTH_STRATEGY.md` for business context
+- **If session goal is AI workflow/tooling/verification enablement:** Also read `.ai/AI_ENABLEMENT_BLUEPRINT.md`
+- **Rules:** Default no new dependencies; run all 4 gates (lint/build/unit/e2e) on meaningful changes and record results in `SESSION_LOG.md`; work on `main`
 
 ---
 

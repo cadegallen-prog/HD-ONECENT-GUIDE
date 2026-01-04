@@ -1,71 +1,30 @@
-# Penny Central - Claude Guide
+# Penny Central - Claude Code Guide
 
-## Read First (in order)
+## Start Here
 
-1. `.ai/VERIFICATION_REQUIRED.md` ⛔ NO PROOF = NOT DONE
-2. `.ai/CONSTRAINTS.md` - Most violated rules
-3. `.ai/GROWTH_STRATEGY.md` - **Business goals & context (START HERE for new sessions)**
-4. `.ai/STATE.md` - Current snapshot
-5. `.ai/BACKLOG.md` - What to work on
-6. `.ai/AI_ENABLEMENT_BLUEPRINT.md` - Only when improving AI workflow/tooling/verification
+Read `.ai/START_HERE.md` for the universal entry point and read order.
 
-**Then ask:** GOAL / WHY / DONE for this session.
+This file contains Claude Code-specific notes only.
 
----
+## Read Order (Mandatory)
 
-## Alignment Mode (Default When Unclear)
+Follow the sequence in `.ai/START_HERE.md`:
+1. START_HERE.md
+2. CRITICAL_RULES.md
+3. STATE.md
+4. BACKLOG.md
+5. CONTRACT.md
+6. DECISION_RIGHTS.md
 
-- If Cade is brainstorming or the request is ambiguous, ask **exactly one** clarifying question (non-technical) before writing code.
-- If Cade provides `GOAL / WHY / DONE MEANS` and says "go" / "build it", implement immediately.
+**First session only:** Read `GROWTH_STRATEGY.md` for business context
 
-### Triggers
-
-- Clear `GOAL / WHY / DONE MEANS` + "go" → implement + verify
-- "What do you think..." / "I'm not sure..." → propose Options A/B/C first
+**Then ask:** GOAL / WHY / DONE for this session
 
 ---
 
-## Session Start Protocol (MANDATORY)
+## Claude Code Specifics
 
-- Follow the canonical `AI Canon & Read Order` in the root `README.md`.
-- After reading, summarize: current state (`.ai/STATE.md`), top priority (`.ai/BACKLOG.md`), key constraints (`.ai/CONSTRAINTS.md` + `.ai/FOUNDATION_CONTRACT.md` + `.ai/GUARDRAILS.md`), and any recent notes (`.ai/SESSION_LOG.md`).
-
----
-
-## Autonomy After "Go" (Default)
-
-Once Cade says "go" / "build it", do the full loop without extra prompts:
-
-1. Implement
-2. Verify (`npm run ai:verify` or lint/build/unit/e2e)
-3. Self-check against `.ai/DECISION_RIGHTS.md` + `.ai/CONSTRAINTS.md`
-4. Update `.ai/SESSION_LOG.md` + `.ai/STATE.md` (+ `.ai/BACKLOG.md` if priorities moved)
-5. Report back with proof
-
----
-
-## Learning Loop (After Mistakes)
-
-When something doesn't work:
-
-1. STOP immediately
-2. Add to LEARNINGS.md:
-   - What problem we hit
-   - What we tried
-   - What we learned
-   - What to do instead
-3. THEN try a different approach
-
-If you try the same failed approach twice without documenting it, you've wasted Cade's time.
-
----
-
-## Canonical Entry Point
-
-- Read the `AI Canon & Read Order` section in `README.md` before diving into Claude-specific notes. That README delivers the shared `STATE.md` → `BACKLOG.md` → `CONTRACT.md`/`DECISION_RIGHTS.md` → `CONSTRAINTS.md`/`FOUNDATION_CONTRACT.md`/`GUARDRAILS.md` → `SESSION_LOG.md` → `CONTEXT.md` sequence referenced across every agent. This file simply layers Claude-specific tips on top of that canonical order.
-
-
-## Owner Context (Read This First)
+### Owner Context
 
 **Cade cannot code.** He cannot read, write, debug, or assess code quality. This changes everything:
 
@@ -103,43 +62,6 @@ Push back (politely but firmly) when Cade:
 
 ---
 
-## Critical Rules
-
-### Rule #1: Verification
-
-- **All 4 tests MUST pass** (lint, build, test:unit, test:e2e)
-- **Paste output** as proof
-- **Screenshots** for UI changes (Playwright)
-- **GitHub Actions** URL if applicable
-
-### Rule #2: Port 3001
-
-```bash
-netstat -ano | findstr :3001
-# IF RUNNING → use it (don't kill)
-# IF NOT → npm run dev
-```
-
-### Rule #3: Colors
-
-- ❌ NO raw Tailwind (`blue-500`, `gray-600`)
-- ✅ USE CSS variables (`var(--cta-primary)`)
-- ✅ OR get approval first
-
-### Rule #4: Internet SKU map (backend-only)
-
-- Use the private internet-SKU map only to generate outbound Home Depot product links on the backend.
-- The UI should continue showing the regular SKU only; internet SKU must stay private.
-- Keep the map in private storage (env/Blob/Drive) and never commit it.
-- Fallback: when a mapping is missing, build links from the regular SKU.
-
-### Rule #5: Session Log Trim
-
-- After adding a session entry, if `.ai/SESSION_LOG.md` has more than 5 entries, trim to keep only the 3 most recent.
-- Git history preserves everything - trimming keeps the file readable and fast to load.
-
----
-
 ## MCP Servers (5 available)
 
 **Configuration:** `.vscode/mcp.json` (for Claude Code only)
@@ -173,36 +95,6 @@ netstat -ano | findstr :3001
 - Refers to Claude Code VSCode extension (Sonnet 4.5 or Opus 4.5)
 - Uses MCPs configured in `.vscode/mcp.json`
 - Full development agent with MCP server integration
-
----
-
-## Quality Gates
-
-```bash
-npm run lint        # 0 errors
-npm run build       # successful
-npm run test:unit   # all passing
-npm run test:e2e    # all passing
-```
-
-**All 4 must pass. Paste output.**
-
----
-
-## Never Touch
-
-- `globals.css` (without approval)
-- Port 3001 (check first, use if running)
-- `/components/store-map.tsx` (fragile)
-
----
-
-## Tech Stack
-
-- Next.js 16 + TypeScript
-- Tailwind (custom tokens)
-- React-Leaflet
-- Vercel
 
 ---
 

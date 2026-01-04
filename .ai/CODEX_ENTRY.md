@@ -4,68 +4,29 @@ You are using **Codex** (ChatGPT, GPT-5.2 with full MCP support via `~/.codex/co
 
 ---
 
-## Read First (in order)
+## Start Here
 
-1. `.ai/VERIFICATION_REQUIRED.md` ⛔ NO PROOF = NOT DONE
-2. `.ai/CONSTRAINTS.md` - Most violated rules
-3. `.ai/GROWTH_STRATEGY.md` - Business goals & owner context
-4. `.ai/STATE.md` - Current project snapshot
-5. `.ai/BACKLOG.md` - Prioritized work queue
+Read `.ai/START_HERE.md` for the universal entry point and read order.
 
-**Then ask:** GOAL / WHY / DONE for this session.
+This file contains Codex-specific notes only.
 
----
+## Read Order (Mandatory)
 
-## Alignment Mode (Default When Unclear)
+Follow the sequence in `.ai/START_HERE.md`:
+1. START_HERE.md
+2. CRITICAL_RULES.md
+3. STATE.md
+4. BACKLOG.md
+5. CONTRACT.md
+6. DECISION_RIGHTS.md
 
-- If Cade is brainstorming or the request is ambiguous, ask **exactly one** clarifying question (non-technical) before writing code.
-- If Cade provides `GOAL / WHY / DONE MEANS` and says "go" / "build it", implement immediately.
+**First session only:** Read `GROWTH_STRATEGY.md` for business context
 
-### Triggers
-
-- Clear `GOAL / WHY / DONE MEANS` + "go" → implement + verify
-- "What do you think..." / "I'm not sure..." → propose Options A/B/C first
+**Then ask:** GOAL / WHY / DONE for this session
 
 ---
 
-## Session Start Protocol (MANDATORY)
-
-- Follow the canonical `AI Canon & Read Order` in the root `README.md`.
-- After reading, summarize: current state (`.ai/STATE.md`), top priority (`.ai/BACKLOG.md`), key constraints (`.ai/CONSTRAINTS.md` + `.ai/FOUNDATION_CONTRACT.md` + `.ai/GUARDRAILS.md`), and any recent notes (`.ai/SESSION_LOG.md`).
-
----
-
-## Autonomy After "Go" (Default)
-
-Once Cade says "go" / "build it", do the full loop without extra prompts:
-
-1. Implement
-2. Verify (`npm run ai:verify` or lint/build/unit/e2e)
-3. Self-check against `.ai/DECISION_RIGHTS.md` + `.ai/CONSTRAINTS.md`
-4. Update `.ai/SESSION_LOG.md` + `.ai/STATE.md` (+ `.ai/BACKLOG.md` if priorities moved)
-5. Report back with proof
-
----
-
-## Learning Loop (After Mistakes)
-
-When something doesn't work:
-
-1. STOP immediately
-2. Add to LEARNINGS.md:
-   - What problem we hit
-   - What we tried
-   - What we learned
-   - What to do instead
-3. THEN try a different approach
-
-If you try the same failed approach twice without documenting it, you've wasted Cade's time.
-
----
-
-## Canonical Entry Point
-
-- The canonical session start lives in `README.md`’s `AI Canon & Read Order` section. Read that sequence before following any model-specific tips so the entire team (Claude, Codex, Copilot) stays on the same page about what to tackle and in what order.
+## Codex Specifics
 
 ## MCP Configuration
 
@@ -80,89 +41,6 @@ Verify all 5 servers are configured:
 5. **Vercel** - Deployment management (optional)
 
 **Reference template:** `.ai/CODEX_CONFIG_SNIPPET.toml`
-
----
-
-## Owner Context
-
-**Cade cannot code.** He cannot read, write, debug, or assess code quality.
-
-Your responsibilities:
-
-- **Architect** - Make all technical decisions
-- **Guardian** - Catch mistakes, push back when needed
-- **Teacher** - Explain in plain English (what/why, not how)
-- **Advisor** - Offer 2-3 approaches, let Cade choose direction
-
----
-
-## Critical Rules (Non-Negotiable)
-
-### Rule #1: Verification Required
-
-- All 4 tests MUST pass (lint, build, test:unit, test:e2e)
-- Paste output as proof
-- Screenshots for UI changes (use Playwright)
-- GitHub Actions URL if applicable
-
-### Rule #2: Never Kill Port 3001
-
-```bash
-netstat -ano | findstr :3001
-# IF RUNNING → use it (don't kill)
-# IF NOT → npm run dev
-```
-
-### Rule #3: Use Design Tokens, Not Generic Colors
-
-- ❌ FORBIDDEN: `blue-500`, `gray-600`, `bg-blue-500`
-- ✅ REQUIRED: `var(--cta-primary)`, `var(--background)`
-- ✅ OR: Get approval before adding new colors
-
-### Rule #4: Internet SKU Map (Backend-Only)
-
-- Use private SKU map only on backend for Home Depot links
-- UI displays regular SKU only (never surface internet SKU)
-- Store in private storage (env var, Vercel Blob, Drive) - never commit
-- Always fall back to regular SKU when mapping missing
-
-### Rule #5: Session Log Trim
-
-- After adding a session entry, if `.ai/SESSION_LOG.md` has >5 entries, trim to 3 most recent
-- Git history preserves everything
-
----
-
-## Quality Gates (ALWAYS Required)
-
-```bash
-npm run lint        # 0 errors
-npm run build       # successful
-npm run test:unit   # all passing
-npm run test:e2e    # all passing
-```
-
-**No exceptions. Paste output.**
-
----
-
-## Never Touch (Without Explicit Permission)
-
-- `globals.css` - Site-wide styling via CSS variables (fragile)
-- `/components/store-map.tsx` - React-Leaflet hydration sensitive (fragile)
-- Port 3001 - Check first, use if running
-- Build configuration - `next.config.js`, `tsconfig.json`, `tailwind.config.ts`
-
----
-
-## Tech Stack
-
-- Next.js 16 + TypeScript
-- Tailwind (custom design tokens)
-- React-Leaflet
-- Vercel deployment
-
-**Live at:** https://pennycentral.com
 
 ---
 
