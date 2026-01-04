@@ -31,11 +31,11 @@ export const OG_VARIANTS: Record<OgMainPageId, { headline: string; subhead: stri
   },
 }
 
-const OG_IMAGE_VERSION = "11"
+const OG_IMAGE_VERSION = "12"
+
+const OG_DEFAULT_IMAGE_PATH = "/og-image-facebook.jpg"
 
 export function ogImageUrl(page: OgMainPageId | string): string {
-  if (OG_MAIN_PAGES.includes(page as OgMainPageId)) return `/og/${page}.jpg`
-
-  const headline = (page || "").trim() || OG_VARIANTS.homepage.headline
-  return `/api/og?headline=${encodeURIComponent(headline)}&v=${OG_IMAGE_VERSION}`
+  void page
+  return `${OG_DEFAULT_IMAGE_PATH}?v=${OG_IMAGE_VERSION}`
 }
