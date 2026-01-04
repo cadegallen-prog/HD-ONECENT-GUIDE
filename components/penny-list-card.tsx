@@ -155,7 +155,7 @@ export function PennyListCard({ item }: PennyListCardProps) {
               onClick={(e) => e.stopPropagation()}
               className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] rounded"
             >
-              <PennyThumbnail src={item.imageUrl} alt={item.name} size={64} />
+              <PennyThumbnail src={item.imageUrl} alt={item.name} size={120} />
             </Link>
             <div className="min-w-0 flex-1 space-y-2">
               <Link
