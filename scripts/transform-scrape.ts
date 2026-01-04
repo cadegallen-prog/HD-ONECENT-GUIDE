@@ -181,7 +181,22 @@ function normalizeProductName(name: string, brand?: string): string {
   normalized = normalized.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase())
 
   // Handle common abbreviations that should stay uppercase
-  const abbreviations = ["HD", "LED", "USB", "AC", "DC", "UV", "PVC", "ABS", "HVAC", "CFM", "PSI", "RPM", "GPM", "BTU"]
+  const abbreviations = [
+    "HD",
+    "LED",
+    "USB",
+    "AC",
+    "DC",
+    "UV",
+    "PVC",
+    "ABS",
+    "HVAC",
+    "CFM",
+    "PSI",
+    "RPM",
+    "GPM",
+    "BTU",
+  ]
   for (const abbr of abbreviations) {
     const regex = new RegExp(`\\b${abbr}\\b`, "gi")
     normalized = normalized.replace(regex, abbr)
@@ -224,9 +239,9 @@ function optimizeImageUrl(url: string | undefined): string | null {
   const trimmed = String(url ?? "").trim()
   if (!trimmed) return null
   if (!trimmed.includes("thdstatic.com")) return trimmed
-  if (trimmed.includes("_1000.jpg")) return trimmed.replace("_1000.jpg", "_400.jpg")
-  if (trimmed.includes("_100.jpg")) return trimmed.replace("_100.jpg", "_400.jpg")
-  return trimmed.replace(/\/\d+\.jpg(\?.*)?$/, "/400.jpg")
+  if (trimmed.includes("_100.jpg")) return trimmed.replace("_100.jpg", "_1000.jpg")
+  if (trimmed.includes("_400.jpg")) return trimmed.replace("_400.jpg", "_1000.jpg")
+  return trimmed.replace(/\/\d+\.jpg(\?.*)?$/, "/1000.jpg")
 }
 
 function canonicalHomeDepotUrl(
@@ -303,10 +318,7 @@ function main() {
 
     const sorted = versions
       .slice()
-      .sort(
-        (a, b) =>
-          new Date(b.scrapedAt || 0).getTime() - new Date(a.scrapedAt || 0).getTime()
-      )
+      .sort((a, b) => new Date(b.scrapedAt || 0).getTime() - new Date(a.scrapedAt || 0).getTime())
 
     const merged: ScrapedItem = { ...sorted[0] }
 

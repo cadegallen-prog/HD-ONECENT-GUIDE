@@ -190,7 +190,7 @@ function cleanItemName(name: string): string {
 function optimizeImageUrl(url: string | null): string | null {
   if (!url) return null
   if (url.includes("thdstatic.com") || url.includes("homedepot.com")) {
-    return url.replace(/\/\d+\.jpg(\?.*)?$/, "/400.jpg")
+    return url.replace(/\/\d+\.jpg(\?.*)?$/, "/1000.jpg")
   }
   return url
 }

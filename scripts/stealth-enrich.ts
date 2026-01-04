@@ -103,7 +103,7 @@ function normalizeSku(sku: string): string | null {
 function optimizeImageUrl(url: string | null): string | null {
   if (!url) return null
   if (url.includes("thdstatic.com")) {
-    return url.replace(/\/\d+\.jpg(\?.*)?$/, "/400.jpg")
+    return url.replace(/\/\d+\.jpg(\?.*)?$/, "/1000.jpg")
   }
   return url
 }
@@ -172,8 +172,7 @@ async function extractData(page: any, inputSku: string) {
       attr('meta[property="og:title"]', "content")
 
     // Brand
-    const brand =
-      text('[data-testid="product-brand"]') || attr('meta[itemprop="brand"]', "content")
+    const brand = text('[data-testid="product-brand"]') || attr('meta[itemprop="brand"]', "content")
 
     // Image
     let imageUrl = attr('meta[property="og:image"]', "content")
@@ -288,7 +287,9 @@ async function main() {
   console.log(`   UA: ${userAgent.substring(0, 50)}...`)
   console.log(`   Viewport: ${viewport.width}x${viewport.height}`)
   console.log(`   Timezone: ${timezone}`)
-  console.log(`   Proxy: ${PROXY_URL ? "✅ Configured" : "❌ None (add WEBSHARE_PROXY to .env.local)"}`)
+  console.log(
+    `   Proxy: ${PROXY_URL ? "✅ Configured" : "❌ None (add WEBSHARE_PROXY to .env.local)"}`
+  )
   console.log()
 
   // Parse proxy if provided

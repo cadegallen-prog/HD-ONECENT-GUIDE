@@ -97,7 +97,9 @@ function normalizeSku(sku: string | number | null | undefined): string | null {
 
 function cleanPrice(value: string | number | undefined | null): number | null {
   if (value === null || value === undefined) return null
-  const digits = String(value).trim().replace(/[^0-9.]/g, "")
+  const digits = String(value)
+    .trim()
+    .replace(/[^0-9.]/g, "")
   if (!digits) return null
   const parsed = Number(digits)
   if (!Number.isFinite(parsed) || parsed <= 0) return null
@@ -124,10 +126,10 @@ function parsePriceInfo(value: string | number | undefined | null): {
 function optimizeImageUrl(url: string | null | undefined): string | null {
   if (!url) return null
   if (url.includes("thdstatic.com")) {
-    // Convert common THD sizes to 400px for efficient loading
-    if (url.includes("_1000.jpg")) return url.replace("_1000.jpg", "_400.jpg")
-    if (url.includes("_100.jpg")) return url.replace("_100.jpg", "_400.jpg")
-    return url.replace(/\/\d+\.jpg(\?.*)?$/, "/400.jpg")
+    // Convert common THD sizes to 1000px for larger card displays
+    if (url.includes("_100.jpg")) return url.replace("_100.jpg", "_1000.jpg")
+    if (url.includes("_400.jpg")) return url.replace("_400.jpg", "_1000.jpg")
+    return url.replace(/\/\d+\.jpg(\?.*)?$/, "/1000.jpg")
   }
   return url
 }
@@ -226,7 +228,12 @@ function parseCSV(content: string): EnrichmentRow[] {
   const lines = content.trim().split("\n")
   if (lines.length < 2) return []
 
-  const headers = lines[0].split(",").map((h) => h.trim().toLowerCase().replace(/[^a-z_]/g, "_"))
+  const headers = lines[0].split(",").map((h) =>
+    h
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z_]/g, "_")
+  )
   const rows: EnrichmentRow[] = []
 
   for (let i = 1; i < lines.length; i++) {
@@ -352,7 +359,9 @@ function normalizeExistingRow(row: ExistingEnrichmentRow) {
     model_number: normalizeOptionalText(row.model_number),
     upc: normalizeOptionalText(row.upc),
     image_url: normalizeOptionalText(row.image_url),
-    home_depot_url: isValidHomeDepotUrl(row.home_depot_url) ? normalizeOptionalText(row.home_depot_url) : null,
+    home_depot_url: isValidHomeDepotUrl(row.home_depot_url)
+      ? normalizeOptionalText(row.home_depot_url)
+      : null,
     internet_sku: row.internet_sku && row.internet_sku > 0 ? row.internet_sku : null,
     retail_price: cleanPrice(row.retail_price),
     source: normalizeOptionalText(row.source),
@@ -502,7 +511,7 @@ async function main() {
       home_depot_url:
         existing.home_depot_url && !isSearchHomeDepotUrl(existing.home_depot_url)
           ? existing.home_depot_url
-          : row.home_depot_url ?? existing.home_depot_url,
+          : (row.home_depot_url ?? existing.home_depot_url),
       internet_sku: existing.internet_sku ?? row.internet_sku,
       retail_price: existing.retail_price ?? row.retail_price,
     })
@@ -546,7 +555,7 @@ async function main() {
       home_depot_url:
         existing.home_depot_url && !isSearchHomeDepotUrl(existing.home_depot_url)
           ? existing.home_depot_url
-          : row.home_depot_url ?? existing.home_depot_url,
+          : (row.home_depot_url ?? existing.home_depot_url),
       internet_sku: existing.internet_sku ?? row.internet_sku,
       retail_price: existing.retail_price ?? row.retail_price,
       source: existing.source ?? row.source,
