@@ -1,78 +1,31 @@
 "use client"
 
-import { ArrowUpDown, ArrowUp, ArrowDown, Copy, Check, PlusCircle } from "lucide-react"
-import { useState, useCallback } from "react"
-import type { KeyboardEvent, MouseEvent } from "react"
-import Link from "next/link"
+import { ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react"
+import { useState } from "react"
+import type { KeyboardEvent as ReactKeyboardEvent } from "react"
 import { useRouter } from "next/navigation"
-import { toast } from "sonner"
-import { US_STATES } from "@/lib/us-states"
-import { formatRelativeDate } from "@/lib/penny-list-utils"
+import {
+  formatCurrency,
+  formatLastSeen,
+  formatLineB,
+  normalizeBrand,
+  normalizeProductName,
+} from "@/lib/penny-list-utils"
 import { PennyThumbnail } from "@/components/penny-thumbnail"
 import type { PennyItem } from "@/lib/fetch-penny-data"
 import type { SortOption } from "./penny-list-filters"
-import { trackEvent } from "@/lib/analytics"
-import { buildReportFindUrl } from "@/lib/report-find-link"
 import { formatSkuForDisplay } from "@/lib/sku"
-import { Button } from "@/components/ui/button"
-import { copyToClipboard } from "@/components/copy-sku-button"
+import { BarcodeModal } from "@/components/barcode-modal"
+import { PennyListActionRow } from "@/components/penny-list-action-row"
+import { StateBreakdownSheet } from "@/components/state-breakdown-sheet"
 
 interface PennyListTableProps {
   items: (PennyItem & { parsedDate?: Date | null })[]
   sortOption: SortOption
   onSortChange: (sort: SortOption) => void
-}
-
-// Get full state name from abbreviation
-function getStateName(code: string): string {
-  const state = US_STATES.find((s) => s.code === code)
-  return state?.name || code
-}
-
-// Get total reports across all states
-function getTotalReports(locations: Record<string, number>): number {
-  return Object.values(locations).reduce((sum, count) => sum + count, 0)
-}
-
-function CopyButton({ sku }: { sku: string }) {
-  const [copied, setCopied] = useState(false)
-
-  const handleCopy = useCallback(
-    async (e: MouseEvent) => {
-      e.preventDefault()
-      e.stopPropagation()
-
-      const success = await copyToClipboard(sku)
-      if (success) {
-        const skuMasked = sku.slice(-4)
-        trackEvent("sku_copy", { skuMasked, source: "table" })
-        setCopied(true)
-        toast.success(`Copied SKU ${formatSkuForDisplay(sku)}`, {
-          duration: 2000,
-        })
-        setTimeout(() => setCopied(false), 1500)
-      } else {
-        toast.error("Failed to copy SKU", { duration: 2000 })
-      }
-    },
-    [sku]
-  )
-
-  return (
-    <button
-      type="button"
-      onClick={handleCopy}
-      className="px-2 py-1 rounded transition-colors focus-visible:outline-2 focus-visible:outline-[var(--cta-primary)] min-h-[36px] hover:bg-[var(--bg-hover)]"
-      aria-label={copied ? "SKU copied" : `Copy SKU ${sku}`}
-      title={copied ? "Copied!" : "Copy SKU"}
-    >
-      {copied ? (
-        <Check className="w-3.5 h-3.5 text-[var(--status-success)]" aria-hidden="true" />
-      ) : (
-        <Copy className="w-3.5 h-3.5 text-[var(--text-muted)]" aria-hidden="true" />
-      )}
-    </button>
-  )
+  stateFilter?: string
+  windowLabel?: string
+  userState?: string
 }
 
 function SortButton({
@@ -123,29 +76,42 @@ function SortButton({
   )
 }
 
-export function PennyListTable({ items, sortOption, onSortChange }: PennyListTableProps) {
+export function PennyListTable({
+  items,
+  sortOption,
+  onSortChange,
+  stateFilter,
+  windowLabel,
+  userState,
+}: PennyListTableProps) {
   const router = useRouter()
+  const [barcodeItem, setBarcodeItem] = useState<{
+    upc: string
+    name: string
+    price: number
+  } | null>(null)
+  const [stateSheetItem, setStateSheetItem] = useState<PennyItem | null>(null)
+  const resolvedWindowLabel = windowLabel?.trim() || "30d"
+  const nowMs = Date.now()
 
   return (
     <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl overflow-hidden">
       {/* Mobile scroll hint */}
       <div className="lg:hidden px-4 py-2 bg-[var(--bg-hover)] border-b border-[var(--border-default)] text-xs text-[var(--text-muted)] text-center">
-        ← Scroll horizontally to see all columns →
+         Scroll horizontally to see all columns 
       </div>
       <div className="overflow-x-auto">
         <table
-          className="w-full text-sm table-fixed min-w-[980px] penny-list-table"
+          className="w-full text-sm table-fixed min-w-[880px] penny-list-table"
           role="table"
           aria-label="Penny list items"
         >
           <colgroup>
-            <col className="w-[7%]" />
-            <col className="w-[30%]" />
-            <col className="w-[13%]" />
-            <col className="w-[18%]" />
-            <col className="w-[9%]" />
-            <col className="w-[13%]" />
             <col className="w-[10%]" />
+            <col className="w-[36%]" />
+            <col className="w-[15%]" />
+            <col className="w-[24%]" />
+            <col className="w-[15%]" />
           </colgroup>
           <thead>
             <tr className="border-b border-[var(--border-default)] bg-[var(--bg-recessed)]">
@@ -160,59 +126,62 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
                 className="text-left px-4 py-3 font-semibold text-[var(--text-primary)]"
               >
                 <SortButton column="alphabetical" currentSort={sortOption} onSort={onSortChange}>
-                  Item Name
+                  Item
                 </SortButton>
               </th>
               <th
                 scope="col"
                 className="text-left px-4 py-3 font-semibold text-[var(--text-primary)]"
               >
-                SKU
+                Price
               </th>
               <th
                 scope="col"
                 className="text-left px-4 py-3 font-semibold text-[var(--text-primary)]"
               >
-                States
+                <div className="flex flex-col gap-1">
+                  <SortButton column="most-reports" currentSort={sortOption} onSort={onSortChange}>
+                    Reports
+                  </SortButton>
+                  <SortButton column="newest" currentSort={sortOption} onSort={onSortChange}>
+                    Last seen
+                  </SortButton>
+                </div>
               </th>
               <th
                 scope="col"
                 className="text-left px-4 py-3 font-semibold text-[var(--text-primary)]"
               >
-                <SortButton column="most-reports" currentSort={sortOption} onSort={onSortChange}>
-                  Reports
-                </SortButton>
-              </th>
-              <th
-                scope="col"
-                className="text-left px-4 py-3 font-semibold text-[var(--text-primary)]"
-              >
-                <SortButton column="newest" currentSort={sortOption} onSort={onSortChange}>
-                  Date
-                </SortButton>
-              </th>
-              <th
-                scope="col"
-                className="text-left px-4 py-3 font-semibold text-[var(--text-primary)]"
-              >
-                Action
+                Actions
               </th>
             </tr>
           </thead>
           <tbody>
             {items.map((item) => {
-              const totalReports = item.locations ? getTotalReports(item.locations) : 0
-              const stateCount = item.locations ? Object.keys(item.locations).length : 0
-              const topStates = item.locations
-                ? Object.entries(item.locations)
-                    .sort(([, a], [, b]) => b - a)
-                    .slice(0, 3)
-                : []
+              const displayBrand = normalizeBrand(item.brand)
+              const displayName = normalizeProductName(item.name, { brand: item.brand })
+              const skuLine = displayBrand
+                ? `${displayBrand} | SKU ${formatSkuForDisplay(item.sku)}`
+                : `SKU ${formatSkuForDisplay(item.sku)}`
+              const retailPrice =
+                typeof item.retailPrice === "number" && item.retailPrice > 0
+                  ? item.retailPrice
+                  : null
+              const formattedPrice = formatCurrency(item.price)
+              const formattedRetail = retailPrice ? formatCurrency(retailPrice) : null
+              const lastSeenLabel = formatLastSeen(item.lastSeenAt ?? item.dateAdded, nowMs)
+              const lineB = formatLineB({
+                locations: item.locations,
+                stateFilter,
+                windowLabel: resolvedWindowLabel,
+              })
+              const upc = item.upc?.trim()
               const skuPageUrl = `/sku/${item.sku}`
 
               const openSkuPage = () => router.push(skuPageUrl)
 
-              const handleRowKeyDown = (event: KeyboardEvent<HTMLTableRowElement>) => {
+              const handleRowKeyDown = (event: ReactKeyboardEvent<HTMLTableRowElement>) => {
+                if (event.currentTarget !== event.target) return
                 if (event.key === "Enter" || event.key === " ") {
                   event.preventDefault()
                   openSkuPage()
@@ -223,121 +192,72 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
                 <tr
                   key={item.id}
                   tabIndex={0}
-                  aria-label={`View details for ${item.name} (SKU ${item.sku})`}
+                  aria-label={`View details for ${displayName} (SKU ${item.sku})`}
                   onClick={openSkuPage}
                   onKeyDown={handleRowKeyDown}
                   className="border-b border-[var(--border-default)] last:border-b-0 hover:bg-[var(--bg-hover)] transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-[var(--cta-primary)] focus-visible:outline-offset-2"
                 >
                   {/* Thumbnail */}
-                  <td className="px-4 py-3 align-top">
-                    <PennyThumbnail src={item.imageUrl} alt={item.name} size={40} />
+                  <td className="px-4 py-4 align-top">
+                    <PennyThumbnail src={item.imageUrl} alt={displayName} size={72} />
                   </td>
-                  {/* Item Name */}
-                  <td className="px-4 py-3 align-top min-w-0">
-                    <div className="space-y-1.5">
-                      <Link
-                        href={skuPageUrl}
-                        className="font-semibold text-[var(--text-primary)] leading-[1.4] truncate hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
-                        title={item.name}
-                        onClick={(event) => event.stopPropagation()}
-                        onKeyDown={(event) => event.stopPropagation()}
+                  {/* Item */}
+                  <td className="px-4 py-4 align-top min-w-0">
+                    <div className="space-y-1">
+                      <p className="text-xs text-[var(--text-muted)] font-medium">{skuLine}</p>
+                      <p
+                        className="text-base font-semibold text-[var(--text-primary)] leading-[1.5] line-clamp-2-table"
+                        title={displayName}
                       >
-                        {item.name}
-                      </Link>
+                        {displayName}
+                      </p>
                     </div>
                   </td>
-
-                  {/* SKU */}
-                  <td className="px-4 py-3 align-top">
-                    <div
-                      className="flex items-center gap-1.5"
-                      onClickCapture={(event) => event.stopPropagation()}
-                      onKeyDownCapture={(event) => event.stopPropagation()}
-                    >
-                      <code className="font-mono text-sm bg-[var(--bg-elevated)] border border-[var(--border-default)] px-2.5 py-1.5 rounded select-all text-[var(--text-primary)] font-medium">
-                        {formatSkuForDisplay(item.sku)}
-                      </code>
-                      <CopyButton sku={item.sku} />
+                  {/* Price */}
+                  <td className="px-4 py-4 align-top">
+                    <div className="space-y-1">
+                      <p className="text-[28px] font-semibold text-[var(--text-primary)]">
+                        {formattedPrice}
+                      </p>
+                      {formattedRetail && (
+                        <p className="text-xs text-[var(--text-muted)]">
+                          Retail <span className="line-through">{formattedRetail}</span>
+                        </p>
+                      )}
                     </div>
                   </td>
-
-                  {/* States */}
-                  <td className="px-4 py-3 align-top">
-                    {stateCount > 0 ? (
-                      <div
-                        className="flex flex-wrap gap-1.5"
-                        title={`Reported in ${stateCount} states`}
+                  {/* Pattern signals */}
+                  <td className="px-4 py-4 align-top">
+                    <div className="space-y-1 text-xs text-[var(--text-muted)]">
+                      <p>{lastSeenLabel}</p>
+                      <button
+                        type="button"
+                        onClick={(event) => {
+                          event.stopPropagation()
+                          setStateSheetItem(item)
+                        }}
+                        className="text-left text-[var(--cta-primary)] underline decoration-[var(--cta-primary)] underline-offset-2 hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+                        aria-label={`View state breakdown for ${displayName}`}
                       >
-                        {topStates.map(([state]) => (
-                          <span
-                            key={state}
-                            className="pill pill-strong"
-                            title={getStateName(state)}
-                          >
-                            {state}
-                          </span>
-                        ))}
-                        {stateCount > 3 && (
-                          <span className="text-xs text-[var(--text-muted)] font-medium">
-                            +{stateCount - 3}
-                          </span>
-                        )}
-                      </div>
-                    ) : (
-                      <span className="text-xs text-[var(--text-muted)]">-</span>
-                    )}
+                        {lineB}
+                      </button>
+                    </div>
                   </td>
-
-                  {/* Reports */}
-                  <td className="px-4 py-3 align-top">
-                    {totalReports > 0 ? (
-                      <span className="text-[var(--text-primary)] font-semibold tabular-nums">
-                        {totalReports}
-                      </span>
-                    ) : (
-                      <span className="text-[var(--text-muted)]">-</span>
-                    )}
-                  </td>
-
-                  {/* Date */}
-                  <td className="px-4 py-3 align-top">
-                    <time
-                      className="text-[var(--text-primary)] tabular-nums"
-                      dateTime={item.dateAdded}
-                    >
-                      {formatRelativeDate(item.dateAdded)}
-                    </time>
-                  </td>
-
-                  {/* Action */}
-                  <td
-                    className="px-4 py-3 align-top"
-                    onClick={(event) => event.stopPropagation()}
-                    onKeyDown={(event) => event.stopPropagation()}
-                  >
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        trackEvent("report_duplicate_click", {
-                          sku: item.sku,
-                          name: item.name,
-                          src: "table",
-                        })
-                        router.push(
-                          buildReportFindUrl({ sku: item.sku, name: item.name, src: "table" })
-                        )
+                  {/* Actions */}
+                  <td className="px-4 py-4 align-top">
+                    <PennyListActionRow
+                      sku={item.sku}
+                      itemName={item.name}
+                      upc={upc}
+                      homeDepotUrl={item.homeDepotUrl}
+                      internetNumber={item.internetNumber}
+                      reportSource="table"
+                      homeDepotSource="penny-list-table"
+                      onBarcodeOpen={() => {
+                        if (!upc) return
+                        setBarcodeItem({ upc, name: displayName, price: item.price })
                       }}
-                      className="relative z-10 pointer-events-auto min-h-[44px] min-w-[44px]"
-                      aria-label={`Report finding ${item.name}`}
-                      title="Report this find"
-                    >
-                      <PlusCircle className="w-4 h-4" aria-hidden="true" />
-                      <span className="sr-only">Report</span>
-                    </Button>
+                    />
                   </td>
                 </tr>
               )
@@ -351,6 +271,21 @@ export function PennyListTable({ items, sortOption, onSortChange }: PennyListTab
           No items match your filters. Try adjusting your search criteria.
         </div>
       )}
+
+      <BarcodeModal
+        open={Boolean(barcodeItem?.upc)}
+        upc={barcodeItem?.upc ?? ""}
+        onClose={() => setBarcodeItem(null)}
+        productName={barcodeItem?.name}
+        pennyPrice={barcodeItem?.price}
+      />
+      <StateBreakdownSheet
+        open={Boolean(stateSheetItem)}
+        onClose={() => setStateSheetItem(null)}
+        stateCounts={stateSheetItem?.locations}
+        windowLabel={resolvedWindowLabel}
+        userState={userState}
+      />
     </div>
   )
 }

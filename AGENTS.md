@@ -156,10 +156,10 @@ Rules:
 
 - Prefer tokens (`var(--bg-*)`, `var(--text-*)`, `var(--cta-*)`) over hard-coded colors
 - Keep the palette neutral + blue CTA; avoid new accent colors unless essential
-- Use an 8-pt spacing grid
-- Minimum body text 16px
+- Use an 8-pt spacing grid; Penny List cards may use 12-14px padding for dense scan layouts
+- Minimum body text 16px; Penny List card metadata may be 12-13px (never below 12px)
 - Minimum touch targets 44×44px
-- Links are underlined and use CTA color
+- Text links are underlined and use CTA color; icon-only action links may be styled as buttons
 
 ---
 
@@ -183,7 +183,7 @@ Rules:
 
 ## 8. SEO & Internal Linking
 
-- **Internal First**: Always link to internal `/sku/[sku]` pages for items, NOT external Home Depot links.
+- **Internal First**: Primary item navigation uses internal `/sku/[sku]` pages; Home Depot links are allowed only as explicit action buttons.
 - **Canonical**: Use `www.pennycentral.com` for all absolute URLs.
 - **Structured Data**: Ensure `Product` JSON-LD is present on all item pages.
 

@@ -134,7 +134,7 @@ export function PennyListClient({
       return value
     }
 
-    return "6m"
+    return "1m" // Default to 30 days per spec (PENNY-LIST-REDESIGN.md L100-101)
   })
 
   const [itemsPerPage, setItemsPerPage] = useState(() => {
@@ -944,11 +944,20 @@ export function PennyListClient({
             items={items}
             sortOption={sortOption}
             onSortChange={setSortOptionWithURL}
+            stateFilter={stateFilter}
+            windowLabel={dateRange}
+            userState={userState}
           />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
             {items.map((item) => (
-              <PennyListCard key={item.id} item={item} />
+              <PennyListCard
+                key={item.id}
+                item={item}
+                stateFilter={stateFilter}
+                windowLabel={dateRange}
+                userState={userState}
+              />
             ))}
           </div>
         )}

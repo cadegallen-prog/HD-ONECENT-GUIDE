@@ -34,10 +34,14 @@
 **Right: Text Stack**
 | Line | Content | Style | Clamp |
 |------|---------|-------|-------|
-| 1 (optional) | Brand | 12–13px, muted, medium weight | 1 line |
+| 1 | Brand + SKU | 12–13px, muted, medium weight | 1 line |
 | 2–3 | Item name | 16–18px, medium weight, primary color | 2 lines + ellipsis |
 
-**SKU/Model:** Omitted from card face in v1.0. Lives on detail page and barcode modal only.
+**SKU (LOCKED):** Must be visible on card face.
+- Format: `Brand · SKU 123456`
+- If brand missing: `SKU 123456`
+
+**Model:** Omitted from card face in v1.0. Lives on detail page and barcode modal only.
 
 **Status pill:** Omitted from card face in v1.0.
 
@@ -68,25 +72,33 @@
 | Line | Content | Format |
 |------|---------|--------|
 | A | Recency | "Last seen: 6h ago" OR "Last seen: Recently" |
-| B | State spread | "GA + X states" OR "Seen in N states" OR "State data unavailable" |
+| B | State spread + report count (windowed) | "GA + X states · Y reports (Wd)" OR "Seen in N states · Y reports (Wd)" OR "State data unavailable · Y reports (Wd)" |
 
 **Line A (Recency) rules:**
 1. Use `date_purchased` if present, valid, and not future → format as relative time
 2. Else use `report_created_at` → format as relative time
 3. Else show **"Last seen: Recently"** (honest placeholder)
 
-**Line B (State spread) rules:**
+**Line B (State spread + report count) rules:**
 | Condition | Display |
 |-----------|---------|
-| User has state filter AND reports_in_state(userState) > 0 | "GA + X states" |
-| User has state filter AND reports_in_state(userState) = 0 | "Seen in N states" |
-| No state filter AND location data exists | "Seen in N states" |
-| Only 1 state | "Seen in 1 state" |
-| No location data | **"State data unavailable"** (honest placeholder) |
+| User has state filter AND reports_in_state(userState) > 0 | "GA + X states · Y reports (Wd)" |
+| User has state filter AND reports_in_state(userState) = 0 | "Seen in N states · Y reports (Wd)" |
+| No state filter AND location data exists | "Seen in N states · Y reports (Wd)" |
+| Only 1 state | "Seen in 1 state · Y reports (Wd)" |
+| No location data | **"State data unavailable · Y reports (Wd)"** (honest placeholder) |
+
+**Y reports:** Total report count across all states within the active window (Wd).
 
 **Do not imply user's state if that state has 0 reports.** State breakdown sheet can show GA=0.
 
-**Report counts:** NOT shown on card face in v1.0. Counts appear in state breakdown sheet and detail page.
+**Report counts (LOCKED):** Always shown on Line B.
+- If space is tight, abbreviate counts (e.g., 1.2k) but never remove them.
+
+**Window label (Wd) rules (LOCKED):**
+1. Use the active list time filter window when present (e.g., 7d, 30d, 6m).
+2. If no active filter exists, default to 30 days and label as `(30d)`.
+3. Map UI date ranges to label tokens (e.g., `1m`, `3m`, `6m`, `12m`, `18m`, `24m`, `all`).
 
 **Tap behavior:** Tapping state spread line opens bottom sheet with full state breakdown (even if "State data unavailable").
 
@@ -103,7 +115,8 @@
 | Desktop (>640px) | Modal dialog |
 
 **Content rules:**
-- **Window:** Same 14-day window as card pattern signals
+- **Window:** Same window as card Line B (active list filter if present; default 30d)
+- **Label:** Show the window label in the sheet header or subtitle (e.g., "State breakdown (30d)")
 - **Sort:** By report count descending
 - **userState pinning:** If userState exists, pin it to top even if count = 0
 - **Format:** State code + count (e.g., "GA: 12 reports", "TX: 8 reports")
@@ -120,12 +133,18 @@
 | Report | Primary button | "Report" (text required) | 44px min | Always shown |
 | Save | Icon button (toggle) | Tooltip on desktop | 36–40px | Always shown |
 | Barcode | Icon button | Tooltip on desktop | 36–40px | Only if UPC/EAN exists |
+| Home Depot | Icon button (link) | Tooltip on desktop | 36–40px | Only if Home Depot URL exists |
 
 **Report button:** Text "Report" required on all viewports. Icon optional.
 
 **Save button:** Filled when saved, outline when not. Tooltip on desktop hover.
 
 **Barcode button:** Hidden entirely if no UPC/EAN. Tooltip on desktop hover.
+
+**Home Depot button (LOCKED):**
+- Opens Home Depot product page in a new tab/window
+- Use `rel="noopener noreferrer"` and an accessible `aria-label`
+- Render only when a valid Home Depot URL exists (do not invent)
 
 ---
 
@@ -138,6 +157,7 @@
 | Save button | Toggle saved state (no navigation) |
 | Barcode button | Open barcode sheet/modal (no navigation) |
 | State spread line | Open state breakdown bottom sheet (no navigation) |
+| Home Depot button | Open Home Depot product page (new tab/window) |
 
 ---
 
@@ -166,11 +186,13 @@
 | Scenario | Behavior |
 |----------|----------|
 | Missing image | Neutral placeholder (same 72×72 size) |
-| Missing brand | Omit brand line (collapse space) |
+| Missing brand | Show `SKU 123456` on Line 1 (no brand prefix) |
 | Missing/invalid retail | Omit retail from card face |
 | Missing UPC/EAN | Hide barcode button |
+| Missing Home Depot URL | Hide Home Depot button |
 | Missing all timestamps | Show "Last seen: Recently" |
 | Missing states/location data | Show "State data unavailable" |
+| Missing report count | Treat as 0 reports for Line B formatting |
 
 **Pattern signals always render 2 lines** using honest placeholders when data is missing.
 
@@ -191,17 +213,17 @@
 | L7 | Barcode: container only, not on card face | Scannability requires full screen |
 | L8 | Barcode container shows: name + price + barcode + code | Confirmed content |
 | L9 | No icons/pills in pattern signals | Text-only, no trust bar |
-| L10 | No report counts on card face (v1.0) | Pattern signals = exactly 2 lines |
+| L10 | Report counts on card face (Line B) | Line B shows state spread + report count + window label |
 | L11 | No new palette colors | Use existing design tokens |
 | L12 | Card does NOT imply "in your store" | Pattern-level credibility only |
-| L13 | SKU/Model omitted from card face (v1.0) | Brand + Item Name only; IDs on detail/modal |
+| L13 | SKU visible on card face (LOCKED) | Brand line shows "Brand · SKU 123456" or "SKU 123456" |
 | L14 | State spread: only show "GA + X" if GA_count > 0 | Do not imply state if 0 reports there |
 | L15 | Barcode container: mobile=sheet, desktop=modal | Platform-appropriate containers |
 | L16 | Desktop actions: same as mobile, tooltips on icons | Consistent structure, enhanced affordance |
-| L17 | HD link: REMOVE from card face (v1.0) | Not in spec Row 4; available on detail page |
+| L17 | HD link: VISIBLE on card face (LOCKED) | Icon button in Row 4 when URL exists |
 | L18 | Status pill: REMOVE from card face (v1.0) | Redundant, risk to truth constraints |
 | L19 | Pattern signals always 2 lines with placeholders | "Last seen: Recently" / "State data unavailable" |
-| L20 | State breakdown: 14d window, sorted desc, userState pinned | Consistent with card, relevant first |
+| L20 | State breakdown uses active window (default 30d) | Must match card Line B window |
 | L21 | Retail strikethrough: amount only | Strikethrough "$49.98" not entire "Retail $49.98" string |
 
 ---
@@ -226,13 +248,13 @@
 | 8 | Grayscale readable | Hierarchy is clear with all color removed |
 | 9 | No new colors | Only existing CSS variables used (no raw Tailwind colors) |
 | 10 | Card navigates | Tapping card body (not action buttons) goes to detail page |
-| 11 | No SKU/Model on card | Card face shows only Brand + Item Name (no identifiers) |
-| 12 | State logic correct | "GA + X" only when GA_count > 0; else "Seen in N states" or "State data unavailable" |
+| 11 | SKU visible on card | Line 1 shows "Brand · SKU 123456" or "SKU 123456"; model omitted |
+| 12 | State + count logic correct | Line B uses correct state phrasing + report count + window label |
 | 13 | Desktop barcode = modal | Barcode opens in modal dialog on desktop viewport |
-| 14 | Desktop icons have tooltips | Save and Barcode icons show tooltip on hover (desktop) |
-| 15 | No HD link on card | HD link removed from card face, available on detail page |
+| 14 | Desktop icons have tooltips | Save, Barcode, and Home Depot icons show tooltip on hover (desktop) |
+| 15 | HD link on card | Home Depot icon visible when URL exists; opens new tab |
 | 16 | No status pill on card | Status pill removed from card face |
-| 17 | State sheet: 14d, sorted, pinned | Sheet shows 14d counts, sorted desc, userState pinned to top |
+| 17 | State sheet window aligned | Sheet uses active window (default 30d), sorted desc, userState pinned top |
 
 ---
 
@@ -249,7 +271,7 @@
 | Image thumbnail | MODIFY | L1: Change size 120px → 72px |
 | Brand | KEEP | Spec Row 1 includes brand |
 | Item name | KEEP | Spec Row 1 includes name |
-| SKU copy button | REMOVE | L13: SKU omitted from card face |
+| SKU copy button | REMOVE | SKU visible as text in Brand line; copy button not required |
 | Model number | REMOVE | L13: Model omitted from card face |
 | "PENNY PRICE" label | REMOVE | L2: Label is redundant |
 | Penny price ($0.01) | KEEP | Spec Row 2, style change to 28-32px bold |
@@ -257,8 +279,8 @@
 | Savings line | REMOVE | L3: Not shown on card face v1.0 |
 | UPC display on card | REMOVE | L7: Barcode container only, not on card face |
 | State pills | REMOVE | L9: No icons/pills in pattern signals |
-| Stats row (X reports, Y states) | REMOVE | L10: No report counts on card face v1.0 |
-| HD link | REMOVE | L17: Not in spec Row 4, available on detail page |
+| Stats row (X reports, Y states) | REMOVE | Counts now live in Line B (state spread + report count) |
+| HD link | KEEP | L17: Visible on card face as action button |
 | Report button | KEEP | L6: Text required on all viewports |
 | Save/Bookmark button | KEEP | Spec Row 4 includes Save |
 | Barcode button | KEEP | Spec Row 4, icon-only, opens modal |
@@ -268,18 +290,23 @@
 **Always exactly 2 lines. No exceptions.**
 
 - **Line A:** "Last seen: {relative}" OR "Last seen: Recently" (per L4, L19)
-- **Line B:** State spread OR "State data unavailable" (per L14, L19)
-  - GA + X states (if GA_count > 0)
-  - Seen in N states (otherwise)
-  - State data unavailable (if no location data)
+- **Line B:** State spread + report count + window label (per L10, L14, L19)
+  - GA + X states · Y reports (Wd) if GA_count > 0
+  - Seen in N states · Y reports (Wd) otherwise
+  - State data unavailable · Y reports (Wd) if no location data
 
-**Report counts NOT shown on card face in v1.0.** Counts appear in:
-- State breakdown sheet (14d window, sorted desc, userState pinned)
+**Report counts are shown on the card face (LOCKED).** Counts also appear in:
+- State breakdown sheet (window matches Line B)
 - Detail page
 
 ---
 
 ## 6. INTERACTION CONTRACT (Explicit)
+
+**Navigation pattern requirement (LOCKED):** Avoid nested interactive elements.
+Use ONE of these safe patterns:
+1. Link wraps only the non-interactive content region; action buttons live outside the Link.
+2. Card container uses `router.push` on click + keyboard (Enter/Space), with `role="link"` and `tabIndex=0`; action buttons call `stopPropagation()`.
 
 | Tap Target | Behavior | Navigation? | stopPropagation? |
 |------------|----------|-------------|------------------|
@@ -288,6 +315,7 @@
 | Report button | Navigate to Report Find form | YES | YES |
 | Save button | Toggle saved state | NO | YES |
 | Barcode button | Open barcode modal/sheet | NO | YES |
+| Home Depot button | Open Home Depot product page (new tab/window) | YES | YES |
 
 **Critical:** State spread line tap MUST call `stopPropagation()` to prevent card navigation.
 
@@ -299,28 +327,30 @@
 
 | # | File Path | Change Type | Risk |
 |---|-----------|-------------|------|
-| 1 | `lib/penny-list-utils.ts` | Add helpers | Low |
+| 1 | `lib/penny-list-utils.ts` | Add helpers (window label + Line B formatting) | Low |
 | 2 | `components/state-breakdown-sheet.tsx` | **NEW FILE** | Low |
 | 3 | `components/barcode-modal.tsx` | Add optional props | Low |
-| 4 | `components/penny-list-card.tsx` | Restructure | Medium |
-| 5 | `components/penny-list-client.tsx` | Pass stateFilter prop | Low |
+| 4 | `components/penny-list-card.tsx` | Restructure + SKU/HD link + Line B | Medium |
+| 5 | `components/penny-list-client.tsx` | Pass stateFilter + window label | Low |
 
-### Change Sequencing
+### Steps 1-5 (in order)
 
-**Phase 1: Foundation**
-1. `lib/penny-list-utils.ts` - Add `getLastSeenDate()`, `formatStateSpread()`
-2. `components/state-breakdown-sheet.tsx` - New component (mobile: bottom sheet, desktop: modal)
-3. `components/barcode-modal.tsx` - Add optional `productName`, `pennyPrice` props
-
-**Phase 2: Card Restructure**
-4. `components/penny-list-card.tsx`:
-   - Add prop: `stateFilter?: string`
-   - Apply KEEP/REMOVE decisions from table above
-   - Restructure to 4-row layout per spec
-   - Implement interaction contract with stopPropagation
-
-**Phase 3: Integration**
-5. `components/penny-list-client.tsx` - Pass `stateFilter` to cards
+1. `lib/penny-list-utils.ts`
+   - Add `getLastSeenDate()` and `formatLineB()` helpers
+   - Add `getWindowLabel(dateRange)` and `formatReportCount(count)` (abbrev as needed)
+2. `components/state-breakdown-sheet.tsx`
+   - New component (mobile: bottom sheet, desktop: modal)
+   - Accept `windowLabel`, `stateCounts`, and `userState` props
+3. `components/barcode-modal.tsx`
+   - Add optional `productName`, `pennyPrice` props (display context)
+4. `components/penny-list-card.tsx`
+   - Add props: `stateFilter?: string`, `windowLabel: string`
+   - Render Line 1 as `Brand · SKU 123456` (or `SKU 123456`)
+   - Render Line B as state spread + report count + window label
+   - Add Home Depot icon button (new tab, noopener) when URL exists
+   - Implement safe navigation pattern (no nested interactive elements)
+5. `components/penny-list-client.tsx`
+   - Pass `stateFilter` and `windowLabel` to cards and state sheet
 
 ---
 
@@ -334,6 +364,8 @@
 | Touch targets too small | Verify ≥36px icons, ≥44px buttons |
 | State sheet doesn't open | Test stopPropagation on mobile |
 | Dark mode broken | Only use existing CSS variables |
+| Window mismatch (card vs sheet) | Derive window label once and pass to both |
+| Report count missing | Default to 0 in Line B; never omit count |
 
 ### Prevention Checklist
 
@@ -341,6 +373,9 @@
 - [ ] No raw Tailwind colors (`npm run lint:colors`)
 - [ ] "use client" preserved on interactive components
 - [ ] Pattern signals always render exactly 2 lines
+- [ ] Line B includes state spread + report count + window label
+- [ ] SKU visible on Line 1 (brand + SKU or SKU only)
+- [ ] Home Depot button only when URL exists; uses noopener
 
 ---
 
@@ -358,13 +393,29 @@
 | 8 | Grayscale readable | Desaturated screenshot |
 | 9 | No new colors | `npm run lint:colors` = 0 |
 | 10 | Card navigates | Playwright: body click → detail page |
-| 11 | No SKU/Model | Visual: only Brand + Name |
-| 12 | State logic correct | Test: GA_count>0 → "GA + X"; GA_count=0 → "Seen in N"; no data → "State data unavailable" |
+| 11 | SKU visible | Visual: "Brand · SKU 123456" or "SKU 123456"; model omitted |
+| 12 | State + count logic correct | Test: GA_count>0 → "GA + X states · Y reports (Wd)"; GA_count=0 → "Seen in N states · Y reports (Wd)"; no data → "State data unavailable · Y reports (Wd)" |
 | 13 | Desktop barcode = modal | 1280px: modal not sheet |
-| 14 | Desktop tooltips | Hover test |
-| 15 | No HD link | Visual: HD link not on card face |
+| 14 | Desktop tooltips | Hover test (Save/Barcode/Home Depot) |
+| 15 | HD link on card | Visual: Home Depot icon appears when URL exists |
 | 16 | No status pill | Visual: status pill not on card face |
-| 17 | State sheet content | Sheet shows: 14d counts, sorted desc, userState pinned top |
+| 17 | State sheet window aligned | Sheet shows counts for active window (default 30d), sorted desc, userState pinned top |
+
+---
+
+### Required Proof Outputs (LOCKED)
+
+- `npm run lint`
+- `npm run build`
+- `npm run test:unit`
+- `npm run test:e2e`
+
+### Proof Artifacts Checklist
+
+- Screenshots: mobile + desktop, light + dark
+- Screenshot before/after for card changes
+- Browser console: no errors
+- Store outputs in `reports/verification/<timestamp>/` and `reports/proof/<timestamp>/` (record paths in SESSION_LOG.md)
 
 ---
 

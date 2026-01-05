@@ -3,6 +3,7 @@ import type { PennyItem } from "./fetch-penny-data"
 import { validateSku } from "./sku"
 
 const DAY_MS = 24 * 60 * 60 * 1000
+const HOUR_MS = 60 * 60 * 1000
 
 /**
  * Normalizes a product name for consistent display.
@@ -177,6 +178,76 @@ export function formatRelativeDate(dateStr: string, now: Date = new Date()): str
     day: "numeric",
     timeZone: "America/New_York",
   })
+}
+
+function getTotalReports(locations: Record<string, number> | undefined): number {
+  if (!locations) return 0
+  return Object.values(locations).reduce((sum, count) => sum + count, 0)
+}
+
+export function formatReportCount(count: number): string {
+  if (count >= 1_000_000) {
+    const value = count / 1_000_000
+    const decimals = value >= 10 ? 0 : 1
+    return `${value.toFixed(decimals).replace(/\.0$/, "")}m`
+  }
+  if (count >= 1_000) {
+    const value = count / 1_000
+    const decimals = value >= 10 ? 0 : 1
+    return `${value.toFixed(decimals).replace(/\.0$/, "")}k`
+  }
+  return String(count)
+}
+
+export function formatLastSeen(
+  dateValue: string | null | undefined,
+  nowMs: number = Date.now()
+): string {
+  if (!dateValue) return "Last seen: Recently"
+  const parsed = new Date(dateValue)
+  const timestamp = parsed.getTime()
+  if (Number.isNaN(timestamp)) return "Last seen: Recently"
+  const diffMs = nowMs - timestamp
+  if (diffMs <= 0) {
+    return `Last seen: ${formatRelativeDate(dateValue)}`
+  }
+  const diffHours = Math.floor(diffMs / HOUR_MS)
+  if (diffHours < 1) return "Last seen: Recently"
+  if (diffHours < 24) return `Last seen: ${diffHours}h ago`
+  return `Last seen: ${formatRelativeDate(dateValue)}`
+}
+
+export function formatLineB({
+  locations,
+  stateFilter,
+  windowLabel,
+}: {
+  locations?: Record<string, number>
+  stateFilter?: string
+  windowLabel: string
+}): string {
+  const totalReports = getTotalReports(locations)
+  const reportLabel = `${formatReportCount(totalReports)} ${
+    totalReports === 1 ? "report" : "reports"
+  }`
+  const resolvedWindow = windowLabel || "30d"
+
+  if (!locations || Object.keys(locations).length === 0) {
+    return `State data unavailable | ${reportLabel} (${resolvedWindow})`
+  }
+
+  const stateCount = Object.keys(locations).length
+  const normalizedState = stateFilter?.trim().toUpperCase()
+  const reportsInState = normalizedState ? (locations[normalizedState] ?? 0) : 0
+
+  if (normalizedState && reportsInState > 0) {
+    const remainingStates = Math.max(0, stateCount - 1)
+    const remainingLabel = remainingStates === 1 ? "state" : "states"
+    return `${normalizedState} + ${remainingStates} ${remainingLabel} | ${reportLabel} (${resolvedWindow})`
+  }
+
+  const stateLabel = stateCount === 1 ? "state" : "states"
+  return `Seen in ${stateCount} ${stateLabel} | ${reportLabel} (${resolvedWindow})`
 }
 
 export function extractStateFromLocation(value: string): string {

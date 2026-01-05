@@ -32,6 +32,7 @@ export type PennyItem = {
   price: number
   retailPrice?: number | null
   dateAdded: string
+  lastSeenAt?: string
   tier: "Very Common" | "Common" | "Rare"
   status: string
   quantityFound: string
@@ -210,6 +211,26 @@ function pickBestDate(row: SupabasePennyRow): { iso: string; ms: number } | null
   return null
 }
 
+function pickLastSeenDate(
+  row: SupabasePennyRow,
+  nowMs: number
+): { iso: string; ms: number } | null {
+  if (row.purchase_date) {
+    const purchase = new Date(`${row.purchase_date}T00:00:00Z`)
+    const purchaseMs = purchase.getTime()
+    if (!Number.isNaN(purchaseMs) && purchaseMs <= nowMs) {
+      return { iso: purchase.toISOString(), ms: purchaseMs }
+    }
+  }
+
+  const timestamp = row.timestamp ? new Date(row.timestamp) : null
+  if (timestamp && !Number.isNaN(timestamp.getTime())) {
+    return { iso: timestamp.toISOString(), ms: timestamp.getTime() }
+  }
+
+  return null
+}
+
 function calculateTier(locations: Record<string, number>): PennyItem["tier"] {
   const stateCount = Object.keys(locations).length
   const totalReports = Object.values(locations).reduce((sum, count) => sum + count, 0)
@@ -234,10 +255,12 @@ async function tryLocalFixtureFallback(): Promise<PennyItem[]> {
 type AggregatedItem = Omit<PennyItem, "tier"> & {
   tier?: PennyItem["tier"]
   latestTimestampMs: number
+  latestSeenAtMs: number
 }
 
 export function buildPennyItemsFromRows(rows: SupabasePennyRow[]): PennyItem[] {
   const grouped = new Map<string, AggregatedItem>()
+  const nowMs = Date.now()
 
   rows.forEach((row) => {
     const sku = normalizeSkuValue(row.home_depot_sku_6_or_10_digits)
@@ -245,6 +268,8 @@ export function buildPennyItemsFromRows(rows: SupabasePennyRow[]): PennyItem[] {
 
     const dateInfo = pickBestDate(row)
     const timestampMs = dateInfo?.ms ?? 0
+    const lastSeenInfo = pickLastSeenDate(row, nowMs)
+    const lastSeenMs = lastSeenInfo?.ms ?? 0
 
     const state = extractStateFromLocation(row.store_city_state ?? "")
     const quantity = row.exact_quantity_found ?? null
@@ -265,25 +290,32 @@ export function buildPennyItemsFromRows(rows: SupabasePennyRow[]): PennyItem[] {
         homeDepotUrl,
         price: 0.01,
         dateAdded: dateInfo?.iso || new Date().toISOString(),
+        lastSeenAt: lastSeenInfo?.iso,
         status: "",
         quantityFound: quantity !== null ? String(quantity) : "",
         imageUrl,
         notes,
         locations: state ? { [state]: 1 } : {},
         latestTimestampMs: timestampMs,
+        latestSeenAtMs: lastSeenMs,
       })
       return
     }
 
     // Save the previous timestamp before updating
     const previousTimestampMs = existing.latestTimestampMs
+    const previousLastSeenMs = existing.latestSeenAtMs
 
     // Update to track the latest timestamp
     existing.latestTimestampMs = Math.max(existing.latestTimestampMs, timestampMs)
+    existing.latestSeenAtMs = Math.max(existing.latestSeenAtMs, lastSeenMs)
 
     // Use the previous value for comparisons to ensure newer submissions win
     if (dateInfo && dateInfo.ms > previousTimestampMs) {
       existing.dateAdded = dateInfo.iso
+    }
+    if (lastSeenInfo && lastSeenInfo.ms > previousLastSeenMs) {
+      existing.lastSeenAt = lastSeenInfo.iso
     }
 
     if (name && (!existing.name || timestampMs > previousTimestampMs)) {
@@ -316,8 +348,9 @@ export function buildPennyItemsFromRows(rows: SupabasePennyRow[]): PennyItem[] {
   })
 
   const items: PennyItem[] = Array.from(grouped.values()).map((item) => {
-    const { latestTimestampMs, ...rest } = item
+    const { latestTimestampMs, latestSeenAtMs, ...rest } = item
     void latestTimestampMs
+    void latestSeenAtMs
     return {
       ...rest,
       tier: calculateTier(rest.locations),

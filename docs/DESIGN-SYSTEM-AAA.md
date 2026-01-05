@@ -191,7 +191,7 @@ Subtle, professional borders that don't compete with content. Steel blue-grey ch
 | `--text-h2`      | 24px   | 30px    | 600    | 1.2         | -0.01em        | Section headings          |
 | `--text-h3`      | 20px   | 24px    | 600    | 1.3         | 0              | Subsections, card titles  |
 | `--text-h4`      | 18px   | 20px    | 500    | 1.4         | 0              | Minor headings            |
-| `--text-body`    | 16px   | 16px    | 400    | 1.6         | 0              | Body text (never smaller) |
+| `--text-body`    | 16px   | 16px    | 400    | 1.6         | 0              | Body text (baseline 16px; dense list metadata may be 12-13px) |
 | `--text-small`   | 14px   | 14px    | 400    | 1.5         | 0              | Secondary text, metadata  |
 | `--text-caption` | 12px   | 12px    | 500    | 1.4         | 0.01em         | Labels, timestamps        |
 
@@ -199,7 +199,7 @@ Subtle, professional borders that don't compete with content. Steel blue-grey ch
 
 | Rule                 | Requirement           | Why                           |
 | -------------------- | --------------------- | ----------------------------- |
-| Minimum body size    | 16px                  | Below this causes eye strain  |
+| Minimum body size    | 16px                  | Dense list metadata may be 12-13px if needed for scan speed |
 | Minimum touch target | 44×44px               | WCAG 2.1 AAA requirement      |
 | Line length          | 45-75 characters      | Optimal reading comprehension |
 | Line height (body)   | 1.5-1.6               | Required for readability      |
@@ -510,7 +510,7 @@ Before shipping any page:
 - [ ] Page has exactly one H1
 - [ ] Animations respect `prefers-reduced-motion`
 - [ ] Color is never the only indicator of meaning
-- [ ] Body text is minimum 16px
+- [ ] Body text is minimum 16px (dense list metadata may be 12-13px)
 - [ ] Line height is at least 1.5 for body text
 
 ---
