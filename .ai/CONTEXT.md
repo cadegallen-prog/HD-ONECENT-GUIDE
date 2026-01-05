@@ -1,8 +1,68 @@
 # Project Context — Penny Central
 
-**Last updated:** Dec 12, 2025
+**Last updated:** Jan 4, 2026
 
-This file is the stable “why/what/who” for PennyCentral.com. It should change rarely. If you need current status or next tasks, see `.ai/STATE.md` and `.ai/BACKLOG.md`.
+This file is the stable "why/what/who" for PennyCentral.com. It should change rarely. If you need current status or next tasks, see `.ai/STATE.md` and `.ai/BACKLOG.md`.
+
+---
+
+## The North Star (Read This First)
+
+> **AI Agents: This section is foundational. Every design decision, feature choice, and UI change must align with this understanding. Do not deviate.**
+
+### The Core Value Proposition (One Sentence)
+
+**Penny Central provides aggregated community intel that Facebook structurally cannot provide: searchable, organized, SKU-aggregated data showing report counts, state distribution, and recency across the entire penny-hunting community.**
+
+### The Flywheel (This Is How We Survive)
+
+```
+Users find penny items in-store
+         ↓
+They report to Penny Central (<30 seconds)
+         ↓
+Site aggregates by SKU (report counts, states, recency)
+         ↓
+Other users see credible, organized data
+         ↓
+They trust it, use it, and contribute back
+         ↓
+More reports = more value = more users = more reports
+```
+
+**Without contributions, the site dies.** Everything we build must reduce friction for contributions and show users that their contributions matter.
+
+### What Facebook CAN'T Do (Our Moat)
+
+The 40K-member Facebook group is valuable but has structural limitations:
+- Posts get buried within hours
+- No way to aggregate reports by SKU
+- No way to see "this item reported 47 times across 12 states"
+- No search by SKU
+- No filtering by state or date
+
+**Penny Central exists to fill these gaps.** We are not competing with the group - we are its structured memory.
+
+### Report Counts & State Distribution Are CORE, Not Clutter
+
+This is critical for UI/design decisions:
+
+| Data Point | Why It's Core |
+|------------|---------------|
+| Report count | Shows community validation ("47 people found this") |
+| State distribution | Shows geographic spread ("active in 12 states") |
+| Recency | Shows freshness ("reported 4 days ago") |
+
+**These are NOT clutter to be hidden.** They are the product. They show what Facebook cannot show. Any design that hides or de-emphasizes these signals undermines the core value proposition.
+
+### The User Journey
+
+1. **Home Research** - Browse list, build mental/physical hunt list, check recency and report counts to gauge confidence
+2. **In-Store Hunting** - Quick visual scanning to match items from prepared list
+3. **In-Store Discovery** - Check if a found item is on the list, confirm via SKU
+4. **Contribution** - Report a find to help others, see the community grow
+
+All four phases must be served. Optimizing only for Phase 2 (scanning) while ignoring Phase 1 (research) or Phase 4 (contribution) breaks the flywheel.
 
 ---
 
@@ -32,13 +92,15 @@ The group is conversation and proof; the site is structured memory and tooling.
    - Store Finder for planning hunts.
    - Trip Tracker is optional/future and must stay low‑maintenance.
 
-3. **Crowd Reports → Penny List**
-   - Users report finds in <30 seconds.
+3. **Crowd Reports → Penny List (The Magnum Opus)**
+   - Users report finds in <30 seconds via low-friction form.
    - The site aggregates by SKU and shows:
      - recent leads (last 30 days),
-     - report counts by state,
+     - **report counts by state (CORE - shows community validation)**,
+     - **state distribution (CORE - shows geographic spread)**,
      - auto‑calculated rarity tiers.
    - Goal: give a nationwide/regional view the group cannot provide natively.
+   - **The Penny List is the flywheel. It must encourage both consumption AND contribution.**
 
 ---
 
@@ -73,6 +135,16 @@ The group is conversation and proof; the site is structured memory and tooling.
 
 ## Current Phase
 
-**Foundation & Stabilization with light Community Intake.**  
+**Foundation & Stabilization with light Community Intake.**
 Highest‑leverage work is always the **Report Find → Penny List retention loop**.
+
+---
+
+## Active Planning Documents
+
+> **AI Agents: Check these documents before making changes to related features.**
+
+| Feature | Planning Document | Status |
+|---------|-------------------|--------|
+| Penny List Cards/UI | `.ai/PENNY-LIST-REDESIGN.md` | Planning (Jan 2026) |
 
