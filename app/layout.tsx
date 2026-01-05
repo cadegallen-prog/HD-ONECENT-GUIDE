@@ -15,6 +15,12 @@ import { ogImageUrl } from "@/lib/og"
 
 const DEFAULT_OG_IMAGE = `https://www.pennycentral.com${ogImageUrl("homepage")}`
 
+/* =====================================================
+   ANALYTICS INFRASTRUCTURE — DO NOT REMOVE OR MODIFY
+   ===================================================== */
+const GA_MEASUREMENT_ID = "G-DJ4RJRX05E"
+const ANALYTICS_ENABLED = process.env.NEXT_PUBLIC_ANALYTICS_ENABLED !== "false"
+
 const ANALYTICS_PROVIDER = process.env.NEXT_PUBLIC_ANALYTICS_PROVIDER ?? "none"
 const ENABLE_PLAUSIBLE =
   process.env.NODE_ENV === "production" &&
@@ -170,13 +176,30 @@ export default function RootLayout({
             }),
           }}
         />
-        {/* Google tag (gtag.js) - GA4 Measurement ID G-DJ4RJRX05E */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-DJ4RJRX05E"></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('js', new Date());\ngtag('config', 'G-DJ4RJRX05E');`
-          }}
-        />
+
+        {/* ===================================================
+            GOOGLE ANALYTICS 4 (GA4)
+            Measurement ID: G-DJ4RJRX05E
+            DO NOT REMOVE OR MODIFY
+            =================================================== */}
+        {ANALYTICS_ENABLED && (
+          <>
+            <script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+            />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${GA_MEASUREMENT_ID}');
+                `,
+              }}
+            />
+          </>
+        )}
       </head>
       <body className="bg-background text-foreground">
         {/* Skip link for keyboard accessibility */}
@@ -209,7 +232,7 @@ export default function RootLayout({
           </AuthProvider>
         </ThemeProvider>
         {/* Vercel scripts should only run on Vercel (and never during Playwright/CI). */}
-        <Analytics />
+        {ANALYTICS_ENABLED && <Analytics />}
         {ENABLE_VERCEL_SCRIPTS && <SpeedInsightsClient />}
       </body>
     </html>
