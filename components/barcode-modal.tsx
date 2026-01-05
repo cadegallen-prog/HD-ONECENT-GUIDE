@@ -26,12 +26,17 @@ export function BarcodeModal({ open, upc, onClose, productName, pennyPrice }: Ba
 
     import("jsbarcode").then((module) => {
       if (cancelled) return
-      module.default(svgRef.current!, upc, {
-        format: "UPC",
-        displayValue: false,
+      const barcodeValue = upc.trim()
+      // Detect barcode format: 12-13 digits = UPC/EAN, others = CODE128
+      const format = /^\d{12,13}$/.test(barcodeValue) ? "UPC" : "CODE128"
+
+      module.default(svgRef.current!, barcodeValue, {
+        format,
+        displayValue: true,
         width: 2,
         height: 90,
-        margin: 0,
+        margin: 10,
+        lineColor: "#000000", // Ensure black barcode
       })
     })
 
@@ -72,6 +77,7 @@ export function BarcodeModal({ open, upc, onClose, productName, pennyPrice }: Ba
         role="dialog"
         aria-modal="true"
         aria-labelledby="barcode-modal-title"
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="relative w-full max-w-md rounded-t-2xl border border-[var(--border-default)] bg-[var(--bg-card)] p-6 shadow-[var(--shadow-card)] sm:rounded-2xl">
           <button
