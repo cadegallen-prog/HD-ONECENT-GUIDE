@@ -384,17 +384,25 @@ async function fetchRows(
     )
 
   // Apply date window filter at database level for performance
-  // Filter on timestamp column (the primary date field)
+  // Filter using "last seen" semantics:
+  // - If purchase_date exists, treat it as authoritative for recency windows.
+  // - Otherwise fall back to timestamp (report created time).
   if (dateWindow) {
     const { startDate, endDate } = dateWindow
-    const start = startDate
-    const end = endDate
-    const orFilters = end
+    const startIso = startDate
+    const endIso = endDate
+    const startDateOnly = startIso.slice(0, 10)
+    const endDateOnly = endIso ? endIso.slice(0, 10) : undefined
+
+    const orFilters = endIso
       ? [
-          `and(timestamp.gte.${start},timestamp.lte.${end})`,
-          `and(purchase_date.gte.${start},purchase_date.lte.${end})`,
+          `and(purchase_date.is.null,timestamp.gte.${startIso},timestamp.lte.${endIso})`,
+          `and(purchase_date.not.is.null,purchase_date.gte.${startDateOnly},purchase_date.lte.${endDateOnly})`,
         ].join(",")
-      : [`and(timestamp.gte.${start})`, `and(purchase_date.gte.${start})`].join(",")
+      : [
+          `and(purchase_date.is.null,timestamp.gte.${startIso})`,
+          `and(purchase_date.not.is.null,purchase_date.gte.${startDateOnly})`,
+        ].join(",")
     query = query.or(orFilters)
   }
 

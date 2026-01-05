@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { getPennyList } from "@/lib/fetch-penny-data"
+import { getPennyListFiltered } from "@/lib/fetch-penny-data"
 import { computeFreshnessMetrics, filterValidPennyItems } from "@/lib/penny-list-utils"
 import { queryPennyItems, getHotItems } from "@/lib/penny-list-query"
 import { PennyListClient } from "@/components/penny-list-client"
@@ -82,16 +82,17 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
     ) {
       return daysParam
     }
-    return "6m"
+    return "1m"
   })()
   const perPage = parsePerPage(getFirstParam(resolvedSearchParams, "perPage"))
   const requestedPage = parsePage(getFirstParam(resolvedSearchParams, "page"))
 
-  const pennyItems = await getPennyList()
-  const validItems = filterValidPennyItems(pennyItems)
-  const feedUnavailable = validItems.length === 0
   const nowMs =
     process.env.PLAYWRIGHT === "1" ? new Date("2025-12-10T12:00:00Z").getTime() : Date.now()
+
+  const pennyItems = await getPennyListFiltered(days, nowMs)
+  const validItems = filterValidPennyItems(pennyItems)
+  const feedUnavailable = validItems.length === 0
   const { newLast24h, totalLast30d } = computeFreshnessMetrics(validItems, nowMs)
   const latestTimestamp = validItems
     .map((item) => new Date(item.dateAdded).getTime())
@@ -125,7 +126,8 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
   // Compute initial page slice from URL params (so reloads/bookmarks show the correct results)
   const { items: filteredItems, total: initialTotal } = queryPennyItems(
     validItems,
-    { state, photo, q, sort, days },
+    // Date filtering is already done at DB level via getPennyListFiltered(days).
+    { state, photo, q, sort, days: "all" },
     nowMs
   )
   const pageCount = Math.max(1, Math.ceil(initialTotal / perPage))

@@ -74,7 +74,7 @@ export function queryPennyItems(
   nowMs: number = Date.now()
 ): QueryResult {
   const today = new Date(nowMs)
-  const dateRange = params.days ?? "6m"
+  const dateRange = params.days ?? "1m"
   const windowMonths = getWindowMonths(dateRange)
 
   const windowStart = (() => {
@@ -88,7 +88,7 @@ export function queryPennyItems(
   const withMeta: ItemWithMeta[] = items
     .map((item) => ({
       ...item,
-      parsedDate: normalizeDate(item.dateAdded),
+      parsedDate: normalizeDate(item.lastSeenAt ?? item.dateAdded),
       tier: item.tier ?? "Rare",
     }))
     .filter((item) => item.parsedDate !== null)
@@ -180,7 +180,7 @@ export function getHotItems(
   return items
     .map((item) => ({
       ...item,
-      parsedDate: normalizeDate(item.dateAdded),
+      parsedDate: normalizeDate(item.lastSeenAt ?? item.dateAdded),
     }))
     .filter(
       (item) =>

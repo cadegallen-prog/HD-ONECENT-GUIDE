@@ -107,6 +107,30 @@ export function formatCurrency(value: number | null | undefined): string {
 const THIRTY_DAYS_MS = 30 * DAY_MS
 const STATE_CODES = new Set(US_STATES.map((state) => state.code.toUpperCase()))
 const STATE_NAME_TO_CODE = new Map(US_STATES.map((state) => [state.name.toUpperCase(), state.code]))
+const WINDOW_LABELS: Record<string, string> = {
+  "1m": "30d",
+  "3m": "90d",
+  "6m": "6m",
+  "12m": "12m",
+  "18m": "18m",
+  "24m": "24m",
+  all: "All time",
+  "7": "7d",
+  "14": "14d",
+  "30": "30d",
+}
+
+const WINDOW_DESCRIPTIONS: Record<string, string> = {
+  "30d": "last 30 days",
+  "90d": "last 90 days",
+  "6m": "last 6 months",
+  "12m": "last 12 months",
+  "18m": "last 18 months",
+  "24m": "last 24 months",
+  "7d": "last 7 days",
+  "14d": "last 14 days",
+  all: "all time",
+}
 
 function isValidDate(value: string): boolean {
   const parsed = new Date(value)
@@ -208,13 +232,38 @@ export function formatLastSeen(
   const timestamp = parsed.getTime()
   if (Number.isNaN(timestamp)) return "Last seen: Recently"
   const diffMs = nowMs - timestamp
-  if (diffMs <= 0) {
-    return `Last seen: ${formatRelativeDate(dateValue)}`
-  }
+  if (diffMs <= 0) return "Last seen: Recently"
+
   const diffHours = Math.floor(diffMs / HOUR_MS)
   if (diffHours < 1) return "Last seen: Recently"
   if (diffHours < 24) return `Last seen: ${diffHours}h ago`
-  return `Last seen: ${formatRelativeDate(dateValue)}`
+
+  const diffDays = Math.floor(diffMs / DAY_MS)
+  if (diffDays === 1) return "Last seen: 1 day ago"
+  if (diffDays < 30) return `Last seen: ${diffDays} days ago`
+
+  const diffMonths = Math.floor(diffDays / 30)
+  if (diffMonths === 1) return "Last seen: 1 month ago"
+  if (diffMonths < 12) return `Last seen: ${diffMonths} months ago`
+
+  const diffYears = Math.floor(diffDays / 365)
+  if (diffYears === 1) return "Last seen: 1 year ago"
+  return `Last seen: ${diffYears} years ago`
+}
+
+export function formatWindowLabel(value: string | null | undefined): string {
+  const trimmed = value?.trim()
+  if (!trimmed) return "30d"
+  return WINDOW_LABELS[trimmed] ?? trimmed
+}
+
+function formatWindowDescription(windowLabel: string): string {
+  const lowered = windowLabel.toLowerCase()
+  const normalized = lowered.replace(/\s+/g, "")
+  if (WINDOW_DESCRIPTIONS[lowered]) return WINDOW_DESCRIPTIONS[lowered]
+  if (WINDOW_DESCRIPTIONS[normalized]) return WINDOW_DESCRIPTIONS[normalized]
+  const canonical = formatWindowLabel(windowLabel).toLowerCase()
+  return WINDOW_DESCRIPTIONS[canonical] ?? windowLabel
 }
 
 export function formatLineB({
@@ -230,10 +279,11 @@ export function formatLineB({
   const reportLabel = `${formatReportCount(totalReports)} ${
     totalReports === 1 ? "report" : "reports"
   }`
-  const resolvedWindow = windowLabel || "30d"
+  const resolvedWindow = formatWindowLabel(windowLabel)
+  const windowPhrase = formatWindowDescription(resolvedWindow)
 
   if (!locations || Object.keys(locations).length === 0) {
-    return `State data unavailable | ${reportLabel} (${resolvedWindow})`
+    return `State data unavailable · ${reportLabel} (${windowPhrase})`
   }
 
   const stateCount = Object.keys(locations).length
@@ -243,11 +293,11 @@ export function formatLineB({
   if (normalizedState && reportsInState > 0) {
     const remainingStates = Math.max(0, stateCount - 1)
     const remainingLabel = remainingStates === 1 ? "state" : "states"
-    return `${normalizedState} + ${remainingStates} ${remainingLabel} | ${reportLabel} (${resolvedWindow})`
+    return `${normalizedState} + ${remainingStates} ${remainingLabel} · ${reportLabel} (${windowPhrase})`
   }
 
   const stateLabel = stateCount === 1 ? "state" : "states"
-  return `Seen in ${stateCount} ${stateLabel} | ${reportLabel} (${resolvedWindow})`
+  return `Seen in ${stateCount} ${stateLabel} · ${reportLabel} (${windowPhrase})`
 }
 
 export function extractStateFromLocation(value: string): string {

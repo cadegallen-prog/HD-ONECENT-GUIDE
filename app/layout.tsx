@@ -32,6 +32,7 @@ const ENABLE_VERCEL_SCRIPTS =
   process.env.PLAYWRIGHT !== "1" &&
   (process.env.VERCEL === "1" || process.env.NEXT_PUBLIC_VERCEL_ENV) &&
   ANALYTICS_PROVIDER === "vercel"
+const ENABLE_VERCEL_ANALYTICS = ANALYTICS_ENABLED && ENABLE_VERCEL_SCRIPTS
 
 const inter = localFont({
   src: [
@@ -232,8 +233,8 @@ export default function RootLayout({
           </AuthProvider>
         </ThemeProvider>
         {/* Vercel scripts should only run on Vercel (and never during Playwright/CI). */}
-        {ANALYTICS_ENABLED && <Analytics />}
-        {ENABLE_VERCEL_SCRIPTS && <SpeedInsightsClient />}
+        {ENABLE_VERCEL_ANALYTICS && <Analytics />}
+        {ENABLE_VERCEL_ANALYTICS && <SpeedInsightsClient />}
       </body>
     </html>
   )

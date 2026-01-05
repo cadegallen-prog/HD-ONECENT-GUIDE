@@ -1,12 +1,15 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
-import { Search, X, LayoutGrid, Table2, MapPin, Image } from "lucide-react"
+import { useCallback, useEffect, useMemo, useState } from "react"
+import { Image, LayoutGrid, MapPin, Search, Table2, X } from "lucide-react"
+
 import { US_STATES } from "@/lib/us-states"
 
 export type SortOption = "newest" | "oldest" | "most-reports" | "alphabetical"
 export type ViewMode = "cards" | "table"
 export type DateRange = "1m" | "3m" | "6m" | "12m" | "18m" | "24m" | "all"
+
+const DEFAULT_DATE_RANGE: DateRange = "1m"
 
 interface PennyListFiltersProps {
   totalItems: number
@@ -23,13 +26,66 @@ interface PennyListFiltersProps {
   setViewMode: (mode: ViewMode) => void
   dateRange: DateRange
   setDateRange: (range: DateRange) => void
-  userState?: string // For "My State" quick filter
+  userState?: string
 }
 
-// Get state name from code
 function getStateName(code: string): string {
   const state = US_STATES.find((s) => s.code === code)
   return state?.name || code
+}
+
+const sortLabels: Record<SortOption, string> = {
+  newest: "Newest First",
+  oldest: "Oldest First",
+  "most-reports": "Most Reports",
+  alphabetical: "A-Z",
+}
+
+const dateOptions: { value: DateRange; label: string }[] = [
+  { value: "1m", label: "1 mo" },
+  { value: "3m", label: "3 mo" },
+  { value: "6m", label: "6 mo" },
+  { value: "12m", label: "12 mo" },
+  { value: "18m", label: "18 mo" },
+  { value: "24m", label: "24 mo" },
+  { value: "all", label: "All" },
+]
+const getDateRangeChipLabel = (value: DateRange): string => {
+  switch (value) {
+    case "1m":
+      return "Last 1 month"
+    case "3m":
+      return "Last 3 months"
+    case "6m":
+      return "Last 6 months"
+    case "12m":
+      return "Last 12 months"
+    case "18m":
+      return "Last 18 months"
+    case "24m":
+      return "Last 24 months"
+    case "all":
+      return "All time"
+  }
+}
+
+const getDateRangeWindowLabel = (value: DateRange): string => {
+  switch (value) {
+    case "1m":
+      return "1 month"
+    case "3m":
+      return "3 months"
+    case "6m":
+      return "6 months"
+    case "12m":
+      return "12 months"
+    case "18m":
+      return "18 months"
+    case "24m":
+      return "24 months"
+    case "all":
+      return "all time"
+  }
 }
 
 export function PennyListFilters({
@@ -51,7 +107,6 @@ export function PennyListFilters({
 }: PennyListFiltersProps) {
   const [localSearch, setLocalSearch] = useState(searchQuery)
 
-  // Debounce search input
   useEffect(() => {
     const timer = setTimeout(() => {
       setSearchQuery(localSearch)
@@ -59,7 +114,6 @@ export function PennyListFilters({
     return () => clearTimeout(timer)
   }, [localSearch, setSearchQuery])
 
-  // Sync local search with prop (for URL param changes)
   useEffect(() => {
     setLocalSearch(searchQuery)
   }, [searchQuery])
@@ -69,7 +123,7 @@ export function PennyListFilters({
     hasPhotoOnly ||
     searchQuery !== "" ||
     sortOption !== "newest" ||
-    dateRange !== "6m"
+    dateRange !== DEFAULT_DATE_RANGE
 
   const clearAllFilters = useCallback(() => {
     setStateFilter("")
@@ -77,116 +131,64 @@ export function PennyListFilters({
     setSearchQuery("")
     setLocalSearch("")
     setSortOption("newest")
-    setDateRange("6m")
-  }, [setStateFilter, setHasPhotoOnly, setSearchQuery, setSortOption, setDateRange])
+    setDateRange(DEFAULT_DATE_RANGE)
+  }, [setDateRange, setHasPhotoOnly, setSearchQuery, setSortOption, setStateFilter])
 
-  const dateOptions: { value: DateRange; label: string }[] = [
-    { value: "1m", label: "1 mo" },
-    { value: "3m", label: "3 mo" },
-    { value: "6m", label: "6 mo" },
-    { value: "12m", label: "12 mo" },
-    { value: "18m", label: "18 mo" },
-    { value: "24m", label: "24 mo" },
-    { value: "all", label: "All" },
-  ]
-
-  const getDateRangeChipLabel = (value: DateRange): string => {
-    const found = dateOptions.find((o) => o.value === value)
-    if (!found) return ""
-
-    switch (value) {
-      case "1m":
-        return "Last 1 month"
-      case "3m":
-        return "Last 3 months"
-      case "6m":
-        return "Last 6 months"
-      case "12m":
-        return "Last 12 months"
-      case "18m":
-        return "Last 18 months"
-      case "24m":
-        return "Last 24 months"
-      case "all":
-        return "All time"
-    }
-  }
-
-  const getDateRangeWindowLabel = (value: DateRange): string => {
-    switch (value) {
-      case "1m":
-        return "1 month"
-      case "3m":
-        return "3 months"
-      case "6m":
-        return "6 months"
-      case "12m":
-        return "12 months"
-      case "18m":
-        return "18 months"
-      case "24m":
-        return "24 months"
-      case "all":
-        return "all time"
-    }
-  }
-
-  // Build active filter chips
-  const activeChips: { key: string; label: string; onRemove: () => void }[] = []
-
-  if (stateFilter) {
-    activeChips.push({
-      key: "state",
-      label: getStateName(stateFilter),
-      onRemove: () => setStateFilter(""),
-    })
-  }
-  if (hasPhotoOnly) {
-    activeChips.push({
-      key: "photo",
-      label: "Has photo",
-      onRemove: () => setHasPhotoOnly(false),
-    })
-  }
-  if (searchQuery) {
-    activeChips.push({
-      key: "search",
-      label: `"${searchQuery}"`,
-      onRemove: () => {
-        setSearchQuery("")
-        setLocalSearch("")
-      },
-    })
-  }
-  if (dateRange !== "6m") {
-    activeChips.push({
-      key: "date",
-      label: getDateRangeChipLabel(dateRange),
-      onRemove: () => setDateRange("6m"),
-    })
-  }
-  if (sortOption !== "newest") {
-    const sortLabels: Record<SortOption, string> = {
-      newest: "Newest",
-      oldest: "Oldest",
-      "most-reports": "Most Reports",
-      alphabetical: "A-Z",
-    }
-    activeChips.push({
-      key: "sort",
-      label: `Sorted: ${sortLabels[sortOption]}`,
-      onRemove: () => setSortOption("newest"),
-    })
-  }
+  const activeChips = useMemo(
+    () =>
+      [
+        stateFilter
+          ? {
+              key: "state",
+              label: `State: ${getStateName(stateFilter)}`,
+              onRemove: () => setStateFilter(""),
+            }
+          : null,
+        hasPhotoOnly
+          ? { key: "photo", label: "With photos", onRemove: () => setHasPhotoOnly(false) }
+          : null,
+        searchQuery
+          ? {
+              key: "search",
+              label: `Search: ${searchQuery}`,
+              onRemove: () => {
+                setSearchQuery("")
+                setLocalSearch("")
+              },
+            }
+          : null,
+        dateRange !== DEFAULT_DATE_RANGE
+          ? {
+              key: "date",
+              label: getDateRangeChipLabel(dateRange) ?? "Date range",
+              onRemove: () => setDateRange(DEFAULT_DATE_RANGE),
+            }
+          : null,
+        sortOption !== "newest"
+          ? {
+              key: "sort",
+              label: sortLabels[sortOption],
+              onRemove: () => setSortOption("newest"),
+            }
+          : null,
+      ].filter(Boolean) as { key: string; label: string; onRemove: () => void }[],
+    [
+      dateRange,
+      hasPhotoOnly,
+      searchQuery,
+      setDateRange,
+      setHasPhotoOnly,
+      setSearchQuery,
+      setSortOption,
+      setStateFilter,
+      sortOption,
+      stateFilter,
+    ]
+  )
 
   return (
-    <section
-      aria-label="Filter penny list results"
-      className="sticky top-16 z-20 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl p-4 sm:p-6 mb-6 shadow-sm"
-    >
-      {/* Row 1: State, My State, Photo, View Mode */}
+    <section className="sticky top-16 z-20 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl p-4 sm:p-6 mb-6 shadow-sm">
       <div className="flex flex-wrap gap-3 mb-4">
-        {/* State Dropdown */}
         <div className="flex-1 min-w-[180px]">
           <label htmlFor="state-filter" className="sr-only">
             Filter by state
@@ -196,21 +198,19 @@ export function PennyListFilters({
             value={stateFilter}
             onChange={(e) => setStateFilter(e.target.value)}
             className="w-full px-3 py-2.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] text-sm min-h-[44px] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent transition-shadow"
-            aria-describedby="state-filter-desc"
           >
-            <option value="">All States</option>
+            <option value="">All states</option>
             {US_STATES.map((state) => (
               <option key={state.code} value={state.code}>
-                {state.name} ({state.code})
+                {state.name}
               </option>
             ))}
           </select>
-          <span id="state-filter-desc" className="sr-only">
+          <span className="text-xs text-[var(--text-muted)] mt-1 block">
             Filter items by the state where they were reported
           </span>
         </div>
 
-        {/* My State Quick Filter */}
         {userState && (
           <button
             type="button"
@@ -232,7 +232,6 @@ export function PennyListFilters({
           </button>
         )}
 
-        {/* Has Photo Toggle */}
         <button
           type="button"
           onClick={() => setHasPhotoOnly(!hasPhotoOnly)}
@@ -245,11 +244,10 @@ export function PennyListFilters({
           title="Show only items with photos"
         >
           <Image className="w-4 h-4" aria-hidden="true" />
-          Has photo
+          Photos only
         </button>
 
-        {/* View Mode Toggle (Desktop Only) */}
-        <div className="hidden lg:flex rounded-lg border border-[var(--border-default)] overflow-hidden">
+        <div className="flex items-center rounded-lg border border-[var(--border-default)] overflow-hidden">
           <button
             type="button"
             onClick={() => setViewMode("cards")}
@@ -287,65 +285,59 @@ export function PennyListFilters({
         </div>
       </div>
 
-      {/* Row 2: Search, Date Range, Sort, Clear */}
-      <div className="flex flex-wrap gap-3">
-        {/* Search Input */}
-        <div className="flex-1 min-w-[180px] relative">
-          <label htmlFor="search-filter" className="sr-only">
-            Search by item name or SKU
-          </label>
+      <div className="flex flex-wrap gap-3 items-start">
+        <div className="flex-1 min-w-[220px] relative">
           <Search
-            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]"
+            className="w-4 h-4 text-[var(--text-muted)] absolute left-3 top-3.5"
             aria-hidden="true"
           />
+          <label htmlFor="search" className="sr-only">
+            Search SKU, brand, or description
+          </label>
           <input
-            id="search-filter"
-            type="search"
+            id="search"
+            name="search"
             value={localSearch}
             onChange={(e) => setLocalSearch(e.target.value)}
-            placeholder="Search by name or SKU..."
+            placeholder="Search SKU, brand, or description"
             className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] text-sm min-h-[44px] placeholder:text-[var(--text-muted)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent transition-shadow"
-            aria-describedby="search-filter-desc"
             suppressHydrationWarning
           />
-          <span id="search-filter-desc" className="sr-only">
-            Type to filter items by name or SKU number
-          </span>
         </div>
 
-        {/* Date Range Quick Filters */}
         <fieldset className="flex-shrink-0">
           <legend className="sr-only">Filter by date range</legend>
           <div
             className="flex rounded-lg border border-[var(--border-default)] overflow-hidden"
             role="group"
-            aria-label="Date range filter"
+            aria-label="Filter by date range"
           >
-            {dateOptions.map((option, index) => {
-              return (
-                <button
-                  key={option.value}
-                  type="button"
-                  onClick={() => setDateRange(option.value)}
-                  {...({ "aria-pressed": dateRange === option.value ? "true" : "false" } as Record<
-                    string,
-                    unknown
-                  >)}
-                  className={`px-3 py-2.5 text-sm font-medium min-h-[44px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
-                    dateRange === option.value
-                      ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
-                      : "bg-[var(--bg-page)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]"
-                  } ${index > 0 ? "border-l border-[var(--border-default)]" : ""}`}
-                  title={`Show items from the last ${option.label}`}
-                >
-                  {option.label}
-                </button>
-              )
-            })}
+            {dateOptions.map((option, index) => (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => setDateRange(option.value)}
+                {...({ "aria-pressed": dateRange === option.value ? "true" : "false" } as Record<
+                  string,
+                  unknown
+                >)}
+                className={`px-3 py-2.5 min-h-[44px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
+                  dateRange === option.value
+                    ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
+                    : "bg-[var(--bg-page)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]"
+                } ${index > 0 ? "border-l border-[var(--border-default)]" : ""}`}
+                title={
+                  option.value === "all"
+                    ? "Show all-time items"
+                    : `Show items from the last ${option.label}`
+                }
+              >
+                {option.label}
+              </button>
+            ))}
           </div>
         </fieldset>
 
-        {/* Sort Dropdown */}
         <div className="flex-shrink-0 min-w-[150px]">
           <label htmlFor="sort-filter" className="sr-only">
             Sort results
@@ -363,7 +355,6 @@ export function PennyListFilters({
           </select>
         </div>
 
-        {/* Clear Filters */}
         {hasActiveFilters && (
           <button
             type="button"
@@ -377,7 +368,6 @@ export function PennyListFilters({
         )}
       </div>
 
-      {/* Active Filter Chips */}
       {activeChips.length > 0 && (
         <div className="mt-4 pt-4 border-t border-[var(--border-default)]">
           <div className="flex flex-wrap gap-2 items-center">
@@ -407,7 +397,6 @@ export function PennyListFilters({
         </div>
       )}
 
-      {/* Results Count - Live Region */}
       <div
         aria-live="polite"
         aria-atomic="true"
@@ -428,7 +417,7 @@ export function PennyListFilters({
             in <strong className="text-[var(--text-primary)]">{getStateName(stateFilter)}</strong>
           </span>
         )}
-        {dateRange !== "6m" && (
+        {dateRange !== DEFAULT_DATE_RANGE && (
           <span className="ml-1">
             from the last{" "}
             <strong className="text-[var(--text-primary)]">

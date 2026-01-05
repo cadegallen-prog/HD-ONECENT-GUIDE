@@ -31,6 +31,7 @@ import { PennyListCard, PennyListCardCompact } from "./penny-list-card"
 import { PennyListTable } from "./penny-list-table"
 import type { PennyItem } from "@/lib/fetch-penny-data"
 import { US_STATES } from "@/lib/us-states"
+import { formatWindowLabel } from "@/lib/penny-list-utils"
 
 interface PennyListClientProps {
   initialItems: PennyItem[]
@@ -62,6 +63,7 @@ const USER_STATE_KEY = "pennycentral_user_state"
 
 const ITEMS_PER_PAGE_OPTIONS = [25, 50, 100]
 const DEFAULT_ITEMS_PER_PAGE = 50
+const DEFAULT_DATE_RANGE: DateRange = "1m"
 
 const DATE_OPTIONS: { value: DateRange; label: string }[] = [
   { value: "1m", label: "1 mo" },
@@ -130,11 +132,19 @@ export function PennyListClient({
     // Backward compatibility for old day-based links
     if (value === "7" || value === "14" || value === "30") return "1m"
 
-    if (value === "1m" || value === "3m" || value === "6m" || value === "12m") {
+    if (
+      value === "1m" ||
+      value === "3m" ||
+      value === "6m" ||
+      value === "12m" ||
+      value === "18m" ||
+      value === "24m" ||
+      value === "all"
+    ) {
       return value
     }
 
-    return "1m" // Default to 30 days per spec (PENNY-LIST-REDESIGN.md L100-101)
+    return DEFAULT_DATE_RANGE // Default to 30 days per spec (PENNY-LIST-REDESIGN.md)
   })
 
   const [itemsPerPage, setItemsPerPage] = useState(() => {
@@ -217,10 +227,9 @@ export function PennyListClient({
         if (
           value === null ||
           value === "" ||
-          value === "all" ||
           value === "newest" ||
           value === "cards" ||
-          value === "6m"
+          value === DEFAULT_DATE_RANGE
         ) {
           params.delete(key)
         } else {
@@ -290,8 +299,8 @@ export function PennyListClient({
   const setDateRangeWithURL = useCallback(
     (value: DateRange) => {
       setDateRange(value)
-      updateURL({ days: value === "6m" ? null : value })
-      trackFilterChange("date_range", value, value === "6m" ? "clear" : "apply")
+      updateURL({ days: value === DEFAULT_DATE_RANGE ? null : value })
+      trackFilterChange("date_range", value, value === DEFAULT_DATE_RANGE ? "clear" : "apply")
     },
     [trackFilterChange, updateURL]
   )
@@ -317,7 +326,7 @@ export function PennyListClient({
     setSearchQueryWithURL("")
     setMobileSearch("")
     setSortOptionWithURL("newest")
-    setDateRangeWithURL("6m")
+    setDateRangeWithURL(DEFAULT_DATE_RANGE)
   }, [
     setDateRangeWithURL,
     setHasPhotoOnlyWithURL,
@@ -359,11 +368,12 @@ export function PennyListClient({
       if (hasPhotoOnly) params.set("photo", "1")
       if (searchQuery) params.set("q", searchQuery)
       if (sortOption !== "newest") params.set("sort", sortOption)
-      if (dateRange !== "6m") params.set("days", dateRange)
+      if (dateRange !== DEFAULT_DATE_RANGE) params.set("days", dateRange)
       params.set("page", String(currentPage))
       params.set("perPage", String(itemsPerPage))
       // Include hot items only when no filters are active (for initial-like requests)
-      const noFiltersActive = !stateFilter && !hasPhotoOnly && !searchQuery && dateRange === "6m"
+      const noFiltersActive =
+        !stateFilter && !hasPhotoOnly && !searchQuery && dateRange === DEFAULT_DATE_RANGE
       if (noFiltersActive) params.set("includeHot", "1")
 
       const response = await fetch(`/api/penny-list?${params.toString()}`)
@@ -404,7 +414,7 @@ export function PennyListClient({
   }, [items.length, searchQuery])
 
   const hasActiveFilters =
-    stateFilter !== "" || hasPhotoOnly || searchQuery !== "" || dateRange !== "6m"
+    stateFilter !== "" || hasPhotoOnly || searchQuery !== "" || dateRange !== DEFAULT_DATE_RANGE
 
   useEffect(() => {
     if (!hasMountedRef.current || hasTrackedViewRef.current) return
@@ -691,7 +701,7 @@ export function PennyListClient({
                 {(stateFilter ||
                   hasPhotoOnly ||
                   searchQuery ||
-                  dateRange !== "6m" ||
+                  dateRange !== DEFAULT_DATE_RANGE ||
                   sortOption !== "newest") && (
                   <button
                     type="button"
@@ -923,7 +933,7 @@ export function PennyListClient({
             <p className="text-[var(--text-secondary)] mb-4">
               {hasActiveFilters
                 ? "Try adjusting your filters or search terms."
-                : "No penny reports in the last 6 months. Check back soon or submit a find!"}
+                : "No penny reports in the last 30 days. Check back soon or submit a find!"}
             </p>
             {hasActiveFilters && (
               <button
@@ -931,7 +941,7 @@ export function PennyListClient({
                 onClick={() => {
                   setStateFilterWithURL("")
                   setSearchQueryWithURL("")
-                  setDateRangeWithURL("6m")
+                  setDateRangeWithURL(DEFAULT_DATE_RANGE)
                 }}
                 className="px-4 py-2 rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-medium hover:bg-[var(--cta-hover)] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
               >
@@ -945,7 +955,7 @@ export function PennyListClient({
             sortOption={sortOption}
             onSortChange={setSortOptionWithURL}
             stateFilter={stateFilter}
-            windowLabel={dateRange}
+            windowLabel={formatWindowLabel(dateRange)}
             userState={userState}
           />
         ) : (
@@ -955,7 +965,7 @@ export function PennyListClient({
                 key={item.id}
                 item={item}
                 stateFilter={stateFilter}
-                windowLabel={dateRange}
+                windowLabel={formatWindowLabel(dateRange)}
                 userState={userState}
               />
             ))}

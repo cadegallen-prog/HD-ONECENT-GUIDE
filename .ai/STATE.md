@@ -13,6 +13,7 @@ Every AI session must update this after meaningful work.
 
 - **Card view parity + shared UI (Jan 05):** Extracted shared `StateBreakdownSheet` and `PennyListActionRow`, centralized Line A/B formatting helpers, and updated card/table to use the shared components with lastSeenAt + state spread.
 - **Penny List "Last seen" precedence (Jan 05):** Added server-side `lastSeenAt` (purchase_date when valid and not future, else report timestamp) and table Line A now uses it (fallback to `dateAdded`).
+- **Penny List date/sort consistency (Jan 05):** Aligned SSR/API/client defaults to 30d, standardized window label to `(30d)`, made Newest/Oldest sort follow `lastSeenAt`, and tightened date-window filtering to “last seen” semantics (purchase_date when present, else timestamp).
 - **Penny List card redesign spec alignment (Jan 05):** Updated `.ai/PENNY-LIST-REDESIGN.md` to require SKU on card face, Home Depot action button, report counts in Line B with window label, and window consistency across card + state sheet. Guardrails updated to allow dense metadata text and card padding exceptions.
 
 - **Unified green brand (Jan 03):** Light mode CTAs updated from slate blue to forest green (#15803d), matching dark mode's Technical Grid emerald green (#43A047). Both modes now use consistent "savings green" psychology (research: 33% higher trust in savings contexts). All contrast ratios meet WCAG AAA. Documentation synced.

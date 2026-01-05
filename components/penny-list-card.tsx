@@ -70,10 +70,6 @@ export function PennyListCard({ item, stateFilter, windowLabel, userState }: Pen
   const upc = item.upc?.trim()
   const hasUpc = Boolean(upc)
   const skuPageUrl = `/sku/${item.sku}`
-  const skuLine = displayBrand
-    ? `${displayBrand} | SKU ${formatSkuForDisplay(item.sku)}`
-    : `SKU ${formatSkuForDisplay(item.sku)}`
-
   const retailPrice =
     typeof item.retailPrice === "number" && item.retailPrice > 0 ? item.retailPrice : null
   const formattedPrice = formatCurrency(item.price)
@@ -81,7 +77,17 @@ export function PennyListCard({ item, stateFilter, windowLabel, userState }: Pen
 
   const resolvedWindowLabel = windowLabel?.trim() || "30d"
   const nowMs = Date.now()
-  const lastSeenLabel = formatLastSeen(item.lastSeenAt ?? item.dateAdded, nowMs)
+  const lastSeenValue = item.lastSeenAt ?? item.dateAdded
+  const lastSeenLabel = formatLastSeen(lastSeenValue, nowMs)
+  const lastSeenTitle = (() => {
+    const parsed = new Date(lastSeenValue)
+    if (Number.isNaN(parsed.getTime())) return null
+    return parsed.toLocaleString("en-US", {
+      dateStyle: "medium",
+      timeStyle: "short",
+      timeZone: "America/New_York",
+    })
+  })()
   const lineB = formatLineB({
     locations: item.locations,
     stateFilter,
@@ -112,10 +118,17 @@ export function PennyListCard({ item, stateFilter, windowLabel, userState }: Pen
           <div className="flex gap-3 items-start">
             <PennyThumbnail src={item.imageUrl} alt={displayName} size={72} />
             <div className="min-w-0 flex-1 space-y-1">
-              <p className="text-xs text-[var(--text-muted)] font-medium truncate">{skuLine}</p>
+              <p className="text-xs text-[var(--text-muted)] font-medium truncate flex items-center gap-1">
+                {displayBrand && (
+                  <span className="text-[var(--text-secondary)]">{displayBrand} ·</span>
+                )}
+                <span className="font-semibold text-[var(--text-primary)]">
+                  SKU {formatSkuForDisplay(item.sku)}
+                </span>
+              </p>
               <h3
                 id={`item-${item.id}-name`}
-                className="text-base sm:text-lg font-medium text-[var(--text-primary)] leading-[1.5] line-clamp-2-table"
+                className="text-sm sm:text-base font-semibold text-[var(--text-primary)] leading-[1.4] line-clamp-2-table"
                 title={displayName}
               >
                 {displayName}
@@ -124,16 +137,19 @@ export function PennyListCard({ item, stateFilter, windowLabel, userState }: Pen
           </div>
 
           <div className="flex flex-wrap items-end gap-4">
-            <p className="text-[28px] font-semibold text-[var(--text-primary)]">{formattedPrice}</p>
+            <p className="text-2xl font-semibold text-[var(--text-primary)]">{formattedPrice}</p>
             {formattedRetail && (
-              <p className="text-xs text-[var(--text-muted)]">
-                Retail <span className="line-through">{formattedRetail}</span>
+              <p className="text-sm font-semibold text-[var(--text-secondary)] leading-tight">
+                Retail{" "}
+                <span className="line-through decoration-[var(--text-muted)]">
+                  {formattedRetail}
+                </span>
               </p>
             )}
           </div>
 
           <div className="space-y-1 text-xs text-[var(--text-muted)]">
-            <p>{lastSeenLabel}</p>
+            <p title={lastSeenTitle ?? undefined}>{lastSeenLabel}</p>
             <button
               type="button"
               onClick={(event) => {

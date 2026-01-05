@@ -18,13 +18,9 @@ test.describe("SKU detail related items (screenshots)", () => {
     // Wait for content to load
     await page.waitForLoadState("networkidle")
 
-    const firstSkuLink = page.locator('a[href^="/sku/"]').first()
-    await expect(firstSkuLink).toBeVisible({ timeout: 10000 })
-
-    const href = await firstSkuLink.getAttribute("href")
-    expect(href).toMatch(/^\/sku\//)
-
-    await page.goto(href!)
+    // Card/table views use click navigation rather than <a href="/sku/...">,
+    // so keep this deterministic by navigating to a known fixture SKU.
+    await page.goto("/sku/1009876543")
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible({ timeout: 10000 })
     const relatedHeading = page.getByRole("heading", { name: "Related penny items" })
     await expect(relatedHeading).toBeVisible()

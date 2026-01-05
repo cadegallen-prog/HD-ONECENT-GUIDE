@@ -50,7 +50,12 @@ export function PennyListActionRow({
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-2" onClick={stopEvent} onKeyDown={stopEvent}>
+    <div
+      className="flex flex-wrap items-center gap-2"
+      onClick={stopEvent}
+      onKeyDown={stopEvent}
+      aria-label="Item actions"
+    >
       <Button
         type="button"
         variant="primary"
@@ -61,18 +66,21 @@ export function PennyListActionRow({
           trackEvent("report_duplicate_click", { sku, name: itemName, src: reportSource })
           router.push(buildReportFindUrl({ sku, name: itemName, src: reportSource }))
         }}
-        className="relative z-10 pointer-events-auto"
+        className="relative z-10 pointer-events-auto min-h-[44px] px-3 text-sm leading-snug whitespace-normal text-left"
         aria-label={`Report finding ${itemName}`}
       >
         <PlusCircle className="w-4 h-4 mr-1.5" aria-hidden="true" />
         Report
       </Button>
-      <AddToListButton
-        sku={sku}
-        itemName={itemName}
-        variant="icon"
-        className="min-h-[44px] min-w-[44px]"
-      />
+      <div className="flex items-center gap-1 text-xs font-medium text-[var(--text-secondary)]">
+        <AddToListButton
+          sku={sku}
+          itemName={itemName}
+          variant="icon"
+          className="min-h-[44px] min-w-[44px]"
+        />
+        <span className="hidden sm:inline">Save</span>
+      </div>
       {hasUpc && (
         <button
           type="button"
@@ -81,11 +89,14 @@ export function PennyListActionRow({
             stopEvent(event)
             onBarcodeOpen?.()
           }}
-          className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+          className="flex items-center gap-1.5 min-h-[44px] min-w-[44px] px-2.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
           aria-label={`Show barcode for ${itemName}`}
           title="Barcode"
         >
           <Barcode className="h-4 w-4" aria-hidden="true" />
+          <span className="text-xs font-medium text-[var(--text-secondary)] hidden sm:inline">
+            Barcode
+          </span>
         </button>
       )}
       {resolvedHomeDepotUrl && (
@@ -93,7 +104,7 @@ export function PennyListActionRow({
           href={resolvedHomeDepotUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+          className="flex items-center gap-1.5 min-h-[44px] min-w-[44px] px-2.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
           aria-label={`Open Home Depot page for ${itemName}`}
           title="Home Depot"
           onClick={(event) => {
@@ -102,6 +113,9 @@ export function PennyListActionRow({
           }}
         >
           <ExternalLink className="h-4 w-4" aria-hidden="true" />
+          <span className="text-xs font-medium text-[var(--text-secondary)] hidden sm:inline">
+            Home Depot
+          </span>
         </a>
       )}
     </div>

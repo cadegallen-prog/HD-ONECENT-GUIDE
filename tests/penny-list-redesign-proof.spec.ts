@@ -85,7 +85,7 @@ test.describe('Penny List Redesign - Visual Verification', () => {
       })
       
       // Close sheet
-      await page.press('Escape')
+      await page.keyboard.press('Escape')
     }
   })
 
@@ -96,11 +96,11 @@ test.describe('Penny List Redesign - Visual Verification', () => {
     // Wait for content
     await expect(page.locator('[role="link"]').first()).toBeVisible({ timeout: 10000 })
     
-    // Check for window label in Line B - should show (1m) which is 30 days
-    const lineB = page.locator('text=(1m)').first()
+    // Check for window label in Line B - should show (30d)
+    const lineB = page.locator('text=(30d)').first()
     if (await lineB.isVisible()) {
       await expect(lineB).toBeVisible()
-      console.log('✅ Window label shows (1m) - correct 30d default')
+      console.log('✅ Window label shows (30d) - correct 30d default')
     } else {
       console.log('⚠️  Could not verify window label visibility')
     }

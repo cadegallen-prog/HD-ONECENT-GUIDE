@@ -54,7 +54,7 @@ function parseDays(value: string | null): DateRange {
   ) {
     return value
   }
-  return "6m"
+  return "1m"
 }
 
 export async function GET(request: Request) {

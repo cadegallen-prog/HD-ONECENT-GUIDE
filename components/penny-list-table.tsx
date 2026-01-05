@@ -169,7 +169,17 @@ export function PennyListTable({
                   : null
               const formattedPrice = formatCurrency(item.price)
               const formattedRetail = retailPrice ? formatCurrency(retailPrice) : null
-              const lastSeenLabel = formatLastSeen(item.lastSeenAt ?? item.dateAdded, nowMs)
+              const lastSeenValue = item.lastSeenAt ?? item.dateAdded
+              const lastSeenLabel = formatLastSeen(lastSeenValue, nowMs)
+              const lastSeenTitle = (() => {
+                const parsed = new Date(lastSeenValue)
+                if (Number.isNaN(parsed.getTime())) return null
+                return parsed.toLocaleString("en-US", {
+                  dateStyle: "medium",
+                  timeStyle: "short",
+                  timeZone: "America/New_York",
+                })
+              })()
               const lineB = formatLineB({
                 locations: item.locations,
                 stateFilter,
@@ -229,7 +239,7 @@ export function PennyListTable({
                   {/* Pattern signals */}
                   <td className="px-4 py-4 align-top">
                     <div className="space-y-1 text-xs text-[var(--text-muted)]">
-                      <p>{lastSeenLabel}</p>
+                      <p title={lastSeenTitle ?? undefined}>{lastSeenLabel}</p>
                       <button
                         type="button"
                         onClick={(event) => {
