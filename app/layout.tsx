@@ -170,6 +170,13 @@ export default function RootLayout({
             }),
           }}
         />
+        {/* Google tag (gtag.js) - GA4 Measurement ID G-DJ4RJRX05E */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-DJ4RJRX05E"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('js', new Date());\ngtag('config', 'G-DJ4RJRX05E');`
+          }}
+        />
       </head>
       <body className="bg-background text-foreground">
         {/* Skip link for keyboard accessibility */}
@@ -202,7 +209,7 @@ export default function RootLayout({
           </AuthProvider>
         </ThemeProvider>
         {/* Vercel scripts should only run on Vercel (and never during Playwright/CI). */}
-        {ENABLE_VERCEL_SCRIPTS && <Analytics />}
+        <Analytics />
         {ENABLE_VERCEL_SCRIPTS && <SpeedInsightsClient />}
       </body>
     </html>
