@@ -5,17 +5,35 @@ import { STATES } from "@/lib/states"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://www.pennycentral.com"
-  const currentDate = new Date().toISOString()
+  const now = Date.now()
+  const currentDate = new Date(now).toISOString()
+  const RECENT_WINDOW_MS = 45 * 24 * 60 * 60 * 1000 // 45 days keeps the sitemap focused on fresh SKUs
+
+  const isRecent = (dateStr: string | null | undefined): boolean => {
+    if (!dateStr) return false
+    const ts = new Date(dateStr).getTime()
+    if (Number.isNaN(ts)) return false
+    const diff = now - ts
+    return diff >= 0 && diff <= RECENT_WINDOW_MS
+  }
 
   // Get all SKUs for dynamic pages
   const communityItems = filterValidPennyItems(await getPennyList())
 
-  const allSkus = new Set(communityItems.map((item) => item.sku))
+  // Only include SKUs seen recently to avoid bloating the sitemap with stale items
+  const recentItems = communityItems.filter((item) => isRecent(item.lastSeenAt ?? item.dateAdded))
+
+  const sitemapItems = recentItems.length > 0 ? recentItems : communityItems
+
+  const allSkus = new Set(sitemapItems.map((item) => item.sku))
 
   const skuPages: MetadataRoute.Sitemap = Array.from(allSkus).map((sku) => ({
     url: `${baseUrl}/sku/${sku}`,
-    lastModified: currentDate,
-    changeFrequency: "weekly",
+    lastModified:
+      sitemapItems.find((item) => item.sku === sku)?.lastSeenAt ??
+      sitemapItems.find((item) => item.sku === sku)?.dateAdded ??
+      currentDate,
+    changeFrequency: "daily",
     priority: 0.6,
   }))
 

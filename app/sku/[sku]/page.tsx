@@ -69,6 +69,8 @@ export default async function SkuDetailPage({ params }: PageProps) {
   const internetNumber = communityItem.internetNumber
   const modelNumber = communityItem.modelNumber
   const upc = communityItem.upc
+  const lastSeen = communityItem.lastSeenAt ?? communityItem.dateAdded ?? null
+  const lastSeenIso = lastSeen ? new Date(lastSeen).toISOString() : null
 
   // Use internetNumber for better product links when available, fallback to SKU search
   const homeDepotUrl = getHomeDepotProductUrl({
@@ -101,14 +103,30 @@ export default async function SkuDetailPage({ params }: PageProps) {
     old: "pill pill-strong",
   }[freshness || "old"]
 
+  const lastSeenLabel = lastSeen
+    ? new Date(lastSeen).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        timeZone: "America/New_York",
+      })
+    : "Recently"
+
+  const summary = `${name} — community-reported penny lead. Last seen ${lastSeenLabel}. ${
+    totalReports > 0
+      ? `${totalReports} report${totalReports === 1 ? "" : "s"} across ${stateCount || 1} state${stateCount === 1 ? "" : "s"}.`
+      : "Reports pending."
+  } Verify in-store; availability varies by location (YMMV).`
+
   // Structured Data
-  const jsonLd = {
+  const jsonLd: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Product",
-    name: name,
+    name,
     image: imageUrl,
-    description: `Community-reported Home Depot penny lead for ${name}.`,
-    sku: sku,
+    description: summary,
+    url: `https://www.pennycentral.com/sku/${sku}`,
+    sku,
     brand: {
       "@type": "Brand",
       name: brand || "Home Depot",
@@ -120,7 +138,25 @@ export default async function SkuDetailPage({ params }: PageProps) {
       price: "0.01",
       itemCondition: "https://schema.org/NewCondition",
       availability: "https://schema.org/InStoreOnly",
+      ...(lastSeenIso ? { availabilityStarts: lastSeenIso } : {}),
     },
+  }
+
+  const additionalProperty = [
+    { "@type": "PropertyValue", name: "Reports", value: totalReports },
+    { "@type": "PropertyValue", name: "States", value: stateCount },
+  ].filter((prop) => prop.value && prop.value > 0)
+
+  if (additionalProperty.length) {
+    jsonLd.additionalProperty = additionalProperty
+  }
+
+  if (modelNumber) {
+    jsonLd.mpn = modelNumber
+  }
+
+  if (internetNumber) {
+    jsonLd.productID = internetNumber
   }
 
   const relatedItems = (() => {
@@ -290,6 +326,8 @@ export default async function SkuDetailPage({ params }: PageProps) {
                     </span>
                   </div>
                 )}
+
+                <p className="text-sm text-[var(--text-primary)] mb-4 leading-relaxed">{summary}</p>
 
                 {/* Product Identifiers Section */}
                 <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-lg p-4 mb-6">
