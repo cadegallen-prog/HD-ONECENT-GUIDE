@@ -24,8 +24,8 @@ export const metadata: Metadata = {
     images: [ogImageUrl("Trip Tracker")],
   },
   robots: {
-    index: false,
-    follow: false,
+    index: true,
+    follow: true,
   },
 }
 
