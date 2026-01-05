@@ -59,13 +59,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Supporting Pages - Medium Priority
     {
       url: `${baseUrl}/report-find`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/resources`,
-      lastModified: currentDate,
       changeFrequency: "monthly",
       priority: 0.7,
     },
