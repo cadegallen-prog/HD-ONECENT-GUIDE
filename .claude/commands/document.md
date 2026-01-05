@@ -16,6 +16,24 @@ Keep `.ai/` documentation current after changes.
 - Update BACKLOG.md (mark done, add new items)
 - Add to LEARNINGS.md if something unexpected happened
 
+## Required Outputs
+
+Before exiting documentation, you must deliver:
+
+1. **Files to Update**
+   - List of .ai/ files needing updates
+   - STATE.md (if significant change)
+   - SESSION_LOG.md (always)
+   - BACKLOG.md (if priorities changed)
+   - LEARNINGS.md (if unexpected issues)
+
+2. **Change Summary**
+   - What was done (high-level)
+   - Decisions made
+   - Next steps
+
+See MODE_CONTRACT.md for detailed documentation standards.
+
 ## Scope
 
 Only `.ai/` directory.
@@ -26,6 +44,9 @@ Only `.ai/` directory.
 - Must keep updates concise
 - Must include date in SESSION_LOG entries
 - Must follow existing format in each file
+- Must summarize changes in user-visible behavior terms
+- Must explain "what" and "why", not "how" (owner cannot code)
+- See MODE_CONTRACT.md for full documentation standards
 
 ## Exit
 

@@ -29,6 +29,31 @@ You are here for iterative, back-and-forth collaborative planning. NOT quick opt
 - Consider the North Star in `.ai/CONTEXT.md` for all decisions
 - Push back when something seems wrong or incomplete
 
+## Required Outputs
+
+Before exiting planning mode, you must deliver:
+
+1. **CONCRETE SPEC**
+   - Layout (columns, spacing, component hierarchy)
+   - Typography (font sizes, weights, line clamps)
+   - Tap targets (minimum 44x44px)
+   - Fallback behavior (what happens with null/empty/long values)
+   - States (loading, error, empty, success)
+
+2. **DECISION LOG**
+   - Locked decisions (cannot change without returning to /plan)
+   - Open decisions (max 5 to exit)
+
+3. **STRUCTURAL AMBIGUITY REGISTER**
+   - List all discovered ambiguities and how each was resolved
+   - **Must be EMPTY to exit /plan mode**
+
+4. **ACCEPTANCE CHECKLIST**
+   - Objective pass/fail criteria only
+   - How to verify each requirement
+
+See MODE_CONTRACT.md for detailed planning output specifications.
+
 ## Constraints
 
 - Do NOT implement anything (no code changes)
@@ -37,6 +62,9 @@ You are here for iterative, back-and-forth collaborative planning. NOT quick opt
 - Document agreed-upon decisions in the planning doc
 - Be honest about uncertainty or disagreement
 - Do NOT treat my suggestions as automatically correct - evaluate objectively
+- Follow MODE CONTRACT discipline: must deliver all required outputs above
+- Structural Ambiguity Register must be EMPTY before exiting /plan
+- See MODE_CONTRACT.md for full planning output requirements
 
 ## Session Flow
 

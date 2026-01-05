@@ -17,6 +17,21 @@ Generate and evaluate ideas quickly without implementing. Present options, not d
 - Suggest which approach to pursue
 - Do NOT make decisions - present options
 
+## Required Outputs
+
+Before exiting brainstorming, you must deliver:
+
+- Exactly 2-3 options (not more)
+- For each option:
+  - What it is (1-2 sentences)
+  - Pros (2-3 bullet points)
+  - Cons (2-3 bullet points)
+  - Which UX dimension it optimizes (from MODE_CONTRACT rubric)
+- No winner declared
+- No implementation details or file lists
+
+See MODE_CONTRACT.md for detailed brainstorming output specifications.
+
 ## Scope
 
 Read-only exploration of codebase.
@@ -27,6 +42,10 @@ Read-only exploration of codebase.
 - Must NOT make decisions (only present options)
 - Must consider existing codebase patterns
 - Must flag if idea conflicts with `.ai/CONSTRAINTS.md`
+- Must present exactly 2-3 options (not more)
+- Must NOT choose a winner or lock decisions
+- Must label which UX dimension each option optimizes
+- See MODE_CONTRACT.md for full brainstorming output requirements
 
 ## Exit
 

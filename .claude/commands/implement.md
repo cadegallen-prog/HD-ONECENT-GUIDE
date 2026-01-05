@@ -17,6 +17,31 @@ Write code according to an approved plan. Stay focused, follow patterns, don't a
 - Use CSS variables (not raw Tailwind colors)
 - Stay within the specified file scope
 
+## Required Outputs
+
+Before exiting implementation, you must deliver:
+
+1. **Implementation Summary**
+   - Files modified (list with line counts changed)
+   - Key changes per file
+   - Any deviations from plan (must be justified)
+
+2. **Evidence**
+   - Screenshots (before/after for UI changes)
+   - Test output (all 4 quality gates)
+   - Console output (no errors)
+
+3. **Testing Checklist**
+   - Each Acceptance Checklist item from /plan tested
+   - Results per item (pass/fail)
+
+4. **Deviation Log**
+   - Any deviations from approved plan
+   - Justification for each
+   - Request approval if significant
+
+See MODE_CONTRACT.md for detailed implementation output specifications.
+
 ## Default Scope (if no plan)
 
 - `components/` - UI components
@@ -30,6 +55,12 @@ Write code according to an approved plan. Stay focused, follow patterns, don't a
 - Must NOT add features beyond what was asked
 - Must use CSS variables for colors
 - Must NOT commit code (leave that to you)
+- Precondition: Approved /architect plan must exist
+- Must NOT redesign UI mid-implementation or expand scope
+- Must document any deviations from approved plan
+- Must provide evidence (screenshots, test output) before claiming completion
+- Must test against Acceptance Checklist from /plan
+- See MODE_CONTRACT.md for full implementation requirements
 
 ## Exit
 

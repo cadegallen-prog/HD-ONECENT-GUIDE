@@ -18,6 +18,28 @@ Design implementation plans before code is written. You explore, plan, and get a
 - List potential risks or gotchas
 - Ask for approval before implementation
 
+## Required Outputs
+
+Before exiting architecture mode, you must deliver:
+
+1. **IMPLEMENTATION PLAN**
+   - Files to create/modify (absolute paths)
+   - Change sequencing (what must happen first)
+   - Technical approach for each file
+   - Risk assessment per change
+
+2. **REGRESSION GUARD PLAN**
+   - What could break from these changes
+   - Prevention strategies
+   - Testing approach
+
+3. **VERIFICATION PLAN**
+   - Map each Acceptance Checklist item to verification steps
+   - How to test (manual steps, automated tests, visual regression)
+   - Success criteria per item
+
+See MODE_CONTRACT.md for detailed architecture output specifications.
+
 ## Scope
 
 Can read any file. Cannot modify files.
@@ -28,6 +50,11 @@ Can read any file. Cannot modify files.
 - Must identify if Store Finder is involved (fragile area)
 - Must specify which files will be touched
 - Must NOT start implementing without approval
+- Precondition: Approved Concrete Spec from /plan must exist
+- If structural ambiguities discovered during architecture, STOP and return to /plan
+- Must NOT write code or show implementation details
+- Must produce all 3 required outputs above (Implementation, Regression Guard, Verification Plans)
+- See MODE_CONTRACT.md for full architecture output requirements
 
 ## Exit
 
