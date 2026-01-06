@@ -12,14 +12,36 @@
 
 ---
 
-## 2026-01-06 - ChatGPT Codex (GPT-5.2) - Fix barcode blank renders + add audit counts
+## 2026-01-06 - ChatGPT Codex (GPT-5.2) - Fix stale homepage "Today's Finds"
 
-**Goal:** Stop the barcode modal from showing a blank white box, and produce hard numbers explaining why “everything looks recent” after importing historical purchases.
+**Goal:** SKU pages and Penny List updated immediately after enrichment fixes, but the homepage "Today's Finds" module could keep showing an old/wrong product.
+
+**Root cause:** `/` was fully static, so it could serve stale "recent finds" until the next deploy.
 
 **Outcome:**
 
-- Barcode modal now validates UPC-A/EAN-13 check digits and falls back to `CODE128` when invalid, so `JsBarcode` won’t render blank.
-- Added `scripts/print-penny-list-count.ts` + `npm run penny:count` to print: total reports, distinct SKUs, enriched vs. unenriched, and “last 1m” by last-seen semantics vs. “last 1m” by submission timestamp.
+- Enabled ISR for `/` so it refreshes periodically without redeploys.
+- Set homepage revalidate to 5 minutes.
+
+**Changes Made:**
+
+- `app/page.tsx`
+
+**Verification (Proof):**
+
+- `npm run lint` ✅
+- `npm run build` ✅ (shows `/` revalidate `5m`)
+- `npm run test:unit` ✅ (21/21)
+- `npm run test:e2e` ✅ (92/92)
+
+## 2026-01-06 - ChatGPT Codex (GPT-5.2) - Fix barcode blank renders + add audit counts
+
+**Goal:** Stop the barcode modal from showing a blank white box, and produce hard numbers explaining why "everything looks recent" after importing historical purchases.
+
+**Outcome:**
+
+- Barcode modal now validates UPC-A/EAN-13 check digits and falls back to `CODE128` when invalid, so `JsBarcode` won't render blank.
+- Added `scripts/print-penny-list-count.ts` + `npm run penny:count` to print: total reports, distinct SKUs, enriched vs. unenriched, and "last 1m" by last-seen semantics vs. "last 1m" by submission timestamp.
 - Fixed Playwright strict-mode failure by targeting the state breakdown sheet dialog via `aria-labelledby="state-breakdown-title"`.
 
 **Verification (Proof):**
@@ -29,66 +51,12 @@
 - `npm run test:unit` ✅
 - `npm run test:e2e` ✅ (92/92; screenshots in `reports/proof/`)
 
-## 2026-01-06 - ChatGPT Codex (GPT-5.2) - Make Vercel Analytics fail-safe (no provider env var foot-gun)
-
-**Goal:** Prevent Vercel Web Analytics from silently dropping to zero due to a missing/mismatched `NEXT_PUBLIC_ANALYTICS_PROVIDER`.
-
-**Outcome:**
-
-- Vercel Analytics now enables automatically on Vercel Production (and remains disable-able only via `NEXT_PUBLIC_ANALYTICS_ENABLED=false`), instead of requiring `NEXT_PUBLIC_ANALYTICS_PROVIDER=vercel`.
-
-**Verification (Proof):**
-
-- `npm run lint` (pass)
-- `npm run build` (pass)
-- `npm run test:unit` (pass, 21/21)
-- `npm run test:e2e` (pass, 92/92)
-
-## 2026-01-06 - ChatGPT Codex (GPT-5.2) - Remove provider toggle (Vercel/GA4 only) + purge Plausible mentions
-
-**Goal:** Remove any provider-based analytics switching and make tracking configuration impossible to silently break.
-
-**Outcome:**
-
-- Removed all Plausible/provider wiring from code + docs; analytics is now Vercel Web Analytics + GA4 only.
-- `NEXT_PUBLIC_ANALYTICS_ENABLED=false` is the single kill-switch for both.
-- Made the SKU related-items Playwright proof test resilient to data variability (related section is conditional).
-
-**Verification (Proof):**
-
-- `npm run lint` (pass)
-- `npm run build` (pass)
-- `npm run test:unit` (pass, 21/21)
-- `npm run test:e2e` (pass, 92/92)
-
-## 2026-01-05 - ChatGPT Codex (GPT-5.2) - Penny List Option A: date/sort consistency + window label clarity
+## 2026-01-05 - ChatGPT Codex (GPT-5.2) - Penny List date/sort consistency + window label clarity
 
 **Goal:** Fix Penny List "wrong dates" perception + broken "Newest First" behavior by aligning defaults and making recency/window labeling consistent.
 
 **Outcome:**
 
-- Fixed root-cause mismatch: client defaulted to `1m` but treated `6m` as the "default" in URL sync + fetch logic.
-- Standardized the window label shown on cards/table to **(30d)** instead of ambiguous `(1m)`.
-- Made "Newest/Oldest" sorting use `lastSeenAt` (purchase date when present/valid, else report timestamp) for consistency with "Last seen".
-- Tightened date window filtering to use "last seen" semantics (purchase date when present, else timestamp).
+- Standardized the window label shown on cards/table to **(30d)**.
+- Made "Newest/Oldest" sorting follow `lastSeenAt` (purchase date when present/valid, else report timestamp).
 
-**Verification (Proof):**
-
-- `npm run lint` ✅
-- `npm run build` ✅
-- `npm run test:unit` ✅
-- `npm run test:e2e` ✅
-- Playwright screenshots created:
-  - `reports/proof/penny-list-mobile-light-redesign.png`
-  - `reports/proof/penny-list-mobile-dark-redesign.png`
-  - `reports/proof/penny-list-desktop-table-light-redesign.png`
-  - `reports/proof/penny-list-desktop-table-dark-redesign.png`
-  - `reports/proof/penny-list-state-breakdown-sheet-open.png`
-
-## 2026-01-05 - ChatGPT Codex (GPT-5.2) - Normalize purchase_date parsing for last seen
-
-**Goal:** Prevent historical imports from appearing “recent” by ensuring `purchase_date` remains authoritative for “last seen”.
-
-**Outcome:**
-
-- Added `parsePurchaseDateValue` so timestamp-like `purchase_date` strings parse correctly and don’t fall back to submission `timestamp`.
