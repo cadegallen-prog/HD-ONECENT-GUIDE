@@ -25,6 +25,7 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { PennyListActionRow } from "@/components/penny-list-action-row"
 import { StateBreakdownSheet } from "@/components/state-breakdown-sheet"
+import { toThdImageVariant } from "@/lib/image-cache"
 
 interface PennyListCardProps {
   item: PennyItem & { parsedDate?: Date | null }
@@ -93,6 +94,7 @@ export function PennyListCard({ item, stateFilter, windowLabel, userState }: Pen
     stateFilter,
     windowLabel: resolvedWindowLabel,
   })
+  const thumbnailSrc = item.imageUrl ? toThdImageVariant(item.imageUrl, 300) : item.imageUrl
 
   const openSkuPage = () => router.push(skuPageUrl)
 
@@ -116,7 +118,7 @@ export function PennyListCard({ item, stateFilter, windowLabel, userState }: Pen
       <article className="flex flex-col h-full">
         <div className="p-3 flex flex-col flex-1 space-y-3">
           <div className="flex gap-3 items-start">
-            <PennyThumbnail src={item.imageUrl} alt={displayName} size={72} />
+            <PennyThumbnail src={thumbnailSrc} alt={displayName} size={250} />
             <div className="min-w-0 flex-1 space-y-1">
               <p className="text-xs text-[var(--text-muted)] font-medium truncate flex items-center gap-1">
                 {displayBrand && (
@@ -217,6 +219,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
   const compactFormattedPrice = formatCurrency(item.price)
   const compactFormattedRetail = retailPrice ? formatCurrency(retailPrice) : null
   const compactFormattedSavings = compactHasSavings ? formatCurrency(compactSavings) : null
+  const thumbnailSrc = item.imageUrl ? toThdImageVariant(item.imageUrl, 300) : item.imageUrl
 
   const openSkuPage = () => router.push(skuPageUrl)
 
@@ -274,7 +277,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
             onClick={(e) => e.stopPropagation()}
             className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] rounded"
           >
-            <PennyThumbnail src={item.imageUrl} alt={item.name} size={48} />
+            <PennyThumbnail src={thumbnailSrc} alt={item.name} size={48} />
           </Link>
           <div className="min-w-0 flex-1 space-y-2">
             <Link

@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { ImageOff } from "lucide-react"
 
-type PennyThumbnailSize = 40 | 48 | 64 | 72 | 120
+type PennyThumbnailSize = 40 | 48 | 64 | 72 | 120 | 250
 
 const sizeClassMap: Record<PennyThumbnailSize, string> = {
   40: "w-10 h-10",
@@ -11,6 +11,7 @@ const sizeClassMap: Record<PennyThumbnailSize, string> = {
   64: "w-16 h-16",
   72: "w-[72px] h-[72px]",
   120: "w-[120px] h-[120px]",
+  250: "w-[250px] h-[250px]",
 }
 
 export function PennyThumbnail({

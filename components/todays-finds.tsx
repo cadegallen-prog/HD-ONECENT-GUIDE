@@ -2,7 +2,7 @@ import Link from "next/link"
 import { PennyThumbnail } from "./penny-thumbnail"
 import type { PennyItem } from "@/lib/fetch-penny-data"
 import { formatRelativeDate } from "@/lib/penny-list-utils"
-import { PLACEHOLDER_IMAGE_URL } from "@/lib/image-cache"
+import { PLACEHOLDER_IMAGE_URL, toThdImageVariant } from "@/lib/image-cache"
 
 interface TodaysFindsProps {
   items: PennyItem[]
@@ -36,6 +36,9 @@ export function TodaysFinds({ items }: TodaysFindsProps) {
             const states = Object.keys(item.locations ?? {})
             const visibleStates = states.slice(0, 3)
             const remainingStates = Math.max(0, states.length - visibleStates.length)
+            const thumbnailSrc = item.imageUrl
+              ? toThdImageVariant(item.imageUrl, 300)
+              : item.imageUrl
 
             return (
               <article
@@ -43,7 +46,7 @@ export function TodaysFinds({ items }: TodaysFindsProps) {
                 className="rounded-xl bg-[var(--bg-card)] elevation-card p-4 flex flex-col items-center min-w-[240px] snap-start md:min-w-0 border border-[var(--border-default)]"
               >
                 <div className="mb-2">
-                  <PennyThumbnail src={item.imageUrl} alt={item.name} size={72} />
+                  <PennyThumbnail src={thumbnailSrc} alt={item.name} size={72} />
                 </div>
                 <h3 className="text-base font-semibold text-[var(--text-primary)] text-center mb-1 line-clamp-2">
                   {item.name}
