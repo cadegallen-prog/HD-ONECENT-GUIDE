@@ -118,7 +118,7 @@ export function PennyListCard({ item, stateFilter, windowLabel, userState }: Pen
       <article className="flex flex-col h-full">
         <div className="p-3 flex flex-col flex-1 space-y-3">
           <div className="flex gap-3 items-start">
-            <PennyThumbnail src={thumbnailSrc} alt={displayName} size={250} />
+            <PennyThumbnail src={thumbnailSrc} alt={displayName} size={72} />
             <div className="min-w-0 flex-1 space-y-1">
               <p className="text-xs text-[var(--text-muted)] font-medium truncate flex items-center gap-1">
                 {displayBrand && (
