@@ -116,3 +116,21 @@
 
 - Penny List matches: 0
 - Enrichment matches: 0
+
+## 2026-01-06 - ChatGPT Codex (GPT-5.2) - Prevent missing THD thumbnail variants (Orbit 1010086378)
+
+**Goal:** Fix cases where an item image shows on the SKU page but appears missing on the Penny List / homepage cards.
+
+**Root cause:** We were rewriting Home Depot CDN images to the `-64_300` variant for thumbnails. Some products don’t have a `300` variant even when `400`/`1000` exists; if the request fails before React hydrates, the client-side fallback may never run and the image stays blank.
+
+**Outcome:** Thumbnails now use the more reliable `-64_400` variant for:
+
+- Homepage `Today's Finds`
+- Penny List cards (both variants)
+
+**Verification (Proof):**
+
+- `npm run lint` ✅
+- `npm run build` ✅
+- `npm run test:unit` ✅ (21/21)
+- `npm run test:e2e` ✅ (92/92)
