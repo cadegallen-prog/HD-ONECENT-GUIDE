@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { getPennyListFiltered } from "@/lib/fetch-penny-data"
-import { computeFreshnessMetrics, filterValidPennyItems } from "@/lib/penny-list-utils"
+import { filterValidPennyItems, formatWindowLabel } from "@/lib/penny-list-utils"
 import { queryPennyItems, getHotItems } from "@/lib/penny-list-query"
 import { PennyListClient } from "@/components/penny-list-client"
 import { ogImageUrl } from "@/lib/og"
@@ -93,7 +93,20 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
   const pennyItems = await getPennyListFiltered(days, nowMs)
   const validItems = filterValidPennyItems(pennyItems)
   const feedUnavailable = validItems.length === 0
-  const { newLast24h, totalLast30d } = computeFreshnessMetrics(validItems, nowMs)
+
+  // Summary metrics
+  // - "New reports (24h)" should reflect actual submission freshness (dateAdded).
+  // - "Items in view" should reflect the selected window (already applied at DB level).
+  const windowLabel = formatWindowLabel(days)
+  const windowTotal = validItems.length
+  const newReportsLast24h = validItems.reduce((acc, item) => {
+    const timestamp = new Date(item.dateAdded).getTime()
+    if (Number.isNaN(timestamp)) return acc
+    const diff = nowMs - timestamp
+    if (diff >= 0 && diff <= 24 * 60 * 60 * 1000) return acc + 1
+    return acc
+  }, 0)
+  const windowLabelSuffix = windowLabel.toLowerCase() === "all time" ? "" : ` (${windowLabel})`
   const latestTimestamp = validItems
     .map((item) => new Date(item.dateAdded).getTime())
     .filter((time) => !Number.isNaN(time))
@@ -205,8 +218,7 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
             Penny List
           </h1>
           <p className="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
-            Community reports of recent penny sightings. Your mileage may vary - always verify at
-            checkout.
+            Community reports of recent penny sightings.
           </p>
           <div className="mt-4">
             <a
@@ -226,17 +238,21 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-[var(--text-secondary)]">
                 <span className="pill pill-strong mr-2 sm:mr-3">
-                  {newLast24h} new reports (24h)
+                  {newReportsLast24h} new reports (24h)
                 </span>
-                <span className="pill pill-muted">Total last 30 days: {totalLast30d}</span>
+                <span className="pill pill-muted">
+                  Items in view{windowLabelSuffix}: {windowTotal}
+                </span>
               </p>
               <p className="text-xs text-[var(--text-muted)]">{lastUpdatedLabel}</p>
             </div>
             <div className="mt-3 flex flex-wrap gap-3">
               <span className="pill pill-strong">
-                Multiple reports: {reportCounts.multipleReports}
+                SKUs with 2+ reports{windowLabelSuffix}: {reportCounts.multipleReports}
               </span>
-              <span className="pill pill-muted">Single report: {reportCounts.singleReport}</span>
+              <span className="pill pill-muted">
+                SKUs with 1 report{windowLabelSuffix}: {reportCounts.singleReport}
+              </span>
             </div>
           </div>
 
