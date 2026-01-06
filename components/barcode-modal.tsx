@@ -13,6 +13,33 @@ interface BarcodeModalProps {
   pennyPrice?: number
 }
 
+function computeModulo10Checksum(digits: string, weightOddFromRight: number): number {
+  let sum = 0
+  for (let i = digits.length - 1; i >= 0; i -= 1) {
+    const digit = digits.charCodeAt(i) - 48
+    if (digit < 0 || digit > 9) return NaN
+    const positionFromRight = digits.length - i
+    const weight = positionFromRight % 2 === 1 ? weightOddFromRight : 1
+    sum += digit * weight
+  }
+  const mod = sum % 10
+  return (10 - mod) % 10
+}
+
+function isValidUpcA12(value: string): boolean {
+  if (!/^\d{12}$/.test(value)) return false
+  const expected = computeModulo10Checksum(value.slice(0, 11), 3)
+  const actual = Number(value[11])
+  return Number.isFinite(expected) && expected === actual
+}
+
+function isValidEan13(value: string): boolean {
+  if (!/^\d{13}$/.test(value)) return false
+  const expected = computeModulo10Checksum(value.slice(0, 12), 3)
+  const actual = Number(value[12])
+  return Number.isFinite(expected) && expected === actual
+}
+
 export function BarcodeModal({ open, upc, onClose, productName, pennyPrice }: BarcodeModalProps) {
   const svgRef = useRef<SVGSVGElement | null>(null)
   const formattedPrice =
@@ -26,23 +53,54 @@ export function BarcodeModal({ open, upc, onClose, productName, pennyPrice }: Ba
 
     import("jsbarcode").then((module) => {
       if (cancelled) return
-      const barcodeValue = upc.trim()
-      // Detect barcode format: 12-13 digits = UPC/EAN, others = CODE128
-      let format: "UPC" | "EAN13" | "CODE128" = "CODE128"
-      if (/^\d{12}$/.test(barcodeValue)) {
-        format = "UPC"
-      } else if (/^\d{13}$/.test(barcodeValue)) {
-        format = "EAN13"
-      }
 
-      module.default(svgRef.current!, barcodeValue, {
-        format,
+      const element = svgRef.current!
+      while (element.firstChild) element.removeChild(element.firstChild)
+
+      const rawValue = upc.trim()
+      const compact = rawValue.replace(/\s+/g, "")
+      const digitsOnly = /^\d+$/.test(compact)
+      const digitValue = digitsOnly ? compact : rawValue
+
+      const baseOptions = {
         displayValue: true,
         width: 2,
         height: 90,
         margin: 10,
-        lineColor: "#000000", // Ensure black barcode
-      })
+        lineColor: "#000000",
+      } as const
+
+      const tryRender = (value: string, format: "UPC" | "EAN13" | "CODE128") => {
+        module.default(element, value, { ...baseOptions, format })
+      }
+
+      try {
+        if (digitsOnly && digitValue.length === 11) {
+          tryRender(digitValue, "UPC")
+          return
+        }
+
+        if (digitsOnly && digitValue.length === 12 && isValidUpcA12(digitValue)) {
+          tryRender(digitValue, "UPC")
+          return
+        }
+
+        if (digitsOnly && digitValue.length === 13 && isValidEan13(digitValue)) {
+          tryRender(digitValue, "EAN13")
+          return
+        }
+
+        // Fall back to CODE128 for invalid/unknown formats so we always show a scannable barcode.
+        tryRender(digitValue, "CODE128")
+      } catch (error) {
+        // JsBarcode throws on invalid UPC/EAN check digits. Ensure we still render something.
+        console.warn("Failed to render barcode; falling back to CODE128", error)
+        try {
+          tryRender(digitValue, "CODE128")
+        } catch (nested) {
+          console.warn("Failed to render fallback CODE128 barcode", nested)
+        }
+      }
     })
 
     return () => {

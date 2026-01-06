@@ -77,7 +77,9 @@ test.describe('Penny List Redesign - Visual Verification', () => {
       await stateButtons.first().click()
       
       // Wait for sheet to open
-      await expect(page.locator('[role="dialog"]')).toBeVisible({ timeout: 5000 })
+      await expect(
+        page.locator('[role="dialog"][aria-labelledby="state-breakdown-title"]')
+      ).toBeVisible({ timeout: 5000 })
       
       await page.screenshot({ 
         path: 'reports/proof/penny-list-state-breakdown-sheet-open.png',
