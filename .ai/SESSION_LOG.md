@@ -29,6 +29,38 @@
 - `npm run test:unit` ✅
 - `npm run test:e2e` ✅ (92/92; screenshots in `reports/proof/`)
 
+## 2026-01-06 - ChatGPT Codex (GPT-5.2) - Make Vercel Analytics fail-safe (no provider env var foot-gun)
+
+**Goal:** Prevent Vercel Web Analytics from silently dropping to zero due to a missing/mismatched `NEXT_PUBLIC_ANALYTICS_PROVIDER`.
+
+**Outcome:**
+
+- Vercel Analytics now enables automatically on Vercel Production (and remains disable-able only via `NEXT_PUBLIC_ANALYTICS_ENABLED=false`), instead of requiring `NEXT_PUBLIC_ANALYTICS_PROVIDER=vercel`.
+
+**Verification (Proof):**
+
+- `npm run lint` (pass)
+- `npm run build` (pass)
+- `npm run test:unit` (pass, 21/21)
+- `npm run test:e2e` (pass, 92/92)
+
+## 2026-01-06 - ChatGPT Codex (GPT-5.2) - Remove provider toggle (Vercel/GA4 only) + purge Plausible mentions
+
+**Goal:** Remove any provider-based analytics switching and make tracking configuration impossible to silently break.
+
+**Outcome:**
+
+- Removed all Plausible/provider wiring from code + docs; analytics is now Vercel Web Analytics + GA4 only.
+- `NEXT_PUBLIC_ANALYTICS_ENABLED=false` is the single kill-switch for both.
+- Made the SKU related-items Playwright proof test resilient to data variability (related section is conditional).
+
+**Verification (Proof):**
+
+- `npm run lint` (pass)
+- `npm run build` (pass)
+- `npm run test:unit` (pass, 21/21)
+- `npm run test:e2e` (pass, 92/92)
+
 ## 2026-01-05 - ChatGPT Codex (GPT-5.2) - Penny List Option A: date/sort consistency + window label clarity
 
 **Goal:** Fix Penny List "wrong dates" perception + broken "Newest First" behavior by aligning defaults and making recency/window labeling consistent.

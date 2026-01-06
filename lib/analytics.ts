@@ -1,12 +1,6 @@
 declare global {
   interface Window {
-    plausible?: (
-      event: string,
-      options?: {
-        props?: Record<string, unknown>
-        u?: string
-      }
-    ) => void
+    gtag?: (...args: unknown[]) => void
   }
 }
 
@@ -103,15 +97,14 @@ function buildPayload(params?: EventParams): Record<string, unknown> {
 export function trackEvent(eventName: EventName, params?: EventParams): void {
   if (typeof window === "undefined") return
   const payload = buildPayload(params)
-  const provider = process.env.NEXT_PUBLIC_ANALYTICS_PROVIDER ?? "none"
 
   if (process.env.NODE_ENV !== "production") {
     // Dev-friendly log for verification
     console.info("[analytics]", eventName, payload)
   }
 
-  if (provider === "plausible" && window.plausible) {
-    window.plausible(eventName, { props: payload })
+  if (process.env.NEXT_PUBLIC_ANALYTICS_ENABLED !== "false" && window.gtag) {
+    window.gtag("event", eventName, payload)
   }
 }
 
@@ -120,15 +113,13 @@ export function trackEvent(eventName: EventName, params?: EventParams): void {
  */
 export function trackPageView(url: string, title?: string): void {
   if (typeof window === "undefined") return
-  const provider = process.env.NEXT_PUBLIC_ANALYTICS_PROVIDER ?? "none"
-  if (provider !== "plausible" || !window.plausible) return
-
-  window.plausible("pageview", {
-    u: url,
-    props: title
-      ? {
-          title,
-        }
-      : undefined,
-  })
+  if (process.env.NEXT_PUBLIC_ANALYTICS_ENABLED !== "false" && window.gtag) {
+    window.gtag("event", "page_view", {
+      page_path: url,
+      page_title: title,
+      device: getDeviceType(),
+      theme: getThemeName(),
+      ts: new Date().toISOString(),
+    })
+  }
 }

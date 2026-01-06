@@ -42,30 +42,19 @@ npm run test:e2e   # Playwright (uses port 3002 by default to avoid clashing wit
 
 ## Analytics (Privacy-Friendly)
 
-Analytics are optional and controlled by environment variables. Supported providers: Plausible (recommended) or Vercel Analytics.
+Analytics are enabled in production by default:
 
-**Environment variables:**
+- **Vercel Web Analytics** (automatic on Vercel production)
+- **GA4** (gtag)
 
-```bash
-# Required to enable analytics (set to "plausible" or "vercel")
-NEXT_PUBLIC_ANALYTICS_PROVIDER=plausible
-
-# Plausible (required when provider is plausible)
-NEXT_PUBLIC_PLAUSIBLE_DOMAIN=www.pennycentral.com
-
-# Optional Plausible overrides (self-hosted)
-NEXT_PUBLIC_PLAUSIBLE_SCRIPT_SRC=https://plausible.io/js/script.js
-NEXT_PUBLIC_PLAUSIBLE_API_HOST=https://plausible.io/api/event
-```
-
-**Disable analytics locally:**
+**Single switch (never remove):**
 
 ```bash
-# .env.local
-NEXT_PUBLIC_ANALYTICS_PROVIDER=none
+# Set to "false" to disable BOTH GA4 and Vercel Analytics
+NEXT_PUBLIC_ANALYTICS_ENABLED=true
 ```
 
-If `NEXT_PUBLIC_ANALYTICS_PROVIDER` is unset, analytics are disabled by default.
+No “provider” env var is used — this avoids tracking silently dropping due to misconfiguration.
 
 ---
 
@@ -160,20 +149,20 @@ public/                 # Static assets
 
 ## For AI Agents & Developers
 
-| File                              | Purpose                                                             |
-| --------------------------------- | ------------------------------------------------------------------- |
-| `AGENTS.md`                       | Master source of truth — behavior rules, design system, constraints |
-| `SKILLS.md`                       | Technical stack, domain knowledge, MCP patterns                     |
-| `CLAUDE.md`                       | Claude Code instructions (points to AGENTS.md)                      |
-| `.github/copilot-instructions.md` | Copilot Chat instructions (points to AGENTS.md)                     |
-| `.ai/AI_ENABLEMENT_BLUEPRINT.md`  | When the goal is AI workflow/tooling/verification enablement        |
-| `PROJECT_ROADMAP.md`              | Current priorities and feature status; **updated Dec 7, 2025**      |
-| `docs/DESIGN-SYSTEM-AAA.md`       | Complete color and typography specification                         |
-| `docs/CROWDSOURCE-SYSTEM.md`      | Current Supabase tables and roles (Penny List + enrichment + lists) |
+| File                              | Purpose                                                              |
+| --------------------------------- | -------------------------------------------------------------------- |
+| `AGENTS.md`                       | Master source of truth — behavior rules, design system, constraints  |
+| `SKILLS.md`                       | Technical stack, domain knowledge, MCP patterns                      |
+| `CLAUDE.md`                       | Claude Code instructions (points to AGENTS.md)                       |
+| `.github/copilot-instructions.md` | Copilot Chat instructions (points to AGENTS.md)                      |
+| `.ai/AI_ENABLEMENT_BLUEPRINT.md`  | When the goal is AI workflow/tooling/verification enablement         |
+| `PROJECT_ROADMAP.md`              | Current priorities and feature status; **updated Dec 7, 2025**       |
+| `docs/DESIGN-SYSTEM-AAA.md`       | Complete color and typography specification                          |
+| `docs/CROWDSOURCE-SYSTEM.md`      | Current Supabase tables and roles (Penny List + enrichment + lists)  |
 | `docs/supabase-rls.md`            | Supabase RLS + public view policy set (how reads/writes are secured) |
-| `docs/SCRAPING_COSTS.md`          | SerpApi enrichment budget + options                                |
-| `docs/GOOGLE-FORM-PENNY-LIST.md`  | Penny list form setup, CSV export, automation                       |
-| `docs/PENNY-LIST-STRATEGY.md`     | Community intake strategy, low-effort moderation                    |
+| `docs/SCRAPING_COSTS.md`          | SerpApi enrichment budget + options                                  |
+| `docs/GOOGLE-FORM-PENNY-LIST.md`  | Penny list form setup, CSV export, automation                        |
+| `docs/PENNY-LIST-STRATEGY.md`     | Community intake strategy, low-effort moderation                     |
 
 ### AI Canon & Read Order (canonical entrypoint)
 

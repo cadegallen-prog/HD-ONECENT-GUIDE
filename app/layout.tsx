@@ -21,17 +21,9 @@ const DEFAULT_OG_IMAGE = `https://www.pennycentral.com${ogImageUrl("homepage")}`
 const GA_MEASUREMENT_ID = "G-DJ4RJRX05E"
 const ANALYTICS_ENABLED = process.env.NEXT_PUBLIC_ANALYTICS_ENABLED !== "false"
 
-const ANALYTICS_PROVIDER = process.env.NEXT_PUBLIC_ANALYTICS_PROVIDER ?? "none"
-const ENABLE_PLAUSIBLE =
-  process.env.NODE_ENV === "production" &&
-  process.env.PLAYWRIGHT !== "1" &&
-  ANALYTICS_PROVIDER === "plausible" &&
-  Boolean(process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN)
+const IS_VERCEL = process.env.VERCEL === "1" || Boolean(process.env.NEXT_PUBLIC_VERCEL_ENV)
 const ENABLE_VERCEL_SCRIPTS =
-  process.env.NODE_ENV === "production" &&
-  process.env.PLAYWRIGHT !== "1" &&
-  (process.env.VERCEL === "1" || process.env.NEXT_PUBLIC_VERCEL_ENV) &&
-  ANALYTICS_PROVIDER === "vercel"
+  process.env.NODE_ENV === "production" && process.env.PLAYWRIGHT !== "1" && IS_VERCEL
 const ENABLE_VERCEL_ANALYTICS = ANALYTICS_ENABLED && ENABLE_VERCEL_SCRIPTS
 
 const inter = localFont({
@@ -123,17 +115,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={inter.variable}>
       <head>
-        {ENABLE_PLAUSIBLE && (
-          <script
-            defer
-            data-domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN}
-            data-api={process.env.NEXT_PUBLIC_PLAUSIBLE_API_HOST || undefined}
-            src={
-              process.env.NEXT_PUBLIC_PLAUSIBLE_SCRIPT_SRC ?? "https://plausible.io/js/script.js"
-            }
-          />
-        )}
-
         {/* Facebook App ID - Required for Meta sharing debugger validation
             TODO: Set FACEBOOK_APP_ID environment variable in Vercel dashboard
             This enables proper Open Graph validation and sharing preview optimization. */}
