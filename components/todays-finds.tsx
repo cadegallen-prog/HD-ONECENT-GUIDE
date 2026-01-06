@@ -37,7 +37,7 @@ export function TodaysFinds({ items }: TodaysFindsProps) {
             const visibleStates = states.slice(0, 3)
             const remainingStates = Math.max(0, states.length - visibleStates.length)
             const thumbnailSrc = item.imageUrl
-              ? toThdImageVariant(item.imageUrl, 300)
+              ? toThdImageVariant(item.imageUrl, 400)
               : item.imageUrl
 
             return (
