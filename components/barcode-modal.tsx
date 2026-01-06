@@ -28,7 +28,12 @@ export function BarcodeModal({ open, upc, onClose, productName, pennyPrice }: Ba
       if (cancelled) return
       const barcodeValue = upc.trim()
       // Detect barcode format: 12-13 digits = UPC/EAN, others = CODE128
-      const format = /^\d{12,13}$/.test(barcodeValue) ? "UPC" : "CODE128"
+      let format: "UPC" | "EAN13" | "CODE128" = "CODE128"
+      if (/^\d{12}$/.test(barcodeValue)) {
+        format = "UPC"
+      } else if (/^\d{13}$/.test(barcodeValue)) {
+        format = "EAN13"
+      }
 
       module.default(svgRef.current!, barcodeValue, {
         format,

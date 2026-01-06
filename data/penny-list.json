@@ -54,5 +54,22 @@
       "NV": 2,
       "AZ": 1
     }
+  },
+  {
+    "id": "1009876544",
+    "name": "Ryobi Battery Charger",
+    "sku": "1009876544",
+    "internetNumber": "",
+    "homeDepotUrl": null,
+    "price": 0.01,
+    "dateAdded": "2025-12-06T09:15:00.000Z",
+    "tier": "Common",
+    "status": "",
+    "quantityFound": "1",
+    "imageUrl": "/images/hd-product-placeholder.svg",
+    "notes": "Fixture item to enable related-items UI in tests",
+    "locations": {
+      "CA": 1
+    }
   }
 ]

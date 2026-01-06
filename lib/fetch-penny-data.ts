@@ -102,6 +102,47 @@ function parsePriceValue(value: string | number | null | undefined): number | un
   return parsed
 }
 
+function parsePurchaseDateValue(
+  value: string | null | undefined
+): { iso: string; ms: number } | null {
+  const raw = value?.trim()
+  if (!raw) return null
+
+  const candidates: string[] = []
+  const seen = new Set<string>()
+
+  const addCandidate = (candidate: string) => {
+    const normalized = candidate.trim()
+    if (!normalized || seen.has(normalized)) return
+    seen.add(normalized)
+    candidates.push(normalized)
+  }
+
+  addCandidate(raw)
+
+  const spaceReplaced = raw.replace(/\s+/g, "T")
+  if (spaceReplaced !== raw) {
+    addCandidate(spaceReplaced)
+  }
+
+  if (spaceReplaced.includes("T") && !/[zZ]|[+\-]\d{2}:?\d{2}$/.test(spaceReplaced)) {
+    addCandidate(`${spaceReplaced}Z`)
+  }
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) {
+    addCandidate(`${raw}T00:00:00Z`)
+  }
+
+  for (const candidate of candidates) {
+    const parsed = new Date(candidate)
+    if (!Number.isNaN(parsed.getTime())) {
+      return { iso: parsed.toISOString(), ms: parsed.getTime() }
+    }
+  }
+
+  return null
+}
+
 type PennyItemEnrichment = {
   sku: string
   name?: string
@@ -201,11 +242,9 @@ function pickBestDate(row: SupabasePennyRow): { iso: string; ms: number } | null
     return { iso: timestamp.toISOString(), ms: timestamp.getTime() }
   }
 
-  if (row.purchase_date) {
-    const purchase = new Date(`${row.purchase_date}T00:00:00Z`)
-    if (!Number.isNaN(purchase.getTime())) {
-      return { iso: purchase.toISOString(), ms: purchase.getTime() }
-    }
+  const purchase = parsePurchaseDateValue(row.purchase_date)
+  if (purchase) {
+    return purchase
   }
 
   return null
@@ -215,12 +254,9 @@ function pickLastSeenDate(
   row: SupabasePennyRow,
   nowMs: number
 ): { iso: string; ms: number } | null {
-  if (row.purchase_date) {
-    const purchase = new Date(`${row.purchase_date}T00:00:00Z`)
-    const purchaseMs = purchase.getTime()
-    if (!Number.isNaN(purchaseMs) && purchaseMs <= nowMs) {
-      return { iso: purchase.toISOString(), ms: purchaseMs }
-    }
+  const purchase = parsePurchaseDateValue(row.purchase_date)
+  if (purchase && purchase.ms <= nowMs) {
+    return purchase
   }
 
   const timestamp = row.timestamp ? new Date(row.timestamp) : null

@@ -12,6 +12,8 @@ Every AI session must update this after meaningful work.
 ## Current Sprint (Last 7 Days)
 
 - **Card view parity + shared UI (Jan 05):** Extracted shared `StateBreakdownSheet` and `PennyListActionRow`, centralized Line A/B formatting helpers, and updated card/table to use the shared components with lastSeenAt + state spread.
+- **Purchase date parsing resilience (Jan 05):** Added a `parsePurchaseDateValue` helper so both `pickBestDate` and `pickLastSeenDate` treat timestamp-like `purchase_date` strings as valid dates instead of falling back to the submission `timestamp`.
+- **Barcode modal stability (Jan 05):** Barcode modal now picks `UPC`, `EAN13`, or `CODE128` based on the UPC length so `JsBarcode` can draw bars for every SKU rather than silently failing on 13-digit values.
 - **Penny List "Last seen" precedence (Jan 05):** Added server-side `lastSeenAt` (purchase_date when valid and not future, else report timestamp) and table Line A now uses it (fallback to `dateAdded`).
 - **Penny List date/sort consistency (Jan 05):** Aligned SSR/API/client defaults to 30d, standardized window label to `(30d)`, made Newest/Oldest sort follow `lastSeenAt`, and tightened date-window filtering to “last seen” semantics (purchase_date when present, else timestamp).
 - **Penny List card redesign spec alignment (Jan 05):** Updated `.ai/PENNY-LIST-REDESIGN.md` to require SKU on card face, Home Depot action button, report counts in Line B with window label, and window consistency across card + state sheet. Guardrails updated to allow dense metadata text and card padding exceptions.

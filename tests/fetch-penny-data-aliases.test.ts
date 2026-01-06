@@ -187,6 +187,25 @@ test("uses purchase_date when timestamp is missing or invalid", async () => {
   clearSupabaseMocks()
 })
 
+test("last seen still uses purchase_date when it includes time info", async () => {
+  installSupabaseMocks({})
+  const { buildPennyItemsFromRows } = await import("../lib/fetch-penny-data")
+
+  const items = buildPennyItemsFromRows([
+    clone(baseRow, {
+      timestamp: "2025-12-10T12:34:56Z",
+      purchase_date: "2022-09-01T00:00:00Z",
+    }),
+  ])
+
+  assert.strictEqual(
+    items[0].lastSeenAt,
+    new Date("2022-09-01T00:00:00Z").toISOString()
+  )
+
+  clearSupabaseMocks()
+})
+
 test("computes tier from aggregate report counts and state spread", async () => {
   installSupabaseMocks({})
   const { buildPennyItemsFromRows } = await import("../lib/fetch-penny-data")

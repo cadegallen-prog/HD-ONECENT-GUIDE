@@ -12,6 +12,39 @@
 
 ---
 
+## 2026-01-05 - ChatGPT Codex (GPT-5.2) - Fix barcode format determination
+
+**Goal:** The barcode modal stayed blank because UPCs longer than 12 digits were being rendered as `"UPC"` instead of a matching symbology, so the plugin never drew the bars.
+
+**Outcome:**
+
+- Updated `BarcodeModal` to detect UPC vs. EAN-13 digits and fall back to `CODE128` for anything longer/shorter.
+- The modal now exhibits consistent bars again because `JsBarcode` receives a format it can render for every SKU we have.
+
+**Verification (Proof):**
+
+- `npm run lint`
+- `npm run build`
+- `npm run test:unit`
+- `npm run test:e2e` *(fails: `tests/sku-related-items.spec.ts` expects the “Related penny items” heading, but the fixture data produced when Playwright falls back to the local store export has no related items, so the heading never renders; see `reports/playwright/results/sku-related-items-SKU-deta-ac78c-ems-and-stays-console-clean-chromium-desktop-light/error-context.md`, `...-chromium-desktop-dark/error-context.md`, and `...chromium-mobile-light/error-context.md` for the captured failures.)*
+
+## 2026-01-05 - ChatGPT Codex (GPT-5.2) - Normalize purchase_date parsing for last seen
+
+**Goal:** Investigate why historical exports sometimes render as “last seen: recently” and keep the penny list anchored to the true `purchase_date` even when the column already carries timestamp-style values.
+
+**Outcome:**
+
+- Added a `parsePurchaseDateValue` helper that tolerates plain dates, timestamp strings, and space-separated date/times (it normalizes them, dedupes parsing attempts, and appends UTC tokens when necessary).
+- Switched `pickBestDate`/`pickLastSeenDate` to reuse that helper so `dateAdded`/`lastSeenAt` no longer drop back to the submission `timestamp` whenever the purchase date already contains time info.
+- Added a regression test to guard against purchase dates that already include time-of-day being overwritten by the row timestamp.
+
+**Verification (Proof):**
+
+- `npm run lint`
+- `npm run build`
+- `npm run test:unit`
+- `npm run test:e2e` *(fails: `tests/sku-related-items.spec.ts` on chromium-desktop light/dark could not find the “Related penny items” heading once Playwright fell back to the tiny fixture dataset after the remote store fetch returned 404; see `reports/playwright/results/.../error-context.md` for details.)*
+
 ## 2026-01-05 - ChatGPT Codex (GPT-5.2) - Penny List Option A: date/sort consistency + window label clarity
 
 **Goal:** Fix Penny List “wrong dates” perception + broken “Newest First” behavior by aligning defaults and making recency/window labeling consistent.
