@@ -96,3 +96,23 @@
 - `npm run build` ✅
 - `npm run test:unit` ✅ (21/21)
 - `npm run test:e2e` ✅ (92/92)
+
+## 2026-01-06 - ChatGPT Codex (GPT-5.2) - Remove obsolete SKU 318611 from Supabase
+
+**Goal:** Remove a Penny List item that’s no longer in the system and can’t be found anywhere.
+
+**Item removed:**
+
+- Name: `MET DVCE BOX 1-3/8" W/CNR KO-IVORY`
+- SKU: `318611` (provided as `318-611`)
+- Internet #: `100152374` (not found in enrichment)
+
+**Outcome:** Deleted the SKU from:
+
+- `Penny List` (1 row)
+- `penny_item_enrichment` (1 row)
+
+**Proof (query after delete):**
+
+- Penny List matches: 0
+- Enrichment matches: 0
