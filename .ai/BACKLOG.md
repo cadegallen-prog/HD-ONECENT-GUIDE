@@ -1,6 +1,6 @@
 # Backlog (Top Priority Items)
 
-**Last updated:** Jan 03, 2026
+**Last updated:** Jan 06, 2026
 **Rule:** Keep ≤10 items. Archive completed/deferred items.
 
 **Auto-archive:** Full backlog history preserved in `archive/backlog-history/`
@@ -52,13 +52,11 @@ Each AI session should:
   - `npm run enrich:diff -- --scrape <clean.json> --export <export.json>` writes `.local/enrichment-diff.md`
 - **Verify:** Gates + paste diff summary snippet into SESSION_LOG.md
 
-### 5. Implement `scripts/print-penny-list-count.ts`
+---
 
-- **Done means:**
-  - Prints: total distinct SKUs, total reports, top states by report count, last updated timestamp
-  - Works in normal mode (Supabase) and fixture mode (Playwright/local data)
-  - Add `npm run penny:count`
-- **Verify:** Gates
+## ✅ Recently Completed
+
+- **2026-01-06:** Implemented `scripts/print-penny-list-count.ts` and added `npm run penny:count`.
 
 ---
 
