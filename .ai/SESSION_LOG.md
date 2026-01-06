@@ -75,3 +75,24 @@
 
 - Standardized the window label shown on cards/table to **(30d)**.
 - Made "Newest/Oldest" sorting follow `lastSeenAt` (purchase date when present/valid, else report timestamp).
+
+## 2026-01-06 - ChatGPT Codex (GPT-5.2) - Fix Penny List thumbnail images disappearing
+
+**Goal:** Some items (example: SKU `1010086378`) showed an image on the SKU page but the Penny List card thumbnail went blank.
+
+**Root cause:** The Penny List card thumbnail was requesting a smaller Home Depot CDN variant (ex: `-64_300.jpg`), but some products don’t actually have that variant, so the `<img>` request 404s.
+
+**Outcome:**
+
+- `PennyThumbnail` now auto-falls back to the `-64_1000` variant if the requested Home Depot thumbnail variant fails to load.
+
+**Changes Made:**
+
+- `components/penny-thumbnail.tsx`
+
+**Verification (Proof):**
+
+- `npm run lint` ✅
+- `npm run build` ✅
+- `npm run test:unit` ✅ (21/21)
+- `npm run test:e2e` ✅ (92/92)
