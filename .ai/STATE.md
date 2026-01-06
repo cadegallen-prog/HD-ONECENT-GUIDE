@@ -12,6 +12,7 @@ Every AI session must update this after meaningful work.
 ## Current Sprint (Last 7 Days)
 
 - **Homepage freshness (Jan 06):** `/` now revalidates every 5 minutes so "Today's Finds" reflects Supabase enrichment fixes without redeploys.
+- **Image variant performance test (Jan 06):** Thumbnails now prefer Home Depot `-64_300` image URLs for Today's Finds + Hot Right Now; Penny List cards render 250×250 thumbnails.
 - **Vercel analytics fail-safe (Jan 06):** Vercel Web Analytics now enables automatically on Vercel production unless explicitly disabled (`NEXT_PUBLIC_ANALYTICS_ENABLED=false`), avoiding silent drops when `NEXT_PUBLIC_ANALYTICS_PROVIDER` is unset/mismatched.
 - **Barcode modal reliability (Jan 06):** Barcode rendering now validates UPC-A/EAN-13 check digits and falls back to `CODE128` when invalid, preventing blank barcode boxes.
 - **Penny List audit counts (Jan 06):** Added `npm run penny:count` (`scripts/print-penny-list-count.ts`) to print report vs. SKU counts and explain "imported history looks recent" (timestamp) vs. true last-seen (purchase_date).

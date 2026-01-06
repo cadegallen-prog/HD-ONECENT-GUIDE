@@ -34,6 +34,22 @@
 - `npm run test:unit` ✅ (21/21)
 - `npm run test:e2e` ✅ (92/92)
 
+## 2026-01-06 - ChatGPT Codex (GPT-5.2) - Test smaller image variants (mobile perf)
+
+**Goal:** Reduce image download size for a performance test by switching Home Depot CDN images from `-64_1000.jpg` to smaller variants where possible.
+
+**Outcome:**
+
+- Added `toThdImageVariant(...)` and used it for `Today's Finds` and `Hot Right Now` thumbnails (300px variant).
+- Penny List card thumbnail now renders at 250×250px and requests the 300px variant.
+
+**Verification (Proof):**
+
+- `npm run lint` ✅
+- `npm run build` ✅
+- `npm run test:unit` ✅
+- `npm run test:e2e` ✅ (92/92)
+
 ## 2026-01-06 - ChatGPT Codex (GPT-5.2) - Fix barcode blank renders + add audit counts
 
 **Goal:** Stop the barcode modal from showing a blank white box, and produce hard numbers explaining why "everything looks recent" after importing historical purchases.
@@ -59,4 +75,3 @@
 
 - Standardized the window label shown on cards/table to **(30d)**.
 - Made "Newest/Oldest" sorting follow `lastSeenAt` (purchase date when present/valid, else report timestamp).
-
