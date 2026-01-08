@@ -291,6 +291,7 @@ export function ListItemCard({
           {/* Thumbnail */}
           <Link
             href={skuPageUrl}
+            prefetch={false}
             className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] rounded flex-shrink-0"
           >
             <PennyThumbnail src={pennyData?.imageUrl} alt={itemName} size={48} />
@@ -298,7 +299,7 @@ export function ListItemCard({
 
           {/* Content */}
           <div className="min-w-0 flex-1">
-            <Link href={skuPageUrl}>
+            <Link href={skuPageUrl} prefetch={false}>
               <h3
                 className="font-semibold text-[var(--text-primary)] leading-tight truncate hover:text-[var(--cta-primary)] transition-colors"
                 title={itemName}

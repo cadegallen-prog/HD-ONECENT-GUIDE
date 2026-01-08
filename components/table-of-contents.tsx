@@ -92,6 +92,7 @@ export function TableOfContents({ variant = "desktop" }: TableOfContentsProps) {
               <Link
                 key={tool.href}
                 href={tool.href}
+                prefetch={false}
                 className={
                   isMobile
                     ? "inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground bg-surface border border-border rounded-md hover:bg-accent transition-colors"

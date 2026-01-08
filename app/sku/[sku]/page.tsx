@@ -8,6 +8,7 @@ import { validateSku, formatSkuForDisplay } from "@/lib/sku"
 import { getHomeDepotProductUrl } from "@/lib/home-depot"
 import { getFreshness } from "@/lib/freshness-utils"
 import { ogImageUrl } from "@/lib/og"
+import { toThdImageVariant } from "@/lib/image-cache"
 import { TrackableLink } from "@/components/trackable-link"
 
 type PageProps = {
@@ -285,7 +286,7 @@ export default async function SkuDetailPage({ params }: PageProps) {
         <div className="bg-[var(--bg-card)] border border-[var(--border-strong)] rounded-2xl overflow-hidden shadow-[var(--shadow-card)]">
           <div className="flex flex-col md:flex-row">
             {/* Image Section */}
-            <div className="w-full md:w-1/2 bg-[var(--bg-muted)] aspect-square relative flex items-center justify-center p-8">
+            <div className="w-full md:w-1/2 bg-[var(--bg-muted)] aspect-auto md:aspect-square relative flex items-center justify-center p-4 md:p-8">
               {imageUrl ? (
                 <img
                   src={imageUrl}
@@ -304,7 +305,7 @@ export default async function SkuDetailPage({ params }: PageProps) {
             </div>
 
             {/* Info Section */}
-            <div className="w-full md:w-1/2 p-6 sm:p-10 flex flex-col">
+            <div className="w-full md:w-1/2 p-6 sm:p-8 flex flex-col">
               <div className="flex-1">
                 {brand && (
                   <span className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mb-2 block">
@@ -312,22 +313,8 @@ export default async function SkuDetailPage({ params }: PageProps) {
                   </span>
                 )}
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[var(--text-primary)] leading-tight mb-4">
-                  {name}
+                  {brand && name.startsWith(brand) ? name.substring(brand.length).trim() : name}
                 </h1>
-
-                {freshness && (
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className={`${freshnessColorClass} text-xs font-semibold`}>
-                      {freshness === "fresh"
-                        ? "Recent"
-                        : freshness === "moderate"
-                          ? "Weeks old"
-                          : "Months old"}
-                    </span>
-                  </div>
-                )}
-
-                <p className="text-sm text-[var(--text-primary)] mb-4 leading-relaxed">{summary}</p>
 
                 {/* Product Identifiers Section */}
                 <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-lg p-4 mb-6">
@@ -442,6 +429,49 @@ export default async function SkuDetailPage({ params }: PageProps) {
           </div>
         </div>
 
+        {/* Related Items - Prominent Section */}
+        {relatedItems.length > 0 && (
+          <div className="mt-8 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl p-6 sm:p-8">
+            <h2 className="text-xl font-bold text-[var(--text-primary)] mb-6">
+              Related penny items
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+              {relatedItems.map((item) => (
+                <Link
+                  key={item.sku}
+                  href={`/sku/${item.sku}`}
+                  className="flex flex-col rounded-xl border border-[var(--border-default)] bg-[var(--bg-elevated)] hover:border-[var(--cta-primary)] hover:shadow-lg transition-all group overflow-hidden"
+                >
+                  <div className="w-full aspect-square bg-[var(--bg-muted)] flex items-center justify-center overflow-hidden">
+                    {item.imageUrl ? (
+                      <img
+                        src={toThdImageVariant(item.imageUrl, 400)}
+                        alt={item.name}
+                        className="object-contain w-full h-full p-2 group-hover:scale-105 transition-transform"
+                        referrerPolicy="no-referrer"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="text-center flex flex-col items-center gap-2">
+                        <ShoppingBag className="w-6 h-6 text-[var(--text-muted)] opacity-30" />
+                        <span className="text-xs text-[var(--text-muted)]">No image</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-3 flex flex-col flex-1">
+                    <p className="text-xs font-semibold text-[var(--text-primary)] line-clamp-2 group-hover:text-[var(--cta-primary)] transition-colors">
+                      {item.name}
+                    </p>
+                    <p className="text-xs text-[var(--text-muted)] mt-2 font-mono">
+                      SKU {formatSkuForDisplay(item.sku)}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Community Details */}
         {communityItem?.locations && Object.keys(communityItem.locations).length > 0 && (
           <div className="mt-8 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl p-6 sm:p-8">
@@ -464,47 +494,6 @@ export default async function SkuDetailPage({ params }: PageProps) {
                     </span>
                   </div>
                 ))}
-            </div>
-          </div>
-        )}
-
-        {relatedItems.length > 0 && (
-          <div className="mt-8 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl p-6 sm:p-8">
-            <h2 className="text-xl font-bold text-[var(--text-primary)] mb-6">
-              Related penny items
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
-              {relatedItems.map((item) => (
-                <Link
-                  key={item.sku}
-                  href={`/sku/${item.sku}`}
-                  className="flex gap-3 items-center p-4 rounded-xl border border-[var(--border-default)] bg-[var(--bg-elevated)] hover:border-[var(--cta-primary)] transition-colors"
-                >
-                  <div className="w-14 h-14 rounded-lg bg-[var(--bg-muted)] flex items-center justify-center overflow-hidden">
-                    {item.imageUrl ? (
-                      <img
-                        src={item.imageUrl}
-                        alt={item.name}
-                        className="object-contain w-full h-full"
-                        referrerPolicy="no-referrer"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <span className="text-xs text-[var(--text-muted)] px-2 text-center">
-                        No image
-                      </span>
-                    )}
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-semibold text-[var(--text-primary)] truncate">
-                      {item.name}
-                    </p>
-                    <p className="text-xs text-[var(--text-muted)] truncate">
-                      {item.brand ? `${item.brand} • ` : ""}SKU {formatSkuForDisplay(item.sku)}
-                    </p>
-                  </div>
-                </Link>
-              ))}
             </div>
           </div>
         )}

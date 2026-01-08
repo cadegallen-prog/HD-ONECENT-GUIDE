@@ -31,6 +31,7 @@ import { PennyListTable } from "./penny-list-table"
 import type { PennyItem } from "@/lib/fetch-penny-data"
 import { US_STATES } from "@/lib/us-states"
 import { formatWindowLabel } from "@/lib/penny-list-utils"
+import { PennyListPageBookmarkBanner } from "./penny-list-page-bookmark-banner"
 
 interface PennyListClientProps {
   initialItems: PennyItem[]
@@ -764,6 +765,8 @@ export function PennyListClient({
           </div>
         </section>
       )}
+
+      <PennyListPageBookmarkBanner />
 
       {/* Disclaimer Card */}
       <div

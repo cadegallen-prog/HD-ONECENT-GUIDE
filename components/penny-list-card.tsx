@@ -94,7 +94,8 @@ export function PennyListCard({ item, stateFilter, windowLabel, userState }: Pen
     stateFilter,
     windowLabel: resolvedWindowLabel,
   })
-  const thumbnailSrc = item.imageUrl ? toThdImageVariant(item.imageUrl, 400) : item.imageUrl
+  // Downconvert to 300px for tiny thumbnail display (72x72)
+  const thumbnailSrc = item.imageUrl ? toThdImageVariant(item.imageUrl, 300) : item.imageUrl
 
   const openSkuPage = () => router.push(skuPageUrl)
 
@@ -218,7 +219,8 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
   const compactFormattedPrice = formatCurrency(item.price)
   const compactFormattedRetail = retailPrice ? formatCurrency(retailPrice) : null
   const compactFormattedSavings = compactHasSavings ? formatCurrency(compactSavings) : null
-  const thumbnailSrc = item.imageUrl ? toThdImageVariant(item.imageUrl, 400) : item.imageUrl
+  // Downconvert to 300px for tiny thumbnail display (72x72)
+  const thumbnailSrc = item.imageUrl ? toThdImageVariant(item.imageUrl, 300) : item.imageUrl
 
   const openSkuPage = () => router.push(skuPageUrl)
 
@@ -272,6 +274,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
         <div className="flex gap-3 items-start">
           <Link
             href={skuPageUrl}
+            prefetch={false}
             aria-label={`View details for ${item.name}`}
             onClick={(e) => e.stopPropagation()}
             className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] rounded"
@@ -281,6 +284,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
           <div className="min-w-0 flex-1 space-y-2">
             <Link
               href={skuPageUrl}
+              prefetch={false}
               onClick={(e) => e.stopPropagation()}
               className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] rounded"
             >

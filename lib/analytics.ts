@@ -12,6 +12,8 @@ export type EventName =
   | "penny_list_view"
   | "penny_list_filter"
   | "penny_list_search"
+  | "bookmark_banner_shown"
+  | "bookmark_banner_dismissed"
   | "sku_copy"
   | "home_depot_click"
   | "share_click"

@@ -22,7 +22,7 @@ import { TodaysFinds } from "@/components/todays-finds"
 import { getRecentFinds } from "@/lib/fetch-penny-data"
 
 // Ensure the homepage "Today's Finds" module reflects recent Supabase enrichment fixes without redeploys.
-export const revalidate = 300 // 5 minutes
+export const revalidate = 600 // 10 minutes
 
 export const metadata: Metadata = {
   title: "Home Depot Penny List & Shopping Guide | Penny Central",

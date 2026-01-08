@@ -18,6 +18,7 @@ export function TrackableNextLink({
   return (
     <Link
       {...props}
+      prefetch={props.prefetch ?? false}
       onClick={(event) => {
         trackEvent(eventName, eventParams)
         onClick?.(event)

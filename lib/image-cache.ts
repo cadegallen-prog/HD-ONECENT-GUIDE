@@ -1,8 +1,18 @@
 /**
- * Image Cache - Simplified
+ * Image Cache & Optimization Strategy
  *
- * Returns placeholder for items without images.
- * Real images come from user-submitted photos in the Penny List.
+ * Database: All image URLs stored as -64_600.jpg (canonical, high-quality source)
+ *
+ * Display-time downconversion:
+ * - SKU pages (full-size): 600px (crisp, good for SEO)
+ * - Related items cards: 400px (medium display, ~40-60 KB)
+ * - Penny List thumbnails (72x72): 300px (tiny display, ~20-30 KB)
+ *
+ * This approach:
+ * ✅ Single source of truth (600px in DB)
+ * ✅ Optimizes bandwidth per use case
+ * ✅ Maintains quality where users see it
+ * ✅ Reduces waste on tiny displays
  */
 
 /**
@@ -15,10 +25,12 @@ function isThdStaticImage(url: string): boolean {
 }
 
 /**
- * Convert a Home Depot `images.thdstatic.com` image to a smaller CDN variant when possible.
+ * Convert a Home Depot `images.thdstatic.com` image to a specific CDN variant.
+ *
+ * Database stores canonical -64_600.jpg; this converts to the size needed for rendering.
  *
  * Example:
- * `...-64_1000.jpg` -> `...-64_300.jpg`
+ * `...-64_600.jpg` with target 300 -> `...-64_300.jpg`
  */
 export function toThdImageVariant(url: string, target: 300 | 400 | 600 | 1000): string {
   if (!url) return url

@@ -5,6 +5,30 @@ import fs from 'fs';
 import path from 'path';
 import net from 'net';
 
+async function gotoWithRetries(page: any, url: string, attempts = 3) {
+  let lastError: unknown = undefined;
+
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    try {
+      await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45_000 });
+
+      try {
+        await page.waitForLoadState('networkidle', { timeout: 5_000 });
+      } catch {
+        // ignore
+      }
+
+      await page.waitForTimeout(350);
+      return;
+    } catch (err) {
+      lastError = err;
+      await page.waitForTimeout(500 * attempt);
+    }
+  }
+
+  throw lastError;
+}
+
 async function checkServerRunning(): Promise<boolean> {
   return new Promise((resolve) => {
     const server = net.createServer();
@@ -112,12 +136,10 @@ async function main() {
     try {
       // Light mode
       await page.emulateMedia({ colorScheme: 'light' });
-      await page.goto(`http://localhost:3001${route}`, {
-        waitUntil: 'networkidle',
-      });
+      await gotoWithRetries(page, `http://localhost:3001${route}`);
       await page.screenshot({
         path: path.join(outDir, `${slug}-light.png`),
-        fullPage: true,
+        fullPage: false,
       });
       console.log(`    ✅ ${slug}-light.png`);
       await captureUiState(page, outDir, slug, 'light');
@@ -125,10 +147,10 @@ async function main() {
 
       // Dark mode
       await page.emulateMedia({ colorScheme: 'dark' });
-      await page.goto(`http://localhost:3001${route}`, { waitUntil: 'networkidle' });
+      await gotoWithRetries(page, `http://localhost:3001${route}`);
       await page.screenshot({
         path: path.join(outDir, `${slug}-dark.png`),
-        fullPage: true,
+        fullPage: false,
       });
       console.log(`    ✅ ${slug}-dark.png`);
       await captureUiState(page, outDir, slug, 'dark');

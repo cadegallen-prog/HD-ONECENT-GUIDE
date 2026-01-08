@@ -115,6 +115,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={inter.variable}>
       <head>
+        {/* Performance hints for critical third-party origins */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://www.google-analytics.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://va.vercel-scripts.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://tile.openstreetmap.org" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://*.sentry.io" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://*.supabase.co" crossOrigin="anonymous" />
         {/* Facebook App ID - Required for Meta sharing debugger validation
             TODO: Set FACEBOOK_APP_ID environment variable in Vercel dashboard
             This enables proper Open Graph validation and sharing preview optimization. */}

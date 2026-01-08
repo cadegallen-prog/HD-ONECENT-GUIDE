@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Jan 08, 2026 (Standardize THD thumbnails to 400)
+**Last updated:** Jan 08, 2026 (Standardize image URLs strategy)
 
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
@@ -11,6 +11,8 @@ Every AI session must update this after meaningful work.
 
 ## Current Sprint (Last 7 Days)
 
+- **Returning users nudge (Jan 08):** Added a small, dismissible “Bookmark this page” banner on `/penny-list` (shows after scroll or ~20s, then stays dismissed) to increase repeat visits; updated `scripts/ai-proof.ts` to be more resilient when capturing Playwright screenshots.
+- **Image URL normalization (Jan 08):** Standardized all product image URLs to -64_600.jpg in database (canonical source). Components downconvert at display time: SKU pages use 600px (full-size, ~60-80 KB), related items cards use 400px (~40-60 KB), Penny List thumbnails use 300px (~20-30 KB). Strategy balances quality with bandwidth efficiency. Script `normalize-image-urls.ts` normalizes DB; removed brand duplication from SKU page titles; enlarged SKU page image area; moved related items higher on page.
 - **SEO intent landing pages (Jan 08):** Added `/home-depot-penny-items`, `/home-depot-penny-list`, and `/how-to-find-penny-items` and included them in the sitemap to target high-intent keyword phrases and funnel to `/guide` + `/penny-list`.
 - **Homepage freshness (Jan 06):** `/` now revalidates every 5 minutes so "Today's Finds" reflects Supabase enrichment fixes without redeploys.
 - **Thumbnail reliability (Jan 08):** Standardized thumbnails to the more reliable Home Depot `-64_400` variant (the `-64_300` variant is not consistently available and can cause 404s/blank images).
