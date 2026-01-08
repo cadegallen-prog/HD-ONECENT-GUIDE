@@ -63,9 +63,11 @@ export function normalizeProductName(
   // Handle common units that should stay lowercase
   const lowercaseUnits = ["in", "ft", "mm", "cm", "oz", "lb", "gal", "qt", "pk", "ct", "sq"]
   for (const unit of lowercaseUnits) {
-    // Match unit preceded by number and followed by word boundary or period
-    const regex = new RegExp(`(\\d)\\s*${unit}\\.?\\b`, "gi")
-    normalized = normalized.replace(regex, `$1 ${unit}.`)
+    // Match unit preceded by number - keep existing period if present, add if not
+    const withPeriod = new RegExp(`(\\d)\\s*${unit}\\.(?=\\s|$)`, "gi")
+    const withoutPeriod = new RegExp(`(\\d)\\s*${unit}(?=\\s|$)`, "gi")
+    normalized = normalized.replace(withPeriod, `$1 ${unit}.`)
+    normalized = normalized.replace(withoutPeriod, `$1 ${unit}.`)
   }
 
   // Truncate if needed

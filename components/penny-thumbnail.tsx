@@ -53,7 +53,7 @@ export function PennyThumbnail({
       width={size}
       height={size}
       loading="lazy"
-      className={`${sizeClass} rounded-lg object-contain p-2 border border-[var(--border-strong)] bg-[var(--bg-tertiary)] shadow-[inset_0_0_0_1px_var(--border-strong)]`}
+      className={`${sizeClass} rounded-lg object-contain border border-[var(--border-strong)] bg-[var(--bg-tertiary)]`}
       onError={() => {
         if (!triedThdFallback && currentSrc) {
           const fallback = toThdImageVariant(currentSrc, 1000)

@@ -116,50 +116,29 @@ export function PennyListCard({ item, stateFilter, windowLabel, userState }: Pen
       aria-labelledby={`item-${item.id}-name`}
     >
       <article className="flex flex-col h-full relative">
-        <div className="p-4 flex flex-col flex-1 space-y-3">
-          <div className="flex gap-4 items-start">
+        <div className="p-3 flex flex-col flex-1 space-y-2.5">
+          <div className="flex gap-3 items-start">
             <PennyThumbnail src={thumbnailSrc} alt={displayName} size={72} />
             <div className="flex-1 space-y-1">
               {/* Brand line - single line, never truncate */}
-              {displayBrand && (
-                <p className="text-xs font-medium text-[var(--text-secondary)] whitespace-nowrap overflow-hidden">
-                  {displayBrand}
-                </p>
-              )}
+              {displayBrand && <p className="penny-card-brand whitespace-nowrap">{displayBrand}</p>}
               {/* Item name - 2-line clamp only */}
               <h3
                 id={`item-${item.id}-name`}
-                className="text-base sm:text-lg font-semibold text-[var(--text-primary)] leading-[1.4] line-clamp-2-table"
+                className="penny-card-name line-clamp-2-table"
                 title={displayName}
               >
                 {displayName}
               </h3>
               {/* SKU line - single line, never truncate, monospace */}
-              <p className="text-xs font-mono text-[var(--text-muted)] whitespace-nowrap overflow-hidden">
+              <p className="penny-card-sku whitespace-nowrap">
                 SKU {formatSkuForDisplay(item.sku)}
               </p>
             </div>
-            {/* Save icon - top-right, prominent, stops propagation */}
-            <div
-              className="absolute top-4 right-4 z-10"
-              onClick={(e) => e.stopPropagation()}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.stopPropagation()
-                }
-              }}
-            >
-              <AddToListButton
-                sku={item.sku}
-                itemName={item.name}
-                variant="icon"
-                className="min-h-[44px] min-w-[44px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
-              />
-            </div>
           </div>
 
-          <div className="flex flex-wrap items-end gap-4">
-            <p className="text-3xl font-semibold text-[var(--text-primary)]">{formattedPrice}</p>
+          <div className="flex flex-wrap items-end gap-3">
+            <p className="penny-card-price">{formattedPrice}</p>
             {formattedRetail && (
               <p className="text-sm font-semibold text-[var(--text-secondary)] leading-tight">
                 Retail{" "}
