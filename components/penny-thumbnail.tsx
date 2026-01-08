@@ -56,7 +56,14 @@ export function PennyThumbnail({
       className={`${sizeClass} rounded-lg object-contain p-2 border border-[var(--border-strong)] bg-[var(--bg-tertiary)] shadow-[inset_0_0_0_1px_var(--border-strong)]`}
       onError={() => {
         if (!triedThdFallback && currentSrc) {
-          const fallback = toThdImageVariant(currentSrc, 1000)
+          // Try 400px variant if currently loading 300px, then fall back to 1000px
+          // This handles cases where smaller CDN variants don't exist
+          let fallback = currentSrc
+          if (currentSrc.includes("-64_300.")) {
+            fallback = toThdImageVariant(currentSrc, 400)
+          } else if (!currentSrc.includes("-64_1000.")) {
+            fallback = toThdImageVariant(currentSrc, 1000)
+          }
           if (fallback !== currentSrc) {
             setTriedThdFallback(true)
             setCurrentSrc(fallback)
