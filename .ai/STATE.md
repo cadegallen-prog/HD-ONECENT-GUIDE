@@ -11,9 +11,10 @@ Every AI session must update this after meaningful work.
 
 ## Current Sprint (Last 7 Days)
 
+- **SEO intent landing pages (Jan 08):** Added `/home-depot-penny-items`, `/home-depot-penny-list`, and `/how-to-find-penny-items` and included them in the sitemap to target high-intent keyword phrases and funnel to `/guide` + `/penny-list`.
 - **Homepage freshness (Jan 06):** `/` now revalidates every 5 minutes so "Today's Finds" reflects Supabase enrichment fixes without redeploys.
 - **Thumbnail reliability (Jan 08):** Standardized thumbnails to the more reliable Home Depot `-64_400` variant (the `-64_300` variant is not consistently available and can cause 404s/blank images).
-- **Penny List thumbnail fallback (Jan 06):** If a THD image request fails, Penny List thumbnails fall back to `-64_1000` automatically so cards don’t show blank images.
+- **Penny List thumbnail fallback (Jan 06):** If a THD image request fails, Penny List thumbnails fall back to `-64_1000` automatically so cards don't show blank images.
 - **Vercel analytics fail-safe (Jan 06):** Vercel Web Analytics now enables automatically on Vercel production unless explicitly disabled (`NEXT_PUBLIC_ANALYTICS_ENABLED=false`), avoiding silent drops when `NEXT_PUBLIC_ANALYTICS_PROVIDER` is unset/mismatched.
 - **Barcode modal reliability (Jan 06):** Barcode rendering now validates UPC-A/EAN-13 check digits and falls back to `CODE128` when invalid, preventing blank barcode boxes.
 - **Penny List audit counts (Jan 06):** Added `npm run penny:count` (`scripts/print-penny-list-count.ts`) to print report vs. SKU counts and explain "imported history looks recent" (timestamp) vs. true last-seen (purchase_date).

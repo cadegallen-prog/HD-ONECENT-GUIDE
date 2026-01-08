@@ -10,6 +10,29 @@
 - Flag blockers or issues for next AI
 - **Self-regulating:** If this file has more than 5 entries, trim to keep only the 3 most recent. Git history preserves everything.
 
+---
+
+## 2026-01-08 - Codex (GPT-5.2) - SEO landing pages + sitemap
+
+**Goal:** Improve Google rankings for "Home Depot penny items" / "penny list" / "how to find penny items" by adding intent-matching landing pages and strengthening crawl paths.
+
+**Outcome:**
+- Added 3 intent-matching SEO landing pages that funnel to `/guide` and `/penny-list`.
+- Added these pages to `app/sitemap.ts` so Google discovers them quickly.
+- Fixed a Windows-only Playwright build flake by cleaning `.next/` before the Playwright build.
+
+**Files Modified:**
+- `app/home-depot-penny-items/page.tsx`
+- `app/home-depot-penny-list/page.tsx`
+- `app/how-to-find-penny-items/page.tsx`
+- `app/sitemap.ts`
+- `playwright.config.ts`
+
+**Verification (Proof):**
+- `npm run lint` ✅
+- `npm run build` ✅
+- `npm run test:unit` ✅ (21/21)
+- `npm run test:e2e` ✅ (92/92)
 
 ---
 
@@ -41,14 +64,10 @@
 - `.ai/CONSTRAINTS_TECHNICAL.md` (added authorized exceptions note)
 
 **Verification:**
-- ✅ `npm run lint` passed (0 errors, 0 warnings)
-- ✅ `npm run build` passed (production build successful)
+- ✅ `npm run lint` (0 errors, 0 warnings)
+- ✅ `npm run build` (production build successful)
 - ⏳ Screenshots pending (320, 360, 375, 1280px at light/dark)
-- ⏳ Playright visual regression testing pending
-
-**Space Gained:** +64px horizontal space at 320px viewport (~40% gain)
-
-**Next Session:** Run Playwright screenshots at 4 breakpoints × light/dark modes, verify accept criteria checklist.
+- ⏳ Playwright visual regression testing pending
 
 ---
 
@@ -56,63 +75,18 @@
 
 **Goal:** Make thumbnail loading reliable (no 404s/blank images) while keeping all quality gates green.
 
-**Root cause:** The codebase had conflicting intent vs. reality: some components were still requesting the `-64_300` variant even though that size isn’t consistently available across products.
+**Root cause:** The codebase had conflicting intent vs. reality: some components were still requesting the `-64_300` variant even though that size isn't consistently available across products.
 
 **Outcome:**
-
 - Standardized thumbnail requests back to the more reliable `-64_400` variant in the Penny List cards and the homepage "Today's Finds" module.
 
 **Changes Made:**
-
 - `components/penny-list-card.tsx`
 - `components/todays-finds.tsx`
 
 **Verification (Proof):**
+- ✅ `npm run lint`
+- ✅ `npm run build`
+- ✅ `npm run test:unit` (21/21)
+- ✅ `npm run test:e2e` (92/92)
 
-- `npm run lint` ✅
-- `npm run build` ✅
-- `npm run test:unit` ✅ (21/21)
-- `npm run test:e2e` ✅ (92/92)
-
----
-
-## 2026-01-06 - ChatGPT Codex (GPT-5.2) - Fix barcode blank renders + add audit counts
-
-**Goal:** Stop the barcode modal from showing a blank white box, and produce hard numbers explaining why "everything looks recent" after importing historical purchases.
-
-**Outcome:**
-
-- Barcode modal now validates UPC-A/EAN-13 check digits and falls back to `CODE128` when invalid, so `JsBarcode` won't render blank.
-- Added `scripts/print-penny-list-count.ts` + `npm run penny:count` to print: total reports, distinct SKUs, enriched vs. unenriched, and "last 1m" by last-seen semantics vs. "last 1m" by submission timestamp.
-- Fixed Playwright strict-mode failure by targeting the state breakdown sheet dialog via `aria-labelledby="state-breakdown-title"`.
-
-**Verification (Proof):**
-
-- `npm run lint` ✅
-- `npm run build` ✅
-- `npm run test:unit` ✅
-- `npm run test:e2e` ✅ (92/92; screenshots in `reports/proof/`)
-
----
-
-## 2026-01-06 - ChatGPT Codex (GPT-5.2) - Fix stale homepage "Today's Finds"
-
-**Goal:** SKU pages and Penny List updated immediately after enrichment fixes, but the homepage "Today's Finds" module could keep showing an old/wrong product.
-
-**Root cause:** `/` was fully static, so it could serve stale "recent finds" until the next deploy.
-
-**Outcome:**
-
-- Enabled ISR for `/` so it refreshes periodically without redeploys.
-- Set homepage revalidate to 5 minutes.
-
-**Changes Made:**
-
-- `app/page.tsx`
-
-**Verification (Proof):**
-
-- `npm run lint` ✅
-- `npm run build` ✅ (shows `/` revalidate `5m`)
-- `npm run test:unit` ✅ (21/21)
-- `npm run test:e2e` ✅ (92/92)

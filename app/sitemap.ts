@@ -74,6 +74,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
 
+    // SEO Landing Pages (Intent Match) - High Priority
+    {
+      url: `${baseUrl}/home-depot-penny-items`,
+      lastModified: currentDate,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/how-to-find-penny-items`,
+      lastModified: currentDate,
+      changeFrequency: "monthly",
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/home-depot-penny-list`,
+      lastModified: currentDate,
+      changeFrequency: "weekly",
+      priority: 0.85,
+    },
+
     // Supporting Pages - Medium Priority
     {
       url: `${baseUrl}/report-find`,
