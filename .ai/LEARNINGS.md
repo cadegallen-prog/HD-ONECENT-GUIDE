@@ -38,11 +38,13 @@ Scan this FIRST before suggesting anything. If your idea matches an anti-pattern
 - When port 3001 is already running, Playwright should reuse it by setting `PLAYWRIGHT_BASE_URL=http://localhost:3001`
 - Reusing an already-running dev server may not have `PLAYWRIGHT=1`, which can make `/penny-list` empty and break specs
 - Safer default: run Playwright against `next start` on port 3002 (no `.next/dev/lock` conflict) with `PLAYWRIGHT=1` enabled
+- If a Playwright-run `next start` gets stuck, it can leave `.next/lock` behind and block subsequent runs; the fix is to stop the stuck server process (typically listening on 3002) and delete `.next/lock`.
 
 **What to Do Instead:**
 - Default: `npm run build` then `npm run test:e2e` (Playwright runs against `next start` on port 3002)
 - If port 3001 running: PowerShell: `$env:PLAYWRIGHT_BASE_URL='http://localhost:3001'; npm run test:e2e`
 - Prefer `npm run ai:verify` (auto-detects port 3001 and sets `PLAYWRIGHT_BASE_URL`)
+- If you hit `.next/lock` (not `.next/dev/lock`): stop the stuck `next start` process (check `netstat -ano | findstr :3002`) and then delete `.next/lock`.
 
 **Files:** `playwright.config.ts`, `scripts/ai-verify.ts`
 **Date:** Jan 03, 2026

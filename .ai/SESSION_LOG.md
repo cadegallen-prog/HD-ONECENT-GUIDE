@@ -10,6 +10,51 @@
 - Flag blockers or issues for next AI
 - **Self-regulating:** If this file has more than 5 entries, trim to keep only the 3 most recent. Git history preserves everything.
 
+
+---
+
+
+## 2026-01-08 - GitHub Copilot (GPT-5.2) - Standardize THD thumbnails to 400px
+
+**Goal:** Make thumbnail loading reliable (no 404s/blank images) while keeping all quality gates green.
+
+**Root cause:** The codebase had conflicting intent vs. reality: some components were still requesting the `-64_300` variant even though that size isn’t consistently available across products.
+
+**Outcome:**
+
+- Standardized thumbnail requests back to the more reliable `-64_400` variant in the Penny List cards and the homepage "Today's Finds" module.
+
+**Changes Made:**
+
+- `components/penny-list-card.tsx`
+- `components/todays-finds.tsx`
+
+**Verification (Proof):**
+
+- `npm run lint` ✅
+- `npm run build` ✅
+- `npm run test:unit` ✅ (21/21)
+- `npm run test:e2e` ✅ (92/92)
+
+---
+
+## 2026-01-06 - ChatGPT Codex (GPT-5.2) - Fix barcode blank renders + add audit counts
+
+**Goal:** Stop the barcode modal from showing a blank white box, and produce hard numbers explaining why "everything looks recent" after importing historical purchases.
+
+**Outcome:**
+
+- Barcode modal now validates UPC-A/EAN-13 check digits and falls back to `CODE128` when invalid, so `JsBarcode` won't render blank.
+- Added `scripts/print-penny-list-count.ts` + `npm run penny:count` to print: total reports, distinct SKUs, enriched vs. unenriched, and "last 1m" by last-seen semantics vs. "last 1m" by submission timestamp.
+- Fixed Playwright strict-mode failure by targeting the state breakdown sheet dialog via `aria-labelledby="state-breakdown-title"`.
+
+**Verification (Proof):**
+
+- `npm run lint` ✅
+- `npm run build` ✅
+- `npm run test:unit` ✅
+- `npm run test:e2e` ✅ (92/92; screenshots in `reports/proof/`)
+
 ---
 
 ## 2026-01-06 - ChatGPT Codex (GPT-5.2) - Fix stale homepage "Today's Finds"
@@ -31,106 +76,5 @@
 
 - `npm run lint` ✅
 - `npm run build` ✅ (shows `/` revalidate `5m`)
-- `npm run test:unit` ✅ (21/21)
-- `npm run test:e2e` ✅ (92/92)
-
-## 2026-01-06 - ChatGPT Codex (GPT-5.2) - Test smaller image variants (mobile perf)
-
-**Goal:** Reduce image download size for a performance test by switching Home Depot CDN images from `-64_1000.jpg` to smaller variants where possible.
-
-**Outcome:**
-
-- Added `toThdImageVariant(...)` and used it for `Today's Finds` and `Hot Right Now` thumbnails (300px variant).
-- Penny List card thumbnail now renders at 250×250px and requests the 300px variant.
-
-**Verification (Proof):**
-
-- `npm run lint` ✅
-- `npm run build` ✅
-- `npm run test:unit` ✅
-- `npm run test:e2e` ✅ (92/92)
-
-## 2026-01-06 - ChatGPT Codex (GPT-5.2) - Fix barcode blank renders + add audit counts
-
-**Goal:** Stop the barcode modal from showing a blank white box, and produce hard numbers explaining why "everything looks recent" after importing historical purchases.
-
-**Outcome:**
-
-- Barcode modal now validates UPC-A/EAN-13 check digits and falls back to `CODE128` when invalid, so `JsBarcode` won't render blank.
-- Added `scripts/print-penny-list-count.ts` + `npm run penny:count` to print: total reports, distinct SKUs, enriched vs. unenriched, and "last 1m" by last-seen semantics vs. "last 1m" by submission timestamp.
-- Fixed Playwright strict-mode failure by targeting the state breakdown sheet dialog via `aria-labelledby="state-breakdown-title"`.
-
-**Verification (Proof):**
-
-- `npm run lint` ✅
-- `npm run build` ✅
-- `npm run test:unit` ✅
-- `npm run test:e2e` ✅ (92/92; screenshots in `reports/proof/`)
-
-## 2026-01-05 - ChatGPT Codex (GPT-5.2) - Penny List date/sort consistency + window label clarity
-
-**Goal:** Fix Penny List "wrong dates" perception + broken "Newest First" behavior by aligning defaults and making recency/window labeling consistent.
-
-**Outcome:**
-
-- Standardized the window label shown on cards/table to **(30d)**.
-- Made "Newest/Oldest" sorting follow `lastSeenAt` (purchase date when present/valid, else report timestamp).
-
-## 2026-01-06 - ChatGPT Codex (GPT-5.2) - Fix Penny List thumbnail images disappearing
-
-**Goal:** Some items (example: SKU `1010086378`) showed an image on the SKU page but the Penny List card thumbnail went blank.
-
-**Root cause:** The Penny List card thumbnail was requesting a smaller Home Depot CDN variant (ex: `-64_300.jpg`), but some products don’t actually have that variant, so the `<img>` request 404s.
-
-**Outcome:**
-
-- `PennyThumbnail` now auto-falls back to the `-64_1000` variant if the requested Home Depot thumbnail variant fails to load.
-
-**Changes Made:**
-
-- `components/penny-thumbnail.tsx`
-
-**Verification (Proof):**
-
-- `npm run lint` ✅
-- `npm run build` ✅
-- `npm run test:unit` ✅ (21/21)
-- `npm run test:e2e` ✅ (92/92)
-
-## 2026-01-06 - ChatGPT Codex (GPT-5.2) - Remove obsolete SKU 318611 from Supabase
-
-**Goal:** Remove a Penny List item that’s no longer in the system and can’t be found anywhere.
-
-**Item removed:**
-
-- Name: `MET DVCE BOX 1-3/8" W/CNR KO-IVORY`
-- SKU: `318611` (provided as `318-611`)
-- Internet #: `100152374` (not found in enrichment)
-
-**Outcome:** Deleted the SKU from:
-
-- `Penny List` (1 row)
-- `penny_item_enrichment` (1 row)
-
-**Proof (query after delete):**
-
-- Penny List matches: 0
-- Enrichment matches: 0
-
-## 2026-01-06 - ChatGPT Codex (GPT-5.2) - Prevent missing THD thumbnail variants (Orbit 1010086378)
-
-**Goal:** Fix cases where an item image shows on the SKU page but appears missing on the Penny List / homepage cards.
-
-**Root cause:** We were rewriting Home Depot CDN images to the `-64_300` variant for thumbnails. Some products don’t have a `300` variant even when `400`/`1000` exists; if the request fails before React hydrates, the client-side fallback may never run and the image stays blank.
-
-**Outcome:** Thumbnails now use the more reliable `-64_400` variant for:
-
-- Homepage `Today's Finds`
-- Penny List cards (both variants)
-
-**Verification (Proof):**
-
-- `npm run lint` ✅
-- `npm run build` ✅
 - `npm run test:unit` ✅ (21/21)
 - `npm run test:e2e` ✅ (92/92)

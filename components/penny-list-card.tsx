@@ -94,7 +94,7 @@ export function PennyListCard({ item, stateFilter, windowLabel, userState }: Pen
     stateFilter,
     windowLabel: resolvedWindowLabel,
   })
-  const thumbnailSrc = item.imageUrl ? toThdImageVariant(item.imageUrl, 300) : item.imageUrl
+  const thumbnailSrc = item.imageUrl ? toThdImageVariant(item.imageUrl, 400) : item.imageUrl
 
   const openSkuPage = () => router.push(skuPageUrl)
 
@@ -239,7 +239,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
   const compactFormattedPrice = formatCurrency(item.price)
   const compactFormattedRetail = retailPrice ? formatCurrency(retailPrice) : null
   const compactFormattedSavings = compactHasSavings ? formatCurrency(compactSavings) : null
-  const thumbnailSrc = item.imageUrl ? toThdImageVariant(item.imageUrl, 300) : item.imageUrl
+  const thumbnailSrc = item.imageUrl ? toThdImageVariant(item.imageUrl, 400) : item.imageUrl
 
   const openSkuPage = () => router.push(skuPageUrl)
 
