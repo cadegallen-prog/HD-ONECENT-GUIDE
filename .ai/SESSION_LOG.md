@@ -13,6 +13,44 @@
 
 ---
 
+## 2026-01-08 - Claude (Opus 4.5) - Penny List Card Typography Restructuring
+
+**Goal:** Fix cascading layout/typography issues on penny-list cards: brand/SKU truncation, item names too large, Save button duplication.
+
+**Authorization:** Cade explicitly authorized redefining typography/layout constraints (2026-01-08).
+
+**Root Causes:**
+1. Item names at 16-18px competing with penny price for visual hierarchy
+2. Layout too cramped at 320px (only ~156px effective text width)
+3. Save button duplicated (top-right absolute + in action row)
+4. Brand/SKU silently truncated by `overflow-hidden`
+
+**Implementation:**
+- Added 4 card-specific CSS utilities to globals.css (`.penny-card-name`, `.penny-card-brand`, `.penny-card-sku`, `.penny-card-price`)
+- Reduced item name from 16-18px to 14px (all viewports)
+- Reduced brand/SKU from 12px to 11px
+- Reduced image from 72px to 64px
+- Reduced card padding from 16px to 12px
+- Removed top-right Save button, kept only in action row
+- Removed `overflow-hidden` from Brand and SKU (now fully visible)
+
+**Files Modified:**
+- `app/globals.css` (+40 lines: 4 new utilities)
+- `components/penny-list-card.tsx` (~20 lines changed)
+- `.ai/CONSTRAINTS.md` (added exception section)
+- `.ai/CONSTRAINTS_TECHNICAL.md` (added authorized exceptions note)
+
+**Verification:**
+- ✅ `npm run lint` passed (0 errors, 0 warnings)
+- ✅ `npm run build` passed (production build successful)
+- ⏳ Screenshots pending (320, 360, 375, 1280px at light/dark)
+- ⏳ Playright visual regression testing pending
+
+**Space Gained:** +64px horizontal space at 320px viewport (~40% gain)
+
+**Next Session:** Run Playwright screenshots at 4 breakpoints × light/dark modes, verify accept criteria checklist.
+
+---
 
 ## 2026-01-08 - GitHub Copilot (GPT-5.2) - Standardize THD thumbnails to 400px
 

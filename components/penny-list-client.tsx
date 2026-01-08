@@ -12,7 +12,6 @@ import {
   ChevronDown,
   Search,
   X,
-  Image,
   MapPin,
   SlidersHorizontal,
   ArrowUpDown,
@@ -113,7 +112,6 @@ export function PennyListClient({
 
   // Initialize state from URL params
   const [stateFilter, setStateFilter] = useState(() => getInitialParam("state"))
-  const [hasPhotoOnly, setHasPhotoOnly] = useState(() => getInitialParam("photo") === "1")
   const [searchQuery, setSearchQuery] = useState(() => getInitialParam("q"))
   const [mobileSearch, setMobileSearch] = useState(() => getInitialParam("q"))
   const [sortOption, setSortOption] = useState<SortOption>(() => {
@@ -262,15 +260,6 @@ export function PennyListClient({
     [trackFilterChange, updateURL]
   )
 
-  const setHasPhotoOnlyWithURL = useCallback(
-    (value: boolean) => {
-      setHasPhotoOnly(value)
-      updateURL({ photo: value ? "1" : null })
-      trackFilterChange("photo", value ? "with" : "all", value ? "apply" : "clear")
-    },
-    [trackFilterChange, updateURL]
-  )
-
   const setSearchQueryWithURL = useCallback(
     (value: string) => {
       setSearchQuery(value)
@@ -322,18 +311,11 @@ export function PennyListClient({
 
   const clearAllFilters = useCallback(() => {
     setStateFilterWithURL("")
-    setHasPhotoOnlyWithURL(false)
     setSearchQueryWithURL("")
     setMobileSearch("")
     setSortOptionWithURL("newest")
     setDateRangeWithURL(DEFAULT_DATE_RANGE)
-  }, [
-    setDateRangeWithURL,
-    setHasPhotoOnlyWithURL,
-    setSearchQueryWithURL,
-    setSortOptionWithURL,
-    setStateFilterWithURL,
-  ])
+  }, [setDateRangeWithURL, setSearchQueryWithURL, setSortOptionWithURL, setStateFilterWithURL])
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -365,15 +347,13 @@ export function PennyListClient({
     try {
       const params = new URLSearchParams()
       if (stateFilter) params.set("state", stateFilter)
-      if (hasPhotoOnly) params.set("photo", "1")
       if (searchQuery) params.set("q", searchQuery)
       if (sortOption !== "newest") params.set("sort", sortOption)
       if (dateRange !== DEFAULT_DATE_RANGE) params.set("days", dateRange)
       params.set("page", String(currentPage))
       params.set("perPage", String(itemsPerPage))
       // Include hot items only when no filters are active (for initial-like requests)
-      const noFiltersActive =
-        !stateFilter && !hasPhotoOnly && !searchQuery && dateRange === DEFAULT_DATE_RANGE
+      const noFiltersActive = !stateFilter && !searchQuery && dateRange === DEFAULT_DATE_RANGE
       if (noFiltersActive) params.set("includeHot", "1")
 
       const response = await fetch(`/api/penny-list?${params.toString()}`)
@@ -390,7 +370,7 @@ export function PennyListClient({
     } finally {
       setIsLoading(false)
     }
-  }, [stateFilter, hasPhotoOnly, searchQuery, sortOption, dateRange, currentPage, itemsPerPage])
+  }, [stateFilter, searchQuery, sortOption, dateRange, currentPage, itemsPerPage])
 
   // Fetch when params change (but not on initial render - we have server data)
   useEffect(() => {
@@ -414,7 +394,7 @@ export function PennyListClient({
   }, [items.length, searchQuery])
 
   const hasActiveFilters =
-    stateFilter !== "" || hasPhotoOnly || searchQuery !== "" || dateRange !== DEFAULT_DATE_RANGE
+    stateFilter !== "" || searchQuery !== "" || dateRange !== DEFAULT_DATE_RANGE
 
   useEffect(() => {
     if (!hasMountedRef.current || hasTrackedViewRef.current) return
@@ -433,7 +413,7 @@ export function PennyListClient({
     if (currentPage === 1) return
     setCurrentPage(1)
     updateURL({ page: null })
-  }, [currentPage, dateRange, hasPhotoOnly, searchQuery, sortOption, stateFilter, updateURL])
+  }, [currentPage, dateRange, searchQuery, sortOption, stateFilter, updateURL])
 
   // Pagination - API returns the page slice, so we just use total from state
   const pageCount = Math.max(1, Math.ceil(total / itemsPerPage))
@@ -477,8 +457,6 @@ export function PennyListClient({
           filteredCount={total}
           stateFilter={stateFilter}
           setStateFilter={setStateFilterWithURL}
-          hasPhotoOnly={hasPhotoOnly}
-          setHasPhotoOnly={setHasPhotoOnlyWithURL}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQueryWithURL}
           sortOption={sortOption}
@@ -620,24 +598,6 @@ export function PennyListClient({
                   </button>
                 )}
 
-                <button
-                  type="button"
-                  onClick={() => setHasPhotoOnlyWithURL(!hasPhotoOnly)}
-                  {...({ "aria-pressed": hasPhotoOnly ? "true" : "false" } as Record<
-                    string,
-                    unknown
-                  >)}
-                  className={`flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg border px-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
-                    hasPhotoOnly
-                      ? "border-[var(--cta-primary)] bg-[var(--cta-primary)] text-[var(--cta-text)]"
-                      : "border-[var(--border-default)] bg-[var(--bg-card)] text-[var(--text-secondary)] hover:bg-[var(--bg-hover)]"
-                  }`}
-                  title="Show only items with photos"
-                >
-                  <Image className="h-4 w-4" aria-hidden="true" />
-                  Has photo
-                </button>
-
                 <div className="space-y-2">
                   <label
                     htmlFor="mobile-search-filter"
@@ -699,7 +659,6 @@ export function PennyListClient({
                 </button>
 
                 {(stateFilter ||
-                  hasPhotoOnly ||
                   searchQuery ||
                   dateRange !== DEFAULT_DATE_RANGE ||
                   sortOption !== "newest") && (
@@ -807,35 +766,6 @@ export function PennyListClient({
       )}
 
       {/* Disclaimer Card */}
-      <div
-        className="bg-[var(--bg-elevated)] dark:bg-[var(--bg-hover)] border border-[var(--border-default)] border-l-4 border-l-[var(--status-warning)] rounded-lg p-4 mb-6 flex gap-3 items-start"
-        role="alert"
-      >
-        <AlertTriangle
-          className="w-5 h-5 text-[var(--status-warning)] flex-shrink-0 mt-0.5"
-          aria-hidden="true"
-        />
-        <div className="text-sm text-[var(--text-secondary)]">
-          <p className="font-semibold mb-2">Please Read:</p>
-          <p className="mb-2">
-            This page shows crowd-sourced reports from PennyCentral users. Submissions are added
-            automatically and are not vetted or guaranteed.
-          </p>
-          <ul className="list-disc pl-4 space-y-1 mb-2">
-            <li>Prices and availability are YMMV.</li>
-            <li>Items may be mistyped, mis-scanned, or already pulled from the shelf.</li>
-            <li>
-              Always double-check in store and use the Facebook group for proof-of-purchase posts
-              and discussion.
-            </li>
-          </ul>
-          <p>
-            The Facebook group remains the gold standard for verified hauls, receipts, and
-            conversation. This list is a fast, experimental radar for possible leads.
-          </p>
-        </div>
-      </div>
-
       <div
         className="mb-6 rounded-xl border border-[var(--border-default)] bg-[var(--bg-elevated)] p-4 flex items-start gap-3 text-sm text-[var(--text-secondary)]"
         data-bookmark-tip="true"

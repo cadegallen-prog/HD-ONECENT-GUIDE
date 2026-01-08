@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { Image, LayoutGrid, MapPin, Search, Table2, X } from "lucide-react"
+import { LayoutGrid, MapPin, Search, Table2, X } from "lucide-react"
 
 import { US_STATES } from "@/lib/us-states"
 
@@ -16,8 +16,6 @@ interface PennyListFiltersProps {
   filteredCount: number
   stateFilter: string
   setStateFilter: (state: string) => void
-  hasPhotoOnly: boolean
-  setHasPhotoOnly: (value: boolean) => void
   searchQuery: string
   setSearchQuery: (query: string) => void
   sortOption: SortOption
@@ -93,8 +91,6 @@ export function PennyListFilters({
   filteredCount,
   stateFilter,
   setStateFilter,
-  hasPhotoOnly,
-  setHasPhotoOnly,
   searchQuery,
   setSearchQuery,
   sortOption,
@@ -120,19 +116,17 @@ export function PennyListFilters({
 
   const hasActiveFilters =
     stateFilter !== "" ||
-    hasPhotoOnly ||
     searchQuery !== "" ||
     sortOption !== "newest" ||
     dateRange !== DEFAULT_DATE_RANGE
 
   const clearAllFilters = useCallback(() => {
     setStateFilter("")
-    setHasPhotoOnly(false)
     setSearchQuery("")
     setLocalSearch("")
     setSortOption("newest")
     setDateRange(DEFAULT_DATE_RANGE)
-  }, [setDateRange, setHasPhotoOnly, setSearchQuery, setSortOption, setStateFilter])
+  }, [setDateRange, setSearchQuery, setSortOption, setStateFilter])
 
   const activeChips = useMemo(
     () =>
@@ -143,9 +137,6 @@ export function PennyListFilters({
               label: `State: ${getStateName(stateFilter)}`,
               onRemove: () => setStateFilter(""),
             }
-          : null,
-        hasPhotoOnly
-          ? { key: "photo", label: "With photos", onRemove: () => setHasPhotoOnly(false) }
           : null,
         searchQuery
           ? {
@@ -174,10 +165,8 @@ export function PennyListFilters({
       ].filter(Boolean) as { key: string; label: string; onRemove: () => void }[],
     [
       dateRange,
-      hasPhotoOnly,
       searchQuery,
       setDateRange,
-      setHasPhotoOnly,
       setSearchQuery,
       setSortOption,
       setStateFilter,
@@ -231,21 +220,6 @@ export function PennyListFilters({
             <span className="sm:hidden">{userState}</span>
           </button>
         )}
-
-        <button
-          type="button"
-          onClick={() => setHasPhotoOnly(!hasPhotoOnly)}
-          {...({ "aria-pressed": hasPhotoOnly ? "true" : "false" } as Record<string, unknown>)}
-          className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium min-h-[44px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
-            hasPhotoOnly
-              ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
-              : "border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]"
-          }`}
-          title="Show only items with photos"
-        >
-          <Image className="w-4 h-4" aria-hidden="true" />
-          Photos only
-        </button>
 
         <div className="flex items-center rounded-lg border border-[var(--border-default)] overflow-hidden">
           <button

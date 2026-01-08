@@ -1359,3 +1359,37 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* ===============================================
+   PENNY LIST CARD TYPOGRAPHY
+   Optimized for dense layouts - card-specific
+   =============================================== */
+.penny-card-name {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+
+.penny-card-brand {
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--text-secondary);
+}
+
+.penny-card-sku {
+  font-size: 11px;
+  font-weight: 400;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+  color: var(--text-muted);
+}
+
+.penny-card-price {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--text-primary);
+}

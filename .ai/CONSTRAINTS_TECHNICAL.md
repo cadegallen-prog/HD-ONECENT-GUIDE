@@ -37,6 +37,9 @@
 3. Test light + dark mode thoroughly
 4. Get explicit approval
 
+**Authorized Exceptions:**
+- **Penny List Card Typography (2026-01-08):** `.penny-card-name`, `.penny-card-brand`, `.penny-card-sku`, `.penny-card-price` utilities were added with Cade's explicit approval. These are card-specific and do NOT modify the global typography scale.
+
 ---
 
 ### 2. React-Leaflet Map Component

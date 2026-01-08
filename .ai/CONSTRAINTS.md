@@ -144,6 +144,20 @@ Which would you prefer?"
 3. Test light + dark mode thoroughly
 4. Get explicit approval
 
+### EXCEPTION: Penny List Card Typography (Jan 2026)
+
+**Authorized by:** Cade (2026-01-08)
+**Context:** Typography constraints were too restrictive for penny list cards
+
+The following globals.css utilities were added with explicit owner approval:
+- `.penny-card-name` (14px)
+- `.penny-card-brand` (11px)
+- `.penny-card-sku` (11px mono)
+- `.penny-card-price` (28px)
+
+These are **card-specific optimizations** and do NOT change the global typography scale.
+Future agents: Do NOT remove these utilities or revert to the old 16-18px item name sizing.
+
 ---
 
 ### 2. React-Leaflet Map Component
