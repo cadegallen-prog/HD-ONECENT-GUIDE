@@ -7,20 +7,20 @@ import { ogImageUrl } from "@/lib/og"
 export const metadata: Metadata = {
   title: "Home Depot Penny Guide: Find $0.01 Items | Penny Central",
   description:
-    "Find Home Depot penny items fast. Complete guide: clearance cadence, label recognition, overhead hunting, verification tactics, and checkout strategy.",
+    "Find Home Depot penny items with our live, crowd-sourced list updated hourly. Complete guide: clearance labels, overhead hunting, verification, checkout.",
   openGraph: {
     type: "website",
     url: "https://www.pennycentral.com/guide",
     title: "Home Depot Penny Guide: Find $0.01 Items",
     description:
-      "Find Home Depot penny items fast. Complete guide: clearance cadence, label recognition, overhead hunting, verification tactics, and checkout strategy.",
+      "Find Home Depot penny items with our live, crowd-sourced list updated hourly. Complete guide: clearance labels, overhead hunting, verification, checkout.",
     images: [ogImageUrl("guide")],
   },
   twitter: {
     card: "summary_large_image",
     title: "Home Depot Penny Guide: Find $0.01 Items",
     description:
-      "Find Home Depot penny items fast. Complete guide: clearance cadence, label recognition, overhead hunting, verification tactics, and checkout strategy.",
+      "Find Home Depot penny items with our live, crowd-sourced list updated hourly. Complete guide: clearance labels, overhead hunting, verification, checkout.",
     images: [ogImageUrl("guide")],
   },
 }

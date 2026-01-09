@@ -1519,8 +1519,8 @@ export function GuideContent() {
             Ready to Start Hunting?
           </h2>
           <p className="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
-            You've learned the clearance cadences, label recognition, verification tactics, and
-            checkout strategies. Now put it into practice.
+            You've learned the tactics. Now use our <strong>live, crowd-sourced penny list</strong>{" "}
+            — updated hourly with fresh finds from hunters nationwide.
           </p>
 
           <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto mt-8">
@@ -1530,11 +1530,11 @@ export function GuideContent() {
             >
               <div className="text-4xl mb-3">📋</div>
               <h3 className="text-xl font-semibold mb-2 group-hover:text-white">
-                Check Today's Penny List
+                Live Penny List (Updated Hourly)
               </h3>
               <p className="text-sm text-[var(--text-secondary)] group-hover:text-white/90">
-                See what items the community has confirmed as penny items in the last 30 days.
-                Filter by state, search by SKU, and save your favorites.
+                <strong>Crowd-sourced & current.</strong> See items hunters confirmed today. Updated
+                hourly with fresh finds nationwide. Filter by state, search by SKU.
               </p>
               <div className="mt-4 text-[var(--cta-primary)] group-hover:text-white font-semibold">
                 View Penny List →
