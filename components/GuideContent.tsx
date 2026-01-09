@@ -408,6 +408,7 @@ export function GuideContent() {
             <img
               src="/guide/label-06.jpg"
               alt="Home Depot clearance label showing $150.03 with WAS $599.00"
+              loading="lazy"
               className="w-full rounded-md border border-[var(--border-strong)]"
             />
             <figcaption className="text-sm text-[var(--text-secondary)]">
@@ -425,6 +426,7 @@ export function GuideContent() {
             <img
               src="/guide/label-04.jpg"
               alt="Home Depot clearance label showing $34.97 LED flush mount with yellow tag"
+              loading="lazy"
               className="w-full rounded-md border border-[var(--border-strong)]"
             />
             <figcaption className="text-sm text-[var(--text-secondary)]">
@@ -442,6 +444,7 @@ export function GuideContent() {
             <img
               src="/guide/label-03.jpg"
               alt="Home Depot clearance label ending in .03"
+              loading="lazy"
               className="w-full rounded-md border border-[var(--border-strong)]"
             />
             <figcaption className="text-sm text-[var(--text-secondary)]">
@@ -460,6 +463,7 @@ export function GuideContent() {
             <img
               src="/guide/label-02.jpg"
               alt="DeWalt jump starter with $85.02 clearance label"
+              loading="lazy"
               className="w-full rounded-md border border-[var(--border-strong)]"
             />
             <figcaption className="text-sm text-[var(--text-secondary)]">
@@ -477,6 +481,7 @@ export function GuideContent() {
             <img
               src="/guide/label-penny.png"
               alt="Clean penny label showing $1.03 - actual penny item"
+              loading="lazy"
               className="w-full rounded-md border border-[var(--border-strong)]"
             />
             <figcaption className="text-sm text-[var(--text-secondary)]">
@@ -523,6 +528,7 @@ export function GuideContent() {
             <img
               src="/guide/overhead-wide.jpg"
               alt="Home Depot overhead shelving with clearance items visible"
+              loading="lazy"
               className="w-full rounded-md border border-[var(--border-strong)]"
             />
             <figcaption className="text-sm text-[var(--text-secondary)]">
@@ -537,6 +543,7 @@ export function GuideContent() {
             <img
               src="/guide/overhead-close.jpg"
               alt="Close-up of overhead clearance items with visible yellow price tags"
+              loading="lazy"
               className="w-full rounded-md border border-[var(--border-strong)]"
             />
             <figcaption className="text-sm text-[var(--text-secondary)]">

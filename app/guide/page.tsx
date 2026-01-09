@@ -5,22 +5,22 @@ import { PageHeader, PageShell, Section } from "@/components/page-templates"
 import { ogImageUrl } from "@/lib/og"
 
 export const metadata: Metadata = {
-  title: "Home Depot Penny Shopping Guide: How to Find $0.01 Items | Penny Central",
+  title: "Home Depot Penny Guide: Find $0.01 Items | Penny Central",
   description:
-    "Find Home Depot penny items in 5 minutes. Step-by-step guide to identifying $0.01 clearance deals before checkout—clearance tags, store locations, timing tricks, and what actually works.",
+    "Find Home Depot penny items fast. Complete guide: clearance cadence, label recognition, overhead hunting, verification tactics, and checkout strategy.",
   openGraph: {
     type: "website",
     url: "https://www.pennycentral.com/guide",
-    title: "Home Depot Penny Shopping Guide",
+    title: "Home Depot Penny Guide: Find $0.01 Items",
     description:
-      "Find Home Depot penny items in 5 minutes. Step-by-step guide to identifying $0.01 clearance deals before checkout—clearance tags, store locations, timing tricks, and what actually works.",
+      "Find Home Depot penny items fast. Complete guide: clearance cadence, label recognition, overhead hunting, verification tactics, and checkout strategy.",
     images: [ogImageUrl("guide")],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Home Depot Penny Shopping Guide",
+    title: "Home Depot Penny Guide: Find $0.01 Items",
     description:
-      "Find Home Depot penny items in 5 minutes. Step-by-step guide to identifying $0.01 clearance deals before checkout—clearance tags, store locations, timing tricks, and what actually works.",
+      "Find Home Depot penny items fast. Complete guide: clearance cadence, label recognition, overhead hunting, verification tactics, and checkout strategy.",
     images: [ogImageUrl("guide")],
   },
 }
