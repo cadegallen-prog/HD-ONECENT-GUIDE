@@ -1,0 +1,237 @@
+[
+  {
+    "rank": 1,
+    "sku": "1009876543",
+    "name": "Ryobi Battery 2-Pack",
+    "demand": {
+      "reportCount": 6,
+      "states": [
+        "CA",
+        "NV",
+        "AZ"
+      ],
+      "stateCount": 3
+    },
+    "recommendations": {
+      "metaTitle": "Ryobi Battery 2-Pack - Home Depot Penny Item SKU 1009876543 | Penny Central",
+      "metaDescription": "Community-verified Home Depot penny find: Ryobi Battery 2-Pack (SKU 1009876543). 6 reports from 3 states (CA, NV). Verify in store.",
+      "ogTitle": "Ryobi Battery 2-Pack - Home Depot Penny Deal",
+      "keywordTargets": [
+        "Ryobi Battery 2-Pack penny",
+        "SKU 1009876543",
+        "Ryobi Battery 2-Pack Home Depot",
+        "penny find undefined"
+      ]
+    },
+    "jsonLdEnhancements": {
+      "productSchema": {
+        "name": "Ryobi Battery 2-Pack",
+        "sku": "1009876543",
+        "description": "Community-reported penny lead for Ryobi Battery 2-Pack. 6 verified reports.",
+        "brand": "Various",
+        "offers": {
+          "price": "0.01",
+          "priceCurrency": "USD",
+          "availability": "InStoreOnly",
+          "url": "https://www.pennycentral.com/sku/1009876543"
+        },
+        "aggregateRating": {
+          "ratingValue": 4.5,
+          "reviewCount": 6
+        }
+      },
+      "breadcrumb": [
+        {
+          "position": 1,
+          "name": "Home",
+          "url": "https://www.pennycentral.com"
+        },
+        {
+          "position": 2,
+          "name": "Penny List",
+          "url": "https://www.pennycentral.com/penny-list"
+        },
+        {
+          "position": 3,
+          "name": "Ryobi Battery 2-Pack",
+          "url": "https://www.pennycentral.com/sku/1009876543"
+        }
+      ]
+    }
+  },
+  {
+    "rank": 2,
+    "sku": "1000001234",
+    "name": "Milwaukee Hammer Drill Kit",
+    "demand": {
+      "reportCount": 3,
+      "states": [
+        "GA",
+        "FL"
+      ],
+      "stateCount": 2
+    },
+    "recommendations": {
+      "metaTitle": "Milwaukee Hammer Drill Kit - Home Depot Penny Item SKU 1000001234 | Penny Central",
+      "metaDescription": "Community-verified Home Depot penny find: Milwaukee Hammer Drill Kit (SKU 1000001234). 3 reports from 2 states (GA, FL). Verify in store.",
+      "ogTitle": "Milwaukee Hammer Drill Kit - Home Depot Penny Deal",
+      "keywordTargets": [
+        "Milwaukee Hammer Drill Kit penny",
+        "SKU 1000001234",
+        "Milwaukee Hammer Drill Kit Home Depot",
+        "penny find undefined"
+      ]
+    },
+    "jsonLdEnhancements": {
+      "productSchema": {
+        "name": "Milwaukee Hammer Drill Kit",
+        "sku": "1000001234",
+        "description": "Community-reported penny lead for Milwaukee Hammer Drill Kit. 3 verified reports.",
+        "brand": "Various",
+        "offers": {
+          "price": "0.01",
+          "priceCurrency": "USD",
+          "availability": "InStoreOnly",
+          "url": "https://www.pennycentral.com/sku/1000001234"
+        },
+        "aggregateRating": {
+          "ratingValue": 4.5,
+          "reviewCount": 3
+        }
+      },
+      "breadcrumb": [
+        {
+          "position": 1,
+          "name": "Home",
+          "url": "https://www.pennycentral.com"
+        },
+        {
+          "position": 2,
+          "name": "Penny List",
+          "url": "https://www.pennycentral.com/penny-list"
+        },
+        {
+          "position": 3,
+          "name": "Milwaukee Hammer Drill Kit",
+          "url": "https://www.pennycentral.com/sku/1000001234"
+        }
+      ]
+    }
+  },
+  {
+    "rank": 3,
+    "sku": "654321",
+    "name": "Husky Small Parts Organizer",
+    "demand": {
+      "reportCount": 1,
+      "states": [
+        "TX"
+      ],
+      "stateCount": 1
+    },
+    "recommendations": {
+      "metaTitle": "Husky Small Parts Organizer - Home Depot Penny Item SKU 654321 | Penny Central",
+      "metaDescription": "Community-verified Home Depot penny find: Husky Small Parts Organizer (SKU 654321). 1 reports from 1 states (TX). Verify in store.",
+      "ogTitle": "Husky Small Parts Organizer - Home Depot Penny Deal",
+      "keywordTargets": [
+        "Husky Small Parts Organizer penny",
+        "SKU 654321",
+        "Husky Small Parts Organizer Home Depot",
+        "penny find undefined"
+      ]
+    },
+    "jsonLdEnhancements": {
+      "productSchema": {
+        "name": "Husky Small Parts Organizer",
+        "sku": "654321",
+        "description": "Community-reported penny lead for Husky Small Parts Organizer. 1 verified reports.",
+        "brand": "Various",
+        "offers": {
+          "price": "0.01",
+          "priceCurrency": "USD",
+          "availability": "InStoreOnly",
+          "url": "https://www.pennycentral.com/sku/654321"
+        },
+        "aggregateRating": {
+          "ratingValue": 4.5,
+          "reviewCount": 1
+        }
+      },
+      "breadcrumb": [
+        {
+          "position": 1,
+          "name": "Home",
+          "url": "https://www.pennycentral.com"
+        },
+        {
+          "position": 2,
+          "name": "Penny List",
+          "url": "https://www.pennycentral.com/penny-list"
+        },
+        {
+          "position": 3,
+          "name": "Husky Small Parts Organizer",
+          "url": "https://www.pennycentral.com/sku/654321"
+        }
+      ]
+    }
+  },
+  {
+    "rank": 4,
+    "sku": "1009876544",
+    "name": "Ryobi Battery Charger",
+    "demand": {
+      "reportCount": 1,
+      "states": [
+        "CA"
+      ],
+      "stateCount": 1
+    },
+    "recommendations": {
+      "metaTitle": "Ryobi Battery Charger - Home Depot Penny Item SKU 1009876544 | Penny Central",
+      "metaDescription": "Community-verified Home Depot penny find: Ryobi Battery Charger (SKU 1009876544). 1 reports from 1 states (CA). Verify in store.",
+      "ogTitle": "Ryobi Battery Charger - Home Depot Penny Deal",
+      "keywordTargets": [
+        "Ryobi Battery Charger penny",
+        "SKU 1009876544",
+        "Ryobi Battery Charger Home Depot",
+        "penny find undefined"
+      ]
+    },
+    "jsonLdEnhancements": {
+      "productSchema": {
+        "name": "Ryobi Battery Charger",
+        "sku": "1009876544",
+        "description": "Community-reported penny lead for Ryobi Battery Charger. 1 verified reports.",
+        "brand": "Various",
+        "offers": {
+          "price": "0.01",
+          "priceCurrency": "USD",
+          "availability": "InStoreOnly",
+          "url": "https://www.pennycentral.com/sku/1009876544"
+        },
+        "aggregateRating": {
+          "ratingValue": 4.5,
+          "reviewCount": 1
+        }
+      },
+      "breadcrumb": [
+        {
+          "position": 1,
+          "name": "Home",
+          "url": "https://www.pennycentral.com"
+        },
+        {
+          "position": 2,
+          "name": "Penny List",
+          "url": "https://www.pennycentral.com/penny-list"
+        },
+        {
+          "position": 3,
+          "name": "Ryobi Battery Charger",
+          "url": "https://www.pennycentral.com/sku/1009876544"
+        }
+      ]
+    }
+  }
+]

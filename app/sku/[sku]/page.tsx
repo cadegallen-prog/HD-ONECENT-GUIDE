@@ -37,12 +37,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const name = communityItem?.name || `SKU ${sku}`
   const description = `Community-reported Home Depot penny lead for ${name}. SKU ${sku}. Verify in store — YMMV.`
 
+  const stateList =
+    communityItem && communityItem.locations
+      ? Object.keys(communityItem.locations).slice(0, 3).join(", ")
+      : null
+  const enhancedDescription = stateList ? `${description} Found in ${stateList}.` : description
+
   return {
     title: `${name} - Home Depot Penny Item SKU ${sku} | Penny Central`,
-    description,
+    description: enhancedDescription,
     openGraph: {
       title: `${name} - Home Depot Penny Item`,
-      description,
+      description: enhancedDescription,
       images: [ogImageUrl(name)],
     },
     twitter: {
@@ -124,7 +130,15 @@ export default async function SkuDetailPage({ params }: PageProps) {
     "@context": "https://schema.org",
     "@type": "Product",
     name,
-    image: imageUrl,
+    image: imageUrl
+      ? [
+          {
+            "@type": "ImageObject",
+            url: imageUrl,
+            caption: name,
+          },
+        ]
+      : undefined,
     description: summary,
     url: `https://www.pennycentral.com/sku/${sku}`,
     sku,
@@ -132,6 +146,7 @@ export default async function SkuDetailPage({ params }: PageProps) {
       "@type": "Brand",
       name: brand || "Home Depot",
     },
+
     offers: {
       "@type": "Offer",
       url: homeDepotUrl,
@@ -141,6 +156,32 @@ export default async function SkuDetailPage({ params }: PageProps) {
       availability: "https://schema.org/InStoreOnly",
       ...(lastSeenIso ? { availabilityStarts: lastSeenIso } : {}),
     },
+  }
+
+  // Breadcrumb structured data
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://www.pennycentral.com/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Penny List",
+        item: "https://www.pennycentral.com/penny-list",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: name,
+        item: `https://www.pennycentral.com/sku/${sku}`,
+      },
+    ],
   }
 
   const additionalProperty = [
@@ -271,6 +312,11 @@ export default async function SkuDetailPage({ params }: PageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
       <div className="container-wide max-w-4xl mx-auto">
