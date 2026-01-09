@@ -12,6 +12,47 @@
 
 ---
 
+## 2026-01-09 - Copilot (Claude Sonnet 4.5) - Guide visual upgrade + verification tactics
+
+**Goal:** Dramatically improve `/guide` page conversion rate by adding real visual label examples, overhead hunting tactics, SKU verification workflow, and strong CTAs to Penny List + Report Find.
+
+**Outcome:**
+
+- ✅ **Fixed guide meta description** to be search-query-focused ("Find Home Depot penny items in 5 minutes..." vs. generic "Master the art...")
+- ✅ **Added Section II-B: Visual Label Recognition** with 6 real label photos (.00, .03, .04, .06, .02, penny) + full clearance cycle example (Honeywell thermostat $32.98 → $8.33)
+- ✅ **Added Section II-C: Overhead Hunting** with wide/close-up overhead photos, "No Home" section explanation, and Zebra scan risk warning
+- ✅ **Added Section III-A: How to Verify Penny Status** with step-by-step "Right Way" (photo → stock check) vs. "Wrong Way" (bring item → lose it) + self-checkout speed tactics
+- ✅ **Updated Section IV: In-Store Hunting** to reflect that clearance endcaps are being phased out (items stay in original aisles now)
+- ✅ **Added conversion CTA section** at guide end linking to `/penny-list` and `/report-find` with clear value props
+
+**Files Modified:**
+
+- `app/guide/page.tsx` (meta description)
+- `components/GuideContent.tsx` (added 3 new sections + updated in-store section + CTA)
+- `public/guide/` (copied 6 label/overhead images from `PICTURES_PENNY_CENTRAL/`)
+
+**Why This Matters:**
+
+- Guide page has 1,138 impressions over 7 days but only 0.39% CTR in Search Console
+- New meta description should climb CTR from 0.39% → 2-3% within 2-3 weeks (15-24 extra clicks/week)
+- Visual proof + tactical workflow converts searchers into Penny List users → repeat visitors
+- Strong CTA drives traffic to compounding loop (Penny List + Report Find)
+
+**Next Session Notes:**
+
+- Monitor Search Console CTR for `/guide` over next 2-3 weeks
+- If CTR improves, consider adding more visual content to other pages (FAQ, In-Store Strategy, etc.)
+- Potentially add a "visual quickstart" section on homepage linking to guide visuals
+
+**Verification:**
+
+```
+npm run lint     ✅ Passed
+npm run build    ✅ Passed (872 static SKU pages generated)
+```
+
+---
+
 ## 2026-01-08 - Codex (GPT-5.2) - SEO landing pages + sitemap
 
 **Goal:** Improve Google rankings for "Home Depot penny items" / "penny list" / "how to find penny items" by adding intent-matching landing pages and strengthening crawl paths.

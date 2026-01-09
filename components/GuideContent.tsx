@@ -368,6 +368,227 @@ export function GuideContent() {
       </section>
 
       {/* ============================================ */}
+      {/* SECTION II-B: VISUAL LABEL RECOGNITION */}
+      {/* ============================================ */}
+      <section id="visual-labels" className="scroll-mt-28 space-y-6">
+        <h2 className="section-heading">
+          <span className="text-[var(--text-primary)]">II-B.</span> Visual Label Recognition
+        </h2>
+        <p className="text-[var(--text-secondary)]">
+          Know what to look for. These are real Home Depot clearance labels at different markdown
+          stages. The price ending tells you how close an item is to penny status.
+        </p>
+
+        {/* Full clearance cycle example */}
+        <figure className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-4 space-y-3">
+          <div className="text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">
+            Complete Clearance Cycle (Same Item)
+          </div>
+          <img
+            src="/guide/clearance-cycle-example.jpg"
+            alt="Honeywell thermostat showing full clearance progression: $32.98, $29.00, $25.06, $16.00, $8.33"
+            className="w-full rounded-md border border-[var(--border-strong)]"
+          />
+          <figcaption className="text-sm text-[var(--text-secondary)]">
+            Real example: Same SKU progressing from $32.98 → $29.00 → $25.06 → $16.00 → $8.33.
+            Notice the price endings (.00, .06, .00, .33) — this item followed Cadence A before
+            likely hitting $0.01 next.
+          </figcaption>
+        </figure>
+
+        {/* Individual label grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <figure className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-4 space-y-3">
+            <div className="flex items-center justify-between text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">
+              <span>.06 ending</span>
+              <Badge className="bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border-yellow-500/30">
+                Medium Priority
+              </Badge>
+            </div>
+            <img
+              src="/guide/label-06.jpg"
+              alt="Home Depot clearance label showing $150.03 with WAS $599.00"
+              className="w-full rounded-md border border-[var(--border-strong)]"
+            />
+            <figcaption className="text-sm text-[var(--text-secondary)]">
+              Second markdown (Cadence A). Check back in 4-6 weeks — next drop likely .03 or penny.
+            </figcaption>
+          </figure>
+
+          <figure className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-4 space-y-3">
+            <div className="flex items-center justify-between text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">
+              <span>.04 ending</span>
+              <Badge className="bg-yellow-500/10 text-yellow-700 dark:text-yellow-400 border-yellow-500/30">
+                Medium Priority
+              </Badge>
+            </div>
+            <img
+              src="/guide/label-04.jpg"
+              alt="Home Depot clearance label showing $34.97 LED flush mount with yellow tag"
+              className="w-full rounded-md border border-[var(--border-strong)]"
+            />
+            <figcaption className="text-sm text-[var(--text-secondary)]">
+              Second markdown (Cadence B). Next drop usually .02, then penny within 2-4 weeks.
+            </figcaption>
+          </figure>
+
+          <figure className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-4 space-y-3">
+            <div className="flex items-center justify-between text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">
+              <span>.03 ending</span>
+              <Badge className="bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/30">
+                High Priority
+              </Badge>
+            </div>
+            <img
+              src="/guide/label-03.jpg"
+              alt="Home Depot clearance label ending in .03"
+              className="w-full rounded-md border border-[var(--border-strong)]"
+            />
+            <figcaption className="text-sm text-[var(--text-secondary)]">
+              Final markdown before penny (Cadence A). High likelihood of hitting $0.01 within 1-3
+              weeks.
+            </figcaption>
+          </figure>
+
+          <figure className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-4 space-y-3">
+            <div className="flex items-center justify-between text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">
+              <span>.02 ending</span>
+              <Badge className="bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/30">
+                High Priority
+              </Badge>
+            </div>
+            <img
+              src="/guide/label-02.jpg"
+              alt="DeWalt jump starter with $85.02 clearance label"
+              className="w-full rounded-md border border-[var(--border-strong)]"
+            />
+            <figcaption className="text-sm text-[var(--text-secondary)]">
+              Final markdown before penny (Cadence B). Very high probability of penny status next.
+            </figcaption>
+          </figure>
+
+          <figure className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-4 space-y-3">
+            <div className="flex items-center justify-between text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">
+              <span>$0.01 Penny</span>
+              <Badge className="bg-green-500/10 text-green-700 dark:text-green-400 border-green-500/30">
+                Penny Item
+              </Badge>
+            </div>
+            <img
+              src="/guide/label-penny.png"
+              alt="Clean penny label showing $1.03 - actual penny item"
+              className="w-full rounded-md border border-[var(--border-strong)]"
+            />
+            <figcaption className="text-sm text-[var(--text-secondary)]">
+              The holy grail. Scan the UPC barcode — it'll ring up at $0.01, not what the yellow tag
+              shows.
+            </figcaption>
+          </figure>
+        </div>
+
+        <div className="callout callout-sky callout-compact">
+          <div className="flex items-start gap-3">
+            <span className="text-lg leading-none">💡</span>
+            <div>
+              <div className="font-bold text-[var(--cta-primary)] mb-2">Key Insight:</div>
+              <p className="text-[var(--text-secondary)] leading-relaxed">
+                The <strong>price ending</strong> matters more than the actual discount percentage.
+                A $150.06 item is more likely to penny than a $5.97 item, even though $5.97 seems
+                cheaper — because .06 signals mid-clearance, while .97 is just a regular sale.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================ */}
+      {/* SECTION II-C: OVERHEAD HUNTING */}
+      {/* ============================================ */}
+      <section id="overhead-hunting" className="scroll-mt-28 space-y-6">
+        <h2 className="section-heading">
+          <span className="text-[var(--text-primary)]">II-C.</span> Overhead Hunting
+        </h2>
+        <p className="text-[var(--text-secondary)]">
+          Clearance items often get moved to the overhead (top shelves above the aisles) when
+          they're being phased out. These are prime penny targets — but there's risk when asking
+          employees to pull them down.
+        </p>
+
+        {/* Overhead visual examples */}
+        <div className="grid md:grid-cols-2 gap-6">
+          <figure className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-4 space-y-3">
+            <div className="text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">
+              Wide View
+            </div>
+            <img
+              src="/guide/overhead-wide.jpg"
+              alt="Home Depot overhead shelving with clearance items visible"
+              className="w-full rounded-md border border-[var(--border-strong)]"
+            />
+            <figcaption className="text-sm text-[var(--text-secondary)]">
+              Overhead clearance items waiting to be pulled. Look for yellow tags from the floor.
+            </figcaption>
+          </figure>
+
+          <figure className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-4 space-y-3">
+            <div className="text-xs uppercase tracking-[0.08em] text-[var(--text-muted)]">
+              Close-Up
+            </div>
+            <img
+              src="/guide/overhead-close.jpg"
+              alt="Close-up of overhead clearance items with visible yellow price tags"
+              className="w-full rounded-md border border-[var(--border-strong)]"
+            />
+            <figcaption className="text-sm text-[var(--text-secondary)]">
+              Yellow clearance labels are visible from the ground — these items are often forgotten
+              and more likely to penny.
+            </figcaption>
+          </figure>
+        </div>
+
+        {/* Overhead tactics */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold text-[var(--text-primary)]">What to Look For</h3>
+          <ul className="space-y-2 text-[var(--text-secondary)]">
+            <li className="flex items-start gap-2">
+              <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400 shrink-0 mt-0.5" />
+              <span>
+                <strong>Yellow clearance tags</strong> visible from the floor
+              </span>
+            </li>
+            <li className="flex items-start gap-2">
+              <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400 shrink-0 mt-0.5" />
+              <span>
+                <strong>"No Home" sections</strong> in the overhead — items without a shelf location
+                (prime penny territory)
+              </span>
+            </li>
+            <li className="flex items-start gap-2">
+              <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400 shrink-0 mt-0.5" />
+              <span>
+                <strong>Dusty or old-looking boxes</strong> — means they've been sitting for weeks
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div className="callout callout-sky callout-compact">
+          <div className="flex items-start gap-3">
+            <span className="text-lg leading-none">⚠️</span>
+            <div>
+              <div className="font-bold text-[var(--cta-primary)] mb-2">The Overhead Risk:</div>
+              <p className="text-[var(--text-secondary)] leading-relaxed">
+                When you ask an employee to pull an overhead item, they can scan it from the floor
+                with their Zebra device <em>before</em> pulling it down. If it scans as $0.01,
+                they'll likely refuse to give it to you or remove it from inventory. Only ask for
+                overhead items if you're willing to take that gamble.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================ */}
       {/* SECTION III: PRE-HUNT INTELLIGENCE */}
       {/* ============================================ */}
       <section id="digital-tools" className="scroll-mt-28">
@@ -476,6 +697,162 @@ export function GuideContent() {
       </section>
 
       {/* ============================================ */}
+      {/* SECTION III-A: HOW TO VERIFY PENNY STATUS IN-STORE */}
+      {/* ============================================ */}
+      <section id="verify-penny-status" className="scroll-mt-28 space-y-6">
+        <h2 className="section-heading">
+          <span className="text-[var(--text-primary)]">III-A.</span> How to Verify Penny Status
+          In-Store
+        </h2>
+        <p className="text-[var(--text-secondary)]">
+          The only way to confirm if an item is truly at $0.01 is by getting an employee to scan the
+          barcode or look up the SKU. Here's the safest way to do it without losing the item.
+        </p>
+
+        {/* The Right Way */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold text-[var(--cta-primary)] flex items-center gap-2">
+            <CheckCircle2 className="h-5 w-5" />
+            The Right Way (Low Risk)
+          </h3>
+          <div className="step-grid">
+            <div className="step-card">
+              <div className="step-badge">1</div>
+              <div className="step-title">Don't Bring the Item</div>
+              <p className="step-desc">
+                Take a photo of the barcode/SKU label — but leave the item on the shelf. This is
+                critical.
+              </p>
+            </div>
+            <div className="step-card">
+              <div className="step-badge">2</div>
+              <div className="step-title">Find a Zebra</div>
+              <p className="step-desc">
+                Look for an employee with a "Zebra" device (looks like a phone, sometimes orange).
+                This is the scanning tool they use for inventory.
+              </p>
+            </div>
+            <div className="step-card">
+              <div className="step-badge">3</div>
+              <div className="step-title">Ask for a "Stock Check"</div>
+              <p className="step-desc">
+                Say: <em>"Can you check if this item is in stock?"</em> or{" "}
+                <em>"Can you look up this SKU?"</em> — show them the photo of the barcode or give
+                them the SKU number.
+              </p>
+            </div>
+            <div className="step-card">
+              <div className="step-badge">4</div>
+              <div className="step-title">Read the Outcome</div>
+              <p className="step-desc">
+                If it scans as <strong>$0.01</strong>: They'll likely say it can't be sold or
+                they'll go pull it from the shelf. Play it off: "Oh, guess it's not here then."
+                <br />
+                If it's <strong>NOT a penny</strong>: You can walk away — no item lost, no
+                suspicion.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* The Wrong Way */}
+        <div className="space-y-4 mt-8">
+          <h3 className="text-lg font-semibold text-red-600 dark:text-red-400 flex items-center gap-2">
+            <XCircle className="h-5 w-5" />
+            The Wrong Way (High Risk)
+          </h3>
+          <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-5">
+            <ul className="space-y-3 text-sm text-[var(--text-secondary)]">
+              <li className="flex items-start gap-2">
+                <XCircle className="h-5 w-5 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
+                <span>
+                  <strong>Bringing the item to them directly</strong> — if they scan it and it's a
+                  penny, they'll take it immediately.
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <XCircle className="h-5 w-5 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
+                <span>
+                  <strong>Asking them to pull overhead items first</strong> — Zebra devices can scan
+                  from the floor. If they scan before pulling, you lose it.
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <XCircle className="h-5 w-5 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
+                <span>
+                  <strong>Asking for a "price check"</strong> — this signals you're trying to buy
+                  it, making them more likely to confiscate it if it's a penny.
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Self-Checkout Strategy */}
+        <div className="space-y-4 mt-8">
+          <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+            Self-Checkout: The Fastest Path
+          </h3>
+          <div className="bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-lg p-5 space-y-3">
+            <p className="text-[var(--text-secondary)]">
+              If you're confident an item is a penny (based on the Community Penny List or your own
+              research), skip verification and go straight to self-checkout:
+            </p>
+            <ol className="space-y-2 text-sm text-[var(--text-secondary)] ml-4">
+              <li>
+                <strong>1. Scan the UPC barcode</strong> (the manufacturer barcode on the product,
+                NOT the yellow clearance tag)
+              </li>
+              <li>
+                <strong>2. Pay immediately</strong> — don't hesitate, don't review the screen slowly
+              </li>
+              <li>
+                <strong>3. Leave quickly and quietly</strong> — the faster you're out, the less
+                attention you draw
+              </li>
+            </ol>
+            <div className="callout callout-sky callout-compact mt-4 mb-0">
+              <div className="flex items-start gap-3">
+                <span className="text-lg leading-none">💡</span>
+                <div>
+                  <div className="font-bold text-[var(--cta-primary)] mb-2">Pro Tips:</div>
+                  <ul className="text-[var(--text-secondary)] space-y-1 text-sm">
+                    <li>
+                      • Use <strong>Home Depot Pro Pass</strong> if you have one (scan pass → items
+                      → pay in 2 taps)
+                    </li>
+                    <li>
+                      • Time your checkout when <strong>other customers</strong> are checking out
+                      (less staff attention)
+                    </li>
+                    <li>
+                      • Avoid scanning the yellow clearance label — it can freeze the terminal and
+                      call a manager
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* When to Walk Away */}
+        <div className="callout callout-sky callout-compact mt-8">
+          <div className="flex items-start gap-3">
+            <span className="text-lg leading-none">⚠️</span>
+            <div>
+              <div className="font-bold text-[var(--cta-primary)] mb-2">When to Walk Away:</div>
+              <p className="text-[var(--text-secondary)] leading-relaxed">
+                If an employee makes a fuss or refuses to sell, leave it. No penny item is worth an
+                argument or being banned from the store. There will always be more penny finds — the
+                goal is to stay in the game long-term.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================ */}
       {/* SECTION IV: IN-STORE HUNTING */}
       {/* ============================================ */}
       <section id="in-store-hunting" className="scroll-mt-28">
@@ -496,9 +873,10 @@ export function GuideContent() {
           <div className="bg-[var(--bg-card)] p-4 rounded-lg border border-[var(--border-default)]">
             <h4 className="font-semibold mb-3 text-[var(--cta-primary)]">Primary Hotspots</h4>
             <ul className="space-y-3 text-sm">
-              <li>Clearance endcaps</li>
-              <li>Aisles with yellow tags</li>
+              <li>Original aisle/bay location (check the label for Aisle/Bay number)</li>
+              <li>Yellow clearance tags scattered throughout regular aisles</li>
               <li>Seasonal sections (especially post-season)</li>
+              <li>Overhead storage (see Section II-C)</li>
             </ul>
           </div>
           <div className="bg-[var(--bg-elevated)] p-4 rounded-lg border border-[var(--border-default)]">
@@ -509,6 +887,23 @@ export function GuideContent() {
               <li>Outdoor garden section (during seasonal changeovers)</li>
               <li>Misplaced items left by customers</li>
             </ul>
+          </div>
+        </div>
+
+        <div className="callout callout-sky callout-compact my-6">
+          <div className="flex items-start gap-3">
+            <span className="text-lg leading-none">📍</span>
+            <div>
+              <div className="font-bold text-[var(--cta-primary)] mb-2">
+                Clearance Endcaps Are Disappearing
+              </div>
+              <p className="text-[var(--text-secondary)] leading-relaxed">
+                Most stores are phasing out clearance endcaps (EC) and keeping clearance items in
+                their original aisle locations instead. Some stores still have them, but don't rely
+                on finding a dedicated clearance section anymore — you'll need to hunt aisle by
+                aisle.
+              </p>
+            </div>
           </div>
         </div>
 
@@ -1105,6 +1500,64 @@ export function GuideContent() {
             Penny hunting is part luck, part hustle, and all strategy. Treat it like a skill - not a
             shortcut.
           </p>
+        </div>
+      </section>
+
+      {/* ============================================ */}
+      {/* SECTION: START HUNTING CTA */}
+      {/* ============================================ */}
+      <section className="scroll-mt-28 py-12 bg-gradient-to-br from-[var(--cta-primary)]/5 to-[var(--cta-primary)]/10 rounded-xl border border-[var(--cta-primary)]/20">
+        <div className="text-center space-y-6 px-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)]">
+            Ready to Start Hunting?
+          </h2>
+          <p className="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
+            You've learned the clearance cadences, label recognition, verification tactics, and
+            checkout strategies. Now put it into practice.
+          </p>
+
+          <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto mt-8">
+            <a
+              href="/penny-list"
+              className="group block p-6 rounded-lg border-2 border-[var(--cta-primary)] bg-[var(--bg-card)] hover:bg-[var(--cta-primary)] hover:text-white transition-all duration-200"
+            >
+              <div className="text-4xl mb-3">📋</div>
+              <h3 className="text-xl font-semibold mb-2 group-hover:text-white">
+                Check Today's Penny List
+              </h3>
+              <p className="text-sm text-[var(--text-secondary)] group-hover:text-white/90">
+                See what items the community has confirmed as penny items in the last 30 days.
+                Filter by state, search by SKU, and save your favorites.
+              </p>
+              <div className="mt-4 text-[var(--cta-primary)] group-hover:text-white font-semibold">
+                View Penny List →
+              </div>
+            </a>
+
+            <a
+              href="/report-find"
+              className="group block p-6 rounded-lg border-2 border-[var(--cta-primary)] bg-[var(--bg-card)] hover:bg-[var(--cta-primary)] hover:text-white transition-all duration-200"
+            >
+              <div className="text-4xl mb-3">🎯</div>
+              <h3 className="text-xl font-semibold mb-2 group-hover:text-white">
+                Report Your Finds
+              </h3>
+              <p className="text-sm text-[var(--text-secondary)] group-hover:text-white/90">
+                Found a penny item? Help other hunters by reporting it. Include the SKU, purchase
+                date, and state — it takes 30 seconds.
+              </p>
+              <div className="mt-4 text-[var(--cta-primary)] group-hover:text-white font-semibold">
+                Report a Find →
+              </div>
+            </a>
+          </div>
+
+          <div className="pt-6 border-t border-[var(--border-default)] mt-8">
+            <p className="text-sm text-[var(--text-muted)]">
+              <strong>Remember:</strong> Penny hunting is part research, part timing, part luck.
+              Stay respectful, stay strategic, and help keep the community strong.
+            </p>
+          </div>
         </div>
       </section>
     </article>

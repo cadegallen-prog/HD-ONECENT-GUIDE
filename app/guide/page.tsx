@@ -7,20 +7,20 @@ import { ogImageUrl } from "@/lib/og"
 export const metadata: Metadata = {
   title: "Home Depot Penny Shopping Guide: How to Find $0.01 Items | Penny Central",
   description:
-    "Master the art of finding $0.01 clearance items at Home Depot. Learn the clearance lifecycle, digital pre-hunt strategies, in-store tactics, and checkout procedures.",
+    "Find Home Depot penny items in 5 minutes. Step-by-step guide to identifying $0.01 clearance deals before checkout—clearance tags, store locations, timing tricks, and what actually works.",
   openGraph: {
     type: "website",
     url: "https://www.pennycentral.com/guide",
     title: "Home Depot Penny Shopping Guide",
     description:
-      "Master the art of finding $0.01 clearance items at Home Depot. Learn the clearance lifecycle, digital pre-hunt strategies, in-store tactics, and checkout procedures.",
+      "Find Home Depot penny items in 5 minutes. Step-by-step guide to identifying $0.01 clearance deals before checkout—clearance tags, store locations, timing tricks, and what actually works.",
     images: [ogImageUrl("guide")],
   },
   twitter: {
     card: "summary_large_image",
     title: "Home Depot Penny Shopping Guide",
     description:
-      "Master the art of finding $0.01 clearance items at Home Depot. Learn the clearance lifecycle, digital pre-hunt strategies, in-store tactics, and checkout procedures.",
+      "Find Home Depot penny items in 5 minutes. Step-by-step guide to identifying $0.01 clearance deals before checkout—clearance tags, store locations, timing tricks, and what actually works.",
     images: [ogImageUrl("guide")],
   },
 }
