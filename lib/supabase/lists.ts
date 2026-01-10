@@ -165,6 +165,39 @@ export async function addItemToList(
 }
 
 /**
+ * Check if an item is already in any of the user's lists
+ */
+export async function isItemInAnyList(
+  sku: string
+): Promise<{ inList: boolean; listId?: string; itemId?: string }> {
+  const supabase = createSupabaseBrowserClient()
+
+  const { data, error } = await supabase
+    .from("list_items")
+    .select(
+      `
+      id,
+      list_id,
+      sku
+    `
+    )
+    .eq("sku", sku)
+    .limit(1)
+
+  if (error) throw error
+
+  if (data && data.length > 0) {
+    return {
+      inList: true,
+      listId: data[0].list_id,
+      itemId: data[0].id,
+    }
+  }
+
+  return { inList: false }
+}
+
+/**
  * Remove an item from a list
  */
 export async function removeItemFromList(itemId: string): Promise<void> {
@@ -173,6 +206,32 @@ export async function removeItemFromList(itemId: string): Promise<void> {
   const { error } = await supabase.from("list_items").delete().eq("id", itemId)
 
   if (error) throw error
+}
+
+/**
+ * Remove an item from a list by SKU (finds it first)
+ */
+export async function removeItemFromListBySku(sku: string): Promise<void> {
+  const supabase = createSupabaseBrowserClient()
+
+  // First find the item
+  const { data: itemData, error: findError } = await supabase
+    .from("list_items")
+    .select("id")
+    .eq("sku", sku)
+    .limit(1)
+    .single()
+
+  if (findError) {
+    // If no item found, that's fine - it's already removed
+    if (findError.code === "PGRST116") return
+    throw findError
+  }
+
+  // Then remove it
+  const { error: deleteError } = await supabase.from("list_items").delete().eq("id", itemData.id)
+
+  if (deleteError) throw deleteError
 }
 
 /**

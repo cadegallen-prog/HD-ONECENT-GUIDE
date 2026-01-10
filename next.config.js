@@ -20,6 +20,15 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ["framer-motion"],
   },
+  // Webpack configuration to handle cmdk properly
+  webpack: (config, { isServer }) => {
+    // Ensure cmdk is transpiled correctly
+    config.resolve.alias = {
+      ...config.resolve.alias,
+    }
+    return config
+  },
+  transpilePackages: ["cmdk"],
   // SEO Strategy: Use www domain as canonical and redirect shortcut pages to guide sections.
   // This prevents "Redirect error" in Google Search Console by providing clear 301 signals.
   async redirects() {

@@ -41,6 +41,7 @@ data/skus-to-enrich.txt
 
 # backup files
 *.backup.*.json
+backups/
 
 # local experiments / scratch
 experimental_scraper/
@@ -80,6 +81,12 @@ temp_urls.js
 
 # privacy: local Lighthouse runs can include machine paths
 lighthouse-mobile.json
+reports/lighthouse-*.json
+reports/lighthouse-report.html
+reports/penny-list-console-capture.png
+
+# privacy: analytics screenshots (local-only)
+.ai/analytics/
 
 # sentry
 .sentryclirc

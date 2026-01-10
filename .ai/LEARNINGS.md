@@ -119,6 +119,22 @@ const StoreMap = dynamic(() => import("@/components/store-map"), {
 })
 ```
 
+---
+
+### 5. Git Commits: Partial Staging + Secret Leakage
+
+**Problem:** A commit/push happened with only a subset of local changes staged, and a tool config file accidentally included a hard-coded access token.
+
+**What We Learned:**
+- Always review `git status -sb` and `git diff --cached --name-only` before committing.
+- Never commit tokens/keys (especially in editor/agent config files); prefer `${ENV_VAR}` placeholders.
+- If a bad commit was pushed to `main`, fix it with `git revert` (no force-push / no history rewrite), then recommit cleanly.
+
+**What to Do Instead:**
+- Before commit: `git status -sb` then `git diff --cached --name-only`
+- Security scan: `rg "sbp_|SUPABASE_SERVICE_ROLE_KEY\\\": \\\"" -S .` (and fix before staging)
+- If pushed mistake: `git revert <sha>` and push a follow-up commit (no force-push)
+
 **Never:** Remove "use client" directive or change import method
 
 **Files:** `/app/store-finder/page.tsx`, `/components/store-map.tsx`

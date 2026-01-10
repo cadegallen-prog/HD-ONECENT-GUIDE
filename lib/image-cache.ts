@@ -6,7 +6,7 @@
  * Display-time downconversion:
  * - SKU pages (full-size): 600px (crisp, good for SEO)
  * - Related items cards: 400px (medium display, ~40-60 KB)
- * - Penny List thumbnails (72x72): 300px (tiny display, ~20-30 KB)
+ * - Penny List thumbnails (72x72): 400px (reliable; some products lack -64_300 variants)
  *
  * This approach:
  * ✅ Single source of truth (600px in DB)
@@ -42,6 +42,16 @@ export function toThdImageVariant(url: string, target: 300 | 400 | 600 | 1000): 
 
   const ext = match[2]
   return trimmed.replace(/-64_\d+\.(jpe?g|png)$/i, `-64_${target}.${ext}`)
+}
+
+/**
+ * Penny List thumbnails render very small, but some Home Depot products do not have a `-64_300`
+ * variant, which can cause broken images on list cards while SKU detail pages render correctly.
+ *
+ * We prefer `-64_400` for reliability and let the UI downscale it visually.
+ */
+export function toPennyListThumbnailUrl(url: string): string {
+  return toThdImageVariant(url, 400)
 }
 
 /**

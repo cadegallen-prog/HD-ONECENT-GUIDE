@@ -45,7 +45,6 @@ const pages = [
 
 export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
   const router = useRouter()
-  const [search, setSearch] = React.useState("")
 
   // Group pages by category
   const groupedPages = React.useMemo(() => {
@@ -59,40 +58,34 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
 
   const handleSelect = (path: string) => {
     onOpenChange(false)
-    setSearch("")
     router.push(path)
   }
+
+  React.useEffect(() => {
+    if (!open) return
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onOpenChange(false)
+    }
+    document.addEventListener("keydown", handleEscape)
+    return () => document.removeEventListener("keydown", handleEscape)
+  }, [open, onOpenChange])
+
+  if (!open) return null
 
   return (
     <>
       {/* Backdrop */}
-      {open && (
-        <div
-          className="fixed inset-0 bg-[var(--bg-hover)]/80 z-40 backdrop-blur-sm"
-          onClick={() => onOpenChange(false)}
-          suppressHydrationWarning
-        />
-      )}
+      <div
+        className="fixed inset-0 bg-[var(--bg-hover)]/80 z-40 backdrop-blur-sm"
+        onClick={() => onOpenChange(false)}
+      />
 
       {/* Command palette */}
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="command-palette-title"
-        className={`fixed top-1/4 left-1/2 -translate-x-1/2 w-full max-w-2xl bg-background border border-border rounded-lg shadow-2xl z-50 overflow-hidden transition-all ${
-          open ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"
-        }`}
-        suppressHydrationWarning
-      >
-        <Command>
-          <div className="sr-only" id="command-palette-title">
-            Quick navigation
-          </div>
+      <div className="fixed top-1/4 left-1/2 -translate-x-1/2 w-full max-w-2xl bg-background border border-border rounded-lg shadow-2xl z-50 overflow-hidden">
+        <Command label="Quick navigation">
           <div className="flex items-center border-b border-border px-4">
             <Search className="w-5 h-5 text-muted-foreground mr-3" />
             <Command.Input
-              value={search}
-              onValueChange={setSearch}
               placeholder="Search pages... (⌘K)"
               className="flex h-12 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
             />
@@ -114,7 +107,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                     key={page.path}
                     value={`${page.label} ${page.path}`}
                     onSelect={() => handleSelect(page.path)}
-                    className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-2 text-sm outline-none hover:bg-accent hover:text-accent-foreground data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
+                    className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-2 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground"
                   >
                     <page.icon className="mr-3 h-4 w-4" />
                     <span>{page.label}</span>

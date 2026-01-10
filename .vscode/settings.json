@@ -35,5 +35,9 @@
 
   "security.workspace.trust.enabled": true,
 
-  "webhint.enable": false
+  "webhint.enable": false,
+
+  // Supabase Extension Settings
+  // Connect to remote project (not local)
+  "supabase.projectRef": "djtejotbcnzzjfsogzlc"
 }

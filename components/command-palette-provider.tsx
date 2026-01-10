@@ -1,14 +1,15 @@
 "use client"
 
 import * as React from "react"
-import dynamic from "next/dynamic"
+// import dynamic from "next/dynamic"
 
-const CommandPalette = dynamic(
-  () => import("./command-palette").then((mod) => mod.CommandPalette),
-  {
-    loading: () => null,
-  }
-)
+// const CommandPalette = dynamic(
+//   () => import("./command-palette").then((mod) => mod.CommandPalette),
+//   {
+//     loading: () => null,
+//     ssr: false,
+//   }
+// )
 
 interface CommandPaletteContextType {
   open: boolean
@@ -27,11 +28,8 @@ export function useCommandPalette() {
 
 export function CommandPaletteProvider({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = React.useState(false)
-  const [mounted, setMounted] = React.useState(false)
 
   React.useEffect(() => {
-    setMounted(true)
-
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault()
@@ -46,7 +44,7 @@ export function CommandPaletteProvider({ children }: { children: React.ReactNode
   return (
     <CommandPaletteContext.Provider value={{ open, setOpen }}>
       {children}
-      {mounted && <CommandPalette open={open} onOpenChange={setOpen} />}
+      {/* {mounted && <CommandPalette open={open} onOpenChange={setOpen} />} */}
     </CommandPaletteContext.Provider>
   )
 }

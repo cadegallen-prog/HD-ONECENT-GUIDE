@@ -17,21 +17,25 @@
         "C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE"
       ]
     },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-playwright"]
+    },
     "github": {
       "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-github"
-      ]
+      "args": ["-y", "@modelcontextprotocol/server-github"]
     },
     "supabase": {
-      "command": "npx",
+      "command": "cmd",
       "args": [
+        "/c",
+        "npx",
         "-y",
-        "@supabase/mcp-server-supabase"
+        "@supabase/mcp-server-supabase@latest",
+        "--project-ref",
+        "djtejotbcnzzjfsogzlc"
       ],
       "env": {
-        "SUPABASE_URL": "${SUPABASE_URL}",
         "SUPABASE_ACCESS_TOKEN": "${SUPABASE_ACCESS_TOKEN}"
       }
     }

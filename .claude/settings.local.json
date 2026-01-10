@@ -1,6 +1,11 @@
 {
   "permissions": {
     "allow": [
+      "McpTool(filesystem:*)",
+      "McpTool(git:*)",
+      "McpTool(github:*)",
+      "McpTool(supabase:*)",
+      "McpTool(playwright:*)",
       "Bash(gh pr list:*)",
       "Bash(git fetch:*)",
       "Bash(git add:*)",
@@ -26,7 +31,8 @@
       "Bash(npx:*)",
       "Bash(setx:*)",
       "Bash(powershell -Command \"$env:SUPABASE_ACCESS_TOKEN\")",
-      "Bash(powershell -Command:*)"
+      "Bash(powershell -Command:*)",
+      "Bash(supabase --version:*)"
     ],
     "deny": [],
     "ask": []

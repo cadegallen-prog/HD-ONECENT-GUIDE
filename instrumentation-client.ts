@@ -12,3 +12,5 @@ Sentry.init({
   // Enable debug mode in development
   debug: false,
 });
+
+export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;
