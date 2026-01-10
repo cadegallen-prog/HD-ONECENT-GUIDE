@@ -3,18 +3,17 @@
 import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Bookmark, BookmarkCheck, Plus, Loader2, X } from "lucide-react"
+import { toast } from "sonner"
 import { useAuth } from "@/components/auth-provider"
 import {
   getUserLists,
   addItemToList,
   createList,
   addSkuToListSmart,
-  isItemInAnyList,
-  removeItemFromListBySku,
   type List,
 } from "@/lib/supabase/lists"
 import { trackEvent } from "@/lib/analytics"
-import { SaveToast } from "@/components/ui/save-toast"
+import { formatSkuForDisplay } from "@/lib/sku"
 
 interface AddToListButtonProps {
   sku: string
@@ -37,15 +36,7 @@ export function AddToListButton({
   const [lists, setLists] = useState<List[]>([])
   const [newListName, setNewListName] = useState("")
   const [creatingList, setCreatingList] = useState(false)
-  const [itemInfo, setItemInfo] = useState<{ inList: boolean; listId?: string; itemId?: string }>({
-    inList: false,
-  })
-  const [showToast, setShowToast] = useState(false)
-  const [toastMessage, setToastMessage] = useState("")
-  const [toastType, setToastType] = useState<"added" | "removed">("added")
-  const [toastPosition, setToastPosition] = useState({ x: 0, y: 0 })
   const pickerRef = useRef<HTMLDivElement>(null)
-  const buttonRef = useRef<HTMLButtonElement>(null)
 
   // Close picker when clicking outside
   useEffect(() => {
@@ -61,23 +52,6 @@ export function AddToListButton({
     }
   }, [showPicker])
 
-  // Check if item is already saved when component mounts or SKU changes
-  useEffect(() => {
-    const checkItemStatus = async () => {
-      if (user && sku) {
-        try {
-          const info = await isItemInAnyList(sku)
-          setItemInfo(info)
-          setSaved(info.inList)
-        } catch (error) {
-          console.error("Failed to check item status:", error)
-        }
-      }
-    }
-
-    checkItemStatus()
-  }, [user, sku])
-
   const handleClick = async (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
@@ -92,61 +66,40 @@ export function AddToListButton({
 
     trackEvent("add_to_list_clicked", { sku, authenticated: true })
 
-    // Calculate toast position near the button
-    if (buttonRef.current) {
-      const rect = buttonRef.current.getBoundingClientRect()
-      setToastPosition({
-        x: rect.left + rect.width / 2,
-        y: rect.top - 10, // Position above the button
-      })
-    }
-
     setLoading(true)
 
     try {
-      if (saved && itemInfo.inList) {
-        // Item is already saved - remove it
-        await removeItemFromListBySku(sku)
-        setSaved(false)
-        setItemInfo({ inList: false })
-        trackEvent("list_item_removed", { sku })
-        setToastMessage("Item removed from your list")
-        setToastType("removed")
-        setShowToast(true)
-      } else {
-        // Item is not saved - add it
-        // Try smart add (auto-handles 0 or 1 list cases)
-        const result = await addSkuToListSmart(sku)
+      // Try smart add (auto-handles 0 or 1 list cases)
+      const result = await addSkuToListSmart(sku)
 
-        if (result) {
-          // Added successfully
-          setSaved(true)
-          setItemInfo({ inList: true, listId: result.list.id, itemId: result.item.id })
-          trackEvent("add_to_list_completed", { sku, listId: result.list.id })
-          setToastMessage("Item added to your list")
-          setToastType("added")
-          setShowToast(true)
-        } else {
-          // Multiple lists - show picker
-          const userLists = await getUserLists()
-          setLists(userLists)
-          setShowPicker(true)
-        }
+      if (result) {
+        // Added successfully
+        setSaved(true)
+        trackEvent("add_to_list_completed", { sku, listId: result.list.id })
+        toast.success(`Added to "${result.list.title}"`, {
+          description: `SKU ${formatSkuForDisplay(sku)}`,
+          duration: 3000,
+          action: {
+            label: "View list",
+            onClick: () => router.push(`/lists/${result.list.id}`),
+          },
+        })
+        // Reset saved state after a bit
+        setTimeout(() => setSaved(false), 3000)
+      } else {
+        // Multiple lists - show picker
+        const userLists = await getUserLists()
+        setLists(userLists)
+        setShowPicker(true)
       }
     } catch (error) {
-      console.error("Failed to toggle item in list:", error)
+      console.error("Failed to add to list:", error)
       if (error instanceof Error && error.message.includes("already in your list")) {
-        // Silently handle "already in list" errors - no error message shown to user
+        toast.info("This item is already in your list")
         setSaved(true)
-        setItemInfo({ inList: true })
-        setToastMessage("Item added to your list")
-        setToastType("added")
-        setShowToast(true)
+        setTimeout(() => setSaved(false), 3000)
       } else {
-        // Only show error for actual failures
-        setToastMessage("Failed to update list")
-        setToastType("removed") // Use removed styling for errors
-        setShowToast(true)
+        toast.error("Failed to add to list")
       }
     } finally {
       setLoading(false)
@@ -157,25 +110,28 @@ export function AddToListButton({
     setLoading(true)
     try {
       await addItemToList(listId, sku)
+      const list = lists.find((l) => l.id === listId)
       setSaved(true)
-      setItemInfo({ inList: true, listId, itemId: undefined }) // itemId would be set by server response
       trackEvent("add_to_list_completed", { sku, listId })
-      setToastMessage("Item added to your list")
-      setToastType("added")
-      setShowToast(true)
+      toast.success(`Added to "${list?.title || "list"}"`, {
+        description: `SKU ${formatSkuForDisplay(sku)}`,
+        duration: 3000,
+        action: {
+          label: "View list",
+          onClick: () => router.push(`/lists/${listId}`),
+        },
+      })
       setShowPicker(false)
+      setTimeout(() => setSaved(false), 3000)
     } catch (error) {
       console.error("Failed to add to list:", error)
       if (error instanceof Error && error.message.includes("already in your list")) {
+        toast.info("This item is already in that list")
         setSaved(true)
-        setItemInfo({ inList: true, listId })
-        setToastMessage("Item added to your list")
-        setToastType("added")
-        setShowToast(true)
+        setShowPicker(false)
+        setTimeout(() => setSaved(false), 3000)
       } else {
-        setToastMessage("Failed to add to list")
-        setToastType("removed") // Use removed styling for errors
-        setShowToast(true)
+        toast.error("Failed to add to list")
       }
     } finally {
       setLoading(false)
@@ -190,18 +146,21 @@ export function AddToListButton({
       const newList = await createList(newListName.trim())
       await addItemToList(newList.id, sku)
       setSaved(true)
-      setItemInfo({ inList: true, listId: newList.id, itemId: undefined })
       trackEvent("add_to_list_completed", { sku, listId: newList.id, newList: true })
-      setToastMessage("Item added to your list")
-      setToastType("added")
-      setShowToast(true)
+      toast.success(`Added to "${newList.title}"`, {
+        description: `SKU ${formatSkuForDisplay(sku)}`,
+        duration: 3000,
+        action: {
+          label: "View list",
+          onClick: () => router.push(`/lists/${newList.id}`),
+        },
+      })
       setShowPicker(false)
       setNewListName("")
+      setTimeout(() => setSaved(false), 3000)
     } catch (error) {
       console.error("Failed to create list:", error)
-      setToastMessage("Failed to create list")
-      setToastType("removed") // Use removed styling for errors
-      setShowToast(true)
+      toast.error("Failed to create list")
     } finally {
       setCreatingList(false)
     }
@@ -218,7 +177,6 @@ export function AddToListButton({
     return (
       <div className="relative" ref={pickerRef}>
         <button
-          ref={buttonRef}
           type="button"
           onClick={handleClick}
           disabled={isLoading}
@@ -227,8 +185,8 @@ export function AddToListButton({
               ? "text-[var(--cta-primary)] bg-[var(--cta-primary)]/10"
               : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-muted)]"
           } ${className}`}
-          aria-label={saved ? "Remove from list" : `Save ${itemName} to list`}
-          title={saved ? "Remove from list" : "Save to list"}
+          aria-label={saved ? "Saved to list" : `Save ${itemName} to list`}
+          title={saved ? "Saved to list" : "Save to list"}
         >
           {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Icon className="w-5 h-5" />}
         </button>
@@ -242,7 +200,6 @@ export function AddToListButton({
                 <button
                   onClick={() => setShowPicker(false)}
                   className="p-1 rounded text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-                  title="Close"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -280,7 +237,6 @@ export function AddToListButton({
                   onClick={handleCreateAndAdd}
                   disabled={!newListName.trim() || creatingList}
                   className="px-3 py-2 rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] disabled:opacity-50"
-                  title="Create list"
                 >
                   {creatingList ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -292,15 +248,6 @@ export function AddToListButton({
             </div>
           </div>
         )}
-
-        {/* Custom toast notification */}
-        <SaveToast
-          show={showToast}
-          message={toastMessage}
-          type={toastType}
-          position={toastPosition}
-          onClose={() => setShowToast(false)}
-        />
       </div>
     )
   }
@@ -309,7 +256,6 @@ export function AddToListButton({
   return (
     <div className="relative" ref={pickerRef}>
       <button
-        ref={buttonRef}
         type="button"
         onClick={handleClick}
         disabled={isLoading}
@@ -318,10 +264,10 @@ export function AddToListButton({
             ? "bg-[var(--cta-primary)]/10 text-[var(--cta-primary)]"
             : "bg-[var(--bg-muted)] text-[var(--text-primary)] hover:bg-[var(--bg-hover)]"
         } ${className}`}
-        aria-label={saved ? "Remove from list" : `Save ${itemName} to list`}
+        aria-label={saved ? "Saved to list" : `Save ${itemName} to list`}
       >
         {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Icon className="w-4 h-4" />}
-        {saved ? "Remove" : "Save"}
+        {saved ? "Saved" : "Save"}
       </button>
 
       {/* List picker dropdown - same as icon variant */}
@@ -333,7 +279,6 @@ export function AddToListButton({
               <button
                 onClick={() => setShowPicker(false)}
                 className="p-1 rounded text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-                title="Close"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -371,7 +316,6 @@ export function AddToListButton({
                 onClick={handleCreateAndAdd}
                 disabled={!newListName.trim() || creatingList}
                 className="px-3 py-2 rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] disabled:opacity-50"
-                title="Create list"
               >
                 {creatingList ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -383,15 +327,6 @@ export function AddToListButton({
           </div>
         </div>
       )}
-
-      {/* Custom toast notification */}
-      <SaveToast
-        show={showToast}
-        message={toastMessage}
-        type={toastType}
-        position={toastPosition}
-        onClose={() => setShowToast(false)}
-      />
     </div>
   )
 }

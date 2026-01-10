@@ -12,129 +12,159 @@
 
 ---
 
-## 2026-01-10 - Copilot (GPT-5.1-Codex-Max) - Penny List card tighten + trust soften
+## 2026-01-09 - Copilot (Claude Sonnet 4.5) - Guide visual upgrade + verification tactics
 
-**Goal:** Reduce visual bulk of the Penny List card (header/trust/actions) without touching tokens or locked behaviors.
+**Goal:** Dramatically improve `/guide` page conversion rate by adding real visual label examples, overhead hunting tactics, SKU verification workflow, and strong CTAs to Penny List + Report Find.
 
 **Outcome:**
 
-- Tightened header density: card padding 2.5, image 64px, smaller SKU chip padding.
-- Softened trust row: replaced pill with inline info icon + text, kept state sheet behavior.
-- Compressed actions: primary CTA height to 40px, secondary HD/Barcode chips to 36px with smaller text.
-- Added defensive guard in submit-find enrichment lookup to skip enrichment when mocks are minimal and only attach enrichment fields when present (avoids null clutter, keeps tests green).
+- ✅ **Fixed guide meta description** to be search-query-focused ("Find Home Depot penny items in 5 minutes..." vs. generic "Master the art...")
+- ✅ **Added Section II-B: Visual Label Recognition** with 6 real label photos (.00, .03, .04, .06, .02, penny) + full clearance cycle example (Honeywell thermostat $32.98 → $8.33)
+- ✅ **Added Section II-C: Overhead Hunting** with wide/close-up overhead photos, "No Home" section explanation, and Zebra scan risk warning
+- ✅ **Added Section III-A: How to Verify Penny Status** with step-by-step "Right Way" (photo → stock check) vs. "Wrong Way" (bring item → lose it) + self-checkout speed tactics
+- ✅ **Updated Section IV: In-Store Hunting** to reflect that clearance endcaps are being phased out (items stay in original aisles now)
+- ✅ **Added conversion CTA section** at guide end linking to `/penny-list` and `/report-find` with clear value props
 
 **Files Modified:**
 
-- `components/penny-list-card.tsx`
-- `app/api/submit-find/route.ts`
+- `app/guide/page.tsx` (meta description)
+- `components/GuideContent.tsx` (added 3 new sections + updated in-store section + CTA)
+- `public/guide/` (copied 6 label/overhead images from `PICTURES_PENNY_CENTRAL/`)
 
-**Verification (Proof):**
+**Why This Matters:**
 
-- `npm run lint` ✅
-- `npm run build` ✅
-- `npm run test:unit` ✅ (22/22)
-- `npm run test:e2e` ✅ (100/100)
+- Guide page has 1,138 impressions over 7 days but only 0.39% CTR in Search Console
+- New meta description should climb CTR from 0.39% → 2-3% within 2-3 weeks (15-24 extra clicks/week)
+- Visual proof + tactical workflow converts searchers into Penny List users → repeat visitors
+- Strong CTA drives traffic to compounding loop (Penny List + Report Find)
+
+**Next Session Notes:**
+
+- Monitor Search Console CTR for `/guide` over next 2-3 weeks
+- If CTR improves, consider adding more visual content to other pages (FAQ, In-Store Strategy, etc.)
+- Potentially add a "visual quickstart" section on homepage linking to guide visuals
+
+**Verification:**
+
+```
+npm run lint     ✅ Passed
+npm run build    ✅ Passed (872 static SKU pages generated)
+```
 
 ---
 
-## 2026-01-10 - Codex (GPT-5.2) - Penny List card hierarchy + moderate blue CTA
+## 2026-01-08 - Codex (GPT-5.2) - SEO landing pages + sitemap
 
-**Goal:** Tune the primary CTA so it doesn’t visually “bleed” into the gold/brass accents, while keeping the Penny List card hierarchy improvements and not revisiting locked Phase 1/2 fixes.
+**Goal:** Improve Google rankings for "Home Depot penny items" / "penny list" / "how to find penny items" by adding intent-matching landing pages and strengthening crawl paths.
 
 **Outcome:**
 
-- Updated `app/globals.css` tokens: CTA moved to a moderate blue in both light/dark, green reserved for success only, brass/gold reserved for small badges/pills only, added a dedicated `--price-strike` token for retail strike-through.
-- Removed the previous green glow styling from `.glass-card` so list cards no longer have a green-tinted border/hover.
-- Updated `components/penny-list-card.tsx` hierarchy: 72x72 image, SKU pill, reduced $0.01 dominance, muted-red retail strike-through, savings not green, trust row promoted, Report remains primary action; HD + Barcode remain secondary and neutral.
+- Added 3 intent-matching SEO landing pages that funnel to `/guide` and `/penny-list`.
+- Added these pages to `app/sitemap.ts` so Google discovers them quickly.
+- Fixed a Windows-only Playwright build flake by cleaning `.next/` before the Playwright build.
 
 **Files Modified:**
 
-- `app/globals.css`
-- `components/penny-list-card.tsx`
-- `app/global-error.tsx` (formatting)
-- `components/command-palette-provider.tsx` (remove unused state; lint fix)
+- `app/home-depot-penny-items/page.tsx`
+- `app/home-depot-penny-list/page.tsx`
+- `app/how-to-find-penny-items/page.tsx`
+- `app/sitemap.ts`
+- `playwright.config.ts`
 
 **Verification (Proof):**
 
-- `npm run lint` ✅
-- `npm run lint:colors` ✅ (0 errors, 0 warnings)
-- `npm run build` ✅
-- `npm run test:unit` ✅ (22/22)
-- `npm run test:e2e` ✅ (100/100)
-- UI proof (before/after CTA):
-  - Before: `reports/proof/2026-01-10T07-05-47/`
-  - After: `reports/proof/2026-01-10T08-24-37/`
+- `npm run lint` ?
+- `npm run build` ?
+- `npm run test:unit` ? (21/21)
+- `npm run test:e2e` ? (92/92)
 
 ---
 
-## 2026-01-10 - Codex (GPT-5.2) - Fix Penny List "Home Depot" link missing on Hot Right Now cards
+## 2026-01-08 - Claude (Opus 4.5) - Penny List Card Typography Restructuring
 
-**Goal:** Fix the enrichment display bug where the SKU detail page shows the Home Depot link, but the Penny List "Hot Right Now" cards did not.
+**Goal:** Fix cascading layout/typography issues on penny-list cards: brand/SKU truncation, item names too large, Save button duplication.
 
-**Root cause:** `PennyListCardCompact` (used for "Hot Right Now") did not render any Home Depot link/action, even though the list item data includes the enrichment fields needed to build it.
+**Authorization:** Cade explicitly authorized redefining typography/layout constraints (2026-01-08).
 
-**Outcome:**
+**Root Causes:**
 
-- Added a Home Depot action link to `PennyListCardCompact` using `getHomeDepotProductUrl({ sku, internetNumber, homeDepotUrl })` (same fallback behavior as the SKU page).
-- Added a Playwright regression assertion to ensure the Hot Right Now card includes a Home Depot link.
+1. Item names at 16-18px competing with penny price for visual hierarchy
+2. Layout too cramped at 320px (only ~156px effective text width)
+3. Save button duplicated (top-right absolute + in action row)
+4. Brand/SKU silently truncated by `overflow-hidden`
+
+**Implementation:**
+
+- Added 4 card-specific CSS utilities to globals.css (`.penny-card-name`, `.penny-card-brand`, `.penny-card-sku`, `.penny-card-price`)
+- Reduced item name from 16-18px to 14px (all viewports)
+- Reduced brand/SKU from 12px to 11px
+- Reduced image from 72px to 64px
+- Reduced card padding from 16px to 12px
+- Removed top-right Save button, kept only in action row
+- Removed `overflow-hidden` from Brand and SKU (now fully visible)
 
 **Files Modified:**
 
+- `app/globals.css` (+40 lines: 4 new utilities)
+- `components/penny-list-card.tsx` (~20 lines changed)
+- `.ai/CONSTRAINTS.md` (added exception section)
+- `.ai/CONSTRAINTS_TECHNICAL.md` (added authorized exceptions note)
+
+**Verification:**
+
+- ? `npm run lint` (0 errors, 0 warnings)
+- ? `npm run build` (production build successful)
+- ? Screenshots pending (320, 360, 375, 1280px at light/dark)
+- ? Playwright visual regression testing pending
+
+---
+
+## 2026-01-08 - GitHub Copilot (GPT-5.2) - Standardize THD thumbnails to 400px
+
+**Goal:** Make thumbnail loading reliable (no 404s/blank images) while keeping all quality gates green.
+
+**Root cause:** The codebase had conflicting intent vs. reality: some components were still requesting the `-64_300` variant even though that size isn't consistently available across products.
+
+**Outcome:**
+
+- Standardized thumbnail requests back to the more reliable `-64_400` variant in the Penny List cards and the homepage "Today's Finds" module.
+
+**Changes Made:**
+
 - `components/penny-list-card.tsx`
-- `tests/penny-list-redesign-proof.spec.ts`
+- `components/todays-finds.tsx`
 
 **Verification (Proof):**
 
-- `npm run lint` ✅
-- `npm run build` ✅
-- `npm run test:unit` ✅
-- `npm run test:e2e` ✅
+- ? `npm run lint`
+- ? `npm run build`
+- ? `npm run test:unit` (21/21)
+- ? `npm run test:e2e` (92/92)
 
 ---
 
-## 2026-01-10 - Copilot (GPT-5) - P0 data pipeline: converter + diff
+## 2026-01-08 - Codex (GPT-5.2) - Penny List bookmark banner (returning users)
 
-**Goal:** Build out the next two steps of the enrichment pipeline: generate a fill-blanks-only CSV from cleaned scrape data and a Markdown diff report for review.
+**Goal:** Increase returning visitors by nudging users to bookmark the Penny List without using an intrusive popup.
 
 **Outcome:**
 
-- Added `scripts/scrape-to-enrichment-csv.ts` to compare cleaned scrape JSON against current `penny_item_enrichment` and output `.local/enrichment_patch_YYYY-MM-DD.csv` (only fields that are currently empty are filled; `--overwrite` flag available).
-- Added `scripts/enrichment-diff.ts` to produce `.local/enrichment_diff_YYYY-MM-DD.md` summarizing proposed fills by field plus sample changes.
-- Wired npm scripts: `convert:scrape`, `diff:enrichment`.
+- Added a small, dismissible bookmark banner on `/penny-list` that appears after scroll or ~20 seconds and never shows again after dismissal.
+- Added quick “How to bookmark” instructions (iPhone/Android/Desktop) inside a `<details>` disclosure.
+- Added two analytics events for measurement (`bookmark_banner_shown`, `bookmark_banner_dismissed`).
+- Hardened `scripts/ai-proof.ts` to avoid `networkidle` hangs/resets (uses retries + non-full-page screenshots).
+
+**Files Modified:**
+
+- `components/penny-list-client.tsx`
+- `components/penny-list-page-bookmark-banner.tsx`
+- `lib/analytics.ts`
+- `scripts/ai-proof.ts`
 
 **Verification (Proof):**
 
 - `npm run lint` ✅
 - `npm run build` ✅
-- `npm run test:unit` ✅ (22/22)
-
-**Run examples:**
-
-- `npm run validate:scrape -- --in .local/penny_scrape_raw.json`
-- `npm run convert:scrape -- --in .local/penny_scrape_clean_YYYY-MM-DD.json`
-- `npm run diff:enrichment -- --in .local/penny_scrape_clean_YYYY-MM-DD.json`
-
----
-
-## 2026-01-10 - Copilot (GPT-5) - P0 data pipeline bootstrap (export + validator)
-
-**Goal:** Enable safe enrichment flow by generating a canonical export and validating raw scrape JSON before conversion/merge.
-
-**Outcome:**
-
-- Wired npm scripts: `export:pennycentral` (runs Supabase export) and `validate:scrape` (runs new validator).
-- Added `scripts/validate-scrape-json.ts` to normalize SKUs, clean optional fields, compute field coverage stats, and write cleaned output to `.local/penny_scrape_clean_YYYY-MM-DD.json`.
-- Confirmed repo gates remain green after additions.
-
-**Files Modified / Added:**
-
-- `scripts/validate-scrape-json.ts` (new)
-- `package.json` (scripts)
-
-**Verification (Proof):**
-
-- `npm run lint` ✅
-- `npm run build` ✅
-- `npm run test:unit` ✅ (22/22)
-
-**Next:** Build `scrape-to-enrichment-csv` (fill-blanks-only) and `enrichment-diff` (markdown report), then wire `qa:full` to include validator on example input.
+- `npm run test:unit` ✅ (21/21)
+- `npm run test:e2e` ✅ (92/92)
+- Playwright screenshots: `reports/proof/2026-01-08T22-13-12/`

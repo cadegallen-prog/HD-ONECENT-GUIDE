@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Jan 10, 2026 (Penny List CTA tuned to moderate blue)
+**Last updated:** Jan 09, 2026 (Guide visual upgrade)
 
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
@@ -10,13 +10,6 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
-
-- **Data pipeline P0 bootstrap (Jan 10):** Added `scripts/validate-scrape-json.ts` to normalize and validate raw scrape JSON (SKU validation, field presence stats, cleaned output to `.local/`), and wired npm scripts for `export:pennycentral` (existing export script runner) and `validate:scrape`.
-- **Data pipeline P0 continue (Jan 10):** Added `scripts/scrape-to-enrichment-csv.ts` (fill-blanks-only CSV from cleaned scrape + current enrichment) and `scripts/enrichment-diff.ts` (Markdown diff summary). Wired npm scripts: `convert:scrape`, `diff:enrichment`.
-- **Penny List card tightening + trust soften (Jan 10):** Reduced card padding, image size to 64px, smaller SKU chip, inline info-style trust row, compressed primary/secondary action heights; submit-find enrichment lookup now skips when mocks are minimal and only attaches enrichment fields when present (no null payload clutter).
-- **Penny List CTA tuned to moderate blue (Jan 10):** Kept brass/gold accents for small badges and green for success only, but moved the primary CTA to a moderate blue (light + dark) so it no longer competes with gold/brass; Penny List card hierarchy updated (72x72 image, SKU pill, reduced $0.01 dominance, trust row prominence, savings not green) and green glow removed from list cards.
-- **Penny List thumbnail image parity fix (Jan 10):** Fixed an image resolution divergence where list cards could show a generic/placeholder thumbnail while SKU pages showed the correct product image; list cards now use a reliable THD `-64_400` thumbnail variant helper instead of generating `-64_300` URLs.
-- **Penny List HD link fix (Jan 10):** Fixed a UI parity bug where the Penny List "Hot Right Now" cards were missing the Home Depot link even though SKU pages had it; Hot cards now render a Home Depot link using the same fallback URL builder as SKU pages, and a Playwright assertion covers it.
 
 - **Guide visual upgrade (Jan 09):** Rewrote `/guide` meta description to match actual search queries ("Find Home Depot penny items in 5 minutes..."); added Section II-B (Visual Label Recognition) with 6 real label photos + full clearance cycle example; added Section II-C (Overhead Hunting) with wide/close overhead photos + Zebra scan risk warning; added Section III-A (How to Verify Penny Status) with step-by-step "Right Way" vs. "Wrong Way" + self-checkout tactics; updated Section IV to note clearance endcaps being phased out; added strong conversion CTA section linking to `/penny-list` and `/report-find`. Expected impact: CTR from 0.39% → 2-3% within 2-3 weeks.
 - **Returning users nudge (Jan 08):** Added a small, dismissible “Bookmark this page” banner on `/penny-list` (shows after scroll or ~20s, then stays dismissed) to increase repeat visits; updated `scripts/ai-proof.ts` to be more resilient when capturing Playwright screenshots.
