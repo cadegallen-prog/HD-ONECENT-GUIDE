@@ -54,7 +54,7 @@
 
     --border-default: #e7e5e4;
     --border-strong: #d6d3d1;
-    --border-focus: #15803d;
+    --border-focus: var(--cta-primary);
     --border-dark: #d6d3d1;
 
     /* Brand neutrals (align to text palette) */
@@ -64,25 +64,30 @@
     --brand-bronze: var(--text-muted);
 
     /* 10% - CTA ACCENT (clickable elements ONLY) */
-    /* Forest green CTA for consistent "savings" psychology across modes */
-    --cta-primary: #15803d; /* 7.1:1 with white (AAA) - green = savings */
-    --cta-hover: #166534; /* Darker green hover */
-    --cta-active: #14532d; /* Darkest green active */
+    /* Moderate blue CTA (timeless, separates from gold/brass) */
+    --cta-primary: #1d4ed8;
+    --cta-hover: #1e40af;
+    --cta-active: #1e3a8a;
     --cta-text: #ffffff;
 
     /* Link colors (defaults to CTA in light mode) */
-    --link-default: #15803d;
-    --link-hover: #166534;
+    --link-default: var(--cta-primary);
+    --link-hover: var(--cta-hover);
 
     /* SYSTEM COLORS */
+    /* Green is reserved for true success states only (not CTA, not savings) */
     --status-success: #15803d;
     --status-warning: #a16207;
     --status-error: #b91c1c;
-    --status-info: #15803d;
+    /* Gold/brass is for small badges/pills only */
+    --status-info: var(--live-indicator);
     --color-success: var(--status-success);
     --color-warning: var(--status-warning);
     --color-error: var(--status-error);
     --color-info: var(--status-info);
+
+    /* Price semantics (avoid using error red for retail strike-through) */
+    --price-strike: #8b2a2a;
 
     /* Legacy status aliases */
     --success: var(--status-success);
@@ -95,15 +100,15 @@
     --shadow-button: 0 1px 2px rgba(0, 0, 0, 0.05);
     --shadow-button-hover: 0 3px 8px rgba(0, 0, 0, 0.12);
 
-    /* Live indicator */
-    --live-indicator: #d97706;
-    --live-glow: rgba(217, 119, 6, 0.4);
+    /* Gold/brass accent (badges/pills only; never buttons) */
+    --live-indicator: #8a6b2c;
+    --live-glow: rgba(138, 107, 44, 0.35);
 
-    /* Accent system aligns to CTA blue */
+    /* Accent system aligns to CTA */
     --accent: var(--cta-primary);
     --accent-hover: var(--cta-hover);
     /* Fallback for browsers without color-mix */
-    --accent-muted: #e7eef8;
+    --accent-muted: #e5edff;
     --accent-emphasis: var(--cta-active);
     --accent-foreground: var(--cta-text);
 
@@ -112,8 +117,8 @@
     --chip-surface-strong: var(--bg-page);
     --chip-border: var(--border-default);
     /* Fallbacks preceding color-mix for broader support */
-    --chip-accent-surface: #e6edf6;
-    --chip-accent-border: #c7d6ea;
+    --chip-accent-surface: #f6efe6;
+    --chip-accent-border: #e7d7c6;
     --chip-success-surface: #dae6df;
     --chip-success-border: #b8d6c4;
     --chip-muted-surface: var(--bg-recessed);
@@ -161,8 +166,8 @@
     --bg-page: #121212; /* Material Design dark grey - halation mitigation */
 
     /* Level 1-2: Standard components (cards, buttons) */
-    --bg-card: #1a1a1a; /* +8 luminance from base - cards, repeating elements */
-    --bg-elevated: #1f1f1f; /* slightly brighter than cards for subtle lift */
+    --bg-card: #1e1e1e; /* Material Design - 5% lighter than base for raised effect */
+    --bg-elevated: #2a2a2a; /* Consistent elevation for premium card surfaces */
     --bg-recessed: #1a1a1a; /* form fields and muted surfaces */
 
     /* Level 3-4: Interactive states (hover, focus) */
@@ -179,14 +184,14 @@
     /* DESATURATED TEXT COLORS (4.5:1 minimum on respective surfaces)
        Using muted warm grays instead of pure white to reduce optical vibration */
 
-    /* Primary content: Must meet 4.5:1 on Level 1 cards (#1a1a1a) */
-    --text-primary: #dcdcdc; /* 12.7:1 on #1a1a1a, 13.6:1 on #121212 (AAA) */
+    /* Primary content: Must meet 4.5:1 on Level 1 cards (#1E1E1E) */
+    --text-primary: #e0e0e0; /* Material Design off-white 87% - prevents halos */
 
     /* Secondary content: Must meet 4.5:1 on Level 1 cards */
     --text-secondary: #b0b0b0; /* 8.0:1 on #1a1a1a (AAA) */
 
-    /* Tertiary content: Must meet 4.5:1 on Level 1 cards */
-    --text-muted: #757575; /* Technical Grid grey - 4.6:1 on #121212 (AA) */
+    /* Tertiary content: Must meet 4.5:1 on elevated surfaces (#2a2a2a) */
+    --text-muted: #959595; /* 4.7:1 on bg-elevated (AA compliant) */
     --text-placeholder: #78716c;
 
     /* Inverse text for light buttons */
@@ -194,10 +199,10 @@
 
     /* UI COMPONENT BORDERS - Technical Grid (steel blue-grey)
        Subtle, professional borders for clean utility aesthetic */
-    --border-default: #37474F; /* Steel blue-grey - 3.2:1 on #121212 (AA) */
-    --border-strong: #455A64; /* Stronger steel - 3.8:1 (AA) */
-    --border-dark: #546E7A; /* Darkest steel - 4.5:1 (AA) */
-    --border-focus: #43A047; /* Match CTA green for focus rings */
+    --border-default: #37474f; /* Steel blue-grey - 3.2:1 on #121212 (AA) */
+    --border-strong: #455a64; /* Stronger steel - 3.8:1 (AA) */
+    --border-dark: #546e7a; /* Darkest steel - 4.5:1 (AA) */
+    --border-focus: var(--cta-primary);
 
     /* Dark mode brand - desaturated */
     --brand-gunmetal: var(--text-secondary);
@@ -205,24 +210,29 @@
     --brand-copper: var(--text-secondary);
     --brand-bronze: var(--text-muted);
 
-    /* CTA ACCENT - Technical Grid palette (emerald green for actions/savings)
-       Professional utility aesthetic for in-store scanning */
-    --cta-primary: #43A047; /* Emerald green - 9.8:1 on #121212 (AAA) */
-    --cta-text: #121212; /* Dark text on green button */
-    --cta-hover: #388E3C; /* Darker green hover - 8.1:1 (AAA) */
-    --cta-active: #2E7D32; /* Darkest green active - 11.2:1 (AAA) */
-    --link-default: #43A047; /* Match CTA for consistency - 9.8:1 (AAA) */
-    --link-hover: #66BB6A; /* Lighter green hover - 10.5:1 (AAA) */
+    /* CTA ACCENT - Moderate blue (matches light mode) */
+    --cta-primary: #93c5fd;
+    --cta-text: #0f172a;
+    --cta-hover: #bfdbfe;
+    --cta-active: #60a5fa;
+    --link-default: var(--cta-primary);
+    --link-hover: var(--cta-hover);
 
     /* STATUS COLORS - Technical Grid palette */
-    --status-success: #43A047; /* Match CTA green (savings = action) */
+    /* Green is reserved for true success states only (not CTA, not savings) */
+    --status-success: #3fbf7f;
+    --status-urgency: #f2b8b5; /* Material Red 200 - alerts without aggression */
     --status-warning: #fbbf24; /* Amber 400 - 8.3:1 on #121212 */
     --status-error: #f87171; /* Red 400 - 4.7:1 on #121212 */
-    --status-info: #43A047; /* Use green for info (utility aesthetic) */
+    /* Gold/brass is for small badges/pills only */
+    --status-info: var(--live-indicator);
 
-    /* LIVE INDICATOR - Special case, decorative element */
-    --live-indicator: #fbbf24; /* Amber 400 - warm, energetic */
-    --live-glow: rgba(251, 191, 36, 0.4);
+    /* Gold/brass accent (badges/pills only; never buttons) */
+    --live-indicator: #f2d184;
+    --live-glow: rgba(242, 209, 132, 0.25);
+
+    /* Price semantics (avoid using error red for retail strike-through) */
+    --price-strike: #f2b8b5;
 
     /* Legacy compatibility */
     --accent: var(--link-default);
@@ -231,10 +241,11 @@
     --accent-emphasis: #d7e2ee;
 
     /* Map + chip system overrides */
-    --chip-accent-surface: #c8d6e6;
-    --chip-accent-border: #93acc6;
-    --chip-success-surface: #bfeccd;
-    --chip-success-border: #7bd49a;
+    --chip-accent-surface: #2a241a;
+    --chip-accent-border: #5a4632;
+    /* Success chips use dark green bg so bright green text is readable */
+    --chip-success-surface: #1a3026;
+    --chip-success-border: #2d4a3a;
     --chip-muted-surface: var(--bg-hover);
     --chip-muted-border: var(--border-strong);
     --map-marker-default: color-mix(in srgb, var(--text-primary) 80%, var(--bg-card) 20%);
@@ -335,6 +346,57 @@
   a[class*="bg-[var(--cta-primary)]"],
   [data-cta] {
     color: var(--cta-text) !important;
+  }
+
+  /* ===============================================
+     CARD STYLES - GLASSMORPHISM vs SOLID
+
+     TO REMOVE GLASSMORPHISM:
+     1. In penny-list-card.tsx, change className="glass-card" to "solid-card"
+     2. That's it - the solid-card class uses standard elevation colors
+
+     Current: glass-card (frosted glass with blur + green glow border)
+     Alternative: solid-card (standard elevated surface, no blur)
+     =============================================== */
+
+  /* Solid card - standard elevated surface (non-glass alternative) */
+  .solid-card {
+    position: relative;
+    background: var(--bg-card);
+    border: 1px solid var(--border-default);
+    box-shadow: var(--shadow-card);
+    transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .solid-card:hover {
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  /* Glass card - frosted glass with backdrop blur */
+  .glass-card {
+    position: relative;
+    background: var(--bg-card);
+    background: color-mix(in srgb, var(--bg-card) 82%, transparent);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid color-mix(in srgb, var(--border-default) 70%, transparent);
+    box-shadow: var(--shadow-card);
+    transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .glass-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 40%);
+    pointer-events: none;
+  }
+
+  .glass-card:hover {
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-card-hover);
   }
 
   /*  ===============================================

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useCallback } from "react"
-import { Calendar, PlusCircle, Copy, Check } from "lucide-react"
+import { Calendar, PlusCircle, Copy, Check, Barcode, ExternalLink, Info } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
 import { copyToClipboard } from "@/components/copy-sku-button"
@@ -19,13 +19,13 @@ import {
 import type { PennyItem } from "@/lib/fetch-penny-data"
 import { formatSkuForDisplay } from "@/lib/sku"
 import { buildReportFindUrl } from "@/lib/report-find-link"
+import { getHomeDepotProductUrl } from "@/lib/home-depot"
 import { trackEvent } from "@/lib/analytics"
 import type { KeyboardEvent, MouseEvent } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { PennyListActionRow } from "@/components/penny-list-action-row"
 import { StateBreakdownSheet } from "@/components/state-breakdown-sheet"
-import { toThdImageVariant } from "@/lib/image-cache"
+import { toPennyListThumbnailUrl } from "@/lib/image-cache"
 
 interface PennyListCardProps {
   item: PennyItem & { parsedDate?: Date | null }
@@ -75,6 +75,17 @@ export function PennyListCard({ item, stateFilter, windowLabel, userState }: Pen
     typeof item.retailPrice === "number" && item.retailPrice > 0 ? item.retailPrice : null
   const formattedPrice = formatCurrency(item.price)
   const formattedRetail = retailPrice ? formatCurrency(retailPrice) : null
+  // Savings calculation for dopamine trigger
+  const savings =
+    retailPrice && retailPrice > item.price ? Number((retailPrice - item.price).toFixed(2)) : 0
+  const hasSavings = savings > 0
+  const formattedSavings = hasSavings ? formatCurrency(savings) : null
+  // Home Depot URL resolution - always available via SKU fallback (matches SKU detail page behavior)
+  const resolvedHomeDepotUrl = getHomeDepotProductUrl({
+    sku: item.sku,
+    homeDepotUrl: item.homeDepotUrl ?? undefined,
+    internetNumber: item.internetNumber ?? undefined,
+  })
 
   const resolvedWindowLabel = windowLabel?.trim() || "30d"
   const nowMs = Date.now()
@@ -94,8 +105,7 @@ export function PennyListCard({ item, stateFilter, windowLabel, userState }: Pen
     stateFilter,
     windowLabel: resolvedWindowLabel,
   })
-  // Downconvert to 300px for tiny thumbnail display (72x72)
-  const thumbnailSrc = item.imageUrl ? toThdImageVariant(item.imageUrl, 300) : item.imageUrl
+  const thumbnailSrc = item.imageUrl ? toPennyListThumbnailUrl(item.imageUrl) : item.imageUrl
 
   const openSkuPage = () => router.push(skuPageUrl)
 
@@ -112,18 +122,30 @@ export function PennyListCard({ item, stateFilter, windowLabel, userState }: Pen
       tabIndex={0}
       onClick={openSkuPage}
       onKeyDown={handleKeyDown}
-      className="rounded-2xl border border-[var(--border-default)] bg-[var(--bg-card)] transition-colors hover:border-[var(--border-strong)] h-full flex flex-col cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+      className="rounded-2xl glass-card h-full flex flex-col cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
       aria-label={`View details for ${item.name} (SKU ${item.sku})`}
       aria-labelledby={`item-${item.id}-name`}
     >
       <article className="flex flex-col h-full relative">
-        <div className="p-3 flex flex-col flex-1 space-y-2.5">
-          <div className="flex gap-3 items-start">
-            <PennyThumbnail src={thumbnailSrc} alt={displayName} size={72} />
+        {/* Heart icon - top-right corner (Design Vision Tier 5) */}
+        <div className="absolute top-3 right-3 z-10" onClick={(event) => event.stopPropagation()}>
+          <AddToListButton
+            sku={item.sku}
+            itemName={item.name}
+            variant="icon"
+            className="min-h-[44px] min-w-[44px]"
+          />
+        </div>
+
+        <div className="p-2.5 flex flex-col flex-1 space-y-2">
+          {/* Tier 1 + 2: Image + Brand + Name + SKU */}
+          <div className="flex gap-2.5 items-start pr-9">
+            <PennyThumbnail src={thumbnailSrc} alt={displayName} size={64} />
             <div className="flex-1 space-y-1">
-              {/* Brand line - single line, never truncate */}
+              {/* Brand (small) */}
               {displayBrand && <p className="penny-card-brand whitespace-nowrap">{displayBrand}</p>}
-              {/* Item name - 2-line clamp only */}
+
+              {/* Name (2 lines) */}
               <h3
                 id={`item-${item.id}-name`}
                 className="penny-card-name line-clamp-2-table"
@@ -131,50 +153,114 @@ export function PennyListCard({ item, stateFilter, windowLabel, userState }: Pen
               >
                 {displayName}
               </h3>
-              {/* SKU line - single line, never truncate, monospace */}
-              <p className="penny-card-sku whitespace-nowrap">
-                SKU {formatSkuForDisplay(item.sku)}
-              </p>
+
+              {/* SKU badge (compact pill) */}
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center rounded-full border border-[var(--border-default)] bg-[var(--bg-recessed)] px-2 py-0.5 text-[11px] font-mono text-[var(--text-secondary)]">
+                  SKU {formatSkuForDisplay(item.sku)}
+                </span>
+              </div>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-end gap-3">
-            <p className="penny-card-price">{formattedPrice}</p>
-            {formattedRetail && (
-              <p className="text-sm font-semibold text-[var(--text-secondary)] leading-tight">
-                Retail{" "}
-                <span className="line-through decoration-[var(--text-muted)]">
-                  {formattedRetail}
+          {/* Tier 3: Price Block with Savings (dopamine trigger) */}
+          <div className="space-y-1">
+            <div className="flex flex-wrap items-baseline gap-2">
+              <span className="text-lg font-semibold text-[var(--text-primary)]">
+                {formattedPrice}
+              </span>
+              {formattedRetail && (
+                <span className="text-sm text-[var(--text-muted)]">
+                  Retail{" "}
+                  <span className="line-through text-[var(--price-strike)]">{formattedRetail}</span>
                 </span>
+              )}
+            </div>
+            {hasSavings && formattedSavings && (
+              <p className="text-sm font-semibold text-[var(--text-secondary)]">
+                <span className="text-[var(--live-indicator)]">{formattedSavings}</span> off
               </p>
             )}
           </div>
 
-          <div className="space-y-1 text-xs text-[var(--text-muted)]">
-            <p title={lastSeenTitle ?? undefined}>{lastSeenLabel}</p>
+          {/* Tier 4: Metadata (confidence builders) */}
+          <div className="space-y-1.5">
+            <p className="text-sm text-[var(--text-secondary)]" title={lastSeenTitle ?? undefined}>
+              {lastSeenLabel}
+            </p>
             <button
               type="button"
               onClick={(event) => {
                 event.stopPropagation()
                 setIsStateBreakdownOpen(true)
               }}
-              className="text-left text-[var(--cta-primary)] underline decoration-[var(--cta-primary)] underline-offset-2 hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+              className="inline-flex items-center gap-1 text-sm font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
               aria-label={`View state breakdown for ${displayName}`}
             >
-              {lineB}
+              <Info className="w-4 h-4" aria-hidden="true" />
+              <span>{lineB}</span>
             </button>
           </div>
 
-          <PennyListActionRow
-            sku={item.sku}
-            itemName={item.name}
-            upc={upc}
-            homeDepotUrl={item.homeDepotUrl}
-            internetNumber={item.internetNumber}
-            reportSource="card"
-            homeDepotSource="penny-list-card"
-            onBarcodeOpen={() => setIsBarcodeOpen(true)}
-          />
+          {/* Tier 5: Actions - Report (full-width primary), then HD + Barcode row */}
+          <div className="space-y-2" onClick={(event) => event.stopPropagation()}>
+            {/* Row 1: Full-width Report button (primary action) */}
+            <Button
+              type="button"
+              variant="primary"
+              size="sm"
+              onClick={(event) => {
+                event.preventDefault()
+                trackEvent("report_duplicate_click", {
+                  sku: item.sku,
+                  name: item.name,
+                  src: "card",
+                })
+                router.push(buildReportFindUrl({ sku: item.sku, name: item.name, src: "card" }))
+              }}
+              className="w-full min-h-[40px]"
+              aria-label={`Report finding ${item.name}`}
+            >
+              <PlusCircle className="w-4 h-4 mr-1.5" aria-hidden="true" />
+              Report Find
+            </Button>
+
+            {/* Row 2: Secondary actions (HD always shows via SKU fallback, Barcode only if UPC exists) */}
+            <div className="flex gap-1.5">
+              <a
+                href={resolvedHomeDepotUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 flex items-center justify-center gap-1.5 min-h-[36px] px-2.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] text-[var(--text-secondary)] text-xs font-semibold transition-colors hover:text-[var(--text-primary)] hover:border-[var(--border-strong)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+                aria-label={`Open Home Depot page for ${item.name}`}
+                onClick={(event) => {
+                  event.stopPropagation()
+                  trackEvent("home_depot_click", {
+                    skuMasked: item.sku.slice(-4),
+                    source: "penny-list-card",
+                  })
+                }}
+              >
+                <ExternalLink className="w-4 h-4" aria-hidden="true" />
+                <span>Home Depot</span>
+              </a>
+              {hasUpc && (
+                <button
+                  type="button"
+                  onClick={(event) => {
+                    event.preventDefault()
+                    event.stopPropagation()
+                    setIsBarcodeOpen(true)
+                  }}
+                  className="flex items-center justify-center gap-1.5 min-h-[36px] px-2.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] text-[var(--text-secondary)] text-xs font-semibold transition-colors hover:text-[var(--text-primary)] hover:border-[var(--border-strong)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+                  aria-label={`Show barcode for ${item.name}`}
+                >
+                  <Barcode className="w-4 h-4" aria-hidden="true" />
+                  <span>Barcode</span>
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       </article>
       <BarcodeModal
@@ -211,6 +297,11 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
   const totalReports = item.locations ? getTotalReports(item.locations) : 0
   const stateCount = item.locations ? Object.keys(item.locations).length : 0
   const skuPageUrl = `/sku/${item.sku}`
+  const resolvedHomeDepotUrl = getHomeDepotProductUrl({
+    sku: item.sku,
+    homeDepotUrl: item.homeDepotUrl ?? undefined,
+    internetNumber: item.internetNumber ?? undefined,
+  })
 
   const retailPrice = typeof item.retailPrice === "number" ? item.retailPrice : null
   const compactSavings =
@@ -219,8 +310,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
   const compactFormattedPrice = formatCurrency(item.price)
   const compactFormattedRetail = retailPrice ? formatCurrency(retailPrice) : null
   const compactFormattedSavings = compactHasSavings ? formatCurrency(compactSavings) : null
-  // Downconvert to 300px for tiny thumbnail display (72x72)
-  const thumbnailSrc = item.imageUrl ? toThdImageVariant(item.imageUrl, 300) : item.imageUrl
+  const thumbnailSrc = item.imageUrl ? toPennyListThumbnailUrl(item.imageUrl) : item.imageUrl
 
   const openSkuPage = () => router.push(skuPageUrl)
 
@@ -340,18 +430,21 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
         <div className="mt-2 flex flex-wrap items-end gap-3 text-xs">
           <div>
             <p className="text-[var(--text-muted)]">Penny price</p>
-            <p className="text-base font-semibold text-[var(--status-success)]">
+            <p className="text-lg font-semibold text-[var(--text-primary)]">
               {compactFormattedPrice}
             </p>
           </div>
           {compactFormattedRetail && (
             <div className="flex flex-col gap-1">
               <span className="text-[var(--text-muted)]">Retail</span>
-              <span className="text-sm font-semibold text-[var(--text-primary)]">
+              <span className="text-sm font-semibold text-[var(--price-strike)] line-through">
                 {compactFormattedRetail}
               </span>
               {compactHasSavings && compactFormattedSavings && (
-                <span className="text-[var(--cta-primary)]">Save {compactFormattedSavings}</span>
+                <span className="text-[var(--text-secondary)] font-semibold">
+                  <span className="text-[var(--live-indicator)]">{compactFormattedSavings}</span>{" "}
+                  off
+                </span>
               )}
             </div>
           )}
@@ -407,6 +500,26 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
             <PlusCircle className="w-4 h-4 mr-1.5" aria-hidden="true" />
             Report this find
           </Button>
+          <a
+            href={resolvedHomeDepotUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-1.5 min-h-[44px] min-w-[44px] px-2.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+            aria-label={`Open Home Depot page for ${item.name}`}
+            title="Home Depot"
+            onClick={(event) => {
+              event.stopPropagation()
+              trackEvent("home_depot_click", {
+                skuMasked: item.sku.slice(-4),
+                source: "penny-list-hot-card",
+              })
+            }}
+          >
+            <ExternalLink className="h-4 w-4" aria-hidden="true" />
+            <span className="hidden sm:inline text-xs font-medium text-[var(--text-secondary)]">
+              Home Depot
+            </span>
+          </a>
           <BookmarkAction sku={item.sku} itemName={item.name} />
         </div>
       </article>
