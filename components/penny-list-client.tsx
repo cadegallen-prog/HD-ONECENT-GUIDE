@@ -342,6 +342,16 @@ export function PennyListClient({
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [closeSheets, isFilterSheetOpen, isSortSheetOpen])
 
+  // Track previous filter values to prevent redundant fetches
+  const prevFiltersRef = useRef({
+    stateFilter,
+    searchQuery,
+    sortOption,
+    dateRange,
+    currentPage,
+    itemsPerPage,
+  })
+
   // Fetch items from API when filters change
   const fetchItems = useCallback(async () => {
     setIsLoading(true)
@@ -374,13 +384,34 @@ export function PennyListClient({
   }, [stateFilter, searchQuery, sortOption, dateRange, currentPage, itemsPerPage])
 
   // Fetch when params change (but not on initial render - we have server data)
+  // Only fetch if filters actually changed to prevent infinite loops
   useEffect(() => {
     if (isInitialRenderRef.current) {
       isInitialRenderRef.current = false
       return
     }
-    fetchItems()
-  }, [fetchItems])
+
+    const prev = prevFiltersRef.current
+    const changed =
+      prev.stateFilter !== stateFilter ||
+      prev.searchQuery !== searchQuery ||
+      prev.sortOption !== sortOption ||
+      prev.dateRange !== dateRange ||
+      prev.currentPage !== currentPage ||
+      prev.itemsPerPage !== itemsPerPage
+
+    if (changed) {
+      prevFiltersRef.current = {
+        stateFilter,
+        searchQuery,
+        sortOption,
+        dateRange,
+        currentPage,
+        itemsPerPage,
+      }
+      fetchItems()
+    }
+  }, [stateFilter, searchQuery, sortOption, dateRange, currentPage, itemsPerPage, fetchItems])
 
   const previousSearchRef = useRef(searchQuery)
 

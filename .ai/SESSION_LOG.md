@@ -12,6 +12,53 @@
 
 ---
 
+## 2026-01-11 - GitHub Copilot - Supabase Critical Fixes (Egress + Security)
+
+**Goal:** Fix infinite API loop causing 44,000+ Supabase calls + security issues  
+**Status:** ✅ Complete
+
+### Issues Fixed
+
+1. **Frontend Infinite Loop (P0)**: `useEffect` in penny-list-client.tsx was re-triggering on every `fetchItems` callback recreation, causing 44,000+ API calls to `penny_item_enrichment` and `penny_list_public` tables.
+   - **Fix**: Added ref-based comparison (`prevFiltersRef`) to only fetch when filters actually change
+   - **Impact**: Reduced API calls from thousands to 1 per filter change
+
+2. **SECURITY DEFINER View**: `penny_list_public` view was using `SECURITY DEFINER` which bypasses RLS policies
+   - **Fix**: Recreated view with `SECURITY INVOKER` (migration 011)
+   - **Impact**: View now respects user permissions via RLS
+
+3. **Public Insert Vulnerability**: `Penny List` table allowed unauthenticated inserts (spam risk)
+   - **Fix**: Updated RLS policy to require authentication (migration 012)
+   - **Trade-off**: Users must sign in to submit finds (can add captcha later for anon submissions)
+
+### Files Changed
+
+- `components/penny-list-client.tsx` - Fixed infinite loop with ref comparison
+- `supabase/migrations/011_fix_security_definer_view.sql` - Fixed SECURITY DEFINER
+- `supabase/migrations/012_restrict_penny_list_inserts.sql` - Locked down inserts
+- `SUPABASE_CRITICAL_FIXES.md` - Full documentation with rollback plan
+
+### Verification
+
+✅ Lint: Passed (0 errors)  
+✅ Build: Passed (successful compilation)  
+✅ TypeScript: Passed (no type errors)
+
+### Next Steps
+
+1. Apply Supabase migrations: `supabase db push`
+2. Deploy to Vercel: `git push origin main`
+3. Monitor Supabase dashboard for API call rate normalization
+4. Test penny-list page filter behavior (should be 1 API call per change)
+
+### Learnings
+
+- `useEffect` with callback dependencies requires careful ref-based comparison to prevent infinite loops
+- Always use `SECURITY INVOKER` for views unless you have a specific reason for `SECURITY DEFINER`
+- Anonymous inserts need rate limiting OR require authentication to prevent spam
+
+---
+
 ## 2026-01-11 - Codex (GPT-5.2) - Dev/Test mode protocol (port ownership + Copilot hang mitigation)
 
 **Goal:** Reduce Copilot “spinner hang” + port 3001 loops by enforcing a single-owner dev server workflow and making `ai:doctor`/`ai:verify` deterministic on Windows.
