@@ -8,7 +8,7 @@
 
 ## 🔴 MOST VIOLATED RULES (READ FIRST)
 
-### ⛔ Rule #1: NEVER Kill Port 3001
+### ⛔ Rule #1: NEVER Kill Port 3001 (Unless Proven Unhealthy + You Own It)
 
 **Problem:** Agents keep killing the dev server on port 3001 even though the user is intentionally running it.
 
@@ -23,7 +23,7 @@
 
 ```bash
 # Check if port 3001 is in use
-lsof -i :3001  # (or netstat on Windows)
+netstat -ano | findstr :3001
 
 # IF PORT IS IN USE:
 # ✅ USE IT - navigate to http://localhost:3001 in Playwright
@@ -37,10 +37,16 @@ lsof -i :3001  # (or netstat on Windows)
 **Exception:** Only kill port 3001 if:
 
 - User explicitly asks you to restart it
-- Process is hung/broken (not responding)
-- You've asked user permission first
+- Process is **proven unhealthy** (port is LISTENING but HTTP does not respond after a few retries)
+- And you **know you own that process** (you started it in this session / terminal), or you’ve asked you (Cade) first
 
 **Default assumption:** If port 3001 is occupied = **user is running server intentionally. Use it.**
+
+**HTTP readiness check (use this before calling it “hung”):**
+
+```bash
+powershell -NoProfile -Command "try { (Invoke-WebRequest -Uri http://localhost:3001 -UseBasicParsing -TimeoutSec 5).StatusCode } catch { $_.Exception.Message }"
+```
 
 ---
 

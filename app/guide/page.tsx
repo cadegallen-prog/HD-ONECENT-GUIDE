@@ -2,26 +2,29 @@ import type { Metadata } from "next"
 import { GuideContent } from "@/components/GuideContent"
 import { SupportAndCashbackCard } from "@/components/SupportAndCashbackCard"
 import { PageHeader, PageShell, Section } from "@/components/page-templates"
-import { ogImageUrl } from "@/lib/og"
 
 export const metadata: Metadata = {
-  title: "Home Depot Penny Guide: Find $0.01 Items | Penny Central",
+  title: "How to Find Home Depot Penny Items (Live Community Guide) | Penny Central",
   description:
-    "Find Home Depot penny items with our live, crowd-sourced list updated hourly. Complete guide: clearance labels, overhead hunting, verification, checkout.",
+    "Learn timing, what to scan, and how penny finds happen. A practical guide backed by live community experience.",
   openGraph: {
-    type: "website",
+    type: "article",
     url: "https://www.pennycentral.com/guide",
-    title: "Home Depot Penny Guide: Find $0.01 Items",
-    description:
-      "Find Home Depot penny items with our live, crowd-sourced list updated hourly. Complete guide: clearance labels, overhead hunting, verification, checkout.",
-    images: [ogImageUrl("guide")],
+    title: "How to Find Home Depot Penny Items",
+    description: "The rules, timing, and what to scan. Learn the process fast.",
+    images: [
+      {
+        url: "/api/og?page=guide",
+        width: 1200,
+        height: 630,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Home Depot Penny Guide: Find $0.01 Items",
-    description:
-      "Find Home Depot penny items with our live, crowd-sourced list updated hourly. Complete guide: clearance labels, overhead hunting, verification, checkout.",
-    images: [ogImageUrl("guide")],
+    title: "How to Find Home Depot Penny Items",
+    description: "The rules, timing, and what to scan. Learn the process fast.",
+    images: ["/api/og?page=guide"],
   },
 }
 
@@ -138,8 +141,34 @@ export default function GuidePage() {
           }),
         }}
       />
+      {/* Article Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            headline: "How to Find Home Depot Penny Items",
+            description:
+              "Learn timing, what to scan, and how penny finds happen. A practical guide backed by live community experience.",
+            url: "https://www.pennycentral.com/guide",
+            author: {
+              "@type": "Organization",
+              name: "Penny Central",
+            },
+            publisher: {
+              "@type": "Organization",
+              name: "Penny Central",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://www.pennycentral.com/icon.svg",
+              },
+            },
+          }),
+        }}
+      />
       <PageHeader
-        title="Complete Guide"
+        title="How Home Depot Penny Shopping Works"
         subtitle="Master the art of finding $0.01 clearance items at Home Depot. Learn the clearance lifecycle, digital pre-hunt strategies, in-store tactics, and checkout procedures."
         primaryAction={{ label: "Check the Penny List", href: "/penny-list" }}
         secondaryActions={[

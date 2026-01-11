@@ -187,7 +187,11 @@ test("uses purchase_date when timestamp is missing or invalid", async () => {
   clearSupabaseMocks()
 })
 
-test("last seen still uses purchase_date when it includes time info", async () => {
+test("last seen uses timestamp (submission time) over purchase_date for freshness", async () => {
+  // "Last Seen" should reflect when someone reported the find (timestamp),
+  // not when they claim they found it (purchase_date). This ensures freshness
+  // signals reflect actual platform activity and prevents "phantom activity"
+  // from backdated submissions.
   installSupabaseMocks({})
   const { buildPennyItemsFromRows } = await import("../lib/fetch-penny-data")
 
@@ -200,7 +204,7 @@ test("last seen still uses purchase_date when it includes time info", async () =
 
   assert.strictEqual(
     items[0].lastSeenAt,
-    new Date("2022-09-01T00:00:00Z").toISOString()
+    new Date("2025-12-10T12:34:56Z").toISOString()
   )
 
   clearSupabaseMocks()

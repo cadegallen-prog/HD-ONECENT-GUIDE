@@ -3,29 +3,32 @@ import { getPennyListFiltered } from "@/lib/fetch-penny-data"
 import { filterValidPennyItems, formatWindowLabel } from "@/lib/penny-list-utils"
 import { queryPennyItems, getHotItems } from "@/lib/penny-list-query"
 import { PennyListClient } from "@/components/penny-list-client"
-import { ogImageUrl } from "@/lib/og"
 
 const VALID_PER_PAGE = [25, 50, 100] as const
 const DEFAULT_PER_PAGE = 50
 
 export const metadata: Metadata = {
-  title: "Home Depot Penny List: Latest $0.01 Item Sightings | Penny Central",
+  title: "Live Home Depot Penny List ($0.01 Finds) by State | Penny Central",
   description:
-    "Latest community-reported Home Depot penny list. Search and filter by state, date, and SKU. Updated hourly with the freshest penny sightings.",
+    "Live $0.01 items reported by the community, organized by state and recency. See what's being found right now.",
   openGraph: {
     type: "website",
     url: "https://www.pennycentral.com/penny-list",
-    title: "Home Depot Penny List ($0.01 Finds)",
-    description:
-      "Latest community-reported penny sightings at Home Depot. Search and filter by state, date, and SKU.",
-    images: [ogImageUrl("penny-list")],
+    title: "Live $0.01 Penny List",
+    description: "Live community-reported penny items by state and recency.",
+    images: [
+      {
+        url: "/api/og?page=penny-list",
+        width: 1200,
+        height: 630,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Home Depot Penny List ($0.01 Finds)",
-    description:
-      "Latest community-reported penny sightings at Home Depot. Search and filter by state, date, and SKU.",
-    images: [ogImageUrl("penny-list")],
+    title: "Live $0.01 Penny List",
+    description: "Live community-reported penny items by state and recency.",
+    images: ["/api/og?page=penny-list"],
   },
 }
 
@@ -90,7 +93,7 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
   const nowMs =
     process.env.PLAYWRIGHT === "1" ? new Date("2025-12-10T12:00:00Z").getTime() : Date.now()
 
-  const pennyItems = await getPennyListFiltered(days, nowMs)
+  const pennyItems = await getPennyListFiltered(days, nowMs, { includeNotes: false })
   const validItems = filterValidPennyItems(pennyItems)
   const feedUnavailable = validItems.length === 0
 
@@ -215,7 +218,7 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
             id="page-heading"
             className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)] mb-4"
           >
-            Penny List
+            Live Home Depot Penny List
           </h1>
           <p className="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
             Community reports of recent penny sightings.

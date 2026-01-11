@@ -64,6 +64,32 @@ This is critical for UI/design decisions:
 
 All four phases must be served. Optimizing only for Phase 2 (scanning) while ignoring Phase 1 (research) or Phase 4 (contribution) breaks the flywheel.
 
+### Decision Frame (Keep Agents Oriented)
+
+This is the primary “zoomed-out” framing that prevents local optimizations from drifting away from the core loop. Treat these as the main levers for the foreseeable future; the goal is 80-90% of “near-perfect” on the core loop, not endless expansion.
+
+**Three growth levers (the why behind most work):**
+
+1. **More submissions (Report a Find)**
+   - **Steelman:** This is flywheel fuel. More verified reports makes the Penny List more valuable, brings users back, and creates more reports. It’s also the most controllable lever (reduce friction, increase trust, improve defaults).
+   - **Strawman:** “Just make the form prettier.” Overbuild the form, increase abandonment, and/or accept lower-quality reports that erode trust.
+
+2. **Better Penny List retention**
+   - **Steelman:** Retention creates habit. The list must feel reliably useful (fresh, scannable, credible signals) so people return and contribute again.
+   - **Strawman:** Endless UI polish/features that add complexity without improving usefulness, increasing maintenance cost and confusion.
+
+3. **More Google traffic (SEO)**
+   - **Steelman:** SEO diversifies beyond Facebook and compounds if it’s intent-matched and internally linked into the Penny List + Report Find loop.
+   - **Strawman:** Generic content and keyword-chasing that drives vanity traffic without converting into retention or submissions.
+
+**Two supporting categories (not “growth levers”, but often prerequisites):**
+
+4. **Stability + verification + agent workflow**
+   - If this is weak, everything else becomes stressful and expensive (regressions, “AI did the wrong thing”, lack of proof).
+
+5. **Data pipeline correctness**
+   - If this is weak, the Penny List can’t be trusted (freshness/credibility suffers) and SEO/retention gains won’t stick.
+
 ---
 
 ## Mission

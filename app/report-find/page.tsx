@@ -19,6 +19,7 @@ function ReportFindForm() {
   const searchParams = useSearchParams()
   const handledPrefillKeyRef = useRef<string | null>(null)
   const [todayIso, setTodayIso] = useState("")
+  const [minDateIso, setMinDateIso] = useState("")
   const [productUrl, setProductUrl] = useState("")
   const [formData, setFormData] = useState({
     itemName: "",
@@ -41,9 +42,19 @@ function ReportFindForm() {
   } | null>(null)
 
   useEffect(() => {
-    const today = new Date().toLocaleDateString("en-CA")
-    setTodayIso(today)
-    setFormData((prev) => (prev.dateFound ? prev : { ...prev, dateFound: today }))
+    const today = new Date()
+    // Format as YYYY-MM-DD (using locale that produces ISO format)
+    const todayStr = today.toLocaleDateString("en-CA")
+    setTodayIso(todayStr)
+
+    // Calculate 30 days ago for min date
+    const thirtyDaysAgo = new Date(today)
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+    const minDateStr = thirtyDaysAgo.toLocaleDateString("en-CA")
+    setMinDateIso(minDateStr)
+
+    // Prefill with today as default
+    setFormData((prev) => (prev.dateFound ? prev : { ...prev, dateFound: todayStr }))
   }, [])
 
   // Prefill state from user's last selection (saved on Penny List or here)
@@ -481,11 +492,16 @@ function ReportFindForm() {
               type="date"
               id="dateFound"
               required
+              aria-required="true"
               value={formData.dateFound}
               onChange={(e) => setFormData({ ...formData, dateFound: e.target.value })}
+              min={minDateIso || undefined}
               max={todayIso || undefined}
               className="w-full px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent"
             />
+            <p className="mt-1 text-xs text-[var(--text-muted)]">
+              When did you find this item? (within the last 30 days)
+            </p>
           </div>
 
           {/* Optional details (collapsed by default) */}

@@ -9,6 +9,33 @@ interface HealthCheck {
   message: string;
 }
 
+async function sleep(ms: number): Promise<void> {
+  await new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function isHttpOkWithRetries(
+  url: string,
+  options: { attempts: number; timeoutMs: number; delayMs: number }
+): Promise<{ ok: boolean; status?: number; error?: string }> {
+  for (let attempt = 1; attempt <= options.attempts; attempt++) {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), options.timeoutMs);
+      const response = await fetch(url, { signal: controller.signal });
+      clearTimeout(timeout);
+
+      if (response.ok) return { ok: true, status: response.status };
+      return { ok: false, status: response.status };
+    } catch (err: any) {
+      const message = err?.name === 'AbortError' ? 'timeout' : String(err?.message || err);
+      if (attempt === options.attempts) return { ok: false, error: message };
+      await sleep(options.delayMs);
+    }
+  }
+
+  return { ok: false, error: 'unknown' };
+}
+
 async function checkPort3001(): Promise<HealthCheck> {
   // First check if port is in use
   const portInUse = await new Promise<boolean>((resolve) => {
@@ -33,34 +60,34 @@ async function checkPort3001(): Promise<HealthCheck> {
   }
 
   // Port is in use - verify server is actually RESPONDING
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 5000);
+  const status = await isHttpOkWithRetries('http://localhost:3001/', {
+    attempts: 3,
+    timeoutMs: 5000,
+    delayMs: 2000,
+  });
 
-    const response = await fetch('http://localhost:3001/', {
-      signal: controller.signal,
-    });
-    clearTimeout(timeout);
+  if (status.ok) {
+    return {
+      name: 'Port 3001',
+      status: 'pass',
+      message: 'Running and responding (reuse it)',
+    };
+  }
 
-    if (response.ok) {
-      return {
-        name: 'Port 3001',
-        status: 'pass',
-        message: 'Running and responding (reuse it)',
-      };
-    } else {
-      return {
-        name: 'Port 3001',
-        status: 'fail',
-        message: `Server error ${response.status} - restart it`,
-      };
-    }
-  } catch (err) {
-    // Server is on port but not responding - CRASHED
+  // Server is on port but not responding - likely stuck or crashed
+  if (status.status) {
     return {
       name: 'Port 3001',
       status: 'fail',
-      message: 'CRASHED - run "npx kill-port 3001" then "npm run dev"',
+      message: `Unhealthy HTTP (${status.status}) - restart only if you own it`,
+    };
+  }
+
+  {
+    return {
+      name: 'Port 3001',
+      status: 'fail',
+      message: 'Unresponsive - find PID via netstat; kill only if you own it',
     };
   }
 }

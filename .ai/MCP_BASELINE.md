@@ -30,4 +30,4 @@
 
 ## Optional servers
 
-- None defined today. If you add optional servers (e.g., Vercel), document them in `.ai/TOOLING_MANIFEST.md` under “Optional MCPs” and keep this baseline unchanged.
+- None defined today. If you add optional servers, document them in `.ai/TOOLING_MANIFEST.md` under "Optional MCPs" and keep this baseline unchanged.

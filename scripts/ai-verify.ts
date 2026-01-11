@@ -5,21 +5,32 @@ import fs from 'fs';
 import path from 'path';
 import net from 'net';
 
-// Check if server is healthy BEFORE running tests
-async function checkServerHealth(): Promise<{
-  ok: boolean;
-  message: string;
-  playwrightBaseUrl?: string;
-}> {
-  if (process.env.PLAYWRIGHT_BASE_URL) {
-    return {
-      ok: true,
-      message: `Using PLAYWRIGHT_BASE_URL=${process.env.PLAYWRIGHT_BASE_URL}`,
-      playwrightBaseUrl: process.env.PLAYWRIGHT_BASE_URL,
-    };
+type VerifyMode = 'auto' | 'dev' | 'test';
+
+function parseMode(argv: string[]): VerifyMode {
+  const modeArg = argv.find((arg) => arg === '--mode' || arg.startsWith('--mode='));
+  if (!modeArg) {
+    const positional = argv.find((arg) => !arg.startsWith('-'));
+    if (!positional) return 'auto';
+    const normalized = positional.trim().toLowerCase();
+    if (normalized === 'auto' || normalized === 'dev' || normalized === 'test') return normalized;
+    return 'auto';
   }
 
-  const portInUse = await new Promise<boolean>((resolve) => {
+  const value = modeArg === '--mode' ? argv[argv.indexOf(modeArg) + 1] : modeArg.split('=')[1];
+  if (!value) return 'auto';
+
+  const normalized = value.trim().toLowerCase();
+  if (normalized === 'auto' || normalized === 'dev' || normalized === 'test') return normalized;
+  return 'auto';
+}
+
+async function sleep(ms: number): Promise<void> {
+  await new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function isPortInUse(port: number): Promise<boolean> {
+  return await new Promise<boolean>((resolve) => {
     const server = net.createServer();
     server.once('error', () => {
       server.close();
@@ -29,38 +40,97 @@ async function checkServerHealth(): Promise<{
       server.close();
       resolve(false);
     });
-    server.listen(3001);
+    server.listen(port);
   });
+}
+
+async function isHttpOkWithRetries(
+  url: string,
+  options: { attempts: number; timeoutMs: number; delayMs: number }
+): Promise<{ ok: boolean; status?: number; error?: string }> {
+  for (let attempt = 1; attempt <= options.attempts; attempt++) {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), options.timeoutMs);
+      const response = await fetch(url, { signal: controller.signal });
+      clearTimeout(timeout);
+
+      if (response.ok) return { ok: true, status: response.status };
+      return { ok: false, status: response.status };
+    } catch (err: any) {
+      const message = err?.name === 'AbortError' ? 'timeout' : String(err?.message || err);
+      if (attempt === options.attempts) return { ok: false, error: message };
+      await sleep(options.delayMs);
+    }
+  }
+
+  return { ok: false, error: 'unknown' };
+}
+
+// Check if server is healthy BEFORE running tests
+async function checkServerHealth(mode: VerifyMode): Promise<{
+  ok: boolean;
+  message: string;
+  playwrightBaseUrl?: string;
+}> {
+  if (process.env.PLAYWRIGHT_BASE_URL) {
+    const baseUrl = process.env.PLAYWRIGHT_BASE_URL;
+    const status = await isHttpOkWithRetries(`${baseUrl}/`, {
+      attempts: 3,
+      timeoutMs: 5000,
+      delayMs: 2000,
+    });
+
+    if (!status.ok) {
+      return {
+        ok: false,
+        message: `PLAYWRIGHT_BASE_URL is set but not responding (${baseUrl})`,
+      };
+    }
+
+    return { ok: true, message: `Using PLAYWRIGHT_BASE_URL=${baseUrl}`, playwrightBaseUrl: baseUrl };
+  }
+
+  if (mode === 'test') {
+    return {
+      ok: true,
+      message: 'Mode=test: Playwright will start its own server on port 3002',
+    };
+  }
+
+  const portInUse = await isPortInUse(3001);
 
   // If 3001 is running, prefer it (never kill/restart it automatically)
   if (portInUse) {
-    try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 5000);
-      const response = await fetch('http://localhost:3001/', {
-        signal: controller.signal,
-      });
-      clearTimeout(timeout);
+    const status = await isHttpOkWithRetries('http://localhost:3001/', {
+      attempts: 3,
+      timeoutMs: 5000,
+      delayMs: 2000,
+    });
 
-      if (!response.ok) {
-        return {
-          ok: false,
-          message: `Dev server on port 3001 responded with ${response.status}. Restart it only if you intend to.`,
-        };
-      }
+    if (!status.ok) {
+      const extra =
+        mode === 'auto'
+          ? 'Rerun in test mode to use Playwright-owned server on port 3002 (no killing), or fix/restart your dev server if you own it. Example: "npm run ai:verify -- test".'
+          : 'Fix/restart your dev server if you own it.';
 
-      return {
-        ok: true,
-        message: 'Dev server detected on port 3001 (Playwright will reuse it)',
-        playwrightBaseUrl: 'http://localhost:3001',
-      };
-    } catch {
       return {
         ok: false,
-        message:
-          'Port 3001 is in use but the server did not respond. Restart it only if you intend to.',
+        message: `Port 3001 is in use but HTTP is not responding (${status.error || status.status || 'unknown'}). ${extra}`,
       };
     }
+
+    return {
+      ok: true,
+      message: 'Dev server detected on port 3001 (healthy)',
+    };
+  }
+
+  if (mode === 'dev') {
+    return {
+      ok: false,
+      message: 'Mode=dev: No dev server detected on port 3001. Start it with "npm run dev".',
+    };
   }
 
   return {
@@ -242,7 +312,8 @@ async function main() {
   // CRITICAL: Check server health BEFORE running tests
   // This prevents infinite loops when server is crashed
   console.log('Checking server health...');
-  const serverHealth = await checkServerHealth();
+  const mode = parseMode(process.argv.slice(2));
+  const serverHealth = await checkServerHealth(mode);
   if (!serverHealth.ok) {
     console.error('\n❌ SERVER HEALTH CHECK FAILED');
     console.error(`   ${serverHealth.message}`);

@@ -24,16 +24,19 @@ Follow this sequence before every session:
 ## Entry Points by Model
 
 ### Claude Code (Sonnet 4.5 / Opus 4.5)
+
 - **MCP Config:** `.vscode/mcp.json`
 - **Entry file:** `CLAUDE.md` (redirects here)
-- **MCP Servers:** Filesystem, GitHub, Playwright, Supabase, Vercel
+- **MCP Servers:** Filesystem, GitHub, Playwright, Supabase
 
 ### ChatGPT Codex (GPT-5.2)
+
 - **MCP Config:** `~/.codex/config.toml`
 - **Entry file:** `.ai/CODEX_ENTRY.md` (redirects here)
 - **MCP Servers:** Same 5 as Claude
 
 ### GitHub Copilot Chat
+
 - **MCP Support:** None
 - **Entry file:** `copilot-instructions.md` (references here)
 - **Best for:** Quick questions, code completion only
@@ -47,16 +50,17 @@ Follow this sequence before every session:
 
 ### Your Responsibilities
 
-| Responsibility | What This Means |
-|----------------|-----------------|
-| **Architect** | You make all technical decisions. Don't ask "does this look right?" - verify it yourself. |
-| **Guardian** | Catch Cade's mistakes. If he requests something wrong, broken, or harmful - push back. |
-| **Teacher** | Explain what's happening in plain English. He should understand the "what" and "why", not the "how". |
-| **Advisor** | Offer 2-3 approaches with pros/cons. Let him choose direction, you handle execution. |
+| Responsibility | What This Means                                                                                      |
+| -------------- | ---------------------------------------------------------------------------------------------------- |
+| **Architect**  | You make all technical decisions. Don't ask "does this look right?" - verify it yourself.            |
+| **Guardian**   | Catch Cade's mistakes. If he requests something wrong, broken, or harmful - push back.               |
+| **Teacher**    | Explain what's happening in plain English. He should understand the "what" and "why", not the "how". |
+| **Advisor**    | Offer 2-3 approaches with pros/cons. Let him choose direction, you handle execution.                 |
 
 ### When to Challenge Cade
 
 Push back (politely but firmly) when Cade:
+
 - Requests a feature that would break existing functionality
 - Wants to skip testing or verification
 - Proposes something that contradicts documented constraints
@@ -85,11 +89,11 @@ npm run test:e2e    # all passing
 
 These are the only technical commands Cade needs to know:
 
-| Command | When to Use | What It Does |
-|---------|-------------|--------------|
-| `/doctor` | Start of session | Checks if environment is healthy |
-| `/verify` | End of session | Runs all tests, generates proof |
-| `/proof` | After UI changes | Takes screenshots for visual verification |
+| Command   | When to Use      | What It Does                              |
+| --------- | ---------------- | ----------------------------------------- |
+| `/doctor` | Start of session | Checks if environment is healthy          |
+| `/verify` | End of session   | Runs all tests, generates proof           |
+| `/proof`  | After UI changes | Takes screenshots for visual verification |
 
 **Cade's job:** Run these commands, grant permissions, pay for tools, make business decisions.
 
@@ -151,3 +155,7 @@ When something doesn't work:
 ## Next Step
 
 Now read `CRITICAL_RULES.md` to learn the never-violate rules (Port 3001, colors, verification, etc.).
+
+After the read order, use `.ai/USAGE.md` (Habit 2) to write a “Goldilocks” task spec (includes NOT DOING / CONSTRAINTS / EXAMPLES) and the course-correction script when the AI is misaligned.
+
+If you’re unsure what to optimize next (submissions vs retention vs SEO), read `.ai/CONTEXT.md` for the stable decision frame.

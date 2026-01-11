@@ -9,11 +9,11 @@ test("inserts only allowed fields into Supabase", async () => {
     inserted.push(payload)
     return { error: null }
   }
-  const mockClient = {
+  const mockClient: any = {
     from: () => ({ insert: insertSpy }),
   }
 
-  installSupabaseMocks({ submitAnon: mockClient as any })
+  installSupabaseMocks({ submitAnon: mockClient })
 
   const { POST } = await import("../app/api/submit-find/route")
   const req = new NextRequest("http://localhost/api/submit-find", {
@@ -23,7 +23,7 @@ test("inserts only allowed fields into Supabase", async () => {
       sku: "1009876543",
       storeCity: "Atlanta",
       storeState: "GA",
-      dateFound: "2025-12-01",
+      dateFound: new Date().toISOString().split("T")[0],
       quantity: "2",
       notes: "Example note",
       website: "",
@@ -43,7 +43,7 @@ test("inserts only allowed fields into Supabase", async () => {
     item_name: "Test Item",
     home_depot_sku_6_or_10_digits: "1009876543",
     store_city_state: "Atlanta, GA",
-    purchase_date: "2025-12-01",
+    purchase_date: new Date().toISOString().split("T")[0],
     exact_quantity_found: 2,
     notes_optional: "Example note",
     timestamp: payload.timestamp,
@@ -60,7 +60,7 @@ test("returns 500 when anon insert is RLS-blocked", async () => {
 
   const anonInserted: Record<string, unknown>[] = []
 
-  const anonClient = {
+  const anonClient: any = {
     from: () => ({
       insert: async (payload: Record<string, unknown>) => {
         anonInserted.push(payload)
@@ -69,7 +69,7 @@ test("returns 500 when anon insert is RLS-blocked", async () => {
     }),
   }
 
-  installSupabaseMocks({ submitAnon: anonClient as any })
+  installSupabaseMocks({ submitAnon: anonClient })
 
   const { POST } = await import("../app/api/submit-find/route")
   const req = new NextRequest("http://localhost/api/submit-find", {
@@ -79,7 +79,7 @@ test("returns 500 when anon insert is RLS-blocked", async () => {
       sku: "1009876543",
       storeCity: "Atlanta",
       storeState: "GA",
-      dateFound: "2025-12-01",
+      dateFound: new Date().toISOString().split("T")[0],
       quantity: "2",
       notes: "Example note",
       website: "",
@@ -95,5 +95,133 @@ test("returns 500 when anon insert is RLS-blocked", async () => {
   assert.strictEqual(res.status, 500)
   assert.strictEqual(anonInserted.length, 1)
 
+  clearSupabaseMocks()
+})
+
+// Date validation tests
+test("accepts date from 15 days ago", async () => {
+  const inserted: Record<string, unknown>[] = []
+  const insertSpy = async (payload: Record<string, unknown>) => {
+    inserted.push(payload)
+    return { error: null }
+  }
+  const mockClient: any = {
+    from: () => ({ insert: insertSpy }),
+  }
+
+  installSupabaseMocks({ submitAnon: mockClient })
+
+  const fifteenDaysAgo = new Date()
+  fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 15)
+  const dateStr = fifteenDaysAgo.toISOString().split("T")[0]
+
+  const { POST } = await import("../app/api/submit-find/route")
+  const req = new NextRequest("http://localhost/api/submit-find", {
+    method: "POST",
+    body: JSON.stringify({
+      itemName: "Test Item",
+      sku: "1009876543",
+      storeCity: "Atlanta",
+      storeState: "GA",
+      dateFound: dateStr,
+      quantity: "1",
+      notes: "",
+      website: "",
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      "x-forwarded-for": "203.0.113.20",
+    },
+  })
+
+  const res = await POST(req)
+  assert.strictEqual(res.status, 200, "Should accept date from 15 days ago")
+  assert.strictEqual(inserted.length, 1)
+  clearSupabaseMocks()
+})
+
+test("rejects date from 31 days ago", async () => {
+  const inserted: Record<string, unknown>[] = []
+  const insertSpy = async (payload: Record<string, unknown>) => {
+    inserted.push(payload)
+    return { error: null }
+  }
+  const mockClient: any = {
+    from: () => ({ insert: insertSpy }),
+  }
+
+  installSupabaseMocks({ submitAnon: mockClient })
+
+  const thirtyOneDaysAgo = new Date()
+  thirtyOneDaysAgo.setDate(thirtyOneDaysAgo.getDate() - 31)
+  const dateStr = thirtyOneDaysAgo.toISOString().split("T")[0]
+
+  const { POST } = await import("../app/api/submit-find/route")
+  const req = new NextRequest("http://localhost/api/submit-find", {
+    method: "POST",
+    body: JSON.stringify({
+      itemName: "Test Item",
+      sku: "1009876543",
+      storeCity: "Atlanta",
+      storeState: "GA",
+      dateFound: dateStr,
+      quantity: "1",
+      notes: "",
+      website: "",
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      "x-forwarded-for": "203.0.113.21",
+    },
+  })
+
+  const res = await POST(req)
+  assert.strictEqual(res.status, 400, "Should reject date from 31 days ago")
+  const data = await res.json()
+  assert.ok(data.error.includes("30 days"), "Error should mention 30-day limit")
+  assert.strictEqual(inserted.length, 0, "Should not insert rejected submission")
+  clearSupabaseMocks()
+})
+
+test("rejects future date", async () => {
+  const inserted: Record<string, unknown>[] = []
+  const insertSpy = async (payload: Record<string, unknown>) => {
+    inserted.push(payload)
+    return { error: null }
+  }
+  const mockClient: any = {
+    from: () => ({ insert: insertSpy }),
+  }
+
+  installSupabaseMocks({ submitAnon: mockClient })
+
+  const tomorrow = new Date()
+  tomorrow.setDate(tomorrow.getDate() + 1)
+  const dateStr = tomorrow.toISOString().split("T")[0]
+
+  const { POST } = await import("../app/api/submit-find/route")
+  const req = new NextRequest("http://localhost/api/submit-find", {
+    method: "POST",
+    body: JSON.stringify({
+      itemName: "Test Item",
+      sku: "1009876543",
+      storeCity: "Atlanta",
+      storeState: "GA",
+      dateFound: dateStr,
+      quantity: "1",
+      notes: "",
+      website: "",
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      "x-forwarded-for": "203.0.113.22",
+    },
+  })
+
+  const res = await POST(req)
+  assert.strictEqual(res.status, 400, "Should reject future date")
+  const data = await res.json()
+  assert.ok(data.error.includes("future"), "Error should mention future date")
+  assert.strictEqual(inserted.length, 0, "Should not insert rejected submission")
   clearSupabaseMocks()
 })

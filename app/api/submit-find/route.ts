@@ -26,6 +26,52 @@ const submissionSchema = z
   })
   .strip() // Strip any extra fields (photoUrl/upload attempts are ignored).
 
+/**
+ * Validates that the submitted date is within the last 30 days.
+ * This allows users flexibility to report recent finds while preventing
+ * very old backdated submissions. "Last Seen" uses submission timestamp
+ * (not this date) to ensure freshness signals reflect actual activity.
+ */
+function validateDateWithin30Days(dateStr: string): { isValid: boolean; error?: string } {
+  const submittedDate = new Date(dateStr)
+  const today = new Date()
+
+  // Check if the date is valid
+  if (Number.isNaN(submittedDate.getTime())) {
+    return { isValid: false, error: "Invalid date format" }
+  }
+
+  // Get dates as UTC day boundaries (ignore time)
+  const submittedDateUTC = Date.UTC(
+    submittedDate.getUTCFullYear(),
+    submittedDate.getUTCMonth(),
+    submittedDate.getUTCDate()
+  )
+
+  const todayUTC = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate())
+
+  // Reject future dates
+  if (submittedDateUTC > todayUTC) {
+    return {
+      isValid: false,
+      error: "Date cannot be in the future.",
+    }
+  }
+
+  // Calculate 30 days ago (in UTC day boundaries)
+  const thirtyDaysAgoMs = todayUTC - 30 * 24 * 60 * 60 * 1000
+
+  // Reject dates older than 30 days
+  if (submittedDateUTC < thirtyDaysAgoMs) {
+    return {
+      isValid: false,
+      error: "Date must be within the last 30 days.",
+    }
+  }
+
+  return { isValid: true }
+}
+
 function getClientIp(request: NextRequest) {
   const forwarded = request.headers.get("x-forwarded-for")
   if (forwarded) return forwarded.split(",")[0].trim()
@@ -157,6 +203,12 @@ export async function POST(request: NextRequest) {
     }
 
     const normalizedSku = skuCheck.normalized
+
+    // Validate date is within the last 30 days
+    const dateValidation = validateDateWithin30Days(body.dateFound)
+    if (!dateValidation.isValid) {
+      return NextResponse.json({ error: dateValidation.error }, { status: 400 })
+    }
 
     // Block obvious test/spam SKUs
     const spamPatterns = [

@@ -137,14 +137,9 @@ export default function RootLayout({
               "@type": "WebSite",
               name: "Penny Central",
               url: "https://www.pennycentral.com",
-              description:
-                "The searchable Home Depot penny list. Filter by state, date, and SKU. Community-reported $0.01 finds updated hourly.",
               potentialAction: {
                 "@type": "SearchAction",
-                target: {
-                  "@type": "EntryPoint",
-                  urlTemplate: "https://www.pennycentral.com/store-finder?q={search_term_string}",
-                },
+                target: "https://www.pennycentral.com/penny-list?search={search_term_string}",
                 "query-input": "required name=search_term_string",
               },
             }),
@@ -158,9 +153,8 @@ export default function RootLayout({
               "@type": "Organization",
               name: "Penny Central",
               url: "https://www.pennycentral.com",
-              description:
-                "Community resource for Home Depot penny item hunters with 40,000+ members.",
-              sameAs: ["https://www.facebook.com/groups/homedepotpennies"],
+              logo: "https://www.pennycentral.com/icon.svg",
+              sameAs: ["https://www.facebook.com/groups/homedepotonecent"],
             }),
           }}
         />

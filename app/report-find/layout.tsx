@@ -1,10 +1,9 @@
 import { Metadata } from "next"
-import { ogImageUrl } from "@/lib/og"
 
 export const metadata: Metadata = {
-  title: "Report a Penny Find - Submit Home Depot $0.01 Items | Penny Central",
+  title: "Report a Home Depot Penny Find (Live Verification) | Penny Central",
   description:
-    "Report your Home Depot penny finds to help the community. Submit SKU, location, and details to add items to the Penny List. Takes 30 seconds.",
+    "Submit a penny find in seconds to help verify live sightings for 47K+ shoppers. Your report updates the intel.",
   keywords: [
     "report penny item",
     "submit penny find",
@@ -16,17 +15,52 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "https://www.pennycentral.com/report-find",
-    title: "Report a Penny Find - Help the Community",
-    description:
-      "Submit your Home Depot penny finds to the community Penny List. Quick and easy reporting.",
-    images: [ogImageUrl("report-find")],
+    title: "Report a Penny Find",
+    description: "Help 47K+ shoppers verify live $0.01 sightings. Fast report, real impact.",
+    images: [
+      {
+        url: "/api/og?page=report-find",
+        width: 1200,
+        height: 630,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    images: [ogImageUrl("report-find")],
+    title: "Report a Penny Find",
+    description: "Help 47K+ shoppers verify live $0.01 sightings. Fast report, real impact.",
+    images: ["/api/og?page=report-find"],
   },
 }
 
 export default function ReportFindLayout({ children }: { children: React.ReactNode }) {
-  return children
+  return (
+    <>
+      {/* Breadcrumb Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Home",
+                item: "https://www.pennycentral.com",
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: "Report a Find",
+                item: "https://www.pennycentral.com/report-find",
+              },
+            ],
+          }),
+        }}
+      />
+      {children}
+    </>
+  )
 }

@@ -2,6 +2,7 @@ import { ImageResponse } from "next/og"
 import { getOgFonts } from "@/lib/og-fonts"
 import { OG_BACKGROUND_BASE64 } from "@/lib/og-background-base64"
 import { OG_MAIN_PAGES, OG_VARIANTS, type OgMainPageId } from "@/lib/og"
+import { MEMBER_COUNT_BADGE_TEXT } from "@/lib/constants"
 
 export const runtime = "edge"
 // Enable caching for SKU pages (main pages now use static images)
@@ -92,6 +93,43 @@ const styles = {
     flexDirection: "row",
     flexWrap: "wrap",
   },
+  badgeContainer: {
+    position: "absolute",
+    top: 24,
+    right: 24,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 10,
+  },
+  badgeNormal: {
+    backgroundColor: "#f0f0f0",
+    color: "#333333",
+    paddingLeft: 16,
+    paddingRight: 16,
+    paddingTop: 8,
+    paddingBottom: 8,
+    borderRadius: 20,
+    fontSize: 18,
+    fontWeight: 600,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  badgeQuieter: {
+    backgroundColor: "#e8e8e8",
+    color: "#666666",
+    paddingLeft: 12,
+    paddingRight: 12,
+    paddingTop: 6,
+    paddingBottom: 6,
+    borderRadius: 16,
+    fontSize: 14,
+    fontWeight: 500,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 } as const
 
 function normalizeText(raw: string | null, fallback: string, maxLen: number) {
@@ -176,21 +214,34 @@ function layoutHeadline(headline: string) {
   return { lines, fontSize: twoLineSize }
 }
 
-function parseVariant(searchParams: URLSearchParams): { headline: string; subhead: string } {
+function parseVariant(searchParams: URLSearchParams): {
+  headline: string
+  subhead: string
+  motif: string
+  badgeSize: "normal" | "quieter"
+} {
   const pageParam = (searchParams.get("page") ?? "").trim()
   const isMainPage = OG_MAIN_PAGES.includes(pageParam as OgMainPageId)
-  if (isMainPage) return OG_VARIANTS[pageParam as OgMainPageId]
+  if (isMainPage) {
+    const variant = OG_VARIANTS[pageParam as OgMainPageId]
+    return {
+      headline: variant.headline,
+      subhead: variant.subline,
+      motif: variant.motif,
+      badgeSize: variant.badgeSize,
+    }
+  }
 
-  const fallbackHeadline = OG_VARIANTS.homepage.headline
-  const fallbackSubhead = OG_VARIANTS.homepage.subhead
-
+  const fallback = OG_VARIANTS.homepage
   return {
     headline: normalizeText(
       searchParams.get("headline") ?? searchParams.get("title"),
-      fallbackHeadline,
+      fallback.headline,
       90
     ),
-    subhead: normalizeText(searchParams.get("subhead"), fallbackSubhead, 130),
+    subhead: normalizeText(searchParams.get("subhead"), fallback.subline, 130),
+    motif: fallback.motif,
+    badgeSize: fallback.badgeSize,
   }
 }
 
@@ -216,14 +267,112 @@ function renderSubheadParts(subhead: string): Array<{ text: string; highlight: b
   return parts.length > 0 ? parts : [{ text: subhead, highlight: false }]
 }
 
+// Render simple abstract motif shapes at the bottom-right
+function renderMotif(motif: string): React.ReactElement {
+  const motifSize = 120
+  const motifStyle = {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    opacity: 0.15,
+    display: "flex",
+  }
+
+  switch (motif) {
+    case "data-dots":
+      // Abstract scatter of dots for state distribution
+      return (
+        <div {...({ style: motifStyle } as Record<string, unknown>)}>
+          <svg width={motifSize} height={motifSize} viewBox="0 0 120 120" fill="none">
+            <circle cx="30" cy="30" r="4" fill="#999" />
+            <circle cx="60" cy="25" r="3" fill="#999" />
+            <circle cx="90" cy="35" r="4" fill="#999" />
+            <circle cx="25" cy="60" r="3" fill="#999" />
+            <circle cx="60" cy="60" r="5" fill="#999" />
+            <circle cx="95" cy="65" r="3" fill="#999" />
+            <circle cx="35" cy="90" r="4" fill="#999" />
+            <circle cx="70" cy="85" r="3" fill="#999" />
+            <circle cx="100" cy="95" r="4" fill="#999" />
+          </svg>
+        </div>
+      )
+    case "list-rows":
+      // Simplified card/row silhouettes
+      return (
+        <div {...({ style: motifStyle } as Record<string, unknown>)}>
+          <svg width={motifSize} height={motifSize} viewBox="0 0 120 120" fill="none">
+            <rect x="10" y="10" width="100" height="20" rx="2" fill="#999" />
+            <rect x="10" y="40" width="100" height="20" rx="2" fill="#999" />
+            <rect x="10" y="70" width="100" height="20" rx="2" fill="#999" />
+          </svg>
+        </div>
+      )
+    case "checklist":
+      // Simple checkmark or book icon
+      return (
+        <div {...({ style: motifStyle } as Record<string, unknown>)}>
+          <svg width={motifSize} height={motifSize} viewBox="0 0 120 120" fill="none">
+            <rect
+              x="15"
+              y="15"
+              width="90"
+              height="90"
+              rx="4"
+              fill="none"
+              stroke="#999"
+              strokeWidth="3"
+            />
+            <path
+              d="M35 60 L50 75 L85 40"
+              stroke="#999"
+              strokeWidth="3"
+              fill="none"
+              strokeLinecap="round"
+            />
+          </svg>
+        </div>
+      )
+    case "plus-marker":
+      // Plus sign or report marker
+      return (
+        <div {...({ style: motifStyle } as Record<string, unknown>)}>
+          <svg width={motifSize} height={motifSize} viewBox="0 0 120 120" fill="none">
+            <circle cx="60" cy="60" r="45" fill="none" stroke="#999" strokeWidth="3" />
+            <path d="M60 35 V85 M35 60 H85" stroke="#999" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+        </div>
+      )
+    case "map-pin":
+      // Location pin with simple store blocks
+      return (
+        <div {...({ style: motifStyle } as Record<string, unknown>)}>
+          <svg width={motifSize} height={motifSize} viewBox="0 0 120 120" fill="none">
+            <path
+              d="M60 15 C48 15 40 23 40 35 C40 50 60 85 60 85 C60 85 80 50 80 35 C80 23 72 15 60 15 Z"
+              fill="none"
+              stroke="#999"
+              strokeWidth="2"
+            />
+            <circle cx="60" cy="35" r="6" fill="#999" />
+            <rect x="30" y="85" width="15" height="15" rx="1" fill="#999" />
+            <rect x="75" y="85" width="15" height="15" rx="1" fill="#999" />
+          </svg>
+        </div>
+      )
+    default:
+      return <div {...({ style: motifStyle } as Record<string, unknown>)} />
+  }
+}
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
     const showBrand = searchParams.get("brand") !== "0"
 
-    const { headline, subhead } = parseVariant(searchParams)
+    const { headline, subhead, motif, badgeSize } = parseVariant(searchParams)
     const headlineLayout = layoutHeadline(headline)
     const subheadParts = renderSubheadParts(subhead)
+    const motifElement = renderMotif(motif)
 
     const ogFonts = await getOgFonts()
 
@@ -235,6 +384,20 @@ export async function GET(request: Request) {
           alt=""
           {...({ style: styles.backgroundImage } as Record<string, unknown>)}
         />
+
+        {/* Motif element */}
+        {motifElement}
+
+        {/* Badge - top-right */}
+        <div {...({ style: styles.badgeContainer } as Record<string, unknown>)}>
+          <div
+            {...({
+              style: badgeSize === "normal" ? styles.badgeNormal : styles.badgeQuieter,
+            } as Record<string, unknown>)}
+          >
+            {MEMBER_COUNT_BADGE_TEXT}
+          </div>
+        </div>
 
         {/* Content overlay - left side only */}
         <div {...({ style: styles.content } as Record<string, unknown>)}>

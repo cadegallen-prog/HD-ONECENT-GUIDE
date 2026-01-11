@@ -19,6 +19,23 @@ const fetchWarningsLogged = {
   pennyListMissing: false,
 }
 const PENNY_LIST_CACHE_SECONDS = 60
+const PENNY_LIST_BASE_COLUMNS = [
+  "id",
+  "purchase_date",
+  "item_name",
+  "home_depot_sku_6_or_10_digits",
+  "exact_quantity_found",
+  "store_city_state",
+  "image_url",
+  "home_depot_url",
+  "internet_sku",
+  "timestamp",
+  "brand",
+  "model_number",
+  "upc",
+  "retail_price",
+]
+const PENNY_LIST_HEAVY_COLUMNS = ["notes_optional"]
 
 export type PennyItem = {
   id: string
@@ -49,10 +66,14 @@ export type SupabasePennyRow = {
   exact_quantity_found: number | null
   store_city_state: string | null
   image_url: string | null
-  notes_optional: string | null
+  notes_optional?: string | null
   home_depot_url: string | null
   internet_sku: number | null
   timestamp: string | null
+  brand: string | null
+  model_number: string | null
+  upc: string | null
+  retail_price: string | number | null
 }
 
 export type SupabasePennyEnrichmentRow = {
@@ -65,7 +86,6 @@ export type SupabasePennyEnrichmentRow = {
   home_depot_url: string | null
   internet_sku: number | null
   updated_at: string | null
-  source: string | null
   retail_price: string | number | null
 }
 
@@ -254,14 +274,19 @@ function pickLastSeenDate(
   row: SupabasePennyRow,
   nowMs: number
 ): { iso: string; ms: number } | null {
+  // Use timestamp (when submitted) for "Last Seen" - ensures freshness signal
+  // reflects actual platform activity, not user-claimed dates.
+  // This prevents "phantom activity" where old backdated submissions
+  // increase find counts without updating freshness indicators.
+  const timestamp = row.timestamp ? new Date(row.timestamp) : null
+  if (timestamp && !Number.isNaN(timestamp.getTime()) && timestamp.getTime() <= nowMs) {
+    return { iso: timestamp.toISOString(), ms: timestamp.getTime() }
+  }
+
+  // Fallback to purchase_date only if no timestamp (legacy data)
   const purchase = parsePurchaseDateValue(row.purchase_date)
   if (purchase && purchase.ms <= nowMs) {
     return purchase
-  }
-
-  const timestamp = row.timestamp ? new Date(row.timestamp) : null
-  if (timestamp && !Number.isNaN(timestamp.getTime())) {
-    return { iso: timestamp.toISOString(), ms: timestamp.getTime() }
   }
 
   return null
@@ -314,6 +339,10 @@ export function buildPennyItemsFromRows(rows: SupabasePennyRow[]): PennyItem[] {
     const internetNumber = normalizeIntToString(row.internet_sku)
     const homeDepotUrl = row.home_depot_url?.trim() || null
     const name = row.item_name?.trim()
+    const brand = row.brand?.trim()
+    const modelNumber = row.model_number?.trim()
+    const upc = row.upc?.trim()
+    const retailPrice = parsePriceValue(row.retail_price)
 
     const existing = grouped.get(sku)
 
@@ -322,9 +351,13 @@ export function buildPennyItemsFromRows(rows: SupabasePennyRow[]): PennyItem[] {
         id: sku,
         sku,
         name: name || `SKU ${sku}`,
+        brand,
+        modelNumber,
+        upc,
         internetNumber,
         homeDepotUrl,
         price: 0.01,
+        retailPrice,
         dateAdded: dateInfo?.iso || new Date().toISOString(),
         lastSeenAt: lastSeenInfo?.iso,
         status: "",
@@ -378,6 +411,23 @@ export function buildPennyItemsFromRows(rows: SupabasePennyRow[]): PennyItem[] {
       existing.quantityFound = String(quantity)
     }
 
+    // Merge enrichment data (prefer non-null values)
+    if (brand && !existing.brand) {
+      existing.brand = brand
+    }
+
+    if (modelNumber && !existing.modelNumber) {
+      existing.modelNumber = modelNumber
+    }
+
+    if (upc && !existing.upc) {
+      existing.upc = upc
+    }
+
+    if (retailPrice !== undefined && existing.retailPrice === undefined) {
+      existing.retailPrice = retailPrice
+    }
+
     if (state) {
       existing.locations[state] = (existing.locations[state] || 0) + 1
     }
@@ -408,16 +458,23 @@ export type DateWindow = {
   endDate?: string
 }
 
+type FetchRowsOptions = {
+  dateWindow?: DateWindow
+  includeNotes?: boolean
+}
+
 async function fetchRows(
   client: ReturnType<typeof getSupabaseClient>,
   label: "anon",
-  dateWindow?: DateWindow
+  options: FetchRowsOptions = {}
 ): Promise<SupabasePennyRow[] | null> {
-  let query = client
-    .from("penny_list_public")
-    .select(
-      "id,purchase_date,item_name,home_depot_sku_6_or_10_digits,exact_quantity_found,store_city_state,image_url,notes_optional,home_depot_url,internet_sku,timestamp"
-    )
+  const { dateWindow, includeNotes = true } = options
+  const columns = [
+    ...PENNY_LIST_BASE_COLUMNS,
+    ...(includeNotes ? PENNY_LIST_HEAVY_COLUMNS : []),
+  ].join(",")
+
+  let query = client.from("penny_list_public").select(columns)
 
   // Apply date window filter at database level for performance
   // Filter using "last seen" semantics:
@@ -484,7 +541,7 @@ async function fetchEnrichmentRows(
   const { data, error } = await client
     .from("penny_item_enrichment")
     .select(
-      "sku,item_name,brand,model_number,upc,image_url,home_depot_url,internet_sku,retail_price,updated_at,source"
+      "sku,item_name,brand,model_number,upc,image_url,home_depot_url,internet_sku,retail_price,updated_at"
     )
 
   if (error) {
@@ -516,10 +573,12 @@ function getSupabaseAnonReadClient(): SupabaseClientLike {
   return getSupabaseClient()
 }
 
-export async function fetchPennyItemsFromSupabase(dateWindow?: DateWindow): Promise<PennyItem[]> {
+export async function fetchPennyItemsFromSupabase(
+  options: FetchRowsOptions = {}
+): Promise<PennyItem[]> {
   try {
     const anonClient = getSupabaseAnonReadClient()
-    const anonRows = await fetchRows(anonClient, "anon", dateWindow)
+    const anonRows = await fetchRows(anonClient, "anon", options)
 
     if (anonRows && anonRows.length > 0) {
       const anonEnrichment = await fetchEnrichmentRows(anonClient, "anon")
@@ -576,7 +635,7 @@ const getPennyListSource = async (): Promise<PennyItem[]> => {
 export async function getRecentFinds(hours: number = 48, nowMs: number = Date.now()) {
   const cutoffMs = nowMs - hours * 60 * 60 * 1000
   const windowRange: "1m" | "3m" | "6m" = hours <= 720 ? "3m" : "6m" // cap at 6m for long windows
-  const items = await getPennyListFiltered(windowRange, nowMs)
+  const items = await getPennyListFiltered(windowRange, nowMs, { includeNotes: false })
   const valid = filterValidPennyItems(items)
   return valid
     .filter((item) => {
@@ -592,6 +651,24 @@ const getPennyListCached =
         revalidate: PENNY_LIST_CACHE_SECONDS,
       })
     : getPennyListSource
+
+const getPennyListFilteredCached =
+  typeof unstable_cache === "function"
+    ? unstable_cache(
+        async (
+          dateRange: "1m" | "3m" | "6m" | "12m" | "18m" | "24m" | "all" | undefined,
+          bucketedNowMs: number,
+          includeNotes: boolean
+        ) => {
+          const dateWindow = dateRange ? dateRangeToWindow(dateRange, bucketedNowMs) : undefined
+          return fetchPennyItemsFromSupabase({ dateWindow, includeNotes })
+        },
+        ["penny-list-filtered"],
+        {
+          revalidate: PENNY_LIST_CACHE_SECONDS,
+        }
+      )
+    : null
 
 export const getPennyList = cacheFn(async (): Promise<PennyItem[]> => {
   // Check global cache first (useful for dev mode HMR)
@@ -671,20 +748,30 @@ function dateRangeToWindow(
  * @param nowMs - Current timestamp in milliseconds (for date calculations)
  * @returns Filtered penny items
  */
+type GetPennyListFilteredOptions = {
+  includeNotes?: boolean
+}
+
 export async function getPennyListFiltered(
   dateRange?: "1m" | "3m" | "6m" | "12m" | "18m" | "24m" | "all",
-  nowMs: number = Date.now()
+  nowMs: number = Date.now(),
+  options: GetPennyListFilteredOptions = {}
 ): Promise<PennyItem[]> {
   // For Playwright tests, use fixture data (no date filtering needed for deterministic tests)
   if (process.env.PLAYWRIGHT === "1") {
     return tryLocalFixtureFallback()
   }
 
-  // Convert date range to window, or undefined for "all"
-  const dateWindow = dateRange ? dateRangeToWindow(dateRange, nowMs) : undefined
+  const includeNotes = options.includeNotes ?? true
+  const cacheBucketMs =
+    Math.floor(nowMs / (PENNY_LIST_CACHE_SECONDS * 1000)) * PENNY_LIST_CACHE_SECONDS * 1000
+  const dateWindow = dateRange ? dateRangeToWindow(dateRange, cacheBucketMs) : undefined
 
   try {
-    const items = await fetchPennyItemsFromSupabase(dateWindow)
+    const items =
+      getPennyListFilteredCached !== null
+        ? await getPennyListFilteredCached(dateRange, cacheBucketMs, includeNotes)
+        : await fetchPennyItemsFromSupabase({ dateWindow, includeNotes })
 
     if (items.length === 0) {
       // Fall back to fixture in dev mode if windowed query returns nothing
