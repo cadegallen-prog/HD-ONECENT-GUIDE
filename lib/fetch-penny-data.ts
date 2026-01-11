@@ -517,7 +517,7 @@ async function fetchRows(
     return null
   }
 
-  const rows = (data as SupabasePennyRow[] | null) ?? []
+  const rows = (data as unknown as SupabasePennyRow[] | null) ?? []
 
   // Only warn in development mode - during builds, parallel workers may have timing issues
   // that cause spurious empty results even when data exists
@@ -560,7 +560,7 @@ async function fetchEnrichmentRows(
     return null
   }
 
-  const rows = (data as SupabasePennyEnrichmentRow[] | null) ?? []
+  const rows = (data as unknown as SupabasePennyEnrichmentRow[] | null) ?? []
   return rows
 }
 
