@@ -1,7 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Jan 11, 2026 (Added skills system + agent entrypoint docs)
-**Last updated:** Jan 11, 2026 (Dev/Test mode protocol for deterministic verification)
+**Last updated:** Jan 11, 2026 (Supabase egress optimization + dev/test mode protocol)
 
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
@@ -12,7 +11,7 @@ Every AI session must update this after meaningful work.
 
 ## Current Sprint (Last 7 Days)
 
-- **Skills system + agent entrypoint (Jan 11):** Added `docs/skills/*` with a repo map, feature-to-files starting points, local dev faststart, and ship-safely guidance; updated root `AGENTS.md` to require consulting skills first and adding new skills when missing.
+- **Supabase egress optimization (Jan 11):** Reduced payload per query by excluding notes from list queries (include only on detail pages). Made `notes_optional` optional in `SupabasePennyRow`, removed unused `source` column from enrichment type, added `includeNotes` flag to `getPennyListFiltered()`, updated list queries to use lightweight fetch. Expected impact: 6.30 GB → ~3.30 GB (stays under 5 GB limit). Also leverages Supabase Cache layer (currently 0.00 GB) via existing Cache-Control headers + ISR page caching (30 min). Tests pending verification.
 - **Decision frame documented (Jan 11):** Added a stable "Decision Frame" (steelman/strawman for submissions vs retention vs SEO, plus stability + pipeline) to `.ai/CONTEXT.md` so agents keep perspective on what matters.
 - **Agent alignment + proof canon (Jan 11):** Added missing `.ai/VERIFICATION_REQUIRED.md` (paste-ready proof format) and expanded `.ai/USAGE.md` (Goldilocks task spec + course-correction script). Linked from `.ai/START_HERE.md`, `.ai/CODEX_ENTRY.md`, `CLAUDE.md`, and `.github/copilot-instructions.md` so Codex/Claude/Copilot follow the same protocol.
 - **Dev/Test mode protocol (Jan 11):** Standardized dev-server ownership to reduce Copilot hang/port loops: `ai:verify` supports `dev`/`test` modes with HTTP readiness retries, Playwright reuses the existing 3002 server locally (`reuseExistingServer: !CI`) and stays non-reuse in CI, and port 3001 guidance is now “kill only if proven unhealthy + you own it”.

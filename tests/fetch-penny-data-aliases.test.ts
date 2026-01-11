@@ -17,6 +17,10 @@ const baseRow: SupabasePennyRow = {
   home_depot_url: null,
   internet_sku: null,
   timestamp: "2025-12-01T12:00:00Z",
+  brand: null,
+  model_number: null,
+  upc: null,
+  retail_price: null,
 }
 
 function clone(row: SupabasePennyRow, overrides: Partial<SupabasePennyRow>): SupabasePennyRow {
@@ -106,7 +110,7 @@ test("applies enrichment metadata and overrides core fields", async () => {
     home_depot_url: "https://www.homedepot.com/p/enriched",
     internet_sku: 987654321,
     updated_at: "2025-12-10T00:00:00Z",
-    source: "manual",
+    retail_price: null,
   }
 
   const enrichedItems = applyEnrichment(items, [enrichment])
@@ -138,7 +142,7 @@ test("ignores enrichment rows with invalid SKUs", async () => {
     home_depot_url: "https://www.homedepot.com/p/bad",
     internet_sku: 123456,
     updated_at: "2025-12-10T00:00:00Z",
-    source: "manual",
+    retail_price: null,
   }
 
   // Use hideUnenriched: false since this test is about SKU validation, not filtering
@@ -202,10 +206,7 @@ test("last seen uses timestamp (submission time) over purchase_date for freshnes
     }),
   ])
 
-  assert.strictEqual(
-    items[0].lastSeenAt,
-    new Date("2025-12-10T12:34:56Z").toISOString()
-  )
+  assert.strictEqual(items[0].lastSeenAt, new Date("2025-12-10T12:34:56Z").toISOString())
 
   clearSupabaseMocks()
 })
