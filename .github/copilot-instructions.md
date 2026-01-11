@@ -15,6 +15,7 @@ Follow the canonical read order (source of truth is the root `README.md`, “AI 
 **If goal is AI workflow/tooling/verification enablement:** `.ai/AI_ENABLEMENT_BLUEPRINT.md`
 
 Keep these open while working:
+
 - `.ai/USAGE.md` (task template + course-correction script)
 - `.ai/VERIFICATION_REQUIRED.md` (paste-ready proof format)
 

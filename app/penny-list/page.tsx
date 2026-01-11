@@ -93,7 +93,7 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
   const nowMs =
     process.env.PLAYWRIGHT === "1" ? new Date("2025-12-10T12:00:00Z").getTime() : Date.now()
 
-  const pennyItems = await getPennyListFiltered(days, nowMs)
+  const pennyItems = await getPennyListFiltered(days, nowMs, { includeNotes: false })
   const validItems = filterValidPennyItems(pennyItems)
   const feedUnavailable = validItems.length === 0
 

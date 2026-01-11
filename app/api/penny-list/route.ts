@@ -76,7 +76,7 @@ export async function GET(request: Request) {
 
     // Fetch items with date window filtering at the database level for performance
     // This reduces data transfer by only fetching rows within the selected time range
-    const pennyItems = await getPennyListFiltered(days, nowMs)
+    const pennyItems = await getPennyListFiltered(days, nowMs, { includeNotes: false })
     const validItems = filterValidPennyItems(pennyItems)
 
     // Apply additional filters and sorting

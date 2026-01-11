@@ -106,7 +106,7 @@ This is a security risk because it allows anyone to see data they shouldn't have
 Recreated the view with `SECURITY INVOKER` (the default and recommended setting):
 
 ```sql
-CREATE OR REPLACE VIEW public.penny_list_public 
+CREATE OR REPLACE VIEW public.penny_list_public
 WITH (security_invoker = true) AS
 SELECT
   id,

@@ -16,7 +16,7 @@ Copy and paste this SQL into the editor and click **Run**:
 
 ```sql
 -- Migration 011: Fix SECURITY DEFINER view
--- 
+--
 -- Issue: penny_list_public was created as SECURITY DEFINER which bypasses RLS
 -- Fix: Recreate as SECURITY INVOKER (default) to respect user permissions
 --
@@ -30,7 +30,7 @@ DROP VIEW IF EXISTS public.penny_list_public;
 
 -- Recreate as SECURITY INVOKER (default - no need to specify)
 -- This ensures the view runs with the permissions of the user calling it
-CREATE OR REPLACE VIEW public.penny_list_public 
+CREATE OR REPLACE VIEW public.penny_list_public
 WITH (security_invoker = true) AS
 SELECT
   id,
@@ -69,7 +69,7 @@ Copy and paste this SQL into the editor and click **Run**:
 
 ```sql
 -- Migration 012: Restrict Penny List inserts to authenticated users only
--- 
+--
 -- Issue: Public inserts allow unauthenticated spam/abuse
 -- Fix: Require authentication OR implement rate limiting/verification
 --
@@ -105,7 +105,7 @@ REVOKE INSERT ON public."Penny List" FROM anon;
 GRANT INSERT ON public."Penny List" TO authenticated;
 
 -- Add comment for documentation
-COMMENT ON POLICY "authenticated-insert-penny-list" ON public."Penny List" 
+COMMENT ON POLICY "authenticated-insert-penny-list" ON public."Penny List"
 IS 'Requires authentication to submit penny finds. Prevents anonymous spam.';
 
 COMMIT;
@@ -139,7 +139,7 @@ After running both migrations:
 
 ## Frontend Deployment
 
-✅ **Already deployed!** 
+✅ **Already deployed!**
 
 Your code was pushed to GitHub at: https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/commit/5c7f154
 

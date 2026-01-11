@@ -275,6 +275,7 @@ function renderMotif(motif: string): React.ReactElement {
     bottom: 20,
     right: 20,
     opacity: 0.15,
+    display: "flex",
   }
 
   switch (motif) {
