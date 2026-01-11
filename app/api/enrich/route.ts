@@ -20,6 +20,7 @@ interface EnrichmentPayload {
   upc?: string
   imageUrl?: string
   homeDepotUrl?: string
+  retailPrice?: number
 }
 
 export async function POST(request: Request) {
@@ -53,6 +54,12 @@ export async function POST(request: Request) {
       if (!isNaN(parsed)) internetSku = parsed
     }
 
+    // Parse retail price
+    let retailPrice: number | null = null
+    if (typeof body.retailPrice === "number" && body.retailPrice > 0) {
+      retailPrice = body.retailPrice
+    }
+
     // Upsert enrichment data
     const { error } = await supabase.from("penny_item_enrichment").upsert(
       {
@@ -64,6 +71,7 @@ export async function POST(request: Request) {
         image_url: body.imageUrl || null,
         home_depot_url: body.homeDepotUrl || null,
         internet_sku: internetSku,
+        retail_price: retailPrice,
         source: "bookmarklet",
         status: "enriched",
         updated_at: new Date().toISOString(),

@@ -189,9 +189,11 @@ function parseProductPage(html: string, sku: string) {
     item_name: null,
     brand: null,
     model_number: null,
+    upc: null,
     image_url: null,
     home_depot_url: null,
     internet_sku: null,
+    retail_price: null,
   }
 
   // Brand (extract first, needed for name normalization)
@@ -220,9 +222,43 @@ function parseProductPage(html: string, sku: string) {
   const canonicalMatch = html.match(/\/p\/[^/]+\/(\d{9,12})/)
   if (canonicalMatch) result.internet_sku = parseInt(canonicalMatch[1], 10)
 
+  // UPC - try multiple patterns
+  // Pattern 1: UPC in specifications
+  const upcMatch = html.match(/UPC[:\s]*(\d{12,14})/i)
+  if (upcMatch) result.upc = upcMatch[1]
+  // Pattern 2: GTIN meta tag
+  if (!result.upc) {
+    const gtinMatch = html.match(/"gtin(?:12|13|14)?"\s*:\s*"(\d{12,14})"/)
+    if (gtinMatch) result.upc = gtinMatch[1]
+  }
+
   // Home Depot URL (use canonical URL for direct product link, not search)
   const urlMatch = html.match(/<link\s+rel="canonical"\s+href="([^"]+)"/)
   if (urlMatch) result.home_depot_url = urlMatch[1]
+
+  // Retail Price - try multiple patterns
+  // Pattern 1: product:price:amount meta tag
+  const priceMetaMatch = html.match(/<meta\s+property="product:price:amount"\s+content="([^"]+)"/)
+  if (priceMetaMatch) {
+    const parsed = parseFloat(priceMetaMatch[1])
+    if (!isNaN(parsed) && parsed > 0) result.retail_price = parsed
+  }
+  // Pattern 2: JSON-LD structured data
+  if (!result.retail_price) {
+    const jsonLdMatch = html.match(/"price"\s*:\s*"?(\d+\.?\d*)"?/i)
+    if (jsonLdMatch) {
+      const parsed = parseFloat(jsonLdMatch[1])
+      if (!isNaN(parsed) && parsed > 0) result.retail_price = parsed
+    }
+  }
+  // Pattern 3: data-testid price element
+  if (!result.retail_price) {
+    const priceTestIdMatch = html.match(/data-testid="price-value"[^>]*>\$?([\d,]+\.?\d*)/)
+    if (priceTestIdMatch) {
+      const parsed = parseFloat(priceTestIdMatch[1].replace(/,/g, ""))
+      if (!isNaN(parsed) && parsed > 0) result.retail_price = parsed
+    }
+  }
 
   return result
 }
@@ -317,6 +353,7 @@ export async function GET(request: Request) {
         {
           ...data,
           source: "auto",
+          status: "enriched",
           updated_at: new Date().toISOString(),
         },
         { onConflict: "sku" }
