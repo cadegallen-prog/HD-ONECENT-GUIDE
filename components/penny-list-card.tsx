@@ -130,7 +130,7 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
             <div className="flex-1 space-y-1">
               {/* Brand (small) */}
               {displayBrand && (
-                <p className="penny-card-brand whitespace-nowrap -ml-[74px]">{displayBrand}</p>
+                <p className="penny-card-brand whitespace-nowrap">{displayBrand}</p>
               )}
 
               {/* Name (2 lines) */}
@@ -380,7 +380,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
             >
               <div className="space-y-2">
                 {displayBrand && (
-                  <p className="text-[11px] uppercase tracking-[0.08em] text-[var(--text-muted)] -ml-[60px] w-fit">
+                  <p className="text-[11px] uppercase tracking-[0.08em] text-[var(--text-muted)]">
                     {displayBrand}
                   </p>
                 )}
