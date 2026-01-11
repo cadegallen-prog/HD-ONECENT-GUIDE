@@ -1,28 +1,59 @@
 import type { Metadata } from "next"
 import type { ReactNode } from "react"
-import { ogImageUrl } from "@/lib/og"
 
 export const metadata: Metadata = {
-  title: "Home Depot Store Finder: Find Stores by State or Zip | Penny Central",
+  title: "Live Store Finder for Home Depot Penny Shopping | Penny Central",
   description:
-    "Find Home Depot stores by state, city, or ZIP. Get store hours, phone numbers, and directions fast.",
+    "Find nearby Home Depot stores for penny hunting and plan your next trip. Then check the live list and report what you find.",
   openGraph: {
     type: "website",
     url: "https://www.pennycentral.com/store-finder",
-    title: "Home Depot Store Finder",
-    description:
-      "Find Home Depot stores by state, city, or ZIP. Get store hours, phone numbers, and directions fast.",
-    images: [ogImageUrl("store-finder")],
+    title: "Find Stores to Penny Hunt Near You",
+    description: "Locate nearby stores, then check the live penny list and report sightings.",
+    images: [
+      {
+        url: "/api/og?page=store-finder",
+        width: 1200,
+        height: 630,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Home Depot Store Finder",
-    description:
-      "Find Home Depot stores by state, city, or ZIP. Get store hours, phone numbers, and directions fast.",
-    images: [ogImageUrl("store-finder")],
+    title: "Find Stores to Penny Hunt Near You",
+    description: "Locate nearby stores, then check the live penny list and report sightings.",
+    images: ["/api/og?page=store-finder"],
   },
 }
 
 export default function StoreFinderLayout({ children }: { children: ReactNode }) {
-  return children
+  return (
+    <>
+      {/* Breadcrumb Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Home",
+                item: "https://www.pennycentral.com",
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: "Store Finder",
+                item: "https://www.pennycentral.com/store-finder",
+              },
+            ],
+          }),
+        }}
+      />
+      {children}
+    </>
+  )
 }

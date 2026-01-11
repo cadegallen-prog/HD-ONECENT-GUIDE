@@ -8,34 +8,42 @@ export const OG_MAIN_PAGES = [
 
 export type OgMainPageId = (typeof OG_MAIN_PAGES)[number]
 
-export const OG_VARIANTS: Record<OgMainPageId, { headline: string; subhead: string }> = {
+export const OG_VARIANTS: Record<
+  OgMainPageId,
+  { headline: string; subline: string; motif: string; badgeSize: "normal" | "quieter" }
+> = {
   homepage: {
-    headline: "Find Home Depot Penny Items",
-    subhead: "The community-reported $0.01 list, updated hourly.",
+    headline: "Live $0.01 Finds",
+    subline: "Community-reported intel",
+    motif: "data-dots",
+    badgeSize: "normal",
   },
   "penny-list": {
-    headline: "Home Depot Penny List",
-    subhead: "Filter by state, date, and SKU. Updated hourly.",
+    headline: "Live Penny List",
+    subline: "$0.01 finds by state",
+    motif: "list-rows",
+    badgeSize: "normal",
   },
   "report-find": {
-    headline: "Report a Penny Find",
-    subhead: "Submit your $0.01 item to update the list. Takes under a minute.",
+    headline: "Report a Find",
+    subline: "Help verify sightings",
+    motif: "plus-marker",
+    badgeSize: "normal",
   },
   "store-finder": {
-    headline: "Home Depot Store Finder",
-    subhead: "Find stores by state and zip. Check nearby locations fast.",
+    headline: "Store Finder",
+    subline: "Find stores near you",
+    motif: "map-pin",
+    badgeSize: "quieter",
   },
   guide: {
-    headline: "Home Depot Penny Guide",
-    subhead: "Learn the markdown cadence and how $0.01 items happen.",
+    headline: "Penny Shopping Guide",
+    subline: "How it works",
+    motif: "checklist",
+    badgeSize: "quieter",
   },
 }
 
-const OG_IMAGE_VERSION = "12"
-
-const OG_DEFAULT_IMAGE_PATH = "/og-image-facebook.jpg"
-
 export function ogImageUrl(page: OgMainPageId | string): string {
-  void page
-  return `${OG_DEFAULT_IMAGE_PATH}?v=${OG_IMAGE_VERSION}`
+  return `/api/og?page=${page}`
 }

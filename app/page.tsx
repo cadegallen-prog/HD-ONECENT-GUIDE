@@ -15,7 +15,6 @@ import {
   FACEBOOK_GROUP_URL,
   BEFRUGAL_REFERRAL_PATH,
 } from "@/lib/constants"
-import { ogImageUrl } from "@/lib/og"
 import { HomePageAnalytics } from "@/components/home-page-analytics"
 import { TrackableNextLink } from "@/components/trackable-next-link"
 import { TodaysFinds } from "@/components/todays-finds"
@@ -25,20 +24,29 @@ import { getRecentFinds } from "@/lib/fetch-penny-data"
 export const revalidate = 600 // 10 minutes
 
 export const metadata: Metadata = {
-  title: "Home Depot Penny List & Shopping Guide | Penny Central",
-  description: `The complete guide to finding Home Depot penny items. Latest penny list, clearance cycles, and tips used by ${COMMUNITY_MEMBER_COUNT_DISPLAY} penny hunters.`,
+  title: "Home Depot Penny Items: Live $0.01 Finds From 47K+ Hunters | Penny Central",
+  description:
+    "Live community-reported $0.01 items with recency and state distribution. Open today's penny list and report what you see in-store.",
   openGraph: {
     type: "website",
     url: "https://www.pennycentral.com",
-    title: "Home Depot Penny List & Shopping Guide | Penny Central",
-    description: `The complete guide to finding Home Depot penny items. Latest penny list, clearance cycles, and tips used by ${COMMUNITY_MEMBER_COUNT_DISPLAY} penny hunters.`,
-    images: [ogImageUrl("homepage")],
+    title: "Live $0.01 Finds From 47K+ Members",
+    description:
+      "Live community reports, updated as sightings come in. See what's hitting stores now.",
+    images: [
+      {
+        url: "/api/og?page=homepage",
+        width: 1200,
+        height: 630,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Home Depot Penny List & Shopping Guide | Penny Central",
-    description: `The complete guide to finding Home Depot penny items. Latest penny list, clearance cycles, and tips used by ${COMMUNITY_MEMBER_COUNT_DISPLAY} penny hunters.`,
-    images: [ogImageUrl("homepage")],
+    title: "Live $0.01 Finds From 47K+ Members",
+    description:
+      "Live community reports, updated as sightings come in. See what's hitting stores now.",
+    images: ["/api/og?page=homepage"],
   },
 }
 
@@ -95,7 +103,7 @@ export default async function Home() {
         <div className="max-w-4xl mx-auto text-center">
           {/* H1 - Unified type scale */}
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[var(--text-primary)] leading-tight">
-            Find Home Depot Penny Items
+            Live Home Depot Penny Finds
           </h1>
 
           {/* Lead text */}
