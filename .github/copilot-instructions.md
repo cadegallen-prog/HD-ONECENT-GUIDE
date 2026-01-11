@@ -154,53 +154,54 @@ netstat -ano | findstr :3001
 
 ---
 
-## Your Capabilities (No MCP Support)
+## Your Capabilities (FULL MCP SUPPORT)
 
-⚠️ **Copilot Chat does NOT have MCP server support.** This is a Microsoft design choice, not a limitation.
+✅ **GitHub Copilot DOES have MCP server support** when used via VS Code Chat.
 
 **What you CAN do:**
 
 - ✅ Code completion (inline suggestions)
-- ✅ Explain code (read-only analysis)
-- ✅ Ask questions about the codebase
-- ✅ Suggest changes (Claude Code/Codex will implement)
-- ✅ Help understand errors and debug
+- ✅ File operations (create, read, edit files)
+- ✅ **Supabase MCP** - Apply migrations, query database, manage schema
+- ✅ **Playwright MCP** - Browser automation, screenshots, E2E tests
+- ✅ **GitHub MCP** - Create PRs, manage issues, repo operations
+- ✅ Run terminal commands
+- ✅ Full development workflow
 
-**What you CAN'T do:**
+**CRITICAL: How to Access Supabase**
 
-- ❌ Use Playwright (no MCP = no browser automation)
-- ❌ Use Supabase MCP (no MCP support)
-- ❌ Execute file operations directly (suggest only)
-- ❌ Create pull requests directly (suggest only)
+You have TWO methods to interact with Supabase:
 
-**When to use Copilot Chat:**
+1. **MCP Tools (PREFERRED):**
+   - `mcp_supabase_apply_migration` - Apply SQL migrations directly
+   - `mcp_supabase_execute_sql` - Run queries
+   - `mcp_supabase_list_projects` - Get project info
+   - `mcp_supabase_list_tables` - Inspect schema
+   - See full list in available tools
 
-- Quick code completion while typing
-- Understanding existing code
-- Lightweight questions that don't need full development capabilities
-- Suggesting changes for Claude Code or Codex to implement
+2. **Environment Variables:**
+   - `NEXT_PUBLIC_SUPABASE_URL` - Project URL
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Public anon key
+   - Available in `.env.local` for manual connections
 
-**For full development work** (file operations, Playwright, testing, deployment):
-
-- Use **Claude Code** (`.vscode/mcp.json` - full MCP support)
-- Use **Codex** (`~/.codex/config.toml` - full MCP support)
+**NEVER say "Supabase CLI not installed" or "I can't access Supabase"** - you have MCP access.
 
 ---
 
-## MCP Servers (Available to Claude Code & Codex)
+## MCP Servers (Available to All AI Agents)
 
 **Configuration:**
 
-- Copilot Chat: ❌ No MCP support (see above)
-- Claude Code: `.vscode/mcp.json` ✅ Full support
-- Codex: `~/.codex/config.toml` ✅ Full support
+- **GitHub Copilot:** ✅ Full MCP support (via VS Code Chat)
+- **Claude Code:** ✅ Full MCP support (`.vscode/mcp.json`)
+- **Codex:** ✅ Full MCP support (`~/.codex/config.toml`)
 
-**4 Available Servers:**
+**5 Available Servers:**
 
-1. **Filesystem** - File operations (automatically available to Claude/Codex)
-2. **GitHub** - PRs/issues/repo management (Claude/Codex only)
-3. **Playwright** - Browser testing & screenshots (Claude/Codex only - REQUIRED for UI changes)
-4. **Supabase** - Database queries during development (Claude/Codex optional)
+1. **Filesystem** - File operations (create, read, edit, move)
+2. **GitHub** - PRs/issues/repo management
+3. **Playwright** - Browser testing & screenshots (REQUIRED for UI changes)
+4. **Supabase** - Database migrations, queries, schema management (ALL AGENTS HAVE ACCESS)
 
 **Note:** Git MCP removed (package doesn't exist) - use terminal for git operations instead.
 
@@ -210,13 +211,13 @@ netstat -ano | findstr :3001
 
 | Tool             | MCP Support        | Best For                               | Entry Point                       |
 | ---------------- | ------------------ | -------------------------------------- | --------------------------------- |
-| **Copilot Chat** | ❌ No              | Code completion, quick questions       | (No special setup needed)         |
-| **Claude Code**  | ✅ Yes (5 servers) | Full development, testing, deployment  | `.github/copilot-instructions.md` |
-| **Codex**        | ✅ Yes (5 servers) | Architecture, high-reasoning decisions | `.ai/CODEX_ENTRY.md`              |
+| **Copilot Chat** | ✅ Yes (4 servers) | Code completion, quick questions       | (No special setup needed)         |
+| **Claude Code**  | ✅ Yes (4 servers) | Full development, testing, deployment  | `.github/copilot-instructions.md` |
+| **Codex**        | ✅ Yes (4 servers) | Architecture, high-reasoning decisions | `.ai/CODEX_ENTRY.md`              |
 
 **Default workflow:**
 
-- Copilot Chat: Light reading + completion suggestions
+- Copilot Chat: Quick development + Supabase migrations
 - Claude Code: Primary development work (full MCP capabilities)
 - Codex: Complex decisions, architecture, reasoning-heavy tasks
 
