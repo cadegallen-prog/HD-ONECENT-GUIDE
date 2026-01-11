@@ -20,6 +20,8 @@ Follow the sequence in `.ai/START_HERE.md`:
 
 **Then ask:** GOAL / WHY / DONE for this session
 
+Use `.ai/USAGE.md` (Habit 2) for the task template and `.ai/VERIFICATION_REQUIRED.md` for the proof bundle format.
+
 ---
 
 ## Claude Code Specifics

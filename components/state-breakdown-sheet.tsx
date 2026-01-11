@@ -21,15 +21,14 @@ function buildStateBreakdownEntries(
   locations: Record<string, number> | undefined,
   userState?: string
 ): Array<[string, number]> {
-  const entries = locations ? Object.entries(locations) : []
+  // Only include states that actually have reports (no 0-count entries)
+  const entries = locations ? Object.entries(locations).filter(([, count]) => count > 0) : []
   const normalizedUserState = userState?.trim().toUpperCase()
 
-  if (normalizedUserState && !entries.some(([state]) => state === normalizedUserState)) {
-    entries.push([normalizedUserState, 0])
-  }
-
+  // Sort by count descending, then alphabetically
   entries.sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
 
+  // If user's state has reports, move it to top
   if (normalizedUserState) {
     const index = entries.findIndex(([state]) => state === normalizedUserState)
     if (index > 0) {

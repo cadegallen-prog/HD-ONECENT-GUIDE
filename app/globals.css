@@ -64,10 +64,10 @@
     --brand-bronze: var(--text-muted);
 
     /* 10% - CTA ACCENT (clickable elements ONLY) */
-    /* Moderate blue CTA (timeless, separates from gold/brass) */
-    --cta-primary: #1d4ed8;
-    --cta-hover: #1e40af;
-    --cta-active: #1e3a8a;
+    /* Desaturated ink/navy CTA (AAA with white text, less glare than bright blue) */
+    --cta-primary: #2b4c7e;
+    --cta-hover: #1f3a5f;
+    --cta-active: #162848;
     --cta-text: #ffffff;
 
     /* Link colors (defaults to CTA in light mode) */
@@ -210,11 +210,11 @@
     --brand-copper: var(--text-secondary);
     --brand-bronze: var(--text-muted);
 
-    /* CTA ACCENT - Moderate blue (matches light mode) */
-    --cta-primary: #93c5fd;
+    /* CTA ACCENT - Muted light-blue (AAA with dark text; avoids "glow spotlight") */
+    --cta-primary: #7da6da;
     --cta-text: #0f172a;
-    --cta-hover: #bfdbfe;
-    --cta-active: #60a5fa;
+    --cta-hover: #84b1e6;
+    --cta-active: #7faade;
     --link-default: var(--cta-primary);
     --link-hover: var(--cta-hover);
 

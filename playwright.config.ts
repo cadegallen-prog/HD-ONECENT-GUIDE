@@ -49,8 +49,8 @@ export default defineConfig({
   webServer: {
     command:
       "node -e \"require('fs').rmSync('.next', { recursive: true, force: true })\" && cross-env PLAYWRIGHT=1 npm run build && cross-env PLAYWRIGHT=1 npm run start -- --port 3002",
-    url: process.env.PLAYWRIGHT_BASE_URL || "http://localhost:3002",
-    reuseExistingServer: false,
+    url: "http://localhost:3002",
+    reuseExistingServer: !process.env.CI,
     timeout: 120000,
   },
 })

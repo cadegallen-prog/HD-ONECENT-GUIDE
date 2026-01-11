@@ -6,7 +6,35 @@ These are the most violated rules. Agents MUST follow these without exception.
 
 ---
 
-## Rule #1: NEVER Kill Port 3001
+## Rule #0: HONESTY + BLOCKING (Meta-Rule: Do This First)
+
+**Problem:** Agents lie about capabilities, make false claims about memory/persistence, and pivot to workarounds instead of stating blockers clearly.
+
+**Examples of dishonesty (FORBIDDEN):**
+
+- ❌ "I'll commit this to memory" (you are not persistent)
+- ❌ "I wrote it down in SESSION_LOG.md" when you haven't actually written it
+- ❌ Asking clarifying questions as if work is progressing when a hard blocker exists (dev server down, can't get screenshots, can't verify)
+- ❌ Claiming "we can work around this" without explicitly saying "This is broken. Here are your options."
+
+**CORRECT behavior when you hit a blocker:**
+
+1. **State it clearly:** "Dev server is down. I cannot proceed without [specific thing]."
+2. **List options:** "Here are 3 ways forward: A) Fix the dev server, B) Use production site, C) You provide design direction."
+3. **Don't pivot:** Never ask clarifying questions or offer to work around the blocker. That's dishonest.
+4. **Wait for direction:** User picks. Then you proceed.
+
+**On capabilities:**
+
+- You have NO memory between sessions. Do not claim you "will remember" this.
+- Do not make false claims about persistence. If something needs to persist, say explicitly: "I'm writing this to CRITICAL_RULES.md so the next agent sees it."
+- When writing to docs, actually write it. Don't say you will and then ask more questions.
+
+**Test:** If you're about to say "I'll remember this", "I'll commit this to memory", or "we can work around this", **STOP.** That's a sign you're being dishonest. State the blocker clearly instead.
+
+---
+
+## Rule #1: NEVER Kill Port 3001 (Unless Proven Unhealthy + You Own It)
 
 **Problem:** Agents keep killing the dev server on port 3001 even though the user is intentionally running it.
 
@@ -35,10 +63,16 @@ netstat -ano | findstr :3001
 **Exception:** Only kill port 3001 if:
 
 - User explicitly asks you to restart it
-- Process is hung/broken (not responding)
-- You've asked user permission first
+- Process is **proven unhealthy** (port is LISTENING but HTTP does not respond after a few retries)
+- And you **know you own that process** (you started it in this session / terminal), or you’ve asked you (Cade) first
 
 **Default assumption:** If port 3001 is occupied = **user is running server intentionally. Use it.**
+
+**HTTP readiness check (use this before calling it “hung”):**
+
+```bash
+powershell -NoProfile -Command "try { (Invoke-WebRequest -Uri http://localhost:3001 -UseBasicParsing -TimeoutSec 5).StatusCode } catch { $_.Exception.Message }"
+```
 
 ---
 

@@ -12,65 +12,63 @@
 
 ---
 
-## 2026-01-10 - Codex (GPT-5.2) - Repair partial commit + ship full local changes
+## 2026-01-11 - Codex (GPT-5.2) - Dev/Test mode protocol (port ownership + Copilot hang mitigation)
 
-**Goal:** Undo the bad/partial pushed commit *without rewriting history*, then stage/commit/push the entire remaining local work safely (no secrets, no junk artifacts).
+**Goal:** Reduce Copilot “spinner hang” + port 3001 loops by enforcing a single-owner dev server workflow and making `ai:doctor`/`ai:verify` deterministic on Windows.
 
 **Outcome:**
 
-- Created a safe revert commit for the previously pushed checkpoint (`9770fd4`), then recombined everything into a single clean commit (no force-push).
-- Removed a hard-coded Supabase access token from `.claude/settings.json` (now uses `${SUPABASE_ACCESS_TOKEN}` placeholder).
-- Committed the remaining work that was left unstaged: submit-find enrichment cascade merge, Save/My Lists helpers, command palette tweaks, Sentry client instrumentation rename, Supabase migration + tooling scripts, and cleanup of old Lighthouse JSON artifacts.
-- Updated `.gitignore` so analytics screenshots + Lighthouse artifacts stay local-only.
+- Added explicit Dev/Test modes to `scripts/ai-verify.ts` (use positional args: `npm run ai:verify -- dev` / `npm run ai:verify -- test`) and added HTTP readiness retries.
+- Updated `playwright.config.ts` so Playwright webServer uses port 3002 and reuses existing server locally (`reuseExistingServer: !CI`) while staying non-reuse in CI.
+- Updated `scripts/ai-doctor.ts` to use HTTP readiness retries and removed “npx kill-port” guidance (replaced with “kill only if you own it”).
+- Updated docs to match the protocol: `.ai/CRITICAL_RULES.md`, `.ai/CONSTRAINTS.md`, `.ai/VERIFICATION_REQUIRED.md`, `.github/copilot-instructions.md`.
+
+**Verification (Proof):**
+
+- `npm run ai:doctor` ✅
+- `npm run ai:verify -- dev` ✅ `reports/verification/2026-01-11T05-38-31/summary.md`
+- `npm run ai:verify -- test` ✅ `reports/verification/2026-01-11T05-41-40/summary.md`
+
+## 2026-01-11 - Codex (GPT-5.2) - Penny Deal Card final converged design
+
+**Goal:** Implement the final converged Penny Deal Card design decisions (brand placement, save placement, recency status, state/report info, and simplified price presentation) without introducing extra UI changes.
+
+**Outcome:**
+
+- Updated `components/penny-list-card.tsx` to match the final hierarchy: image → subtle brand (aligned to image edge) → item name → SKU.
+- Moved Save (icon-only) off the top-right and into the secondary actions row so top-right is status-only (recency).
+- Top-right now shows recency with a small calendar icon and muted text (non-interactive).
+- State pills are limited and muted (no enumeration), with a single smaller/lower-contrast line showing total reports.
+- Penny price is the hero; retail remains muted; removed explicit “$X off” savings lines from the card face.
 
 **Verification (Proof):**
 
 - `npm run lint` ✅ (0 errors)
-- `npm run lint:colors` ✅ (0 errors, 0 warnings)
-- `npm run build` ✅
-- `npm run test:unit` ✅ (22/22)
-- `npm run test:e2e` ✅ (100/100)
+- `npm run build` ✅ (successful)
+- `npm run test:unit` ✅ (25/25 passing)
+- `npm run test:e2e` ✅ (100/100 passing)
+- Command outputs saved to: `reports/verification/2026-01-10T21-10-57_manual/`
+- Playwright screenshots: `reports/proof/2026-01-11T02-07-48/`
 
-**Artifacts:**
+**Notes:**
 
-- Playwright screenshots: `reports/playwright/results/`
+- Port 3001 dev server was listening but unresponsive; it was restarted to capture Playwright proof screenshots.
 
----
+## 2026-01-11 - Codex (GPT-5.2) - Reduce agent misalignment (task spec + proof canon)
 
-## 2026-01-10 - Codex (GPT-5.2) - Penny List card hierarchy + moderate blue CTA
-
-**Goal:** Tune the primary CTA so it doesn't visually "bleed" into the gold/brass accents, while keeping the Penny List card hierarchy improvements and not revisiting locked Phase 1/2 fixes.
-
-**Outcome:**
-
-- Updated `app/globals.css` tokens: CTA moved to a moderate blue in both light/dark, green reserved for success only, brass/gold reserved for small badges/pills only, added a dedicated `--price-strike` token for retail strike-through.
-- Removed the previous green glow styling from `.glass-card` so list cards no longer have a green-tinted border/hover.
-- Updated `components/penny-list-card.tsx` hierarchy: 72x72 image, SKU pill, reduced $0.01 dominance, muted-red retail strike-through, savings not green, trust row promoted, Report remains primary action; HD + Barcode remain secondary and neutral.
-
-**Verification (Proof):**
-
-- `npm run lint` ✅
-- `npm run lint:colors` ✅ (0 errors, 0 warnings)
-- `npm run build` ✅
-- `npm run test:unit` ✅ (22/22)
-- `npm run test:e2e` ✅ (100/100)
-
----
-
-## 2026-01-10 - Codex (GPT-5.2) - Fix Penny List "Home Depot" link missing on Hot Right Now cards
-
-**Goal:** Fix the enrichment display bug where the SKU detail page shows the Home Depot link, but the Penny List "Hot Right Now" cards did not.
-
-**Root cause:** `PennyListCardCompact` (used for "Hot Right Now") did not render any Home Depot link/action, even though the list item data includes the enrichment fields needed to build it.
+**Goal:** Make it easier for you (Cade) to communicate intent and course-correct, and make Codex/Claude/Copilot converge on the same “surgical” workflow with objective proof.
 
 **Outcome:**
 
-- Added a Home Depot action link to `PennyListCardCompact` using `getHomeDepotProductUrl({ sku, internetNumber, homeDepotUrl })` (same fallback behavior as the SKU page).
-- Added a Playwright regression assertion to ensure the Hot Right Now card includes a Home Depot link.
+- Added missing canonical proof doc: `.ai/VERIFICATION_REQUIRED.md` (repo referenced it widely, but the file didn’t exist).
+- Strengthened the session task template in `.ai/USAGE.md` to include **NOT DOING / CONSTRAINTS / EXAMPLES** plus a copy-paste **course-correction script** when the AI is misaligned.
+- Linked these from all major entrypoints so the same protocol applies across tools: `.ai/START_HERE.md`, `.ai/CODEX_ENTRY.md`, `CLAUDE.md`, `.github/copilot-instructions.md`.
+
+**Notes:**
+
+- `npm run ai:verify` failed initially because port 3001 was occupied but unresponsive.
 
 **Verification (Proof):**
 
-- `npm run lint` ✅
-- `npm run build` ✅
-- `npm run test:unit` ✅ (22/22)
-- `npm run test:e2e` ✅ (100/100)
+- `npm run ai:verify` ✅ (all gates pass) - outputs in `reports/verification/2026-01-11T01-45-33/`
+- Summary: `reports/verification/2026-01-11T01-45-33/summary.md`

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useCallback } from "react"
-import { Calendar, PlusCircle, Copy, Check, Barcode, ExternalLink, Info } from "lucide-react"
+import { Calendar, PlusCircle, Copy, Check, Barcode, ExternalLink } from "lucide-react"
 import Link from "next/link"
 import { toast } from "sonner"
 import { copyToClipboard } from "@/components/copy-sku-button"
@@ -11,8 +11,6 @@ import { PennyThumbnail } from "@/components/penny-thumbnail"
 import {
   formatRelativeDate,
   formatCurrency,
-  formatLastSeen,
-  formatLineB,
   normalizeProductName,
   normalizeBrand,
 } from "@/lib/penny-list-utils"
@@ -61,7 +59,7 @@ function BookmarkAction({ sku, itemName }: BookmarkActionProps) {
   )
 }
 
-export function PennyListCard({ item, stateFilter, windowLabel, userState }: PennyListCardProps) {
+export function PennyListCard({ item, windowLabel, userState }: PennyListCardProps) {
   const router = useRouter()
   const [isBarcodeOpen, setIsBarcodeOpen] = useState(false)
   const [isStateBreakdownOpen, setIsStateBreakdownOpen] = useState(false)
@@ -75,11 +73,6 @@ export function PennyListCard({ item, stateFilter, windowLabel, userState }: Pen
     typeof item.retailPrice === "number" && item.retailPrice > 0 ? item.retailPrice : null
   const formattedPrice = formatCurrency(item.price)
   const formattedRetail = retailPrice ? formatCurrency(retailPrice) : null
-  // Savings calculation for dopamine trigger
-  const savings =
-    retailPrice && retailPrice > item.price ? Number((retailPrice - item.price).toFixed(2)) : 0
-  const hasSavings = savings > 0
-  const formattedSavings = hasSavings ? formatCurrency(savings) : null
   // Home Depot URL resolution - always available via SKU fallback (matches SKU detail page behavior)
   const resolvedHomeDepotUrl = getHomeDepotProductUrl({
     sku: item.sku,
@@ -88,9 +81,7 @@ export function PennyListCard({ item, stateFilter, windowLabel, userState }: Pen
   })
 
   const resolvedWindowLabel = windowLabel?.trim() || "30d"
-  const nowMs = Date.now()
   const lastSeenValue = item.lastSeenAt ?? item.dateAdded
-  const lastSeenLabel = formatLastSeen(lastSeenValue, nowMs)
   const lastSeenTitle = (() => {
     const parsed = new Date(lastSeenValue)
     if (Number.isNaN(parsed.getTime())) return null
@@ -100,12 +91,9 @@ export function PennyListCard({ item, stateFilter, windowLabel, userState }: Pen
       timeZone: "America/New_York",
     })
   })()
-  const lineB = formatLineB({
-    locations: item.locations,
-    stateFilter,
-    windowLabel: resolvedWindowLabel,
-  })
+  // lineB is unused but kept for potential future use
   const thumbnailSrc = item.imageUrl ? toPennyListThumbnailUrl(item.imageUrl) : item.imageUrl
+  const totalReports = item.locations ? getTotalReports(item.locations) : 0
 
   const openSkuPage = () => router.push(skuPageUrl)
 
@@ -127,14 +115,12 @@ export function PennyListCard({ item, stateFilter, windowLabel, userState }: Pen
       aria-labelledby={`item-${item.id}-name`}
     >
       <article className="flex flex-col h-full relative">
-        {/* Heart icon - top-right corner (Design Vision Tier 5) */}
-        <div className="absolute top-3 right-3 z-10" onClick={(event) => event.stopPropagation()}>
-          <AddToListButton
-            sku={item.sku}
-            itemName={item.name}
-            variant="icon"
-            className="min-h-[44px] min-w-[44px]"
-          />
+        {/* Status only (recency) */}
+        <div className="absolute top-3 right-3 z-10 flex items-center gap-1 text-[11px] text-[var(--text-muted)] pointer-events-none">
+          <Calendar className="w-3 h-3" aria-hidden="true" />
+          <time dateTime={lastSeenValue} title={lastSeenTitle ?? undefined}>
+            {formatRelativeDate(lastSeenValue)}
+          </time>
         </div>
 
         <div className="p-2.5 flex flex-col flex-1 space-y-2">
@@ -143,7 +129,9 @@ export function PennyListCard({ item, stateFilter, windowLabel, userState }: Pen
             <PennyThumbnail src={thumbnailSrc} alt={displayName} size={64} />
             <div className="flex-1 space-y-1">
               {/* Brand (small) */}
-              {displayBrand && <p className="penny-card-brand whitespace-nowrap">{displayBrand}</p>}
+              {displayBrand && (
+                <p className="penny-card-brand whitespace-nowrap -ml-[74px]">{displayBrand}</p>
+              )}
 
               {/* Name (2 lines) */}
               <h3
@@ -163,12 +151,10 @@ export function PennyListCard({ item, stateFilter, windowLabel, userState }: Pen
             </div>
           </div>
 
-          {/* Tier 3: Price Block with Savings (dopamine trigger) */}
+          {/* Tier 3: Price Block */}
           <div className="space-y-1">
             <div className="flex flex-wrap items-baseline gap-2">
-              <span className="text-lg font-semibold text-[var(--text-primary)]">
-                {formattedPrice}
-              </span>
+              <span className="penny-card-price text-[var(--text-primary)]">{formattedPrice}</span>
               {formattedRetail && (
                 <span className="text-sm text-[var(--text-muted)]">
                   Retail{" "}
@@ -176,31 +162,42 @@ export function PennyListCard({ item, stateFilter, windowLabel, userState }: Pen
                 </span>
               )}
             </div>
-            {hasSavings && formattedSavings && (
-              <p className="text-sm font-semibold text-[var(--text-secondary)]">
-                <span className="text-[var(--live-indicator)]">{formattedSavings}</span> off
-              </p>
-            )}
           </div>
 
-          {/* Tier 4: Metadata (confidence builders) */}
-          <div className="space-y-1.5">
-            <p className="text-sm text-[var(--text-secondary)]" title={lastSeenTitle ?? undefined}>
-              {lastSeenLabel}
-            </p>
+          {/* Tier 4: State + report info */}
+          {item.locations && Object.keys(item.locations).length > 0 && (
             <button
               type="button"
               onClick={(event) => {
                 event.stopPropagation()
                 setIsStateBreakdownOpen(true)
               }}
-              className="inline-flex items-center gap-1 text-sm font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+              className="text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] rounded"
               aria-label={`View state breakdown for ${displayName}`}
             >
-              <Info className="w-4 h-4" aria-hidden="true" />
-              <span>{lineB}</span>
+              <div className="flex flex-wrap items-center gap-1.5">
+                {Object.entries(item.locations)
+                  .sort(([, a], [, b]) => b - a)
+                  .slice(0, 4)
+                  .map(([state]) => (
+                    <span
+                      key={`${item.id}-${state}`}
+                      className="inline-flex items-center rounded-full border border-[var(--border-default)] bg-[var(--bg-recessed)] px-2 py-0.5 text-[11px] font-semibold text-[var(--text-secondary)]"
+                    >
+                      {state}
+                    </span>
+                  ))}
+                {Object.keys(item.locations).length > 4 && (
+                  <span className="text-[11px] font-medium text-[var(--text-secondary)]">
+                    +{Object.keys(item.locations).length - 4}
+                  </span>
+                )}
+              </div>
+              <p className="mt-1 text-[10px] text-[var(--text-muted)]">
+                {totalReports} {totalReports === 1 ? "report" : "reports"} total
+              </p>
             </button>
-          </div>
+          )}
 
           {/* Tier 5: Actions - Report (full-width primary), then HD + Barcode row */}
           <div className="space-y-2" onClick={(event) => event.stopPropagation()}>
@@ -259,6 +256,14 @@ export function PennyListCard({ item, stateFilter, windowLabel, userState }: Pen
                   <span>Barcode</span>
                 </button>
               )}
+              <div className="opacity-70 hover:opacity-100 transition-opacity">
+                <AddToListButton
+                  sku={item.sku}
+                  itemName={item.name}
+                  variant="icon"
+                  className="min-h-[36px] min-w-[36px]"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -295,7 +300,6 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
   const hasIdentifiers = identifiers.some((identifier) => identifier.value)
 
   const totalReports = item.locations ? getTotalReports(item.locations) : 0
-  const stateCount = item.locations ? Object.keys(item.locations).length : 0
   const skuPageUrl = `/sku/${item.sku}`
   const resolvedHomeDepotUrl = getHomeDepotProductUrl({
     sku: item.sku,
@@ -304,12 +308,8 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
   })
 
   const retailPrice = typeof item.retailPrice === "number" ? item.retailPrice : null
-  const compactSavings =
-    retailPrice && retailPrice > item.price ? Number((retailPrice - item.price).toFixed(2)) : 0
-  const compactHasSavings = Boolean(retailPrice && compactSavings > 0)
   const compactFormattedPrice = formatCurrency(item.price)
   const compactFormattedRetail = retailPrice ? formatCurrency(retailPrice) : null
-  const compactFormattedSavings = compactHasSavings ? formatCurrency(compactSavings) : null
   const thumbnailSrc = item.imageUrl ? toPennyListThumbnailUrl(item.imageUrl) : item.imageUrl
 
   const openSkuPage = () => router.push(skuPageUrl)
@@ -354,7 +354,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
     >
       <article>
         <div className="flex items-center justify-end mb-2">
-          <span className="text-xs text-[var(--text-secondary)] font-medium flex items-center gap-1 flex-shrink-0">
+          <span className="text-[11px] text-[var(--text-muted)] font-medium flex items-center gap-1 flex-shrink-0">
             <Calendar className="w-3 h-3" aria-hidden="true" />
             <time dateTime={item.lastSeenAt ?? item.dateAdded}>
               {formatRelativeDate(item.lastSeenAt ?? item.dateAdded)}
@@ -380,7 +380,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
             >
               <div className="space-y-2">
                 {displayBrand && (
-                  <p className="text-xs uppercase tracking-[0.08em] text-[var(--text-secondary)]">
+                  <p className="text-[11px] uppercase tracking-[0.08em] text-[var(--text-muted)] -ml-[60px] w-fit">
                     {displayBrand}
                   </p>
                 )}
@@ -430,9 +430,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
         <div className="mt-2 flex flex-wrap items-end gap-3 text-xs">
           <div>
             <p className="text-[var(--text-muted)]">Penny price</p>
-            <p className="text-lg font-semibold text-[var(--text-primary)]">
-              {compactFormattedPrice}
-            </p>
+            <p className="penny-card-price text-[var(--text-primary)]">{compactFormattedPrice}</p>
           </div>
           {compactFormattedRetail && (
             <div className="flex flex-col gap-1">
@@ -440,41 +438,33 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
               <span className="text-sm font-semibold text-[var(--price-strike)] line-through">
                 {compactFormattedRetail}
               </span>
-              {compactHasSavings && compactFormattedSavings && (
-                <span className="text-[var(--text-secondary)] font-semibold">
-                  <span className="text-[var(--live-indicator)]">{compactFormattedSavings}</span>{" "}
-                  off
-                </span>
-              )}
             </div>
           )}
         </div>
-        {totalReports > 0 && (
-          <p className="mt-2 text-xs text-[var(--text-secondary)]">
-            {totalReports} {totalReports === 1 ? "report" : "reports"} × {stateCount}{" "}
-            {stateCount === 1 ? "state" : "states"}
-          </p>
-        )}
         {item.locations && Object.keys(item.locations).length > 0 && (
-          <div className="mt-3 flex flex-wrap gap-1.5" role="list" aria-label="States with reports">
-            {Object.entries(item.locations)
-              .sort(([, a], [, b]) => b - a)
-              .slice(0, 5)
-              .map(([state, count]) => (
-                <span
-                  key={`${item.id}-${state}`}
-                  role="listitem"
-                  className="pill pill-strong"
-                  aria-label={`${state}: ${count} ${count === 1 ? "report" : "reports"}`}
-                >
-                  {state} × {count}
+          <div className="mt-3">
+            <div className="flex flex-wrap gap-1.5" role="list" aria-label="States with reports">
+              {Object.entries(item.locations)
+                .sort(([, a], [, b]) => b - a)
+                .slice(0, 4)
+                .map(([state]) => (
+                  <span
+                    key={`${item.id}-${state}`}
+                    role="listitem"
+                    className="inline-flex items-center rounded-full border border-[var(--border-default)] bg-[var(--bg-recessed)] px-2 py-0.5 text-[11px] font-semibold text-[var(--text-secondary)]"
+                  >
+                    {state}
+                  </span>
+                ))}
+              {Object.keys(item.locations).length > 4 && (
+                <span className="text-[11px] font-medium text-[var(--text-secondary)]">
+                  +{Object.keys(item.locations).length - 4}
                 </span>
-              ))}
-            {Object.keys(item.locations).length > 5 && (
-              <span className="px-2 py-1 text-[var(--text-muted)] text-xs font-medium">
-                +{Object.keys(item.locations).length - 5} more
-              </span>
-            )}
+              )}
+            </div>
+            <p className="mt-1 text-[10px] text-[var(--text-muted)]">
+              {totalReports} {totalReports === 1 ? "report" : "reports"} total
+            </p>
           </div>
         )}
         <div className="mt-3 pt-3 border-t border-[var(--border-default)] flex items-center gap-2">

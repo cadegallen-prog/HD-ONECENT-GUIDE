@@ -21,13 +21,30 @@ Copy, fill, paste:
 ```
 GOAL: [specific ask]
 WHY: [who it helps / what it fixes]
-EVIDENCE: [error message / screenshot / link / metric — if none yet, say "none"]
+EVIDENCE: [error message / screenshot / link / metric - if none yet, say "none"]
+NOT DOING: [2-3 explicit exclusions to prevent scope creep]
+CONSTRAINTS: [tokens-only colors, don’t touch globals.css, don’t kill port 3001, etc.]
+EXAMPLES: Like this: [one sentence] / Not like this: [one sentence]
 OPTIONS (if this needs approval): A) [fast/safe] B) [balanced] C) [ambitious]
 DONE MEANS:
 - [success criterion]
 - [success criterion]
 - npm run build + npm run lint + npm run test:unit + npm run test:e2e pass
 - I verified the page/flow
+```
+
+If Cade is unsure, the agent should ask **one** non-technical clarifying question: “Which lever matters most right now: more submissions, better retention, or more SEO traffic?”
+
+### Course-Correction Script (When AI Is Misaligned)
+
+Use this exact pattern:
+
+```
+STOP: That’s not what I meant.
+GOAL (revised): [...]
+NOT DOING (revised): [...]
+The misunderstanding is: [...]
+Restate your understanding in 2-3 sentences before changing any code.
 ```
 
 ---

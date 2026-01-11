@@ -2,12 +2,21 @@
 
 ## Read First (in order)
 
-1. `.ai/VERIFICATION_REQUIRED.md` ⛔ NO PROOF = NOT DONE
-2. `.ai/CONSTRAINTS.md` - Most violated rules
-3. `.ai/GROWTH_STRATEGY.md` - **Business goals & context**
-4. `.ai/STATE.md` - Current snapshot
-5. `.ai/BACKLOG.md` - What to work on
-6. `.ai/AI_ENABLEMENT_BLUEPRINT.md` - Only when improving AI workflow/tooling/verification
+Follow the canonical read order (source of truth is the root `README.md`, “AI Canon & Read Order”):
+
+1. `.ai/START_HERE.md`
+2. `.ai/CRITICAL_RULES.md`
+3. `.ai/STATE.md`
+4. `.ai/BACKLOG.md`
+5. `.ai/CONTRACT.md`
+6. `.ai/DECISION_RIGHTS.md`
+
+**First session only:** `.ai/GROWTH_STRATEGY.md`
+**If goal is AI workflow/tooling/verification enablement:** `.ai/AI_ENABLEMENT_BLUEPRINT.md`
+
+Keep these open while working:
+- `.ai/USAGE.md` (task template + course-correction script)
+- `.ai/VERIFICATION_REQUIRED.md` (paste-ready proof format)
 
 **Then ask:** GOAL / WHY / DONE for this session.
 
@@ -120,6 +129,11 @@ netstat -ano | findstr :3001
 # IF NOT → npm run dev
 ```
 
+### Dev/Test Modes (Avoid Port Ownership Loops)
+
+- **Dev Mode (human-owned):** You (Cade) start `npm run dev` once on port 3001 in a visible terminal; Copilot should not start/stop dev servers.
+- **Test Mode (Playwright-owned):** Do not run `npm run dev`; run `npm run ai:verify -- test` (Playwright uses port 3002).
+
 ### Rule #3: Colors
 
 - ❌ NO raw Tailwind (`blue-500`, `gray-600`)
@@ -181,13 +195,12 @@ netstat -ano | findstr :3001
 - Claude Code: `.vscode/mcp.json` ✅ Full support
 - Codex: `~/.codex/config.toml` ✅ Full support
 
-**5 Available Servers:**
+**4 Available Servers:**
 
 1. **Filesystem** - File operations (automatically available to Claude/Codex)
 2. **GitHub** - PRs/issues/repo management (Claude/Codex only)
 3. **Playwright** - Browser testing & screenshots (Claude/Codex only - REQUIRED for UI changes)
 4. **Supabase** - Database queries during development (Claude/Codex optional)
-5. **Vercel** - Deployment management (Claude/Codex optional)
 
 **Note:** Git MCP removed (package doesn't exist) - use terminal for git operations instead.
 

@@ -53,6 +53,10 @@ export type SupabasePennyRow = {
   home_depot_url: string | null
   internet_sku: number | null
   timestamp: string | null
+  brand: string | null
+  model_number: string | null
+  upc: string | null
+  retail_price: string | number | null
 }
 
 export type SupabasePennyEnrichmentRow = {
@@ -254,14 +258,19 @@ function pickLastSeenDate(
   row: SupabasePennyRow,
   nowMs: number
 ): { iso: string; ms: number } | null {
+  // Use timestamp (when submitted) for "Last Seen" - ensures freshness signal
+  // reflects actual platform activity, not user-claimed dates.
+  // This prevents "phantom activity" where old backdated submissions
+  // increase find counts without updating freshness indicators.
+  const timestamp = row.timestamp ? new Date(row.timestamp) : null
+  if (timestamp && !Number.isNaN(timestamp.getTime()) && timestamp.getTime() <= nowMs) {
+    return { iso: timestamp.toISOString(), ms: timestamp.getTime() }
+  }
+
+  // Fallback to purchase_date only if no timestamp (legacy data)
   const purchase = parsePurchaseDateValue(row.purchase_date)
   if (purchase && purchase.ms <= nowMs) {
     return purchase
-  }
-
-  const timestamp = row.timestamp ? new Date(row.timestamp) : null
-  if (timestamp && !Number.isNaN(timestamp.getTime())) {
-    return { iso: timestamp.toISOString(), ms: timestamp.getTime() }
   }
 
   return null
@@ -314,6 +323,10 @@ export function buildPennyItemsFromRows(rows: SupabasePennyRow[]): PennyItem[] {
     const internetNumber = normalizeIntToString(row.internet_sku)
     const homeDepotUrl = row.home_depot_url?.trim() || null
     const name = row.item_name?.trim()
+    const brand = row.brand?.trim()
+    const modelNumber = row.model_number?.trim()
+    const upc = row.upc?.trim()
+    const retailPrice = parsePriceValue(row.retail_price)
 
     const existing = grouped.get(sku)
 
@@ -322,9 +335,13 @@ export function buildPennyItemsFromRows(rows: SupabasePennyRow[]): PennyItem[] {
         id: sku,
         sku,
         name: name || `SKU ${sku}`,
+        brand,
+        modelNumber,
+        upc,
         internetNumber,
         homeDepotUrl,
         price: 0.01,
+        retailPrice,
         dateAdded: dateInfo?.iso || new Date().toISOString(),
         lastSeenAt: lastSeenInfo?.iso,
         status: "",
@@ -378,6 +395,23 @@ export function buildPennyItemsFromRows(rows: SupabasePennyRow[]): PennyItem[] {
       existing.quantityFound = String(quantity)
     }
 
+    // Merge enrichment data (prefer non-null values)
+    if (brand && !existing.brand) {
+      existing.brand = brand
+    }
+
+    if (modelNumber && !existing.modelNumber) {
+      existing.modelNumber = modelNumber
+    }
+
+    if (upc && !existing.upc) {
+      existing.upc = upc
+    }
+
+    if (retailPrice !== undefined && existing.retailPrice === undefined) {
+      existing.retailPrice = retailPrice
+    }
+
     if (state) {
       existing.locations[state] = (existing.locations[state] || 0) + 1
     }
@@ -416,7 +450,7 @@ async function fetchRows(
   let query = client
     .from("penny_list_public")
     .select(
-      "id,purchase_date,item_name,home_depot_sku_6_or_10_digits,exact_quantity_found,store_city_state,image_url,notes_optional,home_depot_url,internet_sku,timestamp"
+      "id,purchase_date,item_name,home_depot_sku_6_or_10_digits,exact_quantity_found,store_city_state,image_url,notes_optional,home_depot_url,internet_sku,timestamp,brand,model_number,upc,retail_price"
     )
 
   // Apply date window filter at database level for performance
