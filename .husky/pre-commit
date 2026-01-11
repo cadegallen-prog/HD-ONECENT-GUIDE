@@ -1,5 +1,13 @@
 echo "Running pre-commit checks..."
 
+# Auto-format staged files with Prettier
+echo "📝 Formatting staged files..."
+npx lint-staged
+if [ $? -ne 0 ]; then
+  echo "❌ Formatting failed. Please fix errors and try again."
+  exit 1
+fi
+
 # Security scan (block PII)
 npm run security:scan
 if [ $? -ne 0 ]; then
