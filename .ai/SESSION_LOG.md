@@ -12,6 +12,20 @@
 
 ---
 
+## 2026-01-11 - Codex (GPT-5.2) - Add skills system + agent entrypoint docs
+
+**Goal:** Reduce repeated “where do I edit?” questions by adding lightweight, repo-native skills and a mandatory skills entrypoint for agents.
+
+**Outcome:**
+
+- Added `/docs/skills` with a README index and four focused skills: repo map, feature-to-files, local dev faststart, and ship-safely.
+- Updated root `AGENTS.md` to require consulting `/docs/skills` before exploring the repo and to add new skills when missing.
+
+**Verification (Proof):**
+
+- Not run (documentation-only change).
+
+## 2026-01-10 - Codex (GPT-5.2) - Repair partial commit + ship full local changes
 ## 2026-01-11 - GitHub Copilot - Supabase Critical Fixes (Egress + Security)
 
 **Goal:** Fix infinite API loop causing 44,000+ Supabase calls + security issues  

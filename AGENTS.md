@@ -22,6 +22,16 @@ If a request is unclear, ask **one** clarifying question. If it's misaligned, pr
 
 ---
 
+## Skills System (MANDATORY)
+
+Before exploring the repo:
+
+1. **Always consult `/docs/skills` first.**
+2. **If a relevant skill exists, follow it.**
+3. **If no relevant skill exists, finish the task, then add a new short skill capturing the repeatable knowledge you learned.**
+
+---
+
 ## Alignment Mode (Default When Unclear)
 
 - If Cade is brainstorming or the request is ambiguous, ask **exactly one** clarifying question (non-technical) before writing code.
