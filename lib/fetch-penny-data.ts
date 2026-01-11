@@ -215,6 +215,75 @@ function buildEnrichmentIndex(
   return index
 }
 
+/**
+ * Build enrichment index from Penny List rows (for self-enrichment from historical data).
+ * Keeps the most recent version per SKU based on timestamp.
+ */
+function buildEnrichmentIndexFromPennyListRows(
+  rows: SupabasePennyRow[]
+): Map<string, PennyItemEnrichment> {
+  const index = new Map<string, PennyItemEnrichment>()
+
+  for (const row of rows) {
+    const sku = normalizeSkuValue(row.home_depot_sku_6_or_10_digits)
+    if (!sku) continue
+
+    // Only add if this row has any enrichment data
+    const hasEnrichment = row.image_url || row.brand || row.model_number || row.upc
+    if (!hasEnrichment) continue
+
+    const timestamp = row.timestamp ? new Date(row.timestamp).getTime() : 0
+    const existing = index.get(sku)
+
+    // Keep the most recent version
+    if (!existing || timestamp > existing.updatedAtMs) {
+      index.set(sku, {
+        sku,
+        name: normalizeOptionalText(row.item_name),
+        brand: normalizeOptionalText(row.brand),
+        modelNumber: normalizeOptionalText(row.model_number),
+        upc: normalizeOptionalText(row.upc),
+        imageUrl: normalizeOptionalText(row.image_url),
+        homeDepotUrl: normalizeOptionalText(row.home_depot_url),
+        internetNumber: normalizeIntToString(row.internet_sku),
+        retailPrice: parsePriceValue(row.retail_price),
+        updatedAtMs: Number.isNaN(timestamp) ? 0 : timestamp,
+      })
+    }
+  }
+
+  return index
+}
+
+/**
+ * Apply self-enrichment from historical Penny List rows to fill gaps.
+ * Only fills missing fields - does not override existing data from date-filtered rows.
+ */
+function applySelfEnrichment(
+  items: PennyItem[],
+  selfEnrichment: Map<string, PennyItemEnrichment>
+): PennyItem[] {
+  if (selfEnrichment.size === 0) return items
+
+  return items.map((item) => {
+    const enrichment = selfEnrichment.get(item.sku)
+    if (!enrichment) return item
+
+    // Only fill gaps - don't override existing data from date-filtered rows
+    return {
+      ...item,
+      name: item.name || enrichment.name || item.name,
+      brand: item.brand || enrichment.brand,
+      modelNumber: item.modelNumber || enrichment.modelNumber,
+      upc: item.upc || enrichment.upc,
+      imageUrl: item.imageUrl && item.imageUrl !== PLACEHOLDER_IMAGE_URL ? item.imageUrl : enrichment.imageUrl || item.imageUrl,
+      homeDepotUrl: item.homeDepotUrl || enrichment.homeDepotUrl,
+      internetNumber: item.internetNumber || enrichment.internetNumber,
+      retailPrice: item.retailPrice ?? enrichment.retailPrice,
+    }
+  })
+}
+
 export function applyEnrichment(
   items: PennyItem[],
   rows: SupabasePennyEnrichmentRow[] | null,
@@ -536,13 +605,21 @@ async function fetchRows(
 
 async function fetchEnrichmentRows(
   client: ReturnType<typeof getSupabaseClient>,
-  label: "anon"
+  label: "anon",
+  skuList?: string[]
 ): Promise<SupabasePennyEnrichmentRow[] | null> {
-  const { data, error } = await client
+  let query = client
     .from("penny_item_enrichment")
     .select(
       "sku,item_name,brand,model_number,upc,image_url,home_depot_url,internet_sku,retail_price,updated_at"
     )
+
+  // Filter by SKUs if provided - dramatically reduces egress
+  if (skuList && skuList.length > 0) {
+    query = query.in("sku", skuList)
+  }
+
+  const { data, error } = await query
 
   if (error) {
     const code = (error as { code?: unknown } | null)?.code
@@ -564,6 +641,36 @@ async function fetchEnrichmentRows(
   return rows
 }
 
+/**
+ * Fetch Penny List rows for specific SKUs (no date filter) to get historical enrichment data.
+ * Only fetches rows that have enrichment data (image, brand, etc).
+ */
+async function fetchRowsForEnrichmentOnly(
+  client: ReturnType<typeof getSupabaseClient>,
+  skuList: string[]
+): Promise<SupabasePennyRow[] | null> {
+  if (skuList.length === 0) return null
+
+  // Query for rows with any enrichment data (image_url OR brand OR model_number OR upc)
+  // Limit to 2 rows per SKU max to reduce egress while still getting recent data
+  const { data, error } = await client
+    .from("penny_list_public")
+    .select(
+      "home_depot_sku_6_or_10_digits,brand,model_number,upc,image_url,home_depot_url,internet_sku,retail_price,item_name,timestamp,id,purchase_date,exact_quantity_found,store_city_state"
+    )
+    .in("home_depot_sku_6_or_10_digits", skuList)
+    .or("image_url.not.is.null,brand.not.is.null,model_number.not.is.null,upc.not.is.null")
+    .order("timestamp", { ascending: false })
+    .limit(skuList.length * 2)
+
+  if (error) {
+    console.error("Error fetching enrichment-only rows:", error)
+    return null
+  }
+
+  return (data as unknown as SupabasePennyRow[]) ?? []
+}
+
 type SupabaseClientLike = ReturnType<typeof getSupabaseClient>
 
 function getSupabaseAnonReadClient(): SupabaseClientLike {
@@ -581,8 +688,28 @@ export async function fetchPennyItemsFromSupabase(
     const anonRows = await fetchRows(anonClient, "anon", options)
 
     if (anonRows && anonRows.length > 0) {
-      const anonEnrichment = await fetchEnrichmentRows(anonClient, "anon")
-      return applyEnrichment(buildPennyItemsFromRows(anonRows), anonEnrichment)
+      // Step 1: Build initial items from date-filtered rows
+      let items = buildPennyItemsFromRows(anonRows)
+
+      // Step 2: Get SKUs that need enrichment (missing image or brand)
+      const skusNeedingEnrichment = items
+        .filter((item) => !item.imageUrl || item.imageUrl === PLACEHOLDER_IMAGE_URL || !item.brand)
+        .map((item) => item.sku)
+
+      // Step 3: Fetch historical enrichment from Penny List (no date filter)
+      if (skusNeedingEnrichment.length > 0) {
+        const historicalRows = await fetchRowsForEnrichmentOnly(anonClient, skusNeedingEnrichment)
+        if (historicalRows && historicalRows.length > 0) {
+          const selfEnrichmentIndex = buildEnrichmentIndexFromPennyListRows(historicalRows)
+          items = applySelfEnrichment(items, selfEnrichmentIndex)
+        }
+      }
+
+      // Step 4: Apply dedicated enrichment table (highest priority)
+      // Only fetch enrichment for SKUs we have - dramatically reduces egress
+      const skusInResult = items.map((item) => item.sku)
+      const anonEnrichment = await fetchEnrichmentRows(anonClient, "anon", skusInResult)
+      return applyEnrichment(items, anonEnrichment)
     }
   } catch (error) {
     // If Supabase is not configured or fails, we'll return empty

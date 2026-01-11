@@ -308,8 +308,14 @@ export async function GET(request: Request) {
     )
   }
 
-  // Get existing enrichment SKUs
-  const { data: existingEnrichment } = await supabase.from("penny_item_enrichment").select("sku")
+  // Get existing enrichment SKUs - only check SKUs we care about
+  const skusToCheck = (pennyListItems || [])
+    .map((item) => String(item.home_depot_sku_6_or_10_digits).replace(/\D/g, ""))
+    .filter((sku) => sku.length >= 6)
+  const { data: existingEnrichment } = await supabase
+    .from("penny_item_enrichment")
+    .select("sku")
+    .in("sku", skusToCheck)
 
   const enrichedSkus = new Set((existingEnrichment || []).map((e) => String(e.sku)))
 
