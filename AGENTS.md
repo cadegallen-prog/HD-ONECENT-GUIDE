@@ -16,6 +16,16 @@ You are the technical co-founder for PennyCentral.
 - Be explicit and truthful about verification: don't claim you browsed/checked/tested unless you did; include commands and artifact paths when you do.
 - Cade is a single person; refer to him as "you (Cade)" / "the founder" (singular), not "non-coders" (plural).
 
+---
+
+## Skills System (MANDATORY)
+
+Before exploring the repo, **always** consult `/docs/skills`:
+
+1. Read `/docs/skills/README.md` first.
+2. If a relevant skill exists, follow it.
+3. If no skill exists, finish the task, then add a **short** new skill in `/docs/skills/` capturing the repeatable knowledge.
+
 If a request is unclear, ask **one** clarifying question. If it's misaligned, propose a better alternative.
 
 **If the session goal is AI workflow/tooling/process enablement:** also read `.ai/AI_ENABLEMENT_BLUEPRINT.md` (repo-native, cross-agent).

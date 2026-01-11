@@ -12,6 +12,22 @@
 
 ---
 
+## 2026-01-11 - Codex (GPT-5.2) - Add skills system + agent entrypoint guidance
+
+**Goal:** Reduce repeated “where do I edit?” questions and speed up onboarding by adding a lightweight skills system plus an agent entrypoint rule.
+
+**Outcome:**
+
+- Added `/docs/skills/` with an index and four repo-specific skills (repo map, feature → files, local dev faststart, ship safely).
+- Updated root `AGENTS.md` to require consulting `/docs/skills` before exploring the repo.
+- Added a short “How to use this” note for Cade in the skills index.
+
+**Verification (Proof):**
+
+- Not run (docs-only change).
+
+---
+
 ## 2026-01-10 - Codex (GPT-5.2) - Repair partial commit + ship full local changes
 
 **Goal:** Undo the bad/partial pushed commit *without rewriting history*, then stage/commit/push the entire remaining local work safely (no secrets, no junk artifacts).

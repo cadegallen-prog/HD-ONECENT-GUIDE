@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Jan 10, 2026 (Penny List CTA tuned to moderate blue)
+**Last updated:** Jan 11, 2026 (Skills system + agent entrypoint guidance added)
 
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
@@ -11,6 +11,7 @@ Every AI session must update this after meaningful work.
 
 ## Current Sprint (Last 7 Days)
 
+- **Skills system + agent entrypoint (Jan 11):** Added `/docs/skills/` with a repo map, feature → files guide, local dev faststart, and ship-safely notes; updated root `AGENTS.md` to require consulting skills before exploring the repo; added a short “How to use this” note for Cade.
 - **Data pipeline P0 bootstrap (Jan 10):** Added `scripts/validate-scrape-json.ts` to normalize and validate raw scrape JSON (SKU validation, field presence stats, cleaned output to `.local/`), and wired npm scripts for `export:pennycentral` (existing export script runner) and `validate:scrape`.
 - **Data pipeline P0 continue (Jan 10):** Added `scripts/scrape-to-enrichment-csv.ts` (fill-blanks-only CSV from cleaned scrape + current enrichment) and `scripts/enrichment-diff.ts` (Markdown diff summary). Wired npm scripts: `convert:scrape`, `diff:enrichment`.
 - **Penny List card tightening + trust soften (Jan 10):** Reduced card padding, image size to 64px, smaller SKU chip, inline info-style trust row, compressed primary/secondary action heights; submit-find enrichment lookup now skips when mocks are minimal and only attaches enrichment fields when present (no null payload clutter).
