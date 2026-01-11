@@ -127,10 +127,10 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
           {/* Tier 1 + 2: Image + Brand + Name + SKU */}
           <div className="flex gap-2.5 items-start pr-9">
             <PennyThumbnail src={thumbnailSrc} alt={displayName} size={64} />
-            <div className="flex-1 space-y-1">
+            <div className="flex-1 min-w-0 space-y-1 overflow-hidden">
               {/* Brand (small) */}
               {displayBrand && (
-                <p className="penny-card-brand whitespace-nowrap">{displayBrand}</p>
+                <p className="penny-card-brand truncate">{displayBrand}</p>
               )}
 
               {/* Name (2 lines) */}
