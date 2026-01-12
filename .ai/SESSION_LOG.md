@@ -12,22 +12,42 @@
 
 ---
 
-## 2026-01-12 - GitHub Copilot - Dependency update and security audit
+## 2026-01-12 - GitHub Copilot - Production error hardening + dependency update
 
-**Goal:** Update low-risk dependencies and run security scans to keep project secure.
+**Goal:** Harden `/api/submit-find` error handling after discovering permission errors in Vercel logs + update dependencies
 **Status:** ✅ Complete
+
+### Root Cause (From Vercel Logs)
+
+- Jan 11 logs showed repeated 500s with `Supabase insert error: { code: '42501', message: 'permission denied for table Penny List' }`
+- Code wasn't reading `SUPABASE_SERVICE_ROLE_KEY` correctly (fixed in earlier session)
+- Missing runtime guards to detect config issues early
+- JSON parse errors returned generic 500s instead of helpful 400s
 
 ### Changes
 
-- Bumped: `@supabase/supabase-js` 2.89.0 → 2.90.1, `next` 16.0.10 → 16.1.1, `@vercel/analytics` 1.5.0 → 1.6.1, `framer-motion`, `lucide-react`, `jsbarcode`, `@tailwindcss/forms`, `autoprefixer`, `eslint` tooling, type packages and others (minor/patch)
+**Error Hardening (`app/api/submit-find/route.ts`):**
+
+- Added early guard: checks `SUPABASE_SERVICE_ROLE_KEY` is present, logs clear error + returns 500 with friendly message if missing
+- Wrapped `request.json()` in try/catch to return 400 on malformed JSON (prevents generic 500s)
+- Enhanced Supabase insert error logging: now logs code, message, details, hint + SKU for debugging
+- Improved catch-all error logging with stack traces
+
+**Dependency Updates:**
+
+- Bumped: `@supabase/supabase-js` 2.89.0 → 2.90.1, `next` 16.0.10 → 16.1.1, `@vercel/analytics` 1.5.0 → 1.6.1, `framer-motion`, `lucide-react`, `jsbarcode`, `@tailwindcss/forms`, `autoprefixer`, `eslint` tooling, type packages (minor/patch only)
 
 ### Verification
 
-- `npm install` completed, `npm audit` found 0 vulnerabilities, `npm run qa:fast` (lint, unit tests, build) passed, `npm run security:scan` passed.
+- `npm run qa:fast`: lint ✅, 25/25 unit tests ✅, Next.js build ✅
+- `npm audit`: 0 vulnerabilities
+- Production test: POST to `/api/submit-find` returned 200, row inserted successfully (SKU 789456)
+- Cleaned up test row from production DB
+- Commit: `5975f06` pushed to main, deployed to Vercel
 
 ### Next Steps
 
-- Pushed to `main` and monitoring Vercel deployment.
+- Monitor Vercel logs for any recurrence of 42501 errors (should be caught early now with better logging)
 
 ---
 
