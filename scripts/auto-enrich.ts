@@ -273,8 +273,19 @@ async function main() {
               url = img.getAttribute("src") || img.getAttribute("data-src") || ""
             }
           }
-          if (url && url.indexOf("thdstatic.com") !== -1) {
-            url = url.replace(/\/\d+\.jpg(\?.*)?$/, "/1000.jpg")
+          if (url) {
+            try {
+              var parsed = new URL(url, window.location && window.location.href ? window.location.href : undefined)
+              var hostname = parsed.hostname.toLowerCase()
+              var isAllowedHost =
+                hostname === "thdstatic.com" ||
+                hostname.endsWith(".thdstatic.com")
+              if (isAllowedHost) {
+                url = url.replace(/\/\d+\.jpg(\?.*)?$/, "/1000.jpg")
+              }
+            } catch (e) {
+              // If URL parsing fails, leave the URL unchanged.
+            }
           }
           return url
         }
