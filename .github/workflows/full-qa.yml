@@ -125,6 +125,7 @@ jobs:
       - name: Run e2e tests
         env:
           PLAYWRIGHT: "1"
+          PLAYWRIGHT_BASE_URL: http://localhost:3001
         run: npm run test:e2e
 
       - name: Run contrast check

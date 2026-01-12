@@ -1,5 +1,7 @@
 import { defineConfig, devices } from "@playwright/test"
 
+const baseURL = process.env.PLAYWRIGHT_BASE_URL || "http://localhost:3002"
+
 export default defineConfig({
   testDir: "./tests",
   testMatch: "**/*.spec.ts",
@@ -7,7 +9,7 @@ export default defineConfig({
   snapshotDir: "reports/playwright/baseline",
   reporter: [["list"], ["html", { outputFolder: "reports/playwright/html", open: "never" }]],
   use: {
-    baseURL: process.env.PLAYWRIGHT_BASE_URL || "http://localhost:3002",
+    baseURL,
     trace: "on-first-retry",
     actionTimeout: 30000,
     navigationTimeout: 30000,
@@ -46,11 +48,15 @@ export default defineConfig({
       },
     },
   ],
-  webServer: {
-    command:
-      "node -e \"require('fs').rmSync('.next', { recursive: true, force: true })\" && cross-env PLAYWRIGHT=1 npm run build && cross-env PLAYWRIGHT=1 npm run start -- --port 3002",
-    url: "http://localhost:3002",
-    reuseExistingServer: !process.env.CI && process.env.PLAYWRIGHT_REUSE_EXISTING_SERVER === "1",
-    timeout: 120000,
-  },
+  // If PLAYWRIGHT_BASE_URL is provided (e.g. CI starts its own server), do not start another server.
+  webServer: process.env.PLAYWRIGHT_BASE_URL
+    ? undefined
+    : {
+        command:
+          "node -e \"require('fs').rmSync('.next', { recursive: true, force: true })\" && cross-env PLAYWRIGHT=1 npm run build && cross-env PLAYWRIGHT=1 npx next start -p 3002",
+        url: baseURL,
+        reuseExistingServer:
+          !process.env.CI && process.env.PLAYWRIGHT_REUSE_EXISTING_SERVER === "1",
+        timeout: 120000,
+      },
 })
