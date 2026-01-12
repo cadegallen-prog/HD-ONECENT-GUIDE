@@ -14,6 +14,10 @@ const SERVER_ONLY_IMPORT_PATHS = ["@/lib/fetch-penny-data", "@/lib/supabase/clie
 const SERVER_ONLY_FILES = ["lib/fetch-penny-data.ts", "lib/supabase/client.ts"] as const
 const SECRET_ENV_MARKERS = ["SUPABASE_SERVICE_ROLE", "SUPABASE_SERVICE_ROLE_KEY"] as const
 
+function escapeForRegExp(literal: string): string {
+  return literal.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+}
+
 async function listFilesRecursive(root: string): Promise<string[]> {
   const results: string[] = []
 
@@ -45,7 +49,7 @@ function isUseClientFile(content: string): boolean {
 function findNonTypeImports(content: string, importPath: (typeof SERVER_ONLY_IMPORT_PATHS)[number]) {
   const violations: string[] = []
 
-  const escaped = importPath.replace(/\//g, "\\/")
+  const escaped = escapeForRegExp(importPath)
   const sideEffectRegex = new RegExp(`^\\s*import\\s+["']${escaped}["']\\s*;?\\s*$`, "gm")
   if (sideEffectRegex.test(content)) violations.push(`side-effect import: ${importPath}`)
 
