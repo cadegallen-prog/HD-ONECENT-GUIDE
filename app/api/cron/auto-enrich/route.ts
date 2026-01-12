@@ -212,8 +212,14 @@ function parseProductPage(html: string, sku: string) {
   const imageMatch = html.match(/<meta\s+property="og:image"\s+content="([^"]+)"/)
   if (imageMatch) {
     let url = imageMatch[1]
-    if (url.includes("thdstatic.com")) {
-      url = url.replace(/\/\d+\.jpg(\?.*)?$/, "/400.jpg")
+    try {
+      const parsed = new URL(url)
+      const hostname = parsed.hostname.toLowerCase()
+      if (hostname === "thdstatic.com" || hostname.endsWith(".thdstatic.com")) {
+        url = url.replace(/\/\d+\.jpg(\?.*)?$/, "/400.jpg")
+      }
+    } catch {
+      // If the URL is invalid, fall through and store it as-is
     }
     result.image_url = url
   }
