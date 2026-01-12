@@ -17,6 +17,9 @@
 
 name: Auto Enrich
 
+permissions:
+  contents: read
+
 on:
   # schedule:
   #   # Run every 6 hours
