@@ -38,7 +38,19 @@ function normalizeImageUrl(url: string | null): string | null {
   if (!url) return null
 
   const trimmed = url.trim()
-  if (!trimmed.includes("thdstatic.com")) return trimmed
+
+  let hostname: string
+  try {
+    const parsedUrl = new URL(trimmed)
+    hostname = parsedUrl.hostname
+  } catch {
+    // If the URL cannot be parsed, leave it unchanged
+    return trimmed
+  }
+
+  const isThdstaticHost =
+    hostname === "thdstatic.com" || hostname.endsWith(".thdstatic.com")
+  if (!isThdstaticHost) return trimmed
 
   // Replace any -64_XXX variant with -64_600.jpg
   const normalized = trimmed.replace(/-64_\d+\.jpg$/i, "-64_600.jpg")
