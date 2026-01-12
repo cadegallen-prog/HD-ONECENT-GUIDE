@@ -78,6 +78,22 @@ const nextConfig = {
         destination: "/guide#faq",
         permanent: true,
       },
+      // SEO consolidation: thin landing pages → pillar pages (Jan 2026)
+      {
+        source: "/home-depot-penny-items",
+        destination: "/penny-list",
+        permanent: true,
+      },
+      {
+        source: "/how-to-find-penny-items",
+        destination: "/guide",
+        permanent: true,
+      },
+      {
+        source: "/home-depot-penny-list",
+        destination: "/penny-list",
+        permanent: true,
+      },
     ]
   },
   // Security and caching headers

@@ -168,7 +168,7 @@ export default function GuidePage() {
         }}
       />
       <PageHeader
-        title="How Home Depot Penny Shopping Works"
+        title="How to Find Home Depot Penny Items"
         subtitle="Master the art of finding $0.01 clearance items at Home Depot. Learn the clearance lifecycle, digital pre-hunt strategies, in-store tactics, and checkout procedures."
         primaryAction={{ label: "Check the Penny List", href: "/penny-list" }}
         secondaryActions={[

@@ -218,19 +218,17 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
             id="page-heading"
             className="text-3xl sm:text-4xl font-bold text-[var(--text-primary)] mb-4"
           >
-            Live Home Depot Penny List
+            Home Depot Penny Items List (Live $0.01 Finds)
           </h1>
           <p className="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
-            Community reports of recent penny sightings.
-          </p>
-          <div className="mt-4">
+            Community reports of recent penny sightings.{" "}
             <a
               href="/guide"
-              className="inline-flex items-center gap-1 text-sm text-[var(--link-default)] hover:text-[var(--link-hover)] font-medium underline underline-offset-4"
+              className="text-[var(--link-default)] hover:text-[var(--link-hover)] underline underline-offset-4"
             >
-              New to penny hunting? Read the Complete Guide →
+              New? Learn how to find penny items first.
             </a>
-          </div>
+          </p>
         </div>
       </section>
 
