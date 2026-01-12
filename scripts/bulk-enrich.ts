@@ -125,12 +125,25 @@ function parsePriceInfo(value: string | number | undefined | null): {
 // Optimize image URL to 400px version
 function optimizeImageUrl(url: string | null | undefined): string | null {
   if (!url) return null
-  if (url.includes("thdstatic.com")) {
+  let hostname: string | null = null
+  try {
+    const parsed = new URL(url)
+    hostname = parsed.hostname
+  } catch {
+    // If URL parsing fails, fall back to returning the original URL
+    return url
+  }
+
+  const isThdHost =
+    hostname === "thdstatic.com" || hostname.endsWith(".thdstatic.com")
+
+  if (isThdHost) {
     // Convert common THD sizes to 1000px for larger card displays
     if (url.includes("_100.jpg")) return url.replace("_100.jpg", "_1000.jpg")
     if (url.includes("_400.jpg")) return url.replace("_400.jpg", "_1000.jpg")
     return url.replace(/\/\d+\.jpg(\?.*)?$/, "/1000.jpg")
   }
+
   return url
 }
 
