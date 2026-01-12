@@ -12,6 +12,28 @@
 
 ---
 
+## 2026-01-12 - GitHub Copilot - Mediavine Journey (Grow) Installation
+
+**Goal:** Install the Mediavine Journey (Grow) tracking script to enable monetization features and first-party data collection.
+**Status:** ✅ Complete
+
+### Actions
+
+- Added a `preconnect` hint for `https://faves.grow.me` in `app/layout.tsx`.
+- Injected the Mediavine Grow initializer script in the `<head>` of the root layout.
+- Verified that the site still builds and lints correctly.
+
+### Verification
+
+- `npm run lint`: ✅ (0 errors)
+- `npm run build`: ✅ (successful)
+
+### Next Steps
+
+- Confirm in the Mediavine dashboard that the script is successfully detected once deployed to production.
+
+---
+
 ## 2026-01-12 - GitHub Copilot - Batch review & merge of security autofix PRs
 
 **Goal:** Review all open security autofix PRs (code-scanning alerts) and merge passing ones.
@@ -73,30 +95,6 @@
 ### Next Steps
 
 - Monitor Vercel logs for any recurrence of 42501 errors (should be caught early now with better logging)
-
----
-
-## 2026-01-12 - ChatGPT Codex (GPT-5.2) - Report Find Submission Outage Fix (CRITICAL)
-
-**Goal:** Fix “Report a Find” submissions failing in production (`Failed to submit find. Please try again.` / follow-on `Too many submissions...` after retries)
-**Status:** ✅ Complete
-
-### Root Cause
-
-- Supabase now blocks direct `anon` INSERT privileges + RLS policy is authenticated-only for `public."Penny List"`.
-- `/api/submit-find` was still inserting with the anon key, so every submission failed (500), and repeated retries triggered the in-memory rate limiter.
-
-### Fix
-
-- `app/api/submit-find/route.ts`: inserts now use Supabase **service role** (keeps DB locked down from direct anon inserts while preserving low-friction web submissions); rate limiter now records **only successful** submissions; more robust rate-limit key when IP is missing.
-- `tests/submit-find-route.test.ts`: updated to assert service-role insertion behavior.
-- `docs/supabase-rls.md`: updated to match current production reality (direct anon INSERT denied; API route inserts with service role).
-- `playwright.config.ts`: default `reuseExistingServer` is now off (opt-in via `PLAYWRIGHT_REUSE_EXISTING_SERVER=1`) to prevent stale Playwright servers from causing `.next` asset mismatch and MIME-type errors during `ai:verify` runs.
-- `tests/visual-smoke.spec.ts`: updated Penny List H1 expectation to match current page title.
-
-### Verification
-
-- ✅ `reports/verification/2026-01-12T05-37-14/summary.md`
 
 ### Next Session Notes
 

@@ -118,6 +118,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://www.google-analytics.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://va.vercel-scripts.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://faves.grow.me" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://tile.openstreetmap.org" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://*.sentry.io" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://*.supabase.co" crossOrigin="anonymous" />
@@ -156,6 +157,17 @@ export default function RootLayout({
               logo: "https://www.pennycentral.com/icon.svg",
               sameAs: ["https://www.facebook.com/groups/homedepotonecent"],
             }),
+          }}
+        />
+
+        {/* ===================================================
+            MEDIAVINE JOURNEY (GROW)
+            DO NOT REMOVE OR MODIFY
+            =================================================== */}
+        <script
+          data-grow-initializer=""
+          dangerouslySetInnerHTML={{
+            __html: `!(function(){window.growMe||((window.growMe=function(e){window.growMe._.push(e);}),(window.growMe._=[]));var e=document.createElement("script");(e.type="text/javascript"),(e.src="https://faves.grow.me/main.js"),(e.defer=!0),e.setAttribute("data-grow-faves-site-id","U2l0ZToyOWE5MzYwOS02MjA3LTQ4NzMtOGNjOC01ZDI5MjliMWZlYzY=");var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t);})();`,
           }}
         />
 

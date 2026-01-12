@@ -6,6 +6,12 @@ Dates are recorded in America/New_York time.
 
 ---
 
+## 2026-01-12 - Mediavine Journey (Grow) installation
+
+- Integrated Mediavine Journey (Grow) tracking script into the global layout (`app/layout.tsx`).
+- Added a `preconnect` hint for `faves.grow.me` to optimize script loading performance.
+- Verified build and lint stability.
+
 ## 2026-01-02 - Penny List price + barcode overhaul
 
 - Captured retail price from enrichment scrapes and threaded it through Supabase, the enrichment tooling (`scripts/bulk-enrich.ts`, `scripts/enrichment-json-to-csv.ts`, `scripts/serpapi-enrich.ts`) and the data layer (`lib/fetch-penny-data.ts`, new `penny_item_enrichment.retail_price` migration) so savings math is accurate.
