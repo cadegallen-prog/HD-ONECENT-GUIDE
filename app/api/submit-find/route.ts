@@ -244,6 +244,15 @@ async function deleteEnrichmentRow(sku: string): Promise<void> {
 }
 
 export async function POST(request: NextRequest) {
+  // Guard: Ensure service role key is configured (prevent permission errors)
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    console.error("CRITICAL: SUPABASE_SERVICE_ROLE_KEY is missing from environment variables")
+    return NextResponse.json(
+      { error: "Server configuration error. Please contact support." },
+      { status: 500 }
+    )
+  }
+
   try {
     const rateKey = getRateLimitKey(request)
     if (isRateLimited(rateKey)) {
@@ -253,7 +262,19 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const parsed = submissionSchema.safeParse(await request.json())
+    // Parse JSON with explicit error handling
+    let requestBody: unknown
+    try {
+      requestBody = await request.json()
+    } catch (jsonError) {
+      console.error("Invalid JSON in request body:", jsonError)
+      return NextResponse.json(
+        { error: "Invalid request format. Please refresh and try again." },
+        { status: 400 }
+      )
+    }
+
+    const parsed = submissionSchema.safeParse(requestBody)
     if (!parsed.success) {
       return NextResponse.json(
         { error: "Missing or invalid required fields. Please check the form and try again." },
@@ -360,7 +381,14 @@ export async function POST(request: NextRequest) {
     const { error } = await serviceClient.from("Penny List").insert(payload)
 
     if (error) {
-      console.error("Supabase insert error:", error)
+      // Log detailed error info (code, message, hint) for debugging without exposing to client
+      console.error("Supabase insert error:", {
+        code: error.code,
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        sku: normalizedSku,
+      })
       return NextResponse.json(
         { error: "Failed to submit find. Please try again." },
         { status: 500 }
@@ -379,7 +407,11 @@ export async function POST(request: NextRequest) {
       message: "Thanks — your find is now on the Penny List.",
     })
   } catch (error) {
-    console.error("Error submitting find:", error)
+    // Log unexpected errors with stack trace for debugging
+    console.error("Unexpected error in submit-find endpoint:", {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    })
     return NextResponse.json({ error: "Failed to submit find. Please try again." }, { status: 500 })
   }
 }
