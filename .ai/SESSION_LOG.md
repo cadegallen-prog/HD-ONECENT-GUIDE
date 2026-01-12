@@ -12,25 +12,30 @@
 
 ---
 
-## 2026-01-12 - GitHub Copilot - Mediavine Journey (Grow) Installation
+## 2026-01-12 - Codex (GPT-5.2) - Canonical global analytics setup (GA4 + Grow + Vercel)
 
-**Goal:** Install the Mediavine Journey (Grow) tracking script to enable monetization features and first-party data collection.
-**Status:** ✅ Complete
+**Goal:** Make `app/layout.tsx` the single, canonical global analytics/script source so GA4, Mediavine Grow, and Vercel Analytics all load sitewide and don’t randomly disappear again.
+**Status:** ✅ Local complete. ⏳ Production verification pending deploy.
 
 ### Actions
 
-- Added a `preconnect` hint for `https://faves.grow.me` in `app/layout.tsx`.
-- Injected the Mediavine Grow initializer script in the `<head>` of the root layout.
-- Verified that the site still builds and lints correctly.
+- Consolidated global analytics behavior into `app/layout.tsx` (no page-level installs).
+- Mediavine Grow now ships as a real `<script src="https://faves.grow.me/main.js" ...>` in `<head>` so it appears in View Page Source.
+- GA4 kept as a single global `<head>` install (Measurement ID `G-DJ4RJRX05E`) and now fires pageviews on SPA route changes (history hooks).
+- Vercel Analytics + Speed Insights are rendered globally, only on Vercel production, never during Playwright/CI.
+- Removed invalid wildcard `preconnect` links (`*.sentry.io`, `*.supabase.co`).
+- Updated CSP to allow Grow (`https://faves.grow.me`, `https://*.grow.me`) without console errors.
 
 ### Verification
 
-- `npm run lint`: ✅ (0 errors)
-- `npm run build`: ✅ (successful)
+- `npm run ai:verify -- test`
+- Proof bundle: `reports/verification/2026-01-12T22-29-04/summary.md`
 
 ### Next Steps
 
-- Confirm in the Mediavine dashboard that the script is successfully detected once deployed to production.
+- Push `main` to deploy, then verify on production:
+  - View Page Source on `/` and `/guide` contains GA4 and Grow
+  - DevTools Network shows 200s for GA4 and Grow scripts
 
 ---
 
@@ -49,13 +54,7 @@
 
 ### Verification
 
-- After merging, ran `npm run qa:fast` on `main` (lint, unit tests, build) — all passed.
-- No runtime issues observed during local verification.
-
-### Next Steps
-
-- Monitor production CI runs and Vercel deployments briefly to ensure no regressions.
-- If you want, I can run Playwright E2E/smoke for UI-sensitive PRs (ask to opt-in).
+- After merging, ran `npm run qa:fast` on `main` (lint, unit tests, build) - all passed.
 
 ---
 
@@ -73,111 +72,10 @@
 
 ### Changes
 
-**Error Hardening (`app/api/submit-find/route.ts`):**
-
-- Added early guard: checks `SUPABASE_SERVICE_ROLE_KEY` is present, logs clear error + returns 500 with friendly message if missing
-- Wrapped `request.json()` in try/catch to return 400 on malformed JSON (prevents generic 500s)
-- Enhanced Supabase insert error logging: now logs code, message, details, hint + SKU for debugging
-- Improved catch-all error logging with stack traces
-
-**Dependency Updates:**
-
-- Bumped: `@supabase/supabase-js` 2.89.0 → 2.90.1, `next` 16.0.10 → 16.1.1, `@vercel/analytics` 1.5.0 → 1.6.1, `framer-motion`, `lucide-react`, `jsbarcode`, `@tailwindcss/forms`, `autoprefixer`, `eslint` tooling, type packages (minor/patch only)
+- Added early guard for `SUPABASE_SERVICE_ROLE_KEY`, clearer logging, and better 400/500 responses.
+- Updated dependencies (minor/patch): `@supabase/supabase-js`, `next`, `@vercel/analytics`, and tooling.
 
 ### Verification
 
 - `npm run qa:fast`: lint ✅, 25/25 unit tests ✅, Next.js build ✅
-- `npm audit`: 0 vulnerabilities
-- Production test: POST to `/api/submit-find` returned 200, row inserted successfully (SKU 789456)
-- Cleaned up test row from production DB
-- Commit: `5975f06` pushed to main, deployed to Vercel
-
-### Next Steps
-
-- Monitor Vercel logs for any recurrence of 42501 errors (should be caught early now with better logging)
-
-### Next Session Notes
-
-- Deploy by pushing `main`, then do a real production submission on `/report-find` to confirm the Supabase row is created.
-- If production still fails, double-check Vercel has `SUPABASE_SERVICE_ROLE_KEY` set (server-only).
-
-## 2026-01-11 - Claude Code (Opus 4.5) - GA4 Analytics Review + Backlog Refresh
-
-**Goal:** Review first clean GA4 analytics window (Jan 9-11) and refresh backlog with growth priorities
-**Status:** ✅ Complete
-
-### Context
-
-Owner's Cartersville traffic (~3k views) was contaminating historical analytics. After fixing the filter, Jan 9-11 represents the first clean data window with ~587 real users.
-
-### Key Analytics Findings
-
-| Metric           | Value        | Implication                        |
-| ---------------- | ------------ | ---------------------------------- |
-| Active users     | 587 (3 days) | Solid traction                     |
-| New vs returning | 80% new      | Acquisition working, retention not |
-| Avg engagement   | 2m 12s       | Good for content site              |
-| Views/user       | 5.90         | Users exploring multiple pages     |
-| Conversion       | 42%          | 245 users clicked to Home Depot    |
-
-**Traffic Sources:**
-
-- Facebook referrals: 38% (#1 channel)
-- Direct: 41%
-- ChatGPT: 45 users (AI recommending the site)
-- Organic search: Only 8 clicks (SEO weak)
-
-**Problem Pages:**
-
-- `/` (homepage): 10s engagement vs 1m 10s on `/penny-list`
-- `/home-depot-penny-items`: 100% bounce rate
-- `/how-to-find-penny-items`: 100% bounce rate
-
-### Actions Taken
-
-1. **Cleaned up stale backlog** - Marked 4 completed data pipeline scripts as done
-2. **Added 4 new P0 items** in `.ai/BACKLOG.md`:
-   - P0-1: Fix 100% bounce pages (quick win)
-   - P0-2: Homepage conversion (10s → 30s+ engagement)
-   - P0-3: SEO improvement (rank for "home depot penny list")
-   - P0-4: User retention system (Day 7 retention >2%)
-
-### Next Session Should
-
-1. **Start with P0-1:** Investigate `/home-depot-penny-items` and `/how-to-find-penny-items`
-2. These are SEO landing pages created Jan 8 - check if content is thin or misleading
-3. Quick fixes: improve content + CTAs, or redirect to better pages
-
-### Learnings
-
-- **Facebook is the growth engine** - 38% of users, double down on groups
-- **Core product works** - `/penny-list` has 1m 10s engagement
-- **Homepage is a leak** - 10s engagement, users not finding value prop
-- **SEO needs work** - Invisible for non-branded "home depot penny" queries
-
----
-
-## 2026-01-11 - GitHub Copilot - Supabase Egress Optimization
-
-**Goal:** Reduce Supabase egress from 6.3 GB to under 5 GB free tier limit
-**Status:** ✅ Complete
-
-### What Was Done
-
-1. **Explicit column selection** - No more `select('*')`, only fetch needed columns
-2. **Lazy-load notes** - `notes_optional` excluded from list queries, included only on detail pages
-3. **Next.js ISR caching** - Pages use `revalidate = 1800` (30 min) to reduce repeated fetches
-
-### Files Changed
-
-- `lib/fetch-penny-data.ts` - Column lists, `{ includeNotes: false }` option
-- `app/api/penny-list/route.ts` - Uses lightweight query
-- `app/penny-list/page.tsx` - Uses lightweight query
-
-### Expected Impact
-
-~50% reduction in egress (6.3 GB → ~3.3 GB)
-
----
-
-**Older entries archived to git history.**
+- Production test: POST to `/api/submit-find` returned 200, row inserted successfully

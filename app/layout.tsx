@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import localFont from "next/font/local"
 import { Analytics } from "@vercel/analytics/react"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
@@ -8,21 +9,24 @@ import { CommandPaletteProvider } from "@/components/command-palette-provider"
 import { AuthProvider } from "@/components/auth-provider"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { AnalyticsSessionTracker } from "@/components/analytics-session"
-import { SpeedInsightsClient } from "@/components/speed-insights-client"
 import { ogImageUrl } from "@/lib/og"
 
 const DEFAULT_OG_IMAGE = `https://www.pennycentral.com${ogImageUrl("homepage")}`
 
 /* =====================================================
-   ANALYTICS INFRASTRUCTURE — DO NOT REMOVE OR MODIFY
+   ANALYTICS INFRASTRUCTURE - DO NOT REMOVE OR MODIFY
    ===================================================== */
 const GA_MEASUREMENT_ID = "G-DJ4RJRX05E"
-const ANALYTICS_ENABLED = process.env.NEXT_PUBLIC_ANALYTICS_ENABLED !== "false"
+const ANALYTICS_FLAG = process.env.NEXT_PUBLIC_ANALYTICS_ENABLED
+const ANALYTICS_ENABLED = ANALYTICS_FLAG !== "false"
 
 const IS_VERCEL = process.env.VERCEL === "1" || Boolean(process.env.NEXT_PUBLIC_VERCEL_ENV)
+const IS_VERCEL_PROD = process.env.VERCEL_ENV === "production"
 const ENABLE_VERCEL_SCRIPTS =
-  process.env.NODE_ENV === "production" && process.env.PLAYWRIGHT !== "1" && IS_VERCEL
+  process.env.NODE_ENV === "production" &&
+  process.env.PLAYWRIGHT !== "1" &&
+  IS_VERCEL &&
+  IS_VERCEL_PROD
 const ENABLE_VERCEL_ANALYTICS = ANALYTICS_ENABLED && ENABLE_VERCEL_SCRIPTS
 
 const inter = localFont({
@@ -120,8 +124,13 @@ export default function RootLayout({
         <link rel="preconnect" href="https://va.vercel-scripts.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://faves.grow.me" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://tile.openstreetmap.org" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://*.sentry.io" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://*.supabase.co" crossOrigin="anonymous" />
+
+        {/* Analytics guard (visible in View Page Source) */}
+        <meta
+          name="pennycentral:analytics"
+          content={`enabled=${ANALYTICS_ENABLED}; flag=${ANALYTICS_FLAG ?? "unset"}`}
+        />
+
         {/* Facebook App ID - Required for Meta sharing debugger validation
             TODO: Set FACEBOOK_APP_ID environment variable in Vercel dashboard
             This enables proper Open Graph validation and sharing preview optimization. */}
@@ -140,7 +149,7 @@ export default function RootLayout({
               url: "https://www.pennycentral.com",
               potentialAction: {
                 "@type": "SearchAction",
-                target: "https://www.pennycentral.com/penny-list?search={search_term_string}",
+                target: "https://www.pennycentral.com/penny-list?q={search_term_string}",
                 "query-input": "required name=search_term_string",
               },
             }),
@@ -165,10 +174,18 @@ export default function RootLayout({
             DO NOT REMOVE OR MODIFY
             =================================================== */}
         <script
-          data-grow-initializer=""
           dangerouslySetInnerHTML={{
-            __html: `!(function(){window.growMe||((window.growMe=function(e){window.growMe._.push(e);}),(window.growMe._=[]));var e=document.createElement("script");(e.type="text/javascript"),(e.src="https://faves.grow.me/main.js"),(e.defer=!0),e.setAttribute("data-grow-faves-site-id","U2l0ZToyOWE5MzYwOS02MjA3LTQ4NzMtOGNjOC01ZDI5MjliMWZlYzY=");var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t);})();`,
+            __html: `
+              window.growMe || ((window.growMe = function (e) {
+                (window.growMe._ = window.growMe._ || []).push(e);
+              }), (window.growMe._ = window.growMe._ || []));
+            `,
           }}
+        />
+        <script
+          defer
+          src="https://faves.grow.me/main.js"
+          data-grow-faves-site-id="U2l0ZToyOWE5MzYwOS02MjA3LTQ4NzMtOGNjOC01ZDI5MjliMWZlYzY="
         />
 
         {/* ===================================================
@@ -187,8 +204,132 @@ export default function RootLayout({
                 __html: `
                   window.dataLayer = window.dataLayer || [];
                   function gtag(){dataLayer.push(arguments);}
+                  window.gtag = window.gtag || gtag;
                   gtag('js', new Date());
-                  gtag('config', '${GA_MEASUREMENT_ID}');
+                  gtag('config', '${GA_MEASUREMENT_ID}', { page_path: window.location.pathname });
+
+                  (function() {
+                    var GA_ID = '${GA_MEASUREMENT_ID}';
+                    var lastPath = window.location.pathname;
+
+                    function deviceType() {
+                      try {
+                        return window.matchMedia("(max-width: 768px)").matches ? "mobile" : "desktop";
+                      } catch (e) {
+                        return "unknown";
+                      }
+                    }
+
+                    function themeName() {
+                      try {
+                        var root = document.documentElement;
+                        return (root.classList.contains("dark") || root.dataset.theme === "dark") ? "dark" : "light";
+                      } catch (e) {
+                        return "unknown";
+                      }
+                    }
+
+                    function basePayload() {
+                      return {
+                        page: window.location.pathname,
+                        device: deviceType(),
+                        theme: themeName(),
+                        ts: new Date().toISOString(),
+                        event_category: "engagement"
+                      };
+                    }
+
+                    function trackEvent(name, extra) {
+                      try {
+                        var payload = basePayload();
+                        if (extra && typeof extra === "object") {
+                          for (var k in extra) payload[k] = extra[k];
+                        }
+                        gtag("event", name, payload);
+                      } catch (e) {
+                        // no-op
+                      }
+                    }
+
+                    function getWeekKey(date) {
+                      var copy = new Date(date.getTime());
+                      var day = copy.getUTCDay();
+                      var diff = copy.getUTCDate() - day;
+                      copy.setUTCDate(diff);
+                      copy.setUTCHours(0, 0, 0, 0);
+                      return copy.toISOString();
+                    }
+
+                    function trackReturnVisit() {
+                      try {
+                        var SESSIONS_KEY = "pc_sessions";
+                        var RETURN_VISIT_KEY = "pc_return_visit_week";
+                        var now = new Date();
+                        var weekKey = getWeekKey(now);
+                        var stored = localStorage.getItem(SESSIONS_KEY);
+                        var sessions = stored ? JSON.parse(stored) : [];
+
+                        var cutoff = now.getTime() - 7 * 24 * 60 * 60 * 1000;
+                        var recentSessions = (Array.isArray(sessions) ? sessions : [])
+                          .map(function(ts) { return new Date(ts); })
+                          .filter(function(d) { return !Number.isNaN(d.getTime()) && d.getTime() >= cutoff; })
+                          .map(function(d) { return d.toISOString(); });
+
+                        recentSessions.push(now.toISOString());
+                        localStorage.setItem(SESSIONS_KEY, JSON.stringify(recentSessions));
+
+                        var emittedWeek = localStorage.getItem(RETURN_VISIT_KEY);
+                        var qualifies = recentSessions.length >= 2;
+
+                        if (qualifies && emittedWeek !== weekKey) {
+                          trackEvent("return_visit", { weeklySessions: recentSessions.length });
+                          localStorage.setItem(RETURN_VISIT_KEY, weekKey);
+                        }
+                      } catch (e) {
+                        // no-op
+                      }
+                    }
+
+                    function trackHomePageViewIfNeeded() {
+                      if (window.location.pathname === "/") {
+                        trackEvent("home_page_view", { page: "/" });
+                      }
+                    }
+
+                    function onRouteChange() {
+                      try {
+                        var path = window.location.pathname;
+                        if (path === lastPath) return;
+                        lastPath = path;
+                        gtag("config", GA_ID, { page_path: path });
+                        trackHomePageViewIfNeeded();
+                      } catch (e) {
+                        // no-op
+                      }
+                    }
+
+                    try {
+                      var pushState = history.pushState;
+                      history.pushState = function() {
+                        pushState.apply(this, arguments);
+                        setTimeout(onRouteChange, 0);
+                      };
+
+                      var replaceState = history.replaceState;
+                      history.replaceState = function() {
+                        replaceState.apply(this, arguments);
+                        setTimeout(onRouteChange, 0);
+                      };
+                    } catch (e) {
+                      // no-op
+                    }
+
+                    window.addEventListener("popstate", function() { setTimeout(onRouteChange, 0); });
+
+                    // Initial client-side events
+                    trackHomePageViewIfNeeded();
+                    trackReturnVisit();
+                  })();
                 `,
               }}
             />
@@ -210,7 +351,6 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            <AnalyticsSessionTracker />
             <CommandPaletteProvider>
               {/* Navbar with full mobile functionality */}
               <Navbar />
@@ -227,7 +367,7 @@ export default function RootLayout({
         </ThemeProvider>
         {/* Vercel scripts should only run on Vercel (and never during Playwright/CI). */}
         {ENABLE_VERCEL_ANALYTICS && <Analytics />}
-        {ENABLE_VERCEL_ANALYTICS && <SpeedInsightsClient />}
+        {ENABLE_VERCEL_ANALYTICS && <SpeedInsights />}
       </body>
     </html>
   )

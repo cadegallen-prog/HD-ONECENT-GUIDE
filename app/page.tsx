@@ -15,7 +15,6 @@ import {
   FACEBOOK_GROUP_URL,
   BEFRUGAL_REFERRAL_PATH,
 } from "@/lib/constants"
-import { HomePageAnalytics } from "@/components/home-page-analytics"
 import { TrackableNextLink } from "@/components/trackable-next-link"
 import { TodaysFinds } from "@/components/todays-finds"
 import { getRecentFinds } from "@/lib/fetch-penny-data"
@@ -55,7 +54,6 @@ export default async function Home() {
 
   return (
     <>
-      <HomePageAnalytics />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
