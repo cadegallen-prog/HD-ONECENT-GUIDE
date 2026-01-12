@@ -102,7 +102,20 @@ function normalizeSku(sku: string): string | null {
 // Optimize image URL
 function optimizeImageUrl(url: string | null): string | null {
   if (!url) return null
-  if (url.includes("thdstatic.com")) {
+
+  let hostname: string | null = null
+  try {
+    const parsed = new URL(url)
+    hostname = parsed.hostname
+  } catch {
+    // If URL parsing fails, fall back to returning the original URL
+    return url
+  }
+
+  const isThdstaticHost =
+    hostname === "thdstatic.com" || hostname.endsWith(".thdstatic.com")
+
+  if (isThdstaticHost) {
     return url.replace(/\/\d+\.jpg(\?.*)?$/, "/1000.jpg")
   }
   return url
