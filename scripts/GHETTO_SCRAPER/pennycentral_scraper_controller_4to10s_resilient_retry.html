@@ -544,7 +544,8 @@
 
       function log(msg) {
         const l = document.getElementById("log")
-        l.innerHTML += `[${new Date().toLocaleTimeString()}] ${msg}\n`
+        const line = `[${new Date().toLocaleTimeString()}] ${msg}\n`
+        l.appendChild(document.createTextNode(line))
         l.scrollTop = l.scrollHeight
       }
 
