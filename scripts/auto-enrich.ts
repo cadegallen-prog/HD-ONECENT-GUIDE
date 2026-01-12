@@ -342,8 +342,16 @@ async function main() {
         // --- Product Extraction End ---
 
         var imageUrl = jsonLdImage || getImageUrl()
-        if (imageUrl && imageUrl.indexOf("thdstatic.com") !== -1) {
-          imageUrl = imageUrl.replace(/\/\d+\.jpg(\?.*)?$/, "/1000.jpg")
+        if (imageUrl) {
+          try {
+            var parsed = new URL(imageUrl)
+            var hostname = parsed.hostname
+            if (hostname === "thdstatic.com" || hostname.endsWith(".thdstatic.com")) {
+              imageUrl = imageUrl.replace(/\/\d+\.jpg(\?.*)?$/, "/1000.jpg")
+            }
+          } catch (e) {
+            // If the URL is invalid or cannot be parsed, leave imageUrl unchanged
+          }
         }
 
         return {
