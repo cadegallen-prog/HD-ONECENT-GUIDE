@@ -12,6 +12,25 @@
 
 ---
 
+## 2026-01-12 - GitHub Copilot - Dependency update and security audit
+
+**Goal:** Update low-risk dependencies and run security scans to keep project secure.
+**Status:** ✅ Complete
+
+### Changes
+
+- Bumped: `@supabase/supabase-js` 2.89.0 → 2.90.1, `next` 16.0.10 → 16.1.1, `@vercel/analytics` 1.5.0 → 1.6.1, `framer-motion`, `lucide-react`, `jsbarcode`, `@tailwindcss/forms`, `autoprefixer`, `eslint` tooling, type packages and others (minor/patch)
+
+### Verification
+
+- `npm install` completed, `npm audit` found 0 vulnerabilities, `npm run qa:fast` (lint, unit tests, build) passed, `npm run security:scan` passed.
+
+### Next Steps
+
+- Pushed to `main` and monitoring Vercel deployment.
+
+---
+
 ## 2026-01-12 - ChatGPT Codex (GPT-5.2) - Report Find Submission Outage Fix (CRITICAL)
 
 **Goal:** Fix “Report a Find” submissions failing in production (`Failed to submit find. Please try again.` / follow-on `Too many submissions...` after retries)
