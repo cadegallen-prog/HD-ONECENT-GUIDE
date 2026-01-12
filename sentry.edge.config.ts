@@ -1,7 +1,10 @@
-import * as Sentry from "@sentry/nextjs";
+import * as Sentry from "@sentry/nextjs"
 
 Sentry.init({
   dsn: "https://6c97a22cc0a22bf546df09e9051202f6@o4510605822394368.ingest.us.sentry.io/4510605823246336",
+
+  // Never report errors from local dev; only production builds.
+  enabled: process.env.NODE_ENV === "production",
 
   // Capture 10% of transactions for performance monitoring (stay in free tier)
   tracesSampleRate: 0.1,
@@ -11,4 +14,4 @@ Sentry.init({
 
   // Enable debug mode in development
   debug: false,
-});
+})

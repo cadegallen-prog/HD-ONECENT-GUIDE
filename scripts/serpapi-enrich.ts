@@ -25,6 +25,13 @@ config({ path: resolve(process.cwd(), ".env.local") })
 
 const SERPAPI_BASE_URL = "https://serpapi.com/search.json"
 
+class SerpApiCreditsExhaustedError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = "SerpApiCreditsExhaustedError"
+  }
+}
+
 // Retry windows in days
 const RETRY_WINDOWS = {
   first_fail: 30, // First failure: wait 30 days
@@ -227,7 +234,9 @@ function extractUpcFromJsonLd(data: unknown): string | null {
   if (typeof data !== "object") return null
 
   const record = data as Record<string, unknown>
-  const direct = normalizeUpcCandidate(record.gtin12 ?? record.gtin13 ?? record.gtin14 ?? record.upc)
+  const direct = normalizeUpcCandidate(
+    record.gtin12 ?? record.gtin13 ?? record.gtin14 ?? record.upc
+  )
   if (direct) return direct
 
   for (const value of Object.values(record)) {
@@ -253,11 +262,10 @@ async function fetchUpcFromHomeDepotPage(homeDepotUrl: string): Promise<string |
     if (!response.ok) return null
     const html = await response.text()
 
-    const jsonLdMatches = [...html.matchAll(
-      /<script[^>]+type=[\"']application\\/ld\\+json[\"'][^>]*>([\\s\\S]*?)<\\/script>/gi
-    )]
+    const jsonLdRegex = /<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi
 
-    for (const match of jsonLdMatches) {
+    let match: RegExpExecArray | null
+    while ((match = jsonLdRegex.exec(html)) !== null) {
       const payload = match[1]
       if (!payload) continue
       try {
@@ -270,7 +278,9 @@ async function fetchUpcFromHomeDepotPage(homeDepotUrl: string): Promise<string |
     }
 
     // Fallback heuristic: sometimes UPC appears in inline JSON
-    const inlineUpc = normalizeUpcCandidate(html.match(/\"(?:gtin12|gtin13|gtin14|upc)\"\\s*:\\s*\"(\\d{12,14})\"/i)?.[1])
+    const inlineUpc = normalizeUpcCandidate(
+      html.match(/\"(?:gtin12|gtin13|gtin14|upc)\"\\s*:\\s*\"(\\d{12,14})\"/i)?.[1]
+    )
     if (inlineUpc) return inlineUpc
 
     return null
@@ -295,15 +305,29 @@ async function searchSerpApi(
     const data: SerpApiSearchResult = await response.json()
 
     if (data.error) {
+      const msg = data.error.toLowerCase()
+      const looksLikeCredits =
+        msg.includes("exceeded") ||
+        msg.includes("quota") ||
+        msg.includes("credit") ||
+        msg.includes("limit") ||
+        msg.includes("payment") ||
+        msg.includes("plan")
+
+      if (looksLikeCredits) {
+        throw new SerpApiCreditsExhaustedError(data.error)
+      }
+
       if (!data.error.includes("hasn't returned any results")) {
-        console.log(`   ⚠️ SerpApi: ${data.error}`)
+        console.log(`   ?? SerpApi: ${data.error}`)
       }
       return undefined
     }
 
     return data.products
   } catch (error) {
-    console.log(`   ❌ Fetch error: ${error}`)
+    if (error instanceof SerpApiCreditsExhaustedError) throw error
+    console.log(`   ⚠️ Fetch error: ${error}`)
     return undefined
   }
 }
@@ -574,7 +598,8 @@ async function main() {
   console.log("🔍 SerpApi Home Depot Enrichment (v2 - credit-saving)")
   console.log(`   Mode: ${testMode ? "TEST (1 item)" : `Normal (up to ${limit} items)`}`)
   if (retryMode) console.log("   ♻️ Retry mode: Will retry failed items past their window")
-  if (force) console.log("   ⚠️ Force mode: Will overwrite existing fields when SerpApi returns values")
+  if (force)
+    console.log("   ⚠️ Force mode: Will overwrite existing fields when SerpApi returns values")
   if (specificSku) console.log(`   Specific SKU: ${specificSku}`)
   console.log()
 
@@ -670,7 +695,10 @@ async function main() {
         updated_at: new Date().toISOString(),
       }
 
-      const current = existingTyped && normalizeSku(existingTyped.sku) === normalizeSku(result.sku) ? existingTyped : null
+      const current =
+        existingTyped && normalizeSku(existingTyped.sku) === normalizeSku(result.sku)
+          ? existingTyped
+          : null
 
       // Fill-blanks-only by default (overwrite only with --force)
       if (hasNonEmptyText(result.item_name) && (force || !hasNonEmptyText(current?.item_name))) {
@@ -679,16 +707,25 @@ async function main() {
       if (hasNonEmptyText(result.brand) && (force || !hasNonEmptyText(current?.brand))) {
         patch.brand = result.brand
       }
-      if (hasNonEmptyText(result.model_number) && (force || !hasNonEmptyText(current?.model_number))) {
+      if (
+        hasNonEmptyText(result.model_number) &&
+        (force || !hasNonEmptyText(current?.model_number))
+      ) {
         patch.model_number = result.model_number
       }
       if (hasNonEmptyText(result.image_url) && (force || !hasNonEmptyText(current?.image_url))) {
         patch.image_url = result.image_url
       }
-      if (hasValidInternetSku(result.internet_sku) && (force || !hasValidInternetSku(current?.internet_sku))) {
+      if (
+        hasValidInternetSku(result.internet_sku) &&
+        (force || !hasValidInternetSku(current?.internet_sku))
+      ) {
         patch.internet_sku = result.internet_sku
       }
-      if (hasValidRetailPrice(result.retail_price) && (force || !hasValidRetailPrice(current?.retail_price))) {
+      if (
+        hasValidRetailPrice(result.retail_price) &&
+        (force || !hasValidRetailPrice(current?.retail_price))
+      ) {
         patch.retail_price = result.retail_price
       }
 
@@ -698,7 +735,10 @@ async function main() {
         homeDepotUrl: result.home_depot_url || current?.home_depot_url || null,
         internetSku: result.internet_sku ?? current?.internet_sku ?? null,
       })
-      if (hasNonEmptyText(canonicalHomeDepotUrl) && (force || !hasNonEmptyText(current?.home_depot_url))) {
+      if (
+        hasNonEmptyText(canonicalHomeDepotUrl) &&
+        (force || !hasNonEmptyText(current?.home_depot_url))
+      ) {
         patch.home_depot_url = canonicalHomeDepotUrl
       }
 
@@ -711,7 +751,9 @@ async function main() {
         }
       }
 
-      const { error } = await supabase.from("penny_item_enrichment").upsert(patch, { onConflict: "sku" })
+      const { error } = await supabase
+        .from("penny_item_enrichment")
+        .upsert(patch, { onConflict: "sku" })
 
       if (error) {
         console.log(`   ⚠️ DB error: ${error.message}`)
@@ -722,7 +764,9 @@ async function main() {
       }
     } else {
       // All search strategies failed - save as not_found
-      console.log(`   ❌ No results found (tried ${creditsUsed} search${creditsUsed > 1 ? "es" : ""})`)
+      console.log(
+        `   ❌ No results found (tried ${creditsUsed} search${creditsUsed > 1 ? "es" : ""})`
+      )
 
       // Get current attempt count
       const { data: existing } = await supabase
@@ -772,4 +816,13 @@ async function main() {
   console.log("=".repeat(50))
 }
 
-main().catch(console.error)
+main().catch((error) => {
+  if (error instanceof SerpApiCreditsExhaustedError) {
+    console.log("⚠️  SerpApi credits exhausted; exiting cleanly (no-op).")
+    console.log(`   ${error.message}`)
+    process.exit(0)
+  }
+
+  console.error(error)
+  process.exit(1)
+})

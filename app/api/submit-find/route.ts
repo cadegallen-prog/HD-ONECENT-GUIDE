@@ -244,15 +244,6 @@ async function deleteEnrichmentRow(sku: string): Promise<void> {
 }
 
 export async function POST(request: NextRequest) {
-  // Guard: Ensure service role key is configured (prevent permission errors)
-  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
-    console.error("CRITICAL: SUPABASE_SERVICE_ROLE_KEY is missing from environment variables")
-    return NextResponse.json(
-      { error: "Server configuration error. Please contact support." },
-      { status: 500 }
-    )
-  }
-
   try {
     const rateKey = getRateLimitKey(request)
     if (isRateLimited(rateKey)) {
@@ -372,6 +363,16 @@ export async function POST(request: NextRequest) {
         payload.home_depot_url = enrichment.home_depot_url.trim()
       if (typeof enrichment.internet_sku === "number")
         payload.internet_sku = enrichment.internet_sku
+    }
+
+    // Guard: Ensure service role key is configured (prevent permission errors)
+    // Place this AFTER request validation so invalid requests still return 400s in CI/tests.
+    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      console.error("CRITICAL: SUPABASE_SERVICE_ROLE_KEY is missing from environment variables")
+      return NextResponse.json(
+        { error: "Server configuration error. Please contact support." },
+        { status: 500 }
+      )
     }
 
     // Inserts are intentionally done with the service role client so we can:
