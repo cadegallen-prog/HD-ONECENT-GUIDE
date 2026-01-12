@@ -26,6 +26,8 @@ on:
 jobs:
   enrich:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     timeout-minutes: 10
 
     steps:
