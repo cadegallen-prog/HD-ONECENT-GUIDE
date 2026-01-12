@@ -27,4 +27,8 @@ jobs:
         run: npm ci
 
       - name: Run fast QA (lint + unit tests + build)
+        env:
+          # Unit tests exercise the submit-find route, which requires this env var to be present.
+          # A dummy value is sufficient because tests stub the service role client.
+          SUPABASE_SERVICE_ROLE_KEY: test
         run: npm run qa:fast

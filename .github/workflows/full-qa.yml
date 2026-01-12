@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       ref:
-        description: 'Git ref to check out (branch, tag, or SHA)'
+        description: "Git ref to check out (branch, tag, or SHA)"
         required: false
         type: string
 
@@ -21,29 +21,29 @@ on:
     branches: [main]
     paths:
       # Auth & security
-      - 'middleware.ts'
-      - 'app/auth/**'
-      - 'lib/supabase/**'
+      - "middleware.ts"
+      - "app/auth/**"
+      - "lib/supabase/**"
 
       # Database
-      - 'supabase/migrations/**'
-      - 'lib/fetch-penny-data.ts'
-      - 'lib/penny-list-query.ts'
+      - "supabase/migrations/**"
+      - "lib/fetch-penny-data.ts"
+      - "lib/penny-list-query.ts"
 
       # API routes
-      - 'app/api/**'
+      - "app/api/**"
 
       # Infrastructure
-      - 'next.config.js'
-      - 'package.json'
-      - 'package-lock.json'
-      - 'playwright.config.ts'
-      - '.github/workflows/**'
+      - "next.config.js"
+      - "package.json"
+      - "package-lock.json"
+      - "playwright.config.ts"
+      - ".github/workflows/**"
 
       # Fragile components (per CLAUDE.md)
-      - 'components/store-map.tsx'
-      - 'app/**/layout.tsx'
-      - 'app/globals.css'
+      - "components/store-map.tsx"
+      - "app/**/layout.tsx"
+      - "app/globals.css"
 
 jobs:
   # Gate: Only run full QA if triggered correctly
@@ -93,6 +93,10 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run fast QA first (lint + unit tests + build)
+        env:
+          # Unit tests exercise the submit-find route, which requires this env var to be present.
+          # A dummy value is sufficient because tests stub the service role client.
+          SUPABASE_SERVICE_ROLE_KEY: test
         run: npm run qa:fast
 
       - name: Start server for e2e tests
