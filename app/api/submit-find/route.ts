@@ -78,14 +78,38 @@ function getClientIp(request: NextRequest) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (request as any).ip || "unknown"
 }
-function checkRateLimit(ip: string): boolean {
+
+function getRateLimitKey(request: NextRequest): string {
+  const forwarded = request.headers.get("x-forwarded-for")
+  const realIp = request.headers.get("x-real-ip")
+  const userAgent = request.headers.get("user-agent")?.slice(0, 128).trim() || "unknown-ua"
+
+  const ip =
+    forwarded?.split(",")[0].trim() || (realIp ? realIp.trim() : "") || getClientIp(request)
+
+  // If IP is unavailable, avoid collapsing all users into a single "unknown" bucket.
+  if (!ip || ip === "unknown") return `ua:${userAgent}`
+
+  return ip
+}
+
+function isRateLimited(key: string): boolean {
   const now = Date.now()
-  const bucket = rateLimitMap.get(ip) ?? []
+  const bucket = rateLimitMap.get(key) ?? []
   const recent = bucket.filter((ts) => now - ts < RATE_LIMIT_WINDOW_MS)
-  if (recent.length >= RATE_LIMIT_MAX) return false
+
+  // Always prune the bucket so it doesn't grow forever.
+  rateLimitMap.set(key, recent)
+
+  return recent.length >= RATE_LIMIT_MAX
+}
+
+function recordSuccessfulSubmission(key: string) {
+  const now = Date.now()
+  const bucket = rateLimitMap.get(key) ?? []
+  const recent = bucket.filter((ts) => now - ts < RATE_LIMIT_WINDOW_MS)
   recent.push(now)
-  rateLimitMap.set(ip, recent)
-  return true
+  rateLimitMap.set(key, recent)
 }
 
 type SupabaseClientLike = ReturnType<typeof getSupabaseClient>
@@ -97,6 +121,16 @@ function getSupabaseServerClient(): SupabaseClientLike {
   return getSupabaseClient()
 }
 
+type SupabaseServiceRoleClientLike = ReturnType<typeof getSupabaseServiceRoleClient>
+
+function getSupabaseServiceRoleServerClient(): SupabaseServiceRoleClientLike {
+  const override = (
+    globalThis as { __supabaseServiceRoleClientOverride?: SupabaseServiceRoleClientLike }
+  ).__supabaseServiceRoleClientOverride
+  if (override) return override
+  return getSupabaseServiceRoleClient()
+}
+
 type EnrichmentData = {
   item_name?: string | null
   brand?: string | null
@@ -106,6 +140,30 @@ type EnrichmentData = {
   home_depot_url?: string | null
   internet_sku?: number | null
   retail_price?: number | null
+}
+
+type EnrichmentLookupQuery = {
+  select: (columns: string) => {
+    eq: (
+      column: string,
+      value: string
+    ) => {
+      maybeSingle: () => Promise<{ data: unknown; error: unknown }>
+    }
+  }
+}
+
+type PennyListLookupQuery = {
+  select: (columns: string) => {
+    eq: (
+      column: string,
+      value: string
+    ) => {
+      limit: (count: number) => {
+        maybeSingle: () => Promise<{ data: unknown; error: unknown }>
+      }
+    }
+  }
 }
 
 /**
@@ -125,9 +183,15 @@ async function lookupEnrichment(
     return { data: null, deleteEnrichmentRow: false }
   }
   try {
+    const enrichmentTable = supabase.from("penny_item_enrichment") as unknown
+    if (typeof (enrichmentTable as { select?: unknown }).select !== "function") {
+      return { data: null, deleteEnrichmentRow: false }
+    }
+
     // Step 1: Check penny_item_enrichment table
-    const { data: enrichmentRow, error: enrichmentError } = await supabase
-      .from("penny_item_enrichment")
+    const { data: enrichmentRow, error: enrichmentError } = await (
+      enrichmentTable as EnrichmentLookupQuery
+    )
       .select(
         "item_name, brand, model_number, upc, image_url, home_depot_url, internet_sku, retail_price"
       )
@@ -138,9 +202,15 @@ async function lookupEnrichment(
       return { data: enrichmentRow as EnrichmentData, deleteEnrichmentRow: true }
     }
 
+    const pennyListTable = supabase.from("Penny List") as unknown
+    if (typeof (pennyListTable as { select?: unknown }).select !== "function") {
+      return { data: null, deleteEnrichmentRow: false }
+    }
+
     // Step 2: Check existing Penny List rows with same SKU
-    const { data: existingRows, error: existingError } = await supabase
-      .from("Penny List")
+    const { data: existingRows, error: existingError } = await (
+      pennyListTable as PennyListLookupQuery
+    )
       .select(
         "item_name, brand, model_number, upc, image_url, home_depot_url, internet_sku, retail_price"
       )
@@ -165,7 +235,7 @@ async function lookupEnrichment(
  */
 async function deleteEnrichmentRow(sku: string): Promise<void> {
   try {
-    const serviceClient = getSupabaseServiceRoleClient()
+    const serviceClient = getSupabaseServiceRoleServerClient()
     await serviceClient.from("penny_item_enrichment").delete().eq("sku", sku)
   } catch (error) {
     // Log warning but don't fail the request - enrichment deletion is non-critical
@@ -175,8 +245,8 @@ async function deleteEnrichmentRow(sku: string): Promise<void> {
 
 export async function POST(request: NextRequest) {
   try {
-    const ip = getClientIp(request)
-    if (!checkRateLimit(ip)) {
+    const rateKey = getRateLimitKey(request)
+    if (isRateLimited(rateKey)) {
       return NextResponse.json(
         { error: "Too many submissions from this device. Please try again later." },
         { status: 429 }
@@ -283,7 +353,11 @@ export async function POST(request: NextRequest) {
         payload.internet_sku = enrichment.internet_sku
     }
 
-    const { error } = await supabase.from("Penny List").insert(payload)
+    // Inserts are intentionally done with the service role client so we can:
+    // - Keep the database locked down from direct anon inserts (RLS)
+    // - Still allow low-friction submissions via this API route
+    const serviceClient = getSupabaseServiceRoleServerClient()
+    const { error } = await serviceClient.from("Penny List").insert(payload)
 
     if (error) {
       console.error("Supabase insert error:", error)
@@ -292,6 +366,8 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       )
     }
+
+    recordSuccessfulSubmission(rateKey)
 
     // Delete enrichment row after successful insert (if it came from enrichment table)
     if (shouldDeleteEnrichment) {

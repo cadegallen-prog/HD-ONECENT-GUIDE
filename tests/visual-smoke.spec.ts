@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test"
 
 const routes = [
   { path: "/", heading: "Live Home Depot Penny Finds" },
-  { path: "/penny-list", heading: "Live Home Depot Penny List" },
+  { path: "/penny-list", heading: "Home Depot Penny Items List (Live $0.01 Finds)" },
   { path: "/report-find", heading: "Report a Penny Find" },
   { path: "/store-finder", heading: "Store Finder" },
   { path: "/about", heading: "About Penny Central" },

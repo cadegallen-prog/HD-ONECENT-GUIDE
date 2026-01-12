@@ -11,7 +11,9 @@ export async function GET() {
 
     const { data, error } = await supabase
       .from("Penny List")
-      .select("id,item_name,home_depot_sku_6_or_10_digits,timestamp,store_city_state,image_url,brand")
+      .select(
+        "id,item_name,home_depot_sku_6_or_10_digits,timestamp,store_city_state,image_url,brand"
+      )
       .gte("timestamp", fortyEightHoursAgo.toISOString())
       .order("timestamp", { ascending: false })
       .limit(500)

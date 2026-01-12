@@ -9,11 +9,14 @@ test("inserts only allowed fields into Supabase", async () => {
     inserted.push(payload)
     return { error: null }
   }
-  const mockClient: any = {
+  const anonReadClient: any = {
+    from: () => ({}),
+  }
+  const serviceRoleClient: any = {
     from: () => ({ insert: insertSpy }),
   }
 
-  installSupabaseMocks({ submitAnon: mockClient })
+  installSupabaseMocks({ submitAnon: anonReadClient, submitServiceRole: serviceRoleClient })
 
   const { POST } = await import("../app/api/submit-find/route")
   const req = new NextRequest("http://localhost/api/submit-find", {
@@ -52,24 +55,28 @@ test("inserts only allowed fields into Supabase", async () => {
   clearSupabaseMocks()
 })
 
-test("returns 500 when anon insert is RLS-blocked", async () => {
-  const permissionError = {
-    code: "42501",
-    message: "new row violates row-level security policy for table Penny List",
-  }
-
+test("uses service role insert (works even when anon inserts are blocked)", async () => {
   const anonInserted: Record<string, unknown>[] = []
+  const serviceInserted: Record<string, unknown>[] = []
 
-  const anonClient: any = {
+  const anonReadClient: any = {
     from: () => ({
       insert: async (payload: Record<string, unknown>) => {
         anonInserted.push(payload)
-        return { error: permissionError }
+        return { error: { code: "42501", message: "anon insert should not be used" } }
+      },
+    }),
+  }
+  const serviceRoleClient: any = {
+    from: () => ({
+      insert: async (payload: Record<string, unknown>) => {
+        serviceInserted.push(payload)
+        return { error: null }
       },
     }),
   }
 
-  installSupabaseMocks({ submitAnon: anonClient })
+  installSupabaseMocks({ submitAnon: anonReadClient, submitServiceRole: serviceRoleClient })
 
   const { POST } = await import("../app/api/submit-find/route")
   const req = new NextRequest("http://localhost/api/submit-find", {
@@ -92,8 +99,9 @@ test("returns 500 when anon insert is RLS-blocked", async () => {
   })
 
   const res = await POST(req)
-  assert.strictEqual(res.status, 500)
-  assert.strictEqual(anonInserted.length, 1)
+  assert.strictEqual(res.status, 200)
+  assert.strictEqual(serviceInserted.length, 1)
+  assert.strictEqual(anonInserted.length, 0)
 
   clearSupabaseMocks()
 })
@@ -105,11 +113,14 @@ test("accepts date from 15 days ago", async () => {
     inserted.push(payload)
     return { error: null }
   }
-  const mockClient: any = {
+  const anonReadClient: any = {
+    from: () => ({}),
+  }
+  const serviceRoleClient: any = {
     from: () => ({ insert: insertSpy }),
   }
 
-  installSupabaseMocks({ submitAnon: mockClient })
+  installSupabaseMocks({ submitAnon: anonReadClient, submitServiceRole: serviceRoleClient })
 
   const fifteenDaysAgo = new Date()
   fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 15)
@@ -146,11 +157,14 @@ test("rejects date from 31 days ago", async () => {
     inserted.push(payload)
     return { error: null }
   }
-  const mockClient: any = {
+  const anonReadClient: any = {
+    from: () => ({}),
+  }
+  const serviceRoleClient: any = {
     from: () => ({ insert: insertSpy }),
   }
 
-  installSupabaseMocks({ submitAnon: mockClient })
+  installSupabaseMocks({ submitAnon: anonReadClient, submitServiceRole: serviceRoleClient })
 
   const thirtyOneDaysAgo = new Date()
   thirtyOneDaysAgo.setDate(thirtyOneDaysAgo.getDate() - 31)
@@ -189,11 +203,14 @@ test("rejects future date", async () => {
     inserted.push(payload)
     return { error: null }
   }
-  const mockClient: any = {
+  const anonReadClient: any = {
+    from: () => ({}),
+  }
+  const serviceRoleClient: any = {
     from: () => ({ insert: insertSpy }),
   }
 
-  installSupabaseMocks({ submitAnon: mockClient })
+  installSupabaseMocks({ submitAnon: anonReadClient, submitServiceRole: serviceRoleClient })
 
   const tomorrow = new Date()
   tomorrow.setDate(tomorrow.getDate() + 1)

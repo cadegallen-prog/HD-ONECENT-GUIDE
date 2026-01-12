@@ -276,7 +276,10 @@ function applySelfEnrichment(
       brand: item.brand || enrichment.brand,
       modelNumber: item.modelNumber || enrichment.modelNumber,
       upc: item.upc || enrichment.upc,
-      imageUrl: item.imageUrl && item.imageUrl !== PLACEHOLDER_IMAGE_URL ? item.imageUrl : enrichment.imageUrl || item.imageUrl,
+      imageUrl:
+        item.imageUrl && item.imageUrl !== PLACEHOLDER_IMAGE_URL
+          ? item.imageUrl
+          : enrichment.imageUrl || item.imageUrl,
       homeDepotUrl: item.homeDepotUrl || enrichment.homeDepotUrl,
       internetNumber: item.internetNumber || enrichment.internetNumber,
       retailPrice: item.retailPrice ?? enrichment.retailPrice,

@@ -50,7 +50,7 @@ export default defineConfig({
     command:
       "node -e \"require('fs').rmSync('.next', { recursive: true, force: true })\" && cross-env PLAYWRIGHT=1 npm run build && cross-env PLAYWRIGHT=1 npm run start -- --port 3002",
     url: "http://localhost:3002",
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: !process.env.CI && process.env.PLAYWRIGHT_REUSE_EXISTING_SERVER === "1",
     timeout: 120000,
   },
 })

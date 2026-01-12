@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Jan 11, 2026 (Supabase egress optimization + dev/test mode protocol)
+**Last updated:** Jan 12, 2026 (Report Find submission restore + verification)
 
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
@@ -11,10 +11,11 @@ Every AI session must update this after meaningful work.
 
 ## Current Sprint (Last 7 Days)
 
+- **Report Find submissions restored (Jan 12):** Root cause was Supabase RLS/privileges now blocking direct `anon` INSERTs into `public."Penny List"` while `/api/submit-find` was still using the anon key. Fixed by inserting via the Supabase service role key in `app/api/submit-find/route.ts` (keeps DB locked down from direct anon inserts), and rate limiting now counts only successful submissions (so a transient server error doesn't lock out users). Updated `docs/supabase-rls.md` to match current reality. Verified with `reports/verification/2026-01-12T05-37-14/summary.md`.
 - **Supabase egress optimization (Jan 11):** Reduced payload per query by excluding notes from list queries (include only on detail pages). Made `notes_optional` optional in `SupabasePennyRow`, removed unused `source` column from enrichment type, added `includeNotes` flag to `getPennyListFiltered()`, updated list queries to use lightweight fetch. Expected impact: 6.30 GB → ~3.30 GB (stays under 5 GB limit). Also leverages Supabase Cache layer (currently 0.00 GB) via existing Cache-Control headers + ISR page caching (30 min). Tests pending verification.
 - **Decision frame documented (Jan 11):** Added a stable "Decision Frame" (steelman/strawman for submissions vs retention vs SEO, plus stability + pipeline) to `.ai/CONTEXT.md` so agents keep perspective on what matters.
 - **Agent alignment + proof canon (Jan 11):** Added missing `.ai/VERIFICATION_REQUIRED.md` (paste-ready proof format) and expanded `.ai/USAGE.md` (Goldilocks task spec + course-correction script). Linked from `.ai/START_HERE.md`, `.ai/CODEX_ENTRY.md`, `CLAUDE.md`, and `.github/copilot-instructions.md` so Codex/Claude/Copilot follow the same protocol.
-- **Dev/Test mode protocol (Jan 11):** Standardized dev-server ownership to reduce Copilot hang/port loops: `ai:verify` supports `dev`/`test` modes with HTTP readiness retries, Playwright reuses the existing 3002 server locally (`reuseExistingServer: !CI`) and stays non-reuse in CI, and port 3001 guidance is now “kill only if proven unhealthy + you own it”.
+- **Dev/Test mode protocol (Jan 11):** Standardized dev-server ownership to reduce Copilot hang/port loops: `ai:verify` supports `dev`/`test` modes with HTTP readiness retries, Playwright uses a Playwright-owned `next start` server on port 3002 by default (no reuse unless `PLAYWRIGHT_REUSE_EXISTING_SERVER=1`), and port 3001 guidance is now "kill only if proven unhealthy + you own it".
 - **Penny Deal Card final converged design (Jan 11):** Updated Penny List cards so brand is attached to the image edge and subordinate, recency is the only top-right element (calendar + muted text), Save is icon-only and moved into secondary actions, state pills are muted (max 4) with a single smaller "X reports total" line, and explicit "$X off" savings lines are removed while $0.01 remains the hero price.
 - **Data pipeline P0 bootstrap (Jan 10):** Added `scripts/validate-scrape-json.ts` to normalize and validate raw scrape JSON (SKU validation, field presence stats, cleaned output to `.local/`), and wired npm scripts for `export:pennycentral` (existing export script runner) and `validate:scrape`.
 - **Data pipeline P0 continue (Jan 10):** Added `scripts/scrape-to-enrichment-csv.ts` (fill-blanks-only CSV from cleaned scrape + current enrichment) and `scripts/enrichment-diff.ts` (Markdown diff summary). Wired npm scripts: `convert:scrape`, `diff:enrichment`.
