@@ -238,7 +238,17 @@ function parsePriceInfo(value: string | number | undefined | null): {
 function optimizeImageUrl(url: string | undefined): string | null {
   const trimmed = String(url ?? "").trim()
   if (!trimmed) return null
-  if (!trimmed.includes("thdstatic.com")) return trimmed
+  let hostname: string
+  try {
+    const parsed = new URL(trimmed)
+    hostname = parsed.hostname.toLowerCase()
+  } catch {
+    // If the URL cannot be parsed, do not attempt host-based optimization.
+    return trimmed
+  }
+  const isThdStaticHost =
+    hostname === "thdstatic.com" || hostname.endsWith(".thdstatic.com")
+  if (!isThdStaticHost) return trimmed
   if (trimmed.includes("_100.jpg")) return trimmed.replace("_100.jpg", "_1000.jpg")
   if (trimmed.includes("_400.jpg")) return trimmed.replace("_400.jpg", "_1000.jpg")
   return trimmed.replace(/\/\d+\.jpg(\?.*)?$/, "/1000.jpg")
