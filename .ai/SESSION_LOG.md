@@ -69,6 +69,7 @@
 
 - ✅ Full QA Suite: https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/20939984364
 - ✅ Quality Checks (Fast): https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/20939984351
+- ✅ SerpApi Enrich (manual run; credits-exhausted should no-op): https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/20940157597
 
 ---
 
