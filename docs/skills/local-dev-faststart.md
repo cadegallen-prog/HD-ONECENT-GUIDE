@@ -25,6 +25,7 @@ Authoritative reference: `.ai/ENVIRONMENT_VARIABLES.md`.
 
 - `npm run test:e2e` uses **http://localhost:3002** by default.
 - Config: `playwright.config.ts`.
+- The Playwright web server runs with `PLAYWRIGHT=1` (fixture data) and uses `next start` on port 3002 by default.
 
 ## Ports stuck? (Never kill 3001)
 

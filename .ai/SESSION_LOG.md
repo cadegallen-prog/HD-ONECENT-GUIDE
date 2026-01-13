@@ -12,6 +12,66 @@
 
 ---
 
+## 2026-01-13 - Codex (GPT-5.2) - Fix: Penny List reliability (Option B)
+
+**Goal:** Restore reliable behavior where (1) new submissions appear, (2) items don’t disappear after submissions, and (3) newest sorting reflects real submission recency.
+**Status:** ✅ Local complete + verified (lint/build/unit/e2e).
+
+### Root Causes (Confirmed)
+
+1. **Stale Supabase reads in Next.js production:** Supabase `select()` requests are GET fetches; Next.js production can cache them, creating a “stuck snapshot” where new DB rows exist but the app keeps serving old results.
+2. **Wrong window semantics:** date window filtering treated `purchase_date` as authoritative when present, excluding fresh submissions with older “date found” values.
+
+### Changes (Minimal)
+
+- `lib/supabase/client.ts`: Force Supabase-js server fetches to `cache: "no-store"` + `next: { revalidate: 0 }` so reads can’t get stuck.
+- `lib/fetch-penny-data.ts`: Date windows use `timestamp` (submission time). Fallback to `purchase_date` only when `timestamp` is NULL.
+- `docs/CROWDSOURCE-SYSTEM.md` and `SUPABASE_CRITICAL_FIXES.md`: Document recency + caching semantics.
+- `playwright.config.ts`: Run Playwright webServer as `next dev --webpack` on 3002 for stability (avoids intermittent Turbopack `next start` missing-chunk console errors).
+
+### Verification (Proof)
+
+- `npm run lint` ✅
+- `npm run build` ✅
+- `npm run test:unit` ✅ 25/25 passing
+- `npm run test:e2e` ✅ 100 passed
+  - HTML report: `reports/playwright/html`
+  - Artifacts: `reports/playwright/results`
+
+---
+
+## 2026-01-13 - Codex (GPT-5.2) - Full QA Suite stabilized (CI e2e + SKU JSON-LD) + Sentry preview noise reduction
+
+**Goal:** Stop GitHub Actions “Full QA Suite” from failing repeatedly and reduce noisy Sentry emails from non-production environments.
+**Status:** ✅ Complete
+
+### Root causes
+
+- **CI hydration crash:** `AuthProvider` called `createSupabaseBrowserClient()` on every route; in CI `NEXT_PUBLIC_SUPABASE_*` is unset, so the browser bundle threw and rendered the global error page (“Something went wrong!”), causing widespread E2E selector failures.
+- **CI SKU pages returning 404:** Full QA’s build step runs without Supabase creds, so `generateStaticParams()` for `/sku/[sku]` had no data. In CI this made SKU routes 404 in E2E, failing JSON-LD and “related items” tests.
+
+### Actions
+
+- `components/auth-provider.tsx`: treat Supabase auth as optional; when `NEXT_PUBLIC_SUPABASE_*` isn’t configured, skip Supabase initialization and avoid crashing hydration.
+- `instrumentation-client.ts`, `sentry.server.config.ts`, `sentry.edge.config.ts`: suppress Sentry reporting on localhost and Vercel previews (only report on production domain / Vercel production).
+- `.github/workflows/full-qa.yml`: set `USE_FIXTURE_FALLBACK=1` during the Full QA build so SKU static params and pages exist deterministically in CI (no Supabase creds needed).
+
+### Verification
+
+**Local (4 gates):**
+
+- `npm run lint` ✅ 0 errors
+- `npm run build` ✅ success
+- `npm run test:unit` ✅ 25/25 passing
+- `npm run test:e2e` ✅ 100/100 passing
+
+**GitHub Actions (green):**
+
+- ✅ Full QA Suite: https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/20939984364
+- ✅ Quality Checks (Fast): https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/20939984351
+
+---
+
 ## 2026-01-12 - Codex (GPT-5.2) - GitHub Actions noise reduction (QA, Sonar, SerpApi) + Sentry dev gating
 
 **Goal:** Stop repeated GitHub failures/noise (qa-fast/full, SonarCloud, SerpApi) and reduce Sentry alert spam from local dev.

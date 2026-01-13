@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Jan 12, 2026 (Canonical global analytics setup + verification)
+**Last updated:** Jan 13, 2026 (Full QA Suite stabilized + Sentry preview noise reduction)
 
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
@@ -11,6 +11,7 @@ Every AI session must update this after meaningful work.
 
 ## Current Sprint (Last 7 Days)
 
+- **Full QA Suite stabilized (Jan 13):** Fixed CI E2E hydration crash when `NEXT_PUBLIC_SUPABASE_*` is missing by making `AuthProvider` skip Supabase initialization when not configured. Ensured `/sku/[sku]` pages exist in Full QA builds by setting `USE_FIXTURE_FALLBACK=1` during the build step (CI has no Supabase creds). Reduced Sentry email noise by suppressing reporting on localhost and Vercel previews.
 - **Canonical global analytics setup (Jan 12):** Made `app/layout.tsx` the single source of truth for global scripts. Grow now ships as a real `<script src="https://faves.grow.me/main.js" ...>` in `<head>` (crawler-detectable), GA4 fires on SPA route changes (history hooks), Vercel Analytics + SpeedInsights render only on Vercel production, removed invalid wildcard `preconnect` links, and updated CSP to allow `faves.grow.me` / `*.grow.me` without console errors. Verified with `reports/verification/2026-01-12T22-29-04/summary.md`.
 - **Mediavine Journey (Grow) installation (Jan 12):** Integrated Mediavine's Grow script for first-party data and monetization readiness. Added `preconnect` and initializer to `app/layout.tsx`. Verified with production build and zero-warning lint.
 - **Report Find submissions restored (Jan 12):** Root cause was Supabase RLS/privileges now blocking direct `anon` INSERTs into `public."Penny List"` while `/api/submit-find` was still using the anon key. Fixed by inserting via the Supabase service role key in `app/api/submit-find/route.ts` (keeps DB locked down from direct anon inserts), and rate limiting now counts only successful submissions (so a transient server error doesn't lock out users). Updated `docs/supabase-rls.md` to match current reality. Verified with `reports/verification/2026-01-12T05-37-14/summary.md`.
