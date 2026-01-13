@@ -712,7 +712,10 @@ export async function fetchPennyItemsFromSupabase(
       // Only fetch enrichment for SKUs we have - dramatically reduces egress
       const skusInResult = items.map((item) => item.sku)
       const anonEnrichment = await fetchEnrichmentRows(anonClient, "anon", skusInResult)
-      return applyEnrichment(items, anonEnrichment)
+
+      // IMPORTANT: Enrichment is an overlay, not a gate.
+      // New submissions must appear even if the enrichment table has no row for that SKU yet.
+      return applyEnrichment(items, anonEnrichment, { hideUnenriched: false })
     }
   } catch (error) {
     // If Supabase is not configured or fails, we'll return empty
@@ -880,6 +883,12 @@ function dateRangeToWindow(
  */
 type GetPennyListFilteredOptions = {
   includeNotes?: boolean
+  /**
+   * Bypass Next.js function caching for this request.
+   * Used for one-off "fresh" reads (e.g. post-submit gratification) without
+   * forcing the entire site to poll or disabling CDN caching for everyone.
+   */
+  bypassCache?: boolean
 }
 
 export async function getPennyListFiltered(
@@ -893,13 +902,15 @@ export async function getPennyListFiltered(
   }
 
   const includeNotes = options.includeNotes ?? true
+  const bypassCache = options.bypassCache === true
   const cacheBucketMs =
     Math.floor(nowMs / (PENNY_LIST_CACHE_SECONDS * 1000)) * PENNY_LIST_CACHE_SECONDS * 1000
   const dateWindow = dateRange ? dateRangeToWindow(dateRange, cacheBucketMs) : undefined
 
   try {
-    const items =
-      getPennyListFilteredCached !== null
+    const items = bypassCache
+      ? await fetchPennyItemsFromSupabase({ dateWindow, includeNotes })
+      : getPennyListFilteredCached !== null
         ? await getPennyListFilteredCached(dateRange, cacheBucketMs, includeNotes)
         : await fetchPennyItemsFromSupabase({ dateWindow, includeNotes })
 

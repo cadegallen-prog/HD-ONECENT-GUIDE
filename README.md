@@ -1,6 +1,6 @@
 # Penny Central
 
-The official companion site for the "Home Depot One Cent Items" Facebook community (40,000+ members and growing). A utility/reference guide for finding Home Depot clearance items marked to $0.01.
+The official companion site for the "Home Depot One Cent Items" Facebook community (48,000 members and growing). A utility/reference guide for finding Home Depot clearance items marked to $0.01.
 
 **Live:** https://pennycentral.com
 
@@ -8,7 +8,7 @@ The official companion site for the "Home Depot One Cent Items" Facebook communi
 
 ## What It Does
 
-- **Penny List (Crowdsourced Reports)** ⭐ NEW — Community-powered list of reported penny finds, updated hourly from Google Forms (no manual work)
+- **Penny List (Crowdsourced Reports)** ⭐ NEW — Community-powered list of reported penny finds, updated regularly (usually within about 5 minutes) from Google Forms (no manual work)
 - **Penny Guide** — Complete reference on how clearance items reach penny status
 - **Store Finder** — Find nearby Home Depot locations with intelligent search (supports city, state name, ZIP code)
 - **Trip Tracker** — Plan and log penny hunting trips
@@ -200,7 +200,7 @@ public/                 # Static assets
 
 ## Community
 
-- **Facebook Group:** Home Depot One Cent Items (40,000+ members)
+- **Facebook Group:** Home Depot One Cent Items (48k members)
 - **Purpose:** Educational resource for penny hunting community
 - **Penny List Form:** Collects verified penny finds from community members
 

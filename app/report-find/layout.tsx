@@ -1,9 +1,10 @@
 import { Metadata } from "next"
 
+import { COMMUNITY_MEMBER_COUNT_DISPLAY } from "@/lib/constants"
+
 export const metadata: Metadata = {
   title: "Report a Home Depot Penny Find (Live Verification) | Penny Central",
-  description:
-    "Submit a penny find in seconds to help verify live sightings for 47K+ shoppers. Your report updates the intel.",
+  description: `Submit a penny find in seconds to help verify live sightings for ${COMMUNITY_MEMBER_COUNT_DISPLAY} shoppers. Your report updates the intel.`,
   keywords: [
     "report penny item",
     "submit penny find",
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
     type: "website",
     url: "https://www.pennycentral.com/report-find",
     title: "Report a Penny Find",
-    description: "Help 47K+ shoppers verify live $0.01 sightings. Fast report, real impact.",
+    description: `Help ${COMMUNITY_MEMBER_COUNT_DISPLAY} shoppers verify live $0.01 sightings. Fast report, real impact.`,
     images: [
       {
         url: "/api/og?page=report-find",
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Report a Penny Find",
-    description: "Help 47K+ shoppers verify live $0.01 sightings. Fast report, real impact.",
+    description: `Help ${COMMUNITY_MEMBER_COUNT_DISPLAY} shoppers verify live $0.01 sightings. Fast report, real impact.`,
     images: ["/api/og?page=report-find"],
   },
 }

@@ -341,3 +341,38 @@ GRANT SELECT ON public.penny_list_public TO anon;
 - [ ] Filters work correctly (state, search, sort, date range)
 - [ ] Submissions require authentication
 - [ ] No security warnings in Supabase dashboard
+
+---
+
+## Addendum - January 13, 2026: Penny List freshness + missing items
+
+### Symptoms (Production)
+
+- Submissions were successfully writing to Supabase, but the Penny List UI was inconsistently missing new items and/or appeared stale for long periods.
+- Some specific SKUs appeared missing (example: water hose), while others (example: Clermont flooring) appeared normally.
+
+### Root Causes (Confirmed)
+
+1. **Public freshness was too slow for the core loop:** CDN/page revalidation settings caused the public feed to update too slowly for a "live" experience.
+2. **Enrichment was incorrectly treated as a gate:** The feed overlay logic was dropping any SKU that did not yet have a corresponding row in `penny_item_enrichment`, making legitimate submissions “disappear” until enrichment existed.
+
+### Fixes (Minimal, No Security Weakening)
+
+- **5-minute public caching:**
+  - `app/api/penny-list/route.ts` now returns `Cache-Control: public, max-age=0, s-maxage=300, stale-while-revalidate=60`.
+  - `app/penny-list/page.tsx` now uses `revalidate = 300`.
+- **Submitter immediate gratification (no global polling):**
+  - `?fresh=1` bypass on `GET /api/penny-list` returns `Cache-Control: no-store` and bypasses function caching for that request only.
+  - `app/report-find/page.tsx` routes submitters to `/penny-list?fresh=1` on success.
+  - `components/penny-list-client.tsx` performs a one-time forced fresh fetch when loaded with `fresh=1`, then removes the param so refresh/back doesn’t keep bypassing cache.
+- **Do not hide unenriched SKUs:**
+  - `lib/fetch-penny-data.ts` now overlays enrichment (`hideUnenriched: false`) so new reports appear immediately even if enrichment hasn’t been created yet.
+
+### Rollback Plan
+
+- Revert the caching and `fresh=1` changes by reverting these files:
+  - `app/api/penny-list/route.ts`
+  - `app/penny-list/page.tsx`
+  - `components/penny-list-client.tsx`
+  - `app/report-find/page.tsx`
+- Revert enrichment gating behavior by reverting `lib/fetch-penny-data.ts` (return to `hideUnenriched: true` - not recommended).

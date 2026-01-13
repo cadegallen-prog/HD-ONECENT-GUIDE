@@ -108,8 +108,10 @@ export function PennyListClient({
   const hasMountedRef = useRef(false)
   const hasTrackedViewRef = useRef(false)
   const isInitialRenderRef = useRef(true)
+  const didForceFreshRef = useRef(false)
 
   const getInitialParam = (key: string) => initialParams.get(key) || ""
+  const shouldForceFreshOnce = getInitialParam("fresh") === "1"
 
   // Initialize state from URL params
   const [stateFilter, setStateFilter] = useState(() => getInitialParam("state"))
@@ -412,6 +414,48 @@ export function PennyListClient({
       fetchItems()
     }
   }, [stateFilter, searchQuery, sortOption, dateRange, currentPage, itemsPerPage, fetchItems])
+
+  // Post-submit gratification: if user arrived with `?fresh=1`, do a single forced fresh fetch.
+  // This bypasses CDN caching without turning the whole site into polling.
+  useEffect(() => {
+    if (!shouldForceFreshOnce) return
+    if (didForceFreshRef.current) return
+    didForceFreshRef.current = true
+
+    // Remove `fresh` from the URL so refreshes/back don't keep forcing no-store.
+    updateURL({ fresh: null, page: null })
+    ;(async () => {
+      try {
+        const params = new URLSearchParams()
+        if (stateFilter) params.set("state", stateFilter)
+        if (searchQuery) params.set("q", searchQuery)
+        if (sortOption !== "newest") params.set("sort", sortOption)
+        if (dateRange !== DEFAULT_DATE_RANGE) params.set("days", dateRange)
+        params.set("page", "1")
+        params.set("perPage", String(itemsPerPage))
+        params.set("fresh", "1")
+
+        const response = await fetch(`/api/penny-list?${params.toString()}`)
+        if (!response.ok) return
+        const data = await response.json()
+        setItems(data.items)
+        setTotal(data.total)
+        if (data.hotItems) {
+          setHotItems(data.hotItems)
+        }
+      } catch {
+        // ignore
+      }
+    })()
+  }, [
+    dateRange,
+    itemsPerPage,
+    searchQuery,
+    shouldForceFreshOnce,
+    sortOption,
+    stateFilter,
+    updateURL,
+  ])
 
   const previousSearchRef = useRef(searchQuery)
 
@@ -962,7 +1006,8 @@ export function PennyListClient({
             </div>
             <div className="flex-1">
               <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
-                Submissions are added automatically, usually within about an hour.
+                Submissions are added automatically, usually within about 5 minutes. If you just
+                submitted, you may see it update immediately.
               </p>
             </div>
           </div>
@@ -1037,7 +1082,7 @@ export function PennyListClient({
         >
           Report a Find
         </TrackableLink>
-        <p className="text-xs text-[var(--text-muted)] mt-3">Shows up within about an hour.</p>
+        <p className="text-xs text-[var(--text-muted)] mt-3">Shows up within about 5 minutes.</p>
       </div>
     </>
   )

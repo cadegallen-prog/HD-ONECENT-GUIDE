@@ -10,8 +10,8 @@ import {
 
 const VALID_PER_PAGE = [25, 50, 100]
 const DEFAULT_PER_PAGE = 50
-const CACHE_SECONDS = 1800 // 30 minutes - aligned with SerpAPI enrichment schedule
-const STALE_SECONDS = 1800
+const CACHE_SECONDS = 300 // 5 minutes (public freshness target)
+const STALE_SECONDS = 60 // allow short stale while CDN revalidates
 
 function parsePerPage(value: string | null): number {
   if (!value) return DEFAULT_PER_PAGE
@@ -69,6 +69,7 @@ export async function GET(request: Request) {
   const perPage = parsePerPage(url.searchParams.get("perPage"))
   const page = parsePage(url.searchParams.get("page"))
   const includeHot = url.searchParams.get("includeHot") === "1"
+  const fresh = url.searchParams.get("fresh") === "1"
 
   try {
     const nowMs =
@@ -76,7 +77,10 @@ export async function GET(request: Request) {
 
     // Fetch items with date window filtering at the database level for performance
     // This reduces data transfer by only fetching rows within the selected time range
-    const pennyItems = await getPennyListFiltered(days, nowMs, { includeNotes: false })
+    const pennyItems = await getPennyListFiltered(days, nowMs, {
+      includeNotes: false,
+      bypassCache: fresh,
+    })
     const validItems = filterValidPennyItems(pennyItems)
 
     // Apply additional filters and sorting
@@ -106,11 +110,17 @@ export async function GET(request: Request) {
       ...(hotItems !== undefined && { hotItems }),
     }
 
+    // Default: cache at CDN for 5 minutes, but prevent browser caching.
+    // Submitter "fresh=1" bypass: no-store (force true fresh read for that one user flow).
+    const cacheControl = fresh
+      ? "no-store"
+      : `public, max-age=0, s-maxage=${CACHE_SECONDS}, stale-while-revalidate=${STALE_SECONDS}`
+
     return new NextResponse(JSON.stringify(response), {
       status: 200,
       headers: {
         "Content-Type": "application/json",
-        "Cache-Control": `public, s-maxage=${CACHE_SECONDS}, stale-while-revalidate=${STALE_SECONDS}`,
+        "Cache-Control": cacheControl,
       },
     })
   } catch (error) {
@@ -120,7 +130,7 @@ export async function GET(request: Request) {
       {
         status: 500,
         headers: {
-          "Cache-Control": "public, s-maxage=30",
+          "Cache-Control": "public, max-age=0, s-maxage=30",
         },
       }
     )

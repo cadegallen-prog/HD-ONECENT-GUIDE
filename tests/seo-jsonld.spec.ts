@@ -10,7 +10,7 @@ test("SKU pages contain Product and Breadcrumb JSON-LD for top skus", async ({ p
     const jsons = scripts.map((s) => {
       try {
         return JSON.parse(s || "")
-      } catch (e) {
+      } catch {
         return null
       }
     })

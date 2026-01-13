@@ -16,7 +16,7 @@ Agents: keep this file short and useful. Update it when you actually finish or s
 
 **What:** PennyCentral.com - a utility/reference guide for finding Home Depot clearance items marked to $0.01, powered by community intelligence.
 
-**Who:** Members of the "Home Depot One Cent Items" Facebook community (40,000+ members and growing). Savvy shoppers who want actionable intel, not hype.
+**Who:** Members of the "Home Depot One Cent Items" Facebook community (48,000 members and growing). Savvy shoppers who want actionable intel, not hype.
 
 **Core value:** Education on how clearance works, tools to find stores and plan trips, realistic guidance on whether items are worth buying, AND a real-time community-powered list of reported penny finds.
 
@@ -41,7 +41,7 @@ Agents: keep this file short and useful. Update it when you actually finish or s
 ## 2. Current major features
 
 - **Penny Guide** (`/guide`) — Complete reference on clearance cadences, markdown stages, and how items reach penny status. ✅ Live
-- **Penny List** (`/penny-list`) ⭐ **ENHANCED DEC 10** — Community-powered list of reported penny finds, auto-updated hourly from Google Form. Phase 1 UI polish complete (improved readability, contrast, mobile UX). ✅ Live
+- **Penny List** (`/penny-list`) ⭐ **ENHANCED DEC 10** — Community-powered list of reported penny finds, auto-updated (usually within about 5 minutes) from Google Form. Phase 1 UI polish complete (improved readability, contrast, mobile UX). ✅ Live
 - **Store Finder** (`/store-finder`) — Find nearby Home Depot locations with interactive map. ✅ Live
 - **Trip Tracker** (`/trip-tracker`) — Plan and log penny hunting trips. ✅ Live
 - **Resources** (`/resources`) — External tools and community links. ✅ Live
@@ -55,11 +55,11 @@ Agents: keep this file short and useful. Update it when you actually finish or s
 
 ### Autonomous Penny List System (🎯 Core Milestone)
 
-**What:** Community can now submit penny finds via a simple Google Form. Data auto-publishes to the site every hour with zero manual intervention.
+**What:** Community can now submit penny finds via a simple Google Form. Data auto-publishes to the site (usually within about 5 minutes) with zero manual intervention.
 
 **Why it matters:**
 
-- Converts 40,000 community members into data sources
+- Converts 48,000 community members into data sources
 - Creates a real-time, crowd-sourced intelligence feed
 - Dramatically increases site value and stickiness
 - Requires no founder time to manage (just Google Sheet moderation)
@@ -68,14 +68,14 @@ Agents: keep this file short and useful. Update it when you actually finish or s
 
 1. Community submits finds via Google Form (visible link on site)
 2. Google Sheet auto-collects responses (Google handles this)
-3. Site fetches CSV hourly and renders on `/penny-list`
+3. Site fetches CSV on a ~5-minute cadence and renders on `/penny-list`
 4. Data is live on Vercel; emails/timestamps never sent to browser
 5. Founder can delete bad rows directly in Sheet if needed
 
 **Technical setup:**
 
 - `lib/fetch-penny-data.ts` — Parses CSV with field aliases (handles any column name variation)
-- `app/penny-list/page.tsx` — Server-side rendering with 1-hour revalidation
+- `app/penny-list/page.tsx` — Server-side rendering with 5-minute revalidation (revalidate = 300)
 - `papaparse` library — Lightweight CSV parsing
 - No database needed; no user auth needed; no infrastructure complexity
 

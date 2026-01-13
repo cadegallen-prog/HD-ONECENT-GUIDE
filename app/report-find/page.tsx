@@ -257,17 +257,15 @@ function ReportFindForm() {
         <div className="rounded-lg border border-[var(--border-default)] border-l-4 border-l-[var(--status-info)] bg-[var(--bg-elevated)] p-4 mb-8 flex gap-3 items-start">
           <Info className="w-5 h-5 text-[var(--status-info)] flex-shrink-0 mt-0.5" />
           <div className="text-sm text-[var(--text-secondary)]">
-            <p className="font-semibold mb-2">About This Form</p>
+            <p className="font-semibold mb-2">About this form</p>
             <p className="mb-2">
-              Your report shows up on the Penny List automatically (usually within an hour).
+              Your report is added to the Penny List automatically, usually within about 5 minutes.
             </p>
+            <p className="mb-2">After you submit, you may see it update immediately.</p>
             <ul className="list-disc pl-4 space-y-1">
               <li>Submissions are not individually confirmed.</li>
               <li>The Penny List may contain mistakes, sold-out items, or prices that changed.</li>
-              <li>
-                For proof-of-purchase posts with receipts and discussion, always use the Facebook
-                group.
-              </li>
+              <li>For receipts and discussion, use the Facebook group.</li>
             </ul>
           </div>
         </div>
@@ -612,7 +610,7 @@ function ReportFindForm() {
                         variant="secondary"
                         size="sm"
                         onClick={() => {
-                          window.location.href = "/penny-list"
+                          window.location.href = "/penny-list?fresh=1"
                         }}
                         className="flex-1"
                       >
@@ -655,8 +653,8 @@ function ReportFindForm() {
         {/* Bottom Info */}
         <div className="mt-8 text-center text-sm text-[var(--text-muted)]">
           <p>
-            Submissions appear on the Penny List automatically. The Facebook group is the gold
-            standard for receipt photos and discussion to confirm a find.
+            Submissions are added to the Penny List automatically, usually within about 5 minutes.
+            For receipts and real-time discussion, use the Facebook group.
           </p>
         </div>
       </div>

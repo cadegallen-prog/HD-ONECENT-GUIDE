@@ -19,7 +19,7 @@
 
 ### Facebook Group Relationship ⚠️
 
-**CRITICAL:** Cade promised a friend (group admin) the website would NOT compete with or cannibalize the Facebook group "Home Depot One Cent Items" (40,000+ members).
+**CRITICAL:** Cade promised a friend (group admin) the website would NOT compete with or cannibalize the Facebook group "Home Depot One Cent Items" (48,000 members).
 
 **Symbiosis Goal:**
 

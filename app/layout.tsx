@@ -51,7 +51,7 @@ const inter = localFont({
 export const metadata: Metadata = {
   title: "Penny Central | Home Depot Penny List",
   description:
-    "The searchable Home Depot penny list. Filter by state, date, and SKU. Community-reported $0.01 finds updated hourly.",
+    "The searchable Home Depot penny list. Filter by state, date, and SKU. Community-reported $0.01 finds, usually updated within about 5 minutes.",
   keywords: [
     "home depot penny items",
     "penny items",
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
     url: "https://www.pennycentral.com",
     title: "Penny Central | Home Depot Penny List",
     description:
-      "The searchable Home Depot penny list. Filter by state, date, and SKU. Community-reported $0.01 finds updated hourly.",
+      "The searchable Home Depot penny list. Filter by state, date, and SKU. Community-reported $0.01 finds, usually updated within about 5 minutes.",
     images: [
       {
         url: DEFAULT_OG_IMAGE,
@@ -87,7 +87,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Penny Central | Home Depot Penny List",
     description:
-      "The searchable Home Depot penny list. Filter by state, date, and SKU. Community-reported $0.01 finds updated hourly.",
+      "The searchable Home Depot penny list. Filter by state, date, and SKU. Community-reported $0.01 finds, usually updated within about 5 minutesed within about 5 minutes.",
     images: [DEFAULT_OG_IMAGE],
   },
   robots: {
@@ -174,6 +174,7 @@ export default function RootLayout({
             DO NOT REMOVE OR MODIFY
             =================================================== */}
         <script
+          data-grow-initializer=""
           dangerouslySetInnerHTML={{
             __html: `
               window.growMe || ((window.growMe = function (e) {

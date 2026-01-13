@@ -39,7 +39,7 @@
 
   <!-- Subtitle -->
   <text x="600" y="300" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="32" font-weight="600" fill="#333">
-    Community-Reported $0.01 Finds – Updated Hourly
+    Community-Reported $0.01 Finds – Usually updated within about 5 minutes
   </text>
 
   <!-- URL (bottom right) -->

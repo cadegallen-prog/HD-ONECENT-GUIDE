@@ -1520,7 +1520,7 @@ export function GuideContent() {
           </h2>
           <p className="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
             You've learned the tactics. Now use our <strong>live, crowd-sourced penny list</strong>{" "}
-            — updated hourly with fresh finds from hunters nationwide.
+            — usually updated within about 5 minutes with fresh finds from hunters nationwide.
           </p>
 
           <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto mt-8">
@@ -1530,11 +1530,13 @@ export function GuideContent() {
             >
               <div className="text-4xl mb-3">📋</div>
               <h3 className="text-xl font-semibold mb-2 group-hover:text-white">
-                Live Penny List (Updated Hourly)
+                Live Penny List (usually updated within about 5 minutes)
               </h3>
+              {/* prettier-ignore */}
               <p className="text-sm text-[var(--text-secondary)] group-hover:text-white/90">
-                <strong>Crowd-sourced & current.</strong> See items hunters confirmed today. Updated
-                hourly with fresh finds nationwide. Filter by state, search by SKU.
+                <strong>Crowd-sourced & current.</strong> Usually updated within about 5 minutes.
+                <br />
+                Fresh finds nationwide. Filter by state, search by SKU.
               </p>
               <div className="mt-4 text-[var(--cta-primary)] group-hover:text-white font-semibold">
                 View Penny List →

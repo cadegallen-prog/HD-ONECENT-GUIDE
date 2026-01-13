@@ -34,7 +34,8 @@ More reports = more value = more users = more reports
 
 ### What Facebook CAN'T Do (Our Moat)
 
-The 40K-member Facebook group is valuable but has structural limitations:
+The 48K-member Facebook group is valuable but has structural limitations:
+
 - Posts get buried within hours
 - No way to aggregate reports by SKU
 - No way to see "this item reported 47 times across 12 states"
@@ -47,11 +48,11 @@ The 40K-member Facebook group is valuable but has structural limitations:
 
 This is critical for UI/design decisions:
 
-| Data Point | Why It's Core |
-|------------|---------------|
-| Report count | Shows community validation ("47 people found this") |
-| State distribution | Shows geographic spread ("active in 12 states") |
-| Recency | Shows freshness ("reported 4 days ago") |
+| Data Point         | Why It's Core                                       |
+| ------------------ | --------------------------------------------------- |
+| Report count       | Shows community validation ("47 people found this") |
+| State distribution | Shows geographic spread ("active in 12 states")     |
+| Recency            | Shows freshness ("reported 4 days ago")             |
 
 **These are NOT clutter to be hidden.** They are the product. They show what Facebook cannot show. Any design that hides or de-emphasizes these signals undermines the core value proposition.
 
@@ -94,7 +95,7 @@ This is the primary “zoomed-out” framing that prevents local optimizations f
 
 ## Mission
 
-PennyCentral.com is the companion utility site for the **“Home Depot One Cent Items”** Facebook community (~40,000 members).  
+PennyCentral.com is the companion utility site for the **“Home Depot One Cent Items”** Facebook community (~48,000 members).  
 The mission is simple: **turn scattered penny‑hunting knowledge into a fast, reliable field guide + living intel feed.**
 
 ---
@@ -170,7 +171,6 @@ Highest‑leverage work is always the **Report Find → Penny List retention loo
 
 > **AI Agents: Check these documents before making changes to related features.**
 
-| Feature | Planning Document | Status |
-|---------|-------------------|--------|
+| Feature             | Planning Document            | Status              |
+| ------------------- | ---------------------------- | ------------------- |
 | Penny List Cards/UI | `.ai/PENNY-LIST-REDESIGN.md` | Planning (Jan 2026) |
-

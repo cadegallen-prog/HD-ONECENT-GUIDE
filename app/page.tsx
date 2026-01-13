@@ -12,6 +12,7 @@ import {
 } from "lucide-react"
 import {
   COMMUNITY_MEMBER_COUNT_DISPLAY,
+  MEMBER_COUNT_BADGE_TEXT,
   FACEBOOK_GROUP_URL,
   BEFRUGAL_REFERRAL_PATH,
 } from "@/lib/constants"
@@ -23,13 +24,13 @@ import { getRecentFinds } from "@/lib/fetch-penny-data"
 export const revalidate = 600 // 10 minutes
 
 export const metadata: Metadata = {
-  title: "Home Depot Penny Items: Live $0.01 Finds From 47K+ Hunters | Penny Central",
+  title: `Home Depot Penny Items: Live $0.01 Finds From ${MEMBER_COUNT_BADGE_TEXT} | Penny Central`,
   description:
     "Live community-reported $0.01 items with recency and state distribution. Open today's penny list and report what you see in-store.",
   openGraph: {
     type: "website",
     url: "https://www.pennycentral.com",
-    title: "Live $0.01 Finds From 47K+ Members",
+    title: `Live $0.01 Finds From ${MEMBER_COUNT_BADGE_TEXT}`,
     description:
       "Live community reports, updated as sightings come in. See what's hitting stores now.",
     images: [
@@ -42,7 +43,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Live $0.01 Finds From 47K+ Members",
+    title: `Live $0.01 Finds From ${MEMBER_COUNT_BADGE_TEXT}`,
     description:
       "Live community reports, updated as sightings come in. See what's hitting stores now.",
     images: ["/api/og?page=homepage"],
@@ -106,7 +107,7 @@ export default async function Home() {
 
           {/* Lead text */}
           <p className="mt-3 text-lg sm:text-xl text-[var(--text-secondary)] leading-relaxed">
-            Guide + community finds. 40,000 hunters strong.
+            Guide + community finds. {COMMUNITY_MEMBER_COUNT_DISPLAY} members strong.
           </p>
 
           {/* CTAs - Unified button system */}

@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   },
 }
 
-export const revalidate = 1800 // 30 minutes - aligned with SerpAPI enrichment schedule
+export const revalidate = 300 // 5 minutes - public freshness target (server render)
 
 type PennyListPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>
