@@ -21,14 +21,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    const supabaseConfigured =
+      Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
+      Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
+
+    // Auth is optional for most of the site. If Supabase isn't configured (common in CI/e2e),
+    // keep the app usable instead of crashing on hydration.
+    if (!supabaseConfigured) {
+      setLoading(false)
+      return
+    }
+
     const supabase = createSupabaseBrowserClient()
 
     // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      setUser(session?.user ?? null)
-      setLoading(false)
-    })
+    supabase.auth
+      .getSession()
+      .then(({ data: { session } }) => {
+        setSession(session)
+        setUser(session?.user ?? null)
+        setLoading(false)
+      })
+      .catch(() => {
+        setLoading(false)
+      })
 
     // Listen for auth changes
     const {
@@ -43,6 +59,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const signInWithOtp = async (email: string) => {
+    const supabaseConfigured =
+      Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
+      Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
+    if (!supabaseConfigured) {
+      return { error: new Error("Auth is not configured") }
+    }
     const supabase = createSupabaseBrowserClient()
     const { error } = await supabase.auth.signInWithOtp({
       email,
@@ -55,6 +77,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const verifyOtp = async (email: string, token: string) => {
+    const supabaseConfigured =
+      Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
+      Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
+    if (!supabaseConfigured) {
+      return { error: new Error("Auth is not configured") }
+    }
     const supabase = createSupabaseBrowserClient()
     const { error } = await supabase.auth.verifyOtp({
       email,
@@ -65,6 +93,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const signOut = async () => {
+    const supabaseConfigured =
+      Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
+      Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
+    if (!supabaseConfigured) {
+      return
+    }
     const supabase = createSupabaseBrowserClient()
     await supabase.auth.signOut()
   }
