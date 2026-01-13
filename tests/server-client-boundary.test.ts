@@ -46,7 +46,10 @@ function isUseClientFile(content: string): boolean {
   return content.includes('"use client"') || content.includes("'use client'")
 }
 
-function findNonTypeImports(content: string, importPath: (typeof SERVER_ONLY_IMPORT_PATHS)[number]) {
+function findNonTypeImports(
+  content: string,
+  importPath: (typeof SERVER_ONLY_IMPORT_PATHS)[number]
+) {
   const violations: string[] = []
 
   const escaped = escapeForRegExp(importPath)
