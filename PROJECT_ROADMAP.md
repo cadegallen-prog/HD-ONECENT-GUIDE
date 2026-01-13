@@ -16,7 +16,7 @@ Agents: keep this file short and useful. Update it when you actually finish or s
 
 **What:** PennyCentral.com - a utility/reference guide for finding Home Depot clearance items marked to $0.01, powered by community intelligence.
 
-**Who:** Members of the "Home Depot One Cent Items" Facebook community (50,000 members and growing). Savvy shoppers who want actionable intel, not hype.
+**Who:** Members of the "Home Depot One Cent Items" Facebook community (50,000+ members and growing). Savvy shoppers who want actionable intel, not hype.
 
 **Core value:** Education on how clearance works, tools to find stores and plan trips, realistic guidance on whether items are worth buying, AND a real-time community-powered list of reported penny finds.
 
@@ -59,7 +59,7 @@ Agents: keep this file short and useful. Update it when you actually finish or s
 
 **Why it matters:**
 
-- Converts 50,000 community members into data sources
+- Converts 50,000+ community members into data sources
 - Creates a real-time, crowd-sourced intelligence feed
 - Dramatically increases site value and stickiness
 - Requires no founder time to manage (just Google Sheet moderation)

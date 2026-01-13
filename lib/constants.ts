@@ -11,10 +11,10 @@
 export const COMMUNITY_MEMBER_COUNT = 50000
 
 /** Display string for member count (use this in JSX) */
-export const COMMUNITY_MEMBER_COUNT_DISPLAY = "50,000"
+export const COMMUNITY_MEMBER_COUNT_DISPLAY = "50,000+"
 
 /** Badge text for OG images (single source of truth) */
-export const MEMBER_COUNT_BADGE_TEXT = "50k members"
+export const MEMBER_COUNT_BADGE_TEXT = "50K+ Members"
 
 /** Raw member count for badge (alternative for calculations) */
 export const MEMBER_COUNT_RAW = 50000
