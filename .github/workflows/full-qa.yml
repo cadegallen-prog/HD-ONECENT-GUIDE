@@ -97,6 +97,10 @@ jobs:
           # Unit tests exercise the submit-find route, which requires this env var to be present.
           # A dummy value is sufficient because tests stub the service role client.
           SUPABASE_SERVICE_ROLE_KEY: test
+          # CI does not have Supabase public credentials; for the build step, force the
+          # server-side Supabase reads to fall back to the committed fixture so dynamic SKU
+          # pages render (and SEO JSON-LD tests don't hit 404).
+          USE_FIXTURE_FALLBACK: "1"
         run: npm run qa:fast
 
       - name: Start server for e2e tests
