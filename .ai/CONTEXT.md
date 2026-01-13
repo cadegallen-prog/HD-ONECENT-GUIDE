@@ -34,7 +34,7 @@ More reports = more value = more users = more reports
 
 ### What Facebook CAN'T Do (Our Moat)
 
-The 48K-member Facebook group is valuable but has structural limitations:
+The 50K-member Facebook group is valuable but has structural limitations:
 
 - Posts get buried within hours
 - No way to aggregate reports by SKU
@@ -95,7 +95,7 @@ This is the primary “zoomed-out” framing that prevents local optimizations f
 
 ## Mission
 
-PennyCentral.com is the companion utility site for the **“Home Depot One Cent Items”** Facebook community (~48,000 members).  
+PennyCentral.com is the companion utility site for the **“Home Depot One Cent Items”** Facebook community (~50,000 members).  
 The mission is simple: **turn scattered penny‑hunting knowledge into a fast, reliable field guide + living intel feed.**
 
 ---

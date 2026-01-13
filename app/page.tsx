@@ -35,7 +35,7 @@ export const metadata: Metadata = {
       "Live community reports, updated as sightings come in. See what's hitting stores now.",
     images: [
       {
-        url: "/api/og?page=homepage",
+        url: "https://www.pennycentral.com/api/og?page=homepage",
         width: 1200,
         height: 630,
       },
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     title: `Live $0.01 Finds From ${MEMBER_COUNT_BADGE_TEXT}`,
     description:
       "Live community reports, updated as sightings come in. See what's hitting stores now.",
-    images: ["/api/og?page=homepage"],
+    images: ["https://www.pennycentral.com/api/og?page=homepage"],
   },
 }
 
