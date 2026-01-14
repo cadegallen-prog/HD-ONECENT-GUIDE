@@ -153,3 +153,18 @@
 ### Verification (bundle)
 
 - `reports/verification/2026-01-14T20-23-25/summary.md`
+
+---
+
+## 2026-01-14 - Codex (GPT-5.2) - Add `ads.txt` for Monumetric onboarding
+
+**Goal:** Publish Monumetric-provided ads.txt lines at `https://www.pennycentral.com/ads.txt` (crawler-accessible) for interim monetization setup.
+**Status:** ✅ Complete + locally verified (all 4 gates via `ai:verify`) + ready to deploy.
+
+### Changes (minimal)
+
+- `public/ads.txt`: added Monumetric-provided `ads.txt` lines verbatim.
+
+### Verification (bundle)
+
+- `reports/verification/2026-01-14T20-40-02/summary.md`
