@@ -136,3 +136,20 @@
 ### Next step (production)
 
 - Deploy (commit + push) then re-run Grow portal “Check Grow Connectivity”.
+
+---
+
+## 2026-01-14 - Codex (GPT-5.2) - Add Privacy Policy page for Monumetric approval
+
+**Goal:** Add a crawler-visible Privacy Policy page containing Monumetric’s required disclosure text and provide a stable link for Monumetric onboarding.
+**Status:** ✅ Complete + locally verified (all 4 gates via `ai:verify`) + ready to deploy.
+
+### Changes (minimal)
+
+- `app/privacy-policy/page.tsx`: new Privacy Policy page with Monumetric “Publisher Advertising Privacy” disclosure and link.
+- `components/footer.tsx`: add `Privacy Policy` link in the global footer (sitewide).
+- `app/sitemap.ts`: include `/privacy-policy` in sitemap.
+
+### Verification (bundle)
+
+- `reports/verification/2026-01-14T20-23-25/summary.md`

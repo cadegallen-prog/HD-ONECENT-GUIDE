@@ -108,6 +108,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/privacy-policy" className={navLinkClass}>
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
                 <span className="text-sm text-[var(--text-secondary)] leading-relaxed block">
                   Not affiliated with Home Depot
                 </span>
