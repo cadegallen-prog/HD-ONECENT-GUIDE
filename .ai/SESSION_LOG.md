@@ -114,3 +114,25 @@
 - ✅ Full QA Suite: https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/20939984364
 - ✅ Quality Checks (Fast): https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/20939984351
 - ✅ SerpApi Enrich (manual run; credits-exhausted should no-op): https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/20940157597
+
+---
+
+## 2026-01-13 - Codex (GPT-5.2) - Grow connectivity: align snippet with Grow portal canonical tag
+
+**Goal:** Reduce false-negative “Check Grow Connectivity” failures by matching the Grow portal’s canonical install snippet shape (single `script[data-grow-initializer]` that injects `https://faves.grow.me/main.js` and sets `data-grow-faves-site-id`).
+**Status:** ✅ Local change + locally verified (lint/build/unit/e2e). ⏳ Needs production deploy + Grow portal re-check.
+
+### Change (minimal)
+
+- `app/layout.tsx`: replaced the split Grow implementation (inline stub + separate external script tag) with the canonical single-tag initializer snippet provided by Grow.
+
+### Verification (local)
+
+- `npm run lint` ✅
+- `npm run build` ✅
+- `npm run test:unit` ✅ (25/25)
+- `npm run test:e2e` ✅ (100/100)
+
+### Next step (production)
+
+- Deploy (commit + push) then re-run Grow portal “Check Grow Connectivity”.

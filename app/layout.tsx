@@ -177,16 +177,9 @@ export default function RootLayout({
           data-grow-initializer=""
           dangerouslySetInnerHTML={{
             __html: `
-              window.growMe || ((window.growMe = function (e) {
-                (window.growMe._ = window.growMe._ || []).push(e);
-              }), (window.growMe._ = window.growMe._ || []));
+              !(function(){window.growMe||((window.growMe=function(e){(window.growMe._=window.growMe._||[]).push(e)}),(window.growMe._=window.growMe._||[]));var e=document.createElement("script");(e.type="text/javascript"),(e.src="https://faves.grow.me/main.js"),(e.defer=!0),e.setAttribute("data-grow-faves-site-id","U2l0ZToyOWE5MzYwOS02MjA3LTQ4NzMtOGNjOC01ZDI5MjliMWZlYzY=");var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})(); 
             `,
           }}
-        />
-        <script
-          defer
-          src="https://faves.grow.me/main.js"
-          data-grow-faves-site-id="U2l0ZToyOWE5MzYwOS02MjA3LTQ4NzMtOGNjOC01ZDI5MjliMWZlYzY="
         />
 
         {/* ===================================================
