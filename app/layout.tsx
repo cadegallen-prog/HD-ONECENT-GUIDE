@@ -29,8 +29,7 @@ const ENABLE_VERCEL_SCRIPTS =
   IS_VERCEL_PROD
 const ENABLE_VERCEL_ANALYTICS = ANALYTICS_ENABLED && ENABLE_VERCEL_SCRIPTS
 const SKIMLINKS_DISABLED =
-  process.env.SKIMLINKS_DISABLED === "1" ||
-  process.env.SKIMLINKS_DISABLED === "true"
+  process.env.SKIMLINKS_DISABLED === "1" || process.env.SKIMLINKS_DISABLED === "true"
 
 const inter = localFont({
   src: [
