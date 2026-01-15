@@ -12,6 +12,36 @@
 
 ---
 
+## 2026-01-15 - GitHub Copilot (Raptor mini (Preview)) - Autonomous automation: Dependabot, Supabase backups, Snyk schedule, Ruff + pre-commit
+
+**Goal:** Reduce CI noise and manual maintenance by adding automated dependency updates, scheduled security scans, weekly Supabase backups, and enforce Python tooling (Ruff + pre-commit). Ensure verification gating covers these changes.
+**Status:** ✅ Complete + verified (all 4 gates via `ai:verify`) + deployed on `main`.
+
+### Changes (minimal)
+
+- ` .github/dependabot.yml`: weekly auto-PRs for `npm`, `pip`, and GitHub Actions (limits: npm 5, pip 3, actions 2) assigned to `cadegallen-prog`.
+- `.github/workflows/supabase-backup.yml`: weekly Supabase DB dump (Mondays 02:00 UTC), compress, commit to `backups/`, prune older than 28 days; skips gracefully when creds absent.
+- `.github/workflows/snyk-security.yml`: changed trigger from per-push to `schedule` (daily 01:00 UTC) + `workflow_dispatch`.
+- `.ai/SENTRY_ALERTS_MANUAL.md`: documentation and steps to tune Sentry alert rules (reduce spam; manual action required).
+- `.ruff.toml`, `.pre-commit-config.yaml`: Ruff configuration and pre-commit hooks to auto-format and lint Python files.
+- `.vscode/settings.json`: set Python interpreter to `.venv` and use Ruff as the default Python formatter.
+- `scripts/setup-dev.ps1`: dev venv setup helper.
+- Minor Python script fixes: tabs→spaces, unused var rename, formatting.
+- `scripts/ai-verify.ts`: small refactor to apply `SKIMLINKS_DISABLED=1` to build and e2e gates (ensures Playwright runs clean during verification).
+
+### Verification (bundle)
+
+- `reports/verification/2026-01-15T11-11-41/summary.md`
+
+### Production checks
+
+- Dependabot: PRs scheduled weekly on Monday mornings (expect first PRs next Monday).
+- Supabase backups: `backups/` will populate with compressed SQL on Mondays; verify files appear and are pruned after 28 days.
+- Snyk: runs daily at 01:00 UTC (manual dispatch available).
+- Sentry: manual alert tuning required; guide in `.ai/SENTRY_ALERTS_MANUAL.md`.
+
+---
+
 ## 2026-01-15 - Codex (GPT-5.2) - Add Skimlinks script with ai:verify guard
 
 **Goal:** Insert the Skimlinks monetization snippet before `</body>` but disable it during verification so Playwright doesn’t surface console errors.
@@ -48,24 +78,3 @@
 ### Production checks
 
 - `https://www.pennycentral.com/ads.txt` returns `200` and includes the missing line.
-
----
-
-## 2026-01-14 - Codex (GPT-5.2) - Add Privacy Policy page for Monumetric approval
-
-**Goal:** Add a crawler-visible Privacy Policy page containing Monumetric's required disclosure text and provide a stable link for Monumetric onboarding.
-**Status:** ✅ Complete + locally verified (all 4 gates via `ai:verify`) + deployed.
-
-### Changes (minimal)
-
-- `app/privacy-policy/page.tsx`: new Privacy Policy page with Monumetric "Publisher Advertising Privacy" disclosure and link.
-- `components/footer.tsx`: add `Privacy Policy` link in the global footer (sitewide).
-- `app/sitemap.ts`: include `/privacy-policy` in sitemap.
-
-### Verification (bundle)
-
-- `reports/verification/2026-01-14T20-23-25/summary.md`
-
-### Production checks
-
-- `https://www.pennycentral.com/privacy-policy` returns `200` and includes the Monumetric disclosure.
