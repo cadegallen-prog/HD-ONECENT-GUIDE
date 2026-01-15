@@ -35,18 +35,22 @@ jobs:
         uses: snyk/actions/setup@master
 
       - name: Snyk Code test (SARIF)
+        if: env.SNYK_TOKEN != ''
         run: snyk code test --sarif-file-output=snyk-code.sarif
         continue-on-error: true
 
       - name: Upload SARIF to GitHub Code Scanning
+        if: env.SNYK_TOKEN != ''
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: snyk-code.sarif
 
       - name: Snyk Open Source monitor
+        if: env.SNYK_TOKEN != ''
         run: snyk monitor --all-projects
         continue-on-error: true
 
       - name: Snyk IaC test
+        if: env.SNYK_TOKEN != ''
         run: snyk iac test --report
         continue-on-error: true

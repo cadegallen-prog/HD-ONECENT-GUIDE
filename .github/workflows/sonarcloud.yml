@@ -45,6 +45,7 @@ jobs:
 
     steps:
       - name: Analyze with SonarCloud
+        if: ${{ secrets.SONAR_TOKEN != '' }}
 
         # You can pin the exact commit or the version.
         # uses: SonarSource/sonarcloud-github-action@v2.2.0

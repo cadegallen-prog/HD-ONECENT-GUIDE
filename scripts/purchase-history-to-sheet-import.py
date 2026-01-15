@@ -40,7 +40,6 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Iterable
 
-
 STATE_NAME_TO_CODE: dict[str, str] = {
     "ALABAMA": "AL",
     "ALASKA": "AK",

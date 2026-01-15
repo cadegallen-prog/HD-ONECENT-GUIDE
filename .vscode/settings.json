@@ -5,6 +5,19 @@
     "source.fixAll.eslint": "always"
   },
 
+  "python.defaultInterpreterPath": ".venv\\Scripts\\python.exe",
+  "python.terminal.activateEnvironment": true,
+
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit",
+      "source.fixAll": true
+    }
+  },
+  "python.analysis.typeCheckingMode": "strict",
+
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
   "typescript.tsserver.maxTsServerMemory": 4096,
 

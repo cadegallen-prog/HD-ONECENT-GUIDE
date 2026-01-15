@@ -335,9 +335,10 @@ async function main() {
 
   fs.mkdirSync(outDir, { recursive: true });
 
-  const e2eEnv = serverHealth.playwrightBaseUrl
-    ? { PLAYWRIGHT_BASE_URL: serverHealth.playwrightBaseUrl }
-    : undefined;
+  const e2eEnv: NodeJS.ProcessEnv = {
+    SKIMLINKS_DISABLED: "1",
+    ...(serverHealth.playwrightBaseUrl ? { PLAYWRIGHT_BASE_URL: serverHealth.playwrightBaseUrl } : {}),
+  };
 
   // Define gates
   const gates: Array<{ name: string; cmd: string; env?: NodeJS.ProcessEnv }> = [

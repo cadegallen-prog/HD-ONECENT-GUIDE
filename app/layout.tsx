@@ -28,6 +28,9 @@ const ENABLE_VERCEL_SCRIPTS =
   IS_VERCEL &&
   IS_VERCEL_PROD
 const ENABLE_VERCEL_ANALYTICS = ANALYTICS_ENABLED && ENABLE_VERCEL_SCRIPTS
+const SKIMLINKS_DISABLED =
+  process.env.SKIMLINKS_DISABLED === "1" ||
+  process.env.SKIMLINKS_DISABLED === "true"
 
 const inter = localFont({
   src: [
@@ -177,7 +180,7 @@ export default function RootLayout({
           data-grow-initializer=""
           dangerouslySetInnerHTML={{
             __html: `
-              !(function(){window.growMe||((window.growMe=function(e){(window.growMe._=window.growMe._||[]).push(e)}),(window.growMe._=window.growMe._||[]));var e=document.createElement("script");(e.type="text/javascript"),(e.src="https://faves.grow.me/main.js"),(e.defer=!0),e.setAttribute("data-grow-faves-site-id","U2l0ZToyOWE5MzYwOS02MjA3LTQ4NzMtOGNjOC01ZDI5MjliMWZlYzY=");var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})(); 
+              !(function(){window.growMe||((window.growMe=function(e){(window.growMe._=window.growMe._||[]).push(e)}),(window.growMe._=window.growMe._||[]));var e=document.createElement("script");(e.type="text/javascript"),(e.src="https://faves.grow.me/main.js"),(e.defer=!0),e.setAttribute("data-grow-faves-site-id","U2l0ZToyOWE5MzYwOS02MjA3LTQ4NzMtOGNjOC01ZDI5MjliMWZlYzY=");var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})();
             `,
           }}
         />
@@ -362,6 +365,12 @@ export default function RootLayout({
         {/* Vercel scripts should only run on Vercel (and never during Playwright/CI). */}
         {ENABLE_VERCEL_ANALYTICS && <Analytics />}
         {ENABLE_VERCEL_ANALYTICS && <SpeedInsights />}
+        {!SKIMLINKS_DISABLED && (
+          <script
+            type="text/javascript"
+            src="https://s.skimresources.com/js/297422X1784909.skimlinks.js"
+          />
+        )}
       </body>
     </html>
   )

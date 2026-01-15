@@ -89,6 +89,20 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install Ruff
+        run: pip install ruff==0.7.4
+
+      - name: Ruff format check
+        run: ruff format --check .
+
+      - name: Ruff lint
+        run: ruff check .
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 

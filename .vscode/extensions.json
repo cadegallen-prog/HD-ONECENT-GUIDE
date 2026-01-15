@@ -5,7 +5,8 @@
     "bradlc.vscode-tailwindcss",
     "ms-playwright.playwright",
     "ms-python.python",
-    "ms-python.black-formatter",
-    "ms-python.pylint"
+    "ms-python.pylint",
+    "ms-python.vscode-pylance",
+    "charliermarsh.ruff"
   ]
 }

@@ -1,0 +1,16 @@
+line-length = 88
+target-version = "py311"
+
+[lint]
+select = ["E", "F", "W", "I", "B"]
+extend-ignore = ["E203", "E501"]
+
+[format]
+quote-style = "double"
+line-ending = "auto"
+
+[lint.isort]
+known-first-party = ["app", "lib", "scripts", "tests"]
+
+[lint.per-file-ignores]
+"__init__.py" = ["F401", "F403"]

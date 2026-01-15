@@ -19,11 +19,11 @@ Dedupe rules
 - Current sheet export: left as-is (cannot reliably dedupe per-person without an identifier)
 
 Usage:
-	python scripts/build-consolidated-import.py \
-	  --current-sheet ./.local/current-sheet.csv \
-	  --purchase-sheet ./.local/purchase-history-sheet-import.csv \
-	  --internet-sku-map ./.local/purchase-history-internet-sku-map.json \
-	  --out ./.local/consolidated-import.csv
+    python scripts/build-consolidated-import.py \
+      --current-sheet ./.local/current-sheet.csv \
+      --purchase-sheet ./.local/purchase-history-sheet-import.csv \
+      --internet-sku-map ./.local/purchase-history-internet-sku-map.json \
+      --out ./.local/consolidated-import.csv
 """
 
 from __future__ import annotations
@@ -35,7 +35,6 @@ import re
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
-
 
 FINAL_HEADERS: list[str] = [
     "Timestamp",
@@ -175,7 +174,8 @@ def build_rows_from_purchase_sheet(
                 "IMAGE URL": "",
                 # Force notes empty for purchase history items (removes "Imported from..." text)
                 "Notes (Optional)": "",
-                "INTERNET SKU": get_first(r, "INTERNET SKU").strip() or internet_sku_map.get(sku, ""),
+                "INTERNET SKU": get_first(r, "INTERNET SKU").strip()
+                or internet_sku_map.get(sku, ""),
             }
         )
 
