@@ -13,6 +13,10 @@ updates:
       - "cadegallen-prog"
     pull-request-branch-name:
       separator: "/"
+    # Auto-merge patches and minor updates if tests pass
+    auto-merge:
+      enabled: true
+      squash: true
 
   # Monitor pip dependencies (Python)
   - package-ecosystem: "pip"
@@ -27,6 +31,10 @@ updates:
       - "cadegallen-prog"
     pull-request-branch-name:
       separator: "/"
+    # Auto-merge patches and minor updates if tests pass
+    auto-merge:
+      enabled: true
+      squash: true
 
   # Monitor GitHub Actions versions
   - package-ecosystem: "github-actions"

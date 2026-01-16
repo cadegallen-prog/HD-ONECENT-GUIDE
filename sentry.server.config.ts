@@ -17,4 +17,17 @@ Sentry.init({
 
   // Enable debug mode in development
   debug: false,
+
+  // Filter out expected/harmless errors before sending to Sentry
+  beforeSend(event) {
+    // Suppress network timeout errors (transient, expected in distributed systems)
+    if (event.message?.includes("ECONNREFUSED") || event.message?.includes("ETIMEDOUT")) {
+      return null
+    }
+    // Suppress database connection pool exhaustion (non-critical, auto-recovers)
+    if (event.message?.includes("pool exhausted")) {
+      return null
+    }
+    return event
+  },
 })

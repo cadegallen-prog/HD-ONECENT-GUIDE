@@ -1,0 +1,6 @@
+# Snyk configuration file
+# This enables automatic fixing of vulnerabilities
+
+version: v1.25.0
+# Snyk will auto-generate fix PRs when vulnerabilities are detected
+# Configure this via: https://app.snyk.io/org/YOUR-ORG/settings/integrations/github

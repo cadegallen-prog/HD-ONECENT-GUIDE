@@ -1,0 +1,36 @@
+name: Auto-Merge Dependabot PRs (Patch/Minor)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  auto-merge-safe:
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check if patch or minor update
+        id: check-version
+        run: |
+          # Extract PR title to determine if it's a patch/minor update
+          # Example: "Bump @package/name from 1.0.0 to 1.1.0"
+          PR_TITLE="${{ github.event.pull_request.title }}"
+
+          if [[ $PR_TITLE =~ \(patch\) ]] || [[ $PR_TITLE =~ \(minor\) ]]; then
+            echo "is_safe=true" >> $GITHUB_OUTPUT
+          else
+            echo "is_safe=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Enable auto-merge
+        if: steps.check-version.outputs.is_safe == 'true'
+        run: |
+          gh pr merge --auto --squash "${{ github.event.pull_request.number }}"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        continue-on-error: true

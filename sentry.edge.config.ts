@@ -17,4 +17,13 @@ Sentry.init({
 
   // Enable debug mode in development
   debug: false,
+
+  // Filter out expected/harmless errors before sending to Sentry
+  beforeSend(event) {
+    // Suppress network timeout errors (transient, expected in edge networks)
+    if (event.message?.includes("ECONNREFUSED") || event.message?.includes("ETIMEDOUT")) {
+      return null
+    }
+    return event
+  },
 })
