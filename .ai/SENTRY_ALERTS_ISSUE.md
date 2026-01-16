@@ -6,6 +6,7 @@
 Sentry is sending hourly emails because the alert rules are too broad (e.g., "any error → notify immediately"). We already implemented code-side filtering (production-only, 10% sample, SKIMLINKS_DISABLED guard during verification), but the alert rules in Sentry still need tuning.
 
 **What to do (manual steps)**
+
 1. Open Sentry: https://sentry.io/organizations/pennycentral/alerts/
 2. Under "Alerts" -> "Rules", locate existing project rules that notify by email/SMS/Slack.
 3. For noisy rules, restrict to:
@@ -18,13 +19,16 @@ Sentry is sending hourly emails because the alert rules are too broad (e.g., "an
 5. Save, test by triggering a known non-critical event, and ensure it does not create an immediate notification.
 
 **References**
+
 - `.ai/SENTRY_ALERTS_MANUAL.md` (step-by-step guide in repo)
 - Verification: `reports/verification/2026-01-15T11-11-41/summary.md`
 
 **Assignee**
+
 - @cadegallen-prog (please confirm and perform)
 
 **Notes**
+
 - This is a manual configuration change in Sentry UI. No code changes are required.
 - Once complete, mark this file as `DONE` or delete it; alternatively create a GitHub Issue referencing this file.
 

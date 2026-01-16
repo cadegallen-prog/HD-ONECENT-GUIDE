@@ -21,6 +21,7 @@
 ---
 
 ## 2026-01-15 - Codex (GPT-5.2) - Add Skimlinks script with ai:verify guard
+
 ---
 
 ## 2026-01-15 - GitHub Copilot (Raptor mini (Preview)) - Autonomous automation: Dependabot, Supabase backups, Snyk schedule, Ruff + pre-commit
@@ -69,7 +70,8 @@
 
 ### Production checks
 
-  - `https://www.pennycentral.com/` now serves the Skimlinks snippet because the guard only disabled it during verification (now removed).
+- `https://www.pennycentral.com/` now serves the Skimlinks snippet because the guard only disabled it during verification (now removed).
+
 ---
 
 ## 2026-01-14 - Codex (GPT-5.2) - Fix Monumetric ads.txt missing line
