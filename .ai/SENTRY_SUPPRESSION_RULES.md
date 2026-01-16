@@ -7,11 +7,13 @@ This file documents which errors are intentionally suppressed in code to prevent
 ## Code-Side Filters (Already in Sentry Config)
 
 ✅ **Production-only reporting**
+
 - `instrumentation-client.ts`: Only reports from `pennycentral.com` domain
 - `sentry.server.config.ts`: Only reports when `NODE_ENV === "production"` AND `VERCEL_ENV === "production"`
 - `sentry.edge.config.ts`: Same production-only filter
 
 ✅ **Sample rate: 10%**
+
 - `tracesSampleRate: 0.1` in both configs keeps transaction volume manageable
 
 ## Recommended Alert Rule Tuning (Manual in Sentry UI)
@@ -30,6 +32,7 @@ Go to: https://sentry.io/organizations/pennycentral/alerts/
 ### 2. Alert Rule: Critical Errors Only
 
 **Conditions:**
+
 - Error rate >= 5% in 10 minutes AND
 - Error level = "error" (not "warning")
 - Exclude: geolocation, network, CORS, 404
@@ -39,6 +42,7 @@ Go to: https://sentry.io/organizations/pennycentral/alerts/
 ### 3. Notification Frequency
 
 Change from "Every error" to:
+
 - [ ] Daily digest summary, OR
 - [ ] Notify only on consecutive occurrences (escalation policy)
 
@@ -46,9 +50,9 @@ Change from "Every error" to:
 
 When tuning alerts, document here why you suppressed each one:
 
-| Error Type | Reason Suppressed | Date |
-|---|---|---|
-| (example) | (reason) | (date) |
+| Error Type | Reason Suppressed | Date   |
+| ---------- | ----------------- | ------ |
+| (example)  | (reason)          | (date) |
 
 ---
 
