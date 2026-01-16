@@ -1,5 +1,34 @@
 ---
 
+## 2026-01-15 - GitHub Copilot (Raptor mini (Preview)) - Autonomous automation: Dependabot, Supabase backups, Snyk schedule, Ruff + pre-commit
+
+**Goal:** Reduce CI noise and manual maintenance by adding automated dependency updates, scheduled security scans, weekly Supabase backups, and enforce Python tooling (Ruff + pre-commit). Ensure verification gating covers these changes.
+**Status:** ✅ Complete + verified (all 4 gates via `ai:verify`) + deployed on `main`.
+
+### Changes (minimal)
+
+- ` .github/dependabot.yml`: weekly auto-PRs for `npm`, `pip`, and GitHub Actions (limits: npm 5, pip 3, actions 2) assigned to `cadegallen-prog`.
+- `.github/workflows/supabase-backup.yml`: weekly Supabase DB dump (Mondays 02:00 UTC), compress, commit to `backups/`, prune older than 28 days; skips gracefully when creds absent.
+- `.github/workflows/snyk-security.yml`: changed trigger from per-push to `schedule` (daily 01:00 UTC) + `workflow_dispatch`.
+- `.ai/SENTRY_ALERTS_MANUAL.md`: documentation and steps to tune Sentry alert rules (reduce spam; manual action required).
+- `.ruff.toml`, `.pre-commit-config.yaml`: Ruff configuration and pre-commit hooks to auto-format and lint Python files.
+- `.vscode/settings.json`: set Python interpreter to `.venv` and use Ruff as the default Python formatter.
+- `scripts/setup-dev.ps1`: dev venv setup helper.
+- Minor Python script fixes: tabs→spaces, unused var rename, formatting.
+- `scripts/ai-verify.ts`: small refactor to apply `SKIMLINKS_DISABLED=1` to build and e2e gates (ensures Playwright runs clean during verification).
+
+### Verification (bundle)
+
+- `reports/verification/2026-01-15T11-11-41/summary.md`
+
+### Production checks
+
+- Dependabot: PRs scheduled weekly on Monday mornings (expect first PRs next Monday).
+- Snyk: scans scheduled daily at 01:00 UTC.
+- Supabase backups: weekly on Mondays at 02:00 UTC.
+
+---
+
 ## 2026-01-16 - Codex (GPT-5.2) - Remove Skimlinks + Raptive integrations
 
 **Goal:** Remove the Skimlinks script (and any gating logic) plus any Raptive references now that both partners declined; keep Grow + Monumetric untouched.
@@ -20,7 +49,22 @@
 
 ---
 
-## 2026-01-15 - Codex (GPT-5.2) - Add Skimlinks script with ai:verify guard
+## 2026-01-16 - GitHub Copilot - Clean up Skimlinks env vars from CI workflow
+
+**Goal:** Remove unnecessary SKIMLINKS_DISABLED env vars from .github/workflows/full-qa.yml since Skimlinks script is fully removed.
+
+**Status:** ✅ Done + verified (all 4 gates passed).
+
+### Changes
+
+- `.github/workflows/full-qa.yml`: Removed SKIMLINKS_DISABLED="1" from qa:fast, server start, and e2e test steps.
+
+### Verification
+
+- Lint: 0 errors
+- Build: successful
+- Unit tests: 25 passed
+- E2e tests: 100 passed
 
 ---
 
@@ -90,3 +134,24 @@
 ### Production checks
 
 - `https://www.pennycentral.com/ads.txt` returns `200` and includes the missing line.
+
+---
+
+## 2026-01-16 - GitHub Copilot - Clean up Skimlinks env vars from CI workflow
+
+**Goal:** Remove unnecessary SKIMLINKS_DISABLED env vars from .github/workflows/full-qa.yml since Skimlinks script is fully removed.
+
+**Status:** ✅ Done + verified (all 4 gates passed).
+
+### Changes
+
+- `.github/workflows/full-qa.yml`: Removed SKIMLINKS_DISABLED="1" from qa:fast, server start, and e2e test steps.
+
+### Verification
+
+- Lint: 0 errors
+- Build: successful
+- Unit tests: 25 passed
+- E2e tests: 100 passed
+
+---

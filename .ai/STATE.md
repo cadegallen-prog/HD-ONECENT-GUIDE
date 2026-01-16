@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Jan 15, 2026 (Automation & verification deployed)
+**Last updated:** Jan 16, 2026 (Skimlinks cleanup)
 
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
@@ -10,6 +10,8 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **Skimlinks env vars cleaned up (Jan 16):** Removed SKIMLINKS_DISABLED env vars from CI workflow since Skimlinks script is fully removed. Verified with all 4 gates passing.
 
 - **Penny List freshness + missing items fixed (Jan 13):** Public updates now target ~5 minutes (`/api/penny-list` CDN caching `s-maxage=300` + `/penny-list` `revalidate=300`), submitter flow can bypass once via `?fresh=1` (no-store) without global polling, and the enrichment overlay no longer hides SKUs that lack `penny_item_enrichment` rows (root cause of “some items missing”). Proof: `reports/verification/2026-01-13T08-16-40/summary.md` and `reports/proof/2026-01-13T08-22-19/console-errors.txt`.
 - **Full QA Suite stabilized (Jan 13):** Fixed CI E2E hydration crash when `NEXT_PUBLIC_SUPABASE_*` is missing by making `AuthProvider` skip Supabase initialization when not configured. Ensured `/sku/[sku]` pages exist in Full QA builds by setting `USE_FIXTURE_FALLBACK=1` during the build step (CI has no Supabase creds). Reduced Sentry email noise by suppressing reporting on localhost and Vercel previews.
