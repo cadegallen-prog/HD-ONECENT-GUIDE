@@ -1,5 +1,28 @@
 ---
 
+## 2026-01-16 - GitHub Copilot CLI - Report-find rate-limit loosened for batch submissions
+
+**Goal:** Review and loosen rate-limiting on report-find submissions to allow users to submit batches of receipts without hitting limits.
+**Status:** ✅ Complete + verified (all 4 gates via `qa:fast` + `test:e2e`).
+
+### Changes
+
+- `app/api/submit-find/route.ts`: Increased `RATE_LIMIT_MAX` from **5 to 30 submissions per hour**, with updated comment explaining the batch use case. Window remains **1 hour** (no change).
+
+### Why This Works
+
+- **Before:** 5/hour meant a user entering 6 receipts would hit 429 after just 5 submissions (too restrictive).
+- **After:** 30/hour allows comfortable batch submission (user can enter a full stack of receipts in one sitting without interruption).
+- **Still protective:** 30/hour is still less than 1 submission per 2 minutes on average, preventing spam while enabling legitimate power-users.
+- **Per-IP tracking:** Rate limit key uses IP address (falling back to user-agent if IP unavailable), so genuine users won't collide.
+
+### Verification
+
+✅ `npm run qa:fast` (lint 0 errors, unit tests 25/25 passing, build successful)
+✅ `npm run test:e2e` (100/100 tests passing across desktop/mobile × light/dark)
+
+---
+
 ## 2026-01-16 - GitHub Copilot CLI - Comprehensive automation + alert noise reduction
 
 **Goal:** Fix all security/automation/alert issues: Dependabot auto-merge, Snyk auto-fix, Sentry filtering, SonarCloud tuning, 300+ CI/Quality failures.

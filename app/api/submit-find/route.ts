@@ -4,7 +4,7 @@ import { validateSku } from "@/lib/sku"
 import { getSupabaseClient, getSupabaseServiceRoleClient } from "@/lib/supabase/client"
 
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000 // 1 hour
-const RATE_LIMIT_MAX = 5
+const RATE_LIMIT_MAX = 30 // Allows batch submissions (e.g., stack of receipts)
 
 type RateBucket = number[]
 const rateLimitMap: Map<string, RateBucket> =
