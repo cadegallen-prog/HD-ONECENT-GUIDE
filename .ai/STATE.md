@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Jan 16, 2026 (Skimlinks cleanup)
+**Last updated:** Jan 16, 2026 (Comprehensive automation + alert noise reduction)
 
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
