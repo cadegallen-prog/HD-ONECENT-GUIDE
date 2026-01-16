@@ -335,17 +335,16 @@ async function main() {
 
   fs.mkdirSync(outDir, { recursive: true });
 
-  const testEnv: NodeJS.ProcessEnv = {
-    SKIMLINKS_DISABLED: "1",
-    ...(serverHealth.playwrightBaseUrl ? { PLAYWRIGHT_BASE_URL: serverHealth.playwrightBaseUrl } : {}),
-  };
+  const e2eEnv = serverHealth.playwrightBaseUrl
+    ? { PLAYWRIGHT_BASE_URL: serverHealth.playwrightBaseUrl }
+    : undefined;
 
   // Define gates
   const gates: Array<{ name: string; cmd: string; env?: NodeJS.ProcessEnv }> = [
     { name: 'lint', cmd: 'npm run lint' },
-    { name: 'build', cmd: 'npm run build', env: testEnv },
+    { name: 'build', cmd: 'npm run build' },
     { name: 'unit', cmd: 'npm run test:unit' },
-    { name: 'e2e', cmd: 'npm run test:e2e', env: testEnv },
+    { name: 'e2e', cmd: 'npm run test:e2e', env: e2eEnv },
   ];
 
   // Run all gates

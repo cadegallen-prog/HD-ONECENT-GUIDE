@@ -28,9 +28,6 @@ const ENABLE_VERCEL_SCRIPTS =
   IS_VERCEL &&
   IS_VERCEL_PROD
 const ENABLE_VERCEL_ANALYTICS = ANALYTICS_ENABLED && ENABLE_VERCEL_SCRIPTS
-const SKIMLINKS_DISABLED =
-  process.env.SKIMLINKS_DISABLED === "1" || process.env.SKIMLINKS_DISABLED === "true"
-
 const inter = localFont({
   src: [
     {
@@ -364,12 +361,6 @@ export default function RootLayout({
         {/* Vercel scripts should only run on Vercel (and never during Playwright/CI). */}
         {ENABLE_VERCEL_ANALYTICS && <Analytics />}
         {ENABLE_VERCEL_ANALYTICS && <SpeedInsights />}
-        {!SKIMLINKS_DISABLED && (
-          <script
-            type="text/javascript"
-            src="https://s.skimresources.com/js/297422X1784909.skimlinks.js"
-          />
-        )}
       </body>
     </html>
   )
