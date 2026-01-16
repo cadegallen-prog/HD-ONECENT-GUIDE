@@ -187,7 +187,7 @@ def aggregate_rows(row_list: list[dict]) -> list[dict]:
 
     # finalize
     result = []
-    for sku, entry in grouped.items():
+    for _sku, entry in grouped.items():
         entry["locations"] = dict(entry["locations"])
         result.append(entry)
     return result
