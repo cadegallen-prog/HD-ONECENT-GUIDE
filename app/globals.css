@@ -424,7 +424,7 @@
   /* ===============================================
      UNIFIED TYPOGRAPHY SCALE
      See: docs/DESIGN_TYPOGRAPHY.md for full spec
-     
+
      Scale: H1 > H2 > H3 > H4 > Lead > Body > Small > Caption
      Font weights: Never below 400 (Regular) for readability
      Line heights: Increased for dark mode comfort (1.7 base)
@@ -506,13 +506,13 @@
 
   /* ===============================================
      UNIFIED MICRO-INTERACTION SYSTEM
-     
+
      Motion tokens used throughout:
      - --duration-fast: 150ms (buttons, hovers)
      - --duration-normal: 200ms (cards, menus)
      - --duration-slow: 300ms (page transitions)
      - --ease-default: cubic-bezier(0.16, 1, 0.3, 1)
-     
+
      Respects prefers-reduced-motion for accessibility.
      =============================================== */
 
@@ -536,7 +536,7 @@
 
   /* ===============================================
      BUTTON INTERACTION PATTERNS
-     
+
      Unified lift + shadow system:
      - Hover: -2px lift + enhanced shadow
      - Active: +1px press + reduced shadow
@@ -612,7 +612,7 @@
 
   /* ===============================================
      CARD & TILE INTERACTIONS
-     
+
      Unified system: subtle shadow + optional lift
      Cards do NOT scale - only shadow changes
      =============================================== */
@@ -761,6 +761,33 @@
 
   @media (prefers-reduced-motion: reduce) {
     .animate-fade-in {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* ===============================================
+     SLIDE-UP ANIMATION
+     For PWA install prompt and bottom sheets
+     =============================================== */
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-slide-up {
+    animation: slide-up var(--duration-normal) var(--ease-default) forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-slide-up {
       animation: none;
       opacity: 1;
       transform: none;

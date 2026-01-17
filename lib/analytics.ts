@@ -42,6 +42,18 @@ export type EventName =
   // In-store mode events
   | "in_store_mode_enabled"
   | "in_store_mode_disabled"
+  // Email signup events
+  | "email_signup_shown"
+  | "email_signup_dismissed"
+  | "email_signup"
+  | "email_signup_error"
+  // PWA install events
+  | "pwa_prompt_shown"
+  | "pwa_prompt_dismissed"
+  | "pwa_install_started"
+  | "pwa_install_accepted"
+  | "pwa_install_declined"
+  | "pwa_install_error"
   // Legacy/compat events (keep until removed from UI)
   | "newsletter_click"
   | "store_search"

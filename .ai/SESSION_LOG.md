@@ -1,5 +1,47 @@
 ---
 
+## 2026-01-16 - Claude Code - PWA Install Prompt (P0-4a)
+
+**Goal:** Implement "Add to Home Screen" prompt on `/penny-list` to improve Day 7 retention (currently ~0%).
+**Status:** ✅ Complete + verified (all 4 gates: lint/build/unit/e2e).
+
+### Changes
+
+- `public/icon-192.png`, `public/icon-512.png`: Generated PWA app icons from `icon.svg` using Playwright screenshot rendering (192x192 and 512x512 PNGs)
+- `scripts/generate-pwa-icons.ts`: Icon generation script using Playwright to render SVG at required sizes
+- `public/site.webmanifest`: Updated manifest with PNG icons, renamed to "Penny Central", set `start_url` to `/penny-list`, updated theme color to `#15803d` (forest green)
+- `components/pwa-install-prompt.tsx`: New PWA install prompt component with:
+  - `beforeinstallprompt` event handling
+  - Scroll trigger (200px) or 20s timer
+  - localStorage persistence for dismiss state
+  - GA4 event tracking (pwa_prompt_shown, pwa_install_started, pwa_prompt_dismissed)
+  - iOS/Android installation detection
+  - Accessibility-compliant UI (ARIA labels, keyboard navigation)
+- `components/penny-list-client.tsx`: Wired PWA prompt component into penny list page
+- `app/globals.css`: Added `@keyframes slide-up` animation with reduced-motion support
+
+### Why This Works
+
+- **Before:** Users visit once, never return. No mechanism to bring them back to home screen. Day 7 retention ~0%.
+- **After:** Users can install the app to home screen, creating a persistent visual reminder. Prompt appears organically (after engagement) and doesn't interrupt first-time visitors.
+- **Analytics:** All interactions tracked in GA4 for measuring adoption rate and A/B testing trigger timing.
+- **Cross-platform:** Works on both iOS (Safari "Add to Home Screen") and Android (Chrome install prompt).
+
+### Verification
+
+✅ `npm run lint` (0 errors, 0 warnings)
+✅ `npm run build` (successful production build, 42 routes)
+✅ `npm run test:unit` (25/25 tests passing)
+✅ `npm run test:e2e` (100/100 tests passing across desktop/mobile × light/dark)
+
+### Next Steps
+
+- **P0-4b:** Email signup form (capture users who want updates)
+- **P0-4c:** Weekly email cron (deliver on the promise)
+- **P0-3:** SEO schema markup (reduce Facebook dependency)
+
+---
+
 ## 2026-01-16 - GitHub Copilot CLI - Report-find rate-limit loosened for batch submissions
 
 **Goal:** Review and loosen rate-limiting on report-find submissions to allow users to submit batches of receipts without hitting limits.

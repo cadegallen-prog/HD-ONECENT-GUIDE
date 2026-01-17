@@ -1,17 +1,29 @@
 {
-  "name": "Home Depot Penny Items Guide",
-  "short_name": "Penny Guide",
-  "description": "Comprehensive guide to finding Home Depot penny items and mastering clearance hunting",
-  "start_url": "/",
+  "name": "Penny Central",
+  "short_name": "Penny Central",
+  "description": "Live Home Depot penny list - community-reported $0.01 finds, updated within 5 minutes",
+  "start_url": "/penny-list",
   "display": "standalone",
   "background_color": "#FFFFFF",
-  "theme_color": "#1D4ED8",
+  "theme_color": "#15803d",
   "orientation": "portrait-primary",
   "scope": "/",
-  "categories": ["shopping", "education", "lifestyle"],
+  "categories": ["shopping", "lifestyle"],
   "lang": "en-US",
   "dir": "ltr",
   "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "/icon.svg",
       "sizes": "any",

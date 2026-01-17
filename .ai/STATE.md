@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Jan 16, 2026 (Comprehensive automation + alert noise reduction)
+**Last updated:** Jan 16, 2026 (PWA install prompt + P0-4a complete)
 
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
@@ -10,6 +10,8 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **PWA Install Prompt (Jan 16):** Implemented "Add to Home Screen" prompt on `/penny-list` to improve Day 7 retention (currently ~0%). Created app icons (192px, 512px) from existing SVG using Playwright, updated `site.webmanifest` with proper PWA metadata (name: "Penny Central", start_url: "/penny-list"), added dismissible prompt component with localStorage persistence and GA4 tracking (pwa_prompt_shown, pwa_install_started, pwa_prompt_dismissed), and wired into penny-list-client. Prompt appears after scroll (200px) or 20s delay, respects prefers-reduced-motion, and detects existing installations. All 4 gates passing (lint/build/unit/e2e).
 
 - **Skimlinks env vars cleaned up (Jan 16):** Removed SKIMLINKS_DISABLED env vars from CI workflow since Skimlinks script is fully removed. Verified with all 4 gates passing.
 

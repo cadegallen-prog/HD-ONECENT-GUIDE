@@ -32,6 +32,8 @@ import type { PennyItem } from "@/lib/fetch-penny-data"
 import { US_STATES } from "@/lib/us-states"
 import { formatWindowLabel } from "@/lib/penny-list-utils"
 import { PennyListPageBookmarkBanner } from "./penny-list-page-bookmark-banner"
+import { PWAInstallPrompt } from "./pwa-install-prompt"
+import { EmailSignupForm } from "./email-signup-form"
 
 interface PennyListClientProps {
   initialItems: PennyItem[]
@@ -842,6 +844,8 @@ export function PennyListClient({
       )}
 
       <PennyListPageBookmarkBanner />
+      <EmailSignupForm />
+      <PWAInstallPrompt />
 
       {/* Disclaimer Card */}
       <div

@@ -1,6 +1,6 @@
 # Backlog (Top Priority Items)
 
-**Last updated:** Jan 06, 2026
+**Last updated:** Jan 16, 2026
 **Rule:** Keep ≤10 items. Archive completed/deferred items.
 
 **Auto-archive:** Full backlog history preserved in `archive/backlog-history/`
@@ -14,49 +14,75 @@ Each AI session should:
 
 ---
 
-## P0 - Do Next
+## P0 - Do Next (Analytics-Driven Growth)
 
-### 1. Restore + standardize the "PennyCentral export" artifact
+### 1. User Retention - Email Signup (P0-4b)
 
-- **Problem:** The `pennycentral_export_*.json` is missing, so we can't methodically diff/merge scraped metadata against current data
+- **Problem:** No way to capture users who want updates. Organic growth without return visits is wasted.
 - **Done means:**
-  - Define canonical schema (storeSku, internetNumber, name, brand, imageUrl, productUrl, upc, timestamps)
-  - Implement `scripts/export-pennycentral-json.ts` that generates export from Supabase
-  - Default output to `.local/` (never committed)
-  - `npm run export:pennycentral` writes `.local/pennycentral_export_YYYY-MM-DD.json` + `.local/pennycentral_export_YYYY-MM-DD.summary.md`
-- **Verify:** All 4 gates (lint/build/unit/e2e)
+  - Email signup form on `/penny-list`
+  - `email_subscribers` table in Supabase
+  - `POST /api/subscribe` endpoint working
+  - `GET /api/unsubscribe` endpoint working
+  - Form is dismissible and tracks GA4 `email_signup` event
+- **Verify:** All 4 gates + manual test (signup works)
+- **Evidence:** 3,262 bookmark_banner_shown events but no capture mechanism
 
-### 2. Validate + normalize the scrape JSON (make ingestion safe)
+### 2. User Retention - Weekly Email Cron (P0-4c)
 
+- **Problem:** Email signups without delivery = broken promise to users
+- **Prerequisites:** Owner must set up Resend.com account first
 - **Done means:**
-  - Implement `scripts/validate-scrape-json.ts` that validates and normalizes SKU formats
-  - Emits deterministic summary (counts, missing fields, SKU-length histogram, % with images)
-  - Writes cleaned output to `.local/penny_scrape_clean_YYYY-MM-DD.json`
-  - `npm run scrape:validate -- --in <path>` prints summary + writes cleaned output
-- **Verify:** Gates + include sample output in SESSION_LOG.md
+  - GitHub Action runs every Sunday 8 AM UTC
+  - Email template renders correctly
+  - Cron queries Supabase for new items (last 7 days)
+  - Sends via Resend to all active subscribers
+  - Unsubscribe link works in email
+- **Verify:** All 4 gates + manual test email
+- **Blocked by:** Resend.com account setup
 
-### 3. Convert scrape-clean output to enrichment upload CSV (fill-blanks-only)
+### 3. SEO Improvement - Schema Markup + Internal Linking (P0-3)
 
-- **Policy:** Fill blanks only; never overwrite non-empty enrichment fields unless `--force`
+- **Problem:** Zero non-branded organic clicks. Position 11.6 for "home depot penny list". 100% dependent on Facebook.
 - **Done means:**
-  - Implement `scripts/scrape-to-enrichment-csv.ts` producing `.local/enrichment-upload.csv`
-  - Deterministic ordering + stable headers for clean diffs
-  - `npm run enrich:from-scrape -- --in <clean.json> --out .local/enrichment-upload.csv`
-- **Verify:** Gates + show row counts + top "missing field" stats
-
-### 4. Create diff report (scrape vs export) to review before uploading
-
-- **Done means:**
-  - Implement `scripts/enrichment-diff.ts` comparing scrape-clean to PennyCentral export
-  - Output markdown report to `.local/` (new SKUs, mismatches, missing images, suspicious UPC mismatches)
-  - `npm run enrich:diff -- --scrape <clean.json> --export <export.json>` writes `.local/enrichment-diff.md`
-- **Verify:** Gates + paste diff summary snippet into SESSION_LOG.md
+  - FAQ schema added to `/guide`
+  - HowTo schema added to `/guide`
+  - Both schemas validate in Google Rich Results Test
+  - Internal links strengthened (guide ↔ penny-list ↔ homepage)
+  - H1s verified to match target keywords
+  - Meta descriptions updated
+- **Verify:** All 4 gates + schema validation
+- **Evidence:** Search Console shows 80 clicks, all branded ("penny central"). Zero clicks for "home depot penny list" despite 6 impressions.
+- **Timeline:** 2-3 weeks for Google to respond after deployment
 
 ---
 
 ## ✅ Recently Completed
 
+- **2026-01-16:** P0-4a (PWA Install Prompt) - Implemented "Add to Home Screen" prompt on `/penny-list` with app icons (192px, 512px), PWA manifest, dismissible UI, localStorage persistence, and GA4 tracking. All 4 gates passing.
+- **2026-01-16:** P0-1 (bounce page redirects) - Redirected `/home-depot-penny-items`, `/how-to-find-penny-items`, and `/home-depot-penny-list` to appropriate pages. Bounce rates improved from 100% to 21-29%.
+- **2026-01-10:** Data pipeline scripts completed:
+  - `scripts/export-pennycentral-json.ts` - PennyCentral export artifact
+  - `scripts/validate-scrape-json.ts` - Scrape JSON validation/normalization
+  - `scripts/scrape-to-enrichment-csv.ts` - Scrape to enrichment CSV conversion
+  - `scripts/enrichment-diff.ts` - Diff report (scrape vs export)
 - **2026-01-06:** Implemented `scripts/print-penny-list-count.ts` and added `npm run penny:count`.
+
+---
+
+## Analytics Context (Jan 12-16, 2026)
+
+**Source:** Fresh GA4 + Search Console data (see plan file for full details)
+
+| Metric | Value | Insight |
+|--------|-------|---------|
+| Daily users | 680 | Up 3.5x from 196/day (Jan 9-11) |
+| Conversion rate | 26% | 906 HD clicks / 3,451 users |
+| Facebook traffic | 28% | #1 referral channel |
+| Organic clicks | 80 | All branded ("penny central") |
+| SEO position | 11.6 | Page 2 for target keywords |
+
+**Key insight:** Traffic growing, core product works, but retention and SEO are critical gaps.
 
 ---
 
