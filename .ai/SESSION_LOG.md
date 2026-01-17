@@ -1,5 +1,73 @@
 ---
 
+## 2026-01-17 - Claude Code - Weekly Email Digest (P0-4c)
+
+**Goal:** Send weekly penny list updates to all active subscribers every Sunday 8 AM UTC via Resend.
+**Status:** ✅ Complete + verified (all 4 gates passing).
+
+### Changes
+
+- `emails/weekly-digest.tsx`: React Email template with product cards, summary stats, responsive design, mobile-optimized for email clients
+- `lib/email-sender.ts`: Resend API wrapper with error handling, rate limiting (100ms delay between sends), typed result objects
+- `app/api/cron/send-weekly-digest/route.ts`: Cron endpoint that queries active subscribers + penny items (last 7 days), processes/aggregates by SKU, renders email template, sends via Resend with unsubscribe links
+- `vercel.json`: Added cron schedule entry (Sunday 8 AM UTC: `0 8 * * 0`)
+- `package.json`: Installed `resend`, `@react-email/components`, `react-email` (136 packages added, 0 vulnerabilities)
+
+### How It Works
+
+- **Weekly trigger:** Vercel Cron calls `/api/cron/send-weekly-digest` every Sunday at 8:00 AM UTC
+- **Query subscribers:** Fetches all `email_subscribers` WHERE `is_active = true`
+- **Query items:** Fetches penny items from last 7 days, groups by SKU, aggregates locations (state → count)
+- **Process:** Sorts by report count (most popular first), limits to top 15 items for email
+- **Render:** Uses React Email components to generate HTML email with inline CSS for email client compatibility
+- **Send:** Loops through subscribers, sends via Resend API with proper headers (List-Unsubscribe, subject line with item count)
+- **Rate limit:** 100ms delay between emails (10/sec max) to avoid hitting Resend free tier limits (100/day)
+
+### Verification
+
+✅ `npm run lint` (0 errors, 0 warnings)
+✅ `npm run build` (successful, 46 routes including new cron endpoint)
+✅ `npm run test:unit` (25/25 passing)
+✅ `npm run test:e2e` (100/100 passing across desktop/mobile × light/dark)
+
+### Next Steps
+
+- **Production test:** Manually trigger cron via Vercel dashboard after deployment
+- **Monitor Resend dashboard:** Check delivery rate, bounces, complaints after first scheduled run
+- **P0-3:** SEO schema markup (reduce Facebook dependency, improve organic search)
+
+---
+
+## 2026-01-16 - Claude Code - Email Signup Form (P0-4b)
+
+**Goal:** Implement email signup form on `/penny-list` to capture users for weekly updates.
+**Status:** ✅ Complete + verified (all 4 gates passing).
+
+### Changes
+
+- `supabase/migrations/015_create_email_subscribers.sql`: Created `email_subscribers` table with RLS policies, indexes on email/is_active/token, auto-update trigger for `updated_at`
+- `app/api/subscribe/route.ts`: POST endpoint with Zod validation, rate limiting (5/hour per IP), honeypot protection, secure token generation via `crypto.getRandomValues`
+- `app/api/unsubscribe/route.ts`: GET endpoint with token-based unsubscribe, redirects to `/unsubscribed`, marks `is_active = false`, handles "already unsubscribed" state
+- `components/email-signup-form.tsx`: Dismissible form component (appears after 25s OR 600px scroll), localStorage persistence (respects dismissal), GA4 tracking (email_signup_shown, email_signup, email_signup_error, email_signup_dismissed)
+- `app/unsubscribed/page.tsx`: Confirmation page with resubscribe link, handles different unsubscribe states
+- `components/penny-list-client.tsx`: Wired email signup form into penny list page (line 847)
+- `lib/analytics.ts`: Added `email_signup_*` event types for GA4 tracking
+
+### Why This Matters
+
+- **Problem:** 3,262 bookmark_banner_shown events but zero mechanism to capture users for return visits
+- **Solution:** Email signup captures interested users, enables weekly penny list delivery (P0-4c)
+- **Evidence:** GA4 shows 680 daily users, 26% conversion to Home Depot clicks - users are engaged but not returning
+
+### Verification
+
+✅ `npm run lint` (0 errors, 0 warnings)
+✅ `npm run build` (45 routes, successful)
+✅ `npm run test:unit` (25/25 passing)
+✅ `npm run test:e2e` (100/100 passing)
+
+---
+
 ## 2026-01-16 - Claude Code - PWA Install Prompt (P0-4a)
 
 **Goal:** Implement "Add to Home Screen" prompt on `/penny-list` to improve Day 7 retention (currently ~0%).

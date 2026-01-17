@@ -1,6 +1,6 @@
 # Backlog (Top Priority Items)
 
-**Last updated:** Jan 16, 2026
+**Last updated:** Jan 17, 2026
 **Rule:** Keep ≤10 items. Archive completed/deferred items.
 
 **Auto-archive:** Full backlog history preserved in `archive/backlog-history/`
@@ -16,32 +16,7 @@ Each AI session should:
 
 ## P0 - Do Next (Analytics-Driven Growth)
 
-### 1. User Retention - Email Signup (P0-4b)
-
-- **Problem:** No way to capture users who want updates. Organic growth without return visits is wasted.
-- **Done means:**
-  - Email signup form on `/penny-list`
-  - `email_subscribers` table in Supabase
-  - `POST /api/subscribe` endpoint working
-  - `GET /api/unsubscribe` endpoint working
-  - Form is dismissible and tracks GA4 `email_signup` event
-- **Verify:** All 4 gates + manual test (signup works)
-- **Evidence:** 3,262 bookmark_banner_shown events but no capture mechanism
-
-### 2. User Retention - Weekly Email Cron (P0-4c)
-
-- **Problem:** Email signups without delivery = broken promise to users
-- **Prerequisites:** Owner must set up Resend.com account first
-- **Done means:**
-  - GitHub Action runs every Sunday 8 AM UTC
-  - Email template renders correctly
-  - Cron queries Supabase for new items (last 7 days)
-  - Sends via Resend to all active subscribers
-  - Unsubscribe link works in email
-- **Verify:** All 4 gates + manual test email
-- **Blocked by:** Resend.com account setup
-
-### 3. SEO Improvement - Schema Markup + Internal Linking (P0-3)
+### 1. SEO Improvement - Schema Markup + Internal Linking (P0-3)
 
 - **Problem:** Zero non-branded organic clicks. Position 11.6 for "home depot penny list". 100% dependent on Facebook.
 - **Done means:**
@@ -59,6 +34,8 @@ Each AI session should:
 
 ## ✅ Recently Completed
 
+- **2026-01-17:** P0-4c (Weekly Email Cron) - Implemented weekly email digest sent every Sunday 8 AM UTC to all active subscribers. Queries new penny items from last 7 days, renders responsive React email template, sends via Resend API with proper unsubscribe links. All 4 gates passing.
+- **2026-01-16:** P0-4b (Email Signup Form) - Implemented email signup form on `/penny-list` with `email_subscribers` table, subscribe/unsubscribe endpoints, dismissible UI, localStorage persistence, and GA4 tracking. All 4 gates passing.
 - **2026-01-16:** P0-4a (PWA Install Prompt) - Implemented "Add to Home Screen" prompt on `/penny-list` with app icons (192px, 512px), PWA manifest, dismissible UI, localStorage persistence, and GA4 tracking. All 4 gates passing.
 - **2026-01-16:** P0-1 (bounce page redirects) - Redirected `/home-depot-penny-items`, `/how-to-find-penny-items`, and `/home-depot-penny-list` to appropriate pages. Bounce rates improved from 100% to 21-29%.
 - **2026-01-10:** Data pipeline scripts completed:

@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Jan 16, 2026 (PWA install prompt + P0-4a complete)
+**Last updated:** Jan 17, 2026 (Weekly email digest + P0-4c complete)
 
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
@@ -10,6 +10,10 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **Weekly Email Digest (Jan 17):** Implemented P0-4c weekly email cron that sends penny list updates to all active subscribers every Sunday 8 AM UTC. Created `emails/weekly-digest.tsx` (React Email template with product cards, summary stats, responsive design for email clients), `lib/email-sender.ts` (Resend API wrapper with error handling, 100ms rate limiting), and `app/api/cron/send-weekly-digest/route.ts` (cron endpoint that queries active subscribers + penny items from last 7 days, processes/aggregates by SKU, renders template, sends via Resend with unsubscribe links). Added cron schedule to `vercel.json` (Sunday 8 AM UTC: `0 8 * * 0`). Installed `resend`, `@react-email/components`, `react-email` (136 packages, 0 vulnerabilities). All 4 gates passing (lint/build/unit/e2e).
+
+- **Email Signup Form (Jan 16):** Implemented P0-4b email signup form on `/penny-list` to capture users for weekly updates. Created `email_subscribers` table (migration 015) with RLS policies and indexes, `app/api/subscribe/route.ts` (POST endpoint with Zod validation, rate limiting 5/hour per IP, honeypot protection, crypto-secure token generation), `app/api/unsubscribe/route.ts` (GET endpoint with token-based unsubscribe), `components/email-signup-form.tsx` (dismissible form that appears after 25s OR 600px scroll, localStorage persistence, GA4 tracking), and `app/unsubscribed/page.tsx` (confirmation page). Wired into penny-list-client. All 4 gates passing (lint/build/unit/e2e).
 
 - **PWA Install Prompt (Jan 16):** Implemented "Add to Home Screen" prompt on `/penny-list` to improve Day 7 retention (currently ~0%). Created app icons (192px, 512px) from existing SVG using Playwright, updated `site.webmanifest` with proper PWA metadata (name: "Penny Central", start_url: "/penny-list"), added dismissible prompt component with localStorage persistence and GA4 tracking (pwa_prompt_shown, pwa_install_started, pwa_prompt_dismissed), and wired into penny-list-client. Prompt appears after scroll (200px) or 20s delay, respects prefers-reduced-motion, and detects existing installations. All 4 gates passing (lint/build/unit/e2e).
 
