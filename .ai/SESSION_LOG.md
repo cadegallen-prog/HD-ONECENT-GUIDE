@@ -1,5 +1,48 @@
 ---
 
+## 2026-01-17 - Claude Code - Ezoic Ads Integration (Bridge Monetization)
+
+**Goal:** Add Ezoic as temporary ad revenue bridge while Mediavine Grow collects 30-day analytics for approval.
+**Status:** ✅ Complete + verified (all 4 gates passing, all E2E tests passing).
+
+### Changes
+
+- `app/layout.tsx`: Added Ezoic privacy scripts (Gatekeeper CMP) + header script at top of `<head>` before all other scripts, with TEMPORARY comment noting removal after Mediavine approval
+- `next.config.js`: Updated CSP policy to allow Ezoic domains:
+  - `script-src`: Added `https://cmp.gatekeeperconsent.com`, `https://the.gatekeeperconsent.com`, `https://www.ezojs.com`, `https://*.ezoic.net`, `https://*.ezoic.com`
+  - `connect-src`: Added `https://*.ezoic.com`, `https://*.ezoic.net`, `https://go.ezodn.com`, `https://privacy.gatekeeperconsent.com`, `https://*.gatekeeperconsent.com`
+
+### How It Works
+
+- **Coexistence:** Ezoic and Mediavine Grow both active simultaneously (intentional bridge strategy)
+- **Script order:** Privacy scripts first (required by Ezoic), then Ezoic header, then Mediavine Grow, then GA4
+- **Consent management:** Gatekeeper CMP handles user consent for both ad networks
+- **Ad serving:** Ezoic handles ad placement while Mediavine collects analytics data for approval
+- **Exit path:** All Ezoic scripts marked TEMPORARY; will delete script blocks in next.config.js CSP when Mediavine is approved (~2 months)
+
+### Verification
+
+✅ `npm run lint` (0 errors, 0 warnings)
+✅ `npm run build` (successful, 46 routes unchanged)
+✅ `npm run test:unit` (25/25 passing)
+✅ `npm run test:e2e` (72/72 passing, no CSP violations)
+
+### Key Decisions
+
+1. **HTTPS only** - Used explicit `https://` instead of protocol-relative `//` to avoid CSP violations in dev (HTTP) vs prod (HTTPS) environments
+2. **data-cfasync="false"** - Prevents Cloudflare optimization, ensures privacy scripts load first
+3. **Broadwildcard CSP** - Used `https://*.gatekeeperconsent.com` and `https://*.ezoic.com` to handle any subdomain variations without future updates
+4. **No component changes** - Only modified `<script>` tags in layout, no hydration risks
+
+### Next Steps (After Mediavine Approval)
+
+1. Delete 4 Ezoic script blocks from `app/layout.tsx` (lines 120-143)
+2. Remove Ezoic domains from CSP in `next.config.js` (both `script-src` and `connect-src`)
+3. Verify build passes and Mediavine Grow still works
+4. No code review needed - removal is straightforward
+
+---
+
 ## 2026-01-17 - Claude Code - Weekly Email Digest (P0-4c)
 
 **Goal:** Send weekly penny list updates to all active subscribers every Sunday 8 AM UTC via Resend.
