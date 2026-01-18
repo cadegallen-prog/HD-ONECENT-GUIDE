@@ -1,43 +1,39 @@
 [
   {
     "rank": 1,
-    "sku": "1009876543",
-    "name": "Ryobi Battery 2-Pack",
+    "sku": "1010086378",
+    "name": "Orbit 33 in. 8-Pattern Thumb Control Garden Hose Watering Wand",
     "demand": {
-      "reportCount": 6,
-      "states": [
-        "CA",
-        "NV",
-        "AZ"
-      ],
-      "stateCount": 3
+      "reportCount": 9,
+      "states": ["UT", "CT", "MA", "AZ", "MD", "TX"],
+      "stateCount": 6
     },
     "recommendations": {
-      "metaTitle": "Ryobi Battery 2-Pack - Home Depot Penny Item SKU 1009876543 | Penny Central",
-      "metaDescription": "Community-verified Home Depot penny find: Ryobi Battery 2-Pack (SKU 1009876543). 6 reports from 3 states (CA, NV). Verify in store.",
-      "ogTitle": "Ryobi Battery 2-Pack - Home Depot Penny Deal",
+      "metaTitle": "Orbit 33 in. 8-Pattern Thumb Control Garden Hose Watering Wand - Home Depot Penny Item SKU 1010086378 | Penny Central",
+      "metaDescription": "Community-verified Home Depot penny find: Orbit 33 in. 8-Pattern Thumb Control Garden Hose Watering Wand (SKU 1010086378). 9 reports from 6 states (UT, CT). Verify in store.",
+      "ogTitle": "Orbit 33 in. 8-Pattern Thumb Control Garden Hose Watering Wand - Home Depot Penny Deal",
       "keywordTargets": [
-        "Ryobi Battery 2-Pack penny",
-        "SKU 1009876543",
-        "Ryobi Battery 2-Pack Home Depot",
+        "Orbit 33 in. 8-Pattern Thumb Control Garden Hose Watering Wand penny",
+        "SKU 1010086378",
+        "Orbit 33 in. 8-Pattern Thumb Control Garden Hose Watering Wand Home Depot",
         "penny find undefined"
       ]
     },
     "jsonLdEnhancements": {
       "productSchema": {
-        "name": "Ryobi Battery 2-Pack",
-        "sku": "1009876543",
-        "description": "Community-reported penny lead for Ryobi Battery 2-Pack. 6 verified reports.",
+        "name": "Orbit 33 in. 8-Pattern Thumb Control Garden Hose Watering Wand",
+        "sku": "1010086378",
+        "description": "Community-reported penny lead for Orbit 33 in. 8-Pattern Thumb Control Garden Hose Watering Wand. 9 verified reports.",
         "brand": "Various",
         "offers": {
           "price": "0.01",
           "priceCurrency": "USD",
           "availability": "InStoreOnly",
-          "url": "https://www.pennycentral.com/sku/1009876543"
+          "url": "https://www.pennycentral.com/sku/1010086378"
         },
         "aggregateRating": {
           "ratingValue": 4.5,
-          "reviewCount": 6
+          "reviewCount": 9
         }
       },
       "breadcrumb": [
@@ -53,46 +49,442 @@
         },
         {
           "position": 3,
-          "name": "Ryobi Battery 2-Pack",
-          "url": "https://www.pennycentral.com/sku/1009876543"
+          "name": "Orbit 33 in. 8-Pattern Thumb Control Garden Hose Watering Wand",
+          "url": "https://www.pennycentral.com/sku/1010086378"
         }
       ]
     }
   },
   {
     "rank": 2,
-    "sku": "1000001234",
-    "name": "Milwaukee Hammer Drill Kit",
+    "sku": "1009258128",
+    "name": "Glacier Bay Modern 1-Spray 7.9 in. Dual Tub Wall Mount Fixed and Handheld Shower Heads 1.8 GPM in Matte Gold HD58302-174405",
+    "brand": "Glacier Bay",
     "demand": {
-      "reportCount": 3,
-      "states": [
-        "GA",
-        "FL"
-      ],
-      "stateCount": 2
+      "reportCount": 7,
+      "states": ["MN", "OH", "TX", "NJ", "SD", "GA"],
+      "stateCount": 6
     },
     "recommendations": {
-      "metaTitle": "Milwaukee Hammer Drill Kit - Home Depot Penny Item SKU 1000001234 | Penny Central",
-      "metaDescription": "Community-verified Home Depot penny find: Milwaukee Hammer Drill Kit (SKU 1000001234). 3 reports from 2 states (GA, FL). Verify in store.",
-      "ogTitle": "Milwaukee Hammer Drill Kit - Home Depot Penny Deal",
+      "metaTitle": "Glacier Bay Modern 1-Spray 7.9 in. Dual Tub Wall Mount Fixed and Handheld Shower Heads 1.8 GPM in Matte Gold HD58302-174405 - Home Depot Penny Item SKU 1009258128 | Penny Central",
+      "metaDescription": "Community-verified Home Depot penny find: Glacier Bay Modern 1-Spray 7.9 in. Dual Tub Wall Mount Fixed and Handheld Shower Heads 1.8 GPM in Matte Gold HD58302-174405 (SKU 1009258128). 7 reports from 6 states (MN, OH). Verify in store.",
+      "ogTitle": "Glacier Bay Modern 1-Spray 7.9 in. Dual Tub Wall Mount Fixed and Handheld Shower Heads 1.8 GPM in Matte Gold HD58302-174405 - Home Depot Penny Deal",
       "keywordTargets": [
-        "Milwaukee Hammer Drill Kit penny",
-        "SKU 1000001234",
-        "Milwaukee Hammer Drill Kit Home Depot",
+        "Glacier Bay Modern 1-Spray 7.9 in. Dual Tub Wall Mount Fixed and Handheld Shower Heads 1.8 GPM in Matte Gold HD58302-174405 penny",
+        "SKU 1009258128",
+        "Glacier Bay Modern 1-Spray 7.9 in. Dual Tub Wall Mount Fixed and Handheld Shower Heads 1.8 GPM in Matte Gold HD58302-174405 Home Depot",
+        "penny find Glacier Bay"
+      ]
+    },
+    "jsonLdEnhancements": {
+      "productSchema": {
+        "name": "Glacier Bay Modern 1-Spray 7.9 in. Dual Tub Wall Mount Fixed and Handheld Shower Heads 1.8 GPM in Matte Gold HD58302-174405",
+        "sku": "1009258128",
+        "description": "Community-reported penny lead for Glacier Bay Modern 1-Spray 7.9 in. Dual Tub Wall Mount Fixed and Handheld Shower Heads 1.8 GPM in Matte Gold HD58302-174405. 7 verified reports.",
+        "brand": "Glacier Bay",
+        "offers": {
+          "price": "0.01",
+          "priceCurrency": "USD",
+          "availability": "InStoreOnly",
+          "url": "https://www.pennycentral.com/sku/1009258128"
+        },
+        "aggregateRating": {
+          "ratingValue": 4.5,
+          "reviewCount": 7
+        }
+      },
+      "breadcrumb": [
+        {
+          "position": 1,
+          "name": "Home",
+          "url": "https://www.pennycentral.com"
+        },
+        {
+          "position": 2,
+          "name": "Penny List",
+          "url": "https://www.pennycentral.com/penny-list"
+        },
+        {
+          "position": 3,
+          "name": "Glacier Bay Modern 1-Spray 7.9 in. Dual Tub Wall Mount Fixed and Handheld Shower Heads 1.8 GPM in Matte Gold HD58302-174405",
+          "url": "https://www.pennycentral.com/sku/1009258128"
+        }
+      ]
+    }
+  },
+  {
+    "rank": 3,
+    "sku": "1010206761",
+    "name": "MOEN Doherty Single Handle Pull-Down Sprayer Kitchen Faucet with Power Clean and Reflex in Spot Resist Stainless 87260SRS",
+    "brand": "MOEN",
+    "demand": {
+      "reportCount": 5,
+      "states": ["PA", "NH", "TN", "TX"],
+      "stateCount": 4
+    },
+    "recommendations": {
+      "metaTitle": "MOEN Doherty Single Handle Pull-Down Sprayer Kitchen Faucet with Power Clean and Reflex in Spot Resist Stainless 87260SRS - Home Depot Penny Item SKU 1010206761 | Penny Central",
+      "metaDescription": "Community-verified Home Depot penny find: MOEN Doherty Single Handle Pull-Down Sprayer Kitchen Faucet with Power Clean and Reflex in Spot Resist Stainless 87260SRS (SKU 1010206761). 5 reports from 4 states (PA, NH). Verify in store.",
+      "ogTitle": "MOEN Doherty Single Handle Pull-Down Sprayer Kitchen Faucet with Power Clean and Reflex in Spot Resist Stainless 87260SRS - Home Depot Penny Deal",
+      "keywordTargets": [
+        "MOEN Doherty Single Handle Pull-Down Sprayer Kitchen Faucet with Power Clean and Reflex in Spot Resist Stainless 87260SRS penny",
+        "SKU 1010206761",
+        "MOEN Doherty Single Handle Pull-Down Sprayer Kitchen Faucet with Power Clean and Reflex in Spot Resist Stainless 87260SRS Home Depot",
+        "penny find MOEN"
+      ]
+    },
+    "jsonLdEnhancements": {
+      "productSchema": {
+        "name": "MOEN Doherty Single Handle Pull-Down Sprayer Kitchen Faucet with Power Clean and Reflex in Spot Resist Stainless 87260SRS",
+        "sku": "1010206761",
+        "description": "Community-reported penny lead for MOEN Doherty Single Handle Pull-Down Sprayer Kitchen Faucet with Power Clean and Reflex in Spot Resist Stainless 87260SRS. 5 verified reports.",
+        "brand": "MOEN",
+        "offers": {
+          "price": "0.01",
+          "priceCurrency": "USD",
+          "availability": "InStoreOnly",
+          "url": "https://www.pennycentral.com/sku/1010206761"
+        },
+        "aggregateRating": {
+          "ratingValue": 4.5,
+          "reviewCount": 5
+        }
+      },
+      "breadcrumb": [
+        {
+          "position": 1,
+          "name": "Home",
+          "url": "https://www.pennycentral.com"
+        },
+        {
+          "position": 2,
+          "name": "Penny List",
+          "url": "https://www.pennycentral.com/penny-list"
+        },
+        {
+          "position": 3,
+          "name": "MOEN Doherty Single Handle Pull-Down Sprayer Kitchen Faucet with Power Clean and Reflex in Spot Resist Stainless 87260SRS",
+          "url": "https://www.pennycentral.com/sku/1010206761"
+        }
+      ]
+    }
+  },
+  {
+    "rank": 4,
+    "sku": "1009074829",
+    "name": "RYOBI ONE+ HP 18V Cordless Pet Stick Vacuum Cleaner (Tool Only) PBLSV716B",
+    "brand": "RYOBI",
+    "demand": {
+      "reportCount": 4,
+      "states": ["PA", "MA", "TX", "GA"],
+      "stateCount": 4
+    },
+    "recommendations": {
+      "metaTitle": "RYOBI ONE+ HP 18V Cordless Pet Stick Vacuum Cleaner (Tool Only) PBLSV716B - Home Depot Penny Item SKU 1009074829 | Penny Central",
+      "metaDescription": "Community-verified Home Depot penny find: RYOBI ONE+ HP 18V Cordless Pet Stick Vacuum Cleaner (Tool Only) PBLSV716B (SKU 1009074829). 4 reports from 4 states (PA, MA). Verify in store.",
+      "ogTitle": "RYOBI ONE+ HP 18V Cordless Pet Stick Vacuum Cleaner (Tool Only) PBLSV716B - Home Depot Penny Deal",
+      "keywordTargets": [
+        "RYOBI ONE+ HP 18V Cordless Pet Stick Vacuum Cleaner (Tool Only) PBLSV716B penny",
+        "SKU 1009074829",
+        "RYOBI ONE+ HP 18V Cordless Pet Stick Vacuum Cleaner (Tool Only) PBLSV716B Home Depot",
+        "penny find RYOBI"
+      ]
+    },
+    "jsonLdEnhancements": {
+      "productSchema": {
+        "name": "RYOBI ONE+ HP 18V Cordless Pet Stick Vacuum Cleaner (Tool Only) PBLSV716B",
+        "sku": "1009074829",
+        "description": "Community-reported penny lead for RYOBI ONE+ HP 18V Cordless Pet Stick Vacuum Cleaner (Tool Only) PBLSV716B. 4 verified reports.",
+        "brand": "RYOBI",
+        "offers": {
+          "price": "0.01",
+          "priceCurrency": "USD",
+          "availability": "InStoreOnly",
+          "url": "https://www.pennycentral.com/sku/1009074829"
+        },
+        "aggregateRating": {
+          "ratingValue": 4.5,
+          "reviewCount": 4
+        }
+      },
+      "breadcrumb": [
+        {
+          "position": 1,
+          "name": "Home",
+          "url": "https://www.pennycentral.com"
+        },
+        {
+          "position": 2,
+          "name": "Penny List",
+          "url": "https://www.pennycentral.com/penny-list"
+        },
+        {
+          "position": 3,
+          "name": "RYOBI ONE+ HP 18V Cordless Pet Stick Vacuum Cleaner (Tool Only) PBLSV716B",
+          "url": "https://www.pennycentral.com/sku/1009074829"
+        }
+      ]
+    }
+  },
+  {
+    "rank": 5,
+    "sku": "1010206760",
+    "name": "Doherty Single Handle Pull-Down Sprayer Kitchen Faucet with Power Clean and Reflex in Matte Black",
+    "brand": "MOEN",
+    "demand": {
+      "reportCount": 4,
+      "states": ["PA", "AL", "MA", "AR"],
+      "stateCount": 4
+    },
+    "recommendations": {
+      "metaTitle": "Doherty Single Handle Pull-Down Sprayer Kitchen Faucet with Power Clean and Reflex in Matte Black - Home Depot Penny Item SKU 1010206760 | Penny Central",
+      "metaDescription": "Community-verified Home Depot penny find: Doherty Single Handle Pull-Down Sprayer Kitchen Faucet with Power Clean and Reflex in Matte Black (SKU 1010206760). 4 reports from 4 states (PA, AL). Verify in store.",
+      "ogTitle": "Doherty Single Handle Pull-Down Sprayer Kitchen Faucet with Power Clean and Reflex in Matte Black - Home Depot Penny Deal",
+      "keywordTargets": [
+        "Doherty Single Handle Pull-Down Sprayer Kitchen Faucet with Power Clean and Reflex in Matte Black penny",
+        "SKU 1010206760",
+        "Doherty Single Handle Pull-Down Sprayer Kitchen Faucet with Power Clean and Reflex in Matte Black Home Depot",
+        "penny find MOEN"
+      ]
+    },
+    "jsonLdEnhancements": {
+      "productSchema": {
+        "name": "Doherty Single Handle Pull-Down Sprayer Kitchen Faucet with Power Clean and Reflex in Matte Black",
+        "sku": "1010206760",
+        "description": "Community-reported penny lead for Doherty Single Handle Pull-Down Sprayer Kitchen Faucet with Power Clean and Reflex in Matte Black. 4 verified reports.",
+        "brand": "MOEN",
+        "offers": {
+          "price": "0.01",
+          "priceCurrency": "USD",
+          "availability": "InStoreOnly",
+          "url": "https://www.pennycentral.com/sku/1010206760"
+        },
+        "aggregateRating": {
+          "ratingValue": 4.5,
+          "reviewCount": 4
+        }
+      },
+      "breadcrumb": [
+        {
+          "position": 1,
+          "name": "Home",
+          "url": "https://www.pennycentral.com"
+        },
+        {
+          "position": 2,
+          "name": "Penny List",
+          "url": "https://www.pennycentral.com/penny-list"
+        },
+        {
+          "position": 3,
+          "name": "Doherty Single Handle Pull-Down Sprayer Kitchen Faucet with Power Clean and Reflex in Matte Black",
+          "url": "https://www.pennycentral.com/sku/1010206760"
+        }
+      ]
+    }
+  },
+  {
+    "rank": 6,
+    "sku": "1007760421",
+    "name": "MOEN Haelyn Single-Handle Pull-Down Sprayer Kitchen Faucet",
+    "demand": {
+      "reportCount": 4,
+      "states": ["PA", "MA", "GA"],
+      "stateCount": 3
+    },
+    "recommendations": {
+      "metaTitle": "MOEN Haelyn Single-Handle Pull-Down Sprayer Kitchen Faucet - Home Depot Penny Item SKU 1007760421 | Penny Central",
+      "metaDescription": "Community-verified Home Depot penny find: MOEN Haelyn Single-Handle Pull-Down Sprayer Kitchen Faucet (SKU 1007760421). 4 reports from 3 states (PA, MA). Verify in store.",
+      "ogTitle": "MOEN Haelyn Single-Handle Pull-Down Sprayer Kitchen Faucet - Home Depot Penny Deal",
+      "keywordTargets": [
+        "MOEN Haelyn Single-Handle Pull-Down Sprayer Kitchen Faucet penny",
+        "SKU 1007760421",
+        "MOEN Haelyn Single-Handle Pull-Down Sprayer Kitchen Faucet Home Depot",
         "penny find undefined"
       ]
     },
     "jsonLdEnhancements": {
       "productSchema": {
-        "name": "Milwaukee Hammer Drill Kit",
-        "sku": "1000001234",
-        "description": "Community-reported penny lead for Milwaukee Hammer Drill Kit. 3 verified reports.",
+        "name": "MOEN Haelyn Single-Handle Pull-Down Sprayer Kitchen Faucet",
+        "sku": "1007760421",
+        "description": "Community-reported penny lead for MOEN Haelyn Single-Handle Pull-Down Sprayer Kitchen Faucet. 4 verified reports.",
         "brand": "Various",
         "offers": {
           "price": "0.01",
           "priceCurrency": "USD",
           "availability": "InStoreOnly",
-          "url": "https://www.pennycentral.com/sku/1000001234"
+          "url": "https://www.pennycentral.com/sku/1007760421"
+        },
+        "aggregateRating": {
+          "ratingValue": 4.5,
+          "reviewCount": 4
+        }
+      },
+      "breadcrumb": [
+        {
+          "position": 1,
+          "name": "Home",
+          "url": "https://www.pennycentral.com"
+        },
+        {
+          "position": 2,
+          "name": "Penny List",
+          "url": "https://www.pennycentral.com/penny-list"
+        },
+        {
+          "position": 3,
+          "name": "MOEN Haelyn Single-Handle Pull-Down Sprayer Kitchen Faucet",
+          "url": "https://www.pennycentral.com/sku/1007760421"
+        }
+      ]
+    }
+  },
+  {
+    "rank": 7,
+    "sku": "1009408133",
+    "name": "High-Performance 3/4 in x 100 ft. Kink Resistant, Durable Contractor Grade",
+    "brand": "Teknor Apex",
+    "demand": {
+      "reportCount": 4,
+      "states": ["GA", "IL", "MD"],
+      "stateCount": 3
+    },
+    "recommendations": {
+      "metaTitle": "High-Performance 3/4 in x 100 ft. Kink Resistant, Durable Contractor Grade - Home Depot Penny Item SKU 1009408133 | Penny Central",
+      "metaDescription": "Community-verified Home Depot penny find: High-Performance 3/4 in x 100 ft. Kink Resistant, Durable Contractor Grade (SKU 1009408133). 4 reports from 3 states (GA, IL). Verify in store.",
+      "ogTitle": "High-Performance 3/4 in x 100 ft. Kink Resistant, Durable Contractor Grade - Home Depot Penny Deal",
+      "keywordTargets": [
+        "High-Performance 3/4 in x 100 ft. Kink Resistant, Durable Contractor Grade penny",
+        "SKU 1009408133",
+        "High-Performance 3/4 in x 100 ft. Kink Resistant, Durable Contractor Grade Home Depot",
+        "penny find Teknor Apex"
+      ]
+    },
+    "jsonLdEnhancements": {
+      "productSchema": {
+        "name": "High-Performance 3/4 in x 100 ft. Kink Resistant, Durable Contractor Grade",
+        "sku": "1009408133",
+        "description": "Community-reported penny lead for High-Performance 3/4 in x 100 ft. Kink Resistant, Durable Contractor Grade. 4 verified reports.",
+        "brand": "Teknor Apex",
+        "offers": {
+          "price": "0.01",
+          "priceCurrency": "USD",
+          "availability": "InStoreOnly",
+          "url": "https://www.pennycentral.com/sku/1009408133"
+        },
+        "aggregateRating": {
+          "ratingValue": 4.5,
+          "reviewCount": 4
+        }
+      },
+      "breadcrumb": [
+        {
+          "position": 1,
+          "name": "Home",
+          "url": "https://www.pennycentral.com"
+        },
+        {
+          "position": 2,
+          "name": "Penny List",
+          "url": "https://www.pennycentral.com/penny-list"
+        },
+        {
+          "position": 3,
+          "name": "High-Performance 3/4 in x 100 ft. Kink Resistant, Durable Contractor Grade",
+          "url": "https://www.pennycentral.com/sku/1009408133"
+        }
+      ]
+    }
+  },
+  {
+    "rank": 8,
+    "sku": "1009591316",
+    "name": "Clermont Elm 22 Mil X 8.7 in. W X 48 in. L Click Lock Waterproof Luxury Vinyl Plank Flooring (20.1 sq. Ft./Case)",
+    "brand": "LIFEPROOF",
+    "demand": {
+      "reportCount": 4,
+      "states": ["GA", "TX", "VA"],
+      "stateCount": 3
+    },
+    "recommendations": {
+      "metaTitle": "Clermont Elm 22 Mil X 8.7 in. W X 48 in. L Click Lock Waterproof Luxury Vinyl Plank Flooring (20.1 sq. Ft./Case) - Home Depot Penny Item SKU 1009591316 | Penny Central",
+      "metaDescription": "Community-verified Home Depot penny find: Clermont Elm 22 Mil X 8.7 in. W X 48 in. L Click Lock Waterproof Luxury Vinyl Plank Flooring (20.1 sq. Ft./Case) (SKU 1009591316). 4 reports from 3 states (GA, TX). Verify in store.",
+      "ogTitle": "Clermont Elm 22 Mil X 8.7 in. W X 48 in. L Click Lock Waterproof Luxury Vinyl Plank Flooring (20.1 sq. Ft./Case) - Home Depot Penny Deal",
+      "keywordTargets": [
+        "Clermont Elm 22 Mil X 8.7 in. W X 48 in. L Click Lock Waterproof Luxury Vinyl Plank Flooring (20.1 sq. Ft./Case) penny",
+        "SKU 1009591316",
+        "Clermont Elm 22 Mil X 8.7 in. W X 48 in. L Click Lock Waterproof Luxury Vinyl Plank Flooring (20.1 sq. Ft./Case) Home Depot",
+        "penny find LIFEPROOF"
+      ]
+    },
+    "jsonLdEnhancements": {
+      "productSchema": {
+        "name": "Clermont Elm 22 Mil X 8.7 in. W X 48 in. L Click Lock Waterproof Luxury Vinyl Plank Flooring (20.1 sq. Ft./Case)",
+        "sku": "1009591316",
+        "description": "Community-reported penny lead for Clermont Elm 22 Mil X 8.7 in. W X 48 in. L Click Lock Waterproof Luxury Vinyl Plank Flooring (20.1 sq. Ft./Case). 4 verified reports.",
+        "brand": "LIFEPROOF",
+        "offers": {
+          "price": "0.01",
+          "priceCurrency": "USD",
+          "availability": "InStoreOnly",
+          "url": "https://www.pennycentral.com/sku/1009591316"
+        },
+        "aggregateRating": {
+          "ratingValue": 4.5,
+          "reviewCount": 4
+        }
+      },
+      "breadcrumb": [
+        {
+          "position": 1,
+          "name": "Home",
+          "url": "https://www.pennycentral.com"
+        },
+        {
+          "position": 2,
+          "name": "Penny List",
+          "url": "https://www.pennycentral.com/penny-list"
+        },
+        {
+          "position": 3,
+          "name": "Clermont Elm 22 Mil X 8.7 in. W X 48 in. L Click Lock Waterproof Luxury Vinyl Plank Flooring (20.1 sq. Ft./Case)",
+          "url": "https://www.pennycentral.com/sku/1009591316"
+        }
+      ]
+    }
+  },
+  {
+    "rank": 9,
+    "sku": "1000288829",
+    "name": "Spa 24.5 in. W x 18.75 in. D x 35.5 in. H Single Sink Bath Vanity in White",
+    "brand": "Glacier Bay",
+    "demand": {
+      "reportCount": 3,
+      "states": ["MA", "CA", "FL"],
+      "stateCount": 3
+    },
+    "recommendations": {
+      "metaTitle": "Spa 24.5 in. W x 18.75 in. D x 35.5 in. H Single Sink Bath Vanity in White - Home Depot Penny Item SKU 1000288829 | Penny Central",
+      "metaDescription": "Community-verified Home Depot penny find: Spa 24.5 in. W x 18.75 in. D x 35.5 in. H Single Sink Bath Vanity in White (SKU 1000288829). 3 reports from 3 states (MA, CA). Verify in store.",
+      "ogTitle": "Spa 24.5 in. W x 18.75 in. D x 35.5 in. H Single Sink Bath Vanity in White - Home Depot Penny Deal",
+      "keywordTargets": [
+        "Spa 24.5 in. W x 18.75 in. D x 35.5 in. H Single Sink Bath Vanity in White penny",
+        "SKU 1000288829",
+        "Spa 24.5 in. W x 18.75 in. D x 35.5 in. H Single Sink Bath Vanity in White Home Depot",
+        "penny find Glacier Bay"
+      ]
+    },
+    "jsonLdEnhancements": {
+      "productSchema": {
+        "name": "Spa 24.5 in. W x 18.75 in. D x 35.5 in. H Single Sink Bath Vanity in White",
+        "sku": "1000288829",
+        "description": "Community-reported penny lead for Spa 24.5 in. W x 18.75 in. D x 35.5 in. H Single Sink Bath Vanity in White. 3 verified reports.",
+        "brand": "Glacier Bay",
+        "offers": {
+          "price": "0.01",
+          "priceCurrency": "USD",
+          "availability": "InStoreOnly",
+          "url": "https://www.pennycentral.com/sku/1000288829"
         },
         "aggregateRating": {
           "ratingValue": 4.5,
@@ -112,49 +504,48 @@
         },
         {
           "position": 3,
-          "name": "Milwaukee Hammer Drill Kit",
-          "url": "https://www.pennycentral.com/sku/1000001234"
+          "name": "Spa 24.5 in. W x 18.75 in. D x 35.5 in. H Single Sink Bath Vanity in White",
+          "url": "https://www.pennycentral.com/sku/1000288829"
         }
       ]
     }
   },
   {
-    "rank": 3,
-    "sku": "654321",
-    "name": "Husky Small Parts Organizer",
+    "rank": 10,
+    "sku": "1003619905",
+    "name": "Sedgewood 24.5 in. W x 18.75 in. D x 34.375 in. H Single Sink Bath Vanity i",
+    "brand": "Home Decorators Collection",
     "demand": {
-      "reportCount": 1,
-      "states": [
-        "TX"
-      ],
-      "stateCount": 1
+      "reportCount": 3,
+      "states": ["CA", "GA", "FL"],
+      "stateCount": 3
     },
     "recommendations": {
-      "metaTitle": "Husky Small Parts Organizer - Home Depot Penny Item SKU 654321 | Penny Central",
-      "metaDescription": "Community-verified Home Depot penny find: Husky Small Parts Organizer (SKU 654321). 1 reports from 1 states (TX). Verify in store.",
-      "ogTitle": "Husky Small Parts Organizer - Home Depot Penny Deal",
+      "metaTitle": "Sedgewood 24.5 in. W x 18.75 in. D x 34.375 in. H Single Sink Bath Vanity i - Home Depot Penny Item SKU 1003619905 | Penny Central",
+      "metaDescription": "Community-verified Home Depot penny find: Sedgewood 24.5 in. W x 18.75 in. D x 34.375 in. H Single Sink Bath Vanity i (SKU 1003619905). 3 reports from 3 states (CA, GA). Verify in store.",
+      "ogTitle": "Sedgewood 24.5 in. W x 18.75 in. D x 34.375 in. H Single Sink Bath Vanity i - Home Depot Penny Deal",
       "keywordTargets": [
-        "Husky Small Parts Organizer penny",
-        "SKU 654321",
-        "Husky Small Parts Organizer Home Depot",
-        "penny find undefined"
+        "Sedgewood 24.5 in. W x 18.75 in. D x 34.375 in. H Single Sink Bath Vanity i penny",
+        "SKU 1003619905",
+        "Sedgewood 24.5 in. W x 18.75 in. D x 34.375 in. H Single Sink Bath Vanity i Home Depot",
+        "penny find Home Decorators Collection"
       ]
     },
     "jsonLdEnhancements": {
       "productSchema": {
-        "name": "Husky Small Parts Organizer",
-        "sku": "654321",
-        "description": "Community-reported penny lead for Husky Small Parts Organizer. 1 verified reports.",
-        "brand": "Various",
+        "name": "Sedgewood 24.5 in. W x 18.75 in. D x 34.375 in. H Single Sink Bath Vanity i",
+        "sku": "1003619905",
+        "description": "Community-reported penny lead for Sedgewood 24.5 in. W x 18.75 in. D x 34.375 in. H Single Sink Bath Vanity i. 3 verified reports.",
+        "brand": "Home Decorators Collection",
         "offers": {
           "price": "0.01",
           "priceCurrency": "USD",
           "availability": "InStoreOnly",
-          "url": "https://www.pennycentral.com/sku/654321"
+          "url": "https://www.pennycentral.com/sku/1003619905"
         },
         "aggregateRating": {
           "ratingValue": 4.5,
-          "reviewCount": 1
+          "reviewCount": 3
         }
       },
       "breadcrumb": [
@@ -170,49 +561,48 @@
         },
         {
           "position": 3,
-          "name": "Husky Small Parts Organizer",
-          "url": "https://www.pennycentral.com/sku/654321"
+          "name": "Sedgewood 24.5 in. W x 18.75 in. D x 34.375 in. H Single Sink Bath Vanity i",
+          "url": "https://www.pennycentral.com/sku/1003619905"
         }
       ]
     }
   },
   {
-    "rank": 4,
-    "sku": "1009876544",
-    "name": "Ryobi Battery Charger",
+    "rank": 11,
+    "sku": "1005696963",
+    "name": "Hampton Bay Ambrose Led Flame Effect Pathway Lights",
+    "brand": "Hampton Bay",
     "demand": {
-      "reportCount": 1,
-      "states": [
-        "CA"
-      ],
-      "stateCount": 1
+      "reportCount": 3,
+      "states": ["CA", "NH", "MD"],
+      "stateCount": 3
     },
     "recommendations": {
-      "metaTitle": "Ryobi Battery Charger - Home Depot Penny Item SKU 1009876544 | Penny Central",
-      "metaDescription": "Community-verified Home Depot penny find: Ryobi Battery Charger (SKU 1009876544). 1 reports from 1 states (CA). Verify in store.",
-      "ogTitle": "Ryobi Battery Charger - Home Depot Penny Deal",
+      "metaTitle": "Hampton Bay Ambrose Led Flame Effect Pathway Lights - Home Depot Penny Item SKU 1005696963 | Penny Central",
+      "metaDescription": "Community-verified Home Depot penny find: Hampton Bay Ambrose Led Flame Effect Pathway Lights (SKU 1005696963). 3 reports from 3 states (CA, NH). Verify in store.",
+      "ogTitle": "Hampton Bay Ambrose Led Flame Effect Pathway Lights - Home Depot Penny Deal",
       "keywordTargets": [
-        "Ryobi Battery Charger penny",
-        "SKU 1009876544",
-        "Ryobi Battery Charger Home Depot",
-        "penny find undefined"
+        "Hampton Bay Ambrose Led Flame Effect Pathway Lights penny",
+        "SKU 1005696963",
+        "Hampton Bay Ambrose Led Flame Effect Pathway Lights Home Depot",
+        "penny find Hampton Bay"
       ]
     },
     "jsonLdEnhancements": {
       "productSchema": {
-        "name": "Ryobi Battery Charger",
-        "sku": "1009876544",
-        "description": "Community-reported penny lead for Ryobi Battery Charger. 1 verified reports.",
-        "brand": "Various",
+        "name": "Hampton Bay Ambrose Led Flame Effect Pathway Lights",
+        "sku": "1005696963",
+        "description": "Community-reported penny lead for Hampton Bay Ambrose Led Flame Effect Pathway Lights. 3 verified reports.",
+        "brand": "Hampton Bay",
         "offers": {
           "price": "0.01",
           "priceCurrency": "USD",
           "availability": "InStoreOnly",
-          "url": "https://www.pennycentral.com/sku/1009876544"
+          "url": "https://www.pennycentral.com/sku/1005696963"
         },
         "aggregateRating": {
           "ratingValue": 4.5,
-          "reviewCount": 1
+          "reviewCount": 3
         }
       },
       "breadcrumb": [
@@ -228,8 +618,520 @@
         },
         {
           "position": 3,
-          "name": "Ryobi Battery Charger",
-          "url": "https://www.pennycentral.com/sku/1009876544"
+          "name": "Hampton Bay Ambrose Led Flame Effect Pathway Lights",
+          "url": "https://www.pennycentral.com/sku/1005696963"
+        }
+      ]
+    }
+  },
+  {
+    "rank": 12,
+    "sku": "1007456239",
+    "name": "90-Degree Pocket Hole Driver Drill Attachment With 3 in. Square Drive Bit K",
+    "brand": "Kreg",
+    "demand": {
+      "reportCount": 3,
+      "states": ["NY", "MD", "GA"],
+      "stateCount": 3
+    },
+    "recommendations": {
+      "metaTitle": "90-Degree Pocket Hole Driver Drill Attachment With 3 in. Square Drive Bit K - Home Depot Penny Item SKU 1007456239 | Penny Central",
+      "metaDescription": "Community-verified Home Depot penny find: 90-Degree Pocket Hole Driver Drill Attachment With 3 in. Square Drive Bit K (SKU 1007456239). 3 reports from 3 states (NY, MD). Verify in store.",
+      "ogTitle": "90-Degree Pocket Hole Driver Drill Attachment With 3 in. Square Drive Bit K - Home Depot Penny Deal",
+      "keywordTargets": [
+        "90-Degree Pocket Hole Driver Drill Attachment With 3 in. Square Drive Bit K penny",
+        "SKU 1007456239",
+        "90-Degree Pocket Hole Driver Drill Attachment With 3 in. Square Drive Bit K Home Depot",
+        "penny find Kreg"
+      ]
+    },
+    "jsonLdEnhancements": {
+      "productSchema": {
+        "name": "90-Degree Pocket Hole Driver Drill Attachment With 3 in. Square Drive Bit K",
+        "sku": "1007456239",
+        "description": "Community-reported penny lead for 90-Degree Pocket Hole Driver Drill Attachment With 3 in. Square Drive Bit K. 3 verified reports.",
+        "brand": "Kreg",
+        "offers": {
+          "price": "0.01",
+          "priceCurrency": "USD",
+          "availability": "InStoreOnly",
+          "url": "https://www.pennycentral.com/sku/1007456239"
+        },
+        "aggregateRating": {
+          "ratingValue": 4.5,
+          "reviewCount": 3
+        }
+      },
+      "breadcrumb": [
+        {
+          "position": 1,
+          "name": "Home",
+          "url": "https://www.pennycentral.com"
+        },
+        {
+          "position": 2,
+          "name": "Penny List",
+          "url": "https://www.pennycentral.com/penny-list"
+        },
+        {
+          "position": 3,
+          "name": "90-Degree Pocket Hole Driver Drill Attachment With 3 in. Square Drive Bit K",
+          "url": "https://www.pennycentral.com/sku/1007456239"
+        }
+      ]
+    }
+  },
+  {
+    "rank": 13,
+    "sku": "1009230240",
+    "name": "Multi-Color Steady or Strobe Indoor/Outdoor Spike Light with Red, Green, Bl",
+    "brand": "Commercial Electric",
+    "demand": {
+      "reportCount": 3,
+      "states": ["AZ", "MD", "IL"],
+      "stateCount": 3
+    },
+    "recommendations": {
+      "metaTitle": "Multi-Color Steady or Strobe Indoor/Outdoor Spike Light with Red, Green, Bl - Home Depot Penny Item SKU 1009230240 | Penny Central",
+      "metaDescription": "Community-verified Home Depot penny find: Multi-Color Steady or Strobe Indoor/Outdoor Spike Light with Red, Green, Bl (SKU 1009230240). 3 reports from 3 states (AZ, MD). Verify in store.",
+      "ogTitle": "Multi-Color Steady or Strobe Indoor/Outdoor Spike Light with Red, Green, Bl - Home Depot Penny Deal",
+      "keywordTargets": [
+        "Multi-Color Steady or Strobe Indoor/Outdoor Spike Light with Red, Green, Bl penny",
+        "SKU 1009230240",
+        "Multi-Color Steady or Strobe Indoor/Outdoor Spike Light with Red, Green, Bl Home Depot",
+        "penny find Commercial Electric"
+      ]
+    },
+    "jsonLdEnhancements": {
+      "productSchema": {
+        "name": "Multi-Color Steady or Strobe Indoor/Outdoor Spike Light with Red, Green, Bl",
+        "sku": "1009230240",
+        "description": "Community-reported penny lead for Multi-Color Steady or Strobe Indoor/Outdoor Spike Light with Red, Green, Bl. 3 verified reports.",
+        "brand": "Commercial Electric",
+        "offers": {
+          "price": "0.01",
+          "priceCurrency": "USD",
+          "availability": "InStoreOnly",
+          "url": "https://www.pennycentral.com/sku/1009230240"
+        },
+        "aggregateRating": {
+          "ratingValue": 4.5,
+          "reviewCount": 3
+        }
+      },
+      "breadcrumb": [
+        {
+          "position": 1,
+          "name": "Home",
+          "url": "https://www.pennycentral.com"
+        },
+        {
+          "position": 2,
+          "name": "Penny List",
+          "url": "https://www.pennycentral.com/penny-list"
+        },
+        {
+          "position": 3,
+          "name": "Multi-Color Steady or Strobe Indoor/Outdoor Spike Light with Red, Green, Bl",
+          "url": "https://www.pennycentral.com/sku/1009230240"
+        }
+      ]
+    }
+  },
+  {
+    "rank": 14,
+    "sku": "1010086379",
+    "name": "Adjustable 30 ft. Spot Sprinkle On Spike With Flow-Through",
+    "brand": "Orbit",
+    "demand": {
+      "reportCount": 3,
+      "states": ["MA", "RI", "TX"],
+      "stateCount": 3
+    },
+    "recommendations": {
+      "metaTitle": "Adjustable 30 ft. Spot Sprinkle On Spike With Flow-Through - Home Depot Penny Item SKU 1010086379 | Penny Central",
+      "metaDescription": "Community-verified Home Depot penny find: Adjustable 30 ft. Spot Sprinkle On Spike With Flow-Through (SKU 1010086379). 3 reports from 3 states (MA, RI). Verify in store.",
+      "ogTitle": "Adjustable 30 ft. Spot Sprinkle On Spike With Flow-Through - Home Depot Penny Deal",
+      "keywordTargets": [
+        "Adjustable 30 ft. Spot Sprinkle On Spike With Flow-Through penny",
+        "SKU 1010086379",
+        "Adjustable 30 ft. Spot Sprinkle On Spike With Flow-Through Home Depot",
+        "penny find Orbit"
+      ]
+    },
+    "jsonLdEnhancements": {
+      "productSchema": {
+        "name": "Adjustable 30 ft. Spot Sprinkle On Spike With Flow-Through",
+        "sku": "1010086379",
+        "description": "Community-reported penny lead for Adjustable 30 ft. Spot Sprinkle On Spike With Flow-Through. 3 verified reports.",
+        "brand": "Orbit",
+        "offers": {
+          "price": "0.01",
+          "priceCurrency": "USD",
+          "availability": "InStoreOnly",
+          "url": "https://www.pennycentral.com/sku/1010086379"
+        },
+        "aggregateRating": {
+          "ratingValue": 4.5,
+          "reviewCount": 3
+        }
+      },
+      "breadcrumb": [
+        {
+          "position": 1,
+          "name": "Home",
+          "url": "https://www.pennycentral.com"
+        },
+        {
+          "position": 2,
+          "name": "Penny List",
+          "url": "https://www.pennycentral.com/penny-list"
+        },
+        {
+          "position": 3,
+          "name": "Adjustable 30 ft. Spot Sprinkle On Spike With Flow-Through",
+          "url": "https://www.pennycentral.com/sku/1010086379"
+        }
+      ]
+    }
+  },
+  {
+    "rank": 15,
+    "sku": "1011858104",
+    "name": "DIABLO 1-1/4 in. Demo Demon Universal Fit Bi-Metal Oscillating Blade for N",
+    "brand": "DIABLO",
+    "demand": {
+      "reportCount": 3,
+      "states": ["TN", "NY", "TX"],
+      "stateCount": 3
+    },
+    "recommendations": {
+      "metaTitle": "DIABLO 1-1/4 in. Demo Demon Universal Fit Bi-Metal Oscillating Blade for N - Home Depot Penny Item SKU 1011858104 | Penny Central",
+      "metaDescription": "Community-verified Home Depot penny find: DIABLO 1-1/4 in. Demo Demon Universal Fit Bi-Metal Oscillating Blade for N (SKU 1011858104). 3 reports from 3 states (TN, NY). Verify in store.",
+      "ogTitle": "DIABLO 1-1/4 in. Demo Demon Universal Fit Bi-Metal Oscillating Blade for N - Home Depot Penny Deal",
+      "keywordTargets": [
+        "DIABLO 1-1/4 in. Demo Demon Universal Fit Bi-Metal Oscillating Blade for N penny",
+        "SKU 1011858104",
+        "DIABLO 1-1/4 in. Demo Demon Universal Fit Bi-Metal Oscillating Blade for N Home Depot",
+        "penny find DIABLO"
+      ]
+    },
+    "jsonLdEnhancements": {
+      "productSchema": {
+        "name": "DIABLO 1-1/4 in. Demo Demon Universal Fit Bi-Metal Oscillating Blade for N",
+        "sku": "1011858104",
+        "description": "Community-reported penny lead for DIABLO 1-1/4 in. Demo Demon Universal Fit Bi-Metal Oscillating Blade for N. 3 verified reports.",
+        "brand": "DIABLO",
+        "offers": {
+          "price": "0.01",
+          "priceCurrency": "USD",
+          "availability": "InStoreOnly",
+          "url": "https://www.pennycentral.com/sku/1011858104"
+        },
+        "aggregateRating": {
+          "ratingValue": 4.5,
+          "reviewCount": 3
+        }
+      },
+      "breadcrumb": [
+        {
+          "position": 1,
+          "name": "Home",
+          "url": "https://www.pennycentral.com"
+        },
+        {
+          "position": 2,
+          "name": "Penny List",
+          "url": "https://www.pennycentral.com/penny-list"
+        },
+        {
+          "position": 3,
+          "name": "DIABLO 1-1/4 in. Demo Demon Universal Fit Bi-Metal Oscillating Blade for N",
+          "url": "https://www.pennycentral.com/sku/1011858104"
+        }
+      ]
+    }
+  },
+  {
+    "rank": 16,
+    "sku": "1013692004",
+    "name": "Kneeling Pad",
+    "brand": "Milwaukee",
+    "demand": {
+      "reportCount": 3,
+      "states": ["AZ", "MD", "CT"],
+      "stateCount": 3
+    },
+    "recommendations": {
+      "metaTitle": "Kneeling Pad - Home Depot Penny Item SKU 1013692004 | Penny Central",
+      "metaDescription": "Community-verified Home Depot penny find: Kneeling Pad (SKU 1013692004). 3 reports from 3 states (AZ, MD). Verify in store.",
+      "ogTitle": "Kneeling Pad - Home Depot Penny Deal",
+      "keywordTargets": [
+        "Kneeling Pad penny",
+        "SKU 1013692004",
+        "Kneeling Pad Home Depot",
+        "penny find Milwaukee"
+      ]
+    },
+    "jsonLdEnhancements": {
+      "productSchema": {
+        "name": "Kneeling Pad",
+        "sku": "1013692004",
+        "description": "Community-reported penny lead for Kneeling Pad. 3 verified reports.",
+        "brand": "Milwaukee",
+        "offers": {
+          "price": "0.01",
+          "priceCurrency": "USD",
+          "availability": "InStoreOnly",
+          "url": "https://www.pennycentral.com/sku/1013692004"
+        },
+        "aggregateRating": {
+          "ratingValue": 4.5,
+          "reviewCount": 3
+        }
+      },
+      "breadcrumb": [
+        {
+          "position": 1,
+          "name": "Home",
+          "url": "https://www.pennycentral.com"
+        },
+        {
+          "position": 2,
+          "name": "Penny List",
+          "url": "https://www.pennycentral.com/penny-list"
+        },
+        {
+          "position": 3,
+          "name": "Kneeling Pad",
+          "url": "https://www.pennycentral.com/sku/1013692004"
+        }
+      ]
+    }
+  },
+  {
+    "rank": 17,
+    "sku": "1001755675",
+    "name": "10 ft. X 1 in. Cam Buckle Tie-Down Straps With S Hook (2-Pack) Fh0904",
+    "brand": "HUSKY",
+    "demand": {
+      "reportCount": 3,
+      "states": ["NY", "TX"],
+      "stateCount": 2
+    },
+    "recommendations": {
+      "metaTitle": "10 ft. X 1 in. Cam Buckle Tie-Down Straps With S Hook (2-Pack) Fh0904 - Home Depot Penny Item SKU 1001755675 | Penny Central",
+      "metaDescription": "Community-verified Home Depot penny find: 10 ft. X 1 in. Cam Buckle Tie-Down Straps With S Hook (2-Pack) Fh0904 (SKU 1001755675). 3 reports from 2 states (NY, TX). Verify in store.",
+      "ogTitle": "10 ft. X 1 in. Cam Buckle Tie-Down Straps With S Hook (2-Pack) Fh0904 - Home Depot Penny Deal",
+      "keywordTargets": [
+        "10 ft. X 1 in. Cam Buckle Tie-Down Straps With S Hook (2-Pack) Fh0904 penny",
+        "SKU 1001755675",
+        "10 ft. X 1 in. Cam Buckle Tie-Down Straps With S Hook (2-Pack) Fh0904 Home Depot",
+        "penny find HUSKY"
+      ]
+    },
+    "jsonLdEnhancements": {
+      "productSchema": {
+        "name": "10 ft. X 1 in. Cam Buckle Tie-Down Straps With S Hook (2-Pack) Fh0904",
+        "sku": "1001755675",
+        "description": "Community-reported penny lead for 10 ft. X 1 in. Cam Buckle Tie-Down Straps With S Hook (2-Pack) Fh0904. 3 verified reports.",
+        "brand": "HUSKY",
+        "offers": {
+          "price": "0.01",
+          "priceCurrency": "USD",
+          "availability": "InStoreOnly",
+          "url": "https://www.pennycentral.com/sku/1001755675"
+        },
+        "aggregateRating": {
+          "ratingValue": 4.5,
+          "reviewCount": 3
+        }
+      },
+      "breadcrumb": [
+        {
+          "position": 1,
+          "name": "Home",
+          "url": "https://www.pennycentral.com"
+        },
+        {
+          "position": 2,
+          "name": "Penny List",
+          "url": "https://www.pennycentral.com/penny-list"
+        },
+        {
+          "position": 3,
+          "name": "10 ft. X 1 in. Cam Buckle Tie-Down Straps With S Hook (2-Pack) Fh0904",
+          "url": "https://www.pennycentral.com/sku/1001755675"
+        }
+      ]
+    }
+  },
+  {
+    "rank": 18,
+    "sku": "1004434909",
+    "name": "Kwikset Aura Venetian Bronze Single Cylinder Electronic Bluetooth Keypad",
+    "demand": {
+      "reportCount": 3,
+      "states": ["PA", "RI"],
+      "stateCount": 2
+    },
+    "recommendations": {
+      "metaTitle": "Kwikset Aura Venetian Bronze Single Cylinder Electronic Bluetooth Keypad - Home Depot Penny Item SKU 1004434909 | Penny Central",
+      "metaDescription": "Community-verified Home Depot penny find: Kwikset Aura Venetian Bronze Single Cylinder Electronic Bluetooth Keypad (SKU 1004434909). 3 reports from 2 states (PA, RI). Verify in store.",
+      "ogTitle": "Kwikset Aura Venetian Bronze Single Cylinder Electronic Bluetooth Keypad - Home Depot Penny Deal",
+      "keywordTargets": [
+        "Kwikset Aura Venetian Bronze Single Cylinder Electronic Bluetooth Keypad penny",
+        "SKU 1004434909",
+        "Kwikset Aura Venetian Bronze Single Cylinder Electronic Bluetooth Keypad Home Depot",
+        "penny find undefined"
+      ]
+    },
+    "jsonLdEnhancements": {
+      "productSchema": {
+        "name": "Kwikset Aura Venetian Bronze Single Cylinder Electronic Bluetooth Keypad",
+        "sku": "1004434909",
+        "description": "Community-reported penny lead for Kwikset Aura Venetian Bronze Single Cylinder Electronic Bluetooth Keypad. 3 verified reports.",
+        "brand": "Various",
+        "offers": {
+          "price": "0.01",
+          "priceCurrency": "USD",
+          "availability": "InStoreOnly",
+          "url": "https://www.pennycentral.com/sku/1004434909"
+        },
+        "aggregateRating": {
+          "ratingValue": 4.5,
+          "reviewCount": 3
+        }
+      },
+      "breadcrumb": [
+        {
+          "position": 1,
+          "name": "Home",
+          "url": "https://www.pennycentral.com"
+        },
+        {
+          "position": 2,
+          "name": "Penny List",
+          "url": "https://www.pennycentral.com/penny-list"
+        },
+        {
+          "position": 3,
+          "name": "Kwikset Aura Venetian Bronze Single Cylinder Electronic Bluetooth Keypad",
+          "url": "https://www.pennycentral.com/sku/1004434909"
+        }
+      ]
+    }
+  },
+  {
+    "rank": 19,
+    "sku": "1004484030",
+    "name": "Aura Satin Nickel Single Cylinder Electronic Bluetooth Keypad Smart Lock Deadbolt featuring SmartKey Security",
+    "brand": "Kwikset",
+    "demand": {
+      "reportCount": 3,
+      "states": ["PA", "MA"],
+      "stateCount": 2
+    },
+    "recommendations": {
+      "metaTitle": "Aura Satin Nickel Single Cylinder Electronic Bluetooth Keypad Smart Lock Deadbolt featuring SmartKey Security - Home Depot Penny Item SKU 1004484030 | Penny Central",
+      "metaDescription": "Community-verified Home Depot penny find: Aura Satin Nickel Single Cylinder Electronic Bluetooth Keypad Smart Lock Deadbolt featuring SmartKey Security (SKU 1004484030). 3 reports from 2 states (PA, MA). Verify in store.",
+      "ogTitle": "Aura Satin Nickel Single Cylinder Electronic Bluetooth Keypad Smart Lock Deadbolt featuring SmartKey Security - Home Depot Penny Deal",
+      "keywordTargets": [
+        "Aura Satin Nickel Single Cylinder Electronic Bluetooth Keypad Smart Lock Deadbolt featuring SmartKey Security penny",
+        "SKU 1004484030",
+        "Aura Satin Nickel Single Cylinder Electronic Bluetooth Keypad Smart Lock Deadbolt featuring SmartKey Security Home Depot",
+        "penny find Kwikset"
+      ]
+    },
+    "jsonLdEnhancements": {
+      "productSchema": {
+        "name": "Aura Satin Nickel Single Cylinder Electronic Bluetooth Keypad Smart Lock Deadbolt featuring SmartKey Security",
+        "sku": "1004484030",
+        "description": "Community-reported penny lead for Aura Satin Nickel Single Cylinder Electronic Bluetooth Keypad Smart Lock Deadbolt featuring SmartKey Security. 3 verified reports.",
+        "brand": "Kwikset",
+        "offers": {
+          "price": "0.01",
+          "priceCurrency": "USD",
+          "availability": "InStoreOnly",
+          "url": "https://www.pennycentral.com/sku/1004484030"
+        },
+        "aggregateRating": {
+          "ratingValue": 4.5,
+          "reviewCount": 3
+        }
+      },
+      "breadcrumb": [
+        {
+          "position": 1,
+          "name": "Home",
+          "url": "https://www.pennycentral.com"
+        },
+        {
+          "position": 2,
+          "name": "Penny List",
+          "url": "https://www.pennycentral.com/penny-list"
+        },
+        {
+          "position": 3,
+          "name": "Aura Satin Nickel Single Cylinder Electronic Bluetooth Keypad Smart Lock Deadbolt featuring SmartKey Security",
+          "url": "https://www.pennycentral.com/sku/1004484030"
+        }
+      ]
+    }
+  },
+  {
+    "rank": 20,
+    "sku": "462742",
+    "name": "20 in. B78 Semi Chisel Chainsaw Chain",
+    "brand": "Powercare",
+    "demand": {
+      "reportCount": 2,
+      "states": ["MA", "TX"],
+      "stateCount": 2
+    },
+    "recommendations": {
+      "metaTitle": "20 in. B78 Semi Chisel Chainsaw Chain - Home Depot Penny Item SKU 462742 | Penny Central",
+      "metaDescription": "Community-verified Home Depot penny find: 20 in. B78 Semi Chisel Chainsaw Chain (SKU 462742). 2 reports from 2 states (MA, TX). Verify in store.",
+      "ogTitle": "20 in. B78 Semi Chisel Chainsaw Chain - Home Depot Penny Deal",
+      "keywordTargets": [
+        "20 in. B78 Semi Chisel Chainsaw Chain penny",
+        "SKU 462742",
+        "20 in. B78 Semi Chisel Chainsaw Chain Home Depot",
+        "penny find Powercare"
+      ]
+    },
+    "jsonLdEnhancements": {
+      "productSchema": {
+        "name": "20 in. B78 Semi Chisel Chainsaw Chain",
+        "sku": "462742",
+        "description": "Community-reported penny lead for 20 in. B78 Semi Chisel Chainsaw Chain. 2 verified reports.",
+        "brand": "Powercare",
+        "offers": {
+          "price": "0.01",
+          "priceCurrency": "USD",
+          "availability": "InStoreOnly",
+          "url": "https://www.pennycentral.com/sku/462742"
+        },
+        "aggregateRating": {
+          "ratingValue": 4.5,
+          "reviewCount": 2
+        }
+      },
+      "breadcrumb": [
+        {
+          "position": 1,
+          "name": "Home",
+          "url": "https://www.pennycentral.com"
+        },
+        {
+          "position": 2,
+          "name": "Penny List",
+          "url": "https://www.pennycentral.com/penny-list"
+        },
+        {
+          "position": 3,
+          "name": "20 in. B78 Semi Chisel Chainsaw Chain",
+          "url": "https://www.pennycentral.com/sku/462742"
         }
       ]
     }
