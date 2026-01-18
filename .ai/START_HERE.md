@@ -152,10 +152,25 @@ When something doesn't work:
 
 ---
 
+## Context Management
+
+**For context portability across sessions/tools:**
+
+- **`.ai/HANDOFF.md`** - Compressed context pack (5 min read, copy/paste primers)
+- **`.ai/topics/INDEX.md`** - Topic capsule index (choose your domain)
+- **`.ai/impl/`** - Implementation plans (approved architectures live here)
+- **`copilot-instructions.md`** - Copilot Chat entry point (limited capabilities)
+
+These enable fast context-loading when switching tools (Claude → Codex → Copilot) or starting fresh.
+
+---
+
 ## Next Step
 
 Now read `CRITICAL_RULES.md` to learn the never-violate rules (Port 3001, colors, verification, etc.).
 
-After the read order, use `.ai/USAGE.md` (Habit 2) to write a “Goldilocks” task spec (includes NOT DOING / CONSTRAINTS / EXAMPLES) and the course-correction script when the AI is misaligned.
+After the read order, use `.ai/USAGE.md` (Habit 2) to write a "Goldilocks" task spec (includes NOT DOING / CONSTRAINTS / EXAMPLES) and the course-correction script when the AI is misaligned.
 
-If you’re unsure what to optimize next (submissions vs retention vs SEO), read `.ai/CONTEXT.md` for the stable decision frame.
+If you're unsure what to optimize next (submissions vs retention vs SEO), read `.ai/CONTEXT.md` for the stable decision frame.
+
+**For multi-session work:** Use `/checkpoint`, `/capsule`, and `/handoff` commands (Claude Code only) to keep context compressed and portable.
