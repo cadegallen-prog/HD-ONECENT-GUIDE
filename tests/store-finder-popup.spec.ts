@@ -103,6 +103,8 @@ test.describe("store finder popup (screenshots)", () => {
       contentType: "image/png",
     })
 
-    expect(consoleErrors, "Console errors on /store-finder").toEqual([])
+    const allowedConsoleRegex = /(ezoic|id5-sync|g\.ezoic\.net|cdn\.id5-sync\.com|ezintegration)/i
+    const filtered = consoleErrors.filter((m) => !allowedConsoleRegex.test(m))
+    expect(filtered, "Console errors on /store-finder (filtered)").toEqual([])
   })
 })
