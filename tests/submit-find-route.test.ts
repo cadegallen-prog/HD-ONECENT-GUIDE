@@ -5,15 +5,21 @@ import { installSupabaseMocks, clearSupabaseMocks } from "./test-utils/supabase-
 
 test("inserts only allowed fields into Supabase", async () => {
   const inserted: Record<string, unknown>[] = []
-  const insertSpy = async (payload: Record<string, unknown>) => {
-    inserted.push(payload)
-    return { error: null }
-  }
   const anonReadClient: any = {
     from: () => ({}),
   }
   const serviceRoleClient: any = {
-    from: () => ({ insert: insertSpy }),
+    from: () => ({
+      insert: (payload: Record<string, unknown>) => {
+        inserted.push(payload)
+        return {
+          select: () => ({
+            single: async () => ({ data: { id: "test-uuid-123" }, error: null }),
+          }),
+        }
+      },
+    }),
+    rpc: async () => ({ data: { enriched: false }, error: null }),
   }
 
   installSupabaseMocks({ submitAnon: anonReadClient, submitServiceRole: serviceRoleClient })
@@ -61,19 +67,31 @@ test("uses service role insert (works even when anon inserts are blocked)", asyn
 
   const anonReadClient: any = {
     from: () => ({
-      insert: async (payload: Record<string, unknown>) => {
+      insert: (payload: Record<string, unknown>) => {
         anonInserted.push(payload)
-        return { error: { code: "42501", message: "anon insert should not be used" } }
+        return {
+          select: () => ({
+            single: async () => ({
+              data: null,
+              error: { code: "42501", message: "anon insert should not be used" },
+            }),
+          }),
+        }
       },
     }),
   }
   const serviceRoleClient: any = {
     from: () => ({
-      insert: async (payload: Record<string, unknown>) => {
+      insert: (payload: Record<string, unknown>) => {
         serviceInserted.push(payload)
-        return { error: null }
+        return {
+          select: () => ({
+            single: async () => ({ data: { id: "test-uuid-456" }, error: null }),
+          }),
+        }
       },
     }),
+    rpc: async () => ({ data: { enriched: false }, error: null }),
   }
 
   installSupabaseMocks({ submitAnon: anonReadClient, submitServiceRole: serviceRoleClient })
@@ -106,18 +124,102 @@ test("uses service role insert (works even when anon inserts are blocked)", asyn
   clearSupabaseMocks()
 })
 
+test("always overwrites item_name with enrichment canonical name", async () => {
+  const inserted: Record<string, unknown>[] = []
+
+  // Mock anon client with enrichment lookup that returns canonical name
+  const anonReadClient: any = {
+    from: () => ({
+      select: () => ({
+        eq: () => ({
+          limit: () => ({
+            maybeSingle: async () => ({
+              data: {
+                item_name: "Milwaukee M18 FUEL Hammer Drill/Driver Kit",  // Canonical
+                brand: "Milwaukee",
+                retail_price: 199.00,
+                image_url: "https://example.com/image.jpg",
+              },
+              error: null,
+            }),
+          }),
+        }),
+      }),
+    }),
+  }
+
+  const serviceRoleClient: any = {
+    from: () => ({
+      insert: (payload: Record<string, unknown>) => {
+        inserted.push(payload)
+        return {
+          select: () => ({
+            single: async () => ({ data: { id: "test-uuid-overwrite" }, error: null }),
+          }),
+        }
+      },
+    }),
+    rpc: async () => ({ data: { enriched: false }, error: null }),
+  }
+
+  installSupabaseMocks({ submitAnon: anonReadClient, submitServiceRole: serviceRoleClient })
+
+  const { POST } = await import("../app/api/submit-find/route")
+  const req = new NextRequest("http://localhost/api/submit-find", {
+    method: "POST",
+    body: JSON.stringify({
+      itemName: "drill",  // User-provided (incomplete)
+      sku: "1009876543",
+      storeCity: "Atlanta",
+      storeState: "GA",
+      dateFound: new Date().toISOString().split("T")[0],
+      quantity: "1",
+      notes: "",
+      website: "",
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      "x-forwarded-for": "203.0.113.30",
+    },
+  })
+
+  const res = await POST(req)
+  assert.strictEqual(res.status, 200)
+  const payload = inserted[0] as Record<string, unknown>
+
+  // Verify canonical name from enrichment is used (NOT user input)
+  assert.strictEqual(
+    payload.item_name,
+    "Milwaukee M18 FUEL Hammer Drill/Driver Kit",
+    "Should use canonical name from enrichment, not user input"
+  )
+
+  // Verify enrichment fields are included
+  assert.strictEqual(payload.brand, "Milwaukee")
+  assert.strictEqual(payload.retail_price, 199.00)
+  assert.strictEqual(payload.image_url, "https://example.com/image.jpg")
+
+  clearSupabaseMocks()
+})
+
 // Date validation tests
 test("accepts date from 15 days ago", async () => {
   const inserted: Record<string, unknown>[] = []
-  const insertSpy = async (payload: Record<string, unknown>) => {
-    inserted.push(payload)
-    return { error: null }
-  }
   const anonReadClient: any = {
     from: () => ({}),
   }
   const serviceRoleClient: any = {
-    from: () => ({ insert: insertSpy }),
+    from: () => ({
+      insert: (payload: Record<string, unknown>) => {
+        inserted.push(payload)
+        return {
+          select: () => ({
+            single: async () => ({ data: { id: "test-uuid-15days" }, error: null }),
+          }),
+        }
+      },
+    }),
+    rpc: async () => ({ data: { enriched: false }, error: null }),
   }
 
   installSupabaseMocks({ submitAnon: anonReadClient, submitServiceRole: serviceRoleClient })
@@ -153,15 +255,21 @@ test("accepts date from 15 days ago", async () => {
 
 test("rejects date from 31 days ago", async () => {
   const inserted: Record<string, unknown>[] = []
-  const insertSpy = async (payload: Record<string, unknown>) => {
-    inserted.push(payload)
-    return { error: null }
-  }
   const anonReadClient: any = {
     from: () => ({}),
   }
   const serviceRoleClient: any = {
-    from: () => ({ insert: insertSpy }),
+    from: () => ({
+      insert: (payload: Record<string, unknown>) => {
+        inserted.push(payload)
+        return {
+          select: () => ({
+            single: async () => ({ data: { id: "test-uuid-31days" }, error: null }),
+          }),
+        }
+      },
+    }),
+    rpc: async () => ({ data: { enriched: false }, error: null }),
   }
 
   installSupabaseMocks({ submitAnon: anonReadClient, submitServiceRole: serviceRoleClient })
@@ -199,15 +307,21 @@ test("rejects date from 31 days ago", async () => {
 
 test("rejects future date", async () => {
   const inserted: Record<string, unknown>[] = []
-  const insertSpy = async (payload: Record<string, unknown>) => {
-    inserted.push(payload)
-    return { error: null }
-  }
   const anonReadClient: any = {
     from: () => ({}),
   }
   const serviceRoleClient: any = {
-    from: () => ({ insert: insertSpy }),
+    from: () => ({
+      insert: (payload: Record<string, unknown>) => {
+        inserted.push(payload)
+        return {
+          select: () => ({
+            single: async () => ({ data: { id: "test-uuid-future" }, error: null }),
+          }),
+        }
+      },
+    }),
+    rpc: async () => ({ data: { enriched: false }, error: null }),
   }
 
   installSupabaseMocks({ submitAnon: anonReadClient, submitServiceRole: serviceRoleClient })

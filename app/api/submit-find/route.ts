@@ -142,17 +142,6 @@ type EnrichmentData = {
   retail_price?: number | null
 }
 
-type EnrichmentLookupQuery = {
-  select: (columns: string) => {
-    eq: (
-      column: string,
-      value: string
-    ) => {
-      maybeSingle: () => Promise<{ data: unknown; error: unknown }>
-    }
-  }
-}
-
 type PennyListLookupQuery = {
   select: (columns: string) => {
     eq: (
@@ -167,47 +156,30 @@ type PennyListLookupQuery = {
 }
 
 /**
- * Lookup enrichment data cascade:
- * 1. Check penny_item_enrichment table
- * 2. If not found, check existing Penny List rows with same SKU
- * 3. If still not found, return null
+ * Lookup self-enrichment data from existing Penny List rows with the same SKU.
+ * This provides "self-enrichment" where previous submissions of the same SKU
+ * can provide data for new submissions.
  *
- * @returns {enrichment data, should delete enrichment row}
+ * Note: Staging queue enrichment happens AFTER insert via the
+ * consume_enrichment_for_penny_item RPC (atomic operation).
+ *
+ * @returns Enrichment data from existing Penny List rows, or null
  */
-async function lookupEnrichment(
+async function lookupSelfEnrichment(
   supabase: SupabaseClientLike,
   sku: string
-): Promise<{ data: EnrichmentData | null; deleteEnrichmentRow: boolean }> {
+): Promise<EnrichmentData | null> {
   // Safety: if test overrides provide a minimal client without select/eq chaining, skip enrichment
   if (!supabase || typeof supabase.from !== "function") {
-    return { data: null, deleteEnrichmentRow: false }
+    return null
   }
   try {
-    const enrichmentTable = supabase.from("penny_item_enrichment") as unknown
-    if (typeof (enrichmentTable as { select?: unknown }).select !== "function") {
-      return { data: null, deleteEnrichmentRow: false }
-    }
-
-    // Step 1: Check penny_item_enrichment table
-    const { data: enrichmentRow, error: enrichmentError } = await (
-      enrichmentTable as EnrichmentLookupQuery
-    )
-      .select(
-        "item_name, brand, model_number, upc, image_url, home_depot_url, internet_sku, retail_price"
-      )
-      .eq("sku", sku)
-      .maybeSingle()
-
-    if (!enrichmentError && enrichmentRow) {
-      return { data: enrichmentRow as EnrichmentData, deleteEnrichmentRow: true }
-    }
-
     const pennyListTable = supabase.from("Penny List") as unknown
     if (typeof (pennyListTable as { select?: unknown }).select !== "function") {
-      return { data: null, deleteEnrichmentRow: false }
+      return null
     }
 
-    // Step 2: Check existing Penny List rows with same SKU
+    // Check existing Penny List rows with same SKU for self-enrichment
     const { data: existingRows, error: existingError } = await (
       pennyListTable as PennyListLookupQuery
     )
@@ -219,27 +191,70 @@ async function lookupEnrichment(
       .maybeSingle()
 
     if (!existingError && existingRows) {
-      return { data: existingRows as EnrichmentData, deleteEnrichmentRow: false }
+      return existingRows as EnrichmentData
     }
   } catch (error) {
     // Skip enrichment if client is minimally mocked (tests) or query builder is incomplete
-    console.warn("Error during enrichment lookup, skipping enrichment:", error)
+    console.warn("Error during self-enrichment lookup, skipping:", error)
   }
 
-  // Step 3: No enrichment data found
-  return { data: null, deleteEnrichmentRow: false }
+  return null
 }
 
 /**
- * Delete enrichment row after successful insert (using service role to bypass RLS)
+ * Consume enrichment from staging queue via atomic RPC.
+ * This function is called AFTER the Penny List insert to atomically:
+ * 1. Find matching staging row (by SKU or internet_number)
+ * 2. Update the Penny List row with merge rules
+ * 3. Delete the staging row
+ *
+ * @returns Result object with enrichment status
  */
-async function deleteEnrichmentRow(sku: string): Promise<void> {
+async function consumeStagingEnrichment(
+  serviceClient: SupabaseServiceRoleClientLike,
+  pennyId: string,
+  sku: string,
+  internetSku: number | null
+): Promise<{ enriched: boolean; matchType?: string; fieldsFilled?: string[] }> {
   try {
-    const serviceClient = getSupabaseServiceRoleServerClient()
-    await serviceClient.from("penny_item_enrichment").delete().eq("sku", sku)
+    const { data, error } = await serviceClient.rpc("consume_enrichment_for_penny_item", {
+      p_penny_id: pennyId,
+      p_sku: sku,
+      p_internet_number: internetSku,
+    })
+
+    if (error) {
+      console.warn("Staging enrichment RPC error:", error.message)
+      return { enriched: false }
+    }
+
+    const result = data as {
+      enriched: boolean
+      match_type?: string
+      fields_filled?: string[]
+      staging_row_deleted?: boolean
+    } | null
+
+    if (result?.enriched) {
+      // Log enrichment result per spec requirements
+      console.log("Enrichment applied:", {
+        submission_id: pennyId,
+        match_type: result.match_type,
+        fields_filled_count: result.fields_filled?.length ?? 0,
+        staging_row_deleted: result.staging_row_deleted,
+      })
+      return {
+        enriched: true,
+        matchType: result.match_type,
+        fieldsFilled: result.fields_filled,
+      }
+    }
+
+    return { enriched: false }
   } catch (error) {
-    // Log warning but don't fail the request - enrichment deletion is non-critical
-    console.warn(`Failed to delete enrichment row for SKU ${sku}:`, error)
+    // Log warning but don't fail the request - staging enrichment is non-critical
+    console.warn("Staging enrichment error:", error)
+    return { enriched: false }
   }
 }
 
@@ -334,9 +349,8 @@ export async function POST(request: NextRequest) {
 
     const supabase = getSupabaseServerClient()
 
-    // Lookup enrichment data (cascade: enrichment table → existing rows → null)
-    const lookupResult = await lookupEnrichment(supabase, normalizedSku)
-    const { data: enrichment, deleteEnrichmentRow: shouldDeleteEnrichment } = lookupResult
+    // Lookup self-enrichment from existing Penny List rows with same SKU
+    const enrichment = await lookupSelfEnrichment(supabase, normalizedSku)
 
     // Build payload with enrichment data merged in (only include enrichment fields when present)
     const payload: Record<string, unknown> = {
@@ -379,15 +393,21 @@ export async function POST(request: NextRequest) {
     // - Keep the database locked down from direct anon inserts (RLS)
     // - Still allow low-friction submissions via this API route
     const serviceClient = getSupabaseServiceRoleServerClient()
-    const { error } = await serviceClient.from("Penny List").insert(payload)
 
-    if (error) {
+    // Insert and return the new row's ID for staging enrichment
+    const { data: insertedRow, error } = await serviceClient
+      .from("Penny List")
+      .insert(payload)
+      .select("id")
+      .single()
+
+    if (error || !insertedRow?.id) {
       // Log detailed error info (code, message, hint) for debugging without exposing to client
       console.error("Supabase insert error:", {
-        code: error.code,
-        message: error.message,
-        details: error.details,
-        hint: error.hint,
+        code: error?.code,
+        message: error?.message,
+        details: error?.details,
+        hint: error?.hint,
         sku: normalizedSku,
       })
       return NextResponse.json(
@@ -398,10 +418,14 @@ export async function POST(request: NextRequest) {
 
     recordSuccessfulSubmission(rateKey)
 
-    // Delete enrichment row after successful insert (if it came from enrichment table)
-    if (shouldDeleteEnrichment) {
-      await deleteEnrichmentRow(normalizedSku)
-    }
+    // Attempt atomic enrichment from staging queue (non-blocking, won't fail request)
+    // This consumes and deletes the staging row if a match is found
+    await consumeStagingEnrichment(
+      serviceClient,
+      insertedRow.id,
+      normalizedSku,
+      typeof payload.internet_sku === "number" ? payload.internet_sku : null
+    )
 
     return NextResponse.json({
       success: true,

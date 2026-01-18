@@ -1,3 +1,7 @@
+# Automated Supabase Backup
+#
+# This workflow runs automatically every Monday at 2 AM UTC (scheduled)
+# and can also be triggered manually from the GitHub Actions UI.
 name: Automated Supabase Backup
 
 on:
@@ -36,7 +40,6 @@ jobs:
 
       - name: Dump Supabase database
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: |
           # Use pg_dump via Supabase connection string

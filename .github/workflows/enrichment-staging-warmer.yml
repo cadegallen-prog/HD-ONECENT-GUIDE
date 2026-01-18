@@ -1,0 +1,85 @@
+# Enrichment Staging Warmer
+# Fills enrichment_staging table with bulk penny item data from scraper_core.py
+#
+# Schedule: Tue-Fri at 9:05 AM ET (14:05 UTC)
+# This timing aligns with Home Depot markdown cycles.
+#
+# Required secrets:
+#   - PENNY_RAW_COOKIE: Cookie string for pro.scouterdev.io API
+#   - PENNY_GUILD_ID: Guild ID for pro.scouterdev.io API
+#   - NEXT_PUBLIC_SUPABASE_URL: Supabase project URL
+#   - SUPABASE_SERVICE_ROLE_KEY: Supabase service role key (bypasses RLS)
+
+name: Enrichment Staging Warmer
+
+on:
+  schedule:
+    # Tue-Fri at 9:05 AM ET (14:05 UTC)
+    # Note: GitHub cron uses UTC time
+    - cron: '5 14 * * 2-5'
+  workflow_dispatch:
+    inputs:
+      max_uniques:
+        description: 'Max unique items to process (default 6000)'
+        required: false
+        default: '6000'
+      batch_size:
+        description: 'Batch size for DB upserts (default 50)'
+        required: false
+        default: '50'
+
+# Prevent overlapping runs
+concurrency:
+  group: enrichment-staging-warmer
+  cancel-in-progress: false
+
+jobs:
+  warm-staging:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install pandas requests supabase
+
+      - name: Validate required secrets
+        run: |
+          if [ -z "${{ secrets.PENNY_RAW_COOKIE }}" ]; then
+            echo "::error::Missing PENNY_RAW_COOKIE secret"
+            exit 1
+          fi
+          if [ -z "${{ secrets.PENNY_GUILD_ID }}" ]; then
+            echo "::error::Missing PENNY_GUILD_ID secret"
+            exit 1
+          fi
+          if [ -z "${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}" ]; then
+            echo "::error::Missing NEXT_PUBLIC_SUPABASE_URL secret"
+            exit 1
+          fi
+          if [ -z "${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" ]; then
+            echo "::error::Missing SUPABASE_SERVICE_ROLE_KEY secret"
+            exit 1
+          fi
+          echo "All required secrets present"
+
+      - name: Run staging warmer
+        env:
+          PENNY_RAW_COOKIE: ${{ secrets.PENNY_RAW_COOKIE }}
+          PENNY_GUILD_ID: ${{ secrets.PENNY_GUILD_ID }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          MAX_UNIQUES: ${{ github.event.inputs.max_uniques || '6000' }}
+          BATCH_SIZE: ${{ github.event.inputs.batch_size || '50' }}
+        run: python scripts/staging-warmer.py

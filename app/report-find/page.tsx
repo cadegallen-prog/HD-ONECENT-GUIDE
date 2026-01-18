@@ -20,7 +20,6 @@ function ReportFindForm() {
   const handledPrefillKeyRef = useRef<string | null>(null)
   const [todayIso, setTodayIso] = useState("")
   const [minDateIso, setMinDateIso] = useState("")
-  const [productUrl, setProductUrl] = useState("")
   const [formData, setFormData] = useState({
     itemName: "",
     sku: "",
@@ -28,7 +27,6 @@ function ReportFindForm() {
     storeState: "",
     dateFound: "",
     quantity: "",
-    notes: "",
     website: "",
   })
 
@@ -120,36 +118,6 @@ function ReportFindForm() {
       ? 'Receipts usually show a UPC/barcode, not a SKU. A valid 10‑digit Home Depot SKU should start with "10" (format: 10xx‑xxx‑xxx).'
       : ""
 
-  // Extract SKU from Home Depot URL
-  function extractSkuFromUrl(url: string): string | null {
-    // Match patterns:
-    // https://www.homedepot.com/p/product-name/1234567890
-    // https://www.homedepot.com/p/1234567890
-    // https://homedepot.com/p/some-product/123456
-    const match = url.match(/\/p\/(?:[^/]+\/)?(\d{6,10})(?:[/?]|$)/)
-    return match ? match[1] : null
-  }
-
-  const handleProductUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const url = e.target.value
-    setProductUrl(url)
-
-    if (!url.trim()) return
-
-    const extracted = extractSkuFromUrl(url)
-    if (extracted) {
-      const normalized = normalizeSku(extracted)
-      const check = validateSku(normalized)
-
-      if (!check.error) {
-        // Auto-fill SKU field
-        setFormData({ ...formData, sku: normalized })
-        setSkuDisplay(formatSkuForDisplay(normalized))
-        setSkuError("")
-      }
-    }
-  }
-
   const handleSkuChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value
     const rawDigits = getRawSku(input)
@@ -213,13 +181,11 @@ function ReportFindForm() {
           storeState: "",
           dateFound: today,
           quantity: "",
-          notes: "",
           website: "",
         })
         setSkuDisplay("")
         setSkuError("")
         setSkuLocked(false)
-        setProductUrl("")
       } else {
         setResult({
           success: false,
@@ -300,30 +266,6 @@ function ReportFindForm() {
             />
             <p className="mt-1 text-xs text-[var(--text-muted)]">
               What is the item? (max 75 characters)
-            </p>
-          </div>
-
-          {/* Optional: Paste Home Depot URL */}
-          <div>
-            <label
-              htmlFor="productUrl"
-              className="block text-sm font-medium text-[var(--text-primary)] mb-2"
-            >
-              Home Depot product URL{" "}
-              <span className="text-xs text-[var(--text-muted)] font-normal">
-                (optional - auto-fills product details)
-              </span>
-            </label>
-            <input
-              type="url"
-              id="productUrl"
-              value={productUrl}
-              onChange={handleProductUrlChange}
-              placeholder="https://www.homedepot.com/p/product-name/1234567890"
-              className="w-full px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent text-sm"
-            />
-            <p className="mt-1 text-xs text-[var(--text-muted)]">
-              Paste a product URL to auto-fill item name and SKU
             </p>
           </div>
 
@@ -420,8 +362,8 @@ function ReportFindForm() {
               </p>
             ) : (
               <p id="sku-hint" className="mt-1 text-xs text-[var(--text-muted)]">
-                Use the 6‑digit shelf SKU or the Home Depot app. Receipts usually show a
-                UPC/barcode, not the SKU.
+                Enter the 6 or 10-digit SKU from the shelf tag or Home Depot app. Do not use Store
+                SO SKU, Internet #, or UPC (receipts show UPC, not SKU).
               </p>
             )}
             {skuWarning && (
@@ -430,6 +372,27 @@ function ReportFindForm() {
                 <span>{skuWarning}</span>
               </p>
             )}
+          </div>
+
+          {/* City (optional) - ABOVE State */}
+          <div>
+            <label
+              htmlFor="storeCity"
+              className="block text-sm font-medium text-[var(--text-primary)] mb-2"
+            >
+              City <span className="text-xs text-[var(--text-muted)] font-normal">(optional)</span>
+            </label>
+            <input
+              type="text"
+              id="storeCity"
+              value={formData.storeCity}
+              onChange={(e) => setFormData({ ...formData, storeCity: e.target.value })}
+              placeholder="e.g., Tampa"
+              className="w-full px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent"
+            />
+            <p className="mt-1 text-xs text-[var(--text-muted)]">
+              Optional: helps show regional patterns.
+            </p>
           </div>
 
           {/* Honeypot field for bots */}
@@ -501,48 +464,6 @@ function ReportFindForm() {
               When did you find this item? (within the last 30 days)
             </p>
           </div>
-
-          {/* Optional details (collapsed by default) */}
-          <details className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] px-4 py-3">
-            <summary className="cursor-pointer text-sm font-medium text-[var(--text-primary)]">
-              Add optional details (city, notes)
-            </summary>
-            <div className="mt-4 space-y-4">
-              <div>
-                <label
-                  htmlFor="storeCity"
-                  className="block text-sm font-medium text-[var(--text-primary)] mb-2"
-                >
-                  City (optional)
-                </label>
-                <input
-                  type="text"
-                  id="storeCity"
-                  value={formData.storeCity}
-                  onChange={(e) => setFormData({ ...formData, storeCity: e.target.value })}
-                  placeholder="e.g., Tampa"
-                  className="w-full px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="notes"
-                  className="block text-sm font-medium text-[var(--text-primary)] mb-2"
-                >
-                  Additional Notes (optional)
-                </label>
-                <textarea
-                  id="notes"
-                  value={formData.notes}
-                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                  placeholder="e.g., Found in clearance aisle, back corner near garden..."
-                  rows={3}
-                  className="w-full px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent resize-none"
-                />
-              </div>
-            </div>
-          </details>
 
           {/* Quantity (optional) */}
           <div>
