@@ -57,6 +57,8 @@ type SupabasePennyEnrichmentRow = {
   retail_price: string | number | null
 }
 
+const DAY_MS = 24 * 60 * 60 * 1000
+
 function loadEnvFileIfPresent(relativePath: string): void {
   const fullPath = path.join(process.cwd(), relativePath)
   if (!fs.existsSync(fullPath)) return
@@ -424,15 +426,39 @@ async function main() {
     }))
     .sort((a, b) => a.sku.localeCompare(b.sku))
 
+  // Playwright runs use a fixed "now" (see `app/penny-list/page.tsx` and `/api/penny-list`)
+  // to keep time-based UI deterministic. Real snapshots can contain "future" timestamps relative
+  // to that pinned time, which would suppress "Hot Right Now" and other freshness-based UI.
+  // Rebase timestamps so the fixture remains deterministic while still using real SKUs/names.
+  const fixtureNowIso = process.env.FIXTURE_NOW_ISO || "2025-12-10T12:00:00Z"
+  const fixtureNowMs = new Date(fixtureNowIso).getTime()
+  if (Number.isNaN(fixtureNowMs)) throw new Error(`Invalid FIXTURE_NOW_ISO: ${fixtureNowIso}`)
+
+  const originalTimes = sanitized
+    .map((item) => new Date(item.lastSeenAt || item.dateAdded).getTime())
+    .filter((ms) => Number.isFinite(ms))
+  const maxOriginalMs = originalTimes.length ? Math.max(...originalTimes) : fixtureNowMs
+
+  const rebased = sanitized.map((item) => {
+    const originalMs = new Date(item.lastSeenAt || item.dateAdded).getTime()
+    const safeOriginalMs = Number.isFinite(originalMs) ? originalMs : maxOriginalMs
+    const deltaMs = Math.max(0, maxOriginalMs - safeOriginalMs)
+    const rebasedMs = fixtureNowMs - Math.min(deltaMs, 29 * DAY_MS)
+    const iso = new Date(rebasedMs).toISOString()
+    return { ...item, dateAdded: iso, lastSeenAt: iso }
+  })
+
   const outPath = path.join(process.cwd(), "data", "penny-list.json")
-  await writeFile(outPath, JSON.stringify(sanitized, null, 2) + "\n", "utf8")
+  await writeFile(outPath, JSON.stringify(rebased, null, 2) + "\n", "utf8")
 
   // eslint-disable-next-line no-console
-  console.log(`✅ Wrote ${sanitized.length} items to ${outPath}`)
+  console.log(`✅ Wrote ${rebased.length} items to ${outPath}`)
   // eslint-disable-next-line no-console
   console.log(
     "   Source: penny_list_public + penny_item_enrichment (sanitized; state-only locations, notes blank)"
   )
+  // eslint-disable-next-line no-console
+  console.log(`   Timestamp base: FIXTURE_NOW_ISO=${fixtureNowIso} (rebased to last 30d)`)
 }
 
 main().catch((err) => {
