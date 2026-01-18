@@ -29,6 +29,7 @@
     "enrich:stealth": "tsx scripts/stealth-enrich.ts",
     "enrich:serpapi": "tsx scripts/serpapi-enrich.ts",
     "penny:count": "tsx scripts/print-penny-list-count.ts",
+    "fixture:snapshot": "tsx scripts/snapshot-penny-list-fixture.ts",
     "prepare": "husky",
     "qa:fast": "npm run lint && npm run test:unit && npm run build",
     "qa:full": "npm run qa:fast && npm run test:e2e && npm run check-contrast && npm run check-axe"
