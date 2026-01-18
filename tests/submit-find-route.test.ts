@@ -29,7 +29,7 @@ test("inserts only allowed fields into Supabase", async () => {
     method: "POST",
     body: JSON.stringify({
       itemName: "Test Item",
-      sku: "1009876543",
+      sku: "1001220867",
       storeCity: "Atlanta",
       storeState: "GA",
       dateFound: new Date().toISOString().split("T")[0],
@@ -50,7 +50,7 @@ test("inserts only allowed fields into Supabase", async () => {
   const payload = inserted[0] as Record<string, unknown>
   assert.deepStrictEqual(payload, {
     item_name: "Test Item",
-    home_depot_sku_6_or_10_digits: "1009876543",
+    home_depot_sku_6_or_10_digits: "1001220867",
     store_city_state: "Atlanta, GA",
     purchase_date: new Date().toISOString().split("T")[0],
     exact_quantity_found: 2,
@@ -101,7 +101,7 @@ test("uses service role insert (works even when anon inserts are blocked)", asyn
     method: "POST",
     body: JSON.stringify({
       itemName: "Test Item",
-      sku: "1009876543",
+      sku: "1001220867",
       storeCity: "Atlanta",
       storeState: "GA",
       dateFound: new Date().toISOString().split("T")[0],
@@ -135,9 +135,9 @@ test("always overwrites item_name with enrichment canonical name", async () => {
           limit: () => ({
             maybeSingle: async () => ({
               data: {
-                item_name: "Milwaukee M18 FUEL Hammer Drill/Driver Kit",  // Canonical
+                item_name: "Milwaukee M18 FUEL Hammer Drill/Driver Kit", // Canonical
                 brand: "Milwaukee",
-                retail_price: 199.00,
+                retail_price: 199.0,
                 image_url: "https://example.com/image.jpg",
               },
               error: null,
@@ -168,8 +168,8 @@ test("always overwrites item_name with enrichment canonical name", async () => {
   const req = new NextRequest("http://localhost/api/submit-find", {
     method: "POST",
     body: JSON.stringify({
-      itemName: "drill",  // User-provided (incomplete)
-      sku: "1009876543",
+      itemName: "drill", // User-provided (incomplete)
+      sku: "1001220867",
       storeCity: "Atlanta",
       storeState: "GA",
       dateFound: new Date().toISOString().split("T")[0],
@@ -196,7 +196,7 @@ test("always overwrites item_name with enrichment canonical name", async () => {
 
   // Verify enrichment fields are included
   assert.strictEqual(payload.brand, "Milwaukee")
-  assert.strictEqual(payload.retail_price, 199.00)
+  assert.strictEqual(payload.retail_price, 199.0)
   assert.strictEqual(payload.image_url, "https://example.com/image.jpg")
 
   clearSupabaseMocks()
@@ -233,7 +233,7 @@ test("accepts date from 15 days ago", async () => {
     method: "POST",
     body: JSON.stringify({
       itemName: "Test Item",
-      sku: "1009876543",
+      sku: "1001220867",
       storeCity: "Atlanta",
       storeState: "GA",
       dateFound: dateStr,
@@ -283,7 +283,7 @@ test("rejects date from 31 days ago", async () => {
     method: "POST",
     body: JSON.stringify({
       itemName: "Test Item",
-      sku: "1009876543",
+      sku: "1001220867",
       storeCity: "Atlanta",
       storeState: "GA",
       dateFound: dateStr,
@@ -335,7 +335,7 @@ test("rejects future date", async () => {
     method: "POST",
     body: JSON.stringify({
       itemName: "Test Item",
-      sku: "1009876543",
+      sku: "1001220867",
       storeCity: "Atlanta",
       storeState: "GA",
       dateFound: dateStr,

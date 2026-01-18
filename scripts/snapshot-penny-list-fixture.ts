@@ -413,7 +413,8 @@ async function main() {
     enrichmentRows = (enrichmentResp.data as SupabasePennyEnrichmentRow[] | null) ?? null
   }
 
-  const enriched = applyEnrichment(newest, enrichmentRows)
+  // For a fixture, keep items even if enrichment is unavailable (anon key, local env, etc).
+  const enriched = applyEnrichment(newest, enrichmentRows, { hideUnenriched: false })
 
   const sanitized = enriched
     .map((item) => ({
