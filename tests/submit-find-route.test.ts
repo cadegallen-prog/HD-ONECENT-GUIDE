@@ -1,7 +1,20 @@
 import assert from "node:assert"
 import test from "node:test"
+import fs from "node:fs"
+import path from "node:path"
 import { NextRequest } from "next/server"
 import { installSupabaseMocks, clearSupabaseMocks } from "./test-utils/supabase-mocks"
+
+function getFixtureSku(): string {
+  const fixturePath = path.join(process.cwd(), "data", "penny-list.json")
+  const text = fs.readFileSync(fixturePath, "utf8")
+  const items = JSON.parse(text) as Array<{ sku?: string }>
+  const sku = items.find((i) => i?.sku)?.sku
+  if (!sku) throw new Error("Fixture penny-list.json contains no SKUs")
+  return sku
+}
+
+const FIXTURE_SKU = getFixtureSku()
 
 test("inserts only allowed fields into Supabase", async () => {
   const inserted: Record<string, unknown>[] = []
@@ -29,7 +42,7 @@ test("inserts only allowed fields into Supabase", async () => {
     method: "POST",
     body: JSON.stringify({
       itemName: "Test Item",
-      sku: "1001220867",
+      sku: FIXTURE_SKU,
       storeCity: "Atlanta",
       storeState: "GA",
       dateFound: new Date().toISOString().split("T")[0],
@@ -50,7 +63,7 @@ test("inserts only allowed fields into Supabase", async () => {
   const payload = inserted[0] as Record<string, unknown>
   assert.deepStrictEqual(payload, {
     item_name: "Test Item",
-    home_depot_sku_6_or_10_digits: "1001220867",
+    home_depot_sku_6_or_10_digits: FIXTURE_SKU,
     store_city_state: "Atlanta, GA",
     purchase_date: new Date().toISOString().split("T")[0],
     exact_quantity_found: 2,
@@ -101,7 +114,7 @@ test("uses service role insert (works even when anon inserts are blocked)", asyn
     method: "POST",
     body: JSON.stringify({
       itemName: "Test Item",
-      sku: "1001220867",
+      sku: FIXTURE_SKU,
       storeCity: "Atlanta",
       storeState: "GA",
       dateFound: new Date().toISOString().split("T")[0],
@@ -169,7 +182,7 @@ test("always overwrites item_name with enrichment canonical name", async () => {
     method: "POST",
     body: JSON.stringify({
       itemName: "drill", // User-provided (incomplete)
-      sku: "1001220867",
+      sku: FIXTURE_SKU,
       storeCity: "Atlanta",
       storeState: "GA",
       dateFound: new Date().toISOString().split("T")[0],
@@ -233,7 +246,7 @@ test("accepts date from 15 days ago", async () => {
     method: "POST",
     body: JSON.stringify({
       itemName: "Test Item",
-      sku: "1001220867",
+      sku: FIXTURE_SKU,
       storeCity: "Atlanta",
       storeState: "GA",
       dateFound: dateStr,
@@ -283,7 +296,7 @@ test("rejects date from 31 days ago", async () => {
     method: "POST",
     body: JSON.stringify({
       itemName: "Test Item",
-      sku: "1001220867",
+      sku: FIXTURE_SKU,
       storeCity: "Atlanta",
       storeState: "GA",
       dateFound: dateStr,
@@ -335,7 +348,7 @@ test("rejects future date", async () => {
     method: "POST",
     body: JSON.stringify({
       itemName: "Test Item",
-      sku: "1001220867",
+      sku: FIXTURE_SKU,
       storeCity: "Atlanta",
       storeState: "GA",
       dateFound: dateStr,

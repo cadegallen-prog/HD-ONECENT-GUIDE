@@ -7,9 +7,9 @@
  *
  * Input format (object keyed by URL):
  * {
- *   "https://www.homedepot.com/p/123456789": {
- *     "internetNumber": "123456789",
- *     "storeSku": "123456",
+ *   "https://www.homedepot.com/p/205744536": {
+ *     "internetNumber": "205744536",
+ *     "storeSku": "1009258128",
  *     "name": "Product Name",
  *     "brand": "Brand",
  *     "upc": "012345678901",
@@ -22,13 +22,13 @@
  * Output format (array):
  * [
  *   {
- *     "sku": "123456",
+ *     "sku": "1009258128",
  *     "item_name": "Product Name",
  *     "brand": "Brand",
  *     "upc": "012345678901",
  *     "image_url": "https://...",
  *     "home_depot_url": "https://...",
- *     "internet_sku": 123456789
+ *     "internet_sku": 205744536
  *   }
  * ]
  *
@@ -246,8 +246,7 @@ function optimizeImageUrl(url: string | undefined): string | null {
     // If the URL cannot be parsed, do not attempt host-based optimization.
     return trimmed
   }
-  const isThdStaticHost =
-    hostname === "thdstatic.com" || hostname.endsWith(".thdstatic.com")
+  const isThdStaticHost = hostname === "thdstatic.com" || hostname.endsWith(".thdstatic.com")
   if (!isThdStaticHost) return trimmed
   if (trimmed.includes("_100.jpg")) return trimmed.replace("_100.jpg", "_1000.jpg")
   if (trimmed.includes("_400.jpg")) return trimmed.replace("_400.jpg", "_1000.jpg")

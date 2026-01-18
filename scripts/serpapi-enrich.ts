@@ -14,7 +14,7 @@
  *   npx tsx scripts/serpapi-enrich.ts              # Enrich up to 10 items
  *   npx tsx scripts/serpapi-enrich.ts --limit 5    # Limit to 5 items
  *   npx tsx scripts/serpapi-enrich.ts --test       # Test with 1 item only
- *   npx tsx scripts/serpapi-enrich.ts --sku 123456 # Test specific SKU
+ *   npx tsx scripts/serpapi-enrich.ts --sku 1009258128 # Test specific SKU
  *   npx tsx scripts/serpapi-enrich.ts --force      # Overwrite existing fields
  */
 
@@ -157,16 +157,14 @@ function getMissingFields(row: PennyListGapRow): string[] {
 
 // Clean item name for search (remove model numbers, adjectives, etc.)
 function cleanItemName(name: string): string {
-  return (
-    name
-      .replace(/\b[A-Z0-9]{5,}\b/gi, "")
-      .replace(/\b(the|a|an|with|for|and|or)\b/gi, "")
-      .replace(/\b\d+(\.\d+)?\s*(in|ft|mm|cm|oz|lb|gal|qt|pk|ct)\b\.?/gi, "")
-      .replace(/\s+/g, " ")
-      .trim()
-      .substring(0, 50)
-      .trim()
-  )
+  return name
+    .replace(/\b[A-Z0-9]{5,}\b/gi, "")
+    .replace(/\b(the|a|an|with|for|and|or)\b/gi, "")
+    .replace(/\b\d+(\.\d+)?\s*(in|ft|mm|cm|oz|lb|gal|qt|pk|ct)\b\.?/gi, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .substring(0, 50)
+    .trim()
 }
 
 // Optimize image URL

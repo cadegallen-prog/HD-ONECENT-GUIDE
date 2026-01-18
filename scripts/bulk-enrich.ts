@@ -16,14 +16,14 @@
  * Input JSON format:
  * [
  *   {
- *     "sku": "123456",
+ *     "sku": "1009258128",
  *     "item_name": "Product Name",
  *     "brand": "Brand",
  *     "model_number": "MODEL123",
  *     "upc": "012345678901",
  *     "image_url": "https://...",
  *     "home_depot_url": "https://www.homedepot.com/p/...",
- *     "internet_sku": 123456789
+ *     "internet_sku": 205744536
  *   }
  * ]
  *
@@ -134,8 +134,7 @@ function optimizeImageUrl(url: string | null | undefined): string | null {
     return url
   }
 
-  const isThdHost =
-    hostname === "thdstatic.com" || hostname.endsWith(".thdstatic.com")
+  const isThdHost = hostname === "thdstatic.com" || hostname.endsWith(".thdstatic.com")
 
   if (isThdHost) {
     // Convert common THD sizes to 1000px for larger card displays
