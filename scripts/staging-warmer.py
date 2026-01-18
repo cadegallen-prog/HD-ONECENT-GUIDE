@@ -27,6 +27,14 @@ import sys
 import time
 from typing import Any, Optional, Set
 
+# Load environment variables from .env.local
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv(".env.local")
+except ImportError:
+    pass  # dotenv not required if env vars set externally
+
 # Add extracted/ to path for scraper_core import
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "extracted"))
 
