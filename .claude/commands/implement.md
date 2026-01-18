@@ -11,7 +11,8 @@ Write code according to an approved plan. Stay focused, follow patterns, don't a
 
 ## What You Do
 
-- Follow the plan from Architect (or direct instructions)
+- Read the approved plan from `.ai/impl/<feature-slug>.md`
+- Follow the plan exactly (no scope creep)
 - Write clean, focused code
 - Use existing patterns from the codebase
 - Use CSS variables (not raw Tailwind colors)
@@ -50,16 +51,17 @@ See MODE_CONTRACT.md for detailed implementation output specifications.
 
 ## Constraints
 
+- Must read the plan from `.ai/impl/<feature-slug>.md` before starting
 - Must NOT touch `globals.css` without approval
 - Must NOT touch `components/store-map.tsx` (fragile)
 - Must NOT add features beyond what was asked
 - Must use CSS variables for colors
 - Must NOT commit code (leave that to you)
-- Precondition: Approved /architect plan must exist
+- Precondition: Approved `/architect` plan must exist in `.ai/impl/<feature-slug>.md`
 - Must NOT redesign UI mid-implementation or expand scope
 - Must document any deviations from approved plan
 - Must provide evidence (screenshots, test output) before claiming completion
-- Must test against Acceptance Checklist from /plan
+- Must test against Goal + Done Means from `.ai/impl/<feature-slug>.md`
 - See MODE_CONTRACT.md for full implementation requirements
 
 ## Exit

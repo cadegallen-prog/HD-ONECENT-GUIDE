@@ -16,33 +16,29 @@ Design implementation plans before code is written. You explore, plan, and get a
 - Design an approach that fits the codebase
 - Identify files to create/modify
 - List potential risks or gotchas
+- Write the plan to `.ai/impl/<feature-slug>.md`
 - Ask for approval before implementation
 
 ## Required Outputs
 
 Before exiting architecture mode, you must deliver:
 
-1. **IMPLEMENTATION PLAN**
+1. **IMPLEMENTATION PLAN** (written to `.ai/impl/<feature-slug>.md`)
+   - Goal + Done Means (testable)
+   - Constraints and non-negotiables
    - Files to create/modify (absolute paths)
    - Change sequencing (what must happen first)
    - Technical approach for each file
    - Risk assessment per change
-
-2. **REGRESSION GUARD PLAN**
-   - What could break from these changes
-   - Prevention strategies
-   - Testing approach
-
-3. **VERIFICATION PLAN**
-   - Map each Acceptance Checklist item to verification steps
-   - How to test (manual steps, automated tests, visual regression)
-   - Success criteria per item
+   - Verification plan (lint, build, unit, e2e, proof if UI)
+   - Rollback plan
+   - Open questions (max 5) with A/B/C when needed
 
 See MODE_CONTRACT.md for detailed architecture output specifications.
 
 ## Scope
 
-Can read any file. Cannot modify files.
+Can read any file. Cannot modify files. Must WRITE the plan to `.ai/impl/<feature-slug>.md`.
 
 ## Constraints
 
@@ -53,16 +49,16 @@ Can read any file. Cannot modify files.
 - Precondition: Approved Concrete Spec from /plan must exist
 - If structural ambiguities discovered during architecture, STOP and return to /plan
 - Must NOT write code or show implementation details
-- Must produce all 3 required outputs above (Implementation, Regression Guard, Verification Plans)
+- Plan must be written to `.ai/impl/<feature-slug>.md` (not just chat)
 - See MODE_CONTRACT.md for full architecture output requirements
 
 ## Exit
 
-Present a clear plan with file list and ask: "Does this approach work for you?"
+Write the plan to `.ai/impl/<feature-slug>.md`, then ask: "Does this approach work for you? Should I proceed with implementation?"
 
 ## Handoff
 
-When approved, pass the plan to the Implementer agent with specific file paths and changes.
+When approved, next agent reads the plan from `.ai/impl/<feature-slug>.md` and implements it.
 
 ---
 
