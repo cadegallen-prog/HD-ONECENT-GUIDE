@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Jan 18, 2026 (SKU detail report CTA reposition + e2e console-noise filter)
+**Last updated:** Jan 18, 2026 (SKU detail report CTA + e2e noise filter + CI axe stabilization)
 
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
@@ -11,7 +11,7 @@ Every AI session must update this after meaningful work.
 
 ## Current Sprint (Last 7 Days)
 
-- **2026-01-18:** SKU detail page now places the “Report this find” CTA directly under the hero image with explicit “tap this to report” guidance; the button deep-links to `/report-find` with SKU/name prefilled (via `buildReportFindUrl`) and tracks via `TrackableLink`. Playwright tests now filter known Ezoic/ID5 CSP console noise so e2e only fails on real app errors.
+- **2026-01-18:** SKU detail page now places the "Report this find" CTA directly under the hero image with explicit "tap this to report" guidance; the button deep-links to `/report-find` with SKU/name prefilled (via `buildReportFindUrl`) and tracks via `TrackableLink`. Playwright tests filter known Ezoic/ID5 CSP console noise so e2e only fails on real app errors. Ezoic scripts are now gated to Vercel production only (disabled in CI/Playwright) so Full QA Suite `check-axe` stays green.
 - **Weekly Email Digest (Jan 17):** Implemented P0-4c weekly email cron that sends penny list updates to all active subscribers every Sunday 8 AM UTC. Created `emails/weekly-digest.tsx` (React Email template with product cards, summary stats, responsive design for email clients), `lib/email-sender.ts` (Resend API wrapper with error handling, 100ms rate limiting), and `app/api/cron/send-weekly-digest/route.ts` (cron endpoint that queries active subscribers + penny items from last 7 days, processes/aggregates by SKU, renders template, sends via Resend with unsubscribe links). Added cron schedule to `vercel.json` (Sunday 8 AM UTC: `0 8 * * 0`). Installed `resend`, `@react-email/components`, `react-email` (136 packages, 0 vulnerabilities). All 4 gates passing (lint/build/unit/e2e).
 
 - **Email Signup Form (Jan 16):** Implemented P0-4b email signup form on `/penny-list` to capture users for weekly updates. Created `email_subscribers` table (migration 015) with RLS policies and indexes, `app/api/subscribe/route.ts` (POST endpoint with Zod validation, rate limiting 5/hour per IP, honeypot protection, crypto-secure token generation), `app/api/unsubscribe/route.ts` (GET endpoint with token-based unsubscribe), `components/email-signup-form.tsx` (dismissible form that appears after 25s OR 600px scroll, localStorage persistence, GA4 tracking), and `app/unsubscribed/page.tsx` (confirmation page). Wired into penny-list-client. All 4 gates passing (lint/build/unit/e2e).
