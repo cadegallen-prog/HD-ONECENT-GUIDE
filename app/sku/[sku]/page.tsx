@@ -10,6 +10,7 @@ import { getFreshness } from "@/lib/freshness-utils"
 import { ogImageUrl } from "@/lib/og"
 import { toThdImageVariant } from "@/lib/image-cache"
 import { TrackableLink } from "@/components/trackable-link"
+import { buildReportFindUrl } from "@/lib/report-find-link"
 
 type PageProps = {
   params: Promise<{ sku: string }>
@@ -85,6 +86,7 @@ export default async function SkuDetailPage({ params }: PageProps) {
     internetNumber,
     homeDepotUrl: communityItem.homeDepotUrl,
   })
+  const reportFindUrl = buildReportFindUrl({ sku, name, src: "sku-page" })
 
   const totalReports = communityItem.locations
     ? Object.values(communityItem.locations).reduce((sum, count) => sum + count, 0)
@@ -348,6 +350,24 @@ export default async function SkuDetailPage({ params }: PageProps) {
               )}
 
               {/* Verified label moved to title area (subtle, non-intrusive) */}
+              <div className="mt-6 w-full flex flex-col items-center gap-2 text-center px-4">
+                <p className="text-sm font-semibold text-[var(--text-primary)]">
+                  Found this in store?
+                </p>
+                <p className="text-xs text-[var(--text-secondary)]">
+                  Tap "Report this find" to open the form with this SKU and name already filled so
+                  reporting takes seconds.
+                </p>
+                <TrackableLink
+                  href={reportFindUrl}
+                  eventName="report_duplicate_click"
+                  eventParams={{ sku, name, src: "sku-page" }}
+                  className="btn-secondary flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl text-sm font-semibold text-[var(--text-primary)]"
+                  aria-label={`Report finding ${name}`}
+                >
+                  Report this find
+                </TrackableLink>
+              </div>
             </div>
 
             {/* Info Section */}
@@ -545,7 +565,7 @@ export default async function SkuDetailPage({ params }: PageProps) {
         )}
 
         {/* Educational Footer */}
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="mt-8">
           <Link
             href="/guide"
             className="p-6 rounded-2xl bg-[var(--bg-muted)] border border-[var(--border-default)] hover:border-[var(--cta-primary)] transition-colors group"
@@ -555,17 +575,6 @@ export default async function SkuDetailPage({ params }: PageProps) {
             </h3>
             <p className="text-sm text-[var(--text-secondary)] mt-1">
               Read our complete guide on how to find these items in the wild.
-            </p>
-          </Link>
-          <Link
-            href="/report-find"
-            className="p-6 rounded-2xl bg-[var(--bg-muted)] border border-[var(--border-default)] hover:border-[var(--cta-primary)] transition-colors group"
-          >
-            <h3 className="font-bold text-[var(--text-primary)] group-hover:text-[var(--cta-primary)] transition-colors">
-              Found this item?
-            </h3>
-            <p className="text-sm text-[var(--text-secondary)] mt-1">
-              Help the community by reporting your find and keeping the list fresh.
             </p>
           </Link>
         </div>

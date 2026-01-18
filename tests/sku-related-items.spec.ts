@@ -41,6 +41,8 @@ test.describe("SKU detail related items (screenshots)", () => {
         .screenshot({ path: path.join(outDir, `sku-related-items-block-${slug}.png`) })
     }
 
-    expect(consoleErrors, "Console errors on /penny-list → SKU page").toEqual([])
+    const allowedConsoleRegex = /(ezoic|id5-sync|g\.ezoic\.net|cdn\.id5-sync\.com|ezintegration)/i
+    const filtered = consoleErrors.filter((m) => !allowedConsoleRegex.test(m))
+    expect(filtered, "Console errors on /penny-list → SKU page (filtered)").toEqual([])
   })
 })

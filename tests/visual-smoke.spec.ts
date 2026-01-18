@@ -59,7 +59,11 @@ test.describe("visual smoke (light/dark, mobile/desktop)", () => {
         }
       )
 
-      expect(consoleErrors, `Console errors on ${path}`).toEqual([])
+      // Filter out known third-party console noise (ads/consent scripts, id5, ezoic) so
+      // our tests only fail on real application errors.
+      const allowedConsoleRegex = /(ezoic|id5-sync|g\.ezoic\.net|cdn\.id5-sync\.com|ezintegration)/i
+      const filtered = consoleErrors.filter((m) => !allowedConsoleRegex.test(m))
+      expect(filtered, `Console errors on ${path} (filtered)`).toEqual([])
     })
   }
 })
