@@ -1,21 +1,23 @@
 ---
 
-## 2026-01-18 - Codex - SKU detail report CTA + e2e noise filter
+## 2026-01-18 - Codex - Real-data test fixture + placeholder SKU removal
 
-**Goal:** Move the SKU page "Found this item?" flow under the product image, make it obvious users should click to report, and ensure the button deep-links to `/report-find` with prefilled item info (like Penny List cards) without breaking tests.
-**Status:** ✅ Complete + verified (all 4 gates passing).
+**Goal:** Stop using fake/invalid SKU placeholders in tests/examples, and switch local/e2e to a one-time Supabase snapshot of real SKUs (no cron/ongoing backups) so testing is reliable.
+**Status:** ✅ Complete + verified (all 4 gates passing) + CI green.
 
 ### Changes
 
-- `app/sku/[sku]/page.tsx`: added "Found this in store?" CTA block under the hero image that deep-links to `/report-find` via `buildReportFindUrl({ sku, name, src: "sku-page" })` and tracks `report_duplicate_click`; removed the duplicate footer report card.
-- `tests/visual-smoke.spec.ts`, `tests/sku-related-items.spec.ts`, `tests/store-finder-popup.spec.ts`: filter known third-party Ezoic/ID5 CSP console noise so Playwright fails only on real application console errors.
-- `app/layout.tsx`: gate Ezoic scripts so they only run on Vercel production and never during CI/Playwright runs (fixes `check-axe` failures caused by Ezoic-injected accessibility violations).
+- Removed placeholder SKUs (like `1001234567`, `123456`, `1009876543`) from tests/examples/UI copy and replaced with real SKUs.
+- `data/penny-list.json`: replaced the old fake fixture with a one-time Supabase snapshot (sanitized: notes blank; state-only location counts).
+- `scripts/snapshot-penny-list-fixture.ts` + `npm run fixture:snapshot`: manual generator for the fixture (reads `.env.local`/`.env` if present). No cron.
+- Fixture timestamps are rebased to Playwright’s pinned `now` (`2025-12-10T12:00:00Z`) so freshness-based UI like "Hot Right Now" stays deterministic in CI.
+- Tests that need a SKU now read from `data/penny-list.json` (instead of hardcoding fake SKUs).
 
 ### Verification
 
-- `npm run ai:verify -- test`: `reports/verification/2026-01-18T09-49-20/summary.md`
-- `npm run ai:verify -- test`: `reports/verification/2026-01-18T11-05-33/summary.md`
-- GitHub Actions: Full QA Suite (includes `check-axe`) ✅ `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/21110727400`
+- `npm run ai:verify -- test`: `reports/verification/2026-01-18T20-22-52/summary.md`
+- GitHub Actions: Quality Checks (Fast) ✅ `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/21118092181`
+- GitHub Actions: Full QA Suite ✅ `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/21118092175`
 
 ---
 
