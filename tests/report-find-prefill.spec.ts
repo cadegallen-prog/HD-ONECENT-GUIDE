@@ -2,23 +2,23 @@ import { test, expect } from "@playwright/test"
 
 test.describe("Report Find Prefill", () => {
   test("prefills SKU and name from query params", async ({ page }) => {
-    await page.goto("/report-find?sku=1001234567&name=Test%20Item&src=card")
+    await page.goto("/report-find?sku=1009258128&name=Test%20Item&src=card")
 
     const skuInput = page.locator("#sku")
     const nameInput = page.locator("#itemName")
 
-    await expect(skuInput).toHaveValue("1001-234-567")
+    await expect(skuInput).toHaveValue("1009-258-128")
     await expect(nameInput).toHaveValue("Test Item")
   })
 
   test("prefilled SKU is read-only until Edit is clicked", async ({ page }) => {
-    await page.goto("/report-find?sku=1001234567&name=Test%20Item&src=card")
+    await page.goto("/report-find?sku=1009258128&name=Test%20Item&src=card")
 
     const skuInput = page.locator("#sku")
 
     // SKU should be disabled when prefilled
     await expect(skuInput).toBeDisabled()
-    await expect(skuInput).toHaveValue("1001-234-567")
+    await expect(skuInput).toHaveValue("1009-258-128")
 
     // Edit button should be visible
     const editButton = page.getByRole("button", { name: "Edit SKU number" })
@@ -33,12 +33,12 @@ test.describe("Report Find Prefill", () => {
   })
 
   test("does not overwrite user edits after prefill", async ({ page }) => {
-    await page.goto("/report-find?sku=1001234567&name=Prefilled%20Item&src=card")
+    await page.goto("/report-find?sku=1009258128&name=Prefilled%20Item&src=card")
 
     const skuInput = page.locator("#sku")
     const nameInput = page.locator("#itemName")
 
-    await expect(skuInput).toHaveValue("1001-234-567")
+    await expect(skuInput).toHaveValue("1009-258-128")
     await expect(nameInput).toHaveValue("Prefilled Item")
 
     // Click Edit to unlock SKU first
@@ -53,10 +53,10 @@ test.describe("Report Find Prefill", () => {
   })
 
   test("does not re-apply prefill after user clears a field", async ({ page }) => {
-    await page.goto("/report-find?sku=1001234567&name=Prefilled%20Item&src=card")
+    await page.goto("/report-find?sku=1009258128&name=Prefilled%20Item&src=card")
 
     const skuInput = page.locator("#sku")
-    await expect(skuInput).toHaveValue("1001-234-567")
+    await expect(skuInput).toHaveValue("1009-258-128")
 
     // Click Edit to unlock SKU first
     const editButton = page.getByRole("button", { name: "Edit SKU number" })
@@ -92,7 +92,7 @@ test.describe("Report Find Prefill", () => {
   })
 
   test("does not show SKU error for valid 10-digit prefill", async ({ page }) => {
-    await page.goto("/report-find?sku=1001234567&name=Test%20Item&src=card")
+    await page.goto("/report-find?sku=1009258128&name=Test%20Item&src=card")
 
     await expect(page.locator("#sku-error")).toHaveCount(0)
   })
@@ -101,7 +101,7 @@ test.describe("Report Find Prefill", () => {
     const specialName = `Test's Item & "Quotes" <tag>`
     const encoded = encodeURIComponent(specialName)
 
-    await page.goto(`/report-find?sku=1001234567&name=${encoded}&src=card`)
+    await page.goto(`/report-find?sku=1009258128&name=${encoded}&src=card`)
 
     const nameInput = page.getByLabel(/Item Name/i)
     await expect(nameInput).toHaveValue(specialName)

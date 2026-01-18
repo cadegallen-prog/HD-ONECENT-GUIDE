@@ -43,7 +43,7 @@ From the spreadsheet, gather your top **3-5 items**:
 {
   "id": "5",
   "name": "Product Name",
-  "sku": "1001234567",
+  "sku": "1009258128",
   "price": 0.01,
   "dateAdded": "2025-12-08",
   "status": "Nationwide",

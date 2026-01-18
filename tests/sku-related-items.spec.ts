@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test"
 import { mkdir } from "node:fs/promises"
+import { readFileSync } from "node:fs"
 import path from "node:path"
 
 test.describe("SKU detail related items (screenshots)", () => {
@@ -18,9 +19,15 @@ test.describe("SKU detail related items (screenshots)", () => {
     // Wait for content to load
     await page.waitForLoadState("networkidle")
 
+    const fixturePath = path.join(process.cwd(), "data", "penny-list.json")
+    const fixtureText = readFileSync(fixturePath, "utf8")
+    const fixtureItems = JSON.parse(fixtureText) as Array<{ sku?: string }>
+    const fixtureSku = fixtureItems.find((i) => i?.sku)?.sku
+    expect(fixtureSku, "Fixture must contain at least one SKU").toBeTruthy()
+
     // Card/table views use click navigation rather than <a href="/sku/...">,
-    // so keep this deterministic by navigating to a known fixture SKU.
-    await page.goto("/sku/1009876543")
+    // so keep this deterministic by navigating to a fixture SKU.
+    await page.goto(`/sku/${fixtureSku}`)
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible({ timeout: 10000 })
     const relatedHeading = page.getByRole("heading", { name: "Related penny items" })
     const hasRelated = await relatedHeading.isVisible().catch(() => false)

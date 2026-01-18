@@ -3,6 +3,7 @@
 ## Why Scraping HD is Hard
 
 Home Depot uses aggressive bot detection:
+
 - Akamai Bot Manager
 - TLS/JA3 fingerprinting (this is why stealth plugins fail!)
 - Webdriver detection
@@ -11,6 +12,7 @@ Home Depot uses aggressive bot detection:
 ## Cost Options (Pick ONE)
 
 ### Option 1: SerpApi Free/Cheap Tier ✅ RECOMMENDED
+
 - Uses SerpApi's Home Depot Search API
 - They handle everything (TLS fingerprinting, CAPTCHAs, proxies)
 - **Free tier: 250 searches/month** (covers typical usage)
@@ -19,12 +21,14 @@ Home Depot uses aggressive bot detection:
 - **95%+ success rate**
 
 ### Option 2: Manual Bookmarklet (Free)
+
 - Run bookmarklet while browsing HD manually
 - Export to JSON, import via `npm run enrich:bulk`
 - 100% reliable but requires your time
 - **Cost: $0**
 
 ### Option 3: Stealth Scraper (Unreliable)
+
 - Playwright + stealth + proxies
 - **Often fails** due to TLS fingerprinting
 - May work for small batches locally
@@ -58,9 +62,11 @@ UPC/barcode: SerpApi does not reliably return UPC. The script attempts a **best-
    - Copy your API key from dashboard
 
 2. **Add GitHub Secret** (Settings → Secrets → Actions)
+
    ```
    SERPAPI_KEY = your-serpapi-api-key
    ```
+
    (Supabase secrets should already be configured)
 
 3. **Enable GitHub Actions**
@@ -69,13 +75,13 @@ UPC/barcode: SerpApi does not reliably return UPC. The script attempts a **best-
 
 ### Monthly Cost Breakdown
 
-| Service | Cost | What It Does |
-|---------|------|--------------|
-| SerpApi Free Tier | $0 | 250 searches/month |
-| SerpApi Starter | $25/mo | 1,000 searches/month (if needed) |
-| GitHub Actions | $0 | 2000 free minutes/month |
-| Vercel Hobby | $0 | Hosts the website |
-| **Typical Total** | **$0/mo** | Free tier usually sufficient |
+| Service           | Cost      | What It Does                     |
+| ----------------- | --------- | -------------------------------- |
+| SerpApi Free Tier | $0        | 250 searches/month               |
+| SerpApi Starter   | $25/mo    | 1,000 searches/month (if needed) |
+| GitHub Actions    | $0        | 2000 free minutes/month          |
+| Vercel Hobby      | $0        | Hosts the website                |
+| **Typical Total** | **$0/mo** | Free tier usually sufficient     |
 
 ## NOT Needed
 
@@ -96,7 +102,7 @@ npm run enrich:serpapi
 npm run enrich:serpapi -- -- --limit 20
 
 # Overwrite existing enrichment fields (use carefully)
-npm run enrich:serpapi -- -- --sku 123456 --force
+npm run enrich:serpapi -- -- --sku 1009258128 --force
 
 # Test with single SKU
 npm run enrich:serpapi -- -- --test
@@ -114,6 +120,7 @@ npm run enrich:bulk
 ## Reliability Expectations
 
 With SerpApi:
+
 - **95%+ success rate** for products that exist on HD
 - Some items return "no results" (discontinued products)
 - Fully automated via GitHub Actions
@@ -122,6 +129,7 @@ With SerpApi:
 ## Fallback: Bookmarklet Workflow
 
 If SerpApi credits run out or for spot-checks:
+
 1. Browse HD manually in your browser
 2. Run bookmarklet to extract data
 3. Export to JSON

@@ -7,8 +7,8 @@
  * @returns URL path with query string, or "/report-find" if no params
  *
  * @example
- * buildReportFindUrl({ sku: "1234567890", name: "Drill", src: "card" })
- * // => "/report-find?sku=1234567890&name=Drill&src=card"
+ * buildReportFindUrl({ sku: "1009258128", name: "Example Item", src: "card" })
+ * // => "/report-find?sku=1009258128&name=Example%20Item&src=card"
  */
 export function buildReportFindUrl(opts: {
   sku?: string | null

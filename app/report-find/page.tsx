@@ -345,7 +345,7 @@ function ReportFindForm() {
               value={skuDisplay}
               onChange={handleSkuChange}
               disabled={skuLocked}
-              placeholder="e.g., 123456 or 1001234567"
+              placeholder="e.g., 1009258128"
               className={`w-full px-4 py-2 rounded-lg border text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent font-mono ${
                 skuLocked
                   ? "bg-[var(--bg-muted)] cursor-not-allowed opacity-75"

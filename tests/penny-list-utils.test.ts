@@ -10,7 +10,7 @@ import type { PennyItem } from "../lib/fetch-penny-data"
 const baseItem: PennyItem = {
   id: "1",
   name: "Test Item",
-  sku: "123456",
+  sku: "1001220867",
   price: 0.01,
   dateAdded: "2025-12-10",
   tier: "Rare",
@@ -41,7 +41,7 @@ const validItems = filterValidPennyItems([
   clone(baseItem, { id: "3", sku: "999999", dateAdded: "invalid-date" }),
 ])
 assert.strictEqual(validItems.length, 1)
-assert.strictEqual(validItems[0].sku, "123456")
+assert.strictEqual(validItems[0].sku, "1001220867")
 
 // Freshness metrics
 const now = new Date("2025-12-10T12:00:00Z").getTime()

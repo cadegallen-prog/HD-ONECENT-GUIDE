@@ -8,7 +8,7 @@ import { installSupabaseMocks, clearSupabaseMocks } from "./test-utils/supabase-
 const baseRow: SupabasePennyRow = {
   id: "row-1",
   item_name: "Test Item",
-  home_depot_sku_6_or_10_digits: 1000001234,
+  home_depot_sku_6_or_10_digits: 1001220867,
   exact_quantity_found: 1,
   store_city_state: "GA",
   purchase_date: "2025-12-01",
@@ -81,12 +81,12 @@ test("stores enrichment fields from Supabase rows", async () => {
 
   const items = buildPennyItemsFromRows([
     clone(baseRow, {
-      internet_sku: 987654321,
+      internet_sku: 205744536,
       home_depot_url: "https://www.homedepot.com/p/custom",
     }),
   ])
 
-  assert.strictEqual(items[0].internetNumber, "987654321")
+  assert.strictEqual(items[0].internetNumber, "205744536")
   assert.strictEqual(items[0].homeDepotUrl, "https://www.homedepot.com/p/custom")
 
   clearSupabaseMocks()
@@ -101,14 +101,14 @@ test("applies enrichment metadata and overrides core fields", async () => {
   ])
 
   const enrichment: SupabasePennyEnrichmentRow = {
-    sku: "1000001234",
+    sku: "1001220867",
     item_name: "Enriched Name",
     brand: "Acme",
     model_number: "MD-100",
     upc: "000123456789",
     image_url: "https://example.com/enriched.jpg",
     home_depot_url: "https://www.homedepot.com/p/enriched",
-    internet_sku: 987654321,
+    internet_sku: 205744536,
     updated_at: "2025-12-10T00:00:00Z",
     retail_price: null,
   }
@@ -120,7 +120,7 @@ test("applies enrichment metadata and overrides core fields", async () => {
   assert.strictEqual(enrichedItems[0].modelNumber, "MD-100")
   assert.strictEqual(enrichedItems[0].upc, "000123456789")
   assert.strictEqual(enrichedItems[0].imageUrl, "https://example.com/enriched.jpg")
-  assert.strictEqual(enrichedItems[0].internetNumber, "987654321")
+  assert.strictEqual(enrichedItems[0].internetNumber, "205744536")
   assert.strictEqual(enrichedItems[0].homeDepotUrl, "https://www.homedepot.com/p/enriched")
 
   clearSupabaseMocks()
@@ -140,7 +140,7 @@ test("ignores enrichment rows with invalid SKUs", async () => {
     upc: "000000000000",
     image_url: "https://example.com/bad.jpg",
     home_depot_url: "https://www.homedepot.com/p/bad",
-    internet_sku: 123456,
+    internet_sku: 205744536,
     updated_at: "2025-12-10T00:00:00Z",
     retail_price: null,
   }
@@ -160,11 +160,11 @@ test("filters out invalid SKUs and keeps valid rows only", async () => {
 
   const items = buildPennyItemsFromRows([
     clone(baseRow, { home_depot_sku_6_or_10_digits: "123" }), // invalid length
-    clone(baseRow, { id: "row-valid", home_depot_sku_6_or_10_digits: "123456" }),
+    clone(baseRow, { id: "row-valid", home_depot_sku_6_or_10_digits: "1001220867" }),
   ])
 
   assert.strictEqual(items.length, 1)
-  assert.strictEqual(items[0].sku, "123456")
+  assert.strictEqual(items[0].sku, "1001220867")
 
   clearSupabaseMocks()
 })

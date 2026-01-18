@@ -5,7 +5,7 @@ import type { PennyItem } from "../lib/fetch-penny-data"
 const baseItem: PennyItem = {
   id: "1",
   name: "Test Item",
-  sku: "123456",
+  sku: "1001220867",
   price: 0.01,
   dateAdded: "2025-12-10",
   tier: "Rare",
@@ -33,7 +33,11 @@ assert.strictEqual(resultAll.total, 3, "Should return all 3 items with no filter
 
 // Date range filtering - 1 month window (Dec 10 - 1 month = Nov 10, so Nov 15 is within window)
 const result1m = queryPennyItems(items, { days: "1m" }, now)
-assert.strictEqual(result1m.total, 3, "1m window should return all 3 items (Nov 15 is within Nov 10-Dec 10)")
+assert.strictEqual(
+  result1m.total,
+  3,
+  "1m window should return all 3 items (Nov 15 is within Nov 10-Dec 10)"
+)
 
 // Date range filtering - verify old items are excluded
 const itemsWithOld = [
@@ -84,14 +88,19 @@ assert.strictEqual(resultWithPhoto.total, 1, "Photo filter should return 1 item 
 
 // Search filtering
 const itemsForSearch = [
-  clone(baseItem, { id: "1", name: "Hammer Tool", sku: "111111" }),
-  clone(baseItem, { id: "2", name: "Screwdriver Set", sku: "222222" }),
-  clone(baseItem, { id: "3", name: "Nail Box", sku: "333333", notes: "Great hammer companion" }),
+  clone(baseItem, { id: "1", name: "Hammer Tool", sku: "1000020590" }),
+  clone(baseItem, { id: "2", name: "Screwdriver Set", sku: "1006656719" }),
+  clone(baseItem, {
+    id: "3",
+    name: "Nail Box",
+    sku: "1007155949",
+    notes: "Great hammer companion",
+  }),
 ]
 const resultSearchName = queryPennyItems(itemsForSearch, { q: "hammer" }, now)
 assert.strictEqual(resultSearchName.total, 2, "Search 'hammer' should match name and notes")
 
-const resultSearchSku = queryPennyItems(itemsForSearch, { q: "222222" }, now)
+const resultSearchSku = queryPennyItems(itemsForSearch, { q: "1006656719" }, now)
 assert.strictEqual(resultSearchSku.total, 1, "Search by SKU should return 1 item")
 
 const resultSearchNoMatch = queryPennyItems(itemsForSearch, { q: "wrench" }, now)
@@ -118,23 +127,11 @@ assert.strictEqual(
 )
 
 const resultAlphabetical = queryPennyItems(itemsForSort, { sort: "alphabetical" }, now)
-assert.strictEqual(
-  resultAlphabetical.items[0].name,
-  "Apple",
-  "Alphabetical first should be Apple"
-)
-assert.strictEqual(
-  resultAlphabetical.items[2].name,
-  "Zebra",
-  "Alphabetical last should be Zebra"
-)
+assert.strictEqual(resultAlphabetical.items[0].name, "Apple", "Alphabetical first should be Apple")
+assert.strictEqual(resultAlphabetical.items[2].name, "Zebra", "Alphabetical last should be Zebra")
 
 // Combined filters
-const combinedResult = queryPennyItems(
-  itemsWithStates,
-  { state: "TX", tier: "Rare" },
-  now
-)
+const combinedResult = queryPennyItems(itemsWithStates, { state: "TX", tier: "Rare" }, now)
 assert.strictEqual(combinedResult.total, 2, "TX + Rare should return 2 items")
 
 // Empty input
@@ -158,7 +155,11 @@ const hotItemsInput = [
   clone(baseItem, { id: "4", tier: "Very Common", dateAdded: "2025-12-08" }),
 ]
 const hotResult = getHotItems(hotItemsInput, 14, 6, now)
-assert.strictEqual(hotResult.length, 2, "Hot items should return 2 Very Common items within 14 days")
+assert.strictEqual(
+  hotResult.length,
+  2,
+  "Hot items should return 2 Very Common items within 14 days"
+)
 assert.strictEqual(hotResult[0].id, "1", "Most recent hot item should be first")
 
 // Hot items respects limit
