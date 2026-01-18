@@ -106,10 +106,15 @@ export function ClearanceLifecycleChart() {
                 border: "1px solid hsl(var(--border))",
                 borderRadius: "8px",
               }}
-              formatter={(value: number, name: string) => {
-                if (name === "successRate") return [`${value}%`, "Success Rate"]
-                if (name === "avgItems") return [value, "Avg Items Found"]
-                return [value, name]
+              formatter={(value: number | string | undefined, name: string | undefined) => {
+                const numericValue = typeof value === "number" ? value : Number(value)
+                if (name === "successRate") {
+                  return [`${Number.isFinite(numericValue) ? numericValue : ""}%`, "Success Rate"]
+                }
+                if (name === "avgItems") {
+                  return [Number.isFinite(numericValue) ? numericValue : "", "Avg Items Found"]
+                }
+                return [value ?? "", name ?? ""]
               }}
             />
             <Legend />
