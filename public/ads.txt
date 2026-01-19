@@ -383,3 +383,4 @@ video.unrulymedia.com, 2564526802, RESELLER
 video.unrulymedia.com, 5672421953199218469, RESELLER
 yahoo.com, 57289, RESELLER, e1a5b5b6e3255540
 zetaglobal.net, 891, RESELLER
+google.com, pub-5302589080375312, DIRECT, f08c47fec0942fa0
