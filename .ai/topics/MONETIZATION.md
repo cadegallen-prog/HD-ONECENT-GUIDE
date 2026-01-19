@@ -3,9 +3,11 @@
 ## CURRENT STATUS
 
 - ✅ Ezoic bridge active (Jan 17, temporary)
+- ✅ **Ezoic ads.txt configured (Jan 19)** - All seller entries added
 - ✅ Mediavine Grow installed (Jan 12, first-party data collection in progress)
 - ✅ Privacy Policy + ads.txt deployed (Jan 14)
-- 🔄 **Awaiting:** Mediavine approval (needs 30 days of Grow analytics)
+- ✅ **Multi-network ads.txt:** Ezoic + Google AdSense + Monumetric coexisting (467 total entries)
+- 🔄 **Awaiting:** Ezoic dashboard verification (24-48hr crawl) + Mediavine approval (needs 30 days of Grow analytics)
 - ❌ **Monumetric:** Onboarding paused pending Mediavine decision
 - **Timeline:** Mediavine decision expected ~Feb 11 (30 days from Jan 12)
 
@@ -71,9 +73,11 @@
 ## POINTERS
 
 - **Ezoic integration details:** `.ai/SESSION_LOG.md` entry "2026-01-17 - Ezoic Ads Integration"
+- **Ezoic ads.txt setup:** `.ai/impl/ads-txt-multi-network-management.md` (architecture plan)
 - **CSP config:** `next.config.js` (lines with `script-src`, `connect-src`)
 - **Layout scripts:** `app/layout.tsx` (search "Ezoic" for script blocks)
 - **Privacy policy:** `app/privacy-policy/page.tsx` + `public/ads.txt`
+- **Ads.txt file:** `public/ads.txt` (lines 1-385: Monumetric, 386: Google AdSense, 387-467: Ezoic)
 - **Grow integration:** `app/layout.tsx` (Mediavine Grow script)
 - **Implementation plan:** None yet (awaiting Mediavine decision)
 
