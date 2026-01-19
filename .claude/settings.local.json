@@ -33,7 +33,8 @@
       "Bash(powershell -Command \"$env:SUPABASE_ACCESS_TOKEN\")",
       "Bash(powershell -Command:*)",
       "Bash(supabase --version:*)",
-      "Bash(source .env.local)"
+      "Bash(source .env.local)",
+      "Bash(claude doctor:*)"
     ],
     "deny": [],
     "ask": []

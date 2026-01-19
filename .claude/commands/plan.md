@@ -75,7 +75,25 @@ See MODE_CONTRACT.md for detailed planning output specifications.
 
 ## Exit
 
-Only when I explicitly say to stop. Never self-terminate.
+Only when user explicitly says "I'm ready to architect" or "Let's stop here". Never self-terminate.
+
+When user approves, output this paste block:
+
+```
+---
+NEXT PHASE: /architect
+SPEC READY: Yes (structural ambiguities = 0)
+---
+
+/architect
+
+Context: [1-line summary of what was planned]
+Scope: [key decisions locked]
+
+Concrete Spec: [location if written to file]
+Acceptance Checklist: [brief summary]
+---
+```
 
 ---
 

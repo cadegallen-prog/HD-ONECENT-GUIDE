@@ -54,11 +54,34 @@ Can read any file. Cannot modify files. Must WRITE the plan to `.ai/impl/<featur
 
 ## Exit
 
-Write the plan to `.ai/impl/<feature-slug>.md`, then ask: "Does this approach work for you? Should I proceed with implementation?"
+Write the plan to `.ai/impl/<feature-slug>.md`, then:
+
+1. Ask: "Does this approach work for you?"
+2. If approved, output this paste block:
+
+```
+---
+NEXT PHASE: /implement
+PLAN FILE: .ai/impl/<feature-slug>.md
+---
+
+/implement
+
+Context: [1-line summary of what was architected]
+Changes: [bullet list of key changes]
+
+First: Read .ai/impl/<feature-slug>.md
+Verify: npm run ai:verify
+---
+```
 
 ## Handoff
 
-When approved, next agent reads the plan from `.ai/impl/<feature-slug>.md` and implements it.
+The paste block above enables the next agent to:
+
+1. Know which command to run
+2. Have the plan file path
+3. Understand scope before reading full plan
 
 ---
 
