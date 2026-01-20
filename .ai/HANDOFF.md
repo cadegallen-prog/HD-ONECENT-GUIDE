@@ -18,15 +18,21 @@
 - ✅ **Enrichment database:** ~1,600+ penny items pre-scraped (Tue-Fri from external source) for auto-population (see `.ai/topics/DATA_PIPELINE.md`)
 - ✅ **Retention features live:** Email signup (10s subscribers), PWA install prompt, weekly digest cron
 - ✅ **Monetization bridge:** Ezoic (temporary) + Mediavine Grow (analytics collection in progress)
-- 🔄 **Next:** SEO (schema markup + internal links) to reduce 100% Facebook dependency
-- 📊 **Metrics:** 680 daily users, 26% conversion (HD clicks), 80 clicks from organic (all branded, need non-branded)
-- 🎯 **Blockers:** None (SEO is P0 but unblocked, ready to start)
+- 🔄 **IN PROGRESS:** Penny List seeding feature (auto-submit quality items from enrichment DB to create social proof)
+- 📊 **Metrics:** 680 daily users, 26% conversion (HD clicks), 80 clicks from organic (all branded)
+- 🎯 **Cold start problem:** Penny List has ~67 items but needs more to encourage participation
 
-### Immediate Next Move
+### Immediate Next Move (Penny List Seeding)
 
-1. **Add schema markup to `/guide`** (FAQ + HowTo) → validate in Google Rich Results Test
-2. **Wire internal links** (guide ↔ penny-list ↔ homepage bidirectional) → verify no broken links
-3. **Submit updated sitemap** to Google Search Console → monitor for non-branded organic clicks in 2-4 weeks
+**Plan file:** `C:\Users\cadeg\.claude\plans\floating-popping-neumann.md`
+
+1. ✅ **Phase 0 (Done):** Documentation fixes - DATA_PIPELINE.md rewrite, HANDOFF.md update
+2. **Phase 1:** Create `seeded_skus` tracking table migration
+3. **Phase 2:** Create `/api/cron/seed-penny-list` endpoint with quality filters ($15+ retail, popular brands, exclude junk)
+4. **Phase 3:** Add Vercel cron schedule (daily 8 AM UTC, 3 items/day)
+5. **Phase 4:** Dry-run test, then deploy
+
+**Goal:** Seed 3 quality items/day from enrichment DB to kickstart participation with geographic spread across all 50 states.
 
 ---
 
@@ -99,13 +105,16 @@ Read in order:
 3. .ai/STATE.md (current sprint snapshot)
 4. .ai/HANDOFF.md (this context pack)
 
-Current reality (Jan 18, 2026):
+Current reality (Jan 20, 2026):
 - ✅ Core product working (submissions, enrichment, Penny List)
-- ✅ Retention features live (email, PWA, weekly digest)
-- 🔄 Next: SEO (P0-3, schema markup + internal links)
-- 📊 680 daily users, 26% conversion, but 100% Facebook dependency
+- ✅ Enrichment DB: ~1,600+ penny items pre-scraped for auto-population
+- 🔄 IN PROGRESS: Penny List seeding (auto-submit quality items to create social proof)
+- 📊 680 daily users, 26% conversion, cold start problem on Penny List
 
-My goal for this session: [GOAL / WHY / DONE MEANS]
+Plan file: C:\Users\cadeg\.claude\plans\floating-popping-neumann.md
+Phases remaining: 1 (migration), 2 (cron endpoint), 3 (Vercel schedule), 4 (dry-run + deploy)
+
+My goal for this session: Continue implementing Penny List seeding feature from Phase 1
 
 What should I read next?
 ```
@@ -261,23 +270,23 @@ Generate a portable context pack (updates `.ai/HANDOFF.md`) + print New Chat Pri
 
 ---
 
-## Top 3 Priorities (From BACKLOG.md)
+## Top 3 Priorities (Current)
 
-1. **P0-3: SEO Improvement (Schema Markup + Internal Linking)**
-   - Done means: FAQ schema + HowTo schema on `/guide`, internal links verified, all 4 gates pass
-   - Blocker: None (ready to architect)
-   - Proof needed: Google Rich Results Test validation + Lighthouse check
+1. **🔄 Penny List Seeding (IN PROGRESS)**
+   - Plan: `C:\Users\cadeg\.claude\plans\floating-popping-neumann.md`
+   - Done means: Cron seeds 3 quality items/day from enrichment DB, geographic spread across states
+   - Phases: ✅ 0 (docs) → 1 (migration) → 2 (cron) → 3 (schedule) → 4 (dry-run)
 
-2. **P0-4d: Monetization Tuning (Post-Mediavine)**
+2. **P0-3: SEO Improvement (Schema Markup + Internal Linking)**
+   - Done means: FAQ schema + HowTo schema on `/guide`, internal links verified
+   - Blocker: None (ready after seeding)
+
+3. **Monetization Tuning (Post-Mediavine)**
    - Timeline: Awaiting Mediavine approval (~Feb 11)
-   - When approved: Remove Ezoic, verify Grow still works (30 min task)
-
-3. **Retention Metrics Tracking**
-   - Monitor: Email unsubscribe rate, PWA install rate, Day 7 retention
-   - Action: If metrics plateau, cycle back to retention features
+   - When approved: Remove Ezoic, verify Grow still works
 
 ---
 
-**Last updated:** Jan 18, 2026
+**Last updated:** Jan 20, 2026
 
 **For questions:** See `.ai/USAGE.md` for task template + `.ai/CRITICAL_RULES.md` for never-violate rules.
