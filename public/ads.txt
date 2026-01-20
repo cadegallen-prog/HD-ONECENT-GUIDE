@@ -465,3 +465,6 @@ improvedigital.com, 2483, RESELLER
 inmobi.com, 6b1465d6abe84397bf7baad04aaee1f1, DIRECT, 83e75a7ae333ca9d
 sonobi.com, c2988be809, RESELLER, d1a215d9eb5aee9e
 media.net, 8CUM5Z5B0, DIRECT
+pubmatic.com, 159277, RESELLER
+rubiconproject.com, 15268, RESELLER, 0bfd66d529a55807
+appnexus.com, 6849, RESELLER
