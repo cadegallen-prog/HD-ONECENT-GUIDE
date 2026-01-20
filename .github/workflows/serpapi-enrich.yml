@@ -1,8 +1,9 @@
 # SerpApi Enrichment Workflow
 # Uses SerpApi's Home Depot API for reliable product data enrichment
 #
-# Cost: $0/mo (free tier: 250 searches) or $25/mo for 1000 searches
-# Runs: Every 6 hours, processes up to 1 SKU per run (keeps usage under the 250-search free tier even when a fallback search uses a 2nd credit)
+# Cost: $0/mo (free tier: 100 searches) or paid tiers for more
+# Runs: Every 6 hours, processes up to 5 SKUs per run (~20/day, ~600/mo)
+# Note: Each SKU may use 1-2 searches (SKU search + fallback name search)
 #
 # Required secrets:
 #   - NEXT_PUBLIC_SUPABASE_URL
@@ -21,7 +22,7 @@ on:
       limit:
         description: 'Number of SKUs to process'
         required: false
-        default: '1'
+        default: '5'
 
 jobs:
   enrich:
@@ -49,4 +50,4 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
         run: |
-          npx tsx scripts/serpapi-enrich.ts --retry --limit ${{ github.event.inputs.limit || '1' }}
+          npx tsx scripts/serpapi-enrich.ts --limit ${{ github.event.inputs.limit || '5' }}
