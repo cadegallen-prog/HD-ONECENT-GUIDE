@@ -487,10 +487,34 @@ export function PennyListClient({
     })
   }, [total, freshnessHours, hasActiveFilters, searchQuery, hotItems.length])
 
+  // Reset to page 1 when filters change (but not when page itself changes)
+  const prevFiltersForPageResetRef = useRef({
+    dateRange,
+    searchQuery,
+    sortOption,
+    stateFilter,
+  })
+
   useEffect(() => {
-    if (currentPage === 1) return
-    setCurrentPage(1)
-    updateURL({ page: null })
+    const prev = prevFiltersForPageResetRef.current
+    const filtersChanged =
+      prev.dateRange !== dateRange ||
+      prev.searchQuery !== searchQuery ||
+      prev.sortOption !== sortOption ||
+      prev.stateFilter !== stateFilter
+
+    if (filtersChanged) {
+      prevFiltersForPageResetRef.current = {
+        dateRange,
+        searchQuery,
+        sortOption,
+        stateFilter,
+      }
+      if (currentPage !== 1) {
+        setCurrentPage(1)
+        updateURL({ page: null })
+      }
+    }
   }, [currentPage, dateRange, searchQuery, sortOption, stateFilter, updateURL])
 
   // Pagination - API returns the page slice, so we just use total from state
