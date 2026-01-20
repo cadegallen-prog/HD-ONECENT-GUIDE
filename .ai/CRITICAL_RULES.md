@@ -135,6 +135,7 @@ Which would you prefer?"
 ### Required for "Done"
 
 1. **All 4 tests pass** (paste output):
+
    ```bash
    npm run lint      # 0 errors
    npm run build     # successful
@@ -162,31 +163,52 @@ Which would you prefer?"
    - Show bug existed
    - Show bug is gone
 
+6. **Documentation updated (proof required)**:
+   ```bash
+   git diff .ai/topics/ .ai/STATE.md .ai/BACKLOG.md
+   ```
+
+   - If no output = docs didn't change = not actually done yet
+   - Paste the diff so user can see what changed
+
 **No exceptions.**
 
 ### Template: Claiming Done
 
-```markdown
+````markdown
 ## Verification
 
 **Tests:**
+
 - lint: ✅ 0 errors
 - build: ✅ success
 - test:unit: ✅ 1/1 passing
 - test:e2e: ✅ 28/28 passing
 
 **Playwright:**
+
 - Before: [screenshot]
 - After: [screenshot]
 - Console: no errors
 - Modes: light + dark tested
 
 **GitHub Actions:**
+
 - ✅ https://github.com/.../runs/12345
 
 **Problem fixed:**
+
 - Before: [describe/screenshot]
 - After: [describe/screenshot]
+
+**Docs updated:**
+
+```bash
+git diff .ai/topics/ .ai/STATE.md .ai/BACKLOG.md
+[paste output here or "no changes"]
+```
+````
+
 ```
 
 **Use this template. No shortcuts.**
@@ -258,19 +280,21 @@ Estimated time: ~8 minutes
 
 **Risky file paths (auto-trigger full QA):**
 ```
-middleware.ts           # Auth & security
-app/auth/**             # Auth pages
-lib/supabase/**         # Database client
-supabase/migrations/**  # DB schema changes
+
+middleware.ts # Auth & security
+app/auth/** # Auth pages
+lib/supabase/** # Database client
+supabase/migrations/** # DB schema changes
 lib/fetch-penny-data.ts
 lib/penny-list-query.ts
-app/api/**              # API routes
-next.config.js          # Build config
-package.json            # Dependencies
-.github/workflows/**    # CI changes
+app/api/** # API routes
+next.config.js # Build config
+package.json # Dependencies
+.github/workflows/** # CI changes
 components/store-map.tsx # Fragile component
-app/**/layout.tsx       # Layout changes
-app/globals.css         # Global styles
+app/**/layout.tsx # Layout changes
+app/globals.css # Global styles
+
 ```
 
 ---
@@ -296,3 +320,4 @@ app/globals.css         # Global styles
 ## Next Step
 
 Now read `CONSTRAINTS_TECHNICAL.md` to learn about fragile areas (globals.css, React-Leaflet, etc.).
+```
