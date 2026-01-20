@@ -3,13 +3,24 @@
 ## CURRENT STATUS
 
 - ✅ Ezoic bridge active (Jan 17, temporary)
-- ✅ **Ezoic ads.txt configured (Jan 19)** - All seller entries added
-- ✅ Mediavine Grow installed (Jan 12, first-party data collection in progress)
+- ✅ **Ezoic ads.txt configured (Jan 19)** - All 81 seller entries deployed to production (Jan 20)
+- ✅ **Journey by Mediavine (Grow) installed** (Jan 12, first-party analytics in progress)
 - ✅ Privacy Policy + ads.txt deployed (Jan 14)
 - ✅ **Multi-network ads.txt:** Ezoic + Google AdSense + Monumetric coexisting (467 total entries)
 - 🔄 **Awaiting:** Ezoic dashboard verification (24-48hr crawl) + Mediavine approval (needs 30 days of Grow analytics)
 - ❌ **Monumetric:** Onboarding paused pending Mediavine decision
 - **Timeline:** Mediavine decision expected ~Feb 11 (30 days from Jan 12)
+
+### Ads.txt Requirements by Network
+
+| Network                         | Ads.txt Required? | Status                            |
+| ------------------------------- | ----------------- | --------------------------------- |
+| **Monumetric**                  | ✅ Yes            | 385 entries (lines 1-385)         |
+| **Google AdSense**              | ✅ Yes            | 2 entries (line 386 + elsewhere)  |
+| **Ezoic**                       | ✅ Yes            | 81 entries (lines 387-467)        |
+| **Journey by Mediavine (Grow)** | ❌ **No**         | Analytics only, no ads.txt needed |
+
+**Critical Note:** Journey by Mediavine (Grow) is an **analytics tool**, NOT an ad network. It does NOT require ads.txt entries. Mediavine ads.txt entries will only be needed IF/WHEN Mediavine approves the site for their ad network (~Feb 11, 2026).
 
 ---
 
