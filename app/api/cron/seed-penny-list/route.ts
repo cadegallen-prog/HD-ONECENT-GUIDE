@@ -91,6 +91,7 @@ function getNextStates(startIndex: number, count: number): string[] {
 /**
  * Query unseeded quality items from enrichment database
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function queryQualityItems(supabase: any): Promise<EnrichmentRow[]> {
   // Popular brands filter (case-insensitive)
   const popularBrands = [
@@ -129,6 +130,7 @@ async function queryQualityItems(supabase: any): Promise<EnrichmentRow[]> {
     .gte("retail_price", 15.0)
     .not("image_url", "is", null)
     .not("item_name", "is", null)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .limit(1000)) as { data: EnrichmentRow[] | null; error: any }
 
   if (error) {
@@ -146,6 +148,7 @@ async function queryQualityItems(supabase: any): Promise<EnrichmentRow[]> {
   // Query seeded SKUs to exclude
   const { data: seededSkus, error: seededError } = (await supabase
     .from("seeded_skus")
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .select("sku")) as { data: { sku: string }[] | null; error: any }
 
   if (seededError) {
@@ -186,7 +189,7 @@ async function queryQualityItems(supabase: any): Promise<EnrichmentRow[]> {
  * Seed items to Penny List
  */
 async function seedItems(
-  supabase: any,
+  supabase: any, // eslint-disable-line @typescript-eslint/no-explicit-any
   items: EnrichmentRow[],
   states: string[]
 ): Promise<SeededResult[]> {
@@ -222,8 +225,10 @@ async function seedItems(
     // Insert to Penny List
     const { data: insertedRow, error: insertError } = (await supabase
       .from("Penny List")
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .insert(payload as any)
       .select("id")
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .single()) as { data: { id: string } | null; error: any }
 
     if (insertError || !insertedRow?.id) {
@@ -237,6 +242,7 @@ async function seedItems(
     const { error: seededError } = await supabase.from("seeded_skus").insert({
       sku: item.sku,
       penny_list_id: pennyListId,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any)
 
     if (seededError) {
