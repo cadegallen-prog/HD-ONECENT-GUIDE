@@ -91,9 +91,7 @@ function getNextStates(startIndex: number, count: number): string[] {
 /**
  * Query unseeded quality items from enrichment database
  */
-async function queryQualityItems(
-  supabase: ReturnType<typeof createClient>
-): Promise<EnrichmentRow[]> {
+async function queryQualityItems(supabase: any): Promise<EnrichmentRow[]> {
   // Popular brands filter (case-insensitive)
   const popularBrands = [
     "milwaukee",
@@ -123,7 +121,7 @@ async function queryQualityItems(
   ]
 
   // Build query
-  const { data: items, error } = await supabase
+  const { data: items, error } = (await supabase
     .from("penny_item_enrichment")
     .select(
       "sku, item_name, brand, model_number, upc, image_url, home_depot_url, internet_sku, retail_price"
@@ -131,7 +129,7 @@ async function queryQualityItems(
     .gte("retail_price", 15.0)
     .not("image_url", "is", null)
     .not("item_name", "is", null)
-    .limit(1000) // Get a large pool to filter from
+    .limit(1000)) as { data: EnrichmentRow[] | null; error: any }
 
   if (error) {
     console.error("[seed-penny-list] Error querying enrichment table:", error)
@@ -146,7 +144,9 @@ async function queryQualityItems(
   console.log(`[seed-penny-list] Found ${items.length} items with retail_price >= $15`)
 
   // Query seeded SKUs to exclude
-  const { data: seededSkus, error: seededError } = await supabase.from("seeded_skus").select("sku")
+  const { data: seededSkus, error: seededError } = (await supabase
+    .from("seeded_skus")
+    .select("sku")) as { data: { sku: string }[] | null; error: any }
 
   if (seededError) {
     console.error("[seed-penny-list] Error querying seeded_skus:", seededError)
@@ -186,7 +186,7 @@ async function queryQualityItems(
  * Seed items to Penny List
  */
 async function seedItems(
-  supabase: ReturnType<typeof createClient>,
+  supabase: any,
   items: EnrichmentRow[],
   states: string[]
 ): Promise<SeededResult[]> {
@@ -220,24 +220,24 @@ async function seedItems(
     }
 
     // Insert to Penny List
-    const { data: insertedRow, error: insertError } = await supabase
+    const { data: insertedRow, error: insertError } = (await supabase
       .from("Penny List")
-      .insert(payload)
+      .insert(payload as any)
       .select("id")
-      .single()
+      .single()) as { data: { id: string } | null; error: any }
 
     if (insertError || !insertedRow?.id) {
       console.error(`[seed-penny-list] Failed to insert SKU ${item.sku}:`, insertError)
       continue
     }
 
-    const pennyListId = insertedRow.id
+    const pennyListId = insertedRow.id as string
 
     // Mark as seeded
     const { error: seededError } = await supabase.from("seeded_skus").insert({
       sku: item.sku,
       penny_list_id: pennyListId,
-    })
+    } as any)
 
     if (seededError) {
       console.error(`[seed-penny-list] Failed to mark SKU ${item.sku} as seeded:`, seededError)
