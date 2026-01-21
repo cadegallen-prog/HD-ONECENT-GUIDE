@@ -2,14 +2,9 @@ import { ExternalLink, Heart, Download, Wrench } from "lucide-react"
 import Link from "next/link"
 import type { Metadata } from "next"
 import { PageHeader, PageShell, Section } from "@/components/page-templates"
-import { ResourcesSupportCtas } from "@/components/resources-support-ctas"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import {
-  BEFRUGAL_REFERRAL_PATH,
-  COMMUNITY_MEMBER_COUNT_DISPLAY,
-  FACEBOOK_GROUP_URL,
-} from "@/lib/constants"
+import { COMMUNITY_MEMBER_COUNT_DISPLAY, FACEBOOK_GROUP_URL } from "@/lib/constants"
 
 export const metadata: Metadata = {
   title: "Resources | Penny Central",
@@ -18,12 +13,6 @@ export const metadata: Metadata = {
 
 export default function ResourcesPage() {
   const tools = [
-    {
-      name: "BeFrugal Cashback",
-      description:
-        "Free cashback on Home Depot and everyday purchases that supports Penny Central at no extra cost.",
-      url: BEFRUGAL_REFERRAL_PATH,
-    },
     {
       name: "Home Depot Store Finder",
       description: "Official store locator with hours and contact info",
@@ -111,9 +100,9 @@ export default function ResourcesPage() {
         </div>
       </Section>
 
-      <Section title="Support Penny Central" subtitle="Keep the tools free for everyone.">
+      <Section title="Support PennyCentral" subtitle="Keep the tools free for everyone.">
         <Link
-          href="/about#support"
+          href="/support"
           className="group flex items-center justify-between rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] p-5 transition-colors hover:border-[var(--border-dark)]"
         >
           <div className="flex items-start gap-4">
@@ -122,10 +111,10 @@ export default function ResourcesPage() {
             </div>
             <div>
               <h3 className="text-sm font-semibold text-[var(--text-primary)]">
-                Support Penny Central
+                Support PennyCentral
               </h3>
               <p className="text-sm text-[var(--text-muted)]">
-                Activate BeFrugal cashback or buy me a coffee to keep the tools free for everyone.
+                Learn how PennyCentral is funded and how you can optionally support the project.
               </p>
             </div>
           </div>
@@ -135,10 +124,6 @@ export default function ResourcesPage() {
             aria-hidden="true"
           />
         </Link>
-      </Section>
-
-      <Section spacing="md">
-        <ResourcesSupportCtas />
       </Section>
     </PageShell>
   )

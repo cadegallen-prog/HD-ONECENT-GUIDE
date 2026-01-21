@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import { GuideContent } from "@/components/GuideContent"
-import { SupportAndCashbackCard } from "@/components/SupportAndCashbackCard"
 import { PageHeader, PageShell, Section } from "@/components/page-templates"
 
 export const metadata: Metadata = {
@@ -180,10 +179,6 @@ export default function GuidePage() {
 
       <Section>
         <GuideContent />
-      </Section>
-
-      <Section spacing="md">
-        <SupportAndCashbackCard />
       </Section>
 
       <Section id="faq" spacing="lg" className="border-t border-[var(--border-default)] pt-16">

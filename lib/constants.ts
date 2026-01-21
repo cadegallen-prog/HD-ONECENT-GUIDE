@@ -31,11 +31,12 @@ export const SUBMIT_FIND_FORM_URL = "/report-find"
 export const NEWSLETTER_URL = "https://pennycentral.kit.com"
 
 // ============================================
-// AFFILIATE LINKS
+// MONETIZATION CONSTANTS
 // ============================================
 
 /**
- * BeFrugal referral redirect path (internal route that 301s to the affiliate URL).
- * Use this for all BeFrugal links throughout the site.
+ * Optional donation URL for supporting PennyCentral.
+ * If empty/undefined: hide donate button and show "Donations coming soon."
+ * If set: show "Support PennyCentral" button linking to this URL.
  */
-export const BEFRUGAL_REFERRAL_PATH = "/go/befrugal"
+export const DONATION_URL = process.env.NEXT_PUBLIC_DONATION_URL || ""

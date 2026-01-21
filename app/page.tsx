@@ -1,20 +1,10 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import {
-  BookOpen,
-  ExternalLink,
-  Heart,
-  DollarSign,
-  Users,
-  Map,
-  List,
-  PlusCircle,
-} from "lucide-react"
+import { BookOpen, ExternalLink, Users, Map, List, PlusCircle } from "lucide-react"
 import {
   COMMUNITY_MEMBER_COUNT_DISPLAY,
   MEMBER_COUNT_BADGE_TEXT,
   FACEBOOK_GROUP_URL,
-  BEFRUGAL_REFERRAL_PATH,
 } from "@/lib/constants"
 import { TrackableNextLink } from "@/components/trackable-next-link"
 import { TodaysFinds } from "@/components/todays-finds"
@@ -305,67 +295,34 @@ export default async function Home() {
 
       {/* ============================================
           SUPPORT SECTION
-          Secondary CTAs for tips and cashback
           ============================================ */}
       <section className="section-padding px-4 sm:px-6 bg-[var(--bg-page)]">
         <div className="container-wide">
           {/* Section header */}
           <div className="text-center mb-10">
             <h2 className="text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug">
-              Support Penny Central
+              Support PennyCentral
             </h2>
             <p className="mt-2 text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed max-w-xl mx-auto">
-              This site is free. If it&apos;s been helpful, here are ways to support the project.
+              This site is free to use. Ads are being enabled now to help keep it sustainable.
+              Optional support is always appreciated, but never required.
             </p>
           </div>
 
-          {/* Support cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
-            {/* Tip Card */}
-            <a
-              href="https://paypal.me/cadegallen"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="card-interactive bg-[var(--bg-elevated)] dark:bg-[var(--bg-card)] rounded-xl p-6 border border-[var(--border-default)] block"
+          {/* Support CTAs */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-2xl mx-auto">
+            <Link
+              href="/support"
+              className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 min-h-[48px] rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold shadow-md hover:bg-[var(--cta-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
             >
-              <div className="w-12 h-12 rounded-xl bg-[var(--bg-page)] flex items-center justify-center mb-4 border border-[var(--border-default)]">
-                <Heart className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
-              </div>
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
-                Buy Me a Coffee
-              </h3>
-              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed">
-                If the guide saved you time or gas money, a one-time PayPal coffee covers hosting,
-                APIs, and the odd scouting trip.
-              </p>
-              <div className="mt-4 inline-flex items-center gap-2 text-[var(--link-default)] font-medium">
-                Buy me a coffee
-                <ExternalLink className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
-              </div>
-            </a>
-
-            {/* Cashback Card */}
-            <a
-              href={BEFRUGAL_REFERRAL_PATH}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="card-interactive bg-[var(--bg-elevated)] dark:bg-[var(--bg-card)] rounded-xl p-6 border border-[var(--border-default)] block"
+              Support PennyCentral
+            </Link>
+            <Link
+              href="/cashback"
+              className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 min-h-[48px] rounded-lg border-2 border-[var(--border-default)] dark:border-[var(--border-strong)] bg-transparent text-[var(--text-primary)] font-semibold hover:bg-[var(--bg-elevated)] hover:border-[var(--border-strong)] dark:hover:bg-[var(--bg-elevated)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
             >
-              <div className="w-12 h-12 rounded-xl bg-[var(--bg-page)] flex items-center justify-center mb-4 border border-[var(--border-default)]">
-                <DollarSign className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
-              </div>
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
-                Activate BeFrugal Cashback
-              </h3>
-              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed">
-                Turn on free cashback before normal Home Depot orders. When you earn $10+ BeFrugal
-                sends a referral bonus that keeps the site free.
-              </p>
-              <div className="mt-4 inline-flex items-center gap-2 text-[var(--link-default)] font-medium">
-                Activate BeFrugal cashback
-                <ExternalLink className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
-              </div>
-            </a>
+              Support & Transparency
+            </Link>
           </div>
         </div>
       </section>

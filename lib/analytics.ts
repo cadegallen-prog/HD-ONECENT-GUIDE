@@ -60,7 +60,6 @@ export type EventName =
   | "trip_create"
   | "find_submit"
   | "donation_click"
-  | "befrugal_click"
   | "cta_click"
 
 export interface EventParams {
