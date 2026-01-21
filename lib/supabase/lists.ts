@@ -274,6 +274,106 @@ export async function updateItemNotes(itemId: string, notes: string | null): Pro
 }
 
 // ============================================================================
+// PHASE 3: DETERMINISTIC LIST OPERATIONS
+// ============================================================================
+
+const ACTIVE_LIST_STORAGE_KEY = "pennycentral_active_list_id_v1"
+
+/**
+ * Check if a SKU is in a specific list (deterministic, list-scoped)
+ */
+export async function isSkuInList(listId: string, sku: string): Promise<boolean> {
+  const supabase = createSupabaseBrowserClient()
+
+  const { data, error } = await supabase
+    .from("list_items")
+    .select("id")
+    .eq("list_id", listId)
+    .eq("sku", sku)
+    .limit(1)
+
+  if (error) {
+    console.error("Error checking SKU in list:", error)
+    return false
+  }
+
+  return data && data.length > 0
+}
+
+/**
+ * Remove a SKU from a specific list (deterministic, list-scoped)
+ * Treats "0 rows deleted" as success (already removed)
+ */
+export async function removeSkuFromList(listId: string, sku: string): Promise<void> {
+  const supabase = createSupabaseBrowserClient()
+
+  const { error } = await supabase.from("list_items").delete().eq("list_id", listId).eq("sku", sku)
+
+  // Treat "no rows deleted" as success - item already removed
+  if (error) throw error
+}
+
+/**
+ * Batch check which SKUs from a list are saved in a specific list
+ * Returns a Set of SKUs that are in the list (efficient for checking many items)
+ */
+export async function getSavedSkusForList(listId: string, skus: string[]): Promise<Set<string>> {
+  if (skus.length === 0) return new Set()
+
+  const supabase = createSupabaseBrowserClient()
+
+  const { data, error } = await supabase
+    .from("list_items")
+    .select("sku")
+    .eq("list_id", listId)
+    .in("sku", skus)
+
+  if (error) {
+    console.error("Error getting saved SKUs:", error)
+    return new Set()
+  }
+
+  return new Set((data || []).map((item) => item.sku))
+}
+
+/**
+ * Get the active list ID from localStorage, validating it exists in the user's lists.
+ * Returns null if no active list is set or if the stored list doesn't exist.
+ * Falls back to the default list if available.
+ */
+export async function getActiveListId(): Promise<string | null> {
+  // Check localStorage for active list ID
+  const stored =
+    typeof localStorage !== "undefined" ? localStorage.getItem(ACTIVE_LIST_STORAGE_KEY) : null
+
+  if (stored) {
+    // Validate that the list still exists
+    const lists = await getUserLists()
+    const exists = lists.some((list) => list.id === stored)
+    if (exists) {
+      return stored
+    }
+    // Clear invalid stored value
+    if (typeof localStorage !== "undefined") {
+      localStorage.removeItem(ACTIVE_LIST_STORAGE_KEY)
+    }
+  }
+
+  // Fallback to default list (most recent list)
+  const { list } = await getOrCreateDefaultList()
+  return list.id
+}
+
+/**
+ * Set the active list ID in localStorage
+ */
+export function setActiveListId(listId: string): void {
+  if (typeof localStorage !== "undefined") {
+    localStorage.setItem(ACTIVE_LIST_STORAGE_KEY, listId)
+  }
+}
+
+// ============================================================================
 // HELPER FUNCTIONS
 // ============================================================================
 

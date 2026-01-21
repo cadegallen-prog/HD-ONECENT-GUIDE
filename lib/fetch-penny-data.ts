@@ -533,6 +533,7 @@ export type DateWindow = {
 type FetchRowsOptions = {
   dateWindow?: DateWindow
   includeNotes?: boolean
+  skuList?: string[]
 }
 
 async function fetchRows(
@@ -540,13 +541,18 @@ async function fetchRows(
   label: "anon",
   options: FetchRowsOptions = {}
 ): Promise<SupabasePennyRow[] | null> {
-  const { dateWindow, includeNotes = true } = options
+  const { dateWindow, includeNotes = true, skuList } = options
   const columns = [
     ...PENNY_LIST_BASE_COLUMNS,
     ...(includeNotes ? PENNY_LIST_HEAVY_COLUMNS : []),
   ].join(",")
 
   let query = client.from("penny_list_public").select(columns)
+
+  // Apply SKU filter at database level (Phase 3: performance optimization)
+  if (skuList && skuList.length > 0) {
+    query = query.in("home_depot_sku_6_or_10_digits", skuList)
+  }
 
   // Apply date window filter at database level for performance
   // Filter using "last seen" semantics:
@@ -695,9 +701,15 @@ export async function fetchPennyItemsFromSupabase(
       let items = buildPennyItemsFromRows(anonRows)
 
       // Step 2: Get SKUs that need enrichment (missing image or brand)
-      const skusNeedingEnrichment = items
-        .filter((item) => !item.imageUrl || item.imageUrl === PLACEHOLDER_IMAGE_URL || !item.brand)
-        .map((item) => item.sku)
+      // Skip historical enrichment if we're already filtering by SKU list (Phase 3)
+      const skusNeedingEnrichment =
+        !options.skuList || options.skuList.length === 0
+          ? items
+              .filter(
+                (item) => !item.imageUrl || item.imageUrl === PLACEHOLDER_IMAGE_URL || !item.brand
+              )
+              .map((item) => item.sku)
+          : []
 
       // Step 3: Fetch historical enrichment from Penny List (no date filter)
       if (skusNeedingEnrichment.length > 0) {
@@ -889,6 +901,11 @@ type GetPennyListFilteredOptions = {
    * forcing the entire site to poll or disabling CDN caching for everyone.
    */
   bypassCache?: boolean
+  /**
+   * Optional list of SKUs to filter by (Phase 3: performance optimization).
+   * When provided, only items matching these SKUs will be returned.
+   */
+  skuList?: string[]
 }
 
 export async function getPennyListFiltered(
@@ -903,13 +920,17 @@ export async function getPennyListFiltered(
 
   const includeNotes = options.includeNotes ?? true
   const bypassCache = options.bypassCache === true
+  const skuList = options.skuList
   const cacheBucketMs =
     Math.floor(nowMs / (PENNY_LIST_CACHE_SECONDS * 1000)) * PENNY_LIST_CACHE_SECONDS * 1000
   const dateWindow = dateRange ? dateRangeToWindow(dateRange, cacheBucketMs) : undefined
 
   try {
-    const items = bypassCache
-      ? await fetchPennyItemsFromSupabase({ dateWindow, includeNotes })
+    // When filtering by SKU list, always bypass cache (these are typically one-off queries)
+    const shouldBypassCache = bypassCache || (skuList && skuList.length > 0)
+
+    const items = shouldBypassCache
+      ? await fetchPennyItemsFromSupabase({ dateWindow, includeNotes, skuList })
       : getPennyListFilteredCached !== null
         ? await getPennyListFilteredCached(dateRange, cacheBucketMs, includeNotes)
         : await fetchPennyItemsFromSupabase({ dateWindow, includeNotes })

@@ -9,8 +9,10 @@ import {
   addItemToList,
   createList,
   addSkuToListSmart,
-  isItemInAnyList,
-  removeItemFromListBySku,
+  isSkuInList,
+  removeSkuFromList,
+  getActiveListId,
+  setActiveListId,
   type List,
 } from "@/lib/supabase/lists"
 import { trackEvent } from "@/lib/analytics"
@@ -37,9 +39,7 @@ export function AddToListButton({
   const [lists, setLists] = useState<List[]>([])
   const [newListName, setNewListName] = useState("")
   const [creatingList, setCreatingList] = useState(false)
-  const [itemInfo, setItemInfo] = useState<{ inList: boolean; listId?: string; itemId?: string }>({
-    inList: false,
-  })
+  const [activeListId, setActiveListIdState] = useState<string | null>(null)
   const [showToast, setShowToast] = useState(false)
   const [toastMessage, setToastMessage] = useState("")
   const [toastType, setToastType] = useState<"added" | "removed">("added")
@@ -61,17 +61,26 @@ export function AddToListButton({
     }
   }, [showPicker])
 
-  // Check if item is already saved when component mounts or SKU changes
+  // Check if item is already saved in the active list when component mounts or SKU changes
   useEffect(() => {
     const checkItemStatus = async () => {
       if (user && sku) {
         try {
-          const info = await isItemInAnyList(sku)
-          setItemInfo(info)
-          setSaved(info.inList)
+          const listId = await getActiveListId()
+          if (listId) {
+            setActiveListIdState(listId)
+            const inList = await isSkuInList(listId, sku)
+            setSaved(inList)
+          } else {
+            setSaved(false)
+          }
         } catch (error) {
           console.error("Failed to check item status:", error)
+          setSaved(false)
         }
+      } else {
+        setSaved(false)
+        setActiveListIdState(null)
       }
     }
 
@@ -105,12 +114,11 @@ export function AddToListButton({
     setLoading(true)
 
     try {
-      if (saved && itemInfo.inList) {
-        // Item is already saved - remove it
-        await removeItemFromListBySku(sku)
+      if (saved && activeListId) {
+        // Item is already saved - remove it from the active list
+        await removeSkuFromList(activeListId, sku)
         setSaved(false)
-        setItemInfo({ inList: false })
-        trackEvent("list_item_removed", { sku })
+        trackEvent("list_item_removed", { sku, listId: activeListId })
         setToastMessage("Removed from My List")
         setToastType("removed")
         setShowToast(true)
@@ -120,9 +128,10 @@ export function AddToListButton({
         const result = await addSkuToListSmart(sku)
 
         if (result) {
-          // Added successfully
+          // Added successfully - set this list as active
           setSaved(true)
-          setItemInfo({ inList: true, listId: result.list.id, itemId: result.item.id })
+          setActiveListId(result.list.id)
+          setActiveListIdState(result.list.id)
           trackEvent("add_to_list_completed", { sku, listId: result.list.id })
           setToastMessage("Added to My List")
           setToastType("added")
@@ -139,7 +148,6 @@ export function AddToListButton({
       if (error instanceof Error && error.message.includes("already in your list")) {
         // Silently handle "already in list" errors - no error message shown to user
         setSaved(true)
-        setItemInfo({ inList: true })
         setToastMessage("Added to My List")
         setToastType("added")
         setShowToast(true)
@@ -159,7 +167,9 @@ export function AddToListButton({
     try {
       await addItemToList(listId, sku)
       setSaved(true)
-      setItemInfo({ inList: true, listId, itemId: undefined }) // itemId would be set by server response
+      // Set this list as the active list
+      setActiveListId(listId)
+      setActiveListIdState(listId)
       trackEvent("add_to_list_completed", { sku, listId })
       setToastMessage("Added to My List")
       setToastType("added")
@@ -169,7 +179,8 @@ export function AddToListButton({
       console.error("Failed to add to list:", error)
       if (error instanceof Error && error.message.includes("already in your list")) {
         setSaved(true)
-        setItemInfo({ inList: true, listId })
+        setActiveListId(listId)
+        setActiveListIdState(listId)
         setToastMessage("Added to My List")
         setToastType("added")
         setShowToast(true)
@@ -178,6 +189,7 @@ export function AddToListButton({
         setToastType("removed") // Use removed styling for errors
         setShowToast(true)
       }
+      setShowPicker(false)
     } finally {
       setLoading(false)
     }
@@ -191,7 +203,9 @@ export function AddToListButton({
       const newList = await createList(newListName.trim())
       await addItemToList(newList.id, sku)
       setSaved(true)
-      setItemInfo({ inList: true, listId: newList.id, itemId: undefined })
+      // Set this new list as the active list
+      setActiveListId(newList.id)
+      setActiveListIdState(newList.id)
       trackEvent("add_to_list_completed", { sku, listId: newList.id, newList: true })
       setToastMessage("Added to My List")
       setToastType("added")

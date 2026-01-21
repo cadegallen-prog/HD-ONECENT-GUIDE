@@ -18,7 +18,12 @@ import {
 import { useAuth } from "@/components/auth-provider"
 import { ListItemCard } from "@/components/list-item-card"
 import { copyToClipboard } from "@/components/copy-sku-button"
-import { getListWithItems, createShareToken, type ListWithItems } from "@/lib/supabase/lists"
+import {
+  getListWithItems,
+  createShareToken,
+  setActiveListId,
+  type ListWithItems,
+} from "@/lib/supabase/lists"
 import { trackEvent } from "@/lib/analytics"
 import type { PennyItem } from "@/lib/fetch-penny-data"
 import { toast } from "sonner"
@@ -75,10 +80,17 @@ export default function ListDetailPage({ params }: ListDetailPageProps) {
       }
       setList(listData)
 
+      // Set this list as the active list (Phase 3: active list tracking)
+      setActiveListId(id)
+
       // Fetch penny data to enrich items with names/images via API
+      // Phase 3: Use skus= parameter for efficient, targeted enrichment
       if (listData.items.length > 0) {
         try {
-          const response = await fetch("/api/penny-list?perPage=1000")
+          const skus = listData.items.map((item) => item.sku).join(",")
+          const response = await fetch(
+            `/api/penny-list?skus=${encodeURIComponent(skus)}&includeHot=0`
+          )
           if (response.ok) {
             const data = await response.json()
             const pennyMap: Record<string, PennyItem> = {}

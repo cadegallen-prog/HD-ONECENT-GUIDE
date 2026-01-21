@@ -70,6 +70,14 @@ export async function GET(request: Request) {
   const page = parsePage(url.searchParams.get("page"))
   const includeHot = url.searchParams.get("includeHot") === "1"
   const fresh = url.searchParams.get("fresh") === "1"
+  // Phase 3: SKU filtering for list enrichment
+  const skusParam = url.searchParams.get("skus")
+  const skuList = skusParam
+    ? skusParam
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean)
+    : undefined
 
   try {
     const nowMs =
@@ -77,9 +85,11 @@ export async function GET(request: Request) {
 
     // Fetch items with date window filtering at the database level for performance
     // This reduces data transfer by only fetching rows within the selected time range
+    // Phase 3: Also supports SKU filtering for efficient list enrichment
     const pennyItems = await getPennyListFiltered(days, nowMs, {
       includeNotes: false,
       bypassCache: fresh,
+      skuList,
     })
     const validItems = filterValidPennyItems(pennyItems)
 
