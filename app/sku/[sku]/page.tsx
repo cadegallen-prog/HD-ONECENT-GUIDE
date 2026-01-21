@@ -362,7 +362,7 @@ export default async function SkuDetailPage({ params }: PageProps) {
                   href={reportFindUrl}
                   eventName="report_duplicate_click"
                   eventParams={{ sku, name, src: "sku-page" }}
-                  className="btn-secondary flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl text-sm font-semibold text-[var(--text-primary)]"
+                  className="btn-primary flex items-center justify-center gap-2 w-full min-h-[44px] px-4 py-3 rounded-xl text-sm font-bold"
                   aria-label={`Report finding ${name}`}
                 >
                   Report this find
@@ -459,6 +459,30 @@ export default async function SkuDetailPage({ params }: PageProps) {
                         <p className="text-sm font-semibold text-[var(--text-primary)]">
                           {totalReports} sightings in {stateCount} states
                         </p>
+                        <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                          {Object.entries(communityItem.locations)
+                            .sort(([, a], [, b]) => b - a)
+                            .slice(0, 4)
+                            .map(([state, count]) => (
+                              <span
+                                key={state}
+                                className="inline-flex items-center rounded-full border border-[var(--border-default)] bg-[var(--bg-recessed)] px-2 py-0.5 text-[11px] font-semibold text-[var(--text-secondary)]"
+                              >
+                                {state}
+                                <span className="ml-1 font-mono text-[11px] font-semibold">
+                                  {count}
+                                </span>
+                              </span>
+                            ))}
+                          <a
+                            href="#where-it-was-found"
+                            className="text-[11px] font-medium text-[var(--cta-primary)] underline underline-offset-2"
+                          >
+                            {Object.keys(communityItem.locations).length > 4
+                              ? `+${Object.keys(communityItem.locations).length - 4} more`
+                              : "See details"}
+                          </a>
+                        </div>
                       </div>
                     </div>
                   )}
@@ -470,7 +494,7 @@ export default async function SkuDetailPage({ params }: PageProps) {
                   href={homeDepotUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-primary w-full flex items-center justify-center gap-2 py-4 rounded-xl font-bold text-lg shadow-lg hover:scale-[1.02] transition-transform"
+                  className="btn-secondary w-full flex items-center justify-center gap-2 min-h-[44px] py-3 rounded-xl font-semibold text-sm"
                   eventName="home_depot_click"
                   eventParams={{ skuMasked: sku.slice(-4), source: "sku-page" }}
                 >
@@ -485,6 +509,35 @@ export default async function SkuDetailPage({ params }: PageProps) {
             </div>
           </div>
         </div>
+
+        {/* Community Details */}
+        {communityItem?.locations && Object.keys(communityItem.locations).length > 0 && (
+          <div
+            id="where-it-was-found"
+            className="mt-6 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl p-6 sm:p-8"
+          >
+            <h2 className="text-xl font-bold text-[var(--text-primary)] mb-6 flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-[var(--cta-primary)]" />
+              Where it was found
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+              {Object.entries(communityItem.locations)
+                .sort(([, a], [, b]) => b - a)
+                .map(([state, count]) => (
+                  <div
+                    key={state}
+                    className="flex flex-col p-3 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-default)]"
+                  >
+                    <span className="text-xs font-bold text-[var(--text-muted)] mb-1">{state}</span>
+                    <span className="text-lg font-bold text-[var(--text-primary)]">
+                      {count}{" "}
+                      <span className="text-xs font-normal text-[var(--text-muted)]">reports</span>
+                    </span>
+                  </div>
+                ))}
+            </div>
+          </div>
+        )}
 
         {/* Related Items - Prominent Section */}
         {relatedItems.length > 0 && (
@@ -529,37 +582,11 @@ export default async function SkuDetailPage({ params }: PageProps) {
           </div>
         )}
 
-        {/* Community Details */}
-        {communityItem?.locations && Object.keys(communityItem.locations).length > 0 && (
-          <div className="mt-8 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl p-6 sm:p-8">
-            <h2 className="text-xl font-bold text-[var(--text-primary)] mb-6 flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-[var(--cta-primary)]" />
-              Where it was found
-            </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-              {Object.entries(communityItem.locations)
-                .sort(([, a], [, b]) => b - a)
-                .map(([state, count]) => (
-                  <div
-                    key={state}
-                    className="flex flex-col p-3 rounded-xl bg-[var(--bg-elevated)] border border-[var(--border-default)]"
-                  >
-                    <span className="text-xs font-bold text-[var(--text-muted)] mb-1">{state}</span>
-                    <span className="text-lg font-bold text-[var(--text-primary)]">
-                      {count}{" "}
-                      <span className="text-xs font-normal text-[var(--text-muted)]">reports</span>
-                    </span>
-                  </div>
-                ))}
-            </div>
-          </div>
-        )}
-
         {/* Educational Footer */}
         <div className="mt-8">
           <Link
             href="/guide"
-            className="p-6 rounded-2xl bg-[var(--bg-muted)] border border-[var(--border-default)] hover:border-[var(--cta-primary)] transition-colors group"
+            className="block w-full p-6 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-default)] hover:border-[var(--cta-primary)] transition-colors group"
           >
             <h3 className="font-bold text-[var(--text-primary)] group-hover:text-[var(--cta-primary)] transition-colors">
               New to Penny Hunting?

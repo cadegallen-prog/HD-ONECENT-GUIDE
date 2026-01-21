@@ -33,7 +33,15 @@ DONE MEANS:
 - I verified the page/flow
 ```
 
-If Cade is unsure, the agent should ask **one** non-technical clarifying question: “Which lever matters most right now: more submissions, better retention, or more SEO traffic?”
+### Plain-English Rule (No UX Jargon Without Translation)
+
+If the agent uses UX terms, it must translate them immediately in plain English (mobile-first).
+
+**Example:**
+
+- “Above the fold” = “visible on the screen without scrolling on your phone”
+
+If Cade is unsure, the agent should ask **one** non-technical clarifying question: "Which lever matters most right now: more submissions, better retention, or more SEO traffic?"
 
 ### Course-Correction Script (When AI Is Misaligned)
 

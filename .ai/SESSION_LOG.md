@@ -1,5 +1,36 @@
 ---
 
+## 2026-01-21 - Codex - SKU page: prioritize reports/states above related (mobile-first)
+
+**Goal:** Fix SKU detail page UX regression: “Where it was found” was below Related, and outbound Home Depot CTA visually competed with “Report this find”.
+**Status:** ✅ Complete + verified (lint/build/unit/e2e)
+
+### Changes
+
+- `app/sku/[sku]/page.tsx`:
+  - Move “Where it was found” section above “Related penny items”.
+  - Make “Report this find” the primary CTA; demote “View on Home Depot” to secondary styling.
+  - Add inline state chips (with counts) under “Community Reports” so the summary pays off immediately.
+  - Restore “New to Penny Hunting?” as a properly boxed card (`block w-full`, `bg-[var(--bg-card)]`).
+
+### Proof
+
+- Verification bundle: `reports/verification/2026-01-21T22-17-23/summary.md`
+- SKU screenshots (Playwright): `reports/verification/sku-related-items-chromium-mobile-light.png`, `reports/verification/sku-related-items-chromium-mobile-dark.png`
+
+---
+
+## 2026-01-21 - Codex - Add plain-English UX terminology rule (docs-only)
+
+**Goal:** Reduce miscommunication by translating UX jargon into plain English (mobile-first) during planning.
+**Status:** ✅ Docs-only (gates not run)
+
+### Change
+
+- `.ai/USAGE.md`: Added a “Plain-English Rule” requiring immediate translation of UX terms (example: “above the fold” = “visible without scrolling”).
+
+---
+
 ## 2026-01-21 - Codex - Fix Vercel build errors after "My List" work
 
 **Goal:** Restore `npm run build` / Vercel deploy after the recent `/lists` changes introduced TypeScript + Next.js prerender errors.
