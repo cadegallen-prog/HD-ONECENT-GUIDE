@@ -258,17 +258,22 @@ function main() {
   if (updateBaseline) {
     fs.mkdirSync(path.dirname(baselinePath), { recursive: true })
     fs.writeFileSync(baselinePath, JSON.stringify(summary, null, 2))
-    console.log(`📌 Baseline updated at ${path.relative(rootDir, baselinePath)} with ${warnings.length} warnings.`)
+    console.log(
+      `📌 Baseline updated at ${path.relative(rootDir, baselinePath)} with ${warnings.length} warnings.`
+    )
     process.exit(0)
   }
 
   if (!fs.existsSync(baselinePath)) {
-    console.error(`❌ Baseline missing at ${path.relative(rootDir, baselinePath)}. Run "npm run lint:colors:update-baseline" to create it.`)
+    console.error(
+      `❌ Baseline missing at ${path.relative(rootDir, baselinePath)}. Run "npm run lint:colors:update-baseline" to create it.`
+    )
     process.exit(1)
   }
 
   const baseline = JSON.parse(fs.readFileSync(baselinePath, "utf8"))
-  const baselineWarnings = baseline.warningsCount ?? (Array.isArray(baseline.warnings) ? baseline.warnings.length : 0)
+  const baselineWarnings =
+    baseline.warningsCount ?? (Array.isArray(baseline.warnings) ? baseline.warnings.length : 0)
 
   if (warnings.length > baselineWarnings) {
     console.error(

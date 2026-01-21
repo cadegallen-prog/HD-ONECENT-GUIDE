@@ -29,6 +29,7 @@ Use these as your first message in Copilot Chat to load the right context fast.
 ### Primer A (General Orientation)
 
 Read these files first and summarize only operational truth:
+
 - `.ai/STATE.md`
 - `.ai/HANDOFF.md`
 - `.ai/BACKLOG.md`
@@ -38,6 +39,7 @@ Then tell me the next 3 actions and which files you would touch.
 ### Primer B (Topic-based Work)
 
 Read:
+
 - `.ai/STATE.md`
 - `.ai/HANDOFF.md`
 - `.ai/topics/INDEX.md`
@@ -48,6 +50,7 @@ Then propose the smallest safe implementation step. List exact files and changes
 ### Primer C (Implementation Plan Based)
 
 Read:
+
 - `.ai/CRITICAL_RULES.md`
 - `.ai/DECISION_RIGHTS.md`
 - `.ai/CONTRACT.md`
@@ -58,6 +61,7 @@ Then implement only Step 1 from the plan. Output as a diff or file-by-file edits
 ### Important: Commands as Headings (Copilot)
 
 Do not rely on literal slash commands. Treat them as headings like:
+
 - ARCHITECT MODE
 - IMPLEMENT MODE
 - VERIFY MODE
@@ -116,6 +120,7 @@ DONE MEANS:
 ## Autonomy After "Go"
 
 Once you understand the goal:
+
 1. Read relevant docs (above)
 2. Answer the question or complete the small task
 3. If code changes are needed: explain them step-by-step (don't auto-complete entire features)
@@ -141,15 +146,15 @@ Once you understand the goal:
 
 ## Key Files by Purpose
 
-| Goal | File to Read |
-|------|---|
-| Understand project & business | `.ai/GROWTH_STRATEGY.md` + `.ai/BACKLOG.md` |
-| See current state & blockers | `.ai/STATE.md` + `.ai/BACKLOG.md` |
-| See recent work | `.ai/SESSION_LOG.md` |
-| Understand design system | `.ai/CONSTRAINTS.md` + `.ai/CONSTRAINTS_TECHNICAL.md` |
-| See design decisions | `.ai/topics/UI_DESIGN.md` or `.ai/PENNY-LIST-REDESIGN.md` |
-| Understand collaboration rules | `.ai/CONTRACT.md` + `.ai/DECISION_RIGHTS.md` |
-| Check past mistakes | `.ai/LEARNINGS.md` |
+| Goal                           | File to Read                                              |
+| ------------------------------ | --------------------------------------------------------- |
+| Understand project & business  | `.ai/GROWTH_STRATEGY.md` + `.ai/BACKLOG.md`               |
+| See current state & blockers   | `.ai/STATE.md` + `.ai/BACKLOG.md`                         |
+| See recent work                | `.ai/SESSION_LOG.md`                                      |
+| Understand design system       | `.ai/CONSTRAINTS.md` + `.ai/CONSTRAINTS_TECHNICAL.md`     |
+| See design decisions           | `.ai/topics/UI_DESIGN.md` or `.ai/PENNY-LIST-REDESIGN.md` |
+| Understand collaboration rules | `.ai/CONTRACT.md` + `.ai/DECISION_RIGHTS.md`              |
+| Check past mistakes            | `.ai/LEARNINGS.md`                                        |
 
 ---
 

@@ -126,8 +126,7 @@ async function fetchEnrichedSkuSet(
 
 async function main() {
   const url = getEnv("NEXT_PUBLIC_SUPABASE_URL")
-  const key =
-    process.env.SUPABASE_SERVICE_ROLE_KEY || getEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY")
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || getEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY")
 
   const supabase = createClient(url, key, {
     auth: { persistSession: false },

@@ -4,7 +4,11 @@
     { "name": "card-surface", "selector": "[data-card], article", "role": "text" },
     { "name": "card-border", "selector": "[data-card], article", "role": "border" },
     { "name": "cta", "selector": "[data-cta=\"befrugal\"]", "role": "cta" },
-    { "name": "status-success", "selector": ".text-emerald-600, .text-emerald-400", "role": "status" },
+    {
+      "name": "status-success",
+      "selector": ".text-emerald-600, .text-emerald-400",
+      "role": "status"
+    },
     { "name": "status-warning", "selector": ".text-amber-600, .text-amber-400", "role": "status" },
     { "name": "status-error", "selector": ".text-red-600, .text-red-400", "role": "status" }
   ]

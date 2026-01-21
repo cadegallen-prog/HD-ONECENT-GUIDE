@@ -13,6 +13,7 @@
 **Purpose:** Design implementation plans before code is written.
 
 **What it does:**
+
 - Reads project context (STATE.md, BACKLOG.md, CONSTRAINTS.md)
 - Explores relevant code to understand current patterns
 - Designs an approach that fits the codebase
@@ -23,6 +24,7 @@
 **Scope:** Can read any file. Cannot modify files.
 
 **Constraints:**
+
 - Must read CONSTRAINTS.md before proposing changes
 - Must identify if Store Finder is involved (fragile area)
 - Must specify which files will be touched
@@ -41,6 +43,7 @@
 **Purpose:** Write code according to an approved plan.
 
 **What it does:**
+
 - Follows the plan from Architect (or your direct instructions)
 - Writes clean, focused code
 - Uses existing patterns from the codebase
@@ -48,11 +51,13 @@
 - Stays within the specified file scope
 
 **Scope:** Only files specified in the plan. Default scope if no plan:
+
 - `components/` - UI components
 - `lib/` - Utilities and data fetching
 - `app/` - Pages and API routes
 
 **Constraints:**
+
 - Must NOT touch `globals.css` without approval
 - Must NOT touch `components/store-map.tsx` (fragile)
 - Must NOT add features beyond what was asked
@@ -72,16 +77,19 @@
 **Purpose:** Write tests and run verification.
 
 **What it does:**
+
 - Writes unit tests for new functions/components
 - Updates E2E tests if UI changed
 - Runs `npm run ai:verify` (all 4 quality gates)
 - Reports results with pass/fail for each gate
 
 **Scope:**
+
 - `tests/` - All test files
 - Can read (not modify) source files being tested
 
 **Constraints:**
+
 - Must run all 4 gates (lint, build, unit, e2e)
 - Must NOT modify source code (only test files)
 - Must report actual output, not just "tests pass"
@@ -99,6 +107,7 @@
 **Purpose:** Find and fix bugs.
 
 **What it does:**
+
 - Reproduces the issue (asks for steps if unclear)
 - Searches for related code and recent changes
 - Identifies root cause
@@ -108,6 +117,7 @@
 **Scope:** Can read any file. Can modify files related to the bug.
 
 **Constraints:**
+
 - Must identify root cause before proposing fix
 - Must NOT make unrelated changes
 - Must test the fix by running verification
@@ -126,6 +136,7 @@
 **Purpose:** Review code before merging.
 
 **What it does:**
+
 - Reads changed files
 - Checks for CONSTRAINTS.md violations
 - Checks for raw Tailwind colors
@@ -136,6 +147,7 @@
 **Scope:** Only files that were changed in current session.
 
 **Constraints:**
+
 - Must NOT modify files (read-only review)
 - Must check against CONSTRAINTS.md
 - Must run `npm run lint:colors` to verify color compliance
@@ -154,6 +166,7 @@
 **Purpose:** Keep .ai/ documentation current.
 
 **What it does:**
+
 - Updates STATE.md if significant changes
 - Updates SESSION_LOG.md with session summary
 - Updates BACKLOG.md (marks done, adds new items)
@@ -162,6 +175,7 @@
 **Scope:** Only `.ai/` directory.
 
 **Constraints:**
+
 - Must NOT modify code files
 - Must keep updates concise
 - Must include date in SESSION_LOG entries
@@ -178,6 +192,7 @@
 **Purpose:** Generate and evaluate ideas without implementing.
 
 **What it does:**
+
 - Explores possibilities for a feature or problem
 - Lists pros/cons of different approaches
 - Considers technical feasibility
@@ -187,6 +202,7 @@
 **Scope:** Read-only exploration of codebase.
 
 **Constraints:**
+
 - Must NOT modify any files
 - Must NOT make decisions (only present options)
 - Must consider existing codebase patterns
@@ -203,6 +219,7 @@
 **Purpose:** Iterative, back-and-forth collaborative planning. NOT quick option-picking - deep exploration.
 
 **Philosophy:**
+
 - Planning is a conversation, not a presentation
 - Go back and forth as many times as needed
 - No pressure to "finish" or move to implementation
@@ -211,6 +228,7 @@
 - Build confidence that the plan will work BEFORE implementing
 
 **What it does:**
+
 - Discusses ideas openly without rushing to conclusions
 - Asks clarifying questions to understand intent
 - Challenges your assumptions when appropriate
@@ -223,6 +241,7 @@
 **Scope:** Read any file. Can only modify `.ai/` planning documents.
 
 **Constraints:**
+
 - Must NOT implement anything (no code changes)
 - Must NOT rush to "wrap up" - stay in planning mode as long as needed
 - Must reference the North Star for major decisions
@@ -231,6 +250,7 @@
 - Must NOT treat Cade's suggestions as automatically correct - evaluate objectively
 
 **Session flow:**
+
 1. Read relevant context (planning docs, CONTEXT.md, codebase if needed)
 2. Engage in back-and-forth discussion
 3. Update planning documents as decisions are made
@@ -244,13 +264,13 @@
 
 ## Quick Reference
 
-| Agent | When to Use | Key Phrase |
-|-------|-------------|------------|
-| **Planning Partner** | **Deep back-and-forth planning** | **"Act as my planning partner for..."** |
-| Architect | New feature, major change | "Act as the architect agent and design..." |
-| Implementer | Approved plan ready | "Act as the implementer agent and build..." |
-| Tester | Code written, needs tests | "Act as the tester agent and write tests..." |
-| Debugger | Something is broken | "Act as the debugger agent and investigate..." |
-| Reviewer | Before merging | "Act as the reviewer agent and check..." |
-| Documenter | Session ending | "Act as the documenter agent and update docs..." |
-| Brainstormer | Quick idea exploration | "Act as the brainstormer agent and explore..." |
+| Agent                | When to Use                      | Key Phrase                                       |
+| -------------------- | -------------------------------- | ------------------------------------------------ |
+| **Planning Partner** | **Deep back-and-forth planning** | **"Act as my planning partner for..."**          |
+| Architect            | New feature, major change        | "Act as the architect agent and design..."       |
+| Implementer          | Approved plan ready              | "Act as the implementer agent and build..."      |
+| Tester               | Code written, needs tests        | "Act as the tester agent and write tests..."     |
+| Debugger             | Something is broken              | "Act as the debugger agent and investigate..."   |
+| Reviewer             | Before merging                   | "Act as the reviewer agent and check..."         |
+| Documenter           | Session ending                   | "Act as the documenter agent and update docs..." |
+| Brainstormer         | Quick idea exploration           | "Act as the brainstormer agent and explore..."   |

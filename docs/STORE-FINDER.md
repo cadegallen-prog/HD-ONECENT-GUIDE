@@ -100,13 +100,13 @@ const STATE_ABBREV_MAP = {
 
 ## Files
 
-| Path                                      | Purpose                                                              |
-| ----------------------------------------- | -------------------------------------------------------------------- |
-| `app/store-finder/page.tsx`               | Main store finder page with search logic                             |
-| `components/store-map.tsx`                | Interactive Leaflet map component                                    |
-| `lib/stores.ts`                           | Store utility functions and types                                    |
+| Path                                      | Purpose                                                                |
+| ----------------------------------------- | ---------------------------------------------------------------------- |
+| `app/store-finder/page.tsx`               | Main store finder page with search logic                               |
+| `components/store-map.tsx`                | Interactive Leaflet map component                                      |
+| `lib/stores.ts`                           | Store utility functions and types                                      |
 | `data/stores/store_directory.master.json` | **Single source of truth** - Complete store database (2,007 locations) |
-| `data/home-depot-stores.json`             | Legacy file (no longer used - can be deleted)                        |
+| `data/home-depot-stores.json`             | Legacy file (no longer used - can be deleted)                          |
 
 ---
 
@@ -133,6 +133,7 @@ const STATE_ABBREV_MAP = {
 ## Data Quality
 
 **How to Update Store Data:**
+
 1. Edit `data/stores/store_directory.master.json` (single source of truth)
 2. Commit and push to GitHub
 3. Vercel auto-deploys with updated data (~2-3 minutes)

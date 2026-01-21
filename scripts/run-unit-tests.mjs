@@ -25,13 +25,9 @@ if (testFiles.length === 0) {
   process.exit(1)
 }
 
-const result = spawnSync(
-  "tsx",
-  ["--import", "./tests/setup.ts", "--test", ...testFiles],
-  {
-    stdio: "inherit",
-    shell: process.platform === "win32",
-  }
-)
+const result = spawnSync("tsx", ["--import", "./tests/setup.ts", "--test", ...testFiles], {
+  stdio: "inherit",
+  shell: process.platform === "win32",
+})
 
 process.exit(result.status ?? 1)

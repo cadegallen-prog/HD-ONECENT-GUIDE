@@ -10,6 +10,7 @@ description: Compress and stabilize project context so it stays portable across 
 Compress and stabilize project context so it stays portable across tools.
 
 **Outcome:**
+
 - `.ai/STATE.md` becomes "current sprint only" and small (target: <5K lines)
 - History lives in pointers (SESSION_LOG, archives, topic capsules, impl plans)
 - Next agent can load context fast, even on constrained tools (Copilot)
@@ -28,6 +29,7 @@ Compress and stabilize project context so it stays portable across tools.
 ## Inputs
 
 Optional user input:
+
 - Topic focus (example: `SEO` or `UI_DESIGN`)
 
 If none provided: checkpoint the whole sprint (compress all of STATE).
@@ -39,6 +41,7 @@ If none provided: checkpoint the whole sprint (compress all of STATE).
 ### Step 1: Analyze Current STATE.md
 
 Read what's currently in `.ai/STATE.md`. Identify:
+
 - What happened this sprint (last 7 days)?
 - What was the state before this sprint?
 - Which items are stale (>30 days old)?
@@ -102,6 +105,7 @@ This file is the **single living snapshot** of where the project is right now.
 ### Step 3: Move Old Content (Optional Safe Archive)
 
 If STATE contains history older than 7 days:
+
 1. Export older content to `.ai/archive/state-history/STATE_YYYY-MM-DD.md` with timestamp
 2. Replace in STATE with a link to the archive
 3. Keep a pointer in "Archive References" section
@@ -122,6 +126,7 @@ If STATE contains history older than 7 days:
 After updating STATE:
 
 1. **Report what changed (5 bullets max):**
+
    ```
    ✅ STATE.md compressed: [X words] → [Y words]
    ✅ [N] old items archived to state-history/
@@ -150,6 +155,7 @@ After updating STATE:
 ## Example Before/After
 
 **Before (Bloated):**
+
 ```
 ## Current Sprint
 
@@ -160,6 +166,7 @@ After updating STATE:
 ```
 
 **After (Compressed):**
+
 ```
 ## Current Sprint
 

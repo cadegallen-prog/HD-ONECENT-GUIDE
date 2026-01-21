@@ -84,7 +84,6 @@ If you try the same failed approach twice without documenting it, you've wasted 
 - Start every session by reading the `AI Canon & Read Order` section in `README.md`. That section defines the official `STATE.md` → `BACKLOG.md` → `CONTRACT.md`/`DECISION_RIGHTS.md` → `CONSTRAINTS.md`/`FOUNDATION_CONTRACT.md`/`GUARDRAILS.md` → latest `SESSION_LOG.md` → `CONTEXT.md` sequence all agents follow.
 - This file codifies collaboration rules, but always defer to `README.md` for the canonical read order so Claude, Codex, and Copilot stay aligned.
 
-
 ---
 
 ## 2. Product North Star
@@ -246,15 +245,15 @@ This is how context persists across sessions.
 
 The owner can invoke specialized behavior by saying "Act as the [X] agent":
 
-| Agent | What It Does | Key Constraint |
-|-------|--------------|----------------|
-| Architect | Designs plans before coding | Asks for approval, doesn't implement |
-| Implementer | Builds approved plans | Stays in scope, no extras |
-| Tester | Writes tests, runs verification | Doesn't modify source code |
-| Debugger | Investigates and fixes bugs | Finds root cause first |
-| Reviewer | Checks code before merge | Read-only, approves or rejects |
-| Documenter | Updates .ai/ documentation | Doesn't touch code files |
-| Brainstormer | Explores ideas and options | Presents options, doesn't decide |
+| Agent        | What It Does                    | Key Constraint                       |
+| ------------ | ------------------------------- | ------------------------------------ |
+| Architect    | Designs plans before coding     | Asks for approval, doesn't implement |
+| Implementer  | Builds approved plans           | Stays in scope, no extras            |
+| Tester       | Writes tests, runs verification | Doesn't modify source code           |
+| Debugger     | Investigates and fixes bugs     | Finds root cause first               |
+| Reviewer     | Checks code before merge        | Read-only, approves or rejects       |
+| Documenter   | Updates .ai/ documentation      | Doesn't touch code files             |
+| Brainstormer | Explores ideas and options      | Presents options, doesn't decide     |
 
 **Full definitions:** `.ai/AGENT_POOL.md`
 **How to chain agents:** `.ai/ORCHESTRATION.md`

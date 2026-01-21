@@ -39,17 +39,20 @@
 **Tool:** Google Rich Results Test (https://search.google.com/test/rich-results)
 
 **Test URLs:**
+
 - https://www.pennycentral.com/guide
 - https://www.pennycentral.com/penny-list
 - https://www.pennycentral.com (homepage)
 - https://www.pennycentral.com/sku/[pick-a-real-sku]
 
 **Expected Issues:**
+
 - Missing `datePublished` / `dateModified` on Article schema
 - Missing `image` on Organization schema (currently using SVG, Google prefers raster)
 - Possible FAQ schema issues (answers too short, missing required fields)
 
 **Acceptance Criteria:**
+
 - [ ] All schemas pass Google Rich Results Test with 0 errors
 - [ ] Any warnings documented with reasoning for why they're acceptable
 - [ ] Screenshot proof of validation results saved to `reports/seo/schema-validation-[date].png`
@@ -57,11 +60,13 @@
 ### Task 1.2: Fix Schema Errors
 
 **Files to Modify:**
+
 - `app/layout.tsx` (Organization schema - add proper logo image)
 - `app/guide/page.tsx` (Article schema - add datePublished, dateModified)
 - Any other files with schema errors
 
 **Acceptance Criteria:**
+
 - [ ] All errors from Task 1.1 fixed
 - [ ] Revalidate in Google Rich Results Test - 0 errors
 - [ ] No new TypeScript errors introduced
@@ -78,6 +83,7 @@
 **File:** `app/penny-list/page.tsx`
 
 **Schema Structure:**
+
 ```json
 {
   "@context": "https://schema.org",
@@ -97,6 +103,7 @@
 ```
 
 **Acceptance Criteria:**
+
 - [ ] ItemList schema added to `/penny-list` page
 - [ ] Validates in Google Rich Results Test
 - [ ] Includes top 10-20 items (not all - avoid bloat)
@@ -109,6 +116,7 @@
 **File:** `app/sku/[sku]/page.tsx`
 
 **Schema Structure:**
+
 ```json
 {
   "@context": "https://schema.org",
@@ -132,6 +140,7 @@
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Product schema added to all SKU pages
 - [ ] Validates in Google Rich Results Test
 - [ ] Uses enrichment data when available
@@ -147,6 +156,7 @@
 **File:** `components/GuideContent.tsx`
 
 **Links to Add:**
+
 1. In "Introduction" section: Link "community" to `/penny-list`
 2. In "Clearance Lifecycle" section: Link "check the penny list" to `/penny-list`
 3. In "Digital Pre-Hunt" section: Link "Store Finder" to `/store-finder`
@@ -154,6 +164,7 @@
 5. In "Checkout Strategy" section: Link "share with the community" to `/report-find`
 
 **Acceptance Criteria:**
+
 - [ ] 5+ contextual links added within guide content (not just nav/footer)
 - [ ] Links use descriptive anchor text (not "click here")
 - [ ] Links open in same tab (internal navigation)
@@ -164,11 +175,13 @@
 **File:** `app/page.tsx`
 
 **Links to Add:**
+
 1. In "How It Works" section: Link "Learn the Cycle" to `/guide#clearance-lifecycle`
 2. In "How It Works" section: Link "Scout First" to `/store-finder`
 3. In hero section: Add "Not sure where to start? Read the guide" link
 
 **Acceptance Criteria:**
+
 - [ ] 3+ contextual links added within homepage content
 - [ ] Links use descriptive anchor text
 - [ ] All 4 gates pass
@@ -178,12 +191,14 @@
 **Why:** Schema exists, but no visible breadcrumbs. Adding UI helps users AND reinforces site hierarchy for Google.
 
 **Files to Modify:**
+
 - `components/breadcrumb.tsx` (create new component)
 - `app/guide/page.tsx` (add breadcrumb UI)
 - `app/penny-list/page.tsx` (add breadcrumb UI)
 - `app/sku/[sku]/page.tsx` (add breadcrumb UI)
 
 **Component Spec:**
+
 ```tsx
 // Small, unobtrusive breadcrumb component
 // Home > Guide
@@ -192,6 +207,7 @@
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Breadcrumb component created following design system
 - [ ] Added to `/guide`, `/penny-list`, and SKU pages
 - [ ] Matches existing schema structure
@@ -208,6 +224,7 @@
 **File:** `components/GuideContent.tsx`
 
 **Sections to Add:**
+
 1. **"When Do Home Depot Penny Items Drop?"** (targets: "when do home depot penny items drop", "home depot penny schedule")
    - Content: Explain weekly markdown cycles, best days to hunt, seasonal patterns
    - 200-300 words
@@ -221,6 +238,7 @@
    - 200-300 words
 
 **Acceptance Criteria:**
+
 - [ ] 3 new sections added to guide (600-900 words total)
 - [ ] Each section targets specific long-tail keywords
 - [ ] Content is practical and actionable (not keyword stuffing)
@@ -230,6 +248,7 @@
 ### Task 4.2: Update Meta Descriptions with Long-Tail Keywords
 
 **Files to Modify:**
+
 - `app/guide/page.tsx` (meta description)
 - `app/penny-list/page.tsx` (meta description)
 - `app/page.tsx` (meta description)
@@ -237,18 +256,23 @@
 **Current vs. Improved:**
 
 **Guide (current):**
+
 > "Learn timing, what to scan, and how penny finds happen. A practical guide backed by live community experience."
 
 **Guide (improved):**
+
 > "Learn when Home Depot penny items drop, what to scan, and how to find $0.01 clearance items. Step-by-step guide from 50K+ community members."
 
 **Penny List (current):**
+
 > "Live $0.01 items reported by the community, organized by state and recency. See what's being found right now."
 
 **Penny List (improved):**
+
 > "Live Home Depot penny list ($0.01 items) updated daily. Filter by state, see what's being found right now, and report your finds."
 
 **Acceptance Criteria:**
+
 - [ ] Meta descriptions updated to include long-tail keywords
 - [ ] Still under 160 characters (Google's display limit)
 - [ ] Natural-sounding (not keyword stuffed)
@@ -263,6 +287,7 @@
 **File:** `public/sitemap.xml`
 
 **Priority Updates:**
+
 ```xml
 <!-- High priority pages (1.0) -->
 <url>
@@ -285,6 +310,7 @@
 ```
 
 **Acceptance Criteria:**
+
 - [ ] Sitemap updated with priority and changefreq signals
 - [ ] All URLs accessible (no 404s)
 - [ ] Sitemap validates at https://www.xml-sitemaps.com/validate-xml-sitemap.html
@@ -292,12 +318,14 @@
 ### Task 5.2: Submit Updated Sitemap to Google Search Console
 
 **Manual Step (Cade):**
+
 1. Go to Google Search Console
 2. Navigate to Sitemaps section
 3. Submit https://www.pennycentral.com/sitemap.xml
 4. Screenshot confirmation
 
 **Acceptance Criteria:**
+
 - [ ] Screenshot proof of sitemap submission
 - [ ] No errors in Google Search Console
 
@@ -347,17 +375,20 @@ None - plan is fully specified.
 ## Acceptance Checklist
 
 ### Phase 1: Schema Validation & Fixes
+
 - [ ] All schemas validate in Google Rich Results Test (0 errors)
 - [ ] Screenshot proof saved to `reports/seo/schema-validation-[date].png`
 - [ ] All 4 gates pass (lint/build/unit/e2e)
 
 ### Phase 2: Add Missing Schema Types
+
 - [ ] ItemList schema added to `/penny-list` and validates
 - [ ] Product schema added to SKU pages and validates
 - [ ] Schemas tested with sample URLs
 - [ ] All 4 gates pass
 
 ### Phase 3: Strengthen Internal Linking
+
 - [ ] 5+ contextual links added to guide content
 - [ ] 3+ contextual links added to homepage
 - [ ] Breadcrumb UI component created and deployed to 3+ pages
@@ -365,17 +396,20 @@ None - plan is fully specified.
 - [ ] All 4 gates pass
 
 ### Phase 4: Minor Content Enhancements
+
 - [ ] 3 new guide sections added (600-900 words total)
 - [ ] Meta descriptions updated on 3 pages
 - [ ] Content targets long-tail keywords naturally (not stuffed)
 - [ ] All 4 gates pass
 
 ### Phase 5: Sitemap & Indexing
+
 - [ ] Sitemap updated with priority/changefreq signals
 - [ ] Sitemap validates at xml-sitemaps.com
 - [ ] Screenshot proof of Google Search Console submission
 
 ### Final Verification
+
 - [ ] All 4 gates pass (lint/build/unit/e2e)
 - [ ] Deploy to production
 - [ ] Verify live URLs in Google Rich Results Test
@@ -386,14 +420,17 @@ None - plan is fully specified.
 ## Files to Modify
 
 ### Phase 1
+
 - `app/layout.tsx` (Organization schema fixes)
 - `app/guide/page.tsx` (Article schema fixes)
 
 ### Phase 2
+
 - `app/penny-list/page.tsx` (ItemList schema)
 - `app/sku/[sku]/page.tsx` (Product schema)
 
 ### Phase 3
+
 - `components/GuideContent.tsx` (contextual links)
 - `app/page.tsx` (contextual links)
 - `components/breadcrumb.tsx` (new file)
@@ -402,12 +439,14 @@ None - plan is fully specified.
 - `app/sku/[sku]/page.tsx` (breadcrumb UI)
 
 ### Phase 4
+
 - `components/GuideContent.tsx` (new sections)
 - `app/guide/page.tsx` (meta description)
 - `app/penny-list/page.tsx` (meta description)
 - `app/page.tsx` (meta description)
 
 ### Phase 5
+
 - `public/sitemap.xml` (priority updates)
 
 ---
@@ -415,17 +454,20 @@ None - plan is fully specified.
 ## Success Metrics (Track in Google Search Console)
 
 **Baseline (Jan 17, 2026):**
+
 - Organic clicks: 80 (all branded)
 - Average position: 11.6 for "home depot penny list"
 - Impressions: ~500/month
 
 **Target (8-12 weeks after deployment):**
+
 - Organic clicks: 200+ (mix of branded + non-branded)
 - Average position: 6-8 for "home depot penny list"
 - Impressions: 1,000+/month
 - Long-tail keyword visibility: 10+ keywords in top 20
 
 **Track Weekly:**
+
 - Impressions (should increase first)
 - CTR (should improve as position improves)
 - Average position (should decrease = higher ranking)
@@ -436,22 +478,26 @@ None - plan is fully specified.
 ## Notes for Future Agent
 
 **When to Execute:**
+
 - After higher-priority tasks (submissions, retention) are complete
 - When Cade says "let's tackle SEO now"
 - Estimated timeline: 3-5 days of work spread over 1-2 weeks
 
 **What NOT to Do:**
+
 - Don't add external link building (out of scope)
 - Don't create new landing pages (scope creep)
 - Don't expect instant results (Google needs 8-12 weeks)
 - Don't skip validation steps (schema errors hurt more than help)
 
 **Dependencies:**
+
 - Google Search Console access (Cade)
 - Playwright MCP for screenshots
 - All 4 quality gates must pass
 
 **Reference:**
+
 - This plan: `.ai/SEO_FOUNDATION_PLAN.md`
 - North Star: `.ai/CONTEXT.md`
 - Verification: `.ai/VERIFICATION_REQUIRED.md`

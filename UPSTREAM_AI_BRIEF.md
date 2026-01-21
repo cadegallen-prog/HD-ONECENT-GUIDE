@@ -12,7 +12,7 @@ PennyCentral is a Next.js 16 + TypeScript site. The founder cannot code, so the 
 - **Configs:** `.vscode/mcp.json` (Copilot), `.claude/settings.json` (Claude Code), `~/.codex/config.toml` (Codex).
 - **Git:** Use terminal/CLI for local git. Use `github` MCP for remote PRs/Issues.
 - **Verification:** Run `npm run ai:doctor` to verify environment. Run `npm run ai:verify` for proof.
- - **Codex installer:** Run `scripts/install-codex-config.ps1` (Windows) or `scripts/install-codex-config.sh` (POSIX) to install `.ai/CODEX_CONFIG_SNIPPET.toml` into `~/.codex/config.toml`.
+- **Codex installer:** Run `scripts/install-codex-config.ps1` (Windows) or `scripts/install-codex-config.sh` (POSIX) to install `.ai/CODEX_CONFIG_SNIPPET.toml` into `~/.codex/config.toml`.
 
 ## Canonical rules (non-negotiable)
 

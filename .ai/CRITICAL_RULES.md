@@ -164,6 +164,7 @@ Which would you prefer?"
    - Show bug is gone
 
 6. **Documentation updated (proof required)**:
+
    ```bash
    git diff .ai/topics/ .ai/STATE.md .ai/BACKLOG.md
    ```

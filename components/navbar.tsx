@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Map, User, Moon, Sun, Book, Menu, X, List, PlusCircle } from "lucide-react"
+import { Map, User, Moon, Sun, Book, Menu, X, List, PlusCircle, Heart } from "lucide-react"
 import { useTheme } from "@/components/theme-provider"
 import { trackEvent } from "@/lib/analytics"
 
@@ -21,6 +21,7 @@ export function Navbar() {
 
   const navItems = [
     { href: "/penny-list", label: "Penny List", icon: List },
+    { href: "/lists", label: "My List", icon: Heart },
     { href: "/report-find", label: "Report a Find", icon: PlusCircle },
     { href: "/guide", label: "Guide", icon: Book },
     { href: "/store-finder", label: "Store Finder", icon: Map },
@@ -48,7 +49,11 @@ export function Navbar() {
                 - Consistent across all items including About */}
             <div className="hidden md:flex items-center gap-1">
               {navItems.map((item) => {
-                const isActive = mounted ? pathname === item.href : false
+                const isActive = mounted
+                  ? item.href === "/lists"
+                    ? pathname === "/lists" || pathname.startsWith("/lists/")
+                    : pathname === item.href
+                  : false
                 return (
                   <Link
                     key={item.href}
@@ -109,7 +114,11 @@ export function Navbar() {
             <nav className="space-y-1">
               {navItems.map((item) => {
                 const Icon = item.icon
-                const isActive = mounted ? pathname === item.href : false
+                const isActive = mounted
+                  ? item.href === "/lists"
+                    ? pathname === "/lists" || pathname.startsWith("/lists/")
+                    : pathname === item.href
+                  : false
                 return (
                   <Link
                     key={item.href}

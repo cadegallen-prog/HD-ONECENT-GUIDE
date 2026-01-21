@@ -29,6 +29,7 @@ pip install requests pandas
 ```
 
 If running in this repo:
+
 ```bash
 pip install -r requirements_product_identifier.txt
 ```
@@ -132,10 +133,7 @@ See the original scraper instructions in `DO_NOT_COMMIT_Cade_Penny_List/scrape.p
 ```json
 {
   "ok": true,
-  "data": [
-    { "item": 1 },
-    { "item": 2 }
-  ],
+  "data": [{ "item": 1 }, { "item": 2 }],
   "raw_count": 150,
   "final_count": 142
 }
@@ -154,6 +152,7 @@ See the original scraper instructions in `DO_NOT_COMMIT_Cade_Penny_List/scrape.p
 ```
 
 **Possible stages:**
+
 - `"fetch"` - API call returned no data
 - `"execution"` - General exception during run
 
@@ -161,21 +160,21 @@ See the original scraper instructions in `DO_NOT_COMMIT_Cade_Penny_List/scrape.p
 
 ## Output Fields Explained
 
-| Field | Type | Example | Source |
-|-------|------|---------|--------|
-| `store_name` | str | "Store ABC" | API |
-| `store_sku` | str | "123456" | API (flexible column name) |
-| `upc` | str | "000111222333" | API |
-| `item_name` | str | "Penny Cola 12oz" | API |
-| `display_stock` | int or str | 5 or "Check App" | API stock columns + normalization |
-| `penny_date` | str (ISO) | "2025-01-14T10:30:00" | API date columns + parsing |
-| `days_old` | int | 0 | Calculated from penny_date |
-| `price` | str | "$0.01" | API price columns + formatting |
-| `retail_price` | str | "$1.99" | API retail columns + formatting |
-| `image_link` | str | "https://..." | API image columns |
-| `location` | str | "Front End" | API location columns |
-| `raw_stock_field` | str | "stock" | Name of detected stock column (debug) |
-| `raw_date_field` | str | "dropped_at" | Name of detected date column (debug) |
+| Field             | Type       | Example               | Source                                |
+| ----------------- | ---------- | --------------------- | ------------------------------------- |
+| `store_name`      | str        | "Store ABC"           | API                                   |
+| `store_sku`       | str        | "123456"              | API (flexible column name)            |
+| `upc`             | str        | "000111222333"        | API                                   |
+| `item_name`       | str        | "Penny Cola 12oz"     | API                                   |
+| `display_stock`   | int or str | 5 or "Check App"      | API stock columns + normalization     |
+| `penny_date`      | str (ISO)  | "2025-01-14T10:30:00" | API date columns + parsing            |
+| `days_old`        | int        | 0                     | Calculated from penny_date            |
+| `price`           | str        | "$0.01"               | API price columns + formatting        |
+| `retail_price`    | str        | "$1.99"               | API retail columns + formatting       |
+| `image_link`      | str        | "https://..."         | API image columns                     |
+| `location`        | str        | "Front End"           | API location columns                  |
+| `raw_stock_field` | str        | "stock"               | Name of detected stock column (debug) |
+| `raw_date_field`  | str        | "dropped_at"          | Name of detected date column (debug)  |
 
 ---
 
@@ -276,18 +275,18 @@ Total time for default run: ~20 seconds (12 requests × 1.2s + API latency)
 
 ## Differences from Original Scraper
 
-| Feature | Original | Extracted |
-|---------|----------|-----------|
-| API calls | ✅ Yes | ✅ Yes |
-| Normalization | ✅ Yes | ✅ Yes |
-| CSV export | ✅ Yes | ❌ No |
-| JSON export | ✅ Yes | ✅ Yes (return value) |
-| Dashboard HTML | ✅ Yes | ❌ No |
-| Email sending | ✅ Yes | ❌ No |
-| Dry-run mode | ✅ Yes | ❌ No |
-| Raw response logging | ✅ Yes | ❌ No |
-| CLI entrypoint | ✅ Yes | ✅ Yes |
-| Module entrypoint | ✅ Limited | ✅ Yes (main use case) |
+| Feature              | Original   | Extracted              |
+| -------------------- | ---------- | ---------------------- |
+| API calls            | ✅ Yes     | ✅ Yes                 |
+| Normalization        | ✅ Yes     | ✅ Yes                 |
+| CSV export           | ✅ Yes     | ❌ No                  |
+| JSON export          | ✅ Yes     | ✅ Yes (return value)  |
+| Dashboard HTML       | ✅ Yes     | ❌ No                  |
+| Email sending        | ✅ Yes     | ❌ No                  |
+| Dry-run mode         | ✅ Yes     | ❌ No                  |
+| Raw response logging | ✅ Yes     | ❌ No                  |
+| CLI entrypoint       | ✅ Yes     | ✅ Yes                 |
+| Module entrypoint    | ✅ Limited | ✅ Yes (main use case) |
 
 ---
 

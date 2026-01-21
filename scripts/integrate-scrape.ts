@@ -1,6 +1,6 @@
 /**
  * Integrates scraped data from GHETTO_SCRAPER JSON into Supabase
- * 
+ *
  * Usage:
  *   npx tsx scripts/integrate-scrape.ts --input <file> [--force]
  */
@@ -41,14 +41,14 @@ async function main() {
   const args = process.argv.slice(2)
   const inputIdx = args.indexOf("--input")
   const forceFlag = args.includes("--force")
-  
+
   if (inputIdx === -1 || !args[inputIdx + 1]) {
     console.error("Usage: npx tsx scripts/integrate-scrape.ts --input <file> [--force]")
     process.exit(1)
   }
 
   const inputFile = args[inputIdx + 1]
-  
+
   if (!fs.existsSync(inputFile)) {
     console.error(`❌ File not found: ${inputFile}`)
     process.exit(1)
@@ -57,7 +57,7 @@ async function main() {
   console.log(`📖 Reading from: ${inputFile}`)
   const rawData = fs.readFileSync(inputFile, "utf-8")
   const data = JSON.parse(rawData) as Record<string, ScrapedItem>
-  
+
   const items = Object.entries(data)
     .filter(([sku]) => {
       // Filter out invalid/placeholder entries
@@ -72,12 +72,13 @@ async function main() {
       image_url: item.imageUrl || null,
       home_depot_url: item.homeDepotUrl || item.productUrl || null,
       internet_sku: item.internetNumber ? parseInt(item.internetNumber) : null,
-      retail_price: item.retailPrice && item.retailPrice > 0 ? parseFloat(String(item.retailPrice)) : null,
+      retail_price:
+        item.retailPrice && item.retailPrice > 0 ? parseFloat(String(item.retailPrice)) : null,
       source: "manual",
     }))
 
   console.log(`\n📊 Parsed ${items.length} items for enrichment`)
-  
+
   if (items.length === 0) {
     console.error("❌ No valid items found")
     process.exit(1)
@@ -94,7 +95,7 @@ async function main() {
   }
 
   console.log(`\n⏳ Inserting ${items.length} items into Supabase...`)
-  
+
   const { data: result, error } = await supabase
     .from("penny_item_enrichment")
     .upsert(items, { onConflict: "sku" })
@@ -105,9 +106,9 @@ async function main() {
   }
 
   console.log(`✅ Successfully upserted ${items.length} items`)
-  
+
   // Verify a few random SKUs
-  const verifySkus = items.slice(0, 3).map(i => i.sku)
+  const verifySkus = items.slice(0, 3).map((i) => i.sku)
   const { data: verified } = await supabase
     .from("penny_item_enrichment")
     .select("sku, item_name, retail_price, image_url")
@@ -115,13 +116,13 @@ async function main() {
 
   if (verified && verified.length > 0) {
     console.log(`\n✨ Verification sample:`)
-    verified.forEach(v => {
+    verified.forEach((v) => {
       console.log(`  ${v.sku}: ${v.item_name} - $${v.retail_price} - ${v.image_url ? "📸" : "❌"}`)
     })
   }
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error("Fatal error:", err)
   process.exit(1)
 })

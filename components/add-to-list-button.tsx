@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Bookmark, BookmarkCheck, Plus, Loader2, X } from "lucide-react"
+import { Heart, Plus, Loader2, X } from "lucide-react"
 import { useAuth } from "@/components/auth-provider"
 import {
   getUserLists,
@@ -82,11 +82,12 @@ export function AddToListButton({
     e.preventDefault()
     e.stopPropagation()
 
-    // If not logged in, redirect to login
+    // If not logged in, redirect to login with save intent
     if (!user) {
       trackEvent("add_to_list_clicked", { sku, authenticated: false })
-      const currentPath = window.location.pathname
-      router.push(`/login?redirect=${encodeURIComponent(currentPath)}`)
+      const intentId = crypto.randomUUID()
+      const redirectPath = `/lists?pc_intent=save_to_my_list&pc_sku=${sku}&pc_intent_id=${intentId}`
+      router.push(`/login?redirect=${encodeURIComponent(redirectPath)}`)
       return
     }
 
@@ -110,7 +111,7 @@ export function AddToListButton({
         setSaved(false)
         setItemInfo({ inList: false })
         trackEvent("list_item_removed", { sku })
-        setToastMessage("Item removed from your list")
+        setToastMessage("Removed from My List")
         setToastType("removed")
         setShowToast(true)
       } else {
@@ -123,7 +124,7 @@ export function AddToListButton({
           setSaved(true)
           setItemInfo({ inList: true, listId: result.list.id, itemId: result.item.id })
           trackEvent("add_to_list_completed", { sku, listId: result.list.id })
-          setToastMessage("Item added to your list")
+          setToastMessage("Added to My List")
           setToastType("added")
           setShowToast(true)
         } else {
@@ -139,7 +140,7 @@ export function AddToListButton({
         // Silently handle "already in list" errors - no error message shown to user
         setSaved(true)
         setItemInfo({ inList: true })
-        setToastMessage("Item added to your list")
+        setToastMessage("Added to My List")
         setToastType("added")
         setShowToast(true)
       } else {
@@ -160,7 +161,7 @@ export function AddToListButton({
       setSaved(true)
       setItemInfo({ inList: true, listId, itemId: undefined }) // itemId would be set by server response
       trackEvent("add_to_list_completed", { sku, listId })
-      setToastMessage("Item added to your list")
+      setToastMessage("Added to My List")
       setToastType("added")
       setShowToast(true)
       setShowPicker(false)
@@ -169,7 +170,7 @@ export function AddToListButton({
       if (error instanceof Error && error.message.includes("already in your list")) {
         setSaved(true)
         setItemInfo({ inList: true, listId })
-        setToastMessage("Item added to your list")
+        setToastMessage("Added to My List")
         setToastType("added")
         setShowToast(true)
       } else {
@@ -192,7 +193,7 @@ export function AddToListButton({
       setSaved(true)
       setItemInfo({ inList: true, listId: newList.id, itemId: undefined })
       trackEvent("add_to_list_completed", { sku, listId: newList.id, newList: true })
-      setToastMessage("Item added to your list")
+      setToastMessage("Added to My List")
       setToastType("added")
       setShowToast(true)
       setShowPicker(false)
@@ -211,7 +212,6 @@ export function AddToListButton({
     return null
   }
 
-  const Icon = saved ? BookmarkCheck : Bookmark
   const isLoading = loading || creatingList
 
   if (variant === "icon") {
@@ -227,10 +227,14 @@ export function AddToListButton({
               ? "text-[var(--cta-primary)] bg-[var(--cta-primary)]/10"
               : "text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-muted)]"
           } ${className}`}
-          aria-label={saved ? "Remove from list" : `Save ${itemName} to list`}
-          title={saved ? "Remove from list" : "Save to list"}
+          aria-label={saved ? "Remove from My List" : `Save ${itemName} to My List`}
+          title={saved ? "Remove from My List" : "Save to My List"}
         >
-          {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Icon className="w-5 h-5" />}
+          {isLoading ? (
+            <Loader2 className="w-5 h-5 animate-spin" />
+          ) : (
+            <Heart className="w-5 h-5" fill={saved ? "currentColor" : "none"} />
+          )}
         </button>
 
         {/* List picker dropdown */}
@@ -238,7 +242,9 @@ export function AddToListButton({
           <div className="absolute right-0 top-full mt-2 w-64 bg-[var(--bg-card)] rounded-xl border border-[var(--border-default)] shadow-lg z-50 overflow-hidden">
             <div className="p-3 border-b border-[var(--border-default)]">
               <div className="flex items-center justify-between">
-                <span className="font-medium text-sm text-[var(--text-primary)]">Save to list</span>
+                <span className="font-medium text-sm text-[var(--text-primary)]">
+                  Save to My List
+                </span>
                 <button
                   onClick={() => setShowPicker(false)}
                   className="p-1 rounded text-[var(--text-muted)] hover:text-[var(--text-primary)]"
@@ -318,9 +324,13 @@ export function AddToListButton({
             ? "bg-[var(--cta-primary)]/10 text-[var(--cta-primary)]"
             : "bg-[var(--bg-muted)] text-[var(--text-primary)] hover:bg-[var(--bg-hover)]"
         } ${className}`}
-        aria-label={saved ? "Remove from list" : `Save ${itemName} to list`}
+        aria-label={saved ? "Remove from My List" : `Save ${itemName} to My List`}
       >
-        {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Icon className="w-4 h-4" />}
+        {isLoading ? (
+          <Loader2 className="w-4 h-4 animate-spin" />
+        ) : (
+          <Heart className="w-4 h-4" fill={saved ? "currentColor" : "none"} />
+        )}
         {saved ? "Remove" : "Save"}
       </button>
 
@@ -329,7 +339,9 @@ export function AddToListButton({
         <div className="absolute left-0 top-full mt-2 w-64 bg-[var(--bg-card)] rounded-xl border border-[var(--border-default)] shadow-lg z-50 overflow-hidden">
           <div className="p-3 border-b border-[var(--border-default)]">
             <div className="flex items-center justify-between">
-              <span className="font-medium text-sm text-[var(--text-primary)]">Save to list</span>
+              <span className="font-medium text-sm text-[var(--text-primary)]">
+                Save to My List
+              </span>
               <button
                 onClick={() => setShowPicker(false)}
                 className="p-1 rounded text-[var(--text-muted)] hover:text-[var(--text-primary)]"

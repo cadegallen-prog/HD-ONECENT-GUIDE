@@ -10,6 +10,7 @@ description: Update exactly one topic capsule so topic-based carryover is determ
 Update exactly one topic capsule so topic-based carryover is deterministic and locked.
 
 **Outcome:**
+
 - `.ai/topics/<TOPIC>.md` becomes source of truth for that domain
 - Next agent (same tool or different) can pick up context without re-reading full STATE.md
 - Decisions are locked; open questions are explicit
@@ -29,6 +30,7 @@ Update exactly one topic capsule so topic-based carryover is deterministic and l
 ## Input Format
 
 User supplies a topic name:
+
 - `SEO`
 - `MONETIZATION`
 - `UI_DESIGN`
@@ -36,6 +38,7 @@ User supplies a topic name:
 - Or other topic if it exists
 
 File target must be:
+
 - `.ai/topics/<TOPIC>.md`
 
 ---
@@ -57,6 +60,7 @@ Open `.ai/topics/<TOPIC>.md` (if it exists) or use the template below (if new).
 ### Step 2: Refresh Content from Reality
 
 Based on what happened this sprint:
+
 - What is **truly** the current status of this topic?
 - What decisions **are locked** and cannot change?
 - What decisions **are still open** and need Cade input?
@@ -115,12 +119,12 @@ Update `.ai/topics/<TOPIC>.md` with these sections in order:
 
 - If this topic was archived/paused: link to `.ai/archive/` snapshots
 - If this is new: leave this section empty
-
 ```
 
 ### Step 4: Verify Quality
 
 Checklist before finishing:
+
 - [ ] CURRENT STATUS is honest and up-to-date
 - [ ] LOCKED DECISIONS reflect approved changes only
 - [ ] OPEN QUESTIONS are clear (each has A/B/C if needed)
@@ -137,6 +141,7 @@ Checklist before finishing:
 After writing the capsule:
 
 1. **Print NEXT ACTIONS list only** (copy/paste to Cade):
+
    ```
    NEXT ACTIONS for <TOPIC>:
    1. [Action]
@@ -156,6 +161,7 @@ After writing the capsule:
 **Scenario:** Just finished adding FAQ schema to `/guide`.
 
 **Before (Stale):**
+
 ```
 ## CURRENT STATUS
 - ✅ Basic site structure + sitemap complete
@@ -166,6 +172,7 @@ After writing the capsule:
 ```
 
 **After (Updated):**
+
 ```
 ## CURRENT STATUS
 - ✅ Basic site structure + sitemap complete

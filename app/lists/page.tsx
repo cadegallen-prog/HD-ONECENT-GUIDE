@@ -1,21 +1,24 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { Plus, List, Trash2, Loader2, Edit2, Check, X } from "lucide-react"
+import { Plus, List, Trash2, Loader2, Edit2, Check, X, Lock } from "lucide-react"
 import { useAuth } from "@/components/auth-provider"
 import {
   getUserLists,
   createList,
   deleteList,
   updateListTitle,
+  addSkuToListSmart,
   type List as ListType,
 } from "@/lib/supabase/lists"
 import { toast } from "sonner"
+import type { PennyItem } from "@/lib/types"
 
 export default function ListsPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { user, loading: authLoading } = useAuth()
   const [lists, setLists] = useState<ListType[]>([])
   const [loading, setLoading] = useState(true)
@@ -25,13 +28,8 @@ export default function ListsPage() {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editingTitle, setEditingTitle] = useState("")
   const [deletingId, setDeletingId] = useState<string | null>(null)
-
-  // Redirect if not authenticated (middleware should handle this, but double-check)
-  useEffect(() => {
-    if (!authLoading && !user) {
-      router.replace("/login?redirect=/lists")
-    }
-  }, [authLoading, user, router])
+  const [sampleItems, setSampleItems] = useState<PennyItem[]>([])
+  const [loadingSamples, setLoadingSamples] = useState(false)
 
   // Load lists
   useEffect(() => {
@@ -39,6 +37,61 @@ export default function ListsPage() {
       loadLists()
     }
   }, [user])
+
+  // Intent resume: handle pc_intent after login
+  useEffect(() => {
+    if (!user || !searchParams) return
+
+    const intent = searchParams.get("pc_intent")
+    const sku = searchParams.get("pc_sku")
+    const intentId = searchParams.get("pc_intent_id")
+
+    if (intent === "save_to_my_list" && sku && intentId) {
+      // Check idempotency guard
+      const storageKey = `pennycentral_intent_consumed_v1_${intentId}`
+      const alreadyConsumed = sessionStorage.getItem(storageKey) === "1"
+
+      if (alreadyConsumed) {
+        // Already processed, just clean URL
+        router.replace("/lists")
+        return
+      }
+
+      // Attempt to save the item
+      ;(async () => {
+        try {
+          await addSkuToListSmart(sku)
+          toast.success("Item saved to My List")
+        } catch (error) {
+          console.error("Failed to resume save intent:", error)
+          // Silent failure - user can manually save
+        } finally {
+          // Mark as consumed and clean URL
+          sessionStorage.setItem(storageKey, "1")
+          router.replace("/lists")
+        }
+      })()
+    }
+  }, [user, searchParams, router])
+
+  // Load sample items for preview (when logged out)
+  useEffect(() => {
+    if (!user && !authLoading) {
+      setLoadingSamples(true)
+      fetch("/api/penny-list?perPage=25&sort=newest")
+        .then((res) => res.json())
+        .then((data) => {
+          // Take first 6 items as samples
+          setSampleItems(data.items?.slice(0, 6) || [])
+        })
+        .catch((error) => {
+          console.error("Failed to load sample items:", error)
+        })
+        .finally(() => {
+          setLoadingSamples(false)
+        })
+    }
+  }, [user, authLoading])
 
   async function loadLists() {
     try {
@@ -103,7 +156,8 @@ export default function ListsPage() {
     }
   }
 
-  if (authLoading || loading) {
+  // Loading state
+  if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[var(--bg-page)]">
         <Loader2 className="w-8 h-8 animate-spin text-[var(--text-muted)]" />
@@ -111,6 +165,128 @@ export default function ListsPage() {
     )
   }
 
+  // Guest preview mode
+  if (!user) {
+    const currentUrl = `/lists${searchParams?.toString() ? `?${searchParams.toString()}` : ""}`
+    const loginUrl = `/login?redirect=${encodeURIComponent(currentUrl)}`
+
+    return (
+      <div className="min-h-screen bg-[var(--bg-page)] py-8 px-4">
+        <div className="max-w-2xl mx-auto">
+          {/* Locked Hero */}
+          <div className="mb-8 text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[var(--cta-primary)]/10 mb-4">
+              <Lock className="w-8 h-8 text-[var(--cta-primary)]" />
+            </div>
+            <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-3">My List</h1>
+            <p className="text-lg text-[var(--text-primary)] mb-6">Your in-store hunt companion</p>
+
+            {/* Benefit bullets */}
+            <div className="max-w-md mx-auto text-left space-y-3 mb-8">
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--cta-primary)] flex items-center justify-center mt-0.5">
+                  <Check className="w-4 h-4 text-white" />
+                </div>
+                <p className="text-[var(--text-primary)]">
+                  <strong>One-handed checklist mode</strong> for scanning penny items in-store
+                </p>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--cta-primary)] flex items-center justify-center mt-0.5">
+                  <Check className="w-4 h-4 text-white" />
+                </div>
+                <p className="text-[var(--text-primary)]">
+                  <strong>Copy SKU with one tap</strong> for quick price checks
+                </p>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[var(--cta-primary)] flex items-center justify-center mt-0.5">
+                  <Check className="w-4 h-4 text-white" />
+                </div>
+                <p className="text-[var(--text-primary)]">
+                  <strong>Track your finds</strong> as you hunt through the store
+                </p>
+              </div>
+            </div>
+
+            {/* Primary CTA */}
+            <Link
+              href={loginUrl}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-medium hover:opacity-90 transition-opacity mb-4"
+            >
+              Sign in to use My List
+            </Link>
+
+            {/* OTP reassurance */}
+            <p className="text-sm text-[var(--text-muted)] mb-4">
+              No password. We&apos;ll email you a one-time code.
+            </p>
+
+            {/* Secondary CTA */}
+            <Link
+              href="/penny-list"
+              className="inline-block text-sm text-[var(--link-default)] hover:underline"
+            >
+              Browse Penny List
+            </Link>
+          </div>
+
+          {/* Sample items */}
+          <div className="mt-12">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-sm font-medium text-[var(--text-muted)] uppercase tracking-wide">
+                Sample from today&apos;s Penny List
+              </h2>
+            </div>
+
+            {loadingSamples ? (
+              <div className="flex justify-center py-8">
+                <Loader2 className="w-6 h-6 animate-spin text-[var(--text-muted)]" />
+              </div>
+            ) : sampleItems.length > 0 ? (
+              <div className="space-y-3">
+                {sampleItems.map((item) => (
+                  <div
+                    key={item.home_depot_sku_6_or_10_digits}
+                    className="flex items-center gap-4 p-4 bg-[var(--bg-card)] rounded-xl border border-[var(--border-default)]"
+                  >
+                    {item.imageUrl && (
+                      <img
+                        src={item.imageUrl}
+                        alt={item.name || "Product image"}
+                        className="w-16 h-16 object-contain rounded"
+                      />
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-medium text-[var(--text-primary)] truncate">
+                        {item.name || "Unnamed item"}
+                      </h3>
+                      <p className="text-sm text-[var(--text-muted)]">
+                        SKU: {item.home_depot_sku_6_or_10_digits}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-center text-[var(--text-muted)] py-8">No sample items available</p>
+            )}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Authenticated user - show loading while fetching lists
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[var(--bg-page)]">
+        <Loader2 className="w-8 h-8 animate-spin text-[var(--text-muted)]" />
+      </div>
+    )
+  }
+
+  // Authenticated user - show lists
   return (
     <div className="min-h-screen bg-[var(--bg-page)] py-8 px-4">
       <div className="max-w-2xl mx-auto">

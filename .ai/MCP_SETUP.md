@@ -6,11 +6,11 @@
 
 ## Quick Summary
 
-| Tool | Config Location | Status |
-|------|-----------------|--------|
-| **VS Code Copilot** | `.vscode/mcp.json` | Auto-configured (in repo) |
-| **Claude Code** | `.claude/settings.json` | Auto-configured (in repo) |
-| **Codex CLI/Extension** | `~/.codex/config.toml` | Manual (see below) |
+| Tool                    | Config Location         | Status                    |
+| ----------------------- | ----------------------- | ------------------------- |
+| **VS Code Copilot**     | `.vscode/mcp.json`      | Auto-configured (in repo) |
+| **Claude Code**         | `.claude/settings.json` | Auto-configured (in repo) |
+| **Codex CLI/Extension** | `~/.codex/config.toml`  | Manual (see below)        |
 
 ---
 
@@ -43,6 +43,7 @@ SUPABASE_ACCESS_TOKEN = "your-supabase-access-token-here"
 ```
 
 **Getting your Supabase Access Token:**
+
 1. Go to https://supabase.com/dashboard/account/tokens
 2. Generate a new access token
 3. Add it to your environment or the config above
@@ -51,18 +52,19 @@ SUPABASE_ACCESS_TOKEN = "your-supabase-access-token-here"
 
 ## Available MCPs
 
-| MCP | What It Does | All 3 Tools? |
-|-----|--------------|--------------|
-| **filesystem** | Read/write project files | Yes |
-| **git** | Git operations (status, diff, log) | Yes |
-| **github** | GitHub API (PRs, issues, repos) | Yes |
-| **supabase** | Direct database access, SQL queries | Yes |
+| MCP            | What It Does                        | All 3 Tools? |
+| -------------- | ----------------------------------- | ------------ |
+| **filesystem** | Read/write project files            | Yes          |
+| **git**        | Git operations (status, diff, log)  | Yes          |
+| **github**     | GitHub API (PRs, issues, repos)     | Yes          |
+| **supabase**   | Direct database access, SQL queries | Yes          |
 
 ---
 
 ## What Supabase MCP Enables
 
 With Supabase MCP, any AI tool can:
+
 - Query the penny list directly from the database
 - Check store locations
 - Run SQL queries
@@ -76,15 +78,18 @@ Example: "Show me the 10 most recent penny items from the database"
 ## Troubleshooting
 
 ### MCPs not working in Copilot
+
 1. Make sure VS Code is v1.102+
 2. Reload VS Code after adding `.vscode/mcp.json`
 3. Check `Output > GitHub Copilot` for errors
 
 ### MCPs not working in Claude Code
+
 1. Restart the Claude Code extension
 2. Check `.claude/settings.json` syntax
 
 ### MCPs not working in Codex
+
 1. Check `~/.codex/config.toml` exists
 2. Use underscores: `mcp_servers` (not `mcp-servers`)
 3. Run `codex mcp list` to verify

@@ -22,28 +22,33 @@ Everything must support this flow on mobile devices in <5 seconds.
 ## Information Hierarchy (Priority Order)
 
 ### Tier 1: Visual Recognition (Image)
+
 - **Most important element**
 - 72×72px (full display, no padding/shading)
 - Tells 80% of the story immediately
 - User makes "do I care?" decision here
 
 ### Tier 2: Confirmation (Item Name + Brand)
+
 - **Brand:** Small, muted (secondary context)
 - **Item Name:** 1–2 lines, truncated (confirms image)
 - Together these validate: "Yes, this is what I thought it was"
 
 ### Tier 3: Motivation (Price Block)
+
 - **Penny Price + Retail:** Side by side showing the delta
 - **Savings Amount:** Bold, prominent (dopamine trigger)
 - Example: `$0.01 → ~~$135.38~~ | Save $135.37`
 - ~~Removed~~ Big "$0.01" label and "Penny" label — implicit from context
 
 ### Tier 4: Confidence (Metadata)
+
 - **SKU:** More prominent than currently (not muted)
 - **Last Seen:** Recency signal
 - **Locations + Reports:** Validity signal ("seen in 3 states, 5 reports")
 
 ### Tier 5: Action (Buttons)
+
 - **Primary:** Report Find (full-width, high contrast)
 - **Secondary:** View on Home Depot (outlined, with external-link icon)
 - **Tertiary:** Barcode (chip, only if data exists)
@@ -54,16 +59,19 @@ Everything must support this flow on mobile devices in <5 seconds.
 ## Design Principles
 
 ### 1. Nothing Overshadows the Image
+
 - Image is the primary storyteller
 - All other elements are supporting cast
 - Price should reinforce the image, not dominate it
 
 ### 2. Mobile-First Spacing
+
 - Tight enough to be scannable (5 seconds max)
 - Loose enough to avoid cognitive overload
 - Clear visual groupings between sections
 
 ### 3. Containers & Visual Grouping
+
 - **Decide per section:** Does it need a container (background/border)?
   - Price block: Yes (high importance, visual isolation)
   - SKU: Possibly (elevation to match importance tier)
@@ -71,6 +79,7 @@ Everything must support this flow on mobile devices in <5 seconds.
 - Containers should create rhythm, not clutter
 
 ### 4. Color & Contrast Strategy
+
 - **Image:** Clean border, no inner shadow
 - **Item Name:** Primary text color, bold weight for scanability
 - **Brand:** Muted, smaller, secondary color
@@ -83,11 +92,13 @@ Everything must support this flow on mobile devices in <5 seconds.
 - **Actions:** Standard button contrast per design system
 
 ### 5. Font Sizing & Weight Hierarchy
+
 - Use weight + size to control visual priority
 - Ensure mobile readability (minimum 12px, usually 14px+)
 - Clear distinction between sections
 
 ### 6. Hover & Interactivity States
+
 - Card itself: subtle lift or shadow change
 - Buttons: clear hover states per design system
 - Heart icon: filled/outline toggle with immediate feedback
@@ -211,6 +222,7 @@ When moving to card redesign planning, address:
 ## Questions for Clarification (When Planning)
 
 If ambiguity arises during planning, refer back to the hierarchy:
+
 - "Does this element help the user reach their action faster?"
 - "Does this compete with image prominence?"
 - "Is this mobile-readable and tap-able?"

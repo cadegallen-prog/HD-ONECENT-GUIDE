@@ -3,6 +3,7 @@
 Short, task-focused guides to avoid repo-wide searching.
 
 **How to use this (for you, Cade):**
+
 - When you start a new request, tell the agent: **"Read `docs/skills/README.md` first and follow the relevant skill."**
 - If the skill doesn’t exist yet, ask the agent to **add a short new skill after finishing the task** so future sessions get faster.
 

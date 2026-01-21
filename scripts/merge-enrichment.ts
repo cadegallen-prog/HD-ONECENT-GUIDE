@@ -214,10 +214,8 @@ function mergeCsv(
 async function main() {
   const [, , currentSheetPath, enrichmentPath, outputPath] = process.argv
 
-  const currentPath =
-    currentSheetPath || path.join(".local", "Current-sheet-export.csv")
-  const enrichPath =
-    enrichmentPath || path.join(".local", "enrichment-upload.csv")
+  const currentPath = currentSheetPath || path.join(".local", "Current-sheet-export.csv")
+  const enrichPath = enrichmentPath || path.join(".local", "enrichment-upload.csv")
   const outPath = outputPath || path.join(".local", "penny-list-merged.csv")
 
   console.log("📊 Reading files...")

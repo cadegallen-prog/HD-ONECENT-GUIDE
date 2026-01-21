@@ -12,15 +12,15 @@ Say: **"Run /doctor and read the project context from .ai/STATE.md and .ai/BACKL
 
 ## The Agents (What to Say)
 
-| When You Want To... | Say This |
-|---------------------|----------|
+| When You Want To...  | Say This                                                            |
+| -------------------- | ------------------------------------------------------------------- |
 | Design a new feature | "Act as the **architect** agent. I want to add [describe feature]." |
-| Build approved code | "Act as the **implementer** agent. Build [the plan/feature]." |
-| Write/run tests | "Act as the **tester** agent. Write tests and run verification." |
-| Fix a bug | "Act as the **debugger** agent. [Describe the problem/error]." |
-| Check before merging | "Act as the **reviewer** agent. Check the changes." |
-| Update documentation | "Act as the **documenter** agent. Update the session log." |
-| Explore ideas | "Act as the **brainstormer** agent. I'm thinking about [idea]." |
+| Build approved code  | "Act as the **implementer** agent. Build [the plan/feature]."       |
+| Write/run tests      | "Act as the **tester** agent. Write tests and run verification."    |
+| Fix a bug            | "Act as the **debugger** agent. [Describe the problem/error]."      |
+| Check before merging | "Act as the **reviewer** agent. Check the changes."                 |
+| Update documentation | "Act as the **documenter** agent. Update the session log."          |
+| Explore ideas        | "Act as the **brainstormer** agent. I'm thinking about [idea]."     |
 
 ---
 
@@ -65,12 +65,12 @@ Say: **"Act as the documenter agent. Update SESSION_LOG.md. Then run /verify."**
 
 ## If Something Goes Wrong
 
-| Problem | Say This |
-|---------|----------|
+| Problem                  | Say This                                                     |
+| ------------------------ | ------------------------------------------------------------ |
 | Agent is going off-track | "Stop. You're outside scope. Focus only on [specific task]." |
-| Agent made a mistake | "Undo that. Act as the debugger agent and investigate." |
-| Not sure what happened | "Explain what you just did in plain English." |
-| Need to start over | "Disregard previous changes. Start fresh as [agent]." |
+| Agent made a mistake     | "Undo that. Act as the debugger agent and investigate."      |
+| Not sure what happened   | "Explain what you just did in plain English."                |
+| Need to start over       | "Disregard previous changes. Start fresh as [agent]."        |
 
 ---
 
@@ -89,6 +89,7 @@ Say: **"Act as the documenter agent. Update SESSION_LOG.md. Then run /verify."**
 ## Quick Checks
 
 Before committing, verify:
+
 - [ ] All 4 gates pass (`npm run ai:verify`)
 - [ ] No raw Tailwind colors (`npm run lint:colors`)
 - [ ] No PII exposed (`npm run security:scan`)

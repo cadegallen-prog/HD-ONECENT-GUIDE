@@ -38,6 +38,7 @@ npm run ai:verify
 ```
 
 This runs all 4 gates and saves artifacts to:
+
 - `reports/verification/<timestamp>/lint.txt`
 - `reports/verification/<timestamp>/build.txt`
 - `reports/verification/<timestamp>/unit.txt`
@@ -62,6 +63,7 @@ npm run ai:proof -- /penny-list /report-find
 ```
 
 Artifacts are saved to:
+
 - `reports/proof/<timestamp>/*.png`
 - `reports/proof/<timestamp>/console-errors.txt`
 
@@ -75,20 +77,24 @@ Use the screenshots as the “before/after” proof when applicable.
 ## Verification
 
 **Tests (required):**
+
 - `npm run lint`: ✅/❌ (link output or paste)
 - `npm run build`: ✅/❌ (link output or paste)
 - `npm run test:unit`: ✅/❌ (link output or paste)
 - `npm run test:e2e`: ✅/❌ (link output or paste)
 
 **Bundle (preferred):**
+
 - `reports/verification/<timestamp>/summary.md`
 
 **Playwright (UI changes only):**
+
 - `reports/proof/<timestamp>/...-light.png`
 - `reports/proof/<timestamp>/...-dark.png`
 - `reports/proof/<timestamp>/console-errors.txt`
 
 **Problem fixed (bug fixes only):**
+
 - Before: [what was wrong + evidence]
 - After: [what changed + evidence]
 ```

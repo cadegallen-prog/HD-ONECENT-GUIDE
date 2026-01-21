@@ -12,6 +12,8 @@ Each AI session should:
 3. Implement + verify (proof required)
 4. Update `.ai/SESSION_LOG.md`, `.ai/STATE.md`, and this file
 
+**Planning (canonical):** See `.ai/plans/INDEX.md` for all concurrent plans and their statuses.
+
 ---
 
 ## P0 - Do Next (Analytics-Driven Growth)
@@ -51,13 +53,13 @@ Each AI session should:
 
 **Source:** Fresh GA4 + Search Console data (see plan file for full details)
 
-| Metric | Value | Insight |
-|--------|-------|---------|
-| Daily users | 680 | Up 3.5x from 196/day (Jan 9-11) |
-| Conversion rate | 26% | 906 HD clicks / 3,451 users |
-| Facebook traffic | 28% | #1 referral channel |
-| Organic clicks | 80 | All branded ("penny central") |
-| SEO position | 11.6 | Page 2 for target keywords |
+| Metric           | Value | Insight                         |
+| ---------------- | ----- | ------------------------------- |
+| Daily users      | 680   | Up 3.5x from 196/day (Jan 9-11) |
+| Conversion rate  | 26%   | 906 HD clicks / 3,451 users     |
+| Facebook traffic | 28%   | #1 referral channel             |
+| Organic clicks   | 80    | All branded ("penny central")   |
+| SEO position     | 11.6  | Page 2 for target keywords      |
 
 **Key insight:** Traffic growing, core product works, but retention and SEO are critical gaps.
 

@@ -49,11 +49,25 @@ Restate your understanding in 2-3 sentences before changing any code.
 
 ---
 
+## Habit 2.5: Plan Canon (When Planning, Not Implementing)
+
+If the request is planning-only (no code changes yet):
+
+1. Open `.ai/plans/INDEX.md` (canonical registry)
+2. Create or update a plan file under `.ai/plans/` using `.ai/plans/_TEMPLATE.md`
+3. If needed, create a deeper audit doc under `.ai/topics/` and link it from the plan
+4. Update `.ai/SESSION_LOG.md` with a docs-only entry ("gates not run")
+
+This supports multiple concurrent plans without losing track of which is approved vs. still being refined.
+
+---
+
 ## Habit 3: Verify BEFORE Claiming "Done"
 
 **⛔ STOP:** Read [VERIFICATION_REQUIRED.md](.ai/VERIFICATION_REQUIRED.md) BEFORE claiming work is complete.
 
 **You CANNOT say "done" without PROOF:**
+
 1. ✅ Screenshots (for UI changes - use Playwright)
 2. ✅ Test output (all 4 commands: lint, build, test:unit, test:e2e)
 3. ✅ GitHub Actions status (if applicable - paste URL)

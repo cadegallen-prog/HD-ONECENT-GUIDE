@@ -103,8 +103,16 @@ const uploadedWithUrl = enriched.filter((d) => d.home_depot_url?.trim()).length
 
 console.log("=== UPLOADED DATA ===")
 console.log("Total uploaded:", enriched.length)
-console.log("With UPC:", uploadedWithUpc, `(${Math.round((uploadedWithUpc / enriched.length) * 100)}%)`)
-console.log("With home_depot_url:", uploadedWithUrl, `(${Math.round((uploadedWithUrl / enriched.length) * 100)}%)`)
+console.log(
+  "With UPC:",
+  uploadedWithUpc,
+  `(${Math.round((uploadedWithUpc / enriched.length) * 100)}%)`
+)
+console.log(
+  "With home_depot_url:",
+  uploadedWithUrl,
+  `(${Math.round((uploadedWithUrl / enriched.length) * 100)}%)`
+)
 console.log("")
 
 // Summary

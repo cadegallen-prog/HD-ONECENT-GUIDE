@@ -11,6 +11,7 @@ Run verification to prove your work:
 4. Copy the summary from `reports/verification/[timestamp]/summary.md`
 
 Gates run:
+
 - npm run lint (0 errors required)
 - npm run build (must succeed)
 - npm run test:unit (all tests pass)

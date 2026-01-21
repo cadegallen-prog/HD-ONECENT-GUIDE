@@ -10,6 +10,7 @@ description: Produce portable context pack for starting fresh chat or switching 
 Produce a portable context pack for starting a fresh chat or switching tools (Claude → Codex → Copilot).
 
 **Outcome:**
+
 - Updates `.ai/HANDOFF.md` with current reality
 - Prints **New Chat Primer** (copy/paste into next session)
 - Prints **ARCHITECT stub** (for designing implementations)
@@ -34,6 +35,7 @@ Produce a portable context pack for starting a fresh chat or switching tools (Cl
 Optional: one or more topic(s) to focus
 
 **Example:**
+
 - `/handoff` (default: full sprint + BACKLOG top items)
 - `/handoff SEO` (focus on SEO context only)
 - `/handoff SEO MONETIZATION` (focus on multiple topics)
@@ -47,6 +49,7 @@ If none provided: default to current sprint and BACKLOG top 3 items.
 ### Step 1: Gather Current Reality
 
 Read:
+
 - `.ai/STATE.md` (current sprint)
 - `.ai/BACKLOG.md` (top priorities)
 - Relevant `.ai/topics/<TOPIC>.md` (if topic-specific)
@@ -82,19 +85,23 @@ Rewrite `.ai/HANDOFF.md` with these sections in order:
 
 ```markdown
 ### Always First (5 min)
+
 1. `.ai/START_HERE.md`
 2. `.ai/CRITICAL_RULES.md`
 3. `.ai/STATE.md`
 
 ### Always Second (2 min)
+
 4. `.ai/HANDOFF.md` (this file)
 
 ### Contextual (Choose One)
+
 - **For general:** `.ai/BACKLOG.md` + `.ai/GROWTH_STRATEGY.md`
 - **For topic work:** `.ai/topics/INDEX.md` → `.ai/topics/<TOPIC>.md`
 - **For implementation:** `.ai/impl/<FEATURE>.md`
 
 ### Before Implementation
+
 - `.ai/CONTRACT.md`
 - `.ai/DECISION_RIGHTS.md`
 - `.ai/CONSTRAINTS.md`
@@ -104,16 +111,19 @@ Rewrite `.ai/HANDOFF.md` with these sections in order:
 
 ```markdown
 ### Claude Code
+
 - ✅ MCP: filesystem, github, playwright, supabase, vercel
 - ✅ Agents: 14 skills (plan, architect, implement, test, review, debug, document, brainstorm, doctor, verify, proof, session-start, session-end, checkpoint, capsule, handoff)
 - ✅ Ideal for: Full feature development
 
 ### Codex (GPT-5.2)
+
 - ✅ MCP: Same (if ~/.codex/config.toml synced)
 - ✅ Agents: Same (if configured)
 - ✅ Ideal for: Full feature development, alternative to Claude
 
 ### Copilot Chat
+
 - ❌ MCP: None
 - ❌ Agents: None
 - ✅ Ideal for: Q&A only
@@ -130,8 +140,8 @@ Rewrite `.ai/HANDOFF.md` with these sections in order:
 [Paste the primer from section E of AUDIT output or from previous session]
 
 Or shorter version:
-
 ```
+
 I'm starting fresh on Penny Central.
 
 Read: .ai/START_HERE.md, .ai/CRITICAL_RULES.md, .ai/STATE.md, .ai/HANDOFF.md
@@ -139,7 +149,9 @@ Read: .ai/START_HERE.md, .ai/CRITICAL_RULES.md, .ai/STATE.md, .ai/HANDOFF.md
 Current: [TL;DR facts from above]
 
 My goal: [GOAL / WHY / DONE MEANS]
+
 ```
+
 ```
 
 #### 5) Stubs (ARCHITECT and IMPLEMENT Templates)
@@ -296,6 +308,7 @@ After:
 **Scenario:** Just finished P0-4c (weekly email digest). Switching from Claude to Codex.
 
 **TL;DR Before:**
+
 ```
 - ✅ Core product working
 - ✅ Retention features live (email, PWA)
@@ -303,6 +316,7 @@ After:
 ```
 
 **TL;DR After:**
+
 ```
 - ✅ Core product working
 - ✅ Retention features live (email signup, PWA install, weekly digest cron)
@@ -312,6 +326,7 @@ After:
 ```
 
 **Immediate Next Move:**
+
 ```
 1. Add FAQ schema to `/guide` (validate in Google Rich Results Test)
 2. Add HowTo schema to `/guide` (same PR)

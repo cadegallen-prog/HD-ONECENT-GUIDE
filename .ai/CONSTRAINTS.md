@@ -156,6 +156,7 @@ Which would you prefer?"
 **Context:** Typography constraints were too restrictive for penny list cards
 
 The following globals.css utilities were added with explicit owner approval:
+
 - `.penny-card-name` (14px)
 - `.penny-card-brand` (11px)
 - `.penny-card-sku` (11px mono)

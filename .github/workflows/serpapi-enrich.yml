@@ -15,14 +15,14 @@ name: SerpApi Enrich
 on:
   schedule:
     # Run every 6 hours (safe monthly budget by default)
-    - cron: '0 */6 * * *'
+    - cron: "0 */6 * * *"
   workflow_dispatch:
     # Allow manual trigger
     inputs:
       limit:
-        description: 'Number of SKUs to process'
+        description: "Number of SKUs to process"
         required: false
-        default: '5'
+        default: "5"
 
 jobs:
   enrich:
@@ -38,8 +38,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'npm'
+          node-version: "22"
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci

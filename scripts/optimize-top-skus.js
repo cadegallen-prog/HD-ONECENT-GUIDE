@@ -1,25 +1,25 @@
 #!/usr/bin/env node
 /**
  * optimize-top-skus.js
- * 
+ *
  * Analyzes penny-list.json and generates SEO optimization recommendations
  * for the top 20 SKUs by report count.
- * 
+ *
  * Usage: node scripts/optimize-top-skus.js
  * Output: JSON report with enhanced titles, descriptions, and JSON-LD templates
  */
 
-import fs from 'fs'
-import path from 'path'
+import fs from "fs"
+import path from "path"
 
-const dataPath = path.join(process.cwd(), 'data', 'penny-list.json')
+const dataPath = path.join(process.cwd(), "data", "penny-list.json")
 
 if (!fs.existsSync(dataPath)) {
   console.error(`❌ penny-list.json not found at ${dataPath}`)
   process.exit(1)
 }
 
-const rawData = JSON.parse(fs.readFileSync(dataPath, 'utf-8'))
+const rawData = JSON.parse(fs.readFileSync(dataPath, "utf-8"))
 const items = Array.isArray(rawData) ? rawData : rawData.items || []
 
 // Calculate metrics per SKU
@@ -63,7 +63,7 @@ const optimizations = topSkus.map((sku, idx) => ({
   },
   recommendations: {
     metaTitle: `${sku.name} - Home Depot Penny Item SKU ${sku.sku} | Penny Central`,
-    metaDescription: `Community-verified Home Depot penny find: ${sku.name} (SKU ${sku.sku}). ${sku.reportCount} reports from ${sku.stateCount} states (${sku.states.slice(0, 2).join(', ')}). Verify in store.`,
+    metaDescription: `Community-verified Home Depot penny find: ${sku.name} (SKU ${sku.sku}). ${sku.reportCount} reports from ${sku.stateCount} states (${sku.states.slice(0, 2).join(", ")}). Verify in store.`,
     ogTitle: `${sku.name} - Home Depot Penny Deal`,
     keywordTargets: [
       `${sku.name} penny`,
@@ -98,7 +98,7 @@ const optimizations = topSkus.map((sku, idx) => ({
 }))
 
 // Write optimization report
-const reportPath = path.join(process.cwd(), 'reports', 'sku-optimization-top20.json')
+const reportPath = path.join(process.cwd(), "reports", "sku-optimization-top20.json")
 const reportsDir = path.dirname(reportPath)
 if (!fs.existsSync(reportsDir)) {
   fs.mkdirSync(reportsDir, { recursive: true })

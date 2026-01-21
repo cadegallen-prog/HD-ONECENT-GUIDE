@@ -3,8 +3,8 @@ name: Snyk Security
 on:
   # Run once daily instead of on every push to reduce noise
   schedule:
-    - cron: "0 1 * * *"  # Every day at 1 AM UTC
-  workflow_dispatch:  # Allow manual trigger
+    - cron: "0 1 * * *" # Every day at 1 AM UTC
+  workflow_dispatch: # Allow manual trigger
 
 permissions:
   contents: read

@@ -1,0 +1,17 @@
+BEGIN:VCALENDAR
+PRODID:-//Penny Central//EN
+VERSION:2.0
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:20260211-monit-decision@pennycentral.com
+SUMMARY:Monetization decision review (Ezoic / Mediavine / Monumetric)
+DESCRIPTION:Review monetization status:\n- Mediavine (installed 2026-01-12)\n- Monumetric (added 2026-01-14)\n- Ezoic bridge (started 2026-01-19)\n\nRepo: https://github.com/cadegallen-prog/HD-ONECENT-GUIDE (see .ai/SESSION_LOG.md)
+DTSTAMP:20260121T120000Z
+DTSTART:20260211T090000
+DTEND:20260211T093000
+ORGANIZER;CN=Penny Central:mailto:no-reply@pennycentral.com
+STATUS:CONFIRMED
+SEQUENCE:0
+END:VEVENT
+END:VCALENDAR

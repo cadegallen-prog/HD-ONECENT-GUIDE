@@ -170,9 +170,7 @@ async function main() {
     // Remove only the pngs we generate (best-effort)
     // eslint-disable-next-line no-console
     console.log("Saving screenshots to", OUT_DIR)
-  } catch {
-
-  }
+  } catch {}
 
   // Start dev server on 3001
   const child = spawnNextDev()

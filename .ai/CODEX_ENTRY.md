@@ -13,6 +13,7 @@ This file contains Codex-specific notes only.
 ## Read Order (Mandatory)
 
 Follow the sequence in `.ai/START_HERE.md`:
+
 1. START_HERE.md
 2. CRITICAL_RULES.md
 3. STATE.md

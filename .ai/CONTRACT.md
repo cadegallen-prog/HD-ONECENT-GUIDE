@@ -102,12 +102,14 @@ Each option includes: scope, risks, rollback plan, and what proof we'll use to v
 **⚠️ CRITICAL:** Read [VERIFICATION_REQUIRED.md](VERIFICATION_REQUIRED.md) - this is NON-NEGOTIABLE.
 
 **You CANNOT claim work is complete without PROOF:**
+
 - ✅ Screenshots (UI changes - use Playwright MCP)
 - ✅ Test output (lint, build, test:unit, test:e2e - ALL 4)
 - ✅ GitHub Actions status (paste URL if applicable)
 - ✅ Before/after comparison (show problem was actually fixed)
 
 **Common lies that break trust:**
+
 - ❌ "Tests pass" (without running them)
 - ❌ "Bug fixed" (without verifying)
 - ❌ "GitHub Actions green" (without checking)

@@ -125,14 +125,17 @@ async function run() {
 
         // Ensure our design tokens are present before measuring computed styles.
         // (Prevents flaky reads when CSS hasn't fully applied yet.)
-        await page.waitForFunction(() => {
-          const style = getComputedStyle(document.documentElement)
-          return (
-            style.getPropertyValue("--bg-page").trim().length > 0 &&
-            style.getPropertyValue("--cta-primary").trim().length > 0 &&
-            style.getPropertyValue("--cta-text").trim().length > 0
-          )
-        }, { timeout: 5000 })
+        await page.waitForFunction(
+          () => {
+            const style = getComputedStyle(document.documentElement)
+            return (
+              style.getPropertyValue("--bg-page").trim().length > 0 &&
+              style.getPropertyValue("--cta-primary").trim().length > 0 &&
+              style.getPropertyValue("--cta-text").trim().length > 0
+            )
+          },
+          { timeout: 5000 }
+        )
 
         const tokens = await page.evaluate(() => {
           const style = getComputedStyle(document.documentElement)
@@ -144,11 +147,14 @@ async function run() {
           }
         })
 
-        const tokenBg = parseHexColor(tokens.bgPage) ?? (theme === "dark" ? [18, 18, 18] : [255, 255, 255])
+        const tokenBg =
+          parseHexColor(tokens.bgPage) ?? (theme === "dark" ? [18, 18, 18] : [255, 255, 255])
         const tokenCtaBg =
           parseHexColor(tokens.ctaPrimary) ?? (theme === "dark" ? [138, 167, 199] : [43, 76, 126])
-        const tokenCtaFg = parseHexColor(tokens.ctaText) ?? (theme === "dark" ? [3, 7, 18] : [255, 255, 255])
-        const tokenTextPrimary = parseHexColor(tokens.textPrimary) ?? (theme === "dark" ? [220, 220, 220] : [28, 25, 23])
+        const tokenCtaFg =
+          parseHexColor(tokens.ctaText) ?? (theme === "dark" ? [3, 7, 18] : [255, 255, 255])
+        const tokenTextPrimary =
+          parseHexColor(tokens.textPrimary) ?? (theme === "dark" ? [220, 220, 220] : [28, 25, 23])
 
         for (const sel of selectors) {
           const styles = await getStyles(page, sel.selector)
@@ -179,7 +185,9 @@ async function run() {
           // CTA checks are token-based to avoid hydration timing flake:
           // verify the design system CTA token pair meets minimum contrast.
           const ratio =
-            sel.role === "cta" ? contrastRatio(tokenCtaFg, tokenCtaBg) : contrastRatio(safeFg, safeBg)
+            sel.role === "cta"
+              ? contrastRatio(tokenCtaFg, tokenCtaBg)
+              : contrastRatio(safeFg, safeBg)
           const threshold =
             sel.role === "border"
               ? 3.0

@@ -323,12 +323,7 @@ export default function WeeklyDigest({
                   </Text>
 
                   {/* Buttons */}
-                  <table
-                    width="100%"
-                    cellPadding="0"
-                    cellSpacing="0"
-                    style={{ marginTop: "8px" }}
-                  >
+                  <table width="100%" cellPadding="0" cellSpacing="0" style={{ marginTop: "8px" }}>
                     <tbody>
                       <tr>
                         <td style={{ paddingRight: "8px" }}>

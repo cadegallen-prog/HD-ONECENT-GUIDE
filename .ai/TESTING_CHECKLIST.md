@@ -740,9 +740,10 @@ After merging `dev` → `main` and deploying to Vercel:
    - Check Prettier config before committing
 
 5.5. **Hydration mismatch / flicker**
-   - Client hooks (`usePathname`, `useTheme`, localStorage) can differ between SSR and first client render.
-   - Never read `window`/`document` during render unless gated by a mounted check.
-   - If you touch shared UI (Navbar/Footer/Layout), run `npm run test:e2e` and scan console for hydration warnings.
+
+- Client hooks (`usePathname`, `useTheme`, localStorage) can differ between SSR and first client render.
+- Never read `window`/`document` during render unless gated by a mounted check.
+- If you touch shared UI (Navbar/Footer/Layout), run `npm run test:e2e` and scan console for hydration warnings.
 
 6. **Zinc palette color inconsistency**
    - Use zinc-100/800 for backgrounds

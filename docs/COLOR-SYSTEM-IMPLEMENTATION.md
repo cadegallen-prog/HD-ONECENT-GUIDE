@@ -11,6 +11,7 @@
 ## 1. The Problem We Solved
 
 ### Before (Generic Tailwind Colors)
+
 ```tsx
 // ❌ WRONG - Hard to change, inconsistent, looks cheap
 <div className="bg-blue-500 text-gray-900 border border-gray-200">
@@ -25,6 +26,7 @@
 ```
 
 ### After (CSS Variables + Tailwind)
+
 ```tsx
 // ✅ CORRECT - Change palette once, updates everywhere
 <div className="bg-[var(--bg-page)] text-[var(--text-primary)] border border-[var(--border-default)]">
@@ -128,6 +130,7 @@ Browser (Switches automatically on .dark class)
 ```
 
 **Mapping (in tailwind.config.ts):**
+
 ```typescript
 background: "var(--background)",     // --bg-page
 foreground: "var(--foreground)",     // --text-primary
@@ -201,12 +204,8 @@ colors: {
 
 ```tsx
 <div className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] p-6 transition-all hover:border-[var(--border-strong)] hover:shadow-lg cursor-pointer">
-  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
-    Card Title
-  </h3>
-  <p className="text-[var(--text-secondary)]">
-    Card description goes here
-  </p>
+  <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Card Title</h3>
+  <p className="text-[var(--text-secondary)]">Card description goes here</p>
 </div>
 ```
 
@@ -229,8 +228,10 @@ colors: {
 ### Pattern 3: Status Alert (Success/Warning/Error)
 
 ```tsx
-{/* Success Alert */}
-<div className="rounded-lg border border-l-4 border-l-[var(--status-success)] bg-[var(--bg-elevated)] p-4 flex gap-3">
+{
+  /* Success Alert */
+}
+;<div className="rounded-lg border border-l-4 border-l-[var(--status-success)] bg-[var(--bg-elevated)] p-4 flex gap-3">
   <CheckCircle2 className="w-5 h-5 text-[var(--status-success)] flex-shrink-0" />
   <div className="text-sm text-[var(--text-secondary)]">
     <p className="font-semibold mb-1">Success!</p>
@@ -238,8 +239,10 @@ colors: {
   </div>
 </div>
 
-{/* Warning Alert */}
-<div className="rounded-lg border border-l-4 border-l-[var(--status-warning)] bg-[var(--bg-elevated)] p-4 flex gap-3">
+{
+  /* Warning Alert */
+}
+;<div className="rounded-lg border border-l-4 border-l-[var(--status-warning)] bg-[var(--bg-elevated)] p-4 flex gap-3">
   <AlertTriangle className="w-5 h-5 text-[var(--status-warning)] flex-shrink-0" />
   <div className="text-sm text-[var(--text-secondary)]">
     <p className="font-semibold mb-1">Warning</p>
@@ -247,8 +250,10 @@ colors: {
   </div>
 </div>
 
-{/* Error Alert */}
-<div className="rounded-lg border border-l-4 border-l-[var(--status-error)] bg-[var(--bg-elevated)] p-4 flex gap-3">
+{
+  /* Error Alert */
+}
+;<div className="rounded-lg border border-l-4 border-l-[var(--status-error)] bg-[var(--bg-elevated)] p-4 flex gap-3">
   <AlertCircle className="w-5 h-5 text-[var(--status-error)] flex-shrink-0" />
   <div className="text-sm text-[var(--text-secondary)]">
     <p className="font-semibold mb-1">Error</p>
@@ -277,17 +282,25 @@ colors: {
 ### Pattern 5: Chip/Badge System
 
 ```tsx
-{/* Accent chip */}
-<span className="pill pill-accent">Featured</span>
+{
+  /* Accent chip */
+}
+;<span className="pill pill-accent">Featured</span>
 
-{/* Success chip */}
-<span className="pill pill-success">Active</span>
+{
+  /* Success chip */
+}
+;<span className="pill pill-success">Active</span>
 
-{/* Muted chip */}
-<span className="pill pill-muted">Archived</span>
+{
+  /* Muted chip */
+}
+;<span className="pill pill-muted">Archived</span>
 
-{/* Info chip */}
-<span className="pill pill-info">Info</span>
+{
+  /* Info chip */
+}
+;<span className="pill pill-info">Info</span>
 ```
 
 ### Pattern 6: Responsive Text Hierarchy
@@ -305,9 +318,7 @@ colors: {
   </h2>
 
   {/* H3 - Subsection */}
-  <h3 className="text-xl sm:text-2xl font-semibold text-[var(--text-primary)] mb-2">
-    Subsection
-  </h3>
+  <h3 className="text-xl sm:text-2xl font-semibold text-[var(--text-primary)] mb-2">Subsection</h3>
 
   {/* Body text */}
   <p className="text-base text-[var(--text-secondary)] leading-relaxed mb-4">
@@ -343,15 +354,18 @@ npm run lint:colors
 ### What the Linter Does
 
 **Forbidden (Errors):**
+
 - ❌ `bg-orange-500`, `text-pink-400` - Off-brand colors
 - ❌ `bg-teal-600`, `text-cyan-700` - Conflicting palette
 - ❌ Arbitrary hex colors: `bg-[#e0e0e0]` - Non-system colors
 
 **Suspicious (Warnings):**
+
 - ⚠️ `bg-gray-500`, `text-slate-900` - Should use stone palette or CSS variables
 - ⚠️ `bg-blue-*`, `text-blue-*` - Should use CTA blue or CSS variables
 
 **Allowed (Safe):**
+
 - ✅ `bg-[var(--bg-page)]` - CSS variables
 - ✅ `text-white`, `bg-transparent` - Core utilities
 - ✅ `text-muted-foreground`, `bg-card` - Semantic classes
@@ -383,12 +397,12 @@ npm run lint:colors:update-baseline
 /* globals.css - The CSS Variables System */
 
 :root {
-  --bg-page: #ffffff;        /* Light mode */
+  --bg-page: #ffffff; /* Light mode */
   --text-primary: #1c1917;
 }
 
 .dark {
-  --bg-page: #121212;        /* Dark mode */
+  --bg-page: #121212; /* Dark mode */
   --text-primary: #dcdcdc;
 }
 ```
@@ -426,11 +440,13 @@ npm run test:e2e
 ### When to Add New Colors
 
 ✅ **OKAY TO ADD:**
+
 - Premium/VIP tier badge needs distinct color
 - New page type needs unique accent
 - Status level we haven't represented (e.g., pending)
 
 ❌ **DON'T ADD IF:**
+
 - Existing color works for the purpose
 - Just using it in 1 component
 - Designer preference without user need
@@ -449,6 +465,7 @@ npm run test:e2e
 **Dark Mode:** #a78bfa (purple 400)
 
 **Usage:**
+
 - Premium badge on cards
 - Premium section header
 - 2 components affected
@@ -478,16 +495,16 @@ npm run test:e2e
   /* ... existing colors ... */
 
   /* NEW: Premium tier indicator */
-  --tier-premium: #7c3aed;    /* Purple 600 */
-  --tier-premium-light: #ede9fe;  /* Purple 100 for backgrounds */
+  --tier-premium: #7c3aed; /* Purple 600 */
+  --tier-premium-light: #ede9fe; /* Purple 100 for backgrounds */
 }
 
 .dark {
   /* ... existing colors ... */
 
   /* NEW: Premium tier indicator */
-  --tier-premium: #a78bfa;     /* Purple 400 */
-  --tier-premium-light: #5b21b6;  /* Purple 800 for backgrounds */
+  --tier-premium: #a78bfa; /* Purple 400 */
+  --tier-premium-light: #5b21b6; /* Purple 800 for backgrounds */
 }
 ```
 
@@ -536,6 +553,7 @@ npm run lint:colors:update-baseline  # Lock the baseline
 **Root Cause:** Using `text-white` instead of `--cta-text` variable
 
 **Fix:**
+
 ```tsx
 // ❌ WRONG
 <button className="bg-[var(--cta-primary)] text-white">
@@ -555,6 +573,7 @@ npm run lint:colors:update-baseline  # Lock the baseline
 **Root Cause:** Using `--border-default` on low-contrast background
 
 **Fix:**
+
 ```tsx
 // ❌ On dark background, might be too faint
 <div className="border border-[var(--border-default)] bg-[var(--bg-page)]">
@@ -570,6 +589,7 @@ npm run lint:colors:update-baseline  # Lock the baseline
 **Root Cause:** Used raw Tailwind color or arbitrary hex
 
 **Fix:**
+
 ```tsx
 // ❌ Causes warning
 <div className="text-gray-500">Wrong</div>
@@ -668,21 +688,21 @@ Verified: ✅ lint-colors ✅ build ✅ e2e ✅ contrast
 
 ## 11. Reference Card (Quick Lookup)
 
-| Need | Use | Example |
-|------|-----|---------|
-| Page background | `--bg-page` | `bg-[var(--bg-page)]` |
-| Card surface | `--bg-elevated` | `bg-[var(--bg-elevated)]` |
-| Form field | `--bg-recessed` | `bg-[var(--bg-recessed)]` |
-| Main text | `--text-primary` | `text-[var(--text-primary)]` |
-| Secondary text | `--text-secondary` | `text-[var(--text-secondary)]` |
-| Muted text | `--text-muted` | `text-[var(--text-muted)]` |
-| Primary CTA | `--cta-primary` | `bg-[var(--cta-primary)]` |
-| CTA text | `--cta-text` | `text-[var(--cta-text)]` |
-| Success | `--status-success` | `text-[var(--status-success)]` |
-| Warning | `--status-warning` | `text-[var(--status-warning)]` |
-| Error | `--status-error` | `text-[var(--status-error)]` |
-| Border | `--border-default` | `border-[var(--border-default)]` |
-| Badge pill | `pill pill-success` | `<span className="pill pill-success">` |
+| Need            | Use                 | Example                                |
+| --------------- | ------------------- | -------------------------------------- |
+| Page background | `--bg-page`         | `bg-[var(--bg-page)]`                  |
+| Card surface    | `--bg-elevated`     | `bg-[var(--bg-elevated)]`              |
+| Form field      | `--bg-recessed`     | `bg-[var(--bg-recessed)]`              |
+| Main text       | `--text-primary`    | `text-[var(--text-primary)]`           |
+| Secondary text  | `--text-secondary`  | `text-[var(--text-secondary)]`         |
+| Muted text      | `--text-muted`      | `text-[var(--text-muted)]`             |
+| Primary CTA     | `--cta-primary`     | `bg-[var(--cta-primary)]`              |
+| CTA text        | `--cta-text`        | `text-[var(--cta-text)]`               |
+| Success         | `--status-success`  | `text-[var(--status-success)]`         |
+| Warning         | `--status-warning`  | `text-[var(--status-warning)]`         |
+| Error           | `--status-error`    | `text-[var(--status-error)]`           |
+| Border          | `--border-default`  | `border-[var(--border-default)]`       |
+| Badge pill      | `pill pill-success` | `<span className="pill pill-success">` |
 
 ---
 

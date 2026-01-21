@@ -226,7 +226,7 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
                 href={resolvedHomeDepotUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 flex items-center justify-center gap-1.5 min-h-[36px] px-2.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] text-[var(--text-secondary)] text-xs font-semibold transition-colors hover:text-[var(--text-primary)] hover:border-[var(--border-strong)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+                className="flex-1 flex items-center justify-center gap-1.5 min-h-[44px] sm:min-h-[36px] px-2.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] text-[var(--text-secondary)] text-xs font-semibold transition-colors hover:text-[var(--text-primary)] hover:border-[var(--border-strong)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
                 aria-label={`Open Home Depot page for ${item.name}`}
                 onClick={(event) => {
                   event.stopPropagation()
@@ -247,7 +247,7 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
                     event.stopPropagation()
                     setIsBarcodeOpen(true)
                   }}
-                  className="flex items-center justify-center gap-1.5 min-h-[36px] px-2.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] text-[var(--text-secondary)] text-xs font-semibold transition-colors hover:text-[var(--text-primary)] hover:border-[var(--border-strong)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+                  className="flex items-center justify-center gap-1.5 min-h-[44px] sm:min-h-[36px] px-2.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] text-[var(--text-secondary)] text-xs font-semibold transition-colors hover:text-[var(--text-primary)] hover:border-[var(--border-strong)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
                   aria-label={`Show barcode for ${item.name}`}
                 >
                   <Barcode className="w-4 h-4" aria-hidden="true" />
@@ -259,7 +259,7 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
                   sku={item.sku}
                   itemName={item.name}
                   variant="icon"
-                  className="min-h-[36px] min-w-[36px]"
+                  className="min-h-[44px] sm:min-h-[36px] min-w-[44px] sm:min-w-[36px]"
                 />
               </div>
             </div>

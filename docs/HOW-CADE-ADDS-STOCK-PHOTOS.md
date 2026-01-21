@@ -4,14 +4,14 @@
 
 Add entries to the `penny_item_enrichment` table in Supabase:
 
-| Column | Description |
-|--------|-------------|
-| `sku` | Home Depot SKU (6 or 10 digits) |
-| `image_url` | Stock product image URL |
-| `internet_sku` | Internet SKU for reliable HD product links |
-| `item_name` | (optional) Correct product name |
-| `brand` | (optional) Brand name |
-| `model_number` | (optional) Model number |
+| Column         | Description                                                 |
+| -------------- | ----------------------------------------------------------- |
+| `sku`          | Home Depot SKU (6 or 10 digits)                             |
+| `image_url`    | Stock product image URL                                     |
+| `internet_sku` | Internet SKU for reliable HD product links                  |
+| `item_name`    | (optional) Correct product name                             |
+| `brand`        | (optional) Brand name                                       |
+| `model_number` | (optional) Model number                                     |
 | `retail_price` | (optional) Retail price used to calculate “Save $X.XX” copy |
 
 ## How It Works

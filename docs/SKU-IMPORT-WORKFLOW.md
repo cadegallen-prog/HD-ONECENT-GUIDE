@@ -24,6 +24,7 @@ python scripts/sku-history-to-import.py \
 ```
 
 Outputs:
+
 - `./.local/sku-import.csv` (safe for Supabase import)
 - `./.local/internet-sku-map.json` (keep private; do NOT commit)
 
@@ -51,6 +52,7 @@ This checks staged files and refuses commits that look like raw export data or c
 ## Internet SKU Map
 
 The internet SKU map is used by the backend to generate more reliable Home Depot product links. Keep it private:
+
 - Store in environment variables, Vercel Blob, or Google Drive
 - Never commit to the repository
 - The UI still shows regular SKU; internet SKU is backend-only

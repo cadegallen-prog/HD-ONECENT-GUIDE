@@ -19,6 +19,11 @@ Follow this sequence before every session:
 
 **Then ask:** GOAL / WHY / DONE for this session
 
+## Planning Canon (When the session is planning-only)
+
+- Open `.ai/plans/INDEX.md` to see the canonical list of plans and their current status.
+- Create/update plans under `.ai/plans/` using `.ai/plans/_TEMPLATE.md`.
+
 ---
 
 ## Entry Points by Model

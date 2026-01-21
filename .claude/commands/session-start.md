@@ -23,6 +23,7 @@ Fix any issues before proceeding.
 ## 3. Capture Goal
 
 Get from user:
+
 - **GOAL:** What will be accomplished
 - **WHY:** Business value
 - **DONE:** Success criteria

@@ -10,6 +10,7 @@ Run the health check to verify the environment is ready:
 3. If all checks pass, you're ready to code
 
 This checks:
+
 - Port 3001 status (reuse if running)
 - Required environment variables
 - Playwright browser availability

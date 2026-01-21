@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Jan 18, 2026 (SKU detail report CTA + e2e noise filter + CI axe stabilization)
+**Last updated:** Jan 21, 2026 (My List Phase 1 implementation complete)
 
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
@@ -11,6 +11,8 @@ Every AI session must update this after meaningful work.
 
 ## Current Sprint (Last 7 Days)
 
+- **2026-01-21 (My List Phase 1):** Implemented Phase 1 of the My List elevation plan: swapped Bookmark icons to Heart (with fill="currentColor" for saved state), updated all UI labels to "My List" (singular), enforced 44px mobile tap targets on secondary action buttons (Home Depot, Barcode, Save) with desktop overrides (sm:min-h-[36px]), added "My List" to navbar and command palette with Heart icon, and implemented prefix-safe active state logic (pathname === "/lists" || pathname.startsWith("/lists/")). Files modified: add-to-list-button.tsx, penny-list-client.tsx, penny-list-card.tsx, navbar.tsx, command-palette.tsx. Ready for UI verification (mobile + desktop).
+- **2026-01-21 (Process):** Standardized planning docs so all agentic coders (Codex/Claude/Copilot) follow the same pipeline: canonical registry at `.ai/plans/INDEX.md`, plan template at `.ai/plans/_TEMPLATE.md`, and a planning pointer in `.ai/START_HERE.md` + `.ai/USAGE.md`. The "My List" roadmap is now anchored via `.ai/plans/my-list-elevation.md` and `.ai/topics/MY_LIST_FEATURE_CURRENT.md`.
 - **2026-01-18:** SKU detail page now places the "Report this find" CTA directly under the hero image with explicit "tap this to report" guidance; the button deep-links to `/report-find` with SKU/name prefilled (via `buildReportFindUrl`) and tracks via `TrackableLink`. Playwright tests filter known Ezoic/ID5 CSP console noise so e2e only fails on real app errors. Ezoic scripts are now gated to Vercel production only (disabled in CI/Playwright) so Full QA Suite `check-axe` stays green.
 - **2026-01-18:** Replaced the fake `data/penny-list.json` fixture with a one-time Supabase snapshot of real SKUs (sanitized + timestamp-rebased for deterministic Playwright runs) and removed placeholder SKUs from tests/examples; regenerate manually via `npm run fixture:snapshot` (no cron).
 - **2026-01-18:** Evaluated "old SKU" impact and decided **not** to add any historical tagging or "active only" UX at this time; documented a narrow, approval-gated plan to harden SKU page performance without user-visible changes (`.ai/impl/sku-page-performance-hardening-plan.md`).

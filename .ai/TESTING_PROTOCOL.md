@@ -32,6 +32,7 @@ npm run test:e2e  # all passing
 ### Playwright Screenshots Required
 
 **When required:**
+
 - All UI changes (buttons, forms, layouts, colors)
 - All JavaScript changes (Store Finder, interactive features)
 - All "bug fixed" claims (visual bugs need proof)
@@ -49,15 +50,18 @@ npm run test:e2e  # all passing
 ### Manual Checks
 
 **Typography & Touch:**
+
 - Text ≥16px body, ≥12px minimum
 - Touch targets ≥44px
 - Line height ≥1.6
 
 **Contrast:**
+
 - Text meets WCAG AAA (7:1 for normal text, 4.5:1 for large)
 - UI elements ≥3:1 (buttons, borders, focus rings)
 
 **Responsive:**
+
 - Test mobile viewport (375×667 - iPhone SE)
 - Test desktop viewport (1920×1080)
 - Horizontal scroll on tables works
@@ -71,21 +75,25 @@ npm run test:e2e  # all passing
 ## Verification
 
 **Tests:**
+
 - lint: ✅ 0 errors
 - build: ✅ success
 - test:unit: ✅ 1/1 passing
 - test:e2e: ✅ 28/28 passing
 
 **Playwright:**
+
 - Before: [screenshot]
 - After: [screenshot]
 - Console: no errors
 - Modes: light + dark tested
 
 **GitHub Actions:**
+
 - ✅ https://github.com/.../runs/12345
 
 **Problem fixed:**
+
 - Before: [describe/screenshot]
 - After: [describe/screenshot]
 ```
@@ -148,6 +156,7 @@ npm run test:e2e  # Playwright (artifacts in reports/playwright/)
 6. Test affiliate links open in new tab
 
 **Expected:**
+
 - No console errors
 - All pages load in <3 seconds
 - Navigation smooth
@@ -166,6 +175,7 @@ npm run test:e2e  # Playwright (artifacts in reports/playwright/)
 8. Verify mobile menu works
 
 **Expected:**
+
 - All touch targets tappable
 - Text readable without zoom
 - No horizontal page scroll (only tables)
@@ -199,6 +209,7 @@ netstat -ano | findstr :3001
 ```
 
 **Never kill port 3001 unless:**
+
 - User explicitly asks you to restart it
 - Process is hung/broken (not responding)
 - You've asked user permission first

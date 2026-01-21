@@ -61,12 +61,7 @@ function shouldSkipSku(entry?: StatusEntry): boolean {
   )
 }
 
-function setStatus(
-  cache: StatusCache,
-  sku: string,
-  status: StatusEntry["status"],
-  reason: string
-) {
+function setStatus(cache: StatusCache, sku: string, status: StatusEntry["status"], reason: string) {
   const existing = cache[sku]
   const attemptCount = (existing?.attemptCount ?? 0) + 1
   const entry: StatusEntry = {
@@ -196,184 +191,191 @@ async function main() {
 
         // Extract Data (using logic ported from bookmarklet)
         const data = await page.evaluate(() => {
-        // --- Product Extraction Start ---
-        function text(sel: string) {
-          var el = document.querySelector(sel)
-          return el && el.textContent ? el.textContent.replace(/\s+/g, " ").trim() : ""
-        }
-        function attr(sel: string, a: string) {
-          var el = document.querySelector(sel)
-          return el ? el.getAttribute(a) || "" : ""
-        }
-        function pickFirstNonEmpty(arr: string[]) {
-          for (var i = 0; i < arr.length; i++) {
-            if (arr[i]) return arr[i]
+          // --- Product Extraction Start ---
+          function text(sel: string) {
+            var el = document.querySelector(sel)
+            return el && el.textContent ? el.textContent.replace(/\s+/g, " ").trim() : ""
           }
-          return ""
-        }
-        function matchDigits(s: string, min: number, max: number) {
-          var m = (s || "").match(new RegExp("\\b\\d{" + min + "," + max + "}\\b"))
-          return m ? m[0] : ""
-        }
-
-        function getInternetNumberFromUrl() {
-          var m = (location.pathname || "").match(/\/p\/[^/]+\/(\d{6,12})/)
-          return m ? m[1] : ""
-        }
-
-        function getJsonLdProduct() {
-          var scripts = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
-          for (var i = 0; i < scripts.length; i++) {
-            try {
-              var json = JSON.parse(scripts[i].textContent || "")
-              var items = Array.isArray(json) ? json : [json]
-              for (var j = 0; j < items.length; j++) {
-                var item = items[j]
-                var type = item && item["@type"]
-                if (type && (type === "Product" || (Array.isArray(type) && type.includes("Product")))) {
-                  return item
-                }
-              }
-            } catch (e) {
-              // ignore parse errors
+          function attr(sel: string, a: string) {
+            var el = document.querySelector(sel)
+            return el ? el.getAttribute(a) || "" : ""
+          }
+          function pickFirstNonEmpty(arr: string[]) {
+            for (var i = 0; i < arr.length; i++) {
+              if (arr[i]) return arr[i]
             }
+            return ""
           }
-          return null
-        }
+          function matchDigits(s: string, min: number, max: number) {
+            var m = (s || "").match(new RegExp("\\b\\d{" + min + "," + max + "}\\b"))
+            return m ? m[0] : ""
+          }
 
-        function getSku() {
-          var candidates = []
-          candidates.push(matchDigits(text('[data-testid="product-sku"]'), 6, 10))
-          candidates.push(matchDigits(text(".product-identifier__sku"), 6, 10))
-          candidates.push(matchDigits(text('span[itemprop="sku"]'), 6, 10))
-          var body = document.body && document.body.innerText ? document.body.innerText : ""
-          var m = body.match(/Store\s*SKU\s*#?\s*(\d{6,10})/i)
-          if (m && m[1]) candidates.push(m[1])
-          m = body.match(/\bSKU\b[^\d]{0,20}(\d{6,10})/i)
-          if (m && m[1]) candidates.push(m[1])
-          return pickFirstNonEmpty(candidates)
-        }
+          function getInternetNumberFromUrl() {
+            var m = (location.pathname || "").match(/\/p\/[^/]+\/(\d{6,12})/)
+            return m ? m[1] : ""
+          }
 
-        function getName() {
-          return pickFirstNonEmpty([
-            text('h1[data-testid="product-title"]'),
-            text("h1.product-details__title"),
-            text("h1"),
-            attr('meta[property="og:title"]', "content"),
-          ])
-        }
-
-        function getImageUrl() {
-          var url = attr('meta[property="og:image"]', "content")
-          if (!url) {
-            var img = document.querySelector(
-              'img[src*="thdstatic.com"],img[data-src*="thdstatic.com"],img[srcset*="thdstatic.com"]'
+          function getJsonLdProduct() {
+            var scripts = Array.from(
+              document.querySelectorAll('script[type="application/ld+json"]')
             )
-            if (img) {
-              url = img.getAttribute("src") || img.getAttribute("data-src") || ""
+            for (var i = 0; i < scripts.length; i++) {
+              try {
+                var json = JSON.parse(scripts[i].textContent || "")
+                var items = Array.isArray(json) ? json : [json]
+                for (var j = 0; j < items.length; j++) {
+                  var item = items[j]
+                  var type = item && item["@type"]
+                  if (
+                    type &&
+                    (type === "Product" || (Array.isArray(type) && type.includes("Product")))
+                  ) {
+                    return item
+                  }
+                }
+              } catch (e) {
+                // ignore parse errors
+              }
+            }
+            return null
+          }
+
+          function getSku() {
+            var candidates = []
+            candidates.push(matchDigits(text('[data-testid="product-sku"]'), 6, 10))
+            candidates.push(matchDigits(text(".product-identifier__sku"), 6, 10))
+            candidates.push(matchDigits(text('span[itemprop="sku"]'), 6, 10))
+            var body = document.body && document.body.innerText ? document.body.innerText : ""
+            var m = body.match(/Store\s*SKU\s*#?\s*(\d{6,10})/i)
+            if (m && m[1]) candidates.push(m[1])
+            m = body.match(/\bSKU\b[^\d]{0,20}(\d{6,10})/i)
+            if (m && m[1]) candidates.push(m[1])
+            return pickFirstNonEmpty(candidates)
+          }
+
+          function getName() {
+            return pickFirstNonEmpty([
+              text('h1[data-testid="product-title"]'),
+              text("h1.product-details__title"),
+              text("h1"),
+              attr('meta[property="og:title"]', "content"),
+            ])
+          }
+
+          function getImageUrl() {
+            var url = attr('meta[property="og:image"]', "content")
+            if (!url) {
+              var img = document.querySelector(
+                'img[src*="thdstatic.com"],img[data-src*="thdstatic.com"],img[srcset*="thdstatic.com"]'
+              )
+              if (img) {
+                url = img.getAttribute("src") || img.getAttribute("data-src") || ""
+              }
+            }
+            if (url) {
+              try {
+                var parsed = new URL(
+                  url,
+                  window.location && window.location.href ? window.location.href : undefined
+                )
+                var hostname = parsed.hostname.toLowerCase()
+                var isAllowedHost =
+                  hostname === "thdstatic.com" || hostname.endsWith(".thdstatic.com")
+                if (isAllowedHost) {
+                  url = url.replace(/\/\d+\.jpg(\?.*)?$/, "/1000.jpg")
+                }
+              } catch (e) {
+                // If URL parsing fails, leave the URL unchanged.
+              }
+            }
+            return url
+          }
+
+          function findSpecValue(label: string) {
+            var rows = document.querySelectorAll("tr,dt")
+            for (var i = 0; i < rows.length; i++) {
+              var row = rows[i]
+              if (row.tagName && row.tagName.toLowerCase() === "tr") {
+                var cells = row.querySelectorAll("th,td")
+                if (cells.length >= 2) {
+                  var k = (cells[0].textContent || "").replace(/\s+/g, " ").trim()
+                  if (k && k.toLowerCase() === label.toLowerCase()) {
+                    return (cells[1].textContent || "").replace(/\s+/g, " ").trim()
+                  }
+                }
+              }
+              if (row.tagName && row.tagName.toLowerCase() === "dt") {
+                var key = (row.textContent || "").replace(/\s+/g, " ").trim()
+                if (key && key.toLowerCase() === label.toLowerCase()) {
+                  var dd = row.nextElementSibling
+                  if (dd && dd.tagName && dd.tagName.toLowerCase() === "dd") {
+                    return (dd.textContent || "").replace(/\s+/g, " ").trim()
+                  }
+                }
+              }
+            }
+            return ""
+          }
+
+          function getBrand() {
+            return pickFirstNonEmpty([
+              text('[data-testid="product-brand"]'),
+              attr('meta[itemprop="brand"]', "content"),
+              findSpecValue("Brand"),
+              findSpecValue("Manufacturer"),
+            ])
+          }
+          function getModel() {
+            return pickFirstNonEmpty([
+              findSpecValue("Model"),
+              findSpecValue("Model #"),
+              findSpecValue("Model Number"),
+            ])
+          }
+
+          var jsonLdProduct = getJsonLdProduct()
+          var jsonLdBrand =
+            jsonLdProduct && jsonLdProduct.brand
+              ? typeof jsonLdProduct.brand === "string"
+                ? jsonLdProduct.brand
+                : jsonLdProduct.brand.name || ""
+              : ""
+          var jsonLdImage = ""
+          if (jsonLdProduct && jsonLdProduct.image) {
+            if (Array.isArray(jsonLdProduct.image)) {
+              jsonLdImage = jsonLdProduct.image[0] || ""
+            } else if (typeof jsonLdProduct.image === "object" && jsonLdProduct.image.url) {
+              jsonLdImage = jsonLdProduct.image.url
+            } else {
+              jsonLdImage = jsonLdProduct.image
             }
           }
-          if (url) {
+
+          // --- Product Extraction End ---
+
+          var imageUrl = jsonLdImage || getImageUrl()
+          if (imageUrl) {
             try {
-              var parsed = new URL(url, window.location && window.location.href ? window.location.href : undefined)
-              var hostname = parsed.hostname.toLowerCase()
-              var isAllowedHost =
-                hostname === "thdstatic.com" ||
-                hostname.endsWith(".thdstatic.com")
-              if (isAllowedHost) {
-                url = url.replace(/\/\d+\.jpg(\?.*)?$/, "/1000.jpg")
+              var parsed = new URL(imageUrl)
+              var hostname = parsed.hostname
+              if (hostname === "thdstatic.com" || hostname.endsWith(".thdstatic.com")) {
+                imageUrl = imageUrl.replace(/\/\d+\.jpg(\?.*)?$/, "/1000.jpg")
               }
             } catch (e) {
-              // If URL parsing fails, leave the URL unchanged.
+              // If the URL is invalid or cannot be parsed, leave imageUrl unchanged
             }
           }
-          return url
-        }
 
-        function findSpecValue(label: string) {
-          var rows = document.querySelectorAll("tr,dt")
-          for (var i = 0; i < rows.length; i++) {
-            var row = rows[i]
-            if (row.tagName && row.tagName.toLowerCase() === "tr") {
-              var cells = row.querySelectorAll("th,td")
-              if (cells.length >= 2) {
-                var k = (cells[0].textContent || "").replace(/\s+/g, " ").trim()
-                if (k && k.toLowerCase() === label.toLowerCase()) {
-                  return (cells[1].textContent || "").replace(/\s+/g, " ").trim()
-                }
-              }
-            }
-            if (row.tagName && row.tagName.toLowerCase() === "dt") {
-              var key = (row.textContent || "").replace(/\s+/g, " ").trim()
-              if (key && key.toLowerCase() === label.toLowerCase()) {
-                var dd = row.nextElementSibling
-                if (dd && dd.tagName && dd.tagName.toLowerCase() === "dd") {
-                  return (dd.textContent || "").replace(/\s+/g, " ").trim()
-                }
-              }
-            }
+          return {
+            sku: (jsonLdProduct && jsonLdProduct.sku) || getSku(),
+            internetSku: getInternetNumberFromUrl(),
+            name: (jsonLdProduct && jsonLdProduct.name) || getName(),
+            brand: jsonLdBrand || getBrand(),
+            model: (jsonLdProduct && (jsonLdProduct.mpn || jsonLdProduct.model)) || getModel(),
+            imageUrl: imageUrl,
           }
-          return ""
-        }
-
-        function getBrand() {
-          return pickFirstNonEmpty([
-            text('[data-testid="product-brand"]'),
-            attr('meta[itemprop="brand"]', "content"),
-            findSpecValue("Brand"),
-            findSpecValue("Manufacturer"),
-          ])
-        }
-        function getModel() {
-          return pickFirstNonEmpty([
-            findSpecValue("Model"),
-            findSpecValue("Model #"),
-            findSpecValue("Model Number"),
-          ])
-        }
-
-        var jsonLdProduct = getJsonLdProduct()
-        var jsonLdBrand =
-          jsonLdProduct && jsonLdProduct.brand
-            ? typeof jsonLdProduct.brand === "string"
-              ? jsonLdProduct.brand
-              : jsonLdProduct.brand.name || ""
-            : ""
-        var jsonLdImage = ""
-        if (jsonLdProduct && jsonLdProduct.image) {
-          if (Array.isArray(jsonLdProduct.image)) {
-            jsonLdImage = jsonLdProduct.image[0] || ""
-          } else if (typeof jsonLdProduct.image === "object" && jsonLdProduct.image.url) {
-            jsonLdImage = jsonLdProduct.image.url
-          } else {
-            jsonLdImage = jsonLdProduct.image
-          }
-        }
-
-        // --- Product Extraction End ---
-
-        var imageUrl = jsonLdImage || getImageUrl()
-        if (imageUrl) {
-          try {
-            var parsed = new URL(imageUrl)
-            var hostname = parsed.hostname
-            if (hostname === "thdstatic.com" || hostname.endsWith(".thdstatic.com")) {
-              imageUrl = imageUrl.replace(/\/\d+\.jpg(\?.*)?$/, "/1000.jpg")
-            }
-          } catch (e) {
-            // If the URL is invalid or cannot be parsed, leave imageUrl unchanged
-          }
-        }
-
-        return {
-          sku: (jsonLdProduct && jsonLdProduct.sku) || getSku(),
-          internetSku: getInternetNumberFromUrl(),
-          name: (jsonLdProduct && jsonLdProduct.name) || getName(),
-          brand: jsonLdBrand || getBrand(),
-          model: (jsonLdProduct && (jsonLdProduct.mpn || jsonLdProduct.model)) || getModel(),
-          imageUrl: imageUrl,
-        }
-      })
+        })
 
         const extractedSku = data.sku ? normalizeSku(data.sku) : ""
         if (extractedSku && extractedSku !== sku) {

@@ -334,7 +334,7 @@ export default async function SkuDetailPage({ params }: PageProps) {
         <div className="bg-[var(--bg-card)] border border-[var(--border-strong)] rounded-2xl overflow-hidden shadow-[var(--shadow-card)]">
           <div className="flex flex-col md:flex-row">
             {/* Image Section */}
-            <div className="w-full md:w-1/2 bg-[var(--bg-muted)] aspect-auto md:aspect-square relative flex items-center justify-center p-4 md:p-8">
+            <div className="w-full md:w-1/2 bg-[var(--bg-muted)] aspect-auto md:aspect-square relative flex flex-col items-center justify-center p-4 md:p-8">
               {imageUrl ? (
                 <img
                   src={imageUrl}
@@ -391,32 +391,23 @@ export default async function SkuDetailPage({ params }: PageProps) {
                     <div>
                       <dt className="text-[var(--text-muted)] inline">SKU:</dt>
                       <dd className="text-[var(--text-primary)] font-mono inline ml-2">
-                        {" "}
                         {formatSkuForDisplay(sku)}
                       </dd>
                     </div>
 
                     {internetNumber && (
                       <div>
-                        <dt className="text-[var(--text-muted)] inline">
-                          Internet # (Home Depot listing):
-                        </dt>
+                        <dt className="text-[var(--text-muted)] inline">Internet #:</dt>
                         <dd className="text-[var(--text-primary)] font-mono inline ml-2">
-                          {" "}
                           {internetNumber}
                         </dd>
-                        <p className="text-xs text-[var(--text-muted)]">
-                          Home Depot product ID used for direct links.
-                        </p>
                       </div>
                     )}
 
                     {upc && (
                       <div>
                         <dt className="text-[var(--text-muted)] inline">UPC:</dt>
-                        <dd className="text-[var(--text-primary)] font-mono inline ml-2">
-                          {upc}
-                        </dd>{" "}
+                        <dd className="text-[var(--text-primary)] font-mono inline ml-2">{upc}</dd>
                       </div>
                     )}
 

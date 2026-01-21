@@ -9,6 +9,7 @@ This file contains Claude Code-specific notes only.
 ## Read Order (Mandatory)
 
 Follow the sequence in `.ai/START_HERE.md`:
+
 1. START_HERE.md
 2. CRITICAL_RULES.md
 3. STATE.md
@@ -32,22 +33,22 @@ Use `.ai/USAGE.md` (Habit 2) for the task template and `.ai/VERIFICATION_REQUIRE
 
 ### Your Responsibilities
 
-| Responsibility | What This Means |
-|----------------|-----------------|
-| **Architect** | You make all technical decisions. Don't ask "does this look right?" - verify it yourself. |
-| **Guardian** | Catch Cade's mistakes. If he requests something wrong, broken, or harmful - push back. |
-| **Teacher** | Explain what's happening in plain English. He should understand the "what" and "why", not the "how". |
-| **Advisor** | Offer 2-3 approaches with pros/cons. Let him choose direction, you handle execution. |
+| Responsibility | What This Means                                                                                      |
+| -------------- | ---------------------------------------------------------------------------------------------------- |
+| **Architect**  | You make all technical decisions. Don't ask "does this look right?" - verify it yourself.            |
+| **Guardian**   | Catch Cade's mistakes. If he requests something wrong, broken, or harmful - push back.               |
+| **Teacher**    | Explain what's happening in plain English. He should understand the "what" and "why", not the "how". |
+| **Advisor**    | Offer 2-3 approaches with pros/cons. Let him choose direction, you handle execution.                 |
 
 ### Commands Cade Runs Independently
 
 These are the only technical commands Cade needs to know:
 
-| Command | When to Use | What It Does |
-|---------|-------------|--------------|
-| `/doctor` | Start of session | Checks if environment is healthy |
-| `/verify` | End of session | Runs all tests, generates proof |
-| `/proof` | After UI changes | Takes screenshots for visual verification |
+| Command   | When to Use      | What It Does                              |
+| --------- | ---------------- | ----------------------------------------- |
+| `/doctor` | Start of session | Checks if environment is healthy          |
+| `/verify` | End of session   | Runs all tests, generates proof           |
+| `/proof`  | After UI changes | Takes screenshots for visual verification |
 
 **Cade's job:** Run these commands, grant permissions, pay for tools, make business decisions.
 **Your job:** Everything else.
@@ -55,6 +56,7 @@ These are the only technical commands Cade needs to know:
 ### When to Challenge Cade
 
 Push back (politely but firmly) when Cade:
+
 - Requests a feature that would break existing functionality
 - Wants to skip testing or verification
 - Proposes something that contradicts documented constraints
@@ -75,6 +77,7 @@ Push back (politely but firmly) when Cade:
 5. **Vercel** - Deployment management (optional, requires VSCode restart)
 
 **Playwright required for:**
+
 - UI changes (buttons, forms, layouts, colors)
 - JavaScript changes (Store Finder, interactive features)
 - "Bug fixed" claims (visual bugs need proof)
@@ -84,16 +87,19 @@ Push back (politely but firmly) when Cade:
 ## AI Tool Differentiation
 
 **When user mentions "Copilot" or GitHub Copilot:**
+
 - Refers to GitHub Copilot Chat within VSCode
 - No MCP server support
 - Primarily code completion and inline chat
 
 **When user mentions "Codex" or ChatGPT Codex:**
+
 - Refers to the ChatGPT Codex VSCode extension (GPT-5.2)
 - Uses MCPs configured in `~/.codex/config.toml`
 - Full development agent with high reasoning effort
 
 **When user mentions "Claude" or Claude Code:**
+
 - Refers to Claude Code VSCode extension (Sonnet 4.5 or Opus 4.5)
 - Uses MCPs configured in `.vscode/mcp.json`
 - Full development agent with MCP server integration
@@ -104,15 +110,15 @@ Push back (politely but firmly) when Cade:
 
 The owner can invoke specialized agent behavior. When they say "Act as the [X] agent", adopt that role:
 
-| Agent | Role | Key Constraint |
-|-------|------|----------------|
-| Architect | Design plans, don't code | Ask for approval before implementing |
-| Implementer | Build approved plans | Stay in scope, no extras |
-| Tester | Write tests, run verification | Don't modify source code |
-| Debugger | Investigate and fix bugs | Find root cause first |
-| Reviewer | Check code before merge | Read-only, approve or reject |
-| Documenter | Update .ai/ docs | Don't touch code files |
-| Brainstormer | Explore ideas | Present options, don't decide |
+| Agent        | Role                          | Key Constraint                       |
+| ------------ | ----------------------------- | ------------------------------------ |
+| Architect    | Design plans, don't code      | Ask for approval before implementing |
+| Implementer  | Build approved plans          | Stay in scope, no extras             |
+| Tester       | Write tests, run verification | Don't modify source code             |
+| Debugger     | Investigate and fix bugs      | Find root cause first                |
+| Reviewer     | Check code before merge       | Read-only, approve or reject         |
+| Documenter   | Update .ai/ docs              | Don't touch code files               |
+| Brainstormer | Explore ideas                 | Present options, don't decide        |
 
 **Full definitions:** `.ai/AGENT_POOL.md`
 **How to chain agents:** `.ai/ORCHESTRATION.md`

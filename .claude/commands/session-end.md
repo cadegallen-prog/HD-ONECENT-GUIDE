@@ -22,6 +22,7 @@ Execute: `npm run ai:verify`
 ### 2. Update SESSION_LOG.md
 
 Update current entry with:
+
 - **Outcome:** ✅ Success or ❌ Partial (reason)
 - **Changes Made:** (bullet list)
 - **Verification:** (summary)
@@ -37,6 +38,7 @@ If anything unexpected happened, add to `.ai/LEARNINGS.md`.
 ## Phase 2: Context Compression (Checkpoint)
 
 Run `/checkpoint` to:
+
 - Compress `.ai/STATE.md` to "current sprint only"
 - Move old content to archives
 - Update pointers
@@ -70,11 +72,13 @@ Ask Cade:
 ## Shortcuts
 
 **Quick Session (no major changes):**
+
 1. Run `npm run ai:verify`
 2. Run `/checkpoint`
 3. Done
 
 **Tool Switch (leaving for Codex/Copilot):**
+
 1. Run `npm run ai:verify`
 2. Run `/checkpoint`
 3. Run `/handoff`

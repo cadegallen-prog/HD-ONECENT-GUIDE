@@ -108,43 +108,43 @@ This is your "alive" signal. Used ONLY for the member counter.
 
 ### Backgrounds
 
-| Token           | Hex       | Usage                                   |
-| --------------- | --------- | --------------------------------------- |
-| `--bg-page`     | `#121212` | Matte black base (OLED optimized)       |
-| `--bg-card`     | `#1A1A1A` | Cards and repeating elements            |
-| `--bg-elevated` | `#1F1F1F` | Light lift above cards                  |
-| `--bg-hover`    | `#242424` | Hover and active states                 |
-| `--bg-focus`    | `#2A2A2A` | Focused states                          |
-| `--bg-modal`    | `#303030` | Dialogs and overlays                    |
-| `--bg-tertiary` | `#3A3A3A` | Highest elevation                       |
+| Token           | Hex       | Usage                             |
+| --------------- | --------- | --------------------------------- |
+| `--bg-page`     | `#121212` | Matte black base (OLED optimized) |
+| `--bg-card`     | `#1A1A1A` | Cards and repeating elements      |
+| `--bg-elevated` | `#1F1F1F` | Light lift above cards            |
+| `--bg-hover`    | `#242424` | Hover and active states           |
+| `--bg-focus`    | `#2A2A2A` | Focused states                    |
+| `--bg-modal`    | `#303030` | Dialogs and overlays              |
+| `--bg-tertiary` | `#3A3A3A` | Highest elevation                 |
 
 ### Text Colors (tested on #121212 and #1A1A1A)
 
-| Token              | Hex       | Contrast on #121212 | Contrast on #1A1A1A | WCAG | Usage                    |
-| ------------------ | --------- | ------------------- | ------------------- | ---- | ------------------------ |
-| `--text-primary`   | `#DCDCDC` | 13.6:1              | 12.7:1              | AAA  | Headlines, body text     |
-| `--text-secondary` | `#B0B0B0` | 8.6:1               | 8.0:1               | AAA  | Subheadings, metadata    |
-| `--text-muted`     | `#757575` | 4.6:1               | 4.3:1               | AA   | Captions, tertiary text  |
+| Token              | Hex       | Contrast on #121212 | Contrast on #1A1A1A | WCAG | Usage                   |
+| ------------------ | --------- | ------------------- | ------------------- | ---- | ----------------------- |
+| `--text-primary`   | `#DCDCDC` | 13.6:1              | 12.7:1              | AAA  | Headlines, body text    |
+| `--text-secondary` | `#B0B0B0` | 8.6:1               | 8.0:1               | AAA  | Subheadings, metadata   |
+| `--text-muted`     | `#757575` | 4.6:1               | 4.3:1               | AA   | Captions, tertiary text |
 
 ### CTA / Accent - Technical Grid (Emerald Green)
 
 **Why Emerald Green:** Bridges trust (blue psychology) + savings (green psychology). Professional utility feel. Avoids "orange AI app" aesthetic.
 
-| Token            | Hex       | Contrast on #121212 | WCAG | Usage                         |
-| ---------------- | --------- | ------------------- | ---- | ----------------------------- |
-| `--cta-primary`  | `#43A047` | 9.8:1               | AAA  | Primary buttons and links     |
-| `--cta-hover`    | `#388E3C` | 8.1:1               | AAA  | Hover states                  |
-| `--cta-active`   | `#2E7D32` | 11.2:1              | AAA  | Active/pressed states         |
-| `--cta-text`     | `#121212` | 9.8:1 on #43A047    | AAA  | Dark text on green buttons    |
+| Token           | Hex       | Contrast on #121212 | WCAG | Usage                      |
+| --------------- | --------- | ------------------- | ---- | -------------------------- |
+| `--cta-primary` | `#43A047` | 9.8:1               | AAA  | Primary buttons and links  |
+| `--cta-hover`   | `#388E3C` | 8.1:1               | AAA  | Hover states               |
+| `--cta-active`  | `#2E7D32` | 11.2:1              | AAA  | Active/pressed states      |
+| `--cta-text`    | `#121212` | 9.8:1 on #43A047    | AAA  | Dark text on green buttons |
 
 ### Status Colors - Technical Grid
 
-| Token              | Hex       | Contrast on #121212 | WCAG | Usage                 |
-| ------------------ | --------- | ------------------- | ---- | --------------------- |
+| Token              | Hex       | Contrast on #121212 | WCAG | Usage                                   |
+| ------------------ | --------- | ------------------- | ---- | --------------------------------------- |
 | `--status-success` | `#43A047` | 9.8:1               | AAA  | Success, price/savings (green = action) |
-| `--status-warning` | `#FBBF24` | 11.2:1              | AAA  | Warnings              |
-| `--status-error`   | `#F87171` | 6.8:1               | AAA  | Errors/destructive    |
-| `--status-info`    | `#43A047` | 9.8:1               | AAA  | Informational (utility aesthetic) |
+| `--status-warning` | `#FBBF24` | 11.2:1              | AAA  | Warnings                                |
+| `--status-error`   | `#F87171` | 6.8:1               | AAA  | Errors/destructive                      |
+| `--status-info`    | `#43A047` | 9.8:1               | AAA  | Informational (utility aesthetic)       |
 
 ### Live Indicator (Dark mode)
 
@@ -157,12 +157,12 @@ This is your "alive" signal. Used ONLY for the member counter.
 
 Subtle, professional borders that don't compete with content. Steel blue-grey chosen for clean, industrial feel.
 
-| Token              | Hex       | Contrast on #121212 | Contrast on #1A1A1A | WCAG | Usage                          |
-| ------------------ | --------- | ------------------- | ------------------- | ---- | ------------------------------ |
-| `--border-default` | `#37474F` | 3.2:1               | 3.0:1               | AA   | Standard component boundaries  |
-| `--border-strong`  | `#455A64` | 3.8:1               | 3.5:1               | AA   | Dividers, emphasis             |
-| `--border-dark`    | `#546E7A` | 4.5:1               | 4.2:1               | AA   | High-emphasis separators       |
-| `--border-focus`   | `#43A047` | 9.8:1               | 9.1:1               | AAA  | Focus rings (match CTA)        |
+| Token              | Hex       | Contrast on #121212 | Contrast on #1A1A1A | WCAG | Usage                         |
+| ------------------ | --------- | ------------------- | ------------------- | ---- | ----------------------------- |
+| `--border-default` | `#37474F` | 3.2:1               | 3.0:1               | AA   | Standard component boundaries |
+| `--border-strong`  | `#455A64` | 3.8:1               | 3.5:1               | AA   | Dividers, emphasis            |
+| `--border-dark`    | `#546E7A` | 4.5:1               | 4.2:1               | AA   | High-emphasis separators      |
+| `--border-focus`   | `#43A047` | 9.8:1               | 9.1:1               | AAA  | Focus rings (match CTA)       |
 
 ---
 
@@ -185,26 +185,26 @@ Subtle, professional borders that don't compete with content. Steel blue-grey ch
 
 ### Type Scale (Modular, 1.25 ratio)
 
-| Level            | Mobile | Desktop | Weight | Line Height | Letter Spacing | Usage                     |
-| ---------------- | ------ | ------- | ------ | ----------- | -------------- | ------------------------- |
-| `--text-h1`      | 30px   | 48px    | 700    | 1.1         | -0.02em        | Page titles only          |
-| `--text-h2`      | 24px   | 30px    | 600    | 1.2         | -0.01em        | Section headings          |
-| `--text-h3`      | 20px   | 24px    | 600    | 1.3         | 0              | Subsections, card titles  |
-| `--text-h4`      | 18px   | 20px    | 500    | 1.4         | 0              | Minor headings            |
+| Level            | Mobile | Desktop | Weight | Line Height | Letter Spacing | Usage                                                         |
+| ---------------- | ------ | ------- | ------ | ----------- | -------------- | ------------------------------------------------------------- |
+| `--text-h1`      | 30px   | 48px    | 700    | 1.1         | -0.02em        | Page titles only                                              |
+| `--text-h2`      | 24px   | 30px    | 600    | 1.2         | -0.01em        | Section headings                                              |
+| `--text-h3`      | 20px   | 24px    | 600    | 1.3         | 0              | Subsections, card titles                                      |
+| `--text-h4`      | 18px   | 20px    | 500    | 1.4         | 0              | Minor headings                                                |
 | `--text-body`    | 16px   | 16px    | 400    | 1.6         | 0              | Body text (baseline 16px; dense list metadata may be 12-13px) |
-| `--text-small`   | 14px   | 14px    | 400    | 1.5         | 0              | Secondary text, metadata  |
-| `--text-caption` | 12px   | 12px    | 500    | 1.4         | 0.01em         | Labels, timestamps        |
+| `--text-small`   | 14px   | 14px    | 400    | 1.5         | 0              | Secondary text, metadata                                      |
+| `--text-caption` | 12px   | 12px    | 500    | 1.4         | 0.01em         | Labels, timestamps                                            |
 
 ### Accessibility Requirements
 
-| Rule                 | Requirement           | Why                           |
-| -------------------- | --------------------- | ----------------------------- |
+| Rule                 | Requirement           | Why                                                         |
+| -------------------- | --------------------- | ----------------------------------------------------------- |
 | Minimum body size    | 16px                  | Dense list metadata may be 12-13px if needed for scan speed |
-| Minimum touch target | 44×44px               | WCAG 2.1 AAA requirement      |
-| Line length          | 45-75 characters      | Optimal reading comprehension |
-| Line height (body)   | 1.5-1.6               | Required for readability      |
-| Paragraph spacing    | 1.5× font size        | Visual separation             |
-| Heading hierarchy    | Sequential (H1→H2→H3) | Screen reader navigation      |
+| Minimum touch target | 44×44px               | WCAG 2.1 AAA requirement                                    |
+| Line length          | 45-75 characters      | Optimal reading comprehension                               |
+| Line height (body)   | 1.5-1.6               | Required for readability                                    |
+| Paragraph spacing    | 1.5× font size        | Visual separation                                           |
+| Heading hierarchy    | Sequential (H1→H2→H3) | Screen reader navigation                                    |
 
 ### Font Weight Usage
 

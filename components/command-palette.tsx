@@ -14,6 +14,7 @@ import {
   ShoppingCart,
   AlertCircle,
   Users,
+  Heart,
 } from "lucide-react"
 
 interface CommandPaletteProps {
@@ -36,6 +37,7 @@ const pages = [
   { icon: CircleHelp, label: "FAQ", path: "/#faq", group: "Guide" },
   // Tools (actual pages)
   { icon: Users, label: "Community Penny List", path: "/penny-list", group: "Tools" },
+  { icon: Heart, label: "My List", path: "/lists", group: "Tools" },
   { icon: Map, label: "Store Finder", path: "/store-finder", group: "Tools" },
   { icon: Clock, label: "Trip Tracker", path: "/trip-tracker", group: "Tools" },
   // More

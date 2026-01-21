@@ -17,13 +17,13 @@ description: Foundational design discipline for all planning and implementation 
 
 Any uncertainty in these areas blocks implementation:
 
-| Category | Examples of Ambiguity |
-|----------|---------------------|
-| **Layout** | Unclear column count, spacing, alignment, responsiveness |
-| **Interactions** | Undefined click behavior, hover states, loading states |
-| **Data Rules** | Unknown validation, edge cases, constraints |
-| **Missing Data** | How to handle null/empty values, fallback behavior |
-| **Performance** | Unknown data limits, pagination needs, loading strategy |
+| Category          | Examples of Ambiguity                                             |
+| ----------------- | ----------------------------------------------------------------- |
+| **Layout**        | Unclear column count, spacing, alignment, responsiveness          |
+| **Interactions**  | Undefined click behavior, hover states, loading states            |
+| **Data Rules**    | Unknown validation, edge cases, constraints                       |
+| **Missing Data**  | How to handle null/empty values, fallback behavior                |
+| **Performance**   | Unknown data limits, pagination needs, loading strategy           |
 | **Accessibility** | Missing ARIA patterns, keyboard navigation, screen reader support |
 
 **If you encounter ANY of these ambiguities during /architect or /implement, STOP and return to /plan.**
@@ -41,11 +41,11 @@ When options conflict, prioritize in this order.
 
 ### 3. Mode Violation Detection
 
-| Mode | Violation Examples | What to Do |
-|------|-------------------|------------|
-| **/plan** | Writing code snippets, showing diffs, implementation phases | STOP. Stay in product decisions only. |
-| **/architect** | Finding structural ambiguities, unclear requirements | STOP. Return to /plan to resolve ambiguities. |
-| **/implement** | Discovering ambiguities, redesigning UI without approval | STOP. Return to appropriate mode. |
+| Mode           | Violation Examples                                          | What to Do                                    |
+| -------------- | ----------------------------------------------------------- | --------------------------------------------- |
+| **/plan**      | Writing code snippets, showing diffs, implementation phases | STOP. Stay in product decisions only.         |
+| **/architect** | Finding structural ambiguities, unclear requirements        | STOP. Return to /plan to resolve ambiguities. |
+| **/implement** | Discovering ambiguities, redesigning UI without approval    | STOP. Return to appropriate mode.             |
 
 **Rule:** If you catch yourself doing implementation work in planning mode (or vice versa), stop immediately and flag the mode violation.
 
@@ -58,6 +58,7 @@ When options conflict, prioritize in this order.
 **Goal:** Explore possibilities quickly without locking decisions.
 
 **Required Output:**
+
 - Exactly 2-3 options (not more)
 - For each option:
   - What it is (1-2 sentences)
@@ -68,6 +69,7 @@ When options conflict, prioritize in this order.
 - No implementation details
 
 **Forbidden:**
+
 - Choosing a winner
 - Locking in decisions
 - File lists or code patterns
@@ -103,12 +105,14 @@ When options conflict, prioritize in this order.
    - No subjective criteria ("looks good")
 
 **Forbidden:**
+
 - Implementation phases
 - File lists
 - Code snippets or diffs
 - Technical architecture details
 
 **Exit Criteria:**
+
 - Structural Ambiguity Register is EMPTY
 - Open decisions ≤ 5 (ideally 0)
 - Acceptance Checklist is complete and objective
@@ -139,17 +143,20 @@ When options conflict, prioritize in this order.
    - Success criteria per item
 
 **Forbidden:**
+
 - Changing product decisions from approved spec
 - Adding features not in spec
 - Writing actual code
 - Starting implementation
 
 **Failure Mode:**
+
 - If you discover structural ambiguities during architecture, STOP
 - Return to /plan to resolve them
 - Do NOT proceed to /implement
 
 **Exit Criteria:**
+
 - Implementation plan is clear and sequenced
 - Risks are identified and mitigated
 - User explicitly approves: "This plan is approved, proceed to /implement"
@@ -182,12 +189,14 @@ When options conflict, prioritize in this order.
    - Request approval if significant
 
 **Forbidden:**
+
 - Redesigning UI mid-implementation
 - Expanding scope beyond approved plan
 - "Improving" things not in spec
 - Silent deviations (always document and justify)
 
 **Exit Criteria:**
+
 - All Acceptance Checklist items pass
 - All 4 quality gates pass (lint, build, unit, e2e)
 - Deviations approved by user
@@ -213,6 +222,7 @@ When options conflict, prioritize in this order.
    - Reference specific files/lines
 
 **Forbidden:**
+
 - Modifying source code (only test files)
 - Subjective assessments ("looks good")
 - Skipping items from checklist
@@ -265,6 +275,7 @@ When options conflict, prioritize in this order.
    - Approve or reject with rationale
 
 **Exit:**
+
 - "Approved for merge" (all criteria pass)
 - OR "Requires changes" (specific list)
 

@@ -86,12 +86,7 @@ function normalizeRows(raw: unknown): NormalizedRow[] {
 }
 
 function toCsv(rows: NormalizedRow[]): string {
-  const header = [
-    "Home Depot SKU (6 or 10 digits)",
-    "IMAGE URL",
-    "INTERNET SKU",
-    "RETAIL PRICE",
-  ]
+  const header = ["Home Depot SKU (6 or 10 digits)", "IMAGE URL", "INTERNET SKU", "RETAIL PRICE"]
   const escape = (value: string) => `"${value.replace(/"/g, '""')}"`
   const lines = [header.join(",")]
 
@@ -125,9 +120,7 @@ async function main() {
   await writeFile(outputPath, toCsv(normalized), "utf8")
 
   console.log(`Wrote ${normalized.length} enrichment row(s) to ${path.resolve(outputPath)}`)
-  console.log(
-    "Headers: Home Depot SKU (6 or 10 digits), IMAGE URL, INTERNET SKU, RETAIL PRICE"
-  )
+  console.log("Headers: Home Depot SKU (6 or 10 digits), IMAGE URL, INTERNET SKU, RETAIL PRICE")
 }
 
 void main()

@@ -38,6 +38,7 @@
 4. Get explicit approval
 
 **Authorized Exceptions:**
+
 - **Penny List Card Typography (2026-01-08):** `.penny-card-name`, `.penny-card-brand`, `.penny-card-sku`, `.penny-card-price` utilities were added with Cade's explicit approval. These are card-specific and do NOT modify the global typography scale.
 
 ---
@@ -235,10 +236,12 @@
 ### Token Usage Guide
 
 **Allowed:**
+
 - `bg-[var(--token)]`, `text-[var(--token)]`, `border-[var(--token)]`
 - shadcn semantic utilities (`bg-background`, `text-foreground`, `border-border`, `bg-card`, `bg-muted`, etc.) now aliased to PennyCentral tokens
 
 **Disallowed:**
+
 - Raw Tailwind palette classes (`bg-slate-*`, `text-zinc-*`, `text-blue-*`, etc.) unless a temporary hotfix is documented and replaced with tokens immediately after
 
 ### Layout Primitives

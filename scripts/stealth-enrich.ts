@@ -112,8 +112,7 @@ function optimizeImageUrl(url: string | null): string | null {
     return url
   }
 
-  const isThdstaticHost =
-    hostname === "thdstatic.com" || hostname.endsWith(".thdstatic.com")
+  const isThdstaticHost = hostname === "thdstatic.com" || hostname.endsWith(".thdstatic.com")
 
   if (isThdstaticHost) {
     return url.replace(/\/\d+\.jpg(\?.*)?$/, "/1000.jpg")

@@ -11,7 +11,10 @@ const pages = [
   { id: "report-find", url: "/api/og?page=report-find" },
   { id: "store-finder", url: "/api/og?page=store-finder" },
   { id: "guide", url: "/api/og?page=guide" },
-  { id: "dynamic-sku", url: "/api/og?headline=Sample%20Product%20Name&subhead=A%20%240.01%20item%20found%20at%20Home%20Depot" },
+  {
+    id: "dynamic-sku",
+    url: "/api/og?headline=Sample%20Product%20Name&subhead=A%20%240.01%20item%20found%20at%20Home%20Depot",
+  },
 ]
 
 async function main() {
