@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Plus, List, Trash2, Loader2, Edit2, Check, X, Lock } from "lucide-react"
@@ -14,9 +14,23 @@ import {
   type List as ListType,
 } from "@/lib/supabase/lists"
 import { toast } from "sonner"
-import type { PennyItem } from "@/lib/types"
+import type { PennyItem } from "@/lib/fetch-penny-data"
 
 export default function ListsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-[var(--bg-page)]">
+          <Loader2 className="w-8 h-8 animate-spin text-[var(--text-muted)]" />
+        </div>
+      }
+    >
+      <ListsPageInner />
+    </Suspense>
+  )
+}
+
+function ListsPageInner() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { user, loading: authLoading } = useAuth()
@@ -247,7 +261,7 @@ export default function ListsPage() {
               <div className="space-y-3">
                 {sampleItems.map((item) => (
                   <div
-                    key={item.home_depot_sku_6_or_10_digits}
+                    key={item.sku}
                     className="flex items-center gap-4 p-4 bg-[var(--bg-card)] rounded-xl border border-[var(--border-default)]"
                   >
                     {item.imageUrl && (
@@ -261,9 +275,7 @@ export default function ListsPage() {
                       <h3 className="font-medium text-[var(--text-primary)] truncate">
                         {item.name || "Unnamed item"}
                       </h3>
-                      <p className="text-sm text-[var(--text-muted)]">
-                        SKU: {item.home_depot_sku_6_or_10_digits}
-                      </p>
+                      <p className="text-sm text-[var(--text-muted)]">SKU: {item.sku}</p>
                     </div>
                   </div>
                 ))}
