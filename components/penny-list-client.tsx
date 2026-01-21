@@ -1080,22 +1080,6 @@ export function PennyListClient({
         </div>
       </details>
 
-      {/* Affiliate CTA */}
-      <div className="mt-6 mb-10">
-        <a
-          href="/go/befrugal"
-          target="_blank"
-          rel="noopener noreferrer"
-          data-cta="befrugal"
-          onClick={() =>
-            trackEvent("affiliate_click", { surface: "penny-list", linkId: "befrugal" })
-          }
-          className="inline-flex items-center justify-center w-full px-4 py-3 rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold min-h-[44px] hover:bg-[var(--cta-hover)] shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
-        >
-          Activate BeFrugal cashback - supports the site at no extra cost.
-        </a>
-      </div>
-
       <div className="mt-12 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl p-6 sm:p-8 text-center">
         <h3 className="text-xl font-bold text-[var(--text-primary)] mb-2">Found a Penny Item?</h3>
         <p className="text-[var(--text-secondary)] mb-6">

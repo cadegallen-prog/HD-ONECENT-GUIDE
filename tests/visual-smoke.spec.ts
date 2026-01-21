@@ -5,7 +5,7 @@ const routes = [
   { path: "/penny-list", heading: "Home Depot Penny Items List (Live $0.01 Finds)" },
   { path: "/report-find", heading: "Report a Penny Find" },
   { path: "/store-finder", heading: "Store Finder" },
-  { path: "/about", heading: "About Penny Central" },
+  { path: "/about", heading: "About PennyCentral" },
 ] as const
 
 test.describe("visual smoke (light/dark, mobile/desktop)", () => {

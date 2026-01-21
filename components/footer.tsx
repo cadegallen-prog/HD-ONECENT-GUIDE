@@ -1,7 +1,6 @@
 "use client"
 
 import Link from "next/link"
-import { trackEvent } from "@/lib/analytics"
 
 export function Footer() {
   const brandLinkClass =
@@ -67,32 +66,13 @@ export function Footer() {
             <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Support</h3>
             <ul className="space-y-2.5">
               <li>
-                <a
-                  href="https://paypal.me/cadegallen"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={navLinkClass}
-                  onClick={() => trackEvent("coffee_click", { surface: "footer" })}
-                >
-                  Buy Me a Coffee
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/go/befrugal"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={navLinkClass}
-                  onClick={() =>
-                    trackEvent("affiliate_click", { surface: "footer", linkId: "befrugal" })
-                  }
-                >
-                  BeFrugal Cashback
-                </a>
+                <Link href="/support" className={navLinkClass}>
+                  Support PennyCentral
+                </Link>
               </li>
               <li>
                 <Link href="/cashback" className={navLinkClass}>
-                  Cashback Info
+                  Support & Transparency
                 </Link>
               </li>
             </ul>
