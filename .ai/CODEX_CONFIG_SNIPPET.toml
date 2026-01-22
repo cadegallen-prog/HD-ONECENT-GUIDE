@@ -4,21 +4,28 @@
 # Example: C:/Users/cadeg/Projects/HD-ONECENT-GUIDE
 # Or use: ~/Projects/HD-ONECENT-GUIDE (if in home directory)
 
-[mcpServers.filesystem]
+[mcp_servers.filesystem]
 command = "npx"
 args = ["-y", "@modelcontextprotocol/server-filesystem", "{PROJECT_PATH}"]
 
-[mcpServers.github]
+[mcp_servers.git]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-git", "--repository", "{PROJECT_PATH}"]
+
+[mcp_servers.github]
 command = "npx"
 args = ["-y", "@modelcontextprotocol/server-github"]
 
-[mcpServers.playwright]
+[mcp_servers.playwright]
 command = "npx"
 args = ["-y", "@playwright/mcp"]
 
-[mcpServers.supabase]
+[mcp_servers.supabase]
 command = "npx"
-args = ["-y", "@supabase/mcp-server-supabase"]
-[mcpServers.supabase.env]
-SUPABASE_URL = "${SUPABASE_URL}"
+args = ["-y", "@supabase/mcp-server-supabase", "--read-only", "--project-ref", "djtejotbcnzzjfsogzlc"]
+
+[mcp_servers.supabase.env]
 SUPABASE_ACCESS_TOKEN = "${SUPABASE_ACCESS_TOKEN}"
+
+[mcp_servers.openaiDeveloperDocs]
+url = "https://developers.openai.com/mcp"

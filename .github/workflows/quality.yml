@@ -45,4 +45,6 @@ jobs:
           # Unit tests exercise the submit-find route, which requires this env var to be present.
           # A dummy value is sufficient because tests stub the service role client.
           SUPABASE_SERVICE_ROLE_KEY: test
+          # CI should not render third-party ad placeholders/scripts.
+          NEXT_PUBLIC_EZOIC_ENABLED: "false"
         run: npm run qa:fast

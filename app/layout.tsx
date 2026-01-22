@@ -11,6 +11,7 @@ import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { ogImageUrl } from "@/lib/og"
 import { CANONICAL_BASE } from "@/lib/canonical"
+import { EZOIC_ENABLED } from "@/lib/ads"
 
 const DEFAULT_OG_IMAGE = `https://www.pennycentral.com${ogImageUrl("homepage")}`
 
@@ -31,12 +32,7 @@ const ENABLE_VERCEL_SCRIPTS =
 const ENABLE_VERCEL_ANALYTICS = ANALYTICS_ENABLED && ENABLE_VERCEL_SCRIPTS
 
 // Ezoic should only run on Vercel production, and never during CI/Playwright runs.
-const ENABLE_EZOIC_SCRIPTS =
-  process.env.NODE_ENV === "production" &&
-  process.env.PLAYWRIGHT !== "1" &&
-  !process.env.CI &&
-  IS_VERCEL &&
-  IS_VERCEL_PROD
+const ENABLE_EZOIC_SCRIPTS = EZOIC_ENABLED && ENABLE_VERCEL_SCRIPTS
 const inter = localFont({
   src: [
     {

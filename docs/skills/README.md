@@ -13,3 +13,4 @@ Short, task-focused guides to avoid repo-wide searching.
 - [feature-to-files](./feature-to-files.md) — **When to use:** You know the feature but not the exact starting files.
 - [local-dev-faststart](./local-dev-faststart.md) — **When to use:** You need to run the site locally or debug a dev server issue.
 - [ship-safely](./ship-safely.md) — **When to use:** You’re getting ready to commit, verify, or roll back safely.
+- [codex-mcp-setup](./codex-mcp-setup.md) — **When to use:** Codex can’t see MCP tools/resources or env vars, or you need to update Codex.

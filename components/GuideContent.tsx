@@ -8,6 +8,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { CheckCircle2, Search, ShoppingCart, Store, XCircle } from "lucide-react"
+import { EzoicPlaceholder } from "@/components/ezoic-placeholder"
+import { AD_SLOTS } from "@/lib/ads"
 
 export function GuideContent() {
   return (
@@ -594,6 +596,18 @@ export function GuideContent() {
           </div>
         </div>
       </section>
+
+      {/* ===================================================
+          EZOIC ADS (Bridge monetization)
+          Slot: CONTENT_AFTER_P1 (130) — after Section II
+          =================================================== */}
+      <div className="flex justify-center">
+        <EzoicPlaceholder
+          slotId={AD_SLOTS.CONTENT_AFTER_P1}
+          format="rectangle"
+          className="w-full max-w-[336px]"
+        />
+      </div>
 
       {/* ============================================ */}
       {/* SECTION III: PRE-HUNT INTELLIGENCE */}

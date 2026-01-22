@@ -53,7 +53,7 @@ export default defineConfig({
     ? undefined
     : {
         command:
-          "node -e \"require('fs').rmSync('.next', { recursive: true, force: true })\" && cross-env PLAYWRIGHT=1 npm run build && cross-env PLAYWRIGHT=1 npx next start -p 3002",
+          "node -e \"require('fs').rmSync('.next', { recursive: true, force: true })\" && cross-env PLAYWRIGHT=1 NEXT_PUBLIC_EZOIC_ENABLED=false npm run build && cross-env PLAYWRIGHT=1 NEXT_PUBLIC_EZOIC_ENABLED=false npx next start -p 3002",
         url: baseURL,
         reuseExistingServer:
           !process.env.CI && process.env.PLAYWRIGHT_REUSE_EXISTING_SERVER === "1",

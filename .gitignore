@@ -89,6 +89,11 @@ reports/penny-list-console-capture.png
 # privacy: analytics screenshots (local-only)
 .ai/analytics/
 
+# privacy: analytics exports (local-only)
+data/Google Analytics/
+data/Google Search Trends/
+PICTURES_PENNY_CENTRAL/
+
 # sentry
 .sentryclirc
 .env.sentry-build-plugin

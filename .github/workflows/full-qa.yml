@@ -111,6 +111,8 @@ jobs:
           # Unit tests exercise the submit-find route, which requires this env var to be present.
           # A dummy value is sufficient because tests stub the service role client.
           SUPABASE_SERVICE_ROLE_KEY: test
+          # CI should not render third-party ad placeholders/scripts.
+          NEXT_PUBLIC_EZOIC_ENABLED: "false"
           # CI does not have Supabase public credentials; for the build step, force the
           # server-side Supabase reads to fall back to the committed fixture so dynamic SKU
           # pages render (and SEO JSON-LD tests don't hit 404).
@@ -121,6 +123,7 @@ jobs:
         env:
           PORT: 3001
           PLAYWRIGHT: "1"
+          NEXT_PUBLIC_EZOIC_ENABLED: "false"
         run: |
           npm run start -- --hostname 0.0.0.0 --port $PORT >/tmp/next.log 2>&1 &
           server_up=0

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, useEffect, useCallback, useRef } from "react"
+import { Fragment, useState, useMemo, useEffect, useCallback, useRef } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import {
   AlertTriangle,
@@ -34,6 +34,8 @@ import { formatWindowLabel } from "@/lib/penny-list-utils"
 import { PennyListPageBookmarkBanner } from "./penny-list-page-bookmark-banner"
 import { PWAInstallPrompt } from "./pwa-install-prompt"
 import { EmailSignupForm } from "./email-signup-form"
+import { EzoicInlineAd } from "@/components/ezoic-placeholder"
+import { AD_SLOTS } from "@/lib/ads"
 
 interface PennyListClientProps {
   initialItems: PennyItem[]
@@ -997,14 +999,22 @@ export function PennyListClient({
           />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-            {items.map((item) => (
-              <PennyListCard
-                key={item.id}
-                item={item}
-                stateFilter={stateFilter}
-                windowLabel={formatWindowLabel(dateRange)}
-                userState={userState}
-              />
+            {items.map((item, index) => (
+              <Fragment key={item.id}>
+                <PennyListCard
+                  item={item}
+                  stateFilter={stateFilter}
+                  windowLabel={formatWindowLabel(dateRange)}
+                  userState={userState}
+                />
+
+                {/* Trust-first: no ads above the first 10 results */}
+                {index === 9 && items.length > 10 && (
+                  <div className="col-span-full">
+                    <EzoicInlineAd slotId={AD_SLOTS.LIST_AFTER_N} />
+                  </div>
+                )}
+              </Fragment>
             ))}
           </div>
         )}

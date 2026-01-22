@@ -9,6 +9,8 @@ import {
 import { TrackableNextLink } from "@/components/trackable-next-link"
 import { TodaysFinds } from "@/components/todays-finds"
 import { getRecentFinds } from "@/lib/fetch-penny-data"
+import { EzoicPlaceholder } from "@/components/ezoic-placeholder"
+import { AD_SLOTS } from "@/lib/ads"
 
 // Ensure the homepage "Today's Finds" module reflects recent Supabase enrichment fixes without redeploys.
 export const revalidate = 600 // 10 minutes
@@ -126,6 +128,21 @@ export default async function Home() {
 
       <TodaysFinds items={recentFinds} />
 
+      {/* ===================================================
+          EZOIC ADS (Bridge monetization)
+          Slot: HOME_TOP (100) — after Today's Finds
+          =================================================== */}
+      <section className="section-padding-sm px-4 sm:px-6 bg-[var(--bg-page)]">
+        <div className="max-w-4xl mx-auto">
+          <EzoicPlaceholder
+            slotId={AD_SLOTS.HOME_TOP}
+            format="leaderboard"
+            mobileFormat="mobileLeaderboard"
+            className="w-full max-w-[728px] mx-auto"
+          />
+        </div>
+      </section>
+
       {/* ============================================
           HOW IT WORKS SECTION
           Scannable steps with unified typography
@@ -206,6 +223,20 @@ export default async function Home() {
               Read the full guide →
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* ===================================================
+          EZOIC ADS (Bridge monetization)
+          Slot: HOME_MID (101) — after How It Works
+          =================================================== */}
+      <section className="section-padding-sm px-4 sm:px-6 bg-[var(--bg-page)]">
+        <div className="max-w-4xl mx-auto">
+          <EzoicPlaceholder
+            slotId={AD_SLOTS.HOME_MID}
+            format="rectangle"
+            className="w-full max-w-[336px] mx-auto"
+          />
         </div>
       </section>
 
@@ -290,6 +321,21 @@ export default async function Home() {
             Join the Facebook Group
             <ExternalLink className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
           </a>
+        </div>
+      </section>
+
+      {/* ===================================================
+          EZOIC ADS (Bridge monetization)
+          Slot: HOME_BOTTOM (102) — after Community, before Support
+          =================================================== */}
+      <section className="section-padding-sm px-4 sm:px-6 bg-[var(--bg-page)]">
+        <div className="max-w-4xl mx-auto">
+          <EzoicPlaceholder
+            slotId={AD_SLOTS.HOME_BOTTOM}
+            format="leaderboard"
+            mobileFormat="mobileLeaderboard"
+            className="w-full max-w-[728px] mx-auto"
+          />
         </div>
       </section>
 

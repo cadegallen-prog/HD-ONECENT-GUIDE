@@ -75,6 +75,18 @@
 
 ---
 
+### Ezoic Ads (1 variable)
+
+| Variable                    | Where Set       | Purpose                                                              | Used In                        |
+| --------------------------- | --------------- | -------------------------------------------------------------------- | ------------------------------ |
+| `NEXT_PUBLIC_EZOIC_ENABLED` | Vercel (Manual) | Kill switch for Ezoic placeholders + scripts (`false` disables ads). | `lib/ads.ts`, `app/layout.tsx` |
+
+**Default behavior:** If unset, ads are enabled in production builds (placeholders + scripts gated to Vercel production).
+
+**Important:** Vercel requires a redeploy for env var changes to take effect (because `NEXT_PUBLIC_*` values are inlined at build time).
+
+---
+
 ## 🟡 OPTIONAL - Integration-Managed (Unused but Harmless)
 
 These were auto-created by the Supabase Vercel Integration but your code doesn't use them:

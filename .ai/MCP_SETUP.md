@@ -34,19 +34,26 @@ args = ["-y", "@modelcontextprotocol/server-git", "--repository", "C:\\Users\\ca
 command = "npx"
 args = ["-y", "@modelcontextprotocol/server-github"]
 
+[mcp_servers.playwright]
+command = "npx"
+args = ["-y", "@playwright/mcp@latest"]
+
 [mcp_servers.supabase]
 command = "npx"
-args = ["-y", "@supabase/mcp-server-supabase"]
+args = ["-y", "@supabase/mcp-server-supabase@latest", "--read-only", "--project-ref", "djtejotbcnzzjfsogzlc"]
 
 [mcp_servers.supabase.env]
-SUPABASE_ACCESS_TOKEN = "your-supabase-access-token-here"
+SUPABASE_ACCESS_TOKEN = "${SUPABASE_ACCESS_TOKEN}"
+
+[mcp_servers.openaiDeveloperDocs]
+url = "https://developers.openai.com/mcp"
 ```
 
 **Getting your Supabase Access Token:**
 
 1. Go to https://supabase.com/dashboard/account/tokens
 2. Generate a new access token
-3. Add it to your environment or the config above
+3. Set it as a **user environment variable** on your machine: `SUPABASE_ACCESS_TOKEN`
 
 ---
 
@@ -91,8 +98,9 @@ Example: "Show me the 10 most recent penny items from the database"
 ### MCPs not working in Codex
 
 1. Check `~/.codex/config.toml` exists
-2. Use underscores: `mcp_servers` (not `mcp-servers`)
-3. Run `codex mcp list` to verify
+2. Use `mcp_servers` (snake_case), not `mcpServers` or `mcp-servers`
+3. Update Codex if needed (older versions don't have `codex mcp list`)
+4. Run `codex mcp list` to verify
 
 ---
 
