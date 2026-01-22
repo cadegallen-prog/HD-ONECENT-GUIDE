@@ -11,6 +11,7 @@ import { ogImageUrl } from "@/lib/og"
 import { toThdImageVariant } from "@/lib/image-cache"
 import { TrackableLink } from "@/components/trackable-link"
 import { buildReportFindUrl } from "@/lib/report-find-link"
+import { getCanonicalUrl } from "@/lib/canonical"
 
 type PageProps = {
   params: Promise<{ sku: string }>
@@ -55,6 +56,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     twitter: {
       card: "summary_large_image",
       images: [ogImageUrl(name)],
+    },
+    alternates: {
+      canonical: getCanonicalUrl(`/sku/${sku}`),
     },
   }
 }

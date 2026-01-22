@@ -3,6 +3,7 @@ import { getPennyListFiltered } from "@/lib/fetch-penny-data"
 import { filterValidPennyItems, formatWindowLabel } from "@/lib/penny-list-utils"
 import { queryPennyItems, getHotItems } from "@/lib/penny-list-query"
 import { PennyListClient } from "@/components/penny-list-client"
+import { getCanonicalUrl } from "@/lib/canonical"
 
 const VALID_PER_PAGE = [25, 50, 100] as const
 const DEFAULT_PER_PAGE = 50
@@ -29,6 +30,9 @@ export const metadata: Metadata = {
     title: "Live $0.01 Penny List",
     description: "Live community-reported penny items by state and recency.",
     images: ["/api/og?page=penny-list"],
+  },
+  alternates: {
+    canonical: getCanonicalUrl("/penny-list"),
   },
 }
 

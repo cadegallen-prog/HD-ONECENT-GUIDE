@@ -1,158 +1,131 @@
+# Session Log (Recent 3 Sessions)
+
+**Auto-trim:** Only the 3 most recent sessions are kept here. Git history preserves everything.
+
+---
+
+## 2026-01-22 - Copilot - Penny List Bottom Pagination
+
+**Goal:** Fix mobile UX issue where users have to scroll all the way back to the top to navigate to the next page. Add bottom pagination controls with "Page X of Y" indicator.
+
+**Status:** ✅ Complete + verified (all 4 gates: lint/build/unit/e2e)
+
+### Problem
+
+- Pagination controls only appeared at the top of the penny list
+- Users scrolling through 25-100 items would reach what looked like the end
+- Had to scroll all the way back up to access page 2
+- Particularly bad on mobile where lists can be very long
+
+### Changes
+
+- **`components/penny-list-client.tsx`:**
+  - Added comment marker for "Top pagination controls" (existing controls)
+  - Added new bottom pagination section after the results (card grid or table)
+  - Bottom pagination only shows when `total > 0 && pageCount > 1`
+  - Features:
+    - "Showing X to Y of Z items" summary text
+    - Previous/Next buttons with arrow indicators (← →)
+    - "Page X of Y" indicator (larger, more prominent than top)
+    - Auto-scroll to top on page change (`window.scrollTo({ top: 0, behavior: "smooth" })`)
+    - 44px min-height for mobile tap targets
+    - Border-top separator for visual clarity
+
+### UX Improvements
+
+1. **No more scroll-back frustration** - Users can immediately navigate to next page
+2. **Clear page context** - "Page X of Y" shows progress through results
+3. **Item count feedback** - "Showing 1 to 50 of 237 items" provides context
+4. **Smooth scroll-to-top** - Navigating to next page brings user back to top smoothly
+5. **Mobile-first** - All buttons meet 44px minimum tap target requirement
+
+### Verification
+
+- **Lint:** ✅ 0 errors, 0 warnings
+- **Build:** ✅ Compiled successfully
+- **Unit:** ✅ All tests passing
+- **E2E:** ✅ 100 tests passing
+
+Full verification: `reports/verification/2026-01-22T07-33-39/summary.md`
+
+### Impact
+
+Mobile users will no longer get "stuck" at the bottom of long result lists. The bottom pagination makes it immediately obvious there are more pages and provides one-tap navigation without scrolling.
+
+---
+
+## 2026-01-22 - Copilot - Global SEO & Indexing Fix: Canonical Tags
+
+**Goal:** Fix Google Search Console issue where `/penny-list` is "Crawled - currently not indexed" due to missing canonical tag. Consolidate authority on new URL, ignore old redirects.
+
+**Status:** ✅ Complete + verified (all 4 gates: lint/build/unit/e2e)
+
+### Changes
+
+- **`lib/canonical.ts` (new):** Created canonical URL utilities
+  - `CANONICAL_BASE = "https://www.pennycentral.com"`
+  - `getCanonicalUrl(pathname, searchParams?)` → generates self-referencing canonical URLs
+  - `getCanonicalLinkElement(pathname, searchParams?)` → HTML string helper (unused for now)
+
+- **`app/layout.tsx`:** Updated root metadata
+  - Added import: `import { CANONICAL_BASE } from "@/lib/canonical"`
+  - Updated `metadataBase` to use `CANONICAL_BASE` constant
+  - Added `alternates.canonical` to metadata config
+  - Next.js automatically renders as `<link rel="canonical" href="https://www.pennycentral.com" />` in `<head>`
+
+- **`app/penny-list/page.tsx`:** Updated page metadata
+  - Added import: `import { getCanonicalUrl } from "@/lib/canonical"`
+  - Added `alternates.canonical: getCanonicalUrl("/penny-list")` to metadata
+  - Renders as: `<link rel="canonical" href="https://www.pennycentral.com/penny-list" />`
+
+- **`app/sku/[sku]/page.tsx`:** Updated dynamic page metadata
+  - Added import: `import { getCanonicalUrl } from "@/lib/canonical"`
+  - Updated `generateMetadata()` to include `alternates.canonical: getCanonicalUrl(\`/sku/${sku}\`)`
+  - Each SKU page renders its own self-referencing canonical (e.g., `/sku/12345`)
+
+### How It Works
+
+The root layout provides a fallback canonical (`/`). Dynamic pages override with their own via the `alternates.canonical` metadata field. Next.js automatically renders each as a proper `<link rel="canonical" ... />` tag in the page `<head>`.
+
+- `/` → `<link rel="canonical" href="https://www.pennycentral.com" />`
+- `/penny-list` → `<link rel="canonical" href="https://www.pennycentral.com/penny-list" />`
+- `/sku/12345` → `<link rel="canonical" href="https://www.pennycentral.com/sku/12345" />`
+- `/guide` → Inherits root canonical (no override yet; can add if needed)
+
+### Verification
+
+- **Lint:** ✅ 0 errors, 0 warnings (fixed trailing whitespace in canonical.ts)
+- **Build:** ✅ Compiled successfully
+- **Unit:** ✅ All tests passing
+- **E2E:** ✅ 100 tests passing
+
+Full verification: `reports/verification/2026-01-22T06-53-56/summary.md`
+
+### Impact
+
+Google Search Console will now see the canonical tag on all pages. Within a few days to a few weeks, Google will:
+
+1. Recognize `/penny-list` as the canonical version
+2. Stop showing "Crawled - currently not indexed" message
+3. Consolidate ranking signals to the new URL
+4. Ignore old redirected URLs in favor of `/penny-list`
+
 ---
 
 ## 2026-01-21 - Codex - SKU page: prioritize reports/states above related (mobile-first)
 
-**Goal:** Fix SKU detail page UX regression: “Where it was found” was below Related, and outbound Home Depot CTA visually competed with “Report this find”.
+**Goal:** Fix SKU detail page UX regression: "Where it was found" was below Related, and outbound Home Depot CTA visually competed with "Report this find".
 **Status:** ✅ Complete + verified (lint/build/unit/e2e)
 
 ### Changes
 
 - `app/sku/[sku]/page.tsx`:
-  - Move “Where it was found” section above “Related penny items”.
-  - Make “Report this find” the primary CTA; demote “View on Home Depot” to secondary styling.
-  - Add inline state chips (with counts) under “Community Reports” so the summary pays off immediately.
-  - Restore “New to Penny Hunting?” as a properly boxed card (`block w-full`, `bg-[var(--bg-card)]`).
+  - Move "Where it was found" section above "Related penny items".
+  - Make "Report this find" the primary CTA; demote "View on Home Depot" to secondary styling.
+  - Add inline state chips (with counts) under "Community Reports" so the summary pays off immediately.
+  - Restore "New to Penny Hunting?" as a properly boxed card (`block w-full`, `bg-[var(--bg-card)]`).
 
 ### Proof
 
 - Verification bundle: `reports/verification/2026-01-21T22-17-23/summary.md`
 - SKU screenshots (Playwright): `reports/verification/sku-related-items-chromium-mobile-light.png`, `reports/verification/sku-related-items-chromium-mobile-dark.png`
-
----
-
-## 2026-01-21 - Codex - Add plain-English UX terminology rule (docs-only)
-
-**Goal:** Reduce miscommunication by translating UX jargon into plain English (mobile-first) during planning.
-**Status:** ✅ Docs-only (gates not run)
-
-### Change
-
-- `.ai/USAGE.md`: Added a “Plain-English Rule” requiring immediate translation of UX terms (example: “above the fold” = “visible without scrolling”).
-
----
-
-## 2026-01-21 - Codex - Fix Vercel build errors after "My List" work
-
-**Goal:** Restore `npm run build` / Vercel deploy after the recent `/lists` changes introduced TypeScript + Next.js prerender errors.
-**Status:** ✅ Complete + verified (lint/build/unit/e2e)
-
-### What Broke
-
-- `app/lists/page.tsx` imported `PennyItem` from `@/lib/types` (file doesn’t exist), causing `next build` to fail.
-- After correcting the type import, the `/lists` page still failed prerender with: `useSearchParams() should be wrapped in a suspense boundary`.
-
-### Fix
-
-- `app/lists/page.tsx`:
-  - Import `PennyItem` from the canonical source (`@/lib/fetch-penny-data`) and align sample-item rendering to use `item.sku`.
-  - Wrap the `useSearchParams()` usage behind a `<Suspense>` boundary by moving the hook into an inner component (`ListsPageInner`) and rendering it from the default export with a loader fallback.
-  - Run Prettier on the file to clear `prettier/prettier` lint warnings.
-
-### Verification
-
-- `npm run ai:verify -- test`: `reports/verification/2026-01-21T12-24-30/summary.md`
-
----
-
-## 2026-01-21 - Claude Code - My List Phase 2: Guest Preview & Auth Intent Persistence
-
-**Goal:** Remove the guest redirect wall on `/lists` and ensure "Save" actions survive the login process.
-**Status:** ? Complete (ready for testing).
-
-### Changes
-
-**1. Guest Preview UI (`app/lists/page.tsx`):**
-
-- Removed redirect wall (previously redirected to `/login?redirect=/lists`)
-- Added locked preview UI for unauthenticated users:
-  - Hero section with "My List" branding and lock icon
-  - Three benefit bullets explaining in-store value
-  - Primary CTA: "Sign in to use My List" (links to `/login?redirect=/lists`)
-  - OTP reassurance: "No password. We'll email you a one-time code."
-  - Secondary CTA: "Browse Penny List"
-  - Sample items section: fetches 6 real items from `/api/penny-list?perPage=25` and displays them
-- Guest preview preserves any `pc_*` intent params in the login redirect URL
-
-**2. Intent Persistence (`components/add-to-list-button.tsx`):**
-
-- Updated guest click handler to redirect to:
-  - `/login?redirect=/lists?pc_intent=save_to_my_list&pc_sku=${sku}&pc_intent_id=${crypto.randomUUID()}`
-- Intent params structure:
-  - `pc_intent`: "save_to_my_list"
-  - `pc_sku`: the SKU being saved
-  - `pc_intent_id`: random UUID for idempotency
-
-**3. Resume Logic (`app/lists/page.tsx`):**
-
-- Added intent resume logic that executes after login:
-  - Checks for `pc_intent=save_to_my_list` params
-  - Uses sessionStorage idempotency guard: `pennycentral_intent_consumed_v1_${intentId}`
-  - Attempts to save item via `addSkuToListSmart(sku)`
-  - Shows success toast: "Item saved to My List"
-  - Cleans URL via `router.replace("/lists")` to prevent refresh loops
-- Prevents re-execution on page refresh using sessionStorage flag
-
-**4. Branding Consistency:**
-
-- All new copy uses "My List" (singular):
-  - Guest preview hero: "My List"
-  - Primary CTA: "Sign in to use My List"
-  - Success toast: "Item saved to My List"
-  - Benefit bullets reference "My List" features
-
-### Files Modified
-
-- `components/add-to-list-button.tsx` (1 edit: guest redirect with intent params)
-- `app/lists/page.tsx` (4 edits: imports, state, intent resume logic, guest preview UI)
-
-### Technical Details
-
-- **Idempotency:** Uses `sessionStorage` + random UUID to prevent duplicate saves on refresh
-- **URL cleaning:** `router.replace("/lists")` removes intent params after save to prevent loops
-- **Sample items:** Fetches from existing `/api/penny-list` endpoint (min 25, displays first 6)
-- **Preview mode:** Preserves intent params in login redirect so save can complete after auth
-
-### Verification
-
-Next steps:
-
-- Test guest flow: click Save → redirected to Login → auto-saved after auth
-- Verify preview UI renders sample items correctly
-- Test idempotency: refresh after login shouldn't re-save
-- Verify URL cleaning: intent params should be removed after save
-- Test mobile UX: ensure preview UI is readable on small screens
-
-### Phase 2 Plan Reference
-
-- `.ai/plans/my-list-elevation.md` - Full elevation plan (Phases 1-3)
-- Phase 1 status: ? Complete (visual identity + mobile excellence)
-- Phase 3 status: Not started (savings calculator, offline mode, performance)
-
----
-
-## 2026-01-21 - GitHub Copilot - SKU detail: layout & identifier label fix
-
-**Goal:** Stack the "Report this find" CTA beneath the product image on SKU pages and simplify the "Internet #" identifier to the concise form (`Internet #:`) so it reads like `Internet #: 1234567890`.
-
-**Status:** ? Complete + verified (lint/build/unit/e2e)
-
-### Changes
-
-- `app/sku/[sku]/page.tsx`:
-  - Add `flex-col` to the image container so the "Report this find" CTA stacks under the image (fixes the CTA appearing to the right on some viewports).
-  - Simplify the Internet identifier label to `Internet #:` and remove the extra explanatory paragraph so the identifier reads as a single inline label + value.
-- Ran Prettier across the repo for consistency (formatting-only changes applied to docs/scripts).
-
-### Files Modified
-
-- `app/sku/[sku]/page.tsx` (layout + label changes)
-- Misc: formatting updates (Prettier) across docs & scripts
-
-### Verification
-
-- Commit: `4fe4737`
-- `npm run lint`: passed (no warnings)
-- `npm run build`: compiled successfully (Next.js production build)
-- `npm run test:unit`: 26 tests passed
-- `npm run test:e2e`: 100 tests passed
-- Proof screenshots: `reports/proof/2026-01-21T12-10-06/sku-1006518932-ui-light.png` and `...-ui-dark.png` (shows CTA stacked under the image)

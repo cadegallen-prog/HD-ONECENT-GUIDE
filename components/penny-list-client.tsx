@@ -903,6 +903,7 @@ export function PennyListClient({
         aria-label="Penny list results"
         className="pb-[calc(80px+env(safe-area-inset-bottom))] sm:pb-0"
       >
+        {/* Top pagination controls */}
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-[var(--text-secondary)]">
             {isLoading ? "Loading..." : resultsSummary}
@@ -1005,6 +1006,45 @@ export function PennyListClient({
                 userState={userState}
               />
             ))}
+          </div>
+        )}
+
+        {/* Bottom pagination controls - visible when there are results and multiple pages */}
+        {total > 0 && pageCount > 1 && (
+          <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-t border-[var(--border-default)] pt-6">
+            <p className="text-sm text-[var(--text-secondary)] text-center sm:text-left">
+              Showing {(clampedPage - 1) * itemsPerPage + 1} to{" "}
+              {Math.min(clampedPage * itemsPerPage, total)} of {total} items
+            </p>
+            <div className="flex items-center justify-center gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  goToPage(clampedPage - 1)
+                  window.scrollTo({ top: 0, behavior: "smooth" })
+                }}
+                disabled={clampedPage === 1}
+                className="inline-flex items-center justify-center min-h-[44px] rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] px-4 py-2 text-sm font-semibold text-[var(--text-primary)] transition hover:border-[var(--cta-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] disabled:cursor-not-allowed disabled:opacity-50"
+                aria-label="Go to previous page"
+              >
+                ← Previous
+              </button>
+              <span className="text-sm font-medium text-[var(--text-primary)] px-2">
+                Page {clampedPage} of {pageCount}
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  goToPage(clampedPage + 1)
+                  window.scrollTo({ top: 0, behavior: "smooth" })
+                }}
+                disabled={clampedPage === pageCount}
+                className="inline-flex items-center justify-center min-h-[44px] rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] px-4 py-2 text-sm font-semibold text-[var(--text-primary)] transition hover:border-[var(--cta-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] disabled:cursor-not-allowed disabled:opacity-50"
+                aria-label="Go to next page"
+              >
+                Next →
+              </button>
+            </div>
           </div>
         )}
       </section>

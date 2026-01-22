@@ -10,6 +10,7 @@ import { AuthProvider } from "@/components/auth-provider"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { ogImageUrl } from "@/lib/og"
+import { CANONICAL_BASE } from "@/lib/canonical"
 
 const DEFAULT_OG_IMAGE = `https://www.pennycentral.com${ogImageUrl("homepage")}`
 
@@ -72,11 +73,11 @@ export const metadata: Metadata = {
     "penny shopping",
   ],
   authors: [{ name: "Home Depot One Cent Items Community" }],
-  metadataBase: new URL("https://www.pennycentral.com"),
+  metadataBase: new URL(CANONICAL_BASE),
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://www.pennycentral.com",
+    url: CANONICAL_BASE,
     title: "Penny Central | Home Depot Penny List",
     description:
       "The searchable Home Depot penny list. Filter by state, date, and SKU. Community-reported $0.01 finds, usually updated within about 5 minutes.",
@@ -114,6 +115,9 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: "black-translucent",
     title: "Penny Central",
+  },
+  alternates: {
+    canonical: CANONICAL_BASE,
   },
 }
 
