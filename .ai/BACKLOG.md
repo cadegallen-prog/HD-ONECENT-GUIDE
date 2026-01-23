@@ -1,6 +1,6 @@
 # Backlog (Top Priority Items)
 
-**Last updated:** Jan 17, 2026
+**Last updated:** Jan 23, 2026
 **Rule:** Keep ≤10 items. Archive completed/deferred items.
 
 **Auto-archive:** Full backlog history preserved in `archive/backlog-history/`
@@ -17,6 +17,15 @@ Each AI session should:
 ---
 
 ## P0 - Do Next (Analytics-Driven Growth)
+
+### 0. Data Pipeline Reliability - Pre-scrape + Cron Auth (P0-0)
+
+- **Problem:** The pre-scrape workflow (`Enrichment Staging Warmer`) is failing due to **403 + Cloudflare “Just a moment...”** from the upstream API when running on GitHub-hosted runners. Separately, Vercel cron endpoints will return 401 if `CRON_SECRET` is missing/mismatched.
+- **Done means:**
+  - A scheduled run of `Enrichment Staging Warmer` is ✅ green and updates `enrichment_staging` with non-zero items
+  - Failure issue #106 closes automatically on recovery
+  - Vercel cron logs show 200s (not 401s) for `/api/cron/seed-penny-list`, `/api/cron/trickle-finds`, `/api/cron/send-weekly-digest`
+- **Approach options:** Provider allowlisting / proper API auth (preferred) vs self-hosted runner vs new data source
 
 ### 1. SEO Improvement - Schema Markup + Internal Linking (P0-3)
 

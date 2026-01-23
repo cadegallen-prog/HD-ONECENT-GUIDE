@@ -1,7 +1,7 @@
 # Environment Variables Reference
 
-**Last Updated:** 2025-12-29
-**Purpose:** Track all environment variables for Penny Central project
+**Last Updated:** 2026-01-23
+**Purpose:** Track environment variables across Vercel (runtime), GitHub Actions (pipelines), and local dev.
 
 ---
 
@@ -37,6 +37,61 @@
 - Captures JavaScript errors in production
 - Sends email alerts when errors occur
 - Source maps help debug minified code
+
+---
+
+### Vercel Cron Security (1 variable)
+
+| Variable      | Where Set       | Purpose                                   | Used In           |
+| ------------- | --------------- | ----------------------------------------- | ----------------- |
+| `CRON_SECRET` | Vercel (Manual) | Auth for `/api/cron/*` endpoints (Bearer) | `app/api/cron/**` |
+
+**If missing/mismatched:** Vercel Cron requests will return `401 Unauthorized` and your scheduled jobs won’t run.
+
+---
+
+### Email (2 variables)
+
+| Variable               | Where Set       | Purpose                                | Used In                              |
+| ---------------------- | --------------- | -------------------------------------- | ------------------------------------ |
+| `RESEND_API_KEY`       | Vercel (Manual) | Send weekly digest emails via Resend   | `app/api/cron/send-weekly-digest/**` |
+| `NEXT_PUBLIC_SITE_URL` | Vercel (Manual) | Canonical base URL for links in emails | `app/api/cron/send-weekly-digest/**` |
+
+**Recommended:** `NEXT_PUBLIC_SITE_URL=https://www.pennycentral.com`
+
+---
+
+### Analytics Switch (1 variable)
+
+| Variable                        | Where Set             | Purpose                                | Used In                              |
+| ------------------------------- | --------------------- | -------------------------------------- | ------------------------------------ |
+| `NEXT_PUBLIC_ANALYTICS_ENABLED` | Vercel / `.env.local` | Kill switch for GA4 + Vercel analytics | `app/layout.tsx`, `lib/analytics.ts` |
+
+**Default:** If unset, analytics are enabled in production.
+
+---
+
+### Scraping / Enrichment Keys (2 variables)
+
+| Variable          | Where Set             | Purpose                                                              | Used In                       |
+| ----------------- | --------------------- | -------------------------------------------------------------------- | ----------------------------- |
+| `SERPAPI_KEY`     | Vercel / `.env.local` | SerpApi enrichment script (fallback enrichment)                      | `scripts/serpapi-enrich.ts`   |
+| `SCRAPER_API_KEY` | Vercel (Manual)       | ScraperAPI key for `/api/cron/auto-enrich` (not currently scheduled) | `app/api/cron/auto-enrich/**` |
+
+---
+
+### GitHub Actions Secrets (Pre-scrape pipeline)
+
+These are **GitHub repo secrets** (not Vercel env vars). They are used by the scheduled workflow that fills `enrichment_staging`.
+
+| Variable                    | Where Set      | Purpose                                    | Used In                                           |
+| --------------------------- | -------------- | ------------------------------------------ | ------------------------------------------------- |
+| `PENNY_RAW_COOKIE`          | GitHub Secrets | Auth cookie for `pro.scouterdev.io`        | `.github/workflows/enrichment-staging-warmer.yml` |
+| `PENNY_GUILD_ID`            | GitHub Secrets | Guild ID header for `pro.scouterdev.io`    | `.github/workflows/enrichment-staging-warmer.yml` |
+| `NEXT_PUBLIC_SUPABASE_URL`  | GitHub Secrets | Supabase URL (pipeline writes to Supabase) | `.github/workflows/enrichment-staging-warmer.yml` |
+| `SUPABASE_SERVICE_ROLE_KEY` | GitHub Secrets | Supabase service role (bypasses RLS)       | `.github/workflows/enrichment-staging-warmer.yml` |
+
+**Important:** You do **not** need `PENNY_RAW_COOKIE` / `PENNY_GUILD_ID` in Vercel unless a Vercel route uses them.
 
 ---
 
@@ -91,16 +146,16 @@
 
 These were auto-created by the Supabase Vercel Integration but your code doesn't use them:
 
-### Analytics (privacy-friendly)
+### Analytics (Deprecated vars)
 
-| Variable                           | Where Set             | Purpose                                              | Used In                              |
-| ---------------------------------- | --------------------- | ---------------------------------------------------- | ------------------------------------ |
-| `NEXT_PUBLIC_ANALYTICS_PROVIDER`   | Vercel / `.env.local` | Analytics provider: `plausible`, `vercel`, or `none` | `app/layout.tsx`, `lib/analytics.ts` |
-| `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`     | Vercel / `.env.local` | Plausible site domain (required for Plausible)       | `app/layout.tsx`                     |
-| `NEXT_PUBLIC_PLAUSIBLE_SCRIPT_SRC` | Vercel / `.env.local` | Optional Plausible script override (self-host)       | `app/layout.tsx`                     |
-| `NEXT_PUBLIC_PLAUSIBLE_API_HOST`   | Vercel / `.env.local` | Optional Plausible API endpoint override (self-host) | `app/layout.tsx`                     |
+The codebase now uses a single switch: `NEXT_PUBLIC_ANALYTICS_ENABLED` (see above).
 
-**Local disable:** set `NEXT_PUBLIC_ANALYTICS_PROVIDER=none` in `.env.local`.
+If these exist in Vercel, they’re legacy and can be ignored:
+
+- `NEXT_PUBLIC_ANALYTICS_PROVIDER`
+- `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`
+- `NEXT_PUBLIC_PLAUSIBLE_SCRIPT_SRC`
+- `NEXT_PUBLIC_PLAUSIBLE_API_HOST`
 
 ### Supabase Duplicates
 
@@ -141,13 +196,17 @@ These were auto-created by the Supabase Vercel Integration but your code doesn't
 
 ## 📋 Local Development Setup (.env.local)
 
-**You don't currently have a `.env.local` file**, and that's fine because:
+`.env.local` is **optional**, but recommended for local dev and tests (unit tests and scripts load it via `dotenv` when present).
 
-- Supabase keys are already in Vercel (not secret)
-- No local-only testing credentials needed
-- `npm run dev` works without it
+**Recommended sync (project-level vars only):**
 
-**If you wanted to test locally with different Supabase credentials:**
+```bash
+vercel env pull .env.local
+```
+
+**Important:** Vercel “Shared/Team” variables do **not** reach a project unless they’re explicitly linked to that project.
+
+**If you want to override Supabase credentials locally:**
 
 ```bash
 # .env.local (create this file in project root if needed)
@@ -206,10 +265,7 @@ SUPABASE_SERVICE_ROLE_KEY=your-test-service-role-key
 
 ## 📊 Current Count
 
-- **Required (used by code):** 8 variables
-- **Optional (integration-managed):** 14+ variables
-- **Deleted (obsolete):** 4 variables
-- **Total in Vercel:** ~23 variables
+This varies by which features you enable (ads, email digest, cron jobs, etc.). Use the tables above as the source of truth.
 
 ---
 
@@ -224,6 +280,7 @@ SUPABASE_SERVICE_ROLE_KEY=your-test-service-role-key
 
 **Last major changes:**
 
+- Jan 23, 2026: Added cron/email + GitHub Actions pipeline env var sections; clarified Vercel project vs team/shared vars.
 - Dec 27, 2025: Removed Vercel Blob Storage (2 deleted, switched to local file)
 - Dec 27, 2025: Added Sentry (4 variables)
 - Dec 2025: Removed Google Sheets variables (2 deleted)

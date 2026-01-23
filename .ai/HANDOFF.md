@@ -1,6 +1,6 @@
 # Context Handoff Pack (Portable, Tool-Agnostic)
 
-**Last Updated:** Jan 20, 2026 by Claude Code
+**Last Updated:** Jan 23, 2026 by Codex
 
 **Purpose:** Compressed, copy-paste-ready context for starting fresh chats or switching tools (Claude → Codex → Copilot).
 
@@ -12,13 +12,13 @@
 
 **Open-source Next.js PWA** helping Home Depot shoppers find "penny items" (clearance deals, often $0.01 to $10).
 
-### Current Reality (Jan 20, 2026)
+### Current Reality (Jan 23, 2026)
 
 - ✅ **Core product working:** Submissions, enrichment, Penny List page
-- ✅ **Enrichment database:** ~1,600+ penny items pre-scraped (Tue-Fri from external source) for auto-population (see `.ai/topics/DATA_PIPELINE.md`)
+- ⚠️ **Pre-scrape pipeline exists but is currently blocked:** GitHub Actions `Enrichment Staging Warmer` runs Tue–Fri, but upstream `pro.scouterdev.io/api/penny-items` is returning **403 + Cloudflare “Just a moment...” HTML** from GitHub runners. `enrichment_staging` currently has ~1,343 rows (stale until the block is resolved). See `.ai/topics/DATA_PIPELINE.md` + issue #106.
 - ✅ **Retention features live:** Email signup (10s subscribers), PWA install prompt, weekly digest cron
 - ✅ **Monetization bridge:** Ezoic (temporary) + Mediavine Grow (analytics collection in progress)
-- 🔄 **IN PROGRESS:** Penny List seeding feature (auto-submit quality items from enrichment DB to create social proof)
+- 🔄 **Cron health check needed:** Vercel cron jobs are configured; ensure `CRON_SECRET` is set correctly so `/api/cron/*` doesn’t return 401.
 - 📊 **Metrics:** 680 daily users, 26% conversion (HD clicks), 80 clicks from organic (all branded)
 - 🎯 **Cold start problem:** Penny List has ~67 items but needs more to encourage participation
 
@@ -272,10 +272,10 @@ Generate a portable context pack (updates `.ai/HANDOFF.md`) + print New Chat Pri
 
 ## Top 3 Priorities (Current)
 
-1. **🔄 Penny List Seeding (IN PROGRESS)**
-   - Plan: `C:\Users\cadeg\.claude\plans\floating-popping-neumann.md`
-   - Done means: Cron seeds 3 quality items/day from enrichment DB, geographic spread across states
-   - Phases: ✅ 0 (docs) → 1 (migration) → 2 (cron) → 3 (schedule) → 4 (dry-run)
+1. **🔴 Data Pipeline Reliability (BLOCKED)**
+   - GitHub Action `Enrichment Staging Warmer` is failing due to Cloudflare 403 from upstream API.
+   - Track and resolve via issue #106 (allowlist / self-hosted runner / new source).
+   - Ensure Vercel cron auth is configured (`CRON_SECRET`) so `/api/cron/*` endpoints run.
 
 2. **P0-3: SEO Improvement (Schema Markup + Internal Linking)**
    - Done means: FAQ schema + HowTo schema on `/guide`, internal links verified

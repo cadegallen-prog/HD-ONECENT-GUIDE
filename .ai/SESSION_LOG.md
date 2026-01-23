@@ -4,6 +4,38 @@
 
 ---
 
+## 2026-01-23 - Codex - Pipeline: staging warmer diagnostics + Cloudflare blocker
+
+**Goal:** Get the Tue–Fri pre-scrape pipeline working reliably and make failures impossible to miss.
+
+**Status:** ⚠️ Blocked (Cloudflare 403 from upstream API) — not a silent failure anymore.
+
+### Changes
+
+- `.github/workflows/enrichment-staging-warmer.yml`: Added failure auto-issue creation/update + clearer schedule notes.
+- `extracted/scraper_core.py`: Added per-zip diagnostics (HTTP status, HTML detection, timing) and better failure hints.
+- `scripts/staging-warmer.py`: Prints `FETCH_DIAGNOSTICS` lines + GitHub Actions `::error` annotation on failure.
+- `app/api/cron/seed-penny-list/route.ts`: Switched data source to `enrichment_staging` (prod does not have `penny_item_enrichment`).
+- `app/api/cron/trickle-finds/route.ts`: Switched data source to `enrichment_staging` (same reason).
+
+### Findings (Root Cause)
+
+- Upstream `https://pro.scouterdev.io/api/penny-items` returns **HTTP 403 + Cloudflare “Just a moment...” HTML** from GitHub Actions runners.
+- This is likely IP / bot protection; refreshing `PENNY_RAW_COOKIE` alone may not fix it.
+- `enrichment_staging` exists and currently has **1343** rows (as of Jan 23, 2026).
+- `penny_item_enrichment` does **not** exist in production Supabase (PostgREST `PGRST205`).
+
+### Evidence
+
+- Latest failed run: https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/21283542371
+- Auto-created failure issue: https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/issues/106
+
+### Verification
+
+- Bundle: `reports/verification/2026-01-23T10-51-52/summary.md`
+
+---
+
 ## 2026-01-22 - Codex - Codex CLI + MCP enablement (non-coder workflow)
 
 **Goal:** Make Codex less brittle for a 100% AI-reliant workflow: fix MCP config drift, upgrade Codex CLI to match current docs, and remove the need to hardcode secrets in config files.
@@ -47,53 +79,3 @@
 
 - Verification bundle: `reports/verification/2026-01-22T10-39-19/summary.md`
 - Ad placement screenshots: `reports/proof/2026-01-22T10-29-18-ezoic-b/`
-
----
-
-## 2026-01-22 - Copilot - Penny List Bottom Pagination
-
-**Goal:** Fix mobile UX issue where users have to scroll all the way back to the top to navigate to the next page. Add bottom pagination controls with "Page X of Y" indicator.
-
-**Status:** ✅ Complete + verified (all 4 gates: lint/build/unit/e2e)
-
-### Problem
-
-- Pagination controls only appeared at the top of the penny list
-- Users scrolling through 25-100 items would reach what looked like the end
-- Had to scroll all the way back up to access page 2
-- Particularly bad on mobile where lists can be very long
-
-### Changes
-
-- **`components/penny-list-client.tsx`:**
-  - Added comment marker for "Top pagination controls" (existing controls)
-  - Added new bottom pagination section after the results (card grid or table)
-  - Bottom pagination only shows when `total > 0 && pageCount > 1`
-  - Features:
-    - "Showing X to Y of Z items" summary text
-    - Previous/Next buttons with arrow indicators (← →)
-    - "Page X of Y" indicator (larger, more prominent than top)
-    - Auto-scroll to top on page change (`window.scrollTo({ top: 0, behavior: "smooth" })`)
-    - 44px min-height for mobile tap targets
-    - Border-top separator for visual clarity
-
-### UX Improvements
-
-1. **No more scroll-back frustration** - Users can immediately navigate to next page
-2. **Clear page context** - "Page X of Y" shows progress through results
-3. **Item count feedback** - "Showing 1 to 50 of 237 items" provides context
-4. **Smooth scroll-to-top** - Navigating to next page brings user back to top smoothly
-5. **Mobile-first** - All buttons meet 44px minimum tap target requirement
-
-### Verification
-
-- **Lint:** ✅ 0 errors, 0 warnings
-- **Build:** ✅ Compiled successfully
-- **Unit:** ✅ All tests passing
-- **E2E:** ✅ 100 tests passing
-
-Full verification: `reports/verification/2026-01-22T07-33-39/summary.md`
-
-### Impact
-
-Mobile users will no longer get "stuck" at the bottom of long result lists. The bottom pagination makes it immediately obvious there are more pages and provides one-tap navigation without scrolling.

@@ -5,24 +5,26 @@
 ### The Two-Table System
 
 ```
-External Penny Source ─→ Scraper (Tue-Fri) ─→ penny_item_enrichment (~1,600+ items)
-                                                        │
-                                                        ▼
-                              User submits SKU ─→ Auto-enriched from DB ─→ "Penny List" (public display)
+External Penny Source (Scouter/ScouterPro) ─→ GitHub Action (Tue–Fri) ─→ enrichment_staging (~1,343 rows as of 2026-01-23)
+                                                                      │
+                                                                      ├─→ Vercel cron: seed/trickle → "Penny List" (social proof)
+                                                                      └─→ (Future) Use as pre-enrichment cache for /api/submit-find
 ```
 
-**`penny_item_enrichment`** = Pre-scraped penny items (source of truth for enrichment)
+**`enrichment_staging`** = Pre-scraped penny items pool (current automated pipeline output)
 
-- ~1,600+ items and growing
-- Scraped Tuesday through Friday from external penny-tracking source
+- ~1,343 rows currently in production (may be stale until the pipeline is unblocked)
+- Intended to refresh Tue–Fri from the external penny source
 - Contains: SKU, item_name, brand, model_number, upc, image_url, home_depot_url, internet_sku, retail_price
-- Purpose: When users submit a SKU, we auto-enrich their submission from this database
+- Purpose today: seed/trickle synthetic finds; future use: pre-enrichment cache to reduce SERP costs
 
 **`"Penny List"`** = User-submitted finds (what displays on the website)
 
 - Currently ~67 items visible in last 30 days
 - Each row is a submission (user-reported find OR seeded from enrichment)
 - Contains enrichment data merged in at submission time
+
+**Important reality check:** Production Supabase currently does **not** have `penny_item_enrichment` (PostgREST `PGRST205` “table not found”). Docs/migrations may reference it, but do not treat it as the live source of truth until migrations are verified/applied.
 
 ### Why This Exists
 
@@ -34,70 +36,70 @@ External Penny Source ─→ Scraper (Tue-Fri) ─→ penny_item_enrichment (~1,
 
 ### Data Flow (Detailed)
 
-1. **External penny source** publishes new penny items (Tuesday-Friday)
-2. **Scraper** (Tampermonkey + HTML controller) scrapes product data from Home Depot
-3. **Enrichment database** (`penny_item_enrichment`) stores the scraped data
-4. **User submits** a find via `/api/submit-find`
-5. **Auto-enrichment** looks up the SKU in enrichment database
-6. **Merge** enrichment data into the submission (fill-blanks-only)
-7. **Insert** to `"Penny List"` table
-8. **Display** on `/penny-list` page with full product details
+1. **External penny source** publishes new penny items (Tue–Fri)
+2. **GitHub Action** (`Enrichment Staging Warmer`) fetches across ZIPs and upserts into `enrichment_staging`
+3. **Vercel cron** uses `enrichment_staging` to create social-proof finds:
+   - `/api/cron/seed-penny-list` (3 quality items/day)
+   - `/api/cron/trickle-finds` (5–10 finds/day)
+4. **Users submit** finds via `/api/submit-find`:
+   - Enrichment comes from existing Penny List + staging-queue consumption (not `penny_item_enrichment`)
+   - SERP/API fallback enrichment is still available when needed
+5. **Display** on `/penny-list` page with enriched product details
 
 ---
 
 ## Current Status
 
-- ✅ Core pipeline stable: Scrape → Enrichment → Auto-enrich → Display
-- ✅ Enrichment database: ~1,600+ items, refreshed Tue-Fri
-- ✅ Bulk enrichment scripts complete (validate, scrape-to-CSV, diff)
-- ✅ RLS hardened (anon users cannot insert directly; use service role key in `/api/submit-find`)
-- ✅ Rate limiting: `/api/submit-find` = 30 submissions/hour per IP
-- ✅ Manual scrape tooling: Tampermonkey userscript + HTML controller UI with pause/resume
-- ❌ **Auto-enrich cron (ScraperAPI): DISABLED** (reverted in commit `8945fee` - ScraperAPI proxy was broken)
-- ✅ **SerpAPI enrichment scripts:** Available (`scripts/serpapi-enrich.ts`) - 250 searches/month free tier
-- **Status:** Pipeline is self-healing; enrichment comes from external source scrapes, not SerpAPI
+- ✅ Core product working: submissions + Penny List display
+- ✅ `enrichment_staging` exists and currently has **1343** rows (as of 2026-01-23)
+- ⚠️ **Automated pre-scrape is currently blocked:** GitHub-hosted runners get **403 + Cloudflare “Just a moment...” HTML** from `pro.scouterdev.io/api/penny-items` (see issue #106)
+- ✅ Failures are no longer silent: the workflow prints `FETCH_DIAGNOSTICS` and opens/updates a GitHub issue on failure
+- ⚠️ **Cron health depends on `CRON_SECRET`:** `/api/cron/*` routes return 401 if misconfigured
+- ✅ Manual scrape tooling still exists (Tampermonkey controller) if needed
+- ✅ SERP/API enrichment is still available for real-time enrichment when pre-scrape isn’t available
 
 ---
 
 ## Locked Decisions
 
-- **Scrape source:** External penny-tracking website (via Tampermonkey + controller)
-- **Scrape schedule:** Tuesday, Wednesday, Thursday, Friday
-- **Storage:** `penny_item_enrichment` table (Supabase)
-- **Merge strategy:** Fill-blanks-only (never overwrite existing good data)
-- **Price validation:** Skip items with explicit `$0.00` retail prices
-- **ScraperAPI auto-enrich cron:** DISABLED (proxy was broken)
-- **SerpAPI scripts:** Available for manual enrichment (250/month free tier)
-- **Canonical image URL:** `-64_600.jpg` (normalized in DB, downconverted at display time)
-- **Brand normalization:** Scraper standardizes brand case + removes duplicates
+- **Automated source:** `https://pro.scouterdev.io/api/penny-items` (cookie + guild ID)
+- **Schedule:** Tue–Fri at 14:05 UTC (`.github/workflows/enrichment-staging-warmer.yml`)
+- **Storage:** `enrichment_staging` table in Supabase (service role upserts)
+- **Retention:** 60-day prune before inserting new data
+- **Failure alerting:** Workflow auto-updates GitHub issue on failure (no silent 0-item successes)
+- **Known blocker:** Cloudflare/bot protection blocks GitHub-hosted runners (403 + “Just a moment...” HTML)
+
+**Manual fallback tooling (still in repo):** Tampermonkey controller + export/validate scripts.
 
 ---
 
 ## Open Questions
 
-None (pipeline is stable and locked).
+1. **How do we unblock Cloudflare?**
+   - Ask provider to allowlist GitHub Actions IPs or provide a proper API token, **or**
+   - Move this workflow to a self-hosted runner (runs from your own IP), **or**
+   - Replace the upstream source.
 
 ---
 
 ## Next Actions
 
-1. **Monitor enrichment table growth (monthly)**
-   - Track row count: `SELECT COUNT(*) FROM penny_item_enrichment`
-   - No upper limit concern - external source provides filtered penny items
+1. **Resolve Cloudflare blocker (required for automation)**
+   - Preferred: ask provider for allowlisting or a real API auth method for server-to-server use.
+   - Backup: move workflow to a self-hosted runner (runs from your IP).
 
-2. **Manual scrape as needed (Tue-Fri)**
-   - When external source updates, use Tampermonkey controller
-   - Export results to `.local/scrape_*.json`
-   - Run: `npm run validate:scrape && npm run bulk:enrich`
+2. **Confirm the workflow is healthy**
+   - Expect: `Enrichment Staging Warmer` run turns green and logs show non-zero items fetched + upserted.
+   - Monitor: `enrichment_staging` row count increases and `updated_at` refreshes.
 
-3. **Test fallback image handling (quarterly)**
-   - Verify: List cards use `-64_400`, fallback to `-64_1000` if 404
-   - Verify: Detail pages use `-64_600`, fallback chain works
+3. **Confirm Vercel cron jobs are authorized**
+   - Ensure `CRON_SECRET` is set (prod) and cron logs show 200s (not 401s) for:
+     - `/api/cron/seed-penny-list`
+     - `/api/cron/trickle-finds`
+     - `/api/cron/send-weekly-digest`
 
-4. **Audit RLS policies (quarterly)**
-   - Verify: Anon cannot INSERT directly into `Penny List`
-   - Verify: Service role can INSERT via `/api/submit-find`
-   - Run: Full E2E submission test + RLS test
+4. **Optional fallback**
+   - Keep manual scrape tooling available if the upstream source remains hostile to automation.
 
 ---
 
@@ -105,10 +107,12 @@ None (pipeline is stable and locked).
 
 | Purpose                 | File                                                                                 |
 | ----------------------- | ------------------------------------------------------------------------------------ |
-| Enrichment table schema | `supabase/migrations/004_create_enrichment_table.sql`                                |
-| Retail price column     | `supabase/migrations/009_add_retail_price_to_enrichment.sql`                         |
-| Staging queue           | `supabase/migrations/016_enrichment_staging_queue.sql`                               |
+| Pre-scrape workflow     | `.github/workflows/enrichment-staging-warmer.yml`                                    |
+| Pre-scrape runner       | `scripts/staging-warmer.py`                                                          |
+| Upstream API client     | `extracted/scraper_core.py`                                                          |
+| Staging table schema    | `supabase/migrations/016_enrichment_staging_queue.sql`                               |
 | Consume RPC             | `supabase/migrations/017_consume_enrichment_rpc.sql`                                 |
+| Seed/trickle cron       | `app/api/cron/seed-penny-list/route.ts`, `app/api/cron/trickle-finds/route.ts`       |
 | Submit endpoint         | `app/api/submit-find/route.ts`                                                       |
 | Bulk enrich script      | `scripts/bulk-enrich.ts`                                                             |
 | SerpAPI enrich script   | `scripts/serpapi-enrich.ts`                                                          |

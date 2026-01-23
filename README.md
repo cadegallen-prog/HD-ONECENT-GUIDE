@@ -131,9 +131,9 @@ public/                 # Static assets
 
 ### Autonomous Penny List (Live)
 
-- **Data source:** Supabase (`Penny List` + `penny_item_enrichment`)
+- **Data source:** Supabase (`Penny List` + optional enrichment overlay when available)
 - **Files:** `lib/fetch-penny-data.ts`, `app/api/submit-find/route.ts`, `app/api/penny-list/route.ts`
-- **How it works:** Report Find inserts into `Penny List`; the site reads via `penny_list_public` (RLS-safe view) and overlays metadata from `penny_item_enrichment` by SKU.
+- **How it works:** Report Find inserts into `Penny List`; the site reads via `penny_list_public` (RLS-safe view) and overlays metadata from `penny_item_enrichment` **when present** (code is resilient if the table is missing).
 - **Why there are 5 tables:** `lists`, `list_items`, `list_shares` exist for the optional Save/My Lists feature (separate from scraping/enrichment).
 - **Legacy note:** The older Google Sheets pipeline is deprecated; docs remain for history at `docs/GOOGLE-FORM-PENNY-LIST.md`.
 
