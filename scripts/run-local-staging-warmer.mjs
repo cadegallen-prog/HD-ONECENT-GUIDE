@@ -27,6 +27,7 @@ function parseArgs(argv) {
     zipCodes: undefined,
     maxUniques: undefined,
     batchSize: undefined,
+    apiUrl: undefined,
   }
 
   for (let i = 0; i < argv.length; i++) {
@@ -47,6 +48,11 @@ function parseArgs(argv) {
     }
     if (a === "--batch-size") {
       args.batchSize = argv[i + 1]
+      i++
+      continue
+    }
+    if (a === "--api-url") {
+      args.apiUrl = argv[i + 1]
       i++
       continue
     }
@@ -101,6 +107,7 @@ function printHelp() {
   console.log("  npm run warm:staging")
   console.log("  npm run warm:staging -- --zip-codes 30301,30303,30305,30308,30309")
   console.log("  npm run warm:staging -- --max-uniques 6000 --batch-size 50")
+  console.log("  npm run warm:staging -- --api-url https://pro.scouterdev.io/api/penny-items")
   console.log("")
   console.log("Required env vars (in .env.local or your shell):")
   console.log("  PENNY_RAW_COOKIE, PENNY_GUILD_ID, NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY")
@@ -127,6 +134,7 @@ async function main() {
   process.env.PENNY_ZIP_CODES = args.zipCodes || process.env.PENNY_ZIP_CODES || defaultZipCodes
   process.env.MAX_UNIQUES = args.maxUniques || process.env.MAX_UNIQUES || "6000"
   process.env.BATCH_SIZE = args.batchSize || process.env.BATCH_SIZE || "50"
+  if (args.apiUrl) process.env.PENNY_API_URL = args.apiUrl
 
   const required = [
     "PENNY_RAW_COOKIE",
@@ -164,4 +172,3 @@ main().catch((err) => {
   console.error(err)
   process.exit(1)
 })
-

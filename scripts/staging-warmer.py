@@ -291,6 +291,7 @@ def main():
         raw_cookie=config["cookie"],
         guild_id=config["guild"],
         zip_codes=zip_codes,
+        api_url=os.environ.get("PENNY_API_URL") or None,
     )
 
     if not scrape_result.get("ok"):

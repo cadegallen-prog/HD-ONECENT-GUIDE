@@ -415,6 +415,7 @@ def run_scrape(
     raw_cookie: str,
     guild_id: str,
     zip_codes: Optional[List[str]] = None,
+    api_url: Optional[str] = None,
 ) -> Dict[str, Any]:
     """
     Convenience function: single entry point for scraping.
@@ -423,6 +424,7 @@ def run_scrape(
         raw_cookie: Cookie string (from env or secret store)
         guild_id: Guild ID (from env or secret store)
         zip_codes: Optional list of zip codes (defaults to GA zips)
+        api_url: Optional override for the upstream API endpoint (defaults to pro.scouterdev.io)
 
     Returns:
         {
@@ -436,6 +438,7 @@ def run_scrape(
         raw_cookie=raw_cookie,
         guild_id=guild_id,
         zip_codes=zip_codes,
+        api_url=api_url or "https://pro.scouterdev.io/api/penny-items",
     )
     return scraper.run()
 
