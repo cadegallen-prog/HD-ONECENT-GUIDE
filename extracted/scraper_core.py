@@ -83,7 +83,12 @@ class PennyScraperCore:
         """Return a small, safe-to-log snippet of the response body."""
         try:
             raw = response.content[:limit]
-            return raw.decode("utf-8", errors="replace").replace("\n", " ").replace("\r", " ").strip()
+            return (
+                raw.decode("utf-8", errors="replace")
+                .replace("\n", " ")
+                .replace("\r", " ")
+                .strip()
+            )
         except Exception:
             return ""
 
@@ -153,7 +158,9 @@ class PennyScraperCore:
                 return len(data)
             else:
                 zip_result["error"] = f"http_{r.status_code}"
-                zip_result["response_snippet"] = snippet if zip_result["looks_like_html"] else ""
+                zip_result["response_snippet"] = (
+                    snippet if zip_result["looks_like_html"] else ""
+                )
                 # Non-200 response; return 0 but don't crash
                 return 0
 
@@ -339,8 +346,14 @@ class PennyScraperCore:
 
             # Check if we got any data
             if not self.all_data:
-                status_codes = [r.get("status_code") for r in self.zip_results if r.get("status_code") is not None]
-                looks_like_html = any(r.get("looks_like_html") for r in self.zip_results)
+                status_codes = [
+                    r.get("status_code")
+                    for r in self.zip_results
+                    if r.get("status_code") is not None
+                ]
+                looks_like_html = any(
+                    r.get("looks_like_html") for r in self.zip_results
+                )
                 has_auth_error = any(code in (401, 403) for code in status_codes)
 
                 cloudflare_block = any(
