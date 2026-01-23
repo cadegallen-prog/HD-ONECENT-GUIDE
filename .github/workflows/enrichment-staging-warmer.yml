@@ -103,13 +103,16 @@ jobs:
               `- Commit: ${context.sha}`,
               `- Updated: ${now}`,
               ``,
-              `Most likely cause: **PENNY_RAW_COOKIE expired/invalid** (or upstream API changed/down).`,
+              `Most likely causes:`,
+              `- **Cloudflare / bot protection** blocking GitHub Actions (HTTP 403 + HTML \\"Just a moment...\\" page)`,
+              `- **PENNY_RAW_COOKIE expired/invalid**`,
+              `- Upstream API changed/down`,
               ``,
               `Next steps (do NOT paste secrets here):`,
-              `1) Refresh the Home Depot / ScouterPro cookie and update GitHub repo secret \`PENNY_RAW_COOKIE\``,
-              `2) Re-run the workflow (Actions → Enrichment Staging Warmer → Run workflow)`,
-              `3) In the run logs, search for \`FETCH_DIAGNOSTICS\` lines to see HTTP status codes / HTML login clues.`,
-            ].join("\\n");
+              `1) Open the failed run and search logs for \`FETCH_DIAGNOSTICS\` (it prints HTTP status + HTML clues)`,
+              `2) If you see 401/403 with a normal API response, refresh \`PENNY_RAW_COOKIE\` and retry`,
+              `3) If you see 403 + \\"Just a moment...\\" (Cloudflare), cookie refresh alone may not work — you likely need a self-hosted runner (your own IP) or ScouterPro allowlisting.`,
+            ].join("\n");
 
             const { data: issues } = await github.rest.issues.listForRepo({
               owner: context.repo.owner,

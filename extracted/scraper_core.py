@@ -343,7 +343,21 @@ class PennyScraperCore:
                 looks_like_html = any(r.get("looks_like_html") for r in self.zip_results)
                 has_auth_error = any(code in (401, 403) for code in status_codes)
 
-                if has_auth_error or looks_like_html:
+                cloudflare_block = any(
+                    isinstance(r.get("response_snippet"), str)
+                    and (
+                        "just a moment" in r["response_snippet"].lower()
+                        or "cloudflare" in r["response_snippet"].lower()
+                    )
+                    for r in self.zip_results
+                )
+
+                if cloudflare_block:
+                    hint = (
+                        "Blocked by Cloudflare/bot protection (HTML challenge). "
+                        "GitHub Actions IPs may be blocked; cookie refresh alone may not fix it."
+                    )
+                elif has_auth_error or looks_like_html:
                     hint = "Likely auth failure (cookie expired/invalid) — refresh PENNY_RAW_COOKIE and retry."
                 elif status_codes:
                     hint = "API returned no usable data — check upstream availability and response format."
