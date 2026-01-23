@@ -5,14 +5,14 @@ import { STATES } from "@/lib/states"
 /**
  * Penny List Seeding Cron Endpoint
  *
- * Automatically seeds quality items from penny_item_enrichment to create social proof
+ * Automatically seeds quality items from enrichment_staging to create social proof
  * and kickstart user participation.
  *
  * Schedule: Daily at 8:00 AM UTC (defined in vercel.json)
  * Flow:
  *   1. Authorize request via CRON_SECRET
  *   2. Validate environment variables
- *   3. Query penny_item_enrichment for unseeded quality items
+ *   3. Query enrichment_staging for unseeded quality items
  *   4. Apply quality filters (see filters below)
  *   5. Pick 3 random items
  *   6. For each item:
@@ -39,16 +39,15 @@ import { STATES } from "@/lib/states"
  *   - CRON_SECRET (optional in development)
  */
 
-interface EnrichmentRow {
+interface EnrichmentStagingRow {
   sku: string
-  item_name: string
+  item_name: string | null
   brand: string | null
-  model_number: string | null
-  upc: string | null
-  image_url: string
-  home_depot_url: string | null
-  internet_sku: number | null
-  retail_price: number
+  barcode_upc: string | null
+  image_url: string | null
+  product_link: string | null
+  internet_number: number | null
+  retail_price: string | number | null
 }
 
 interface SeededResult {
@@ -88,11 +87,16 @@ function getNextStates(startIndex: number, count: number): string[] {
   return states
 }
 
+function toNumber(value: string | number | null): number | null {
+  const parsed = typeof value === "number" ? value : Number(value)
+  return Number.isFinite(parsed) ? parsed : null
+}
+
 /**
  * Query unseeded quality items from enrichment database
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function queryQualityItems(supabase: any): Promise<EnrichmentRow[]> {
+async function queryQualityItems(supabase: any): Promise<EnrichmentStagingRow[]> {
   // Popular brands filter (case-insensitive)
   const popularBrands = [
     "milwaukee",
@@ -123,15 +127,15 @@ async function queryQualityItems(supabase: any): Promise<EnrichmentRow[]> {
 
   // Build query
   const { data: items, error } = (await supabase
-    .from("penny_item_enrichment")
+    .from("enrichment_staging")
     .select(
-      "sku, item_name, brand, model_number, upc, image_url, home_depot_url, internet_sku, retail_price"
+      "sku, item_name, brand, barcode_upc, image_url, product_link, internet_number, retail_price"
     )
     .gte("retail_price", 15.0)
     .not("image_url", "is", null)
     .not("item_name", "is", null)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .limit(1000)) as { data: EnrichmentRow[] | null; error: any }
+    .limit(1000)) as { data: EnrichmentStagingRow[] | null; error: any }
 
   if (error) {
     console.error("[seed-penny-list] Error querying enrichment table:", error)
@@ -166,7 +170,7 @@ async function queryQualityItems(supabase: any): Promise<EnrichmentRow[]> {
 
     const itemName = (item.item_name || "").toLowerCase()
     const brand = (item.brand || "").toLowerCase()
-    const retailPrice = item.retail_price || 0
+    const retailPrice = toNumber(item.retail_price) ?? 0
 
     // Exclude junk items
     if (junkKeywords.some((keyword) => itemName.includes(keyword))) {
@@ -178,7 +182,7 @@ async function queryQualityItems(supabase: any): Promise<EnrichmentRow[]> {
     const isHighValue = retailPrice >= 30.0
 
     return isPopularBrand || isHighValue
-  }) as EnrichmentRow[]
+  }) as EnrichmentStagingRow[]
 
   console.log(`[seed-penny-list] After filtering: ${filtered.length} quality items available`)
 
@@ -190,7 +194,7 @@ async function queryQualityItems(supabase: any): Promise<EnrichmentRow[]> {
  */
 async function seedItems(
   supabase: any, // eslint-disable-line @typescript-eslint/no-explicit-any
-  items: EnrichmentRow[],
+  items: EnrichmentStagingRow[],
   states: string[]
 ): Promise<SeededResult[]> {
   const results: SeededResult[] = []
@@ -199,6 +203,13 @@ async function seedItems(
   for (let i = 0; i < items.length; i++) {
     const item = items[i]
     const state = states[i]
+
+    // queryQualityItems() filters out null item_name rows, but keep a runtime guard
+    // so Next dev/Playwright builds stay type-safe and resilient to upstream data drift.
+    if (!item.item_name) {
+      console.error(`[seed-penny-list] Missing item_name for SKU ${item.sku}; skipping`)
+      continue
+    }
 
     // Generate random quantity (1-3)
     const quantity = Math.floor(Math.random() * 3) + 1
@@ -214,12 +225,12 @@ async function seedItems(
       timestamp: new Date().toISOString(),
       // Enrichment data
       brand: item.brand,
-      model_number: item.model_number,
-      upc: item.upc,
+      model_number: null,
+      upc: item.barcode_upc,
       image_url: item.image_url,
-      home_depot_url: item.home_depot_url,
-      internet_sku: item.internet_sku,
-      retail_price: item.retail_price,
+      home_depot_url: item.product_link,
+      internet_sku: item.internet_number,
+      retail_price: toNumber(item.retail_price),
     }
 
     // Insert to Penny List

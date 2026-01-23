@@ -1,7 +1,7 @@
 # Enrichment Staging Warmer
 # Fills enrichment_staging table with bulk penny item data from scraper_core.py
 #
-# Schedule: Tue-Fri at 9:05 AM ET (14:05 UTC)
+# Schedule: Tue-Fri at 14:05 UTC
 # This timing aligns with Home Depot markdown cycles.
 #
 # Required secrets:
@@ -14,8 +14,8 @@ name: Enrichment Staging Warmer
 
 on:
   schedule:
-    # Tue-Fri at 9:05 AM ET (14:05 UTC)
-    # Note: GitHub cron uses UTC time
+    # Tue-Fri at 14:05 UTC
+    # Note: GitHub cron uses UTC time (this is 9:05 AM ET during standard time, 10:05 AM ET during DST)
     - cron: "5 14 * * 2-5"
   workflow_dispatch:
     inputs:
@@ -48,7 +48,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          cache: "pip"
 
       - name: Install dependencies
         run: |
@@ -82,4 +81,6 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           MAX_UNIQUES: ${{ github.event.inputs.max_uniques || '6000' }}
           BATCH_SIZE: ${{ github.event.inputs.batch_size || '50' }}
+          # Default to 5 zips; override by setting PENNY_ZIP_CODES in the workflow or secrets.
+          PENNY_ZIP_CODES: "30301,30303,30305,30308,30309"
         run: python scripts/staging-warmer.py

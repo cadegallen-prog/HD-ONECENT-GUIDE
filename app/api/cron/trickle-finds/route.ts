@@ -5,17 +5,17 @@ import { createClient } from "@supabase/supabase-js"
  * Trickle Finds Cron Endpoint
  *
  * Periodically inserts legitimate penny finds to boost social proof.
- * Picks random SKUs from a pre-approved pool and inserts them as finds.
+ * Picks random SKUs from the staging enrichment pool and inserts them as finds.
  *
- * Schedule: Every 4 hours (configurable in vercel.json)
- * Rate: 5-10 finds per run = 30-60 finds/day
+ * Schedule: Daily at 6:00 AM UTC (defined in vercel.json)
+ * Rate: 5-10 finds per run
  *
  * Required env vars:
  *   - NEXT_PUBLIC_SUPABASE_URL
  *   - SUPABASE_SERVICE_ROLE_KEY
  *   - CRON_SECRET (for authorization)
  *
- * Data source: data/trickle-pool.json
+ * Data source: enrichment_staging (service role only)
  */
 
 // US States for random location generation
@@ -146,8 +146,12 @@ function randomPurchaseDate(): string {
 interface TricklePoolItem {
   sku: string
   item_name: string
-  image_url?: string
-  internet_sku?: number
+  brand: string | null
+  barcode_upc: string | null
+  image_url: string | null
+  product_link: string | null
+  internet_number: number | null
+  retail_price: string | number | null
 }
 
 export async function GET(request: Request) {
@@ -168,10 +172,12 @@ export async function GET(request: Request) {
 
   // Load trickle pool
   // In production, this could be from Supabase or a JSON file
-  // For now, we'll use SKUs from the enrichment table that have good data
+  // For now, we'll use rows from enrichment_staging that have good data
   const { data: enrichedItems, error: enrichError } = await supabase
-    .from("penny_item_enrichment")
-    .select("sku, item_name, image_url, internet_sku")
+    .from("enrichment_staging")
+    .select(
+      "sku, item_name, brand, barcode_upc, image_url, product_link, internet_number, retail_price"
+    )
     .not("item_name", "is", null)
     .not("image_url", "is", null)
     .limit(100)
@@ -217,8 +223,13 @@ export async function GET(request: Request) {
       timestamp: randomRecentTimestamp(),
       exact_quantity_found: Math.random() > 0.5 ? randomInt(1, 5) : null,
       notes_optional: null,
-      image_url: item.image_url || null,
-      internet_sku: item.internet_sku || null,
+      // Enrichment data (pre-filled so list cards look complete)
+      brand: item.brand,
+      upc: item.barcode_upc,
+      image_url: item.image_url,
+      home_depot_url: item.product_link,
+      internet_sku: item.internet_number,
+      retail_price: item.retail_price,
       source: "trickle",
     }
 
