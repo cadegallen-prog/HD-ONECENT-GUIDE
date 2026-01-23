@@ -294,10 +294,39 @@ def main():
     )
 
     if not scrape_result.get("ok"):
-        print(
-            f"ERROR: Scrape failed at stage '{scrape_result.get('stage', 'unknown')}'"
-        )
-        print(f"  Error: {scrape_result.get('error', 'Unknown error')}")
+        stage = scrape_result.get("stage", "unknown")
+        error = scrape_result.get("error", "Unknown error")
+
+        # GitHub Actions annotation (does not include secrets)
+        print(f"::error title=Staging warmer scrape failed ({stage})::{error}")
+        print(f"ERROR: Scrape failed at stage '{stage}'")
+        print(f"  Error: {error}")
+
+        zip_results = scrape_result.get("zip_results") or []
+        if zip_results:
+            print("\nFetch diagnostics (per zip):")
+            for r in zip_results:
+                zip_code = r.get("zip_code", "?")
+                status = r.get("status_code")
+                count = r.get("count")
+                content_type = r.get("content_type")
+                looks_like_html = r.get("looks_like_html")
+                was_redirected = r.get("was_redirected")
+                err = r.get("error")
+                elapsed_ms = r.get("elapsed_ms")
+
+                print(
+                    "  FETCH_DIAGNOSTICS "
+                    + f"zip={zip_code} status={status} count={count} "
+                    + f"content_type={content_type} looks_like_html={looks_like_html} "
+                    + f"redirected={was_redirected} error={err} elapsed_ms={elapsed_ms}"
+                )
+
+                snippet = r.get("response_snippet")
+                if isinstance(snippet, str) and snippet.strip():
+                    safe_snippet = snippet.strip()[:200]
+                    print(f"    snippet: {safe_snippet}")
+
         sys.exit(1)
 
     items = scrape_result.get("data", [])

@@ -39,6 +39,7 @@ jobs:
     timeout-minutes: 30
     permissions:
       contents: read
+      issues: write
 
     steps:
       - name: Checkout
@@ -84,3 +85,91 @@ jobs:
           # Default to 5 zips; override by setting PENNY_ZIP_CODES in the workflow or secrets.
           PENNY_ZIP_CODES: "30301,30303,30305,30308,30309"
         run: python scripts/staging-warmer.py
+
+      - name: Open or update failure issue
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = "🚨 Enrichment Staging Warmer failing (check cookie)";
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const now = new Date().toISOString();
+
+            const body = [
+              `The scheduled workflow **Enrichment Staging Warmer** failed.`,
+              ``,
+              `- Last failed run: ${runUrl}`,
+              `- Branch: ${context.ref}`,
+              `- Commit: ${context.sha}`,
+              `- Updated: ${now}`,
+              ``,
+              `Most likely cause: **PENNY_RAW_COOKIE expired/invalid** (or upstream API changed/down).`,
+              ``,
+              `Next steps (do NOT paste secrets here):`,
+              `1) Refresh the Home Depot / ScouterPro cookie and update GitHub repo secret \`PENNY_RAW_COOKIE\``,
+              `2) Re-run the workflow (Actions → Enrichment Staging Warmer → Run workflow)`,
+              `3) In the run logs, search for \`FETCH_DIAGNOSTICS\` lines to see HTTP status codes / HTML login clues.`,
+            ].join("\\n");
+
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+              per_page: 100,
+            });
+
+            const existing = issues.find((i) => i.title === title);
+            if (existing) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                body,
+              });
+              core.info(`Updated existing issue #${existing.number}`);
+            } else {
+              const created = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+              });
+              core.info(`Created issue #${created.data.number}`);
+            }
+
+      - name: Close failure issue (if recovered)
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = "🚨 Enrichment Staging Warmer failing (check cookie)";
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+              per_page: 100,
+            });
+
+            const existing = issues.find((i) => i.title === title);
+            if (!existing) {
+              core.info("No open failure issue found.");
+              return;
+            }
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: existing.number,
+              body: `✅ Workflow is healthy again. Last successful run: ${runUrl}`,
+            });
+
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: existing.number,
+              state: "closed",
+            });
+
+            core.info(`Closed issue #${existing.number}`);

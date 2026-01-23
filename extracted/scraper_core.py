@@ -65,6 +65,7 @@ class PennyScraperCore:
 
         self.session: Optional[requests.Session] = None
         self.all_data: List[Dict[str, Any]] = []
+        self.zip_results: List[Dict[str, Any]] = []
 
     def _setup_session(self) -> None:
         """Create and configure session with auth headers."""
@@ -72,10 +73,19 @@ class PennyScraperCore:
         self.session.headers.update(
             {
                 "User-Agent": "Mozilla/5.0",
+                "Accept": "application/json,text/plain,*/*",
                 "X-Guild-Id": self.guild_id,
                 "Cookie": self.raw_cookie,
             }
         )
+
+    def _peek_text(self, response: requests.Response, limit: int = 220) -> str:
+        """Return a small, safe-to-log snippet of the response body."""
+        try:
+            raw = response.content[:limit]
+            return raw.decode("utf-8", errors="replace").replace("\n", " ").replace("\r", " ").strip()
+        except Exception:
+            return ""
 
     def _fetch_zip_code(self, zip_code: str) -> int:
         """
@@ -90,6 +100,17 @@ class PennyScraperCore:
         if not self.session:
             raise RuntimeError("Session not initialized. Call _setup_session() first.")
 
+        started = time.time()
+        zip_result: Dict[str, Any] = {
+            "zip_code": zip_code,
+            "count": 0,
+            "status_code": None,
+            "content_type": None,
+            "looks_like_html": None,
+            "was_redirected": None,
+            "error": None,
+        }
+
         try:
             r = self.session.get(
                 self.api_url,
@@ -102,10 +123,25 @@ class PennyScraperCore:
                 timeout=self.timeout_sec,
             )
 
+            zip_result["status_code"] = r.status_code
+            zip_result["content_type"] = r.headers.get("content-type")
+            zip_result["was_redirected"] = bool(r.history)
+
+            snippet = self._peek_text(r)
+            snippet_lower = snippet.lstrip().lower()
+            zip_result["looks_like_html"] = (
+                ("text/html" in (zip_result["content_type"] or "").lower())
+                or snippet_lower.startswith("<!doctype")
+                or snippet_lower.startswith("<html")
+            )
+
             if r.status_code == 200:
                 try:
                     data = r.json()
                 except (ValueError, json.JSONDecodeError):
+                    zip_result["error"] = "json_decode_error"
+                    # Save a short snippet to help detect HTML/login pages. Never includes secrets.
+                    zip_result["response_snippet"] = snippet
                     return 0
 
                 # Ensure it's a list
@@ -113,14 +149,21 @@ class PennyScraperCore:
                     data = [data] if data else []
 
                 self.all_data.extend(data)
+                zip_result["count"] = len(data)
                 return len(data)
             else:
+                zip_result["error"] = f"http_{r.status_code}"
+                zip_result["response_snippet"] = snippet if zip_result["looks_like_html"] else ""
                 # Non-200 response; return 0 but don't crash
                 return 0
 
-        except requests.RequestException:
+        except requests.RequestException as e:
             # Timeout, connection error, etc.; return 0 but don't crash
+            zip_result["error"] = f"request_exception:{type(e).__name__}"
             return 0
+        finally:
+            zip_result["elapsed_ms"] = int((time.time() - started) * 1000)
+            self.zip_results.append(zip_result)
 
     def _normalize_frame(self, df: pd.DataFrame) -> pd.DataFrame:
         """
@@ -283,6 +326,7 @@ class PennyScraperCore:
             }
         """
         try:
+            self.zip_results = []
             # Setup session
             self._setup_session()
 
@@ -295,12 +339,24 @@ class PennyScraperCore:
 
             # Check if we got any data
             if not self.all_data:
+                status_codes = [r.get("status_code") for r in self.zip_results if r.get("status_code") is not None]
+                looks_like_html = any(r.get("looks_like_html") for r in self.zip_results)
+                has_auth_error = any(code in (401, 403) for code in status_codes)
+
+                if has_auth_error or looks_like_html:
+                    hint = "Likely auth failure (cookie expired/invalid) — refresh PENNY_RAW_COOKIE and retry."
+                elif status_codes:
+                    hint = "API returned no usable data — check upstream availability and response format."
+                else:
+                    hint = "All requests failed (timeouts/network) — check upstream availability."
+
                 return {
                     "ok": False,
-                    "error": "Empty API response. Check credentials and API availability.",
+                    "error": f"Empty API response. {hint}",
                     "stage": "fetch",
                     "raw_count": 0,
                     "final_count": 0,
+                    "zip_results": self.zip_results,
                 }
 
             # Convert to DataFrame and deduplicate
@@ -324,6 +380,7 @@ class PennyScraperCore:
                 "data": result,
                 "raw_count": raw_count,
                 "final_count": final_count,
+                "zip_results": self.zip_results,
             }
 
         except Exception as e:
@@ -333,6 +390,7 @@ class PennyScraperCore:
                 "stage": "execution",
                 "raw_count": len(self.all_data),
                 "final_count": 0,
+                "zip_results": self.zip_results,
             }
 
 
