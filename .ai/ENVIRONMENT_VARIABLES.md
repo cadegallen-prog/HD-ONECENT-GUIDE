@@ -93,6 +93,12 @@ These are **GitHub repo secrets** (not Vercel env vars). They are used by the sc
 
 **Important:** You do **not** need `PENNY_RAW_COOKIE` / `PENNY_GUILD_ID` in Vercel unless a Vercel route uses them.
 
+**Local manual override:** If GitHub-hosted runners are blocked (Cloudflare), you can run the same warmer from your machine:
+
+- Put `PENNY_RAW_COOKIE` + `PENNY_GUILD_ID` in `.env.local` (never commit)
+- Pull Supabase vars with `vercel env pull .env.local`
+- Run: `npm run warm:staging`
+
 ---
 
 ### Home Depot Stores (0 variables - Uses Local File)

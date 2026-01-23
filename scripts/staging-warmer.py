@@ -296,11 +296,13 @@ def main():
     if not scrape_result.get("ok"):
         stage = scrape_result.get("stage", "unknown")
         error = scrape_result.get("error", "Unknown error")
+        cloudflare_block = bool(scrape_result.get("cloudflare_block"))
 
         # GitHub Actions annotation (does not include secrets)
         print(f"::error title=Staging warmer scrape failed ({stage})::{error}")
         print(f"ERROR: Scrape failed at stage '{stage}'")
         print(f"  Error: {error}")
+        print(f"cloudflare_block={'true' if cloudflare_block else 'false'}")
 
         zip_results = scrape_result.get("zip_results") or []
         if zip_results:

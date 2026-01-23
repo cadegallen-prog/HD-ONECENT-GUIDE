@@ -92,6 +92,11 @@ External Penny Source (Scouter/ScouterPro) ─→ GitHub Action (Tue–Fri) ─�
    - Expect: `Enrichment Staging Warmer` run turns green and logs show non-zero items fetched + upserted.
    - Monitor: `enrichment_staging` row count increases and `updated_at` refreshes.
 
+2.5. **Manual override (works today): local warmer from your home IP**
+
+- Command: `npm run warm:staging`
+- This runs the same pipeline as the GitHub Action but from your machine/network.
+
 3. **Confirm Vercel cron jobs are authorized**
    - Ensure `CRON_SECRET` is set (prod) and cron logs show 200s (not 401s) for:
      - `/api/cron/seed-penny-list`

@@ -16,6 +16,7 @@
 
 - ✅ **Core product working:** Submissions, enrichment, Penny List page
 - ⚠️ **Pre-scrape pipeline exists but is currently blocked:** GitHub Actions `Enrichment Staging Warmer` runs Tue–Fri, but upstream `pro.scouterdev.io/api/penny-items` is returning **403 + Cloudflare “Just a moment...” HTML** from GitHub runners. `enrichment_staging` currently has ~1,343 rows (stale until the block is resolved). See `.ai/topics/DATA_PIPELINE.md` + issue #106.
+- ✅ **Manual override exists:** Run `npm run warm:staging` locally (your home IP) to refresh `enrichment_staging` until the Cloudflare block is resolved.
 - ✅ **Retention features live:** Email signup (10s subscribers), PWA install prompt, weekly digest cron
 - ✅ **Monetization bridge:** Ezoic (temporary) + Mediavine Grow (analytics collection in progress)
 - 🔄 **Cron health check needed:** Vercel cron jobs are configured; ensure `CRON_SECRET` is set correctly so `/api/cron/*` doesn’t return 401.

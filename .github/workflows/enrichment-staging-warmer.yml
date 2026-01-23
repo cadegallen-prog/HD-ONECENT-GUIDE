@@ -75,25 +75,40 @@ jobs:
           echo "All required secrets present"
 
       - name: Run staging warmer
+        id: warmer
+        continue-on-error: true
         env:
           PENNY_RAW_COOKIE: ${{ secrets.PENNY_RAW_COOKIE }}
           PENNY_GUILD_ID: ${{ secrets.PENNY_GUILD_ID }}
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          MAX_UNIQUES: ${{ github.event.inputs.max_uniques || '6000' }}
+          # Scheduled runs are a low-aggression health probe (light mode).
+          # Manual dispatch runs the full warmer by default.
+          MAX_UNIQUES: ${{ github.event_name == 'schedule' && '1000' || (github.event.inputs.max_uniques || '6000') }}
           BATCH_SIZE: ${{ github.event.inputs.batch_size || '50' }}
-          # Default to 5 zips; override by setting PENNY_ZIP_CODES in the workflow or secrets.
-          PENNY_ZIP_CODES: "30301,30303,30305,30308,30309"
-        run: python scripts/staging-warmer.py
+          PENNY_ZIP_CODES: ${{ github.event_name == 'schedule' && '30301' || '30301,30303,30305,30308,30309' }}
+        run: |
+          set +e
+          python scripts/staging-warmer.py 2>&1 | tee warmer.log
+          status=${PIPESTATUS[0]}
+
+          cloudflare_block=false
+          if grep -qi "cloudflare_block=true" warmer.log; then
+            cloudflare_block=true
+          fi
+          echo "cloudflare_block=$cloudflare_block" >> "$GITHUB_OUTPUT"
+
+          exit $status
 
       - name: Open or update failure issue
-        if: failure()
+        if: steps.warmer.outcome == 'failure'
         uses: actions/github-script@v7
         with:
           script: |
             const title = "🚨 Enrichment Staging Warmer failing (check cookie)";
             const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
             const now = new Date().toISOString();
+            const cloudflareBlock = "${{ steps.warmer.outputs.cloudflare_block }}" === "true";
 
             const body = [
               `The scheduled workflow **Enrichment Staging Warmer** failed.`,
@@ -102,6 +117,7 @@ jobs:
               `- Branch: ${context.ref}`,
               `- Commit: ${context.sha}`,
               `- Updated: ${now}`,
+              `- cloudflare_block: ${cloudflareBlock ? "true" : "false"}`,
               ``,
               `Most likely causes:`,
               `- **Cloudflare / bot protection** blocking GitHub Actions (HTTP 403 + HTML \\"Just a moment...\\" page)`,
@@ -111,7 +127,7 @@ jobs:
               `Next steps (do NOT paste secrets here):`,
               `1) Open the failed run and search logs for \`FETCH_DIAGNOSTICS\` (it prints HTTP status + HTML clues)`,
               `2) If you see 401/403 with a normal API response, refresh \`PENNY_RAW_COOKIE\` and retry`,
-              `3) If you see 403 + \\"Just a moment...\\" (Cloudflare), cookie refresh alone may not work — you likely need a self-hosted runner (your own IP) or ScouterPro allowlisting.`,
+              `3) If \`cloudflare_block: true\` and you see 403 + \\"Just a moment...\\" (Cloudflare), GitHub runners are blocked — use the local warmer or a self-hosted runner (your own IP).`,
             ].join("\n");
 
             const { data: issues } = await github.rest.issues.listForRepo({
@@ -141,7 +157,7 @@ jobs:
             }
 
       - name: Close failure issue (if recovered)
-        if: success()
+        if: steps.warmer.outcome == 'success'
         uses: actions/github-script@v7
         with:
           script: |
@@ -176,3 +192,7 @@ jobs:
             });
 
             core.info(`Closed issue #${existing.number}`);
+
+      - name: Fail job if warmer failed
+        if: steps.warmer.outcome == 'failure'
+        run: exit 1

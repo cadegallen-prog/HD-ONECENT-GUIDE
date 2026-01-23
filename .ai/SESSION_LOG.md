@@ -15,6 +15,7 @@
 - `.github/workflows/enrichment-staging-warmer.yml`: Added failure auto-issue creation/update + clearer schedule notes.
 - `extracted/scraper_core.py`: Added per-zip diagnostics (HTTP status, HTML detection, timing) and better failure hints.
 - `scripts/staging-warmer.py`: Prints `FETCH_DIAGNOSTICS` lines + GitHub Actions `::error` annotation on failure.
+- `scripts/run-local-staging-warmer.mjs` + `npm run warm:staging`: Local manual override runner (same code path as Actions, but from your home IP).
 - `app/api/cron/seed-penny-list/route.ts`: Switched data source to `enrichment_staging` (prod does not have `penny_item_enrichment`).
 - `app/api/cron/trickle-finds/route.ts`: Switched data source to `enrichment_staging` (same reason).
 
@@ -24,6 +25,11 @@
 - This is likely IP / bot protection; refreshing `PENNY_RAW_COOKIE` alone may not fix it.
 - `enrichment_staging` exists and currently has **1343** rows (as of Jan 23, 2026).
 - `penny_item_enrichment` does **not** exist in production Supabase (PostgREST `PGRST205`).
+
+### Manual Override (Current Best Path)
+
+- Run from your machine/network (home IP): `npm run warm:staging`
+- The GitHub Action remains a low-aggression probe and will auto-update issue #106 with `cloudflare_block: true/false`.
 
 ### Evidence
 

@@ -370,6 +370,7 @@ class PennyScraperCore:
                     "stage": "fetch",
                     "raw_count": 0,
                     "final_count": 0,
+                    "cloudflare_block": cloudflare_block,
                     "zip_results": self.zip_results,
                 }
 
@@ -394,6 +395,7 @@ class PennyScraperCore:
                 "data": result,
                 "raw_count": raw_count,
                 "final_count": final_count,
+                "cloudflare_block": False,
                 "zip_results": self.zip_results,
             }
 
@@ -404,6 +406,7 @@ class PennyScraperCore:
                 "stage": "execution",
                 "raw_count": len(self.all_data),
                 "final_count": 0,
+                "cloudflare_block": False,
                 "zip_results": self.zip_results,
             }
 
