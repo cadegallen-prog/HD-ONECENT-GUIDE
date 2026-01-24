@@ -6,11 +6,12 @@ import { filterValidPennyItems, formatRelativeDate } from "@/lib/penny-list-util
 import { normalizeStateParam } from "@/lib/states"
 
 type PageParams = {
-  params: { state: string }
+  params: Promise<{ state: string }>
 }
 
 export async function generateMetadata({ params }: PageParams): Promise<Metadata> {
-  const stateInfo = normalizeStateParam(params.state)
+  const { state } = await params
+  const stateInfo = normalizeStateParam(state)
   if (!stateInfo) return {}
 
   const title = `Home Depot Penny Items in ${stateInfo.name} | Penny Central`
@@ -31,7 +32,8 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
 }
 
 export default async function StatePennyPage({ params }: PageParams) {
-  const stateInfo = normalizeStateParam(params.state)
+  const { state } = await params
+  const stateInfo = normalizeStateParam(state)
   if (!stateInfo) notFound()
 
   // Use a 6m window for freshness while keeping the Supabase pull smaller
