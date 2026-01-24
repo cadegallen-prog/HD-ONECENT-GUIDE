@@ -4,6 +4,32 @@
 
 ---
 
+## 2026-01-24 - Codex - AdSense compliance baseline (snippet + policy pages)
+
+**Goal:** Implement AdSense compliance requirements (head snippet, robots, policy/contact pages).
+
+**Status:** ⚠️ Partial (unit/e2e gates failed due to missing env + webServer timeout).
+
+### Changes
+
+- `app/layout.tsx`: Added AdSense script to `<head>` so it loads early on all pages.
+- `public/robots.txt`: Allowed `Mediapartners-Google` explicitly.
+- `app/privacy-policy/page.tsx`: Added Google AdSense privacy disclosure (third-party cookies + DART + opt-out).
+- `app/about/page.tsx`: Expanded About copy to include Penny Central mission + >200 words.
+- `app/contact/page.tsx`: Added Contact page with email address.
+- `components/footer.tsx`: Added Contact Us link in footer.
+- `app/sitemap.ts`: Added Contact page to sitemap.
+
+### Verification
+
+- `npm run lint`: ✅
+- `npm run build`: ✅
+- `npm run test:unit`: ❌ (missing `SUPABASE_SERVICE_ROLE_KEY`, tests returned 500)
+- `npm run test:e2e`: ❌ (Playwright webServer timed out after 120000ms)
+- Playwright proof: `reports/proof/2026-01-24T17-18-16` (24 console errors recorded in `console-errors.txt`)
+
+---
+
 ## 2026-01-23 - Codex - Pipeline: staging warmer diagnostics + Cloudflare blocker
 
 **Goal:** Get the Tue–Fri pre-scrape pipeline working reliably and make failures impossible to miss.
@@ -39,30 +65,6 @@
 ### Verification
 
 - Bundle: `reports/verification/2026-01-23T10-51-52/summary.md`
-
----
-
-## 2026-01-22 - Codex - Codex CLI + MCP enablement (non-coder workflow)
-
-**Goal:** Make Codex less brittle for a 100% AI-reliant workflow: fix MCP config drift, upgrade Codex CLI to match current docs, and remove the need to hardcode secrets in config files.
-
-**Status:** ✅ Complete
-
-### Changes
-
-- Updated repo MCP docs to match current Codex config schema (`mcp_servers`, snake_case):
-  - `.ai/MCP_SETUP.md`
-  - `.ai/CODEX_CONFIG_SNIPPET.toml`
-  - `docs/skills/codex-mcp-setup.md` (new)
-- Updated local machine setup (outside repo):
-  - Fixed broken npm global `prefix` (so `npm install -g` works)
-  - Upgraded Codex CLI to a version that supports `codex mcp list/add/login`
-  - Normalized `~/.codex/config.toml` to use `mcp_servers` + added OpenAI Docs MCP
-
-### Quick verify
-
-- `codex --version`
-- `codex mcp list`
 
 ---
 
