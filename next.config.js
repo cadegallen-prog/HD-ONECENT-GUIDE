@@ -127,15 +127,15 @@ const nextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              // Ad Networks: Ezoic (approved), Mediavine Journey/Grow.me (approved), ID5 identity service
+              // Ad Networks: Google AdSense (approved), Ezoic (approved), Mediavine Journey/Grow.me (approved), ID5 identity service
               // Future: Monument Metric (under review) - add https://*.monumentmetric.com when approved
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://va.vercel-scripts.com https://faves.grow.me https://*.grow.me https://cmp.gatekeeperconsent.com https://the.gatekeeperconsent.com https://www.ezojs.com https://*.ezoic.net https://*.ezoic.com https://cdn.id5-sync.com https://*.id5-sync.com",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://faves.grow.me https://*.grow.me https://cmp.gatekeeperconsent.com https://the.gatekeeperconsent.com https://www.ezojs.com https://*.ezoic.net https://*.ezoic.com https://cdn.id5-sync.com https://*.id5-sync.com",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
               // Ezoic requires HTTP for legacy image endpoints (g.ezoic.net)
               "img-src 'self' data: blob: https://*.tile.openstreetmap.org https://*.google-analytics.com https://*.googletagmanager.com https: http://g.ezoic.net http://*.ezoic.net",
-              "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://www.befrugal.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com",
-              "frame-src 'self' https://app.grow.me https://*.grow.me",
+              "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://www.befrugal.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com",
+              "frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://app.grow.me https://*.grow.me",
               "frame-ancestors 'none'",
               "object-src 'none'",
               "base-uri 'self'",
