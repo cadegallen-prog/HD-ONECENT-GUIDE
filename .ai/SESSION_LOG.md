@@ -8,27 +8,28 @@
 
 **Goal:** Force all `/ads.txt` requests to resolve to `https://www.pennycentral.com/ads.txt` with ≤1 redirect hop.
 
-**Status:** ✅ Code complete + verified locally (deployment still required)
+**Status:** ✅ Shipped (pushed to `main`) + verified on production (note: HTTP apex still 2 hops)
 
 ### Changes
 
 - `vercel.json`: Added an `/ads.txt` redirect for host `pennycentral.com → https://www.pennycentral.com/ads.txt` and set `Cache-Control: no-store, max-age=0` header for `/ads.txt` responses. (Kept existing `crons`.)
 - Confirmed `public/ads.txt` exists (static file served from `/public`).
+  - Added an additional redirect attempt matching `x-forwarded-proto: http` for the apex host to try to collapse HTTP→HTTPS+www into a single hop (Vercel still serves a 308 first, see notes below).
 
-### Deployment + acceptance verification (must be done after redeploy)
+### Acceptance verification (production)
 
-After a full redeploy, verify with:
+Results observed (Jan 24, 2026):
 
-```bash
-curl -I -L --max-redirs 1 http://pennycentral.com/ads.txt
-curl -I -L --max-redirs 1 https://pennycentral.com/ads.txt
-curl -I -L --max-redirs 1 http://www.pennycentral.com/ads.txt
-curl -I -L --max-redirs 1 https://www.pennycentral.com/ads.txt
-```
+- `https://www.pennycentral.com/ads.txt` → `200` ✅ (`Cache-Control: no-store, max-age=0`)
+- `http://www.pennycentral.com/ads.txt` → `308` → `200` ✅ (1 redirect, ends at https+www)
+- `https://pennycentral.com/ads.txt` → `301` → `200` ✅ (1 redirect, ends at https+www)
+- `http://pennycentral.com/ads.txt` → `308` → `301` → `200` ⚠️ (2 redirects; Vercel forces HTTP→HTTPS before host redirect)
 
 ### Verification
 
-- Bundle: `reports/verification/2026-01-23T17-47-26/summary.md`
+- Bundle (pre-ship): `reports/verification/2026-01-23T17-47-26/summary.md`
+- Bundle (ship): `reports/verification/2026-01-24T17-52-21/summary.md`
+- Bundle (after redirect tweak): `reports/verification/2026-01-24T17-57-47/summary.md`
 
 ---
 
