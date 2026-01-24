@@ -13,7 +13,8 @@
 ### Changes
 
 - `next.config.js`: Removed redirects for `/checkout-strategy` and `/responsible-hunting` (these now serve real pages).
-- `public/sitemap.xml`: Canonicalized all `<loc>` URLs from `https://pennycentral.com/...` → `https://www.pennycentral.com/...`.
+- `app/sitemap.ts`: Added `/checkout-strategy` and `/responsible-hunting` to the live sitemap output.
+- `public/sitemap.xml`: Canonicalized all `<loc>` URLs from `https://pennycentral.com/...` → `https://www.pennycentral.com/...` (note: production uses `app/sitemap.ts`).
 - Playwright stability (verification hygiene):
   - `playwright.config.ts`: Avoids deleting `.next` and starts `next start -p 3002` using `NEXT_DIST_DIR=.next-playwright`.
   - `package.json`: `test:e2e` builds with `NEXT_DIST_DIR=.next-playwright` then runs Playwright.
@@ -21,12 +22,13 @@
 
 ### Verification (local)
 
-- Bundle: `reports/verification/2026-01-24T22-45-55/summary.md` (lint ✅, build ✅, unit ✅, e2e ✅)
+- Bundle: `reports/verification/2026-01-24T23-01-47/summary.md` (lint ✅, build ✅, unit ✅, e2e ✅)
 
 ### Production verification (after deploy)
 
 - `https://www.pennycentral.com/checkout-strategy` → `200` (observed 2026-01-24)
 - `https://www.pennycentral.com/responsible-hunting` → `200` (observed 2026-01-24)
+- `https://www.pennycentral.com/sitemap.xml` includes both URLs (observed 2026-01-24)
 
 ---
 
