@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Jan 22, 2026 (Ezoic ads: Option B placeholders)
+**Last updated:** Jan 24, 2026 (AdSense readiness + professional email checklist)
 
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
@@ -11,6 +11,7 @@ Every AI session must update this after meaningful work.
 
 ## Current Sprint (Last 7 Days)
 
+- **2026-01-24 (AdSense readiness + professional email checklist):** Added a README checklist covering domain/DNS, Cloudflare Email Routing, deliverability basics, and AdSense reviewer expectations. Added a reusable skill doc for future sessions: `docs/skills/adsense-domain-email-setup.md`.
 - **2026-01-23 (Ads.txt canonicalization):** Shipped Vercel config so `/ads.txt` resolves to `https://www.pennycentral.com/ads.txt` and is served with `Cache-Control: no-store, max-age=0` (static file at `public/ads.txt`; no middleware/API). Production verification (Jan 24, 2026): HTTPS apex and HTTP www are ≤1 hop; **HTTP apex is still 2 hops** due to Vercel’s automatic HTTP→HTTPS redirect happening before host canonicalization. Verification bundles: `reports/verification/2026-01-24T17-52-21/summary.md`, `reports/verification/2026-01-24T17-57-47/summary.md`.
 - **2026-01-23 (SEO: State pages 500 fix):** Fixed `/pennies/[state]` pages returning 500 in production (blocking crawl/indexing) by updating the route params to match Next 16 (`params: Promise<...>`). Also stabilized Playwright verification by building in test mode with `NEXT_PUBLIC_EZOIC_ENABLED=false` and using `127.0.0.1` for the Playwright base URL to avoid flaky `localhost` IPv6 connection issues. Verification bundle: `reports/verification/2026-01-23T17-39-46/summary.md`.
 - **2026-01-23 (Pipeline: Enrichment Staging Warmer diagnostics + Cloudflare blocker):** Fixed the GitHub Actions `Enrichment Staging Warmer` workflow so failures aren’t silent: added per-zip HTTP diagnostics (`FETCH_DIAGNOSTICS`), clearer failure hints, and auto-created/updated a GitHub issue on failure (includes `cloudflare_block: true/false`). Reality check: the upstream `pro.scouterdev.io/api/penny-items` endpoint is returning **403 + Cloudflare “Just a moment...” HTML** from GitHub-hosted runners, so scheduled runs are a low-aggression probe until we change runtime/IP. Added a local manual override that runs the _same_ pipeline from your home IP: `npm run warm:staging`. Also updated Vercel cron endpoints `seed-penny-list` and `trickle-finds` to read from `enrichment_staging` because production Supabase does **not** have `penny_item_enrichment` (PostgREST `PGRST205`). Verification bundle: `reports/verification/2026-01-23T10-51-52/summary.md`. Failure tracking issue: https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/issues/106. Note: Cade updated Vercel apex redirect `pennycentral.com → www.pennycentral.com` from **307** to **301** for SEO/canonicalization.

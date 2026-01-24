@@ -58,6 +58,60 @@ No “provider” env var is used — this avoids tracking silently dropping due
 
 ---
 
+## AdSense Readiness + Professional Domain Email (Checklist)
+
+Use this as the **single checklist** for a professional contact email and AdSense reviewer readiness.
+
+### A) Domain + DNS Foundation
+
+1. **Pick the canonical domain** (e.g., `www.pennycentral.com`) and set a 301 redirect from the apex.
+2. **DNS on Cloudflare** (or your DNS provider):
+   - Ensure the domain is active and the site resolves over HTTPS.
+   - Keep your `A`/`CNAME` records pointed to Vercel (or your host).
+
+### B) Professional Contact Email (Cloudflare Email Routing)
+
+**Goal (AdSense-ready):** Create `contact@pennycentral.com` that forwards to your personal inbox and **does not bounce**.
+
+**Step 1 — Cloudflare Email Routing (receive)**
+
+1. Enable **Email Routing** in Cloudflare.
+2. Add the **MX** + **TXT** records Cloudflare provides.
+3. Create a **Custom Address**: `contact@pennycentral.com`.
+4. Set the **Destination Address** to your personal email (e.g., `you@gmail.com`).
+
+**Step 2 — Outbound / Replying (optional)**
+
+Cloudflare Email Routing is **receive-only** (no SMTP). If you need to send/reply *from* `contact@pennycentral.com`, pick one:
+
+- **Option A (fastest, free):** Receive mail at `contact@...`, but reply from your personal email (set your Gmail display name to “Penny Central”). This is usually sufficient for AdSense.
+- **Option B (reliable, paid):** Use an email host (Google Workspace, Fastmail, Zoho, etc.) and then configure Gmail “Send mail as” using that provider’s SMTP.
+- **Option C (already in this repo):** Keep using Resend for the weekly digest/newsletter sender address; keep `contact@...` for inbound support.
+
+**Step 3 — Verification (required)**
+
+1. Send a test email **to** `contact@pennycentral.com` from another account.
+2. Confirm it lands in your inbox and does **not bounce**.
+
+### C) AdSense Review Readiness (Site Checklist)
+
+1. **Contact page** with the professional email (`contact@pennycentral.com`).
+2. **Privacy Policy** page (required).
+3. **Terms/Disclaimer** page (recommended).
+4. **Clear navigation** so reviewers can reach key pages.
+5. **Sufficient original content** (not thin or placeholder).
+6. **No broken links** / “under construction” pages.
+7. **HTTPS everywhere** (no mixed-content warnings).
+8. **Ads.txt ready** once AdSense is approved (AdSense gives the line to add).
+
+### D) Optional (Nice-to-Have for Trust)
+
+1. **About page** with who runs the site.
+2. **Consistency**: use the same brand name in footer, email, and policy pages.
+3. **Search Console** verification on the canonical domain.
+
+---
+
 ## OG Images (Facebook Reliable)
 
 Main pages use **static** OG PNGs for reliability on Facebook and other scrapers.
