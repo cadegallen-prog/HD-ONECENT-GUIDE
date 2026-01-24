@@ -4,6 +4,20 @@
 
 ---
 
+## 2026-01-24 - Codex - AdSense readiness + professional email checklist
+
+**Goal:** Document a clear checklist for AdSense review readiness and professional domain email setup.
+
+**Status:** ✅ Complete
+
+### Changes
+
+- `README.md`: Added an AdSense readiness + professional email checklist (domain/DNS, Cloudflare routing, Gmail send-as, SPF/DMARC, reviewer basics).
+- `docs/skills/adsense-domain-email-setup.md`: New reusable skill with the same checklist for future sessions.
+- `docs/skills/README.md`: Added the new skill to the index.
+
+---
+
 ## 2026-01-23 - Codex - Ads.txt one-hop canonicalization (Vercel)
 
 **Goal:** Force all `/ads.txt` requests to resolve to `https://www.pennycentral.com/ads.txt` with ≤1 redirect hop.
@@ -52,43 +66,3 @@ Results observed (Jan 24, 2026):
 ### Verification
 
 - Bundle: `reports/verification/2026-01-23T17-39-46/summary.md`
-
----
-
-## 2026-01-23 - Codex - Pipeline: staging warmer diagnostics + Cloudflare blocker
-
-**Goal:** Get the Tue–Fri pre-scrape pipeline working reliably and make failures impossible to miss.
-
-**Status:** ⚠️ Blocked (Cloudflare 403 from upstream API) — not a silent failure anymore.
-
-### Changes
-
-- `.github/workflows/enrichment-staging-warmer.yml`: Added failure auto-issue creation/update + clearer schedule notes.
-- `extracted/scraper_core.py`: Added per-zip diagnostics (HTTP status, HTML detection, timing) and better failure hints.
-- `scripts/staging-warmer.py`: Prints `FETCH_DIAGNOSTICS` lines + GitHub Actions `::error` annotation on failure.
-- `scripts/run-local-staging-warmer.mjs` + `npm run warm:staging`: Local manual override runner (same code path as Actions, but from your home IP).
-- `app/api/cron/seed-penny-list/route.ts`: Switched data source to `enrichment_staging` (prod does not have `penny_item_enrichment`).
-- `app/api/cron/trickle-finds/route.ts`: Switched data source to `enrichment_staging` (same reason).
-
-### Findings (Root Cause)
-
-- Upstream `https://pro.scouterdev.io/api/penny-items` returns **HTTP 403 + Cloudflare “Just a moment...” HTML** from GitHub Actions runners.
-- This is likely IP / bot protection; refreshing `PENNY_RAW_COOKIE` alone may not fix it.
-- `enrichment_staging` exists and currently has **1343** rows (as of Jan 23, 2026).
-- `penny_item_enrichment` does **not** exist in production Supabase (PostgREST `PGRST205`).
-
-### Manual Override (Current Best Path)
-
-- Run from your machine/network (home IP): `npm run warm:staging`
-- The GitHub Action remains a low-aggression probe and will auto-update issue #106 with `cloudflare_block: true/false`.
-
-### Evidence
-
-- Latest failed run: https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/21283542371
-- Auto-created failure issue: https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/issues/106
-
-### Verification
-
-- Bundle: `reports/verification/2026-01-23T10-51-52/summary.md`
-
----
