@@ -5,6 +5,9 @@ const nextConfig = {
   reactStrictMode: false, // Disabled due to Leaflet map initialization issues
   poweredByHeader: false,
   compress: true,
+  // Allow Playwright/CI to build to an isolated output directory so e2e runs don't clobber a local dev server.
+  // Defaults to `.next` (no behavior change in production).
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   images: {
     formats: ["image/avif", "image/webp"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
@@ -54,18 +57,8 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/checkout-strategy",
-        destination: "/guide#checkout",
-        permanent: true,
-      },
-      {
         source: "/internal-systems",
         destination: "/guide#internal-operations",
-        permanent: true,
-      },
-      {
-        source: "/responsible-hunting",
-        destination: "/guide#responsible-hunting",
         permanent: true,
       },
       {

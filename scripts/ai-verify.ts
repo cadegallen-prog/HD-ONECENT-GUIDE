@@ -92,6 +92,21 @@ async function checkServerHealth(mode: VerifyMode): Promise<{
   }
 
   if (mode === "test") {
+    // Fail fast if a stale Playwright-owned server is still running.
+    const status = await isHttpOkWithRetries("http://127.0.0.1:3002/", {
+      attempts: 1,
+      timeoutMs: 1500,
+      delayMs: 0,
+    })
+
+    if (status.ok) {
+      return {
+        ok: false,
+        message:
+          "Mode=test: Port 3002 is already serving HTTP. Stop the existing process using 3002 (often `next start -p 3002`) and retry.",
+      }
+    }
+
     return {
       ok: true,
       message: "Mode=test: Playwright will start its own server on port 3002",
