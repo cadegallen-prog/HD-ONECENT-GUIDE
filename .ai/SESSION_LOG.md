@@ -4,6 +4,56 @@
 
 ---
 
+## 2026-01-23 - Codex - Ads.txt one-hop canonicalization (Vercel)
+
+**Goal:** Force all `/ads.txt` requests to resolve to `https://www.pennycentral.com/ads.txt` with ≤1 redirect hop.
+
+**Status:** ✅ Code complete + verified locally (deployment still required)
+
+### Changes
+
+- `vercel.json`: Added an `/ads.txt` redirect for host `pennycentral.com → https://www.pennycentral.com/ads.txt` and set `Cache-Control: no-store, max-age=0` header for `/ads.txt` responses. (Kept existing `crons`.)
+- Confirmed `public/ads.txt` exists (static file served from `/public`).
+
+### Deployment + acceptance verification (must be done after redeploy)
+
+After a full redeploy, verify with:
+
+```bash
+curl -I -L --max-redirs 1 http://pennycentral.com/ads.txt
+curl -I -L --max-redirs 1 https://pennycentral.com/ads.txt
+curl -I -L --max-redirs 1 http://www.pennycentral.com/ads.txt
+curl -I -L --max-redirs 1 https://www.pennycentral.com/ads.txt
+```
+
+### Verification
+
+- Bundle: `reports/verification/2026-01-23T17-47-26/summary.md`
+
+---
+
+## 2026-01-23 - Codex - SEO: fix state pages (indexing blocker)
+
+**Goal:** Fix `/pennies/[state]` pages returning 500 (prevents crawling/indexing) and stabilize local verification.
+
+**Status:** ✅ Complete + verified (all 4 gates: lint/build/unit/e2e)
+
+### Changes
+
+- `app/pennies/[state]/page.tsx`: Updated to Next 16 route params shape (`params: Promise<...>`) to prevent production 500s on state pages.
+- `scripts/ai-verify.ts`: In `-- test` mode, runs `npm run build` with `PLAYWRIGHT=1` + `NEXT_PUBLIC_EZOIC_ENABLED=false` so Playwright runs against the correct client bundle (prevents hydration/console errors).
+- `playwright.config.ts`: Switched base URL to `http://127.0.0.1:3002` to avoid intermittent IPv6 `localhost` connection issues; webServer starts `next start` (no duplicate build step).
+
+### Evidence (production before fix)
+
+- `curl -i https://www.pennycentral.com/pennies/alabama` → `500 Internal Server Error` (Jan 23, 2026)
+
+### Verification
+
+- Bundle: `reports/verification/2026-01-23T17-39-46/summary.md`
+
+---
+
 ## 2026-01-23 - Codex - Pipeline: staging warmer diagnostics + Cloudflare blocker
 
 **Goal:** Get the Tue–Fri pre-scrape pipeline working reliably and make failures impossible to miss.
@@ -41,47 +91,3 @@
 - Bundle: `reports/verification/2026-01-23T10-51-52/summary.md`
 
 ---
-
-## 2026-01-22 - Codex - Codex CLI + MCP enablement (non-coder workflow)
-
-**Goal:** Make Codex less brittle for a 100% AI-reliant workflow: fix MCP config drift, upgrade Codex CLI to match current docs, and remove the need to hardcode secrets in config files.
-
-**Status:** ✅ Complete
-
-### Changes
-
-- Updated repo MCP docs to match current Codex config schema (`mcp_servers`, snake_case):
-  - `.ai/MCP_SETUP.md`
-  - `.ai/CODEX_CONFIG_SNIPPET.toml`
-  - `docs/skills/codex-mcp-setup.md` (new)
-- Updated local machine setup (outside repo):
-  - Fixed broken npm global `prefix` (so `npm install -g` works)
-  - Upgraded Codex CLI to a version that supports `codex mcp list/add/login`
-  - Normalized `~/.codex/config.toml` to use `mcp_servers` + added OpenAI Docs MCP
-
-### Quick verify
-
-- `codex --version`
-- `codex mcp list`
-
----
-
-## 2026-01-22 - Codex - Ezoic ads (Option B rollout: 5 placeholders)
-
-**Goal:** Implement a trust-first Ezoic ad rollout (Option B): 3 homepage slots + 1 Penny List slot (after item #10) + 1 Guide slot (after Section II), with CLS protection and a kill switch.
-
-**Status:** ✅ Complete + verified (all 4 gates: lint/build/unit/e2e)
-
-### Changes
-
-- `lib/ads.ts`: Centralized `EZOIC_ENABLED` toggle, `AD_SLOTS`, and CLS min-heights (`AD_MIN_HEIGHTS`). Disable with `NEXT_PUBLIC_EZOIC_ENABLED=false` (Vercel env var changes require redeploy).
-- `app/layout.tsx`: Gate Ezoic scripts via `EZOIC_ENABLED && ENABLE_VERCEL_SCRIPTS` (only Vercel production + when enabled).
-- `app/page.tsx`: Added homepage placeholders: `HOME_TOP (100)`, `HOME_MID (101)`, `HOME_BOTTOM (102)`.
-- `components/penny-list-client.tsx`: Injected `LIST_AFTER_N (110)` after item #10 in the card grid (no ads above results).
-- `components/GuideContent.tsx`: Added `CONTENT_AFTER_P1 (130)` after Section II.
-- `playwright.config.ts`: E2E web server sets `NEXT_PUBLIC_EZOIC_ENABLED=false` to keep Playwright console-clean and avoid hydration mismatches.
-
-### Proof
-
-- Verification bundle: `reports/verification/2026-01-22T10-39-19/summary.md`
-- Ad placement screenshots: `reports/proof/2026-01-22T10-29-18-ezoic-b/`
