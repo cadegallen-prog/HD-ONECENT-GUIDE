@@ -7,6 +7,22 @@
         {
           "type": "host",
           "value": "pennycentral.com"
+        },
+        {
+          "type": "header",
+          "key": "x-forwarded-proto",
+          "value": "http"
+        }
+      ],
+      "destination": "https://www.pennycentral.com/ads.txt",
+      "permanent": true
+    },
+    {
+      "source": "/ads.txt",
+      "has": [
+        {
+          "type": "host",
+          "value": "pennycentral.com"
         }
       ],
       "destination": "https://www.pennycentral.com/ads.txt",
