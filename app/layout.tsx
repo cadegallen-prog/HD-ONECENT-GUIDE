@@ -125,6 +125,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={inter.variable}>
       <head>
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5302589080375312"
+          crossOrigin="anonymous"
+        />
         {ENABLE_EZOIC_SCRIPTS && (
           <>
             {/* ===================================================

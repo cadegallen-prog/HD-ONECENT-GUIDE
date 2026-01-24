@@ -67,6 +67,38 @@ export default function PrivacyPolicyPage() {
           </p>
         </Prose>
       </Section>
+
+      <Section title="Google AdSense Privacy Disclosure">
+        <Prose>
+          <p>
+            Penny Central uses third-party advertising vendors, including Google, to serve ads on
+            this site. These vendors use cookies to serve ads based on a user&apos;s prior visits to
+            this website and other sites on the internet.
+          </p>
+          <p>
+            Google&apos;s use of the DoubleClick DART cookie enables it and its partners to serve
+            ads to you based on your visit to Penny Central and/or other sites on the internet.
+            Users may opt out of the use of the DART cookie by visiting Google&apos;s ad settings or
+            by visiting{" "}
+            <a href="https://www.aboutads.info" target="_blank" rel="noopener noreferrer">
+              www.aboutads.info
+            </a>
+            .
+          </p>
+          <p>
+            If you would like to learn more about how Google uses data when you use partner sites or
+            apps, you can review Google&apos;s disclosures at{" "}
+            <a
+              href="https://policies.google.com/technologies/ads"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              https://policies.google.com/technologies/ads
+            </a>
+            .
+          </p>
+        </Prose>
+      </Section>
     </PageShell>
   )
 }

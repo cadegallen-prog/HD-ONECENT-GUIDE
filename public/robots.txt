@@ -13,6 +13,9 @@ Disallow: /api/
 Sitemap: https://www.pennycentral.com/sitemap.xml
 
 # Allow Google, Bing, and other major search engines (explicitly)
+User-agent: Mediapartners-Google
+Disallow:
+
 User-agent: Googlebot
 Allow: /
 

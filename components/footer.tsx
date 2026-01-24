@@ -93,6 +93,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/contact" className={navLinkClass}>
+                  Contact Us
+                </Link>
+              </li>
+              <li>
                 <span className="text-sm text-[var(--text-secondary)] leading-relaxed block">
                   Not affiliated with Home Depot
                 </span>

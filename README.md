@@ -82,7 +82,7 @@ Use this as the **single checklist** for a professional contact email and AdSens
 
 **Step 2 — Outbound / Replying (optional)**
 
-Cloudflare Email Routing is **receive-only** (no SMTP). If you need to send/reply *from* `contact@pennycentral.com`, pick one:
+Cloudflare Email Routing is **receive-only** (no SMTP). If you need to send/reply _from_ `contact@pennycentral.com`, pick one:
 
 - **Option A (fastest, free):** Receive mail at `contact@...`, but reply from your personal email (set your Gmail display name to “Penny Central”). This is usually sufficient for AdSense.
 - **Option B (reliable, paid):** Use an email host (Google Workspace, Fastmail, Zoho, etc.) and then configure Gmail “Send mail as” using that provider’s SMTP.
