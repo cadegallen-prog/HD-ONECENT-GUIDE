@@ -32,6 +32,13 @@ CREATE POLICY email_subscribers_insert_policy ON public.email_subscribers
   TO anon
   WITH CHECK (TRUE);
 
+-- Policy: Allow anonymous updates (for reactivating subscriptions)
+CREATE POLICY email_subscribers_update_policy ON public.email_subscribers
+  FOR UPDATE
+  TO anon
+  USING (TRUE)
+  WITH CHECK (TRUE);
+
 -- Policy: Allow token-based unsubscribe (public reads by token)
 CREATE POLICY email_subscribers_select_by_token ON public.email_subscribers
   FOR SELECT

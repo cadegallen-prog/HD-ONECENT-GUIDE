@@ -1,0 +1,203 @@
+# Archived: Enrichment Staging Warmer (GitHub-hosted runner version)
+#
+# Why archived:
+# - pro.scouterdev.io is returning HTTP 403 + Cloudflare “Just a moment...” HTML from GitHub-hosted runner IPs.
+# - This makes scheduled runs unreliable and creates noise without refreshing enrichment_staging.
+#
+# Current approach:
+# - Run the same warmer locally from your home IP: `npm run warm:staging`
+# - Future: re-enable via self-hosted runner / allowlisted IP / proxy (without rewriting warmer logic).
+#
+# Previous behavior (when enabled):
+# - Filled `enrichment_staging` table with bulk penny item data from scraper_core.py
+# - Schedule: Tue–Fri at 14:05 UTC
+# - Required secrets:
+#   - PENNY_RAW_COOKIE, PENNY_GUILD_ID, NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
+
+name: Enrichment Staging Warmer
+
+on:
+  schedule:
+    # Tue-Fri at 14:05 UTC
+    # Note: GitHub cron uses UTC time (this is 9:05 AM ET during standard time, 10:05 AM ET during DST)
+    - cron: "5 14 * * 2-5"
+  workflow_dispatch:
+    inputs:
+      max_uniques:
+        description: "Max unique items to process (default 6000)"
+        required: false
+        default: "6000"
+      batch_size:
+        description: "Batch size for DB upserts (default 50)"
+        required: false
+        default: "50"
+
+# Prevent overlapping runs
+concurrency:
+  group: enrichment-staging-warmer
+  cancel-in-progress: false
+
+jobs:
+  warm-staging:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install pandas requests supabase
+
+      - name: Validate required secrets
+        run: |
+          if [ -z "${{ secrets.PENNY_RAW_COOKIE }}" ]; then
+            echo "::error::Missing PENNY_RAW_COOKIE secret"
+            exit 1
+          fi
+          if [ -z "${{ secrets.PENNY_GUILD_ID }}" ]; then
+            echo "::error::Missing PENNY_GUILD_ID secret"
+            exit 1
+          fi
+          if [ -z "${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}" ]; then
+            echo "::error::Missing NEXT_PUBLIC_SUPABASE_URL secret"
+            exit 1
+          fi
+          if [ -z "${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" ]; then
+            echo "::error::Missing SUPABASE_SERVICE_ROLE_KEY secret"
+            exit 1
+          fi
+          echo "All required secrets present"
+
+      - name: Run staging warmer
+        id: warmer
+        continue-on-error: true
+        env:
+          PENNY_RAW_COOKIE: ${{ secrets.PENNY_RAW_COOKIE }}
+          PENNY_GUILD_ID: ${{ secrets.PENNY_GUILD_ID }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          # Scheduled runs are a low-aggression health probe (light mode).
+          # Manual dispatch runs the full warmer by default.
+          MAX_UNIQUES: ${{ github.event_name == 'schedule' && '1000' || (github.event.inputs.max_uniques || '6000') }}
+          BATCH_SIZE: ${{ github.event.inputs.batch_size || '50' }}
+          PENNY_ZIP_CODES: ${{ github.event_name == 'schedule' && '30301' || '30301,30303,30305,30308,30309' }}
+        run: |
+          set +e
+          python scripts/staging-warmer.py 2>&1 | tee warmer.log
+          status=${PIPESTATUS[0]}
+
+          cloudflare_block=false
+          if grep -qi "cloudflare_block=true" warmer.log; then
+            cloudflare_block=true
+          fi
+          echo "cloudflare_block=$cloudflare_block" >> "$GITHUB_OUTPUT"
+
+          exit $status
+
+      - name: Open or update failure issue
+        if: steps.warmer.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = "🚨 Enrichment Staging Warmer failing (check cookie)";
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const now = new Date().toISOString();
+            const cloudflareBlock = "${{ steps.warmer.outputs.cloudflare_block }}" === "true";
+
+            const body = [
+              `The scheduled workflow **Enrichment Staging Warmer** failed.`,
+              ``,
+              `- Last failed run: ${runUrl}`,
+              `- Branch: ${context.ref}`,
+              `- Commit: ${context.sha}`,
+              `- Updated: ${now}`,
+              `- cloudflare_block: ${cloudflareBlock ? "true" : "false"}`,
+              ``,
+              `Most likely causes:`,
+              `- **Cloudflare / bot protection** blocking GitHub Actions (HTTP 403 + HTML \\"Just a moment...\\" page)`,
+              `- **PENNY_RAW_COOKIE expired/invalid**`,
+              `- Upstream API changed/down`,
+              ``,
+              `Next steps (do NOT paste secrets here):`,
+              `1) Open the failed run and search logs for \`FETCH_DIAGNOSTICS\` (it prints HTTP status + HTML clues)`,
+              `2) If you see 401/403 with a normal API response, refresh \`PENNY_RAW_COOKIE\` and retry`,
+              `3) If \`cloudflare_block: true\` and you see 403 + \\"Just a moment...\\" (Cloudflare), GitHub runners are blocked — use the local warmer or a self-hosted runner (your own IP).`,
+            ].join("\n");
+
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+              per_page: 100,
+            });
+
+            const existing = issues.find((i) => i.title === title);
+            if (existing) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                body,
+              });
+              core.info(`Updated existing issue #${existing.number}`);
+            } else {
+              const created = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+              });
+              core.info(`Created issue #${created.data.number}`);
+            }
+
+      - name: Close failure issue (if recovered)
+        if: steps.warmer.outcome == 'success'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = "🚨 Enrichment Staging Warmer failing (check cookie)";
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+              per_page: 100,
+            });
+
+            const existing = issues.find((i) => i.title === title);
+            if (!existing) {
+              core.info("No open failure issue found.");
+              return;
+            }
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: existing.number,
+              body: `✅ Workflow is healthy again. Last successful run: ${runUrl}`,
+            });
+
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: existing.number,
+              state: "closed",
+            });
+
+            core.info(`Closed issue #${existing.number}`);
+
+      - name: Fail job if warmer failed
+        if: steps.warmer.outcome == 'failure'
+        run: exit 1
+
