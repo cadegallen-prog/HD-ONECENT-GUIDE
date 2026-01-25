@@ -86,15 +86,16 @@ export function EmailSignupForm() {
       if (response.ok) {
         setSubmitStatus("success")
         setSuccessMessage(data.message || "Successfully subscribed!")
-        safeSetItem(SUBSCRIBED_KEY, "1")
         trackEvent("email_signup", {
           surface: "penny-list",
           alreadySubscribed: data.alreadySubscribed || false,
           reactivated: data.reactivated || false,
         })
 
-        // Hide form after 3 seconds
+        // Hide form after 3 seconds, THEN mark as subscribed in localStorage
+        // (Moving localStorage write here prevents immediate re-render that hides success message)
         setTimeout(() => {
+          safeSetItem(SUBSCRIBED_KEY, "1")
           setIsVisible(false)
         }, 3000)
       } else {

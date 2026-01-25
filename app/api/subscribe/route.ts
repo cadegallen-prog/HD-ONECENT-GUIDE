@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
-import { getSupabaseClient } from "@/lib/supabase/client"
+import { getSupabaseServiceRoleClient } from "@/lib/supabase/client"
 
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000 // 1 hour
-const RATE_LIMIT_MAX = 5 // Max 5 signup attempts per hour per IP
+const RATE_LIMIT_MAX_PER_IP = 5 // Max 5 signup attempts per hour per IP
+const RATE_LIMIT_MAX_PER_EMAIL = 3 // Max 3 attempts per hour per email (prevents hammering same email)
 
 type RateBucket = number[]
 const rateLimitMap: Map<string, RateBucket> =
@@ -32,14 +33,17 @@ function generateUnsubscribeToken(): string {
   return Array.from(array, (byte) => byte.toString(16).padStart(2, "0")).join("")
 }
 
-function checkRateLimit(identifier: string): { allowed: boolean; retryAfter?: number } {
+function checkRateLimit(
+  identifier: string,
+  maxAttempts: number
+): { allowed: boolean; retryAfter?: number } {
   const now = Date.now()
   const bucket = rateLimitMap.get(identifier) ?? []
 
   // Remove timestamps outside the window
   const validTimestamps = bucket.filter((ts) => now - ts < RATE_LIMIT_WINDOW_MS)
 
-  if (validTimestamps.length >= RATE_LIMIT_MAX) {
+  if (validTimestamps.length >= maxAttempts) {
     const oldestTimestamp = validTimestamps[0]
     const retryAfter = Math.ceil((oldestTimestamp + RATE_LIMIT_WINDOW_MS - now) / 1000)
     return { allowed: false, retryAfter }
@@ -50,6 +54,14 @@ function checkRateLimit(identifier: string): { allowed: boolean; retryAfter?: nu
   rateLimitMap.set(identifier, validTimestamps)
 
   return { allowed: true }
+}
+
+function normalizeEmail(email: string): string {
+  // Normalize email for rate limiting: lowercase and strip +aliases
+  const [localPart, domain] = email.toLowerCase().split("@")
+  // Remove everything after + in local part (common alias trick)
+  const cleanLocal = localPart.split("+")[0]
+  return `${cleanLocal}@${domain}`
 }
 
 export async function POST(request: NextRequest) {
@@ -72,23 +84,41 @@ export async function POST(request: NextRequest) {
 
     const { email } = parsed.data
 
-    // Rate limiting
+    // Rate limiting - check both IP and email
     const clientIp = getClientIp(request)
-    const rateLimitKey = `email-signup:${clientIp}`
-    const rateLimitResult = checkRateLimit(rateLimitKey)
+    const normalizedEmail = normalizeEmail(email)
 
-    if (!rateLimitResult.allowed) {
+    // Check IP rate limit first
+    const ipRateLimitKey = `email-signup:ip:${clientIp}`
+    const ipRateLimitResult = checkRateLimit(ipRateLimitKey, RATE_LIMIT_MAX_PER_IP)
+
+    if (!ipRateLimitResult.allowed) {
       return NextResponse.json(
         {
           error: "Too many signup attempts. Please try again later.",
-          retryAfter: rateLimitResult.retryAfter,
+          retryAfter: ipRateLimitResult.retryAfter,
+        },
+        { status: 429 }
+      )
+    }
+
+    // Check per-email rate limit (prevents hammering the same email)
+    const emailRateLimitKey = `email-signup:email:${normalizedEmail}`
+    const emailRateLimitResult = checkRateLimit(emailRateLimitKey, RATE_LIMIT_MAX_PER_EMAIL)
+
+    if (!emailRateLimitResult.allowed) {
+      return NextResponse.json(
+        {
+          error: "This email has been submitted too many times. Please try again later.",
+          retryAfter: emailRateLimitResult.retryAfter,
         },
         { status: 429 }
       )
     }
 
     // Check if email already exists
-    const supabase = getSupabaseClient()
+    // Using service_role to bypass RLS (anon write policies removed for security)
+    const supabase = getSupabaseServiceRoleClient()
     const { data: existingSubscriber } = await supabase
       .from("email_subscribers")
       .select("email, is_active, unsubscribed_at")

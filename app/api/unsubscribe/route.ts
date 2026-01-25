@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getSupabaseClient } from "@/lib/supabase/client"
+import { getSupabaseServiceRoleClient } from "@/lib/supabase/client"
 
 export async function GET(request: NextRequest) {
   try {
@@ -11,7 +11,8 @@ export async function GET(request: NextRequest) {
     }
 
     // Find subscriber by token
-    const supabase = getSupabaseClient()
+    // Using service_role to bypass RLS (anon write policies removed for security)
+    const supabase = getSupabaseServiceRoleClient()
     const { data: subscriber, error: fetchError } = await supabase
       .from("email_subscribers")
       .select("id, email, is_active")
