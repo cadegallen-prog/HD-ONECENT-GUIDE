@@ -4,6 +4,29 @@
 
 ---
 
+## 2026-01-25 - Codex - Pipeline: local-first warmer + GH probe-only
+
+**Goal:** Stop relying on GitHub Actions for full pre-scrape (Cloudflare 403 reality) and make the local warmer the primary freshness path, while keeping scheduled Actions as a non-failing probe with strong diagnostics.
+
+**Status:** ✅ Verified locally (ready to push)
+
+### Changes
+
+- `.github/workflows/enrichment-staging-warmer.yml`: Scheduled runs now execute in **probe-only** mode (no Supabase writes; no hard dependency on secrets) and open/update an issue when blocked; manual runs still attempt the full warmer when secrets are present.
+- `scripts/staging-warmer.py`: Added `PROBE_ONLY` mode so scheduled runs emit `FETCH_DIAGNOSTICS` + `cloudflare_block=true/false` without failing. Also stamps `created_at` on upserts so freshness reflects the most recent warmer run.
+- `scripts/print-enrichment-staging-status.ts`: Fixed to use `created_at` and added an easy freshness check command.
+- `package.json`: Added `npm run staging:status`.
+- `docs/skills/run-local-staging-warmer.md`: Updated success criteria + added the quick status check.
+
+### Verification (local)
+
+- `npm run lint` ✅
+- `npm run build` ✅
+- `npm run test:unit` ✅
+- `npm run test:e2e` ✅ (100/100)
+
+---
+
 ## 2026-01-24 - Codex - SEO: stop redirect-only pages + sitemap canonical (www)
 
 **Goal:** Remove redirects for `/checkout-strategy` and `/responsible-hunting` so those pages return `200` (not `308`), and ensure sitemap URLs match canonical `www` domain.
@@ -94,19 +117,3 @@ PR #108 had been sitting unmerged for weeks, blocking Google AdSense approval be
 - E2E tests: ✅ 100/100 passed
 - GitHub Actions: ✅ All checks passed
 - Production deployment: ✅ Verified via curl (AdSense script in HTML)
-
----
-
-## 2026-01-24 - Codex - AdSense readiness + professional email checklist
-
-**Goal:** Document a clear checklist for AdSense review readiness and professional domain email setup.
-
-**Status:** ✅ Complete
-
-### Changes
-
-- `README.md`: Added an AdSense readiness + professional email checklist (domain/DNS, Cloudflare routing, Gmail send-as, SPF/DMARC, reviewer basics).
-- `docs/skills/adsense-domain-email-setup.md`: New reusable skill with the same checklist for future sessions.
-- `docs/skills/README.md`: Added the new skill to the index.
-
----

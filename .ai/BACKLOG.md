@@ -1,6 +1,6 @@
 # Backlog (Top Priority Items)
 
-**Last updated:** Jan 23, 2026
+**Last updated:** Jan 25, 2026
 **Rule:** Keep ≤10 items. Archive completed/deferred items.
 
 **Auto-archive:** Full backlog history preserved in `archive/backlog-history/`
@@ -20,12 +20,13 @@ Each AI session should:
 
 ### 0. Data Pipeline Reliability - Pre-scrape + Cron Auth (P0-0)
 
-- **Problem:** The pre-scrape workflow (`Enrichment Staging Warmer`) is failing due to **403 + Cloudflare “Just a moment...”** from the upstream API when running on GitHub-hosted runners. Separately, Vercel cron endpoints will return 401 if `CRON_SECRET` is missing/mismatched.
+- **Problem:** GitHub-hosted runners are blocked upstream (**403 + Cloudflare “Just a moment...”**), so scheduled scraping cannot be the primary freshness path right now. Separately, Vercel cron endpoints will return 401 if `CRON_SECRET` is missing/mismatched.
 - **Done means:**
-  - A scheduled run of `Enrichment Staging Warmer` is ✅ green and updates `enrichment_staging` with non-zero items
-  - Failure issue #106 closes automatically on recovery
+  - `npm run warm:staging` (local/home IP) reliably updates `enrichment_staging` with non-zero items
+  - `npm run staging:status -- --max-age-hours 72` is ✅ green after a local warm run
+  - Scheduled `Enrichment Staging Warmer` runs are ✅ green as **probe-only**, but open/update a GitHub issue when blocked (`cloudflare_block=true`)
   - Vercel cron logs show 200s (not 401s) for `/api/cron/seed-penny-list`, `/api/cron/trickle-finds`, `/api/cron/send-weekly-digest`
-- **Approach options:** Provider allowlisting / proper API auth (preferred) vs self-hosted runner vs new data source
+- **Approach options (later):** self-hosted runner (home IP / VPS) vs paid residential proxy vs new data source (avoid upstream dependency where possible)
 
 ### 1. SEO Improvement - Schema Markup + Internal Linking (P0-3)
 
