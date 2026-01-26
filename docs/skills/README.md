@@ -16,4 +16,3 @@ Short, task-focused guides to avoid repo-wide searching.
 - [run-local-staging-warmer](./run-local-staging-warmer.md) — **When to use:** GitHub Actions is blocked (Cloudflare) and you need to refresh `enrichment_staging` from your home IP.
 - [ship-safely](./ship-safely.md) — **When to use:** You’re getting ready to commit, verify, or roll back safely.
 - [codex-mcp-setup](./codex-mcp-setup.md) — **When to use:** Codex can’t see MCP tools/resources or env vars, or you need to update Codex.
-- [update-ads-txt](./update-ads-txt.md) — **When to use:** You need to refresh `public/ads.txt` with partner-provided lines without breaking existing custom records.

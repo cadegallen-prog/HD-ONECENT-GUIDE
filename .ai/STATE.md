@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Jan 26, 2026 (Monumetric ads.txt refresh + Ezoic preserved)
+**Last updated:** Jan 25, 2026 (Pipeline: local-first warmer + GH probe-only)
 
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
@@ -11,7 +11,6 @@ Every AI session must update this after meaningful work.
 
 ## Current Sprint (Last 7 Days)
 
-- **2026-01-26 (Monumetric ads.txt refresh):** Replaced `public/ads.txt` with Monumetric’s latest ads.txt payload and kept the existing Ezoic block as custom records below the required “ALL CUSTOM RECORDS MUST BE BELOW THIS LINE” marker. This preserves Ezoic while updating Monumetric’s entries, and does not change Grow (Mediavine Journey) scripts/config.
 - **2026-01-25 (Email Subscribers: Security & UX Hardening - LIVE):** Fixed 3 issues with email signup form: (1) **UX Bug:** Form was disappearing without success feedback because localStorage write triggered immediate re-render. Moved `safeSetItem(SUBSCRIBED_KEY)` inside the 3-second timeout so success message displays before hiding. (2) **Security:** Switched `/api/subscribe` and `/api/unsubscribe` to use `getSupabaseServiceRoleClient()` instead of anon key. Created migration 021 to drop overly permissive anon INSERT/UPDATE policies and fix trigger function search_path (`SET search_path = public, pg_catalog`). All writes now validated via API before database. (3) **Rate Limiting:** Added per-email rate limiting (3/hour, normalized to strip +aliases and lowercase) alongside existing IP rate limiting (5/hour). Prevents bypass via `test+spam@gmail.com` or domain variants. Commits: 5ce7bed (migration + initial fixes), b2caad9 (reapply after agent revert). **Note:** Migration 021 still needs to run in Supabase (will apply automatically on next Vercel deploy, or run manually in SQL editor).
 - **2026-01-25 (Pipeline: local-first staging warmer + GH probe-only):** Updated the `Enrichment Staging Warmer` workflow to run in **probe-only** mode on schedule (no Supabase writes; no hard dependency on secrets) and to open/update an issue when blocked. Added a `PROBE_ONLY` path to `scripts/staging-warmer.py` so scheduled runs stay green while still emitting `FETCH_DIAGNOSTICS` + `cloudflare_block=true/false`. Also improved “freshness” tracking by stamping `created_at` on upserts, and fixed `scripts/print-enrichment-staging-status.ts` to use `created_at` (added `npm run staging:status`). Local warmer remains the primary data freshness path: `npm run warm:staging`.
 - **2026-01-25 (SEO: delete thin pages):** Intentionally deleted `app/checkout-strategy/page.tsx` and `app/responsible-hunting/page.tsx` (commit `b7ca7bd`) to remove thin/low-value pages. These pages no longer serve `200` and should no longer be considered part of the sitemap strategy.
