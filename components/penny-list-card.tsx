@@ -25,6 +25,8 @@ import { Button } from "@/components/ui/button"
 import { StateBreakdownSheet } from "@/components/state-breakdown-sheet"
 import { toPennyListThumbnailUrl } from "@/lib/image-cache"
 
+const ENABLE_SKU_COPY_PILL = true // Flip to false to revert to old SKU badge quickly
+
 interface PennyListCardProps {
   item: PennyItem & { parsedDate?: Date | null }
   stateFilter?: string
@@ -63,6 +65,7 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
   const router = useRouter()
   const [isBarcodeOpen, setIsBarcodeOpen] = useState(false)
   const [isStateBreakdownOpen, setIsStateBreakdownOpen] = useState(false)
+  const [copiedSku, setCopiedSku] = useState(false)
 
   const displayBrand = normalizeBrand(item.brand)
   const displayName = normalizeProductName(item.name, { brand: item.brand })
@@ -104,6 +107,26 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
     }
   }
 
+  const handleSkuCopy = useCallback(
+    async (e?: MouseEvent) => {
+      e?.preventDefault()
+      e?.stopPropagation()
+      const success = await copyToClipboard(item.sku)
+      if (success) {
+        const skuMasked = item.sku.slice(-4)
+        trackEvent("sku_copy", { skuMasked, source: "card-sku-pill" })
+        setCopiedSku(true)
+        toast.success(`Copied SKU ${formatSkuForDisplay(item.sku)}`, {
+          duration: 1500,
+        })
+        setTimeout(() => setCopiedSku(false), 1500)
+      } else {
+        toast.error("Failed to copy SKU", { duration: 2000 })
+      }
+    },
+    [item.sku]
+  )
+
   return (
     <div
       role="link"
@@ -140,11 +163,39 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
                 {displayName}
               </h3>
 
-              {/* SKU badge (compact pill) */}
+              {/* SKU pill (copyable) */}
               <div className="flex items-center gap-2">
-                <span className="inline-flex items-center rounded-full border border-[var(--border-default)] bg-[var(--bg-recessed)] px-2 py-0.5 text-[11px] font-mono text-[var(--text-secondary)]">
-                  SKU {formatSkuForDisplay(item.sku)}
-                </span>
+                {ENABLE_SKU_COPY_PILL ? (
+                  <button
+                    type="button"
+                    onClick={(event) => {
+                      event.preventDefault()
+                      event.stopPropagation()
+                      handleSkuCopy(event)
+                    }}
+                    className={`penny-card-sku focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${copiedSku ? "copied" : ""}`}
+                    aria-label={`Copy SKU ${formatSkuForDisplay(item.sku)}`}
+                    title="Click to copy SKU"
+                    data-test="penny-card-sku"
+                  >
+                    <span className="hidden sm:inline text-[12px] text-[var(--text-muted)] mr-2">
+                      SKU
+                    </span>
+                    <span className="whitespace-nowrap">{formatSkuForDisplay(item.sku)}</span>
+                    {copiedSku ? (
+                      <Check
+                        className="w-4 h-4 ml-2 text-[var(--status-success)]"
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <Copy className="w-4 h-4 ml-2 text-[var(--text-muted)]" aria-hidden="true" />
+                    )}
+                  </button>
+                ) : (
+                  <span className="inline-flex items-center rounded-full border border-[var(--border-default)] bg-[var(--bg-recessed)] px-2 py-0.5 text-[11px] font-mono text-[var(--text-secondary)]">
+                    SKU {formatSkuForDisplay(item.sku)}
+                  </span>
+                )}
               </div>
             </div>
           </div>

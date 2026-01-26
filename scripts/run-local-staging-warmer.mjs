@@ -110,7 +110,9 @@ function printHelp() {
   console.log("  npm run warm:staging -- --api-url https://pro.scouterdev.io/api/penny-items")
   console.log("")
   console.log("Required env vars (in .env.local or your shell):")
-  console.log("  PENNY_RAW_COOKIE, PENNY_GUILD_ID, NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY")
+  console.log(
+    "  PENNY_RAW_COOKIE, PENNY_GUILD_ID, NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY"
+  )
 }
 
 function pickPythonCommand() {
@@ -148,7 +150,9 @@ async function main() {
     for (const k of missing) console.error(`- ${k}`)
     console.error("")
     console.error("Fix:")
-    console.error("- Run `vercel env pull .env.local` (Supabase vars), then add PENNY_RAW_COOKIE + PENNY_GUILD_ID to .env.local")
+    console.error(
+      "- Run `vercel env pull .env.local` (Supabase vars), then add PENNY_RAW_COOKIE + PENNY_GUILD_ID to .env.local"
+    )
     process.exit(1)
   }
 
