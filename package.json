@@ -61,7 +61,7 @@
     "react-email": "^5.2.5",
     "react-hook-form": "^7.53.2",
     "react-leaflet": "^4.2.1",
-    "recharts": "^3.6.0",
+    "recharts": "^3.7.0",
     "resend": "^6.7.0",
     "server-only": "^0.0.1",
     "sonner": "^2.0.7",
