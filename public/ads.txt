@@ -752,6 +752,9 @@ rhythmone.com, 3463482822, RESELLER, a670c89d4a324e47 #yieldmo
 
 # ALL CUSTOM RECORDS MUST BE BELOW THIS LINE
 
+# Google AdSense (Penny Central publisher)
+google.com, pub-5302589080375312, DIRECT, f08c47fec0942fa0
+
 INVENTORYPARTNERDOMAIN=monumetric.com
 
 # ============================================
