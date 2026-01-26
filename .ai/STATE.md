@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Jan 25, 2026 (Pipeline: local-first warmer + GH probe-only)
+**Last updated:** Jan 26, 2026 (SKU pill copy + Pipeline: local-first warmer + GH probe-only)
 
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
@@ -10,6 +10,8 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-01-26 (SKU pill copy):** Added a reversible, feature-flagged copyable SKU pill on Penny List cards; styles + Playwright test added and verified (lint/build/unit/e2e).
 
 - **2026-01-25 (Email Subscribers: Security & UX Hardening - LIVE):** Fixed 3 issues with email signup form: (1) **UX Bug:** Form was disappearing without success feedback because localStorage write triggered immediate re-render. Moved `safeSetItem(SUBSCRIBED_KEY)` inside the 3-second timeout so success message displays before hiding. (2) **Security:** Switched `/api/subscribe` and `/api/unsubscribe` to use `getSupabaseServiceRoleClient()` instead of anon key. Created migration 021 to drop overly permissive anon INSERT/UPDATE policies and fix trigger function search_path (`SET search_path = public, pg_catalog`). All writes now validated via API before database. (3) **Rate Limiting:** Added per-email rate limiting (3/hour, normalized to strip +aliases and lowercase) alongside existing IP rate limiting (5/hour). Prevents bypass via `test+spam@gmail.com` or domain variants. Commits: 5ce7bed (migration + initial fixes), b2caad9 (reapply after agent revert). **Note:** Migration 021 still needs to run in Supabase (will apply automatically on next Vercel deploy, or run manually in SQL editor).
 - **2026-01-25 (Pipeline: local-first staging warmer + GH probe-only):** Updated the `Enrichment Staging Warmer` workflow to run in **probe-only** mode on schedule (no Supabase writes; no hard dependency on secrets) and to open/update an issue when blocked. Added a `PROBE_ONLY` path to `scripts/staging-warmer.py` so scheduled runs stay green while still emitting `FETCH_DIAGNOSTICS` + `cloudflare_block=true/false`. Also improved “freshness” tracking by stamping `created_at` on upserts, and fixed `scripts/print-enrichment-staging-status.ts` to use `created_at` (added `npm run staging:status`). Local warmer remains the primary data freshness path: `npm run warm:staging`.
