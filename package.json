@@ -98,7 +98,7 @@
     "lint-staged": "^16.2.7",
     "playwright-extra": "^4.3.6",
     "postcss": "^8.4.47",
-    "prettier": "^3.8.0",
+    "prettier": "^3.8.1",
     "puppeteer-extra-plugin-stealth": "^2.11.2",
     "satori": "^0.18.3",
     "sharp": "^0.34.5",
