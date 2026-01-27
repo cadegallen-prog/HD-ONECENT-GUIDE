@@ -136,15 +136,15 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
       aria-labelledby={`item-${item.id}-name`}
     >
       <article className="flex flex-col h-full relative">
-        <div className="p-4 flex flex-col flex-1 space-y-2">
+        <div className="p-4 flex flex-col flex-1 space-y-3">
           {/* Tier 1 + 2: Image + Brand + Name + SKU */}
           <div className="flex gap-2.5 items-start">
-            <PennyThumbnail src={thumbnailSrc} alt={displayName} size={64} />
+            <PennyThumbnail src={thumbnailSrc} alt={displayName} size={72} />
             <div className="flex-1 min-w-0 space-y-1 overflow-hidden">
               {/* Brand */}
               {displayBrand && (
                 <p
-                  className="text-xs font-medium text-[var(--text-muted)] uppercase truncate max-w-[70%]"
+                  className="text-xs font-normal text-[var(--text-muted)] uppercase truncate max-w-[70%]"
                   title={displayBrand}
                   data-testid="penny-card-brand"
                 >
@@ -160,28 +160,6 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
               >
                 {displayName}
               </h3>
-
-              {/* SKU (plain text, copyable) */}
-              <button
-                type="button"
-                onClick={(event) => {
-                  event.preventDefault()
-                  event.stopPropagation()
-                  handleSkuCopy(event)
-                }}
-                className="text-xs font-medium font-mono text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] rounded"
-                aria-label={`Copy SKU ${formatSkuForDisplay(item.sku)}`}
-                title="Click to copy SKU"
-                data-test="penny-card-sku"
-              >
-                SKU {formatSkuForDisplay(item.sku)}
-                {copiedSku && (
-                  <Check
-                    className="inline w-3 h-3 ml-1 text-[var(--status-success)]"
-                    aria-hidden="true"
-                  />
-                )}
-              </button>
             </div>
           </div>
 
@@ -195,9 +173,31 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
             )}
           </div>
 
-          {/* Tier 4: Pattern Signals (2 lines, text only) */}
-          <div className="space-y-0.5 text-xs text-[var(--text-secondary)]">
-            <p>
+          {/* Tier 4: Pattern Signals (SKU + recency + reports + states) */}
+          <div className="space-y-1 text-xs text-[var(--text-secondary)]">
+            {/* SKU (moved from Block 1) */}
+            <button
+              type="button"
+              onClick={(event) => {
+                event.preventDefault()
+                event.stopPropagation()
+                handleSkuCopy(event)
+              }}
+              className="text-xs font-medium font-mono text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] rounded"
+              aria-label={`Copy SKU ${formatSkuForDisplay(item.sku)}`}
+              title="Click to copy SKU"
+              data-test="penny-card-sku"
+            >
+              SKU {formatSkuForDisplay(item.sku)}
+              {copiedSku && (
+                <Check
+                  className="inline w-3 h-3 ml-1 text-[var(--status-success)]"
+                  aria-hidden="true"
+                />
+              )}
+            </button>
+
+            <p className="font-medium">
               Last seen:{" "}
               <time dateTime={lastSeenValue} title={lastSeenTitle ?? undefined}>
                 {formatRelativeDate(lastSeenValue)}
@@ -429,7 +429,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
               <div className="space-y-2">
                 {displayBrand && (
                   <p
-                    className="text-[11px] uppercase tracking-[0.08em] text-[var(--text-muted)] truncate max-w-[70%]"
+                    className="text-[11px] uppercase tracking-[0.08em] text-[var(--text-muted)] font-normal truncate max-w-[70%]"
                     title={displayBrand}
                     data-testid="penny-card-brand-compact"
                   >
@@ -445,23 +445,6 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
                 </h3>
               </div>
             </Link>
-            <button
-              type="button"
-              onClick={handleSkuCopy}
-              className="flex items-center gap-2 text-xs text-[var(--text-primary)] font-mono elevation-2 border border-[var(--border-strong)] px-2.5 py-1.5 rounded w-fit font-medium cursor-pointer hover:border-[var(--cta-primary)] hover:bg-[var(--bg-hover)] transition-colors min-h-[44px] flex-shrink-0 whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
-              aria-label={`Copy SKU ${item.sku} to clipboard`}
-              title="Tap to copy SKU"
-            >
-              <span>SKU:</span>
-              <span className="font-semibold whitespace-nowrap">
-                {formatSkuForDisplay(item.sku)}
-              </span>
-              {copied ? (
-                <Check className="w-3.5 h-3.5 text-[var(--status-success)]" aria-hidden="true" />
-              ) : (
-                <Copy className="w-3.5 h-3.5 text-[var(--text-muted)]" aria-hidden="true" />
-              )}
-            </button>
             {hasIdentifiers && (
               <div className="mt-2 flex flex-wrap gap-2 text-xs text-[var(--text-secondary)]">
                 <span className="font-semibold text-[var(--text-muted)]">Identifiers:</span>
@@ -493,6 +476,22 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
             </div>
           )}
         </div>
+        {/* SKU (moved to metadata area) */}
+        <button
+          type="button"
+          onClick={handleSkuCopy}
+          className="mt-3 flex items-center gap-2 text-xs text-[var(--text-primary)] font-mono elevation-2 border border-[var(--border-strong)] px-2.5 py-1.5 rounded w-fit font-medium cursor-pointer hover:border-[var(--cta-primary)] hover:bg-[var(--bg-hover)] transition-colors min-h-[44px] flex-shrink-0 whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+          aria-label={`Copy SKU ${item.sku} to clipboard`}
+          title="Tap to copy SKU"
+        >
+          <span>SKU:</span>
+          <span className="font-semibold whitespace-nowrap">{formatSkuForDisplay(item.sku)}</span>
+          {copied ? (
+            <Check className="w-3.5 h-3.5 text-[var(--status-success)]" aria-hidden="true" />
+          ) : (
+            <Copy className="w-3.5 h-3.5 text-[var(--text-muted)]" aria-hidden="true" />
+          )}
+        </button>
         {item.locations && Object.keys(item.locations).length > 0 && (
           <div className="mt-3">
             <div className="flex flex-wrap gap-1.5" role="list" aria-label="States with reports">

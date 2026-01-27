@@ -30,8 +30,8 @@ export default function SupportPage() {
 
           <h2>Ads</h2>
           <p>
-            Ads are being enabled now. You may start seeing ads appear as setup and testing
-            finishes.
+            Ads are now live on the site. You will see ads displayed across our pages to fund
+            continued development and operations.
           </p>
           <p>
             We are optimizing for a usable site first. That means we will avoid the most disruptive
@@ -74,7 +74,7 @@ export default function SupportPage() {
           <h2>Feedback</h2>
           <p>
             If something breaks or looks off, report it here:{" "}
-            <a href="mailto:support@pennycentral.com">support@pennycentral.com</a>
+            <a href="mailto:contact@pennycentral.com">contact@pennycentral.com</a>
           </p>
 
           <div className="mt-6">

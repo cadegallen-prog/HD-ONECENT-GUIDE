@@ -20,8 +20,8 @@ export default function TransparencyPage() {
         <Prose>
           <h2>What&apos;s changing</h2>
           <p>
-            Ads are being enabled now. You may see ads begin appearing as setup and testing
-            finishes.
+            Ads are now live on the site, helping fund continued development and operations. You
+            will see ads displayed across our pages to support free access to all tools.
           </p>
 
           <h2>What won&apos;t change</h2>

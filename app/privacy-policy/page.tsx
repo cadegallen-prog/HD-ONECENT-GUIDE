@@ -67,6 +67,26 @@ export default function PrivacyPolicyPage() {
         </Prose>
       */}
 
+      <Section title="Data Privacy & Your Rights">
+        <Prose>
+          <p>
+            Your privacy is important to us. PennyCentral collects minimal personal data and only
+            uses it to serve content and improve the user experience.
+          </p>
+          <p>
+            <strong>Your Data Rights:</strong> You have the right to request access, correction, or
+            deletion of your personal data. If you have concerns about your information or wish to
+            exercise these rights, please contact us at{" "}
+            <a href="mailto:contact@pennycentral.com">contact@pennycentral.com</a>.
+          </p>
+          <p>
+            We commit to responding to all legitimate privacy requests within 30 days. We do not
+            sell, rent, or share your personal information with third parties except as required to
+            operate the site and provide services (such as hosting and analytics).
+          </p>
+        </Prose>
+      </Section>
+
       <Section title="Google Advertising Privacy Disclosure">
         <Prose>
           <p>
@@ -98,6 +118,24 @@ export default function PrivacyPolicyPage() {
             </a>
             .
           </p>
+        </Prose>
+      </Section>
+
+      <Section title="Questions About This Privacy Policy">
+        <Prose>
+          <p>
+            If you have questions about this privacy policy or our data practices, please contact
+            us:
+          </p>
+          <ul>
+            <li>
+              <strong>Email:</strong>{" "}
+              <a href="mailto:contact@pennycentral.com">contact@pennycentral.com</a>
+            </li>
+            <li>
+              <strong>Contact Form:</strong> <a href="/contact">Visit our contact page</a>
+            </li>
+          </ul>
         </Prose>
       </Section>
     </PageShell>
