@@ -5,12 +5,44 @@ import { COMMUNITY_MEMBER_COUNT_DISPLAY, FACEBOOK_GROUP_URL } from "@/lib/consta
 
 export const metadata: Metadata = {
   title: "About PennyCentral",
-  description: "A free, community-driven guide for finding $0.01 clearance items at Home Depot.",
+  description:
+    "A free, community-driven guide for finding $0.01 clearance items at Home Depot. Learn about our mission, transparency practices, and how to contact us.",
 }
 
 export default function AboutPage() {
+  const orgSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "PennyCentral",
+    url: "https://www.pennycentral.com",
+    logo: "https://www.pennycentral.com/penny-central-logo.png",
+    description:
+      "A community-driven resource for finding and verifying $0.01 clearance items at Home Depot.",
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "Customer Service",
+      email: "contact@pennycentral.com",
+      url: "https://www.pennycentral.com/contact",
+    },
+    sameAs: ["https://www.facebook.com/groups/homedepotonecent"],
+    founder: {
+      "@type": "Person",
+      name: "Penny Central Founder",
+    },
+    foundingDate: "2024",
+    areaServed: {
+      "@type": "Country",
+      name: "United States",
+    },
+  }
+
   return (
     <PageShell width="default">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
+      />
+
       <PageHeader
         title="About PennyCentral"
         subtitle="A free, community-driven guide for finding $0.01 clearance items at Home Depot."
@@ -28,8 +60,8 @@ export default function AboutPage() {
             Penny Central is a community-built resource for tracking and sharing extreme clearance
             finds at Home Depot. The mission is simple: help people spot patterns, verify penny
             items, and share trustworthy information so the community can find legitimate deals
-            faster. We focus on clear, searchable data and practical education so you (Cade) and the
-            community can make better decisions in store.
+            faster. We focus on clear, searchable data and practical education so that shoppers and
+            the community can make better decisions in store.
           </p>
 
           <p>
@@ -47,7 +79,7 @@ export default function AboutPage() {
             contribute responsibly.
           </p>
 
-          <h2>Community emphasis</h2>
+          <h2>Community Emphasis</h2>
           <p>
             PennyCentral was built for members of the Home Depot One Cent Items community and is
             shaped by community reports.
@@ -61,6 +93,41 @@ export default function AboutPage() {
             feedback loop is the core of the product.
           </p>
 
+          <h2>Transparency & Operations</h2>
+          <p>
+            PennyCentral is an independent educational resource dedicated to consumer advocacy and
+            retail price transparency. Our mission is to provide accurate, community-verified data
+            regarding extreme clearance patterns at major retailers.
+          </p>
+
+          <h2>Business Identity & Ownership</h2>
+          <p>
+            PennyCentral is a founder-led project based in the United States. We operate with a
+            &quot;Community-First&quot; philosophy, ensuring that all data shared on our Community
+            Penny List is vetted for accuracy by actual shoppers. We remain independent and are not
+            affiliated with Home Depot or any advertising network, though we may use partner
+            services to support site operations and provide free content to our community.
+          </p>
+
+          <h2>Contact & Transparency</h2>
+          <p>
+            We value transparency and are available for inquiries regarding our data, privacy
+            practices, or community guidelines. Please reach out using any of the methods below:
+          </p>
+          <ul>
+            <li>
+              <strong>General Inquiries:</strong>{" "}
+              <a href="mailto:contact@pennycentral.com">contact@pennycentral.com</a>
+            </li>
+            <li>
+              <strong>Support & Transparency:</strong>{" "}
+              <Link href="/support">Support PennyCentral</Link>
+            </li>
+            <li>
+              <strong>Contact Form:</strong> <Link href="/contact">Contact Us Page</Link>
+            </li>
+          </ul>
+
           <h2>Disclosure</h2>
           <p>PennyCentral is not affiliated with Home Depot.</p>
 
@@ -72,10 +139,10 @@ export default function AboutPage() {
               Support PennyCentral
             </Link>
             <Link
-              href="/cashback"
+              href="/contact"
               className="inline-flex items-center justify-center px-6 py-3 border-2 border-[var(--border-default)] text-[var(--text-primary)] font-semibold rounded-lg hover:bg-[var(--bg-elevated)] transition-colors"
             >
-              Support & Transparency
+              Get In Touch
             </Link>
           </div>
         </Prose>
