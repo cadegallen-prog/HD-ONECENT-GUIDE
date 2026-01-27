@@ -41,7 +41,7 @@ Agents: keep this file short and useful. Update it when you actually finish or s
 ## 2. Current major features
 
 - **Penny Guide** (`/guide`) — Complete reference on clearance cadences, markdown stages, and how items reach penny status. ✅ Live
-- **Penny List** (`/penny-list`) ⭐ **ENHANCED DEC 10** — Community-powered list of reported penny finds, auto-updated (usually within about 5 minutes) from Google Form. Phase 1 UI polish complete (improved readability, contrast, mobile UX). ✅ Live
+- **Penny List** (`/penny-list`) ⭐ **ENHANCED DEC 10** — Community-powered list of reported penny finds, auto-updated (usually within about 5 minutes) from the site's "Report a Find" form (Supabase-backed). Phase 1 UI polish complete (improved readability, contrast, mobile UX). ✅ Live
 - **Store Finder** (`/store-finder`) — Find nearby Home Depot locations with interactive map. ✅ Live
 - **Trip Tracker** (`/trip-tracker`) — Plan and log penny hunting trips. ✅ Live
 - **Resources** (`/resources`) — External tools and community links. ✅ Live
@@ -55,35 +55,34 @@ Agents: keep this file short and useful. Update it when you actually finish or s
 
 ### Autonomous Penny List System (🎯 Core Milestone)
 
-**What:** Community can now submit penny finds via a simple Google Form. Data auto-publishes to the site (usually within about 5 minutes) with zero manual intervention.
+**What:** Community can now submit penny finds via the site's "Report a Find" page. Submissions are written to Supabase `Penny List` table, and the public read view `penny_list_public` is used by the site to render listings (typically within ~5 minutes after cache revalidation).
 
 **Why it matters:**
 
 - Converts 50,000+ community members into data sources
 - Creates a real-time, crowd-sourced intelligence feed
 - Dramatically increases site value and stickiness
-- Requires no founder time to manage (just Google Sheet moderation)
+- Requires minimal founder time (moderation via Supabase table editor)
 
 **How it works:**
 
-1. Community submits finds via Google Form (visible link on site)
-2. Google Sheet auto-collects responses (Google handles this)
-3. Site fetches CSV on a ~5-minute cadence and renders on `/penny-list`
-4. Data is live on Vercel; emails/timestamps never sent to browser
-5. Founder can delete bad rows directly in Sheet if needed
+1. Community submits finds via `/report-find` (server route `app/api/submit-find/route.ts`)
+2. Server inserts into Supabase `Penny List` table
+3. Site reads from `penny_list_public` view and aggregates results for `/penny-list`
+4. Founder moderates via Supabase project; no Google Sheets required
 
 **Technical setup:**
 
-- `lib/fetch-penny-data.ts` — Parses CSV with field aliases (handles any column name variation)
-- `app/penny-list/page.tsx` — Server-side rendering with 5-minute revalidation (revalidate = 300)
-- `papaparse` library — Lightweight CSV parsing
-- No database needed; no user auth needed; no infrastructure complexity
+- `lib/fetch-penny-data.ts` — Supabase-backed reads, enrichment overlay, and aggregation
+- `app/penny-list/page.tsx` — Server-side rendering with short cache revalidation (target ~5 minutes)
+- Supabase `Penny List` table + `penny_list_public` read view (RLS-protected as required)
+- Ensure Supabase env vars (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`) are set in Vercel
 
 **For no-code owner:**
 
-- Set `GOOGLE_SHEET_URL` in Vercel environment (one-time, 2 min)
-- Google Form is already live and collecting responses
-- That's it. Site updates itself hourly.
+- Ensure Supabase environment variables (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`) are set in Vercel and that you have Supabase project access.
+- Monitor the first 5–10 submissions in the Supabase `Penny List` table to ensure quality.
+- That's it. Site updates itself after short revalidation (typical ~5 minutes).
 
 ---
 
@@ -114,9 +113,9 @@ Agents: keep this file short and useful. Update it when you actually finish or s
 
 **What you need to do:**
 
-1. ✅ Set `GOOGLE_SHEET_URL` in Vercel (copy the published CSV link from your Sheet)
-2. ✅ Monitor the first 5–10 submissions to ensure quality
-3. ✅ Delete any spam or obviously bad entries from the Sheet
+1. ✅ Ensure Supabase environment variables (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`) are set in Vercel and that you have Supabase project access
+2. ✅ Monitor the first 5–10 submissions in the Supabase `Penny List` table to ensure quality
+3. ✅ Remove any spam or obviously bad entries via the Supabase table editor
 4. Share `/penny-list` link in Facebook group (one post, let it run)
 
 **Realistic outcome:** 20–50 submissions in first 2 weeks; site feels alive and community-powered.
@@ -176,7 +175,7 @@ Agents: keep this file short and useful. Update it when you actually finish or s
    - Effort: 2 hours (AI agent work; you test in browser)
 
 3. **"How to Submit" guide + FAQ**
-   - Link from `/penny-list` to Google Form
+   - Link from `/penny-list` to `/report-find` (Report a Find page)
    - Answer: "Why is my find missing?" / "How long does it take to appear?"
    - Effort: 30 min; pure writing, no coding
 

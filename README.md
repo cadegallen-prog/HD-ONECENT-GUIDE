@@ -8,7 +8,7 @@ The official companion site for the "Home Depot One Cent Items" Facebook communi
 
 ## What It Does
 
-- **Penny List (Crowdsourced Reports)** ⭐ NEW — Community-powered list of reported penny finds, updated regularly (usually within about 5 minutes) from Google Forms (no manual work)
+- **Penny List (Crowdsourced Reports)** ⭐ NEW — Community-powered list of reported penny finds, updated regularly (usually within about 5 minutes) from the site's "Report a Find" page (Supabase-backed).
 - **Penny Guide** — Complete reference on how clearance items reach penny status
 - **Store Finder** — Find nearby Home Depot locations with intelligent search (supports city, state name, ZIP code)
 - **Trip Tracker** — Plan and log penny hunting trips
@@ -189,7 +189,7 @@ public/                 # Static assets
 - **Files:** `lib/fetch-penny-data.ts`, `app/api/submit-find/route.ts`, `app/api/penny-list/route.ts`
 - **How it works:** Report Find inserts into `Penny List`; the site reads via `penny_list_public` (RLS-safe view) and overlays metadata from `penny_item_enrichment` **when present** (code is resilient if the table is missing).
 - **Why there are 5 tables:** `lists`, `list_items`, `list_shares` exist for the optional Save/My Lists feature (separate from scraping/enrichment).
-- **Legacy note:** The older Google Sheets pipeline is deprecated; docs remain for history at `docs/GOOGLE-FORM-PENNY-LIST.md`.
+- **Legacy note:** The older Google Sheets pipeline is deprecated; historical docs are archived at `docs/legacy/PENNY-LIST-STRATEGY.md`.
 
 ### Setup Required
 

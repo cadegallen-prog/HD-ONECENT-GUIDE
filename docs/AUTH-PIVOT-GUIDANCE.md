@@ -4,10 +4,14 @@ Audience: Future AI assistants and contributors. Purpose: avoid re-litigating wh
 
 ## Current Approach (Do This Now)
 
-- Intake: Google Form with required SKU, item name, photo proof, location, notes.
-- Verification: Google Sheet with `Approved` checkbox + Tier (`Very Common` | `Common` | `Rare`) + Date Approved.
-- Display: Site shows only approved, recent (14–30 days) items; includes Tier and a "Hot Right Now" slice for recent Very Common items.
-- Moderation load: ~15 minutes/day to approve and tier.
+- Intake: Internal `/report-find` page that inserts submissions into the Supabase `Penny List` table (required: SKU, item name, photo proof, location, notes).
+- Verification: Moderate directly in Supabase `Penny List` (filter/remove spam) and add enrichment to `penny_item_enrichment` as needed.
+- Display: Site shows recent, validated items from the `penny_list_public` read view; includes Tier and a "Hot Right Now" slice for recent Very Common items.
+- Moderation load: ~15 minutes/week to scan and enrich, not per-day manual sheet review.
+
+## Bottom Line
+
+Stick with the Supabase `Report a Find` → `Penny List` workflow. Auth remains a future upgrade — do not add accounts until milestones are met.
 
 ## Do NOT Add Auth Until All Milestones Are Met
 

@@ -150,21 +150,23 @@
 
 ---
 
-### 6. Penny List CSV Fetching
+### 6. Penny List Data Fetching (Supabase-backed; Google Sheets DEPRECATED)
 
 **Location:** `/lib/fetch-penny-data.ts`
 
+**Current State:** The system now reads from Supabase `penny_list_public` and `penny_item_enrichment`. The legacy Google Sheet CSV parsing workflow is deprecated and only retained for one-off, manual imports.
+
 **Why It's Delicate:**
 
-- Parses Google Sheets CSV with flexible column aliases
+- Primary reads happen from Supabase; do not re-enable automated Google Sheet polling.
 - Privacy-sensitive (must not expose emails/timestamps)
 - Server-side only (can't run in browser)
 
 **Before Modifying:**
 
 - Verify email addresses stay server-side
-- Test with actual Google Sheet data
-- Ensure hourly revalidation works
+- Prefer Supabase fixtures and test data for local development
+- If you must run a one-off import from CSV, use the archived scripts under `scripts/` and document the import in the session log
 - If wiring the internet-SKU → product URL map, keep it backend-only, stored privately (env/Blob/Drive), never expose internet SKU in UI, and always fall back to regular SKU-based links when no mapping exists
 
 ---
@@ -173,10 +175,10 @@
 
 **Current Vars:**
 
-- `GOOGLE_SHEET_URL` (set in Vercel)
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
+- (Deprecated) `GOOGLE_SHEET_URL` — legacy; remove from Vercel secrets if present and only after confirming no active scheduled jobs rely on it
 - Analytics vars (optional)
 
 **Why It's Sensitive:**

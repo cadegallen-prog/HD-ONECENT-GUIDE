@@ -1,10 +1,13 @@
 #!/usr/bin/env tsx
 
 /**
- * Merge enrichment data (images + internet SKUs) into current Google Sheet export
- * Creates ONE canonical merged CSV file
+ * DEPRECATED: Legacy Google Sheet enrichment merge helper.
+ * NOTE (ARCHIVE): This script was designed for Google Forms → Sheets workflows.
+ * The project migrated to a Supabase-backed "Report a Find" flow in Dec 2025.
+ * Keep this script for manual, one-off CSV imports/enrichment; do NOT enable
+ * automated polling of Google Sheets in production.
  *
- * Usage:
+ * Usage (one-off, supervised):
  *   tsx scripts/merge-enrichment.ts [current-sheet.csv] [enrichment.csv] [output.csv]
  *
  * Defaults:

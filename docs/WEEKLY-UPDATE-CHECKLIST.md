@@ -9,9 +9,8 @@
 
 ### Step 1: Review Submissions (10 min)
 
-1. Open your Google Form responses
-2. Click **Responses** → **Green Sheets Icon**
-3. Scan for items with:
+1. Open your Supabase project and view the `Penny List` table (Table Editor).
+2. Scan for items with:
    - ✅ Multiple reports (high signal)
    - ✅ Photo attachment (proof)
    - ✅ Clear location info (store # or city/state)
@@ -33,27 +32,14 @@ From the spreadsheet, gather your top **3-5 items**:
 - Locations reported (city/state or store #)
 - Any special notes (where to look, condition, etc.)
 
-### Step 3: Update the Website (2 min)
+### Step 3: Moderate & Enrich (2 min)
 
-**File to edit:** `data/penny-list.json`
+Use the Supabase Table Editor:
 
-**Format to use:**
+- Remove spam/bad rows from the `Penny List` table.
+- Add enrichment rows to `penny_item_enrichment` (sku, image_url, internet_sku, item_name, brand) for top items — the site will overlay enrichment automatically.
 
-```json
-{
-  "id": "5",
-  "name": "Product Name",
-  "sku": "1009258128",
-  "price": 0.01,
-  "dateAdded": "2025-12-08",
-  "status": "Nationwide",
-  "quantityFound": "5-10 found",
-  "imageUrl": "/images/placeholder-product.jpg",
-  "notes": "Reported in TX, FL, CA. Check [aisle]. Store #[####]."
-}
-```
-
-**Status options:**
+**Status options (for display logic):**
 
 - `"Nationwide"` — Reported in 3+ states or multiple regions
 - `"Regional"` — Reported in 1-2 states
@@ -106,7 +92,7 @@ Filter these out. Community quality > quantity.
 
 | Issue                           | Solution                                                        |
 | ------------------------------- | --------------------------------------------------------------- |
-| Can't find responses            | Check you're in the right Google Form                           |
+| Can't find responses            | Check you're in the right Supabase project / table (Penny List) |
 | JSON file won't save            | Make sure you're editing the right file: `data/penny-list.json` |
 | Changes don't appear on site    | Give Vercel 3-5 min to deploy, then refresh                     |
 | Too many submissions (50+/week) | Start a second curation pass or discuss Phase 2 automation      |

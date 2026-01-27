@@ -1,13 +1,12 @@
 #!/usr/bin/env tsx
 
 /**
- * Convert Cade's bookmark-exported JSON (sku, imageUrl, internetSku) into a
- * Sheet-ready CSV with canonical headers:
- *   - Home Depot SKU (6 or 10 digits)
- *   - IMAGE URL
- *   - INTERNET SKU
+ * DEPRECATED: Legacy enrichment JSON → CSV helper for Google Sheets workflows.
+ * The site's enrichment now uses Supabase `penny_item_enrichment`. This script is
+ * retained for one-off CSV exports/imports only; do NOT use it as part of any
+ * automated Sheets polling pipeline.
  *
- * Usage:
+ * Usage (archive):
  *   tsx scripts/enrichment-json-to-csv.ts input.json [output.csv]
  *
  * Defaults:

@@ -1,17 +1,12 @@
 #!/usr/bin/env python3
 """
-Merge verified pennies backup into consolidated CSV for Google Sheets import.
+DEPRECATED: Legacy "merge verified backups" helper for Google Sheets import.
 
-Applies contributor-aware deduplication: dedupe_key = (SKU + contributor_id)
-- Same person + same SKU -> single row (upsert/enrich)
-- Different people + same SKU -> multiple rows (allowed)
+This was used to build Sheet-import CSVs for the old Google Sheets intake flow. The project
+migrated to Supabase in Dec 2025; use Supabase for moderation and enrichment.
 
-Enriches missing fields from verified backup:
-- imageUrl -> "IMAGE URL"
-- internetNumber -> "INTERNET SKU"
-- brand/model -> "Notes (Optional)" as "Brand=X; Model=Y"
-
-Never overwrites existing non-empty values.
+(Original behavior: merges backups, applies dedupe rules, and enriches fields. Retained
+for historical or one-off migration tasks only.)
 """
 
 import argparse
