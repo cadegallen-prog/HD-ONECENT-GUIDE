@@ -150,7 +150,7 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
           {/* Tier 1 + 2: Image + Brand + Name + SKU */}
           <div className="flex gap-2.5 items-start pr-9">
             <PennyThumbnail src={thumbnailSrc} alt={displayName} size={64} />
-            <div className="flex-1 min-w-0 space-y-1 overflow-hidden">
+            <div className="flex-1 min-w-0 space-y-2 overflow-hidden">
               {/* Brand (small) */}
               {displayBrand && <p className="penny-card-brand truncate">{displayBrand}</p>}
 
@@ -173,7 +173,7 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
                       event.stopPropagation()
                       handleSkuCopy(event)
                     }}
-                    className={`penny-card-sku focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${copiedSku ? "copied" : ""}`}
+                    className={`penny-card-sku w-fit focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${copiedSku ? "copied" : ""}`}
                     aria-label={`Copy SKU ${formatSkuForDisplay(item.sku)}`}
                     title="Click to copy SKU"
                     data-test="penny-card-sku"
