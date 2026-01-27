@@ -4,6 +4,27 @@
 
 ---
 
+## 2026-01-26 - GitHub Copilot - Deprecate Google Sheets pipeline & archive scripts
+
+**Goal:** Remove ambiguous Google Forms / Google Sheets guidance from active docs, archive original strategy doc and legacy scripts, and mark sheet-focused scripts as DEPRECATED. Ensure the active pipeline clearly uses the Supabase-based Report a Find flow.
+
+**Status:** ✅ Completed & pushed to `main` (commit `cd78313`).
+
+### Changes
+
+- Archived `docs/PENNY-LIST-STRATEGY.md` to `docs/legacy/PENNY-LIST-STRATEGY.md` and replaced it with a DEPRECATED notice.
+- Updated `README.md`, `PROJECT_ROADMAP.md`, `docs/WEEKLY-UPDATE-CHECKLIST.md`, `docs/AUTH-PIVOT-GUIDANCE.md`, and `.ai/CONSTRAINTS_TECHNICAL.md` to reference the Supabase-based `Report a Find` flow.
+- Added `docs/legacy/README.md` explaining archival guidance.
+- Marked legacy scripts with DEPRECATED headers and moved sheet-focused scripts to `scripts/legacy/`; sensitive scripts were moved to `backups/legacy-scripts/` to satisfy pre-commit privacy checks.
+
+### Verification
+
+- `npm run lint` ✅
+- `npm run test:unit` ✅ (26/26)
+- `npm run build` ✅
+
+**Notes:** Pre-commit hooks blocked sensitive filenames; we moved them to `backups/legacy-scripts/` to keep a copy without risking accidental PII leakage.
+
 ## 2026-01-26 - GitHub Copilot - UI: Copyable SKU pill on Penny List cards (feature-flagged)
 
 **Goal:** Add a prominent, copyable `SKU` pill to the main Penny List card to increase successful SKU capture and automated matching. Implemented behind an in-file feature flag for quick rollback.

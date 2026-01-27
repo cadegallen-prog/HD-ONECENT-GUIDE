@@ -25,8 +25,6 @@ import { Button } from "@/components/ui/button"
 import { StateBreakdownSheet } from "@/components/state-breakdown-sheet"
 import { toPennyListThumbnailUrl } from "@/lib/image-cache"
 
-const ENABLE_SKU_COPY_PILL = true // Flip to false to revert to old SKU badge quickly
-
 interface PennyListCardProps {
   item: PennyItem & { parsedDate?: Date | null }
   stateFilter?: string
@@ -138,21 +136,21 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
       aria-labelledby={`item-${item.id}-name`}
     >
       <article className="flex flex-col h-full relative">
-        {/* Status only (recency) */}
-        <div className="absolute top-3 right-3 z-10 flex items-center gap-1 text-[11px] text-[var(--text-muted)] pointer-events-none">
-          <Calendar className="w-3 h-3" aria-hidden="true" />
-          <time dateTime={lastSeenValue} title={lastSeenTitle ?? undefined}>
-            {formatRelativeDate(lastSeenValue)}
-          </time>
-        </div>
-
-        <div className="p-2.5 flex flex-col flex-1 space-y-2">
+        <div className="p-4 flex flex-col flex-1 space-y-2">
           {/* Tier 1 + 2: Image + Brand + Name + SKU */}
-          <div className="flex gap-2.5 items-start pr-9">
+          <div className="flex gap-2.5 items-start">
             <PennyThumbnail src={thumbnailSrc} alt={displayName} size={64} />
-            <div className="flex-1 min-w-0 space-y-2 overflow-hidden">
-              {/* Brand (small) */}
-              {displayBrand && <p className="penny-card-brand truncate">{displayBrand}</p>}
+            <div className="flex-1 min-w-0 space-y-1 overflow-hidden">
+              {/* Brand */}
+              {displayBrand && (
+                <p
+                  className="text-xs font-medium text-[var(--text-muted)] uppercase truncate max-w-[70%]"
+                  title={displayBrand}
+                  data-testid="penny-card-brand"
+                >
+                  {displayBrand}
+                </p>
+              )}
 
               {/* Name (2 lines) */}
               <h3
@@ -163,57 +161,65 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
                 {displayName}
               </h3>
 
-              {/* SKU pill (copyable) */}
-              <div className="flex items-center gap-2">
-                {ENABLE_SKU_COPY_PILL ? (
-                  <button
-                    type="button"
-                    onClick={(event) => {
-                      event.preventDefault()
-                      event.stopPropagation()
-                      handleSkuCopy(event)
-                    }}
-                    className={`penny-card-sku w-fit focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${copiedSku ? "copied" : ""}`}
-                    aria-label={`Copy SKU ${formatSkuForDisplay(item.sku)}`}
-                    title="Click to copy SKU"
-                    data-test="penny-card-sku"
-                  >
-                    <span className="hidden sm:inline text-[12px] text-[var(--text-muted)] mr-2">
-                      SKU
-                    </span>
-                    <span className="whitespace-nowrap">{formatSkuForDisplay(item.sku)}</span>
-                    {copiedSku ? (
-                      <Check
-                        className="w-4 h-4 ml-2 text-[var(--status-success)]"
-                        aria-hidden="true"
-                      />
-                    ) : (
-                      <Copy className="w-4 h-4 ml-2 text-[var(--text-muted)]" aria-hidden="true" />
-                    )}
-                  </button>
-                ) : (
-                  <span className="inline-flex items-center rounded-full border border-[var(--border-default)] bg-[var(--bg-recessed)] px-2 py-0.5 text-[11px] font-mono text-[var(--text-secondary)]">
-                    SKU {formatSkuForDisplay(item.sku)}
-                  </span>
+              {/* SKU (plain text, copyable) */}
+              <button
+                type="button"
+                onClick={(event) => {
+                  event.preventDefault()
+                  event.stopPropagation()
+                  handleSkuCopy(event)
+                }}
+                className="text-xs font-medium font-mono text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] rounded"
+                aria-label={`Copy SKU ${formatSkuForDisplay(item.sku)}`}
+                title="Click to copy SKU"
+                data-test="penny-card-sku"
+              >
+                SKU {formatSkuForDisplay(item.sku)}
+                {copiedSku && (
+                  <Check
+                    className="inline w-3 h-3 ml-1 text-[var(--status-success)]"
+                    aria-hidden="true"
+                  />
                 )}
-              </div>
+              </button>
             </div>
           </div>
 
           {/* Tier 3: Price Block */}
-          <div className="space-y-1">
-            <div className="flex flex-wrap items-baseline gap-2">
-              <span className="penny-card-price text-[var(--text-primary)]">{formattedPrice}</span>
-              {formattedRetail && (
-                <span className="text-sm text-[var(--text-muted)]">
-                  Retail{" "}
-                  <span className="line-through text-[var(--price-strike)]">{formattedRetail}</span>
-                </span>
-              )}
-            </div>
+          <div className="flex flex-wrap items-baseline gap-2">
+            <span className="penny-card-price">{formattedPrice}</span>
+            {formattedRetail && (
+              <span className="text-[13px] font-normal text-[var(--text-muted)] line-through">
+                {formattedRetail}
+              </span>
+            )}
           </div>
 
-          {/* Tier 4: State + report info */}
+          {/* Tier 4: Pattern Signals (2 lines, text only) */}
+          <div className="space-y-0.5 text-xs text-[var(--text-secondary)]">
+            <p>
+              Last seen:{" "}
+              <time dateTime={lastSeenValue} title={lastSeenTitle ?? undefined}>
+                {formatRelativeDate(lastSeenValue)}
+              </time>
+            </p>
+            <p>
+              {totalReports} {totalReports === 1 ? "report" : "reports"}
+              {" · "}
+              {item.locations && Object.keys(item.locations).length > 0
+                ? (() => {
+                    const stateCount = Object.keys(item.locations).length
+                    const userStateInLocations = userState && item.locations[userState]
+                    if (userStateInLocations) {
+                      return `${userState} + ${stateCount - 1} ${stateCount - 1 === 1 ? "state" : "states"}`
+                    }
+                    return `${stateCount} ${stateCount === 1 ? "state" : "states"}`
+                  })()
+                : "State data unavailable"}
+            </p>
+          </div>
+
+          {/* Tier 4b: State Chips (text, tappable) */}
           {item.locations && Object.keys(item.locations).length > 0 && (
             <button
               type="button"
@@ -231,7 +237,7 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
                   .map(([state]) => (
                     <span
                       key={`${item.id}-${state}`}
-                      className="inline-flex items-center rounded-full border border-[var(--border-default)] bg-[var(--bg-recessed)] px-2 py-0.5 text-[11px] font-semibold text-[var(--text-secondary)]"
+                      className="text-[11px] font-semibold text-[var(--text-secondary)]"
                     >
                       {state}
                     </span>
@@ -242,15 +248,12 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
                   </span>
                 )}
               </div>
-              <p className="mt-1 text-[10px] text-[var(--text-muted)]">
-                {totalReports} {totalReports === 1 ? "report" : "reports"} total
-              </p>
             </button>
           )}
 
-          {/* Tier 5: Actions - Report (full-width primary), then HD + Barcode row */}
+          {/* Tier 5: Actions */}
           <div className="space-y-2" onClick={(event) => event.stopPropagation()}>
-            {/* Row 1: Full-width Report button (primary action) */}
+            {/* Primary: Report Find (full-width) */}
             <Button
               type="button"
               variant="primary"
@@ -264,20 +267,20 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
                 })
                 router.push(buildReportFindUrl({ sku: item.sku, name: item.name, src: "card" }))
               }}
-              className="w-full min-h-[40px]"
+              className="w-full min-h-[44px] rounded-[10px] text-sm font-semibold"
               aria-label={`Report finding ${item.name}`}
             >
               <PlusCircle className="w-4 h-4 mr-1.5" aria-hidden="true" />
               Report Find
             </Button>
 
-            {/* Row 2: Secondary actions (HD always shows via SKU fallback, Barcode only if UPC exists) */}
-            <div className="flex gap-1.5">
+            {/* Secondary: icon-only, no borders */}
+            <div className="flex justify-center gap-1.5">
               <a
                 href={resolvedHomeDepotUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 flex items-center justify-center gap-1.5 min-h-[44px] sm:min-h-[36px] px-2.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] text-[var(--text-secondary)] text-xs font-semibold transition-colors hover:text-[var(--text-primary)] hover:border-[var(--border-strong)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+                className="flex items-center justify-center min-h-[44px] min-w-[44px] rounded-lg text-[var(--text-muted)] transition-colors hover:bg-[var(--bg-recessed)] hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
                 aria-label={`Open Home Depot page for ${item.name}`}
                 onClick={(event) => {
                   event.stopPropagation()
@@ -287,8 +290,7 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
                   })
                 }}
               >
-                <ExternalLink className="w-4 h-4" aria-hidden="true" />
-                <span>Home Depot</span>
+                <ExternalLink className="w-5 h-5" aria-hidden="true" />
               </a>
               {hasUpc && (
                 <button
@@ -298,21 +300,18 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
                     event.stopPropagation()
                     setIsBarcodeOpen(true)
                   }}
-                  className="flex items-center justify-center gap-1.5 min-h-[44px] sm:min-h-[36px] px-2.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] text-[var(--text-secondary)] text-xs font-semibold transition-colors hover:text-[var(--text-primary)] hover:border-[var(--border-strong)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+                  className="flex items-center justify-center min-h-[44px] min-w-[44px] rounded-lg text-[var(--text-muted)] transition-colors hover:bg-[var(--bg-recessed)] hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
                   aria-label={`Show barcode for ${item.name}`}
                 >
-                  <Barcode className="w-4 h-4" aria-hidden="true" />
-                  <span>Barcode</span>
+                  <Barcode className="w-5 h-5" aria-hidden="true" />
                 </button>
               )}
-              <div className="opacity-70 hover:opacity-100 transition-opacity">
-                <AddToListButton
-                  sku={item.sku}
-                  itemName={item.name}
-                  variant="icon"
-                  className="min-h-[44px] sm:min-h-[36px] min-w-[44px] sm:min-w-[36px]"
-                />
-              </div>
+              <AddToListButton
+                sku={item.sku}
+                itemName={item.name}
+                variant="icon"
+                className="min-h-[44px] min-w-[44px] text-[var(--text-muted)] hover:bg-[var(--bg-recessed)] hover:text-[var(--text-primary)]"
+              />
             </div>
           </div>
         </div>
@@ -429,7 +428,11 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
             >
               <div className="space-y-2">
                 {displayBrand && (
-                  <p className="text-[11px] uppercase tracking-[0.08em] text-[var(--text-muted)]">
+                  <p
+                    className="text-[11px] uppercase tracking-[0.08em] text-[var(--text-muted)] truncate max-w-[70%]"
+                    title={displayBrand}
+                    data-testid="penny-card-brand-compact"
+                  >
                     {displayBrand}
                   </p>
                 )}
@@ -500,7 +503,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
                   <span
                     key={`${item.id}-${state}`}
                     role="listitem"
-                    className="inline-flex items-center rounded-full border border-[var(--border-default)] bg-[var(--bg-recessed)] px-2 py-0.5 text-[11px] font-semibold text-[var(--text-secondary)]"
+                    className="inline-flex items-center text-[11px] font-semibold text-[var(--text-secondary)]"
                   >
                     {state}
                   </span>
@@ -543,7 +546,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
             href={resolvedHomeDepotUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-1.5 min-h-[44px] min-w-[44px] px-2.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+            className="flex items-center justify-center gap-1.5 min-h-[44px] min-w-[44px] px-2.5 rounded-lg text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
             aria-label={`Open Home Depot page for ${item.name}`}
             title="Home Depot"
             onClick={(event) => {

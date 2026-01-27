@@ -33,7 +33,7 @@
     /* 60% - NEUTRAL BASE (backgrounds, text) */
     --bg-page: #ffffff;
     --bg-elevated: #fafaf9;
-    --bg-recessed: #f5f5f4;
+    --bg-recessed: #f0f0ef;
     --bg-hover: #f0efed;
     --bg-focus: #f0efed;
     --bg-card: var(--bg-elevated);
@@ -52,7 +52,7 @@
     --text-placeholder: #78716c;
     --text-inverse: #ffffff;
 
-    --border-default: #e7e5e4;
+    --border-default: #d4d4d4;
     --border-strong: #d6d3d1;
     --border-focus: var(--cta-primary);
     --border-dark: #d6d3d1;
@@ -373,25 +373,14 @@
     box-shadow: var(--shadow-card-hover);
   }
 
-  /* Glass card - frosted glass with backdrop blur */
+  /* Glass card - now solid (no blur/transparency) */
   .glass-card {
     position: relative;
     background: var(--bg-card);
-    background: color-mix(in srgb, var(--bg-card) 82%, transparent);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-    border: 1px solid color-mix(in srgb, var(--border-default) 70%, transparent);
+    border: 1px solid var(--border-default);
+    border-radius: 16px;
     box-shadow: var(--shadow-card);
     transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .glass-card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 40%);
-    pointer-events: none;
   }
 
   .glass-card:hover {
@@ -1454,9 +1443,16 @@
    Optimized for dense layouts - card-specific
    =============================================== */
 .penny-card-name {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1.4;
+  color: var(--text-primary);
+}
+
+.penny-card-price {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
   color: var(--text-primary);
 }
 

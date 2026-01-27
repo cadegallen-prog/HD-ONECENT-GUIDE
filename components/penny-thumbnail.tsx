@@ -36,7 +36,7 @@ export function PennyThumbnail({
     currentSrc && !errored && (/^https?:\/\//i.test(currentSrc) || currentSrc.startsWith("/"))
   const normalizedSize = size ?? 64
   const sizeClass = sizeClassMap[normalizedSize]
-  const wrapperClass = `flex items-center justify-center rounded-lg bg-[var(--bg-tertiary)] border border-[var(--border-strong)] shadow-[inset_0_0_0_1px_var(--border-strong)] text-[var(--text-muted)] ${sizeClass}`
+  const wrapperClass = `flex items-center justify-center rounded-xl bg-[var(--bg-recessed)] text-[var(--text-muted)] ${sizeClass}`
 
   if (!showImage) {
     return (
@@ -53,7 +53,7 @@ export function PennyThumbnail({
       width={size}
       height={size}
       loading="lazy"
-      className={`${sizeClass} rounded-lg object-contain border border-[var(--border-strong)] bg-[var(--bg-tertiary)]`}
+      className={`${sizeClass} rounded-xl object-contain bg-[var(--bg-recessed)]`}
       onError={() => {
         if (!triedThdFallback && currentSrc) {
           const fallback = toThdImageVariant(currentSrc, 1000)

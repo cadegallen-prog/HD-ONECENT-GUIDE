@@ -4,7 +4,7 @@ import { PageHeader, PageShell, Prose, Section } from "@/components/page-templat
 export const metadata: Metadata = {
   title: "Privacy Policy | Penny Central",
   description:
-    "Privacy policy and advertising disclosures for Penny Central, including Ezoic and Monumetric data usage notices.",
+    "Privacy policy and advertising disclosures for Penny Central, including Ezoic data usage notices.",
   robots: {
     index: true,
     follow: true,
@@ -13,8 +13,7 @@ export const metadata: Metadata = {
     type: "article",
     url: "https://www.pennycentral.com/privacy-policy",
     title: "Privacy Policy | Penny Central",
-    description:
-      "Privacy policy and advertising disclosures for Penny Central, including Monumetric data usage notice.",
+    description: "Privacy policy and advertising disclosures for Penny Central.",
   },
 }
 
@@ -49,7 +48,7 @@ export default function PrivacyPolicyPage() {
         </Prose>
       </Section>
 
-      <Section title="Publisher Advertising Privacy (Monumetric)">
+      {/* Section title="Publisher Advertising Privacy (Monumetric)" - Temporarily hidden during Ezoic MCM review
         <Prose>
           <p>
             This Site is affiliated with Monumetric (dba for The Blogger Network, LLC) for the
@@ -66,9 +65,9 @@ export default function PrivacyPolicyPage() {
             .
           </p>
         </Prose>
-      </Section>
+      */}
 
-      <Section title="Google AdSense Privacy Disclosure">
+      <Section title="Google Advertising Privacy Disclosure">
         <Prose>
           <p>
             Penny Central uses third-party advertising vendors, including Google, to serve ads on
@@ -76,24 +75,26 @@ export default function PrivacyPolicyPage() {
             this website and other sites on the internet.
           </p>
           <p>
-            Google&apos;s use of the DoubleClick DART cookie enables it and its partners to serve
-            ads to you based on your visit to Penny Central and/or other sites on the internet.
-            Users may opt out of the use of the DART cookie by visiting Google&apos;s ad settings or
-            by visiting{" "}
+            Google&apos;s use of advertising cookies enables it and its partners to serve ads based
+            on your visit to Penny Central and/or other sites on the internet. Users may opt out of
+            personalized advertising by visiting{" "}
+            <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer">
+              Google Ad Settings
+            </a>{" "}
+            or by visiting{" "}
             <a href="https://www.aboutads.info" target="_blank" rel="noopener noreferrer">
               www.aboutads.info
             </a>
             .
           </p>
           <p>
-            If you would like to learn more about how Google uses data when you use partner sites or
-            apps, you can review Google&apos;s disclosures at{" "}
+            For more information on how Google uses data in its ad products, please visit{" "}
             <a
               href="https://policies.google.com/technologies/ads"
               target="_blank"
               rel="noopener noreferrer"
             >
-              https://policies.google.com/technologies/ads
+              Google&apos;s Privacy & Terms
             </a>
             .
           </p>
