@@ -21,6 +21,7 @@
 
 ## Active / Noteworthy Plans
 
-| Plan                             | Status                     | Priority       | Last updated | Notes                               |
-| -------------------------------- | -------------------------- | -------------- | ------------ | ----------------------------------- |
-| `.ai/plans/my-list-elevation.md` | Approved (Not Implemented) | P1 (Retention) | 2026-01-21   | 3-phase roadmap; strict infra reuse |
+| Plan                                    | Status                     | Priority          | Last updated | Notes                                        |
+| --------------------------------------- | -------------------------- | ----------------- | ------------ | -------------------------------------------- |
+| `.ai/plans/my-list-elevation.md`        | Approved (Not Implemented) | P1 (Retention)    | 2026-01-21   | 3-phase roadmap; strict infra reuse          |
+| `.ai/plans/ad-monetization-strategy.md` | Planning                   | P1 (Monetization) | 2026-01-26   | Monumetric vs Ezoic; awaiting email response |
