@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import { EZOIC_ENABLED, AD_MIN_HEIGHTS, type AdSlotId, type AdFormat } from "@/lib/ads"
+import { EZOIC_ENABLED, type AdSlotId } from "@/lib/ads"
 
 // =============================================================================
 // TYPE DEFINITIONS
@@ -10,14 +10,8 @@ import { EZOIC_ENABLED, AD_MIN_HEIGHTS, type AdSlotId, type AdFormat } from "@/l
 interface EzoicPlaceholderProps {
   /** Slot ID from AD_SLOTS - must match Ezoic dashboard */
   slotId: AdSlotId
-  /** Ad format determines reserved height for CLS protection */
-  format?: AdFormat
-  /** Override min-height (pixels) */
-  minHeight?: number
   /** Additional CSS classes */
   className?: string
-  /** Format for mobile breakpoint (responsive ads) */
-  mobileFormat?: AdFormat
 }
 
 interface EzoicInlineAdProps {
@@ -60,16 +54,9 @@ declare global {
  */
 export function EzoicPlaceholder({
   slotId,
-  format = "rectangle",
-  minHeight,
   className = "",
-  mobileFormat,
-}: EzoicPlaceholderProps) {
+}: Pick<EzoicPlaceholderProps, "slotId" | "className">) {
   const hasInitialized = useRef(false)
-
-  // Calculate heights for CLS protection
-  const desktopHeight = minHeight ?? AD_MIN_HEIGHTS[format]
-  const mobileHeight = mobileFormat ? AD_MIN_HEIGHTS[mobileFormat] : desktopHeight
 
   useEffect(() => {
     // Skip if ads disabled or already initialized
@@ -107,10 +94,8 @@ export function EzoicPlaceholder({
   return (
     <div
       id={`ezoic-pub-ad-placeholder-${slotId}`}
-      className={`ezoic-ad-placeholder flex items-center justify-center bg-[var(--bg-muted)] rounded-lg border border-[var(--border-default)] overflow-hidden ${className}`}
+      className={`ezoic-ad-placeholder ${className}`}
       style={{
-        // Mobile-first min-height
-        minHeight: `${mobileHeight}px`,
         // CSS containment for performance
         contain: "layout style",
       }}
@@ -119,25 +104,11 @@ export function EzoicPlaceholder({
       role="complementary"
       aria-label="Advertisement"
     >
-      {/* Skeleton placeholder while ad loads */}
-      <span className="animate-pulse text-xs text-[var(--text-muted)] opacity-40 select-none">
-        Ad
-      </span>
-
-      {/* Responsive height for desktop */}
-      {mobileHeight !== desktopHeight && (
-        <style
-          dangerouslySetInnerHTML={{
-            __html: `
-              @media (min-width: 768px) {
-                #ezoic-pub-ad-placeholder-${slotId} {
-                  min-height: ${desktopHeight}px !important;
-                }
-              }
-            `,
-          }}
-        />
-      )}
+      {/*
+        No visible placeholder - Ezoic fills this div directly.
+        If no ad loads, div stays empty (no ugly gray box).
+        CLS protection happens via Ezoic's own container sizing.
+      */}
     </div>
   )
 }
@@ -163,13 +134,8 @@ export function EzoicInlineAd({ slotId, className = "" }: EzoicInlineAdProps) {
   if (!EZOIC_ENABLED) return null
 
   return (
-    <div className={`my-4 ${className}`}>
-      <EzoicPlaceholder
-        slotId={slotId}
-        format="mobileLeaderboard"
-        mobileFormat="mobileBanner"
-        className="w-full"
-      />
+    <div className={`ezoic-inline-ad-wrapper ${className}`}>
+      <EzoicPlaceholder slotId={slotId} className="w-full" />
     </div>
   )
 }

@@ -134,12 +134,7 @@ export default async function Home() {
           =================================================== */}
       <section className="section-padding-sm px-4 sm:px-6 bg-[var(--bg-page)]">
         <div className="max-w-4xl mx-auto">
-          <EzoicPlaceholder
-            slotId={AD_SLOTS.HOME_TOP}
-            format="leaderboard"
-            mobileFormat="mobileLeaderboard"
-            className="w-full max-w-[728px] mx-auto"
-          />
+          <EzoicPlaceholder slotId={AD_SLOTS.HOME_TOP} className="w-full max-w-[728px] mx-auto" />
         </div>
       </section>
 
@@ -232,11 +227,7 @@ export default async function Home() {
           =================================================== */}
       <section className="section-padding-sm px-4 sm:px-6 bg-[var(--bg-page)]">
         <div className="max-w-4xl mx-auto">
-          <EzoicPlaceholder
-            slotId={AD_SLOTS.HOME_MID}
-            format="rectangle"
-            className="w-full max-w-[336px] mx-auto"
-          />
+          <EzoicPlaceholder slotId={AD_SLOTS.HOME_MID} className="w-full max-w-[336px] mx-auto" />
         </div>
       </section>
 
@@ -332,8 +323,6 @@ export default async function Home() {
         <div className="max-w-4xl mx-auto">
           <EzoicPlaceholder
             slotId={AD_SLOTS.HOME_BOTTOM}
-            format="leaderboard"
-            mobileFormat="mobileLeaderboard"
             className="w-full max-w-[728px] mx-auto"
           />
         </div>

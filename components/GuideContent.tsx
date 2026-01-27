@@ -602,11 +602,7 @@ export function GuideContent() {
           Slot: CONTENT_AFTER_P1 (130) — after Section II
           =================================================== */}
       <div className="flex justify-center">
-        <EzoicPlaceholder
-          slotId={AD_SLOTS.CONTENT_AFTER_P1}
-          format="rectangle"
-          className="w-full max-w-[336px]"
-        />
+        <EzoicPlaceholder slotId={AD_SLOTS.CONTENT_AFTER_P1} className="w-full max-w-[336px]" />
       </div>
 
       {/* ============================================ */}

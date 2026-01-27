@@ -1499,3 +1499,21 @@
   border-color: var(--status-success);
   background-color: var(--chip-success-surface);
 }
+
+/* =============================================================================
+   EZOIC AD CONTAINERS
+   Invisible until Ezoic fills them. No ugly gray boxes.
+   ============================================================================= */
+.ezoic-ad-placeholder:empty,
+.ezoic-inline-ad-wrapper:empty {
+  display: none;
+}
+
+/* Give Ezoic-filled containers some breathing room */
+.ezoic-ad-placeholder:not(:empty) {
+  margin-block: 1rem;
+}
+
+.ezoic-inline-ad-wrapper:not(:empty) {
+  margin-block: 1rem;
+}
