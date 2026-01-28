@@ -53,6 +53,13 @@
 
 **Verification bundle:** `reports/verification/2026-01-28-pages-overhaul-chunk5/` (lint ✅, build ✅, unit ✅, e2e ✅)
 
+### Pages Overhaul (Chunk 6): Delete /cashback + redirect
+
+- Deleted `app/cashback/page.tsx`.
+- Added a permanent redirect `/cashback` → `/support` in `next.config.js` (keeps old links working and consolidates support content).
+
+**Verification:** `npm run lint` ✅, `npm run build` ✅, `npm run test:unit` ✅, `npm run test:e2e` ✅
+
 ## 2026-01-26 - GitHub Copilot - Deprecate Google Sheets pipeline & archive scripts
 
 **Goal:** Remove ambiguous Google Forms / Google Sheets guidance from active docs, archive original strategy doc and legacy scripts, and mark sheet-focused scripts as DEPRECATED. Ensure the active pipeline clearly uses the Supabase-based Report a Find flow.

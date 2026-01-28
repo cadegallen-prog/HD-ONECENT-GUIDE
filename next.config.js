@@ -87,6 +87,12 @@ const nextConfig = {
         destination: "/penny-list",
         permanent: true,
       },
+      // Pages Overhaul: consolidate legacy /cashback into /support (Jan 2026)
+      {
+        source: "/cashback",
+        destination: "/support",
+        permanent: true,
+      },
     ]
   },
   // Security and caching headers
