@@ -4,6 +4,55 @@
 
 ---
 
+## 2026-01-28 - Codex - Enablement: safe Vercel env parity (no prod writes)
+
+**Goal:** Make local dev + local perf debugging reliable without risking production data. Reduce “limp local” by giving a one-command Vercel → `.env.local` sync, plus a guardrail that prevents accidentally targeting prod Supabase.
+
+**Status:** ✅ Completed & verified locally.
+
+### Changes
+
+- `package.json`: Added `env:pull`, `env:safety`, and `start:prodlike` scripts.
+- `scripts/env-safety-check.ts`: Fails if local `NEXT_PUBLIC_SUPABASE_URL` appears to target the known production Supabase project (override available for intentional one-offs).
+- `scripts/ai-doctor.ts`: Improves env guidance and fails fast on unsafe prod-target local env.
+- `scripts/run-local-staging-warmer.mjs` + `docs/skills/run-local-staging-warmer.md`: Updated guidance to use `npm run env:pull` (works even when `vercel` isn’t globally installed).
+- `.ai/ENVIRONMENT_VARIABLES.md` + `docs/skills/local-dev-faststart.md`: Documented the safe “staging-first” local workflow and the new scripts.
+
+### Verification
+
+- Bundle: `reports/verification/2026-01-28T21-05-36/summary.md` (lint ✅, build ✅, unit ✅, e2e ✅)
+
+### Pages Overhaul (Chunk 1–2): Rakuten affiliate redirect + backward compatibility
+
+- Added `RAKUTEN_REFERRAL_URL` to `lib/constants.ts`.
+- Added `/go/rakuten` route (`app/go/rakuten/route.ts`) that redirects to Rakuten.
+- Added `/go/befrugal` route (`app/go/befrugal/route.ts`) that redirects to `/go/rakuten` (keeps old links working).
+
+**Quick check:** `curl -I http://localhost:3001/go/rakuten` shows a `307` with `Location: https://www.rakuten.com/r/CADEGA16?eeid=28187`.
+
+**Verification bundle:** `reports/verification/2026-01-28-pages-overhaul-chunk1-2/` (lint ✅, build ✅, unit ✅, e2e ✅)
+
+### Pages Overhaul (Chunk 3): Privacy Policy rewrite (Monumetric-ready)
+
+- Rewrote `app/privacy-policy/page.tsx` to remove all Ezoic references and add: GA4 disclosure, generalized advertising partners + `/ads.txt` reference, Rakuten affiliate disclosure, and a CCPA section with `id="ccpa"` (effective date: Jan 28, 2026).
+- Added `tests/privacy-policy.spec.ts` (ensures `/privacy-policy` contains required disclosures, contains no “Ezoic”, and `/privacy-policy#ccpa` anchor works).
+
+**Verification bundle:** `reports/verification/2026-01-28-pages-overhaul-chunk3/` (lint ✅, build ✅, unit ✅, e2e ✅)
+
+### Pages Overhaul (Chunk 4): Terms of Service page (new)
+
+- Added `app/terms-of-service/page.tsx` with the planned TOS content (effective date: Jan 28, 2026).
+- Added `tests/terms-of-service.spec.ts` to ensure `/terms-of-service` loads and displays the effective date.
+
+**Verification bundle:** `reports/verification/2026-01-28-pages-overhaul-chunk4/` (lint ✅, build ✅, unit ✅, e2e ✅)
+
+### Pages Overhaul (Chunk 5): Support page rewrite (Rakuten + transparency)
+
+- Rewrote `app/support/page.tsx` to merge transparency content, remove the page-level `/cashback` link, add prominent Rakuten CTA (`/go/rakuten`) with affiliate disclosure, and generalize ads messaging (no Ezoic references). Also updates the community count copy to **58,000+** and keeps contact info.
+- Added `tests/support.spec.ts` to ensure `/support` includes the Rakuten CTA, contains no “BeFrugal”, and has no `/cashback` link in the main page content.
+
+**Verification bundle:** `reports/verification/2026-01-28-pages-overhaul-chunk5/` (lint ✅, build ✅, unit ✅, e2e ✅)
+
 ## 2026-01-26 - GitHub Copilot - Deprecate Google Sheets pipeline & archive scripts
 
 **Goal:** Remove ambiguous Google Forms / Google Sheets guidance from active docs, archive original strategy doc and legacy scripts, and mark sheet-focused scripts as DEPRECATED. Ensure the active pipeline clearly uses the Supabase-based Report a Find flow.
@@ -47,54 +96,3 @@
 - Playwright visual/interaction proof: `reports/playwright/html` (generated)
 
 **Rollback:** Set `ENABLE_SKU_COPY_PILL = false` in `components/penny-list-card.tsx` and revert the CSS class if needed.
-
----
-
-## 2026-01-25 - Codex - Pipeline: local-first warmer + GH probe-only
-
-**Goal:** Stop relying on GitHub Actions for full pre-scrape (Cloudflare 403 reality) and make the local warmer the primary freshness path, while keeping scheduled Actions as a non-failing probe with strong diagnostics.
-
-**Status:** ✅ Verified locally (ready to push)
-
-### Changes
-
-- `.github/workflows/enrichment-staging-warmer.yml`: Scheduled runs now execute in **probe-only** mode (no Supabase writes; no hard dependency on secrets) and open/update an issue when blocked; manual runs still attempt the full warmer when secrets are present.
-- `scripts/staging-warmer.py`: Added `PROBE_ONLY` mode so scheduled runs emit `FETCH_DIAGNOSTICS` + `cloudflare_block=true/false` without failing. Also stamps `created_at` on upserts so freshness reflects the most recent warmer run.
-- `scripts/print-enrichment-staging-status.ts`: Fixed to use `created_at` and added an easy freshness check command.
-- `package.json`: Added `npm run staging:status`.
-- `docs/skills/run-local-staging-warmer.md`: Updated success criteria + added the quick status check.
-
-### Verification (local)
-
-- `npm run lint` ✅
-- `npm run build` ✅
-- `npm run test:unit` ✅
-- `npm run test:e2e` ✅ (100/100)
-
----
-
-## 2026-01-24 - Codex - SEO: stop redirect-only pages + sitemap canonical (www)
-
-**Goal:** Remove redirects for `/checkout-strategy` and `/responsible-hunting` so those pages return `200` (not `308`), and ensure sitemap URLs match canonical `www` domain.
-
-**Status:** ✅ Shipped (pushed to `main`) + verified locally + verified on production
-
-### Changes
-
-- `next.config.js`: Removed redirects for `/checkout-strategy` and `/responsible-hunting` (these now serve real pages).
-- `app/sitemap.ts`: Added `/checkout-strategy` and `/responsible-hunting` to the live sitemap output.
-- `public/sitemap.xml`: Canonicalized all `<loc>` URLs from `https://pennycentral.com/...` → `https://www.pennycentral.com/...` (note: production uses `app/sitemap.ts`).
-- Playwright stability (verification hygiene):
-  - `playwright.config.ts`: Avoids deleting `.next` and starts `next start -p 3002` using `NEXT_DIST_DIR=.next-playwright`.
-  - `package.json`: `test:e2e` builds with `NEXT_DIST_DIR=.next-playwright` then runs Playwright.
-  - `scripts/ai-verify.ts`: Fails fast if port 3002 is already serving HTTP (prevents “port already used” flake).
-
-### Verification (local)
-
-- Bundle: `reports/verification/2026-01-24T23-01-47/summary.md` (lint ✅, build ✅, unit ✅, e2e ✅)
-
-### Production verification (after deploy)
-
-- `https://www.pennycentral.com/checkout-strategy` → `200` (observed 2026-01-24)
-- `https://www.pennycentral.com/responsible-hunting` → `200` (observed 2026-01-24)
-- `https://www.pennycentral.com/sitemap.xml` includes both URLs (observed 2026-01-24)

@@ -34,6 +34,9 @@ export const NEWSLETTER_URL = "https://pennycentral.kit.com"
 // MONETIZATION CONSTANTS
 // ============================================
 
+/** Rakuten referral URL (affiliate) */
+export const RAKUTEN_REFERRAL_URL = "https://www.rakuten.com/r/CADEGA16?eeid=28187"
+
 /**
  * Optional donation URL for supporting PennyCentral.
  * If empty/undefined: hide donate button and show "Donations coming soon."

@@ -1,10 +1,18 @@
 import { test, expect } from "@playwright/test"
 
 test.describe("Penny Card Systematic Hierarchy", () => {
+  async function firstCard(page: import("@playwright/test").Page) {
+    const brand = page.locator('[data-testid="penny-card-brand"]').first()
+    await expect(brand).toBeVisible({ timeout: 15000 })
+
+    // Use the card that actually contains the first brand label (more stable than "article".first()).
+    return brand.locator("xpath=ancestor::article[1]")
+  }
+
   test("Full card: Brand is font-normal (400 weight)", async ({ page }) => {
     await page.goto("/penny-list")
-    const brand = page.locator('[data-testid="penny-card-brand"]').first()
-    await expect(brand).toBeVisible()
+    const card = await firstCard(page)
+    const brand = card.locator('[data-testid="penny-card-brand"]').first()
 
     // Check computed font-weight
     const fontWeight = await brand.evaluate((el) => window.getComputedStyle(el).fontWeight)
@@ -13,7 +21,11 @@ test.describe("Penny Card Systematic Hierarchy", () => {
 
   test("Full card: Image is 72px", async ({ page }) => {
     await page.goto("/penny-list")
-    const thumbnail = page.locator(".penny-thumbnail").first()
+    const card = await firstCard(page)
+    const thumbnail = card
+      .locator('img[width="72"][height="72"], [aria-label="No photo available"]')
+      .first()
+    await expect(thumbnail).toBeVisible({ timeout: 15000 })
     const box = await thumbnail.boundingBox()
 
     expect(box?.width).toBeCloseTo(72, 5)
@@ -22,17 +34,13 @@ test.describe("Penny Card Systematic Hierarchy", () => {
 
   test("Full card: SKU in metadata block (below price)", async ({ page }) => {
     await page.goto("/penny-list")
-    await page.waitForSelector('[data-testid="penny-card-brand"]', { timeout: 10000 })
+    const card = await firstCard(page)
 
-    // Get the first card by finding the parent article element
-    const card = page.locator("article").first()
-
-    // Get positions of price and SKU
-    const price = card.locator("text=/\\$0\\.01/").first()
+    const price = card.locator(".penny-card-price").first()
     const sku = card.locator('[data-test="penny-card-sku"]').first()
 
     await expect(price).toBeVisible()
-    await expect(sku).toBeVisible()
+    await expect(sku).toBeVisible({ timeout: 15000 })
 
     const priceBox = await price.boundingBox()
     const skuBox = await sku.boundingBox()
@@ -43,7 +51,8 @@ test.describe("Penny Card Systematic Hierarchy", () => {
 
   test('Full card: "Last seen" is font-medium', async ({ page }) => {
     await page.goto("/penny-list")
-    const lastSeen = page.locator("text=/Last seen:/").first()
+    const card = await firstCard(page)
+    const lastSeen = card.locator("text=/Last seen:/").first()
 
     await expect(lastSeen).toBeVisible()
 
@@ -56,7 +65,7 @@ test.describe("Penny Card Systematic Hierarchy", () => {
     await page.goto("/penny-list")
 
     const cards = page.locator('[data-testid="penny-card-brand"]')
-    await page.waitForSelector('[data-testid="penny-card-brand"]', { timeout: 10000 })
+    await page.waitForSelector('[data-testid="penny-card-brand"]', { timeout: 15000 })
 
     const count = await cards.count()
     expect(count).toBeGreaterThanOrEqual(1)

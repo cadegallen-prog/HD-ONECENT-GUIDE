@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button"
 import { DONATION_URL } from "@/lib/constants"
 
 export const metadata: Metadata = {
-  title: "Support PennyCentral",
-  description: "Learn how PennyCentral is funded and how you can optionally support the project.",
+  title: "Support | PennyCentral",
+  description:
+    "Learn how PennyCentral is funded, how ads work on the site, and how you can optionally support the project.",
 }
 
 export default function SupportPage() {
@@ -16,11 +17,37 @@ export default function SupportPage() {
     <PageShell width="narrow">
       <PageHeader
         title="Support PennyCentral"
-        subtitle="PennyCentral is free to use. No paywalls, no subscriptions, and no premium tier required to access the core tools."
+        subtitle={
+          <>
+            PennyCentral is free to use. No paywalls, no subscriptions, and no premium tier required
+            to access the core tools for the <strong>58,000+</strong> member community.
+          </>
+        }
       />
 
       <Section>
         <Prose>
+          <h2>Save Money & Support the Site with Rakuten</h2>
+          <p>
+            Get cash back on purchases (including Home Depot!) while helping fund PennyCentral—at no
+            cost to you.
+          </p>
+          <p>Rakuten is a trusted cash back service used by millions:</p>
+          <ul>
+            <li>Earn up to 10%+ back at thousands of stores</li>
+            <li>$30 welcome bonus after a small qualifying spend</li>
+          </ul>
+          <div className="mt-4">
+            <Button asChild variant="primary" size="lg">
+              <a href="/go/rakuten" target="_blank" rel="noopener noreferrer">
+                Sign Up for Rakuten →
+              </a>
+            </Button>
+          </div>
+          <p className="text-sm text-[var(--text-muted)] mt-2">
+            Affiliate disclosure: we earn a commission on qualifying referrals.
+          </p>
+
           <h2>Sustainability</h2>
           <p>
             As the site grows, there are real costs to keep it online and improving (hosting,
@@ -30,7 +57,7 @@ export default function SupportPage() {
 
           <h2>Ads</h2>
           <p>
-            Ads are now live on the site. You will see ads displayed across our pages to fund
+            Ads are now live on the site. You will see ads displayed across our pages to help fund
             continued development and operations.
           </p>
           <p>
@@ -67,8 +94,8 @@ export default function SupportPage() {
             site.
           </p>
           <p>
-            <strong>Affiliate/referral links:</strong> If affiliate or referral links are added in
-            the future, they will be clearly labeled.
+            <strong>Affiliate/referral links:</strong> PennyCentral may earn a commission from
+            qualifying referrals (for example, Rakuten). These links will be clearly labeled.
           </p>
 
           <h2>Feedback</h2>
@@ -79,10 +106,10 @@ export default function SupportPage() {
 
           <div className="mt-6">
             <Link
-              href="/cashback"
+              href="/contact"
               className="text-[var(--link-default)] hover:text-[var(--link-hover)] hover:underline"
             >
-              Support & Transparency →
+              Contact Us →
             </Link>
           </div>
         </Prose>

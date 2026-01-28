@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Jan 26, 2026 (SKU pill copy + Pipeline: local-first warmer + GH probe-only)
+**Last updated:** Jan 28, 2026 (Enablement: safe local env parity)
 
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
@@ -10,6 +10,12 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-01-28 (Enablement: safe local env parity):** Added `npm run env:pull` (Vercel → `.env.local`) and `npm run env:safety` (blocks accidental local targeting of prod Supabase by default), plus `npm run start:prodlike` for perf debugging. Updated `ai:doctor` and local warmer docs to reduce “limp local” from missing env vars. Verified with `npm run ai:verify` (lint/build/unit/e2e all passed).
+- **2026-01-28 (Pages overhaul: Rakuten redirects):** Added `/go/rakuten` (redirects to Rakuten) and `/go/befrugal` (redirects to `/go/rakuten` for backward compatibility), plus `RAKUTEN_REFERRAL_URL` constant. Verified with `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e` (bundled under `reports/verification/2026-01-28-pages-overhaul-chunk1-2/`).
+- **2026-01-28 (Pages overhaul: Privacy Policy rewrite):** Rewrote `/privacy-policy` to remove all Ezoic references, add GA4 disclosure, generalize advertising to “advertising partners” with `/ads.txt` reference, add Rakuten affiliate disclosure, and add a CCPA section anchored at `/privacy-policy#ccpa`. Verified with `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e` (bundled under `reports/verification/2026-01-28-pages-overhaul-chunk3/`).
+- **2026-01-28 (Pages overhaul: Terms of Service page):** Added `/terms-of-service` with a new Terms of Service page (effective date: Jan 28, 2026). Verified with `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e` (bundled under `reports/verification/2026-01-28-pages-overhaul-chunk4/`).
+- **2026-01-28 (Pages overhaul: Support page rewrite):** Rewrote `/support` to include a prominent Rakuten section (CTA links to `/go/rakuten` + affiliate disclosure), merge transparency content, remove the page-level `/cashback` link, and keep generalized ads + contact info. Verified with `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e` (bundled under `reports/verification/2026-01-28-pages-overhaul-chunk5/`).
 
 - **2026-01-26 (Deprecate Google Sheets pipeline):** Archived legacy Google Forms/Sheets strategy doc (`docs/legacy/PENNY-LIST-STRATEGY.md`), updated docs to Supabase flow (`README.md`, `PROJECT_ROADMAP.md`, `docs/WEEKLY-UPDATE-CHECKLIST.md`, `docs/AUTH-PIVOT-GUIDANCE.md`), added DEPRECATED headers to sheet-related scripts, and moved sensitive scripts to `backups/legacy-scripts/` to satisfy privacy pre-commit checks. Verified with `npm run qa:fast` (lint/build/test:unit all passed). Commit: `cd78313`.
 
