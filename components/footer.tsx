@@ -70,11 +70,6 @@ export function Footer() {
                   Support PennyCentral
                 </Link>
               </li>
-              <li>
-                <Link href="/cashback" className={navLinkClass}>
-                  Support & Transparency
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -88,13 +83,23 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/contact" className={navLinkClass}>
+                  Contact Us
+                </Link>
+              </li>
+              <li>
                 <Link href="/privacy-policy" className={navLinkClass}>
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className={navLinkClass}>
-                  Contact Us
+                <Link href="/terms-of-service" className={navLinkClass}>
+                  Terms of Service
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacy-policy#ccpa" className={navLinkClass}>
+                  Do Not Sell My Info
                 </Link>
               </li>
               <li>
@@ -110,7 +115,7 @@ export function Footer() {
         <div className="mt-10 pt-8 border-t border-[var(--border-default)]">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <p className="text-xs text-[var(--text-muted)] order-2 sm:order-1">
-              © 2025 Penny Central. Educational use only.
+              © 2026 PennyCentral. Educational use only.
             </p>
             <div className="flex items-center gap-4 order-1 sm:order-2">
               <a

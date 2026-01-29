@@ -60,6 +60,12 @@
 
 **Verification:** `npm run lint` ✅, `npm run build` ✅, `npm run test:unit` ✅, `npm run test:e2e` ✅
 
+### Pages Overhaul (Chunk 7): Footer updates
+
+- Updated `components/footer.tsx` to remove the legacy `/cashback` link, add `Terms of Service` (`/terms-of-service`), add `Do Not Sell My Info` (`/privacy-policy#ccpa`), and update the copyright year to 2026.
+
+**Verification:** `npm run lint` ✅, `npm run build` ✅, `npm run test:unit` ✅, `npm run test:e2e` ✅
+
 ## 2026-01-26 - GitHub Copilot - Deprecate Google Sheets pipeline & archive scripts
 
 **Goal:** Remove ambiguous Google Forms / Google Sheets guidance from active docs, archive original strategy doc and legacy scripts, and mark sheet-focused scripts as DEPRECATED. Ensure the active pipeline clearly uses the Supabase-based Report a Find flow.
