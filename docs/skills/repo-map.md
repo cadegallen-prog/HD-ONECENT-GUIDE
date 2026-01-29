@@ -19,7 +19,7 @@
 - **Penny list feed:** `app/api/penny-list/route.ts`
 - **Stores API:** `app/api/stores/route.ts`
 - **OG images:** `app/api/og/route.tsx`
-- **Affiliate redirect:** `app/go/befrugal/route.ts`
+- **Affiliate redirect:** `app/go/rakuten/route.ts` (legacy: `app/go/befrugal/route.ts` redirects)
 
 ## Shared components (UI + feature logic)
 

@@ -231,9 +231,10 @@ public/                 # Static assets
 
 ## Affiliate Links & Redirects
 
-- `/go/befrugal` is the canonical affiliate path. Keep the redirect logic in `app/go/befrugal/route.ts`.
-- Always render affiliate CTAs as plain `<a href="/go/befrugal" target="_blank" rel="noopener noreferrer">` elements. **Do not** wrap them in `next/link`, buttons, or components that prefetch.
-- Next.js prefetching will hit BeFrugal in the background, which triggers browser CORS errors (`net::ERR_FAILED`) even though no real click happened. Using plain anchors avoids those phantom requests and keeps referrals safe.
+- `/go/rakuten` is the canonical affiliate path. Keep the redirect logic in `app/go/rakuten/route.ts`.
+- Legacy: `/go/befrugal` redirects to `/go/rakuten` for old links.
+- Always render affiliate CTAs as plain `<a href="/go/rakuten" target="_blank" rel="noopener noreferrer">` elements. **Do not** wrap them in `next/link`, buttons, or components that prefetch.
+- Next.js prefetching can hit affiliate destinations in the background, which can trigger browser CORS errors (`net::ERR_FAILED`) even though no real click happened. Using plain anchors avoids those phantom requests and keeps referrals safe.
 - It’s fine to track clicks with `trackEvent(...)`, but never fire a `fetch` to the affiliate URL from client-side code.
 
 ---

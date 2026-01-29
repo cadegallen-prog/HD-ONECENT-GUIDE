@@ -66,6 +66,14 @@
 
 **Verification:** `npm run lint` ✅, `npm run build` ✅, `npm run test:unit` ✅, `npm run test:e2e` ✅
 
+### Pages Overhaul (Chunk 8): About/Contact sweep + affiliate docs cleanup
+
+- Confirmed `app/about/page.tsx` and `app/contact/page.tsx` contain no BeFrugal references.
+- Updated `README.md` + `docs/skills/repo-map.md` to treat `/go/rakuten` as canonical and keep `/go/befrugal` as a legacy redirect.
+- Removed the `www.befrugal.com` CSP `connect-src` entry from `next.config.js` (no longer needed).
+
+**Verification:** `npm run lint` ✅, `npm run build` ✅, `npm run test:unit` ✅, `npm run test:e2e` ✅
+
 ## 2026-01-26 - GitHub Copilot - Deprecate Google Sheets pipeline & archive scripts
 
 **Goal:** Remove ambiguous Google Forms / Google Sheets guidance from active docs, archive original strategy doc and legacy scripts, and mark sheet-focused scripts as DEPRECATED. Ensure the active pipeline clearly uses the Supabase-based Report a Find flow.
