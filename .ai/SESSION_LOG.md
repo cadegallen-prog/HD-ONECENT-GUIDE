@@ -74,6 +74,12 @@
 
 **Verification:** `npm run lint` ✅, `npm run build` ✅, `npm run test:unit` ✅, `npm run test:e2e` ✅
 
+### Analytics Ops: Weekly review canon (Founder OS)
+
+- Added `.ai/ANALYTICS_WEEKLY_REVIEW.md` (weekly review loop: device mix → leak check → core loop health → Search Console → 3-bullet decision output).
+- Added “Device Mix → QA rules” section to `.ai/CONSTRAINTS.md`.
+- Added “Traffic & Device Mix (Update Monthly)” + weekly “Top 3” placeholders to `.ai/STATE.md`.
+
 ## 2026-01-26 - GitHub Copilot - Deprecate Google Sheets pipeline & archive scripts
 
 **Goal:** Remove ambiguous Google Forms / Google Sheets guidance from active docs, archive original strategy doc and legacy scripts, and mark sheet-focused scripts as DEPRECATED. Ensure the active pipeline clearly uses the Supabase-based Report a Find flow.

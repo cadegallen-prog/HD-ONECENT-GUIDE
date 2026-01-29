@@ -368,7 +368,20 @@ Future agents: Do NOT remove these utilities or revert to the old 16-18px item n
 
 4. **Functionality Verification**
    - Does the feature work as intended?
-   - Does existing functionality still work?
+
+---
+
+## Analytics & QA Focus (Operational Policy)
+
+Analytics must actively drive priorities (not just be installed).
+
+### Device Mix → QA Rules
+
+- Maintain current device mix in `.ai/STATE.md` (update monthly from GA4).
+- If **mobile ≥ 60%**, every UI change must be checked on **375×667** and **390×844** viewports.
+- If **tablet ≥ 8%**, add one tablet viewport check (iPad-ish) for any UI change.
+- If device mix shifts by **±10 points** week-over-week, treat that as a priority signal and adjust QA focus.
+  - Does existing functionality still work?
 
 5. **Documentation Update**
    - Update SESSION_LOG.md
