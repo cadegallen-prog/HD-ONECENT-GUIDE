@@ -30,13 +30,22 @@ export default function ContactPage() {
             The fastest way to reach Penny Central is email. We read every message and prioritize
             corrections, broken links, and anything that improves the accuracy of the Penny List.
           </p>
-          <p>
-            Email us at <a href="mailto:contact@pennycentral.com">contact@pennycentral.com</a> and
-            include any SKU numbers, store details, and dates that help us verify what you saw. If
-            you have a collaboration or media request, include your timeline and the best way to
-            follow up.
-          </p>
         </Prose>
+
+        {/* Primary contact card */}
+        <div className="mt-6 p-6 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-lg">
+          <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Email Us</h2>
+          <a
+            href="mailto:contact@pennycentral.com"
+            className="inline-flex items-center min-h-[44px] text-xl font-medium text-[var(--link-default)] hover:text-[var(--link-hover)] hover:underline transition-colors"
+          >
+            contact@pennycentral.com
+          </a>
+          <p className="mt-4 text-sm text-[var(--text-secondary)] leading-relaxed">
+            Include any SKU numbers, store details, and dates that help us verify what you saw. For
+            collaboration or media requests, include your timeline and the best way to follow up.
+          </p>
+        </div>
       </Section>
     </PageShell>
   )

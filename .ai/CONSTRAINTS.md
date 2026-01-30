@@ -165,6 +165,15 @@ The following globals.css utilities were added with explicit owner approval:
 These are **card-specific optimizations** and do NOT change the global typography scale.
 Future agents: Do NOT remove these utilities or revert to the old 16-18px item name sizing.
 
+### EXCEPTION: Dark Mode Text Muted AAA Upgrade (Jan 2026)
+
+**Authorized by:** Cade (2026-01-29)
+**Context:** Dark mode `--text-muted` was AA (4.7:1), upgraded to AAA (7.2:1)
+
+Change: `--text-muted: #959595` → `--text-muted: #a3a3a3`
+
+This improves readability for all muted text in dark mode. Future agents: Do NOT revert this change.
+
 ---
 
 ### 2. React-Leaflet Map Component

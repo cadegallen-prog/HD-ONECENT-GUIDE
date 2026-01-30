@@ -191,7 +191,7 @@
     --text-secondary: #b0b0b0; /* 8.0:1 on #1a1a1a (AAA) */
 
     /* Tertiary content: Must meet 4.5:1 on elevated surfaces (#2a2a2a) */
-    --text-muted: #959595; /* 4.7:1 on bg-elevated (AA compliant) */
+    --text-muted: #a3a3a3; /* 7.2:1 on #121212 (AAA compliant) */
     --text-placeholder: #78716c;
 
     /* Inverse text for light buttons */

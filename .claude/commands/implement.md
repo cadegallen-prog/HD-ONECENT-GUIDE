@@ -66,11 +66,26 @@ See MODE_CONTRACT.md for detailed implementation output specifications.
 
 ## Exit
 
-Say: "Implementation complete. Ready for testing."
+Before saying "done", you MUST complete these documentation updates:
+
+1. **Update plan file status:**
+   - Change `Status: Awaiting approval` → `Status: ✅ COMPLETE`
+   - Add `**Implemented:** [today's date]` line
+
+2. **Add SESSION_LOG.md entry:**
+   - Add dated entry at top of file
+   - Include: Goal, Status (✅ Implemented), Changes (files + summary), Next steps
+   - Follow existing format in file
+
+3. **State what's next:**
+   - If there's a follow-up plan, name it
+   - If verification is needed, say so
+
+Then say: "Implementation complete. Ready for testing."
 
 ## Handoff
 
-List files modified and what to test.
+List files modified, what to test, and what comes next.
 
 ---
 

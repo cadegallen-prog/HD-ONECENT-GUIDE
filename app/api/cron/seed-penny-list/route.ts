@@ -230,7 +230,9 @@ async function seedItems(
       image_url: item.image_url,
       home_depot_url: item.product_link,
       internet_sku: item.internet_number,
-      retail_price: toNumber(item.retail_price),
+      // Do not copy retail_price from enrichment_staging; it's often store/region-specific clearance context.
+      // Leave this blank so the SerpApi enrichment job can fill a stable HomeDepot.com retail price later.
+      retail_price: null,
     }
 
     // Insert to Penny List

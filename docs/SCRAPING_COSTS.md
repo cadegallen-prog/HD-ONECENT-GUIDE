@@ -39,18 +39,24 @@ Home Depot uses aggressive bot detection:
 ### How It Works
 
 ```
-GitHub Actions (free, runs every 6 hours)
+GitHub Actions (free, runs daily)
     ↓
 SerpApi Home Depot Search API ($0-25/mo)
-    ↓ fetches product data for ~1 SKU per run by default (manual runs can raise the limit)
-penny_item_enrichment table (Supabase)
-    ↓ merges with user submissions
-Polished Penny Cards (no placeholders!)
+    ↓ fetches product data for a small batch of recent Penny List items
+"Penny List" table (Supabase)
+    ↓ fills missing enrichment fields (name/brand/model/image/link/internet_sku/retail_price)
+Polished Penny Cards (fewer placeholders)
 ```
 
-Budget note: the script always spends **1 SerpApi search** per SKU (search by SKU), and may spend a **2nd search** (fallback by item name) when SKU search fails. The default schedule+limit is set to stay under the **250 searches/month** free tier even in the worst case.
+Budget note: the script always spends **1 SerpApi search** per SKU (search by SKU), and may spend a **2nd search** (fallback by item name) when SKU search fails. The daily schedule is intentionally conservative to keep spend low.
 
-This pipeline writes enrichment fields (name/brand/model/image/link/internet_sku/retail_price) into `penny_item_enrichment` **fill-blanks-only by default** (no overwrites unless you use `--force`).
+This pipeline writes enrichment fields (name/brand/model/image/link/internet_sku/retail_price) into `"Penny List"` **fill-blanks-only by default** (no overwrites unless you use `--force`).
+
+**Important:** SerpApi Home Depot results are **location-sensitive**. The script sets `delivery_zip` for more consistent pricing/availability. You can override via:
+
+```
+SERPAPI_DELIVERY_ZIP=30303
+```
 
 UPC/barcode: SerpApi does not reliably return UPC. The script attempts a **best-effort UPC extract from the Home Depot product page (no SerpApi credits)** when it has a working `home_depot_url`, but it can still fail due to bot/region blocks.
 

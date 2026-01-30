@@ -174,7 +174,7 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
           </div>
 
           {/* Tier 4: Pattern Signals (SKU + recency + reports + states) */}
-          <div className="space-y-1 text-xs text-[var(--text-secondary)]">
+          <div className="space-y-2 text-xs text-[var(--text-secondary)]">
             {/* SKU (moved from Block 1) */}
             <button
               type="button"
@@ -183,7 +183,7 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
                 event.stopPropagation()
                 handleSkuCopy(event)
               }}
-              className="text-xs font-medium font-mono text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] rounded"
+              className={`penny-card-sku ${copiedSku ? "copied" : ""}`}
               aria-label={`Copy SKU ${formatSkuForDisplay(item.sku)}`}
               title="Click to copy SKU"
               data-test="penny-card-sku"
@@ -237,13 +237,13 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
                   .map(([state]) => (
                     <span
                       key={`${item.id}-${state}`}
-                      className="text-[11px] font-semibold text-[var(--text-secondary)]"
+                      className="inline-flex items-center text-[11px] font-semibold text-[var(--text-secondary)] bg-[var(--chip-muted-surface)] border border-[var(--chip-muted-border)] px-1.5 py-0.5 rounded"
                     >
                       {state}
                     </span>
                   ))}
                 {Object.keys(item.locations).length > 4 && (
-                  <span className="text-[11px] font-medium text-[var(--text-secondary)]">
+                  <span className="inline-flex items-center text-[11px] font-medium text-[var(--text-muted)] bg-[var(--chip-muted-surface)] border border-[var(--chip-muted-border)] px-1.5 py-0.5 rounded">
                     +{Object.keys(item.locations).length - 4}
                   </span>
                 )}
@@ -275,7 +275,7 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
             </Button>
 
             {/* Secondary: icon-only, no borders */}
-            <div className="flex justify-center gap-1.5">
+            <div className="flex justify-center gap-2.5">
               <a
                 href={resolvedHomeDepotUrl}
                 target="_blank"

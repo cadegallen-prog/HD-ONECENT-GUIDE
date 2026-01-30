@@ -4,45 +4,90 @@
 
 ---
 
-## 2026-01-28 - Codex - Enablement: safe Vercel env parity (no prod writes)
+## 2026-01-30 - Codex - SerpApi credit spend control (free-tier safety)
 
-**Goal:** Make local dev + local perf debugging reliable without risking production data. Reduce “limp local” by giving a one-command Vercel → `.env.local` sync, plus a guardrail that prevents accidentally targeting prod Supabase.
+**Goal:** Keep SerpApi usage firmly in the free tier by tying enrichment to recent activity only, reducing run frequency, and adding minimal audit logging.
 
 **Status:** ✅ Completed & verified locally.
 
 ### Changes
 
-- `package.json`: Added `env:pull`, `env:safety`, and `start:prodlike` scripts.
-- `scripts/env-safety-check.ts`: Fails if local `NEXT_PUBLIC_SUPABASE_URL` appears to target the known production Supabase project (override available for intentional one-offs).
-- `scripts/ai-doctor.ts`: Improves env guidance and fails fast on unsafe prod-target local env.
-- `scripts/run-local-staging-warmer.mjs` + `docs/skills/run-local-staging-warmer.md`: Updated guidance to use `npm run env:pull` (works even when `vercel` isn’t globally installed).
-- `.ai/ENVIRONMENT_VARIABLES.md` + `docs/skills/local-dev-faststart.md`: Documented the safe “staging-first” local workflow and the new scripts.
+- `scripts/serpapi-enrich.ts`: Added a 30-day lookback filter for “gap” selection (`timestamp >= now-30d`), early-exits with “No recent gaps to enrich; skipping.”, and writes a minimal per-run summary to `serpapi_logs` (non-fatal if table missing).
+- `.github/workflows/serpapi-enrich.yml`: Reduced scheduled cadence from every 6 hours to **daily** (`0 2 * * *`).
+- `supabase/migrations/023_backlog_cleanup_enrichment_attempts.sql`: One-time cleanup: sets `enrichment_attempts = 3` for rows older than 60 days that still have canonical gaps, preventing future SerpApi churn on historical backlog.
+- `supabase/migrations/024_create_serpapi_logs.sql`: Adds `serpapi_logs` table for auditing attempted SerpApi usage without parsing GitHub logs.
+- `docs/SCRAPING_COSTS.md`: Updated to reflect daily schedule.
 
 ### Verification
 
-- Bundle: `reports/verification/2026-01-28T21-05-36/summary.md` (lint ✅, build ✅, unit ✅, e2e ✅)
+- Bundle: `reports/verification/2026-01-30T06-19-26/summary.md` (lint ✅, build ✅, unit ✅, e2e ✅)
 
-### Pages Overhaul (Chunk 1–2): Rakuten affiliate redirect + backward compatibility
+---
 
-- Added `RAKUTEN_REFERRAL_URL` to `lib/constants.ts`.
-- Added `/go/rakuten` route (`app/go/rakuten/route.ts`) that redirects to Rakuten.
-- Added `/go/befrugal` route (`app/go/befrugal/route.ts`) that redirects to `/go/rakuten` (keeps old links working).
+## 2026-01-30 - Claude Opus 4.5 - Visual Hierarchy Overhaul (Penny Cards + Static Pages)
 
-**Quick check:** `curl -I http://localhost:3001/go/rakuten` shows a `307` with `Location: https://www.rakuten.com/r/CADEGA16?eeid=28187`.
+**Goal:** Fix visual hierarchy across penny cards and static pages through design-driven composition. Ensure metadata is scannable, properly grouped, uses existing design tokens, and improves dark mode contrast.
 
-**Verification bundle:** `reports/verification/2026-01-28-pages-overhaul-chunk1-2/` (lint ✅, build ✅, unit ✅, e2e ✅)
+**Status:** ✅ Implemented & Verified
 
-### Pages Overhaul (Chunk 3): Privacy Policy rewrite (Monumetric-ready)
+**Plan files:** `.ai/impl/visual-hierarchy-overhaul.md`, `.ai/impl/static-pages-visual-hierarchy.md`
 
-- Rewrote `app/privacy-policy/page.tsx` to remove all Ezoic references and add: GA4 disclosure, generalized advertising partners + `/ads.txt` reference, Rakuten affiliate disclosure, and a CCPA section with `id="ccpa"` (effective date: Jan 28, 2026).
-- Added `tests/privacy-policy.spec.ts` (ensures `/privacy-policy` contains required disclosures, contains no “Ezoic”, and `/privacy-policy#ccpa` anchor works).
+### Phase 1: Penny Card Metadata Fixes
 
-**Verification bundle:** `reports/verification/2026-01-28-pages-overhaul-chunk3/` (lint ✅, build ✅, unit ✅, e2e ✅)
+- `components/penny-list-card.tsx`:
+  - Increased metadata vertical spacing from `space-y-1` (4px) to `space-y-2` (8px) for better scannability
+  - Migrated SKU to use existing `.penny-card-sku` class (chip styling with border, background, hover states, 44px min-height)
+  - Added visual containers to state chips using `--chip-muted-*` tokens
+  - Increased secondary actions spacing from `gap-1.5` (6px) to `gap-2.5` (10px)
+- `components/penny-list-client.tsx`: Fixed empty ad slot gap by wrapping ad block in `EZOIC_ENABLED` check
+- `app/globals.css`: Upgraded dark mode `--text-muted` from #959595 (4.7:1 AA) to #a3a3a3 (7.2:1 AAA)
+- `.ai/CONSTRAINTS.md`: Documented dark mode text muted AAA upgrade exception
 
-### Pages Overhaul (Chunk 4): Terms of Service page (new)
+### Phase 2: Static Pages Visual Hierarchy
 
-- Added `app/terms-of-service/page.tsx` with the planned TOS content (effective date: Jan 28, 2026).
-- Added `tests/terms-of-service.spec.ts` to ensure `/terms-of-service` loads and displays the effective date.
+- `app/contact/page.tsx`: Extracted email from prose into prominent card with 44px tap target, explicit h2 heading, and elevated background
+- `app/about/page.tsx`: Added CTA hierarchy (primary with shadow, secondary ghost style), added `[&_h2]:mt-10` to Prose for 40px h2 breathing room
+- `app/support/page.tsx`: Extracted Rakuten section into visually distinct card, remaining content in Prose with `[&_h2]:mt-8` for 32px section spacing
+
+### Quality Gates
+
+All 4 gates passed:
+
+- ✅ Lint: 0 errors
+- ✅ Build: Successful
+- ✅ Unit tests: 26/26 passed
+- ✅ E2E tests: 156/156 passed
+
+### Visual Proof
+
+Playwright screenshots captured for before/after comparison on mobile (375px) + desktop (1280px) + dark mode.
+
+---
+
+## 2026-01-30 - Codex - Fix: retail price accuracy (staging vs HomeDepot.com)
+
+**Goal:** Stop showing obviously wrong “Retail” strike-through prices on Penny List cards (e.g., HomeDepot.com shows $139 but PennyCentral shows $49).
+
+**Status:** ✅ Completed & verified locally.
+
+### Root cause (confirmed)
+
+- `retail_price` was being copied from `enrichment_staging` into `"Penny List"` during submission enrichment (`consume_enrichment_for_penny_item` RPC) and during cron seeding/trickling.
+- That upstream “retail” value comes from the scan API and can be store/region-specific clearance context (and/or stale), so it can differ drastically from HomeDepot.com.
+- Once set to any non-null value, the SerpApi gap filler is **fill-blanks-only** by default and would not correct the wrong price later.
+
+### Changes
+
+- `supabase/migrations/022_consume_enrichment_rpc_skip_retail_price.sql`: Updates the staging-consume RPC to **not** copy `retail_price` from `enrichment_staging` into `"Penny List"`.
+- `app/api/cron/seed-penny-list/route.ts`: Stops copying staging `retail_price` into seeded Penny List rows (leave null for SerpApi).
+- `app/api/cron/trickle-finds/route.ts`: Stops copying staging `retail_price` into trickled Penny List rows (leave null for SerpApi).
+- `scripts/serpapi-enrich.ts`: Pins SerpApi `delivery_zip` (env: `SERPAPI_DELIVERY_ZIP`, default `30303`) to improve pricing/availability consistency and adds a safety check to avoid mismatching SKU-search results against an existing `item_name`.
+- `package.json`: Disables analytics during Playwright E2E (`NEXT_PUBLIC_ANALYTICS_ENABLED=false`) to keep console-clean assertions stable in CI.
+- Docs: Updated `README.md` + `docs/SCRAPING_COSTS.md` to match the current staging/SerpApi enrichment reality.
+
+### Verification
+
+- Bundle: `reports/verification/2026-01-30T00-30-06/summary.md` (lint ✅, build ✅, unit ✅, e2e ✅)
 
 **Verification bundle:** `reports/verification/2026-01-28-pages-overhaul-chunk4/` (lint ✅, build ✅, unit ✅, e2e ✅)
 

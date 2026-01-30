@@ -55,7 +55,7 @@ export default function AboutPage() {
       />
 
       <Section>
-        <Prose>
+        <Prose className="[&_h2]:mt-10 [&_h2:first-of-type]:mt-0">
           <p>
             Penny Central is a community-built resource for tracking and sharing extreme clearance
             finds at Home Depot. The mission is simple: help people spot patterns, verify penny
@@ -131,18 +131,18 @@ export default function AboutPage() {
           <h2>Disclosure</h2>
           <p>PennyCentral is not affiliated with Home Depot.</p>
 
-          <div className="mt-8 flex flex-wrap gap-4">
+          <div className="mt-8 flex flex-col sm:flex-row flex-wrap gap-4">
             <Link
               href="/support"
-              className="inline-flex items-center justify-center px-6 py-3 bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold rounded-lg hover:bg-[var(--cta-hover)] transition-colors"
+              className="inline-flex items-center justify-center min-h-[48px] px-6 py-3 bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold rounded-lg hover:bg-[var(--cta-hover)] shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] transition-all duration-150"
             >
               Support PennyCentral
             </Link>
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center px-6 py-3 border-2 border-[var(--border-default)] text-[var(--text-primary)] font-semibold rounded-lg hover:bg-[var(--bg-elevated)] transition-colors"
+              className="inline-flex items-center justify-center min-h-[48px] px-6 py-3 text-[var(--text-secondary)] font-medium rounded-lg hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)] transition-all duration-150"
             >
-              Get In Touch
+              Get In Touch →
             </Link>
           </div>
         </Prose>

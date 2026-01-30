@@ -12,7 +12,7 @@
     "lint:colors": "tsx scripts/lint-colors.ts",
     "lint:colors:update-baseline": "tsx scripts/lint-colors.ts --update-baseline",
     "export": "next build && next export",
-    "test:e2e": "cross-env NEXT_DIST_DIR=.next-playwright PLAYWRIGHT=1 NEXT_PUBLIC_EZOIC_ENABLED=false npm run build && playwright test --workers=1",
+    "test:e2e": "cross-env NEXT_DIST_DIR=.next-playwright PLAYWRIGHT=1 NEXT_PUBLIC_EZOIC_ENABLED=false NEXT_PUBLIC_ANALYTICS_ENABLED=false npm run build && playwright test --workers=1",
     "test:unit": "node scripts/run-unit-tests.mjs",
     "check-contrast": "node scripts/check-contrast.js",
     "check-axe": "node scripts/check-axe.js",

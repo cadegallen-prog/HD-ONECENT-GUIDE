@@ -137,9 +137,14 @@ async function main() {
       await captureUiState(page, outDir, slug, "light")
       console.log(`    ✅ ${slug}-ui-light.png`)
 
-      // Dark mode
-      await page.emulateMedia({ colorScheme: "dark" })
-      await gotoWithRetries(page, `http://localhost:3001${route}`)
+      // Dark mode - click the theme toggle button
+      const themeToggle = page
+        .locator('button[aria-label*="theme" i], button:has(svg path[d*="M21 12.79A9"])')
+        .first()
+      if ((await themeToggle.count()) > 0) {
+        await themeToggle.click()
+        await page.waitForTimeout(500) // Wait for transition
+      }
       await page.screenshot({
         path: path.join(outDir, `${slug}-dark.png`),
         fullPage: false,

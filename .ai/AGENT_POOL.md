@@ -64,7 +64,11 @@
 - Must use CSS variables for colors
 - Must NOT commit code (leave that to you)
 
-**Exit criteria:** Code is written. Says "Implementation complete. Ready for testing."
+**Exit criteria:** Code is written AND documentation is updated. Before saying "done":
+
+1. **Update plan file status:** Change `Status: Awaiting approval` → `Status: ✅ COMPLETE` and add `Implemented: [date]`
+2. **Add SESSION_LOG entry:** Add a dated entry with Goal, Status, Changes (files + summary), and Next steps
+3. Say "Implementation complete. Ready for testing." with a summary of what was done
 
 **Handoff to Tester:** Lists files modified and what to test.
 

@@ -35,7 +35,7 @@ import { PennyListPageBookmarkBanner } from "./penny-list-page-bookmark-banner"
 import { PWAInstallPrompt } from "./pwa-install-prompt"
 import { EmailSignupForm } from "./email-signup-form"
 import { EzoicInlineAd } from "@/components/ezoic-placeholder"
-import { AD_SLOTS } from "@/lib/ads"
+import { AD_SLOTS, EZOIC_ENABLED } from "@/lib/ads"
 
 interface PennyListClientProps {
   initialItems: PennyItem[]
@@ -1009,7 +1009,7 @@ export function PennyListClient({
                 />
 
                 {/* Trust-first: no ads above the first 10 results */}
-                {index === 9 && items.length > 10 && (
+                {EZOIC_ENABLED && index === 9 && items.length > 10 && (
                   <div className="col-span-full">
                     <EzoicInlineAd slotId={AD_SLOTS.LIST_AFTER_N} />
                   </div>

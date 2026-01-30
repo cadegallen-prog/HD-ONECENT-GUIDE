@@ -26,28 +26,36 @@ export default function SupportPage() {
       />
 
       <Section>
-        <Prose>
-          <h2>Save Money & Support the Site with Rakuten</h2>
-          <p>
+        {/* Rakuten highlight card - primary monetization CTA */}
+        <div className="p-6 sm:p-8 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-lg">
+          <h2 className="text-2xl font-semibold text-[var(--text-primary)] mb-4">
+            Save Money & Support the Site with Rakuten
+          </h2>
+          <p className="text-[var(--text-secondary)] leading-relaxed mb-3">
             Get cash back on purchases (including Home Depot!) while helping fund PennyCentral—at no
             cost to you.
           </p>
-          <p>Rakuten is a trusted cash back service used by millions:</p>
-          <ul>
+          <p className="text-[var(--text-secondary)] leading-relaxed mb-3">
+            Rakuten is a trusted cash back service used by millions:
+          </p>
+          <ul className="list-disc pl-5 space-y-1.5 mb-6 text-[var(--text-secondary)]">
             <li>Earn up to 10%+ back at thousands of stores</li>
             <li>$30 welcome bonus after a small qualifying spend</li>
           </ul>
-          <div className="mt-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
             <Button asChild variant="primary" size="lg">
               <a href="/go/rakuten" target="_blank" rel="noopener noreferrer">
                 Sign Up for Rakuten →
               </a>
             </Button>
+            <p className="text-sm text-[var(--text-muted)]">
+              Affiliate disclosure: we earn a commission on qualifying referrals.
+            </p>
           </div>
-          <p className="text-sm text-[var(--text-muted)] mt-2">
-            Affiliate disclosure: we earn a commission on qualifying referrals.
-          </p>
+        </div>
 
+        {/* Remaining content */}
+        <Prose className="[&_h2]:mt-8 [&_h2:first-of-type]:mt-0">
           <h2>Sustainability</h2>
           <p>
             As the site grows, there are real costs to keep it online and improving (hosting,

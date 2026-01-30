@@ -21,11 +21,14 @@
 import { config } from "dotenv"
 import { resolve } from "path"
 import { createClient } from "@supabase/supabase-js"
+import { randomUUID } from "crypto"
 
 // Load env
 config({ path: resolve(process.cwd(), ".env.local") })
 
 const SERPAPI_BASE_URL = "https://serpapi.com/search.json"
+const DEFAULT_DELIVERY_ZIP = "30303"
+const GAP_LOOKBACK_DAYS = 30
 
 class SerpApiCreditsExhaustedError extends Error {
   constructor(message: string) {
@@ -251,9 +254,11 @@ async function searchSerpApi(
   query: string,
   apiKey: string
 ): Promise<SerpApiSearchResult["products"]> {
+  const deliveryZip = (process.env.SERPAPI_DELIVERY_ZIP || DEFAULT_DELIVERY_ZIP).trim()
   const params = new URLSearchParams({
     engine: "home_depot",
     q: query,
+    delivery_zip: deliveryZip,
     api_key: apiKey,
   })
 
@@ -354,10 +359,27 @@ async function smartEnrich(
   let products = await searchSerpApi(sku, apiKey)
 
   if (products && products.length > 0) {
-    return {
-      result: extractProduct(sku, products[0], sku),
-      searchTerm: sku,
-      creditsUsed,
+    // Prefer a result whose title matches the existing item_name when available.
+    // This prevents accidentally enriching the wrong product when the SKU query is ambiguous.
+    let candidate: NonNullable<SerpApiSearchResult["products"]>[0] | null = products[0]
+    if (itemName) {
+      const topMatches = candidate ? isLikelyMatch(candidate.title, itemName) : false
+      if (!topMatches) {
+        const alt = products.slice(1, 4).find((p) => isLikelyMatch(p.title, itemName))
+        if (alt) candidate = alt
+        else {
+          console.log(`   Warning: SKU result doesn't match item name; skipping SKU result`)
+          candidate = null
+        }
+      }
+    }
+
+    if (candidate) {
+      return {
+        result: extractProduct(sku, candidate, sku),
+        searchTerm: sku,
+        creditsUsed,
+      }
     }
   }
 
@@ -442,6 +464,8 @@ async function getPennyListGaps(
   supabase: ReturnType<typeof createClient>,
   limit: number
 ): Promise<PennyListGapRow[]> {
+  const sinceIso = new Date(Date.now() - GAP_LOOKBACK_DAYS * 24 * 60 * 60 * 1000).toISOString()
+
   // Query Penny List for rows missing key fields
   const { data, error } = await supabase
     .from("Penny List")
@@ -450,6 +474,7 @@ async function getPennyListGaps(
     )
     .or("item_name.is.null,brand.is.null,image_url.is.null,retail_price.is.null")
     .lt("enrichment_attempts", 2) // Skip items that already failed 2x
+    .gte("timestamp", sinceIso) // Only enrich recent activity (limits SerpApi spend)
     .order("timestamp", { ascending: false })
     .limit(limit * 2) // Fetch more to account for filtering
 
@@ -479,6 +504,46 @@ async function getPennyListGaps(
   }
 
   return gaps
+}
+
+async function safeInsertSerpApiLogStart(
+  supabase: ReturnType<typeof createClient>,
+  payload: {
+    run_id: string
+    started_at: string
+  }
+): Promise<boolean> {
+  try {
+    const { error } = await supabase.from("serpapi_logs").insert(payload)
+    if (error) {
+      console.log(`Warning: Failed to write serpapi_logs (start): ${error.message}`)
+      return false
+    }
+    return true
+  } catch (error) {
+    console.log(`Warning: Failed to write serpapi_logs (start): ${String(error)}`)
+    return false
+  }
+}
+
+async function safeUpdateSerpApiLogEnd(
+  supabase: ReturnType<typeof createClient>,
+  runId: string,
+  payload: {
+    finished_at: string
+    items_processed: number
+    credits_attempted: number
+    skus_enriched: string[]
+  }
+): Promise<void> {
+  try {
+    const { error } = await supabase.from("serpapi_logs").update(payload).eq("run_id", runId)
+    if (error) {
+      console.log(`Warning: Failed to write serpapi_logs (end): ${error.message}`)
+    }
+  } catch (error) {
+    console.log(`Warning: Failed to write serpapi_logs (end): ${String(error)}`)
+  }
 }
 
 // Update a Penny List row directly with enrichment data
@@ -556,9 +621,14 @@ async function updatePennyListRow(
 
 async function main() {
   const { limit, testMode, specificSku, force } = parseArgs()
+  const runId = randomUUID()
 
   console.log("SerpApi Home Depot Enrichment (v3 - Penny List Gaps)")
   console.log(`   Mode: ${testMode ? "TEST (1 item)" : `Normal (up to ${limit} items)`}`)
+  console.log(
+    `   delivery_zip: ${(process.env.SERPAPI_DELIVERY_ZIP || DEFAULT_DELIVERY_ZIP).trim()}`
+  )
+  console.log(`   gap_lookback_days: ${GAP_LOOKBACK_DAYS}`)
   if (force) console.log("   Warning: Force mode: Will overwrite existing fields")
   if (specificSku) console.log(`   Specific SKU: ${specificSku}`)
   console.log()
@@ -579,6 +649,11 @@ async function main() {
 
   const supabase = createClient(supabaseUrl, supabaseServiceKey)
   console.log("Connected to Supabase")
+
+  const logEnabled = await safeInsertSerpApiLogStart(supabase, {
+    run_id: runId,
+    started_at: new Date().toISOString(),
+  })
 
   // Get items to enrich
   let itemsToEnrich: PennyListGapRow[]
@@ -612,7 +687,17 @@ async function main() {
   }
 
   if (itemsToEnrich.length === 0) {
-    console.log("\nNo items with gaps found. All Penny List rows are enriched!")
+    console.log("\nNo recent gaps to enrich; skipping.")
+
+    if (logEnabled) {
+      await safeUpdateSerpApiLogEnd(supabase, runId, {
+        finished_at: new Date().toISOString(),
+        items_processed: 0,
+        credits_attempted: 0,
+        skus_enriched: [],
+      })
+    }
+
     process.exit(0)
   }
 
@@ -622,6 +707,7 @@ async function main() {
   let success = 0
   let failed = 0
   let totalCredits = 0
+  const skusEnriched: string[] = []
 
   for (let i = 0; i < itemsToEnrich.length; i++) {
     const row = itemsToEnrich[i]
@@ -665,6 +751,7 @@ async function main() {
       const updated = await updatePennyListRow(supabase, row.id, result, row, force)
       if (updated) {
         success++
+        skusEnriched.push(sku)
       } else {
         failed++
       }
@@ -694,6 +781,15 @@ async function main() {
   console.log(`   Failed: ${failed}`)
   console.log(`   Credits used: ~${totalCredits}`)
   console.log("=".repeat(50))
+
+  if (logEnabled) {
+    await safeUpdateSerpApiLogEnd(supabase, runId, {
+      finished_at: new Date().toISOString(),
+      items_processed: itemsToEnrich.length,
+      credits_attempted: totalCredits,
+      skus_enriched: [...new Set(skusEnriched)],
+    })
+  }
 }
 
 main().catch((error) => {

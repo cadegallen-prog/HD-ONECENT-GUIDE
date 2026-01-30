@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Jan 28, 2026 (Enablement: safe local env parity)
+**Last updated:** Jan 30, 2026 (Fix: retail price accuracy)
 
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
@@ -11,6 +11,9 @@ Every AI session must update this after meaningful work.
 
 ## Current Sprint (Last 7 Days)
 
+- **2026-01-30 (Visual hierarchy overhaul: penny cards + static pages):** Fixed visual hierarchy across penny cards (metadata spacing, SKU chip styling, state chip containers, dark mode AAA contrast, empty ad slot gap) and static pages (Contact email card, About CTA hierarchy + h2 spacing, Support Rakuten card). Verified with all 4 quality gates + Playwright screenshots (mobile/desktop/dark). Plan files: `.ai/impl/visual-hierarchy-overhaul.md`, `.ai/impl/static-pages-visual-hierarchy.md`.
+- **2026-01-30 (Fix: SerpApi spend control):** Scoped SerpApi gap-filler to the last 30 days only (prevents churn on historical backlog), reduced SerpApi workflow cadence to daily, added one-time backlog attempt capping migration, and added minimal `serpapi_logs` run summary table for auditability. Verified with `npm run ai:verify -- test` (bundle: `reports/verification/2026-01-30T06-19-26/summary.md`).
+- **2026-01-30 (Fix: retail price accuracy):** Stopped copying `retail_price` from `enrichment_staging` into `Penny List` during submission/cron seeding (prevents wrong retail strike-through values). SerpApi gap filler now pins `delivery_zip` (env: `SERPAPI_DELIVERY_ZIP`, default `30303`) to improve pricing/availability consistency. Verified with `npm run ai:verify -- test` (bundle: `reports/verification/2026-01-30T00-30-06/summary.md`).
 - **2026-01-28 (Enablement: safe local env parity):** Added `npm run env:pull` (Vercel → `.env.local`) and `npm run env:safety` (blocks accidental local targeting of prod Supabase by default), plus `npm run start:prodlike` for perf debugging. Updated `ai:doctor` and local warmer docs to reduce “limp local” from missing env vars. Verified with `npm run ai:verify` (lint/build/unit/e2e all passed).
 - **2026-01-28 (Pages overhaul: Rakuten redirects):** Added `/go/rakuten` (redirects to Rakuten) and `/go/befrugal` (redirects to `/go/rakuten` for backward compatibility), plus `RAKUTEN_REFERRAL_URL` constant. Verified with `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e` (bundled under `reports/verification/2026-01-28-pages-overhaul-chunk1-2/`).
 - **2026-01-28 (Pages overhaul: Privacy Policy rewrite):** Rewrote `/privacy-policy` to remove all Ezoic references, add GA4 disclosure, generalize advertising to “advertising partners” with `/ads.txt` reference, add Rakuten affiliate disclosure, and add a CCPA section anchored at `/privacy-policy#ccpa`. Verified with `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e` (bundled under `reports/verification/2026-01-28-pages-overhaul-chunk3/`).

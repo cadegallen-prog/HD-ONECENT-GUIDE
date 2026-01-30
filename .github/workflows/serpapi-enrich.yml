@@ -2,7 +2,7 @@
 # Uses SerpApi's Home Depot API for reliable product data enrichment
 #
 # Cost: $0/mo (free tier: 100 searches) or paid tiers for more
-# Runs: Every 6 hours, processes up to 5 SKUs per run (~20/day, ~600/mo)
+# Runs: Daily, processes up to 5 SKUs per run by default
 # Note: Each SKU may use 1-2 searches (SKU search + fallback name search)
 #
 # Required secrets:
@@ -14,8 +14,8 @@ name: SerpApi Enrich
 
 on:
   schedule:
-    # Run every 6 hours (safe monthly budget by default)
-    - cron: "0 */6 * * *"
+    # Run once daily to keep SerpApi spend firmly in the free tier.
+    - cron: "0 2 * * *"
   workflow_dispatch:
     # Allow manual trigger
     inputs:
