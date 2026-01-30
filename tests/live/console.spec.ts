@@ -21,7 +21,42 @@ test.describe("live site console audit", () => {
         infos: 0,
         requestFailures: 0,
         thirdParty: 0,
+        cspViolations: 0,
+        criticalCspViolations: 0,
       },
+    }
+
+    // CSP violations blocking these domains are CRITICAL (site config issues, not third-party noise)
+    // These affect core functionality: analytics, database, error tracking
+    const CRITICAL_CSP_DOMAINS = [
+      /google-analytics\.com/i,
+      /analytics\.google\.com/i,
+      /googletagmanager\.com/i,
+      /supabase\.co/i,
+      /sentry\.io/i,
+      /vercel-scripts\.com/i,
+    ]
+
+    // Detect CSP violation messages
+    const isCSPViolation = (text: string) =>
+      /Content Security Policy|violates the following.*directive/i.test(text)
+
+    // Extract blocked domain from CSP error message
+    const extractBlockedDomain = (text: string): string | null => {
+      const match = text.match(/Connecting to ['"](https?:\/\/[^'"\/]+)/i)
+      if (match) {
+        try {
+          return new URL(match[1]).hostname
+        } catch {}
+      }
+      return null
+    }
+
+    // Check if CSP violation blocks a critical service
+    const isCriticalCSPViolation = (text: string): boolean => {
+      const blockedDomain = extractBlockedDomain(text)
+      if (!blockedDomain) return false
+      return CRITICAL_CSP_DOMAINS.some((regex) => regex.test(blockedDomain))
     }
 
     // Regexes for noisy/known third-party libraries we don't want to treat as site errors
@@ -158,11 +193,20 @@ test.describe("live site console audit", () => {
           severity = "info"
         }
 
+        // Detect CSP violations
+        const cspViolation = isCSPViolation(text)
+        const criticalCsp = cspViolation && isCriticalCSPViolation(text)
+        const blockedDomain = cspViolation ? extractBlockedDomain(text) : null
+
         // Is this an actionable error for the site team?
         let actionable = false
         if (severity === "error") {
-          if (!isThirdParty) actionable = true
-          else {
+          // CRITICAL: CSP violations blocking analytics/database are site config issues
+          if (criticalCsp) {
+            actionable = true
+          } else if (!isThirdParty) {
+            actionable = true
+          } else {
             // Some third-party failures (e.g., infinite recursion in consent scripts) do affect user experience
             const likelyBrokenThirdParty =
               /Maximum call stack size exceeded|_ezaq is not defined|bad response|Monetization not allowed for site/i
@@ -181,6 +225,9 @@ test.describe("live site console audit", () => {
           thirdParty: isThirdParty,
           severity,
           actionable,
+          cspViolation,
+          criticalCsp,
+          blockedDomain,
         }
 
         pageReport.messages.push(processed)
@@ -192,6 +239,8 @@ test.describe("live site console audit", () => {
         if (processed.severity === "info") report.summary.infos++
         if (m.type === "requestfailed") report.summary.requestFailures++
         if (processed.thirdParty) report.summary.thirdParty++
+        if (processed.cspViolation) report.summary.cspViolations++
+        if (processed.criticalCsp) report.summary.criticalCspViolations++
       }
 
       report.pages.push(pageReport)
@@ -209,29 +258,65 @@ test.describe("live site console audit", () => {
     })
 
     // Build human-friendly verdict
-    const siteErrors = report.pages
-      .flatMap((p: any) => p.messages)
-      .filter((m: any) => !m.ignored && m.severity === "error" && !m.thirdParty)
-    const thirdPartyErrors = report.pages
-      .flatMap((p: any) => p.messages)
-      .filter((m: any) => !m.ignored && m.severity === "error" && m.thirdParty)
+    const allMessages = report.pages.flatMap((p: any) => p.messages)
+    const criticalCspErrors = allMessages.filter((m: any) => !m.ignored && m.criticalCsp)
+    const siteErrors = allMessages.filter(
+      (m: any) => !m.ignored && m.severity === "error" && !m.thirdParty && !m.criticalCsp
+    )
+    const thirdPartyErrors = allMessages.filter(
+      (m: any) => !m.ignored && m.severity === "error" && m.thirdParty && !m.cspViolation
+    )
+    const otherCspErrors = allMessages.filter(
+      (m: any) => !m.ignored && m.cspViolation && !m.criticalCsp
+    )
 
     console.log("Console audit saved to:", reportPath)
+
+    // CRITICAL CSP violations get top billing - these break analytics/database
+    if (criticalCspErrors.length > 0) {
+      console.log(
+        `\n🚨 CRITICAL: Found ${criticalCspErrors.length} CSP violation(s) blocking essential services!`
+      )
+      console.log(
+        "   These are SITE CONFIG issues in next.config.js CSP, not third-party problems."
+      )
+      console.log("   Blocked domains:")
+      const seenDomains = new Set<string>()
+      for (const e of criticalCspErrors) {
+        if (e.blockedDomain && !seenDomains.has(e.blockedDomain)) {
+          seenDomains.add(e.blockedDomain)
+          console.log(`   - ${e.blockedDomain}`)
+        }
+      }
+      console.log("\n   Fix: Add these domains to connect-src in next.config.js")
+    }
+
     if (siteErrors.length > 0) {
       console.log(`\n⚠️ Found ${siteErrors.length} site-origin error(s) that likely need fixing:`)
       for (const e of siteErrors.slice(0, 10)) {
-        console.log("-", e.text, "(page: ", e.origin || "<inline>", ")")
+        console.log("-", e.text.slice(0, 100), "(page: ", e.origin || "<inline>", ")")
       }
-      console.log(`\nFull report: ${reportPath}`)
-    } else if (thirdPartyErrors.length > 0) {
-      console.log(
-        `\nℹ️ No site-origin errors, but ${thirdPartyErrors.length} third-party error(s) were observed (ads/analytics).`
-      )
-      console.log("Tip: If these are noisy, add them to the third-party filter in the test.")
-      console.log(`\nFull report: ${reportPath}`)
-    } else {
-      console.log("\n✅ No actionable console errors found on the checked pages.")
-      console.log(`\nFull report: ${reportPath}`)
     }
+
+    if (otherCspErrors.length > 0) {
+      console.log(
+        `\nℹ️ ${otherCspErrors.length} non-critical CSP violation(s) (third-party ad/tracking scripts).`
+      )
+    }
+
+    if (thirdPartyErrors.length > 0) {
+      console.log(`\nℹ️ ${thirdPartyErrors.length} third-party error(s) (ads/analytics noise).`)
+    }
+
+    if (
+      criticalCspErrors.length === 0 &&
+      siteErrors.length === 0 &&
+      otherCspErrors.length === 0 &&
+      thirdPartyErrors.length === 0
+    ) {
+      console.log("\n✅ No actionable console errors found on the checked pages.")
+    }
+
+    console.log(`\nFull report: ${reportPath}`)
   })
 })
