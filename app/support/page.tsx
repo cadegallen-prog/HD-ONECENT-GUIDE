@@ -2,7 +2,7 @@ import Link from "next/link"
 import type { Metadata } from "next"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
 import { Button } from "@/components/ui/button"
-import { DONATION_URL } from "@/lib/constants"
+import { COMMUNITY_MEMBER_COUNT_DISPLAY, DONATION_URL } from "@/lib/constants"
 
 export const metadata: Metadata = {
   title: "Support | PennyCentral",
@@ -20,7 +20,8 @@ export default function SupportPage() {
         subtitle={
           <>
             PennyCentral is free to use. No paywalls, no subscriptions, and no premium tier required
-            to access the core tools for the <strong>58,000+</strong> member community.
+            to access the core tools for the <strong>{COMMUNITY_MEMBER_COUNT_DISPLAY}</strong>{" "}
+            member community.
           </>
         }
       />

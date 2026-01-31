@@ -36,6 +36,12 @@
 **Focus:** Scrape → Enrichment → Auto-enrich workflow
 **Quick link:** See `.ai/CONSTRAINTS_TECHNICAL.md` for system details
 
+### [CONSOLE_AUDIT](.ai/topics/CONSOLE_AUDIT.md)
+
+**Status:** ✅ Available (run on-demand)
+**Focus:** Live site console error monitoring via Playwright
+**Quick link:** Run after deploys or weekly to catch production issues
+
 ---
 
 ## How to Use This Index
