@@ -22,20 +22,18 @@ import { config } from "dotenv"
 import { resolve } from "path"
 import { createClient } from "@supabase/supabase-js"
 import { randomUUID } from "crypto"
+import {
+  fetchUpcFromHomeDepotProductWithSerpApi,
+  getSerpApiDeliveryZip,
+  SerpApiCreditsExhaustedError,
+} from "../lib/serpapi/home-depot"
+import { getHomeDepotProductUrl } from "../lib/home-depot"
 
 // Load env
 config({ path: resolve(process.cwd(), ".env.local") })
 
 const SERPAPI_BASE_URL = "https://serpapi.com/search.json"
-const DEFAULT_DELIVERY_ZIP = "30303"
 const GAP_LOOKBACK_DAYS = 30
-
-class SerpApiCreditsExhaustedError extends Error {
-  constructor(message: string) {
-    super(message)
-    this.name = "SerpApiCreditsExhaustedError"
-  }
-}
 
 interface SerpApiSearchResult {
   search_metadata?: { status: string }
@@ -81,6 +79,7 @@ interface PennyListGapRow {
   model_number: string | null
   upc: string | null
   enrichment_attempts: number
+  enrichment_provenance?: Record<string, unknown> | null
 }
 
 // Parse CLI args
@@ -130,19 +129,16 @@ function hasValidRetailPrice(value: unknown): boolean {
   return Number.isFinite(n) && n > 0
 }
 
-function buildCanonicalHomeDepotUrl(params: {
-  sku: string
-  homeDepotUrl: string | null
-  internetSku: number | null
-}): string {
-  const manual = (params.homeDepotUrl || "").trim()
-  if (manual) return manual
+function isConfirmedAbsentByStaging(
+  provenance: Record<string, unknown> | null | undefined,
+  field: "upc" | "internet_sku"
+): boolean {
+  const entry = (provenance?.[field] ?? null) as unknown as {
+    source?: unknown
+    confirmed_absent?: unknown
+  } | null
 
-  if (hasValidInternetSku(params.internetSku)) {
-    return `https://www.homedepot.com/p/${Number(params.internetSku)}`
-  }
-
-  return `https://www.homedepot.com/s/${params.sku}`
+  return entry?.source === "staging" && entry?.confirmed_absent === true
 }
 
 // Check which fields are missing on a Penny List row
@@ -152,9 +148,6 @@ function getMissingFields(row: PennyListGapRow): string[] {
   if (!hasNonEmptyText(row.brand)) missing.push("brand")
   if (!hasNonEmptyText(row.image_url)) missing.push("image_url")
   if (!hasValidRetailPrice(row.retail_price)) missing.push("retail_price")
-  if (!hasNonEmptyText(row.home_depot_url) && !hasValidInternetSku(row.internet_sku)) {
-    missing.push("home_depot_url/internet_sku")
-  }
   return missing
 }
 
@@ -179,82 +172,12 @@ function optimizeImageUrl(url: string | null): string | null {
   return url
 }
 
-function normalizeUpcCandidate(value: unknown): string | null {
-  if (!value) return null
-  const digits = String(value).replace(/\D/g, "")
-  if (digits.length === 12 || digits.length === 13 || digits.length === 14) return digits
-  return null
-}
-
-function extractUpcFromJsonLd(data: unknown): string | null {
-  if (!data) return null
-
-  if (Array.isArray(data)) {
-    for (const item of data) {
-      const found = extractUpcFromJsonLd(item)
-      if (found) return found
-    }
-    return null
-  }
-
-  if (typeof data !== "object") return null
-
-  const record = data as Record<string, unknown>
-  const direct = normalizeUpcCandidate(
-    record.gtin12 ?? record.gtin13 ?? record.gtin14 ?? record.upc
-  )
-  if (direct) return direct
-
-  for (const value of Object.values(record)) {
-    const found = extractUpcFromJsonLd(value)
-    if (found) return found
-  }
-
-  return null
-}
-
-async function fetchUpcFromHomeDepotPage(homeDepotUrl: string): Promise<string | null> {
-  if (!hasNonEmptyText(homeDepotUrl)) return null
-
-  try {
-    const response = await fetch(homeDepotUrl, {
-      headers: {
-        "user-agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        accept: "text/html,application/xhtml+xml",
-      },
-    })
-
-    if (!response.ok) return null
-    const html = await response.text()
-
-    const jsonLdRegex = /<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi
-
-    let match: RegExpExecArray | null
-    while ((match = jsonLdRegex.exec(html)) !== null) {
-      const payload = match[1]
-      if (!payload) continue
-      try {
-        const parsed = JSON.parse(payload)
-        const upc = extractUpcFromJsonLd(parsed)
-        if (upc) return upc
-      } catch {
-        // ignore malformed JSON-LD blocks
-      }
-    }
-
-    return null
-  } catch {
-    return null
-  }
-}
-
 // Search SerpApi with a query term
 async function searchSerpApi(
   query: string,
   apiKey: string
 ): Promise<SerpApiSearchResult["products"]> {
-  const deliveryZip = (process.env.SERPAPI_DELIVERY_ZIP || DEFAULT_DELIVERY_ZIP).trim()
+  const deliveryZip = getSerpApiDeliveryZip()
   const params = new URLSearchParams({
     engine: "home_depot",
     q: query,
@@ -470,7 +393,7 @@ async function getPennyListGaps(
   const { data, error } = await supabase
     .from("Penny List")
     .select(
-      "id, home_depot_sku_6_or_10_digits, item_name, brand, image_url, retail_price, internet_sku, home_depot_url, model_number, upc, enrichment_attempts"
+      "id, home_depot_sku_6_or_10_digits, item_name, brand, image_url, retail_price, internet_sku, home_depot_url, model_number, upc, enrichment_attempts, enrichment_provenance"
     )
     .or("item_name.is.null,brand.is.null,image_url.is.null,retail_price.is.null")
     .lt("enrichment_attempts", 2) // Skip items that already failed 2x
@@ -555,58 +478,86 @@ async function updatePennyListRow(
   force: boolean
 ): Promise<boolean> {
   const patch: Record<string, unknown> = {}
+  const nowIso = new Date().toISOString()
+  const deliveryZip = getSerpApiDeliveryZip()
+  const baseProv = (currentRow.enrichment_provenance ?? {}) as Record<string, unknown>
+  const nextProv: Record<string, unknown> = {
+    ...baseProv,
+    _schema: 1,
+    _serpapi: {
+      at: nowIso,
+      delivery_zip: deliveryZip,
+      search_term: enrichment.searchTerm,
+    },
+  }
+  const provEntry = { source: "serpapi", at: nowIso, delivery_zip: deliveryZip }
 
   // Fill-blanks-only (merge rules) unless --force
   if (hasNonEmptyText(enrichment.item_name) && (force || !hasNonEmptyText(currentRow.item_name))) {
     patch.item_name = enrichment.item_name
+    nextProv.item_name = provEntry
   }
   if (hasNonEmptyText(enrichment.brand) && (force || !hasNonEmptyText(currentRow.brand))) {
     patch.brand = enrichment.brand
+    nextProv.brand = provEntry
   }
   if (
     hasNonEmptyText(enrichment.model_number) &&
     (force || !hasNonEmptyText(currentRow.model_number))
   ) {
     patch.model_number = enrichment.model_number
+    nextProv.model_number = provEntry
   }
   if (hasNonEmptyText(enrichment.image_url) && (force || !hasNonEmptyText(currentRow.image_url))) {
     patch.image_url = enrichment.image_url
+    nextProv.image_url = provEntry
   }
   if (
     hasValidInternetSku(enrichment.internet_sku) &&
+    !isConfirmedAbsentByStaging(currentRow.enrichment_provenance, "internet_sku") &&
     (force || !hasValidInternetSku(currentRow.internet_sku))
   ) {
     patch.internet_sku = enrichment.internet_sku
+    nextProv.internet_sku = { ...provEntry, confirmed_absent: false }
   }
   if (
     hasValidRetailPrice(enrichment.retail_price) &&
     (force || !hasValidRetailPrice(currentRow.retail_price))
   ) {
     patch.retail_price = enrichment.retail_price
+    nextProv.retail_price = provEntry
   }
 
   // Always ensure a canonical Home Depot URL exists
-  const canonicalHomeDepotUrl = buildCanonicalHomeDepotUrl({
+  const canonicalHomeDepotUrl = getHomeDepotProductUrl({
     sku: enrichment.sku,
     homeDepotUrl: enrichment.home_depot_url || currentRow.home_depot_url || null,
-    internetSku: enrichment.internet_sku ?? currentRow.internet_sku ?? null,
+    internetNumber: enrichment.internet_sku ?? currentRow.internet_sku ?? null,
   })
   if (
     hasNonEmptyText(canonicalHomeDepotUrl) &&
     (force || !hasNonEmptyText(currentRow.home_depot_url))
   ) {
     patch.home_depot_url = canonicalHomeDepotUrl
+    nextProv.home_depot_url = provEntry
   }
 
   // UPC if available
-  if (hasNonEmptyText(enrichment.upc) && (force || !hasNonEmptyText(currentRow.upc))) {
+  if (
+    hasNonEmptyText(enrichment.upc) &&
+    !isConfirmedAbsentByStaging(currentRow.enrichment_provenance, "upc") &&
+    (force || !hasNonEmptyText(currentRow.upc))
+  ) {
     patch.upc = enrichment.upc
+    nextProv.upc = { ...provEntry, confirmed_absent: false }
   }
 
   if (Object.keys(patch).length === 0) {
     console.log(`   No fields to update`)
     return true
   }
+
+  patch.enrichment_provenance = nextProv
 
   const { error } = await supabase.from("Penny List").update(patch).eq("id", id)
 
@@ -625,9 +576,7 @@ async function main() {
 
   console.log("SerpApi Home Depot Enrichment (v3 - Penny List Gaps)")
   console.log(`   Mode: ${testMode ? "TEST (1 item)" : `Normal (up to ${limit} items)`}`)
-  console.log(
-    `   delivery_zip: ${(process.env.SERPAPI_DELIVERY_ZIP || DEFAULT_DELIVERY_ZIP).trim()}`
-  )
+  console.log(`   delivery_zip: ${getSerpApiDeliveryZip()}`)
   console.log(`   gap_lookback_days: ${GAP_LOOKBACK_DAYS}`)
   if (force) console.log("   Warning: Force mode: Will overwrite existing fields")
   if (specificSku) console.log(`   Specific SKU: ${specificSku}`)
@@ -669,7 +618,7 @@ async function main() {
     const { data, error } = await supabase
       .from("Penny List")
       .select(
-        "id, home_depot_sku_6_or_10_digits, item_name, brand, image_url, retail_price, internet_sku, home_depot_url, model_number, upc"
+        "id, home_depot_sku_6_or_10_digits, item_name, brand, image_url, retail_price, internet_sku, home_depot_url, model_number, upc, enrichment_attempts, enrichment_provenance"
       )
       .eq("home_depot_sku_6_or_10_digits", normalized)
       .limit(1)
@@ -733,15 +682,23 @@ async function main() {
       console.log(`   Image: ${result.image_url ? "Yes" : "No"}`)
       console.log(`   Internet SKU: ${result.internet_sku || "N/A"}`)
 
-      // Try to fetch UPC from Home Depot page
-      const canonicalUrl = buildCanonicalHomeDepotUrl({
-        sku: result.sku,
-        homeDepotUrl: result.home_depot_url || row.home_depot_url || null,
-        internetSku: result.internet_sku ?? row.internet_sku ?? null,
-      })
+      // UPC extraction must use SerpApi (direct HomeDepot.com fetch is bot-blocked).
+      const needUpc =
+        !hasNonEmptyText(row.upc) && !isConfirmedAbsentByStaging(row.enrichment_provenance, "upc")
 
-      if (!hasNonEmptyText(row.upc)) {
-        const upc = await fetchUpcFromHomeDepotPage(canonicalUrl)
+      const productIdCandidate = result.internet_sku ?? row.internet_sku ?? null
+      const canUseProductId =
+        hasValidInternetSku(productIdCandidate) &&
+        !isConfirmedAbsentByStaging(row.enrichment_provenance, "internet_sku")
+
+      if (needUpc && canUseProductId) {
+        totalCredits++ // home_depot_product call
+        const upc = await fetchUpcFromHomeDepotProductWithSerpApi({
+          apiKey: serpApiKey,
+          productId: String(productIdCandidate),
+          deliveryZip: getSerpApiDeliveryZip(),
+        })
+
         if (upc) {
           result.upc = upc
           console.log(`   UPC: ${upc}`)
