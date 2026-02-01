@@ -353,8 +353,16 @@ function extractProduct(
   }
 
   let homeDepotUrl = product.link
-  if (homeDepotUrl && homeDepotUrl.includes("apionline.homedepot.com")) {
-    homeDepotUrl = homeDepotUrl.replace("apionline.homedepot.com", "www.homedepot.com")
+  if (homeDepotUrl) {
+    try {
+      const parsedUrl = new URL(homeDepotUrl)
+      if (parsedUrl.hostname === "apionline.homedepot.com") {
+        parsedUrl.hostname = "www.homedepot.com"
+        homeDepotUrl = parsedUrl.toString()
+      }
+    } catch {
+      // If URL parsing fails, fall back to the original value
+    }
   }
 
   let retailPrice: number | null = null
