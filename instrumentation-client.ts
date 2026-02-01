@@ -1,9 +1,11 @@
 import * as Sentry from "@sentry/nextjs"
 
+const allowedSentryHosts = ["pennycentral.com", "www.pennycentral.com"]
+
 const shouldEnableSentry =
   process.env.NODE_ENV === "production" &&
   typeof window !== "undefined" &&
-  window.location.hostname.endsWith("pennycentral.com")
+  allowedSentryHosts.includes(window.location.hostname)
 
 Sentry.init({
   dsn: "https://6c97a22cc0a22bf546df09e9051202f6@o4510605822394368.ingest.us.sentry.io/4510605823246336",
