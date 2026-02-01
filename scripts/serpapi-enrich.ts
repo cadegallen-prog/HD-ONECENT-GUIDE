@@ -163,12 +163,34 @@ function cleanItemName(name: string): string {
     .trim()
 }
 
+// Determine whether a hostname is an allowed Home Depot domain or subdomain
+function isAllowedHomeDepotHost(hostname: string): boolean {
+  const allowedRoots = ["thdstatic.com", "homedepot.com"]
+  return allowedRoots.some((root) => {
+    return (
+      hostname === root ||
+      (hostname.endsWith("." + root) && hostname.length > root.length + 1)
+    )
+  })
+}
+
 // Optimize image URL
 function optimizeImageUrl(url: string | null): string | null {
   if (!url) return null
-  if (url.includes("thdstatic.com") || url.includes("homedepot.com")) {
+
+  let hostname: string | null = null
+  try {
+    const parsed = new URL(url)
+    hostname = parsed.hostname
+  } catch {
+    // If the URL cannot be parsed, return it unchanged
+    return url
+  }
+
+  if (hostname && isAllowedHomeDepotHost(hostname)) {
     return url.replace(/\/\d+\.jpg(\?.*)?$/, "/1000.jpg")
   }
+
   return url
 }
 
