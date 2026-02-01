@@ -119,11 +119,24 @@ jobs:
           USE_FIXTURE_FALLBACK: "1"
         run: npm run qa:fast
 
+      - name: Build e2e server bundle (.next-playwright)
+        env:
+          NEXT_DIST_DIR: .next-playwright
+          PLAYWRIGHT: "1"
+          NEXT_PUBLIC_EZOIC_ENABLED: "false"
+          NEXT_PUBLIC_ANALYTICS_ENABLED: "false"
+          USE_FIXTURE_FALLBACK: "1"
+          SUPABASE_SERVICE_ROLE_KEY: test
+        run: npm run build
+
       - name: Start server for e2e tests
         env:
           PORT: 3001
+          NEXT_DIST_DIR: .next-playwright
           PLAYWRIGHT: "1"
           NEXT_PUBLIC_EZOIC_ENABLED: "false"
+          NEXT_PUBLIC_ANALYTICS_ENABLED: "false"
+          USE_FIXTURE_FALLBACK: "1"
         run: |
           npm run start -- --hostname 0.0.0.0 --port $PORT >/tmp/next.log 2>&1 &
           server_up=0
@@ -146,8 +159,10 @@ jobs:
       - name: Run e2e tests
         env:
           PLAYWRIGHT: "1"
+          NEXT_PUBLIC_EZOIC_ENABLED: "false"
+          NEXT_PUBLIC_ANALYTICS_ENABLED: "false"
           PLAYWRIGHT_BASE_URL: http://localhost:3001
-        run: npm run test:e2e
+        run: npx playwright test --workers=1
 
       - name: Run contrast check
         env:
