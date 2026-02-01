@@ -42,16 +42,8 @@
   ],
   "crons": [
     {
-      "path": "/api/cron/trickle-finds",
-      "schedule": "0 6 * * *"
-    },
-    {
       "path": "/api/cron/send-weekly-digest",
       "schedule": "0 8 * * 0"
-    },
-    {
-      "path": "/api/cron/seed-penny-list",
-      "schedule": "0 8 * * *"
     }
   ]
 }
