@@ -62,10 +62,20 @@ function parseRetailPrice(value: unknown): number | null {
 function normalizeHomeDepotUrl(url: string | null | undefined): string | null {
   const trimmed = String(url ?? "").trim()
   if (!trimmed) return null
-  if (trimmed.includes("apionline.homedepot.com")) {
-    return trimmed.replace("apionline.homedepot.com", "www.homedepot.com")
+  try {
+    const parsed = new URL(trimmed)
+    if (parsed.hostname === "apionline.homedepot.com") {
+      parsed.hostname = "www.homedepot.com"
+      return parsed.toString()
+    }
+    return trimmed
+  } catch {
+    // Fallback for non-absolute URLs: only rewrite if the string starts with the legacy host
+    if (trimmed.startsWith("apionline.homedepot.com")) {
+      return trimmed.replace("apionline.homedepot.com", "www.homedepot.com")
+    }
+    return trimmed
   }
-  return trimmed
 }
 
 function toInternetSku(productId: string | null | undefined): number | null {
