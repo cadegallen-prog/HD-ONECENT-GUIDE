@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 import { validateSku } from "@/lib/sku"
 import { getSupabaseClient, getSupabaseServiceRoleClient } from "@/lib/supabase/client"
+import { enrichHomeDepotSkuWithSerpApi } from "@/lib/enrichment/serpapi-home-depot-enrich"
+import { getSerpApiDeliveryZip, SerpApiCreditsExhaustedError } from "@/lib/serpapi/home-depot"
 
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000 // 1 hour
 const RATE_LIMIT_MAX = 30 // Allows batch submissions (e.g., stack of receipts)
@@ -140,6 +142,22 @@ type EnrichmentData = {
   home_depot_url?: string | null
   internet_sku?: number | null
   retail_price?: number | null
+  enrichment_provenance?: Record<string, unknown> | null
+}
+
+type PennyListRowForRealtimeSerpApi = {
+  id: string
+  home_depot_sku_6_or_10_digits: string
+  item_name: string | null
+  brand: string | null
+  model_number: string | null
+  upc: string | null
+  image_url: string | null
+  home_depot_url: string | null
+  internet_sku: number | null
+  retail_price: number | null
+  enrichment_attempts: number | null
+  enrichment_provenance: Record<string, unknown> | null
 }
 
 type PennyListLookupQuery = {
@@ -184,7 +202,7 @@ async function lookupSelfEnrichment(
       pennyListTable as PennyListLookupQuery
     )
       .select(
-        "item_name, brand, model_number, upc, image_url, home_depot_url, internet_sku, retail_price"
+        "item_name, brand, model_number, upc, image_url, home_depot_url, internet_sku, retail_price, enrichment_provenance"
       )
       .eq("home_depot_sku_6_or_10_digits", sku)
       .limit(1)
@@ -199,6 +217,193 @@ async function lookupSelfEnrichment(
   }
 
   return null
+}
+
+function hasNonEmptyText(value: unknown): value is string {
+  return typeof value === "string" && value.trim().length > 0
+}
+
+function hasValidRetailPrice(value: unknown): boolean {
+  const num = typeof value === "number" ? value : Number(value)
+  return Number.isFinite(num) && num > 0
+}
+
+function hasCanonicalGap(
+  row: Pick<PennyListRowForRealtimeSerpApi, "item_name" | "brand" | "image_url" | "retail_price">
+): boolean {
+  if (!hasNonEmptyText(row.item_name)) return true
+  if (!hasNonEmptyText(row.brand)) return true
+  if (!hasNonEmptyText(row.image_url)) return true
+  if (!hasValidRetailPrice(row.retail_price)) return true
+  return false
+}
+
+function isConfirmedAbsentByStaging(
+  provenance: Record<string, unknown> | null,
+  field: "upc" | "internet_sku"
+): boolean {
+  const entry = (provenance?.[field] ?? null) as unknown as {
+    source?: unknown
+    confirmed_absent?: unknown
+  } | null
+
+  return entry?.source === "staging" && entry?.confirmed_absent === true
+}
+
+function getRealtimeSerpApiDailyCap(): number {
+  const raw = String(process.env.SERPAPI_REALTIME_DAILY_CAP || "").trim()
+  const parsed = raw ? Number.parseInt(raw, 10) : NaN
+  if (Number.isFinite(parsed) && parsed >= 1) return parsed
+  return 5
+}
+
+async function maybeRealtimeSerpApiEnrich(
+  serviceClient: SupabaseServiceRoleClientLike,
+  pennyId: string
+): Promise<void> {
+  try {
+    const serpApiKey = process.env.SERPAPI_KEY
+    if (!serpApiKey) return
+
+    // Unit tests may provide a minimal Supabase mock that doesn't implement query builders.
+    // Realtime SerpApi is non-critical; skip safely if the client is mocked/incomplete.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const pennyListTable = (serviceClient as any)?.from?.("Penny List")
+    if (!pennyListTable || typeof pennyListTable.select !== "function") return
+
+    const { data: row, error: rowError } = await pennyListTable
+      .select(
+        "id, home_depot_sku_6_or_10_digits, item_name, brand, model_number, upc, image_url, home_depot_url, internet_sku, retail_price, enrichment_attempts, enrichment_provenance"
+      )
+      .eq("id", pennyId)
+      .single()
+
+    if (rowError || !row) {
+      console.warn(
+        "Realtime SerpApi skipped: failed to fetch newly inserted row:",
+        rowError?.message
+      )
+      return
+    }
+
+    const typedRow = row as unknown as PennyListRowForRealtimeSerpApi
+    if (!hasCanonicalGap(typedRow)) return
+
+    const cap = getRealtimeSerpApiDailyCap()
+    const { data: slotData, error: slotError } = await serviceClient.rpc(
+      "claim_serpapi_realtime_slot",
+      {
+        p_max_per_day: cap,
+      }
+    )
+
+    if (slotError) {
+      console.warn("Realtime SerpApi skipped: failed to claim daily slot:", slotError.message)
+      return
+    }
+
+    const slot = slotData as unknown as { allowed?: boolean; count?: number } | null
+    if (!slot?.allowed) {
+      console.log(`Realtime SerpApi skipped: daily cap reached (${cap}/day).`)
+      return
+    }
+
+    const deliveryZip = getSerpApiDeliveryZip()
+    const needUpc =
+      !hasNonEmptyText(typedRow.upc) &&
+      !isConfirmedAbsentByStaging(typedRow.enrichment_provenance, "upc") &&
+      !isConfirmedAbsentByStaging(typedRow.enrichment_provenance, "internet_sku")
+
+    const { result, creditsUsed } = await enrichHomeDepotSkuWithSerpApi({
+      apiKey: serpApiKey,
+      sku: typedRow.home_depot_sku_6_or_10_digits,
+      itemNameForMatch: typedRow.item_name,
+      needUpc,
+      deliveryZip,
+    })
+
+    if (!result) {
+      const currentAttempts = typedRow.enrichment_attempts || 0
+      await serviceClient
+        .from("Penny List")
+        .update({ enrichment_attempts: currentAttempts + 1 })
+        .eq("id", typedRow.id)
+      return
+    }
+
+    const nowIso = new Date().toISOString()
+    const baseProv = (typedRow.enrichment_provenance ?? {}) as Record<string, unknown>
+    const nextProv: Record<string, unknown> = {
+      ...baseProv,
+      _schema: 1,
+      _serpapi: {
+        at: nowIso,
+        delivery_zip: deliveryZip,
+        credits_attempted: creditsUsed,
+        search_term: result.searchTerm,
+      },
+    }
+
+    const provEntry = { source: "serpapi", at: nowIso, delivery_zip: deliveryZip }
+    const patch: Record<string, unknown> = {}
+
+    if (!hasNonEmptyText(typedRow.item_name) && hasNonEmptyText(result.item_name)) {
+      patch.item_name = result.item_name
+      nextProv.item_name = provEntry
+    }
+    if (!hasNonEmptyText(typedRow.brand) && hasNonEmptyText(result.brand)) {
+      patch.brand = result.brand
+      nextProv.brand = provEntry
+    }
+    if (!hasNonEmptyText(typedRow.model_number) && hasNonEmptyText(result.model_number)) {
+      patch.model_number = result.model_number
+      nextProv.model_number = provEntry
+    }
+    if (!hasNonEmptyText(typedRow.image_url) && hasNonEmptyText(result.image_url)) {
+      patch.image_url = result.image_url
+      nextProv.image_url = provEntry
+    }
+    if (!hasNonEmptyText(typedRow.home_depot_url) && hasNonEmptyText(result.home_depot_url)) {
+      patch.home_depot_url = result.home_depot_url
+      nextProv.home_depot_url = provEntry
+    }
+    if (!hasValidRetailPrice(typedRow.retail_price) && hasValidRetailPrice(result.retail_price)) {
+      patch.retail_price = result.retail_price
+      nextProv.retail_price = provEntry
+    }
+
+    if (
+      !typedRow.internet_sku &&
+      result.internet_sku &&
+      !isConfirmedAbsentByStaging(typedRow.enrichment_provenance, "internet_sku")
+    ) {
+      patch.internet_sku = result.internet_sku
+      nextProv.internet_sku = { ...provEntry, confirmed_absent: false }
+    }
+
+    if (!hasNonEmptyText(typedRow.upc) && hasNonEmptyText(result.upc)) {
+      patch.upc = result.upc
+      nextProv.upc = { ...provEntry, confirmed_absent: false }
+    }
+
+    if (Object.keys(patch).length === 0) return
+
+    patch.enrichment_provenance = nextProv
+
+    const { error: updateError } = await serviceClient
+      .from("Penny List")
+      .update(patch)
+      .eq("id", typedRow.id)
+    if (updateError) {
+      console.warn("Realtime SerpApi: failed to update Penny List row:", updateError.message)
+    }
+  } catch (error) {
+    if (error instanceof SerpApiCreditsExhaustedError) {
+      console.warn("Realtime SerpApi skipped: credits exhausted:", error.message)
+      return
+    }
+    console.warn("Realtime SerpApi unexpected error:", error)
+  }
 }
 
 /**
@@ -377,6 +582,30 @@ export async function POST(request: NextRequest) {
         payload.home_depot_url = enrichment.home_depot_url.trim()
       if (typeof enrichment.internet_sku === "number")
         payload.internet_sku = enrichment.internet_sku
+
+      // Carry forward "confirmed absent" provenance for opportunistic fields, even when the value is null.
+      // This prevents wasting SerpApi credits attempting to fill fields staging already confirmed do not exist.
+      const prov = enrichment.enrichment_provenance ?? null
+      if (prov && typeof prov === "object") {
+        const upcProv = (prov as Record<string, unknown>).upc as
+          | { source?: unknown; confirmed_absent?: unknown }
+          | undefined
+        const internetProv = (prov as Record<string, unknown>).internet_sku as
+          | { source?: unknown; confirmed_absent?: unknown }
+          | undefined
+
+        const carried: Record<string, unknown> = {}
+        if (upcProv?.source === "staging" && upcProv?.confirmed_absent === true) {
+          carried.upc = upcProv
+        }
+        if (internetProv?.source === "staging" && internetProv?.confirmed_absent === true) {
+          carried.internet_sku = internetProv
+        }
+
+        if (Object.keys(carried).length > 0) {
+          payload.enrichment_provenance = { _schema: 1, ...carried }
+        }
+      }
     }
 
     // Guard: Ensure service role key is configured (prevent permission errors)
@@ -420,12 +649,18 @@ export async function POST(request: NextRequest) {
 
     // Attempt atomic enrichment from staging queue (non-blocking, won't fail request)
     // This consumes and deletes the staging row if a match is found
-    await consumeStagingEnrichment(
+    const stagingResult = await consumeStagingEnrichment(
       serviceClient,
       insertedRow.id,
       normalizedSku,
       typeof payload.internet_sku === "number" ? payload.internet_sku : null
     )
+
+    // Preferred UX: if staging didn't match AND canonical fields are still missing, enrich immediately via SerpApi.
+    if (!stagingResult.enriched) {
+      // Fire-and-forget: never block the user response on SerpApi.
+      void maybeRealtimeSerpApiEnrich(serviceClient, insertedRow.id)
+    }
 
     return NextResponse.json({
       success: true,
