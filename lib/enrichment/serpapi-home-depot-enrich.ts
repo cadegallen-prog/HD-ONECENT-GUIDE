@@ -37,7 +37,19 @@ function cleanItemName(name: string): string {
 
 function optimizeImageUrl(url: string | null): string | null {
   if (!url) return null
-  if (url.includes("thdstatic.com") || url.includes("homedepot.com")) {
+  let parsed: URL
+  try {
+    parsed = new URL(url)
+  } catch {
+    return url
+  }
+  const hostname = parsed.hostname.toLowerCase()
+  const isHomeDepotHost =
+    hostname === "homedepot.com" ||
+    hostname.endsWith(".homedepot.com") ||
+    hostname === "thdstatic.com" ||
+    hostname.endsWith(".thdstatic.com")
+  if (isHomeDepotHost) {
     return url.replace(/\/\d+\.jpg(\?.*)?$/, "/1000.jpg")
   }
   return url
