@@ -166,9 +166,27 @@ function cleanItemName(name: string): string {
 // Optimize image URL
 function optimizeImageUrl(url: string | null): string | null {
   if (!url) return null
-  if (url.includes("thdstatic.com") || url.includes("homedepot.com")) {
-    return url.replace(/\/\d+\.jpg(\?.*)?$/, "/1000.jpg")
+
+  let parsed: URL
+  try {
+    parsed = new URL(url)
+  } catch {
+    // If the URL is invalid, return it unchanged
+    return url
   }
+
+  const hostname = parsed.hostname.toLowerCase()
+  const isThdstatic =
+    hostname === "thdstatic.com" || hostname.endsWith(".thdstatic.com")
+  const isHomeDepot =
+    hostname === "homedepot.com" || hostname.endsWith(".homedepot.com")
+
+  if (isThdstatic || isHomeDepot) {
+    // Replace the trailing "/<digits>.jpg" segment in the pathname with "/1000.jpg"
+    parsed.pathname = parsed.pathname.replace(/\/\d+\.jpg$/, "/1000.jpg")
+    return parsed.toString()
+  }
+
   return url
 }
 
