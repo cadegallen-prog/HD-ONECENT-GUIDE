@@ -1,12 +1,14 @@
-# Skill: Run Local Staging Warmer (Manual Override)
+# Skill: Run Local Staging Warmer (Local-Only)
 
-Use this when GitHub Actions runners are blocked by Cloudflare (403 + “Just a moment…”) and you need to refresh `enrichment_staging` from your own/home IP.
+This is the **only supported** way to refresh `enrichment_staging`.
+
+GitHub Actions for the staging warmer were **permanently removed** because upstream is prone to blocking datacenter runners (Cloudflare / bot protection).
 
 ## What this does
 
-- Runs the **same warmer pipeline** as GitHub Actions, but locally.
+- Runs the staging warmer pipeline locally.
 - Pulls penny items from the upstream source and upserts into Supabase `enrichment_staging`.
-- Keeps the GitHub Action as a low-aggression probe (it will still log diagnostics and open a GitHub issue when blocked).
+- Intended to be run from your home IP (or another “normal” residential network).
 
 ## One-time setup
 
@@ -44,5 +46,5 @@ npm run warm:staging -- --max-uniques 6000 --batch-size 50
 
 ## If it fails
 
-- If you see `cloudflare_block=true`, it’s bot protection; try again later from a different network (e.g., hotspot) or plan a self-hosted runner.
+- If you see `cloudflare_block=true`, it’s bot protection; try again later from a different network (e.g., hotspot).
 - If you see 401/403 without the Cloudflare HTML, refresh `PENNY_RAW_COOKIE` and retry.

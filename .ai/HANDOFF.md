@@ -1,6 +1,6 @@
 # Context Handoff Pack (Portable, Tool-Agnostic)
 
-**Last Updated:** Jan 23, 2026 by Codex
+**Last Updated:** Jan 31, 2026 by Codex
 
 **Purpose:** Compressed, copy-paste-ready context for starting fresh chats or switching tools (Claude → Codex → Copilot).
 
@@ -15,25 +15,18 @@
 ### Current Reality (Jan 23, 2026)
 
 - ✅ **Core product working:** Submissions, enrichment, Penny List page
-- ⚠️ **Pre-scrape pipeline exists but is currently blocked:** GitHub Actions `Enrichment Staging Warmer` runs Tue–Fri, but upstream `pro.scouterdev.io/api/penny-items` is returning **403 + Cloudflare “Just a moment...” HTML** from GitHub runners. `enrichment_staging` currently has ~1,343 rows (stale until the block is resolved). See `.ai/topics/DATA_PIPELINE.md` + issue #106.
-- ✅ **Manual override exists:** Run `npm run warm:staging` locally (your home IP) to refresh `enrichment_staging` until the Cloudflare block is resolved.
+- ✅ **Staging warmer is local-only:** GitHub Action permanently removed. Run `npm run warm:staging` from your home IP to refresh `enrichment_staging` (upstream may block datacenter runners via Cloudflare).
 - ✅ **Retention features live:** Email signup (10s subscribers), PWA install prompt, weekly digest cron
 - ✅ **Monetization bridge:** Ezoic (temporary) + Mediavine Grow (analytics collection in progress)
-- 🔄 **Cron health check needed:** Vercel cron jobs are configured; ensure `CRON_SECRET` is set correctly so `/api/cron/*` doesn’t return 401.
+- 🔄 **Cron health check needed:** Vercel cron is configured; ensure `CRON_SECRET` is set correctly so `/api/cron/send-weekly-digest` doesn’t return 401.
 - 📊 **Metrics:** 680 daily users, 26% conversion (HD clicks), 80 clicks from organic (all branded)
 - 🎯 **Cold start problem:** Penny List has ~67 items but needs more to encourage participation
 
-### Immediate Next Move (Penny List Seeding)
+### Immediate Next Move (Pipeline Reliability)
 
-**Plan file:** `C:\Users\cadeg\.claude\plans\floating-popping-neumann.md`
-
-1. ✅ **Phase 0 (Done):** Documentation fixes - DATA_PIPELINE.md rewrite, HANDOFF.md update
-2. **Phase 1:** Create `seeded_skus` tracking table migration
-3. **Phase 2:** Create `/api/cron/seed-penny-list` endpoint with quality filters ($15+ retail, popular brands, exclude junk)
-4. **Phase 3:** Add Vercel cron schedule (daily 8 AM UTC, 3 items/day)
-5. **Phase 4:** Dry-run test, then deploy
-
-**Goal:** Seed 3 quality items/day from enrichment DB to kickstart participation with geographic spread across all 50 states.
+1. Run the staging warmer locally (only path): `npm run warm:staging`.
+2. Confirm `CRON_SECRET` is set (prod) so `/api/cron/send-weekly-digest` returns 200 (not 401).
+3. Confirm SerpApi spend stays low via `serpapi_logs` (batch job) + provenance on rows (staging vs serpapi).
 
 ---
 
