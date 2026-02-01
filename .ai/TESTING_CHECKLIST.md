@@ -576,7 +576,35 @@ chr_navigate_page({ url: "http://localhost:3001/penny-list" })
 
 ---
 
-### 12. Production Verification (Post-Merge)
+### 12. Live Site Console Audit
+
+**Purpose:** Catch CSP violations, third-party script errors, and production-only bugs in a clean browser (no extensions/adblockers).
+
+**When to run:**
+
+- After every deploy
+- Weekly monitoring check-in
+- When debugging production issues
+
+**Command:**
+
+```bash
+PLAYWRIGHT_BASE_URL='https://pennycentral.com' npx playwright test tests/live/console.spec.ts --project=chromium-desktop-light --workers=1
+```
+
+**Output:** `reports/playwright/console-report-<timestamp>.json`
+
+**Priority triage:**
+
+1. **Critical CSP violations** - Fix immediately (blocking analytics, Supabase, Sentry)
+2. **Site-origin errors** - Fix when time allows (our code is broken)
+3. **Third-party errors** - Usually ignore (their problem)
+
+**Full documentation:** [.ai/topics/CONSOLE_AUDIT.md](.ai/topics/CONSOLE_AUDIT.md)
+
+---
+
+### 13. Production Verification (Post-Merge)
 
 After merging `dev` → `main` and deploying to Vercel:
 
@@ -609,7 +637,7 @@ After merging `dev` → `main` and deploying to Vercel:
 
 ---
 
-### 13. Regression Testing
+### 14. Regression Testing
 
 **After any change to:**
 
