@@ -80,7 +80,7 @@
     "@types/sharp": "^0.32.0",
     "@typescript-eslint/parser": "^8.53.0",
     "@vercel/og": "^0.8.6",
-    "autoprefixer": "^10.4.23",
+    "autoprefixer": "^10.4.24",
     "cross-env": "^10.1.0",
     "eslint": "^9.39.2",
     "eslint-config-next": "16.1.4",
