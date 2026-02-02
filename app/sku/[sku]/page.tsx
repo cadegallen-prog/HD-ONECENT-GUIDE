@@ -48,6 +48,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${name} - Home Depot Penny Item SKU ${sku} | Penny Central`,
     description: enhancedDescription,
+    robots: {
+      index: false,
+      follow: true,
+    },
     openGraph: {
       title: `${name} - Home Depot Penny Item`,
       description: enhancedDescription,
