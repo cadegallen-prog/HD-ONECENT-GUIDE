@@ -24,6 +24,7 @@ Scan this FIRST before suggesting anything. If your idea matches an anti-pattern
 | ❌ Skip reading LEARNINGS.md            | You'll repeat documented failures        | Read this file at session start                |
 | ❌ Ask Cade for every tactical decision | Creates friction, wastes time            | Auto-chain: Implement → Test → Review → Doc    |
 | ❌ Suggest without conversation first   | Builds wrong thing, hours wasted         | Ask 1-2 questions before implementing          |
+| ❌ Sitemap with 100s of thin pages      | AdSense rejects as "low value content"   | Pillar-only sitemap + noindex thin pages       |
 
 ---
 
@@ -272,6 +273,50 @@ const StoreMap = dynamic(() => import("@/components/store-map"), {
 - Define permanent redirects in `next.config.js` for legacy paths
 
 **Files:** `app/layout.tsx`, `app/sitemap.ts`, `next.config.js`
+
+---
+
+### 11. AdSense "Low Value Content" & Sitemap Bloat
+
+**Problem:** Google AdSense rejected site for "Low Value Content" despite strong engagement metrics (17k users, 70k PVs, 70s avg session, 40% bounce).
+
+**What We Learned:**
+
+- AdSense uses same quality signals as Google Search
+- Sitemap with 900+ URLs where Google won't crawl 787 of them = "low value" signal
+- "Discovered - currently not indexed" with N/A for "last crawled" means Google looked at the URL and decided it wasn't worth fetching
+- Thin programmatic pages (SKU pages with just SKU/image/location count) hurt domain-wide quality perception
+- Filtered list pages (state pages) are seen as duplicate/doorway content
+- The **ratio** of good:bad pages matters more than absolute numbers
+
+**What to Do Instead:**
+
+- Keep sitemap lean: only include pages Google should actually index
+- Add `robots: { index: false, follow: true }` to thin/programmatic pages
+- Check GSC for "Discovered - currently not indexed" ratio before applying to ad networks
+- If traffic is social/direct (not organic), noindexing thin pages has zero downside
+- Fix the root cause before reapplying (don't just hope for different result)
+
+**Pattern (Pillar-Only Indexing):**
+
+```typescript
+// sitemap.ts - only pillar pages
+export default function sitemap(): MetadataRoute.Sitemap {
+  return [
+    { url: "https://example.com/", priority: 1.0 },
+    { url: "https://example.com/guide", priority: 0.9 },
+    // Only editorial/content-rich pages
+  ]
+}
+
+// Thin pages get noindex
+export const metadata: Metadata = {
+  robots: { index: false, follow: true },
+}
+```
+
+**Files:** `app/sitemap.ts`, `app/sku/[sku]/page.tsx`, `app/pennies/[state]/page.tsx`
+**Date:** Feb 02, 2026
 
 ---
 
