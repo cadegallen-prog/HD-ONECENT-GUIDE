@@ -139,6 +139,20 @@ function calculateStats(items: ProcessedItem[]) {
 }
 
 export async function GET(request: Request) {
+  // CRON PAUSED (2026-02-03): User requested hold on emails until content validation.
+  // Set FORCE_RUN_DIGEST=true in .env to bypass this pause for testing.
+  if (process.env.FORCE_RUN_DIGEST === "true") {
+    return _original_GET(request)
+  }
+
+  return NextResponse.json({
+    status: "paused",
+    message: "Weekly digest cron is paused pending content review. See SESSION_LOG.",
+  })
+}
+
+// Renamed from GET to pause execution while preserving type safety
+async function _original_GET(request: Request) {
   // 1. Authorization check
   if (!isAuthorized(request)) {
     console.error("[send-weekly-digest] Unauthorized request")

@@ -4,6 +4,24 @@
 
 ---
 
+## 2026-02-03 - Security & Cron Pause
+
+**Goal:** Secure repo dependency and pause unverified email cron to stop Supabase usage warnings.
+
+**Status:** ✅ Completed.
+
+### Changes
+
+- **Security:** `npm audit fix` for `@isaacs/brace-expansion` (Critical).
+- **Cron Pause:**
+  - Removed scheduler from `vercel.json`.
+  - Refactored `/api/cron/send-weekly-digest` to return "Paused" status immediately.
+  - Added `FORCE_RUN_DIGEST` env hook for future testing.
+
+### Verification
+
+- `npm run build`: Passed (Typescript & Next.js valid).
+
 ## 2026-02-03 - Adsense Recovery - Atomize Guide & E-E-A-T
 
 **Goal:** Refactor monolithic `/guide` into 6 indexed sub-pages and add E-E-A-T pages (About, Contact, Privacy, Terms) for AdSense approval.
