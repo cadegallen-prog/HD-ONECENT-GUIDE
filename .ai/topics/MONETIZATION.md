@@ -187,7 +187,8 @@ Based on research:
    - Current fix: noindex tags should prevent quality scan issues
    - Unknown: Do AdSense/AdX scans honor noindex tags?
    - Fallback plan: Add enriched product data + AI-generated context if needed
-   - Full analysis: `.ai/SKU_CONTENT_ANALYSIS.md`
+
+- Full analysis (archived): `archive/docs-pruned/2026-02-03-pass2/.ai/SKU_CONTENT_ANALYSIS.md`
 
 ---
 
@@ -209,7 +210,7 @@ The following pages are dead code - they redirect to homepage anchors but serve 
 ## POINTERS
 
 - **AdSense status/fix:** `.ai/ADSENSE_NEXT_STEPS.md`
-- **SKU content analysis:** `.ai/SKU_CONTENT_ANALYSIS.md`
+- **SKU content analysis (archived):** `archive/docs-pruned/2026-02-03-pass2/.ai/SKU_CONTENT_ANALYSIS.md`
 - **Full monetization plan:** `.ai/plans/ad-monetization-strategy.md`
 - **Privacy policy:** `app/privacy-policy/page.tsx`
 - **Ads.txt file:** `public/ads.txt`
