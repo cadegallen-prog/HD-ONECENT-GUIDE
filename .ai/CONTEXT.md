@@ -171,8 +171,8 @@ Highest‑leverage work is always the **Report Find → Penny List retention loo
 
 > **AI Agents: Check these documents before making changes to related features.**
 
-| Feature              | Planning Document                   | Status                       |
-| -------------------- | ----------------------------------- | ---------------------------- |
-| Penny List Cards/UI  | `.ai/PENNY-LIST-REDESIGN.md`        | Architecture complete        |
-| **Visual Overhaul**  | `.ai/PENNY-CARD-VISUAL-OVERHAUL.md` | **READY FOR IMPLEMENTATION** |
-| Implementation Guide | `.ai/HAIKU-IMPLEMENTATION-GUIDE.md` | 9 chunks for Haiku           |
+| Feature              | Planning Document                                                        | Status                       |
+| -------------------- | ------------------------------------------------------------------------ | ---------------------------- |
+| Penny List Cards/UI  | `.ai/PENNY-LIST-REDESIGN.md`                                             | Architecture complete        |
+| **Visual Overhaul**  | `.ai/PENNY-CARD-VISUAL-OVERHAUL.md`                                      | **READY FOR IMPLEMENTATION** |
+| Implementation Guide | `archive/docs-pruned/2026-02-03-pass3/.ai/HAIKU-IMPLEMENTATION-GUIDE.md` | Archived reference           |

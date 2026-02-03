@@ -10,7 +10,7 @@ Why archived:
 What you'll find here:
 
 - `PENNY-LIST-STRATEGY.md` — Archived original strategy doc (do not rely on it for live ops).
-- One-off import & merge scripts in `scripts/` (e.g., `merge-enrichment.ts`, `purchase-history-to-sheet-import.py`) — keep for historical or manual imports only.
+- One-off import & merge scripts are archived under `archive/scripts-pruned/2026-02-03-pass2/scripts/legacy/` (e.g., `merge-enrichment.ts`) and should be treated as historical/manual use only.
 
 Guidance:
 

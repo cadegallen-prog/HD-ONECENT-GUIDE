@@ -4,6 +4,39 @@
 
 ---
 
+## 2026-02-03 - Codex - Bloat reduction (archive-first pass 3)
+
+**Goal:** Continue reducing deprecated/legacy/single-use docs and scripts without hard deletion.
+
+**Status:** ✅ Completed & verified.
+
+### Changes
+
+- Archived docs:
+  - `.ai/HAIKU-IMPLEMENTATION-GUIDE.md`
+  - `.ai/PENNY_CARD_DESIGN_VISION.md`
+  - `docs/HOW-CADE-ADDS-STOCK-PHOTOS.md`
+- Archived scripts:
+  - `scripts/page-improvement-wizard.ps1`
+  - `scripts/legacy/enrichment-json-to-csv.ts`
+  - `scripts/legacy/merge-enrichment.ts`
+- Added snapshot manifests:
+  - `archive/docs-pruned/2026-02-03-pass3/INDEX.md`
+  - `archive/scripts-pruned/2026-02-03-pass2/INDEX.md`
+- Updated references to archived locations:
+  - `.ai/CONTEXT.md`
+  - `.ai/topics/UI_DESIGN.md`
+  - `docs/legacy/README.md`
+- Added TS compile guard so archived scripts do not affect app builds:
+  - `tsconfig.json` excludes `archive`
+
+### Verification
+
+- `npm run ai:verify -- test` ✅
+- Bundle: `reports/verification/2026-02-03T23-09-46/summary.md`
+
+---
+
 ## 2026-02-03 - Copilot - AdSense Compliance & SEO Pillars
 
 **Goal:** Fix security vulnerabilities, pause billing-intensive crons, and harden site structure for AdSense approval.
@@ -58,57 +91,3 @@
 
 - `npm run ai:verify -- test` ✅
 - Bundle: `reports/verification/2026-02-03T22-49-40/summary.md`
-
----
-
-## 2026-02-03 - Security & Cron Pause
-
-**Goal:** Secure repo dependency and pause unverified email cron to stop Supabase usage warnings.
-
-**Status:** ✅ Completed.
-
-### Changes
-
-- **Security:** `npm audit fix` for `@isaacs/brace-expansion` (Critical).
-- **Cron Pause:**
-  - Removed scheduler from `vercel.json`.
-  - Refactored `/api/cron/send-weekly-digest` to return "Paused" status immediately.
-  - Added `FORCE_RUN_DIGEST` env hook for future testing.
-
-### Verification
-
-- `npm run build`: Passed (Typescript & Next.js valid).
-
----
-
-## 2026-02-03 - Adsense Recovery - Atomize Guide & E-E-A-T
-
-**Goal:** Refactor monolithic `/guide` into 6 indexed sub-pages and add E-E-A-T pages (About, Contact, Privacy, Terms) for AdSense approval.
-
-**Status:** ✅ Completed & verified.
-
-### Changes
-
-- **Guide Atomization:**
-  - Split `components/GuideContent.tsx` (5,913 words) into `components/guide/sections/*.tsx`.
-  - Created 6 new routes:
-    - `/guide/clearance-lifecycle`
-    - `/guide/digital-pre-hunt`
-    - `/guide/in-store-strategy`
-    - `/guide/inside-scoop`
-    - `/guide/fact-vs-fiction`
-    - `/guide/responsible-hunting`
-  - Refreshed `/guide` hub with Table of Contents.
-  - Added `GuideNav.tsx` for inter-chapter navigation.
-- **E-E-A-T & Quality Fixes (Critique Response):**
-  - Added `EditorialBlock` (author/date/purpose) and `EthicalDisclosure`.
-  - Fixed heading hierarchy and TOC language.
-- **E-E-A-T Pages:**
-  - Created `/about`, `/contact`, `/privacy-policy`, `/terms-of-service`.
-- **Cleanup:** Deleted obsolete `components/GuideContent.tsx`.
-
-### Verification
-
-- **Lint:** Passed (0 errors).
-- **Build:** Passed (routes generated).
-- **Unit Tests:** Passed (26/26).

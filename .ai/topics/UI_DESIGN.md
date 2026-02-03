@@ -58,7 +58,7 @@ None (design is frozen pending retention improvements).
 ## POINTERS
 
 - **Frozen spec:** `.ai/PENNY-LIST-REDESIGN.md` (18 KB, full layout/typography/fallback spec)
-- **Old vision (archived):** `.ai/PENNY_CARD_DESIGN_VISION.md` (pre-redesign context)
+- **Old vision (archived):** `archive/docs-pruned/2026-02-03-pass3/.ai/PENNY_CARD_DESIGN_VISION.md` (pre-redesign context)
 - **Color system:** `.ai/CONSTRAINTS.md` (CSS variable names + ratios)
 - **Component code:** `components/penny-list-client.tsx` (card rendering)
 - **Related pages:** `/guide` (visual label recognition section added Jan 9)
@@ -68,4 +68,4 @@ None (design is frozen pending retention improvements).
 
 ## Archive References
 
-- `.ai/PENNY_CARD_DESIGN_VISION.md` - Old vision doc (kept for historical reference, not active)
+- `archive/docs-pruned/2026-02-03-pass3/.ai/PENNY_CARD_DESIGN_VISION.md` - Old vision doc (kept for historical reference, not active)

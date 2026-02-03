@@ -39,7 +39,9 @@ Each AI session should:
 - **Current snapshots:**
   - `archive/docs-pruned/2026-02-03/`
   - `archive/docs-pruned/2026-02-03-pass2/`
+  - `archive/docs-pruned/2026-02-03-pass3/`
   - `archive/scripts-pruned/2026-02-03/`
+  - `archive/scripts-pruned/2026-02-03-pass2/`
 
 ### 2. Data Pipeline Reliability - Pre-scrape + Cron Auth (P0-0)
 
@@ -69,6 +71,7 @@ Each AI session should:
 
 ## ✅ Recently Completed
 
+- **2026-02-03:** Archive-first bloat pass 3 completed: moved additional legacy docs (`.ai/HAIKU-IMPLEMENTATION-GUIDE.md`, `.ai/PENNY_CARD_DESIGN_VISION.md`, `docs/HOW-CADE-ADDS-STOCK-PHOTOS.md`) and additional one-off scripts (`scripts/page-improvement-wizard.ps1`, legacy enrichment merge helpers) with restore manifests under `archive/docs-pruned/2026-02-03-pass3/` and `archive/scripts-pruned/2026-02-03-pass2/`.
 - **2026-02-03:** Archive-first bloat pass 2 completed: moved 7 additional docs to `archive/docs-pruned/2026-02-03-pass2/` and 28 unreferenced/single-use scripts to `archive/scripts-pruned/2026-02-03/`, with restore manifests added.
 - **2026-02-03:** Docs bloat archive-first pass completed. Pruned docs moved to `archive/docs-pruned/2026-02-03/` (no hard deletions), with default-ignore policy now codified in `AGENTS.md` and `.ai/START_HERE.md`. Restore remains explicit via `git mv archive/docs-pruned/...`.
 - **2026-01-17:** P0-4c (Weekly Email Cron) - Implemented weekly email digest sent every Sunday 8 AM UTC to all active subscribers. Queries new penny items from last 7 days, renders responsive React email template, sends via Resend API with proper unsubscribe links. All 4 gates passing.
