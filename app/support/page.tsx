@@ -2,6 +2,7 @@ import Link from "next/link"
 import type { Metadata } from "next"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
 import { Button } from "@/components/ui/button"
+import { EditorialBlock } from "@/components/guide/EditorialBlock"
 import { COMMUNITY_MEMBER_COUNT_DISPLAY, DONATION_URL } from "@/lib/constants"
 
 export const metadata: Metadata = {
@@ -25,6 +26,10 @@ export default function SupportPage() {
           </>
         }
       />
+
+      <div className="flex justify-center mb-12">
+        <EditorialBlock />
+      </div>
 
       <Section>
         {/* Rakuten highlight card - primary monetization CTA */}

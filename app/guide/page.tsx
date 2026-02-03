@@ -31,7 +31,7 @@ export default function GuideHubPage() {
 
         <div className="flex justify-center gap-4">
           <Button asChild size="lg" className="bg-[var(--cta-primary)] hover:bg-[var(--cta-hover)]">
-            <Link href="/guide/clearance-lifecycle">
+            <Link href="/clearance-lifecycle">
               Start Reading <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>

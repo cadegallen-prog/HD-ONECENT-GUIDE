@@ -7,36 +7,42 @@ const chapters = [
     slug: "clearance-lifecycle",
     icon: BookOpen,
     desc: "How prices drop from full retail to $0.01.",
+    href: "/clearance-lifecycle",
   },
   {
     title: "Pre-Hunt Intelligence",
     slug: "digital-pre-hunt",
     icon: Search,
     desc: "Using the app and digital tools to scout before you drive.",
+    href: "/digital-pre-hunt",
   },
   {
     title: "In-Store Strategy",
     slug: "in-store-strategy",
     icon: Store,
     desc: "Where to look, how to scan, and how to find hidden items.",
+    href: "/in-store-strategy",
   },
   {
     title: "The Inside Scoop",
     slug: "inside-scoop",
     icon: ShoppingCart,
     desc: "Internal policies, ZMA, and why pennies exist.",
+    href: "/inside-scoop",
   },
   {
     title: "Fact vs. Fiction",
     slug: "fact-vs-fiction",
     icon: CheckCircle2,
     desc: "Debunking myths about 'secret sales' and employee rules.",
+    href: "/facts-vs-myths",
   },
   {
     title: "Responsible Hunting",
     slug: "responsible-hunting",
     icon: CheckCircle2,
     desc: "Etiquette, community rules, and long-term success.",
+    href: "/what-are-pennies",
   },
 ]
 
@@ -46,7 +52,7 @@ export function TableOfContents() {
       {chapters.map((chapter, index) => (
         <Link
           key={chapter.slug}
-          href={`/guide/${chapter.slug}`}
+          href={chapter.href}
           className="group block p-5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] hover:border-[var(--cta-primary)] transition-all duration-200"
         >
           <div className="flex items-start gap-4">

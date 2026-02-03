@@ -17,3 +17,4 @@ Short, task-focused guides to avoid repo-wide searching.
 - [run-local-staging-warmer](./run-local-staging-warmer.md) — **When to use:** GitHub Actions is blocked (Cloudflare) and you need to refresh `enrichment_staging` from your home IP.
 - [ship-safely](./ship-safely.md) — **When to use:** You’re getting ready to commit, verify, or roll back safely.
 - [codex-mcp-setup](./codex-mcp-setup.md) — **When to use:** Codex can’t see MCP tools/resources or env vars, or you need to update Codex.
+- [archive-first-prune](./archive-first-prune.md) — **When to use:** You need to reduce AI/doc/script bloat safely by archiving legacy files with restore manifests instead of deleting.

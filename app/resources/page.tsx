@@ -4,6 +4,7 @@ import type { Metadata } from "next"
 import { PageHeader, PageShell, Section } from "@/components/page-templates"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { EditorialBlock } from "@/components/guide/EditorialBlock"
 import { COMMUNITY_MEMBER_COUNT_DISPLAY, FACEBOOK_GROUP_URL } from "@/lib/constants"
 
 export const metadata: Metadata = {
@@ -39,6 +40,10 @@ export default function ResourcesPage() {
         secondaryActions={[{ label: "Report a find", href: "/report-find" }]}
         align="left"
       />
+
+      <div className="flex justify-center mb-12">
+        <EditorialBlock />
+      </div>
 
       <Section>
         <Card className="bg-[var(--bg-card)] border-[var(--border-default)]">
