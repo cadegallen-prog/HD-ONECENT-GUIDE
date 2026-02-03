@@ -54,6 +54,21 @@ async function main() {
     auth: { persistSession: false, autoRefreshToken: false },
   })
 
+  // DB reality: early versions of enrichment_staging used only `created_at`.
+  // Some environments may have added `updated_at` later. Prefer `updated_at` when present,
+  // otherwise fall back to `created_at`.
+  const freshnessColumn = await (async () => {
+    const probe = await supabase
+      .from("enrichment_staging")
+      .select("updated_at")
+      .order("updated_at", { ascending: false })
+      .limit(1)
+      .maybeSingle()
+    if (!probe.error) return "updated_at" as const
+    if (probe.error.message.includes("does not exist")) return "created_at" as const
+    throw new Error(`Failed to probe freshness column: ${probe.error.message}`)
+  })()
+
   // Total rows (exact count)
   const totalRes = await supabase
     .from("enrichment_staging")
@@ -63,17 +78,20 @@ async function main() {
   }
   const total = totalRes.count ?? 0
 
-  // Latest updated_at
+  // Latest freshness timestamp
   const latestRes = await supabase
     .from("enrichment_staging")
-    .select("updated_at")
-    .order("updated_at", { ascending: false })
+    .select(freshnessColumn)
+    .order(freshnessColumn, { ascending: false })
     .limit(1)
     .maybeSingle()
   if (latestRes.error) {
-    throw new Error(`Failed to fetch latest updated_at: ${latestRes.error.message}`)
+    throw new Error(`Failed to fetch latest ${freshnessColumn}: ${latestRes.error.message}`)
   }
-  const latestUpdatedAt = (latestRes.data as { updated_at?: string } | null)?.updated_at ?? null
+  const latestFreshnessAt =
+    (latestRes.data as { updated_at?: string; created_at?: string } | null | undefined)?.[
+      freshnessColumn
+    ] ?? null
 
   const now = Date.now()
   const since1d = new Date(now - 24 * 60 * 60 * 1000).toISOString()
@@ -82,33 +100,53 @@ async function main() {
   const last1dRes = await supabase
     .from("enrichment_staging")
     .select("sku", { count: "exact", head: true })
-    .gte("updated_at", since1d)
+    .gte(freshnessColumn, since1d)
   if (last1dRes.error) throw new Error(`Failed to count last 24h: ${last1dRes.error.message}`)
 
   const last7dRes = await supabase
     .from("enrichment_staging")
     .select("sku", { count: "exact", head: true })
-    .gte("updated_at", since7d)
+    .gte(freshnessColumn, since7d)
   if (last7dRes.error) throw new Error(`Failed to count last 7d: ${last7dRes.error.message}`)
 
   console.log("[enrichment_staging] status")
   console.log(`- total_rows: ${total}`)
-  console.log(`- latest_updated_at: ${latestUpdatedAt ?? "null"}`)
+  console.log(`- freshness_column: ${freshnessColumn}`)
+  console.log(`- latest_freshness_at: ${latestFreshnessAt ?? "null"}`)
   console.log(`- updated_last_24h: ${last1dRes.count ?? 0}`)
   console.log(`- updated_last_7d: ${last7dRes.count ?? 0}`)
 
+  // Field coverage (helps diagnose “everything except retail_price” scenarios)
+  const coverageFields = [
+    "retail_price",
+    "item_name",
+    "brand",
+    "image_url",
+    "product_link",
+  ] as const
+  for (const field of coverageFields) {
+    const res = await supabase
+      .from("enrichment_staging")
+      .select("sku", { count: "exact", head: true })
+      .not(field, "is", null)
+    if (res.error) throw new Error(`Failed to count ${field} coverage: ${res.error.message}`)
+    const count = res.count ?? 0
+    const pct = total > 0 ? Math.round((count / total) * 100) : 0
+    console.log(`- with_${field}: ${count} (${pct}%)`)
+  }
+
   if (options.maxAgeHours != null) {
-    if (!latestUpdatedAt) {
+    if (!latestFreshnessAt) {
       console.error(
-        `ERROR: latest_updated_at is null; expected recent data (max age ${options.maxAgeHours}h)`
+        `ERROR: latest_freshness_at is null; expected recent data (max age ${options.maxAgeHours}h)`
       )
       process.exit(2)
     }
-    const ageMs = Date.now() - new Date(latestUpdatedAt).getTime()
+    const ageMs = Date.now() - new Date(latestFreshnessAt).getTime()
     const maxAgeMs = options.maxAgeHours * 60 * 60 * 1000
     const ageHours = ageMs / (60 * 60 * 1000)
     if (!Number.isFinite(ageMs) || ageMs < 0) {
-      console.error(`ERROR: Could not compute age from latest_updated_at: ${latestUpdatedAt}`)
+      console.error(`ERROR: Could not compute age from latest_freshness_at: ${latestFreshnessAt}`)
       process.exit(2)
     }
     if (ageMs > maxAgeMs) {

@@ -138,7 +138,17 @@ If SerpApi credits run out or for spot-checks:
 
 1. Browse HD manually in your browser
 2. Run bookmarklet to extract data
-3. Export to JSON
-4. Upload via `npm run enrich:bulk`
+
+**Bookmarklet source of truth:** `tools/bookmarklets/bookmarklet.txt` (inline; works even when Home Depot blocks external script injection)
+
+**Export bookmarklet:** `tools/bookmarklets/export-saved-json.txt`
+
+If `price` is ever exported as an empty string even though you see a price on screen, it’s usually a PDP variant / hydration timing / JSON-LD shape difference. The current bookmarklet includes:
+
+- JSON-LD parsing that supports `@graph` layouts
+- Meta-tag + DOM fallbacks for price
+- A short retry loop to wait for the price to hydrate
+
+If Home Depot blocks loading external scripts, an inline bookmarklet is required. That’s why the bookmarklet is not a “script loader”. 3. Export to JSON 4. Upload via `npm run enrich:bulk`
 
 This is 100% reliable but requires your time.

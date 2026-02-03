@@ -25,6 +25,9 @@ function parseArgs(argv) {
   const args = {
     help: false,
     zipCodes: undefined,
+    zipPool: undefined,
+    zipSample: undefined,
+    zipSeed: undefined,
     maxUniques: undefined,
     batchSize: undefined,
     apiUrl: undefined,
@@ -38,6 +41,21 @@ function parseArgs(argv) {
     }
     if (a === "--zip-codes") {
       args.zipCodes = argv[i + 1]
+      i++
+      continue
+    }
+    if (a === "--zip-pool") {
+      args.zipPool = argv[i + 1]
+      i++
+      continue
+    }
+    if (a === "--zip-sample") {
+      args.zipSample = argv[i + 1]
+      i++
+      continue
+    }
+    if (a === "--zip-seed") {
+      args.zipSeed = argv[i + 1]
       i++
       continue
     }
@@ -106,6 +124,8 @@ function printHelp() {
   console.log("Usage:")
   console.log("  npm run warm:staging")
   console.log("  npm run warm:staging -- --zip-codes 30301,30303,30305,30308,30309")
+  console.log("  npm run warm:staging -- --zip-pool 30301,10001,60601 --zip-sample 5")
+  console.log("  npm run warm:staging -- --zip-pool 30301,10001,60601 --zip-sample 5 --zip-seed 20260201")
   console.log("  npm run warm:staging -- --max-uniques 6000 --batch-size 50")
   console.log("  npm run warm:staging -- --api-url https://pro.scouterdev.io/api/penny-items")
   console.log("")
@@ -113,11 +133,53 @@ function printHelp() {
   console.log(
     "  PENNY_RAW_COOKIE, PENNY_GUILD_ID, NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY"
   )
+  console.log("")
+  console.log("Optional env vars:")
+  console.log("  PENNY_ZIP_POOL (comma-separated zip codes; sampled into PENNY_ZIP_CODES)")
 }
 
 function pickPythonCommand() {
-  if (process.platform === "win32") return { cmd: "py", args: ["-3"] }
+  // Try "python" first (works on most systems including Windows with python.org install)
+  // Fall back to "py -3" (Windows Python Launcher) or "python3" (macOS/Linux)
+  if (process.platform === "win32") return { cmd: "python", args: [] }
   return { cmd: "python3", args: [] }
+}
+
+function parseZipCodes(value) {
+  if (!value) return []
+  return String(value)
+    .split(",")
+    .map((z) => z.trim())
+    .filter(Boolean)
+    .filter((z) => /^\d{5}$/.test(z))
+}
+
+function mulberry32(seed) {
+  let t = seed >>> 0
+  return () => {
+    t += 0x6d2b79f5
+    let x = Math.imul(t ^ (t >>> 15), 1 | t)
+    x ^= x + Math.imul(x ^ (x >>> 7), 61 | x)
+    return ((x ^ (x >>> 14)) >>> 0) / 4294967296
+  }
+}
+
+function sampleUnique(list, n, seed) {
+  const pool = [...new Set(list)]
+  if (n <= 0) return []
+  if (pool.length <= n) return pool
+
+  const rand =
+    seed == null
+      ? Math.random
+      : mulberry32(Number.isFinite(Number(seed)) ? Number(seed) : String(seed).length)
+
+  // Fisher–Yates shuffle then take first n
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1))
+    ;[pool[i], pool[j]] = [pool[j], pool[i]]
+  }
+  return pool.slice(0, n)
 }
 
 async function main() {
@@ -133,7 +195,21 @@ async function main() {
 
   // Defaults match the GitHub Actions warmer dispatch defaults.
   const defaultZipCodes = "30301,30303,30305,30308,30309"
-  process.env.PENNY_ZIP_CODES = args.zipCodes || process.env.PENNY_ZIP_CODES || defaultZipCodes
+
+  const explicitZipCodes = parseZipCodes(args.zipCodes || process.env.PENNY_ZIP_CODES)
+  const zipPool = parseZipCodes(args.zipPool || process.env.PENNY_ZIP_POOL)
+  const sampleSizeRaw = args.zipSample || process.env.PENNY_ZIP_SAMPLE || "5"
+  const sampleSize = Number(sampleSizeRaw)
+  const zipSeed = args.zipSeed || process.env.PENNY_ZIP_SEED
+
+  const selectedZipCodes =
+    explicitZipCodes.length > 0
+      ? explicitZipCodes
+      : zipPool.length > 0
+        ? sampleUnique(zipPool, Number.isFinite(sampleSize) ? sampleSize : 5, zipSeed)
+        : parseZipCodes(defaultZipCodes)
+
+  process.env.PENNY_ZIP_CODES = selectedZipCodes.join(",")
   process.env.MAX_UNIQUES = args.maxUniques || process.env.MAX_UNIQUES || "6000"
   process.env.BATCH_SIZE = args.batchSize || process.env.BATCH_SIZE || "50"
   if (args.apiUrl) process.env.PENNY_API_URL = args.apiUrl

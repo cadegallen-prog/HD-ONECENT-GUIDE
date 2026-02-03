@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Jan 30, 2026 (Fix: retail price accuracy)
+**Last updated:** Feb 3, 2026 (AdSense Recovery: Guide Atomization & E-E-A-T)
 
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
@@ -11,6 +11,8 @@ Every AI session must update this after meaningful work.
 
 ## Current Sprint (Last 7 Days)
 
+- **2026-02-03 (AdSense Recovery: Guide Atomization & E-E-A-T):** Refactored monolithic Guide into 6 indexed sub-pages (`/guide/*`) with proper navigation and metadata. Added dedicated E-E-A-T pages (`/about`, `/contact`, `/privacy-policy`, `/terms-of-service`) to support AdSense re-application. Verified with `npm run lint`, `npm run build`, `npm run test:unit`.
+- **2026-02-01 (Fix: pre-enrichment retail_price missing + manual Penny List refresh):** Fixed staging warmer + scraper normalization so `enrichment_staging` no longer drops retail prices when upstream returns `store_retail_price` (and `retail_price` is `"N/A"`). Added staging status coverage stats and optional zip breadth sampling (`--zip-pool/--zip-sample/--zip-seed`, `PENNY_ZIP_POOL`). Added `scripts/apply-hd-enrichment-json.ts` to refresh Penny List enrichment fields from a manual HomeDepot.com scrape JSON (Option A). Hardened the HD bookmarklet price extraction to avoid exporting `price: ""` on some PDP variants, and kept it as an inline bookmarklet (Home Depot can block external script injection). Verified with `npm run ai:verify -- test` (bundle: `reports/verification/2026-02-02T19-24-43/summary.md`).
 - **2026-01-30 (Visual hierarchy overhaul: penny cards + static pages):** Fixed visual hierarchy across penny cards (metadata spacing, SKU chip styling, state chip containers, dark mode AAA contrast, empty ad slot gap) and static pages (Contact email card, About CTA hierarchy + h2 spacing, Support Rakuten card). Verified with all 4 quality gates + Playwright screenshots (mobile/desktop/dark). Plan files: `.ai/impl/visual-hierarchy-overhaul.md`, `.ai/impl/static-pages-visual-hierarchy.md`.
 - **2026-01-30 (Fix: SerpApi spend control):** Scoped SerpApi gap-filler to the last 30 days only (prevents churn on historical backlog), reduced SerpApi workflow cadence to daily, added one-time backlog attempt capping migration, and added minimal `serpapi_logs` run summary table for auditability. Verified with `npm run ai:verify -- test` (bundle: `reports/verification/2026-01-30T06-19-26/summary.md`).
 - **2026-01-30 (Fix: retail price accuracy):** Stopped copying `retail_price` from `enrichment_staging` into `Penny List` during submission/cron seeding (prevents wrong retail strike-through values). SerpApi gap filler now pins `delivery_zip` (env: `SERPAPI_DELIVERY_ZIP`, default `30303`) to improve pricing/availability consistency. Verified with `npm run ai:verify -- test` (bundle: `reports/verification/2026-01-30T00-30-06/summary.md`).

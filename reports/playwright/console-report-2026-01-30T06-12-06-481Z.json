@@ -1,0 +1,1138 @@
+{
+  "base": "https://pennycentral.com",
+  "testedAt": "2026-01-30T06:12:06.482Z",
+  "pages": [
+    {
+      "path": "/",
+      "url": "https://pennycentral.com/",
+      "messages": [
+        {
+          "type": "error",
+          "text": "[EzoicAds JS]: Enable should only ever be called once.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 289
+          },
+          "timestamp": "2026-01-30T06:12:07.287Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "[EzoicAds JS]: Enable should only ever be called once.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 289
+          },
+          "timestamp": "2026-01-30T06:12:07.288Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Connecting to 'https://analytics.google.com/g/collect?v=2&tid=G-DJ4RJRX05E&gtm=45je61s0h2v9236412929za200zd9236412929&_p=1769753526969&_gaz=1&gcs=G1--&gcd=13l3l3R3l5l1&npa=0&dma=0&tcfd=10000&cid=709109366.1769753527&ecid=398536599&ul=en-us&sr=1280x720&tt=internal&uaa=x86&uab=64&uafvl=HeadlessChrome%3B143.0.7499.4%7CChromium%3B143.0.7499.4%7CNot%2520A(Brand%3B24.0.0.0&uamb=0&uam=&uap=Windows&uapv=10.0&uaw=0&are=1&frm=0&pscdl=noapi&ec_mode=a&_eu=CAAAAGA&_s=1&tag_exp=103116026~103200004~104527907~104528501~104684208~104684211~115495939~115938466~115938469~116185181~116185182~116988316~117041587&dp=%2F&sid=1769753527&sct=1&seg=0&dl=https%3A%2F%2Fwww.pennycentral.com%2F&dt=Home%20Depot%20Penny%20Items%3A%20Live%20%240.01%20Finds%20From%2050K%2B%20Members%20%7C%20Penny%20Central&en=page_view&_fv=1&_nsi=1&_ss=1&_ee=1&tfd=868' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:07.356Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Fetch API cannot load https://analytics.google.com/g/collect?v=2&tid=G-DJ4RJRX05E&gtm=45je61s0h2v9236412929za200zd9236412929&_p=1769753526969&_gaz=1&gcs=G1--&gcd=13l3l3R3l5l1&npa=0&dma=0&tcfd=10000&cid=709109366.1769753527&ecid=398536599&ul=en-us&sr=1280x720&tt=internal&uaa=x86&uab=64&uafvl=HeadlessChrome%3B143.0.7499.4%7CChromium%3B143.0.7499.4%7CNot%2520A(Brand%3B24.0.0.0&uamb=0&uam=&uap=Windows&uapv=10.0&uaw=0&are=1&frm=0&pscdl=noapi&ec_mode=a&_eu=CAAAAGA&_s=1&tag_exp=103116026~103200004~104527907~104528501~104684208~104684211~115495939~115938466~115938469~116185181~116185182~116988316~117041587&dp=%2F&sid=1769753527&sct=1&seg=0&dl=https%3A%2F%2Fwww.pennycentral.com%2F&dt=Home%20Depot%20Penny%20Items%3A%20Live%20%240.01%20Finds%20From%2050K%2B%20Members%20%7C%20Penny%20Central&en=page_view&_fv=1&_nsi=1&_ss=1&_ee=1&tfd=868. Refused to connect because it violates the document's Content Security Policy.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:07.356Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Connecting to 'https://stats.g.doubleclick.net/g/collect?v=2&tid=G-DJ4RJRX05E&cid=709109366.1769753527&gtm=45je61s0h2v9236412929za200zd9236412929&aip=1&dma=0&gcs=G1--&gcd=13l3l3R3l5l1&npa=0&frm=0&tag_exp=103116026~103200004~104527907~104528501~104684208~104684211~115495939~115938466~115938469~116185181~116185182~116988316~117041587' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.googletagmanager.com/gtag/js?id=G-DJ4RJRX05E",
+            "lineNumber": 276,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:07.357Z",
+          "origin": "https://www.googletagmanager.com/gtag/js?id=G-DJ4RJRX05E",
+          "originHost": "www.googletagmanager.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Failed to load resource: the server responded with a status of 403 ()",
+          "location": {
+            "url": "https://g.ezoic.net/sa.go",
+            "lineNumber": 0,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:07.416Z",
+          "origin": "https://g.ezoic.net/sa.go",
+          "originHost": "g.ezoic.net",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "[EzoicAds JS]: bad response. Status; 403 Response: Monetization not allowed for site\n",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 289
+          },
+          "timestamp": "2026-01-30T06:12:07.416Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": true
+        },
+        {
+          "type": "error",
+          "text": "Connecting to 'https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20260128&st=env&sjk=6341443232962147' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 12,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:07.559Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "requestfailed",
+          "url": "https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20260128&st=env&sjk=6341443232962147",
+          "method": "GET",
+          "failureText": "csp",
+          "timestamp": "2026-01-30T06:12:07.561Z",
+          "text": "",
+          "origin": "https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20260128&st=env&sjk=6341443232962147",
+          "originHost": "ep1.adtrafficquality.google",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Connecting to 'https://id5-sync.com/bounce' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:08.070Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Fetch API cannot load https://id5-sync.com/bounce. Refused to connect because it violates the document's Content Security Policy.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:08.070Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Connecting to 'https://lbs.eu-1-id5-sync.com/lbs/v1' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:08.071Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Fetch API cannot load https://lbs.eu-1-id5-sync.com/lbs/v1. Refused to connect because it violates the document's Content Security Policy.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:08.071Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Connecting to 'https://lb.eu-1-id5-sync.com/lb/v1' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:08.071Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Fetch API cannot load https://lb.eu-1-id5-sync.com/lb/v1. Refused to connect because it violates the document's Content Security Policy.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:08.071Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Connecting to 'https://id5-sync.com/gm/v3' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 12,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:08.073Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "requestfailed",
+          "url": "https://id5-sync.com/gm/v3",
+          "method": "POST",
+          "failureText": "csp",
+          "timestamp": "2026-01-30T06:12:08.073Z",
+          "text": "",
+          "origin": "https://id5-sync.com/gm/v3",
+          "originHost": "id5-sync.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Connecting to 'https://analytics.google.com/g/collect?v=2&tid=G-DJ4RJRX05E&gtm=45je61s0h2v9236412929za200zd9236412929&_p=1769753526969&gcs=G1--&gcd=13l3l3R3l5l1&npa=0&dma=0&tcfd=10000&cid=709109366.1769753527&ecid=398536599&ul=en-us&sr=1280x720&tt=internal&uaa=x86&uab=64&uafvl=HeadlessChrome%3B143.0.7499.4%7CChromium%3B143.0.7499.4%7CNot%2520A(Brand%3B24.0.0.0&uamb=0&uam=&uap=Windows&uapv=10.0&uaw=0&are=1&frm=0&pscdl=noapi&_eu=CAAAAGQ&_s=2&tag_exp=103116026~103200004~104527907~104528501~104684208~104684211~115495939~115938466~115938469~116185181~116185182~116988316~117041587&dp=%2F&sid=1769753527&sct=1&seg=0&dl=https%3A%2F%2Fwww.pennycentral.com%2F&dt=Home%20Depot%20Penny%20Items%3A%20Live%20%240.01%20Finds%20From%2050K%2B%20Members%20%7C%20Penny%20Central&en=home_page_view&_ee=1&ep.page=%2F&ep.device=desktop&ep.theme=light&ep.ts=2026-01-30T06%3A12%3A06.969Z&ep.event_category=engagement&_et=5&tfd=2330' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:08.816Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Fetch API cannot load https://analytics.google.com/g/collect?v=2&tid=G-DJ4RJRX05E&gtm=45je61s0h2v9236412929za200zd9236412929&_p=1769753526969&gcs=G1--&gcd=13l3l3R3l5l1&npa=0&dma=0&tcfd=10000&cid=709109366.1769753527&ecid=398536599&ul=en-us&sr=1280x720&tt=internal&uaa=x86&uab=64&uafvl=HeadlessChrome%3B143.0.7499.4%7CChromium%3B143.0.7499.4%7CNot%2520A(Brand%3B24.0.0.0&uamb=0&uam=&uap=Windows&uapv=10.0&uaw=0&are=1&frm=0&pscdl=noapi&_eu=CAAAAGQ&_s=2&tag_exp=103116026~103200004~104527907~104528501~104684208~104684211~115495939~115938466~115938469~116185181~116185182~116988316~117041587&dp=%2F&sid=1769753527&sct=1&seg=0&dl=https%3A%2F%2Fwww.pennycentral.com%2F&dt=Home%20Depot%20Penny%20Items%3A%20Live%20%240.01%20Finds%20From%2050K%2B%20Members%20%7C%20Penny%20Central&en=home_page_view&_ee=1&ep.page=%2F&ep.device=desktop&ep.theme=light&ep.ts=2026-01-30T06%3A12%3A06.969Z&ep.event_category=engagement&_et=5&tfd=2330. Refused to connect because it violates the document's Content Security Policy.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:08.816Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "pageerror",
+          "text": "Maximum call stack size exceeded",
+          "stack": "Uncaught (in promise) RangeError: Maximum call stack size exceeded\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)",
+          "timestamp": "2026-01-30T06:12:08.929Z",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": true
+        }
+      ]
+    },
+    {
+      "path": "/store-finder",
+      "url": "https://pennycentral.com/store-finder",
+      "messages": [
+        {
+          "type": "error",
+          "text": "Error getting location: GeolocationPositionError",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 289
+          },
+          "timestamp": "2026-01-30T06:12:11.039Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": false,
+          "severity": "error",
+          "actionable": true
+        },
+        {
+          "type": "error",
+          "text": "Connecting to 'https://analytics.google.com/g/collect?v=2&tid=G-DJ4RJRX05E&gtm=45je61s0h2v9236412929za200zd9236412929&_p=1769753530980&gcs=G1--&gcd=13l3l3R3l5l1&npa=0&dma=0&tcfd=10000&cid=709109366.1769753527&ecid=398536599&ul=en-us&sr=1280x720&tt=internal&uaa=x86&uab=64&uafvl=HeadlessChrome%3B143.0.7499.4%7CChromium%3B143.0.7499.4%7CNot%2520A(Brand%3B24.0.0.0&uamb=0&uam=&uap=Windows&uapv=10.0&uaw=0&are=1&frm=0&pscdl=noapi&ec_mode=a&_eu=CAAAAGQ&_s=1&tag_exp=103116026~103200004~104527906~104528501~104684208~104684211~115495938~115938466~115938469~116185181~116185182~116988316~117041587&dp=%2Fstore-finder&sid=1769753527&sct=1&seg=1&dl=https%3A%2F%2Fwww.pennycentral.com%2Fstore-finder&dt=Live%20Store%20Finder%20for%20Home%20Depot%20Penny%20Shopping%20%7C%20Penny%20Central&en=page_view&_ee=1&tfd=276' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:11.107Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Fetch API cannot load https://analytics.google.com/g/collect?v=2&tid=G-DJ4RJRX05E&gtm=45je61s0h2v9236412929za200zd9236412929&_p=1769753530980&gcs=G1--&gcd=13l3l3R3l5l1&npa=0&dma=0&tcfd=10000&cid=709109366.1769753527&ecid=398536599&ul=en-us&sr=1280x720&tt=internal&uaa=x86&uab=64&uafvl=HeadlessChrome%3B143.0.7499.4%7CChromium%3B143.0.7499.4%7CNot%2520A(Brand%3B24.0.0.0&uamb=0&uam=&uap=Windows&uapv=10.0&uaw=0&are=1&frm=0&pscdl=noapi&ec_mode=a&_eu=CAAAAGQ&_s=1&tag_exp=103116026~103200004~104527906~104528501~104684208~104684211~115495938~115938466~115938469~116185181~116185182~116988316~117041587&dp=%2Fstore-finder&sid=1769753527&sct=1&seg=1&dl=https%3A%2F%2Fwww.pennycentral.com%2Fstore-finder&dt=Live%20Store%20Finder%20for%20Home%20Depot%20Penny%20Shopping%20%7C%20Penny%20Central&en=page_view&_ee=1&tfd=276. Refused to connect because it violates the document's Content Security Policy.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:11.107Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Connecting to 'https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20260128&st=env&sjk=4316452793345073' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 12,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:11.352Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "requestfailed",
+          "url": "https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20260128&st=env&sjk=4316452793345073",
+          "method": "GET",
+          "failureText": "csp",
+          "timestamp": "2026-01-30T06:12:11.353Z",
+          "text": "",
+          "origin": "https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20260128&st=env&sjk=4316452793345073",
+          "originHost": "ep1.adtrafficquality.google",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "requestfailed",
+          "url": "https://www.pennycentral.com/penny-list?_rsc=ejtld",
+          "method": "GET",
+          "failureText": "net::ERR_ABORTED",
+          "timestamp": "2026-01-30T06:12:11.561Z",
+          "text": "",
+          "origin": "https://www.pennycentral.com/penny-list?_rsc=ejtld",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": false,
+          "severity": "info",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Connecting to 'https://id5-sync.com/gm/v3' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 12,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:11.873Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "requestfailed",
+          "url": "https://id5-sync.com/gm/v3",
+          "method": "POST",
+          "failureText": "csp",
+          "timestamp": "2026-01-30T06:12:11.874Z",
+          "text": "",
+          "origin": "https://id5-sync.com/gm/v3",
+          "originHost": "id5-sync.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Connecting to 'https://analytics.google.com/g/collect?v=2&tid=G-DJ4RJRX05E&gtm=45je61s0h2v9236412929za200zd9236412929&_p=1769753530980&gcs=G1--&gcd=13l3l3R3l5l1&npa=0&dma=0&tcfd=10000&cid=709109366.1769753527&ecid=398536599&ul=en-us&sr=1280x720&tt=internal&uaa=x86&uab=64&uafvl=HeadlessChrome%3B143.0.7499.4%7CChromium%3B143.0.7499.4%7CNot%2520A(Brand%3B24.0.0.0&uamb=0&uam=&uap=Windows&uapv=10.0&uaw=0&are=1&frm=0&pscdl=noapi&_eu=CAAAAGQ&_s=2&tag_exp=103116026~103200004~104527906~104528501~104684208~104684211~115495938~115938466~115938469~116185181~116185182~116988316~117041587&dp=%2Fstore-finder&sid=1769753527&sct=1&seg=1&dl=https%3A%2F%2Fwww.pennycentral.com%2Fstore-finder&dt=Live%20Store%20Finder%20for%20Home%20Depot%20Penny%20Shopping%20%7C%20Penny%20Central&en=return_visit&_ee=1&ep.page=%2Fstore-finder&ep.device=desktop&ep.theme=light&ep.ts=2026-01-30T06%3A12%3A10.980Z&ep.event_category=engagement&epn.weeklySessions=2&_et=2&tfd=2072' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:12.902Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Fetch API cannot load https://analytics.google.com/g/collect?v=2&tid=G-DJ4RJRX05E&gtm=45je61s0h2v9236412929za200zd9236412929&_p=1769753530980&gcs=G1--&gcd=13l3l3R3l5l1&npa=0&dma=0&tcfd=10000&cid=709109366.1769753527&ecid=398536599&ul=en-us&sr=1280x720&tt=internal&uaa=x86&uab=64&uafvl=HeadlessChrome%3B143.0.7499.4%7CChromium%3B143.0.7499.4%7CNot%2520A(Brand%3B24.0.0.0&uamb=0&uam=&uap=Windows&uapv=10.0&uaw=0&are=1&frm=0&pscdl=noapi&_eu=CAAAAGQ&_s=2&tag_exp=103116026~103200004~104527906~104528501~104684208~104684211~115495938~115938466~115938469~116185181~116185182~116988316~117041587&dp=%2Fstore-finder&sid=1769753527&sct=1&seg=1&dl=https%3A%2F%2Fwww.pennycentral.com%2Fstore-finder&dt=Live%20Store%20Finder%20for%20Home%20Depot%20Penny%20Shopping%20%7C%20Penny%20Central&en=return_visit&_ee=1&ep.page=%2Fstore-finder&ep.device=desktop&ep.theme=light&ep.ts=2026-01-30T06%3A12%3A10.980Z&ep.event_category=engagement&epn.weeklySessions=2&_et=2&tfd=2072. Refused to connect because it violates the document's Content Security Policy.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:12.902Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "pageerror",
+          "text": "Maximum call stack size exceeded",
+          "stack": "Uncaught (in promise) RangeError: Maximum call stack size exceeded\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)",
+          "timestamp": "2026-01-30T06:12:12.938Z",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": true
+        }
+      ]
+    },
+    {
+      "path": "/guide",
+      "url": "https://pennycentral.com/guide",
+      "messages": [
+        {
+          "type": "error",
+          "text": "Connecting to 'https://analytics.google.com/g/collect?v=2&tid=G-DJ4RJRX05E&gtm=45je61s0h2v9236412929za200zd9236412929&_p=1769753535122&gcs=G1--&gcd=13l3l3R3l5l1&npa=0&dma=0&tcfd=10000&cid=709109366.1769753527&ecid=398536599&ul=en-us&sr=1280x720&tt=internal&uaa=x86&uab=64&uafvl=HeadlessChrome%3B143.0.7499.4%7CChromium%3B143.0.7499.4%7CNot%2520A(Brand%3B24.0.0.0&uamb=0&uam=&uap=Windows&uapv=10.0&uaw=0&are=1&frm=0&pscdl=noapi&ec_mode=a&_eu=CAAAAGQ&_s=1&tag_exp=103116026~103200004~104527907~104528500~104684208~104684211~115616986~115938466~115938468~116185181~116185182~116491844~116988316~117041588&dp=%2Fguide&sid=1769753527&sct=1&seg=1&dl=https%3A%2F%2Fwww.pennycentral.com%2Fguide&dt=How%20to%20Find%20Home%20Depot%20Penny%20Items%20(Live%20Community%20Guide)%20%7C%20Penny%20Central&en=page_view&_ee=1&tfd=889' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:15.803Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Fetch API cannot load https://analytics.google.com/g/collect?v=2&tid=G-DJ4RJRX05E&gtm=45je61s0h2v9236412929za200zd9236412929&_p=1769753535122&gcs=G1--&gcd=13l3l3R3l5l1&npa=0&dma=0&tcfd=10000&cid=709109366.1769753527&ecid=398536599&ul=en-us&sr=1280x720&tt=internal&uaa=x86&uab=64&uafvl=HeadlessChrome%3B143.0.7499.4%7CChromium%3B143.0.7499.4%7CNot%2520A(Brand%3B24.0.0.0&uamb=0&uam=&uap=Windows&uapv=10.0&uaw=0&are=1&frm=0&pscdl=noapi&ec_mode=a&_eu=CAAAAGQ&_s=1&tag_exp=103116026~103200004~104527907~104528500~104684208~104684211~115616986~115938466~115938468~116185181~116185182~116491844~116988316~117041588&dp=%2Fguide&sid=1769753527&sct=1&seg=1&dl=https%3A%2F%2Fwww.pennycentral.com%2Fguide&dt=How%20to%20Find%20Home%20Depot%20Penny%20Items%20(Live%20Community%20Guide)%20%7C%20Penny%20Central&en=page_view&_ee=1&tfd=889. Refused to connect because it violates the document's Content Security Policy.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:15.922Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Failed to load resource: the server responded with a status of 403 ()",
+          "location": {
+            "url": "https://g.ezoic.net/sa.go",
+            "lineNumber": 0,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:15.928Z",
+          "origin": "https://g.ezoic.net/sa.go",
+          "originHost": "g.ezoic.net",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "[EzoicAds JS]: bad response. Status; 403 Response: Monetization not allowed for site\n",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 289
+          },
+          "timestamp": "2026-01-30T06:12:15.928Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": true
+        },
+        {
+          "type": "error",
+          "text": "Connecting to 'https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20260128&st=env&sjk=666277162838930' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 12,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:15.973Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "requestfailed",
+          "url": "https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20260128&st=env&sjk=666277162838930",
+          "method": "GET",
+          "failureText": "csp",
+          "timestamp": "2026-01-30T06:12:15.974Z",
+          "text": "",
+          "origin": "https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20260128&st=env&sjk=666277162838930",
+          "originHost": "ep1.adtrafficquality.google",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Connecting to 'https://id5-sync.com/gm/v3' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 12,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:16.388Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "requestfailed",
+          "url": "https://id5-sync.com/gm/v3",
+          "method": "POST",
+          "failureText": "csp",
+          "timestamp": "2026-01-30T06:12:16.388Z",
+          "text": "",
+          "origin": "https://id5-sync.com/gm/v3",
+          "originHost": "id5-sync.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "pageerror",
+          "text": "Maximum call stack size exceeded",
+          "stack": "Uncaught (in promise) RangeError: Maximum call stack size exceeded\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)",
+          "timestamp": "2026-01-30T06:12:16.940Z",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": true
+        }
+      ]
+    },
+    {
+      "path": "/trip-tracker",
+      "url": "https://pennycentral.com/trip-tracker",
+      "messages": [
+        {
+          "type": "error",
+          "text": "Connecting to 'https://analytics.google.com/g/collect?v=2&tid=G-DJ4RJRX05E&gtm=45je61s0h2v9236412929za200zd9236412929&_p=1769753539165&gcs=G1--&gcd=13l3l3R3l5l1&npa=0&dma=0&tcfd=10000&cid=709109366.1769753527&ecid=398536599&ul=en-us&sr=1280x720&tt=internal&uaa=x86&uab=64&uafvl=HeadlessChrome%3B143.0.7499.4%7CChromium%3B143.0.7499.4%7CNot%2520A(Brand%3B24.0.0.0&uamb=0&uam=&uap=Windows&uapv=10.0&uaw=0&are=1&frm=0&pscdl=noapi&ec_mode=a&_eu=CAAAAGQ&_s=1&tag_exp=103116026~103200004~104527907~104528501~104684208~104684211~115938466~115938469~116185181~116185182~116988316~117041587&dp=%2Ftrip-tracker&sid=1769753527&sct=1&seg=1&dl=https%3A%2F%2Fwww.pennycentral.com%2Ftrip-tracker&dt=Trip%20Tracker%20-%20Plan%20Your%20Penny%20Hunting%20Trips%20%7C%20Penny%20Central&en=page_view&_ee=1&tfd=335' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:19.257Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Fetch API cannot load https://analytics.google.com/g/collect?v=2&tid=G-DJ4RJRX05E&gtm=45je61s0h2v9236412929za200zd9236412929&_p=1769753539165&gcs=G1--&gcd=13l3l3R3l5l1&npa=0&dma=0&tcfd=10000&cid=709109366.1769753527&ecid=398536599&ul=en-us&sr=1280x720&tt=internal&uaa=x86&uab=64&uafvl=HeadlessChrome%3B143.0.7499.4%7CChromium%3B143.0.7499.4%7CNot%2520A(Brand%3B24.0.0.0&uamb=0&uam=&uap=Windows&uapv=10.0&uaw=0&are=1&frm=0&pscdl=noapi&ec_mode=a&_eu=CAAAAGQ&_s=1&tag_exp=103116026~103200004~104527907~104528501~104684208~104684211~115938466~115938469~116185181~116185182~116988316~117041587&dp=%2Ftrip-tracker&sid=1769753527&sct=1&seg=1&dl=https%3A%2F%2Fwww.pennycentral.com%2Ftrip-tracker&dt=Trip%20Tracker%20-%20Plan%20Your%20Penny%20Hunting%20Trips%20%7C%20Penny%20Central&en=page_view&_ee=1&tfd=335. Refused to connect because it violates the document's Content Security Policy.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:19.257Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Connecting to 'https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20260128&st=env&sjk=1049560248491845' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 12,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:19.372Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "requestfailed",
+          "url": "https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20260128&st=env&sjk=1049560248491845",
+          "method": "GET",
+          "failureText": "csp",
+          "timestamp": "2026-01-30T06:12:19.372Z",
+          "text": "",
+          "origin": "https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20260128&st=env&sjk=1049560248491845",
+          "originHost": "ep1.adtrafficquality.google",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Connecting to 'https://id5-sync.com/gm/v3' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 12,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:19.882Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "requestfailed",
+          "url": "https://id5-sync.com/gm/v3",
+          "method": "POST",
+          "failureText": "csp",
+          "timestamp": "2026-01-30T06:12:19.884Z",
+          "text": "",
+          "origin": "https://id5-sync.com/gm/v3",
+          "originHost": "id5-sync.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "pageerror",
+          "text": "Maximum call stack size exceeded",
+          "stack": "Uncaught (in promise) RangeError: Maximum call stack size exceeded\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)",
+          "timestamp": "2026-01-30T06:12:20.456Z",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": true
+        }
+      ]
+    },
+    {
+      "path": "/resources",
+      "url": "https://pennycentral.com/resources",
+      "messages": [
+        {
+          "type": "error",
+          "text": "Connecting to 'https://analytics.google.com/g/collect?v=2&tid=G-DJ4RJRX05E&gtm=45je61s0h2v9236412929za200zd9236412929&_p=1769753542620&gcs=G1--&gcd=13l3l3R3l5l1&npa=0&dma=0&tcfd=10000&cid=709109366.1769753527&ecid=398536599&ul=en-us&sr=1280x720&tt=internal&uaa=x86&uab=64&uafvl=HeadlessChrome%3B143.0.7499.4%7CChromium%3B143.0.7499.4%7CNot%2520A(Brand%3B24.0.0.0&uamb=0&uam=&uap=Windows&uapv=10.0&uaw=0&are=1&frm=0&pscdl=noapi&ec_mode=a&_eu=CAAAAGQ&_s=1&tag_exp=103116026~103200004~104527907~104528501~104684208~104684211~115495938~115938466~115938469~116185181~116185182~116491844~116988316~117041587&dp=%2Fresources&sid=1769753527&sct=1&seg=1&dl=https%3A%2F%2Fwww.pennycentral.com%2Fresources&dt=Resources%20%7C%20Penny%20Central&en=page_view&_ee=1&tfd=251' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:22.681Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Fetch API cannot load https://analytics.google.com/g/collect?v=2&tid=G-DJ4RJRX05E&gtm=45je61s0h2v9236412929za200zd9236412929&_p=1769753542620&gcs=G1--&gcd=13l3l3R3l5l1&npa=0&dma=0&tcfd=10000&cid=709109366.1769753527&ecid=398536599&ul=en-us&sr=1280x720&tt=internal&uaa=x86&uab=64&uafvl=HeadlessChrome%3B143.0.7499.4%7CChromium%3B143.0.7499.4%7CNot%2520A(Brand%3B24.0.0.0&uamb=0&uam=&uap=Windows&uapv=10.0&uaw=0&are=1&frm=0&pscdl=noapi&ec_mode=a&_eu=CAAAAGQ&_s=1&tag_exp=103116026~103200004~104527907~104528501~104684208~104684211~115495938~115938466~115938469~116185181~116185182~116491844~116988316~117041587&dp=%2Fresources&sid=1769753527&sct=1&seg=1&dl=https%3A%2F%2Fwww.pennycentral.com%2Fresources&dt=Resources%20%7C%20Penny%20Central&en=page_view&_ee=1&tfd=251. Refused to connect because it violates the document's Content Security Policy.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:22.681Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Connecting to 'https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20260128&st=env&sjk=1201781368769748' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 12,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:22.750Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "requestfailed",
+          "url": "https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20260128&st=env&sjk=1201781368769748",
+          "method": "GET",
+          "failureText": "csp",
+          "timestamp": "2026-01-30T06:12:22.751Z",
+          "text": "",
+          "origin": "https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20260128&st=env&sjk=1201781368769748",
+          "originHost": "ep1.adtrafficquality.google",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "requestfailed",
+          "url": "https://www.pennycentral.com/penny-list?_rsc=1exf1",
+          "method": "GET",
+          "failureText": "net::ERR_ABORTED",
+          "timestamp": "2026-01-30T06:12:22.926Z",
+          "text": "",
+          "origin": "https://www.pennycentral.com/penny-list?_rsc=1exf1",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": false,
+          "severity": "info",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Connecting to 'https://id5-sync.com/gm/v3' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 12,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:23.272Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "requestfailed",
+          "url": "https://id5-sync.com/gm/v3",
+          "method": "POST",
+          "failureText": "csp",
+          "timestamp": "2026-01-30T06:12:23.273Z",
+          "text": "",
+          "origin": "https://id5-sync.com/gm/v3",
+          "originHost": "id5-sync.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "pageerror",
+          "text": "Maximum call stack size exceeded",
+          "stack": "Uncaught (in promise) RangeError: Maximum call stack size exceeded\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)",
+          "timestamp": "2026-01-30T06:12:23.808Z",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": true
+        }
+      ]
+    },
+    {
+      "path": "/about",
+      "url": "https://pennycentral.com/about",
+      "messages": [
+        {
+          "type": "error",
+          "text": "Connecting to 'https://analytics.google.com/g/collect?v=2&tid=G-DJ4RJRX05E&gtm=45je61s0h2v9236412929za200zd9236412929&_p=1769753546001&gcs=G1--&gcd=13l3l3R3l5l1&npa=0&dma=0&tcfd=10000&cid=709109366.1769753527&ecid=398536599&ul=en-us&sr=1280x720&tt=internal&uaa=x86&uab=64&uafvl=HeadlessChrome%3B143.0.7499.4%7CChromium%3B143.0.7499.4%7CNot%2520A(Brand%3B24.0.0.0&uamb=0&uam=&uap=Windows&uapv=10.0&uaw=0&are=1&frm=0&pscdl=noapi&ec_mode=a&_eu=CAAAAGQ&_s=1&tag_exp=103116026~103200004~104527907~104528500~104684208~104684211~115938465~115938469~116185181~116185182~116988316~117041587&dp=%2Fabout&sid=1769753527&sct=1&seg=1&dl=https%3A%2F%2Fwww.pennycentral.com%2Fabout&dt=About%20PennyCentral&en=page_view&_ee=1&tfd=290' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:26.092Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Fetch API cannot load https://analytics.google.com/g/collect?v=2&tid=G-DJ4RJRX05E&gtm=45je61s0h2v9236412929za200zd9236412929&_p=1769753546001&gcs=G1--&gcd=13l3l3R3l5l1&npa=0&dma=0&tcfd=10000&cid=709109366.1769753527&ecid=398536599&ul=en-us&sr=1280x720&tt=internal&uaa=x86&uab=64&uafvl=HeadlessChrome%3B143.0.7499.4%7CChromium%3B143.0.7499.4%7CNot%2520A(Brand%3B24.0.0.0&uamb=0&uam=&uap=Windows&uapv=10.0&uaw=0&are=1&frm=0&pscdl=noapi&ec_mode=a&_eu=CAAAAGQ&_s=1&tag_exp=103116026~103200004~104527907~104528500~104684208~104684211~115938465~115938469~116185181~116185182~116988316~117041587&dp=%2Fabout&sid=1769753527&sct=1&seg=1&dl=https%3A%2F%2Fwww.pennycentral.com%2Fabout&dt=About%20PennyCentral&en=page_view&_ee=1&tfd=290. Refused to connect because it violates the document's Content Security Policy.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 9,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:26.092Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Connecting to 'https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20260128&st=env&sjk=3441683872076993' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 12,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:26.162Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "requestfailed",
+          "url": "https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20260128&st=env&sjk=3441683872076993",
+          "method": "GET",
+          "failureText": "csp",
+          "timestamp": "2026-01-30T06:12:26.164Z",
+          "text": "",
+          "origin": "https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20260128&st=env&sjk=3441683872076993",
+          "originHost": "ep1.adtrafficquality.google",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Connecting to 'https://id5-sync.com/gm/v3' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 12,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:26.695Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "requestfailed",
+          "url": "https://id5-sync.com/gm/v3",
+          "method": "POST",
+          "failureText": "csp",
+          "timestamp": "2026-01-30T06:12:26.695Z",
+          "text": "",
+          "origin": "https://id5-sync.com/gm/v3",
+          "originHost": "id5-sync.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "pageerror",
+          "text": "Maximum call stack size exceeded",
+          "stack": "Uncaught (in promise) RangeError: Maximum call stack size exceeded\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)",
+          "timestamp": "2026-01-30T06:12:27.268Z",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": true
+        },
+        {
+          "type": "pageerror",
+          "text": "_ezaq is not defined",
+          "stack": "ReferenceError: _ezaq is not defined\n    at https://www.ezojs.com/ezoic/sa.min.js:1:114943\n    at n (https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg:7:4705)",
+          "timestamp": "2026-01-30T06:12:28.066Z",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": true
+        },
+        {
+          "type": "error",
+          "text": "Failed to load resource: the server responded with a status of 429 ()",
+          "location": {
+            "url": "https://o4510605822394368.ingest.us.sentry.io/api/4510605823246336/envelope/?sentry_version=7&sentry_key=6c97a22cc0a22bf546df09e9051202f6&sentry_client=sentry.javascript.nextjs%2F10.32.1",
+            "lineNumber": 0,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:28.103Z",
+          "origin": "https://o4510605822394368.ingest.us.sentry.io/api/4510605823246336/envelope/?sentry_version=7&sentry_key=6c97a22cc0a22bf546df09e9051202f6&sentry_client=sentry.javascript.nextjs%2F10.32.1",
+          "originHost": "o4510605822394368.ingest.us.sentry.io",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        }
+      ]
+    },
+    {
+      "path": "/cashback",
+      "url": "https://pennycentral.com/cashback",
+      "messages": [
+        {
+          "type": "error",
+          "text": "Connecting to 'https://analytics.google.com/g/collect?v=2&tid=G-DJ4RJRX05E&gtm=45je61s0h2v9236412929za200zd9236412929&_p=1769753549515&gcs=G1--&gcd=13l3l3R3l5l1&npa=0&dma=0&tcfd=10000&cid=709109366.1769753527&ecid=398536599&ul=en-us&sr=1280x720&tt=internal&uaa=x86&uab=64&uafvl=HeadlessChrome%3B143.0.7499.4%7CChromium%3B143.0.7499.4%7CNot%2520A(Brand%3B24.0.0.0&uamb=0&uam=&uap=Windows&uapv=10.0&uaw=0&are=1&frm=0&pscdl=noapi&ec_mode=a&_eu=CAAAAGQ&_s=1&tag_exp=103116026~103200004~104527907~104528500~104684208~104684211~115938465~115938468~116185181~116185182~116988316~117041588&dp=%2Fsupport&sid=1769753527&sct=1&seg=1&dl=https%3A%2F%2Fwww.pennycentral.com%2Fsupport&dt=Support%20%7C%20PennyCentral&en=page_view&_ee=1&tfd=290' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.googletagmanager.com/gtag/js?id=G-DJ4RJRX05E",
+            "lineNumber": 278,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:29.538Z",
+          "origin": "https://www.googletagmanager.com/gtag/js?id=G-DJ4RJRX05E",
+          "originHost": "www.googletagmanager.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Fetch API cannot load https://analytics.google.com/g/collect?v=2&tid=G-DJ4RJRX05E&gtm=45je61s0h2v9236412929za200zd9236412929&_p=1769753549515&gcs=G1--&gcd=13l3l3R3l5l1&npa=0&dma=0&tcfd=10000&cid=709109366.1769753527&ecid=398536599&ul=en-us&sr=1280x720&tt=internal&uaa=x86&uab=64&uafvl=HeadlessChrome%3B143.0.7499.4%7CChromium%3B143.0.7499.4%7CNot%2520A(Brand%3B24.0.0.0&uamb=0&uam=&uap=Windows&uapv=10.0&uaw=0&are=1&frm=0&pscdl=noapi&ec_mode=a&_eu=CAAAAGQ&_s=1&tag_exp=103116026~103200004~104527907~104528500~104684208~104684211~115938465~115938468~116185181~116185182~116988316~117041588&dp=%2Fsupport&sid=1769753527&sct=1&seg=1&dl=https%3A%2F%2Fwww.pennycentral.com%2Fsupport&dt=Support%20%7C%20PennyCentral&en=page_view&_ee=1&tfd=290. Refused to connect because it violates the document's Content Security Policy.",
+          "location": {
+            "url": "https://www.googletagmanager.com/gtag/js?id=G-DJ4RJRX05E",
+            "lineNumber": 278,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:29.538Z",
+          "origin": "https://www.googletagmanager.com/gtag/js?id=G-DJ4RJRX05E",
+          "originHost": "www.googletagmanager.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Connecting to 'https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20260128&st=env&sjk=7776820604441741' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 12,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:29.622Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "requestfailed",
+          "url": "https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20260128&st=env&sjk=7776820604441741",
+          "method": "GET",
+          "failureText": "csp",
+          "timestamp": "2026-01-30T06:12:29.622Z",
+          "text": "",
+          "origin": "https://ep1.adtrafficquality.google/getconfig/sodar?sv=200&tid=gda&tv=r20260128&st=env&sjk=7776820604441741",
+          "originHost": "ep1.adtrafficquality.google",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "error",
+          "text": "Connecting to 'https://id5-sync.com/gm/v3' violates the following Content Security Policy directive: \"connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.ezoic.com https://*.ezoic.net https://go.ezodn.com https://privacy.gatekeeperconsent.com https://*.gatekeeperconsent.com\". The action has been blocked.",
+          "location": {
+            "url": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+            "lineNumber": 12,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:30.190Z",
+          "origin": "https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg",
+          "originHost": "www.pennycentral.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "requestfailed",
+          "url": "https://id5-sync.com/gm/v3",
+          "method": "POST",
+          "failureText": "csp",
+          "timestamp": "2026-01-30T06:12:30.191Z",
+          "text": "",
+          "origin": "https://id5-sync.com/gm/v3",
+          "originHost": "id5-sync.com",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        },
+        {
+          "type": "pageerror",
+          "text": "Maximum call stack size exceeded",
+          "stack": "Uncaught (in promise) RangeError: Maximum call stack size exceeded\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)\n    at window.__tcfapi (https://cmp.gatekeeperconsent.com/min.js:0:0)\n    at E (https://faves.grow.me/initializeApp-Dnj8HqgO.js:0:0)",
+          "timestamp": "2026-01-30T06:12:30.735Z",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": true
+        },
+        {
+          "type": "pageerror",
+          "text": "_ezaq is not defined",
+          "stack": "ReferenceError: _ezaq is not defined\n    at https://www.ezojs.com/ezoic/sa.min.js:1:114943\n    at n (https://www.pennycentral.com/_next/static/chunks/af7b72d2d95c3488.js?dpl=dpl_EcHnL5WtcgfDt1kvieNMMfmG1oFg:7:4705)",
+          "timestamp": "2026-01-30T06:12:31.613Z",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": true
+        },
+        {
+          "type": "error",
+          "text": "Failed to load resource: the server responded with a status of 429 ()",
+          "location": {
+            "url": "https://o4510605822394368.ingest.us.sentry.io/api/4510605823246336/envelope/?sentry_version=7&sentry_key=6c97a22cc0a22bf546df09e9051202f6&sentry_client=sentry.javascript.nextjs%2F10.32.1",
+            "lineNumber": 0,
+            "columnNumber": 0
+          },
+          "timestamp": "2026-01-30T06:12:31.646Z",
+          "origin": "https://o4510605822394368.ingest.us.sentry.io/api/4510605823246336/envelope/?sentry_version=7&sentry_key=6c97a22cc0a22bf546df09e9051202f6&sentry_client=sentry.javascript.nextjs%2F10.32.1",
+          "originHost": "o4510605822394368.ingest.us.sentry.io",
+          "ignored": false,
+          "thirdParty": true,
+          "severity": "error",
+          "actionable": false
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "totalMessages": 73,
+    "errors": 71,
+    "warnings": 0,
+    "infos": 2,
+    "requestFailures": 16,
+    "thirdParty": 70
+  }
+}

@@ -170,9 +170,24 @@ def extract_staging_row(item: dict) -> dict:
         brand = str(brand).strip() or None
 
     # Retail price
-    retail_price = parse_price(
-        item.get("retail_price") or item.get("retailPrice") or item.get("list_price")
-    )
+    retail_price = None
+    # Important: do NOT use `or` chaining here.
+    # `scraper_core` normalization sometimes writes "N/A" into `retail_price` even when
+    # the raw payload contains a real price under a different key (e.g. `retailPrice`).
+    # "N/A" is truthy, which would short-circuit and incorrectly drop the real price.
+    for k in [
+        "retail_price",
+        "retailPrice",
+        "store_retail_price",
+        "storeRetailPrice",
+        "list_price",
+        "listPrice",
+        "msrp",
+        "MSRP",
+    ]:
+        retail_price = parse_price(item.get(k))
+        if retail_price is not None:
+            break
 
     # Image URL
     image_url = (
@@ -384,6 +399,11 @@ def main():
         seen_skus.add(sku)
         if internet:
             seen_internet.add(internet)
+
+        # Avoid degrading coverage: don't overwrite an existing non-null retail_price with NULL.
+        # (Upstream sometimes returns no retail value for a SKU on a given run.)
+        if row.get("retail_price") is None:
+            row.pop("retail_price", None)
 
         unique_items.append(row)
 

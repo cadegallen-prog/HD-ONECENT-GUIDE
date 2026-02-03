@@ -53,7 +53,7 @@ export default defineConfig({
     ? undefined
     : {
         command:
-          "cross-env NEXT_DIST_DIR=.next-playwright PLAYWRIGHT=1 NEXT_PUBLIC_EZOIC_ENABLED=false node node_modules/next/dist/bin/next start -p 3002",
+          "cross-env NEXT_DIST_DIR=.next-playwright PLAYWRIGHT=1 node node_modules/next/dist/bin/next start -p 3002",
         url: baseURL,
         reuseExistingServer:
           !process.env.CI && process.env.PLAYWRIGHT_REUSE_EXISTING_SERVER === "1",

@@ -1,8 +1,10 @@
 # Tooling Manifest
 
-**Last verified:** December 27, 2025
+**Last verified:** February 1, 2026
 
 ## npm Scripts
+
+### Core Development
 
 | Script        | Command                        | Purpose                   |
 | ------------- | ------------------------------ | ------------------------- |
@@ -15,6 +17,46 @@
 | test:e2e      | `npm run test:e2e`             | Playwright E2E tests      |
 | lint:colors   | `npm run lint:colors`          | Block raw Tailwind colors |
 | security:scan | `npm run security:scan`        | Block PII in commits      |
+
+### Enrichment & Data Management
+
+| Script             | Command                      | Purpose                                         |
+| ------------------ | ---------------------------- | ----------------------------------------------- |
+| warm:staging       | `npm run warm:staging`       | Scrape penny items from Scouter API to staging  |
+| metrics:enrichment | `npm run metrics:enrichment` | Show staging consumption metrics & cost savings |
+| enrich:auto        | `npm run enrich:auto`        | Auto-enrich penny items (legacy)                |
+| enrich:bulk        | `npm run enrich:bulk`        | Bulk enrich penny items (legacy)                |
+| enrich:stealth     | `npm run enrich:stealth`     | Stealth enrich penny items (legacy)             |
+| enrich:serpapi     | `npm run enrich:serpapi`     | Real-time SerpAPI enrichment (active)           |
+
+## Enrichment Staging System
+
+**Purpose:** Pre-populate penny item metadata from Scouter API to avoid expensive SerpAPI calls.
+
+**Architecture:**
+
+1. **Staging Warmer** (`npm run warm:staging`) - Scrapes bulk penny items from `pro.scouterdev.io` API, upserts to `enrichment_staging` table
+2. **Consumption** (automatic) - When users submit penny finds, `consume_enrichment_for_penny_item()` RPC matches staging data by SKU and fills metadata
+3. **Metrics** (`npm run metrics:enrichment`) - Shows consumption rate, fields filled, cost savings
+
+**Database Tables:**
+
+- `enrichment_staging` - Queue of pre-scraped items (SKU, item_name, brand, image_url, etc.)
+- `Penny List` - Main list with `enrichment_provenance` JSONB tracking source of each field
+
+**Cost Savings:**
+
+- SerpAPI: $0.125/item (2.5 credits × $0.05/credit)
+- Staging enrichment: ~$0 (one-time scrape amortized over many items)
+
+**Configuration:**
+
+- Required env vars: `PENNY_RAW_COOKIE`, `PENNY_GUILD_ID` (in `.env.local`, do NOT commit)
+- Default zips: Atlanta metro (30301, 30303, 30305, 30308, 30309)
+- Default max items: 6,000 per run
+- Retention: 60 days (stale rows pruned during warmer runs)
+
+**Note:** Staging warmer runs locally only (GitHub Actions blocked by Cloudflare).
 
 ## Slash Commands (Claude Code)
 

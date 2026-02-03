@@ -1,6 +1,6 @@
 "use client"
 
-import { Fragment, useState, useMemo, useEffect, useCallback, useRef } from "react"
+import { useState, useMemo, useEffect, useCallback, useRef } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import {
   AlertTriangle,
@@ -34,8 +34,6 @@ import { formatWindowLabel } from "@/lib/penny-list-utils"
 import { PennyListPageBookmarkBanner } from "./penny-list-page-bookmark-banner"
 import { PWAInstallPrompt } from "./pwa-install-prompt"
 import { EmailSignupForm } from "./email-signup-form"
-import { EzoicInlineAd } from "@/components/ezoic-placeholder"
-import { AD_SLOTS, EZOIC_ENABLED } from "@/lib/ads"
 
 interface PennyListClientProps {
   initialItems: PennyItem[]
@@ -575,7 +573,7 @@ export function PennyListClient({
 
       {/* Mobile Action Bar + Sheets */}
       <div className="sm:hidden">
-        <div className="fixed inset-x-0 bottom-0 z-30 border-t border-[var(--border-default)] bg-[var(--bg-elevated)]">
+        <div className="fixed inset-x-0 bottom-0 z-30 border-t border-[var(--border-default)] bg-[var(--bg-elevated)] transition-transform duration-150 ease-out">
           <div className="grid grid-cols-4 gap-2 px-3 pt-2 pb-[calc(8px+env(safe-area-inset-bottom))]">
             <button
               type="button"
@@ -999,22 +997,14 @@ export function PennyListClient({
           />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-            {items.map((item, index) => (
-              <Fragment key={item.id}>
-                <PennyListCard
-                  item={item}
-                  stateFilter={stateFilter}
-                  windowLabel={formatWindowLabel(dateRange)}
-                  userState={userState}
-                />
-
-                {/* Trust-first: no ads above the first 10 results */}
-                {EZOIC_ENABLED && index === 9 && items.length > 10 && (
-                  <div className="col-span-full">
-                    <EzoicInlineAd slotId={AD_SLOTS.LIST_AFTER_N} />
-                  </div>
-                )}
-              </Fragment>
+            {items.map((item) => (
+              <PennyListCard
+                key={item.id}
+                item={item}
+                stateFilter={stateFilter}
+                windowLabel={formatWindowLabel(dateRange)}
+                userState={userState}
+              />
             ))}
           </div>
         )}

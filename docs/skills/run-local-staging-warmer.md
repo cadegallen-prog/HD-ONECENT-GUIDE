@@ -39,10 +39,33 @@ npm run warm:staging -- --zip-codes 30301,30303,30305,30308,30309
 npm run warm:staging -- --max-uniques 6000 --batch-size 50
 ```
 
+### Broader zip coverage (still small per run)
+
+If you want broader coverage without manually editing the command every time, set a larger pool and sample from it each run:
+
+```bash
+# Sample 5 zip codes from a larger pool each run
+PENNY_ZIP_POOL=30301,10001,60601,75201,94103,98101
+npm run warm:staging
+```
+
+Or pass via CLI:
+
+```bash
+npm run warm:staging -- --zip-pool 30301,10001,60601,75201,94103,98101 --zip-sample 5
+```
+
+For deterministic sampling (repeatable runs), add a seed:
+
+```bash
+npm run warm:staging -- --zip-pool 30301,10001,60601,75201,94103,98101 --zip-sample 5 --zip-seed 20260201
+```
+
 ## Success criteria
 
 - The command prints `STAGING WARMER COMPLETE` with non-zero `upserted_to_staging`.
-- Supabase `enrichment_staging` row count increases and recent `updated_at` values refresh.
+- Supabase `enrichment_staging` row count increases (or existing rows update) and field coverage improves (especially `retail_price`).
+- Optional: run `tsx scripts/print-enrichment-staging-status.ts` (with your env loaded) to see counts and `retail_price` coverage.
 
 ## If it fails
 

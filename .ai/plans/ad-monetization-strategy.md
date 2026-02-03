@@ -330,18 +330,50 @@ Cade
 
 ---
 
+## Decision: Ezoic Removed Entirely (2026-02-01)
+
+**Decision:** Delete all Ezoic infrastructure and start fresh for Monumetric.
+
+**Rationale:**
+
+- Ezoic UX was poor (gray placeholder boxes, awkward desktop splits)
+- Card #10 break was confusing users
+- Clean slate for Monumetric integration when approved
+
+**What was removed:**
+
+- `components/ezoic-placeholder.tsx` - Deleted
+- `lib/ads.ts` - Deleted
+- All Ezoic imports from `app/page.tsx`, `components/GuideContent.tsx`, `app/layout.tsx`
+- Ezoic CSP entries from `next.config.js`
+- 3 homepage ad slots (HOME_TOP, HOME_MID, HOME_BOTTOM)
+- 1 penny list ad slot (LIST_AFTER_N at card #10)
+- 1 guide ad slot (CONTENT_AFTER_P1)
+- Ezoic scripts from `<head>`
+
+**What was kept:**
+
+- `public/ads.txt` with Monumetric entries (ready for 80k threshold)
+- Google AdSense (continues working independently)
+- Mediavine Journey/Grow.me (engagement widget)
+
+---
+
 ## Next Steps
 
 1. **Wait for Monumetric email response**
-2. **Decide: Fix Ezoic UX vs Disable Ezoic vs Remove Ezoic**
-3. **Test mobile ad experience** (screenshot current state)
-4. **Document decision in this file**
-5. **Execute chosen path**
+2. ~~Decide: Fix Ezoic UX vs Disable Ezoic vs Remove Ezoic~~ ✅ DONE - Removed entirely
+3. **When Monumetric approves:** Add their script tags strategically
+4. **Strategic ad placement (Monumetric):**
+   - Mobile: After card #20 (not #10), end of list
+   - Desktop: Sticky sidebar (doesn't interrupt content)
+5. **Monitor retention vs revenue** (start with 1 ad/session, increase gradually)
 
 ---
 
 ## Change Log
 
-| Date       | Change                    | Decision                     |
-| ---------- | ------------------------- | ---------------------------- |
-| 2026-01-26 | Created planning document | Awaiting Monumetric response |
+| Date       | Change                           | Decision                     |
+| ---------- | -------------------------------- | ---------------------------- |
+| 2026-02-01 | Removed all Ezoic infrastructure | Clean slate for Monumetric   |
+| 2026-01-26 | Created planning document        | Awaiting Monumetric response |

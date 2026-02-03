@@ -11,7 +11,6 @@ import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { ogImageUrl } from "@/lib/og"
 import { CANONICAL_BASE } from "@/lib/canonical"
-import { EZOIC_ENABLED } from "@/lib/ads"
 
 const DEFAULT_OG_IMAGE = `https://www.pennycentral.com${ogImageUrl("homepage")}`
 
@@ -31,8 +30,6 @@ const ENABLE_VERCEL_SCRIPTS =
   IS_VERCEL_PROD
 const ENABLE_VERCEL_ANALYTICS = ANALYTICS_ENABLED && ENABLE_VERCEL_SCRIPTS
 
-// Ezoic should only run on Vercel production, and never during CI/Playwright runs.
-const ENABLE_EZOIC_SCRIPTS = EZOIC_ENABLED && ENABLE_VERCEL_SCRIPTS
 const inter = localFont({
   src: [
     {
@@ -131,28 +128,6 @@ export default function RootLayout({
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5302589080375312"
             crossOrigin="anonymous"
           />
-        )}
-        {ENABLE_EZOIC_SCRIPTS && (
-          <>
-            {/* ===================================================
-                EZOIC ADS (BRIDGE MONETIZATION)
-                TEMPORARY: Remove after Mediavine approval
-                =================================================== */}
-            {/* Ezoic Privacy Scripts - MUST LOAD FIRST */}
-            <script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js" />
-            <script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js" />
-
-            {/* Ezoic Header Script */}
-            <script async src="https://www.ezojs.com/ezoic/sa.min.js" />
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `
-                  window.ezstandalone = window.ezstandalone || {};
-                  ezstandalone.cmd = ezstandalone.cmd || [];
-                `,
-              }}
-            />
-          </>
         )}
 
         {/* Performance hints for critical third-party origins */}

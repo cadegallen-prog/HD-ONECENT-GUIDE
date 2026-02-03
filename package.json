@@ -29,6 +29,7 @@
     "enrich:stealth": "tsx scripts/stealth-enrich.ts",
     "enrich:serpapi": "tsx scripts/serpapi-enrich.ts",
     "warm:staging": "node scripts/run-local-staging-warmer.mjs",
+    "metrics:enrichment": "tsx scripts/enrichment-metrics.ts",
     "penny:count": "tsx scripts/print-penny-list-count.ts",
     "fixture:snapshot": "tsx scripts/snapshot-penny-list-fixture.ts",
     "prepare": "husky",

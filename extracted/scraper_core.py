@@ -234,10 +234,24 @@ class PennyScraperCore:
             ),
             None,
         )
-        _retail_col = next(
-            (c for c in ["retail_price", "list_price", "msrp"] if c in df.columns),
-            None,
-        )
+        # NOTE: Upstream payloads sometimes mix snake_case and camelCase.
+        # Avoid choosing a single "retail" column because that can leave many rows as NaN,
+        # even when the row has a valid price under a different key.
+        _retail_cols = [
+            c
+            for c in [
+                "retail_price",
+                "retailPrice",
+                "store_retail_price",
+                "storeRetailPrice",
+                "list_price",
+                "listPrice",
+                "msrp",
+                "MSRP",
+                "price_retail",
+            ]
+            if c in df.columns
+        ]
         _img_col = next(
             (
                 c
@@ -290,11 +304,17 @@ class PennyScraperCore:
             return "N/A"
 
         df["price"] = df.apply(_detect_price_row, axis=1)
-        df["retail_price"] = (
-            df[_retail_col].apply(_format_price)
-            if _retail_col and _retail_col in df.columns
-            else df.get("retail_price", "N/A")
-        )
+        def _detect_retail_row(row):
+            for c in _retail_cols:
+                if c in row and pd.notna(row[c]):
+                    return _format_price(row[c])
+            # Fallback: if the source already has a retail_price string column in some rows
+            # but we didn't detect it (unlikely), preserve it if present.
+            if "retail_price" in row and pd.notna(row["retail_price"]):
+                return _format_price(row["retail_price"])
+            return "N/A"
+
+        df["retail_price"] = df.apply(_detect_retail_row, axis=1)
         df["image_link"] = (
             df[_img_col]
             if _img_col and _img_col in df.columns
