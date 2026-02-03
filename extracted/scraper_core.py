@@ -304,6 +304,7 @@ class PennyScraperCore:
             return "N/A"
 
         df["price"] = df.apply(_detect_price_row, axis=1)
+
         def _detect_retail_row(row):
             for c in _retail_cols:
                 if c in row and pd.notna(row[c]):
