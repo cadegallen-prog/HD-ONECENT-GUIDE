@@ -48,7 +48,7 @@ Before exploring the repo:
 
 - Follow the canonical `AI Canon & Read Order` in `README.md`.
 - After reading, summarize: current state (`.ai/STATE.md`), top priority (`.ai/BACKLOG.md`), key constraints (`.ai/CONSTRAINTS.md` + `.ai/FOUNDATION_CONTRACT.md` + `.ai/GUARDRAILS.md`), and any recent notes (`.ai/SESSION_LOG.md`).
-- Ignore `archive/docs-pruned/**` by default; only open archived docs when you (Cade) explicitly request restore/review.
+- Ignore `archive/docs-pruned/**` and `archive/scripts-pruned/**` by default; only open archived items when you (Cade) explicitly request restore/review.
 
 ---
 

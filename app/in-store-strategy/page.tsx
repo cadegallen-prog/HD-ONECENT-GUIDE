@@ -26,5 +26,5 @@ export const metadata: Metadata = {
 }
 
 export default function InStoreRedirect() {
-  redirect("/#in-store-hunting")
+  redirect("/guide/in-store-strategy")
 }

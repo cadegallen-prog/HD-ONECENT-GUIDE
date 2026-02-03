@@ -26,5 +26,5 @@ export const metadata: Metadata = {
 }
 
 export default function DigitalPreHuntRedirect() {
-  redirect("/#digital-tools")
+  redirect("/guide/digital-pre-hunt")
 }

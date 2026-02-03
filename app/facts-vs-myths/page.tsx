@@ -26,5 +26,5 @@ export const metadata: Metadata = {
 }
 
 export default function FactsRedirect() {
-  redirect("/#fact-vs-fiction")
+  redirect("/guide/fact-vs-fiction")
 }

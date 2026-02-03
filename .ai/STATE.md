@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 3, 2026 (Docs-pruning governance + autonomy planning + AdSense recovery)
+**Last updated:** Feb 3, 2026 (Large archive-first bloat reduction + autonomy planning + AdSense recovery)
 
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
@@ -11,6 +11,7 @@ Every AI session must update this after meaningful work.
 
 ## Current Sprint (Last 7 Days)
 
+- **2026-02-03 (Docs/scripts bloat reduction - pass 2):** Archived an additional low-signal set into cold storage: 7 docs moved to `archive/docs-pruned/2026-02-03-pass2/` and 28 unreferenced/single-use scripts moved to `archive/scripts-pruned/2026-02-03/` (preserving exact restore paths). Added manifest files for both snapshots and updated startup guardrails so agents ignore both `archive/docs-pruned/**` and `archive/scripts-pruned/**` unless explicitly requested.
 - **2026-02-03 (Docs hygiene: archive-first prune governance):** Confirmed the large documentation-prune move now lives under `archive/docs-pruned/2026-02-03/`. Added archive policy docs (`archive/docs-pruned/README.md`, snapshot `INDEX.md`) and guardrails so agents ignore pruned docs by default (`AGENTS.md`, `.ai/START_HERE.md`) unless Cade explicitly requests restore/review.
 - **2026-02-03 (Enablement: Agent Autonomy Hardening plan scaffold):** Added canonical planning docs for agent reliability and context retention: `.ai/plans/agent-autonomy-hardening.md` + `.ai/topics/AGENT_AUTONOMY_CURRENT.md`; registered in `.ai/plans/INDEX.md` and moved port-3001 reliability/access matrix into a phased, decision-complete plan. Docs-only change; quality gates not run.
 - **2026-02-03 (Security & Cron Pause):** Paused weekly digest cron (`/api/cron/send-weekly-digest`) and removed from Vercel schedule to prevent unverified email blasts and address Supabase usage warnings (Supabase restriction alerts). Fixed critical vulnerability in `@isaacs/brace-expansion`. Verified with `npm run build`.

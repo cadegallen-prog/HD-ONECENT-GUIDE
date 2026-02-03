@@ -25,5 +25,5 @@ export const metadata: Metadata = {
 }
 
 export default function WhatArePenniesRedirect() {
-  redirect("/#introduction")
+  redirect("/guide/inside-scoop")
 }

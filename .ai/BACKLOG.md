@@ -28,7 +28,20 @@ Each AI session should:
   - Verification evidence includes one bundle for dev mode and one for test mode
 - **Plan:** `.ai/plans/agent-autonomy-hardening.md`
 
-### 1. Data Pipeline Reliability - Pre-scrape + Cron Auth (P0-0)
+### 1. Bloat Control - Ongoing Archive-First Hygiene
+
+- **Problem:** Deprecated/legacy/single-use docs and scripts keep accumulating, increasing AI context noise and decision drift.
+- **Done means:**
+  - Add a repeatable prune-audit check that reports unreferenced docs/scripts and duplicate guidance hotspots.
+  - Run archive-first prune in small, reversible batches with per-snapshot `INDEX.md` manifests.
+  - Keep startup guardrails enforcing archive ignore by default.
+  - Document a restore protocol that requires explicit founder request.
+- **Current snapshots:**
+  - `archive/docs-pruned/2026-02-03/`
+  - `archive/docs-pruned/2026-02-03-pass2/`
+  - `archive/scripts-pruned/2026-02-03/`
+
+### 2. Data Pipeline Reliability - Pre-scrape + Cron Auth (P0-0)
 
 - **Problem:** GitHub-hosted runners are blocked upstream (**403 + Cloudflare “Just a moment...”**), so scheduled scraping cannot be the primary freshness path right now. Separately, Vercel cron endpoints will return 401 if `CRON_SECRET` is missing/mismatched.
 - **Done means:**
@@ -38,7 +51,7 @@ Each AI session should:
   - Vercel cron logs show 200s (not 401s) for `/api/cron/seed-penny-list`, `/api/cron/trickle-finds`, `/api/cron/send-weekly-digest`
 - **Approach options (later):** self-hosted runner (home IP / VPS) vs paid residential proxy vs new data source (avoid upstream dependency where possible)
 
-### 2. SEO Improvement - Schema Markup + Internal Linking (P0-3)
+### 3. SEO Improvement - Schema Markup + Internal Linking (P0-3)
 
 - **Problem:** Zero non-branded organic clicks. Position 11.6 for "home depot penny list". 100% dependent on Facebook.
 - **Done means:**
@@ -56,6 +69,7 @@ Each AI session should:
 
 ## ✅ Recently Completed
 
+- **2026-02-03:** Archive-first bloat pass 2 completed: moved 7 additional docs to `archive/docs-pruned/2026-02-03-pass2/` and 28 unreferenced/single-use scripts to `archive/scripts-pruned/2026-02-03/`, with restore manifests added.
 - **2026-02-03:** Docs bloat archive-first pass completed. Pruned docs moved to `archive/docs-pruned/2026-02-03/` (no hard deletions), with default-ignore policy now codified in `AGENTS.md` and `.ai/START_HERE.md`. Restore remains explicit via `git mv archive/docs-pruned/...`.
 - **2026-01-17:** P0-4c (Weekly Email Cron) - Implemented weekly email digest sent every Sunday 8 AM UTC to all active subscribers. Queries new penny items from last 7 days, renders responsive React email template, sends via Resend API with proper unsubscribe links. All 4 gates passing.
 - **2026-01-16:** P0-4b (Email Signup Form) - Implemented email signup form on `/penny-list` with `email_subscribers` table, subscribe/unsubscribe endpoints, dismissible UI, localStorage persistence, and GA4 tracking. All 4 gates passing.
