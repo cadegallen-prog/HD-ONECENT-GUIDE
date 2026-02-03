@@ -5,19 +5,17 @@ export function ResponsibleHunting() {
       {/* SECTION VIII: RESPONSIBLE HUNTING */}
       {/* ============================================ */}
       <section id="responsible-hunting" className="scroll-mt-28">
-        <h2 className="section-heading">
-          <span className="text-[var(--text-primary)]">VIII.</span> Responsible Penny Hunting
-        </h2>
-
         <p>
           Penny hunting thrives on community, strategy, and discretion. Acting irresponsibly not
           only gets you shut down - it can cause stores to crack down harder on{" "}
           <strong>everyone</strong>.
         </p>
 
+        <h2 className="text-2xl font-semibold mt-8 mb-6">Core Guidelines</h2>
+
         <div className="grid md:grid-cols-2 gap-6 my-6">
           <div className="p-4 rounded-lg border">
-            <h4 className="font-semibold mb-3">1. Be Respectful to Store Employees</h4>
+            <h3 className="text-lg font-semibold mb-3">1. Be Respectful to Store Employees</h3>
             <p className="text-sm text-muted-foreground">
               Even if you're frustrated, caught off-guard, or denied a penny sale: stay calm, stay
               polite, avoid confrontations. Staff are following orders - not making personal
@@ -25,21 +23,21 @@ export function ResponsibleHunting() {
             </p>
           </div>
           <div className="p-4 rounded-lg border">
-            <h4 className="font-semibold mb-3">2. Don't Be Loud About Finds</h4>
+            <h3 className="text-lg font-semibold mb-3">2. Don't Be Loud About Finds</h3>
             <p className="text-sm text-muted-foreground">
               Getting loud, excited, or bragging at checkout draws attention. Don't show receipts to
               other customers, tell staff about your score, or film inside the store.
             </p>
           </div>
           <div className="p-4 rounded-lg border">
-            <h4 className="font-semibold mb-3">3. Use Community Resources Wisely</h4>
+            <h3 className="text-lg font-semibold mb-3">3. Use Community Resources Wisely</h3>
             <p className="text-sm text-muted-foreground">
               Share helpful info like UPCs, tag dates, or clearance cycles. Post accurate finds -
               not rumors. Don't flood groups with repeat questions.
             </p>
           </div>
           <div className="p-4 rounded-lg border">
-            <h4 className="font-semibold mb-3">4. Know When to Walk Away</h4>
+            <h3 className="text-lg font-semibold mb-3">4. Know When to Walk Away</h3>
             <p className="text-sm text-muted-foreground">
               If an employee or manager denies the sale, just move on. It's not worth getting banned
               from the store. Better to lose one item than burn access to future deals.
@@ -68,10 +66,7 @@ export function ResponsibleHunting() {
       {/* SECTION IX: CONCLUSION */}
       {/* ============================================ */}
       <section id="conclusion" className="scroll-mt-28">
-        <h2 className="section-heading">
-          <span className="text-[var(--text-primary)]">IX.</span> Conclusion: Tips for Success
-        </h2>
-
+        <h2 className="section-heading">Conclusion: Tips for Success</h2>
         <p>
           Whether you're just starting out or you've been hunting for a while, here's what matters
           most: <strong>know the system, stay patient, play it smart, and stay respectful.</strong>

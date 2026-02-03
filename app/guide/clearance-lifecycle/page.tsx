@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { EthicalDisclosure } from "@/components/guide/EthicalDisclosure"
 import { ClearanceLifecycle } from "@/components/guide/sections/ClearanceLifecycle"
 import { GuideNav } from "@/components/guide/GuideNav"
 
@@ -19,6 +20,8 @@ export default function ClearanceLifecyclePage() {
           The journey from full price to $0.01 follows a predictable pattern. Here's how to spot it.
         </p>
       </div>
+
+      <EthicalDisclosure />
 
       <ClearanceLifecycle />
 

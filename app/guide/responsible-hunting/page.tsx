@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { EthicalDisclosure } from "@/components/guide/EthicalDisclosure"
 import { ResponsibleHunting } from "@/components/guide/sections/ResponsibleHunting"
 import { GuideNav } from "@/components/guide/GuideNav"
 
@@ -19,6 +20,8 @@ export default function ResponsibleHuntingPage() {
           Keep the game alive by hunting smart, safe, and respectful.
         </p>
       </div>
+
+      <EthicalDisclosure />
 
       <ResponsibleHunting />
 

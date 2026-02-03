@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { EthicalDisclosure } from "@/components/guide/EthicalDisclosure"
 import { FactVsFiction } from "@/components/guide/sections/FactVsFiction"
 import { GuideNav } from "@/components/guide/GuideNav"
 
@@ -19,6 +20,8 @@ export default function FactVsFictionPage() {
           Separating community myths from verified store policies.
         </p>
       </div>
+
+      <EthicalDisclosure />
 
       <FactVsFiction />
 

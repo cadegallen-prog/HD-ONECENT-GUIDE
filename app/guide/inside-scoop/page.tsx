@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { EthicalDisclosure } from "@/components/guide/EthicalDisclosure"
 import { InsideScoop } from "@/components/guide/sections/InsideScoop"
 import { GuideNav } from "@/components/guide/GuideNav"
 
@@ -19,6 +20,8 @@ export default function InsideScoopPage() {
           Understand the "why" behind policies, ZMA, and why stores try to stop penny sales.
         </p>
       </div>
+
+      <EthicalDisclosure />
 
       <InsideScoop />
 

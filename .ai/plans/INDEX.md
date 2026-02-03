@@ -21,7 +21,8 @@
 
 ## Active / Noteworthy Plans
 
-| Plan                                    | Status                     | Priority          | Last updated | Notes                                        |
-| --------------------------------------- | -------------------------- | ----------------- | ------------ | -------------------------------------------- |
-| `.ai/plans/my-list-elevation.md`        | Approved (Not Implemented) | P1 (Retention)    | 2026-01-21   | 3-phase roadmap; strict infra reuse          |
-| `.ai/plans/ad-monetization-strategy.md` | Planning                   | P1 (Monetization) | 2026-01-26   | Monumetric vs Ezoic; awaiting email response |
+| Plan                                    | Status                     | Priority          | Last updated | Notes                                          |
+| --------------------------------------- | -------------------------- | ----------------- | ------------ | ---------------------------------------------- |
+| `.ai/plans/agent-autonomy-hardening.md` | Planning                   | P0 (Enablement)   | 2026-02-03   | Port lifecycle + access matrix + observability |
+| `.ai/plans/my-list-elevation.md`        | Approved (Not Implemented) | P1 (Retention)    | 2026-01-21   | 3-phase roadmap; strict infra reuse            |
+| `.ai/plans/ad-monetization-strategy.md` | Planning                   | P1 (Monetization) | 2026-01-26   | Monumetric vs Ezoic; awaiting email response   |

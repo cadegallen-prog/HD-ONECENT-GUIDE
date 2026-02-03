@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge"
-import { CheckCircle2, ShoppingCart, Store, XCircle } from "lucide-react"
+import { CheckCircle2, XCircle } from "lucide-react"
 
 export function InStoreStrategy() {
   return (
@@ -8,18 +8,13 @@ export function InStoreStrategy() {
       {/* SECTION IV: IN-STORE HUNTING */}
       {/* ============================================ */}
       <section id="in-store-hunting" className="scroll-mt-28">
-        <h2 className="section-heading">
-          <Store className="h-6 w-6 text-[var(--text-muted)]" />
-          <span className="text-[var(--text-primary)]">IV.</span> In-Store Penny Hunting Strategies
-        </h2>
-
         <p>
           Once you're in the store, your goal is to find penny-priced items that haven't yet been
           pulled from the shelves. These are usually clearance items that slipped through the
           cracks.
         </p>
 
-        <h3 className="text-xl font-semibold mt-8 mb-4">Where to Look</h3>
+        <h2 className="text-2xl font-semibold mt-8 mb-4">Where to Look</h2>
 
         <div className="grid md:grid-cols-2 gap-6 my-6">
           <div className="bg-[var(--bg-card)] p-4 rounded-lg border border-[var(--border-default)]">
@@ -59,7 +54,7 @@ export function InStoreStrategy() {
           </div>
         </div>
 
-        <h3 className="text-xl font-semibold mt-8 mb-4">What to Look For</h3>
+        <h2 className="text-2xl font-semibold mt-8 mb-4">What to Look For</h2>
         <p>Certain categories tend to hit penny status more often:</p>
         <div className="flex flex-wrap gap-2 my-4">
           <Badge>Hardware</Badge>
@@ -85,7 +80,7 @@ export function InStoreStrategy() {
           </div>
         </div>
 
-        <h3 className="text-xl font-semibold mt-8 mb-4">How to Check the Price (Discreetly)</h3>
+        <h2 className="text-2xl font-semibold mt-8 mb-4">How to Check the Price (Discreetly)</h2>
 
         <div className="content-panel space-y-4 my-6">
           <h4 className="font-semibold text-[var(--status-success)]">
@@ -131,9 +126,9 @@ export function InStoreStrategy() {
           </ul>
         </div>
 
-        <h3 className="text-xl font-semibold mt-8 mb-4">
+        <h2 className="text-2xl font-semibold mt-8 mb-4">
           Overhead Items: High-Risk, Mixed Results
-        </h3>
+        </h2>
         <div className="content-panel space-y-6">
           <p>Items stored overhead present a unique challenge - and some real risks:</p>
 
@@ -174,11 +169,7 @@ export function InStoreStrategy() {
       {/* SECTION V: CHECKOUT CHALLENGE */}
       {/* ============================================ */}
       <section id="checkout" className="scroll-mt-28">
-        <h2 className="section-heading">
-          <ShoppingCart className="h-6 w-6 text-[var(--text-muted)]" />
-          <span className="text-[var(--text-primary)]">V.</span> The Checkout Challenge
-        </h2>
-
+        <h2 className="section-heading">The Checkout Challenge</h2>
         <p>
           You found a penny item. Now comes the tricky part: getting it through checkout without
           issues.

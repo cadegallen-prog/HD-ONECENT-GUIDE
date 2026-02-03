@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { CheckCircle2, Search, ShoppingCart, Store, XCircle } from "lucide-react"
+import { CheckCircle2 } from "lucide-react"
 
 export function ClearanceLifecycle() {
   return (
@@ -16,11 +16,6 @@ export function ClearanceLifecycle() {
       {/* SECTION II: CLEARANCE LIFECYCLE */}
       {/* ============================================ */}
       <section id="clearance-lifecycle" className="scroll-mt-28">
-        <h2 className="section-heading">
-          <span className="text-[var(--text-primary)]">II.</span> Understanding the Clearance
-          Lifecycle
-        </h2>
-
         <p>
           At Home Depot, clearance items follow a markdown sequence that may eventually lead to the
           $0.01 "penny" status. While unofficial, two distinct markdown patterns - or{" "}
@@ -28,7 +23,7 @@ export function ClearanceLifecycle() {
         </p>
 
         {/* Cadence A */}
-        <h3 className="text-xl font-semibold mt-8 mb-4">Clearance Cadence A (Approx. 13 Weeks)</h3>
+        <h2 className="text-2xl font-semibold mt-8 mb-4">Clearance Cadence A (Approx. 13 Weeks)</h2>
         <Table>
           <TableHeader>
             <TableRow>
@@ -80,7 +75,7 @@ export function ClearanceLifecycle() {
         </Table>
 
         {/* Cadence B */}
-        <h3 className="text-xl font-semibold mt-8 mb-4">Clearance Cadence B (Approx. 7 Weeks)</h3>
+        <h2 className="text-2xl font-semibold mt-8 mb-4">Clearance Cadence B (Approx. 7 Weeks)</h2>
         <Table>
           <TableHeader>
             <TableRow>
@@ -132,9 +127,9 @@ export function ClearanceLifecycle() {
         </Table>
 
         {/* Price Ending Cheat Sheet */}
-        <h3 className="text-xl font-semibold mt-8 mb-4">
+        <h2 className="text-2xl font-semibold mt-8 mb-4">
           Quick Reference: Price Ending Cheat Sheet
-        </h3>
+        </h2>
         <Table>
           <TableHeader>
             <TableRow>
@@ -231,9 +226,7 @@ export function ClearanceLifecycle() {
       {/* SECTION II-A: VISUAL TIMELINE + TAG EXAMPLES */}
       {/* ============================================ */}
       <section id="clearance-timeline" className="scroll-mt-28 space-y-6">
-        <h2 className="section-heading">
-          <span className="text-[var(--text-primary)]">II-A.</span> Clearance Cadence Timeline
-        </h2>
+        <h2 className="section-heading">Clearance Cadence Timeline</h2>
         <p className="text-[var(--text-secondary)]">
           Typical markdown progression before items hit $0.01. Timing varies by store/category, but
           the sequence stays consistent.
@@ -328,9 +321,7 @@ export function ClearanceLifecycle() {
       {/* SECTION II-B: VISUAL LABEL RECOGNITION */}
       {/* ============================================ */}
       <section id="visual-labels" className="scroll-mt-28 space-y-6">
-        <h2 className="section-heading">
-          <span className="text-[var(--text-primary)]">II-B.</span> Visual Label Recognition
-        </h2>
+        <h2 className="section-heading">Visual Label Recognition</h2>
         <p className="text-[var(--text-secondary)]">
           Know what to look for. These are real Home Depot clearance labels at different markdown
           stages. The price ending tells you how close an item is to penny status.
@@ -467,9 +458,7 @@ export function ClearanceLifecycle() {
       {/* SECTION II-C: OVERHEAD HUNTING */}
       {/* ============================================ */}
       <section id="overhead-hunting" className="scroll-mt-28 space-y-6">
-        <h2 className="section-heading">
-          <span className="text-[var(--text-primary)]">II-C.</span> Overhead Hunting
-        </h2>
+        <h2 className="section-heading">Overhead Hunting</h2>
         <p className="text-[var(--text-secondary)]">
           Clearance items often get moved to the overhead (top shelves above the aisles) when
           they're being phased out. These are prime penny targets — but there's risk when asking

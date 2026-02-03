@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { CheckCircle2, Search, XCircle } from "lucide-react"
+import { CheckCircle2, XCircle } from "lucide-react"
 
 export function DigitalPreHunt() {
   return (
@@ -15,12 +15,6 @@ export function DigitalPreHunt() {
       {/* SECTION III: PRE-HUNT INTELLIGENCE */}
       {/* ============================================ */}
       <section id="digital-tools" className="scroll-mt-28">
-        <h2 className="section-heading">
-          <Search className="h-6 w-6 text-[var(--text-muted)]" />
-          <span className="text-[var(--text-primary)]">III.</span> Pre-Hunt Intelligence: Using
-          Digital Tools
-        </h2>
-
         <p>
           Before heading into a store, use Home Depot's app or website to scout items that might
           have reached penny status. It won't show you the $0.01 price directly - but it can give
@@ -51,7 +45,7 @@ export function DigitalPreHunt() {
           </div>
         </div>
 
-        <h3 className="text-xl font-semibold mt-8 mb-4">Interpreting Online Status</h3>
+        <h2 className="text-2xl font-semibold mt-8 mb-4">Interpreting Online Status</h2>
         <Table>
           <TableHeader>
             <TableRow>
@@ -99,7 +93,7 @@ export function DigitalPreHunt() {
           </div>
         </div>
 
-        <h3 className="text-xl font-semibold mt-8 mb-4">Limitations to Keep in Mind</h3>
+        <h2 className="text-2xl font-semibold mt-8 mb-4">Limitations to Keep in Mind</h2>
         <ul>
           <li>Online data isn't real-time - there can be a delay of 1-2 days</li>
           <li>
@@ -108,7 +102,7 @@ export function DigitalPreHunt() {
           <li>You still need in-store confirmation to be sure - this is just a filtering step</li>
         </ul>
 
-        <h3 className="text-xl font-semibold mt-8 mb-4">When to Go In-Store</h3>
+        <h2 className="text-2xl font-semibold mt-8 mb-4">When to Go In-Store</h2>
         <p>Only go check in person if:</p>
         <ul>
           <li>You've found an item that shows no local stock but is still listed online</li>
@@ -123,10 +117,7 @@ export function DigitalPreHunt() {
       {/* SECTION III-A: HOW TO VERIFY PENNY STATUS IN-STORE */}
       {/* ============================================ */}
       <section id="verify-penny-status" className="scroll-mt-28 space-y-6">
-        <h2 className="section-heading">
-          <span className="text-[var(--text-primary)]">III-A.</span> How to Verify Penny Status
-          In-Store
-        </h2>
+        <h2 className="section-heading">How to Verify Penny Status In-Store</h2>
         <p className="text-[var(--text-secondary)]">
           The only way to confirm if an item is truly at $0.01 is by getting an employee to scan the
           barcode or look up the SKU. Here's the safest way to do it without losing the item.

@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { EthicalDisclosure } from "@/components/guide/EthicalDisclosure"
 import { InStoreStrategy } from "@/components/guide/sections/InStoreStrategy"
 import { GuideNav } from "@/components/guide/GuideNav"
 
@@ -20,6 +21,8 @@ export default function InStoreStrategyPage() {
           successfully.
         </p>
       </div>
+
+      <EthicalDisclosure />
 
       <InStoreStrategy />
 

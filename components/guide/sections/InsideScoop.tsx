@@ -5,17 +5,12 @@ export function InsideScoop() {
       {/* SECTION VI: INSIDE SCOOP */}
       {/* ============================================ */}
       <section id="internal-operations" className="scroll-mt-28">
-        <h2 className="section-heading">
-          <span className="text-[var(--text-primary)]">VI.</span> The Inside Scoop: Internal
-          Operations
-        </h2>
-
         <p>
           Understanding Home Depot's internal operations helps you grasp why penny items exist, why
           staff act the way they do, and how the system works behind the scenes.
         </p>
 
-        <h3 className="text-xl font-semibold mt-8 mb-4">Penny Items = Not Meant for Sale</h3>
+        <h2 className="text-2xl font-semibold mt-8 mb-4">Penny Items = Not Meant for Sale</h2>
         <p>
           Home Depot doesn't price things at $0.01 for customers - it's an internal accounting
           mechanism triggered by <strong>Zero Margin Adjustment (ZMA)</strong>.
@@ -42,7 +37,7 @@ export function InsideScoop() {
           </div>
         </div>
 
-        <h3 className="text-xl font-semibold mt-8 mb-4">Employee Policy: Strict Rules</h3>
+        <h2 className="text-2xl font-semibold mt-8 mb-4">Employee Policy: Strict Rules</h2>
         <ul>
           <li>
             <strong>Employees are forbidden from buying penny items</strong> - doing so results in
@@ -55,7 +50,7 @@ export function InsideScoop() {
           <li>This prevents staff from hiding items for themselves</li>
         </ul>
 
-        <h3 className="text-xl font-semibold mt-8 mb-4">FIRST Phones & the Clearance App</h3>
+        <h2 className="text-2xl font-semibold mt-8 mb-4">FIRST Phones & the Clearance App</h2>
         <p>
           Home Depot equips staff with handheld devices called FIRST phones. The{" "}
           <strong>Clearance App</strong> lets associates:
@@ -69,7 +64,7 @@ export function InsideScoop() {
           This tool helps staff actively search for and remove penny items from the sales floor.
         </p>
 
-        <h3 className="text-xl font-semibold mt-8 mb-4">Why Management Cares So Much</h3>
+        <h2 className="text-2xl font-semibold mt-8 mb-4">Why Management Cares So Much</h2>
         <p>Managers are pressured to remove penny items because they:</p>
         <ul>
           <li>Hurt shrink metrics (loss due to theft, damage, system errors)</li>
@@ -78,7 +73,7 @@ export function InsideScoop() {
           <li>Disrupt inventory accuracy for automation and reorders</li>
         </ul>
 
-        <h3 className="text-xl font-semibold mt-8 mb-4">SOP Reality: Policy vs. Practice</h3>
+        <h2 className="text-2xl font-semibold mt-8 mb-4">SOP Reality: Policy vs. Practice</h2>
         <p>Enforcement varies:</p>
         <ul>
           <li>Some managers will quietly honor the sale to avoid escalation</li>

@@ -4,6 +4,66 @@
 
 ---
 
+## 2026-02-03 - Adsense Recovery - Atomize Guide & E-E-A-T
+
+**Goal:** Refactor monolithic `/guide` into 6 indexed sub-pages and add E-E-A-T pages (About, Contact, Privacy, Terms) for AdSense approval.
+
+**Status:** ✅ Completed & verified.
+
+### Changes
+
+- **Guide Atomization:**
+  - Split `components/GuideContent.tsx` (5,913 words) into `components/guide/sections/*.tsx`.
+  - Created 6 new routes:
+    - `/guide/clearance-lifecycle`
+    - `/guide/digital-pre-hunt`
+    - `/guide/in-store-strategy`
+    - `/guide/inside-scoop`
+    - `/guide/fact-vs-fiction`
+    - `/guide/responsible-hunting`
+  - Refreshed `/guide` hub with Table of Contents.
+  - Added `GuideNav.tsx` for inter-chapter navigation.
+- **E-E-A-T & Quality Fixes (Critique Response):**
+  - **Editorial Authority:** Added `EditorialBlock` (Author, Date, Purpose) to Guide Hub.
+  - **Ethical Framing:** Added `EthicalDisclosure` to Hub and all sub-pages.
+  - **Heading Hierarchy:** Validated H1 (Title) -> H2 (Sections) structure across all files; removed duplicate H2s from section components.
+  - **TOC:** Renamed "Part X" to "Chapter X".
+- **E-E-A-T Pages:**
+  - Created `/about`, `/contact`, `/privacy-policy`, `/terms-of-service`.
+- **E-E-A-T & Quality Fixes (Critique Response):**
+  - **Editorial Authority:** Added `EditorialBlock` (Author, Date, Purpose) to Guide Hub.
+  - **Ethical Framing:** Added `EthicalDisclosure` to Hub and all sub-pages.
+  - **Heading Hierarchy:** Validated H1 (Title) -> H2 (Sections) structure across all files; removed duplicate H2s from section components.
+  - **TOC:** Renamed "Part X" to "Chapter X".
+- **Cleanup:** Deleted obsolete `components/GuideContent.tsx`.
+
+### Verification
+
+- **Lint:** Passed (0 errors).
+- **Build:** Passed (Routes generated).
+- **Unit Tests:** Passed (26/26).
+
+## 2026-02-03 - Codex - Docs: Agent autonomy hardening plan + memory anchors
+
+**Goal:** Persist a decision-complete plan so port-3001 reliability and access/permission work does not get lost across sessions.
+
+**Status:** ✅ Completed (docs-only).
+
+### Changes
+
+- Created canonical plan: `.ai/plans/agent-autonomy-hardening.md` (phased implementation + defaults).
+- Registered plan in `.ai/plans/INDEX.md` with P0 (Enablement) priority.
+- Added current-state audit: `.ai/topics/AGENT_AUTONOMY_CURRENT.md`.
+- Updated `.ai/STATE.md` with the new enablement workstream.
+- Updated `.ai/BACKLOG.md` to add Phase 1 as a top P0 item.
+- Attempted to use the `pc-plan-scaffold` helper script; discovered its index parser expects a stricter table header pattern than the current `.ai/plans/INDEX.md`, so index registration was completed manually.
+
+### Verification
+
+- Docs-only change; quality gates not run.
+
+---
+
 ## 2026-02-01 - Codex - Fix: staging warmer retail_price fill rate
 
 **Goal:** Stop `enrichment_staging` from scraping “everything except retail_price”.
@@ -61,26 +121,3 @@
 ### Verification
 
 - Bundle: `reports/verification/2026-01-30T06-19-26/summary.md` (lint ✅, build ✅, unit ✅, e2e ✅)
-
----
-
-## 2026-01-30 - Codex - Fix: retail price accuracy (staging vs HomeDepot.com)
-
-**Goal:** Stop showing obviously wrong “Retail” strike-through prices on Penny List cards (e.g., HomeDepot.com shows $139 but PennyCentral shows $49).
-
-**Status:** ✅ Completed & verified locally.
-
-### Root cause (confirmed)
-
-- `retail_price` was being copied from `enrichment_staging` into `"Penny List"` during submission enrichment (`consume_enrichment_for_penny_item` RPC) and during cron seeding/trickling.
-- That upstream “retail” value can be store/region-specific clearance context (and/or stale), so it can differ drastically from HomeDepot.com.
-
-### Changes
-
-- `supabase/migrations/022_consume_enrichment_rpc_skip_retail_price.sql`: Stops copying staging `retail_price` into `"Penny List"`.
-- `app/api/cron/seed-penny-list/route.ts` and `app/api/cron/trickle-finds/route.ts`: Stops copying staging `retail_price` (leave null for SerpApi).
-- `scripts/serpapi-enrich.ts`: Pins SerpApi `delivery_zip` (env: `SERPAPI_DELIVERY_ZIP`, default `30303`) for consistency.
-
-### Verification
-
-- Bundle: `reports/verification/2026-01-30T00-30-06/summary.md` (lint ✅, build ✅, unit ✅, e2e ✅)

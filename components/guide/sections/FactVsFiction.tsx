@@ -14,11 +14,6 @@ export function FactVsFiction() {
       {/* SECTION VII: FACT VS FICTION */}
       {/* ============================================ */}
       <section id="fact-vs-fiction" className="scroll-mt-28">
-        <h2 className="section-heading">
-          <span className="text-[var(--text-primary)]">VII.</span> Research Deep Dive: Fact vs
-          Fiction
-        </h2>
-
         <p>
           Despite how widespread penny hunting has become, Home Depot has never publicly confirmed
           the full clearance-to-penny process. Most of what we know comes from community
@@ -26,7 +21,7 @@ export function FactVsFiction() {
           clearance cycles work.
         </p>
 
-        <h3 className="text-xl font-semibold mt-8 mb-4">What's Real vs. What's Rumor</h3>
+        <h2 className="text-2xl font-semibold mt-8 mb-4">What's Real vs. What's Rumor</h2>
         <Table>
           <TableHeader>
             <TableRow>
@@ -95,7 +90,7 @@ export function FactVsFiction() {
           </TableBody>
         </Table>
 
-        <h3 className="text-xl font-semibold mt-8 mb-4">How Dependable Is Community Intel?</h3>
+        <h2 className="text-2xl font-semibold mt-8 mb-4">How Dependable Is Community Intel?</h2>
         <p>Very - but with a few caveats:</p>
         <ul>
           <li>

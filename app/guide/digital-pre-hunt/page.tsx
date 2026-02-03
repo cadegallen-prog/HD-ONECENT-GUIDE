@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { EthicalDisclosure } from "@/components/guide/EthicalDisclosure"
 import { DigitalPreHunt } from "@/components/guide/sections/DigitalPreHunt"
 import { GuideNav } from "@/components/guide/GuideNav"
 
@@ -19,6 +20,8 @@ export default function DigitalPreHuntPage() {
           Don't drive blind. Use digital tools to scout your local store inventory first.
         </p>
       </div>
+
+      <EthicalDisclosure />
 
       <DigitalPreHunt />
 

@@ -55,7 +55,7 @@ export function TableOfContents() {
             </div>
             <div>
               <div className="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider mb-1">
-                Part {index + 1}
+                Chapter {index + 1}
               </div>
               <h3 className="font-bold text-[var(--text-primary)] group-hover:text-[var(--cta-primary)] transition-colors mb-2">
                 {chapter.title}

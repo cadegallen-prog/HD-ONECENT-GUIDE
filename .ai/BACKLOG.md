@@ -1,6 +1,6 @@
 # Backlog (Top Priority Items)
 
-**Last updated:** Jan 25, 2026
+**Last updated:** Feb 3, 2026
 **Rule:** Keep ≤10 items. Archive completed/deferred items.
 
 **Auto-archive:** Full backlog history preserved in `archive/backlog-history/`
@@ -18,7 +18,17 @@ Each AI session should:
 
 ## P0 - Do Next (Analytics-Driven Growth)
 
-### 0. Data Pipeline Reliability - Pre-scrape + Cron Auth (P0-0)
+### 0. Agent Autonomy Hardening - Phase 1 (Port 3001 Reliability Contract)
+
+- **Problem:** Local dev-server ownership and verification mode selection are easy to misapply, creating restart-loop confusion and blocking agent momentum.
+- **Done means:**
+  - `scripts/ai-doctor.ts`, `scripts/ai-verify.ts`, and `scripts/ai-proof.ts` all use the same explicit server-state contract (`healthy 3001`, `3001 free`, `3001 unhealthy`)
+  - `ai:verify` has deterministic non-destructive fallback behavior when 3001 is unavailable/unhealthy
+  - Policy/docs are aligned in one pass (`AGENTS.md`, `.ai/CRITICAL_RULES.md`, `.ai/VERIFICATION_REQUIRED.md`, `docs/skills/local-dev-faststart.md`)
+  - Verification evidence includes one bundle for dev mode and one for test mode
+- **Plan:** `.ai/plans/agent-autonomy-hardening.md`
+
+### 1. Data Pipeline Reliability - Pre-scrape + Cron Auth (P0-0)
 
 - **Problem:** GitHub-hosted runners are blocked upstream (**403 + Cloudflare “Just a moment...”**), so scheduled scraping cannot be the primary freshness path right now. Separately, Vercel cron endpoints will return 401 if `CRON_SECRET` is missing/mismatched.
 - **Done means:**
@@ -28,7 +38,7 @@ Each AI session should:
   - Vercel cron logs show 200s (not 401s) for `/api/cron/seed-penny-list`, `/api/cron/trickle-finds`, `/api/cron/send-weekly-digest`
 - **Approach options (later):** self-hosted runner (home IP / VPS) vs paid residential proxy vs new data source (avoid upstream dependency where possible)
 
-### 1. SEO Improvement - Schema Markup + Internal Linking (P0-3)
+### 2. SEO Improvement - Schema Markup + Internal Linking (P0-3)
 
 - **Problem:** Zero non-branded organic clicks. Position 11.6 for "home depot penny list". 100% dependent on Facebook.
 - **Done means:**
