@@ -40,8 +40,10 @@ Each AI session should:
   - `archive/docs-pruned/2026-02-03/`
   - `archive/docs-pruned/2026-02-03-pass2/`
   - `archive/docs-pruned/2026-02-03-pass3/`
+  - `archive/docs-pruned/2026-02-03-pass4/`
   - `archive/scripts-pruned/2026-02-03/`
   - `archive/scripts-pruned/2026-02-03-pass2/`
+  - `archive/scripts-pruned/2026-02-03-pass3/`
 
 ### 2. Data Pipeline Reliability - Pre-scrape + Cron Auth (P0-0)
 
@@ -71,6 +73,7 @@ Each AI session should:
 
 ## ✅ Recently Completed
 
+- **2026-02-03:** Archive-first bloat pass 4 completed: moved `.ai/enablement-prompts/*` into `archive/docs-pruned/2026-02-03-pass4/`, moved low-reference helper `scripts/normalize-image-urls.ts` into `archive/scripts-pruned/2026-02-03-pass3/`, added per-snapshot manifests, and updated `.ai/AI_ENABLEMENT_BLUEPRINT.md` + `.gitignore` (`/reports/playwright/console-report-*.json`) to reduce future noise.
 - **2026-02-03:** Archive-first bloat pass 3 completed: moved additional legacy docs (`.ai/HAIKU-IMPLEMENTATION-GUIDE.md`, `.ai/PENNY_CARD_DESIGN_VISION.md`, `docs/HOW-CADE-ADDS-STOCK-PHOTOS.md`) and additional one-off scripts (`scripts/page-improvement-wizard.ps1`, legacy enrichment merge helpers) with restore manifests under `archive/docs-pruned/2026-02-03-pass3/` and `archive/scripts-pruned/2026-02-03-pass2/`.
 - **2026-02-03:** Archive-first bloat pass 2 completed: moved 7 additional docs to `archive/docs-pruned/2026-02-03-pass2/` and 28 unreferenced/single-use scripts to `archive/scripts-pruned/2026-02-03/`, with restore manifests added.
 - **2026-02-03:** Docs bloat archive-first pass completed. Pruned docs moved to `archive/docs-pruned/2026-02-03/` (no hard deletions), with default-ignore policy now codified in `AGENTS.md` and `.ai/START_HERE.md`. Restore remains explicit via `git mv archive/docs-pruned/...`.

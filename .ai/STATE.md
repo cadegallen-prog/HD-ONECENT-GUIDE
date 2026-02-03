@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 3, 2026 (Large archive-first bloat reduction + autonomy planning + AdSense recovery)
+**Last updated:** Feb 3, 2026 (Archive-first bloat reduction pass 4 + autonomy planning + AdSense recovery)
 
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
@@ -11,8 +11,9 @@ Every AI session must update this after meaningful work.
 
 ## Current Sprint (Last 7 Days)
 
+- **2026-02-03 (Docs/scripts bloat reduction - pass 4):** Archived low-signal AI prompt-pack docs to `archive/docs-pruned/2026-02-03-pass4/` and a low-reference helper script to `archive/scripts-pruned/2026-02-03-pass3/`, preserving restore-path parity. Added new snapshot manifests, updated `.ai/AI_ENABLEMENT_BLUEPRINT.md` to the archived prompt-pack path, and added `.gitignore` coverage for generated Playwright console report artifacts. Verified with `npm run ai:verify -- test` (`reports/verification/2026-02-03T23-28-59/summary.md`).
 - **2026-02-03 (Docs/scripts bloat reduction - pass 3):** Archived additional legacy docs and one-off scripts while preserving deterministic restore paths: docs moved to `archive/docs-pruned/2026-02-03-pass3/`, scripts moved to `archive/scripts-pruned/2026-02-03-pass2/`. Added snapshot indexes and updated in-repo references (`.ai/CONTEXT.md`, `.ai/topics/UI_DESIGN.md`, `docs/legacy/README.md`). Verified with `npm run ai:verify -- test` (`reports/verification/2026-02-03T23-09-46/summary.md`).
-- **2026-02-03 (AdSense Compliance: SEO Pillars & Content Consolidation):** Restored 6 high-quality root pillar pages (e.g., `/what-are-pennies`, `/clearance-lifecycle`, `/inside-scoop`) and redirected legacy `/guide/xxx` sub-paths to them to resolve Duplicate Content issues. Implemented a feature-rich `/faq` page with Schema.org JSON-LD. Hardened `sitemap.ts` to include 23 high-value pillar URLs only. Pushed all changes after successful `npm run build` and `npm run test:e2e` (82+ tests passing).
+- **2026-02-03 (AdSense Compliance: SEO Pillars & Content Consolidation):** Restored 6 high-quality root pillar pages (e.g., `/what-are-pennies`, `/clearance-lifecycle`, `/inside-scoop`) and redirected legacy `/guide/xxx` sub-paths to them to resolve Duplicate Content issues. Implemented a feature-rich `/faq` page with Schema.org JSON-LD. Hardened `sitemap.ts` to include 20 high-value pillar URLs only. Pushed all changes after successful `npm run build` and `npm run test:e2e` (82+ tests passing).
 - **2026-02-03 (Docs/scripts bloat reduction - pass 2):** Archived an additional low-signal set into cold storage: 7 docs moved to `archive/docs-pruned/2026-02-03-pass2/` and 28 unreferenced/single-use scripts moved to `archive/scripts-pruned/2026-02-03/` (preserving exact restore paths). Added manifest files for both snapshots and updated startup guardrails so agents ignore both `archive/docs-pruned/**` and `archive/scripts-pruned/**` unless explicitly requested. Verified with `npm run ai:verify -- test` (`reports/verification/2026-02-03T22-49-40/summary.md`).
 - **2026-02-03 (Enablement: Agent Autonomy Hardening plan scaffold):** Added canonical planning docs for agent reliability and context retention: `.ai/plans/agent-autonomy-hardening.md` + `.ai/topics/AGENT_AUTONOMY_CURRENT.md`; registered in `.ai/plans/INDEX.md` and moved port-3001 reliability/access matrix into a phased, decision-complete plan. Docs-only change; quality gates not run.
 - **2026-02-03 (Security & Cron Pause):** Paused weekly digest cron (`/api/cron/send-weekly-digest`) and removed from Vercel schedule to address Supabase usage warnings. Fixed critical vulnerability in `@isaacs/brace-expansion`. Verified with `npm run build`.

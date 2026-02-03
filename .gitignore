@@ -8,6 +8,7 @@
 /reports/playwright/results/
 /reports/playwright/html/
 /reports/playwright/proof/
+/reports/playwright/console-report-*.json
 /reports/proof/
 /reports/verification/
 /reports/verification-*.png
