@@ -56,6 +56,7 @@ Each AI session should:
 
 ## ✅ Recently Completed
 
+- **2026-02-03:** Docs bloat archive-first pass completed. Pruned docs moved to `archive/docs-pruned/2026-02-03/` (no hard deletions), with default-ignore policy now codified in `AGENTS.md` and `.ai/START_HERE.md`. Restore remains explicit via `git mv archive/docs-pruned/...`.
 - **2026-01-17:** P0-4c (Weekly Email Cron) - Implemented weekly email digest sent every Sunday 8 AM UTC to all active subscribers. Queries new penny items from last 7 days, renders responsive React email template, sends via Resend API with proper unsubscribe links. All 4 gates passing.
 - **2026-01-16:** P0-4b (Email Signup Form) - Implemented email signup form on `/penny-list` with `email_subscribers` table, subscribe/unsubscribe endpoints, dismissible UI, localStorage persistence, and GA4 tracking. All 4 gates passing.
 - **2026-01-16:** P0-4a (PWA Install Prompt) - Implemented "Add to Home Screen" prompt on `/penny-list` with app icons (192px, 512px), PWA manifest, dismissible UI, localStorage persistence, and GA4 tracking. All 4 gates passing.

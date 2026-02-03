@@ -15,6 +15,8 @@ Follow this sequence before every session:
 5. **CONTRACT.md** - How we collaborate
 6. **DECISION_RIGHTS.md** - What needs approval
 
+**Default ignore list:** Do not load files under `archive/docs-pruned/**` unless Cade explicitly asks to restore/review archived docs.
+
 **First session only:** Read `GROWTH_STRATEGY.md` for business context
 
 **Then ask:** GOAL / WHY / DONE for this session
