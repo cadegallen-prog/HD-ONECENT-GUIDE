@@ -2,32 +2,56 @@ import type { Metadata } from "next"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
 import { EthicalDisclosure } from "@/components/guide/EthicalDisclosure"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
-import Link from "next/link"
 
 export const metadata: Metadata = {
-  title: "The Clearance Lifecycle - From Full Price to One Cent | Penny Central",
+  title: "Home Depot Store Pulse & ICE Metrics 2026 | Penny Central",
   description:
-    "Predicting the penny. Learn the exact pricing sequence Home Depot uses to clear out inventory, from .06 and .03 markdowns to the final penny.",
+    "The definitive guide to Home Depot's 2026 clearance system. Learn ICE metrics, the $.02 buffer, and Speed-to-Penny timelines.",
 }
 
-const milestones = [
+const iceMetrics = [
   {
-    price: ".06",
-    title: "First Major Markdown",
-    description:
-      "When an item ends in .06, it is officially on clearance. Usually, this stays for 3-6 weeks before the next drop.",
+    component: "Inactive (I)",
+    definition: "SKUs removed from replenishment pipeline",
+    impact: "First warning - no longer receiving stock",
   },
   {
-    price: ".03",
-    title: "Final Clearance",
-    description:
-      "The 'Yellow Tag' phase. This is the last stop before the penny. Items ending in .03 will almost certainly drop to .01 in exactly 3 weeks.",
+    component: "Clearance (C)",
+    definition: "Items in markdown cadence ($.06, $.03)",
+    impact: "Compressed to 2-3 weeks in high-volume depts",
   },
   {
-    price: ".01",
-    title: "The Penny",
-    description:
-      "The item has been removed from inventory systems. It is technically 'salvage' or 'ZMA' status and no longer belongs on the floor.",
+    component: "E-Velocity (E)",
+    definition: "Turn rate / movement speed metric",
+    impact: "Triggers aggressive liquidation when low",
+  },
+]
+
+const legacyComparison = [
+  {
+    feature: "Primary System",
+    legacy: "IMS",
+    current: "Store Pulse & BOLT",
+  },
+  {
+    feature: "Markdown Speed",
+    legacy: "3/6 week intervals",
+    current: "Speed-to-Penny, often skipping stages",
+  },
+  {
+    feature: "Final Buffer",
+    legacy: "None ($.03 → $.01)",
+    current: "$.02 Buffer: 48-hour MET signal",
+  },
+  {
+    feature: "Clearance Location",
+    legacy: "Dedicated clearance bays",
+    current: "Home Bay Only (endcaps phased out)",
+  },
+  {
+    feature: "Removal Team",
+    legacy: "General associates",
+    current: "MET Team (specialized)",
   },
 ]
 
@@ -35,8 +59,8 @@ export default function ClearanceLifecyclePage() {
   return (
     <PageShell width="default">
       <PageHeader
-        title="Clearance Lifecycle"
-        subtitle="The roadmap of a markdown. Understanding the 3-week cadence."
+        title="The 2026 Clearance System"
+        subtitle="How Store Pulse and ICE metrics transformed penny hunting."
       />
 
       <div className="flex justify-center mb-8">
@@ -48,49 +72,229 @@ export default function ClearanceLifecyclePage() {
 
         <Prose className="mt-8">
           <p className="mb-10 text-lg leading-relaxed">
-            Contrary to popular belief, items don't just 'randomly' become a penny. Home Depot uses
-            a standardized, predictable sequence for clearing out shelf space.
+            In 2025, Home Depot deployed Store Pulse—a real-time algorithmic liquidation system that
+            replaced the legacy IMS framework. This fundamentally changed how clearance items move
+            through the markdown cycle, compressing timelines and introducing new signals that penny
+            hunters must understand.
           </p>
 
-          <h2 className="text-2xl font-bold mb-6">The Three Price Tiers</h2>
+          <h2 className="text-2xl font-bold mb-6">The System Shift</h2>
+          <p className="mb-8">
+            Store Pulse uses algorithmic liquidation driven by real-time sales velocity and
+            inventory levels. Unlike the rigid IMS cadence, Store Pulse can skip markdown stages
+            entirely, accelerating items from $.06 directly to penny status in high-volume
+            departments. This shift introduced the ICE metrics framework—the internal dashboard that
+            dictates clearance flow.
+          </p>
 
-          <div className="space-y-6 mb-16">
-            {milestones.map((m, idx) => (
-              <div
-                key={idx}
-                className="flex gap-6 p-8 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-default)] shadow-sm"
-              >
-                <div className="text-4xl font-black text-[var(--cta-primary)] flex-shrink-0 pt-1">
-                  {m.price}
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold mb-2">{m.title}</h3>
-                  <p className="text-[var(--text-secondary)] leading-relaxed">{m.description}</p>
-                </div>
-              </div>
-            ))}
+          <h2 className="text-2xl font-bold mb-6">ICE Metrics Framework</h2>
+          <p className="mb-6">
+            ICE (Inactive, Clearance, E-Velocity) is the internal metric system that tracks items
+            through the liquidation pipeline. Understanding these components helps predict which
+            items will penny-out and when.
+          </p>
+
+          <div className="overflow-x-auto mb-12">
+            <table className="w-full border-collapse border border-[var(--border-default)]">
+              <thead>
+                <tr className="bg-[var(--bg-elevated)]">
+                  <th className="border border-[var(--border-default)] px-4 py-3 text-left font-bold">
+                    Component
+                  </th>
+                  <th className="border border-[var(--border-default)] px-4 py-3 text-left font-bold">
+                    Definition
+                  </th>
+                  <th className="border border-[var(--border-default)] px-4 py-3 text-left font-bold">
+                    2026 Impact
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {iceMetrics.map((metric, idx) => (
+                  <tr key={idx} className="hover:bg-[var(--bg-elevated)] transition-colors">
+                    <td className="border border-[var(--border-default)] px-4 py-3 font-semibold">
+                      {metric.component}
+                    </td>
+                    <td className="border border-[var(--border-default)] px-4 py-3">
+                      {metric.definition}
+                    </td>
+                    <td className="border border-[var(--border-default)] px-4 py-3">
+                      {metric.impact}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
 
-          <h2 className="text-2xl font-bold mb-6">The Success Trick</h2>
+          <h2 className="text-2xl font-bold mb-6">The $.02 Buffer: Critical Warning</h2>
+
+          <div className="p-6 mb-10 rounded-lg bg-[var(--bg-card)] border border-[var(--border-default)] border-l-4 border-l-[var(--status-warning)]">
+            <h3 className="text-xl font-bold mb-3 text-[var(--text-primary)]">
+              <span className="text-[var(--status-warning)]">48-Hour</span> Buffer Window
+            </h3>
+            <p className="mb-4 text-[var(--text-secondary)]">
+              The $.02 price point is not a traditional markdown—it's a 48-hour buffer that signals
+              the MET (Merchandising Execution Team) to pull the item. This "ghost stage" indicates
+              the item is 90% off and scheduled for removal.
+            </p>
+            <p className="font-semibold text-[var(--text-primary)]">
+              If you see $.02, you have a narrow window before it disappears entirely or drops to
+              $.01 and becomes ZMA (salvage).
+            </p>
+          </div>
+
+          <h2 className="text-2xl font-bold mb-6">Speed-to-Penny Timeline</h2>
           <p className="mb-6">
-            The secret to high-volume penny hunting isn't finding penny items—it's{" "}
-            <strong>finding .03 items</strong> and marking your calendar. If you see a shelf full of
-            .03 lighting fixtures today, there is a nearly 100% chance they will be $0.01 in three
-            weeks.
+            The 2026 system has dramatically compressed clearance cycles. The traditional 3-week or
+            6-week cadence is being replaced by aggressive "Speed-to-Penny" liquidation in
+            high-velocity departments.
           </p>
 
-          <div className="mt-12 p-8 rounded-2xl bg-[var(--cta-primary)] text-white">
-            <h3 className="text-xl font-bold mb-3">Want your own reminder system?</h3>
-            <p className="mb-6 opacity-90">
-              Our Trip Tracker helps you log .03 finds so you can get a notification when they're
-              likely to hit the penny.
-            </p>
-            <Link
-              href="/trip-tracker"
-              className="inline-block px-6 py-3 bg-white text-[var(--cta-primary)] rounded-full font-bold hover:bg-opacity-90 transition-all"
-            >
-              Try Trip Tracker (Free)
-            </Link>
+          <div className="overflow-x-auto mb-12">
+            <table className="w-full border-collapse border border-[var(--border-default)]">
+              <thead>
+                <tr className="bg-[var(--bg-elevated)]">
+                  <th className="border border-[var(--border-default)] px-4 py-3 text-left font-bold">
+                    Feature
+                  </th>
+                  <th className="border border-[var(--border-default)] px-4 py-3 text-left font-bold">
+                    Legacy (Pre-2025)
+                  </th>
+                  <th className="border border-[var(--border-default)] px-4 py-3 text-left font-bold">
+                    2026 Reality
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {legacyComparison.map((row, idx) => (
+                  <tr key={idx} className="hover:bg-[var(--bg-elevated)] transition-colors">
+                    <td className="border border-[var(--border-default)] px-4 py-3 font-semibold">
+                      {row.feature}
+                    </td>
+                    <td className="border border-[var(--border-default)] px-4 py-3">
+                      {row.legacy}
+                    </td>
+                    <td className="border border-[var(--border-default)] px-4 py-3">
+                      {row.current}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <details className="mb-10 p-6 rounded-lg bg-[var(--bg-card)] border border-[var(--border-default)]">
+            <summary className="font-bold cursor-pointer text-lg mb-4">
+              Historical Context: Cadence A/B (Legacy)
+            </summary>
+            <div className="text-[var(--text-secondary)] space-y-4">
+              <p>
+                Before Store Pulse, stores followed more rigid markdown patterns. These were never
+                guarantees, but they were consistent enough that hunters could plan around them.
+              </p>
+
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse border border-[var(--border-default)]">
+                  <thead>
+                    <tr className="bg-[var(--bg-elevated)]">
+                      <th className="border border-[var(--border-default)] px-4 py-3 text-left font-bold">
+                        Stage
+                      </th>
+                      <th className="border border-[var(--border-default)] px-4 py-3 text-left font-bold">
+                        Cadence A (historical)
+                      </th>
+                      <th className="border border-[var(--border-default)] px-4 py-3 text-left font-bold">
+                        Cadence B (historical)
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="hover:bg-[var(--bg-elevated)] transition-colors">
+                      <td className="border border-[var(--border-default)] px-4 py-3 font-semibold">
+                        Full retail
+                      </td>
+                      <td className="border border-[var(--border-default)] px-4 py-3">
+                        .00 (not on clearance) ~4 weeks
+                      </td>
+                      <td className="border border-[var(--border-default)] px-4 py-3">
+                        .00 (not on clearance) ~1–2 weeks
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-[var(--bg-elevated)] transition-colors">
+                      <td className="border border-[var(--border-default)] px-4 py-3 font-semibold">
+                        1st markdown
+                      </td>
+                      <td className="border border-[var(--border-default)] px-4 py-3">
+                        .06 ~6 weeks
+                      </td>
+                      <td className="border border-[var(--border-default)] px-4 py-3">
+                        .04 ~4 weeks
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-[var(--bg-elevated)] transition-colors">
+                      <td className="border border-[var(--border-default)] px-4 py-3 font-semibold">
+                        2nd markdown
+                      </td>
+                      <td className="border border-[var(--border-default)] px-4 py-3">
+                        .03 ~3 weeks
+                      </td>
+                      <td className="border border-[var(--border-default)] px-4 py-3">
+                        .02 ~2 weeks
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-[var(--bg-elevated)] transition-colors">
+                      <td className="border border-[var(--border-default)] px-4 py-3 font-semibold">
+                        Final
+                      </td>
+                      <td className="border border-[var(--border-default)] px-4 py-3">
+                        .01 (penny)
+                      </td>
+                      <td className="border border-[var(--border-default)] px-4 py-3">
+                        .01 (penny)
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <p className="text-[var(--text-muted)]">
+                These are historical patterns used for context. In 2026, Store Pulse can compress,
+                pause, or skip stages based on real-time inventory pressure.
+              </p>
+            </div>
+          </details>
+
+          <h2 className="text-2xl font-bold mb-6">What This Means For Hunters</h2>
+          <div className="space-y-4 mb-10">
+            <div className="border-l-4 border-[var(--cta-primary)] pl-6 py-2">
+              <h3 className="font-bold mb-2">Watch for $.02</h3>
+              <p className="text-[var(--text-secondary)]">
+                This is your primary signal. If you see $.02, the item is on a 48-hour countdown to
+                removal.
+              </p>
+            </div>
+            <div className="border-l-4 border-[var(--cta-primary)] pl-6 py-2">
+              <h3 className="font-bold mb-2">Focus on Home Bays</h3>
+              <p className="text-[var(--text-secondary)]">
+                Clearance endcaps are being phased out. Items marked "No Home" in the system are
+                prime penny candidates.
+              </p>
+            </div>
+            <div className="border-l-4 border-[var(--cta-primary)] pl-6 py-2">
+              <h3 className="font-bold mb-2">Compressed Timelines</h3>
+              <p className="text-[var(--text-secondary)]">
+                Don't rely on the old 3-week cadence. High-velocity items can skip directly from
+                $.06 to $.01.
+              </p>
+            </div>
+            <div className="border-l-4 border-[var(--cta-primary)] pl-6 py-2">
+              <h3 className="font-bold mb-2">MET Team Schedules</h3>
+              <p className="text-[var(--text-secondary)]">
+                Learn when MET teams work (typically Wed/Thu). This is when penny items are pulled
+                and moved to ZMA bins.
+              </p>
+            </div>
           </div>
         </Prose>
       </Section>

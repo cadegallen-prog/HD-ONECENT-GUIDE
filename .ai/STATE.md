@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 4, 2026 (Bloat reduction pass 6: exports + legacy snapshots + ai:verify hardening)
+**Last updated:** Feb 4, 2026 (Guide refresh: 2026 research integration + token-only styling + full gates green)
 
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
@@ -10,6 +10,22 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-04 (Guide Refresh - 2026 Research Integration):** Integrated 2026 operational research into the public guide pages and enforced token-only styling for a professional look.
+  - **Scope:** Implemented `.ai/plans/2026-research-integration.md`.
+  - **Content delivered (high-signal additions):**
+    - ICE metrics tables + explanation
+    - $.02 “buffer” explanation (what it signals and why it matters)
+    - MET team schedule/ownership and why resets matter
+    - ZMA disposition data table + implications
+    - Legacy vs 2026 behavior comparison (explicitly labeled; no promises)
+  - **Files updated:**
+    - `app/clearance-lifecycle/page.tsx`
+    - `app/inside-scoop/page.tsx`
+    - `app/in-store-strategy/page.tsx`
+    - `app/facts-vs-myths/page.tsx`
+    - `components/guide/TableOfContents.tsx`
+  - **Verification:** `npm run lint` ✅, `npm run build` ✅, `npm run test:unit` ✅ (26/26), `npm run test:e2e` ✅ (156 passed), `npm run lint:colors` ✅ (0 errors / 0 warnings).
 
 - **2026-02-04 (Guide Content Credibility Restoration - Critical):** Fixed content accuracy regression in clearance-lifecycle page introduced by commit 1c04eb7 (Feb 3, 2026).
   - **Root Cause:** Guide atomization commit included unapproved content rewrites that introduced false claims ("nearly 100% chance in 3 weeks"), removed detailed Cadence A & B information, reintroduced deprecated Trip Tracker CTA, and degraded mobile UX.

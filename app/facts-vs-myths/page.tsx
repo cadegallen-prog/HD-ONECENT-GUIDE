@@ -7,7 +7,7 @@ import Link from "next/link"
 export const metadata: Metadata = {
   title: "Penny Hunting Facts vs Myths - The Truth Explained | Penny Central",
   description:
-    "Separating penny hunting facts from internet myths. Learn the reality of'secret sales', employee policies, and hidden markdowns.",
+    "Separating penny hunting facts from internet myths. Learn the reality of 'secret sales', employee policies, and markdown signals.",
 }
 
 const comparisons = [
@@ -28,8 +28,24 @@ const comparisons = [
     myth: "Employees buy all the penny items before customers can get to them.",
   },
   {
-    fact: "Items typically follow a 3-week clearance cadence: .06 -> .03 -> .01.",
-    myth: "Items randomly drop to a penny at different times every day.",
+    fact: "Legacy markdowns often followed Cadence A/B patterns, but 2026 Store Pulse can compress or skip stages based on real-time inventory pressure.",
+    myth: "There is still a reliable 3-week schedule you can plan around.",
+  },
+  {
+    fact: "The $0.02 price point can act like a short buffer window that signals the item is scheduled to be pulled by MET.",
+    myth: "$0.02 means you have plenty of time before it becomes a penny.",
+  },
+  {
+    fact: "In many stores, the best penny candidates are in (or near) their Home Bay — and items with 'No Home' status are often being cleared aggressively.",
+    myth: "Clearance endcaps are the most reliable place to find pennies in 2026.",
+  },
+  {
+    fact: "Penny scans can trigger internal auditing (often called Zero-Comm reports), which is why many cashiers pause or call a manager.",
+    myth: "If it scans for $0.01, the cashier must complete the sale no questions asked.",
+  },
+  {
+    fact: "Operational timing matters: MET workdays and bay resets can wipe out penny-eligible items quickly.",
+    myth: "Timing doesn't matter — penny items sit around for weeks.",
   },
 ]
 
@@ -60,8 +76,8 @@ export default function FactsVsMythsPage() {
           <div className="space-y-12">
             {comparisons.map((item, index) => (
               <div key={index} className="grid md:grid-cols-2 gap-6 items-start">
-                <div className="p-6 rounded-xl bg-red-50 dark:bg-red-950/20 border border-red-100 dark:border-red-900/30">
-                  <h3 className="text-red-700 dark:text-red-400 font-bold uppercase tracking-tight text-sm mb-2 flex items-center gap-2">
+                <div className="p-6 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)] border-l-4 border-l-[var(--status-error)]">
+                  <h3 className="text-[var(--status-error)] font-bold uppercase tracking-tight text-sm mb-2 flex items-center gap-2">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="16"
@@ -83,8 +99,8 @@ export default function FactsVsMythsPage() {
                     "{item.myth}"
                   </p>
                 </div>
-                <div className="p-6 rounded-xl bg-green-50 dark:bg-green-950/20 border border-green-100 dark:border-green-900/30">
-                  <h3 className="text-green-700 dark:text-green-400 font-bold uppercase tracking-tight text-sm mb-2 flex items-center gap-2">
+                <div className="p-6 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)] border-l-4 border-l-[var(--cta-primary)]">
+                  <h3 className="text-[var(--cta-primary)] font-bold uppercase tracking-tight text-sm mb-2 flex items-center gap-2">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="16"
