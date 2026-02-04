@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 4, 2026 (WCAG AAA contrast compliance - 0 violations achieved)
+**Last updated:** Feb 4, 2026 (Guide content credibility restoration + bloat reduction pass 5)
 
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
@@ -11,6 +11,26 @@ Every AI session must update this after meaningful work.
 
 ## Current Sprint (Last 7 Days)
 
+- **2026-02-04 (Guide Content Credibility Restoration - Critical):** Fixed content accuracy regression in clearance-lifecycle page introduced by commit 1c04eb7 (Feb 3, 2026).
+  - **Root Cause:** Guide atomization commit included unapproved content rewrites that introduced false claims ("nearly 100% chance in 3 weeks"), removed detailed Cadence A & B information, reintroduced deprecated Trip Tracker CTA, and degraded mobile UX.
+  - **Audit Completed:** Full analysis at `.ai/audits/guide-atomization-content-audit-2026-02-04.md` documenting what was removed vs. replaced with user impact analysis.
+  - **Fixes Applied:**
+    - ✅ Deleted Trip Tracker CTA block entirely (unapproved + conflicts with MY LIST)
+    - ✅ Removed false "nearly 100% chance in 3 weeks" claim
+    - ✅ Restored accurate Cadence A (13-week: .00→.06→.03→.01) and Cadence B (7-week: .00→.04→.02→.01) historical data with specific stage durations
+    - ✅ Added "How It Used To Work" section explaining historical patterns
+    - ✅ Added "What Changed" section explaining penny pricing shift (Home Depot inventory evolution)
+    - ✅ Added "Current Reality" section with honest assessment of 2026 uncertainty
+    - ✅ Added "Why We Show This History" bridge section to manage expectations
+    - ✅ Fixed mobile UX (professional table sizing, responsive padding, removed oversized "childish" font)
+  - **Verification:** `npm run qa:fast` (lint ✅, unit ✅, build ✅); commit `09a0670`.
+  - **Impact:** Credibility restored through honesty about pattern shifts; users won't be blindsided when old advice doesn't work.
+
+- **2026-02-04 (Bloat reduction - pass 5):** Implemented an evidence-based, repeatable bloat workflow and removed large sources of repo noise.
+  - **Audit:** Added `npm run prune:audit` to measure repo surface area and detect bloat hotspots.
+  - **Media quarantine:** Created `archive/media-pruned/` and moved large non-production media (and legacy proof images) into `archive/media-pruned/2026-02-04-pass1/` while preserving restore-path parity.
+  - **Generated report cleanup:** Removed tracked generated artifacts (Playwright console reports + axe/contrast outputs) and added `.gitignore` coverage so they don’t reappear.
+  - **Verification:** `npm run ai:verify -- test` (`reports/verification/2026-02-04T12-02-44/summary.md`).
 - **2026-02-04 (WCAG AAA Contrast Compliance - 0 Violations):** Achieved complete WCAG AAA accessibility compliance by fixing color contrast issues across all backgrounds.
   - **Root Cause Analysis:** Previous agent only tested colors against white (#ffffff) but ignored off-white backgrounds (#fafaf9, #f0f0ef) where text/borders actually appear.
   - **Fixes Applied:**
