@@ -45,15 +45,15 @@
     --bg-secondary: var(--bg-elevated);
     --bg-dark: #1c1917;
 
-    /* WCAG AAA compliant text colors (7:1+ contrast) */
+    /* WCAG AAA compliant text colors (7:1+ contrast on ALL backgrounds) */
     --text-primary: #1c1917;
-    --text-secondary: #44403c;
-    --text-muted: #57534e;
-    --text-placeholder: #78716c;
+    --text-secondary: #36312e; /* 11.26:1 on #f0f0ef (AAA compliant) */
+    --text-muted: #44403c; /* 9.01:1 on #f0f0ef (AAA compliant, lighter than secondary) */
+    --text-placeholder: #36312e; /* Same as secondary for AAA compliance */
     --text-inverse: #ffffff;
 
-    --border-default: #d4d4d4;
-    --border-strong: #d6d3d1;
+    --border-default: #757575; /* 4.61:1 on white, 4.04:1 on #f0f0ef (3:1+ compliant) */
+    --border-strong: #757575; /* 4.61:1 on white, 4.04:1 on #f0f0ef (3:1+ compliant) */
     --border-focus: var(--cta-primary);
     --border-dark: #d6d3d1;
 
@@ -76,9 +76,9 @@
 
     /* SYSTEM COLORS */
     /* Green is reserved for true success states only (not CTA, not savings) */
-    --status-success: #15803d;
-    --status-warning: #a16207;
-    --status-error: #b91c1c;
+    --status-success: #0d5c2a; /* Darkened 25% */
+    --status-warning: #714204; /* Darkened 30% */
+    --status-error: #8c1515; /* Darkened 20% */
     /* Gold/brass is for small badges/pills only */
     --status-info: var(--live-indicator);
     --color-success: var(--status-success);
@@ -101,8 +101,8 @@
     --shadow-button-hover: 0 3px 8px rgba(0, 0, 0, 0.12);
 
     /* Gold/brass accent (badges/pills only; never buttons) */
-    --live-indicator: #8a6b2c;
-    --live-glow: rgba(138, 107, 44, 0.35);
+    --live-indicator: #53401e; /* 8.69:1 on #f0f0ef (AAA compliant, was #8a6b2c) */
+    --live-glow: rgba(83, 64, 30, 0.35);
 
     /* Accent system aligns to CTA */
     --accent: var(--cta-primary);
@@ -192,7 +192,7 @@
 
     /* Tertiary content: Must meet 4.5:1 on elevated surfaces (#2a2a2a) */
     --text-muted: #a3a3a3; /* 7.2:1 on #121212 (AAA compliant) */
-    --text-placeholder: #78716c;
+    --text-placeholder: #a3a3a3; /* 7.2:1 AAA compliant */
 
     /* Inverse text for light buttons */
     --text-inverse: #030712;
@@ -220,10 +220,10 @@
 
     /* STATUS COLORS - Technical Grid palette */
     /* Green is reserved for true success states only (not CTA, not savings) */
-    --status-success: #3fbf7f;
+    --status-success: #43c083; /* Lightened for dark mode AAA */
     --status-urgency: #f2b8b5; /* Material Red 200 - alerts without aggression */
     --status-warning: #fbbf24; /* Amber 400 - 8.3:1 on #121212 */
-    --status-error: #f87171; /* Red 400 - 4.7:1 on #121212 */
+    --status-error: #ffc2c2; /* AAA compliant (9.37:1) */
     /* Gold/brass is for small badges/pills only */
     --status-info: var(--live-indicator);
 

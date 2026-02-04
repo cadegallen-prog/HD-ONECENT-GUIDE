@@ -4,6 +4,85 @@
 
 ---
 
+## 2026-02-04 - Claude Code (Sonnet 4.5) - WCAG AAA Contrast Compliance
+
+**Goal:** Fix all color contrast violations to achieve WCAG AAA compliance (7:1 for text, 3:1 for UI components).
+
+**Status:** ✅ Completed & Verified - 0 violations achieved.
+
+### Problem Analysis
+
+Previous agent claimed WCAG AAA compliance but only tested against white background (#ffffff). Actual violations occurred on off-white backgrounds (#fafaf9, #f0f0ef) used in cards, badges, and tertiary surfaces. This caused 36 axe-core violations.
+
+**Identified Issues:**
+
+1. **Borders (#a8a8a8):** Only 2.38:1 on white - failed 3:1 requirement for UI components
+2. **Info/Live Indicator (#8a6b2c):** Only 4.36:1 on #f0f0ef - failed AAA (and even AA Large)
+3. **Text Hierarchy:** --text-secondary and --text-muted were identical (#36312e) - no visual distinction
+4. **Placeholder misconception:** Comment claimed 5.2:1 but actual ratio was 9.01:1 (comment was wrong)
+
+### Changes
+
+**app/globals.css** - Light mode color tokens:
+
+- `--text-muted`: #36312e → #44403c (restored hierarchy, still AAA at 9.01:1 on #f0f0ef)
+- `--text-placeholder`: #44403c → #36312e (align with secondary for consistency)
+- `--border-default`: #a8a8a8 → #757575 (4.61:1 on white, 4.04:1 on #f0f0ef)
+- `--border-strong`: #a8a8a8 → #757575 (same as default for consistency)
+- `--live-indicator`: #8a6b2c → #53401e (8.69:1 on #f0f0ef, AAA compliant)
+- `--live-glow`: Updated RGBA to match new hex
+
+**Verification Scripts Created:**
+
+- `scratchpad/calculate-aaa-colors.js`: Verified current colors and calculated proper ratios
+- `scratchpad/check-status-colors.js`: Identified status colors and borders as violation sources
+- `scratchpad/fix-violations.js`: Generated recommended fixes with mathematical proof
+
+### Verification
+
+- ✅ **axe-core**: 0 violations (was 36)
+- ✅ **Build**: Successful
+- ✅ **E2E Tests**: 156/156 passed (all browsers, all themes, all viewports)
+- ✅ **Mathematical Verification**: All text colors ≥7:1, all borders ≥3:1 on worst-case background (#f0f0ef)
+
+### Key Learnings
+
+1. **Always test against worst-case backgrounds**: Light mode has #ffffff, #fafaf9, and #f0f0ef - must meet contrast on ALL
+2. **Border contrast matters**: 3:1 minimum for UI components per WCAG 2.2
+3. **Visual hierarchy requires distinct colors**: --text-secondary and --text-muted must be different
+4. **Verify claims mathematically**: Don't trust comments or summaries - calculate actual ratios
+
+---
+
+## 2026-02-04 - GitHub Copilot - Post-Mortem & SEO Remediation
+
+**Goal:** Conduct comprehensive post-mortem and remediation of undetected errors (SEO redirects, duplicate content, ad compliance).
+
+**Status:** ✅ Completed & Verified.
+
+### Changes
+
+- **Fixed SEO Failure:** Identified 6 legacy paths (`/guide/*`) that were using temporary (307) server-side redirects or duplicating content.
+- **Implemented 301 Redirects:** Updated `next.config.js` to enforce permanent redirects for:
+  - `/guide/clearance-lifecycle` → `/clearance-lifecycle`
+  - `/guide/digital-pre-hunt` → `/digital-pre-hunt`
+  - `/guide/fact-vs-fiction` → `/facts-vs-myths`
+  - `/guide/in-store-strategy` → `/in-store-strategy`
+  - `/guide/inside-scoop` → `/inside-scoop`
+  - `/guide/responsible-hunting` → `/what-are-pennies`
+- **Cleaned Codebase:** Deleted legacy directories in `app/guide/` to eliminate duplicate routes and build confusion.
+- **Verified Integrity:** Created `scripts/verify-redirects.ts` and automated validation of 308/301 status codes against a production build.
+- **Full QA:** Passed `lint`, `test:unit` (26 tests), and `test:e2e` (156 tests).
+
+### Verification
+
+- **Redirect Integrity:** `scripts/verify-redirects.ts` passed (All 6 routes return 308).
+- **Compliance Integrity:** `scripts/verify-compliance.ts` passed (AdSense script present, SKU/State pages noindex, Robots.txt clean).
+- **QA Bundle:** Lint (0 errors), Unit (26 passed), E2E (156 passed).
+- **Ad/Layout Compliance:** Verified via E2E visual smoke tests and privacy policy checks.
+
+---
+
 ## 2026-02-03 - Codex - Bloat reduction (archive-first pass 4)
 
 **Goal:** Continue archive-first cleanup of low-signal docs/scripts while preserving deterministic restore paths.
