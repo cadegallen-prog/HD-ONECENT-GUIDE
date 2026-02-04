@@ -38,7 +38,7 @@
 ### Verification
 
 - `npm run ai:verify -- test` ✅
-- Bundle: `reports/verification/2026-02-04T12-02-44/summary.md`
+- Bundle: `reports/verification/2026-02-04T12-13-27/summary.md`
 
 ---
 

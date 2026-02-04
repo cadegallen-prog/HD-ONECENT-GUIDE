@@ -36,7 +36,7 @@ Reports are saved to `reports/playwright/console-report-<timestamp>.json`
 **Sample summary output:**
 
 ```
-Console audit saved to: reports/playwright/console-report-2026-01-29T09-56-04-716Z.json
+Console audit saved to: reports/playwright/console-report-<timestamp>.json
 
 ✅ No actionable console errors found on the checked pages.
 ```

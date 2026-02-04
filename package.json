@@ -17,6 +17,7 @@
     "check-contrast": "node scripts/check-contrast.js",
     "check-axe": "node scripts/check-axe.js",
     "security:scan": "node scripts/security-scan-no-pii.mjs",
+    "prune:audit": "tsx scripts/prune-audit.ts",
     "ai:doctor": "tsx scripts/ai-doctor.ts",
     "ai:verify": "tsx scripts/ai-verify.ts",
     "ai:proof": "tsx scripts/ai-proof.ts",

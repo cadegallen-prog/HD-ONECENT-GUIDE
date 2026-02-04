@@ -26,6 +26,9 @@ Reduce bloat without destructive deletes by moving low-signal files to archive s
  git ls-files "*.md" | measure
  git ls-files "scripts/*" "scripts/**/*" | measure
 
+# evidence-based prune audit (recommended)
+ npm run prune:audit
+
 # quick low-reference scan (manual pattern)
  rg -n "<filename>" -S --glob '!archive/**'
 ```
@@ -34,6 +37,7 @@ Reduce bloat without destructive deletes by moving low-signal files to archive s
 
 - Docs: `archive/docs-pruned/<snapshot-date>/...`
 - Scripts: `archive/scripts-pruned/<snapshot-date>/...`
+- Media: `archive/media-pruned/<snapshot-date>/...`
 
 Each snapshot must include:
 

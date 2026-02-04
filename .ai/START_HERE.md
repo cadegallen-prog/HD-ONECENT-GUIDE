@@ -15,7 +15,7 @@ Follow this sequence before every session:
 5. **CONTRACT.md** - How we collaborate
 6. **DECISION_RIGHTS.md** - What needs approval
 
-**Default ignore list:** Do not load files under `archive/docs-pruned/**` or `archive/scripts-pruned/**` unless Cade explicitly asks to restore/review archived items.
+**Default ignore list:** Do not load files under `archive/docs-pruned/**`, `archive/scripts-pruned/**`, or `archive/media-pruned/**` unless Cade explicitly asks to restore/review archived items.
 
 **First session only:** Read `GROWTH_STRATEGY.md` for business context
 

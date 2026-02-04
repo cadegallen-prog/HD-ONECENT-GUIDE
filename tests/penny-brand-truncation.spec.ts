@@ -57,11 +57,11 @@ test.describe("Penny Card - Brand Truncation (Full Variant)", () => {
       }
     }
 
-    // Take screenshot for visual verification
+    // Attach proof to the Playwright report (avoid mutating tracked repo files).
     const screenshotName = `penny-brand-truncation-${testInfo.project.name}`
-    await page.screenshot({
-      path: `screenshots/${screenshotName}.png`,
-      fullPage: false,
+    await testInfo.attach(screenshotName, {
+      body: await page.screenshot({ fullPage: false }),
+      contentType: "image/png",
     })
   })
 })
@@ -97,11 +97,11 @@ test.describe("Penny Card - Brand Truncation (Compact Variant)", () => {
     const brandText = await compactBrandElement.textContent()
     expect(brandText?.trim()).toBe(titleAttr?.trim())
 
-    // Take screenshot
+    // Attach proof to the Playwright report (avoid mutating tracked repo files).
     const screenshotName = `penny-brand-compact-truncation-${testInfo.project.name}`
-    await page.screenshot({
-      path: `screenshots/${screenshotName}.png`,
-      fullPage: false,
+    await testInfo.attach(screenshotName, {
+      body: await page.screenshot({ fullPage: false }),
+      contentType: "image/png",
     })
   })
 })
@@ -131,12 +131,13 @@ test.describe("Penny Card - Long Brand Visual Verification", () => {
       const title = await longBrandCard.getAttribute("title")
       expect(title?.length).toBeGreaterThan(20) // Verify it's a long brand
 
-      // Take focused screenshot of the card area
       const cardContainer = longBrandCard.locator("xpath=ancestor::div[@role='link']")
       const screenshotName = `penny-long-brand-${testInfo.project.name}`
 
-      await cardContainer.screenshot({
-        path: `screenshots/${screenshotName}.png`,
+      // Attach proof to the Playwright report (avoid mutating tracked repo files).
+      await testInfo.attach(screenshotName, {
+        body: await cardContainer.screenshot(),
+        contentType: "image/png",
       })
     } else {
       // If long brand not visible in current viewport, just verify any brand works

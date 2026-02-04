@@ -12,6 +12,9 @@
 /reports/proof/
 /reports/verification/
 /reports/verification-*.png
+/reports/axe-report.json
+/reports/contrast-computed.json
+/reports/sku-optimization-top20.json
 /data/Intial_Supabase_and_Google_sheets_csv_conversion_12-24-25/
 
 # next.js
@@ -50,7 +53,14 @@ backups/
 experimental_scraper/
 Experimental_archive_test_pic_iteratation/
 nul
-archive/
+
+# archive (repo-tracked). Keep local-only scratch ignored explicitly (not the whole folder).
+archive/COOKBOOK.md
+archive/DECISIONS.md
+archive/docs-history/
+archive/legacy-json/
+archive/legacy-static-experiments/
+archive/verified-pennies.backup*.json
 
 # typescript
 *.tsbuildinfo
@@ -90,6 +100,10 @@ reports/penny-list-console-capture.png
 
 # privacy: analytics screenshots (local-only)
 .ai/analytics/
+
+# local-only analytics screenshots that were moved into cold storage during prune
+archive/media-pruned/**/.ai/analytics/**/*.jpg
+archive/media-pruned/**/.ai/analytics/**/*.jpeg
 
 # privacy: analytics exports (local-only)
 data/Google Analytics/
