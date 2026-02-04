@@ -14,48 +14,95 @@ export const metadata: Metadata = {
 
 export default function GuideHubPage() {
   return (
-    <div className="container max-w-4xl mx-auto py-12 px-4 md:px-6">
-      <div className="text-center mb-12 space-y-6">
-        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4">
-          The Ultimate Home Depot Penny Shopping Guide (2026)
-        </h1>
-        <p className="text-xl md:text-2xl text-[var(--text-secondary)] max-w-2xl mx-auto">
-          At Home Depot, a "penny item" refers to merchandise that rings up at{" "}
-          <strong className="text-[var(--text-primary)]">$0.01</strong>. These aren't sales—they're
-          clearance secrets.
-        </p>
-
-        <div className="flex justify-center max-w-2xl mx-auto">
-          <EditorialBlock />
+    <div className="container max-w-5xl mx-auto py-8 px-4 md:px-6">
+      <div className="text-center mb-10 space-y-4">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-default)] mb-2">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
+          <span className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
+            Updated for 2026 Store Pulse
+          </span>
         </div>
 
-        <div className="flex justify-center gap-4">
-          <Button asChild size="lg" className="bg-[var(--cta-primary)] hover:bg-[var(--cta-hover)]">
+        <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-[var(--text-primary)] mb-2">
+          The Ultimate Home Depot Penny Guide
+        </h1>
+        <p className="text-lg md:text-xl text-[var(--text-secondary)] max-w-2xl mx-auto leading-relaxed">
+          The "penny system" has changed. Stop reading outdated 2024 guides. Here is how to find
+          1-cent clearance items using the <strong>2026 Rules of Engagement</strong>.
+        </p>
+
+        <div className="flex justify-center gap-4 pt-4">
+          <Button
+            asChild
+            size="lg"
+            className="bg-[var(--cta-primary)] hover:bg-[var(--cta-hover)] text-white shadow-lg shadow-blue-900/10"
+          >
             <Link href="/clearance-lifecycle">
-              Start Reading <ArrowRight className="ml-2 h-4 w-4" />
+              Start Chapter 1 <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
-          <Button asChild variant="secondary" size="lg">
+          <Button
+            asChild
+            variant="secondary"
+            size="lg"
+            className="border-[var(--border-default)] hover:bg-[var(--bg-elevated)]"
+          >
             <Link href="/report-find">Report a Find</Link>
           </Button>
         </div>
       </div>
 
-      <div className="prose dark:prose-invert max-w-none mb-16">
-        <h2>Why This Guide Exists</h2>
-        <p>
-          This guide is the result of years of community knowledge, trial and error, and thousands
-          of successful finds verified by the PennyCentral community. It breaks down exactly how the
-          system works, what the price tags mean, and how to find these items before they disappear.
-        </p>
+      <div className="grid lg:grid-cols-[2fr_1fr] gap-10 mb-16">
+        <div className="prose dark:prose-invert max-w-none">
+          <div className="p-6 rounded-xl bg-[var(--bg-subtle)] border border-[var(--border-default)] not-prose mb-8">
+            <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
+              <span className="text-xl">🛑</span> Read This First
+            </h3>
+            <p className="text-[var(--text-secondary)] mb-4">
+              This is not a "get rich quick" scheme. Penny shopping is a hobby that requires
+              understanding retail logistics. If you walk into a store asking for "penny items," you
+              will leave empty-handed.
+            </p>
+            <ul className="grid gap-2 text-sm text-[var(--text-secondary)]">
+              <li className="flex items-start gap-2">
+                <span className="text-[var(--cta-primary)] font-bold">1.</span>
+                <span>
+                  Penny items are <strong>expired clearance</strong> meant for the trash (ZMA).
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-[var(--cta-primary)] font-bold">2.</span>
+                <span>
+                  Employees <strong>must remove them</strong> if they find them.
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-[var(--cta-primary)] font-bold">3.</span>
+                <span>Self-checkout is your only friend for small hauls.</span>
+              </li>
+            </ul>
+          </div>
 
-        <EthicalDisclosure />
+          <EthicalDisclosure />
+        </div>
+
+        <div className="space-y-6">
+          <div className="p-5 rounded-xl border border-[var(--border-default)] bg-[var(--bg-card)] shadow-sm">
+            <EditorialBlock />
+          </div>
+        </div>
       </div>
 
-      <div className="space-y-8">
-        <h2 className="text-2xl font-bold border-b border-[var(--border-default)] pb-2">
-          Table of Contents
-        </h2>
+      <div className="space-y-6">
+        <div className="flex items-center gap-4 pb-2 border-b border-[var(--border-default)]">
+          <span className="flex items-center justify-center h-8 w-8 rounded-full bg-[var(--bg-elevated)] font-bold text-sm text-[var(--text-muted)]">
+            📚
+          </span>
+          <h2 className="text-2xl font-bold text-[var(--text-primary)]">Complete Guide Chapters</h2>
+        </div>
         <TableOfContents />
       </div>
     </div>
