@@ -108,12 +108,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.7,
     },
-    {
-      url: `${baseUrl}/cashback`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.6,
-    },
 
     // Trust & Legal Pages - Lower Priority but important for E-E-A-T
     {

@@ -55,6 +55,8 @@ export default function FactsVsMythsPage() {
             inventory systems.
           </p>
 
+          <h2 className="text-2xl font-bold mb-12">Common Misconceptions</h2>
+
           <div className="space-y-12">
             {comparisons.map((item, index) => (
               <div key={index} className="grid md:grid-cols-2 gap-6 items-start">
@@ -112,7 +114,7 @@ export default function FactsVsMythsPage() {
             breaks down the numbers so you can stop guessing.
           </p>
           <Link
-            href="/guide/clearance-lifecycle"
+            href="/clearance-lifecycle"
             className="inline-flex items-center gap-2 font-bold text-[var(--cta-primary)] hover:underline"
           >
             Read: Understanding the Clearance Lifecycle

@@ -54,6 +54,8 @@ export default function DigitalPreHuntPage() {
             Home Depot digital inventory as a blueprint for their day.
           </p>
 
+          <h2 className="text-2xl font-bold mb-8">The Process</h2>
+
           <div className="grid md:grid-cols-2 gap-x-12 gap-y-16 mb-20">
             {steps.map((item, idx) => (
               <div key={idx} className="relative pl-16">
@@ -74,10 +76,7 @@ export default function DigitalPreHuntPage() {
               Online inventory counts are <strong>not real-time</strong> and are often inaccurate
               for low-stock items. An item showing '1 in stock' has a high probability of being
               missing, stolen, or bereits in someone's cart. Always use our
-              <Link
-                href="/guide/in-store-strategy"
-                className="mx-1 text-[var(--cta-primary)] underline"
-              >
+              <Link href="/in-store-strategy" className="mx-1 text-[var(--cta-primary)] underline">
                 In-Store Strategy
               </Link>
               to verify.

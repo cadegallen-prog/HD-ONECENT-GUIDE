@@ -317,7 +317,7 @@ export default async function Home() {
               Support PennyCentral
             </Link>
             <Link
-              href="/cashback"
+              href="/support"
               className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 min-h-[48px] rounded-lg border-2 border-[var(--border-default)] dark:border-[var(--border-strong)] bg-transparent text-[var(--text-primary)] font-semibold hover:bg-[var(--bg-elevated)] hover:border-[var(--border-strong)] dark:hover:bg-[var(--bg-elevated)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
             >
               Support & Transparency

@@ -51,12 +51,19 @@ This 7:1 ratio of "ignored pages" to "indexed pages" signals to Google (and AdSe
 
 - Removed Supabase query that generated 800+ SKU URLs
 - Removed 50 state page URLs
-- Now returns only 12 static pillar pages:
+- Now returns 20 static pillar pages:
   - `/` (homepage)
   - `/penny-list`
   - `/guide`
   - `/store-finder`
   - `/clearance-lifecycle`
+  - `/facts-vs-myths`
+  - `/what-are-pennies`
+  - `/digital-pre-hunt`
+  - `/in-store-strategy`
+  - `/inside-scoop`
+  - `/faq`
+  - `/resources`
   - `/report-find`
   - `/trip-tracker`
   - `/cashback`
@@ -64,6 +71,7 @@ This 7:1 ratio of "ignored pages" to "indexed pages" signals to Google (and AdSe
   - `/contact`
   - `/support`
   - `/privacy-policy`
+  - `/terms-of-service`
 
 **2. Added `noindex` to SKU pages (`app/sku/[sku]/page.tsx`)**
 
@@ -87,8 +95,8 @@ robots: {
 
 | Before                     | After                           |
 | -------------------------- | ------------------------------- |
-| 900+ URLs in sitemap       | 12 URLs in sitemap              |
-| 7:1 bad:good ratio         | 0:12 bad:good ratio             |
+| 900+ URLs in sitemap       | 20 URLs in sitemap              |
+| 7:1 bad:good ratio         | 0:20 bad:good ratio             |
 | Google ignoring 787 URLs   | Google sees only quality pages  |
 | "Low value content" signal | "Curated editorial site" signal |
 
@@ -102,7 +110,7 @@ robots: {
 
 ```
 curl https://www.pennycentral.com/sitemap.xml | grep -c "<url>"
-# Result: 12
+# Result: 20
 ```
 
 ### Noindex Meta Tag on SKU Page
@@ -123,9 +131,9 @@ Verified on: `https://www.pennycentral.com/pennies/california`
 
 ### Google Search Console
 
-- Sitemap resubmitted: Feb 2, 2026
+- Sitemap resubmitted: Feb 2-3, 2026
 - Status: Success
-- Discovered pages: 12
+- Discovered pages: 20
 
 ---
 

@@ -49,6 +49,8 @@ export default function InsideScoopPage() {
             to clear inventory—a 'salvage' item that should no longer be on the sales floor.
           </p>
 
+          <h2 className="text-2xl font-bold mb-12">Behind the Scenes</h2>
+
           <div className="space-y-12 mb-16">
             {insights.map((insight, idx) => (
               <div key={idx} className="border-l-4 border-[var(--cta-primary)] pl-6 py-2">

@@ -54,6 +54,8 @@ export default function InStoreStrategyPage() {
             doors requires a blend of preparation, awareness, and extreme courtesy.
           </p>
 
+          <h2 className="text-2xl font-bold mb-8">Key Strategies</h2>
+
           <div className="grid sm:grid-cols-2 gap-8 mb-16">
             {strategies.map((strat, index) => (
               <div
@@ -87,7 +89,7 @@ export default function InStoreStrategyPage() {
             verify inventory before you even burn the gas.
           </p>
           <Link
-            href="/guide/digital-pre-hunt"
+            href="/digital-pre-hunt"
             className="inline-flex items-center gap-2 font-bold text-[var(--cta-primary)] hover:underline"
           >
             Read: The Digital Pre-Hunt

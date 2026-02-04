@@ -41,36 +41,6 @@ const nextConfig = {
         destination: "/penny-list",
         permanent: true,
       },
-      {
-        source: "/what-are-pennies",
-        destination: "/guide#introduction",
-        permanent: true,
-      },
-      {
-        source: "/digital-pre-hunt",
-        destination: "/guide#digital-tools",
-        permanent: true,
-      },
-      {
-        source: "/in-store-strategy",
-        destination: "/guide#in-store-hunting",
-        permanent: true,
-      },
-      {
-        source: "/internal-systems",
-        destination: "/guide#internal-operations",
-        permanent: true,
-      },
-      {
-        source: "/facts-vs-myths",
-        destination: "/guide#fact-vs-fiction",
-        permanent: true,
-      },
-      {
-        source: "/faq",
-        destination: "/guide#faq",
-        permanent: true,
-      },
       // SEO consolidation: thin landing pages → pillar pages (Jan 2026)
       {
         source: "/home-depot-penny-items",

@@ -52,6 +52,8 @@ export default function ClearanceLifecyclePage() {
             a standardized, predictable sequence for clearing out shelf space.
           </p>
 
+          <h2 className="text-2xl font-bold mb-6">The Three Price Tiers</h2>
+
           <div className="space-y-6 mb-16">
             {milestones.map((m, idx) => (
               <div

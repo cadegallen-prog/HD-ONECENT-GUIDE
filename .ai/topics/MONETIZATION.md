@@ -13,8 +13,8 @@
 ### Pending
 
 - 🔄 **Monumetric MCM invite** - ACCEPTED, awaiting advertiser approval (2-6 weeks)
-- ❌ **AdSense site approval** - REJECTED Feb 2, 2026 ("Low Value Content")
-- 🔄 **Sitemap fix deployed** - Pillar-only (12 URLs), awaiting Google re-crawl
+- 🔄 **AdSense site approval** - Reapplied Feb 3, 2026 (previously rejected "Low Value Content")
+- ✅ **Sitemap fix deployed** - Pillar-only (20 URLs), resubmitted to GSC
 
 ### Removed
 
@@ -121,13 +121,13 @@ Based on research:
 
 ### Root Cause
 
-- Sitemap had 900+ URLs (800+ SKU pages + 50 state pages + 12 pillar pages)
+- Sitemap had 900+ URLs (800+ SKU pages + 50 state pages + pillar pages)
 - Google Search Console: 787 pages "Discovered - currently not indexed"
 - 7:1 ratio of "ignored" to "indexed" = "low value" signal to AdSense
 
-### Fix Deployed (Feb 2, 2026)
+### Fix Deployed (Feb 2-3, 2026)
 
-- Sitemap pruned to 12 pillar pages only
+- Sitemap pruned to 20 pillar pages only
 - SKU pages: `robots: { index: false, follow: true }`
 - State pages: `robots: { index: false, follow: true }`
 - User experience unchanged (all pages still work)
@@ -189,21 +189,6 @@ Based on research:
    - Fallback plan: Add enriched product data + AI-generated context if needed
 
 - Full analysis (archived): `archive/docs-pruned/2026-02-03-pass2/.ai/SKU_CONTENT_ANALYSIS.md`
-
----
-
-## REDIRECT PAGES (Cleanup Task)
-
-The following pages are dead code - they redirect to homepage anchors but serve no purpose:
-
-- `/what-are-pennies` → `/#introduction`
-- `/facts-vs-myths` → `/#fact-vs-fiction`
-- `/in-store-strategy` → (redirect target TBD)
-- `/digital-pre-hunt` → (redirect target TBD)
-- `/internal-systems` → (redirect target TBD)
-
-**Status:** Not in sitemap, not linked from navbar. Safe to delete.
-**Decision:** TBD (Gemini 3 Pro suggested deleting, Claude agrees)
 
 ---
 

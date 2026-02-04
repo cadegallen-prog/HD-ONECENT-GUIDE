@@ -42,7 +42,7 @@ export default function GuideHubPage() {
       </div>
 
       <div className="prose dark:prose-invert max-w-none mb-16">
-        <h3>Why This Guide Exists</h3>
+        <h2>Why This Guide Exists</h2>
         <p>
           This guide is the result of years of community knowledge, trial and error, and thousands
           of successful finds verified by the PennyCentral community. It breaks down exactly how the
