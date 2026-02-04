@@ -41,10 +41,13 @@ Each AI session should:
   - `archive/docs-pruned/2026-02-03-pass2/`
   - `archive/docs-pruned/2026-02-03-pass3/`
   - `archive/docs-pruned/2026-02-03-pass4/`
+  - `archive/docs-pruned/2026-02-04-pass1/`
   - `archive/media-pruned/2026-02-04-pass1/`
+  - `archive/media-pruned/2026-02-04-pass2/`
   - `archive/scripts-pruned/2026-02-03/`
   - `archive/scripts-pruned/2026-02-03-pass2/`
   - `archive/scripts-pruned/2026-02-03-pass3/`
+  - `archive/scripts-pruned/2026-02-04-pass1/`
 
 ### 2. Data Pipeline Reliability - Pre-scrape + Cron Auth (P0-0)
 
@@ -74,6 +77,7 @@ Each AI session should:
 
 ## ✅ Recently Completed
 
+- **2026-02-04:** Bloat reduction (pass 6): archived SEO export CSVs + legacy Playwright baselines/screenshots to new cold-storage snapshots and hardened `ai:verify` to build with `.next-playwright` when 3001 is in use. Proof: `reports/verification/2026-02-04T13-31-17/summary.md`.
 - **2026-02-04:** Bloat reduction (pass 5): added `npm run prune:audit`, archived large non-production media to `archive/media-pruned/2026-02-04-pass1/`, removed tracked generated reports/logs (`reports/playwright/console-report-*.json`, axe/contrast outputs) and expanded `.gitignore` so these artifacts don’t come back.
 - **2026-02-03:** Archive-first bloat pass 4 completed: moved `.ai/enablement-prompts/*` into `archive/docs-pruned/2026-02-03-pass4/`, moved low-reference helper `scripts/normalize-image-urls.ts` into `archive/scripts-pruned/2026-02-03-pass3/`, added per-snapshot manifests, and updated `.ai/AI_ENABLEMENT_BLUEPRINT.md` + `.gitignore` (`/reports/playwright/console-report-*.json`) to reduce future noise.
 - **2026-02-03:** Archive-first bloat pass 3 completed: moved additional legacy docs (`.ai/HAIKU-IMPLEMENTATION-GUIDE.md`, `.ai/PENNY_CARD_DESIGN_VISION.md`, `docs/HOW-CADE-ADDS-STOCK-PHOTOS.md`) and additional one-off scripts (`scripts/page-improvement-wizard.ps1`, legacy enrichment merge helpers) with restore manifests under `archive/docs-pruned/2026-02-03-pass3/` and `archive/scripts-pruned/2026-02-03-pass2/`.

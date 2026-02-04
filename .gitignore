@@ -20,6 +20,7 @@
 # next.js
 /.next/
 /.next-playwright/
+/.next-build/
 /out/
 
 # production
@@ -91,6 +92,12 @@ data/penny_scrape_*.json
 penny_scrape_*.json
 bulk_enrich_output.log
 temp_urls.js
+dev-server.log
+vercel_list.json
+vercel_logs.json
+screenshots/
+https___www.pennycentral.com_-Coverage-*/
+https___www.pennycentral.com_-Performance-on-Search-*/
 
 # privacy: local Lighthouse runs can include machine paths
 lighthouse-mobile.json

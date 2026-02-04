@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 4, 2026 (Guide content credibility restoration + bloat reduction pass 5)
+**Last updated:** Feb 4, 2026 (Bloat reduction pass 6: exports + legacy snapshots + ai:verify hardening)
 
 This file is the **single living snapshot** of where the project is right now.
 Every AI session must update this after meaningful work.
@@ -31,6 +31,9 @@ Every AI session must update this after meaningful work.
   - **Media quarantine:** Created `archive/media-pruned/` and moved large non-production media (and legacy proof images) into `archive/media-pruned/2026-02-04-pass1/` while preserving restore-path parity.
   - **Generated report cleanup:** Removed tracked generated artifacts (Playwright console reports + axe/contrast outputs) and added `.gitignore` coverage so they don’t reappear.
   - **Verification:** `npm run ai:verify -- test` (`reports/verification/2026-02-04T12-13-27/summary.md`).
+
+- **2026-02-04 (Bloat reduction - pass 6):** Archived export artifacts, legacy Playwright snapshot baselines, and tracked screenshots into cold storage; added per-snapshot `INDEX.md` manifests and `.gitignore` patterns to prevent reintroduction. Hardened `ai:verify` so build uses `.next-playwright` when a dev server is running on 3001 (avoids `.next` clobber / flaky Windows Turbopack chunk errors).
+  - **Verification:** `npm run ai:verify -- test` (`reports/verification/2026-02-04T13-31-17/summary.md`).
 - **2026-02-04 (WCAG AAA Contrast Compliance - 0 Violations):** Achieved complete WCAG AAA accessibility compliance by fixing color contrast issues across all backgrounds.
   - **Root Cause Analysis:** Previous agent only tested colors against white (#ffffff) but ignored off-white backgrounds (#fafaf9, #f0f0ef) where text/borders actually appear.
   - **Fixes Applied:**

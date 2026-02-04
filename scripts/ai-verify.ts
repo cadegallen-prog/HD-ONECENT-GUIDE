@@ -351,10 +351,21 @@ async function main() {
     ? { PLAYWRIGHT_BASE_URL: serverHealth.playwrightBaseUrl }
     : undefined
 
+  // If a local dev server is running on 3001, it typically owns `.next/`.
+  // Building to `.next/` while dev is running can cause flaky/misleading build failures on Windows.
+  // We already use `.next-playwright/` for e2e, and tsconfig.json is preconfigured for it, so reuse it here.
+  const devPortInUse = await isPortInUse(3001)
+  const buildEnv = devPortInUse ? { NEXT_DIST_DIR: ".next-playwright" } : undefined
+  if (buildEnv) {
+    console.log(
+      "ℹ️  Dev server detected on 3001; building with NEXT_DIST_DIR=.next-playwright to avoid clobbering .next\n"
+    )
+  }
+
   // Define gates
   const gates: Array<{ name: string; cmd: string; env?: NodeJS.ProcessEnv }> = [
     { name: "lint", cmd: "npm run lint" },
-    { name: "build", cmd: "npm run build" },
+    { name: "build", cmd: "npm run build", env: buildEnv },
     { name: "unit", cmd: "npm run test:unit" },
     { name: "e2e", cmd: "npm run test:e2e", env: e2eEnv },
   ]

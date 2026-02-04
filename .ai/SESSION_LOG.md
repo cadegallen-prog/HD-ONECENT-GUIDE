@@ -4,6 +4,40 @@
 
 ---
 
+## 2026-02-04 - Codex - Bloat reduction (archive-first pass 6: exports + legacy snapshots)
+
+**Goal:** Continue reducing repo noise by archiving low-signal exports and legacy test media, without disrupting the founder's dev server on port 3001.
+
+**Status:** ✅ Completed & verified.
+
+### Changes
+
+- Archived export artifacts (restore-path parity):
+  - `https___www.pennycentral.com_-Coverage-2026-02-02/**`
+  - `https___www.pennycentral.com_-Performance-on-Search-2026-02-02/**`
+  - `dev-server.log`, `vercel_list.json`, `vercel_logs.json`, `$file`, `$filePath`
+  - `events/monetization-decision-review-2026-02-11.ics`
+  - Snapshot: `archive/docs-pruned/2026-02-04-pass1/` + `INDEX.md`
+- Archived legacy media (no longer used by current tests):
+  - `reports/playwright/baseline/**`
+  - `screenshots/**`
+  - Snapshot: `archive/media-pruned/2026-02-04-pass2/` + `INDEX.md`
+- Archived legacy scripts:
+  - `scripts/GHETTO_SCRAPER/**`
+  - `scripts/analyze-scrape-coverage.ts`
+  - `scripts/transform-scrape.ts`
+  - Snapshot: `archive/scripts-pruned/2026-02-04-pass1/` + `INDEX.md`
+- Hardened verification loop when dev server is running on 3001:
+  - `scripts/ai-verify.ts` now builds with `NEXT_DIST_DIR=.next-playwright` when 3001 is in use (avoids `.next` clobber / flaky Windows Turbopack chunk errors).
+- Expanded `.gitignore` to prevent reintroducing these local-only artifacts.
+
+### Verification
+
+- `npm run ai:verify -- test` ✅
+- Bundle: `reports/verification/2026-02-04T13-31-17/summary.md`
+
+---
+
 ## 2026-02-04 - Codex - Bloat reduction (archive-first pass 5: media + reports + audit)
 
 **Goal:** Aggressively reduce repo noise (especially large media + generated report artifacts) while adding a repeatable, evidence-based prune workflow.
