@@ -60,7 +60,8 @@ Once Cade says "go" / "build it", do the full loop without extra prompts:
 2. Verify (`npm run ai:verify` or lint/build/unit/e2e)
 3. Self-check against `.ai/DECISION_RIGHTS.md` + `.ai/CONSTRAINTS.md`
 4. Update `.ai/SESSION_LOG.md` + `.ai/STATE.md` (+ `.ai/BACKLOG.md` if priorities moved)
-5. Report back with proof
+5. Prepare a structured next-agent handoff block (see `.ai/HANDOFF_PROTOCOL.md`)
+6. Report back with proof
 
 ---
 
@@ -223,6 +224,7 @@ Rules:
 6. ✅ GitHub Actions check (if applicable)
 7. ✅ Update `.ai/SESSION_LOG.md` and `.ai/STATE.md`
 8. ✅ **Paste proof** using template from `.ai/VERIFICATION_REQUIRED.md`
+9. ✅ Include `Next-Agent Handoff` block per `.ai/HANDOFF_PROTOCOL.md`
 
 **Summarize changes in plain English with verification evidence.**
 
@@ -242,6 +244,8 @@ The `.ai/` folder IS the memory system:
 **Read these at session start. Update at session end.**
 
 This is how context persists across sessions.
+
+Meta-awareness rule: if a fact, decision, risk, or lesson only exists in chat and not in `.ai/`, treat it as non-persistent and document it.
 
 ---
 

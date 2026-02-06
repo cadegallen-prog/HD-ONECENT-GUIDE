@@ -24,6 +24,9 @@ To claim “done” on a meaningful change, provide:
    - `.ai/SESSION_LOG.md` (always)
    - `.ai/STATE.md` (when it changes current reality)
    - `.ai/BACKLOG.md` (only if priorities moved)
+5. **Handoff block** (for meaningful work):
+   - Include a structured next-agent handoff per `.ai/HANDOFF_PROTOCOL.md`
+   - Must include: completion status, changed files, verification paths, open risks, and immediate next step
 
 If the change is truly docs-only and no code paths changed, you can say “Docs-only change; gates not run” — but do not claim the system is green.
 
@@ -97,4 +100,31 @@ Use the screenshots as the “before/after” proof when applicable.
 
 - Before: [what was wrong + evidence]
 - After: [what changed + evidence]
+
+## Next-Agent Handoff
+
+### Objective + Why
+
+- Goal:
+- Why it matters:
+
+### Completion Status
+
+- Completed:
+- Not completed:
+- Out of scope:
+
+### Files Changed
+
+- `path/to/file` — why it changed
+
+### Risks / Watchouts
+
+- Remaining risks:
+- Regressions to watch:
+
+### Immediate Next Step
+
+- Single next task:
+- First command/file to open:
 ```

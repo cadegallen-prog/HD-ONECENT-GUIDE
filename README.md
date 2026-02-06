@@ -140,6 +140,7 @@ For any meaningful change (especially UI/copy/navigation):
 - Paste raw outputs for: `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e`
 - UI changes: capture Playwright screenshots (light/dark, mobile/desktop) and confirm browser console has no errors
 - Docs/memory updated: `README.md`, `.ai/STATE.md`, `.ai/BACKLOG.md`, `.ai/SESSION_LOG.md`, `CHANGELOG.md`
+- Include a structured next-agent handoff block per `.ai/HANDOFF_PROTOCOL.md`
 - Token-only colors confirmed (no raw Tailwind palette); prefer `npm run lint:colors`
 
 See: `.ai/VERIFICATION_REQUIRED.md`
@@ -223,6 +224,7 @@ public/                 # Static assets
 - **Start here:** Read `.ai/START_HERE.md` for the universal entry point and mandatory read order
 - The `.ai/README.md` file is now a stub that points back to this section
 - **Read sequence:** START_HERE.md → CRITICAL_RULES.md → STATE.md → BACKLOG.md → CONTRACT.md → DECISION_RIGHTS.md
+- **Task closeout contract:** `.ai/HANDOFF_PROTOCOL.md` (mandatory completion + next-agent handoff schema)
 - **First session only:** Read `GROWTH_STRATEGY.md` for business context
 - **If session goal is AI workflow/tooling/verification enablement:** Also read `.ai/AI_ENABLEMENT_BLUEPRINT.md`
 - **Rules:** Default no new dependencies; run all 4 gates (lint/build/unit/e2e) on meaningful changes and record results in `SESSION_LOG.md`; work on `main`

@@ -14,6 +14,7 @@ Follow this sequence before every session:
 4. **BACKLOG.md** - What to work on
 5. **CONTRACT.md** - How we collaborate
 6. **DECISION_RIGHTS.md** - What needs approval
+7. **HANDOFF_PROTOCOL.md** - How tasks are closed and handed to the next agent
 
 **Default ignore list:** Do not load files under `archive/docs-pruned/**`, `archive/scripts-pruned/**`, or `archive/media-pruned/**` unless Cade explicitly asks to restore/review archived items.
 
@@ -128,7 +129,8 @@ Once Cade says "go" / "build it", do the full loop without extra prompts:
 2. Verify (`npm run ai:verify` or lint/build/unit/e2e)
 3. Self-check against `DECISION_RIGHTS.md` + `CRITICAL_RULES.md`
 4. Update `SESSION_LOG.md` + `STATE.md` (+ `BACKLOG.md` if priorities moved)
-5. Report back with proof
+5. Create a structured next-agent handoff block per `HANDOFF_PROTOCOL.md`
+6. Report back with proof
 
 ---
 
@@ -164,6 +166,7 @@ When something doesn't work:
 **For context portability across sessions/tools:**
 
 - **`.ai/HANDOFF.md`** - Compressed context pack (5 min read, copy/paste primers)
+- **`.ai/HANDOFF_PROTOCOL.md`** - Mandatory task closeout + next-agent handoff contract
 - **`.ai/topics/INDEX.md`** - Topic capsule index (choose your domain)
 - **`.ai/impl/`** - Implementation plans (approved architectures live here)
 - **`copilot-instructions.md`** - Copilot Chat entry point (limited capabilities)

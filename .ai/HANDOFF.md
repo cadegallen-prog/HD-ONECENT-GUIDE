@@ -4,6 +4,8 @@
 
 **Purpose:** Compressed, copy-paste-ready context for starting fresh chats or switching tools (Claude → Codex → Copilot).
 
+**Process contract:** This file is a context capsule. The mandatory end-of-task completion workflow (verification + memory updates + next-agent handoff schema) is defined in `.ai/HANDOFF_PROTOCOL.md`.
+
 ---
 
 ## TL;DR (Read This First)

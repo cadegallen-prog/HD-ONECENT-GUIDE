@@ -4,6 +4,34 @@
 
 ---
 
+## 2026-02-06 - Codex - Completion/Handoff Workflow Hardening (Docs)
+
+**Goal:** Make task completion + next-agent handoff a mandatory, persistent process across context windows.
+
+**Status:** ✅ Completed (docs-only).
+
+### Changes
+
+- Added canonical closeout contract: `.ai/HANDOFF_PROTOCOL.md`
+  - Required end-of-task sequence (implement -> verify -> memory update -> handoff)
+  - Required `Next-Agent Handoff` schema
+  - Meta-awareness persistence rules for `.ai/` updates
+- Wired protocol into entry/guardrail docs:
+  - `.ai/START_HERE.md` (read order + context portability references)
+  - `.ai/VERIFICATION_REQUIRED.md` (handoff now required in completion template)
+  - `AGENTS.md` (Autonomy After Go + Session End Checklist + memory rule)
+  - `README.md` (AI canon closeout contract + Definition of Done handoff requirement)
+  - `.ai/HANDOFF.md` now points to `.ai/HANDOFF_PROTOCOL.md` as process authority
+- Added reusable skill:
+  - `docs/skills/task-completion-handoff.md`
+  - Indexed in `docs/skills/README.md`
+
+### Verification
+
+- Docs-only change; quality gates not run.
+
+---
+
 ## 2026-02-06 - Codex - Guide AAA Polish + Contrast Guardrail Hardening
 
 **Goal:** Fix guide presentation quality (alignment/hierarchy) and enforce stricter WCAG AAA/3:1 checks with reliable automation.
@@ -68,24 +96,5 @@
 - **Unit:** `npm run test:unit` ✅ (26/26)
 - **E2E:** `npm run test:e2e` ✅ (156 passed)
 - **Playwright (after):** `reports/proof/2026-02-06T05-18-53/` (guide routes light/dark)
-
----
-
-## 2026-02-06 - Codex - AdSense Reapplication Status Update (Docs Only)
-
-**Goal:** Persist founder clarification that AdSense was re-applied and is currently active/in-review.
-
-**Status:** ✅ Completed (docs-only).
-
-### Changes
-
-- Updated `.ai/topics/ADSENSE_APPROVAL_CURRENT.md` with:
-  - founder-reported reapplication submitted about one day after the initial low-value denial
-  - current status marked as active/in-review
-- Updated `.ai/STATE.md` to include this context update in Current Sprint.
-
-### Verification
-
-- Docs-only change; quality gates not run.
 
 ---

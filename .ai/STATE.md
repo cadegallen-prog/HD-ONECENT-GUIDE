@@ -12,6 +12,12 @@ Every AI session must update this after meaningful work.
 
 ## Current Sprint (Last 7 Days)
 
+- **2026-02-06 (Completion/Handoff workflow hardening - docs):** Standardized how tasks are closed and handed off so context survives agent/context-window switches.
+  - **Canonical process contract:** Added `.ai/HANDOFF_PROTOCOL.md` (required closeout sequence + `Next-Agent Handoff` schema + meta-awareness persistence rules).
+  - **Wired into canon:** Updated `README.md`, `.ai/START_HERE.md`, `.ai/VERIFICATION_REQUIRED.md`, `AGENTS.md`, and `.ai/HANDOFF.md` to make handoff explicit and mandatory.
+  - **Skill added:** `docs/skills/task-completion-handoff.md` and indexed in `docs/skills/README.md`.
+  - **Verification:** Docs-only change; quality gates not run.
+
 - **2026-02-06 (Guide AAA polish + guardrail hardening):** Completed a one-shot UX/readability pass to normalize guide layout alignment and harden automated contrast enforcement.
   - **Guide presentation fixes:**
     - Aligned guide header, editorial strip, prose column, and chapter navigation to one centered 68ch reading column on all chapter routes.
