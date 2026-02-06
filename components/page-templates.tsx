@@ -195,9 +195,11 @@ export function Section({
 type ProseProps = {
   children: ReactNode
   className?: string
+  /** Use "guide" for long-form guide chapters with enhanced readability */
+  variant?: "default" | "guide"
 }
 
-export function Prose({ children, className }: ProseProps) {
+export function Prose({ children, className, variant = "default" }: ProseProps) {
   return (
     <div
       className={cn(
@@ -212,6 +214,7 @@ export function Prose({ children, className }: ProseProps) {
         "[&_li]:text-[var(--text-secondary)] [&_li]:leading-relaxed",
         "[&_a]:font-semibold",
         "[&_code]:font-mono [&_code]:text-sm [&_code]:bg-[var(--bg-elevated)] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded",
+        variant === "guide" && "guide-article w-full mx-auto",
         className
       )}
     >

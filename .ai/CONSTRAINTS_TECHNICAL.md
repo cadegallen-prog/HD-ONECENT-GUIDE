@@ -41,6 +41,8 @@
 
 - **Penny List Card Typography (2026-01-08):** `.penny-card-name`, `.penny-card-brand`, `.penny-card-sku`, `.penny-card-price` utilities were added with Cade's explicit approval. These are card-specific and do NOT modify the global typography scale.
 
+- **WCAG AAA Readability Overhaul (2026-02-06):** Light mode text hierarchy widened for guide readability; dark mode secondary/muted upgraded to AAA on card surfaces; placeholders upgraded to AAA on intended surfaces; added `--bg-subtle` token; added `.guide-article` / `.guide-callout` classes. Founder-approved for accessibility/readability/consistency work (not arbitrary redesign). See `docs/DESIGN-SYSTEM-AAA.md` for full contrast evidence.
+
 ---
 
 ### 2. React-Leaflet Map Component
@@ -229,7 +231,7 @@
 **Source of truth:** `app/globals.css` + `docs/DESIGN-SYSTEM-AAA.md`
 
 - Do not add or change tokens without explicit approval
-- Use tokenized Tailwind colors (`text-text-primary`, `bg-card`, `bg-elevated`, `border-border`, `text-muted`, `text-secondary`, `text-foreground`, `bg-background`)
+- Use tokenized Tailwind colors (`text-[var(--text-primary)]`, `bg-[var(--bg-card)]`, `bg-[var(--bg-elevated)]`, `border-[var(--border-default)]`, `text-[var(--text-muted)]`, `text-[var(--text-secondary)]`); shadcn aliases (`bg-background`, `text-foreground`, `bg-card`, etc.) also available
 - Status/CTA: use `text-success|warning|error|info` or `bg-[var(--status-*)]` sparingly; only one primary CTA per viewport
 - Spacing: 8pt grid (`p-2/4/6/8`, `gap-2/4/6`, `section-padding`/`section-padding-sm`); Penny List cards may use 12-14px padding for dense scan layouts
 - Minimum body text 16px; Penny List card metadata may be 12-13px; minimum touch target 44x44px; never use text <12px

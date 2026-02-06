@@ -28,6 +28,86 @@ const selectors = loadJson(selectorsPath, {
   ],
 }).selectors
 
+const tokenChecks = [
+  {
+    name: "token-text-primary-on-bg-page",
+    fg: "--text-primary",
+    bg: "--bg-page",
+    threshold: 7.0,
+    role: "text",
+  },
+  {
+    name: "token-text-secondary-on-bg-page",
+    fg: "--text-secondary",
+    bg: "--bg-page",
+    threshold: 7.0,
+    role: "text",
+  },
+  {
+    name: "token-text-muted-on-bg-page",
+    fg: "--text-muted",
+    bg: "--bg-page",
+    threshold: 7.0,
+    role: "text",
+  },
+  {
+    name: "token-text-secondary-on-bg-card",
+    fg: "--text-secondary",
+    bg: "--bg-card",
+    threshold: 7.0,
+    role: "text",
+  },
+  {
+    name: "token-text-muted-on-bg-card",
+    fg: "--text-muted",
+    bg: "--bg-card",
+    threshold: 7.0,
+    role: "text",
+  },
+  {
+    name: "token-text-placeholder-on-bg-recessed",
+    fg: "--text-placeholder",
+    bg: "--bg-recessed",
+    threshold: 7.0,
+    role: "text",
+  },
+  {
+    name: "token-cta-text-on-cta-primary",
+    fg: "--cta-text",
+    bg: "--cta-primary",
+    threshold: 7.0,
+    role: "cta",
+  },
+  {
+    name: "token-border-default-on-bg-page",
+    fg: "--border-default",
+    bg: "--bg-page",
+    threshold: 3.0,
+    role: "border",
+  },
+  {
+    name: "token-border-default-on-bg-card",
+    fg: "--border-default",
+    bg: "--bg-card",
+    threshold: 3.0,
+    role: "border",
+  },
+  {
+    name: "token-border-strong-on-bg-page",
+    fg: "--border-strong",
+    bg: "--bg-page",
+    threshold: 3.0,
+    role: "border",
+  },
+  {
+    name: "token-border-strong-on-bg-card",
+    fg: "--border-strong",
+    bg: "--bg-card",
+    threshold: 3.0,
+    role: "border",
+  },
+]
+
 function srgbToLin(c) {
   const v = c / 255
   return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)
@@ -75,6 +155,10 @@ function parseHexColor(str) {
   return [r, g, b]
 }
 
+function parseCssColor(str) {
+  return parseHexColor(str) ?? parseColor(str)
+}
+
 async function getStyles(page, selector) {
   const found = await page.$(selector)
   if (!found) return null
@@ -92,6 +176,7 @@ async function run() {
   const browser = await chromium.launch({ headless: true })
   const results = []
   const startedAt = Date.now()
+  const tokenChecksDone = new Set()
   try {
     for (const route of routes) {
       if (Date.now() - startedAt > HARD_TIMEOUT_MS) {
@@ -137,29 +222,53 @@ async function run() {
           { timeout: 5000 }
         )
 
-        const tokens = await page.evaluate(() => {
+        const tokenVars = Array.from(new Set(tokenChecks.flatMap((check) => [check.fg, check.bg])))
+        const tokens = await page.evaluate((vars) => {
           const style = getComputedStyle(document.documentElement)
-          return {
-            bgPage: style.getPropertyValue("--bg-page").trim(),
-            ctaPrimary: style.getPropertyValue("--cta-primary").trim(),
-            ctaText: style.getPropertyValue("--cta-text").trim(),
-            textPrimary: style.getPropertyValue("--text-primary").trim(),
+          const values = {}
+          for (const varName of vars) {
+            values[varName] = style.getPropertyValue(varName).trim()
           }
-        })
+          return values
+        }, tokenVars)
 
         const tokenBg =
-          parseHexColor(tokens.bgPage) ?? (theme === "dark" ? [18, 18, 18] : [255, 255, 255])
-        const tokenCtaBg =
-          parseHexColor(tokens.ctaPrimary) ?? (theme === "dark" ? [138, 167, 199] : [43, 76, 126])
-        const tokenCtaFg =
-          parseHexColor(tokens.ctaText) ?? (theme === "dark" ? [3, 7, 18] : [255, 255, 255])
+          parseCssColor(tokens["--bg-page"]) ?? (theme === "dark" ? [18, 18, 18] : [255, 255, 255])
         const tokenTextPrimary =
-          parseHexColor(tokens.textPrimary) ?? (theme === "dark" ? [220, 220, 220] : [28, 25, 23])
+          parseCssColor(tokens["--text-primary"]) ??
+          (theme === "dark" ? [224, 224, 224] : [28, 25, 23])
+
+        if (!tokenChecksDone.has(theme)) {
+          for (const tokenCheck of tokenChecks) {
+            const fg = parseCssColor(tokens[tokenCheck.fg])
+            const bg = parseCssColor(tokens[tokenCheck.bg])
+            const valid = Boolean(fg && bg)
+            const ratio = valid ? contrastRatio(fg, bg) : 0
+
+            results.push({
+              route: "__tokens__",
+              theme,
+              name: tokenCheck.name,
+              selector: `${tokenCheck.fg} on ${tokenCheck.bg}`,
+              role: tokenCheck.role,
+              found: valid,
+              ratio: Number(ratio.toFixed(2)),
+              threshold: tokenCheck.threshold,
+              pass: valid && ratio >= tokenCheck.threshold,
+              note: valid ? undefined : "unable to parse token color",
+            })
+          }
+          tokenChecksDone.add(theme)
+        }
 
         for (const sel of selectors) {
+          if (Array.isArray(sel.routes) && !sel.routes.includes(route)) {
+            continue
+          }
+
           const styles = await getStyles(page, sel.selector)
           if (!styles) {
-            // If the selector isn't present, skip (counts as pass to avoid false negatives)
+            const optional = sel.optional === true
             results.push({
               route,
               theme,
@@ -168,8 +277,9 @@ async function run() {
               role: sel.role,
               found: false,
               ratio: 0,
-              pass: true,
-              note: "selector not found",
+              threshold: typeof sel.threshold === "number" ? sel.threshold : undefined,
+              pass: optional,
+              note: optional ? "optional selector not found" : "required selector not found",
             })
             continue
           }
@@ -179,23 +289,12 @@ async function run() {
           const bg = parseColor(bgSource)
 
           // Default to token colors if transparent/invalid colors are encountered.
-          const safeFg = fg ?? (sel.role === "cta" ? tokenCtaFg : tokenTextPrimary)
-          const safeBg = bg ?? (sel.role === "cta" ? tokenCtaBg : tokenBg)
+          const safeFg = fg ?? tokenTextPrimary
+          const safeBg = bg ?? tokenBg
 
-          // CTA checks are token-based to avoid hydration timing flake:
-          // verify the design system CTA token pair meets minimum contrast.
-          const ratio =
-            sel.role === "cta"
-              ? contrastRatio(tokenCtaFg, tokenCtaBg)
-              : contrastRatio(safeFg, safeBg)
+          const ratio = contrastRatio(safeFg, safeBg)
           const threshold =
-            sel.role === "border"
-              ? 3.0
-              : sel.role === "status"
-                ? 3.0
-                : sel.role === "cta"
-                  ? 3.0
-                  : 7.0
+            typeof sel.threshold === "number" ? sel.threshold : sel.role === "border" ? 3.0 : 7.0
           results.push({
             route,
             theme,

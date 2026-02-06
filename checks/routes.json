@@ -1,3 +1,17 @@
 {
-  "routes": ["/", "/penny-list", "/store-finder", "/about"]
+  "routes": [
+    "/",
+    "/penny-list",
+    "/report-find",
+    "/store-finder",
+    "/about",
+    "/guide",
+    "/what-are-pennies",
+    "/clearance-lifecycle",
+    "/digital-pre-hunt",
+    "/in-store-strategy",
+    "/inside-scoop",
+    "/facts-vs-myths",
+    "/faq"
+  ]
 }

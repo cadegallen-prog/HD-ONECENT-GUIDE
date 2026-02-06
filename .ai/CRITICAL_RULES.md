@@ -98,8 +98,10 @@ powershell -NoProfile -Command "try { (Invoke-WebRequest -Uri http://localhost:3
 --background, --foreground
 --card, --card-foreground
 --primary, --primary-foreground
---cta-primary, --cta-secondary
---border-default, --border-elevated
+--cta-primary, --cta-text
+--border-default, --border-strong
+--text-primary, --text-secondary, --text-muted
+--bg-page, --bg-elevated, --bg-card, --bg-subtle
 ```
 
 **Option 2: Get approval FIRST before adding new colors**

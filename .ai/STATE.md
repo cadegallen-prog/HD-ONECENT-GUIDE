@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 6, 2026 (AdSense reapplication status update)
+**Last updated:** Feb 6, 2026 (Guide AAA polish + contrast guardrail hardening)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,34 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-06 (Guide AAA polish + guardrail hardening):** Completed a one-shot UX/readability pass to normalize guide layout alignment and harden automated contrast enforcement.
+  - **Guide presentation fixes:**
+    - Aligned guide header, editorial strip, prose column, and chapter navigation to one centered 68ch reading column on all chapter routes.
+    - Added `className` support to `components/guide/EditorialBlock.tsx` and applied consistent width constraints on all guide chapter pages.
+  - **Token tuning for strict thresholds:**
+    - Light placeholder: `--text-placeholder` `#55504a` → `#544f49` (now above 7:1 on recessed surfaces).
+    - Dark borders: `--border-default` `#455a64` → `#546e7a`; `--border-strong` `#546e7a` → `#607d8b`; `--border-dark` `#607d8b` → `#78909c` (keeps non-text boundaries above 3:1 on page/card surfaces).
+  - **Contrast tooling hardening:**
+    - Expanded route coverage (`checks/routes.json`) to include guide chapters and core routes.
+    - Expanded selector coverage (`checks/selectors.json`) with guide-aware selectors and optional handling to reduce false negatives.
+    - Updated `scripts/check-contrast.js` to enforce token-level checks and required-selector behavior, including border checks on both `--bg-page` and `--bg-card`.
+  - **Verification:** `npm run lint` ✅, `npm run lint:colors` ✅, `npm run build` ✅, `npm run test:unit` ✅ (26/26), `npm run test:e2e` ✅ (156 passed), `npm run check-contrast` ✅, proof bundle: `reports/proof/2026-02-06T08-30-41/`.
+
+- **2026-02-06 (WCAG AAA Readability Overhaul - Guide Visual System):** Fixed the guide visual system and readability foundation for light/dark modes.
+  - **Token changes (globals.css):**
+    - Light `--text-secondary`: `#36312e` → `#44403c` (body copy — wider gap from headlines, AAA)
+    - Light `--text-muted`: `#44403c` → `#504a45` (metadata — clearly lighter than body, AAA)
+    - Light `--text-placeholder`: `#36312e` → `#544f49` (placeholder now AAA on recessed surfaces)
+    - Dark `--text-secondary`: `#b0b0b0` → `#bdbdbd` (AAA on card surfaces)
+    - Dark `--text-muted`: `#a3a3a3` → `#adadad` (AAA on card surfaces)
+    - Added `--bg-subtle` token (light: `#f8f8f7`, dark: `#181818`)
+  - **Guide enhancements:**
+    - Added `.guide-article` CSS class with enhanced readability (1.75 line-height, 68ch max-width, h2 border separators, styled tables)
+    - Added `.guide-callout` / `.guide-callout-warning` / `.guide-callout-success` classes
+    - Added `variant="guide"` prop to `Prose` component; applied to all 7 guide chapters
+  - **Docs updated:** `docs/DESIGN-SYSTEM-AAA.md` (full rewrite to match actual tokens), `.ai/CRITICAL_RULES.md`, `.ai/CONSTRAINTS.md`, `.ai/CONSTRAINTS_TECHNICAL.md`, `AGENTS.md`
+  - **Verification:** `npm run lint` ✅, `npm run lint:colors` ✅, `npm run build` ✅, `npm run test:unit` ✅ (26/26), `npm run test:e2e` ✅ (156 passed), Playwright proof: `reports/proof/2026-02-06-aaa-readability/` (16 screenshots: 8 pages × light/dark).
 
 - **2026-02-06 (AdSense reapplication status - docs only):** Added founder clarification that AdSense was re-applied about one day after rejection and is currently active/in-review.
   - **Topic updated:** `.ai/topics/ADSENSE_APPROVAL_CURRENT.md`.

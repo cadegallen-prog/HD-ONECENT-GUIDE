@@ -165,17 +165,20 @@ Tokens live in `app/globals.css`; Tailwind consumes them via CSS variables.
 Rules:
 
 - Prefer tokens (`var(--bg-*)`, `var(--text-*)`, `var(--cta-*)`) over hard-coded colors
-- Keep the palette neutral + blue CTA; avoid new accent colors unless essential
+- Keep the palette neutral + navy CTA (light) / muted blue CTA (dark); avoid new accent colors unless essential
+- Text hierarchy: `--text-primary` (headlines) > `--text-secondary` (body) > `--text-muted` (metadata) — do not compress
+- Guide chapters use `<Prose variant="guide">` which applies `.guide-article` for enhanced readability
 - Use an 8-pt spacing grid; Penny List cards may use 12-14px padding for dense scan layouts
 - Minimum body text 16px; Penny List card metadata may be 12-13px (never below 12px)
 - Minimum touch targets 44×44px
 - Text links are underlined and use CTA color; icon-only action links may be styled as buttons
+- Full token reference: `docs/DESIGN-SYSTEM-AAA.md`
 
 ---
 
 ## 6. Accessibility Expectations
 
-- Aim for WCAG AAA for body text where feasible; AA minimum everywhere
+- Enforce WCAG AAA for all text tokens on intended surfaces; non-text UI boundaries must be at least 3:1
 - Keyboard navigation must be correct; focus rings visible and consistent
 - Use semantic HTML (`<button>`, `<label>`, `<fieldset>`, `<time>`)
 - Use `<details>/<summary>` for simple accordions

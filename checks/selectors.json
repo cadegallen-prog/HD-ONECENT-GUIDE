@@ -1,15 +1,150 @@
 {
   "selectors": [
-    { "name": "body-text", "selector": "body", "role": "text" },
-    { "name": "card-surface", "selector": "[data-card], article", "role": "text" },
-    { "name": "card-border", "selector": "[data-card], article", "role": "border" },
-    { "name": "cta", "selector": "[data-cta=\"befrugal\"]", "role": "cta" },
+    { "name": "body-text", "selector": "body", "role": "text", "threshold": 7 },
+    { "name": "page-h1", "selector": "main h1", "role": "text", "threshold": 7 },
+    {
+      "name": "card-surface",
+      "selector": "[data-card], article",
+      "role": "text",
+      "threshold": 7,
+      "optional": true
+    },
+    {
+      "name": "card-border",
+      "selector": "[data-card], article",
+      "role": "border",
+      "threshold": 3,
+      "optional": true
+    },
+    {
+      "name": "guide-article-body",
+      "selector": ".guide-article",
+      "role": "text",
+      "threshold": 7,
+      "routes": [
+        "/what-are-pennies",
+        "/clearance-lifecycle",
+        "/digital-pre-hunt",
+        "/in-store-strategy",
+        "/inside-scoop",
+        "/facts-vs-myths",
+        "/faq"
+      ]
+    },
+    {
+      "name": "guide-article-paragraph",
+      "selector": ".guide-article p",
+      "role": "text",
+      "threshold": 7,
+      "optional": true,
+      "routes": [
+        "/what-are-pennies",
+        "/clearance-lifecycle",
+        "/digital-pre-hunt",
+        "/in-store-strategy",
+        "/inside-scoop",
+        "/facts-vs-myths",
+        "/faq"
+      ]
+    },
+    {
+      "name": "guide-h2",
+      "selector": ".guide-article h2",
+      "role": "text",
+      "threshold": 7,
+      "routes": [
+        "/what-are-pennies",
+        "/clearance-lifecycle",
+        "/digital-pre-hunt",
+        "/in-store-strategy",
+        "/inside-scoop",
+        "/facts-vs-myths",
+        "/faq"
+      ]
+    },
+    {
+      "name": "guide-h3",
+      "selector": ".guide-article h3",
+      "role": "text",
+      "threshold": 7,
+      "optional": true,
+      "routes": [
+        "/what-are-pennies",
+        "/clearance-lifecycle",
+        "/digital-pre-hunt",
+        "/in-store-strategy",
+        "/inside-scoop",
+        "/facts-vs-myths",
+        "/faq"
+      ]
+    },
+    {
+      "name": "guide-editorial-meta",
+      "selector": ".not-prose",
+      "role": "text",
+      "threshold": 7,
+      "routes": [
+        "/what-are-pennies",
+        "/clearance-lifecycle",
+        "/digital-pre-hunt",
+        "/in-store-strategy",
+        "/inside-scoop",
+        "/facts-vs-myths",
+        "/faq"
+      ]
+    },
+    {
+      "name": "guide-callout-text",
+      "selector": ".guide-callout, .callout",
+      "role": "text",
+      "threshold": 7,
+      "optional": true,
+      "routes": [
+        "/what-are-pennies",
+        "/clearance-lifecycle",
+        "/digital-pre-hunt",
+        "/in-store-strategy",
+        "/inside-scoop",
+        "/facts-vs-myths",
+        "/faq"
+      ]
+    },
+    {
+      "name": "guide-callout-border",
+      "selector": ".guide-callout, .callout",
+      "role": "border",
+      "threshold": 3,
+      "optional": true,
+      "routes": [
+        "/what-are-pennies",
+        "/clearance-lifecycle",
+        "/digital-pre-hunt",
+        "/in-store-strategy",
+        "/inside-scoop",
+        "/facts-vs-myths",
+        "/faq"
+      ]
+    },
     {
       "name": "status-success",
-      "selector": ".text-emerald-600, .text-emerald-400",
-      "role": "status"
+      "selector": ".text-success, [class*=\"text-[var(--status-success)]\"]",
+      "role": "text",
+      "threshold": 7,
+      "optional": true
     },
-    { "name": "status-warning", "selector": ".text-amber-600, .text-amber-400", "role": "status" },
-    { "name": "status-error", "selector": ".text-red-600, .text-red-400", "role": "status" }
+    {
+      "name": "status-warning",
+      "selector": ".text-warning, [class*=\"text-[var(--status-warning)]\"]",
+      "role": "text",
+      "threshold": 7,
+      "optional": true
+    },
+    {
+      "name": "status-error",
+      "selector": ".text-error, [class*=\"text-[var(--status-error)]\"]",
+      "role": "text",
+      "threshold": 7,
+      "optional": true
+    }
   ]
 }

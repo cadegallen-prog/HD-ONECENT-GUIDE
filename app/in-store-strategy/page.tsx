@@ -97,17 +97,17 @@ const ifStoppedSteps = [
 export default function InStoreStrategyPage() {
   return (
     <PageShell width="default" gap="md">
-      <PageHeader
-        title="Verify & In-Store Strategy"
-        subtitle="Boots-on-the-ground tactics for finding pennies and checking out responsibly."
-      />
-
-      <div className="flex justify-center">
-        <EditorialBlock />
+      <div className="w-full max-w-[68ch] mx-auto">
+        <PageHeader
+          title="Verify & In-Store Strategy"
+          subtitle="Boots-on-the-ground tactics for finding pennies and checking out responsibly."
+        />
       </div>
 
-      <Section>
-        <Prose>
+      <EditorialBlock className="w-full max-w-[68ch] mx-auto" />
+
+      <Section className="w-full max-w-[68ch] mx-auto">
+        <Prose variant="guide">
           <p className="mb-10 text-lg leading-relaxed">
             Finding a penny item is only half the game. The other half is verifying the price,
             avoiding unnecessary attention, and staying respectful if a store refuses the sale. This

@@ -145,17 +145,17 @@ export default function FAQPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
-      <PageHeader
-        title="Frequently Asked Questions"
-        subtitle="Clear answers and a quick reference for penny hunting."
-      />
-
-      <div className="flex justify-center">
-        <EditorialBlock />
+      <div className="w-full max-w-[68ch] mx-auto">
+        <PageHeader
+          title="Frequently Asked Questions"
+          subtitle="Clear answers and a quick reference for penny hunting."
+        />
       </div>
 
-      <Section>
-        <Prose>
+      <EditorialBlock className="w-full max-w-[68ch] mx-auto" />
+
+      <Section className="w-full max-w-[68ch] mx-auto">
+        <Prose variant="guide">
           <div className="space-y-6">
             {faqs.map((faq, index) => (
               <details

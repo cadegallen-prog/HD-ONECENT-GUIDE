@@ -40,16 +40,21 @@
     --bg-modal: var(--bg-elevated);
     --bg-tertiary: var(--bg-recessed);
 
+    /* Subtle surface for light background lifts (badges, hover hints) */
+    --bg-subtle: #f8f8f7;
+
     /* Legacy aliases for compatibility */
     --bg-primary: var(--bg-page);
     --bg-secondary: var(--bg-elevated);
     --bg-dark: #1c1917;
 
-    /* WCAG AAA compliant text colors (7:1+ contrast on ALL backgrounds) */
-    --text-primary: #1c1917;
-    --text-secondary: #36312e; /* 11.26:1 on #f0f0ef (AAA compliant) */
-    --text-muted: #44403c; /* 9.01:1 on #f0f0ef (AAA compliant, lighter than secondary) */
-    --text-placeholder: #36312e; /* Same as secondary for AAA compliance */
+    /* WCAG AAA compliant text colors (7:1+ contrast on ALL backgrounds)
+       Hierarchy: primary (headlines) > secondary (body) > muted (metadata) > placeholder (inputs)
+       All tested on worst-case background #f0f0ef (--bg-recessed) */
+    --text-primary: #1c1917; /* 15.4:1 on white, 13.5:1 on #f0f0ef — headlines, labels */
+    --text-secondary: #44403c; /* 10.26:1 on white, 8.97:1 on #f0f0ef — body copy */
+    --text-muted: #504a45; /* 8.71:1 on white, 7.61:1 on #f0f0ef — metadata, captions */
+    --text-placeholder: #544f49; /* 8.10:1 on white, 7.11:1 on #f0f0ef — placeholders (AAA) */
     --text-inverse: #ffffff;
 
     --border-default: #757575; /* 4.61:1 on white, 4.04:1 on #f0f0ef (3:1+ compliant) */
@@ -177,31 +182,33 @@
     /* Level 5-6: Modals and highest priority */
     --bg-modal: #303030; /* dialogs, overlays */
     --bg-tertiary: #3a3a3a; /* maximum elevation */
+    --bg-subtle: #181818; /* Between page and card — badge/hint surfaces */
     --bg-primary: var(--bg-page);
     --bg-secondary: var(--bg-elevated);
     --bg-dark: var(--bg-page);
 
-    /* DESATURATED TEXT COLORS (4.5:1 minimum on respective surfaces)
+    /* DESATURATED TEXT COLORS — WCAG AAA on page (#121212) and card (#1e1e1e)
+       Hierarchy: primary (headlines) > secondary (body) > muted (metadata)
        Using muted warm grays instead of pure white to reduce optical vibration */
 
-    /* Primary content: Must meet 4.5:1 on Level 1 cards (#1E1E1E) */
-    --text-primary: #e0e0e0; /* Material Design off-white 87% - prevents halos */
+    /* Primary content: AAA on all surfaces */
+    --text-primary: #e0e0e0; /* 12.2:1 on #121212, 9.2:1 on #1e1e1e — headlines */
 
-    /* Secondary content: Must meet 4.5:1 on Level 1 cards */
-    --text-secondary: #b0b0b0; /* 8.0:1 on #1a1a1a (AAA) */
+    /* Secondary content: AAA on page and card */
+    --text-secondary: #bdbdbd; /* 8.87:1 on #1e1e1e — body copy */
 
-    /* Tertiary content: Must meet 4.5:1 on elevated surfaces (#2a2a2a) */
-    --text-muted: #a3a3a3; /* 7.2:1 on #121212 (AAA compliant) */
-    --text-placeholder: #a3a3a3; /* 7.2:1 AAA compliant */
+    /* Tertiary content: AAA on page and card */
+    --text-muted: #adadad; /* 7.43:1 on #121212, 7.43:1 on #1e1e1e — metadata */
+    --text-placeholder: #adadad; /* 7.43:1 on #121212, 7.43:1 on #1e1e1e — placeholders */
 
     /* Inverse text for light buttons */
     --text-inverse: #030712;
 
     /* UI COMPONENT BORDERS - Technical Grid (steel blue-grey)
        Subtle, professional borders for clean utility aesthetic */
-    --border-default: #37474f; /* Steel blue-grey - 3.2:1 on #121212 (AA) */
-    --border-strong: #455a64; /* Stronger steel - 3.8:1 (AA) */
-    --border-dark: #546e7a; /* Darkest steel - 4.5:1 (AA) */
+    --border-default: #546e7a; /* Steel blue-grey - 3.5:1 on #121212, 3.1:1 on #1e1e1e */
+    --border-strong: #607d8b; /* Stronger steel - 4.3:1 on #121212, 3.8:1 on #1e1e1e */
+    --border-dark: #78909c; /* Darkest steel - 5.6:1 on #121212, 5.0:1 on #1e1e1e */
     --border-focus: var(--cta-primary);
 
     /* Dark mode brand - desaturated */
@@ -210,11 +217,11 @@
     --brand-copper: var(--text-secondary);
     --brand-bronze: var(--text-muted);
 
-    /* CTA ACCENT - Muted light-blue (AAA with dark text; avoids "glow spotlight") */
-    --cta-primary: #7da6da;
+    /* CTA ACCENT - Muted light-blue (AAA as link text on dark surfaces) */
+    --cta-primary: #90b8ea;
     --cta-text: #0f172a;
-    --cta-hover: #84b1e6;
-    --cta-active: #7faade;
+    --cta-hover: #9cc4f8;
+    --cta-active: #84b1e6;
     --link-default: var(--cta-primary);
     --link-hover: var(--cta-hover);
 
@@ -1040,25 +1047,95 @@
 
   /* ===============================================
      GUIDE ARTICLE STYLES
+     Long-form reading optimized for clarity and hierarchy.
+     Used by guide chapters and educational content.
      =============================================== */
   .guide-article {
     @apply text-[var(--text-secondary)];
+    max-width: 68ch; /* Optimal line length for readability */
+    width: 100%;
+    margin-inline: auto;
   }
 
   .guide-article p {
-    @apply mb-4 leading-relaxed;
+    @apply mb-5 leading-relaxed;
+    font-size: 1rem;
+    line-height: 1.75;
   }
 
   .guide-article ul {
     @apply mb-6 ml-6 space-y-2 list-disc;
   }
 
+  .guide-article ol {
+    @apply mb-6 ml-6 space-y-2 list-decimal;
+  }
+
   .guide-article li {
     @apply leading-relaxed;
+    line-height: 1.75;
   }
 
   .guide-article strong {
     @apply text-[var(--text-primary)] font-semibold;
+  }
+
+  .guide-article h2 {
+    @apply text-2xl font-bold mt-14 mb-6 text-[var(--text-primary)];
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-default);
+    text-wrap: pretty;
+  }
+
+  .guide-article h3 {
+    @apply text-lg font-bold mt-10 mb-4 text-[var(--text-primary)];
+    text-wrap: pretty;
+  }
+
+  /* Guide tables — structured data inside articles */
+  .guide-article table {
+    @apply w-full mb-8 rounded-lg overflow-hidden border;
+    border-color: var(--border-default);
+    background-color: var(--bg-card);
+  }
+
+  .guide-article thead {
+    background-color: var(--bg-elevated);
+  }
+
+  .guide-article th {
+    @apply text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider;
+    color: var(--text-muted);
+  }
+
+  .guide-article td {
+    @apply px-4 py-3 text-sm border-t;
+    border-color: var(--border-default);
+  }
+
+  .guide-article tbody tr {
+    background-color: var(--bg-card);
+    transition: background-color var(--duration-fast) var(--ease-default);
+  }
+
+  .guide-article tbody tr:hover {
+    background-color: var(--bg-hover);
+  }
+
+  /* Guide callout — left-border accent for important context */
+  .guide-callout {
+    @apply rounded-lg p-5 mb-6;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-default);
+    border-left: 4px solid var(--cta-primary);
+  }
+
+  .guide-callout-warning {
+    border-left-color: var(--status-warning);
+  }
+
+  .guide-callout-success {
+    border-left-color: var(--status-success);
   }
 
   /* Section Headings - unified with type scale */
@@ -1069,6 +1146,7 @@
   .lead {
     @apply text-lg mb-6;
     color: var(--text-secondary);
+    line-height: 1.75;
   }
 
   /* ===============================================

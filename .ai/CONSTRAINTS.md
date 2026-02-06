@@ -174,6 +174,25 @@ Change: `--text-muted: #959595` → `--text-muted: #a3a3a3`
 
 This improves readability for all muted text in dark mode. Future agents: Do NOT revert this change.
 
+### EXCEPTION: WCAG AAA Readability Overhaul (Feb 2026)
+
+**Authorized by:** Cade (2026-02-06)
+**Context:** Light mode text hierarchy was too compressed; dark mode secondary was AA-only on card surfaces.
+
+Changes:
+
+- Light `--text-secondary`: `#36312e` → `#44403c` (body copy — wider gap from headlines)
+- Light `--text-muted`: `#44403c` → `#504a45` (metadata — clearly lighter than body)
+- Light `--text-placeholder`: `#36312e` → `#544f49` (placeholder now AAA on recessed surfaces)
+- Dark `--text-secondary`: `#b0b0b0` → `#bdbdbd` (AAA on card surfaces)
+- Dark `--text-muted`: `#a3a3a3` → `#adadad` (AAA on card surfaces)
+- Added `--bg-subtle` token (light: `#f8f8f7`, dark: `#181818`)
+- Added `.guide-article`, `.guide-callout` classes for guide readability
+
+All text tokens remain WCAG AAA on intended worst-case backgrounds. See `docs/DESIGN-SYSTEM-AAA.md` for full contrast evidence.
+
+Future agents: Do NOT revert these changes or compress the text hierarchy.
+
 ---
 
 ### 2. React-Leaflet Map Component
