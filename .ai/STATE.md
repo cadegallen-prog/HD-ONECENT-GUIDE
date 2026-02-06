@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 6, 2026 (Guide Finish Touches)
+**Last updated:** Feb 6, 2026 (Monetization timeline context update)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,14 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-06 (Monetization status context - docs only):** Recorded founder-reported AdSense/Ad Manager/Monumetric timeline so future sessions stop re-asking for the same approval history.
+  - **Topic updated:** `.ai/topics/ADSENSE_APPROVAL_CURRENT.md` now includes:
+    - AdSense low-value denial timing (Feb 2-3, 2026, founder-reported)
+    - concurrent Ezoic/Ad Manager evaluation and later denial context
+    - Monumetric outreach + reported escalation to Google approvals
+    - founder preference to de-prioritize Ezoic and prioritize Monumetric
+  - **Verification:** Docs-only change; quality gates not run.
 
 - **2026-02-06 (Guide spacing cleanup - remove deadspace after editorial block):** Reduced vertical gaps across guide chapters by removing extra margins and tightening layout spacing.
   - **Layout changes:** Removed redundant margins around the editorial block and prose blocks; set guide pages to tighter `PageShell` spacing; removed `my-8` from `EditorialBlock`.
