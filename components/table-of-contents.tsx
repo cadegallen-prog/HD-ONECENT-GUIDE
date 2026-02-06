@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Map, Clock } from "lucide-react"
+import { Map } from "lucide-react"
 import Link from "next/link"
 
 const sections = [
@@ -16,10 +16,7 @@ const sections = [
   { id: "conclusion", title: "IX. Conclusion: Tips for Success" },
 ]
 
-const tools = [
-  { href: "/store-finder", label: "Store Finder", icon: Map },
-  { href: "/trip-tracker", label: "Trip Tracker", icon: Clock },
-]
+const tools = [{ href: "/store-finder", label: "Store Finder", icon: Map }]
 
 interface TableOfContentsProps {
   variant?: "desktop" | "mobile"

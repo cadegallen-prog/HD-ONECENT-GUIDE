@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: "Live Store Finder for Home Depot Penny Shopping | Penny Central",
   description:
     "Find nearby Home Depot stores for penny hunting and plan your next trip. Then check the live list and report what you find.",
+  alternates: {
+    canonical: "/store-finder",
+  },
   openGraph: {
     type: "website",
     url: "https://www.pennycentral.com/store-finder",

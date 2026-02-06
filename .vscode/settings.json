@@ -23,7 +23,7 @@
 
   "files.eol": "\n",
 
-  "workbench.startupEditor": "readme",
+  "workbench.startupEditor": "welcomePage",
   "workbench.editor.enablePreview": false,
   "css.lint.unknownAtRules": "ignore",
 
@@ -52,5 +52,11 @@
 
   // Supabase Extension Settings
   // Connect to remote project (not local)
-  "supabase.projectRef": "djtejotbcnzzjfsogzlc"
+  "supabase.projectRef": "djtejotbcnzzjfsogzlc",
+  "github.copilot.chat.copilotMemory.enabled": true,
+  "github.copilot.chat.anthropic.contextEditing.enabled": true,
+  "github.copilot.chat.anthropic.thinking.budgetTokens": 32000,
+  "chat.customAgentInSubagent.enabled": true,
+  "github.copilot.chat.searchSubagent.enabled": true,
+  "chat.agent.thinking.collapsedTools": "off"
 }

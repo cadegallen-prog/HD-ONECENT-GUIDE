@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: "Privacy Policy | PennyCentral",
   description:
     "Privacy policy and disclosures for PennyCentral, including analytics, advertising, and affiliate information.",
+  alternates: {
+    canonical: "/privacy-policy",
+  },
   robots: {
     index: true,
     follow: true,

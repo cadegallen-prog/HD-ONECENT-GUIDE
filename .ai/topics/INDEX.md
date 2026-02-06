@@ -24,6 +24,12 @@
 **Focus:** Ad networks, revenue strategy, timeline
 **Quick link:** See SESSION_LOG for Ezoic integration details
 
+### [ADSENSE_APPROVAL](.ai/topics/ADSENSE_APPROVAL_CURRENT.md)
+
+**Status:** 🔄 In progress (hardening)
+**Focus:** Low-value-content recovery, canonical/index hygiene, approval evidence
+**Quick link:** See `.ai/STATE.md` for implemented changes and verification
+
 ### [UI_DESIGN](.ai/topics/UI_DESIGN.md)
 
 **Status:** ✅ Frozen (Penny List redesign complete)

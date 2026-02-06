@@ -8,8 +8,6 @@ export type DeviceType = "mobile" | "desktop" | "unknown"
 export type ThemeName = "light" | "dark" | "unknown"
 
 export type EventName =
-  | "home_page_view"
-  | "penny_list_view"
   | "penny_list_filter"
   | "penny_list_search"
   | "bookmark_banner_shown"

@@ -11,6 +11,7 @@ Short, task-focused guides to avoid repo-wide searching.
 
 - [repo-map](./repo-map.md) — **When to use:** You’re unsure where things live (pages, data, scripts, tests).
 - [adsense-domain-email-setup](./adsense-domain-email-setup.md) — **When to use:** You need a professional domain email plus an AdSense reviewer checklist.
+- [adsense-low-value-content-audit](./adsense-low-value-content-audit.md) — **When to use:** AdSense is rejecting for “low value content” and you need a repeatable audit for `/sku/[sku]` pages (images, content volume, Googlebot render, CSP).
 - [feature-to-files](./feature-to-files.md) — **When to use:** You know the feature but not the exact starting files.
 - [local-dev-faststart](./local-dev-faststart.md) — **When to use:** You need to run the site locally or debug a dev server issue.
 - [backfill-homedepot-enrichment-json](./backfill-homedepot-enrichment-json.md) — **When to use:** You have a HomeDepot.com scrape JSON and want to refresh Penny List enrichment fields only (including retail price).

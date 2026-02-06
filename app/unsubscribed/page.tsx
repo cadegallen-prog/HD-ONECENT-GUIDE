@@ -5,6 +5,9 @@ import { CheckCircle2 } from "lucide-react"
 export const metadata: Metadata = {
   title: "Unsubscribed | Penny Central",
   description: "You have been unsubscribed from Penny Central email updates.",
+  alternates: {
+    canonical: "/unsubscribed",
+  },
   robots: {
     index: false,
     follow: false,

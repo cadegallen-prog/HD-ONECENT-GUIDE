@@ -4,6 +4,9 @@ import { PageHeader, PageShell, Prose, Section } from "@/components/page-templat
 export const metadata: Metadata = {
   title: "Terms of Service | PennyCentral",
   description: "Terms of service for PennyCentral.com.",
+  alternates: {
+    canonical: "/terms-of-service",
+  },
   robots: {
     index: true,
     follow: true,

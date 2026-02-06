@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: "About PennyCentral",
   description:
     "A free, community-driven guide for finding $0.01 clearance items at Home Depot. Learn about our mission, transparency practices, and how to contact us.",
+  alternates: {
+    canonical: "/about",
+  },
 }
 
 export default function AboutPage() {

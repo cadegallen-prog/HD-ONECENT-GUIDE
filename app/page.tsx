@@ -37,6 +37,9 @@ export const metadata: Metadata = {
       "Live community reports, updated as sightings come in. See what's hitting stores now.",
     images: ["https://www.pennycentral.com/api/og?page=homepage"],
   },
+  alternates: {
+    canonical: "/",
+  },
 }
 
 export default async function Home() {

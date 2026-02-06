@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "Home Depot Internal Systems - Understanding Store Operations | Penny Central",
   description:
     "Understand Home Depot's internal systems, SKU structure, inventory management, and clearance processes from a penny hunter's perspective.",
+  alternates: {
+    canonical: "/",
+  },
   keywords: [
     "home depot systems",
     "sku structure",

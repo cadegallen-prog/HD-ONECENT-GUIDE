@@ -9,6 +9,7 @@ import { CommandPaletteProvider } from "@/components/command-palette-provider"
 import { AuthProvider } from "@/components/auth-provider"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
+import { AnalyticsTracker } from "@/components/analytics-tracker"
 import { ogImageUrl } from "@/lib/og"
 import { CANONICAL_BASE } from "@/lib/canonical"
 
@@ -109,9 +110,6 @@ export const metadata: Metadata = {
     statusBarStyle: "black-translucent",
     title: "Penny Central",
   },
-  alternates: {
-    canonical: CANONICAL_BASE,
-  },
 }
 
 export default function RootLayout({
@@ -197,7 +195,7 @@ export default function RootLayout({
         {/* ===================================================
             GOOGLE ANALYTICS 4 (GA4)
             Measurement ID: G-DJ4RJRX05E
-            DO NOT REMOVE OR MODIFY
+            Tidied up: Consent Mode v2 + SPA tracking fix
             =================================================== */}
         {ANALYTICS_ENABLED && (
           <>
@@ -211,52 +209,22 @@ export default function RootLayout({
                   window.dataLayer = window.dataLayer || [];
                   function gtag(){dataLayer.push(arguments);}
                   window.gtag = window.gtag || gtag;
+
+                  // Consent Mode v2 Default (Granted for now, but explicit for GA4 modeling)
+                  gtag('consent', 'default', {
+                    'ad_storage': 'granted',
+                    'ad_user_data': 'granted',
+                    'ad_personalization': 'granted',
+                    'analytics_storage': 'granted'
+                  });
+
                   gtag('js', new Date());
-                  gtag('config', '${GA_MEASUREMENT_ID}', { page_path: window.location.pathname });
+                  // Page views are now handled by <AnalyticsTracker /> in the body
+                  gtag('config', '${GA_MEASUREMENT_ID}', { 
+                    send_page_view: false
+                  });
 
                   (function() {
-                    var GA_ID = '${GA_MEASUREMENT_ID}';
-                    var lastPath = window.location.pathname;
-
-                    function deviceType() {
-                      try {
-                        return window.matchMedia("(max-width: 768px)").matches ? "mobile" : "desktop";
-                      } catch (e) {
-                        return "unknown";
-                      }
-                    }
-
-                    function themeName() {
-                      try {
-                        var root = document.documentElement;
-                        return (root.classList.contains("dark") || root.dataset.theme === "dark") ? "dark" : "light";
-                      } catch (e) {
-                        return "unknown";
-                      }
-                    }
-
-                    function basePayload() {
-                      return {
-                        page: window.location.pathname,
-                        device: deviceType(),
-                        theme: themeName(),
-                        ts: new Date().toISOString(),
-                        event_category: "engagement"
-                      };
-                    }
-
-                    function trackEvent(name, extra) {
-                      try {
-                        var payload = basePayload();
-                        if (extra && typeof extra === "object") {
-                          for (var k in extra) payload[k] = extra[k];
-                        }
-                        gtag("event", name, payload);
-                      } catch (e) {
-                        // no-op
-                      }
-                    }
-
                     function getWeekKey(date) {
                       var copy = new Date(date.getTime());
                       var day = copy.getUTCDay();
@@ -288,52 +256,16 @@ export default function RootLayout({
                         var qualifies = recentSessions.length >= 2;
 
                         if (qualifies && emittedWeek !== weekKey) {
-                          trackEvent("return_visit", { weeklySessions: recentSessions.length });
+                          gtag("event", "return_visit", { 
+                            weeklySessions: recentSessions.length,
+                            event_category: "engagement"
+                          });
                           localStorage.setItem(RETURN_VISIT_KEY, weekKey);
                         }
-                      } catch (e) {
-                        // no-op
-                      }
+                      } catch (e) { /* no-op */ }
                     }
 
-                    function trackHomePageViewIfNeeded() {
-                      if (window.location.pathname === "/") {
-                        trackEvent("home_page_view", { page: "/" });
-                      }
-                    }
-
-                    function onRouteChange() {
-                      try {
-                        var path = window.location.pathname;
-                        if (path === lastPath) return;
-                        lastPath = path;
-                        gtag("config", GA_ID, { page_path: path });
-                        trackHomePageViewIfNeeded();
-                      } catch (e) {
-                        // no-op
-                      }
-                    }
-
-                    try {
-                      var pushState = history.pushState;
-                      history.pushState = function() {
-                        pushState.apply(this, arguments);
-                        setTimeout(onRouteChange, 0);
-                      };
-
-                      var replaceState = history.replaceState;
-                      history.replaceState = function() {
-                        replaceState.apply(this, arguments);
-                        setTimeout(onRouteChange, 0);
-                      };
-                    } catch (e) {
-                      // no-op
-                    }
-
-                    window.addEventListener("popstate", function() { setTimeout(onRouteChange, 0); });
-
-                    // Initial client-side events
-                    trackHomePageViewIfNeeded();
+                    // Initial tracking
                     trackReturnVisit();
                   })();
                 `,
@@ -356,6 +288,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          {/* Handles client-side tracking for GA4 */}
+          <AnalyticsTracker />
           <AuthProvider>
             <CommandPaletteProvider>
               {/* Navbar with full mobile functionality */}

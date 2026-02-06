@@ -7,7 +7,6 @@
 - **Report a Find:** `app/report-find/page.tsx`
 - **SKU detail pages:** `app/sku/[sku]/page.tsx`
 - **Store Finder:** `app/store-finder/page.tsx`
-- **Trip Tracker:** `app/trip-tracker/page.tsx`
 - **Guide:** `app/guide/page.tsx` (content in `components/GuideContent.tsx`)
 - **Resources:** `app/resources/page.tsx`
 - **Auth + Lists:** `app/auth/**`, `app/login/page.tsx`, `app/lists/**`

@@ -2,7 +2,7 @@ import { test } from "@playwright/test"
 import { promises as fs } from "node:fs"
 import path from "node:path"
 
-const PAGES = ["/", "/store-finder", "/guide", "/trip-tracker", "/resources", "/about", "/cashback"]
+const PAGES = ["/", "/store-finder", "/guide", "/resources", "/about", "/cashback"]
 
 test.describe("live site console audit", () => {
   test("captures console, pageerrors and failed requests across key pages and writes a report", async ({

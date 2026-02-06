@@ -320,4 +320,90 @@ export const metadata: Metadata = {
 
 ---
 
+### 12. Playwright E2E Timeout (Local)
+
+**Problem:** `npm run test:e2e` timed out at the default 240s during this session.
+
+**What We Tried:**
+
+- Ran `npm run test:e2e` after successful `lint`, `build`, and `test:unit`.
+
+**What We Learned:**
+
+- The Playwright run can exceed the default timeout in this environment, even when the build is clean.
+
+**What to Do Instead:**
+
+- Re-run `npm run test:e2e` with a longer timeout (e.g., 6–8 minutes) when it times out.
+- If it still fails, capture the first failing spec by running a targeted Playwright command and log artifacts before retrying the full suite.
+
+**Date:** Feb 05, 2026
+
+---
+
+### 13. Build Fails After Route Removal (Stale `.next` Types)
+
+**Problem:** `npm run build` failed after removing `/trip-tracker`, with type errors in `.next-playwright` and `.next/dev/types`.
+
+**What We Tried:**
+
+- Re-ran `npm run build` directly.
+
+**What We Learned:**
+
+- Next.js can keep stale route types in `.next` and `.next-playwright` after a route is deleted.
+
+**What to Do Instead:**
+
+- Delete `.next` and `.next-playwright` before rebuilding when removing routes:
+  - `cmd /c rmdir /s /q .next`
+  - `cmd /c rmdir /s /q .next-playwright`
+
+**Date:** Feb 05, 2026
+
+---
+
+### 14. Playwright MCP Blocks `file://` URLs
+
+**Problem:** Playwright MCP refused to open a local HTML file for before/after screenshots.
+
+**What We Tried:**
+
+- Navigated to a `file:///` URL in the Playwright MCP browser.
+
+**What We Learned:**
+
+- The Playwright MCP tool blocks `file://` URLs.
+
+**What to Do Instead:**
+
+- Serve the file over a local HTTP server (example: `python -m http.server 4173` from the folder).
+- Navigate to `http://localhost:4173/<file>.html` and capture the screenshot.
+
+**Date:** Feb 05, 2026
+
+---
+
+### 15. Prettier CRLF Warnings After Python Edits
+
+**Problem:** `npm run lint` reported hundreds of Prettier warnings (`Insert ␍`) after editing TSX files with Python.
+
+**What We Tried:**
+
+- Ran lint immediately after Python rewrites.
+
+**What We Learned:**
+
+- The repo expects CRLF line endings; Python writes LF by default.
+- Running `eslint --fix` or rewriting with CRLF resolves the warnings.
+
+**What to Do Instead:**
+
+- Normalize line endings to CRLF after Python edits, or run:
+  - `npx eslint <files> --fix`
+
+**Date:** Feb 05, 2026
+
+---
+
 **For full learning history:** See `archive/learnings-history/LEARNINGS_full_2024-2025.md`

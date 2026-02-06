@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   title: "Support | PennyCentral",
   description:
     "Learn how PennyCentral is funded, how ads work on the site, and how you can optionally support the project.",
+  alternates: {
+    canonical: "/support",
+  },
 }
 
 export default function SupportPage() {

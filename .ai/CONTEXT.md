@@ -117,7 +117,7 @@ The group is conversation and proof; the site is structured memory and tooling.
 
 2. **Practical tools**
    - Store Finder for planning hunts.
-   - Trip Tracker is optional/future and must stay low‑maintenance.
+   - Trip Tracker removed (archived); focus on My List instead.
 
 3. **Crowd Reports → Penny List (The Magnum Opus)**
    - Users report finds in <30 seconds via low-friction form.

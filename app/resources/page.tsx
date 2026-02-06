@@ -10,6 +10,9 @@ import { COMMUNITY_MEMBER_COUNT_DISPLAY, FACEBOOK_GROUP_URL } from "@/lib/consta
 export const metadata: Metadata = {
   title: "Resources | Penny Central",
   description: "Essential tools and resources for penny hunting at Home Depot.",
+  alternates: {
+    canonical: "/resources",
+  },
 }
 
 export default function ResourcesPage() {

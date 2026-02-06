@@ -1,5 +1,11 @@
 # AdSense & Monetization Status
 
+> **Canonical context doc (current):**
+>
+> - `.ai/topics/ADSENSE_APPROVAL_CURRENT.md`
+>
+> This file is retained for historical context; prefer the topic doc above for active work.
+
 **Last Updated:** 2026-02-02
 
 ---
@@ -65,7 +71,6 @@ This 7:1 ratio of "ignored pages" to "indexed pages" signals to Google (and AdSe
   - `/faq`
   - `/resources`
   - `/report-find`
-  - `/trip-tracker`
   - `/cashback`
   - `/about`
   - `/contact`

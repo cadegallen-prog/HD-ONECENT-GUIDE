@@ -78,7 +78,6 @@ The test covers key user flows:
 - `/` - Homepage
 - `/store-finder` - Geolocation feature
 - `/guide` - Content page
-- `/trip-tracker` - Interactive feature
 - `/resources` - Resource links
 - `/about` - Static page
 - `/cashback` - Affiliate content

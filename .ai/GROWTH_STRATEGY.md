@@ -164,12 +164,12 @@
 | --------------------------- | -------------------- | ------- |
 | Related content suggestions | Keep users exploring | Various |
 
-#### ❌ SHELVED
+#### ❌ ARCHIVED
 
-| Task                      | Why Shelved                                                          |
+| Task                      | Why Archived                                                         |
 | ------------------------- | -------------------------------------------------------------------- |
 | Trip Tracker gamification | Requires user accounts to work properly; localStorage is too fragile |
-| Trip Tracker page         | Keep accessible but don't promote; unclear user value                |
+| Trip Tracker page         | Removed in favor of My List; unclear user value                      |
 
 ---
 

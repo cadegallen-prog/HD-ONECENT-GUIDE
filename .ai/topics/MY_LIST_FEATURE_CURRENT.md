@@ -206,7 +206,7 @@ From `supabase/migrations/002_create_list_shares.sql`:
 - **But Navbar does NOT include "My Lists":**
   - `components/navbar.tsx` nav items: Penny List, Report a Find, Guide, Store Finder, About
 - **Command palette does NOT include "My Lists":**
-  - `components/command-palette.tsx` includes Penny List/Store Finder/Trip Tracker, but not `/lists`.
+  - `components/command-palette.tsx` includes Penny List/Store Finder, but not `/lists`.
 
 ### Only current "My Lists" entry point (Penny List mobile bar)
 

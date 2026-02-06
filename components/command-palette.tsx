@@ -39,7 +39,6 @@ const pages = [
   { icon: Users, label: "Community Penny List", path: "/penny-list", group: "Tools" },
   { icon: Heart, label: "My List", path: "/lists", group: "Tools" },
   { icon: Map, label: "Store Finder", path: "/store-finder", group: "Tools" },
-  { icon: Clock, label: "Trip Tracker", path: "/trip-tracker", group: "Tools" },
   // More
   { icon: FileText, label: "Resources", path: "/resources", group: "More" },
   { icon: Info, label: "About", path: "/about", group: "More" },

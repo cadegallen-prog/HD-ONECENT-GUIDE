@@ -13,6 +13,9 @@ export const metadata: Metadata = {
     "penny item submission",
     "report clearance find",
   ],
+  alternates: {
+    canonical: "/report-find",
+  },
   openGraph: {
     type: "website",
     url: "https://www.pennycentral.com/report-find",

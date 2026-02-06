@@ -102,12 +102,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.7,
     },
-    {
-      url: `${baseUrl}/trip-tracker`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
 
     // Trust & Legal Pages - Lower Priority but important for E-E-A-T
     {

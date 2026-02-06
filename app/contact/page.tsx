@@ -4,6 +4,9 @@ import { PageHeader, PageShell, Prose, Section } from "@/components/page-templat
 export const metadata: Metadata = {
   title: "Contact Penny Central",
   description: "Contact Penny Central with questions, corrections, or partnership inquiries.",
+  alternates: {
+    canonical: "/contact",
+  },
   robots: {
     index: true,
     follow: true,

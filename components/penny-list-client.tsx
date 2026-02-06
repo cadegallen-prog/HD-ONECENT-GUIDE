@@ -108,7 +108,6 @@ export function PennyListClient({
   }, [initialSearchParams])
   const paramsRef = useRef<URLSearchParams>(initialParams)
   const hasMountedRef = useRef(false)
-  const hasTrackedViewRef = useRef(false)
   const isInitialRenderRef = useRef(true)
   const didForceFreshRef = useRef(false)
 
@@ -193,17 +192,6 @@ export function PennyListClient({
     const newURL = initialParamsString ? `${pathname}?${initialParamsString}` : pathname
     router.replace(newURL, { scroll: false })
   }, [hadTierParam, initialParamsString, pathname, router])
-
-  // Compute freshness from current items (for analytics)
-  const freshnessHours = useMemo(() => {
-    const timestamps = items
-      .map((item) => new Date(item.dateAdded).getTime())
-      .filter((time) => !Number.isNaN(time))
-    if (timestamps.length === 0) return null
-    const latestTimestamp = Math.max(...timestamps)
-    const diffMs = Date.now() - latestTimestamp
-    return Math.max(0, Math.round(diffMs / (1000 * 60 * 60)))
-  }, [items])
 
   // Load user's state from localStorage on mount
   useEffect(() => {
@@ -474,18 +462,9 @@ export function PennyListClient({
   const hasActiveFilters =
     stateFilter !== "" || searchQuery !== "" || dateRange !== DEFAULT_DATE_RANGE
 
-  useEffect(() => {
-    if (!hasMountedRef.current || hasTrackedViewRef.current) return
-    hasTrackedViewRef.current = true
-    trackEvent("penny_list_view", {
-      page: "/penny-list",
-      itemsVisible: total,
-      hasFilter: hasActiveFilters,
-      hasSearch: searchQuery.trim().length > 0,
-      freshnessHours: freshnessHours ?? undefined,
-      hotItemsCount: hotItems.length,
-    })
-  }, [total, freshnessHours, hasActiveFilters, searchQuery, hotItems.length])
+  // Redundant penny_list_view removed.
+  // Custom metrics like itemsVisible and freshness are now tracked via config parameters
+  // in AnalyticsTracker or can be added to custom events if needed.
 
   // Reset to page 1 when filters change (but not when page itself changes)
   const prevFiltersForPageResetRef = useRef({
