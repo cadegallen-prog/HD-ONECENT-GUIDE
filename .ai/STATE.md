@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 6, 2026 (Monetization timeline context update)
+**Last updated:** Feb 6, 2026 (AdSense reapplication status update)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,10 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-06 (AdSense reapplication status - docs only):** Added founder clarification that AdSense was re-applied about one day after rejection and is currently active/in-review.
+  - **Topic updated:** `.ai/topics/ADSENSE_APPROVAL_CURRENT.md`.
+  - **Verification:** Docs-only change; quality gates not run.
 
 - **2026-02-06 (Monetization status context - docs only):** Recorded founder-reported AdSense/Ad Manager/Monumetric timeline so future sessions stop re-asking for the same approval history.
   - **Topic updated:** `.ai/topics/ADSENSE_APPROVAL_CURRENT.md` now includes:

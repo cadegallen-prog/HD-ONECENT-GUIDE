@@ -29,6 +29,25 @@
 
 ---
 
+## 2026-02-06 - Codex - AdSense Reapplication Status Update (Docs Only)
+
+**Goal:** Persist founder clarification that AdSense was re-applied and is currently active/in-review.
+
+**Status:** ✅ Completed (docs-only).
+
+### Changes
+
+- Updated `.ai/topics/ADSENSE_APPROVAL_CURRENT.md` with:
+  - founder-reported reapplication submitted about one day after the initial low-value denial
+  - current status marked as active/in-review
+- Updated `.ai/STATE.md` to include this context update in Current Sprint.
+
+### Verification
+
+- Docs-only change; quality gates not run.
+
+---
+
 ## 2026-02-06 - Codex - Monetization Timeline Context Update (Docs Only)
 
 **Goal:** Persist founder-provided approval history so future sessions do not require repeated re-explanation.
@@ -47,30 +66,5 @@
 ### Verification
 
 - Docs-only change; quality gates not run.
-
----
-
-## 2026-02-06 - Codex - Guide Finish Touches (TOC + Links + Sources)
-
-**Goal:** Close remaining guide UI polish items: TOC badge size, link underlines, HD links as action buttons, and softer ladder note.
-
-**Status:** ✅ Completed & verified.
-
-### Changes
-
-- Raised the TOC "Part" badge text to 12px minimum for readability.
-- Applied default underlines to /guide quick links to meet link styling rules.
-- Converted the Inside Scoop corporate sources into explicit action buttons.
-- Softened the ladder color note with "varies by store" language.
-
-### Verification
-
-- **Lint:** `npm run lint` ✅
-- **Build:** `npm run build` ✅
-- **Unit:** `npm run test:unit` ✅ (26/26)
-- **E2E:** `npm run test:e2e` ✅ (156 passed)
-- **Playwright (after):** `reports/proof/2026-02-06T03-30-08/` (light/dark + UI shots)
-- **Console logs:** `reports/proof/2026-02-06T03-30-08/console-errors.txt` (hydration mismatch + CSP noise)
-- **E2E console audits:** `reports/playwright/console-report-2026-02-06T03-26-26-774Z.json`, `reports/playwright/console-report-2026-02-06T03-27-17-607Z.json`, `reports/playwright/console-report-2026-02-06T03-28-11-991Z.json`, `reports/playwright/console-report-2026-02-06T03-29-03-305Z.json`
 
 ---

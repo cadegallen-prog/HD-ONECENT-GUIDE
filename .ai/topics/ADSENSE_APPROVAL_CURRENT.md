@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-02-06  
 **Owner:** Cade (founder)  
-**Status:** Active (AdSense denied; Monumetric escalation in progress)
+**Status:** Active (AdSense reapplication pending; Monumetric escalation in progress)
 
 ---
 
@@ -60,6 +60,8 @@ Source folder: `data/Google Search Console Stats`
 ### Founder-reported approval timeline (recorded Feb 6, 2026)
 
 - **Feb 2-3, 2026:** AdSense rejection received for low-value content (exact date currently remembered as Feb 2 or Feb 3).
+- **~1 day after rejection (founder-reported):** AdSense was re-applied even though waiting about a week is generally recommended.
+- **Current status:** Reapplication is active/in-review.
 - **Same period:** Ezoic/Google Ad Manager evaluation was running concurrently.
 - **Feb 6, 2026:** Founder reported Ad Manager was also declined via Ezoic path; interpreted as reinforcing that AdSense rejection likely was not an accidental false denial.
 - **Early week of Feb 3, 2026:** Founder contacted Monumetric after AdSense denial while Ad Manager status was still pending.
