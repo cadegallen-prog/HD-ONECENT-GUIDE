@@ -4,75 +4,83 @@
 
 ---
 
-## 2026-02-04 - GitHub Copilot (Copilot Chat) - 2026 Research Integration (Guide Refresh)
+## 2026-02-06 - Codex - Guide Finish Touches (TOC + Links + Sources)
 
-**Goal:** Implement `.ai/plans/2026-research-integration.md` by integrating 2026 operational research into the guide pages and ensuring a professional, token-only visual system.
-
-**Status:** ✅ Completed & verified (local).
-
-### Changes
-
-- Content refresh (2026 reality):
-  - `app/clearance-lifecycle/page.tsx`: ICE metrics + tables, $.02 buffer explanation, legacy vs 2026 comparison, and clearly-labeled historical Cadence A/B reference.
-  - `app/inside-scoop/page.tsx`: MET team timing/ownership + ZMA disposition table + “No Home” signal + Zero-Comm framing.
-  - `app/in-store-strategy/page.tsx`: register/Zero-Comm awareness + updated in-store guidance.
-  - `app/facts-vs-myths/page.tsx`: new 2026 myths (and removal of outdated cadence assumptions).
-  - `components/guide/TableOfContents.tsx`: chapter descriptions aligned to the updated content.
-- Professional styling enforcement:
-  - Removed forbidden raw Tailwind palette colors from the touched guide pages.
-  - Standardized callouts/tables to token-based colors (`var(--...)`) and mobile-readable overflow behavior.
-
-### Verification
-
-- `npm run lint`: ✅
-- `npm run build`: ✅
-- `npm run test:unit`: ✅ (26/26 passed)
-- `npm run test:e2e`: ✅ (156 passed)
-- `npm run lint:colors`: ✅ (Errors: 0 | Warnings: 0)
-- Playwright console audit (from e2e): `reports/playwright/console-report-2026-02-04T16-14-58-496Z.json`
-
----
-
-## 2026-02-04 - Codex - Bloat reduction (archive-first pass 6: exports + legacy snapshots)
-
-**Goal:** Continue reducing repo noise by archiving low-signal exports and legacy test media, without disrupting the founder's dev server on port 3001.
+**Goal:** Close remaining guide UI polish items: TOC badge size, link underlines, HD links as action buttons, and softer ladder note.
 
 **Status:** ✅ Completed & verified.
 
 ### Changes
 
-- Archived export artifacts (restore-path parity):
-  - `https___www.pennycentral.com_-Coverage-2026-02-02/**`
-  - `https___www.pennycentral.com_-Performance-on-Search-2026-02-02/**`
-  - `dev-server.log`, `vercel_list.json`, `vercel_logs.json`, `$file`, `$filePath`
-  - `events/monetization-decision-review-2026-02-11.ics`
-  - Snapshot: `archive/docs-pruned/2026-02-04-pass1/` + `INDEX.md`
-- Archived legacy media (no longer used by current tests):
-  - `reports/playwright/baseline/**`
-  - `screenshots/**`
-  - Snapshot: `archive/media-pruned/2026-02-04-pass2/` + `INDEX.md`
-- Archived legacy scripts:
-  - `scripts/GHETTO_SCRAPER/**`
-  - `scripts/analyze-scrape-coverage.ts`
-  - `scripts/transform-scrape.ts`
-  - Snapshot: `archive/scripts-pruned/2026-02-04-pass1/` + `INDEX.md`
-- Hardened verification loop when dev server is running on 3001:
-  - `scripts/ai-verify.ts` now builds with `NEXT_DIST_DIR=.next-playwright` when 3001 is in use (avoids `.next` clobber / flaky Windows Turbopack chunk errors).
-- Expanded `.gitignore` to prevent reintroducing these local-only artifacts.
+- Raised the TOC "Part" badge text to 12px minimum for readability.
+- Applied default underlines to /guide quick links to meet link styling rules.
+- Converted the Inside Scoop corporate sources into explicit action buttons.
+- Softened the ladder color note with "varies by store" language.
 
 ### Verification
 
-- `npm run ai:verify -- test` ✅
-- Bundle: `reports/verification/2026-02-04T13-31-17/summary.md`
+- **Lint:** `npm run lint` ✅
+- **Build:** `npm run build` ✅
+- **Unit:** `npm run test:unit` ✅ (26/26)
+- **E2E:** `npm run test:e2e` ✅ (156 passed)
+- **Playwright (after):** `reports/proof/2026-02-06T03-30-08/` (light/dark + UI shots)
+- **Console logs:** `reports/proof/2026-02-06T03-30-08/console-errors.txt` (hydration mismatch + CSP noise)
+- **E2E console audits:** `reports/playwright/console-report-2026-02-06T03-26-26-774Z.json`, `reports/playwright/console-report-2026-02-06T03-27-17-607Z.json`, `reports/playwright/console-report-2026-02-06T03-28-11-991Z.json`, `reports/playwright/console-report-2026-02-06T03-29-03-305Z.json`
 
 ---
 
-## 2026-02-04 - GitHub Copilot (Copilot Chat) - Guide Credibility Restoration
+## 2026-02-06 - Codex - Guide Content Alignment (Source-of-Truth Sync)
 
-**Goal:** Fix content accuracy regression in clearance-lifecycle page; remove false claims, restore historical Cadence data, remove unapproved Trip Tracker CTA.
+**Goal:** Align the rebuilt guide with the pre-split HTML baseline and vetted 2026 notes while keeping community-reported claims clearly caveated.
 
-**Status:** ✅ Completed & Verified - Commit `09a0670`.
+**Status:** ✅ Completed & verified.
+
+### Changes
+
+- Restored clearance timeline durations + added a tag-date example; added a cautious .02 buffer note.
+- Added penny-prone categories + community-reported verification tips (Zebra/stock check/avoid price checks).
+- Added No Home overhead cue + ladder color guidance (community-reported, caveated).
+- Expanded Inside Scoop with internal-ops context (policy vs practice, why management cares, handheld tools, Store Pulse/ICE/ZMA/Zero-Comm/MET resets) as community-reported only.
+- Added a community intel reliability paragraph + real-vs-rumor mini table.
+- Added pre-split FAQ content with softened policy language.
+- Removed repeated EthicalDisclosure blocks from subpages; kept the primary disclosure on `/guide`.
 
 ### Verification
 
-- `npm run qa:fast`: ✅
+- **Lint:** `npm run lint` ✅
+- **Build:** `npm run build` ✅
+- **Unit:** `npm run test:unit` ✅ (26/26)
+- **E2E:** `npm run test:e2e` ✅ (156 passed)
+- **Playwright (after):** `reports/proof/2026-02-06T00-00-51/` (light/dark + UI shots for all guide routes)
+- **Console logs:** `reports/proof/2026-02-06T00-00-51/console-errors.txt` (CSP + geolocation noise)
+- **E2E console audits:** `reports/playwright/console-report-2026-02-05T23-57-09-948Z.json`, `reports/playwright/console-report-2026-02-05T23-58-01-818Z.json`, `reports/playwright/console-report-2026-02-05T23-58-56-398Z.json`, `reports/playwright/console-report-2026-02-05T23-59-46-742Z.json`
+
+---
+
+## 2026-02-05 - Codex - Guide Rebuild (AdSense Content Recovery)
+
+**Goal:** Restore the guide's accuracy and depth using the pre-split HTML as baseline, integrate vetted 2026 context, and expand word count to reduce "low value content" risk.
+
+**Status:** ✅ Completed & verified.
+
+### Changes
+
+- Rebuilt `/guide` as a substantive hub (usage instructions, glossary, update notes, checklist) while keeping it non-promotional.
+- Rewrote all chapters to preserve the original guide's logic and tone while removing false claims:
+  - `/what-are-pennies`, `/clearance-lifecycle`, `/digital-pre-hunt`, `/in-store-strategy`, `/inside-scoop`, `/facts-vs-myths`, `/faq`.
+- Added responsible, non-hype sections: signal stacking, myth vetting, pre-hunt limitations, checkout etiquette, and updated FAQs.
+- Labeled speculative content explicitly and kept internal-term references as community-reported context.
+- Updated `components/guide/TableOfContents.tsx` to match the new 7-part sequence.
+- Captured before/after UI proof (pre-split HTML as baseline + new multi-page guide).
+
+### Verification
+
+- **Lint:** `npm run lint` ✅
+- **Lint (colors):** `npm run lint:colors` ✅
+- **Build:** `npm run build` ✅
+- **Unit:** `npm run test:unit` ✅ (26/26)
+- **E2E:** `npm run test:e2e` ✅ (156 passed)
+- **Playwright (after):** `reports/proof/2026-02-05T21-59-41/` (light/dark + UI shots for all guide routes)
+- **Playwright (before):** `reports/proof/2026-02-05T21-59-41/guide-pre-split-before.png`
+- **Console logs:** `reports/proof/2026-02-05T21-59-41/console-errors.txt` (CSP + dev hydration noise)
+- **E2E console audits:** `reports/playwright/console-report-2026-02-05T21-53-26-259Z.json`, `reports/playwright/console-report-2026-02-05T21-54-14-548Z.json`, `reports/playwright/console-report-2026-02-05T21-55-03-636Z.json`, `reports/playwright/console-report-2026-02-05T21-55-50-450Z.json`

@@ -1,48 +1,63 @@
 import Link from "next/link"
-import { BookOpen, CheckCircle2, Search, ShoppingCart, Store } from "lucide-react"
+import {
+  BookOpen,
+  Calendar,
+  CheckCircle2,
+  HelpCircle,
+  Search,
+  ShoppingCart,
+  Store,
+} from "lucide-react"
 
 const chapters = [
   {
-    title: "Understanding the Clearance Lifecycle",
-    slug: "clearance-lifecycle",
+    title: "What Are Penny Items? (Start Here)",
+    slug: "what-are-pennies",
     icon: BookOpen,
-    desc: "Store Pulse, ICE metrics, the $.02 buffer, and how items reach $0.01 in 2026.",
+    desc: "Definitions, why pennies exist, and the ethics that keep the hobby alive.",
+    href: "/what-are-pennies",
+  },
+  {
+    title: "Clearance Lifecycle & Cadence",
+    slug: "clearance-lifecycle",
+    icon: Calendar,
+    desc: "Common price endings, cadence patterns, and how to read tag dates without guessing.",
     href: "/clearance-lifecycle",
   },
   {
-    title: "Pre-Hunt Intelligence",
+    title: "Labels, Overhead, & Pre-Hunt",
     slug: "digital-pre-hunt",
     icon: Search,
-    desc: "Using the app and digital tools to scout before you drive.",
+    desc: "Label recognition, overhead cues, and digital checks before you drive.",
     href: "/digital-pre-hunt",
   },
   {
-    title: "In-Store Strategy",
+    title: "Verify & In-Store Strategy",
     slug: "in-store-strategy",
     icon: Store,
-    desc: "Home Bay focus, MET timing, and checkout tactics that actually work.",
+    desc: "How to verify penny status, where to look, and how to checkout without drama.",
     href: "/in-store-strategy",
   },
   {
-    title: "The Inside Scoop",
+    title: "Inside Scoop (2026 Context)",
     slug: "inside-scoop",
     icon: ShoppingCart,
-    desc: "MET, “No Home”, Zero-Comm, and what happens to items after ZMA.",
+    desc: "Community-reported signals, internal terms, and what to treat as unconfirmed.",
     href: "/inside-scoop",
   },
   {
-    title: "Fact vs. Fiction",
-    slug: "fact-vs-fiction",
+    title: "Facts vs. Myths",
+    slug: "facts-vs-myths",
     icon: CheckCircle2,
-    desc: "The 2026 myth-busters: cadence rumors, $.02 confusion, and register reality.",
+    desc: "Myth-busting and how to vet claims before you waste a trip.",
     href: "/facts-vs-myths",
   },
   {
-    title: "Responsible Hunting",
-    slug: "responsible-hunting",
-    icon: CheckCircle2,
-    desc: "Etiquette, community rules, and long-term success.",
-    href: "/what-are-pennies",
+    title: "FAQ & Quick Reference",
+    slug: "faq",
+    icon: HelpCircle,
+    desc: "Fast answers, common pitfalls, and a quick reference cheat sheet.",
+    href: "/faq",
   },
 ]
 
@@ -59,7 +74,7 @@ export function TableOfContents() {
             <div className="p-2 rounded-md bg-[var(--bg-elevated)] text-[var(--cta-primary)] group-hover:bg-[var(--cta-primary)] group-hover:text-[var(--cta-text)] transition-colors">
               <chapter.icon className="h-5 w-5" />
             </div>
-            <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest bg-[var(--bg-subtle)] px-2 py-1 rounded-sm group-hover:bg-[var(--bg-elevated)] transition-colors">
+            <span className="text-[12px] font-bold text-[var(--text-muted)] uppercase tracking-widest bg-[var(--bg-subtle)] px-2 py-1 rounded-sm group-hover:bg-[var(--bg-elevated)] transition-colors">
               Part {index + 1}
             </span>
           </div>
