@@ -139,7 +139,7 @@ export default function FAQPage() {
   }
 
   return (
-    <PageShell width="default">
+    <PageShell width="default" gap="md">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
@@ -150,12 +150,12 @@ export default function FAQPage() {
         subtitle="Clear answers and a quick reference for penny hunting."
       />
 
-      <div className="flex justify-center mb-8">
+      <div className="flex justify-center">
         <EditorialBlock />
       </div>
 
       <Section>
-        <Prose className="mt-8">
+        <Prose>
           <div className="space-y-6">
             {faqs.map((faq, index) => (
               <details

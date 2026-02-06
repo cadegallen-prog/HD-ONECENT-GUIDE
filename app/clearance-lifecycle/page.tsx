@@ -136,18 +136,18 @@ const dotZeroTips = [
 
 export default function ClearanceLifecyclePage() {
   return (
-    <PageShell width="default">
+    <PageShell width="default" gap="md">
       <PageHeader
         title="Clearance Lifecycle & Cadence"
         subtitle="How penny items typically move through clearance, and how to read the signals responsibly."
       />
 
-      <div className="flex justify-center mb-8">
+      <div className="flex justify-center">
         <EditorialBlock />
       </div>
 
       <Section>
-        <Prose className="mt-8">
+        <Prose>
           <p className="mb-10 text-lg leading-relaxed">
             Penny items are the final stage of clearance, not a public promotion. Home Depot does
             not publish a formal penny playbook, so this chapter is based on consistent community

@@ -12,6 +12,13 @@ Every AI session must update this after meaningful work.
 
 ## Current Sprint (Last 7 Days)
 
+- **2026-02-06 (Guide spacing cleanup - remove deadspace after editorial block):** Reduced vertical gaps across guide chapters by removing extra margins and tightening layout spacing.
+  - **Layout changes:** Removed redundant margins around the editorial block and prose blocks; set guide pages to tighter `PageShell` spacing; removed `my-8` from `EditorialBlock`.
+
+  - **Scope:** `/what-are-pennies`, `/clearance-lifecycle`, `/digital-pre-hunt`, `/in-store-strategy`, `/inside-scoop`, `/facts-vs-myths`, `/faq`, and `components/guide/EditorialBlock.tsx`.
+
+  - **Verification:** `npm run lint` ✅, `npm run lint:colors` ✅, `npm run build` ✅, `npm run test:unit` ✅ (26/26), `npm run test:e2e` ✅ (156 passed), Playwright proof: `reports/proof/2026-02-06T05-18-53/`.
+
 - **2026-02-06 (Guide Finish Touches - TOC, Links, Sources):** Applied final UI compliance fixes for the guide hub + chapters without changing core content.
   - **TOC badge sizing:** Raised Part badge to 12px minimum for readability.
 

@@ -49,18 +49,18 @@ const categories = [
 
 export default function WhatArePenniesPage() {
   return (
-    <PageShell width="default">
+    <PageShell width="default" gap="md">
       <PageHeader
         title="What Are Penny Items?"
         subtitle="A beginner-friendly foundation for understanding the $0.01 clearance system."
       />
 
-      <div className="flex justify-center mb-8">
+      <div className="flex justify-center">
         <EditorialBlock />
       </div>
 
       <Section>
-        <Prose className="mt-8">
+        <Prose>
           <p className="mb-10 text-lg leading-relaxed">
             A penny item is a product that scans for $0.01 because it has reached the final stage of
             clearance. It is not a public promotion. It is an internal removal signal that can

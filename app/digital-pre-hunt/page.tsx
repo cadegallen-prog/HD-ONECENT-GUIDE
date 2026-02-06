@@ -117,18 +117,18 @@ const inStoreTriggers = [
 
 export default function DigitalPreHuntPage() {
   return (
-    <PageShell width="default">
+    <PageShell width="default" gap="md">
       <PageHeader
         title="Labels, Overhead, & Pre-Hunt"
         subtitle="Use label signals and digital checks to cut wasted trips."
       />
 
-      <div className="flex justify-center mb-8">
+      <div className="flex justify-center">
         <EditorialBlock />
       </div>
 
       <Section>
-        <Prose className="mt-8">
+        <Prose>
           <p className="mb-10 text-lg leading-relaxed">
             The best penny hunters do most of their work before they drive. This chapter teaches you
             how to read clearance labels, spot overhead risks, and use the app as a filter without

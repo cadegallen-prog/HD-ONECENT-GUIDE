@@ -94,18 +94,18 @@ const redFlags = [
 
 export default function FactsVsMythsPage() {
   return (
-    <PageShell width="default">
+    <PageShell width="default" gap="md">
       <PageHeader
         title="Facts vs. Myths"
         subtitle="Separating useful signals from rumors that waste your time."
       />
 
-      <div className="flex justify-center mb-8">
+      <div className="flex justify-center">
         <EditorialBlock />
       </div>
 
       <Section>
-        <Prose className="mt-8">
+        <Prose>
           <p className="mb-10 text-lg leading-relaxed">
             Penny hunting lives on community information. That is a strength, but it also creates a
             lot of noise. This chapter filters the most common myths so you can focus on what

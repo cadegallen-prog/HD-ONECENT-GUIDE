@@ -4,6 +4,31 @@
 
 ---
 
+## 2026-02-06 - Codex - Guide Spacing Cleanup (Deadspace Fix)
+
+**Goal:** Remove oversized gaps after the EditorialBlock on guide pages without reintroducing repeated disclaimers.
+
+**Status:** ✅ Completed & verified.
+
+### Changes
+
+- Removed `my-8` from `components/guide/EditorialBlock.tsx` to stop double vertical spacing.
+- Tightened guide page layout by removing extra wrapper/prose margins and using `PageShell` `gap="md"`.
+- Applied across guide chapters: `/what-are-pennies`, `/clearance-lifecycle`, `/digital-pre-hunt`, `/in-store-strategy`, `/inside-scoop`, `/facts-vs-myths`, `/faq`.
+
+### Verification
+
+- **Lint:** `npm run lint` ✅
+- **Lint:colors:** `npm run lint:colors` ✅
+- **Build:** `npm run build` ✅
+- **Unit:** `npm run test:unit` ✅ (26/26)
+- **E2E:** `npm run test:e2e` ✅ (156 passed)
+- **Playwright (after):** `reports/proof/2026-02-06T05-18-53/` (guide routes light/dark)
+- **Console logs:** `reports/proof/2026-02-06T05-18-53/console-errors.txt`
+- **E2E console audits:** `reports/playwright/console-report-2026-02-06T05-15-09-662Z.json`, `reports/playwright/console-report-2026-02-06T05-16-11-587Z.json`, `reports/playwright/console-report-2026-02-06T05-17-04-691Z.json`, `reports/playwright/console-report-2026-02-06T05-17-54-117Z.json`
+
+---
+
 ## 2026-02-06 - Codex - Guide Finish Touches (TOC + Links + Sources)
 
 **Goal:** Close remaining guide UI polish items: TOC badge size, link underlines, HD links as action buttons, and softer ladder note.
@@ -54,33 +79,3 @@
 - **Playwright (after):** `reports/proof/2026-02-06T00-00-51/` (light/dark + UI shots for all guide routes)
 - **Console logs:** `reports/proof/2026-02-06T00-00-51/console-errors.txt` (CSP + geolocation noise)
 - **E2E console audits:** `reports/playwright/console-report-2026-02-05T23-57-09-948Z.json`, `reports/playwright/console-report-2026-02-05T23-58-01-818Z.json`, `reports/playwright/console-report-2026-02-05T23-58-56-398Z.json`, `reports/playwright/console-report-2026-02-05T23-59-46-742Z.json`
-
----
-
-## 2026-02-05 - Codex - Guide Rebuild (AdSense Content Recovery)
-
-**Goal:** Restore the guide's accuracy and depth using the pre-split HTML as baseline, integrate vetted 2026 context, and expand word count to reduce "low value content" risk.
-
-**Status:** ✅ Completed & verified.
-
-### Changes
-
-- Rebuilt `/guide` as a substantive hub (usage instructions, glossary, update notes, checklist) while keeping it non-promotional.
-- Rewrote all chapters to preserve the original guide's logic and tone while removing false claims:
-  - `/what-are-pennies`, `/clearance-lifecycle`, `/digital-pre-hunt`, `/in-store-strategy`, `/inside-scoop`, `/facts-vs-myths`, `/faq`.
-- Added responsible, non-hype sections: signal stacking, myth vetting, pre-hunt limitations, checkout etiquette, and updated FAQs.
-- Labeled speculative content explicitly and kept internal-term references as community-reported context.
-- Updated `components/guide/TableOfContents.tsx` to match the new 7-part sequence.
-- Captured before/after UI proof (pre-split HTML as baseline + new multi-page guide).
-
-### Verification
-
-- **Lint:** `npm run lint` ✅
-- **Lint (colors):** `npm run lint:colors` ✅
-- **Build:** `npm run build` ✅
-- **Unit:** `npm run test:unit` ✅ (26/26)
-- **E2E:** `npm run test:e2e` ✅ (156 passed)
-- **Playwright (after):** `reports/proof/2026-02-05T21-59-41/` (light/dark + UI shots for all guide routes)
-- **Playwright (before):** `reports/proof/2026-02-05T21-59-41/guide-pre-split-before.png`
-- **Console logs:** `reports/proof/2026-02-05T21-59-41/console-errors.txt` (CSP + dev hydration noise)
-- **E2E console audits:** `reports/playwright/console-report-2026-02-05T21-53-26-259Z.json`, `reports/playwright/console-report-2026-02-05T21-54-14-548Z.json`, `reports/playwright/console-report-2026-02-05T21-55-03-636Z.json`, `reports/playwright/console-report-2026-02-05T21-55-50-450Z.json`

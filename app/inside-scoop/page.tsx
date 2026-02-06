@@ -55,18 +55,18 @@ const reported2026Signals = [
 
 export default function InsideScoopPage() {
   return (
-    <PageShell width="default">
+    <PageShell width="default" gap="md">
       <PageHeader
         title="Inside Scoop (2026 Context)"
         subtitle="What the community reports, what we can verify publicly, and what remains unconfirmed."
       />
 
-      <div className="flex justify-center mb-8">
+      <div className="flex justify-center">
         <EditorialBlock />
       </div>
 
       <Section>
-        <Prose className="mt-8">
+        <Prose>
           <p className="mb-10 text-lg leading-relaxed">
             This chapter is different from the rest of the guide. It separates what we can verify
             publicly from what employees and shoppers report in the field. The goal is accuracy, not

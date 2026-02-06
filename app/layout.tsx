@@ -89,7 +89,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Penny Central | Home Depot Penny List",
     description:
-      "The searchable Home Depot penny list. Filter by state, date, and SKU. Community-reported $0.01 finds, usually updated within about 5 minutesed within about 5 minutes.",
+      "The searchable Home Depot penny list. Filter by state, date, and SKU. Community-reported $0.01 finds, usually updated within about 5 minutes.",
     images: [DEFAULT_OG_IMAGE],
   },
   robots: {
