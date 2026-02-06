@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 6, 2026 (Guide AAA polish + contrast guardrail hardening)
+**Last updated:** Feb 6, 2026 (Guide UX de-clutter + navigation simplification)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,13 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-06 (Guide UX de-clutter + navigation simplification):** Completed a one-shot guide presentation cleanup to reduce dead space, remove conflicting navigation signals, and simplify chapter flow.
+  - **Hub rebuilt:** `app/guide/page.tsx` now uses a cleaner chapter-first structure with one disclosure, simpler quick-start guidance, and reduced visual clutter.
+  - **Chapter nav simplified:** `components/guide/ChapterNavigation.tsx` now uses clearer labels, responsive single-column mobile fallback, and no empty `next` column when absent.
+  - **Redundant CTA panels removed:** removed conflicting end-of-page promo cards from `app/in-store-strategy/page.tsx`, `app/facts-vs-myths/page.tsx`, and `app/faq/page.tsx` so chapter progression is unambiguous.
+  - **Spacing + demarcation cleanup:** tightened guide rhythm via `components/page-templates.tsx` and `app/globals.css`, including reduced inter-section spacing and removal of heavy H2 divider lines.
+  - **Verification:** `npm run lint` ✅, `npm run build` ✅, `npm run test:unit` ✅ (26/26), `npm run test:e2e` ✅ (156 passed), Playwright proof: `reports/proof/2026-02-06T22-09-10/`.
 
 - **2026-02-06 (Trust Signals & Authenticity Overhaul):** Replaced "template/corporate" content on Trust Pages with authentic, founder-led content to satisfy AdSense E-E-A-T.
   - **About Page:** Replaced placeholders with the "Nurse to Webmaster" origin story, community growth details (32k -> 62k), and "Scavenger Hunt" philosophy. Correctly credited Spoe Jarky and Jorian Wulf.

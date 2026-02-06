@@ -47,8 +47,8 @@ const labelSignals = [
 
 const overheadClues = [
   "Yellow clearance tags visible from the floor",
-  'Overhead areas marked as "No Home" (community term, not official)',
-  "Dusty boxes or items that look untouched for weeks",
+  'Overhead areas marked as "No Home" (community-reported term, not official)',
+  "Dusty boxes or items that look untouched for months",
   "Mixed or mismatched products tucked above a bay",
   "Seasonal items parked in overhead after the season ends",
 ]
@@ -117,7 +117,7 @@ const inStoreTriggers = [
 
 export default function DigitalPreHuntPage() {
   return (
-    <PageShell width="default" gap="md">
+    <PageShell width="default" padding="sm" gap="md">
       <div className="w-full max-w-[68ch] mx-auto">
         <PageHeader
           title="Labels, Overhead, & Pre-Hunt"
@@ -129,7 +129,7 @@ export default function DigitalPreHuntPage() {
 
       <Section className="w-full max-w-[68ch] mx-auto">
         <Prose variant="guide">
-          <p className="mb-10 text-lg leading-relaxed">
+          <p className="mb-8 text-lg leading-relaxed">
             The best penny hunters do most of their work before they drive. This chapter teaches you
             how to read clearance labels, spot overhead risks, and use the app as a filter without
             treating it like a crystal ball.
@@ -142,7 +142,7 @@ export default function DigitalPreHuntPage() {
             not official policy, but they show up consistently in the field.
           </p>
 
-          <div className="overflow-x-auto mb-10">
+          <div className="overflow-x-auto mb-8">
             <table className="w-full border-collapse border border-[var(--border-default)]">
               <thead>
                 <tr className="bg-[var(--bg-elevated)]">
@@ -199,7 +199,7 @@ export default function DigitalPreHuntPage() {
           </p>
 
           <h2 className="text-2xl font-bold mt-10 mb-6">Digital pre-hunt steps</h2>
-          <div className="grid md:grid-cols-2 gap-x-12 gap-y-16 mb-16">
+          <div className="grid md:grid-cols-2 gap-x-12 gap-y-10 mb-16">
             {preHuntSteps.map((item) => (
               <div key={item.step} className="relative pl-16">
                 <span className="absolute left-0 top-0 text-5xl font-black text-[var(--cta-primary)] opacity-20">
@@ -219,7 +219,7 @@ export default function DigitalPreHuntPage() {
             person.
           </p>
 
-          <div className="overflow-x-auto mb-10">
+          <div className="overflow-x-auto mb-8">
             <table className="w-full border-collapse border border-[var(--border-default)]">
               <thead>
                 <tr className="bg-[var(--bg-elevated)]">
@@ -247,14 +247,14 @@ export default function DigitalPreHuntPage() {
           </div>
 
           <h2 className="text-2xl font-bold mb-6">Limitations to keep in mind</h2>
-          <ul className="mb-10">
+          <ul className="mb-8">
             {limitations.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
 
           <h2 className="text-2xl font-bold mb-6">When to skip a trip</h2>
-          <ul className="mb-10">
+          <ul className="mb-8">
             {skipTrip.map((item) => (
               <li key={item}>{item}</li>
             ))}
@@ -264,13 +264,13 @@ export default function DigitalPreHuntPage() {
           <p className="mb-6">
             Go in person only when the signal stack is strong. These are the most reliable triggers:
           </p>
-          <ul className="mb-10">
+          <ul className="mb-8">
             {inStoreTriggers.map((trigger) => (
               <li key={trigger}>{trigger}</li>
             ))}
           </ul>
 
-          <div className="p-8 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl shadow-sm mb-12">
+          <div className="p-8 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl shadow-sm mb-8">
             <h2 className="text-2xl font-bold mb-4">A note on accuracy</h2>
             <p className="text-[var(--text-secondary)] leading-relaxed">
               Online inventory counts are often wrong for low-stock items. A listing that shows "one

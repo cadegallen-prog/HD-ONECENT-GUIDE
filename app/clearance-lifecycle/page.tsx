@@ -36,7 +36,7 @@ const truthMatrixRows = [
     claim: "The yellow tag always matches the real price",
     verdict: "complicated" as const,
     reality:
-      "Tags can be stale or missing. The scan price is what matters, so always verify at the register or with the app.",
+      "Tags can be stale or missing. The in-store UPC scan price is what matters, so verify at self-checkout or the register.",
   },
   {
     claim: "Every store follows the same cadence",
@@ -136,7 +136,7 @@ const dotZeroTips = [
 
 export default function ClearanceLifecyclePage() {
   return (
-    <PageShell width="default" gap="md">
+    <PageShell width="default" padding="sm" gap="md">
       <div className="w-full max-w-[68ch] mx-auto">
         <PageHeader
           title="Clearance Lifecycle & Cadence"
@@ -148,7 +148,7 @@ export default function ClearanceLifecyclePage() {
 
       <Section className="w-full max-w-[68ch] mx-auto">
         <Prose variant="guide">
-          <p className="mb-10 text-lg leading-relaxed">
+          <p className="mb-8 text-lg leading-relaxed">
             Penny items are the final stage of clearance, not a public promotion. Home Depot does
             not publish a formal penny playbook, so this chapter is based on consistent community
             reports and in-store observations. Use it as a guide, not a guarantee.
@@ -163,15 +163,19 @@ export default function ClearanceLifecyclePage() {
 
           <TruthMatrix rows={truthMatrixRows} />
 
-          <h2 className="text-2xl font-bold mt-12 mb-6 text-[var(--text-primary)]">
+          <h2 className="text-2xl font-bold mt-8 mb-6 text-[var(--text-primary)]">
             Common clearance cadences (reported)
           </h2>
           <p className="mb-6">
             Two patterns show up repeatedly in community reports. They are helpful for planning, but
             they are not official and not guaranteed. Some categories skip stages or move faster.
           </p>
+          <p className="mb-6 text-sm text-[var(--text-secondary)]">
+            Community-reported full-cycle approximation: Cadence A is often around 13 weeks total
+            and Cadence B around 7 weeks total. Treat both as planning ranges, not guarantees.
+          </p>
 
-          <div className="overflow-x-auto mb-12">
+          <div className="overflow-x-auto mb-8">
             <table className="w-full border-collapse border border-[var(--border-default)]">
               <thead>
                 <tr className="bg-[var(--bg-elevated)]">
@@ -218,7 +222,7 @@ export default function ClearanceLifecyclePage() {
             the item sits in the clearance lifecycle, but the only sure answer is a scan.
           </p>
 
-          <div className="overflow-x-auto mb-12">
+          <div className="overflow-x-auto mb-8">
             <table className="w-full border-collapse border border-[var(--border-default)]">
               <thead>
                 <tr className="bg-[var(--bg-elevated)]">
@@ -250,7 +254,7 @@ export default function ClearanceLifecyclePage() {
               </tbody>
             </table>
           </div>
-          <p className="text-sm text-[var(--text-secondary)] mb-10">
+          <p className="text-sm text-[var(--text-secondary)] mb-8">
             Community note: Some hunters report a brief .02 buffer just before penny, while others
             never see it. Treat it as a possible signal, not a rule.
           </p>
@@ -262,7 +266,7 @@ export default function ClearanceLifecyclePage() {
             This is the most practical way to think about timing. Use tag dates and store-specific
             observations instead of a fixed calendar.
           </p>
-          <div className="space-y-6 mb-10">
+          <div className="space-y-6 mb-8">
             {timelineSteps.map((step) => (
               <div key={step.title} className="border-l-4 border-[var(--cta-primary)] pl-6 py-2">
                 <h3 className="font-bold mb-2 text-[var(--text-primary)]">{step.title}</h3>
@@ -278,7 +282,7 @@ export default function ClearanceLifecyclePage() {
             Not every category moves at the same speed. Seasonal categories tend to drop quickly
             after a holiday or reset, while core categories can sit longer at early markdowns.
           </p>
-          <ul className="mb-10">
+          <ul className="mb-8">
             {seasonalNotes.map((note) => (
               <li key={note}>{note}</li>
             ))}
@@ -287,7 +291,7 @@ export default function ClearanceLifecyclePage() {
           <h2 className="text-2xl font-bold mb-6 text-[var(--text-primary)]">
             What to do when you see .00
           </h2>
-          <ul className="mb-10">
+          <ul className="mb-8">
             {dotZeroTips.map((tip) => (
               <li key={tip}>{tip}</li>
             ))}
@@ -304,11 +308,31 @@ export default function ClearanceLifecyclePage() {
               but timing still varies by store and category.
             </p>
           </div>
-          <ul className="mb-10">
+          <ul className="mb-8">
             <li>Older clearance tag dates usually mean a drop is closer, but not guaranteed.</li>
             <li>Combine an old tag date with low stock for a stronger signal.</li>
             <li>If a tag is missing, rely on the scan price, not the shelf.</li>
             <li>Use the digital pre-hunt chapter to filter candidates before you drive.</li>
+          </ul>
+
+          <h2 className="text-2xl font-bold mb-6 text-[var(--text-primary)]">
+            Community-reported reset timing signals
+          </h2>
+          <p className="mb-6">
+            Community-reported pattern: late-stage items are often pulled around MET bay reset work.
+            Some reports describe a short .02 buffer window (about 24-48 hours) before a pull, while
+            other stores skip that step.
+          </p>
+          <ul className="mb-8">
+            <li>
+              Stronger signal stack: "No Home" status + late-stage ending (.03/.02) + older tag
+              date.
+            </li>
+            <li>If only one signal is present, odds are lower. Verify in-store with a UPC scan.</li>
+            <li>
+              Reset timing varies by store, department, and staffing, so treat this as directional
+              guidance.
+            </li>
           </ul>
         </Prose>
 

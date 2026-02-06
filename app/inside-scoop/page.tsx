@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
-import Link from "next/link"
 import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
 
 export const metadata: Metadata = {
@@ -14,10 +13,10 @@ export const metadata: Metadata = {
 }
 
 const communitySignals = [
-  "Store Pulse is the internal system associates mention most when discussing clearance tasks.",
-  "ICE is commonly described as Inactive / Clearance / E-velocity inside Store Pulse.",
-  "No Home is a status used for items without a current bay location during resets.",
-  "BOLT is the tool associates mention for bay sequencing and planogram changes.",
+  "Community-reported: Store Pulse is the internal system associates mention most when discussing clearance tasks.",
+  "Community-reported: ICE is commonly described as Inactive / Clearance / E-velocity inside Store Pulse.",
+  "Community-reported: No Home is a status used for items without a current bay location during resets.",
+  "Community-reported: BOLT is the tool associates mention for bay sequencing and planogram changes.",
 ]
 
 const doNotAssume = [
@@ -27,35 +26,35 @@ const doNotAssume = [
 ]
 
 const handheldNotes = [
-  "Associates often use handheld scanners (commonly called Zebra or FIRST).",
-  "Some report a clearance or Store Pulse screen that lists markdown tasks.",
-  "Terms like ZMA, ICE, and No Home are reported but not publicly documented.",
+  "Community-reported: associates often use handheld scanners (commonly called Zebra or FIRST).",
+  "Community-reported: some report a clearance or Store Pulse screen that lists markdown tasks.",
+  "Community-reported: terms like ZMA, ICE, and No Home are reported but not publicly documented.",
 ]
 
 const managementFocus = [
-  "Penny items can create extra cleanup because they are meant to be removed, not sold.",
-  "Managers may be measured on shrink, inventory accuracy, or clearance completion.",
-  "Some stores treat penny scans as exceptions that trigger follow-up work.",
+  "Community-reported: penny items can create extra cleanup because they are meant to be removed, not sold.",
+  "Community-reported: managers may be measured on shrink, inventory accuracy, or clearance completion.",
+  "Community-reported: some stores treat penny scans as exceptions that trigger follow-up work.",
 ]
 
 const policyPracticeNotes = [
-  "Some managers quietly honor the scan to avoid conflict. Others refuse the sale.",
-  "Enforcement can change by shift, department, or leadership style.",
-  "The same store can behave differently from week to week.",
+  "Community-reported: some managers quietly honor the scan to avoid conflict. Others refuse the sale.",
+  "Community-reported: enforcement can change by shift, department, or leadership style.",
+  "Community-reported: the same store can behave differently from week to week.",
 ]
 
 const reported2026Signals = [
-  "Store Pulse is described as a central hub for clearance tasks.",
-  "ICE is described as Inactive, Clearance, and E-velocity tracking inside Store Pulse.",
-  "ZMA is often used to describe the internal removal stage after penny.",
-  "Zero-Comm is mentioned as an internal exception report when a penny sale happens.",
-  "MET teams are reported to handle more of the reset and clearance execution work.",
-  "Some vendors use buy-back or RTV locks that prevent a sale at the register.",
+  "Community-reported: Store Pulse is described as a central hub for clearance tasks.",
+  "Community-reported: ICE is described as Inactive, Clearance, and E-velocity tracking inside Store Pulse.",
+  "Community-reported: ZMA is often used to describe the internal removal stage after penny.",
+  "Community-reported: Zero-Comm is mentioned as an internal exception report when a penny sale happens.",
+  "Community-reported: MET teams are reported to handle more of the reset and clearance execution work.",
+  "Community-reported: some vendors use buy-back or RTV locks that prevent a sale at the register.",
 ]
 
 export default function InsideScoopPage() {
   return (
-    <PageShell width="default" gap="md">
+    <PageShell width="default" padding="sm" gap="md">
       <div className="w-full max-w-[68ch] mx-auto">
         <PageHeader
           title="Inside Scoop (2026 Context)"
@@ -67,7 +66,7 @@ export default function InsideScoopPage() {
 
       <Section className="w-full max-w-[68ch] mx-auto">
         <Prose variant="guide">
-          <p className="mb-10 text-lg leading-relaxed">
+          <p className="mb-8 text-lg leading-relaxed">
             This chapter is different from the rest of the guide. It separates what we can verify
             publicly from what employees and shoppers report in the field. The goal is accuracy, not
             hype. Use these notes as context, not as guarantees.
@@ -79,7 +78,7 @@ export default function InsideScoopPage() {
             forums. We cannot verify these definitions from Home Depot directly, but the consistency
             across reports makes them useful as context.
           </p>
-          <ul className="mb-10">
+          <ul className="mb-8">
             {communitySignals.map((signal) => (
               <li key={signal}>{signal}</li>
             ))}
@@ -96,7 +95,7 @@ export default function InsideScoopPage() {
             The following notes come from employee and shopper reports. They are not confirmed by
             Home Depot and should be treated as context only.
           </p>
-          <ul className="mb-10">
+          <ul className="mb-8">
             {handheldNotes.map((note) => (
               <li key={note}>{note}</li>
             ))}
@@ -107,10 +106,50 @@ export default function InsideScoopPage() {
             Many hunters notice strong reactions when a penny item is found. Community reports
             suggest a few reasons why stores take penny scans seriously:
           </p>
-          <ul className="mb-10">
+          <ul className="mb-8">
             {managementFocus.map((note) => (
               <li key={note}>{note}</li>
             ))}
+          </ul>
+
+          <h2 className="text-2xl font-bold mb-6">
+            Zero-Comm and register exceptions (community-reported)
+          </h2>
+          <p className="mb-6">
+            Community reports describe penny scans as exception events that can create extra
+            checkout work and follow-up review.
+          </p>
+          <ul className="mb-8">
+            <li>
+              Community-reported: a penny scan can trigger associate intervention at checkout.
+            </li>
+            <li>
+              Community-reported: some associates re-ring at the last merchandised price to avoid a
+              Zero-Comm exception log.
+            </li>
+            <li>
+              Community-reported: recall or Buy-Back/RTV locks can block sale even when an item is
+              physically present.
+            </li>
+          </ul>
+
+          <h2 className="text-2xl font-bold mb-6">ZMA disposition paths (community-reported)</h2>
+          <p className="mb-6">
+            After an item reaches penny status, community reports describe two common disposition
+            paths rather than one universal outcome.
+          </p>
+          <ul className="mb-8">
+            <li>
+              Community-reported: field destruction/compactor is common for low-value salvage.
+            </li>
+            <li>
+              Community-reported: return-to-vendor (RTV/Buy-Back) is common in some branded or
+              higher-value categories.
+            </li>
+            <li>
+              Community-reported: frequently cited ranges are roughly 40-60% destruction with a
+              substantial RTV share (often cited near 40%), but this varies by store and category.
+            </li>
           </ul>
 
           <h2 className="text-2xl font-bold mb-6">Policy vs. practice</h2>
@@ -118,10 +157,30 @@ export default function InsideScoopPage() {
             Store behavior is inconsistent. That is why we recommend using multiple signals and
             staying polite at checkout.
           </p>
-          <ul className="mb-10">
+          <ul className="mb-8">
             {policyPracticeNotes.map((note) => (
               <li key={note}>{note}</li>
             ))}
+          </ul>
+
+          <h2 className="text-2xl font-bold mb-6">MET reset timing signals (community-reported)</h2>
+          <p className="mb-6">
+            Community reports often align major pulls with MET bay reset work rather than a fixed
+            customer-facing calendar.
+          </p>
+          <ul className="mb-8">
+            <li>
+              Community-reported: items marked "No Home" can be pre-pull candidates during reset
+              windows.
+            </li>
+            <li>
+              Community-reported: some stores report a short .02 buffer window before pull, while
+              others skip that step.
+            </li>
+            <li>
+              Community-reported: use reset timing as a probability signal only, not a guaranteed
+              schedule.
+            </li>
           </ul>
 
           <h2 className="text-2xl font-bold mt-10 mb-6">How to use this section safely</h2>
@@ -130,7 +189,7 @@ export default function InsideScoopPage() {
             internal acronyms, treat that as a signal that the person may have store access, not as
             a promise that the item will penny in your store.
           </p>
-          <ul className="mb-10">
+          <ul className="mb-8">
             <li>Look for multiple, recent reports before you act.</li>
             <li>Use internal terms as a tie-breaker, not your only reason to drive.</li>
             <li>Expect store-to-store variation, even when the terms are the same.</li>
@@ -138,7 +197,7 @@ export default function InsideScoopPage() {
           </ul>
 
           <h2 className="text-2xl font-bold mb-6">Confidence levels we use</h2>
-          <ul className="mb-10">
+          <ul className="mb-8">
             <li>
               <strong>Verified publicly:</strong> Information that appears in official statements or
               press releases (not penny mechanics).
@@ -159,7 +218,7 @@ export default function InsideScoopPage() {
             Pro-focused tools. This does not confirm any specific penny mechanics, but it does
             explain why inventory efficiency and faster decision cycles matter in 2026.
           </p>
-          <ul className="mb-10">
+          <ul className="mb-8">
             <li>
               Home Depot issued a strategic update outlining its fiscal 2026 outlook and margin
               focus.
@@ -170,7 +229,7 @@ export default function InsideScoopPage() {
             </li>
           </ul>
 
-          <div className="p-6 mb-10 rounded-lg bg-[var(--bg-card)] border border-[var(--border-default)]">
+          <div className="p-6 mb-8 rounded-lg bg-[var(--bg-card)] border border-[var(--border-default)]">
             <h3 className="text-lg font-bold mb-3">Why this matters to penny hunters</h3>
             <p className="text-[var(--text-secondary)]">
               When a retailer emphasizes operational efficiency, clearance decisions can feel faster
@@ -181,11 +240,11 @@ export default function InsideScoopPage() {
           </div>
 
           <h2 className="text-2xl font-bold mb-6">Stacking signals the safe way</h2>
-          <p className="mb-10">
+          <p className="mb-8">
             Treat internal terms as a supporting signal. If a report mentions "No Home" and you also
-            see an old tag date and a late-stage price ending, the signal stack is stronger. If the
-            only evidence is an acronym with no SKU, no date, and no store, skip it. Assume noise
-            until you can corroborate it.
+            see an old tag date plus a late-stage ending (.03/.02), the signal stack is stronger. If
+            the only evidence is an acronym with no SKU, no date, and no store, skip it. Assume
+            noise until you can corroborate it.
           </p>
 
           <h2 className="text-2xl font-bold mb-6">What not to assume</h2>
@@ -193,7 +252,7 @@ export default function InsideScoopPage() {
             Some claims sound confident but are not verifiable. The safest approach is to treat
             anything time-specific as unconfirmed until you see it in your own store.
           </p>
-          <ul className="mb-10">
+          <ul className="mb-8">
             {doNotAssume.map((item) => (
               <li key={item}>{item}</li>
             ))}
@@ -212,63 +271,12 @@ export default function InsideScoopPage() {
             These terms and workflow notes are reported by employees and experienced hunters. They
             are not official policy and should not be treated as guarantees.
           </p>
-          <ul className="mb-10">
+          <ul className="mb-8">
             {reported2026Signals.map((signal) => (
               <li key={signal}>{signal}</li>
             ))}
           </ul>
-
-          <h2 className="text-2xl font-bold mb-4">Sources (public)</h2>
-          <p className="mb-4 text-sm text-[var(--text-secondary)]">
-            Action links to public corporate announcements (context only).
-          </p>
-          <div className="not-prose flex flex-col gap-3">
-            <a
-              className="btn-secondary inline-flex items-center justify-center gap-2 px-5 py-2 rounded-lg border border-[var(--border-default)] font-semibold"
-              href="https://corporate.homedepot.com/news/company/home-depot-provides-strategic-update-reaffirms-fiscal-2025-guidance-establishes"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Home Depot strategic update and 2026 outlook
-            </a>
-            <a
-              className="btn-secondary inline-flex items-center justify-center gap-2 px-5 py-2 rounded-lg border border-[var(--border-default)] font-semibold"
-              href="https://www.prnewswire.com/news-releases/the-home-depot-launches-material-list-builder-ai-to-help-pros-save-time-by-building-complete-job-lists-within-minutes-302669297.html"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Material List Builder AI announcement
-            </a>
-          </div>
         </Prose>
-
-        <div className="mt-16 p-8 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl shadow-sm">
-          <h2 className="text-2xl font-bold mb-4">Back to field tactics</h2>
-          <p className="text-[var(--text-secondary)] mb-8 max-w-2xl">
-            If you want practical, on-the-floor strategy, go to the verification and in-store
-            chapter.
-          </p>
-          <Link
-            href="/in-store-strategy"
-            className="inline-flex items-center gap-2 font-bold text-[var(--cta-primary)] hover:underline"
-          >
-            Read: Verify & In-Store Strategy
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <line x1="5" y1="12" x2="19" y2="12" />
-              <polyline points="12 5 19 12 12 19" />
-            </svg>
-          </Link>
-        </div>
 
         <ChapterNavigation
           prev={{

@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
-import Link from "next/link"
 import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
 
 export const metadata: Metadata = {
@@ -22,7 +21,7 @@ const faqs = [
   {
     question: "How do I find penny items at Home Depot?",
     answer:
-      "Start with clearance areas and the home bay where the item normally lives, then check seasonal sections and overhead for yellow tags. Use the Penny List for recent SKUs, and always verify by scanning the UPC in-store.",
+      "Start with the home bay where the item normally lives, then check seasonal sections, overhead, and any clearance areas for yellow tags. Use the Penny List for recent SKUs, and verify by scanning the UPC in-store.",
   },
   {
     question: "Why does Home Depot penny items out?",
@@ -72,7 +71,7 @@ const faqs = [
   {
     question: "Do Home Depot employees buy penny items?",
     answer:
-      "Policy generally prohibits employees from buying penny items, but enforcement varies by store. Assume nothing and focus on your own process.",
+      "Employee purchases are generally reported as prohibited by policy. Enforcement details can vary by store, but shoppers should assume employee penny-item purchases are prohibited and focus on their own process.",
   },
   {
     question: "Do penny prices show on the shelf tag?",
@@ -139,7 +138,7 @@ export default function FAQPage() {
   }
 
   return (
-    <PageShell width="default" gap="md">
+    <PageShell width="default" padding="sm" gap="md">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
@@ -187,34 +186,13 @@ export default function FAQPage() {
             ))}
           </div>
 
-          <h2 className="text-2xl font-bold mt-12 mb-6">Quick reference</h2>
-          <ul className="mb-10">
+          <h2 className="text-2xl font-bold mt-8 mb-6">Quick reference</h2>
+          <ul className="mb-8">
             {quickReference.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
         </Prose>
-
-        <div className="mt-12 p-6 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl text-center">
-          <h3 className="text-xl font-bold mb-3">Want the full playbook?</h3>
-          <p className="text-[var(--text-secondary)] mb-6">
-            Go back to the guide hub to follow the full sequence.
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link
-              href="/guide"
-              className="btn-primary px-6 py-2 rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold"
-            >
-              Guide Hub
-            </Link>
-            <Link
-              href="/contact"
-              className="btn-secondary px-6 py-2 rounded-lg border border-[var(--border-default)] font-semibold"
-            >
-              Contact Support
-            </Link>
-          </div>
-        </div>
 
         <ChapterNavigation
           prev={{

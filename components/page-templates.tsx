@@ -53,8 +53,8 @@ export function PageShell({
   }[background]
 
   const gapClass = {
-    md: "gap-10 sm:gap-12",
-    lg: "gap-12 sm:gap-14",
+    md: "gap-6 sm:gap-8",
+    lg: "gap-8 sm:gap-10",
   }[gap]
 
   return (

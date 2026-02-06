@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
-import Link from "next/link"
 import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
 
 export const metadata: Metadata = {
@@ -94,7 +93,7 @@ const redFlags = [
 
 export default function FactsVsMythsPage() {
   return (
-    <PageShell width="default" gap="md">
+    <PageShell width="default" padding="sm" gap="md">
       <div className="w-full max-w-[68ch] mx-auto">
         <PageHeader
           title="Facts vs. Myths"
@@ -106,13 +105,13 @@ export default function FactsVsMythsPage() {
 
       <Section className="w-full max-w-[68ch] mx-auto">
         <Prose variant="guide">
-          <p className="mb-10 text-lg leading-relaxed">
+          <p className="mb-8 text-lg leading-relaxed">
             Penny hunting lives on community information. That is a strength, but it also creates a
             lot of noise. This chapter filters the most common myths so you can focus on what
             actually works.
           </p>
 
-          <h2 className="text-2xl font-bold mb-12">Common misconceptions</h2>
+          <h2 className="text-2xl font-bold mb-8">Common misconceptions</h2>
 
           <div className="space-y-12">
             {comparisons.map((item, index) => (
@@ -163,8 +162,8 @@ export default function FactsVsMythsPage() {
             ))}
           </div>
 
-          <h2 className="text-2xl font-bold mt-12 mb-6">How we decide what is real</h2>
-          <ul className="mb-10">
+          <h2 className="text-2xl font-bold mt-8 mb-6">How we decide what is real</h2>
+          <ul className="mb-8">
             {researchRules.map((rule) => (
               <li key={rule}>{rule}</li>
             ))}
@@ -174,7 +173,7 @@ export default function FactsVsMythsPage() {
             a recent date. It is weakest when it is a cropped screenshot with no context.
           </p>
 
-          <div className="overflow-x-auto mb-10">
+          <div className="overflow-x-auto mb-8">
             <table className="w-full border-collapse border border-[var(--border-default)]">
               <thead>
                 <tr className="bg-[var(--bg-elevated)]">
@@ -202,14 +201,14 @@ export default function FactsVsMythsPage() {
           </div>
 
           <h2 className="text-2xl font-bold mb-6">Red flags to ignore</h2>
-          <ul className="mb-10">
+          <ul className="mb-8">
             {redFlags.map((flag) => (
               <li key={flag}>{flag}</li>
             ))}
           </ul>
 
           <h2 className="text-2xl font-bold mb-6">60-second vetting checklist</h2>
-          <ol className="mb-10">
+          <ol className="mb-8">
             <li>Check the date and the specific store or region.</li>
             <li>Look for a SKU or UPC, not just a price screenshot.</li>
             <li>Compare the report to tag dates and price endings you can see.</li>
@@ -218,7 +217,7 @@ export default function FactsVsMythsPage() {
           </ol>
 
           <h2 className="text-2xl font-bold mb-6">Why myths persist</h2>
-          <p className="mb-10">
+          <p className="mb-8">
             Penny hunting moves fast, and screenshots spread faster. A real penny find in one store
             can turn into a rumor for every store within hours. Treat rumors as leads, not truth.
           </p>
@@ -228,7 +227,7 @@ export default function FactsVsMythsPage() {
             <strong>Strong report:</strong> Includes the SKU, the store, the date, and a clear photo
             of the tag or UPC. You can verify it in your own context.
           </p>
-          <p className="mb-10">
+          <p className="mb-8">
             <strong>Weak report:</strong> A cropped screenshot with no date, no SKU, and no store.
             It might be real, but you cannot act on it responsibly.
           </p>
@@ -239,39 +238,12 @@ export default function FactsVsMythsPage() {
             data. It is strong when it is recent, specific, and backed by receipts or tag photos. It
             is weak when it is vague or repeated without context.
           </p>
-          <p className="mb-10">
+          <p className="mb-8">
             Treat every report as a lead, not a promise. The most successful hunters combine
             community tips with their own store knowledge. If you would regret the trip without the
             penny, skip it.
           </p>
         </Prose>
-
-        <div className="mt-16 p-8 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl shadow-sm">
-          <h2 className="text-2xl font-bold mb-4">Next: quick answers</h2>
-          <p className="text-[var(--text-secondary)] mb-8 max-w-2xl">
-            Ready for short, direct answers? Jump to the FAQ and quick reference.
-          </p>
-          <Link
-            href="/faq"
-            className="inline-flex items-center gap-2 font-bold text-[var(--cta-primary)] hover:underline"
-          >
-            Read: FAQ & Quick Reference
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <line x1="5" y1="12" x2="19" y2="12" />
-              <polyline points="12 5 19 12 12 19" />
-            </svg>
-          </Link>
-        </div>
 
         <ChapterNavigation
           prev={{

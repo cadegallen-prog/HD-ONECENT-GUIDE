@@ -4,6 +4,50 @@
 
 ---
 
+## 2026-02-06 - Codex - Guide UX De-Clutter + Navigation Simplification
+
+**Goal:** Reduce dead space, remove confusing/redundant guide navigation elements, and improve chapter readability/scannability across light/dark without changing core guide intent.
+
+**Status:** ✅ Completed & verified.
+
+### Changes
+
+- Rebuilt `app/guide/page.tsx` into a cleaner chapter-first hub:
+  - single-column structure
+  - one disclosure on `/guide`
+  - simpler quick-start + quick-links blocks
+  - removed crowded side-panel structure
+- Simplified chapter navigation in `components/guide/ChapterNavigation.tsx`:
+  - removed card-like nav treatment
+  - mobile-first single-column fallback
+  - clearer previous/next labels
+  - removed empty right-side slot when `next` is absent
+- Removed redundant end-of-page CTA panels that conflicted with chapter nav:
+  - `app/in-store-strategy/page.tsx`
+  - `app/facts-vs-myths/page.tsx`
+  - `app/faq/page.tsx`
+- Reduced visual noise and dead space in guide typography/system spacing:
+  - tightened `PageShell` inter-block gaps in `components/page-templates.tsx`
+  - tightened guide prose rhythm and removed heavy section divider lines in `app/globals.css`
+  - standardized all guide chapters to `padding="sm"` and tightened oversized `mt/mb` utility spacing
+
+### Verification
+
+- `npm run lint` ✅
+- `npm run build` ✅
+- `npm run test:unit` ✅ (26/26)
+- `npm run test:e2e` ✅ (156 passed)
+- Playwright UI proof: `reports/proof/2026-02-06T22-09-10/`
+- Console proof file: `reports/proof/2026-02-06T22-09-10/console-errors.txt`
+- E2E console audits:
+  - `reports/playwright/console-report-2026-02-06T22-05-05-337Z.json`
+  - `reports/playwright/console-report-2026-02-06T22-05-59-673Z.json`
+  - `reports/playwright/console-report-2026-02-06T22-06-56-363Z.json`
+  - `reports/playwright/console-report-2026-02-06T22-07-48-923Z.json`
+- Known non-blocking noise unchanged: GeolocationPositionError + third-party CSP/ads console noise.
+
+---
+
 ## 2026-02-06 - Codex - Trust Signals & Authenticity Overhaul
 
 **Goal:** Replace "template/corporate" content on Trust Pages (`/about`, `/contact`, `/support`) with authentic, founder-led content to satisfy AdSense E-E-A-T requirements.

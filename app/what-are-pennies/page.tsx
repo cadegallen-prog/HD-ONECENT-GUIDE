@@ -49,7 +49,7 @@ const categories = [
 
 export default function WhatArePenniesPage() {
   return (
-    <PageShell width="default" gap="md">
+    <PageShell width="default" padding="sm" gap="md">
       <div className="w-full max-w-[68ch] mx-auto">
         <PageHeader
           title="What Are Penny Items?"
@@ -61,33 +61,33 @@ export default function WhatArePenniesPage() {
 
       <Section className="w-full max-w-[68ch] mx-auto">
         <Prose variant="guide">
-          <p className="mb-10 text-lg leading-relaxed">
+          <p className="mb-8 text-lg leading-relaxed">
             A penny item is a product that scans for $0.01 because it has reached the final stage of
             clearance. It is not a public promotion. It is an internal removal signal that can
             occasionally be purchased if the item is still on the shelf and the store honors the
             sale.
           </p>
 
-          <h2 className="text-2xl font-bold mt-12 mb-6">Why penny items exist</h2>
+          <h2 className="text-2xl font-bold mt-8 mb-6">Why penny items exist</h2>
           <p>
             Large retailers need a way to remove old or slow-moving inventory from their system. The
             penny price is a bookkeeping step that marks the item as clearance complete. Some stores
             pull items immediately. Others miss a few, which creates the opportunity.
           </p>
           <p>
-            You will hear employees and shoppers use the term ZMA to describe this removal stage.
-            The exact internal label varies by store, but the idea is consistent: the item is no
-            longer meant for sale.
+            You will often hear ZMA (Zero Margin Adjustment) used to describe this removal stage.
+            Community-reported wording can vary by store, but the core idea is consistent: the item
+            is no longer meant for sale.
           </p>
 
-          <h2 className="text-2xl font-bold mt-12 mb-6">What happens after an item pennied out</h2>
+          <h2 className="text-2xl font-bold mt-8 mb-6">What happens after an item pennied out</h2>
           <p>
             Once an item reaches the penny stage, the store is expected to remove it from the floor.
             That can mean disposal, return to vendor, or other internal disposition. The key point
             for shoppers is that the item is not supposed to be available for long.
           </p>
 
-          <h2 className="text-2xl font-bold mt-12 mb-6">What kinds of items become pennies?</h2>
+          <h2 className="text-2xl font-bold mt-8 mb-6">What kinds of items become pennies?</h2>
           <p>Most penny items come from predictable places. Common examples include:</p>
           <ul className="my-6 space-y-3">
             {categories.map((item) => (
@@ -99,14 +99,14 @@ export default function WhatArePenniesPage() {
             usually smaller items and seasonal accessories.
           </p>
 
-          <h2 className="text-2xl font-bold mt-12 mb-6">Can you actually buy penny items?</h2>
+          <h2 className="text-2xl font-bold mt-8 mb-6">Can you actually buy penny items?</h2>
           <p>
             Sometimes, yes. But there is no guarantee. Store managers have discretion. Some stores
             honor the price if it scans. Others refuse because the item is marked for removal. The
             safest approach is to stay polite and accept the decision.
           </p>
 
-          <h2 className="text-2xl font-bold mt-12 mb-6">
+          <h2 className="text-2xl font-bold mt-8 mb-6">
             How pennies differ from regular clearance
           </h2>
           <p>
@@ -119,7 +119,7 @@ export default function WhatArePenniesPage() {
             <li>That is why some stores honor the scan and others refuse it.</li>
           </ul>
 
-          <h2 className="text-2xl font-bold mt-12 mb-6">Responsible hunting</h2>
+          <h2 className="text-2xl font-bold mt-8 mb-6">Responsible hunting</h2>
           <p>
             Penny hunting only works long-term if shoppers behave well. Arguments with staff,
             aggressive behavior, or messy aisles lead to crackdowns that hurt everyone.
@@ -131,14 +131,14 @@ export default function WhatArePenniesPage() {
             <li>Walk away if a sale is refused. There will be more opportunities.</li>
           </ul>
 
-          <h2 className="text-2xl font-bold mt-12 mb-6">For beginners: start here</h2>
+          <h2 className="text-2xl font-bold mt-8 mb-6">For beginners: start here</h2>
           <ul className="my-6 space-y-3">
             {beginnerTips.map((tip) => (
               <li key={tip}>{tip}</li>
             ))}
           </ul>
 
-          <h2 className="text-2xl font-bold mt-12 mb-6">
+          <h2 className="text-2xl font-bold mt-8 mb-6">
             For experienced hunters: refine your game
           </h2>
           <ul className="my-6 space-y-3">
@@ -147,71 +147,35 @@ export default function WhatArePenniesPage() {
             ))}
           </ul>
 
-          <h2 className="text-2xl font-bold mt-12 mb-6">Final mindset</h2>
+          <h2 className="text-2xl font-bold mt-8 mb-6">Final mindset</h2>
           <p>
             This is part research, part timing, and part luck. The long game matters more than any
             single penny. Stay patient, stay respectful, and keep your standards high for what you
             share with the community.
           </p>
 
-          <h2 className="text-2xl font-bold mt-12 mb-6">Ready to start hunting?</h2>
+          <h2 className="text-2xl font-bold mt-8 mb-6">Ready to start hunting?</h2>
           <p>
             The next step is learning how clearance moves through the system and how to read the
             signals without guessing. Use the chapters below to build a repeatable routine.
           </p>
-
-          <div className="grid sm:grid-cols-2 gap-6 mt-12">
-            <div className="p-6 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)]">
-              <h3 className="text-lg font-bold mb-3">Clearance Lifecycle</h3>
-              <p className="text-[var(--text-secondary)] mb-4">
-                Learn the common cadence patterns and how to use tag dates.
-              </p>
-              <Link
-                href="/clearance-lifecycle"
-                className="text-[var(--cta-primary)] font-semibold hover:underline"
-              >
-                Clearance Lifecycle
+          <ul className="my-6 space-y-3">
+            <li>
+              <Link href="/clearance-lifecycle" className="text-[var(--cta-primary)] font-semibold">
+                Continue to Clearance Lifecycle & Cadence
               </Link>
-            </div>
-
-            <div className="p-6 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)]">
-              <h3 className="text-lg font-bold mb-3">Labels & Pre-Hunt</h3>
-              <p className="text-[var(--text-secondary)] mb-4">
-                Use label signals and the app to build a smart target list.
-              </p>
-              <Link
-                href="/digital-pre-hunt"
-                className="text-[var(--cta-primary)] font-semibold hover:underline"
-              >
-                Labels & Pre-Hunt
+            </li>
+            <li>
+              <Link href="/digital-pre-hunt" className="text-[var(--cta-primary)] font-semibold">
+                Continue to Labels, Overhead, & Pre-Hunt
               </Link>
-            </div>
-          </div>
-
-          <div className="mt-12 p-8 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl text-center">
-            <h3 className="text-xl font-bold mb-4">Find current penny items</h3>
-            <p className="text-[var(--text-secondary)] mb-6">
-              Browse penny items reported by the community, updated throughout the day.
-            </p>
-            <Link
-              href="/penny-list"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--cta-primary)] text-[var(--cta-text)] rounded-lg font-semibold hover:bg-opacity-90"
-            >
-              View the Penny List
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </svg>
-            </Link>
-          </div>
+            </li>
+            <li>
+              <Link href="/penny-list" className="text-[var(--cta-primary)] font-semibold">
+                Browse the live Penny List
+              </Link>
+            </li>
+          </ul>
         </Prose>
 
         <ChapterNavigation

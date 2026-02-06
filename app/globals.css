@@ -1058,22 +1058,22 @@
   }
 
   .guide-article p {
-    @apply mb-5 leading-relaxed;
+    @apply mb-4 leading-relaxed;
     font-size: 1rem;
-    line-height: 1.75;
+    line-height: 1.7;
   }
 
   .guide-article ul {
-    @apply mb-6 ml-6 space-y-2 list-disc;
+    @apply mb-5 ml-6 space-y-1.5 list-disc;
   }
 
   .guide-article ol {
-    @apply mb-6 ml-6 space-y-2 list-decimal;
+    @apply mb-5 ml-6 space-y-1.5 list-decimal;
   }
 
   .guide-article li {
     @apply leading-relaxed;
-    line-height: 1.75;
+    line-height: 1.65;
   }
 
   .guide-article strong {
@@ -1081,14 +1081,12 @@
   }
 
   .guide-article h2 {
-    @apply text-2xl font-bold mt-14 mb-6 text-[var(--text-primary)];
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--border-default);
+    @apply text-2xl font-bold mt-10 mb-4 text-[var(--text-primary)];
     text-wrap: pretty;
   }
 
   .guide-article h3 {
-    @apply text-lg font-bold mt-10 mb-4 text-[var(--text-primary)];
+    @apply text-lg font-bold mt-7 mb-3 text-[var(--text-primary)];
     text-wrap: pretty;
   }
 
