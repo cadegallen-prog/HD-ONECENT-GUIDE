@@ -35,6 +35,26 @@ export default function SupportPage() {
       </div>
 
       <Section>
+        <Prose className="mb-12">
+          <h2>Transparency First</h2>
+          <p>
+            PennyCentral is a free resource, but it costs money to run. We pay for high-speed
+            servers, database hosting (Supabase), domain names, and the tools that keep the Penny
+            List running fast and bot-free.
+          </p>
+          <p>To cover these costs without charging you a subscription, we use two methods:</p>
+          <ul>
+            <li>
+              <strong>Ads:</strong> You may see display ads on the site. We try to keep them
+              unobtrusive.
+            </li>
+            <li>
+              <strong>Affiliate Links:</strong> If you use our link to sign up for Rakuten (below),
+              we may earn a referral commission at no cost to you.
+            </li>
+          </ul>
+        </Prose>
+
         {/* Rakuten highlight card - primary monetization CTA */}
         <div className="p-6 sm:p-8 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-lg">
           <h2 className="text-2xl font-semibold text-[var(--text-primary)] mb-4">
@@ -58,31 +78,13 @@ export default function SupportPage() {
               </a>
             </Button>
             <p className="text-sm text-[var(--text-muted)]">
-              Affiliate disclosure: we earn a commission on qualifying referrals.
+              Affiliate disclosure: we may earn a commission on qualifying referrals.
             </p>
           </div>
         </div>
 
         {/* Remaining content */}
         <Prose className="[&_h2]:mt-8 [&_h2:first-of-type]:mt-0">
-          <h2>Sustainability</h2>
-          <p>
-            As the site grows, there are real costs to keep it online and improving (hosting,
-            database, tooling, and maintenance). To keep PennyCentral sustainable, we use a mix of
-            advertising and optional community support.
-          </p>
-
-          <h2>Ads</h2>
-          <p>
-            Ads are now live on the site. You will see ads displayed across our pages to help fund
-            continued development and operations.
-          </p>
-          <p>
-            We are optimizing for a usable site first. That means we will avoid the most disruptive
-            formats, like popups that block content and auto-play audio. Placement may change over
-            time as we improve performance and layout.
-          </p>
-
           <h2>Optional Support</h2>
           {hasDonationUrl ? (
             <>
@@ -102,7 +104,20 @@ export default function SupportPage() {
               </p>
             </>
           ) : (
-            <p>Donations are not enabled yet. A PennyCentral support link is coming soon.</p>
+            <div>
+              <p>
+                If you'd like to support PennyCentral, you can use the PayPal link:
+                <br />
+                <a
+                  href="https://paypal.me/cadegallen"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline ml-1"
+                >
+                  paypal.me/cadegallen
+                </a>
+              </p>
+            </div>
           )}
 
           <h2>Disclosures</h2>

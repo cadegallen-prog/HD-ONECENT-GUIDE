@@ -4,6 +4,37 @@
 
 ---
 
+## 2026-02-06 - Codex - Trust Signals & Authenticity Overhaul
+
+**Goal:** Replace "template/corporate" content on Trust Pages (`/about`, `/contact`, `/support`) with authentic, founder-led content to satisfy AdSense E-E-A-T requirements.
+
+**Status:** ✅ Completed & verified.
+
+### Changes
+
+- **About Page (`app/about/page.tsx`):**
+  - Removed generic "Penny Central Founder" placeholders.
+  - Added the "Origin Story" (Nurse -> PDF -> Website).
+  - Explicitly mentioned the community growth (32k -> 62k members).
+  - Cited "Spoe Jarky" (founder) and "Jorian Wulf" (admin).
+  - Corrected timeline (Restart April 5, 2025).
+  - Clarified "I" (Code) vs "We" (Community).
+- **Contact Page (`app/contact/page.tsx`):**
+  - Replaced generic "inquiries" text with a "Data Accuracy" focus.
+  - Added a specific "Correction Promise" (24-hour response) to signal active management.
+  - Split contact channels into "Corrections" vs "General".
+- **Support Page (`app/support/page.tsx`):**
+  - Moved "Transparency" (Funding sources: Ads + Rakuten) to the top of the page.
+  - Made the monetization model explicit to satisfy "Clear Disclosure" rules.
+- **Context:** Created `.ai/topics/PROJECT_IDENTITY.md` to persist these facts.
+
+### Verification
+
+- **Build:** `npm run build` ✅
+- **Manual Check:** Content aligns with founder's monologue and AdSense "High Quality" guidelines (Originality + Expertise + Trust).
+
+---
+
 ## 2026-02-06 - Codex - Completion/Handoff Workflow Hardening (Docs)
 
 **Goal:** Make task completion + next-agent handoff a mandatory, persistent process across context windows.

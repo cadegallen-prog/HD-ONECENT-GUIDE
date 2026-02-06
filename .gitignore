@@ -15,6 +15,8 @@
 /reports/axe-report.json
 /reports/contrast-computed.json
 /reports/sku-optimization-top20.json
+/reports/*.log
+/reports/*.err
 /data/Intial_Supabase_and_Google_sheets_csv_conversion_12-24-25/
 
 # next.js
@@ -37,6 +39,7 @@ yarn-error.log*
 .dev.log
 
 # local env files
+.env
 .env*.local
 
 # vercel
@@ -115,7 +118,9 @@ archive/media-pruned/**/.ai/analytics/**/*.jpeg
 # privacy: analytics exports (local-only)
 data/Google Analytics/
 data/Google Search Trends/
+data/Google Search Console Stats/
 PICTURES_PENNY_CENTRAL/
+Console_logs/
 
 # sentry
 .sentryclirc
