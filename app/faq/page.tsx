@@ -1,46 +1,127 @@
 import type { Metadata } from "next"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
-import { EthicalDisclosure } from "@/components/guide/EthicalDisclosure"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
 import Link from "next/link"
+import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
 
 export const metadata: Metadata = {
-  title: "Penny Hunting FAQ - Your Questions Answered | Penny Central",
+  title: "Penny Hunting FAQ & Quick Reference | Penny Central",
   description:
-    "The most common questions about Home Depot penny items, clearance cycles, and hunting strategies explained clearly.",
+    "Clear answers to the most common penny hunting questions, plus a quick reference cheat sheet.",
+  alternates: {
+    canonical: "/faq",
+  },
 }
 
 const faqs = [
   {
-    question: "What exactly is a 'penny item'?",
+    question: "What exactly is a penny item?",
     answer:
-      "A penny item is a product that has completed its clearance lifecycle and been 'pennied out' by the store's computer system. While these items are usually intended to be removed from the floor, they ring up at $0.01 if you find them before they are pulled.",
+      "A penny item is a product that scans for $0.01 because it has reached the final stage of clearance. It is an internal removal signal, not a public promotion.",
+  },
+  {
+    question: "How do I find penny items at Home Depot?",
+    answer:
+      "Start with clearance areas and the home bay where the item normally lives, then check seasonal sections and overhead for yellow tags. Use the Penny List for recent SKUs, and always verify by scanning the UPC in-store.",
   },
   {
     question: "Why does Home Depot penny items out?",
     answer:
-      "The $0.01 price is an internal signal to employees that the product has reached a 100% discount and should be removed from inventory (ZMA/Destroyed). It is not meant to be a promotional sale for customers.",
+      "The penny price marks an item as clearance complete so it can be removed from inventory. Stores may dispose of it, return it to a vendor, or handle it internally.",
   },
   {
-    question: "What happens if a cashier refuses to sell me a penny item?",
+    question: "Are penny items guaranteed to be sold to customers?",
     answer:
-      "Technically, Home Depot is not required to sell items that have been marked for removal. If they refuse, the best practice is to be polite and walk away. Don't argue with staff or demand to speak to a manager, as this draws negative attention to the hobby.",
+      "No. Store managers have discretion. Some stores honor the price, others refuse because the item is marked for removal.",
   },
   {
-    question: "How do I know if an item is a penny without taking it to the register?",
+    question: "Can I see penny prices in the Home Depot app?",
     answer:
-      "Download the Home Depot app and set it to your specific store location. While most penny items show 'Out of Stock' online, you can use the in-app scanner to check prices. However, many penny items will show full price or 'See Associate' in the app to prevent people from finding them.",
+      "Usually not. The app is useful for filtering, but it is not real-time and often does not show penny prices directly.",
   },
   {
-    question: "When is the best time to go penny hunting?",
+    question: "What do clearance price endings mean?",
     answer:
-      "Most automated markdowns happen on Sundays or Mondays. Many hunters prefer to go early in the morning when the store first opens, before employees have a chance to clear the clearance sections.",
+      "Endings like .00, .06/.04, and .03/.02 often show up in clearance cycles. They are helpful signals, but timing varies by store and category.",
+  },
+  {
+    question: "What is the best time to go penny hunting?",
+    answer:
+      "There is no guaranteed day. Many hunters go early in the morning or after seasonal transitions, but timing varies by store.",
+  },
+  {
+    question: "Why do cashiers sometimes refuse penny sales?",
+    answer:
+      "Because the item is flagged for removal, some stores do not allow penny sales. This is a policy choice, not a personal decision by the cashier.",
+  },
+  {
+    question: "What if the item is locked, recalled, or buy-back?",
+    answer:
+      "If the register blocks the sale or an associate says the item is locked, it is usually unsellable. Do not argue; move on.",
   },
   {
     question: "Is penny hunting legal?",
     answer:
-      "Yes, it is perfectly legal to buy items at the price they ring up for in the store's system. As long as you are not hiding items, switching tags, or being disruptive, it is simply extreme clearance shopping.",
+      "Yes, as long as you are not switching tags, hiding items, or causing disruption. Always follow store policy and staff direction.",
   },
+  {
+    question: "How can I verify a penny price without losing the item?",
+    answer:
+      "Take a photo of the UPC and ask for a stock check, or scan the UPC at self-checkout if it is quiet. Avoid asking for a price override.",
+  },
+  {
+    question: "Do Home Depot employees buy penny items?",
+    answer:
+      "Policy generally prohibits employees from buying penny items, but enforcement varies by store. Assume nothing and focus on your own process.",
+  },
+  {
+    question: "Do penny prices show on the shelf tag?",
+    answer:
+      "Not reliably. Tags can be stale or missing. The scan price is the truth, which is why verification matters.",
+  },
+  {
+    question: "Can I use a price check kiosk?",
+    answer:
+      "If your store has one, it can be a helpful hint, but it is not always current. Treat it as a filter, not a guarantee.",
+  },
+  {
+    question: "Can I buy multiple penny items at once?",
+    answer:
+      "Some stores allow multiples of the same SKU, but different penny SKUs in one checkout can draw attention. Keep it simple and respect store discretion.",
+  },
+  {
+    question: "What if the app says out of stock but I see the item?",
+    answer:
+      "Inventory data lags. If you see it on the shelf, scan the UPC and decide based on the real price.",
+  },
+  {
+    question: "What if I am asked to return a penny item after purchase?",
+    answer:
+      "Stay calm and show your receipt. Ask politely for clarification and follow the manager's direction. Avoid arguments.",
+  },
+  {
+    question: "How do I report a find to help others?",
+    answer:
+      "Use the Report a Find page with the SKU, store, and date so the Penny List stays accurate for everyone.",
+  },
+  {
+    question: "Should I hide items for later?",
+    answer:
+      "No. Hiding items hurts other shoppers and often leads to crackdowns. If you want it, verify and check out responsibly.",
+  },
+  {
+    question: "Do all stores have penny items?",
+    answer:
+      "Most stores see pennies eventually, but frequency and timing vary. Some stores pull them fast, others miss a few.",
+  },
+]
+
+const quickReference = [
+  "Use UPC scans, not yellow tags.",
+  "Price endings help, but do not guarantee timing.",
+  "Tag dates are better than guesswork.",
+  "Be polite if a sale is refused. It is not worth a confrontation.",
+  "Keep receipts for any penny purchase.",
 ]
 
 export default function FAQPage() {
@@ -66,7 +147,7 @@ export default function FAQPage() {
 
       <PageHeader
         title="Frequently Asked Questions"
-        subtitle="Common questions about the penny hunting cycle, store policies, and strategies."
+        subtitle="Clear answers and a quick reference for penny hunting."
       />
 
       <div className="flex justify-center mb-8">
@@ -74,8 +155,6 @@ export default function FAQPage() {
       </div>
 
       <Section>
-        <EthicalDisclosure />
-
         <Prose className="mt-8">
           <div className="space-y-6">
             {faqs.map((faq, index) => (
@@ -107,20 +186,26 @@ export default function FAQPage() {
               </details>
             ))}
           </div>
+
+          <h2 className="text-2xl font-bold mt-12 mb-6">Quick reference</h2>
+          <ul className="mb-10">
+            {quickReference.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
         </Prose>
 
         <div className="mt-12 p-6 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl text-center">
-          <h3 className="text-xl font-bold mb-3">Still have questions?</h3>
+          <h3 className="text-xl font-bold mb-3">Want the full playbook?</h3>
           <p className="text-[var(--text-secondary)] mb-6">
-            Check out our detailed guide chapters for a deep dive into store operations and hunting
-            tactics.
+            Go back to the guide hub to follow the full sequence.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link
               href="/guide"
-              className="btn-primary px-6 py-2 rounded-lg bg-[var(--cta-primary)] text-white font-semibold"
+              className="btn-primary px-6 py-2 rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold"
             >
-              Read the Full Guide
+              Guide Hub
             </Link>
             <Link
               href="/contact"
@@ -130,6 +215,14 @@ export default function FAQPage() {
             </Link>
           </div>
         </div>
+
+        <ChapterNavigation
+          prev={{
+            slug: "facts-vs-myths",
+            title: "Facts vs. Myths",
+          }}
+          next={undefined}
+        />
       </Section>
     </PageShell>
   )

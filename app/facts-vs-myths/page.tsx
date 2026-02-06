@@ -1,52 +1,95 @@
 import type { Metadata } from "next"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
-import { EthicalDisclosure } from "@/components/guide/EthicalDisclosure"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
 import Link from "next/link"
+import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
 
 export const metadata: Metadata = {
-  title: "Penny Hunting Facts vs Myths - The Truth Explained | Penny Central",
-  description:
-    "Separating penny hunting facts from internet myths. Learn the reality of 'secret sales', employee policies, and markdown signals.",
+  title: "Penny Hunting Facts vs Myths | Penny Central",
+  description: "Clear, practical myth-busting based on community patterns and in-store reality.",
+  alternates: {
+    canonical: "/facts-vs-myths",
+  },
 }
 
 const comparisons = [
   {
-    fact: "Penny items ring up as $0.01 because they are marked for removal from inventory.",
-    myth: "Penny items are 'secret sales' that Home Depot wants customers to find.",
+    fact: "Penny items are internal clearance, not public promotions.",
+    myth: "Penny items are secret sales Home Depot wants you to find.",
   },
   {
-    fact: "Individual store managers have the final say on whether to honor a penny sale.",
-    myth: "Stores are legally required to sell you any item at the price it rings up.",
+    fact: "Store discretion is real. A penny scan does not guarantee a sale.",
+    myth: "If it scans for a penny, the store must sell it to you.",
   },
   {
-    fact: "Most penny hunters scan items manually or use the Home Depot app.",
-    myth: "There is a secret 'penny master key' or special code to find everything.",
+    fact: "Price endings help, but timing varies by store and category.",
+    myth: "A .03 ending always means it will penny next week.",
   },
   {
-    fact: "Employees are usually instructed to pull penny items and destroy them (ZMA).",
-    myth: "Employees buy all the penny items before customers can get to them.",
+    fact: "The app is a filter, not the truth. It can be delayed or incomplete.",
+    myth: "The app shows penny prices and exact inventory in real time.",
   },
   {
-    fact: "Legacy markdowns often followed Cadence A/B patterns, but 2026 Store Pulse can compress or skip stages based on real-time inventory pressure.",
-    myth: "There is still a reliable 3-week schedule you can plan around.",
+    fact: "There is no perfect day or time. Patterns exist, but they shift.",
+    myth: "Pennies always drop on a specific weekday.",
   },
   {
-    fact: "The $0.02 price point can act like a short buffer window that signals the item is scheduled to be pulled by MET.",
-    myth: "$0.02 means you have plenty of time before it becomes a penny.",
+    fact: "Employees are following policy. Politeness keeps the hobby alive.",
+    myth: "Arguing with staff is how you win a penny sale.",
   },
   {
-    fact: "In many stores, the best penny candidates are in (or near) their Home Bay — and items with 'No Home' status are often being cleared aggressively.",
-    myth: "Clearance endcaps are the most reliable place to find pennies in 2026.",
+    fact: "Community intel is valuable but time-sensitive. Check dates and store context.",
+    myth: "A screenshot from months ago is still reliable today.",
   },
   {
-    fact: "Penny scans can trigger internal auditing (often called Zero-Comm reports), which is why many cashiers pause or call a manager.",
-    myth: "If it scans for $0.01, the cashier must complete the sale no questions asked.",
+    fact: "Shelf tags can be stale. The scan price is what matters.",
+    myth: "The yellow tag always matches the real price.",
   },
   {
-    fact: "Operational timing matters: MET workdays and bay resets can wipe out penny-eligible items quickly.",
-    myth: "Timing doesn't matter — penny items sit around for weeks.",
+    fact: "Penny items can be in normal bays, overheads, or seasonal areas.",
+    myth: "Only the clearance endcap has penny items.",
   },
+  {
+    fact: "Scan the UPC on the product, not the clearance tag.",
+    myth: "The yellow clearance tag is the best barcode to scan.",
+  },
+  {
+    fact: "Clearing a shelf can draw attention and hurt future success.",
+    myth: "If you find pennies, you should buy every item in sight.",
+  },
+]
+
+const realityTable = [
+  {
+    claim: "Price endings can signal clearance progress.",
+    reality: "Often useful, but timing varies by store and category.",
+  },
+  {
+    claim: "A penny scan guarantees a sale.",
+    reality: "No. Store discretion is real and policy varies by location.",
+  },
+  {
+    claim: "The app shows penny prices in real time.",
+    reality: "Usually not. The scan price is the truth.",
+  },
+  {
+    claim: "Community intel is reliable.",
+    reality: "Strong when it is recent and specific, weak when it lacks context.",
+  },
+]
+
+const researchRules = [
+  "Prefer multiple reports over a single viral post.",
+  "Check the date and store location before you drive.",
+  "Match the report to your store and category, not just the price ending.",
+  "Treat any exact timeline claims as unconfirmed until you see them yourself.",
+]
+
+const redFlags = [
+  "Claims of guaranteed timing (for example, exact day-of-week drops).",
+  "Advice that requires arguing with staff or violating store policy.",
+  "Screenshots with no date, no SKU, or no store context.",
+  'Posts that say "every store" without evidence.',
 ]
 
 export default function FactsVsMythsPage() {
@@ -54,7 +97,7 @@ export default function FactsVsMythsPage() {
     <PageShell width="default">
       <PageHeader
         title="Facts vs. Myths"
-        subtitle="Separating community misinformation from verified store policies and patterns."
+        subtitle="Separating useful signals from rumors that waste your time."
       />
 
       <div className="flex justify-center mb-8">
@@ -62,16 +105,14 @@ export default function FactsVsMythsPage() {
       </div>
 
       <Section>
-        <EthicalDisclosure />
-
         <Prose className="mt-8">
           <p className="mb-10 text-lg leading-relaxed">
-            Internet groups are full of rumors about how penny shopping works. To be a successful
-            and responsible hunter, you need to understand the dry, mechanical reality of retail
-            inventory systems.
+            Penny hunting lives on community information. That is a strength, but it also creates a
+            lot of noise. This chapter filters the most common myths so you can focus on what
+            actually works.
           </p>
 
-          <h2 className="text-2xl font-bold mb-12">Common Misconceptions</h2>
+          <h2 className="text-2xl font-bold mb-12">Common misconceptions</h2>
 
           <div className="space-y-12">
             {comparisons.map((item, index) => (
@@ -121,19 +162,100 @@ export default function FactsVsMythsPage() {
               </div>
             ))}
           </div>
+
+          <h2 className="text-2xl font-bold mt-12 mb-6">How we decide what is real</h2>
+          <ul className="mb-10">
+            {researchRules.map((rule) => (
+              <li key={rule}>{rule}</li>
+            ))}
+          </ul>
+          <p className="mb-6">
+            Community intel is most reliable when it includes a SKU or UPC, the store or region, and
+            a recent date. It is weakest when it is a cropped screenshot with no context.
+          </p>
+
+          <div className="overflow-x-auto mb-10">
+            <table className="w-full border-collapse border border-[var(--border-default)]">
+              <thead>
+                <tr className="bg-[var(--bg-elevated)]">
+                  <th className="border border-[var(--border-default)] px-4 py-3 text-left font-bold">
+                    Claim
+                  </th>
+                  <th className="border border-[var(--border-default)] px-4 py-3 text-left font-bold">
+                    Reality
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {realityTable.map((row) => (
+                  <tr key={row.claim} className="hover:bg-[var(--bg-elevated)] transition-colors">
+                    <td className="border border-[var(--border-default)] px-4 py-3 font-semibold">
+                      {row.claim}
+                    </td>
+                    <td className="border border-[var(--border-default)] px-4 py-3 text-[var(--text-secondary)]">
+                      {row.reality}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <h2 className="text-2xl font-bold mb-6">Red flags to ignore</h2>
+          <ul className="mb-10">
+            {redFlags.map((flag) => (
+              <li key={flag}>{flag}</li>
+            ))}
+          </ul>
+
+          <h2 className="text-2xl font-bold mb-6">60-second vetting checklist</h2>
+          <ol className="mb-10">
+            <li>Check the date and the specific store or region.</li>
+            <li>Look for a SKU or UPC, not just a price screenshot.</li>
+            <li>Compare the report to tag dates and price endings you can see.</li>
+            <li>See if there are multiple recent reports, not just one post.</li>
+            <li>Decide if the trip is worth it even if the penny is gone.</li>
+          </ol>
+
+          <h2 className="text-2xl font-bold mb-6">Why myths persist</h2>
+          <p className="mb-10">
+            Penny hunting moves fast, and screenshots spread faster. A real penny find in one store
+            can turn into a rumor for every store within hours. Treat rumors as leads, not truth.
+          </p>
+
+          <h2 className="text-2xl font-bold mb-6">Example: strong report vs. weak report</h2>
+          <p className="mb-4">
+            <strong>Strong report:</strong> Includes the SKU, the store, the date, and a clear photo
+            of the tag or UPC. You can verify it in your own context.
+          </p>
+          <p className="mb-10">
+            <strong>Weak report:</strong> A cropped screenshot with no date, no SKU, and no store.
+            It might be real, but you cannot act on it responsibly.
+          </p>
+
+          <h2 className="text-2xl font-bold mb-6">Research deep dive</h2>
+          <p className="mb-6">
+            Home Depot does not publish a penny roadmap, so community intel is the best available
+            data. It is strong when it is recent, specific, and backed by receipts or tag photos. It
+            is weak when it is vague or repeated without context.
+          </p>
+          <p className="mb-10">
+            Treat every report as a lead, not a promise. The most successful hunters combine
+            community tips with their own store knowledge. If you would regret the trip without the
+            penny, skip it.
+          </p>
         </Prose>
 
         <div className="mt-16 p-8 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl shadow-sm">
-          <h2 className="text-2xl font-bold mb-4">Master the Hunt</h2>
+          <h2 className="text-2xl font-bold mb-4">Next: quick answers</h2>
           <p className="text-[var(--text-secondary)] mb-8 max-w-2xl">
-            Want to see exactly how the markdown patterns work? Our Guide to the Clearance Lifecycle
-            breaks down the numbers so you can stop guessing.
+            Ready for short, direct answers? Jump to the FAQ and quick reference.
           </p>
           <Link
-            href="/clearance-lifecycle"
+            href="/faq"
             className="inline-flex items-center gap-2 font-bold text-[var(--cta-primary)] hover:underline"
           >
-            Read: Understanding the Clearance Lifecycle
+            Read: FAQ & Quick Reference
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -150,6 +272,17 @@ export default function FactsVsMythsPage() {
             </svg>
           </Link>
         </div>
+
+        <ChapterNavigation
+          prev={{
+            slug: "inside-scoop",
+            title: "Inside Scoop (2026 Context)",
+          }}
+          next={{
+            slug: "faq",
+            title: "FAQ & Quick Reference",
+          }}
+        />
       </Section>
     </PageShell>
   )

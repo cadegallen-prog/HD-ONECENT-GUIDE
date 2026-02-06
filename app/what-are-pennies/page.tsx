@@ -1,13 +1,13 @@
 import type { Metadata } from "next"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
-import { EthicalDisclosure } from "@/components/guide/EthicalDisclosure"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
 import Link from "next/link"
+import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
 
 export const metadata: Metadata = {
   title: "What Are Penny Items? - Home Depot $0.01 Clearance Explained | Penny Central",
   description:
-    "Learn what Home Depot penny items are, how they work, and why products get marked down to $0.01. Complete introduction to penny hunting.",
+    "Start here: what penny items are, why they exist, and how to hunt responsibly without drama.",
   keywords: [
     "what are penny items",
     "home depot one cent items",
@@ -17,19 +17,42 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "What Are Penny Items? - Home Depot $0.01 Clearance Explained",
-    description: "Learn what Home Depot penny items are and how the $0.01 clearance system works.",
+    description: "Start here: what penny items are and how the $0.01 clearance system works.",
   },
   twitter: {
     card: "summary_large_image",
   },
+  alternates: {
+    canonical: "/what-are-pennies",
+  },
 }
+
+const beginnerTips = [
+  "Understand the basics before you chase a specific SKU.",
+  "Use the app to narrow your list, then verify in-store.",
+  "Treat the first few trips as learning, not winning.",
+]
+
+const advancedTips = [
+  "Track clearance patterns in your local store, not just online posts.",
+  "Follow category resets and seasonal transitions; they drive many pennies.",
+  "Keep notes on tag dates and price endings so you can predict better over time.",
+]
+
+const categories = [
+  "Seasonal leftovers",
+  "Discontinued product lines",
+  "Overstocked accessories",
+  "Packaging changes or old versions",
+  "Odd sizes or colors that did not sell",
+]
 
 export default function WhatArePenniesPage() {
   return (
     <PageShell width="default">
       <PageHeader
         title="What Are Penny Items?"
-        subtitle="A complete beginner's guide to Home Depot's $0.01 clearance system."
+        subtitle="A beginner-friendly foundation for understanding the $0.01 clearance system."
       />
 
       <div className="flex justify-center mb-8">
@@ -37,161 +60,142 @@ export default function WhatArePenniesPage() {
       </div>
 
       <Section>
-        <EthicalDisclosure />
-
         <Prose className="mt-8">
           <p className="mb-10 text-lg leading-relaxed">
-            If you've spent any time in Home Depot communities online, you've probably heard the
-            term "penny item." But what exactly is a penny item, and why would a major retailer sell
-            something for just one cent? The answer is more interesting than you might think.
+            A penny item is a product that scans for $0.01 because it has reached the final stage of
+            clearance. It is not a public promotion. It is an internal removal signal that can
+            occasionally be purchased if the item is still on the shelf and the store honors the
+            sale.
           </p>
 
-          <h2 className="text-2xl font-bold mt-12 mb-6">The $0.01 Mystery</h2>
-
+          <h2 className="text-2xl font-bold mt-12 mb-6">Why penny items exist</h2>
           <p>
-            A <strong>penny item</strong> is any product in Home Depot that rings up for exactly
-            $0.01 at the register. It's not a typo. It's not a glitch. It's a deliberate action by
-            the retailer to mark items for removal from their inventory system.
+            Large retailers need a way to remove old or slow-moving inventory from their system. The
+            penny price is a bookkeeping step that marks the item as clearance complete. Some stores
+            pull items immediately. Others miss a few, which creates the opportunity.
           </p>
-
           <p>
-            When you find an item priced at $0.01, you can typically purchase it for that price—but
-            store discretion applies. Some managers honor penny sales; others may refuse. It depends
-            on the individual store's policies and the manager on duty.
+            You will hear employees and shoppers use the term ZMA to describe this removal stage.
+            The exact internal label varies by store, but the idea is consistent: the item is no
+            longer meant for sale.
           </p>
 
-          <h2 className="text-2xl font-bold mt-12 mb-6">Why Do Penny Items Exist?</h2>
-
+          <h2 className="text-2xl font-bold mt-12 mb-6">What happens after an item pennied out</h2>
           <p>
-            Penny items aren't a "secret sale" or a retailer mistake. They're part of a deliberate
-            inventory management system used by large retailers like Home Depot.
+            Once an item reaches the penny stage, the store is expected to remove it from the floor.
+            That can mean disposal, return to vendor, or other internal disposition. The key point
+            for shoppers is that the item is not supposed to be available for long.
           </p>
 
-          <p>
-            Here's how it works: When Home Depot wants to clear out old, damaged, or discontinued
-            products from shelves, they mark them down through a series of price reductions:
-          </p>
-
+          <h2 className="text-2xl font-bold mt-12 mb-6">What kinds of items become pennies?</h2>
+          <p>Most penny items come from predictable places. Common examples include:</p>
           <ul className="my-6 space-y-3">
-            <li>
-              <strong>First markdown:</strong> Items end in .06 (50-70% off original price)
-            </li>
-            <li>
-              <strong>Second markdown:</strong> Items end in .03 (usually 75%+ off original price)
-            </li>
-            <li>
-              <strong>Final markdown:</strong> Items end in .01 (the penny tier)
-            </li>
+            {categories.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+          <p>
+            High-ticket items can penny out, but it is less common. The most reliable finds are
+            usually smaller items and seasonal accessories.
+          </p>
+
+          <h2 className="text-2xl font-bold mt-12 mb-6">Can you actually buy penny items?</h2>
+          <p>
+            Sometimes, yes. But there is no guarantee. Store managers have discretion. Some stores
+            honor the price if it scans. Others refuse because the item is marked for removal. The
+            safest approach is to stay polite and accept the decision.
+          </p>
+
+          <h2 className="text-2xl font-bold mt-12 mb-6">
+            How pennies differ from regular clearance
+          </h2>
+          <p>
+            A deep clearance price (like $0.03 or $0.06) is still meant to sell. A penny price is a
+            removal signal. That difference explains most of the confusion new hunters have.
+          </p>
+          <ul className="my-6 space-y-3">
+            <li>Clearance deals are promotions. Pennies are internal cleanup.</li>
+            <li>Clearance items are meant to be purchased. Pennies are meant to be pulled.</li>
+            <li>That is why some stores honor the scan and others refuse it.</li>
           </ul>
 
+          <h2 className="text-2xl font-bold mt-12 mb-6">Responsible hunting</h2>
           <p>
-            When an item hits $0.01, the retail system marks it as <strong>"salvage"</strong> or{" "}
-            <strong>"ZMA" (Z-Mark Out of Asset)</strong>. At this point, the item is technically
-            removed from inventory—it shouldn't exist on the sales floor anymore. Employees are
-            supposed to take it to a special bin for destruction or return to the vendor.
+            Penny hunting only works long-term if shoppers behave well. Arguments with staff,
+            aggressive behavior, or messy aisles lead to crackdowns that hurt everyone.
           </p>
-
-          <p>
-            But between the time the price is set and when employees collect the items, shoppers can
-            find them. That's the opportunity.
-          </p>
-
-          <h2 className="text-2xl font-bold mt-12 mb-6">Can You Actually Buy Penny Items?</h2>
-
-          <p>
-            <strong>Yes, you can.</strong> But with an important caveat: it's not guaranteed.
-          </p>
-
-          <p>
-            Home Depot's policy is that individual{" "}
-            <strong>store managers have final discretion</strong> on whether to honor penny sales.
-            Some stores embrace it as a community benefit. Others treat it as a system error that
-            shouldn't be exploited. If a manager decides an item shouldn't be sold (even at a
-            penny), they can refuse the transaction.
-          </p>
-
-          <p>
-            Additionally, if an employee scans an item and realizes it's a penny before it reaches
-            the register, they often remove it from your cart. Store employees are usually evaluated
-            on how quickly they clear salvage items, so they have an incentive to pull these
-            products before they're purchased.
-          </p>
-
-          <h2 className="text-2xl font-bold mt-12 mb-6">What Kinds of Items Become Pennies?</h2>
-
-          <p>Not everything is eligible for penny status. Retailers typically mark down:</p>
-
           <ul className="my-6 space-y-3">
-            <li>Discontinued items (seasonal products no longer in the annual lineup)</li>
-            <li>Damaged or open-box merchandise</li>
-            <li>Overstocked items</li>
-            <li>Outdated products (last season's colors or styles)</li>
-            <li>Items with broken packaging</li>
+            <li>Be polite. Employees are enforcing store policy, not targeting you personally.</li>
+            <li>Do not brag at checkout or attract attention to the price.</li>
+            <li>Share accurate information in communities and avoid spreading rumors.</li>
+            <li>Walk away if a sale is refused. There will be more opportunities.</li>
           </ul>
 
+          <h2 className="text-2xl font-bold mt-12 mb-6">For beginners: start here</h2>
+          <ul className="my-6 space-y-3">
+            {beginnerTips.map((tip) => (
+              <li key={tip}>{tip}</li>
+            ))}
+          </ul>
+
+          <h2 className="text-2xl font-bold mt-12 mb-6">
+            For experienced hunters: refine your game
+          </h2>
+          <ul className="my-6 space-y-3">
+            {advancedTips.map((tip) => (
+              <li key={tip}>{tip}</li>
+            ))}
+          </ul>
+
+          <h2 className="text-2xl font-bold mt-12 mb-6">Final mindset</h2>
           <p>
-            Home Depot rarely marks down high-ticket items like appliances or power tools to a
-            penny. Most penny items are smaller: lighting fixtures, home décor, paint, landscaping
-            supplies, and seasonal products.
+            This is part research, part timing, and part luck. The long game matters more than any
+            single penny. Stay patient, stay respectful, and keep your standards high for what you
+            share with the community.
           </p>
 
-          <h2 className="text-2xl font-bold mt-12 mb-6">The 3-Week Clearance Cycle</h2>
-
+          <h2 className="text-2xl font-bold mt-12 mb-6">Ready to start hunting?</h2>
           <p>
-            Home Depot follows a predictable markdown schedule. Once an item hits the first markdown
-            (.06), it typically takes <strong>exactly 3 weeks</strong> to reach the next tier (.03),
-            and another <strong>3 weeks</strong> to reach the penny tier.
-          </p>
-
-          <p>
-            This is important: if you spot a shelf full of .03 items today, you can reasonably
-            expect them to be pennies in three weeks. This is the strategy used by serious penny
-            hunters—find the .03 items, mark your calendar, and return when they drop.
-          </p>
-
-          <h2 className="text-2xl font-bold mt-12 mb-6">Get Started</h2>
-
-          <p>
-            Now that you understand what penny items are, you're ready to start hunting. The next
-            step is learning where and how to find them.
+            The next step is learning how clearance moves through the system and how to read the
+            signals without guessing. Use the chapters below to build a repeatable routine.
           </p>
 
           <div className="grid sm:grid-cols-2 gap-6 mt-12">
             <div className="p-6 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)]">
-              <h3 className="text-lg font-bold mb-3">Prepare Before You Go</h3>
+              <h3 className="text-lg font-bold mb-3">Clearance Lifecycle</h3>
               <p className="text-[var(--text-secondary)] mb-4">
-                Learn how to use Home Depot's digital tools to find penny items from your couch.
+                Learn the common cadence patterns and how to use tag dates.
+              </p>
+              <Link
+                href="/clearance-lifecycle"
+                className="text-[var(--cta-primary)] font-semibold hover:underline"
+              >
+                Clearance Lifecycle
+              </Link>
+            </div>
+
+            <div className="p-6 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)]">
+              <h3 className="text-lg font-bold mb-3">Labels & Pre-Hunt</h3>
+              <p className="text-[var(--text-secondary)] mb-4">
+                Use label signals and the app to build a smart target list.
               </p>
               <Link
                 href="/digital-pre-hunt"
                 className="text-[var(--cta-primary)] font-semibold hover:underline"
               >
-                Digital Pre-Hunt →
-              </Link>
-            </div>
-
-            <div className="p-6 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)]">
-              <h3 className="text-lg font-bold mb-3">In-Store Tactics</h3>
-              <p className="text-[var(--text-secondary)] mb-4">
-                Practical strategies for finding penny items once you're in the store.
-              </p>
-              <Link
-                href="/in-store-strategy"
-                className="text-[var(--cta-primary)] font-semibold hover:underline"
-              >
-                In-Store Strategy →
+                Labels & Pre-Hunt
               </Link>
             </div>
           </div>
 
           <div className="mt-12 p-8 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl text-center">
-            <h3 className="text-xl font-bold mb-4">Find Current Penny Items</h3>
+            <h3 className="text-xl font-bold mb-4">Find current penny items</h3>
             <p className="text-[var(--text-secondary)] mb-6">
               Browse penny items reported by the community, updated throughout the day.
             </p>
             <Link
               href="/penny-list"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--cta-primary)] text-white rounded-lg font-semibold hover:bg-opacity-90"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--cta-primary)] text-[var(--cta-text)] rounded-lg font-semibold hover:bg-opacity-90"
             >
               View the Penny List
               <svg
@@ -209,6 +213,14 @@ export default function WhatArePenniesPage() {
             </Link>
           </div>
         </Prose>
+
+        <ChapterNavigation
+          prev={undefined}
+          next={{
+            slug: "clearance-lifecycle",
+            title: "Clearance Lifecycle & Cadence",
+          }}
+        />
       </Section>
     </PageShell>
   )

@@ -1,44 +1,105 @@
 import type { Metadata } from "next"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
-import { EthicalDisclosure } from "@/components/guide/EthicalDisclosure"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
 import Link from "next/link"
+import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
 
 export const metadata: Metadata = {
-  title: "In-Store Penny Hunting Strategy - Shop Like a Pro | Penny Central",
+  title: "Verify & In-Store Penny Strategy | Penny Central",
   description:
-    "Tactical advice for finding penny items in-store. Learn how to handle store employees, find hidden inventory, and checkout successfully.",
+    "How to verify penny status, where to look in-store, and how to checkout without drama.",
+  alternates: {
+    canonical: "/in-store-strategy",
+  },
 }
 
-const strategies = [
+const verifySteps = [
   {
-    title: "The Golden Rule: Don't Be a Nuisance",
-    description:
-      "Penny shopping is a privilege, not a right. Keep your cart manageable, don't leave aisles a mess, and always be polite to staff. If you are asked to leave or told an item is not for sale, comply immediately.",
+    title: "Use the UPC, not the yellow tag",
+    detail:
+      "Scan the manufacturer barcode at self-checkout when possible. The tag can be stale or trigger a price override prompt.",
   },
   {
-    title: "Scanning Protocol",
-    description:
-      "Use the Home Depot mobile app for price checks. Ensure your app is set to your current store location. If an item shows a price but you suspect it's a penny, try scanning it at a self-checkout station (if available and not busy).",
+    title: "Keep it low-key",
+    detail:
+      "If you need help, ask for a stock check rather than a price check. It reduces the chance the item gets pulled.",
   },
   {
-    title: "Where to Look: Home Bay Focus",
-    description:
-      "As of 2026, clearance endcaps are being phased out. Focus on Home Bays—the primary shelf location for each item. Look for items that don't fit the planogram, are sitting in the wrong section, or have no shelf tag.",
+    title: "Pay quickly and keep the receipt",
+    detail:
+      "If it scans for a penny and the sale goes through, finish the transaction and keep your receipt in case of confusion.",
   },
-  {
-    title: "Timing Your Visits",
-    description:
-      "MET teams work primarily Wednesday and Thursday (overnight/early morning). Visit Tuesday evenings for the highest penny availability, or Friday/Saturday after MET has cleared but before weekend foot traffic.",
-  },
+]
+
+const communityReportedTips = [
+  "Many hunters avoid bringing the item to the desk. A clear UPC photo is usually enough.",
+  "Asking for a stock check is often lower drama than asking for a price check, which some say can lead to a pull.",
+  "Some associates use handhelds often called Zebra or FIRST. If they scan and see a penny, they may pull the item.",
+]
+
+const rightWay = [
+  "Take a photo of the UPC and shelf tag so you can verify without carrying the item around.",
+  "Ask for a stock check if you are unsure. It is less confrontational than asking for a price override.",
+  "Use self-checkout when it is quiet and you can pay quickly.",
+]
+
+const wrongWay = [
+  "Handing the item to an employee and asking for a price check. If it scans for a penny, it may be pulled.",
+  "Making a scene when a cashier refuses a sale. It almost always backfires.",
+  "Using employee-only ladders or restricted areas. That can get you removed from the store.",
+]
+
+const bringList = [
+  "Your phone with the Home Depot app set to the correct store.",
+  "A photo of the UPC or the SKU number.",
+  "A payment method ready so checkout is quick.",
+  "Patience. Not every trip will be a win.",
+]
+
+const hotspots = [
+  "Home bay shelves where the item normally lives",
+  "Seasonal sections right after a holiday or department reset",
+  "Top and bottom shelves where leftovers sit undisturbed",
+  "Overhead areas with visible yellow tags (high reward, higher risk)",
+  "Return areas or endcaps that look unorganized",
+]
+
+const pennyCategories = [
+  "Hardware",
+  "Lighting",
+  "Electrical parts",
+  "Paint accessories",
+  "Seasonal leftovers",
+  "Discontinued items",
+  "Brand or packaging transitions",
+]
+
+const checkoutTips = [
+  "Mix one penny item with a few normal items if you are worried about attention.",
+  "Avoid scanning multiple different penny SKUs in one transaction.",
+  "If an associate stops the sale, stay calm. Many stores simply do not allow penny sales.",
+  "If you are asked to return the item after purchase, show your receipt and ask politely for guidance.",
+]
+
+const selfCheckoutSteps = [
+  "Have your payment ready before you scan anything.",
+  "Scan the UPC barcode on the product, not the yellow clearance tag.",
+  "If it scans for a penny, pay immediately and print the receipt.",
+  "Leave calmly and avoid drawing attention to the screen.",
+]
+
+const ifStoppedSteps = [
+  "Stay calm and polite. Do not argue.",
+  "If you have already paid, show the receipt and ask for guidance.",
+  "If the sale is refused, accept it and move on.",
 ]
 
 export default function InStoreStrategyPage() {
   return (
     <PageShell width="default">
       <PageHeader
-        title="In-Store Strategy"
-        subtitle="Tactical, boots-on-the-ground advice for successful (and ethical) hunting."
+        title="Verify & In-Store Strategy"
+        subtitle="Boots-on-the-ground tactics for finding pennies and checking out responsibly."
       />
 
       <div className="flex justify-center mb-8">
@@ -46,83 +107,137 @@ export default function InStoreStrategyPage() {
       </div>
 
       <Section>
-        <EthicalDisclosure />
-
         <Prose className="mt-8">
           <p className="mb-10 text-lg leading-relaxed">
-            Successfully finding a penny item is only half the battle. Getting it through the front
-            doors requires a blend of preparation, awareness, and extreme courtesy.
+            Finding a penny item is only half the game. The other half is verifying the price,
+            avoiding unnecessary attention, and staying respectful if a store refuses the sale. This
+            chapter covers the safest ways to check and the most common pitfalls.
           </p>
 
-          <h2 className="text-2xl font-bold mb-8">Key Strategies</h2>
+          <h2 className="text-2xl font-bold mb-6">How to verify penny status in-store</h2>
+          <p className="mb-6">
+            The only way to know the real price is to scan the UPC. The app can help, but the scan
+            is what counts.
+          </p>
 
-          <div className="grid sm:grid-cols-2 gap-8 mb-16">
-            {strategies.map((strat, index) => (
-              <div
-                key={index}
-                className="p-8 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-default)] hover:border-[var(--cta-primary)] transition-colors group"
-              >
-                <h3 className="text-xl font-bold mb-3 group-hover:text-[var(--cta-primary)] transition-colors">
-                  {strat.title}
-                </h3>
-                <p className="text-[var(--text-secondary)] leading-relaxed">{strat.description}</p>
+          <div className="space-y-6 mb-10">
+            {verifySteps.map((step) => (
+              <div key={step.title} className="border-l-4 border-[var(--cta-primary)] pl-6 py-2">
+                <h3 className="font-bold mb-2 text-[var(--text-primary)]">{step.title}</h3>
+                <p className="text-[var(--text-secondary)]">{step.detail}</p>
               </div>
             ))}
           </div>
-
-          <h2 className="text-2xl font-bold mb-6">Register Awareness: The Zero-Comm Factor</h2>
-          <p className="mb-6">
-            When a penny item is scanned, the system generates a "Zero-Communication" report—an
-            internal audit that flags the transaction for management review. Many cashiers are
-            coached to refuse penny sales or call for a manager override. Understanding this
-            pressure helps you approach checkout strategically.
+          <h3 className="text-xl font-bold mb-4">Community-reported verification tips</h3>
+          <p className="mb-4 text-[var(--text-secondary)]">
+            These are common patterns reported by experienced hunters. They are not official policy
+            and may vary by store.
           </p>
+          <ul className="mb-10">
+            {communityReportedTips.map((tip) => (
+              <li key={tip}>{tip}</li>
+            ))}
+          </ul>
 
-          <div className="border-l-4 border-[var(--cta-primary)] pl-6 py-2 mb-10">
-            <h3 className="text-xl font-bold mb-3">Best Practices at the Register</h3>
-            <ul className="space-y-2 text-[var(--text-secondary)] list-disc list-inside">
-              <li>Mix penny items with regular purchases to avoid raising flags</li>
-              <li>Use self-checkout when available (reduced scrutiny)</li>
-              <li>If a cashier questions the price, remain calm and polite—never argue</li>
-              <li>Acknowledge $.02 vs $.01 distinction: $.02 may ring up but trigger MET alert</li>
-            </ul>
+          <h2 className="text-2xl font-bold mb-6">The right way vs. the wrong way</h2>
+          <div className="grid md:grid-cols-2 gap-8 mb-12">
+            <div className="p-6 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)] border-l-4 border-l-[var(--cta-primary)]">
+              <h3 className="text-lg font-bold mb-3">Low-risk moves</h3>
+              <ul className="space-y-2 text-[var(--text-secondary)]">
+                {rightWay.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="p-6 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)] border-l-4 border-l-[var(--status-error)]">
+              <h3 className="text-lg font-bold mb-3">High-risk moves</h3>
+              <ul className="space-y-2 text-[var(--text-secondary)]">
+                {wrongWay.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
           </div>
 
-          <h2 className="text-2xl font-bold mb-6">The Checkout Approach</h2>
+          <h2 className="text-2xl font-bold mb-6">What to bring</h2>
+          <ul className="mb-10">
+            {bringList.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+
+          <h2 className="text-2xl font-bold mb-6">Where to look in-store</h2>
+          <ul className="mb-10">
+            {hotspots.map((spot) => (
+              <li key={spot}>{spot}</li>
+            ))}
+          </ul>
+
+          <h2 className="text-2xl font-bold mb-6">What to look for (penny-prone categories)</h2>
           <p className="mb-6">
-            Successfully purchasing penny items requires discretion and awareness of the internal
-            dynamics. Bring a mix of items (even full-price ones) to the register. It's less
-            conspicuous than a cart full of the same penny item. If an item rings up for a penny,
-            remain calm and process the transaction normally.
+            These categories show up often in community reports. They are not guarantees, but they
+            are reliable starting points.
+          </p>
+          <ul className="mb-10">
+            {pennyCategories.map((category) => (
+              <li key={category}>{category}</li>
+            ))}
+          </ul>
+
+          <h2 className="text-2xl font-bold mb-6">Checkout: keep it simple</h2>
+          <p className="mb-6">
+            There is no perfect method. Some stores honor penny prices. Some do not. The goal is to
+            avoid unnecessary attention and respect store discretion.
+          </p>
+          <ul className="mb-10">
+            {checkoutTips.map((tip) => (
+              <li key={tip}>{tip}</li>
+            ))}
+          </ul>
+
+          <h3 className="text-xl font-bold mb-4">Self-checkout flow (low drama)</h3>
+          <ol className="mb-10">
+            {selfCheckoutSteps.map((step) => (
+              <li key={step}>{step}</li>
+            ))}
+          </ol>
+
+          <h3 className="text-xl font-bold mb-4">If you are stopped</h3>
+          <ul className="mb-10">
+            {ifStoppedSteps.map((step) => (
+              <li key={step}>{step}</li>
+            ))}
+          </ul>
+          <p className="mb-10 text-[var(--text-secondary)]">
+            The long game matters. Leaving a penny behind is better than burning a store or creating
+            a bad interaction.
           </p>
 
-          <div className="p-6 bg-[var(--bg-elevated)] border-l-4 border-l-[var(--status-warning)] rounded-r-lg mb-10">
-            <p className="italic text-[var(--text-secondary)]">
-              "Your best tool isn't a scanning app—it's your personality. Employees who like you are
-              far more likely to let a penny item slide through than those who find you disruptive."
+          <h2 className="text-2xl font-bold mb-6">Locked cases and cages</h2>
+          <p className="mb-6">
+            Items in locked cases or cages require an employee. If the item is a penny, the employee
+            may refuse to hand it over. If you still want to try, add a normal item to your cart,
+            ask politely, and accept the answer you get.
+          </p>
+
+          <div className="p-6 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-lg mb-10">
+            <p className="text-[var(--text-secondary)]">
+              If a store refuses the sale, move on. The best long-term strategy is to stay welcome
+              and keep hunting.
             </p>
           </div>
-
-          <h2 className="text-2xl font-bold mb-6">Navigating Employee Interactions</h2>
-          <p className="mb-6">
-            If an employee realizes an item is a penny, they are often required by corporate policy
-            to pull it from your cart and place it in the ZMA (Z-Mark Out of Asset) bin for
-            destruction or return to vendor. MET team members, in particular, are evaluated on how
-            quickly they can clear salvage items.
-          </p>
         </Prose>
 
         <div className="mt-16 p-8 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl shadow-sm">
-          <h2 className="text-2xl font-bold mb-4">Advance Prep</h2>
+          <h2 className="text-2xl font-bold mb-4">Need better targets?</h2>
           <p className="text-[var(--text-secondary)] mb-8 max-w-2xl">
-            Winning in the store starts at home. Learn how to use the "Digital Pre-Hunt" method to
-            verify inventory before you even burn the gas.
+            Before you drive, use label recognition and pre-hunt filters to narrow the list.
           </p>
           <Link
             href="/digital-pre-hunt"
             className="inline-flex items-center gap-2 font-bold text-[var(--cta-primary)] hover:underline"
           >
-            Read: The Digital Pre-Hunt
+            Read: Labels, Overhead, & Pre-Hunt
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -139,6 +254,17 @@ export default function InStoreStrategyPage() {
             </svg>
           </Link>
         </div>
+
+        <ChapterNavigation
+          prev={{
+            slug: "digital-pre-hunt",
+            title: "Labels, Overhead, & Pre-Hunt",
+          }}
+          next={{
+            slug: "inside-scoop",
+            title: "Inside Scoop (2026 Context)",
+          }}
+        />
       </Section>
     </PageShell>
   )

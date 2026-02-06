@@ -1,73 +1,145 @@
 import type { Metadata } from "next"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
-import { EthicalDisclosure } from "@/components/guide/EthicalDisclosure"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
 import { TruthMatrix } from "@/components/guide/TruthMatrix"
 import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
 
 export const metadata: Metadata = {
-  title: "Home Depot Store Pulse & ICE Metrics 2026 | Penny Central",
+  title: "Home Depot Clearance Lifecycle (2026 Guide) | Penny Central",
   description:
-    "The definitive guide to Home Depot's 2026 clearance system. Learn ICE metrics, the $.02 buffer, and Speed-to-Penny timelines.",
+    "How penny items typically move through clearance: common price endings, cadence patterns, and how to read tag dates.",
+  alternates: {
+    canonical: "/clearance-lifecycle",
+  },
 }
-
-const iceMetrics = [
-  {
-    component: "Inactive (I)",
-    definition: "SKUs removed from replenishment pipeline",
-    impact: "First warning - no longer receiving stock",
-  },
-  {
-    component: "Clearance (C)",
-    definition: "Items in markdown cadence ($.06, $.03)",
-    impact: "Impact: Compressed to 2-3 weeks in high-volume depts",
-  },
-  {
-    component: "E-Velocity (E)",
-    definition: "Turn rate / movement speed metric",
-    impact: "Triggers aggressive liquidation when low",
-  },
-]
 
 const truthMatrixRows = [
   {
-    claim: "Items follow a strict 3-week cadence",
+    claim: "There is a fixed three-week markdown schedule",
     verdict: "false" as const,
     reality:
-      "Store Pulse now accelerates low-velocity items. An item can jump from $.06 to $.01 in days if E-velocity is critical.",
+      "Timing varies by store and department. Use ranges and tag dates instead of a fixed calendar.",
   },
   {
-    claim: "$.03 is the last safe price before penny",
-    verdict: "complicated" as const,
-    reality:
-      "Yes, but the new $.02 buffer (48-hr warning) is the real signal. If you see $.03, utilize the scan tool to check stock depth.",
-  },
-  {
-    claim: "Penny items are in clearance bays",
+    claim: "Clearance endcaps are the only place to look",
     verdict: "false" as const,
     reality:
-      "Clearance endcaps are being phased out. Most penny items are now found in their 'Home Bay' mixed with full-price stock (Zero-Comm).",
+      "Clearance can appear in home bays, seasonal areas, and overheads. Endcaps still exist, but they are not the only signal.",
   },
   {
-    claim: "MET Team removes pennies on Thursdays",
+    claim: "Any price ending in .97 means penny soon",
+    verdict: "false" as const,
+    reality:
+      "A .97 ending is usually a regular sale price. Clearance endings (.00, .06/.04, .03/.02, .01) are more meaningful.",
+  },
+  {
+    claim: "The yellow tag always matches the real price",
     verdict: "complicated" as const,
     reality:
-      "MET schedules vary by district (Mon-Fri). However, large resets often happen mid-week. Knowing your store's specific MET rhythm is key.",
+      "Tags can be stale or missing. The scan price is what matters, so always verify at the register or with the app.",
   },
   {
-    claim: "Employees hide penny items to buy them",
-    verdict: "true" as const,
-    reality:
-      "Still happens. If an item shows 'On Hand: 10' but the shelf is empty, check top stock or behind adjacent boxes.",
+    claim: "Every store follows the same cadence",
+    verdict: "false" as const,
+    reality: "Cadence patterns exist, but stores vary in timing, staffing, and enforcement.",
   },
+]
+
+const cadenceRows = [
+  {
+    stage: "Initial markdown",
+    cadenceA: ".00 (about 10-25% off, about 4 weeks)",
+    cadenceB: ".00 (about 10-25% off, 1-2 weeks)",
+    notes: "Enters clearance. Watch the tag date.",
+  },
+  {
+    stage: "Second markdown",
+    cadenceA: ".06 (about 50% off, about 6 weeks)",
+    cadenceB: ".04 (about 50% off, about 4 weeks)",
+    notes: "Often the longest stage. Timing varies by category.",
+  },
+  {
+    stage: "Final visible markdown",
+    cadenceA: ".03 (about 75% off, about 3 weeks)",
+    cadenceB: ".02 (about 75% off, about 2 weeks)",
+    notes: "Often the last tag before penny. Not guaranteed.",
+  },
+  {
+    stage: "System update",
+    cadenceA: ".01 (penny)",
+    cadenceB: ".01 (penny)",
+    notes: "Internal removal stage. Some stores honor it, some do not.",
+  },
+]
+
+const priceEndingRows = [
+  {
+    ending: ".00",
+    meaning: "First markdown. Item has entered clearance.",
+    signal: "Low to medium",
+  },
+  {
+    ending: ".06 / .04",
+    meaning: "Mid-clearance. Common second markdown endings.",
+    signal: "Medium",
+  },
+  {
+    ending: ".03 / .02",
+    meaning: "Late-clearance. Often the final visible markdown stage.",
+    signal: "High (but not a promise)",
+  },
+  {
+    ending: ".01",
+    meaning: "Penny. Internal removal stage; not meant for sale.",
+    signal: "Highest",
+  },
+  {
+    ending: ".97 / .98",
+    meaning: "Regular sale price in many categories.",
+    signal: "Low",
+  },
+]
+
+const timelineSteps = [
+  {
+    title: "Stage 1: .00 (enters clearance)",
+    detail:
+      "The first markdown. In many reports this stage lasts about 1-4 weeks. Use the tag date as your reference point. Older tag dates often indicate a near-term drop.",
+  },
+  {
+    title: "Stage 2: .06 or .04",
+    detail:
+      "Mid-clearance. In many reports this stage lasts about 2-6 weeks. Seasonal items often move faster, while core items may stay longer.",
+  },
+  {
+    title: "Stage 3: .03 or .02",
+    detail:
+      "Late-clearance. In many reports this stage lasts about 1-3 weeks. A strong signal, but not a guarantee. Always verify with a scan.",
+  },
+  {
+    title: "Stage 4: .01 (penny)",
+    detail: "Internal removal. Some stores still sell it, some pull it immediately.",
+  },
+]
+
+const seasonalNotes = [
+  "Seasonal items often move faster right after the season ends.",
+  "Core items can sit longer at .00 or .06 before moving again.",
+  "Department resets can trigger faster drops or sudden pulls.",
+]
+
+const dotZeroTips = [
+  "Take note of the tag date and the bay location.",
+  "Check nearby overhead storage for matching items.",
+  "Watch for a follow-up drop rather than chasing it the same day.",
 ]
 
 export default function ClearanceLifecyclePage() {
   return (
     <PageShell width="default">
       <PageHeader
-        title="The 2026 Clearance System"
-        subtitle="How Store Pulse and ICE metrics transformed penny hunting."
+        title="Clearance Lifecycle & Cadence"
+        subtitle="How penny items typically move through clearance, and how to read the signals responsibly."
       />
 
       <div className="flex justify-center mb-8">
@@ -75,35 +147,28 @@ export default function ClearanceLifecyclePage() {
       </div>
 
       <Section>
-        <EthicalDisclosure />
-
         <Prose className="mt-8">
           <p className="mb-10 text-lg leading-relaxed">
-            In 2025, Home Depot deployed <strong>Store Pulse</strong>—a real-time algorithmic
-            liquidation system that replaced the legacy IMS framework. This fundamentally changed
-            how clearance items move through the markdown cycle, compressing timelines and
-            introducing new signals that penny hunters must understand to succeed in 2026.
+            Penny items are the final stage of clearance, not a public promotion. Home Depot does
+            not publish a formal penny playbook, so this chapter is based on consistent community
+            reports and in-store observations. Use it as a guide, not a guarantee.
           </p>
 
-          <h2 className="text-2xl font-bold mb-6 text-[var(--text-primary)]">
-            The System Shift: Then vs. Now
-          </h2>
+          <h2 className="text-2xl font-bold mb-6 text-[var(--text-primary)]">The reality check</h2>
           <p className="mb-6">
-            If you're using guides from 2024 or earlier, you are hunting with a map of a city that
-            has been bulldozed. The rigid schedules are gone, replaced by "Speed-to-Penny"
-            algorithms. Here is the honest breakdown of what still works and what will get you
-            empty-handed.
+            Old guides often describe a fixed schedule. In practice, timing varies by store,
+            department, and inventory pressure. You can still make smart predictions, but only if
+            you treat cadences as ranges and verify with a scan.
           </p>
 
           <TruthMatrix rows={truthMatrixRows} />
 
           <h2 className="text-2xl font-bold mt-12 mb-6 text-[var(--text-primary)]">
-            Understanding ICE Metrics
+            Common clearance cadences (reported)
           </h2>
           <p className="mb-6">
-            <strong>ICE</strong> (Inactive, Clearance, E-Velocity) is the internal dashboard metric
-            used by Store Pulse to decide an item's fate. Understanding these components helps you
-            predict which items will "penny out" and when.
+            Two patterns show up repeatedly in community reports. They are helpful for planning, but
+            they are not official and not guaranteed. Some categories skip stages or move faster.
           </p>
 
           <div className="overflow-x-auto mb-12">
@@ -111,27 +176,33 @@ export default function ClearanceLifecyclePage() {
               <thead>
                 <tr className="bg-[var(--bg-elevated)]">
                   <th className="border border-[var(--border-default)] px-4 py-3 text-left font-bold text-[var(--text-primary)]">
-                    Metric
+                    Stage
                   </th>
                   <th className="border border-[var(--border-default)] px-4 py-3 text-left font-bold text-[var(--text-primary)]">
-                    What It Means
+                    Cadence A (approx)
                   </th>
                   <th className="border border-[var(--border-default)] px-4 py-3 text-left font-bold text-[var(--text-primary)]">
-                    Why It Matters
+                    Cadence B (approx)
+                  </th>
+                  <th className="border border-[var(--border-default)] px-4 py-3 text-left font-bold text-[var(--text-primary)]">
+                    Notes
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {iceMetrics.map((metric, idx) => (
-                  <tr key={idx} className="hover:bg-[var(--bg-elevated)] transition-colors">
+                {cadenceRows.map((row) => (
+                  <tr key={row.stage} className="hover:bg-[var(--bg-elevated)] transition-colors">
                     <td className="border border-[var(--border-default)] px-4 py-3 font-semibold text-[var(--text-primary)]">
-                      {metric.component}
+                      {row.stage}
                     </td>
                     <td className="border border-[var(--border-default)] px-4 py-3 text-[var(--text-secondary)]">
-                      {metric.definition}
+                      {row.cadenceA}
                     </td>
                     <td className="border border-[var(--border-default)] px-4 py-3 text-[var(--text-secondary)]">
-                      {metric.impact}
+                      {row.cadenceB}
+                    </td>
+                    <td className="border border-[var(--border-default)] px-4 py-3 text-[var(--text-secondary)]">
+                      {row.notes}
                     </td>
                   </tr>
                 ))}
@@ -140,157 +211,115 @@ export default function ClearanceLifecyclePage() {
           </div>
 
           <h2 className="text-2xl font-bold mb-6 text-[var(--text-primary)]">
-            The $.02 Buffer & ZMA
-          </h2>
-
-          <div className="p-6 mb-10 rounded-lg bg-[var(--bg-card)] border border-[var(--border-default)] border-l-4 border-l-[var(--status-warning)]">
-            <h3 className="text-xl font-bold mb-3 text-[var(--text-primary)]">
-              <span className="text-[var(--status-warning)]">$.02</span> is the "Get It Now" Warning
-            </h3>
-            <p className="mb-4 text-[var(--text-secondary)]">
-              The $.02 price point is <strong>not a sale</strong>. It is a 48-hour operational
-              buffer that signals the MET team to remove the item from the shelf.
-            </p>
-            <p className="font-semibold text-[var(--text-primary)]">
-              At this stage, the item is processed as{" "}
-              <span className="text-[var(--cta-primary)]">ZMA (Zero Markdown Application)</span>
-              —retail speak for "salvage/destroy." Once an item is ZMA'd, it cannot be sold. $.02 is
-              your last chance to buy it before the register locks it out.
-            </p>
-          </div>
-
-          <p className="mb-8">
-            <strong>What happens after ZMA?</strong> The item is physically thrown into a compactor,
-            palletized for liquidation auctions, or credited back to the vendor. It never returns to
-            the shelf. This is why timing is everything.
-          </p>
-
-          <h2 className="text-2xl font-bold mb-6 text-[var(--text-primary)]">
-            Speed-to-Penny Timeline
+            Quick reference: price ending cheat sheet
           </h2>
           <p className="mb-6">
-            In the legacy system, you could watch an item sit at $.06 for six weeks. In 2026, Store
-            Pulse monitors "E-Velocity" (sales speed). If an item is taking up valuable shelf space
-            and not moving, the system will force it down the chain aggressively.
+            Price endings are more useful than the discount percentage. The ending can hint at where
+            the item sits in the clearance lifecycle, but the only sure answer is a scan.
           </p>
 
-          <details className="mb-10 p-6 rounded-lg bg-[var(--bg-card)] border border-[var(--border-default)]">
-            <summary className="font-bold cursor-pointer text-lg mb-4 text-[var(--text-primary)] hover:text-[var(--cta-primary)] transition-colors">
-              Click to view Historical Context (Cadence A/B)
-            </summary>
-            <div className="text-[var(--text-secondary)] space-y-4 pt-2">
-              <p>
-                Before Store Pulse, stores followed rigid markdown patterns. We preserve this data
-                because some low-volume rural stores still echo this rhythm, but do not rely on it
-                as a rule in major metro areas.
-              </p>
-
-              <div className="overflow-x-auto">
-                <table className="w-full border-collapse border border-[var(--border-default)]">
-                  <thead>
-                    <tr className="bg-[var(--bg-elevated)]">
-                      <th className="border border-[var(--border-default)] px-4 py-3 text-left font-bold text-[var(--text-primary)]">
-                        Stage
-                      </th>
-                      <th className="border border-[var(--border-default)] px-4 py-3 text-left font-bold text-[var(--text-primary)]">
-                        Cadence A (historical)
-                      </th>
-                      <th className="border border-[var(--border-default)] px-4 py-3 text-left font-bold text-[var(--text-primary)]">
-                        Cadence B (historical)
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="hover:bg-[var(--bg-elevated)] transition-colors">
-                      <td className="border border-[var(--border-default)] px-4 py-3 font-semibold text-[var(--text-primary)]">
-                        Full retail
-                      </td>
-                      <td className="border border-[var(--border-default)] px-4 py-3 text-[var(--text-secondary)]">
-                        .00 (not on clearance) ~4 weeks
-                      </td>
-                      <td className="border border-[var(--border-default)] px-4 py-3 text-[var(--text-secondary)]">
-                        .00 (not on clearance) ~1–2 weeks
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-[var(--bg-elevated)] transition-colors">
-                      <td className="border border-[var(--border-default)] px-4 py-3 font-semibold text-[var(--text-primary)]">
-                        1st markdown
-                      </td>
-                      <td className="border border-[var(--border-default)] px-4 py-3 text-[var(--text-secondary)]">
-                        .06 ~6 weeks
-                      </td>
-                      <td className="border border-[var(--border-default)] px-4 py-3 text-[var(--text-secondary)]">
-                        .04 ~4 weeks
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-[var(--bg-elevated)] transition-colors">
-                      <td className="border border-[var(--border-default)] px-4 py-3 font-semibold text-[var(--text-primary)]">
-                        2nd markdown
-                      </td>
-                      <td className="border border-[var(--border-default)] px-4 py-3 text-[var(--text-secondary)]">
-                        .03 ~3 weeks
-                      </td>
-                      <td className="border border-[var(--border-default)] px-4 py-3 text-[var(--text-secondary)]">
-                        .02 ~2 weeks
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-[var(--bg-elevated)] transition-colors">
-                      <td className="border border-[var(--border-default)] px-4 py-3 font-semibold text-[var(--text-primary)]">
-                        Final
-                      </td>
-                      <td className="border border-[var(--border-default)] px-4 py-3 text-[var(--text-secondary)]">
-                        .01 (penny)
-                      </td>
-                      <td className="border border-[var(--border-default)] px-4 py-3 text-[var(--text-secondary)]">
-                        .01 (penny)
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </details>
+          <div className="overflow-x-auto mb-12">
+            <table className="w-full border-collapse border border-[var(--border-default)]">
+              <thead>
+                <tr className="bg-[var(--bg-elevated)]">
+                  <th className="border border-[var(--border-default)] px-4 py-3 text-left font-bold text-[var(--text-primary)]">
+                    Ending
+                  </th>
+                  <th className="border border-[var(--border-default)] px-4 py-3 text-left font-bold text-[var(--text-primary)]">
+                    What it usually means
+                  </th>
+                  <th className="border border-[var(--border-default)] px-4 py-3 text-left font-bold text-[var(--text-primary)]">
+                    Penny signal
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {priceEndingRows.map((row) => (
+                  <tr key={row.ending} className="hover:bg-[var(--bg-elevated)] transition-colors">
+                    <td className="border border-[var(--border-default)] px-4 py-3 font-semibold text-[var(--text-primary)]">
+                      {row.ending}
+                    </td>
+                    <td className="border border-[var(--border-default)] px-4 py-3 text-[var(--text-secondary)]">
+                      {row.meaning}
+                    </td>
+                    <td className="border border-[var(--border-default)] px-4 py-3 text-[var(--text-secondary)]">
+                      {row.signal}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="text-sm text-[var(--text-secondary)] mb-10">
+            Community note: Some hunters report a brief .02 buffer just before penny, while others
+            never see it. Treat it as a possible signal, not a rule.
+          </p>
 
           <h2 className="text-2xl font-bold mb-6 text-[var(--text-primary)]">
-            Three Rules to Survive in 2026
+            The cadence timeline (practical view)
           </h2>
+          <p className="mb-6">
+            This is the most practical way to think about timing. Use tag dates and store-specific
+            observations instead of a fixed calendar.
+          </p>
           <div className="space-y-6 mb-10">
-            <div className="border-l-4 border-[var(--cta-primary)] pl-6 py-2">
-              <h3 className="font-bold mb-2 text-[var(--text-primary)]">
-                1. Hunt the Home Bay, Not Clearance
-              </h3>
-              <p className="text-[var(--text-secondary)]">
-                Most penny items now sit in their original home location ("Home Bay") mixed with
-                full-price items. If you only check yellow clearance stickers, you will miss 80% of
-                the finds.
-              </p>
-            </div>
-            <div className="border-l-4 border-[var(--cta-primary)] pl-6 py-2">
-              <h3 className="font-bold mb-2 text-[var(--text-primary)]">
-                2. Respect the MET Schedule
-              </h3>
-              <p className="text-[var(--text-secondary)]">
-                MET teams work Monday through Friday. If you find a store that does heavy resets on
-                Wednesdays, realize that Thursday morning is the most dangerous time for items to be
-                pulled, but also the best time to find what they missed.
-              </p>
-            </div>
-            <div className="border-l-4 border-[var(--cta-primary)] pl-6 py-2">
-              <h3 className="font-bold mb-2 text-[var(--text-primary)]">3. Speed is Survivable</h3>
-              <p className="text-[var(--text-secondary)]">
-                Since Store Pulse accelerates items, you cannot "wait and see." If you scan an item
-                at $.03, do not wait for next week. Verify if it's the only one left. If stock is
-                low, the algorithm will likely kill it quickly.
-              </p>
-            </div>
+            {timelineSteps.map((step) => (
+              <div key={step.title} className="border-l-4 border-[var(--cta-primary)] pl-6 py-2">
+                <h3 className="font-bold mb-2 text-[var(--text-primary)]">{step.title}</h3>
+                <p className="text-[var(--text-secondary)]">{step.detail}</p>
+              </div>
+            ))}
           </div>
+
+          <h2 className="text-2xl font-bold mb-6 text-[var(--text-primary)]">
+            Seasonal vs. core inventory
+          </h2>
+          <p className="mb-6">
+            Not every category moves at the same speed. Seasonal categories tend to drop quickly
+            after a holiday or reset, while core categories can sit longer at early markdowns.
+          </p>
+          <ul className="mb-10">
+            {seasonalNotes.map((note) => (
+              <li key={note}>{note}</li>
+            ))}
+          </ul>
+
+          <h2 className="text-2xl font-bold mb-6 text-[var(--text-primary)]">
+            What to do when you see .00
+          </h2>
+          <ul className="mb-10">
+            {dotZeroTips.map((tip) => (
+              <li key={tip}>{tip}</li>
+            ))}
+          </ul>
+
+          <h2 className="text-2xl font-bold mb-6 text-[var(--text-primary)]">
+            How to use tag dates without guessing
+          </h2>
+          <div className="p-6 mb-6 rounded-lg bg-[var(--bg-card)] border border-[var(--border-default)]">
+            <h3 className="text-lg font-bold mb-2 text-[var(--text-primary)]">Tag date example</h3>
+            <p className="text-[var(--text-secondary)]">
+              Example: A clearance label showing $12.06 with a tag date of 11/04 is a mid-clearance
+              stage. If that date is several weeks old, many hunters report the next drop is closer,
+              but timing still varies by store and category.
+            </p>
+          </div>
+          <ul className="mb-10">
+            <li>Older clearance tag dates usually mean a drop is closer, but not guaranteed.</li>
+            <li>Combine an old tag date with low stock for a stronger signal.</li>
+            <li>If a tag is missing, rely on the scan price, not the shelf.</li>
+            <li>Use the digital pre-hunt chapter to filter candidates before you drive.</li>
+          </ul>
         </Prose>
 
         <ChapterNavigation
-          prev={undefined}
+          prev={{
+            slug: "what-are-pennies",
+            title: "What Are Penny Items?",
+          }}
           next={{
             slug: "digital-pre-hunt",
-            title: "Pre-Hunt Intelligence",
+            title: "Labels, Overhead, & Pre-Hunt",
           }}
         />
       </Section>
