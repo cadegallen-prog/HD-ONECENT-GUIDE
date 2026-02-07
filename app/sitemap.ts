@@ -88,13 +88,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.8,
     },
-    {
-      url: `${baseUrl}/resources`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-
     // Supporting Pages - Medium Priority
     {
       url: `${baseUrl}/report-find`,

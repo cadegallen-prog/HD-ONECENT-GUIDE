@@ -8,7 +8,6 @@
 - **SKU detail pages:** `app/sku/[sku]/page.tsx`
 - **Store Finder:** `app/store-finder/page.tsx`
 - **Guide:** `app/guide/page.tsx` (content in `components/GuideContent.tsx`)
-- **Resources:** `app/resources/page.tsx`
 - **Auth + Lists:** `app/auth/**`, `app/login/page.tsx`, `app/lists/**`
 - **SEO + crawlers:** `app/sitemap.ts`, `app/robots.ts`
 

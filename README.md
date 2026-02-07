@@ -12,7 +12,6 @@ The official companion site for the "Home Depot One Cent Items" Facebook communi
 - **Penny Guide** — Complete reference on how clearance items reach penny status
 - **Store Finder** — Find nearby Home Depot locations with intelligent search (supports city, state name, ZIP code)
 - **Trip Tracker** — Plan and log penny hunting trips
-- **Resources** — External tools and community links
 - **Cashback Guide** — How to stack savings with cashback apps
 
 ---
@@ -170,7 +169,6 @@ app/                    # Pages (App Router)
   store-finder/         # Store Finder
   trip-tracker/         # Trip Tracker
   guide/                # Penny Guide
-  resources/            # Resources
   about/                # About
   cashback/             # Cashback Guide
 components/             # Shared components

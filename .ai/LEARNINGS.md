@@ -30,6 +30,29 @@ Scan this FIRST before suggesting anything. If your idea matches an anti-pattern
 
 ## Top 10 Learnings (Most Important)
 
+### 0. Route deletion + stale Next type artifacts
+
+**Problem:** After deleting a route page, `npm run build` failed with type errors from stale generated files under `.next-playwright/types` and `.next/dev/types/app/...`.
+
+**What We Tried:**
+
+- Re-ran `npm run build` directly (still failed)
+- Cleared stale generated route type folders (`.next-playwright`, stale deleted-route type folder under `.next/dev/types/app/`)
+
+**What We Learned:**
+
+- Next-generated type artifacts can keep references to deleted routes when dev/test build caches already exist.
+- This is a cache artifact problem, not a source-code problem.
+
+**What to Do Instead:**
+
+- If a deleted route still appears in type errors, clear stale generated type folders and rebuild.
+- Keep port 3001 process running; do not kill the dev server to fix this.
+
+**Date:** Feb 7, 2026
+
+---
+
 ### 1. Playwright E2E + Next Dev Lock (Port 3001)
 
 **Problem:** Playwright E2E failed with `Unable to acquire lock at .next/dev/lock, is another instance of next dev running?`

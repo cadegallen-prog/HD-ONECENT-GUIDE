@@ -359,7 +359,7 @@ async function main() {
 
   const page = await context.newPage()
 
-  // Block unnecessary resources
+  // Block unnecessary requests
   await page.route("**/*", (route) => {
     const type = route.request().resourceType()
     if (["image", "stylesheet", "font", "media"].includes(type)) {

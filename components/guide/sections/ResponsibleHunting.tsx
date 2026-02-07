@@ -30,7 +30,7 @@ export function ResponsibleHunting() {
             </p>
           </div>
           <div className="p-4 rounded-lg border">
-            <h3 className="text-lg font-semibold mb-3">3. Use Community Resources Wisely</h3>
+            <h3 className="text-lg font-semibold mb-3">3. Use Community Intel Wisely</h3>
             <p className="text-sm text-muted-foreground">
               Share helpful info like UPCs, tag dates, or clearance cycles. Post accurate finds -
               not rumors. Don't flood groups with repeat questions.

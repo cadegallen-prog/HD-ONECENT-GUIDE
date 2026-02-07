@@ -17,7 +17,7 @@ Short, task-focused guides to avoid repo-wide searching.
 - [backfill-homedepot-enrichment-json](./backfill-homedepot-enrichment-json.md) — **When to use:** You have a HomeDepot.com scrape JSON and want to refresh Penny List enrichment fields only (including retail price).
 - [run-local-staging-warmer](./run-local-staging-warmer.md) — **When to use:** GitHub Actions is blocked (Cloudflare) and you need to refresh `enrichment_staging` from your home IP.
 - [ship-safely](./ship-safely.md) — **When to use:** You’re getting ready to commit, verify, or roll back safely.
-- [codex-mcp-setup](./codex-mcp-setup.md) — **When to use:** Codex can’t see MCP tools/resources or env vars, or you need to update Codex.
+- [codex-mcp-setup](./codex-mcp-setup.md) — **When to use:** Codex can’t see MCP tools/data or env vars, or you need to update Codex.
 - [archive-first-prune](./archive-first-prune.md) — **When to use:** You need to reduce AI/doc/script bloat safely by archiving legacy files with restore manifests instead of deleting.
 - [stash-hygiene](./stash-hygiene.md) — **When to use:** Stashes/untracked junk are creating invisible state that confuses agents; bundle+drop to keep `git stash list` near-zero.
 - [task-completion-handoff](./task-completion-handoff.md) — **When to use:** You want strict closeout behavior (verify + memory updates + next-agent handoff) so context persists across windows.

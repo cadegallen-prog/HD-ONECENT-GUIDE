@@ -226,7 +226,7 @@ export default async function Home() {
               Tools
             </h2>
             <p className="mt-2 text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed">
-              Resources to help you plan trips and find penny items
+              Tools to help you plan trips and find penny items
             </p>
           </div>
 

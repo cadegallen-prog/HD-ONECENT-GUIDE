@@ -1,6 +1,6 @@
 # Codex MCP setup (and why env vars “don’t work”)
 
-**When to use:** Codex can’t see MCP tools/resources, MCP servers aren’t listed, or secrets/env vars aren’t available to tools.
+**When to use:** Codex can’t see MCP tools/data, MCP servers aren’t listed, or secrets/env vars aren’t available to tools.
 
 ## 1) Make sure Codex is new enough
 

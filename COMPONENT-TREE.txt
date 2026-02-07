@@ -14,7 +14,6 @@ components/penny-list-client.tsx
 components/penny-list-filters.tsx
 components/penny-list-table.tsx
 components/penny-thumbnail.tsx
-components/resources-support-ctas.tsx
 components/store-comparison-table.tsx
 components/store-map.css
 components/store-map.tsx

@@ -3,7 +3,6 @@ $pages = @(
     "/store-finder",
     "/guide",
     "/trip-tracker",
-    "/resources",
     "/about",
     "/cashback"
 )

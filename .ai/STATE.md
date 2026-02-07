@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 6, 2026 (Guide UX de-clutter + navigation simplification)
+**Last updated:** Feb 7, 2026 (External-links route removal + sitemap cleanup)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,13 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-07 (External-links route removal + sitemap cleanup):** Removed the low-value external-links surface and all active references so it is no longer linked, indexed, or audited as a core page.
+  - **Route removal:** deleted the dedicated external-links route file.
+  - **Indexing/nav cleanup:** removed the external-links route from `app/sitemap.ts` and `components/command-palette.tsx`.
+  - **Verification + audit cleanup:** removed the external-links route from `tests/live/console.spec.ts` and `scripts/run-audit.ps1`.
+  - **Copy/docs alignment:** updated `app/page.tsx`, `README.md`, `ROUTE-TREE.txt`, `COMPONENT-TREE.txt`, and `docs/skills/repo-map.md` to match the new route set.
+  - **Verification:** `npm run lint` ✅, `npm run build` ✅, `npm run test:unit` ✅ (26/26), `npm run test:e2e` ✅ (156/156), Playwright proof: `reports/proof/2026-02-07T06-41-40/`.
 
 - **2026-02-06 (Guide UX de-clutter + navigation simplification):** Completed a one-shot guide presentation cleanup to reduce dead space, remove conflicting navigation signals, and simplify chapter flow.
   - **Hub rebuilt:** `app/guide/page.tsx` now uses a cleaner chapter-first structure with one disclosure, simpler quick-start guidance, and reduced visual clutter.

@@ -40,7 +40,6 @@ const pages = [
   { icon: Heart, label: "My List", path: "/lists", group: "Tools" },
   { icon: Map, label: "Store Finder", path: "/store-finder", group: "Tools" },
   // More
-  { icon: FileText, label: "Resources", path: "/resources", group: "More" },
   { icon: Info, label: "About", path: "/about", group: "More" },
 ]
 
