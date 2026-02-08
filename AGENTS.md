@@ -157,6 +157,17 @@ Never kill port 3001 unless user asks.
 - ✅ USE CSS variables (`var(--cta-primary)`)
 - ✅ OR get approval first
 
+### ⛔ Rule #4: Canonical Plan File (Repo-First)
+
+- ✅ Final plan files live in `.ai/impl/<slug>.md` (repo path only)
+- ⚠️ Tool-local folders (for example `C:\Users\cadeg\.claude\plans\`) are scratch, not source of truth
+- ✅ If a plan is drafted in a tool-local folder, copy/merge it into `.ai/impl/<slug>.md` immediately and continue from the repo file
+- ✅ Before claiming planning work complete, report:
+  - Canonical plan path
+  - SHA256 hash of the canonical plan file
+  - `No unsynced tool-local plan: YES/NO`
+- ✅ Handoffs must reference repo plan paths only (not `.claude` paths)
+
 ---
 
 ## 5. Design System

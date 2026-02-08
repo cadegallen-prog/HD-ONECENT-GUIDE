@@ -24,6 +24,7 @@
 4. **Publish next-agent handoff**
    - Include a structured handoff block in the final response and/or session log.
    - The handoff must let another agent continue without re-discovery.
+   - If the task involved planning docs, include canonical plan evidence (path + hash + sync status).
 
 ---
 
@@ -57,6 +58,9 @@ Use this schema every time:
 - `npm run test:e2e`:
 - Playwright proof path(s):
 - Known non-blocking console noise:
+- Canonical plan path (if planning task):
+- Canonical plan SHA256 (if planning task):
+- No unsynced tool-local plan: YES/NO (if planning task):
 
 ### 5) Risks / Watchouts
 

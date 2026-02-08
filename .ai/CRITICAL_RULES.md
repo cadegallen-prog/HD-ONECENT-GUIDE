@@ -212,7 +212,7 @@ git diff .ai/topics/ .ai/STATE.md .ai/BACKLOG.md
 ```
 ````
 
-```
+````
 
 **Use this template. No shortcuts.**
 
@@ -242,6 +242,38 @@ git diff .ai/topics/ .ai/STATE.md .ai/BACKLOG.md
 
 ---
 
+## Rule #6: Plan Canonicality (Repo Only)
+
+**Purpose:** Ensure all agents continue from one shared plan source instead of diverging tool-local drafts.
+
+**Requirements:**
+
+- Final plans must exist in `.ai/impl/<slug>.md`
+- Tool-local plan files (for example `C:\\Users\\cadeg\\.claude\\plans\\*.md`) are scratch only and not canonical
+- If a tool-local plan exists and differs, merge it into `.ai/impl/<slug>.md` before declaring planning complete
+- Handoff prompts must reference repo plan paths only
+- For plan tasks, completion report must include:
+  - Canonical path
+  - SHA256 of canonical file
+  - `No unsynced tool-local plan: YES/NO`
+
+**Suggested hash/sync check (PowerShell):**
+
+```powershell
+$repo = ".ai/impl/<slug>.md"
+$local = "C:\\Users\\cadeg\\.claude\\plans\\<draft>.md"
+
+"repo_hash=$((Get-FileHash $repo -Algorithm SHA256).Hash)"
+if (Test-Path $local) {
+  "local_hash=$((Get-FileHash $local -Algorithm SHA256).Hash)"
+  "in_sync=$(((Get-FileHash $repo -Algorithm SHA256).Hash) -eq ((Get-FileHash $local -Algorithm SHA256).Hash))"
+} else {
+  "local_file_missing_ok=True"
+}
+````
+
+---
+
 ## Stopping Criteria
 
 **The Meta-Rule:** If you've accomplished the user's goal and passed all quality gates, **STOP**.
@@ -262,6 +294,7 @@ git diff .ai/topics/ .ai/STATE.md .ai/BACKLOG.md
 ### Default: qa:fast
 
 All PRs run `npm run qa:fast` automatically. This includes:
+
 - **lint** - ESLint checks
 - **test:unit** - Unit tests
 - **build** - Next.js production build (catches type errors)
@@ -271,10 +304,12 @@ Estimated time: ~2 minutes
 ### When to Run qa:full
 
 Full QA runs automatically when:
+
 - PR touches **risky files** (auth, db, api, infra, fragile UI)
 - PR has the **`full-qa` label** added
 
 **What qa:full adds:**
+
 - **test:e2e** - Playwright end-to-end tests
 - **check-contrast** - Color contrast validation
 - **check-axe** - Accessibility checks
@@ -282,6 +317,7 @@ Full QA runs automatically when:
 Estimated time: ~8 minutes
 
 **Risky file paths (auto-trigger full QA):**
+
 ```
 
 middleware.ts # Auth & security
@@ -305,11 +341,13 @@ app/globals.css # Global styles
 ## Playwright Required For
 
 **When required:**
+
 - All UI changes (buttons, forms, layouts, colors)
 - All JavaScript changes (Store Finder, interactive features)
 - All "bug fixed" claims (visual bugs need proof)
 
 **Required steps:**
+
 1. Navigate: `http://localhost:3001/[page]`
 2. Screenshot BEFORE
 3. Make changes
@@ -323,4 +361,7 @@ app/globals.css # Global styles
 ## Next Step
 
 Now read `CONSTRAINTS_TECHNICAL.md` to learn about fragile areas (globals.css, React-Leaflet, etc.).
+
+```
+
 ```

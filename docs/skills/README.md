@@ -21,3 +21,4 @@ Short, task-focused guides to avoid repo-wide searching.
 - [archive-first-prune](./archive-first-prune.md) — **When to use:** You need to reduce AI/doc/script bloat safely by archiving legacy files with restore manifests instead of deleting.
 - [stash-hygiene](./stash-hygiene.md) — **When to use:** Stashes/untracked junk are creating invisible state that confuses agents; bundle+drop to keep `git stash list` near-zero.
 - [task-completion-handoff](./task-completion-handoff.md) — **When to use:** You want strict closeout behavior (verify + memory updates + next-agent handoff) so context persists across windows.
+- [plan-canonicality](./plan-canonicality.md) — **When to use:** A plan exists in tool-local locations (like `.claude/plans`) and you need one repo-canonical source of truth in `.ai/impl/`.

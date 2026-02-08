@@ -1,6 +1,6 @@
 # Context Handoff Pack (Portable, Tool-Agnostic)
 
-**Last Updated:** Jan 31, 2026 by Codex
+**Last Updated:** Feb 7, 2026 by Claude Opus 4.6
 
 **Purpose:** Compressed, copy-paste-ready context for starting fresh chats or switching tools (Claude → Codex → Copilot).
 
@@ -14,21 +14,20 @@
 
 **Open-source Next.js PWA** helping Home Depot shoppers find "penny items" (clearance deals, often $0.01 to $10).
 
-### Current Reality (Jan 23, 2026)
+### Current Reality (Feb 7, 2026)
 
-- ✅ **Core product working:** Submissions, enrichment, Penny List page
-- ✅ **Staging warmer is local-only:** GitHub Action permanently removed. Run `npm run warm:staging` from your home IP to refresh `enrichment_staging` (upstream may block datacenter runners via Cloudflare).
-- ✅ **Retention features live:** Email signup (10s subscribers), PWA install prompt, weekly digest cron
-- ✅ **Monetization bridge:** Ezoic (temporary) + Mediavine Grow (analytics collection in progress)
-- 🔄 **Cron health check needed:** Vercel cron is configured; ensure `CRON_SECRET` is set correctly so `/api/cron/send-weekly-digest` doesn’t return 401.
-- 📊 **Metrics:** 680 daily users, 26% conversion (HD clicks), 80 clicks from organic (all branded)
-- 🎯 **Cold start problem:** Penny List has ~67 items but needs more to encourage participation
+- ✅ **Core product working:** Submissions, enrichment, Penny List page, Store Finder
+- ✅ **Guide exists:** 7 chapters + hub across 8 routes, but quality is 4.5/10
+- 🔴 **GUIDE RECOVERY PLAN APPROVED** — `.ai/impl/guide-recovery.md` is the approved implementation plan
+- 🔴 **Guide problems (verified):** AI-documentation voice (60+ hedging instances in Ch 5), 2026 intel dumped in one chapter, FAQ hidden behind 20 dropdowns, concepts referenced before introduced, Speed-to-Penny absent from entire guide
+- ✅ **Design system solid:** WCAG AAA compliant, custom tokens, guide-article CSS class
+- 📊 **Metrics:** 680 daily users, 26% conversion (HD clicks), 100% Facebook dependency
 
-### Immediate Next Move (Pipeline Reliability)
+### Immediate Next Move
 
-1. Run the staging warmer locally (only path): `npm run warm:staging`.
-2. Confirm `CRON_SECRET` is set (prod) so `/api/cron/send-weekly-digest` returns 200 (not 401).
-3. Confirm SerpApi spend stays low via `serpapi_logs` (batch job) + provenance on rows (staging vs serpapi).
+1. **Implement Guide Recovery Phase 1** (content & voice) from `.ai/impl/guide-recovery.md`
+2. Then Phase 2 (visual/UX) — FAQ overhaul, hub redesign, CSS tuning
+3. Then Phase 3 (drift guard) — format contract document
 
 ---
 
@@ -44,11 +43,12 @@
 
 4. **This file** (`.ai/HANDOFF.md`) - Portable context pack
 
-### Contextual (Choose One)
+### For Guide Recovery (THE CURRENT TASK)
 
-- **For general orientation:** `.ai/BACKLOG.md` (top 10 priorities) + `.ai/GROWTH_STRATEGY.md` (business why)
-- **For topic work:** `.ai/topics/INDEX.md` → `.ai/topics/<TOPIC>.md` (e.g., SEO, MONETIZATION)
-- **For implementation:** `.ai/impl/<FEATURE>.md` (approved plans only)
+5. `.ai/impl/guide-recovery.md` — **THE APPROVED PLAN** (read this completely before any edits)
+6. `Guide Remodel/GUIDE_RECOVERY_HANDOFF.md` — Source of truth for problems, locked copy, voice rules, redistribution map
+7. `Guide Remodel/newinfoforguide.html` — 2026 operational intel (minified HTML, use text extraction)
+8. `Guide Remodel/codexdialogue.txt` — Prior 22-row claim matrix (lines 1-78)
 
 ### Before Implementation
 
@@ -58,68 +58,169 @@
 
 ---
 
+## Guide Recovery Context (Critical for Next Agent)
+
+### What Was Architected
+
+A 3-phase, 10-step plan to recover the guide from 4.5/10 to founder standard:
+
+**Phase 1 — Content & Voice (do first, no UX changes):**
+
+- Step 1.0: Create `GUIDE_LOCKED_COPY.md` with 5 immutable founder strings
+- Step 1.1: Build extended claim matrix (extend 22-row Codex matrix)
+- Step 1.2: Edit chapters 1-6 in order (redistribute 2026 intel, add missing concepts)
+- Step 1.3: Voice verification pass (grep for banned hedging phrases)
+- Step 1.4: Concept ordering verification (sequential read-through)
+- CHECKPOINT: lint + build + test:unit + test:e2e
+
+**Phase 2 — Visual & UX (after Phase 1 content is solid):**
+
+- Step 2.0: FAQ overhaul (remove 20 `<details>`, group by topic, visible Q&A)
+- Step 2.1: Guide hub redesign (user triage, chapter descriptions)
+- Step 2.2: CSS tuning (H2 border, speculative callout, shadow, spacing)
+- CHECKPOINT: lint + build + test:unit + test:e2e + proof screenshots
+
+**Phase 3 — Drift Guard:**
+
+- Step 3.0: Create `GUIDE_FORMAT_CONTRACT.md`
+- FINAL: Full verification + proof bundle for all 8 guide routes
+
+### Approved CSS Changes (globals.css — Cade approved Feb 7)
+
+1. Restore H2 bottom border in `.guide-article h2` (`border-bottom: 1px solid var(--border-default)`)
+2. Tighten H2 top spacing from `mt-10` (40px) to `mt-8` (32px)
+3. Add `.guide-callout-speculative` variant (gray left-border for community-reported content)
+4. Add subtle `box-shadow` to `.guide-callout` in light mode
+5. Implementer may also investigate color palette, shadows, contrast, WCAG AAA+ improvements
+
+### 2026 Intel Redistribution Map
+
+| Content                             | Move TO                                | WHY                        |
+| ----------------------------------- | -------------------------------------- | -------------------------- |
+| Store Pulse replacing IMS           | Ch 1 (What Are Pennies)                | Foundational 2026 context  |
+| ICE metrics (I/C/E)                 | Ch 2 (Clearance Lifecycle)             | WHY cadence changed        |
+| Speed-to-Penny (14-day compression) | Ch 2 (Clearance Lifecycle)             | WHY some items drop fast   |
+| $.02 buffer (48hr signal)           | Ch 2 (signals) + Ch 4 (practical)      | "You have ~48hrs"          |
+| Home Bay Only (endcaps phased out)  | Ch 3 (Pre-Hunt) + Ch 4 (where to look) | Corrects old endcap advice |
+| ZMA/Zero-Comm reporting             | Ch 4 (In-Store Strategy)               | WHY checkout is hard       |
+| MET team timing                     | Ch 4 (when to go) + Ch 5 (deeper)      | Practical timing signal    |
+
+### Voice Rules (Mandatory for All Text Edits)
+
+- Lead with action: "Scan a filler item first" NOT "Many hunters report scanning a filler item first"
+- Use "you": "Here's what you'll see" NOT "Here's what hunters typically observe"
+- Section-level caveats only: One "Note: based on community reports" at section top, NOT per-bullet
+- Max 1x "community-reported" per chapter
+- Confident tone. No hedging every sentence.
+- Connect WHY to WHAT: explain the operational logic
+
+### Locked Copy (5 Immutable Strings)
+
+1. `app/digital-pre-hunt/page.tsx`: "Dusty boxes or items that look untouched for months"
+2. `app/in-store-strategy/page.tsx`: UPC not yellow tag (SCO "customer needs assistance" trigger)
+3. `app/in-store-strategy/page.tsx`: "Don't scan the QR code" (triggers "customer needs assistance")
+4. `app/in-store-strategy/page.tsx`: Self-checkout vs employee verification paragraph
+5. `app/in-store-strategy/page.tsx`: Filler item tip + FIRST/Zebra SCO notification behavior
+
+### HIGH-RISK Files (Extra Care Required)
+
+- `app/in-store-strategy/page.tsx` — contains 4 of 5 locked copy strings. Diff verify after every edit.
+- `app/inside-scoop/page.tsx` — largest change volume (60+ hedges to kill, content to redistribute out)
+- `app/globals.css` — additive CSS changes only, requires approval (already granted)
+
+### Pass/Fail Acceptance Criteria
+
+| Check                   | Pass condition                                                |
+| ----------------------- | ------------------------------------------------------------- |
+| Factual accuracy        | Claim matrix: zero red rows                                   |
+| Locked copy             | All 5 strings in GUIDE_LOCKED_COPY.md unchanged               |
+| Voice                   | "community-reported"/"many hunters report" max 1x per chapter |
+| 2026 intel distribution | ICE/$.02/ZMA/Store Pulse/Speed-to-Penny in correct chapters   |
+| FAQ                     | No `<details>` elements. All answers visible.                 |
+| Concept ordering        | No concept referenced before introduced                       |
+| Visual consistency      | Screenshots: consistent heading hierarchy, no gaps >80px      |
+| Navigation              | 1 prev/next per chapter, no competing CTAs                    |
+| Gates                   | lint ✅, build ✅, test:unit ✅, test:e2e ✅                  |
+| Proof                   | ai:proof screenshots for all 8 guide routes                   |
+
+### Target Files
+
+- `app/guide/page.tsx` (hub)
+- `app/what-are-pennies/page.tsx` (Ch 1)
+- `app/clearance-lifecycle/page.tsx` (Ch 2)
+- `app/digital-pre-hunt/page.tsx` (Ch 3)
+- `app/in-store-strategy/page.tsx` (Ch 4)
+- `app/inside-scoop/page.tsx` (Ch 5)
+- `app/facts-vs-myths/page.tsx` (Ch 6)
+- `app/faq/page.tsx` (Ch 7)
+- `app/globals.css` (guide CSS selectors)
+- `components/guide/TableOfContents.tsx` (chapter descriptions)
+
+### Source Files
+
+- `Guide Remodel/single_page_guide_pre_update.html` (15.8MB) — canonical voice/flow baseline
+- `Guide Remodel/newinfoforguide.html` (72KB) — 2026 operational intel
+- `Guide Remodel/codexdialogue.txt` — Prior claim matrix + Codex session history
+
+---
+
 ## Tool Capability Notes
 
 ### Claude Code (VSCode Extension)
 
 - ✅ **MCP Support:** Filesystem, GitHub, Playwright, Supabase, Vercel
-- ✅ **Agent System:** 14 skills (plan, architect, implement, test, review, debug, document, brainstorm, doctor, verify, proof, session-start, session-end, checkpoint, capsule, handoff)
-- ✅ **Capabilities:** Full file editing, terminal access, E2E testing, screenshots, DB queries
-- ✅ **Context:** 200K tokens
+- ✅ **Agent System:** 14+ skills (plan, architect, implement, test, review, debug, etc.)
 - ✅ **Ideal for:** Full feature development (design → code → test → verify)
 
 ### Codex (ChatGPT, GPT-5.2)
 
-- ✅ **MCP Support:** Same as Claude (if `~/.codex/config.toml` is synced)
-- ✅ **Agent System:** Same (if configured)
-- ✅ **Capabilities:** Full file editing, terminal access, E2E testing, screenshots, DB queries
-- ✅ **Context:** 200K tokens
+- ✅ **MCP Support:** Same (if `~/.codex/config.toml` is synced)
 - ✅ **Ideal for:** Full feature development, alternative to Claude
-- ⚠️ **Caveat:** MCP config drift possible; verify before complex tasks
 
 ### Copilot Chat (GitHub Copilot)
 
-- ❌ **MCP Support:** None (no MCP servers)
-- ❌ **Agent System:** None (no skills)
-- ✅ **Capabilities:** Code explanation, quick fixes, inline suggestions
-- ⚠️ **Context:** ~128K tokens (lower than Claude/Codex)
+- ❌ **MCP Support:** None
 - ✅ **Ideal for:** Q&A only, not full development
-- ⚠️ **Escalate when:** >3 files, refactoring, major UX changes, Playwright proof needed
 
 ---
 
 ## New Chat Primer (Copy/Paste into Chat)
 
-**Use this when starting a fresh session in any tool:**
+**Use this when starting a fresh session:**
 
 ```
 I'm starting fresh on Penny Central (pennycentral.com).
 
 Read in order:
-1. .ai/START_HERE.md (universal entry point)
-2. .ai/CRITICAL_RULES.md (never violate these 7 rules)
-3. .ai/STATE.md (current sprint snapshot)
-4. .ai/HANDOFF.md (this context pack)
+1. .ai/START_HERE.md
+2. .ai/CRITICAL_RULES.md
+3. .ai/STATE.md
+4. .ai/HANDOFF.md
 
-Current reality (Jan 20, 2026):
-- ✅ Core product working (submissions, enrichment, Penny List)
-- ✅ Enrichment DB: ~1,600+ penny items pre-scraped for auto-population
-- 🔄 IN PROGRESS: Penny List seeding (auto-submit quality items to create social proof)
-- 📊 680 daily users, 26% conversion, cold start problem on Penny List
+Then read the APPROVED implementation plan:
+5. .ai/impl/guide-recovery.md (THE PLAN — read completely before any work)
 
-Plan file: C:\Users\cadeg\.claude\plans\floating-popping-neumann.md
-Phases remaining: 1 (migration), 2 (cron endpoint), 3 (Vercel schedule), 4 (dry-run + deploy)
+Current reality (Feb 7, 2026):
+- Guide quality is 4.5/10. Approved 3-phase recovery plan exists.
+- Phase 1: Content & voice recovery (redistribute 2026 intel, kill hedging, fix concept ordering)
+- Phase 2: Visual & UX (FAQ overhaul, hub redesign, CSS tuning)
+- Phase 3: Drift guard (format contract)
+- All CSS changes pre-approved by founder
+- 5 locked copy strings must NOT be modified (see plan)
+- In-store-strategy has 4 locked strings — HIGH RISK file
 
-My goal for this session: Continue implementing Penny List seeding feature from Phase 1
+GOAL: Implement Guide Recovery from .ai/impl/guide-recovery.md
+WHY: Guide reads like AI documentation, not expert penny-hunter content. 2026 intel is dumped in one chapter. FAQ hides answers behind dropdowns.
+DONE MEANS: All acceptance criteria in the plan pass. All 4 gates green. Proof screenshots for all 8 guide routes. Locked founder copy preserved: YES.
 
-What should I read next?
+Start with: /implement
+Context: Guide recovery — approved 3-phase plan
+First: Read .ai/impl/guide-recovery.md completely
 ```
 
 ---
 
-## ARCHITECT Stub (Write .ai/impl/<feature-slug>.md)
-
-**Use this when you need to design before implementing:**
+## ARCHITECT Stub
 
 ```
 I'm ready to architect a feature for Penny Central.
@@ -134,11 +235,6 @@ Read:
 
 Task:
 Design the implementation plan for: [FEATURE]
-
-Rules:
-- Do not implement code.
-- Resolve structural ambiguities. If any remain, list them and provide options A/B/C.
-- Respect DECISION_RIGHTS: propose changes that need approval.
 
 Deliverable:
 Write the plan to: .ai/impl/<feature-slug>.md
@@ -158,9 +254,7 @@ Stop and ask for approval to implement.
 
 ---
 
-## IMPLEMENT Stub (Read .ai/impl/<feature-slug>.md)
-
-**Use this after a plan is approved:**
+## IMPLEMENT Stub
 
 ```
 I'm ready to implement from an approved plan.
@@ -192,97 +286,30 @@ After:
 
 ---
 
-## Portal Commands (For Context Management)
-
-These commands (in Claude Code only) maintain portability across sessions:
-
-### /checkpoint
-
-Compress project context so it stays portable. Shrinks `.ai/STATE.md` to "current sprint only". History lives in pointers.
-
-**When to use:** End of complex sessions or when context grows unwieldy.
-
-### /capsule <TOPIC>
-
-Update exactly one topic capsule (SEO, MONETIZATION, UI_DESIGN, DATA_PIPELINE).
-
-**When to use:** After topic-specific work to lock decisions for next agent.
-
-### /handoff
-
-Generate a portable context pack (updates `.ai/HANDOFF.md`) + print New Chat Primer.
-
-**When to use:** Before switching tools (Claude → Codex → Copilot) or starting new session.
-
----
-
 ## Key Files by Purpose
 
-| Goal                              | File to Read                                              |
-| --------------------------------- | --------------------------------------------------------- |
-| Understand project & business     | `.ai/GROWTH_STRATEGY.md` + `.ai/BACKLOG.md`               |
-| See what's broken/planned         | `.ai/STATE.md` + `.ai/BACKLOG.md`                         |
-| Understand what changed recently  | `.ai/SESSION_LOG.md` (searchable by date)                 |
-| Check design system               | `.ai/CONSTRAINTS.md` + `.ai/CONSTRAINTS_TECHNICAL.md`     |
-| See design decisions              | `.ai/topics/UI_DESIGN.md` or `.ai/PENNY-LIST-REDESIGN.md` |
-| Learn SEO plan                    | `.ai/topics/SEO.md` or `.ai/SEO_FOUNDATION_PLAN.md`       |
-| See monetization status           | `.ai/topics/MONETIZATION.md`                              |
-| See data pipeline status          | `.ai/topics/DATA_PIPELINE.md`                             |
-| Check past mistakes               | `.ai/LEARNINGS.md`                                        |
-| Understand collaboration rules    | `.ai/CONTRACT.md` + `.ai/DECISION_RIGHTS.md`              |
-| See approved implementation plans | `.ai/impl/` directory                                     |
+| Goal                           | File to Read                                       |
+| ------------------------------ | -------------------------------------------------- |
+| Understand project & business  | `.ai/GROWTH_STRATEGY.md` + `.ai/BACKLOG.md`        |
+| See what's broken/planned      | `.ai/STATE.md` + `.ai/BACKLOG.md`                  |
+| See what changed recently      | `.ai/SESSION_LOG.md`                               |
+| Check design system            | `.ai/CONSTRAINTS.md` + `docs/DESIGN-SYSTEM-AAA.md` |
+| See approved plans             | `.ai/impl/` directory                              |
+| Check past mistakes            | `.ai/LEARNINGS.md`                                 |
+| Understand collaboration rules | `.ai/CONTRACT.md` + `.ai/DECISION_RIGHTS.md`       |
 
 ---
 
 ## Emergency Checklist (If Stuck)
 
-| Situation                         | What to Do                                                                                             |
-| --------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| "I'm out of context"              | Stop. Summarize to `.ai/SESSION_LOG.md`. Ask Cade to start fresh session. Run `/checkpoint`.           |
-| "Dev server on port 3001 is down" | State clearly: "Port 3001 is unhealthy. Options: A) Restart, B) Use production, C) You restart." Wait. |
-| "Tests are failing"               | Paste error + link to test file. Ask: "Should I debug or revert?"                                      |
-| "I found a blocker"               | Don't ask clarifying questions. List the blocker + 3 options. Wait for Cade's choice.                  |
-| "Feature scope is unclear"        | Stop. Use `.ai/USAGE.md` task template. Ask Cade: GOAL / WHY / DONE MEANS?                             |
+| Situation                         | What to Do                                                                   |
+| --------------------------------- | ---------------------------------------------------------------------------- |
+| "I'm out of context"              | Stop. Summarize to SESSION_LOG.md. Ask Cade to start fresh.                  |
+| "Dev server on port 3001 is down" | State clearly. Options: A) Restart, B) Use production, C) You restart. Wait. |
+| "Tests are failing"               | Paste error. Ask: "Debug or revert?"                                         |
+| "Locked copy seems wrong"         | STOP. Ask founder. Do NOT modify.                                            |
+| "Feature scope is unclear"        | Stop. Ask Cade: GOAL / WHY / DONE MEANS?                                     |
 
 ---
 
-## Session Checklist (Paste at Start)
-
-```
-[ ] Read .ai/START_HERE.md
-[ ] Read .ai/CRITICAL_RULES.md
-[ ] Read .ai/STATE.md
-[ ] Read .ai/HANDOFF.md (this file)
-[ ] Ask Cade: "GOAL / WHY / DONE MEANS?" (use .ai/USAGE.md format)
-[ ] Clarify scope + constraints
-[ ] Implement (or propose options if approval needed)
-[ ] Run: npm run ai:verify
-[ ] Update .ai/SESSION_LOG.md (with proof links)
-[ ] Update .ai/STATE.md (if reality changed)
-[ ] Update .ai/BACKLOG.md (if priorities moved)
-[ ] Run /checkpoint (compress context)
-[ ] Ask: "Switching tools? (y/n)" → if yes, run /handoff
-```
-
----
-
-## Top 3 Priorities (Current)
-
-1. **🔴 Data Pipeline Reliability (BLOCKED)**
-   - GitHub Action `Enrichment Staging Warmer` is failing due to Cloudflare 403 from upstream API.
-   - Track and resolve via issue #106 (allowlist / self-hosted runner / new source).
-   - Ensure Vercel cron auth is configured (`CRON_SECRET`) so `/api/cron/*` endpoints run.
-
-2. **P0-3: SEO Improvement (Schema Markup + Internal Linking)**
-   - Done means: FAQ schema + HowTo schema on `/guide`, internal links verified
-   - Blocker: None (ready after seeding)
-
-3. **Monetization Tuning (Post-Mediavine)**
-   - Timeline: Awaiting Mediavine approval (~Feb 11)
-   - When approved: Remove Ezoic, verify Grow still works
-
----
-
-**Last updated:** Jan 20, 2026
-
-**For questions:** See `.ai/USAGE.md` for task template + `.ai/CRITICAL_RULES.md` for never-violate rules.
+**Last updated:** Feb 7, 2026
