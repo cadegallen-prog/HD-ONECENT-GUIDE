@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 
 const beginnerTips = [
   "Understand the basics before you chase a specific SKU.",
-  "Use the app to narrow your list, then verify in-store.",
+  "Use the app to narrow your list, then verify in-store with a UPC scan.",
   "Treat the first few trips as learning, not winning.",
 ]
 
@@ -68,26 +68,47 @@ export default function WhatArePenniesPage() {
             sale.
           </p>
 
-          <h2 className="text-2xl font-bold mt-8 mb-6">Why penny items exist</h2>
+          <h2>Why penny items exist</h2>
           <p>
             Large retailers need a way to remove old or slow-moving inventory from their system. The
             penny price is a bookkeeping step that marks the item as clearance complete. Some stores
             pull items immediately. Others miss a few, which creates the opportunity.
           </p>
           <p>
-            You will often hear ZMA (Zero Margin Adjustment) used to describe this removal stage.
-            Community-reported wording can vary by store, but the core idea is consistent: the item
-            is no longer meant for sale.
+            When an item hits the penny price, the system flags it as ZMA (Zero Margin Adjustment).
+            That is the internal removal stage — it tells the store this item needs to come off the
+            shelf. Most ZMA items are destroyed (compactor), returned to the vendor (RTV), or
+            donated. The item is no longer meant for sale.
           </p>
 
-          <h2 className="text-2xl font-bold mt-8 mb-6">What happens after an item pennied out</h2>
+          <h2>How the system works (2026)</h2>
+          <p>
+            The internal system that tracks every clearance item is called Store Pulse. It replaced
+            an older system called IMS and now uses real-time data to decide when items get marked
+            down and when they get pulled. You do not need to access Store Pulse — but understanding
+            that it exists explains why pricing changes can feel sudden or inconsistent.
+          </p>
+          <p>
+            Store Pulse tracks three signals for every item: whether it is still being restocked,
+            where it sits in the markdown cycle, and how fast it is selling. When an item stops
+            moving, the system pushes it toward final markdown faster.
+          </p>
+          <p>
+            If a penny item sells at checkout, the system logs it as a Zero-Comm report — a failure
+            log that says the store did not pull the item in time. This is why checkout can be
+            complicated: every penny sale creates paperwork, and some associates push back because
+            of it.
+          </p>
+
+          <h2>What happens after an item pennies out</h2>
           <p>
             Once an item reaches the penny stage, the store is expected to remove it from the floor.
             That can mean disposal, return to vendor, or other internal disposition. The key point
-            for shoppers is that the item is not supposed to be available for long.
+            for you is that the item is not supposed to be available for long — the clock is ticking
+            from the moment it hits $0.01.
           </p>
 
-          <h2 className="text-2xl font-bold mt-8 mb-6">What kinds of items become pennies?</h2>
+          <h2>What kinds of items become pennies?</h2>
           <p>Most penny items come from predictable places. Common examples include:</p>
           <ul className="my-6 space-y-3">
             {categories.map((item) => (
@@ -99,16 +120,14 @@ export default function WhatArePenniesPage() {
             usually smaller items and seasonal accessories.
           </p>
 
-          <h2 className="text-2xl font-bold mt-8 mb-6">Can you actually buy penny items?</h2>
+          <h2>Can you actually buy penny items?</h2>
           <p>
             Sometimes, yes. But there is no guarantee. Store managers have discretion. Some stores
             honor the price if it scans. Others refuse because the item is marked for removal. The
             safest approach is to stay polite and accept the decision.
           </p>
 
-          <h2 className="text-2xl font-bold mt-8 mb-6">
-            How pennies differ from regular clearance
-          </h2>
+          <h2>How pennies differ from regular clearance</h2>
           <p>
             A deep clearance price (like $0.03 or $0.06) is still meant to sell. A penny price is a
             removal signal. That difference explains most of the confusion new hunters have.
@@ -119,10 +138,10 @@ export default function WhatArePenniesPage() {
             <li>That is why some stores honor the scan and others refuse it.</li>
           </ul>
 
-          <h2 className="text-2xl font-bold mt-8 mb-6">Responsible hunting</h2>
+          <h2>Responsible hunting</h2>
           <p>
-            Penny hunting only works long-term if shoppers behave well. Arguments with staff,
-            aggressive behavior, or messy aisles lead to crackdowns that hurt everyone.
+            Penny hunting only works long-term if you behave well. Arguments with staff, aggressive
+            behavior, or messy aisles lead to crackdowns that hurt everyone.
           </p>
           <ul className="my-6 space-y-3">
             <li>Be polite. Employees are enforcing store policy, not targeting you personally.</li>
@@ -131,30 +150,28 @@ export default function WhatArePenniesPage() {
             <li>Walk away if a sale is refused. There will be more opportunities.</li>
           </ul>
 
-          <h2 className="text-2xl font-bold mt-8 mb-6">For beginners: start here</h2>
+          <h2>For beginners: start here</h2>
           <ul className="my-6 space-y-3">
             {beginnerTips.map((tip) => (
               <li key={tip}>{tip}</li>
             ))}
           </ul>
 
-          <h2 className="text-2xl font-bold mt-8 mb-6">
-            For experienced hunters: refine your game
-          </h2>
+          <h2>For experienced hunters: refine your game</h2>
           <ul className="my-6 space-y-3">
             {advancedTips.map((tip) => (
               <li key={tip}>{tip}</li>
             ))}
           </ul>
 
-          <h2 className="text-2xl font-bold mt-8 mb-6">Final mindset</h2>
+          <h2>Final mindset</h2>
           <p>
             This is part research, part timing, and part luck. The long game matters more than any
             single penny. Stay patient, stay respectful, and keep your standards high for what you
             share with the community.
           </p>
 
-          <h2 className="text-2xl font-bold mt-8 mb-6">Ready to start hunting?</h2>
+          <h2>Ready to start hunting?</h2>
           <p>
             The next step is learning how clearance moves through the system and how to read the
             signals without guessing. Use the chapters below to build a repeatable routine.

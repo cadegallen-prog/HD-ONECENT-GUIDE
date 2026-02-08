@@ -36,10 +36,10 @@ const verifySteps = [
 ]
 
 const communityReportedTips = [
-  "Many hunters avoid bringing the item to the desk. A clear UPC photo is usually enough.",
-  "Asking for a stock check is often lower drama than asking for a price check, which some say can lead to a pull.",
-  "Some associates use handhelds often called Zebra or FIRST. If they scan and see a penny, they may pull the item.",
-  "Associates can often scan a barcode photo on your phone or look up the SKU on their device without physically taking the item, but some may push back or ask extra questions.",
+  "Avoid bringing the item to the desk. A clear UPC photo is usually enough.",
+  "Ask for a stock check instead of a price check. A price check is more likely to result in the item being pulled.",
+  "Associates use handhelds (Zebra or FIRST). If they scan and see a penny, they may pull the item.",
+  "Associates can scan a barcode photo on your phone or look up the SKU on their device without physically taking the item, but expect pushback or extra questions.",
   "Community members report an easier checkout experience when they scan a filler item first, then the penny item, to draw less attention to a $0.01 screen result.",
   "Note: self-checkout terminals can notify employees through the FIRST phone (store phone, also called Zebra) when a penny item is scanned. Some stores are more proactive than others.",
 ]
@@ -64,7 +64,7 @@ const bringList = [
 ]
 
 const hotspots = [
-  "Home bay shelves where the item normally lives",
+  "Home bay shelves where the item normally lives — this is now the primary location as endcaps are phased out",
   "Seasonal sections right after a holiday or department reset",
   "Top and bottom shelves where leftovers sit undisturbed",
   "Overhead areas with visible yellow tags (high reward, higher risk)",
@@ -121,7 +121,7 @@ export default function InStoreStrategyPage() {
             chapter covers the safest ways to check and the most common pitfalls.
           </p>
 
-          <h2 className="text-2xl font-bold mb-6">How to verify penny status in-store</h2>
+          <h2>How to verify penny status in-store</h2>
           <p className="mb-6">
             The only way to know the real price is to scan the UPC. The app can help, but the scan
             is what counts.
@@ -142,10 +142,9 @@ export default function InStoreStrategyPage() {
               </div>
             ))}
           </div>
-          <h3 className="text-xl font-bold mb-4">Community-reported verification tips</h3>
-          <p className="mb-4 text-[var(--text-secondary)]">
-            These are common patterns reported by experienced hunters. They are not official policy
-            and may vary by store.
+          <h3 className="text-xl font-bold mb-4">Practical verification tips</h3>
+          <p className="mb-4 text-sm text-[var(--text-secondary)]">
+            Note: These tips are based on consistent community reports. Specifics vary by store.
           </p>
           <ul className="mb-8">
             {communityReportedTips.map((tip) => (
@@ -153,7 +152,7 @@ export default function InStoreStrategyPage() {
             ))}
           </ul>
 
-          <h2 className="text-2xl font-bold mb-6">The right way vs. the wrong way</h2>
+          <h2>The right way vs. the wrong way</h2>
           <div className="grid md:grid-cols-2 gap-8 mb-8">
             <div className="p-6 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)] border-l-4 border-l-[var(--cta-primary)]">
               <h3 className="text-lg font-bold mb-3">Low-risk moves</h3>
@@ -173,21 +172,29 @@ export default function InStoreStrategyPage() {
             </div>
           </div>
 
-          <h2 className="text-2xl font-bold mb-6">What to bring</h2>
+          <h2>What to bring</h2>
           <ul className="mb-8">
             {bringList.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
 
-          <h2 className="text-2xl font-bold mb-6">Where to look in-store</h2>
+          <h2>Where to look in-store</h2>
           <ul className="mb-8">
             {hotspots.map((spot) => (
               <li key={spot}>{spot}</li>
             ))}
           </ul>
 
-          <h2 className="text-2xl font-bold mb-6">What to look for (penny-prone categories)</h2>
+          <h2>MET reset timing</h2>
+          <p className="mb-6">
+            MET teams handle bay resets on a scheduled calendar. Penny-outs are often synchronized
+            with these resets. The 48 hours before a scheduled reset is when items are most likely
+            to be pulled. If you notice a reset in progress in a specific department, check nearby
+            bays for late-stage clearance items before they get swept.
+          </p>
+
+          <h2>What to look for (penny-prone categories)</h2>
           <p className="mb-6">
             These categories show up often in community reports. They are not guarantees, but they
             are reliable starting points.
@@ -198,7 +205,28 @@ export default function InStoreStrategyPage() {
             ))}
           </ul>
 
-          <h2 className="text-2xl font-bold mb-6">Checkout: keep it simple</h2>
+          <h2>Why checkout can be complicated</h2>
+          <p className="mb-6">
+            Every penny sale generates an internal report called a Zero-Comm. It is a failure log —
+            it means the store did not pull the item before someone found it. This is why some
+            associates push back: the sale creates paperwork for them. Understanding this helps you
+            stay patient when checkout does not go smoothly.
+          </p>
+          <p className="mb-6">
+            Some items — especially power tools from brands like Milwaukee and Ryobi — have
+            automated buy-back locks. Even a willing associate cannot sell them. The system blocks
+            the sale because the vendor has already arranged to reclaim the inventory. If a register
+            blocks the sale entirely, the item is likely in this category.
+          </p>
+
+          <h2>The $.02 signal in practice</h2>
+          <p className="mb-6">
+            If you find an item at $.02, move quickly. This price is a 48-hour signal to the MET
+            team to pull the item (explained in detail in Chapter 2). The window between $.02 and
+            removal is short.
+          </p>
+
+          <h2>Checkout: keep it simple</h2>
           <p className="mb-6">
             There is no perfect method. Some stores honor penny prices. Some do not. The goal is to
             avoid unnecessary attention and respect store discretion.
@@ -227,7 +255,7 @@ export default function InStoreStrategyPage() {
             a bad interaction.
           </p>
 
-          <h2 className="text-2xl font-bold mb-6">Locked cases and cages</h2>
+          <h2>Locked cases and cages</h2>
           <p className="mb-6">
             Items in locked cases or cages require an employee. If the item is a penny, the employee
             may refuse to hand it over. If you still want to try, add a normal item to your cart,

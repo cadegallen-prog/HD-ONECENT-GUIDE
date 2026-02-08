@@ -14,104 +14,124 @@ export const metadata: Metadata = {
 
 const faqs = [
   {
+    category: "Basics",
     question: "What exactly is a penny item?",
     answer:
-      "A penny item is a product that scans for $0.01 because it has reached the final stage of clearance. It is an internal removal signal, not a public promotion.",
+      "A penny item is a product that scans for $0.01 after it reaches the final removal stage in Home Depot's clearance flow. It is not a coupon, an advertised sale, or a markdown event for shoppers. The penny price is an inventory-status signal that tells the store the item should already be gone from active selling space.",
   },
   {
+    category: "Basics",
     question: "How do I find penny items at Home Depot?",
     answer:
-      "Start with the home bay where the item normally lives, then check seasonal sections, overhead, and any clearance areas for yellow tags. Use the Penny List for recent SKUs, and verify by scanning the UPC in-store.",
+      "Start with a specific SKU list, then search the product's normal home bay first because many markdowns now stay in their regular aisle location. After that, check overhead storage and nearby seasonal transitions. Use the Penny List as a scouting tool, but treat in-store UPC scans as the final authority before you make a checkout decision.",
   },
   {
+    category: "Basics",
     question: "Why does Home Depot penny items out?",
     answer:
-      "The penny price marks an item as clearance complete so it can be removed from inventory. Stores may dispose of it, return it to a vendor, or handle it internally.",
+      "The penny stage marks clearance completion so an item can be removed from normal inventory flow. At that point the store often needs to pull, return, dispose, or otherwise process the product according to internal operations. That is why penny pricing exists in the system and why shopper experience can differ from one location to another.",
   },
   {
+    category: "Checkout & Policy",
     question: "Are penny items guaranteed to be sold to customers?",
     answer:
-      "No. Store managers have discretion. Some stores honor the price, others refuse because the item is marked for removal.",
+      "No. Penny status does not guarantee a sale because managers still control how removed inventory is handled in their store. One location may allow the sale while another may refuse at register review. Keep expectations realistic, stay respectful, and avoid building a trip around the assumption that every penny scan will be honored.",
   },
   {
+    category: "Verification",
     question: "Can I see penny prices in the Home Depot app?",
     answer:
-      "Usually not. The app is useful for filtering, but it is not real-time and often does not show penny prices directly.",
+      "Usually no. The app is useful for identifying likely SKUs, bay locations, and on-hand clues, but it is not a real-time source of penny status. Price feeds can lag and final markdown states are often missing from customer-facing results. Use the app to narrow targets, then verify with an in-store scan before acting.",
   },
   {
+    category: "Basics",
     question: "What do clearance price endings mean?",
     answer:
-      "Endings like .00, .06/.04, and .03/.02 often show up in clearance cycles. They are helpful signals, but timing varies by store and category.",
+      "Endings such as .00, .06/.04, and .03/.02 are useful timing signals in common clearance cadence patterns. They help you estimate where an item sits in the markdown lifecycle, but they do not guarantee the next date or next price step. Combine endings with tag dates, shelf location, and in-store scan results for stronger decisions.",
   },
   {
+    category: "Checkout & Policy",
     question: "What is the best time to go penny hunting?",
     answer:
-      "There is no guaranteed day. Many hunters go early in the morning or after seasonal transitions, but timing varies by store.",
+      "There is no universal best day across every store. Strong windows usually appear around resets, seasonal transitions, and early-day shopping before aisles are heavily picked over. The most reliable approach is to build a short target list, monitor timing signals, and go when multiple indicators align instead of relying on one schedule rumor.",
   },
   {
+    category: "Checkout & Policy",
     question: "Why do cashiers sometimes refuse penny sales?",
     answer:
-      "Because the item is flagged for removal, some stores do not allow penny sales. This is a policy choice, not a personal decision by the cashier.",
+      "Penny items can trigger operational friction because the product is flagged for removal rather than normal sale flow. In many stores that creates register prompts, policy checks, or manager involvement. Refusal is usually a store-level decision tied to inventory handling, not a personal conflict with the cashier, so calm and respectful behavior is the best path.",
   },
   {
+    category: "Checkout & Policy",
     question: "What if the item is locked, recalled, or buy-back?",
     answer:
-      "If the register blocks the sale or an associate says the item is locked, it is usually unsellable. Do not argue; move on.",
+      "If the register blocks the sale or an associate confirms lock, recall, or buy-back status, treat the item as unsellable and move on. Those outcomes are often system-enforced and cannot be overridden at checkout. Arguing usually wastes time and can create avoidable negative interactions for both staff and shoppers.",
   },
   {
+    category: "Basics",
     question: "Is penny hunting legal?",
     answer:
-      "Yes, as long as you are not switching tags, hiding items, or causing disruption. Always follow store policy and staff direction.",
+      "Yes, searching for legitimate markdown inventory is legal when you follow store rules and normal customer conduct. Problems begin when someone swaps tags, hides merchandise, blocks access, or ignores staff direction. The sustainable approach is simple: verify honestly, checkout politely, keep receipts, and leave the store in the same condition you found it.",
   },
   {
+    category: "Verification",
     question: "How can I verify a penny price without losing the item?",
     answer:
-      "Take a photo of the UPC and ask for a stock check, or scan the UPC at self-checkout if it is quiet. Avoid asking for a price override.",
+      "Your safest workflow is to verify using a method that keeps identification accurate and interaction simple. Capture a clear UPC photo, compare SKU digits, and use quiet self-checkout verification when available. If staff help is required, ask for confirmation rather than an override request. Precision and calm communication reduce friction and mistakes.",
   },
   {
+    category: "Checkout & Policy",
     question: "Do Home Depot employees buy penny items?",
     answer:
-      "Employee purchases are generally reported as prohibited by policy. Enforcement details can vary by store, but shoppers should assume employee penny-item purchases are prohibited and focus on their own process.",
+      "Employee penny-item purchases are generally reported as prohibited by policy. Enforcement details can vary by store, but shoppers should assume employee penny-item purchases are prohibited and focus on their own process. Keeping your focus on verification, respect, and accurate reporting is more productive than debating how internal policy is enforced.",
   },
   {
+    category: "Verification",
     question: "Do penny prices show on the shelf tag?",
     answer:
-      "Not reliably. Tags can be stale or missing. The scan price is the truth, which is why verification matters.",
+      "Not reliably. Shelf tags can be old, misplaced, or disconnected from the most current register state. A tag may still show a higher ending even when the item is already in late-stage clearance. Treat tags as directional context, then verify with a scan because the register result is the final source of truth.",
   },
   {
+    category: "Verification",
     question: "Can I use a price check kiosk?",
     answer:
-      "If your store has one, it can be a helpful hint, but it is not always current. Treat it as a filter, not a guarantee.",
+      "Yes, if your store still has an active kiosk, but use it as a filter only. Kiosk feeds can be delayed, and some stores remove or limit kiosk reliability during resets. A kiosk hit can justify checking a SKU in person, but you should still confirm at the register before assuming penny status is final.",
   },
   {
+    category: "Checkout & Policy",
     question: "Can I buy multiple penny items at once?",
     answer:
-      "Some stores allow multiples of the same SKU, but different penny SKUs in one checkout can draw attention. Keep it simple and respect store discretion.",
+      "Sometimes, but outcomes vary by store and by checkout context. Multiple units of one SKU may pass in one location while mixed penny SKUs can trigger extra review in another. If your goal is smooth checkout, keep transactions simple, avoid unnecessary complexity, and accept store discretion when a lane or manager declines a basket.",
   },
   {
+    category: "Verification",
     question: "What if the app says out of stock but I see the item?",
     answer:
-      "Inventory data lags. If you see it on the shelf, scan the UPC and decide based on the real price.",
+      "Inventory systems lag, so online stock status and physical shelf reality can disagree. If the product is in front of you, verify the exact item by UPC and shelf context instead of assuming the app is correct. The practical rule is physical evidence plus scan result beats delayed online inventory data.",
   },
   {
+    category: "Checkout & Policy",
     question: "What if I am asked to return a penny item after purchase?",
     answer:
-      "Stay calm and show your receipt. Ask politely for clarification and follow the manager's direction. Avoid arguments.",
+      "Stay calm, keep the interaction professional, and present your receipt so facts are clear. Ask for manager clarification instead of debating front-line staff, then follow the final direction provided. Even when you disagree, avoiding escalation protects your account standing, your local reputation, and your ability to shop productively in the future.",
   },
   {
+    category: "Etiquette & Community",
     question: "How do I report a find to help others?",
     answer:
-      "Use the Report a Find page with the SKU, store, and date so the Penny List stays accurate for everyone.",
+      "Use the Report a Find form with exact SKU, store location, and date while details are still fresh. Include only information you verified directly so the Penny List remains useful for everyone who checks it later. High-quality reporting creates better route planning, fewer wasted trips, and stronger trust across the community.",
   },
   {
+    category: "Etiquette & Community",
     question: "Should I hide items for later?",
     answer:
-      "No. Hiding items hurts other shoppers and often leads to crackdowns. If you want it, verify and check out responsibly.",
+      "No. Hiding products harms other shoppers, increases staff friction, and can lead to broader crackdowns that hurt everyone using the process responsibly. If you want an item, verify it and checkout through normal customer flow. Respectful behavior protects long-term access and keeps the local environment healthier for future trips.",
   },
   {
+    category: "Basics",
     question: "Do all stores have penny items?",
     answer:
-      "Most stores see pennies eventually, but frequency and timing vary. Some stores pull them fast, others miss a few.",
+      "Most stores eventually generate penny-stage inventory, but frequency and visibility vary widely. Some locations pull fast and leave very little on the floor, while others miss occasional items during transitions. Treat each store as its own operating pattern, track your own results, and avoid assuming one location behaves like another.",
   },
 ]
 
@@ -155,38 +175,284 @@ export default function FAQPage() {
 
       <Section className="w-full max-w-[68ch] mx-auto">
         <Prose variant="guide">
-          <div className="space-y-6">
-            {faqs.map((faq, index) => (
-              <details
-                key={index}
-                className="group border border-[var(--border-default)] rounded-lg p-4 [&_summary::-webkit-details-marker]:hidden bg-[var(--bg-card)]"
-              >
-                <summary className="flex items-center justify-between cursor-pointer font-bold text-lg text-[var(--text-primary)]">
-                  <span>{faq.question}</span>
-                  <span className="text-[var(--cta-primary)] transition-transform group-open:rotate-180">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="m6 9 6 6 6-6" />
-                    </svg>
-                  </span>
-                </summary>
-                <div className="mt-4 text-[var(--text-secondary)] leading-relaxed border-t border-[var(--border-default)] pt-4">
-                  {faq.answer}
-                </div>
-              </details>
-            ))}
+          <p className="mb-6">
+            This FAQ is organized by workflow so you can scan quickly and still get full context.
+            Every answer is visible by default, and each point reflects practical guidance from the
+            same system logic explained in the chapter routes.
+          </p>
+
+          <div className="space-y-10">
+            <section>
+              <h2>Basics</h2>
+              <p className="mb-5 text-[var(--text-secondary)]">
+                Core definitions, lifecycle fundamentals, and realistic expectations before your
+                first trip.
+              </p>
+              <div className="space-y-5">
+                <article className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
+                  <h3 className="mb-2 text-[var(--text-primary)]">What exactly is a penny item?</h3>
+                  <p className="text-[var(--text-secondary)]">
+                    A penny item is a product that scans for $0.01 after it reaches the final
+                    removal stage in Home Depot&apos;s clearance flow. It is not a coupon, an
+                    advertised sale, or a markdown event for shoppers. The penny price is an
+                    inventory-status signal that tells the store the item should already be gone
+                    from active selling space.
+                  </p>
+                </article>
+                <article className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
+                  <h3 className="mb-2 text-[var(--text-primary)]">
+                    How do I find penny items at Home Depot?
+                  </h3>
+                  <p className="text-[var(--text-secondary)]">
+                    Start with a specific SKU list, then search the product&apos;s normal home bay
+                    first because many markdowns now stay in their regular aisle location. After
+                    that, check overhead storage and nearby seasonal transitions. Use the Penny List
+                    as a scouting tool, but treat in-store UPC scans as the final authority before
+                    you make a checkout decision.
+                  </p>
+                </article>
+                <article className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
+                  <h3 className="mb-2 text-[var(--text-primary)]">
+                    Why does Home Depot penny items out?
+                  </h3>
+                  <p className="text-[var(--text-secondary)]">
+                    The penny stage marks clearance completion so an item can be removed from normal
+                    inventory flow. At that point the store often needs to pull, return, dispose, or
+                    otherwise process the product according to internal operations. That is why
+                    penny pricing exists in the system and why shopper experience can differ from
+                    one location to another.
+                  </p>
+                </article>
+                <article className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
+                  <h3 className="mb-2 text-[var(--text-primary)]">
+                    What do clearance price endings mean?
+                  </h3>
+                  <p className="text-[var(--text-secondary)]">
+                    Endings such as .00, .06/.04, and .03/.02 are useful timing signals in common
+                    clearance cadence patterns. They help you estimate where an item sits in the
+                    markdown lifecycle, but they do not guarantee the next date or next price step.
+                    Combine endings with tag dates, shelf location, and in-store scan results for
+                    stronger decisions.
+                  </p>
+                </article>
+                <article className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
+                  <h3 className="mb-2 text-[var(--text-primary)]">Is penny hunting legal?</h3>
+                  <p className="text-[var(--text-secondary)]">
+                    Yes, searching for legitimate markdown inventory is legal when you follow store
+                    rules and normal customer conduct. Problems begin when someone swaps tags, hides
+                    merchandise, blocks access, or ignores staff direction. The sustainable approach
+                    is simple: verify honestly, checkout politely, keep receipts, and leave the
+                    store in the same condition you found it.
+                  </p>
+                </article>
+                <article className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
+                  <h3 className="mb-2 text-[var(--text-primary)]">
+                    Do all stores have penny items?
+                  </h3>
+                  <p className="text-[var(--text-secondary)]">
+                    Most stores eventually generate penny-stage inventory, but frequency and
+                    visibility vary widely. Some locations pull fast and leave very little on the
+                    floor, while others miss occasional items during transitions. Treat each store
+                    as its own operating pattern, track your own results, and avoid assuming one
+                    location behaves like another.
+                  </p>
+                </article>
+              </div>
+            </section>
+
+            <section>
+              <h2>Verification</h2>
+              <p className="mb-5 text-[var(--text-secondary)]">
+                How to confirm signal quality, validate item status, and avoid bad assumptions.
+              </p>
+              <div className="space-y-5">
+                <article className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
+                  <h3 className="mb-2 text-[var(--text-primary)]">
+                    Can I see penny prices in the Home Depot app?
+                  </h3>
+                  <p className="text-[var(--text-secondary)]">
+                    Usually no. The app is useful for identifying likely SKUs, bay locations, and
+                    on-hand clues, but it is not a real-time source of penny status. Price feeds can
+                    lag and final markdown states are often missing from customer-facing results.
+                    Use the app to narrow targets, then verify with an in-store scan before acting.
+                  </p>
+                </article>
+                <article className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
+                  <h3 className="mb-2 text-[var(--text-primary)]">
+                    How can I verify a penny price without losing the item?
+                  </h3>
+                  <p className="text-[var(--text-secondary)]">
+                    Your safest workflow is to verify using a method that keeps identification
+                    accurate and interaction simple. Capture a clear UPC photo, compare SKU digits,
+                    and use quiet self-checkout verification when available. If staff help is
+                    required, ask for confirmation rather than an override request. Precision and
+                    calm communication reduce friction and mistakes.
+                  </p>
+                </article>
+                <article className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
+                  <h3 className="mb-2 text-[var(--text-primary)]">
+                    Do penny prices show on the shelf tag?
+                  </h3>
+                  <p className="text-[var(--text-secondary)]">
+                    Not reliably. Shelf tags can be old, misplaced, or disconnected from the most
+                    current register state. A tag may still show a higher ending even when the item
+                    is already in late-stage clearance. Treat tags as directional context, then
+                    verify with a scan because the register result is the final source of truth.
+                  </p>
+                </article>
+                <article className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
+                  <h3 className="mb-2 text-[var(--text-primary)]">
+                    Can I use a price check kiosk?
+                  </h3>
+                  <p className="text-[var(--text-secondary)]">
+                    Yes, if your store still has an active kiosk, but use it as a filter only. Kiosk
+                    feeds can be delayed, and some stores remove or limit kiosk reliability during
+                    resets. A kiosk hit can justify checking a SKU in person, but you should still
+                    confirm at the register before assuming penny status is final.
+                  </p>
+                </article>
+                <article className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
+                  <h3 className="mb-2 text-[var(--text-primary)]">
+                    What if the app says out of stock but I see the item?
+                  </h3>
+                  <p className="text-[var(--text-secondary)]">
+                    Inventory systems lag, so online stock status and physical shelf reality can
+                    disagree. If the product is in front of you, verify the exact item by UPC and
+                    shelf context instead of assuming the app is correct. The practical rule is
+                    physical evidence plus scan result beats delayed online inventory data.
+                  </p>
+                </article>
+              </div>
+            </section>
+
+            <section>
+              <h2>Checkout &amp; Policy</h2>
+              <p className="mb-5 text-[var(--text-secondary)]">
+                What to expect at register time, why refusal happens, and how to handle edge cases.
+              </p>
+              <div className="space-y-5">
+                <article className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
+                  <h3 className="mb-2 text-[var(--text-primary)]">
+                    Are penny items guaranteed to be sold to customers?
+                  </h3>
+                  <p className="text-[var(--text-secondary)]">
+                    No. Penny status does not guarantee a sale because managers still control how
+                    removed inventory is handled in their store. One location may allow the sale
+                    while another may refuse at register review. Keep expectations realistic, stay
+                    respectful, and avoid building a trip around the assumption that every penny
+                    scan will be honored.
+                  </p>
+                </article>
+                <article className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
+                  <h3 className="mb-2 text-[var(--text-primary)]">
+                    What is the best time to go penny hunting?
+                  </h3>
+                  <p className="text-[var(--text-secondary)]">
+                    There is no universal best day across every store. Strong windows usually appear
+                    around resets, seasonal transitions, and early-day shopping before aisles are
+                    heavily picked over. The most reliable approach is to build a short target list,
+                    monitor timing signals, and go when multiple indicators align instead of relying
+                    on one schedule rumor.
+                  </p>
+                </article>
+                <article className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
+                  <h3 className="mb-2 text-[var(--text-primary)]">
+                    Why do cashiers sometimes refuse penny sales?
+                  </h3>
+                  <p className="text-[var(--text-secondary)]">
+                    Penny items can trigger operational friction because the product is flagged for
+                    removal rather than normal sale flow. In many stores that creates register
+                    prompts, policy checks, or manager involvement. Refusal is usually a store-level
+                    decision tied to inventory handling, not a personal conflict with the cashier,
+                    so calm and respectful behavior is the best path.
+                  </p>
+                </article>
+                <article className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
+                  <h3 className="mb-2 text-[var(--text-primary)]">
+                    What if the item is locked, recalled, or buy-back?
+                  </h3>
+                  <p className="text-[var(--text-secondary)]">
+                    If the register blocks the sale or an associate confirms lock, recall, or
+                    buy-back status, treat the item as unsellable and move on. Those outcomes are
+                    often system-enforced and cannot be overridden at checkout. Arguing usually
+                    wastes time and can create avoidable negative interactions for both staff and
+                    shoppers.
+                  </p>
+                </article>
+                <article className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
+                  <h3 className="mb-2 text-[var(--text-primary)]">
+                    Do Home Depot employees buy penny items?
+                  </h3>
+                  <p className="text-[var(--text-secondary)]">
+                    Employee penny-item purchases are generally reported as prohibited by policy.
+                    Enforcement details can vary by store, but shoppers should assume employee
+                    penny-item purchases are prohibited and focus on their own process. Keeping your
+                    focus on verification, respect, and accurate reporting is more productive than
+                    debating how internal policy is enforced.
+                  </p>
+                </article>
+                <article className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
+                  <h3 className="mb-2 text-[var(--text-primary)]">
+                    Can I buy multiple penny items at once?
+                  </h3>
+                  <p className="text-[var(--text-secondary)]">
+                    Sometimes, but outcomes vary by store and by checkout context. Multiple units of
+                    one SKU may pass in one location while mixed penny SKUs can trigger extra review
+                    in another. If your goal is smooth checkout, keep transactions simple, avoid
+                    unnecessary complexity, and accept store discretion when a lane or manager
+                    declines a basket.
+                  </p>
+                </article>
+                <article className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
+                  <h3 className="mb-2 text-[var(--text-primary)]">
+                    What if I am asked to return a penny item after purchase?
+                  </h3>
+                  <p className="text-[var(--text-secondary)]">
+                    Stay calm, keep the interaction professional, and present your receipt so facts
+                    are clear. Ask for manager clarification instead of debating front-line staff,
+                    then follow the final direction provided. Even when you disagree, avoiding
+                    escalation protects your account standing, your local reputation, and your
+                    ability to shop productively in the future.
+                  </p>
+                </article>
+              </div>
+            </section>
+
+            <section>
+              <h2>Etiquette &amp; Community</h2>
+              <p className="mb-5 text-[var(--text-secondary)]">
+                Behavior standards that keep the process sustainable for everyone.
+              </p>
+              <div className="space-y-5">
+                <article className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
+                  <h3 className="mb-2 text-[var(--text-primary)]">
+                    How do I report a find to help others?
+                  </h3>
+                  <p className="text-[var(--text-secondary)]">
+                    Use the Report a Find form with exact SKU, store location, and date while
+                    details are still fresh. Include only information you verified directly so the
+                    Penny List remains useful for everyone who checks it later. High-quality
+                    reporting creates better route planning, fewer wasted trips, and stronger trust
+                    across the community.
+                  </p>
+                </article>
+                <article className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
+                  <h3 className="mb-2 text-[var(--text-primary)]">
+                    Should I hide items for later?
+                  </h3>
+                  <p className="text-[var(--text-secondary)]">
+                    No. Hiding products harms other shoppers, increases staff friction, and can lead
+                    to broader crackdowns that hurt everyone using the process responsibly. If you
+                    want an item, verify it and checkout through normal customer flow. Respectful
+                    behavior protects long-term access and keeps the local environment healthier for
+                    future trips.
+                  </p>
+                </article>
+              </div>
+            </section>
           </div>
 
-          <h2 className="text-2xl font-bold mt-8 mb-6">Quick reference</h2>
+          <h2>Quick reference</h2>
           <ul className="mb-8">
             {quickReference.map((item) => (
               <li key={item}>{item}</li>

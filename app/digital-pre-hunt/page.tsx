@@ -47,7 +47,7 @@ const labelSignals = [
 
 const overheadClues = [
   "Yellow clearance tags visible from the floor",
-  'Overhead areas marked as "No Home" (community-reported term, not official)',
+  'Overhead areas marked as "No Home" (defined in Chapter 2) — a signal the item has no shelf location',
   "Dusty boxes or items that look untouched for months",
   "Mixed or mismatched products tucked above a bay",
   "Seasonal items parked in overhead after the season ends",
@@ -135,7 +135,7 @@ export default function DigitalPreHuntPage() {
             treating it like a crystal ball.
           </p>
 
-          <h2 className="text-2xl font-bold mb-6">Visual label recognition</h2>
+          <h2>Visual label recognition</h2>
           <p className="mb-6">
             Price endings tell you more than the discount percentage. A high-dollar item ending in
             .06 or .03 is often closer to penny than a cheap item ending in .97. These endings are
@@ -174,14 +174,18 @@ export default function DigitalPreHuntPage() {
               </tbody>
             </table>
           </div>
+          <p className="text-sm text-[var(--text-secondary)] mb-8">
+            For the complete cadence breakdown, see Chapter 2.
+          </p>
 
-          <h2 className="text-2xl font-bold mb-6">Overhead hunting (high reward, real risk)</h2>
+          <h2>Overhead hunting (high reward, real risk)</h2>
           <p className="mb-6">
             Clearance items often move to overhead storage when a bay is being cleared. Overhead can
             be a goldmine, but it is also where items get pulled quickly if an associate scans them.
             Ask yourself if you are willing to risk the item being removed before you ask for help.
-            Some hunters also report a \"No Home\" status in overhead areas, but treat that as a
-            community signal, not a guarantee.
+            Items marked &ldquo;No Home&rdquo; (introduced in Chapter 2) are strong candidates
+            &mdash; the store has no shelf location for them, which often means they are headed for
+            final markdown.
           </p>
           <ul className="mb-6">
             {overheadClues.map((clue) => (
@@ -197,8 +201,14 @@ export default function DigitalPreHuntPage() {
             If you ask an employee to pull an overhead item, they may scan it first. If it scans as
             a penny, they may remove it instead of handing it to you. This is common, not personal.
           </p>
+          <p className="mb-6">
+            Clearance endcaps are being phased out in many stores. Items now stay in their home bay
+            — the original shelf location — through the entire markdown cycle. The deepest discounts
+            are hidden in plain sight alongside full-price stock. When pre-hunting online, focus on
+            specific SKUs and bays rather than assuming everything will be on an endcap.
+          </p>
 
-          <h2 className="text-2xl font-bold mt-10 mb-6">Digital pre-hunt steps</h2>
+          <h2>Digital pre-hunt steps</h2>
           <div className="grid md:grid-cols-2 gap-x-12 gap-y-10 mb-16">
             {preHuntSteps.map((item) => (
               <div key={item.step} className="relative pl-16">
@@ -213,7 +223,30 @@ export default function DigitalPreHuntPage() {
             ))}
           </div>
 
-          <h2 className="text-2xl font-bold mb-6">Interpreting online status</h2>
+          <h2>Home-bay-first search workflow</h2>
+          <p className="mb-6">
+            A fast pre-hunt starts with shelf location, not price hype. Because many stores now keep
+            markdown items in their original bays, your goal is to build a short list of exact shelf
+            targets before you walk in. Think in this order: SKU, department, bay, then fallback
+            locations like overhead.
+          </p>
+          <ul className="mb-8">
+            <li>Start with 5-15 SKUs you can verify quickly, not a giant wishlist.</li>
+            <li>
+              For each SKU, note the department and aisle/bay so you walk a direct route instead of
+              wandering.
+            </li>
+            <li>
+              Prioritize items that already show late-stage endings (.03/.02) or old tag dates from
+              recent community photos.
+            </li>
+            <li>
+              Use overhead as a secondary pass after you check the home bay, especially in seasonal
+              categories.
+            </li>
+          </ul>
+
+          <h2>Interpreting online status</h2>
           <p className="mb-6">
             Online data is useful, but it is not real-time. Treat it as a filter, then verify in
             person.
@@ -246,21 +279,36 @@ export default function DigitalPreHuntPage() {
             </table>
           </div>
 
-          <h2 className="text-2xl font-bold mb-6">Limitations to keep in mind</h2>
+          <h2>Limitations to keep in mind</h2>
           <ul className="mb-8">
             {limitations.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
 
-          <h2 className="text-2xl font-bold mb-6">When to skip a trip</h2>
+          <h2>Pre-trip evidence checklist</h2>
+          <p className="mb-6">
+            Before you drive, require at least two strong signals for each target. One weak clue is
+            usually not enough to justify the trip.
+          </p>
+          <ul className="mb-8">
+            <li>A specific SKU or UPC you can match in-store.</li>
+            <li>A recent date from a tag photo, receipt, or trusted report.</li>
+            <li>A plausible location path (home bay first, then overhead fallback).</li>
+            <li>
+              A realistic expectation: the item may be gone, refused, or already pulled by the time
+              you arrive.
+            </li>
+          </ul>
+
+          <h2>When to skip a trip</h2>
           <ul className="mb-8">
             {skipTrip.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
 
-          <h2 className="text-2xl font-bold mb-6">When to go in-store</h2>
+          <h2>When to go in-store</h2>
           <p className="mb-6">
             Go in person only when the signal stack is strong. These are the most reliable triggers:
           </p>
@@ -271,7 +319,7 @@ export default function DigitalPreHuntPage() {
           </ul>
 
           <div className="p-8 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl shadow-sm mb-8">
-            <h2 className="text-2xl font-bold mb-4">A note on accuracy</h2>
+            <h2>A note on accuracy</h2>
             <p className="text-[var(--text-secondary)] leading-relaxed">
               Online inventory counts are often wrong for low-stock items. A listing that shows "one
               left" might already be gone, or it might be sitting in overhead. Always verify in

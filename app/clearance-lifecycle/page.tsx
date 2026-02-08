@@ -24,7 +24,7 @@ const truthMatrixRows = [
     claim: "Clearance endcaps are the only place to look",
     verdict: "false" as const,
     reality:
-      "Clearance can appear in home bays, seasonal areas, and overheads. Endcaps still exist, but they are not the only signal.",
+      "Clearance items now stay in their home bays through the full markdown cycle. Endcaps still exist in some stores, but they are no longer the primary location.",
   },
   {
     claim: "Any price ending in .97 means penny soon",
@@ -104,17 +104,17 @@ const timelineSteps = [
   {
     title: "Stage 1: .00 (enters clearance)",
     detail:
-      "The first markdown. In many reports this stage lasts about 1-4 weeks. Use the tag date as your reference point. Older tag dates often indicate a near-term drop.",
+      "The first markdown. This stage typically lasts about 1-4 weeks. Use the tag date as your reference point. Older tag dates often indicate a near-term drop.",
   },
   {
     title: "Stage 2: .06 or .04",
     detail:
-      "Mid-clearance. In many reports this stage lasts about 2-6 weeks. Seasonal items often move faster, while core items may stay longer.",
+      "Mid-clearance. This stage typically lasts about 2-6 weeks. Seasonal items often move faster, while core items may stay longer.",
   },
   {
     title: "Stage 3: .03 or .02",
     detail:
-      "Late-clearance. In many reports this stage lasts about 1-3 weeks. A strong signal, but not a guarantee. Always verify with a scan.",
+      "Late-clearance. This stage typically lasts about 1-3 weeks. A strong signal, but not a guarantee. Always verify with a scan.",
   },
   {
     title: "Stage 4: .01 (penny)",
@@ -154,25 +154,25 @@ export default function ClearanceLifecyclePage() {
             reports and in-store observations. Use it as a guide, not a guarantee.
           </p>
 
-          <h2 className="text-2xl font-bold mb-6 text-[var(--text-primary)]">The reality check</h2>
+          <h2>The reality check</h2>
           <p className="mb-6">
             Old guides often describe a fixed schedule. In practice, timing varies by store,
             department, and inventory pressure. You can still make smart predictions, but only if
-            you treat cadences as ranges and verify with a scan.
+            you treat cadences as ranges and verify with a UPC scan.
           </p>
 
           <TruthMatrix rows={truthMatrixRows} />
 
-          <h2 className="text-2xl font-bold mt-8 mb-6 text-[var(--text-primary)]">
-            Common clearance cadences (reported)
-          </h2>
-          <p className="mb-6">
-            Two patterns show up repeatedly in community reports. They are helpful for planning, but
-            they are not official and not guaranteed. Some categories skip stages or move faster.
+          <h2>Common clearance cadences</h2>
+          <p className="mb-4 text-sm text-[var(--text-secondary)]">
+            Note: Cadence data is based on consistent community reports and in-store observations.
+            Specifics vary by store and region.
           </p>
-          <p className="mb-6 text-sm text-[var(--text-secondary)]">
-            Community-reported full-cycle approximation: Cadence A is often around 13 weeks total
-            and Cadence B around 7 weeks total. Treat both as planning ranges, not guarantees.
+          <p className="mb-6">
+            Two patterns show up repeatedly. They are helpful for planning, but they are not
+            official and not guaranteed. Some categories skip stages or move faster. Cadence A runs
+            roughly 13 weeks total. Cadence B runs roughly 7 weeks total. Treat both as planning
+            ranges, not guarantees.
           </p>
 
           <div className="overflow-x-auto mb-8">
@@ -214,12 +214,24 @@ export default function ClearanceLifecyclePage() {
             </table>
           </div>
 
-          <h2 className="text-2xl font-bold mb-6 text-[var(--text-primary)]">
-            Quick reference: price ending cheat sheet
-          </h2>
+          <h2>What drives the cadence (2026 context)</h2>
+          <p className="mb-6">
+            Store Pulse (introduced in Chapter 1) tracks three signals for every clearance item,
+            often called ICE: Inactive (no longer restocked), Clearance (in the markdown cycle), and
+            E-velocity (how fast it is moving). When e-velocity drops below a threshold, the system
+            flags the item for faster removal. This is why some items skip stages entirely.
+          </p>
+          <p className="mb-6">
+            In 2026, some items can move from first markdown to penny in as little as 14 days —
+            compared to the older 9-14 week cycles. The system now skips stages when e-velocity data
+            says the item is not moving. This compressed cadence is sometimes called
+            &ldquo;Speed-to-Penny&rdquo; and it means you need to act faster on strong signals.
+          </p>
+
+          <h2>Quick reference: price ending cheat sheet</h2>
           <p className="mb-6">
             Price endings are more useful than the discount percentage. The ending can hint at where
-            the item sits in the clearance lifecycle, but the only sure answer is a scan.
+            the item sits in the clearance lifecycle, but the only sure answer is a UPC scan.
           </p>
 
           <div className="overflow-x-auto mb-8">
@@ -254,14 +266,16 @@ export default function ClearanceLifecyclePage() {
               </tbody>
             </table>
           </div>
-          <p className="text-sm text-[var(--text-secondary)] mb-8">
-            Community note: Some hunters report a brief .02 buffer just before penny, while others
-            never see it. Treat it as a possible signal, not a rule.
+
+          <h2>The $.02 buffer signal</h2>
+          <p className="mb-8">
+            A $.02 price is a 48-hour signal. It tells the MET team to locate and pull the item. The
+            item is still technically sellable, but the clock is ticking. If you see $.02, you
+            likely have less than 48 hours before it is pulled. Not every store uses this buffer —
+            some skip straight from $.03 to $.01 — but when you see it, treat it as urgent.
           </p>
 
-          <h2 className="text-2xl font-bold mb-6 text-[var(--text-primary)]">
-            The cadence timeline (practical view)
-          </h2>
+          <h2>The cadence timeline (practical view)</h2>
           <p className="mb-6">
             This is the most practical way to think about timing. Use tag dates and store-specific
             observations instead of a fixed calendar.
@@ -275,9 +289,33 @@ export default function ClearanceLifecyclePage() {
             ))}
           </div>
 
-          <h2 className="text-2xl font-bold mb-6 text-[var(--text-primary)]">
-            Seasonal vs. core inventory
-          </h2>
+          <h2>Understanding &ldquo;No Home&rdquo; status</h2>
+          <p className="mb-6">
+            When a planogram update removes an item&rsquo;s shelf location, the system marks it
+            &ldquo;No Home.&rdquo; This is a strong signal — the store has no designated place for
+            the item, which often means it is headed for final markdown or removal. You will see
+            this term referenced in later chapters.
+          </p>
+
+          <h2>Signal stacking</h2>
+          <p className="mb-6">
+            No single signal is reliable on its own. The strongest predictions come from combining
+            multiple signals at once:
+          </p>
+          <ul className="mb-8">
+            <li>
+              <strong>Strongest stack:</strong> &ldquo;No Home&rdquo; status + late-stage ending
+              (.03/.02) + older tag date. When all three align, the item is very likely headed to
+              penny.
+            </li>
+            <li>If only one signal is present, odds are lower. Verify in-store with a UPC scan.</li>
+            <li>
+              Add community reports from the same SKU/store as a fourth signal for the highest
+              confidence.
+            </li>
+          </ul>
+
+          <h2>Seasonal vs. core inventory</h2>
           <p className="mb-6">
             Not every category moves at the same speed. Seasonal categories tend to drop quickly
             after a holiday or reset, while core categories can sit longer at early markdowns.
@@ -288,24 +326,20 @@ export default function ClearanceLifecyclePage() {
             ))}
           </ul>
 
-          <h2 className="text-2xl font-bold mb-6 text-[var(--text-primary)]">
-            What to do when you see .00
-          </h2>
+          <h2>What to do when you see .00</h2>
           <ul className="mb-8">
             {dotZeroTips.map((tip) => (
               <li key={tip}>{tip}</li>
             ))}
           </ul>
 
-          <h2 className="text-2xl font-bold mb-6 text-[var(--text-primary)]">
-            How to use tag dates without guessing
-          </h2>
+          <h2>How to use tag dates without guessing</h2>
           <div className="p-6 mb-6 rounded-lg bg-[var(--bg-card)] border border-[var(--border-default)]">
             <h3 className="text-lg font-bold mb-2 text-[var(--text-primary)]">Tag date example</h3>
             <p className="text-[var(--text-secondary)]">
               Example: A clearance label showing $12.06 with a tag date of 11/04 is a mid-clearance
-              stage. If that date is several weeks old, many hunters report the next drop is closer,
-              but timing still varies by store and category.
+              stage. If that date is several weeks old, the next drop is likely closer — but timing
+              still varies by store and category.
             </p>
           </div>
           <ul className="mb-8">
@@ -315,20 +349,21 @@ export default function ClearanceLifecyclePage() {
             <li>Use the digital pre-hunt chapter to filter candidates before you drive.</li>
           </ul>
 
-          <h2 className="text-2xl font-bold mb-6 text-[var(--text-primary)]">
-            Community-reported reset timing signals
-          </h2>
+          <h2>Reset timing signals</h2>
+          <p className="mb-4 text-sm text-[var(--text-secondary)]">
+            Note: Reset timing data is based on consistent community reports. Specifics vary by
+            store and region.
+          </p>
           <p className="mb-6">
-            Community-reported pattern: late-stage items are often pulled around MET bay reset work.
-            Some reports describe a short .02 buffer window (about 24-48 hours) before a pull, while
-            other stores skip that step.
+            Late-stage items are often pulled around MET bay reset work. The 48 hours before a
+            scheduled reset is when items are most likely to be pulled. If you see a $.02 buffer
+            price during that window, the item is almost certainly on its way out.
           </p>
           <ul className="mb-8">
             <li>
-              Stronger signal stack: "No Home" status + late-stage ending (.03/.02) + older tag
-              date.
+              Use the signal stack (No Home + late-stage ending + older tag date) as your primary
+              filter.
             </li>
-            <li>If only one signal is present, odds are lower. Verify in-store with a UPC scan.</li>
             <li>
               Reset timing varies by store, department, and staffing, so treat this as directional
               guidance.

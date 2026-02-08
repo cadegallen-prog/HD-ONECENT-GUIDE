@@ -45,7 +45,7 @@ const comparisons = [
     myth: "The yellow tag always matches the real price.",
   },
   {
-    fact: "Penny items can be in normal bays, overheads, or seasonal areas.",
+    fact: "Penny items are most often found in their home bay — the original shelf location. Clearance endcaps are being phased out, so the deepest discounts hide in plain sight alongside full-price stock.",
     myth: "Only the clearance endcap has penny items.",
   },
   {
@@ -111,7 +111,7 @@ export default function FactsVsMythsPage() {
             actually works.
           </p>
 
-          <h2 className="text-2xl font-bold mb-8">Common misconceptions</h2>
+          <h2>Common misconceptions</h2>
 
           <div className="space-y-12">
             {comparisons.map((item, index) => (
@@ -162,7 +162,7 @@ export default function FactsVsMythsPage() {
             ))}
           </div>
 
-          <h2 className="text-2xl font-bold mt-8 mb-6">How we decide what is real</h2>
+          <h2>How we decide what is real</h2>
           <ul className="mb-8">
             {researchRules.map((rule) => (
               <li key={rule}>{rule}</li>
@@ -199,15 +199,59 @@ export default function FactsVsMythsPage() {
               </tbody>
             </table>
           </div>
+          <p className="text-sm text-[var(--text-secondary)] mb-4">
+            For detailed cadence breakdown, see Chapter 2.
+          </p>
 
-          <h2 className="text-2xl font-bold mb-6">Red flags to ignore</h2>
+          <h2>Red flags to ignore</h2>
           <ul className="mb-8">
             {redFlags.map((flag) => (
               <li key={flag}>{flag}</li>
             ))}
           </ul>
 
-          <h2 className="text-2xl font-bold mb-6">60-second vetting checklist</h2>
+          <h2>Why timeline myths spread so fast</h2>
+          <p className="mb-6">
+            Timeline myths feel trustworthy because they are simple. "Pennies always drop on X day"
+            sounds actionable, so people repeat it even when it fails half the time. In reality,
+            markdown timing is driven by local conditions: staffing, reset windows, inventory
+            pressure, and category behavior. A pattern that worked in one district can fail
+            immediately in another.
+          </p>
+          <p className="mb-8">
+            Treat all timing claims as probability, not certainty. If a post includes no SKU, no
+            store context, and no recent date, you are reading entertainment, not field-ready intel.
+          </p>
+
+          <h2>90-second validation workflow</h2>
+          <p className="mb-6">
+            Use this fast screen before acting on any claim. It protects your time and keeps the
+            Penny List signal quality high.
+          </p>
+          <ol className="mb-8">
+            <li>
+              <strong>Identifier check:</strong> Confirm the post includes a SKU or UPC. If not,
+              stop there.
+            </li>
+            <li>
+              <strong>Date check:</strong> Verify the report is recent enough to matter for your
+              next trip.
+            </li>
+            <li>
+              <strong>Location check:</strong> Make sure the store/region is known and relevant to
+              your hunt.
+            </li>
+            <li>
+              <strong>Signal stack check:</strong> Look for at least one supporting signal
+              (late-stage ending, old tag date, No Home context, or multiple matching reports).
+            </li>
+            <li>
+              <strong>Decision check:</strong> If you would regret the trip without the penny, skip
+              it and wait for stronger evidence.
+            </li>
+          </ol>
+
+          <h2>60-second vetting checklist</h2>
           <ol className="mb-8">
             <li>Check the date and the specific store or region.</li>
             <li>Look for a SKU or UPC, not just a price screenshot.</li>
@@ -216,13 +260,28 @@ export default function FactsVsMythsPage() {
             <li>Decide if the trip is worth it even if the penny is gone.</li>
           </ol>
 
-          <h2 className="text-2xl font-bold mb-6">Why myths persist</h2>
+          <h2>Why myths persist</h2>
           <p className="mb-8">
             Penny hunting moves fast, and screenshots spread faster. A real penny find in one store
             can turn into a rumor for every store within hours. Treat rumors as leads, not truth.
           </p>
 
-          <h2 className="text-2xl font-bold mb-6">Example: strong report vs. weak report</h2>
+          <h2>Trip ROI rule</h2>
+          <p className="mb-6">
+            A good lead should still make sense if the penny is gone. If your plan depends on one
+            unverified screenshot, your expected return is low. Build trips around clusters of
+            credible signals so each stop has more than one chance to pay off.
+          </p>
+          <ul className="mb-8">
+            <li>Group nearby departments so one failed SKU does not waste the entire trip.</li>
+            <li>Prioritize repeatable patterns over viral one-off claims.</li>
+            <li>Track what worked in your store so your next trip gets smarter, not longer.</li>
+            <li>
+              Share corrected outcomes back to the community so weak myths lose traction over time.
+            </li>
+          </ul>
+
+          <h2>Example: strong report vs. weak report</h2>
           <p className="mb-4">
             <strong>Strong report:</strong> Includes the SKU, the store, the date, and a clear photo
             of the tag or UPC. You can verify it in your own context.
@@ -232,7 +291,7 @@ export default function FactsVsMythsPage() {
             It might be real, but you cannot act on it responsibly.
           </p>
 
-          <h2 className="text-2xl font-bold mb-6">Research deep dive</h2>
+          <h2>Research deep dive</h2>
           <p className="mb-6">
             Home Depot does not publish a penny roadmap, so community intel is the best available
             data. It is strong when it is recent, specific, and backed by receipts or tag photos. It

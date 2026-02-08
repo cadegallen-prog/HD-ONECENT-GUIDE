@@ -1081,8 +1081,10 @@
   }
 
   .guide-article h2 {
-    @apply text-2xl font-bold mt-10 mb-4 text-[var(--text-primary)];
+    @apply text-2xl font-bold mt-8 mb-4 text-[var(--text-primary)];
     text-wrap: pretty;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-default);
   }
 
   .guide-article h3 {
@@ -1126,6 +1128,15 @@
     background-color: var(--bg-card);
     border: 1px solid var(--border-default);
     border-left: 4px solid var(--cta-primary);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
+  .dark .guide-callout {
+    box-shadow: none;
+  }
+
+  .guide-callout-speculative {
+    border-left-color: var(--text-muted);
   }
 
   .guide-callout-warning {

@@ -21,6 +21,7 @@
     "ai:doctor": "tsx scripts/ai-doctor.ts",
     "ai:verify": "tsx scripts/ai-verify.ts",
     "ai:proof": "tsx scripts/ai-proof.ts",
+    "ai:guide:guardrails": "tsx scripts/guide-guardrails.ts",
     "export:pennycentral": "tsx scripts/export-pennycentral-json.ts",
     "validate:scrape": "tsx scripts/validate-scrape-json.ts",
     "convert:scrape": "tsx scripts/scrape-to-enrichment-csv.ts",
