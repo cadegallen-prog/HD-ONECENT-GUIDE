@@ -68,13 +68,13 @@ export function TableOfContents() {
         <Link
           key={chapter.slug}
           href={chapter.href}
-          className="group flex flex-col p-5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] hover:border-[var(--cta-primary)] transition-all duration-200 h-full"
+          className="group flex h-full flex-col rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5 transition-all duration-200 hover:border-[var(--cta-primary)] hover:bg-[var(--bg-hover)] hover:shadow-[var(--shadow-card-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cta-primary)] focus-visible:ring-offset-2"
         >
           <div className="flex items-start justify-between mb-3">
-            <div className="p-2 rounded-md bg-[var(--bg-elevated)] text-[var(--cta-primary)] group-hover:bg-[var(--cta-primary)] group-hover:text-[var(--cta-text)] transition-colors">
+            <div className="rounded-md border border-[var(--border-default)] bg-[var(--bg-elevated)] p-2 text-[var(--cta-primary)] transition-colors group-hover:border-[var(--cta-primary)] group-hover:bg-[var(--cta-primary)] group-hover:text-[var(--cta-text)]">
               <chapter.icon className="h-5 w-5" />
             </div>
-            <span className="text-[12px] font-bold text-[var(--text-muted)] uppercase tracking-widest bg-[var(--bg-subtle)] px-2 py-1 rounded-sm group-hover:bg-[var(--bg-elevated)] transition-colors">
+            <span className="rounded-sm border border-[var(--border-default)] bg-[var(--bg-subtle)] px-2 py-1 text-[12px] font-bold uppercase tracking-widest text-[var(--text-muted)] transition-colors group-hover:border-[var(--cta-primary)] group-hover:bg-[var(--bg-elevated)] group-hover:text-[var(--text-primary)]">
               Part {index + 1}
             </span>
           </div>

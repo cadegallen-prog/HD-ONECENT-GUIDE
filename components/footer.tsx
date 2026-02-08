@@ -24,9 +24,9 @@ export function Footer() {
             </p>
           </div>
 
-          {/* Quick Links */}
+          {/* Explore */}
           <div>
-            <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Quick Links</h3>
+            <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Explore</h3>
             <ul className="space-y-2.5">
               <li>
                 <Link href="/penny-list" className={navLinkClass}>

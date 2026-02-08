@@ -66,6 +66,12 @@ const utilityLinks = [
   },
 ]
 
+const workflowGuardrails = [
+  "Build your shortlist digitally first, but treat in-store UPC scans as the final source of truth.",
+  "Use chapter order for your first pass, then revisit only the chapter tied to your next decision.",
+  "Prioritize respectful behavior in-store and follow store policy when outcomes differ by location.",
+]
+
 export default function GuideHubPage() {
   return (
     <div className="container mx-auto max-w-5xl px-4 py-7 md:px-6 md:py-9">
@@ -81,7 +87,7 @@ export default function GuideHubPage() {
           in-store behavior.
         </p>
         <div className="flex flex-wrap gap-3 pt-1">
-          <Button asChild size="lg" className="bg-[var(--cta-primary)] text-[var(--cta-text)]">
+          <Button asChild size="lg" variant="primary">
             <Link href="/what-are-pennies">
               Start Chapter 1 <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
@@ -111,6 +117,30 @@ export default function GuideHubPage() {
         </div>
       </section>
 
+      <section className="mx-auto mb-6 max-w-[68ch] rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
+        <h2 className="mb-3 text-xl font-semibold text-[var(--text-primary)]">
+          Why this guide format works
+        </h2>
+        <p className="text-[var(--text-secondary)]">
+          Most penny content online is either too shallow to be useful or too speculative to trust.
+          This guide is structured to avoid both failure modes. It starts with fundamentals, moves
+          into repeatable detection and verification steps, then adds deeper operational context
+          only after you understand the practical field workflow.
+        </p>
+        <p className="mt-3 text-[var(--text-secondary)]">
+          That structure is intentional. New hunters need clear, safe decisions they can execute
+          today. Returning hunters need stronger signal interpretation so they can prioritize where
+          to spend time in-store. By separating those layers, you avoid overloading the early
+          chapters while still preserving advanced context for readers who need it.
+        </p>
+        <p className="mt-3 text-[var(--text-secondary)]">
+          You should expect each chapter to answer one core question, not ten loosely connected
+          ones. Chapter 1 explains what penny items are and why they exist. Chapter 2 explains
+          cadence and signal quality. Chapters 3 and 4 convert theory into execution. Chapters 5
+          through 7 handle deeper context, myth correction, and rapid operational answers.
+        </p>
+      </section>
+
       <section className="mx-auto mb-6 max-w-[68ch]">
         <div className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
           <h2 className="mb-3 text-xl font-semibold text-[var(--text-primary)]">
@@ -136,7 +166,7 @@ export default function GuideHubPage() {
         </div>
       </section>
 
-      <section className="mb-6 space-y-3">
+      <section className="mb-6 space-y-3 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
         <h2 className="text-2xl font-bold text-[var(--text-primary)]">Guide Chapters</h2>
         <p className="text-[var(--text-secondary)]">
           Follow the chapter order for full context, or jump directly to the section that matches
@@ -147,24 +177,34 @@ export default function GuideHubPage() {
 
       <section className="mx-auto mb-6 max-w-[68ch] rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
         <h2 className="mb-3 text-xl font-semibold text-[var(--text-primary)]">
-          Hub monetization gate (Phase 2 decision)
+          Execution standards before you hunt
         </h2>
         <p className="text-[var(--text-secondary)]">
-          This `/guide` hub remains navigation-first in this phase, so it stays ad-ineligible.
-          Monetization remains focused on chapter routes that meet depth requirements.
+          Treat this as a field operations checklist, not entertainment content. The strongest
+          results come from process discipline: verify identity, verify timing, verify checkout
+          behavior, and log outcomes. When you skip steps, you increase wasted trips and increase
+          avoidable conflict at checkout.
         </p>
         <ul className="mt-3 list-disc space-y-1.5 pl-5 text-[var(--text-secondary)]">
-          <li>Chapter routes remain monetization-eligible after quality-depth checks.</li>
-          <li>Legal and compliance routes stay ad-ineligible.</li>
-          <li>
-            Mobile guardrails stay active: no ad clusters, one sticky max, and inline spacing
-            between substantive sections.
-          </li>
+          {workflowGuardrails.map((rule) => (
+            <li key={rule}>{rule}</li>
+          ))}
         </ul>
+        <p className="mt-3 text-[var(--text-secondary)]">
+          If you can only read one chapter before a store run, use Chapter 4. If you have 20 minutes
+          before leaving, use Chapter 3 first, then Chapter 4. If something in-store feels
+          inconsistent, use Chapter 6 to test assumptions before escalating. This keeps your
+          decisions grounded in known behavior instead of rumor loops.
+        </p>
       </section>
 
       <section className="rounded-xl border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
-        <h2 className="mb-4 text-2xl font-bold text-[var(--text-primary)]">Quick Links</h2>
+        <h2 className="mb-4 text-2xl font-bold text-[var(--text-primary)]">Essential Tools</h2>
+        <p className="mb-4 text-[var(--text-secondary)]">
+          Use these pages to move from research to action quickly. The Penny List gives you live
+          inventory signals, Report a Find strengthens data quality, and Store Finder keeps your
+          targeting aligned with the location you actually plan to visit.
+        </p>
         <ul className="grid gap-4 md:grid-cols-2">
           {utilityLinks.map((link) => (
             <li key={link.href}>
