@@ -18,11 +18,17 @@
 **Focus:** Schema markup, internal linking, organic search lift
 **Quick link:** See `.ai/SEO_FOUNDATION_PLAN.md` for detailed plan
 
+### [SITE_MONETIZATION](.ai/topics/SITE_MONETIZATION_CURRENT.md)
+
+**Status:** 🔄 Planning baseline (sitewide)
+**Focus:** Route eligibility, thin URL lifecycle, and UX-safe ad architecture
+**Quick link:** See `.ai/plans/sitewide-monetization-readiness.md`
+
 ### [MONETIZATION](.ai/topics/MONETIZATION.md)
 
-**Status:** ✅ Bridge active (Ezoic + Mediavine)
+**Status:** ✅ Historical bridge context
 **Focus:** Ad networks, revenue strategy, timeline
-**Quick link:** See SESSION_LOG for Ezoic integration details
+**Quick link:** See `.ai/plans/sitewide-monetization-readiness.md` for current canonical planning
 
 ### [ADSENSE_APPROVAL](.ai/topics/ADSENSE_APPROVAL_CURRENT.md)
 

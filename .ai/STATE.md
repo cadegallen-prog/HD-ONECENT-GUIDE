@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 7, 2026 (External-links route removal + sitemap cleanup)
+**Last updated:** Feb 8, 2026 (Guide recovery Phase 3 drift guard implemented and verified)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,47 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-08 (Guide recovery implementation - Phase 3 drift guard):** Executed Phase-3-only scope from `.ai/impl/guide-recovery.md` to prevent future guide regressions.
+  - **Step 3.0 complete:** Created `.ai/topics/GUIDE_FORMAT_CONTRACT.md` with the canonical chapter template, voice rules, locked-copy pointer, 2026 intel distribution map, concept introduction order, and forbidden reintroductions list.
+  - **Scope guardrails preserved:** No dependency changes, no route model changes, no unrelated refactors.
+  - **Verification:** guide guardrails ✅ (`reports/guide-guardrails/2026-02-08T20-46-00.md`) and full 4-gate verify ✅ (`reports/verification/2026-02-08T20-46-17/summary.md`).
+
+- **2026-02-08 (Guide recovery implementation - Phase 2):** Executed remaining Phase-2-only scope from `.ai/impl/guide-recovery.md` and closed the FAQ/hub/visual guardrail gaps without entering Phase 3.
+  - **Step 2.0 complete:** `app/faq/page.tsx` now has visible grouped Q&A (Basics, Verification, Checkout & Policy, Etiquette & Community) with zero `<details>` usage, preserved FAQ JSON-LD sourced from `faqs`, and expanded visible answer depth.
+  - **Step 2.1 complete:** `app/guide/page.tsx` now includes the "Where should you start?" triage section, tighter section rhythm, and explicit hub monetization gate decision (hub remains navigation-first and ad-ineligible in this phase).
+  - **Step 2.1 TOC copy complete:** `components/guide/TableOfContents.tsx` chapter descriptions updated to canonical one-line plan copy.
+  - **Step 2.2 complete:** `app/globals.css` now restores `.guide-article h2` border-bottom + padding + `mt-8/mb-4` rhythm, adds `.guide-callout-speculative`, and adds a subtle light-mode callout shadow with dark-mode suppression.
+  - **Step 2.2d status:** Chapter 3 already retained the Chapter 2 cadence cross-reference in `app/digital-pre-hunt/page.tsx`; no additional change required this pass.
+  - **Verification:** guide guardrails ✅ (`reports/guide-guardrails/2026-02-08T20-32-02.md`), full 4-gate verify ✅ (`reports/verification/2026-02-08T20-32-11/summary.md`), and proof bundle ✅ (`reports/proof/2026-02-08T20-37-44/`).
+
+- **2026-02-08 (Guide recovery implementation - Phase 0 + Phase 1):** Executed approved implementation scope from `.ai/impl/guide-recovery.md` without entering Phase 2/3.
+  - **Phase 0 delivered:** `.ai/topics/GUIDE_MONETIZATION_CONTRACT.md`, `.ai/topics/GUIDE_LOCKED_COPY.md`, `.ai/audits/guide-claim-matrix-2026-02-08.md`, `scripts/guide-guardrails.ts`, and npm alias `ai:guide:guardrails`.
+  - **Phase 1 delivered:** Chapter updates across `app/what-are-pennies/page.tsx`, `app/clearance-lifecycle/page.tsx`, `app/digital-pre-hunt/page.tsx`, `app/in-store-strategy/page.tsx`, `app/inside-scoop/page.tsx`, `app/facts-vs-myths/page.tsx`, plus Phase-1-scope updates in `app/faq/page.tsx`.
+  - **Quality checkpoints:** All guide chapter `<h2>` inline class overrides removed; locked founder strings preserved; banned hedging phrases removed; chapter word-count target now satisfied for Chapters 1-6 in the guardrail report.
+  - **Verification:** `npm run ai:verify` ✅ (`reports/verification/2026-02-08T18-20-32/summary.md`), Playwright proof ✅ (`reports/proof/2026-02-08T18-26-05/`), guide guardrails ⚠️ expected Phase-2-only FAQ failures (`reports/guide-guardrails/2026-02-08T18-20-17.md`).
+
+- **2026-02-08 (Sitewide monetization readiness planning - docs):** Added a canonical sitewide monetization architecture plan so non-guide concerns stop living in chat context.
+  - **New canonical plan:** `.ai/plans/sitewide-monetization-readiness.md`
+  - **New current-state capsule:** `.ai/topics/SITE_MONETIZATION_CURRENT.md`
+  - **Policy lock-in:** active-valid inventory retention, temporary noindex for thin active pages, invalid-record-only 410/redirect, homepage/nav first-layer strong-page mandate
+  - **Registry updates:** `.ai/plans/INDEX.md`, `.ai/topics/INDEX.md`
+  - **Verification:** Docs-only planning update; no runtime/code changes.
+
+- **2026-02-08 (Guide recovery plan refinement - docs):** Refined `.ai/impl/guide-recovery.md` to add automation-first recurring checks and a mobile-first monetization architecture.
+  - **Phase 0 added:** `GUIDE_MONETIZATION_CONTRACT.md` + scriptable guardrail checks before content edits.
+  - **Monetization rules clarified:** route-level eligibility, legal-page exclusions, `/guide` hub ad gate, mobile frequency caps, and no ad-cluster placement.
+  - **Word-count policy clarified:** replaced hard "Google minimum" wording with internal monetization-depth targets (800+ for monetized chapter pages).
+  - **Acceptance criteria expanded:** added monetization layout gate, hub eligibility gate, and guardrail automation gate.
+  - **Consistency update:** synced `Guide Remodel/GUIDE_RECOVERY_HANDOFF.md` to match the refined plan.
+  - **Verification:** Docs-only planning update; no runtime/code changes.
+
+- **2026-02-08 (Plan canonicality guardrail - docs):** Added repo-first planning guardrails so all agents use one canonical plan source in `.ai/impl/`.
+  - **AGENTS contract update:** Added a critical rule in `AGENTS.md` requiring final plans in `.ai/impl/<slug>.md` and treating `.claude/plans` as scratch only.
+  - **Critical rule update:** Added `Rule #6` in `.ai/CRITICAL_RULES.md` with required canonical path/hash/sync reporting and a PowerShell hash check snippet.
+  - **Handoff schema update:** Updated `.ai/HANDOFF_PROTOCOL.md` so planning tasks must include canonical plan evidence in handoff output.
+  - **Skill added:** Added `docs/skills/plan-canonicality.md` and indexed it in `docs/skills/README.md`.
+  - **Verification:** Docs-only process hardening; no runtime/code changes.
 
 - **2026-02-07 (External-links route removal + sitemap cleanup):** Removed the low-value external-links surface and all active references so it is no longer linked, indexed, or audited as a core page.
   - **Route removal:** deleted the dedicated external-links route file.

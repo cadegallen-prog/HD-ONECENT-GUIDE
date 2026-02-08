@@ -18,7 +18,17 @@ Each AI session should:
 
 ## P0 - Do Next (Analytics-Driven Growth)
 
-### 0. Agent Autonomy Hardening - Phase 1 (Port 3001 Reliability Contract)
+### 0. Sitewide Monetization Readiness - Route Policy + UX-Safe Revenue Architecture
+
+- **Problem:** Monetization strategy is currently fragmented (guide-focused execution, but sitewide revenue depends heavily on utility routes and first-layer IA quality signals).
+- **Done means:**
+  - Route eligibility matrix exists for all major page types
+  - Thin URL lifecycle policy is implemented (keep active valid URLs; temporary noindex for thin active pages until enriched)
+  - Homepage/navigation prioritize strong pages in first-layer structure
+  - Monumetric handoff packet is prepared (slot map + exclusions + frequency guardrails)
+- **Plan:** `.ai/plans/sitewide-monetization-readiness.md`
+
+### 1. Agent Autonomy Hardening - Phase 1 (Port 3001 Reliability Contract)
 
 - **Problem:** Local dev-server ownership and verification mode selection are easy to misapply, creating restart-loop confusion and blocking agent momentum.
 - **Done means:**
@@ -28,7 +38,7 @@ Each AI session should:
   - Verification evidence includes one bundle for dev mode and one for test mode
 - **Plan:** `.ai/plans/agent-autonomy-hardening.md`
 
-### 1. Bloat Control - Ongoing Archive-First Hygiene
+### 2. Bloat Control - Ongoing Archive-First Hygiene
 
 - **Problem:** Deprecated/legacy/single-use docs and scripts keep accumulating, increasing AI context noise and decision drift.
 - **Done means:**
@@ -49,7 +59,7 @@ Each AI session should:
   - `archive/scripts-pruned/2026-02-03-pass3/`
   - `archive/scripts-pruned/2026-02-04-pass1/`
 
-### 2. Data Pipeline Reliability - Pre-scrape + Cron Auth (P0-0)
+### 3. Data Pipeline Reliability - Pre-scrape + Cron Auth (P0-0)
 
 - **Problem:** GitHub-hosted runners are blocked upstream (**403 + Cloudflare “Just a moment...”**), so scheduled scraping cannot be the primary freshness path right now. Separately, Vercel cron endpoints will return 401 if `CRON_SECRET` is missing/mismatched.
 - **Done means:**
@@ -59,7 +69,7 @@ Each AI session should:
   - Vercel cron logs show 200s (not 401s) for `/api/cron/seed-penny-list`, `/api/cron/trickle-finds`, `/api/cron/send-weekly-digest`
 - **Approach options (later):** self-hosted runner (home IP / VPS) vs paid residential proxy vs new data source (avoid upstream dependency where possible)
 
-### 3. SEO Improvement - Schema Markup + Internal Linking (P0-3)
+### 4. SEO Improvement - Schema Markup + Internal Linking (P0-3)
 
 - **Problem:** Zero non-branded organic clicks. Position 11.6 for "home depot penny list". 100% dependent on Facebook.
 - **Done means:**
