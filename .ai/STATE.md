@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 8, 2026 (Guide recovery Phase 3 drift guard implemented and verified)
+**Last updated:** Feb 8, 2026 (Guide recovery shipped to main in commit chunks; bookmarklet workflow and source artifacts synced)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,12 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-08 (Guide recovery ship completion - main sync):** Completed chunked commit/push workflow and left branch clean/synced.
+  - **Commits pushed to `main`:** `9cbce81` (guide phases 0-3), `db69c96` (sitewide monetization planning), `6277357` (process/canonicality docs), `89e6b8d` (bookmarklet source+build workflow), `725e1c5` (source artifacts + ignore hygiene).
+  - **Bookmarklet hardening:** Added canonical source `tools/bookmarklets/pc-extractor.src.js`, deterministic builder `tools/bookmarklets/build-bookmarklet.js`, and regenerated `tools/bookmarklets/bookmarklet.txt` from source.
+  - **Repo hygiene:** Added `Guide Remodel/codexdialogue.txt` + `Guide Remodel/Operational Analysis of Home Depot 2026 Clearance Architecture.docx` to tracked sources; updated `.gitignore` for local-only outputs (`/reports/`, `.ai/_tmp/`, Office lock files).
+  - **Verification:** `npm run ai:verify` ✅ (`reports/verification/2026-02-08T22-16-05/summary.md`).
 
 - **2026-02-08 (Guide recovery implementation - Phase 3 drift guard):** Executed Phase-3-only scope from `.ai/impl/guide-recovery.md` to prevent future guide regressions.
   - **Step 3.0 complete:** Created `.ai/topics/GUIDE_FORMAT_CONTRACT.md` with the canonical chapter template, voice rules, locked-copy pointer, 2026 intel distribution map, concept introduction order, and forbidden reintroductions list.

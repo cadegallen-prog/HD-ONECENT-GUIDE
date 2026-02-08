@@ -4,6 +4,38 @@
 
 ---
 
+## 2026-02-08 - Codex - Ship Completion (Commits + Push + Repo Hygiene)
+
+**Goal:** Finish shipping all completed guide/planning work to `main` in safe chunks, resolve leftover local files, and leave a clean synced branch.
+
+**Status:** ✅ Completed (5 commits on `main` now pushed and synced).
+
+### Changes
+
+- Pushed previously prepared guide/planning/process commits:
+  - `9cbce81` `feat(guide): complete recovery phases 0-3 with guardrails`
+  - `db69c96` `docs(planning): add sitewide monetization readiness roadmap`
+  - `6277357` `docs(process): enforce canonical planning and refresh handoff`
+- Added bookmarklet source/build workflow and regenerated canonical payload:
+  - `89e6b8d` `feat(bookmarklet): add source+build workflow and regenerate payload`
+  - Files: `tools/bookmarklets/pc-extractor.src.js`, `tools/bookmarklets/build-bookmarklet.js`, `tools/bookmarklets/bookmarklet.txt`
+- Added source artifacts used by guide recovery planning and cleaned local-noise ignore rules:
+  - `725e1c5` `chore(repo): track guide source artifacts and ignore local temp outputs`
+  - Files: `Guide Remodel/codexdialogue.txt`, `Guide Remodel/Operational Analysis of Home Depot 2026 Clearance Architecture.docx`, `.gitignore` (`/reports/`, `.ai/_tmp/`, `Guide Remodel/~$*.docx`)
+- Branch state after push: `main` clean and fully synced with `origin/main`.
+
+### Verification
+
+- Full 4-gate bundle: `npm run ai:verify` ✅
+  - Artifact: `reports/verification/2026-02-08T22-16-05/summary.md`
+  - Gate outputs:
+    - `reports/verification/2026-02-08T22-16-05/lint.txt`
+    - `reports/verification/2026-02-08T22-16-05/build.txt`
+    - `reports/verification/2026-02-08T22-16-05/unit.txt`
+    - `reports/verification/2026-02-08T22-16-05/e2e.txt`
+
+---
+
 ## 2026-02-08 - Codex - Guide Recovery Phase 3 Drift Guard
 
 **Goal:** Execute only Phase 3 from `.ai/impl/guide-recovery.md` and lock future guide format behavior.
@@ -76,38 +108,3 @@
   - Artifact bundle: `reports/proof/2026-02-08T20-37-44/`
   - Console report: `reports/proof/2026-02-08T20-37-44/console-errors.txt`
   - Non-blocking console noise remains global hydration/CSP ad-script noise from existing layout integrations (not introduced by this phase scope).
-
----
-
-## 2026-02-08 - Codex - Guide Recovery Phase 0 + Phase 1 Implementation
-
-**Goal:** Implement Phase 0 and Phase 1 from `.ai/impl/guide-recovery.md` with proof-backed verification.
-
-**Status:** ✅ Completed (Phase 0 + Phase 1 only; Phase 2/3 intentionally not executed).
-
-### Changes
-
-- Implemented Phase 0 docs/contracts:
-  - Created `.ai/topics/GUIDE_MONETIZATION_CONTRACT.md`.
-  - Created `.ai/topics/GUIDE_LOCKED_COPY.md`.
-  - Created `.ai/audits/guide-claim-matrix-2026-02-08.md`.
-- Implemented Phase 0 automation:
-  - Added `scripts/guide-guardrails.ts`.
-  - Added npm script `ai:guide:guardrails` in `package.json`.
-- Implemented Phase 1 chapter edits + H2 normalization:
-  - Updated `app/what-are-pennies/page.tsx`.
-  - Updated `app/clearance-lifecycle/page.tsx`.
-  - Updated `app/digital-pre-hunt/page.tsx`.
-  - Updated `app/in-store-strategy/page.tsx`.
-  - Updated `app/inside-scoop/page.tsx`.
-  - Updated `app/facts-vs-myths/page.tsx`.
-  - Updated `app/faq/page.tsx` (Phase 1 scope only; FAQ visibility migration deferred to Phase 2).
-
-### Verification
-
-- Full 4-gate bundle: `npm run ai:verify` ✅
-  - Artifact: `reports/verification/2026-02-08T18-20-32/summary.md`
-- UI proof: `npm run ai:proof -- /what-are-pennies /clearance-lifecycle /digital-pre-hunt /in-store-strategy /inside-scoop /facts-vs-myths /faq` ✅
-  - Artifact: `reports/proof/2026-02-08T18-26-05/`
-- Guardrails: `npm run ai:guide:guardrails` ⚠️ expected fail on Phase-2-only FAQ checks
-  - Artifact: `reports/guide-guardrails/2026-02-08T18-20-17.md`
