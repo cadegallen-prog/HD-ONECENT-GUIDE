@@ -1,0 +1,2120 @@
+"Read-only audit completed per your order. I compared:
+
+- single_page_guide_pre_update.html
+- newinfoforguide.html
+- Current guide routes in page.tsx, page.tsx, page.tsx, page.tsx, page.tsx, page.tsx, page.tsx, page.tsx
+
+No code edits were made.
+
+**Claim Matrix**  
+Legend: ✅ Match ⚠️ Partial/Gap ❌ Conflict
+
+| # | Source claim | Source anchor | Current evidence | Status |
+|---|---|---|---|---|
+| 1 | Penny items are internal removal, not public promo | single_page: I. Introduction | page.tsx (line 67), page.tsx (line 65), page.tsx (line 20) | ✅ |
+| 2 | Penny scan is not guaranteed sale (store discretion) | single_page: V, FAQ; newinfo: Zero-Comm context | page.tsx (line 104), page.tsx (line 35), page.tsx (line 21) | ✅ |
+| 3 | Cadence A/B sequences with approx durations (13w/7w framing) | single_page: II tables | page.tsx (line 48), page.tsx (line 103) | ⚠️ |
+| 4 | Price endings .97/.98 are regular sale, low penny signal | single_page: II cheat sheet | page.tsx (line 97), page.tsx (line 29) | ✅ |
+| 5 | Older clearance tag dates can indicate next drop is nearer | single_page: II-A | page.tsx (line 297), page.tsx (line 308) | ✅ |
+| 6 | App is filter-only; penny price usually not shown; in-store scan is truth | single_page: III + FAQ | page.tsx (line 99), page.tsx (line 40), but page.tsx (line 39) says verify “with the app” | ❌ |
+| 7 | Scan UPC, not yellow tag | single_page: III-A, IV, V | page.tsx (line 18), page.tsx (line 86), page.tsx (line 53) | ✅ |
+| 8 | Yellow-tag scan can trigger terminal intervention/lockout risk | single_page: IV/V | page.tsx (line 20) mentions override prompt, but no lockout/freeze behavior | ⚠️ |
+| 9 | Overhead + “No Home” cues are useful but risky | single_page: II-C; newinfo: No Home section | page.tsx (line 178), page.tsx (line 183), page.tsx (line 19) | ✅ |
+|10| Yellow ladder customer-use vs orange employee-only (store variation caveat acceptable) | single_page: IV | page.tsx (line 192) | ✅ |
+|11| Dedicated clearance endcaps are de-emphasized; home-bay-first is key | single_page: IV; newinfo: Home Bay Only | page.tsx (line 24), but page.tsx (line 25) still starts with “clearance areas” | ⚠️ |
+|12| Low-risk verification phrasing: stock check > price check | single_page: III-A | page.tsx (line 25), page.tsx (line 41), page.tsx (line 70) | ✅ |
+|13| Zero-Comm mechanism explains why penny sales get blocked/refused | newinfo: Zero-Comm audit section | page.tsx (line 51) mentions term only; mechanism largely absent | ⚠️ |
+|14| Buy-back/recall/RTV locks can make item unsellable | newinfo: RTV lock section; single_page: V | page.tsx (line 58), page.tsx (line 53) | ✅ |
+|15| ZMA disposition mix (compactor/RTV) affects what categories penny out | newinfo: ZMA framework | No equivalent quantitative guidance in current pages | ⚠️ |
+|16| Employee purchase prohibition is strict (not a normal discretionary behavior) | single_page: VI + FAQ; newinfo: ZMA section | page.tsx (line 75) softens as “generally prohibits... enforcement varies” | ⚠️ |
+|17| 2026 public context (HD strategic update + Material List AI) as context only | newinfo: public-source sections | page.tsx (line 156), page.tsx (line 168) | ✅ |
+|18| “Pro liquidation bundle” is speculative and should be labeled as such | newinfo: AI-driven future | page.tsx (line 202) explicitly labeled speculation | ✅ |
+|19| Community intel should be caveated (date/store/SKU context) | single_page: VII/VIII | page.tsx (line 81), page.tsx (line 172), page.tsx (line 87) | ✅ |
+|20| Live Penny List freshness messaging (~5 min) | single_page: Ready to Start Hunting | page.tsx (line 217) | ✅ |
+|21| “No Home + late-stage ending” is a stronger combined signal than either alone | newinfo: No Home tactical indicator | Pieces exist separately (page.tsx (line 19), page.tsx (line 255)) but no combined rule | ⚠️ |
+|22| MET reset timing should be treated as a specific operational signal (with caveat label) | newinfo: Bay reset calendar | Generic reset mention only (page.tsx (line 128), page.tsx (line 114)) | ⚠️ |
+
+**Top 10 Must-Fix Inaccuracies (by severity)**
+
+1. Critical page.tsx (line 39)  
+   Conflict: says verify with app; source consistently says app is not reliable for penny verification.  
+   Fix: replace with in-store UPC/register scan wording only.
+
+2. High page.tsx (line 75)  
+   Drift: employee purchase rule is softened too much versus source’s strict prohibition framing.  
+   Fix: tighten to “policy prohibits; enforcement details vary, assume prohibited.”
+
+3. High page.tsx (missing ZMA disposition detail)  
+   Gap: source includes disposition mechanics affecting penny odds (compactor/RTV split).  
+   Fix: add labeled community-reported summary with clear caveat.
+
+4. High page.tsx + page.tsx  
+   Gap: MET reset timing model (including pre-reset pull window) is underrepresented.  
+   Fix: add clearly labeled community-reported timing signal block.
+
+5. High page.tsx + page.tsx  
+   Gap: combined-signal logic (No Home + late-stage ending) is not explicit.  
+   Fix: add a “signal stacking” rule with caveat label.
+
+6. Medium page.tsx (line 25)  
+   Drift: opener still biases “clearance areas” first, while source stresses endcap decline/home-bay reality.  
+   Fix: reorder to home-bay/aisle-first wording.
+
+7. Medium page.tsx (line 20)  
+   Gap: yellow-tag scan risk is under-described versus source lockout/freeze behavior.  
+   Fix: expand to “can trigger intervention/hold/lockout” wording (caveated).
+
+8. Medium page.tsx (line 48)  
+   Gap: cadence model dropped the explicit 13-week vs 7-week framing from source.  
+   Fix: restore quick “full-cycle approximation” line while keeping non-guarantee language.
+
+9. Medium page.tsx (line 79)  
+   Ambiguity: “exact internal label varies” can blur the source’s stable ZMA framing.  
+   Fix: keep ZMA term explicit, then caveat local terminology variance.
+
+10. Medium page.tsx (line 16)  
+    Labeling consistency issue: some strong operational bullets read factual without per-bullet confidence qualifiers.  
+    Fix: append confidence tags consistently (community-reported / speculative).
+
+Stopped here per your step 3. Awaiting your approval before any edits."
+
+This is a strong audit. I’d approve implementation with one guardrail: keep anything operationally sensitive as community-reported unless it is explicitly in your two source HTML files.
+
+Use this exact follow-up:
+
+GO. Approved to implement now.
+
+Scope:
+Apply factual corrections for the Top 10 must-fix items from your audit, with minimal diffs and no layout redesign.
+
+Rules:
+1) Only edit:
+- app/guide/page.tsx
+- app/what-are-pennies/page.tsx
+- app/clearance-lifecycle/page.tsx
+- app/digital-pre-hunt/page.tsx
+- app/in-store-strategy/page.tsx
+- app/inside-scoop/page.tsx
+- app/facts-vs-myths/page.tsx
+- app/faq/page.tsx
+2) Keep existing design/layout structure. No token/color/spacing refactors.
+3) Label non-official operational claims consistently as `community-reported`.
+4) Keep speculative claims explicitly labeled `speculative`.
+5) For employee purchase policy wording: tighten to “assume prohibited” while avoiding absolute legal claims.
+6) For ZMA/Zero-Comm/MET timing details: only add what is present in source HTML; if uncertain, caveat clearly.
+
+Output requirements:
+- Show a compact before/after diff summary per must-fix item (1–10).
+- Provide updated claim matrix rows for all previously ❌/⚠️ entries.
+- Run full verification:
+  - npm run lint
+  - npm run build
+  - npm run test:unit
+  - npm run test:e2e
+- If any visual output changed, include Playwright proof bundle path.
+- End with Next-Agent Handoff block per .ai/HANDOFF_PROTOCOL.md.
+If you want, I can also review their implementation result before you merge anything else.
+
+
+User attachment
+User attachment
+User attachment
+IS there too much blank space on the website? it feels like that's been a recurring theme with the website. I would imagine that the website significantly less favorable in the eyes of google. there's just way too much dead space even for me. That also affects how many ads can be show on the page i think (this is kinda secondary though) it's more important thtat it doesn't look that good, looks empty, looks barren, and it hosnestly makes it more difficult to read. I feel like the demarkcations are a bit overdone as well when separating the paragraphs from the pargraphs, but maybe that's not even the main issue? I'm not sure. Also the navigation continues to be ghastly for the guide and it's very confusing. and there is a a stylistic error being made here in the screenshot "sources" where itunderlines the links and has a container and highlights on hover. The underline makes it difficult to read. Not to mention, this sources thing should not be there at all. thats just corporate nonsense that adds no value. There's also the glaring issue that "Back to field tactics" screenshot also inclkuuded is so confusing especially when considering that it looks like it is the end of the guide b/c sources are at the end of the guide, but it also is redudndant and unecssary, because it's literally right below that in "previous" with the arrow pointing "<-" but the box above it is pointing the opposite direction "->" and it's giving conflicting visual signals. Additionally there are more pages to the guide and it's NOT the end of it as evidenced by "Next -> Facts vs. Myths". THEN on TOP of this is the fact that when looked at in totality there is  sensory overload in the 3rd screenshot when you have all of these things competeting with one another simultanouesly!
+
+
+This isn't even taking into consideration the reality that you revamped the layout and structure of the guide pages, but you didnt revamp the layout and structure of the "guide hub" or whatever it's still awful looking. But it doesn't matter because it all needs to be reavvluated anyways.... I know this is a lot of information at once but I just keep looking and the more i look the more i see.
+
+I'm sorry for being such a prude.... You've been EXCEPTIOJNALLY helpful and I appreciate you so much. I apologize.
+
+Will you please help me with all of these areas? I feel like I'm going in circles and it's driving me nuts!
+
+I’ll fix this directly in code now with a focused UX cleanup pass: remove low-value sections (“Sources”/redundant “Back to field tactics”), simplify chapter navigation, tighten guide spacing/demarcations, and improve the guide hub structure. I’m starting by loading the repo skills + current guide components so I can patch the right files in one pass.
+
+Ran Get-Content docs/skills/README.md -TotalCount 220
+
+
+Ran Get-Content docs/skills/ship-safely.md -TotalCount 220
+
+
+Ran git status --short --branch
+
+
+Ran Get-Content docs/skills/feature-to-files.md -TotalCount 260
+
+
+I found existing uncommitted guide-page edits in your branch, so I’ll preserve those and layer only UX fixes on top. I’m now inspecting the guide hub, chapter navigation component, and inside-scoop sections that match your screenshots.
+
+Ran rg -n "Sources \(public\)|Back to field tactics|Read: Verify|ChapterNavigation|guide-article|mt-12|mb-10|border-b" app/inside-scoop/page.tsx app/*.tsx components/guide/*.tsx app/globals.css
+
+
+Ran Get-Content components/guide/TableOfContents.tsx -TotalCount 320
+
+
+Ran Get-Content components/guide/ChapterNavigation.tsx -TotalCount 300
+
+
+Ran Get-Content app/guide/page.tsx -TotalCount 340
+
+
+Ran Get-Content app/inside-scoop/page.tsx -TotalCount 420
+
+
+Ran Get-Content components/page-templates.tsx -TotalCount 320
+
+
+Ran Get-Content app/globals.css -TotalCount 1300
+
+
+I’m now applying the concrete UX fixes: simplify chapter navigation globally, remove the redundant inside-scoop end sections, tighten guide spacing/demarcations, and rebuild the guide hub into a cleaner single-column flow.
+
+Edited file
+ChapterNavigation.tsx
++47
+-48
+
+  return (
+    <nav
+      className="mt-16 grid grid-cols-2 gap-4 border-t border-[var(--border-default)] pt-8"
+      aria-label="Chapter navigation"
+    >
+      <div className="col-start-1">
+        {prev ? (
+          <Link
+            href={`/${prev.slug}`}
+            className="group flex flex-col items-start gap-1 p-4 -ml-4 rounded-lg hover:bg-[var(--bg-subtle)] transition-colors text-left"
+          >
+            <span className="flex items-center text-xs font-medium text-[var(--text-muted)] group-hover:text-[var(--text-primary)] transition-colors">
+              <ArrowLeft className="mr-1 h-3 w-3 transition-transform group-hover:-translate-x-1" />
+              Previous
+            </span>
+            <span className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-[var(--cta-primary)] transition-colors">
+              {prev.title}
+            </span>
+          </Link>
+        ) : (
+          <Link
+            href="/guide"
+            className="group flex flex-col items-start gap-1 p-4 -ml-4 rounded-lg hover:bg-[var(--bg-subtle)] transition-colors text-left"
+          >
+            <span className="flex items-center text-xs font-medium text-[var(--text-muted)] group-hover:text-[var(--text-primary)] transition-colors">
+              <Home className="mr-1 h-3 w-3" />
+              Start Over
+            </span>
+            <span className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-[var(--cta-primary)] transition-colors">
+              Guide Hub
+            </span>
+          </Link>
+        )}
+      </div>
+    <nav className="mt-10 border-t border-[var(--border-default)] pt-5" aria-label="Chapter navigation">
+      <div className="grid grid-cols-2 gap-6">
+        <div className="text-left">
+          {prev ? (
+            <>
+              <span className="mb-1 flex items-center text-xs font-medium text-[var(--text-muted)]">
+                <ArrowLeft className="mr-1 h-3.5 w-3.5" />
+                Previous chapter
+              </span>
+              <Link
+                href={`/${prev.slug}`}
+                className="text-base font-semibold text-[var(--text-primary)] hover:text-[var(--cta-primary)] no-underline"
+              >
+                {prev.title}
+              </Link>
+            </>
+          ) : (
+            <>
+              <span className="mb-1 flex items-center text-xs font-medium text-[var(--text-muted)]">
+                <Home className="mr-1 h-3.5 w-3.5" />
+                Guide index
+              </span>
+              <Link
+                href="/guide"
+                className="text-base font-semibold text-[var(--text-primary)] hover:text-[var(--cta-primary)] no-underline"
+              >
+                Guide Hub
+              </Link>
+            </>
+          )}
+        </div>
+
+      <div className="col-start-2 flex justify-end">
+        {next && (
+          <Link
+            href={`/${next.slug}`}
+            className="group flex flex-col items-end gap-1 p-4 -mr-4 rounded-lg hover:bg-[var(--bg-subtle)] transition-colors text-right"
+          >
+            <span className="flex items-center text-xs font-medium text-[var(--text-muted)] group-hover:text-[var(--text-primary)] transition-colors">
+              Next
+              <ArrowRight className="ml-1 h-3 w-3 transition-transform group-hover:translate-x-1" />
+            </span>
+            <span className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-[var(--cta-primary)] transition-colors">
+              {next.title}
+            </span>
+          </Link>
+        )}
+        <div className="text-right">
+          {next && (
+            <>
+              <span className="mb-1 inline-flex items-center text-xs font-medium text-[var(--text-muted)]">
+                Next chapter
+                <ArrowRight className="ml-1 h-3.5 w-3.5" />
+              </span>
+              <Link
+                href={`/${next.slug}`}
+                className="block text-base font-semibold text-[var(--text-primary)] hover:text-[var(--cta-primary)] no-underline"
+              >
+                {next.title}
+              </Link>
+            </>
+          )}
+        </div>
+      </div>
+Edited file
+page.tsx
++5
+-56
+
+import { EditorialBlock } from "@/components/guide/EditorialBlock"
+import Link from "next/link"
+import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
+import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
+
+
+          <h2 className="text-2xl font-bold mb-4">Sources (public)</h2>
+          <p className="mb-4 text-sm text-[var(--text-secondary)]">
+            Action links to public corporate announcements (context only).
+          </p>
+          <div className="not-prose flex flex-col gap-3">
+            <a
+              className="btn-secondary inline-flex items-center justify-center gap-2 px-5 py-2 rounded-lg border border-[var(--border-default)] font-semibold"
+              href="https://corporate.homedepot.com/news/company/home-depot-provides-strategic-update-reaffirms-fiscal-2025-guidance-establishes"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Home Depot strategic update and 2026 outlook
+            </a>
+            <a
+              className="btn-secondary inline-flex items-center justify-center gap-2 px-5 py-2 rounded-lg border border-[var(--border-default)] font-semibold"
+              href="https://www.prnewswire.com/news-releases/the-home-depot-launches-material-list-builder-ai-to-help-pros-save-time-by-building-complete-job-lists-within-minutes-302669297.html"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Material List Builder AI announcement
+            </a>
+          </div>
+        </Prose>
+
+        <div className="mt-16 p-8 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl shadow-sm">
+          <h2 className="text-2xl font-bold mb-4">Back to field tactics</h2>
+          <p className="text-[var(--text-secondary)] mb-8 max-w-2xl">
+            If you want practical, on-the-floor strategy, go to the verification and in-store
+            chapter.
+          </p>
+          <Link
+            href="/in-store-strategy"
+            className="inline-flex items-center gap-2 font-bold text-[var(--cta-primary)] hover:underline"
+          >
+            Read: Verify & In-Store Strategy
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </Link>
+        </div>
+
+        <ChapterNavigation
+          prev={{
+        </Prose>
+
+        <ChapterNavigation
+          prev={{
+            slug: "in-store-strategy",
+Context automatically compacted
+I’m going to finish this UX pass end-to-end now: remove the confusing/redundant guide elements you flagged, tighten guide spacing/demarcations, simplify hub/chapter flow, then run full verification and capture proof. I’ll start by inspecting the current guide files and current git state.
+
+Ran Get-Content -Raw components/guide/ChapterNavigation.tsx
+
+
+Ran git status --short --branch
+
+
+Ran Get-Content -Raw app/inside-scoop/page.tsx
+
+
+Ran Get-Content -Raw app/globals.css
+
+
+Ran Get-Content -Raw app/guide/page.tsx
+
+
+I’ve confirmed navigation was simplified already, and inside-scoop no longer contains the Sources/Back to field tactics blocks. Next I’m pinpointing the remaining dead-space source in shared templates/styles so we can fix it across all guide pages in one pass.
+
+Ran Get-Content -Raw components/guide/EditorialBlock.tsx
+
+
+Ran Get-Content -Raw app/what-are-pennies/page.tsx
+
+
+Ran Get-Content -Raw app/clearance-lifecycle/page.tsx
+
+
+Ran Get-Content -Raw app/facts-vs-myths/page.tsx
+
+
+Ran Get-Content -Raw components/page-templates.tsx
+
+
+Ran rg -n "ChapterNavigation|Next:|Back to|Quick links|Sources \(public\)|mt-16|mt-12|mb-12|mb-10" app/what-are-pennies/page.tsx app/clearance-lifecycle/page.tsx app/digital-pre-hunt/page.tsx app/in-store-strategy/page.tsx app/inside-scoop/page.tsx app/facts-vs-myths/page.tsx app/faq/page.tsx app/guide/page.tsx
+
+
+Ran Get-Content -Raw app/faq/page.tsx
+
+
+Ran Get-Content -Raw app/in-store-strategy/page.tsx
+
+
+Ran Get-Content -Raw app/digital-pre-hunt/page.tsx
+
+
+Ran rg -n "<PageShell" app components | Select-Object -First 200
+
+
+Ran rg -n "guide-article h2|guide-article p|guide-article ul|guide-article h3" app/globals.css
+
+
+Ran Get-ChildItem -Recurse app/guide | Select-Object FullName
+
+
+Ran Get-Content -Raw app/guide/digital-pre-hunt/page.tsx
+
+
+Ran Get-Content -Raw app/guide/responsible-hunting/page.tsx
+
+
+Ran Get-Content -Raw app/guide/clearance-lifecycle/page.tsx
+
+
+Ran Get-Content -Raw app/guide/in-store-strategy/page.tsx
+
+
+Ran Get-Content -Raw app/guide/inside-scoop/page.tsx
+
+
+Ran Get-Content -Raw app/guide/fact-vs-fiction/page.tsx
+
+
+Ran Get-Content -Raw components/guide/TableOfContents.tsx
+
+
+I found the core pattern: large spacing is coming from a combination of guide-specific utility classes (mt-12/mb-10/mb-12/mt-16), high PageShell gaps, and extra bottom CTA cards that duplicate chapter navigation. I’m now applying a focused cleanup across all guide pages plus the hub: tighten spacing rhythm, remove redundant bottom nav cards, and simplify the hub structure.
+
+Ran @' *** Begin Patch *** Update File: components/page-templates.tsx @@ const gapClass = { - md: "gap-10 sm:gap-12", - lg: "gap-12 sm:gap-14", + md: "gap-6 sm:gap-8", + lg: "gap-8 sm:gap-10", }[gap] *** End Patch '@ | apply_patch
+
+
+Edited file
+page-templates.tsx
++2
+-2
+
+  const gapClass = {
+    md: "gap-10 sm:gap-12",
+    lg: "gap-12 sm:gap-14",
+    md: "gap-6 sm:gap-8",
+    lg: "gap-8 sm:gap-10",
+  }[gap]
+Edited file
+globals.css
++27
+-29
+
+
+  .guide-article p {
+    @apply mb-5 leading-relaxed;
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+
+  .guide-article ul {
+    @apply mb-6 ml-6 space-y-2 list-disc;
+  }
+
+  .guide-article ol {
+    @apply mb-6 ml-6 space-y-2 list-decimal;
+  }
+
+  .guide-article li {
+    @apply leading-relaxed;
+    line-height: 1.75;
+  }
+  .guide-article p {
+    @apply mb-4 leading-relaxed;
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .guide-article ul {
+    @apply mb-5 ml-6 space-y-1.5 list-disc;
+  }
+
+  .guide-article ol {
+    @apply mb-5 ml-6 space-y-1.5 list-decimal;
+  }
+
+  .guide-article li {
+    @apply leading-relaxed;
+    line-height: 1.65;
+  }
+
+
+  .guide-article h2 {
+    @apply text-2xl font-bold mt-14 mb-6 text-[var(--text-primary)];
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-default);
+    text-wrap: pretty;
+  }
+
+  .guide-article h3 {
+    @apply text-lg font-bold mt-10 mb-4 text-[var(--text-primary)];
+    text-wrap: pretty;
+  }
+  .guide-article h2 {
+    @apply text-2xl font-bold mt-10 mb-4 text-[var(--text-primary)];
+    text-wrap: pretty;
+  }
+
+  .guide-article h3 {
+    @apply text-lg font-bold mt-7 mb-3 text-[var(--text-primary)];
+    text-wrap: pretty;
+  }
+
+I’ve tightened the shared guide rhythm globally: reduced section spacing, removed the heavy H2 divider lines, and compressed inter-section gaps so pages feel denser and easier to scan. Next I’m cleaning each chapter page by removing redundant bottom CTA boxes and standardizing guide page shell spacing.
+
+Edited file
+page.tsx
++1
+-1
+
+  return (
+    <PageShell width="default" gap="md">
+    <PageShell width="default" padding="sm" gap="md">
+      <div className="w-full max-w-[68ch] mx-auto">
+Edited file
+page.tsx
++1
+-1
+
+  return (
+    <PageShell width="default" gap="md">
+    <PageShell width="default" padding="sm" gap="md">
+      <div className="w-full max-w-[68ch] mx-auto">
+Edited file
+page.tsx
++1
+-1
+
+  return (
+    <PageShell width="default" gap="md">
+    <PageShell width="default" padding="sm" gap="md">
+      <div className="w-full max-w-[68ch] mx-auto">
+Edited file
+page.tsx
++1
+-1
+
+  return (
+    <PageShell width="default" gap="md">
+    <PageShell width="default" padding="sm" gap="md">
+      <div className="w-full max-w-[68ch] mx-auto">
+Edited file
+page.tsx
++1
+-1
+
+  return (
+    <PageShell width="default" gap="md">
+    <PageShell width="default" padding="sm" gap="md">
+      <div className="w-full max-w-[68ch] mx-auto">
+Edited file
+page.tsx
++1
+-1
+
+  return (
+    <PageShell width="default" gap="md">
+    <PageShell width="default" padding="sm" gap="md">
+      <div className="w-full max-w-[68ch] mx-auto">
+Edited file
+page.tsx
++1
+-1
+
+  return (
+    <PageShell width="default" gap="md">
+    <PageShell width="default" padding="sm" gap="md">
+      <script
+Ran Get-Content app/faq/page.tsx -TotalCount 340
+
+
+Ran rg -n "mt-16 p-8|Next: quick answers|Need better targets\?|Want the full playbook\?|Ready to start hunting\?|p-8 bg|p-6 bg" app/in-store-strategy/page.tsx app/facts-vs-myths/page.tsx app/faq/page.tsx app/what-are-pennies/page.tsx
+
+
+Ran Get-Content app/facts-vs-myths/page.tsx -TotalCount 340
+
+
+Ran Get-Content app/in-store-strategy/page.tsx -TotalCount 340
+
+
+I’m now removing the redundant chapter-CTA panels that were competing with prev/next navigation. This should eliminate the conflicting arrows/flow and reduce cognitive load at the end of each guide page.
+
+Edited file
+page.tsx
++7
+-35
+
+import type { Metadata } from "next"
+import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
+import { EditorialBlock } from "@/components/guide/EditorialBlock"
+import Link from "next/link"
+import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
+import type { Metadata } from "next"
+import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
+import { EditorialBlock } from "@/components/guide/EditorialBlock"
+import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
+
+
+        <div className="mt-16 p-8 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl shadow-sm">
+          <h2 className="text-2xl font-bold mb-4">Need better targets?</h2>
+          <p className="text-[var(--text-secondary)] mb-8 max-w-2xl">
+            Before you drive, use label recognition and pre-hunt filters to narrow the list.
+          </p>
+          <Link
+            href="/digital-pre-hunt"
+            className="inline-flex items-center gap-2 font-bold text-[var(--cta-primary)] hover:underline"
+          >
+            Read: Labels, Overhead, & Pre-Hunt
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </Link>
+        </div>
+
+        <ChapterNavigation
+          prev={{
+            slug: "digital-pre-hunt",
+        <ChapterNavigation
+          prev={{
+            slug: "digital-pre-hunt",
+            title: "Labels, Overhead, & Pre-Hunt",
+Edited file
+page.tsx
++7
+-35
+
+import type { Metadata } from "next"
+import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
+import { EditorialBlock } from "@/components/guide/EditorialBlock"
+import Link from "next/link"
+import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
+import type { Metadata } from "next"
+import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
+import { EditorialBlock } from "@/components/guide/EditorialBlock"
+import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
+
+
+        <div className="mt-16 p-8 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl shadow-sm">
+          <h2 className="text-2xl font-bold mb-4">Next: quick answers</h2>
+          <p className="text-[var(--text-secondary)] mb-8 max-w-2xl">
+            Ready for short, direct answers? Jump to the FAQ and quick reference.
+          </p>
+          <Link
+            href="/faq"
+            className="inline-flex items-center gap-2 font-bold text-[var(--cta-primary)] hover:underline"
+          >
+            Read: FAQ & Quick Reference
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </Link>
+        </div>
+
+        <ChapterNavigation
+          prev={{
+            slug: "inside-scoop",
+        <ChapterNavigation
+          prev={{
+            slug: "inside-scoop",
+            title: "Inside Scoop (2026 Context)",
+Edited file
+page.tsx
++7
+-29
+
+import type { Metadata } from "next"
+import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
+import { EditorialBlock } from "@/components/guide/EditorialBlock"
+import Link from "next/link"
+import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
+import type { Metadata } from "next"
+import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
+import { EditorialBlock } from "@/components/guide/EditorialBlock"
+import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
+
+
+        <div className="mt-12 p-6 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-xl text-center">
+          <h3 className="text-xl font-bold mb-3">Want the full playbook?</h3>
+          <p className="text-[var(--text-secondary)] mb-6">
+            Go back to the guide hub to follow the full sequence.
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <Link
+              href="/guide"
+              className="btn-primary px-6 py-2 rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold"
+            >
+              Guide Hub
+            </Link>
+            <Link
+              href="/contact"
+              className="btn-secondary px-6 py-2 rounded-lg border border-[var(--border-default)] font-semibold"
+            >
+              Contact Support
+            </Link>
+          </div>
+        </div>
+
+        <ChapterNavigation
+          prev={{
+            slug: "facts-vs-myths",
+        <ChapterNavigation
+          prev={{
+            slug: "facts-vs-myths",
+            title: "Facts vs. Myths",
+Edited file
+page.tsx
++23
+-59
+
+
+          <h2 className="text-2xl font-bold mt-12 mb-6">Ready to start hunting?</h2>
+          <p>
+            The next step is learning how clearance moves through the system and how to read the
+            signals without guessing. Use the chapters below to build a repeatable routine.
+          </p>
+
+          <div className="grid sm:grid-cols-2 gap-6 mt-12">
+            <div className="p-6 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)]">
+              <h3 className="text-lg font-bold mb-3">Clearance Lifecycle</h3>
+              <p className="text-[var(--text-secondary)] mb-4">
+                Learn the common cadence patterns and how to use tag dates.
+              </p>
+              <Link
+                href="/clearance-lifecycle"
+                className="text-[var(--cta-primary)] font-semibold hover:underline"
+              >
+                Clearance Lifecycle
+              </Link>
+            </div>
+
+            <div className="p-6 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)]">
+              <h3 className="text-lg font-bold mb-3">Labels & Pre-Hunt</h3>
+              <p className="text-[var(--text-secondary)] mb-4">
+                Use label signals and the app to build a smart target list.
+              </p>
+              <Link
+                href="/digital-pre-hunt"
+                className="text-[var(--cta-primary)] font-semibold hover:underline"
+              >
+                Labels & Pre-Hunt
+              </Link>
+            </div>
+          </div>
+
+          <div className="mt-12 p-8 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-2xl text-center">
+            <h3 className="text-xl font-bold mb-4">Find current penny items</h3>
+            <p className="text-[var(--text-secondary)] mb-6">
+              Browse penny items reported by the community, updated throughout the day.
+            </p>
+            <Link
+              href="/penny-list"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--cta-primary)] text-[var(--cta-text)] rounded-lg font-semibold hover:bg-opacity-90"
+            >
+              View the Penny List
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </Link>
+          </div>
+        </Prose>
+          <h2 className="text-2xl font-bold mt-12 mb-6">Ready to start hunting?</h2>
+          <p>
+            The next step is learning how clearance moves through the system and how to read the
+            signals without guessing. Use the chapters below to build a repeatable routine.
+          </p>
+          <ul className="my-6 space-y-3">
+            <li>
+              <Link href="/clearance-lifecycle" className="text-[var(--cta-primary)] font-semibold">
+                Continue to Clearance Lifecycle & Cadence
+              </Link>
+            </li>
+            <li>
+              <Link href="/digital-pre-hunt" className="text-[var(--cta-primary)] font-semibold">
+                Continue to Labels, Overhead, & Pre-Hunt
+              </Link>
+            </li>
+            <li>
+              <Link href="/penny-list" className="text-[var(--cta-primary)] font-semibold">
+                Browse the live Penny List
+              </Link>
+            </li>
+          </ul>
+        </Prose>
+
+I’m now replacing the guide hub layout with a cleaner single-column structure so it reads like a true entry page instead of a crowded landing panel. This keeps one disclosure on /guide, puts chapter navigation first, and removes the extra visual noise.
+
+Deleted file
+page.tsx
++0
+-255
+
+import type { Metadata } from "next"
+import Link from "next/link"
+import { ArrowRight } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { TableOfContents } from "@/components/guide/TableOfContents"
+import { EditorialBlock } from "@/components/guide/EditorialBlock"
+import { EthicalDisclosure } from "@/components/guide/EthicalDisclosure"
+
+export const metadata: Metadata = {
+  title: "Home Depot Penny Guide (2026) | Penny Central",
+  description:
+    "Start here. A field-tested, community-verified guide to Home Depot penny items, clearance patterns, and responsible hunting.",
+  alternates: {
+    canonical: "/guide",
+  },
+}
+
+export default function GuideHubPage() {
+  return (
+    <div className="container max-w-5xl mx-auto py-8 px-4 md:px-6">
+      <div className="text-center mb-10 space-y-4">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--bg-elevated)] border border-[var(--border-default)] mb-2">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--status-success)] opacity-30"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--status-success)]"></span>
+          </span>
+          <span className="text-xs font-semibold text-[var(--text-secondary)] uppercase tracking-wider">
+            Updated February 2026
+          </span>
+        </div>
+
+        <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-[var(--text-primary)] mb-2">
+          The Home Depot Penny Guide
+        </h1>
+        <p className="text-lg md:text-xl text-[var(--text-secondary)] max-w-2xl mx-auto leading-relaxed">
+          A practical, field-tested guide to penny items, clearance patterns, and responsible
+          hunting. This is not official Home Depot policy. It is a synthesis of community reports
+          and real-world observations. Rules and enforcement vary by store.
+        </p>
+
+        <div className="flex justify-center gap-4 pt-4">
+          <Button
+            asChild
+            size="lg"
+            className="bg-[var(--cta-primary)] hover:bg-[var(--cta-hover)] text-[var(--cta-text)] shadow-sm"
+          >
+            <Link href="/what-are-pennies">
+              Start Chapter 1 <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+          <Button
+            asChild
+            variant="secondary"
+            size="lg"
+            className="border-[var(--border-default)] hover:bg-[var(--bg-elevated)]"
+          >
+            <Link href="/report-find">Report a Find</Link>
+          </Button>
+        </div>
+      </div>
+
+      <div className="grid lg:grid-cols-[2fr_1fr] gap-10 mb-16">
+        <div className="prose dark:prose-invert max-w-none">
+          <div className="p-6 rounded-xl bg-[var(--bg-subtle)] border border-[var(--border-default)] not-prose mb-8">
+            <h3 className="font-bold text-lg mb-2">Read This First</h3>
+            <p className="text-[var(--text-secondary)] mb-4">
+              Penny items are not public promotions. They are clearance items marked for removal.
+              Some stores honor the price. Some do not. Your goal is to hunt responsibly and keep
+              the hobby healthy for everyone.
+            </p>
+            <ul className="grid gap-2 text-sm text-[var(--text-secondary)]">
+              <li className="flex items-start gap-2">
+                <span className="text-[var(--cta-primary)] font-bold">1.</span>
+                <span>Penny items are internal clearance, not a guaranteed sale.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-[var(--cta-primary)] font-bold">2.</span>
+                <span>Store discretion is real. Stay polite and avoid confrontation.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-[var(--cta-primary)] font-bold">3.</span>
+                <span>Use this guide to reduce wasted trips, not to argue with staff.</span>
+              </li>
+            </ul>
+          </div>
+
+          <EthicalDisclosure />
+
+          <h2>How to use this guide</h2>
+          <p>
+            Think of this as a step-by-step playbook. Start with definitions, then learn how
+            clearance typically moves, then go practical with labels, overhead cues, and in-store
+            verification. If you are new, read it in order. If you are experienced, jump straight to
+            the chapter you need and use the quick reference at the end.
+          </p>
+
+          <ol>
+            <li>
+              Start with <strong>What Are Penny Items?</strong> to understand the basics and ethics.
+            </li>
+            <li>
+              Learn how clearance usually flows in <strong>Clearance Lifecycle & Cadence</strong>.
+            </li>
+            <li>
+              Use <strong>Labels, Overhead, & Pre-Hunt</strong> to filter targets before you drive.
+            </li>
+            <li>
+              Follow <strong>Verify & In-Store Strategy</strong> to check prices and checkout
+              calmly.
+            </li>
+          </ol>
+
+          <h2>Who this guide is for</h2>
+          <p>
+            If you are brand new, this is your zero-to-one. If you are experienced, this is a clean
+            reference that matches how the stores actually behave in 2026.
+          </p>
+          <ul>
+            <li>New hunters who want a legit foundation without forum noise.</li>
+            <li>Experienced hunters who want a current, calm reference.</li>
+            <li>Anyone who wants to cut wasted trips and avoid awkward checkout moments.</li>
+          </ul>
+
+          <h2>What this guide is not</h2>
+          <ul>
+            <li>It is not official Home Depot policy.</li>
+            <li>It is not a promise that penny items will be available in your store.</li>
+            <li>It is not a script for arguing with staff or gaming the system.</li>
+          </ul>
+
+          <h2>Key terms in 60 seconds</h2>
+          <ul>
+            <li>
+              <strong>Penny item:</strong> A product that scans for $0.01 after clearance is
+              complete.
+            </li>
+            <li>
+              <strong>Clearance cadence:</strong> The rough pattern of markdowns before a penny.
+            </li>
+            <li>
+              <strong>Tag date:</strong> The date on the clearance label that helps you estimate
+              timing.
+            </li>
+            <li>
+              <strong>UPC vs SKU:</strong> The UPC is the barcode on the product; the SKU is the
+              Home Depot identifier. Both can help, but the UPC scan is the truth.
+            </li>
+            <li>
+              <strong>ZMA:</strong> A term often used to describe the removal stage after an item
+              pennied out.
+            </li>
+          </ul>
+
+          <h2>What has changed since older guides</h2>
+          <p>
+            Many 2024 guides assumed fixed schedules and a dedicated clearance corner. The field
+            reports we see in 2026 are more mixed. Timing varies by store and department, and older
+            "three-week rules" do not hold everywhere. That does not mean penny hunting is dead. It
+            means you have to use signals, not myths.
+          </p>
+          <ul>
+            <li>Cadence patterns still exist, but the timing ranges are wider.</li>
+            <li>Clearance items can be in home bays, seasonal areas, or overheads.</li>
+            <li>Digital pre-hunt saves time, but app data is not real-time.</li>
+          </ul>
+          <p className="text-sm text-[var(--text-secondary)]">
+            This guide reflects community-reported patterns, not official Home Depot policy.
+          </p>
+
+          <h2>Quick start checklist</h2>
+          <ul>
+            <li>Set your store in the Home Depot app before searching.</li>
+            <li>Track price endings and tag dates, not just discount percentages.</li>
+            <li>Use the manufacturer UPC to scan at self-checkout, not the yellow tag.</li>
+            <li>Be willing to walk away if staff refuse a penny sale.</li>
+            <li>Keep receipts; they are your proof if there is confusion later.</li>
+          </ul>
+          <h2>If you only do one thing</h2>
+          <p>
+            Set your store, note the tag date, and scan the UPC in person. That simple routine
+            prevents most wasted trips and most awkward checkout moments.
+          </p>
+          <p>
+            For fresh intel, use the Penny List and report your own finds so the community stays
+            accurate. It is the fastest way for this guide to stay current between updates.
+          </p>
+        </div>
+
+        <div className="space-y-6">
+          <div className="p-5 rounded-xl border border-[var(--border-default)] bg-[var(--bg-card)] shadow-sm">
+            <EditorialBlock />
+          </div>
+        </div>
+      </div>
+
+      <div className="space-y-6">
+        <div className="flex items-center gap-4 pb-2 border-b border-[var(--border-default)]">
+          <span className="flex items-center justify-center h-8 w-8 rounded-full bg-[var(--bg-elevated)] font-bold text-sm text-[var(--text-muted)]">
+            1
+          </span>
+          <h2 className="text-2xl font-bold text-[var(--text-primary)]">Complete Guide Chapters</h2>
+        </div>
+        <TableOfContents />
+      </div>
+
+      <div className="mt-12 p-6 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)]">
+        <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-4">Quick links</h2>
+        <ul className="grid gap-4 md:grid-cols-2 text-[var(--text-secondary)]">
+          <li>
+            <Link
+              href="/penny-list"
+              className="text-[var(--cta-primary)] font-semibold underline underline-offset-4 hover:underline"
+            >
+              Live Penny List
+            </Link>
+            <span className="block text-sm">
+              Usually updated within about 5 minutes with community finds.
+            </span>
+          </li>
+          <li>
+            <Link
+              href="/report-find"
+              className="text-[var(--cta-primary)] font-semibold underline underline-offset-4 hover:underline"
+            >
+              Report a Find
+            </Link>
+            <span className="block text-sm">
+              Share a SKU, store, and date so the list stays accurate.
+            </span>
+          </li>
+          <li>
+            <Link
+              href="/store-finder"
+              className="text-[var(--cta-primary)] font-semibold underline underline-offset-4 hover:underline"
+            >
+              Store Finder
+            </Link>
+            <span className="block text-sm">
+              Set the correct store before you research or scan.
+            </span>
+          </li>
+          <li>
+            <Link
+              href="/support"
+              className="text-[var(--cta-primary)] font-semibold underline underline-offset-4 hover:underline"
+            >
+              Support
+            </Link>
+            <span className="block text-sm">Contact and transparency info for Penny Central.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  )
+}
+Created file
+page.tsx
++104
+-0
+
+import type { Metadata } from "next"
+import Link from "next/link"
+import { ArrowRight } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { TableOfContents } from "@/components/guide/TableOfContents"
+import { EthicalDisclosure } from "@/components/guide/EthicalDisclosure"
+
+export const metadata: Metadata = {
+  title: "Home Depot Penny Guide (2026) | Penny Central",
+  description:
+    "Start here. A field-tested, community-verified guide to Home Depot penny items, clearance patterns, and responsible hunting.",
+  alternates: {
+    canonical: "/guide",
+  },
+}
+
+const quickStart = [
+  "Read in order if you are new. Jump by chapter if you already know the basics.",
+  "Treat this guide as directional. Store behavior and enforcement can vary.",
+  "Verify in-store with UPC scans before acting on any online claim.",
+]
+
+const utilityLinks = [
+  {
+    href: "/penny-list",
+    label: "Live Penny List",
+    note: "Community finds, updated throughout the day.",
+  },
+  {
+    href: "/report-find",
+    label: "Report a Find",
+    note: "Submit SKU + store + date to improve list quality.",
+  },
+  {
+    href: "/store-finder",
+    label: "Store Finder",
+    note: "Set the right store before researching or scanning.",
+  },
+  {
+    href: "/support",
+    label: "Support",
+    note: "Contact, transparency, and site support details.",
+  },
+]
+
+export default function GuideHubPage() {
+  return (
+    <div className="container mx-auto max-w-5xl px-4 py-8 md:px-6 md:py-10">
+      <header className="mx-auto mb-8 max-w-[68ch] space-y-4">
+        <p className="inline-flex items-center rounded-full border border-[var(--border-default)] bg-[var(--bg-elevated)] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[var(--text-muted)]">
+          Updated February 2026
+        </p>
+        <h1 className="text-3xl font-extrabold tracking-tight text-[var(--text-primary)] md:text-5xl">
+          The Home Depot Penny Guide
+        </h1>
+        <p className="text-lg leading-relaxed text-[var(--text-secondary)] md:text-xl">
+          Practical, community-verified guidance for penny items, clearance patterns, and respectful
+          in-store behavior.
+        </p>
+        <div className="flex flex-wrap gap-3 pt-2">
+          <Button asChild size="lg" className="bg-[var(--cta-primary)] text-[var(--cta-text)]">
+            <Link href="/what-are-pennies">
+              Start Chapter 1 <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+          <Button asChild size="lg" variant="secondary">
+            <Link href="/report-find">Report a Find</Link>
+          </Button>
+        </div>
+      </header>
+
+      <section className="mx-auto mb-8 max-w-[68ch] space-y-4">
+        <EthicalDisclosure />
+        <div className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
+          <h2 className="mb-3 text-xl font-semibold text-[var(--text-primary)]">How to use this guide</h2>
+          <ul className="list-disc space-y-2 pl-5 text-[var(--text-secondary)]">
+            {quickStart.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="mb-8 space-y-4">
+        <h2 className="text-2xl font-bold text-[var(--text-primary)]">Guide Chapters</h2>
+        <TableOfContents />
+      </section>
+
+      <section className="rounded-xl border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
+        <h2 className="mb-4 text-2xl font-bold text-[var(--text-primary)]">Quick Links</h2>
+        <ul className="grid gap-4 md:grid-cols-2">
+          {utilityLinks.map((link) => (
+            <li key={link.href}>
+              <Link href={link.href} className="font-semibold text-[var(--cta-primary)]">
+                {link.label}
+              </Link>
+              <p className="text-sm text-[var(--text-secondary)]">{link.note}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </div>
+  )
+}
+I’ve rebuilt the guide hub into a cleaner chapter-first layout. Next I’m applying a uniform spacing compression pass across all guide chapter files (mt-12/mb-10/mb-12 style classes) so the dead-space issue is resolved consistently, not page-by-page.
+
+Ran $files = @('app/what-are-pennies/page.tsx','app/clearance-lifecycle/page.tsx','app/digital-pre-hunt/page.tsx','app/in-store-strategy/page.tsx','app/inside-scoop/page.tsx','app/facts-vs-myths/page.tsx','app/faq/page.tsx'); foreach ($f in $files) { $c = Get-Content -Raw $f; $c = $c -replace 'mb-12','mb-8'; $c = $c -replace 'mb-10','mb-8'; $c = $c -replace 'mt-12','mt-8'; $c = $c -replace 'mt-16','mt-10'; $c = $c -replace 'gap-y-16','gap-y-10'; Set-Content -Path $f -Value $c -NoNewline };
+
+
+Ran Get-Content -Raw app/facts-vs-myths/page.tsx
+
+
+Ran Get-Content -Raw app/faq/page.tsx
+
+
+Ran rg -n "Sources \(public\)|Back to field tactics|Need better targets\?|Next: quick answers|Want the full playbook\?|mt-16|mb-12|mb-10|mt-12|gap-y-16" app/guide/page.tsx app/what-are-pennies/page.tsx app/clearance-lifecycle/page.tsx app/digital-pre-hunt/page.tsx app/in-store-strategy/page.tsx app/inside-scoop/page.tsx app/facts-vs-myths/page.tsx app/faq/page.tsx
+
+
+Ran Get-Content -Raw app/in-store-strategy/page.tsx
+
+
+Ran rg -n "import Link from \"next/link\"" app/in-store-strategy/page.tsx app/facts-vs-myths/page.tsx app/faq/page.tsx app/what-are-pennies/page.tsx
+
+
+Ran Get-Content -Raw app/what-are-pennies/page.tsx
+
+
+Ran Get-Content -Raw app/inside-scoop/page.tsx
+
+
+Edited file
+ChapterNavigation.tsx
++15
+-17
+
+    <nav className="mt-10 border-t border-[var(--border-default)] pt-5" aria-label="Chapter navigation">
+      <div className="grid grid-cols-2 gap-6">
+      <div className={`grid gap-5 ${next ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1"}`}>
+        <div className="text-left">
+
+        <div className="text-right">
+          {next && (
+            <>
+              <span className="mb-1 inline-flex items-center text-xs font-medium text-[var(--text-muted)]">
+                Next chapter
+                <ArrowRight className="ml-1 h-3.5 w-3.5" />
+              </span>
+              <Link
+                href={`/${next.slug}`}
+                className="block text-base font-semibold text-[var(--text-primary)] hover:text-[var(--cta-primary)] no-underline"
+              >
+                {next.title}
+              </Link>
+            </>
+          )}
+        </div>
+        {next && (
+          <div className="text-left sm:text-right">
+            <span className="mb-1 inline-flex items-center text-xs font-medium text-[var(--text-muted)]">
+              Next chapter
+              <ArrowRight className="ml-1 h-3.5 w-3.5" />
+            </span>
+            <Link
+              href={`/${next.slug}`}
+              className="block text-base font-semibold text-[var(--text-primary)] hover:text-[var(--cta-primary)] no-underline"
+            >
+              {next.title}
+            </Link>
+          </div>
+        )}
+      </div>
+Core layout changes are in: shared guide spacing tightened, redundant end-of-page CTA cards removed, chapter nav simplified/responsive, and the hub rebuilt into a cleaner chapter-first flow. I’m running full verification now (lint/build/unit/e2e) and then I’ll update .ai state/session docs with a handoff-ready summary.
+
+Ran npm run lint
+
+
+Lint failed only on formatting (line endings/prettier), no logic errors. I’m running a formatting pass on the edited files and then rerunning full verification.
+
+Ran npx prettier --write app/guide/page.tsx app/what-are-pennies/page.tsx app/clearance-lifecycle/page.tsx app/digital-pre-hunt/page.tsx app/in-store-strategy/page.tsx app/inside-scoop/page.tsx app/facts-vs-myths/page.tsx app/faq/page.tsx components/guide/ChapterNavigation.tsx components/page-templates.tsx app/globals.css
+
+
+Ran npm run lint
+
+
+Ran npm run build
+
+
+Ran npm run test:unit
+
+
+Ran npm run test:e2e
+
+
+Ran Get-Content -Raw package.json
+
+
+Ran Get-Content -Raw .ai/VERIFICATION_REQUIRED.md
+
+
+Ran npm run ai:proof -- /guide /what-are-pennies /clearance-lifecycle /digital-pre-hunt /in-store-strategy /inside-scoop /facts-vs-myths /faq
+
+
+Verification is green including fresh guide screenshots (reports/proof/2026-02-06T22-09-10). I’m now updating SESSION_LOG.md and STATE.md with this pass plus a clean next-agent handoff block so context persists across windows.
+
+Ran Get-Content .ai/SESSION_LOG.md -TotalCount 220
+
+
+Ran Get-Content .ai/STATE.md -TotalCount 220
+
+
+Ran git status --short --branch
+
+
+Ran Get-Content -Raw .ai/HANDOFF_PROTOCOL.md
+
+
+I’ve got all code changes and verification complete. I’m now writing the persistent memory updates (SESSION_LOG.md and STATE.md) so the next agent can continue without re-discovery.
+
+Edited file
+SESSION_LOG.md
++49
+-5
+
+
+---
+
+## 2026-02-06 - Codex - Trust Signals & Authenticity Overhaul
+
+**Goal:** Replace "template/corporate" content on Trust Pages (`/about`, `/contact`, `/support`) with authentic, founder-led content to satisfy AdSense E-E-A-T requirements.
+---
+
+## 2026-02-06 - Codex - Guide UX De-Clutter + Navigation Simplification
+
+**Goal:** Reduce dead space, remove confusing/redundant guide navigation elements, and improve chapter readability/scannability across light/dark without changing core guide intent.
+
+**Status:** ✅ Completed & verified.
+
+### Changes
+
+- Rebuilt `app/guide/page.tsx` into a cleaner chapter-first hub:
+  - single-column structure
+  - one disclosure on `/guide`
+  - simpler quick-start + quick-links blocks
+  - removed crowded side-panel structure
+- Simplified chapter navigation in `components/guide/ChapterNavigation.tsx`:
+  - removed card-like nav treatment
+  - mobile-first single-column fallback
+  - clearer previous/next labels
+  - removed empty right-side slot when `next` is absent
+- Removed redundant end-of-page CTA panels that conflicted with chapter nav:
+  - `app/in-store-strategy/page.tsx`
+  - `app/facts-vs-myths/page.tsx`
+  - `app/faq/page.tsx`
+- Reduced visual noise and dead space in guide typography/system spacing:
+  - tightened `PageShell` inter-block gaps in `components/page-templates.tsx`
+  - tightened guide prose rhythm and removed heavy section divider lines in `app/globals.css`
+  - standardized all guide chapters to `padding="sm"` and tightened oversized `mt/mb` utility spacing
+
+### Verification
+
+- `npm run lint` ✅
+- `npm run build` ✅
+- `npm run test:unit` ✅ (26/26)
+- `npm run test:e2e` ✅ (156 passed)
+- Playwright UI proof: `reports/proof/2026-02-06T22-09-10/`
+- Console proof file: `reports/proof/2026-02-06T22-09-10/console-errors.txt`
+- E2E console audits:
+  - `reports/playwright/console-report-2026-02-06T22-05-05-337Z.json`
+  - `reports/playwright/console-report-2026-02-06T22-05-59-673Z.json`
+  - `reports/playwright/console-report-2026-02-06T22-06-56-363Z.json`
+  - `reports/playwright/console-report-2026-02-06T22-07-48-923Z.json`
+- Known non-blocking noise unchanged: GeolocationPositionError + third-party CSP/ads console noise.
+
+---
+
+## 2026-02-06 - Codex - Trust Signals & Authenticity Overhaul
+
+**Goal:** Replace "template/corporate" content on Trust Pages (`/about`, `/contact`, `/support`) with authentic, founder-led content to satisfy AdSense E-E-A-T requirements.
+
+Edited file
+STATE.md
++11
+-4
+
+
+**Last updated:** Feb 6, 2026 (Guide AAA polish + contrast guardrail hardening)
+**Last updated:** Feb 6, 2026 (Guide UX de-clutter + navigation simplification)
+
+
+## Current Sprint (Last 7 Days)
+
+- **2026-02-06 (Trust Signals & Authenticity Overhaul):** Replaced "template/corporate" content on Trust Pages with authentic, founder-led content to satisfy AdSense E-E-A-T.
+## Current Sprint (Last 7 Days)
+
+- **2026-02-06 (Guide UX de-clutter + navigation simplification):** Completed a one-shot guide presentation cleanup to reduce dead space, remove conflicting navigation signals, and simplify chapter flow.
+  - **Hub rebuilt:** `app/guide/page.tsx` now uses a cleaner chapter-first structure with one disclosure, simpler quick-start guidance, and reduced visual clutter.
+  - **Chapter nav simplified:** `components/guide/ChapterNavigation.tsx` now uses clearer labels, responsive single-column mobile fallback, and no empty `next` column when absent.
+  - **Redundant CTA panels removed:** removed conflicting end-of-page promo cards from `app/in-store-strategy/page.tsx`, `app/facts-vs-myths/page.tsx`, and `app/faq/page.tsx` so chapter progression is unambiguous.
+  - **Spacing + demarcation cleanup:** tightened guide rhythm via `components/page-templates.tsx` and `app/globals.css`, including reduced inter-section spacing and removal of heavy H2 divider lines.
+  - **Verification:** `npm run lint` ✅, `npm run build` ✅, `npm run test:unit` ✅ (26/26), `npm run test:e2e` ✅ (156 passed), Playwright proof: `reports/proof/2026-02-06T22-09-10/`.
+
+- **2026-02-06 (Trust Signals & Authenticity Overhaul):** Replaced "template/corporate" content on Trust Pages with authentic, founder-led content to satisfy AdSense E-E-A-T.
+  - **About Page:** Replaced placeholders with the "Nurse to Webmaster" origin story, community growth details (32k -> 62k), and "Scavenger Hunt" philosophy. Correctly credited Spoe Jarky and Jorian Wulf.
+Ran git status --short --branch
+
+
+Ran git diff --stat
+
+
+Ran git diff -- app/guide/page.tsx components/guide/ChapterNavigation.tsx app/globals.css components/page-templates.tsx
+
+
+Ran git diff -- app/in-store-strategy/page.tsx app/facts-vs-myths/page.tsx app/faq/page.tsx app/what-are-pennies/page.tsx
+
+
+Ran git diff -- .ai/SESSION_LOG.md .ai/STATE.md
+
+
+I’ve reviewed the final diff; it’s coherent with your UX goals and all verification gates passed. I’m committing everything now and pushing to main, then I’ll give you a concise handoff + exact next-step recommendations.
+
+Ran git add .ai/SESSION_LOG.md .ai/STATE.md app/clearance-lifecycle/page.tsx app/digital-pre-hunt/page.tsx app/facts-vs-myths/page.tsx app/faq/page.tsx app/globals.css app/guide/page.tsx app/in-store-strategy/page.tsx app/inside-scoop/page.tsx app/what-are-pennies/page.tsx components/guide/ChapterNavigation.tsx components/page-templates.tsx && git commit -m "Refine guide UX: tighter spacing, clearer nav, cleaner hub"
+
+
+Ran git status --short --branch
+
+
+Ran git push origin main
+
+
+Ran gh run list --limit 1
+
+
+Ran rg -n "export default function GuideHubPage|How to use this guide|Guide Chapters|Quick Links" app/guide/page.tsx
+
+
+Ran rg -n "export function ChapterNavigation|Previous chapter|Guide index|Next chapter" components/guide/ChapterNavigation.tsx
+
+
+Ran rg -n "const gapClass =|md: \"gap-6 sm:gap-8\"|lg: \"gap-8 sm:gap-10\"" components/page-templates.tsx
+
+
+Ran rg -n "PageShell width=\"default\" padding=\"sm\" gap=\"md\"|ChapterNavigation" app/what-are-pennies/page.tsx app/clearance-lifecycle/page.tsx app/digital-pre-hunt/page.tsx app/in-store-strategy/page.tsx app/inside-scoop/page.tsx app/facts-vs-myths/page.tsx app/faq/page.tsx
+
+
+Ran rg -n "guide-article p|guide-article h2|guide-article h3|guide-article ul|guide-article ol" app/globals.css
+
+
+Ran rg -n "const gapClass" components/page-templates.tsx
+
+
+Ran rg -n "padding=\"sm\"" app/what-are-pennies/page.tsx app/clearance-lifecycle/page.tsx app/digital-pre-hunt/page.tsx app/in-store-strategy/page.tsx app/inside-scoop/page.tsx app/facts-vs-myths/page.tsx app/faq/page.tsx
+
+
+Ran rg -n "ChapterNavigation" app/in-store-strategy/page.tsx app/facts-vs-myths/page.tsx app/faq/page.tsx
+
+
+Ran rg -n "gap-6 sm:gap-8|gap-8 sm:gap-10" components/page-templates.tsx
+
+
+Ran Select-String -Path app/what-are-pennies/page.tsx,app/clearance-lifecycle/page.tsx,app/digital-pre-hunt/page.tsx,app/in-store-strategy/page.tsx,app/inside-scoop/page.tsx,app/facts-vs-myths/page.tsx,app/faq/page.tsx -Pattern 'padding="sm"' | ForEach-Object { "$($_.Path):$($_.LineNumber):$($_.Line.Trim())" }
+
+
+Ran Get-ChildItem -Name reports/proof/2026-02-06T22-09-10
+
+
+Ran git status --short --branch
+
+
+Ran gh run list --limit 1
+
+
+Worked for 19m 31s
+Guide UX cleanup is done, committed, and pushed.
+
+Commit: bed5f20
+Branch: main
+Push: origin/main complete
+GitHub Actions: https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/21767747767 (success)
+What I changed
+
+Rebuilt the guide hub to a cleaner, chapter-first structure in page.tsx (line 46).
+Simplified chapter nav and removed conflicting visual signals in ChapterNavigation.tsx (line 14).
+Tightened shared guide spacing and removed heavy H2 divider lines in globals.css (line 1060).
+Reduced inter-block shell spacing in page-templates.tsx (line 55).
+Standardized chapter pages to tighter shell spacing:
+page.tsx (line 52)
+page.tsx (line 139)
+page.tsx (line 120)
+page.tsx (line 106)
+page.tsx (line 57)
+page.tsx (line 96)
+page.tsx (line 141)
+Removed redundant bottom CTA panels that were competing with chapter nav:
+page.tsx (line 245)
+page.tsx (line 248)
+page.tsx (line 197)
+Updated persistent memory:
+SESSION_LOG.md
+STATE.md
+Verification
+npm run lint: ✅
+npm run build: ✅
+npm run test:unit: ✅ (26/26)
+npm run test:e2e: ✅ (156 passed)
+Playwright UI proof: reports/proof/2026-02-06T22-09-10/
+Console proof: console-errors.txt
+E2E console audits:
+console-report-2026-02-06T22-05-05-337Z.json
+console-report-2026-02-06T22-05-59-673Z.json
+console-report-2026-02-06T22-06-56-363Z.json
+console-report-2026-02-06T22-07-48-923Z.json
+Known non-blocking noise remains: geolocation error + third-party CSP/ad script errors.
+
+Recommendations (next)
+Run the factual/source-of-truth pass next (content accuracy is now the highest remaining risk).
+Then run a targeted AAA pass (check-contrast + check-axe) specifically on guide pages after factual edits.
+Keep navigation model fixed: one chapter nav system only (no extra “next/back” CTA panels).
+Next-Agent Handoff
+Objective + Why
+Goal: Perform factual correction pass on guide content using the two HTML source files, with no structural redesign unless needed for clarity.
+Why it matters: UX is now cleaner; primary risk is remaining claim inaccuracy.
+Completion Status
+Completed: guide UX de-clutter, spacing normalization, chapter-nav simplification, hub cleanup, full verification, docs memory updates.
+Not completed: full factual claim-by-claim rewrite.
+Out of scope: monetization/ad strategy changes, non-guide redesign.
+Files Changed
+page.tsx — simplified hub structure.
+ChapterNavigation.tsx — clearer nav, mobile behavior, removed conflicting cues.
+globals.css — tighter guide rhythm, reduced demarcation noise.
+page-templates.tsx — reduced shell gap sizes.
+page.tsx — tighter spacing, simplified end links.
+page.tsx — spacing normalization.
+page.tsx — spacing normalization.
+page.tsx — removed redundant bottom CTA panel.
+page.tsx — spacing normalization.
+page.tsx — removed redundant bottom CTA panel.
+page.tsx — removed redundant bottom CTA panel.
+SESSION_LOG.md, STATE.md — persistent memory updated.
+Risks / Watchouts
+Remaining risk: factual drift on specific operational claims.
+Keep one disclosure model (/guide primary) and avoid re-adding repetitive disclaimer blocks.
+Avoid reintroducing dual navigation cues at chapter bottoms.
+Immediate Next Step
+Single next task: claim-accuracy correction pass from source HTML to chapter pages.
+First command/file to open:
+single_page_guide_pre_update.html
+newinfoforguide.html
+then *.tsx guide chapters.
+If you want, I can now generate the exact copy-paste prompt for that next factual pass in your preferred strict format.
+
+
+13 files changed
++298
+-564
+Undo
+
+Review
+.ai/SESSION_LOG.md
+.ai/STATE.md
+app/clearance-lifecycle/page.tsx
+app/digital-pre-hunt/page.tsx
+app/facts-vs-myths/page.tsx
+app/faq/page.tsx
+app/globals.css
+app/guide/page.tsx
+app/in-store-strategy/page.tsx
+app/inside-scoop/page.tsx
+app/what-are-pennies/page.tsx
+components/guide/ChapterNavigation.tsx
+components/page-templates.tsx
+I want you to give me that handoff, yes, and I also want you to take into consideration some of the changes that I have specifically made with another agent that I do not want to change as I have crafted them myself intentionally. I will provide that conversation below:
+
+Initial response by coder: "Implemented approved factual-only corrections with minimal diffs, scoped to allowed guide files.
+
+Edited files:
+- page.tsx
+- page.tsx
+- page.tsx
+- page.tsx
+- page.tsx
+- page.tsx
+
+Unchanged (allowed but not needed):
+- page.tsx
+- page.tsx
+
+**Diff Summary (Top 10)**
+1. page.tsx (line 39)  
+Before: verification allowed “register or app.”  
+After: verification is explicitly in-store UPC scan only (self-checkout/register).
+
+2. page.tsx (line 75)  
+Before: employee purchase policy phrasing was soft.  
+After: tightened to “generally reported as prohibited” + “assume prohibited.”
+
+3. page.tsx (line 137)  
+Before: no concrete ZMA disposition paths.  
+After: added caveated community-reported ZMA disposition section (destruction vs RTV).
+
+4. page.tsx (line 167) and page.tsx (line 319)  
+Before: MET timing signal was underrepresented.  
+After: added caveated community-reported MET reset timing sections.
+
+5. page.tsx (line 246) and page.tsx (line 328)  
+Before: No Home + late-stage combined signal not explicit.  
+After: explicit signal stack includes No Home + .03/.02 + old tag date.
+
+6. page.tsx (line 25)  
+Before: led with clearance areas.  
+After: reordered to home-bay-first, then seasonal/overhead/clearance.
+
+7. page.tsx (line 20)  
+Before: yellow-tag risk only said “price override prompt.”  
+After: expanded to terminal intervention risk (override/hold) bringing staff over.
+
+8. page.tsx (line 174)  
+Before: lacked explicit total-cycle framing.  
+After: added community-reported approx totals (Cadence A ~13w, Cadence B ~7w), caveated.
+
+9. page.tsx (line 78)  
+Before: ZMA mention was generic/ambiguous.  
+After: explicit “ZMA (Zero Margin Adjustment)” with community-reported wording caveat.
+
+10. page.tsx (line 17)  
+Before: mixed confidence tone in operational bullets.  
+After: consistent Community-reported: labeling across non-official operational bullets/sections.
+
+**Updated Matrix (Previously ❌/⚠️ Rows Only)**
+
+| Prior Row | Previous | Updated | Evidence |
+|---|---|---|---|
+| 3 (cadence framing) | ⚠️ | ✅ | page.tsx (line 174) |
+| 6 (app vs scan truth) | ❌ | ✅ | page.tsx (line 39) |
+| 8 (yellow-tag intervention risk) | ⚠️ | ✅ | page.tsx (line 20) |
+| 11 (home-bay-first emphasis) | ⚠️ | ✅ | page.tsx (line 25) |
+| 13 (Zero-Comm mechanism) | ⚠️ | ✅ | page.tsx (line 117) |
+| 15 (ZMA disposition mix) | ⚠️ | ✅ | page.tsx (line 137) |
+| 16 (employee policy wording) | ⚠️ | ✅ | page.tsx (line 75) |
+| 21 (No Home + late-stage stack) | ⚠️ | ✅ | page.tsx (line 328), page.tsx (line 246) |
+| 22 (MET timing model) | ⚠️ | ✅ | page.tsx (line 167), page.tsx (line 319) |
+
+**Verification**
+- npm run lint ✅
+- npm run build ✅
+- npm run test:unit ✅ (26/26)
+- npm run test:e2e ✅ (156 passed)
+
+Visual proof (copy changed on UI pages):
+- reports/proof/2026-02-06T21-27-54/
+- console-errors.txt
+
+Additional e2e console audits:
+- console-report-2026-02-06T21-24-01-420Z.json
+- console-report-2026-02-06T21-24-54-913Z.json
+- console-report-2026-02-06T21-25-50-410Z.json
+- console-report-2026-02-06T21-26-46-346Z.json
+
+## Next-Agent Handoff
+
+### 1) Objective + Why
+- Goal: Apply factual-veracity corrections for the approved top-10 inaccuracies in guide content.
+- Why it matters: Keeps guide claims aligned to source HTML while preserving trust, caveats, and stable UI.
+
+### 2) Completion Status
+- Completed: All 10 approved must-fix corrections implemented with minimal diffs.
+- Completed: Consistent community-reported and speculative labeling preserved/strengthened.
+- Not completed: No additional factual expansion beyond approved top-10 scope.
+- Out of scope: Layout/token redesign; unrelated files; backlog P0 autonomy work.
+
+### 3) Files Changed
+- page.tsx — scan-truth fix, cadence framing, MET/reset signal block, No Home signal stack.
+- page.tsx — standardized “community-reported” term label.
+- page.tsx — home-bay-first hunting order; employee policy tightened to assume prohibited.
+- page.tsx — stronger yellow-tag intervention/hold risk wording.
+- page.tsx — added Zero-Comm, ZMA disposition, MET timing sections with caveats; confidence-label consistency.
+- page.tsx — explicit ZMA expansion + caveated wording variance.
+
+### 4) Verification Evidence
+- npm run lint: pass
+- npm run build: pass
+- npm run test:unit: pass (26/26)
+- npm run test:e2e: pass (156)
+- Playwright proof path(s): reports/proof/2026-02-06T21-27-54/
+- Known non-blocking console noise: geolocation error + third-party CSP/ads noise in console reports listed above.
+
+### 5) Risks / Watchouts
+- Remaining risks: Operational internals still depend on community-reported evidence; should be re-validated when new source docs arrive.
+- Regressions to watch: Future edits should keep “app is filter; in-store scan is truth” consistent across all guide chapters.
+
+### 6) Immediate Next Step
+- Single next task: Founder review of wording tone/strictness on new community-reported sections before commit.
+- First command/file to open: page.tsx"
+
+
+
+***My Feedback***: "const overheadClues = [
+  "Yellow clearance tags visible from the floor",
+  'Overhead areas marked as "No Home" (community-reported term, not official)',
+  "Dusty boxes or items that look untouched for weeks",
+  "Mixed or mismatched products tucked above a bay",
+  "Seasonal items parked in overhead after the season ends",
+
+really it's dusty boxes or items that look untouched for months.
+
+
+
+also here are some other improvements/additions/refinements that once implemented should not be altered
+
+"Verify the instore price at the self-check out or the employee store phone but getting the employee to verify is risky as they may take the item away from you if it is a penny. They are able to scan a picture of a barcode on your phone if you ask them to, but they may provide pushback and ask more questions. They can also lookup the SKU number on their phone as well and both of these methods do not require physically taking the item to them. The safest approach is to take the item to self checkout and chance it there. Communitymembers report having an easier checkout experience having a "fille item" to scan first before scanning a penny item. This helps not draw attention to an item showing up as $0.01 on the screen. Note: The self-checkout terminal notifies employees via the first phone (store phone, AKA "zebra") when a penny item is scanned. Some stores are more proactive than others. 
+
+
+and for this "const verifySteps = [
+  {
+    title: "Use the UPC, not the yellow tag",
+    detail:
+      "Scan the manufacturer barcode at self-checkout when possible. The tag can be stale and can trigger terminal intervention (for example, an override or hold) that brings staff over.",
+  },"
+
+
+'A more accurate detail would be: Scan only the manufacturer barcode at self-checkout. Scanning the yellow tag will trigger the SCO terminal to notify "customer needs assistance" that brings staff over.
+
+exception to the above rule: If there is no barcode, an employee will have to assist you by inputting the SKU number of the item and they are likely to notice that the item is a penny and will likely decline the sale and take the item.'
+
+'additional noteworthy addition ot the list:
+title: Don't scan the QR code
+detail: There are occassionaly QR code's that are placed near the manufacturer barcode. Be sure to cover these when scanning the UPC, otherwise, if you scan the QR code, then it will flag "customer needs assistance" that results in SCO attendant coming over. '
+"
+
+
+You can improve the grammar for flow and clarity but do not change the content or context."
+
+Integration of my feedback summary from agentic coder:
+"Implemented exactly as requested, with grammar cleanup only and no layout/token changes.
+
+Changes made
+
+page.tsx (line 51)
+
+Updated to: "Dusty boxes or items that look untouched for months".
+page.tsx (line 20)
+
+Replaced first verify-step detail with your accurate SCO behavior ("customer needs assistance" when yellow tag is scanned) plus the no-barcode exception (SKU entry likely triggers refusal/pull).
+page.tsx (line 23)
+
+Added new verify step: "Don't scan the QR code" with the same assistance-flag warning.
+page.tsx (line 131)
+
+Added your in-store verification guidance paragraph (self-checkout vs employee phone, barcode photo/SKU lookup, pushback risk, safest path).
+page.tsx (line 44)
+
+Added filler-item community-reported tip and the FIRST/Zebra notification behavior.
+Verification
+
+npm run lint ✅
+npm run build ✅
+npm run test:unit ✅ (26/26)
+npm run test:e2e ✅ (156 passed)
+Playwright proof (visual text changes)
+
+reports/proof/2026-02-06T21-45-55/
+console-errors.txt
+Known non-blocking console noise remained the same pattern (geolocation + third-party CSP/ad noise)."
+
+I’ll build a handoff prompt that explicitly protects your intentional wording and tells the next agent what is locked vs editable. First I’m quickly checking the current files so the handoff matches the repo exactly.
+
+Ran Select-String -Path .ai/SESSION_LOG.md -Pattern 'Guide UX De-Clutter|21-45-55|factual' -Context 0,2
+
+
+Ran git status --short --branch
+
+
+Ran git log -1 --oneline
+
+
+Ran Select-String -Path app/digital-pre-hunt/page.tsx -Pattern 'Dusty boxes|No Home|overheadClues' -Context 0,3
+
+
+Ran Get-Content -Raw docs/skills/README.md
+
+
+Ran Select-String -Path app/in-store-strategy/page.tsx -Pattern 'Use the UPC, not the yellow tag|Don\'t scan the QR code|customer needs assistance|filler item|FIRST phone|barcode photo|SKU number' -Context 0,3
+
+
+Ran Get-Content -Raw app/in-store-strategy/page.tsx
+
+
+Plan
+Open
+
+Next-Agent Handoff Prompt (Locked-Content Safe)
+Summary
+Use this as the copy/paste prompt for the next agent. It preserves your intentional wording, keeps the recent UX cleanup intact, and scopes work to factual refinement only.
+
+Public API / Interface Changes
+None expected.
+This is content + guide UX continuity work only.
+Test Cases / Scenarios
+Full 4 gates required after edits: lint, build, test:unit, test:e2e.
+Playwright proof required for guide pages in light/dark.
+Validate locked text remains unchanged.
+Assumptions / Defaults
+Baseline commit is bed5f20 on main.
+Locked wording below is intentional and must not be altered unless you (Cade) explicitly approve.
+Follow repo session-start protocol and AGENTS.md.
+Read `docs/skills/README.md` first and use relevant skills.
+Work on `main` only.
+
+GOAL:
+Do a factual-veracity refinement pass on the guide content while preserving the current UX cleanup and preserving founder-locked wording exactly.
+
+WHY:
+Guide accuracy is still the top risk. UX was recently cleaned up and should not be re-fragmented.
+
+CURRENT BASELINE:
+- Latest commit on main: `bed5f20` ("Refine guide UX: tighter spacing, clearer nav, cleaner hub")
+- Existing guide UX changes (hub/nav/spacing) are intentional and should remain unless a clear regression is proven.
+
+NON-NEGOTIABLE LOCKED CONTENT (DO NOT CHANGE):
+1) `app/digital-pre-hunt/page.tsx`
+   - Keep this exact overhead clue:
+   "Dusty boxes or items that look untouched for months"
+
+2) `app/in-store-strategy/page.tsx`
+   - Keep this verify step meaning and wording intent exactly:
+     Title: "Use the UPC, not the yellow tag"
+     Detail includes:
+     - scan only manufacturer barcode at SCO
+     - yellow-tag scan triggers "customer needs assistance"
+     - no-barcode exception requiring SKU entry by employee, likely refusal/pull
+   - Keep this verify step:
+     Title: "Don't scan the QR code"
+     Detail includes QR-code trigger to "customer needs assistance".
+   - Keep the in-store verification paragraph that covers:
+     - self-checkout vs employee store phone
+     - employee verification risk (item may be taken)
+     - barcode photo / SKU lookup on employee device
+     - possible pushback/questions
+     - safest path = self-checkout attempt
+   - Keep these community tips:
+     - filler item before penny scan
+     - FIRST/Zebra SCO notification behavior
+
+RULE:
+Grammar-only cleanup is allowed only if meaning/context remains identical.
+If any locked text seems wrong, STOP and ask before editing.
+
+SOURCE OF TRUTH FILES:
+- `Guide Remodel/single_page_guide_pre_update.html`
+- `Guide Remodel/newinfoforguide.html`
+
+TARGET FILES (guide):
+- `app/guide/page.tsx`
+- `app/what-are-pennies/page.tsx`
+- `app/clearance-lifecycle/page.tsx`
+- `app/digital-pre-hunt/page.tsx`
+- `app/in-store-strategy/page.tsx`
+- `app/inside-scoop/page.tsx`
+- `app/facts-vs-myths/page.tsx`
+- `app/faq/page.tsx`
+
+WORK PLAN:
+1) Run a read-only claim matrix against source HTML vs current guide pages.
+2) Produce a surgical edit list for inaccuracies only.
+3) Exclude locked content from edits.
+4) Implement minimal factual corrections only.
+5) Verify with proof:
+   - `npm run lint`
+   - `npm run build`
+   - `npm run test:unit`
+   - `npm run test:e2e`
+   - `npm run ai:proof -- /guide /what-are-pennies /clearance-lifecycle /digital-pre-hunt /in-store-strategy /inside-scoop /facts-vs-myths /faq`
+6) Update:
+   - `.ai/SESSION_LOG.md`
+   - `.ai/STATE.md`
+7) Provide final response with:
+   - exact files changed
+   - before/after claim corrections
+   - proof paths
+   - next-agent handoff block
+
+DONE MEANS:
+- Factual drift reduced.
+- Locked wording unchanged.
+- Guide UX cleanup preserved.
+- All 4 gates pass with Playwright proof artifacts.
+Expand plan
+Here;s the thing, you are doing well in all of this, but the reality is that it's not realistic to expect any AI coder to be able to, without any ACTUAL specific details of the plan already being setforth, to expect them to be able to whimsically determine as they are working on implementing the system, they also need to extrapolate meaning, deduce the intent that is consistent with what we are asking of it, take then proceed to integrate this into the project while retaining the contentual awareness and relying on incomplete information and no proper direction or idea what "done" looks like or even what the goal on the implementation looks like.
+
+That diagnosis is accurate. The failure mode is not “bad coding,” it is “coding before a decision-complete spec exists.”
+
+I can lock this down so future agents stop guessing, but I need one product-process choice first.
+
+
+Asked 1 question
+Plan
+Open
+
+Spec-First Guide Workflow (No-Guessing System)
+Summary
+You are correct: agents fail when they must infer intent while implementing.
+We will enforce a Spec-First Gates workflow so implementation cannot start until goals, locked text, scope, and proof criteria are explicit.
+
+Public Interfaces / Contracts
+Add a canonical spec contract file: GUIDE_IMPLEMENTATION_CONTRACT.md.
+Add a per-task spec packet template: _GUIDE_TASK_TEMPLATE.md.
+Add a locked-copy registry interface: GUIDE_LOCKED_COPY.md.
+Add a handoff packet schema section in HANDOFF_PROTOCOL.md:
+Goal
+In scope
+Out of scope
+Locked content
+Acceptance checks
+Verification artifact paths
+Open risks
+Next single task
+Workflow Gates (Mandatory)
+Intent Gate
+Define GOAL, WHY, DONE MEANS, NOT DOING.
+Define user-visible outcomes only.
+Define exactly which files are editable.
+Truth Gate
+Run read-only claim matrix against source HTML vs current pages.
+Classify each claim: accurate, altered, wrong, missing, speculative.
+Mark required labels: community-reported and speculative.
+Spec Gate
+Produce decision-complete edit plan per file.
+Include exact locked strings that must not change.
+Include acceptance checks with line-level expectations.
+Implementation Gate
+Apply only approved diffs.
+No layout/system drift unless explicitly approved in spec.
+No rewriting locked copy.
+Verification Gate
+Run all 4 gates: lint, build, test:unit, test:e2e.
+Run Playwright proof for changed guide routes.
+Provide artifact paths in final response.
+Memory + Handoff Gate
+Update SESSION_LOG.md and STATE.md.
+Publish next-agent handoff using the schema above.
+Include “locked content unchanged” proof check.
+Acceptance Criteria (Definition of Done)
+Every changed claim maps back to source truth table.
+Locked copy remains exact.
+No unexpected guide UX regressions.
+All 4 quality gates pass.
+Playwright proof bundle exists for touched routes.
+Persistent memory files updated.
+Test Cases / Scenarios
+Locked Copy Protection
+Validate all strings in GUIDE_LOCKED_COPY.md are byte-for-byte unchanged.
+Claim Integrity
+Spot-check top 10 corrected claims against source files and route text.
+Guide Flow
+Confirm one clear chapter navigation model only.
+Confirm no redundant/competing end-of-page nav cards return.
+Regression
+Run full test suite and console audit artifacts.
+Confirm only known non-blocking noise remains.
+Assumptions / Defaults
+Workflow mode is Spec-First Gates by default.
+Guide tasks are content-critical and cannot be “best effort.”
+“Grammar cleanup” is allowed only when meaning is unchanged.
+Any ambiguity in claim meaning blocks implementation until clarified.
+If scope expands, a new spec packet is required before more edits.
+Immediate Next Step
+Create and approve one concrete spec packet for the next guide pass using this contract.
+Then run one agent strictly in implementation mode against that approved packet only.
+Expand plan
+Please also understand that you're assuming that the work that you have done is acceptable, it's important for future agents to understand that the UX/UI, overall structure and presentation of the guide is still mediocre at BEST, and unreadable at worst. Currently I'd say the formatting, structure, presentation, etc... is a 4.5/10 to be honest, the heirrachy has an identity crisis, the guide lacks the nuanced understanding that someone like myself would have because people who are experienced penny shoppers have an intimate knowledge and understanding and way of communicating information that isn't easily replicated unless you are "in-the-know", so it's very easy to pick out things that are wrong, even if they are subtle. But that's talking specifically about the content itself, as far as the color pallette, shadows, typography, structure, design system, font, etc... those are things that when they are BAD even those who can't put it into words or know nothing about any of these things will be able to identify that "it just doesn't look right" or "it just blends together" or "its too busy" or "something's just off" and even with dead space, or poorly structured parggraphs, or headers, or anything like that. There must be a certain degree of canonical formatting, templating, and structure that apply consistently and symetrrically. I don't know if you're able to encapsulate the meaning behind what it is that I am trying to communicate to you. Please ask questions.
+
+You’re communicating it clearly: content trust and visual trust are both below bar, and future agents need that captured as explicit standards, not assumptions. I’m going to inspect existing style/docs quickly, then ask focused decisions so we can lock a concrete quality rubric that agents must satisfy.
+
+Ran Get-Content -Raw app/globals.css
+
+
+Ran Get-Content -Raw components/page-templates.tsx
+
+
+Ran rg -n "guide|typography|spacing|hierarchy|readability|design system|AAA|template" docs .ai components app -g "*.md" -g "*.tsx" -g "*.css"
+
+
+Ran Get-Content -Raw docs/DESIGN-SYSTEM-AAA.md
+
+
+I checked the current state and there’s a real mismatch between docs, constraints, and what “good” should mean for you. To make future agents stop shipping “4.5/10,” I need three concrete decisions from you.
+
+
+Asked 3 questions
+Worked for 1m 21s
+Perfect. With those choices set, I need one more round to make the spec implementation-ready for any agent without guesswork.
+
+
+Asked 3 questions
+Plan
+Open
+
+Guide Recovery Plan v1 (Spec-First, Exact-Lock, Hub-Only)
+Summary
+Current baseline is explicitly not acceptable (~4.5/10 by founder assessment).
+This plan enforces: Content then UX, Pre-split voice baseline, Guide-wide system pass, Strict 8.5/10 done bar, Exact founder-copy lock, and /guide as hub-only.
+
+Public Interfaces / Route Model
+No new API endpoints.
+Public route model remains:
+/guide = hub/index only.
+Chapter content on root chapter routes (/what-are-pennies, /clearance-lifecycle, /digital-pre-hunt, /in-store-strategy, /inside-scoop, /facts-vs-myths, /faq).
+Keep existing legacy /guide/* redirects as-is unless a redirect bug is found.
+Canonical Inputs (Source of Truth)
+single_page_guide_pre_update.html = canonical voice/flow baseline.
+newinfoforguide.html = delta source, only with strict caveat labeling when unverified.
+Existing guide files in *.tsx = implementation targets.
+Locked founder wording from prior handoff (exact-lock).
+Exact-Lock Policy (Non-Negotiable)
+Implement exact-lock for founder-crafted copy in GUIDE_LOCKED_COPY.md.
+Any text in that lock file is immutable unless founder explicitly approves.
+Grammar-only edits are allowed only where founder explicitly marked grammar-safe.
+This includes the current locked points in:
+page.tsx (dusty ... untouched for months line).
+page.tsx (UPC not yellow tag, Don’t scan the QR code, employee phone/self-checkout/filler-item/FIRST-Zebra logic).
+Implementation Phases
+Phase 1: Factual/Voice Correction (No UX redesign yet)
+Produce claim matrix artifact at guide-claim-matrix-<date>.md.
+Required columns:
+Source section
+Current route
+Current claim
+Status (accurate|altered|wrong|missing|speculative)
+Required correction
+Label required (none|community-reported|speculative)
+Confidence
+Apply minimal factual corrections to chapter files only.
+Preserve pre-split tone and “in-the-know” communication style.
+Do not alter locked founder copy.
+Phase 2: Canonical Guide Formatting System (Guide-wide UX pass)
+Standardize chapter template shape for all chapter pages:
+PageShell(width="default", padding="sm", gap="md")
+PageHeader
+EditorialBlock
+Section
+Prose variant="guide"
+ChapterNavigation
+Remove redundant competing nav/CTA blocks from chapter endings.
+Keep one clear progression signal only (ChapterNavigation).
+Keep /guide hub clean and index-like, no content duplication.
+In globals.css, guide-specific selectors only:
+.guide-article p
+.guide-article h2
+.guide-article h3
+.guide-article ul
+.guide-article ol
+.guide-article table
+Tune for readability and hierarchy consistency, not novelty design.
+Update DESIGN-SYSTEM-AAA.md and constraints docs if guide formatting tokens/rules change.
+Phase 3: Consistency/Drift Guard
+Add guide format contract doc at GUIDE_FORMAT_CONTRACT.md.
+Add “forbidden reintroductions” list:
+sources block in chapter body where founder says no value
+dual conflicting nav cues
+heavy dead-space section gaps
+ad-hoc per-page styling patterns that break template symmetry
+Strict Done Bar (8.5/10 Gate)
+Scoring rubric (must meet both conditions):
+
+Total score >= 8.5/10.
+No category below 8/10.
+Categories:
+Factual accuracy to source matrix.
+Founder voice fidelity (pre-split style match).
+Information hierarchy clarity.
+Visual consistency and symmetry across all chapter pages.
+Navigation clarity (no ambiguity or conflicting cues).
+Verification Requirements
+npm run lint
+npm run build
+npm run test:unit
+npm run test:e2e
+npm run ai:proof -- /guide /what-are-pennies /clearance-lifecycle /digital-pre-hunt /in-store-strategy /inside-scoop /facts-vs-myths /faq
+Archive proof paths in final response and SESSION_LOG.md.
+Acceptance Test Scenarios
+Locked copy integrity:
+Confirm exact locked strings are unchanged.
+Content truth:
+Top 10 previously known drift points all resolve to accurate or explicitly caveated.
+UX readability:
+No large barren gaps.
+Clear H1/H2/H3 hierarchy.
+Paragraph spacing consistent across all chapters.
+Navigation:
+No duplicate or contradictory next/previous cues.
+Accessibility:
+Keep AAA checks for guide text and 3:1 for UI boundaries.
+Memory + Handoff Updates
+Update SESSION_LOG.md with:
+what changed
+proof paths
+known non-blocking console noise
+Update STATE.md with new current reality.
+Include full next-agent handoff block in final report.
+Include explicit line: Locked founder copy preserved: YES/NO.
+Assumptions / Defaults Chosen
+Founder approval is granted for guide-wide system pass including globals.css and related guide constraints/docs updates.
+/guide remains hub-only.
+Content accuracy and voice fidelity are prioritized before UI polish.
+Existing known console noise (geolocation/CSP/3rd-party ads) is non-blocking unless pattern changes.
+Copy/Paste Prompt for Next Agent
+Follow repo session-start protocol and AGENTS.md. Read docs/skills/README.md first.
+
+MODE: Spec-first execution. Do not code until claim matrix is complete and approved.
+
+GOAL:
+Recover guide quality to founder standard using pre-split voice + factual truth + canonical formatting consistency.
+
+SOURCE OF TRUTH:
+- Guide Remodel/single_page_guide_pre_update.html
+- Guide Remodel/newinfoforguide.html
+
+PRIORITY ORDER:
+1) Content accuracy and voice fidelity
+2) Guide-wide formatting/system consistency pass
+
+LOCKED COPY RULE:
+Read `.ai/topics/GUIDE_LOCKED_COPY.md` and preserve all locked strings exactly.
+If any locked line seems problematic, STOP and ask.
+
+ROUTE MODEL:
+- `/guide` stays hub-only.
+- Chapters remain on root chapter URLs.
+
+DONE MEANS:
+- Strict 8.5/10 quality gate met
+- No category below 8/10
+- 4 quality gates pass + ai:proof screenshots
+- `.ai/SESSION_LOG.md` and `.ai/STATE.md` updated
+- Final handoff includes `Locked founder copy preserved: YES`
+
+REQUIRED OUTPUTS:
+1) `.ai/audits/guide-claim-matrix-<date>.md`
+2) minimal factual correction diffs
+3) canonical guide formatting pass diffs
+4) verification artifacts and proof paths
+5) next-agent handoff block

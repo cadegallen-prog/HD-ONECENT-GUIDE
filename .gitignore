@@ -5,6 +5,7 @@
 
 # testing
 /coverage
+/reports/
 /reports/playwright/results/
 /reports/playwright/html/
 /reports/playwright/proof/
@@ -110,6 +111,7 @@ reports/penny-list-console-capture.png
 
 # privacy: analytics screenshots (local-only)
 .ai/analytics/
+.ai/_tmp/
 
 # local-only analytics screenshots that were moved into cold storage during prune
 archive/media-pruned/**/.ai/analytics/**/*.jpg
@@ -121,6 +123,7 @@ data/Google Search Trends/
 data/Google Search Console Stats/
 PICTURES_PENNY_CENTRAL/
 Console_logs/
+Guide Remodel/~$*.docx
 
 # sentry
 .sentryclirc
