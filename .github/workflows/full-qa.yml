@@ -139,7 +139,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        shard: ["1/2", "2/2"]
+        shard_index: [1, 2]
+        shard_total: [2]
     env:
       PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
 
@@ -168,7 +169,7 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Run full e2e shard ${{ matrix.shard }}
+      - name: Run full e2e shard ${{ matrix.shard_index }}/${{ matrix.shard_total }}
         env:
           NEXT_DIST_DIR: .next-playwright
           PLAYWRIGHT: "1"
@@ -178,13 +179,13 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: test
         run: |
           npm run build
-          npx playwright test --workers=1 --shard=${{ matrix.shard }}
+          npx playwright test --workers=1 --shard=${{ matrix.shard_index }}/${{ matrix.shard_total }}
 
-      - name: Upload full e2e artifacts (shard ${{ matrix.shard }})
+      - name: Upload full e2e artifacts (shard ${{ matrix.shard_index }}/${{ matrix.shard_total }})
         if: always()
         uses: actions/upload-artifact@v6
         with:
-          name: full-e2e-shard-${{ matrix.shard }}
+          name: full-e2e-shard-${{ matrix.shard_index }}-of-${{ matrix.shard_total }}
           path: reports/playwright/
           retention-days: 14
 
