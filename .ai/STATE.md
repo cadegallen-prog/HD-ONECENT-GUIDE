@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 9, 2026 (Guide editorial block restored across guide hub + chapters with full 4-gate verification + UI proof)
+**Last updated:** Feb 9, 2026 (Tiered verification lanes implemented: FAST + SMOKE defaults, conditional FULL in CI)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,11 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-09 (Tiered CI/CD verification overhaul):** Replaced monolithic verification behavior with FAST/SMOKE/FULL lanes across scripts, tests, CI triggers, and agent instructions.
+  - **Scope:** `package.json`, `tests/smoke-critical.spec.ts`, `.github/workflows/{quality.yml,smoke-e2e.yml,full-qa.yml}`, `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, `CONTRIBUTING.md`, plus canonical verification docs (`README.md`, `.ai/START_HERE.md`, `.ai/CRITICAL_RULES.md`, `.ai/VERIFICATION_REQUIRED.md`).
+  - **Change detail:** Added lane scripts (`verify:fast`, `e2e:smoke`, `e2e:full`, `verify`), created a 3-test smoke suite, added dedicated smoke workflow, converted full QA to conditional + sharded execution with Playwright browser caching, and codified `run-full-e2e` trigger policy.
+  - **Verification:** `npm run verify:fast` ✅ (`reports/forensics/phase4-verify-fast-2026-02-09T14-21-49.log`), `npm run e2e:smoke` ✅ (`reports/forensics/phase4-e2e-smoke-2026-02-09T14-23-32.log`), `npm run e2e:full` ✅ (`reports/forensics/phase4-e2e-full-2026-02-09T14-24-37.log`), workflow YAML formatting ✅ (`npx prettier --check .github/workflows/*.yml`).
 
 - **2026-02-09 (Guide editorial block restoration):** Restored the full editorial strip across guide pages and removed smaller replacement timestamp text.
   - **Scope:** `app/guide/page.tsx` + all chapter routes (`/what-are-pennies`, `/clearance-lifecycle`, `/digital-pre-hunt`, `/in-store-strategy`, `/inside-scoop`, `/facts-vs-myths`, `/faq`).

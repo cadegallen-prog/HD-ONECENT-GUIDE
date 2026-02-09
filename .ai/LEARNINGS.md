@@ -457,4 +457,18 @@ export const metadata: Metadata = {
 
 ---
 
+### 18. GitHub Actions API Can Throttle Repeated `gh run list` Calls
+
+**Problem:** `gh run list` started failing with HTTP 429 while collecting workflow-run evidence artifacts.
+
+**What We Tried:** Re-ran `gh run list` with different limits immediately after prior calls.
+
+**What We Learned:** GitHub Actions endpoints can temporarily throttle repeated requests, even for authenticated clients.
+
+**What to Do Instead:** Treat already-captured successful outputs as evidence, pause before retrying, and avoid repeated immediate calls to the same workflow list endpoint in one session.
+
+**Date:** Feb 09, 2026
+
+---
+
 **For full learning history:** See `archive/learnings-history/LEARNINGS_full_2024-2025.md`

@@ -4,6 +4,45 @@
 
 ---
 
+## 2026-02-09 - Codex - Tiered Verification Lanes (FAST + SMOKE + FULL)
+
+**Goal:** Forensically audit current verification behavior, then implement a strict tiered workflow that avoids full e2e on every iteration while staying enforceable across local scripts, CI, and agent docs.
+
+**Status:** ✅ Completed.
+
+### Changes
+
+- Added lane scripts in `package.json`:
+  - `verify:fast` (lint + typecheck + unit + build)
+  - `e2e:smoke` (critical-flow subset)
+  - `e2e:full` (full Playwright suite)
+  - `verify` (fast + smoke)
+  - Kept compatibility aliases (`test:e2e`, `qa:fast`, `qa:full`)
+- Added smoke coverage: `tests/smoke-critical.spec.ts` (app boot, `/penny-list` load, report-find interaction)
+- CI updates:
+  - `quality.yml` now runs FAST lane with cancel-in-progress concurrency
+  - New `smoke-e2e.yml` for PR/main smoke checks with Playwright browser cache
+  - Rebuilt `full-qa.yml` with conditional trigger evaluation, risky-path detection, sharded full e2e, browser cache, and retained contrast/axe checks
+- Persistent policy updates:
+  - `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, `CONTRIBUTING.md`
+  - Canonical docs aligned to lanes: `README.md`, `.ai/START_HERE.md`, `.ai/CRITICAL_RULES.md`, `.ai/VERIFICATION_REQUIRED.md`
+
+### Verification
+
+- `npm run verify:fast` ✅ (`reports/forensics/phase4-verify-fast-2026-02-09T14-21-49.log`)
+- `npm run e2e:smoke` ✅ (`reports/forensics/phase4-e2e-smoke-2026-02-09T14-23-32.log`)
+- `npm run e2e:full` ✅ (`reports/forensics/phase4-e2e-full-2026-02-09T14-24-37.log`)
+- `npm run verify` ✅ (`reports/forensics/phase4-verify-lane-2026-02-09T14-30-53.log`)
+- Workflow YAML formatting check ✅ (`npx prettier --check .github/workflows/*.yml`)
+- Baseline forensic logs retained:
+  - `reports/forensics/phase1-qa-fast-2026-02-09T14-04-15.log`
+  - `reports/forensics/phase1-test-e2e-2026-02-09T14-05-50.log`
+  - `reports/forensics/phase1-e2e-trend.txt`
+  - `reports/forensics/phase1-gh-fullqa-runs.json`
+  - `reports/forensics/phase1-gh-fullqa-summary.txt`
+
+---
+
 ## 2026-02-09 - Codex - Guide Editorial Block Restoration
 
 **Goal:** Restore the guide editorial block styling across guide routes and remove the smaller "Updated February 2026" replacement text while keeping founder byline.
@@ -33,23 +72,6 @@
 - `npm run test:e2e` ✅ (156/156)
 - UI proof bundle (guide routes light + dark): `reports/proof/2026-02-09T08-49-22/`
   - Console report: `reports/proof/2026-02-09T08-49-22/console-errors.txt`
-
----
-
-## 2026-02-09 - GitHub Copilot - Community Engagement Content
-
-**Goal:** Create social media post drafts to encourage group members to visit the website.
-
-**Status:** ✅ Completed.
-
-### Changes
-
-- Drafted 3 variations of a group announcement reflecting the 2026 guide updates and founder appreciation.
-- Highlighted the "Store Pulse/ZMA" updates and "Penny List" contributions.
-
-### Verification
-
-- Content provided directly to user (Cade).
 
 ---
 
