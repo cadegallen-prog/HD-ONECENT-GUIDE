@@ -12,7 +12,12 @@
     "lint:colors": "tsx scripts/lint-colors.ts",
     "lint:colors:update-baseline": "tsx scripts/lint-colors.ts --update-baseline",
     "export": "next build && next export",
-    "test:e2e": "cross-env NEXT_DIST_DIR=.next-playwright PLAYWRIGHT=1 NEXT_PUBLIC_EZOIC_ENABLED=false NEXT_PUBLIC_ANALYTICS_ENABLED=false npm run build && playwright test --workers=1",
+    "typecheck": "tsc --noEmit",
+    "verify:fast": "npm run lint && npm run typecheck && npm run test:unit && npm run build",
+    "e2e:smoke": "cross-env NEXT_DIST_DIR=.next-playwright PLAYWRIGHT=1 NEXT_PUBLIC_EZOIC_ENABLED=false NEXT_PUBLIC_ANALYTICS_ENABLED=false npm run build && playwright test tests/smoke-critical.spec.ts --project=chromium-desktop-light --workers=1",
+    "e2e:full": "cross-env NEXT_DIST_DIR=.next-playwright PLAYWRIGHT=1 NEXT_PUBLIC_EZOIC_ENABLED=false NEXT_PUBLIC_ANALYTICS_ENABLED=false npm run build && playwright test --workers=1",
+    "test:e2e": "npm run e2e:full",
+    "verify": "npm run verify:fast && npm run e2e:smoke",
     "test:unit": "node scripts/run-unit-tests.mjs",
     "check-contrast": "node scripts/check-contrast.js",
     "check-axe": "node scripts/check-axe.js",
@@ -36,8 +41,8 @@
     "penny:count": "tsx scripts/print-penny-list-count.ts",
     "fixture:snapshot": "tsx scripts/snapshot-penny-list-fixture.ts",
     "prepare": "husky",
-    "qa:fast": "npm run lint && npm run test:unit && npm run build",
-    "qa:full": "npm run qa:fast && npm run test:e2e && npm run check-contrast && npm run check-axe"
+    "qa:fast": "npm run verify:fast",
+    "qa:full": "npm run verify:fast && npm run e2e:full && npm run check-contrast && npm run check-axe"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.8",

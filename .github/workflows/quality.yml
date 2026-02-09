@@ -9,6 +9,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: quality-fast-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   quality-fast:
     runs-on: ubuntu-latest
@@ -40,9 +44,9 @@ jobs:
       - name: Ruff lint
         run: ruff check .
 
-      - name: Run fast QA (lint + unit tests + build)
+      - name: Run FAST lane (lint + typecheck + unit + build)
         env:
           # Unit tests exercise the submit-find route, which requires this env var to be present.
           # A dummy value is sufficient because tests stub the service role client.
           SUPABASE_SERVICE_ROLE_KEY: test
-        run: npm run qa:fast
+        run: npm run verify:fast
