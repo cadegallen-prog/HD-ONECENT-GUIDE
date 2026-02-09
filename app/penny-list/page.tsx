@@ -184,6 +184,22 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
           }),
         }}
       />
+      {/* ItemList Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            name: "Home Depot Penny List",
+            description:
+              "Live community-reported penny finds at Home Depot, filtered by state, recency, and report strength.",
+            itemListOrder: "https://schema.org/ItemListOrderDescending",
+            numberOfItems: windowTotal,
+            url: "https://www.pennycentral.com/penny-list",
+          }),
+        }}
+      />
       {/* Dataset Structured Data */}
       <script
         type="application/ld+json"
@@ -282,6 +298,81 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
             hotItems={hotItems}
             initialSearchParams={resolvedSearchParams}
           />
+
+          <section
+            aria-labelledby="penny-list-methodology"
+            className="mt-12 rounded-xl border border-[var(--border-default)] bg-[var(--bg-elevated)] p-5 sm:p-6"
+          >
+            <h2
+              id="penny-list-methodology"
+              className="text-2xl font-semibold text-[var(--text-primary)]"
+            >
+              How to use this list effectively
+            </h2>
+            <p className="mt-3 text-[var(--text-secondary)] leading-relaxed">
+              This page is a live lead board, not a guaranteed checkout board. Reports are
+              community-submitted and time-sensitive, which means the value comes from signal
+              interpretation and execution discipline. Use this list to prioritize where to look and
+              what to verify first, then validate each item in-store with UPC-based checks. The best
+              outcomes come from consistent process, not one-off luck.
+            </p>
+            <p className="mt-3 text-[var(--text-secondary)] leading-relaxed">
+              Start by filtering to your state and the most recent window that still gives you
+              enough volume. If you only have one store run planned, bias toward newer and
+              higher-confidence signals. If you are doing recon across multiple stores, widen the
+              range to capture trend continuity. Items with multiple independent reports are
+              generally stronger candidates than one-off submissions, but verification at your
+              specific store is still required.
+            </p>
+            <p className="mt-3 text-[var(--text-secondary)] leading-relaxed">
+              Before leaving home, build a short route plan instead of a long wish list. Pick the
+              top candidates, then open the operational guide sections that match your next
+              decisions: clearance lifecycle interpretation, pre-hunt targeting, and checkout
+              verification. Treat this page and the guide as one system. The list gives you target
+              density, while the guide gives you decision quality.
+            </p>
+            <div className="mt-4 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-4">
+              <h3 className="text-lg font-semibold text-[var(--text-primary)]">
+                Practical workflow for each store run
+              </h3>
+              <ul className="mt-2 list-disc space-y-1.5 pl-5 text-[var(--text-secondary)]">
+                <li>
+                  Filter by your state, then sort by recency or report strength based on your time
+                  budget.
+                </li>
+                <li>
+                  Build a focused shortlist and verify each candidate with in-store scans, not shelf
+                  assumptions.
+                </li>
+                <li>
+                  Log what you observe, including misses, so future decisions improve for you and
+                  for the community.
+                </li>
+                <li>
+                  Submit confirmed findings through{" "}
+                  <a
+                    href="/report-find"
+                    className="text-[var(--link-default)] hover:text-[var(--link-hover)] underline underline-offset-4"
+                  >
+                    Report a Find
+                  </a>{" "}
+                  to strengthen the live signal base.
+                </li>
+              </ul>
+            </div>
+            <p className="mt-4 text-[var(--text-secondary)] leading-relaxed">
+              If you are new, read{" "}
+              <a
+                href="/guide"
+                className="text-[var(--link-default)] hover:text-[var(--link-hover)] underline underline-offset-4"
+              >
+                the full guide
+              </a>{" "}
+              before making decisions from this page alone. If you already know the basics, use this
+              list as your live targeting interface and return to the guide only when signals
+              conflict or checkout behavior is unclear.
+            </p>
+          </section>
         </div>
       </section>
     </div>

@@ -219,10 +219,10 @@ export default function RootLayout({
                   });
 
                   gtag('js', new Date());
-                  // Page views are now handled by <AnalyticsTracker /> in the body
-                  gtag('config', '${GA_MEASUREMENT_ID}', { 
-                    send_page_view: false
-                  });
+
+                  // Measurement ID: ${GA_MEASUREMENT_ID}
+                  // Initial coverage for bounces/speed; SPA transitions handled by <AnalyticsTracker />
+                  gtag('config', '${GA_MEASUREMENT_ID}');
 
                   (function() {
                     function getWeekKey(date) {

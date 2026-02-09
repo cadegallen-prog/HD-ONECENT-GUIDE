@@ -10,7 +10,6 @@ import {
   Clock,
   Info,
   CircleHelp,
-  Lightbulb,
   ShoppingCart,
   AlertCircle,
   Users,
@@ -26,17 +25,16 @@ interface CommandPaletteProps {
 const pages = [
   // Guide Sections
   { icon: FileText, label: "Complete Guide", path: "/guide", group: "Guide" },
-  { icon: FileText, label: "What Are Pennies", path: "/#introduction", group: "Guide" },
+  { icon: FileText, label: "What Are Pennies", path: "/what-are-pennies", group: "Guide" },
   { icon: Clock, label: "Clearance Lifecycle", path: "/clearance-lifecycle", group: "Guide" },
-  { icon: Search, label: "Digital Tools", path: "/#digital-tools", group: "Guide" },
-  { icon: Map, label: "In-Store Strategies", path: "/#in-store-hunting", group: "Guide" },
-  { icon: ShoppingCart, label: "Checkout", path: "/#checkout", group: "Guide" },
-  { icon: FileText, label: "Internal Systems", path: "/#internal-operations", group: "Guide" },
-  { icon: AlertCircle, label: "Facts vs Myths", path: "/#fact-vs-fiction", group: "Guide" },
-  { icon: Lightbulb, label: "Responsible Hunting", path: "/#responsible-hunting", group: "Guide" },
-  { icon: CircleHelp, label: "FAQ", path: "/#faq", group: "Guide" },
+  { icon: Search, label: "Digital Pre-Hunt", path: "/digital-pre-hunt", group: "Guide" },
+  { icon: Map, label: "In-Store Strategies", path: "/in-store-strategy", group: "Guide" },
+  { icon: ShoppingCart, label: "Inside Scoop", path: "/inside-scoop", group: "Guide" },
+  { icon: AlertCircle, label: "Facts vs Myths", path: "/facts-vs-myths", group: "Guide" },
+  { icon: CircleHelp, label: "FAQ", path: "/faq", group: "Guide" },
   // Tools (actual pages)
   { icon: Users, label: "Community Penny List", path: "/penny-list", group: "Tools" },
+  { icon: FileText, label: "Report a Find", path: "/report-find", group: "Tools" },
   { icon: Heart, label: "My List", path: "/lists", group: "Tools" },
   { icon: Map, label: "Store Finder", path: "/store-finder", group: "Tools" },
   // More

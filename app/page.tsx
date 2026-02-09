@@ -140,61 +140,84 @@ export default async function Home() {
               How Penny Hunting Works
             </h2>
             <p className="mt-2 text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed">
-              Items follow a predictable markdown cycle before hitting $0.01
+              Home Depot markdown behavior is not random. It follows operational patterns you can
+              track, verify, and execute against.
             </p>
           </div>
 
           {/* Steps grid */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="mb-6 rounded-xl border border-[var(--border-default)] bg-[var(--bg-elevated)] p-5">
+            <p className="text-[var(--text-secondary)] leading-relaxed">
+              Penny pricing is a final-stage inventory state, not a public sale campaign. Items move
+              through clearance endings until the system flags them for removal. That is why speed,
+              verification discipline, and location context matter more than luck. Use this
+              four-step model to avoid wasted trips and to focus on decisions that produce
+              repeatable results.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             {/* Step 1 */}
-            <div className="text-center p-4">
-              <div className="w-12 h-12 rounded-full bg-[var(--bg-elevated)] dark:bg-[var(--bg-tertiary)] mx-auto mb-3 flex items-center justify-center border border-[var(--border-default)]">
+            <div className="rounded-xl border border-[var(--border-default)] bg-[var(--bg-elevated)] p-5">
+              <div className="w-12 h-12 rounded-full bg-[var(--bg-page)] dark:bg-[var(--bg-tertiary)] mb-3 flex items-center justify-center border border-[var(--border-default)]">
                 <span className="text-base font-bold text-[var(--cta-primary)]">1</span>
               </div>
               <h3 className="text-base font-semibold text-[var(--text-primary)] leading-snug">
                 Learn the Cycle
               </h3>
-              <p className="mt-1 text-sm text-[var(--text-secondary)] leading-relaxed">
-                Items markdown: .00 → .06 → .03 → .01
+              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed">
+                Items commonly move through markdown endings before reaching $0.01. When you
+                understand stage progression and timing windows, you stop treating each store trip
+                as a gamble. The goal is to identify late-stage candidates, then validate in-store
+                with UPC-based checks.
               </p>
             </div>
 
             {/* Step 2 */}
-            <div className="text-center p-4">
-              <div className="w-12 h-12 rounded-full bg-[var(--bg-elevated)] dark:bg-[var(--bg-tertiary)] mx-auto mb-3 flex items-center justify-center border border-[var(--border-default)]">
+            <div className="rounded-xl border border-[var(--border-default)] bg-[var(--bg-elevated)] p-5">
+              <div className="w-12 h-12 rounded-full bg-[var(--bg-page)] dark:bg-[var(--bg-tertiary)] mb-3 flex items-center justify-center border border-[var(--border-default)]">
                 <span className="text-base font-bold text-[var(--cta-primary)]">2</span>
               </div>
               <h3 className="text-base font-semibold text-[var(--text-primary)] leading-snug">
                 Scout First
               </h3>
-              <p className="mt-1 text-sm text-[var(--text-secondary)] leading-relaxed">
-                Check inventory in the Home Depot app before driving
+              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed">
+                Use digital signals to build a focused shortlist before you leave home. App and web
+                inventory can narrow targets, but they are directional. Treat them as a planning
+                layer, then confirm with on-site scan behavior so you do not burn time on false
+                positives.
               </p>
             </div>
 
             {/* Step 3 */}
-            <div className="text-center p-4">
-              <div className="w-12 h-12 rounded-full bg-[var(--bg-elevated)] dark:bg-[var(--bg-tertiary)] mx-auto mb-3 flex items-center justify-center border border-[var(--border-default)]">
+            <div className="rounded-xl border border-[var(--border-default)] bg-[var(--bg-elevated)] p-5">
+              <div className="w-12 h-12 rounded-full bg-[var(--bg-page)] dark:bg-[var(--bg-tertiary)] mb-3 flex items-center justify-center border border-[var(--border-default)]">
                 <span className="text-base font-bold text-[var(--cta-primary)]">3</span>
               </div>
               <h3 className="text-base font-semibold text-[var(--text-primary)] leading-snug">
                 Hunt Smart
               </h3>
-              <p className="mt-1 text-sm text-[var(--text-secondary)] leading-relaxed">
-                Endcaps, back corners, overhead storage
+              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed">
+                Prioritize likely zones based on current reset behavior, home-bay placement, and
+                neglected inventory signals. Efficiency beats volume. A disciplined route through
+                the store gives you more verified scans and fewer random checks in the same amount
+                of time.
               </p>
             </div>
 
             {/* Step 4 */}
-            <div className="text-center p-4">
-              <div className="w-12 h-12 rounded-full bg-[var(--bg-elevated)] dark:bg-[var(--bg-tertiary)] mx-auto mb-3 flex items-center justify-center border border-[var(--border-default)]">
+            <div className="rounded-xl border border-[var(--border-default)] bg-[var(--bg-elevated)] p-5">
+              <div className="w-12 h-12 rounded-full bg-[var(--bg-page)] dark:bg-[var(--bg-tertiary)] mb-3 flex items-center justify-center border border-[var(--border-default)]">
                 <span className="text-base font-bold text-[var(--cta-primary)]">4</span>
               </div>
               <h3 className="text-base font-semibold text-[var(--text-primary)] leading-snug">
                 Checkout
               </h3>
-              <p className="mt-1 text-sm text-[var(--text-secondary)] leading-relaxed">
-                Self-checkout works best
+              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed">
+                Verification and checkout behavior can vary by store and by item state. Stay calm,
+                follow store policy, and focus on clean verification steps rather than
+                confrontation. Process discipline protects your time and improves repeat success
+                rates over the long run.
               </p>
             </div>
           </div>
@@ -208,6 +231,27 @@ export default async function Home() {
               Read the full guide →
             </Link>
           </div>
+        </div>
+      </section>
+
+      <section className="section-padding-sm px-4 sm:px-6 bg-[var(--bg-page)]">
+        <div className="max-w-4xl mx-auto rounded-xl border border-[var(--border-default)] bg-[var(--bg-elevated)] p-5 sm:p-6">
+          <h2 className="text-xl sm:text-2xl font-semibold text-[var(--text-primary)] leading-snug">
+            Why this site is structured this way
+          </h2>
+          <p className="mt-3 text-[var(--text-secondary)] leading-relaxed">
+            PennyCentral is built as a utility plus education system. The utility layer helps you
+            act quickly with live reports, filters, and store-aware targeting. The education layer
+            helps you make better decisions by explaining verification rules, clearance behavior,
+            and risk signals that reduce wasted trips. Both are necessary. Utility alone becomes
+            noisy; education alone becomes slow.
+          </p>
+          <p className="mt-3 text-[var(--text-secondary)] leading-relaxed">
+            That is why the homepage points you to three core routes: the Penny List for live
+            targeting, the Guide for structured process, and Report a Find for data quality. The
+            better the report quality, the stronger the list becomes for everyone. The stronger the
+            guide adherence, the fewer false assumptions people make at checkout.
+          </p>
         </div>
       </section>
 
