@@ -36,6 +36,12 @@
 **Focus:** Low-value-content recovery, canonical/index hygiene, approval evidence
 **Quick link:** See `.ai/STATE.md` for implemented changes and verification
 
+### [ANALYTICS_CONTRACT](.ai/topics/ANALYTICS_CONTRACT.md)
+
+**Status:** ✅ Active guardrail
+**Focus:** GA4 single-source tracking, pageview/user/session verification protocol
+**Quick link:** Run `npm run ai:analytics:verify` before/after analytics changes
+
 ### [UI_DESIGN](.ai/topics/UI_DESIGN.md)
 
 **Status:** ✅ Frozen (Penny List redesign complete)
