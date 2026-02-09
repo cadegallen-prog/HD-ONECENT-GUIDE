@@ -8,16 +8,16 @@
 // ============================================
 
 /** Raw member count number (for calculations if needed) */
-export const COMMUNITY_MEMBER_COUNT = 60000
+export const COMMUNITY_MEMBER_COUNT = 62000
 
 /** Display string for member count (use this in JSX) */
-export const COMMUNITY_MEMBER_COUNT_DISPLAY = "60,000+"
+export const COMMUNITY_MEMBER_COUNT_DISPLAY = "62,000+"
 
 /** Badge text for OG images (single source of truth) */
-export const MEMBER_COUNT_BADGE_TEXT = "60K+ Members"
+export const MEMBER_COUNT_BADGE_TEXT = "62K+ Members"
 
 /** Raw member count for badge (alternative for calculations) */
-export const MEMBER_COUNT_RAW = 60000
+export const MEMBER_COUNT_RAW = 62000
 
 /** Facebook group URL */
 export const FACEBOOK_GROUP_URL = "https://www.facebook.com/groups/homedepotonecent"

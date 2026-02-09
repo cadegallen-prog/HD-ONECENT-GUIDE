@@ -321,11 +321,12 @@ export default async function Home() {
             <Users className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
           </div>
           <h2 className="text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug">
-            Join {COMMUNITY_MEMBER_COUNT_DISPLAY} Penny Hunters
+            Join {COMMUNITY_MEMBER_COUNT_DISPLAY} Active Hunters
           </h2>
           <p className="mt-3 text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed max-w-xl mx-auto">
-            Connect with the community to share finds, ask questions, and stay updated on the latest
-            penny patterns.
+            Join {COMMUNITY_MEMBER_COUNT_DISPLAY} active hunters sharing real-time finds,
+            verification tips, and store-specific clearance patterns. Get notified when penny waves
+            hit your area.
           </p>
           <a
             href={FACEBOOK_GROUP_URL}

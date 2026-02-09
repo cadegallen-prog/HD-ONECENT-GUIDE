@@ -66,10 +66,11 @@ export default function AboutPage() {
           </p>
           <p>
             On April 5, 2025, we restarted the <strong>Home Depot One Cent Items</strong> community
-            from scratch. The growth was explosive—rocketing from zero to over 62,000 members in
-            less than 10 months. New members joined every day asking the same questions:{" "}
-            <em>How do I find them?</em> <em>Is it a scam?</em> <em>What rules do I follow?</em>{" "}
-            Check the files section, we said. But on mobile, downloading files was a pain.
+            from scratch. The growth was explosive—rocketing from zero to over{" "}
+            {COMMUNITY_MEMBER_COUNT_DISPLAY} members in less than 10 months. New members joined
+            every day asking the same questions: <em>How do I find them?</em> <em>Is it a scam?</em>{" "}
+            <em>What rules do I follow?</em> Check the files section, we said. But on mobile,
+            downloading files was a pain.
           </p>
           <p>
             I&apos;m a nurse by trade, not a coder. I had zero website experience. But I figured:{" "}
@@ -82,10 +83,10 @@ export default function AboutPage() {
             in my spare time to serve that community.
           </p>
 
-          <h2>Growing with the 62,000+</h2>
+          <h2>Growing with the {COMMUNITY_MEMBER_COUNT_DISPLAY}</h2>
           <p>
             When I launched the site in December 2025, the group had about 32,000 members. Today, we
-            have crossed 62,000.
+            have crossed {COMMUNITY_MEMBER_COUNT_DISPLAY.replace("+", "")}.
           </p>
           <p>
             As the community grew, the needs grew. Facebook is great for conversation, but it&apos;s
@@ -134,8 +135,11 @@ export default function AboutPage() {
 
           <p>
             I never thought I&apos;d be running a website with 20,000 monthly users. I make
-            mistakes. I break things. But I promise to keep fixing them, creating value, and
-            listening to the community that made this possible.
+            mistakes. I break things. But as long as this community keeps hunting, I&apos;ll keep
+            building.
+          </p>
+          <p className="text-[var(--text-muted)] italic mt-6">
+            — Cade Allen, PennyCentral Creator, Home Depot One Cent Items Admin, & Fellow Hunter
           </p>
         </Prose>
 

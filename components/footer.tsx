@@ -13,9 +13,9 @@ export function Footer() {
   return (
     <footer className="bg-[var(--bg-elevated)] dark:bg-[var(--bg-card)] border-t border-[var(--border-default)] mt-auto">
       <div className="container-wide py-12 sm:py-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Brand Column */}
-          <div className="col-span-2 md:col-span-1">
+          <div>
             <Link href="/" className={brandLinkClass}>
               PennyCentral
             </Link>
@@ -24,18 +24,18 @@ export function Footer() {
             </p>
           </div>
 
-          {/* Explore */}
+          {/* Navigate */}
           <div>
-            <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Explore</h3>
+            <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Navigate</h3>
             <ul className="space-y-2.5">
               <li>
                 <Link href="/penny-list" className={navLinkClass}>
-                  Community Penny List
+                  Penny List
                 </Link>
               </li>
               <li>
-                <Link href="/report-find" className={navLinkClass}>
-                  Report a Find
+                <Link href="/guide" className={navLinkClass}>
+                  Guide
                 </Link>
               </li>
               <li>
@@ -44,8 +44,8 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/guide" className={navLinkClass}>
-                  Guide
+                <Link href="/report-find" className={navLinkClass}>
+                  Report a Find
                 </Link>
               </li>
               <li>
@@ -61,21 +61,9 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Support */}
+          {/* Company */}
           <div>
-            <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Support</h3>
-            <ul className="space-y-2.5">
-              <li>
-                <Link href="/support" className={navLinkClass}>
-                  Support PennyCentral
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Legal */}
-          <div>
-            <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">About</h3>
+            <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Company</h3>
             <ul className="space-y-2.5">
               <li>
                 <Link href="/about" className={navLinkClass}>
@@ -85,6 +73,11 @@ export function Footer() {
               <li>
                 <Link href="/contact" className={navLinkClass}>
                   Contact Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/support" className={navLinkClass}>
+                  Support & Transparency
                 </Link>
               </li>
               <li>
@@ -102,11 +95,6 @@ export function Footer() {
                   Do Not Sell My Info
                 </Link>
               </li>
-              <li>
-                <span className="text-sm text-[var(--text-secondary)] leading-relaxed block">
-                  Not affiliated with Home Depot
-                </span>
-              </li>
             </ul>
           </div>
         </div>
@@ -117,7 +105,10 @@ export function Footer() {
             <p className="text-xs text-[var(--text-muted)] order-2 sm:order-1">
               © 2026 PennyCentral. Educational use only.
             </p>
-            <div className="flex items-center gap-4 order-1 sm:order-2">
+            <p className="text-xs text-[var(--text-muted)] order-3 sm:order-2">
+              Not affiliated with Home Depot
+            </p>
+            <div className="flex items-center gap-4 order-1 sm:order-3">
               <a
                 href="https://www.facebook.com/groups/homedepotonecent"
                 target="_blank"
