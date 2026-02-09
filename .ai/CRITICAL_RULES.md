@@ -136,13 +136,22 @@ Which would you prefer?"
 
 ### Required for "Done"
 
-1. **All 4 tests pass** (paste output):
+1. **FAST lane passes** (paste output):
 
    ```bash
-   npm run lint      # 0 errors
-   npm run build     # successful
-   npm run test:unit # all passing
-   npm run test:e2e  # all passing
+   npm run verify:fast # lint + typecheck + unit + build
+   ```
+
+   For route/form/API/navigation/UI-flow changes, also paste:
+
+   ```bash
+   npm run e2e:smoke
+   ```
+
+   For FULL-trigger conditions (PR to main, merge queue, `run-full-e2e` label, risky paths, nightly, manual), also paste:
+
+   ```bash
+   npm run e2e:full
    ```
 
    **If you touched styles/colors:** also paste `npm run lint:colors` output and confirm no raw Tailwind palette colors were introduced.
@@ -281,7 +290,7 @@ if (Test-Path $local) {
 ### ✅ STOP if:
 
 1. User's goal accomplished
-2. All 4 quality gates passed (lint/build/unit/e2e)
+2. Required verification lanes passed (`verify:fast`, plus `e2e:smoke`/`e2e:full` when applicable)
 3. Documentation updated
 4. User informed of what was done and next steps
 
@@ -291,32 +300,39 @@ if (Test-Path $local) {
 
 ## QA Trigger Rules
 
-### Default: qa:fast
+### Local Default
 
-All PRs run `npm run qa:fast` automatically. This includes:
+- Before every push: `npm run verify:fast` (lint + typecheck + unit + build)
+- For route/form/API/navigation/UI-flow changes: `npm run e2e:smoke`
 
-- **lint** - ESLint checks
-- **test:unit** - Unit tests
-- **build** - Next.js production build (catches type errors)
+### CI FAST lane
 
-Estimated time: ~2 minutes
+All pushes and PRs run `npm run verify:fast`.
 
-### When to Run qa:full
+### CI SMOKE lane
 
-Full QA runs automatically when:
+PRs and pushes to `main` run `npm run e2e:smoke`.
 
-- PR touches **risky files** (auth, db, api, infra, fragile UI)
-- PR has the **`full-qa` label** added
+### CI FULL lane
 
-**What qa:full adds:**
+Full QA runs when any trigger matches:
 
-- **test:e2e** - Playwright end-to-end tests
+- PR targets `main`
+- merge queue (`merge_group`)
+- PR has label **`run-full-e2e`**
+- risky paths changed
+- nightly schedule
+- manual `workflow_dispatch`
+
+**What FULL adds:**
+
+- **e2e:full** - Playwright full suite (sharded in CI)
 - **check-contrast** - Color contrast validation
 - **check-axe** - Accessibility checks
 
-Estimated time: ~8 minutes
+Estimated time target: ~5 minutes with sharding + cache (varies by queue/load).
 
-**Risky file paths (auto-trigger full QA):**
+**Risky file paths (auto-trigger FULL):**
 
 ```
 

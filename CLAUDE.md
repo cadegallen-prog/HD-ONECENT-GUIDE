@@ -53,6 +53,23 @@ These are the only technical commands Cade needs to know:
 **Cade's job:** Run these commands, grant permissions, pay for tools, make business decisions.
 **Your job:** Everything else.
 
+### Verification Lanes (Mandatory)
+
+- Local default before push: `npm run verify:fast` (lint + typecheck + unit + build).
+- Run `npm run e2e:smoke` for route, form, API, navigation, and other core flow changes.
+- Do not run full e2e by default during iteration; use `npm run e2e:full` for high-risk work or explicit requests.
+
+CI lane policy:
+
+- **FAST** runs on `push` + `pull_request`.
+- **SMOKE e2e** runs on `pull_request` and `push` to `main`.
+- **FULL e2e** runs when any trigger matches: PR targets `main`, `merge_group`, label `run-full-e2e`, risky paths changed, nightly schedule, or manual `workflow_dispatch`.
+
+Done-proof requirement:
+
+- Always include FAST + SMOKE evidence.
+- Include FULL e2e link/output whenever FULL trigger conditions apply.
+
 ### When to Challenge Cade
 
 Push back (politely but firmly) when Cade:
