@@ -429,4 +429,18 @@ export const metadata: Metadata = {
 
 ---
 
+### 16. One-off SKU Fix Scripts
+
+**Problem:** One-off scripts were created to fix incorrect SKUs and then left in `scripts/`.
+
+**What We Tried:** Created `scripts/fix-sku-1006609478.ts` and `scripts/fix-sku-527385.ts`, executed them to correct data, and removed them from the repo.
+
+**What We Learned:** One-off scripts are useful for immediate fixes but should be archived or deleted after use to avoid clutter and accidental reuse. Prefer parameterized, tested tools for repeated tasks.
+
+**What to Do Instead:** For single fixes: apply and then archive under `archive/scripts-pruned/` or delete after recording the action in `.ai/SESSION_LOG.md` and `.ai/LEARNINGS.md`. For recurring needs: build a safe, parameterized `scripts/fix-sku.ts` with dry-run default and tests.
+
+**Date:** Feb 09, 2026
+
+---
+
 **For full learning history:** See `archive/learnings-history/LEARNINGS_full_2024-2025.md`

@@ -4,6 +4,23 @@
 
 ---
 
+## 2026-02-09 - GitHub Copilot - Remove one-off SKU fix scripts
+
+**Goal:** Remove temporary one-off scripts used to correct SKU data and record the action.
+
+**Status:** ✅ Completed.
+
+### Changes
+
+- Removed: `scripts/fix-sku-1006609478.ts`, `scripts/fix-sku-527385.ts`
+- Added learning note: `.ai/LEARNINGS.md` (entry: 'One-off SKU Fix Scripts')
+
+### Verification
+
+- Confirmed files deleted and commit pushed.
+
+---
+
 ## 2026-02-09 - Codex - GA4 Forensics + Analytics Guardrails
 
 **Goal:** Determine exactly what GA4 tracked before/after analytics changes, fix undercount/duplicate risk, and lock recurring verification.
