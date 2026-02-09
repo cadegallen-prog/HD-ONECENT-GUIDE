@@ -18,6 +18,11 @@ Every AI session must update this after meaningful work.
   - **Guardrails added:** New command `npm run ai:analytics:verify` (`scripts/ai-analytics-verify.ts`) plus `.ai/topics/ANALYTICS_CONTRACT.md`.
   - **Coverage proof:** guide/canonical + legacy guide redirect matrix verified with exactly one `page_view` per tested route (`reports/ga4-guide-routes-prod-check.json`).
 
+- **2026-02-09 (Interactive MCP Setup):** Added `interactive-mcp` to the project baseline for better human-AI collaboration.
+  - **Config update:** Added `interactive` server to `.vscode/mcp.json`.
+  - **Docs update:** Updated `.ai/MCP_BASELINE.md`, `.ai/TOOLING_MANIFEST.md`, and `.ai/MCP_SETUP.md` to reflect the new standard.
+  - **Verification:** Verified successful tool communication via `mcp_interactive_request_user_input`.
+
 - **2026-02-08 (Guide recovery ship completion - main sync):** Completed chunked commit/push workflow and left branch clean/synced.
   - **Commits pushed to `main`:** `9cbce81` (guide phases 0-3), `db69c96` (sitewide monetization planning), `6277357` (process/canonicality docs), `89e6b8d` (bookmarklet source+build workflow), `725e1c5` (source artifacts + ignore hygiene).
   - **Bookmarklet hardening:** Added canonical source `tools/bookmarklets/pc-extractor.src.js`, deterministic builder `tools/bookmarklets/build-bookmarklet.js`, and regenerated `tools/bookmarklets/bookmarklet.txt` from source.

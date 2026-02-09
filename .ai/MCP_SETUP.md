@@ -45,6 +45,10 @@ args = ["-y", "@supabase/mcp-server-supabase@latest", "--read-only", "--project-
 [mcp_servers.supabase.env]
 SUPABASE_ACCESS_TOKEN = "${SUPABASE_ACCESS_TOKEN}"
 
+[mcp_servers.interactive]
+command = "npx"
+args = ["-y", "interactive-mcp"]
+
 [mcp_servers.openaiDeveloperDocs]
 url = "https://developers.openai.com/mcp"
 ```

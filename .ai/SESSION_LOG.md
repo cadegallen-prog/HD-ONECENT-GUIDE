@@ -4,6 +4,42 @@
 
 ---
 
+## 2026-02-09 - GitHub Copilot - Community Engagement Content
+
+**Goal:** Create social media post drafts to encourage group members to visit the website.
+
+**Status:** ✅ Completed.
+
+### Changes
+
+- Drafted 3 variations of a group announcement reflecting the 2026 guide updates and founder appreciation.
+- Highlighted the "Store Pulse/ZMA" updates and "Penny List" contributions.
+
+### Verification
+
+- Content provided directly to user (Cade).
+
+---
+
+## 2026-02-09 - GitHub Copilot - Interactive MCP Setup
+
+**Goal:** Add interactive-mcp to the project baseline and document usage.
+
+**Status:** ✅ Completed.
+
+### Changes
+
+- Updated `.vscode/mcp.json` to include the `interactive` server.
+- Updated `.ai/MCP_BASELINE.md`, `.ai/TOOLING_MANIFEST.md`, and `.ai/MCP_SETUP.md`.
+- Updated `.ai/CODEX_CONFIG_SNIPPET.toml`.
+- Verified tool functionality using `mcp_interactive_request_user_input`.
+
+### Verification
+
+- Successful interactive input from user (Cade).
+
+---
+
 ## 2026-02-09 - GitHub Copilot - Remove one-off SKU fix scripts
 
 **Goal:** Remove temporary one-off scripts used to correct SKU data and record the action.
@@ -54,41 +90,3 @@
   - `npm run ai:verify` ✅ (`reports/verification/2026-02-09T02-42-09/summary.md`)
   - `npm run lint` ✅
   - `npm run build` ✅
-
----
-
-## 2026-02-08 - Codex - Ship Completion (Commits + Push + Repo Hygiene)
-
-**Goal:** Finish shipping completed guide/planning work to `main` in safe chunks and leave branch clean/synced.
-
-**Status:** ✅ Completed.
-
-### Highlights
-
-- Pushed: `9cbce81`, `db69c96`, `6277357`, `89e6b8d`, `725e1c5`.
-- Added bookmarklet source/build workflow and regenerated canonical payload.
-- Tracked guide source artifacts and ignore hygiene updates.
-
-### Verification
-
-- `npm run ai:verify` ✅
-  - `reports/verification/2026-02-08T22-16-05/summary.md`
-
----
-
-## 2026-02-08 - Codex - Guide Recovery Phase 3 Drift Guard
-
-**Goal:** Execute Phase 3 from `.ai/impl/guide-recovery.md` and lock format/voice drift prevention.
-
-**Status:** ✅ Completed.
-
-### Highlights
-
-- Created `.ai/topics/GUIDE_FORMAT_CONTRACT.md` with canonical template, voice rules, concept order, and forbidden reintroductions.
-
-### Verification
-
-- `npm run ai:guide:guardrails` ✅
-  - `reports/guide-guardrails/2026-02-08T20-46-00.md`
-- `npm run ai:verify` ✅
-  - `reports/verification/2026-02-08T20-46-17/summary.md`

@@ -8,6 +8,7 @@
 - **github** — PRs/issues/status checks
 - **playwright** — screenshots + browser automation (proof for UI changes)
 - **supabase** — DB access for penny list and related data
+- **interactive** — user input/clarification during complex tasks
 
 > Note: `@modelcontextprotocol/server-git` is not published; we rely on `github` MCP for repo status/PR data and native git CLI for local git ops.
 

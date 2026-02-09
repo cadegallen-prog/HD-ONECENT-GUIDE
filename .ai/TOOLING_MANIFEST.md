@@ -78,13 +78,14 @@ MCPs are configured for ALL THREE AI tools:
 | `.claude/settings.json` | Claude Code                    |
 | `~/.codex/config.toml`  | Codex (see `.ai/MCP_SETUP.md`) |
 
-| MCP        | Purpose                             |
-| ---------- | ----------------------------------- |
-| Filesystem | Read/write project files            |
-| Git        | Version control operations          |
-| GitHub     | PRs, issues, actions                |
-| Supabase   | Direct database access, SQL queries |
-| Vercel     | Deployment info (Claude only)       |
+| MCP         | Purpose                             |
+| ----------- | ----------------------------------- |
+| Filesystem  | Read/write project files            |
+| Git         | Version control operations          |
+| GitHub      | PRs, issues, actions                |
+| Supabase    | Direct database access, SQL queries |
+| Interactive | User input/clarification tools      |
+| Vercel      | Deployment info (Claude only)       |
 
 **Setup Guide:** `.ai/MCP_SETUP.md`
 

@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
-import { EditorialBlock } from "@/components/guide/EditorialBlock"
 import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
 
 export const metadata: Metadata = {
@@ -9,6 +8,33 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/facts-vs-myths",
   },
+}
+
+const articleJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: "Penny Hunting Facts vs Myths",
+  description: "Clear, practical myth-busting based on community patterns and in-store reality.",
+  author: { "@type": "Person", name: "Cade Allen", url: "https://www.pennycentral.com/about" },
+  publisher: {
+    "@type": "Organization",
+    name: "Penny Central",
+    url: "https://www.pennycentral.com",
+    logo: { "@type": "ImageObject", url: "https://www.pennycentral.com/icon.svg" },
+  },
+  datePublished: "2025-06-01",
+  dateModified: "2026-02-09",
+  mainEntityOfPage: "https://www.pennycentral.com/facts-vs-myths",
+}
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://www.pennycentral.com" },
+    { "@type": "ListItem", position: 2, name: "Guide", item: "https://www.pennycentral.com/guide" },
+    { "@type": "ListItem", position: 3, name: "Facts vs. Myths" },
+  ],
 }
 
 const comparisons = [
@@ -93,228 +119,253 @@ const redFlags = [
 
 export default function FactsVsMythsPage() {
   return (
-    <PageShell width="default" padding="sm" gap="md">
-      <div className="w-full max-w-[68ch] mx-auto">
-        <PageHeader
-          title="Facts vs. Myths"
-          subtitle="Separating useful signals from rumors that waste your time."
-        />
-      </div>
-
-      <EditorialBlock className="w-full max-w-[68ch] mx-auto" />
-
-      <Section className="w-full max-w-[68ch] mx-auto">
-        <Prose variant="guide">
-          <p className="mb-8 text-lg leading-relaxed">
-            Penny hunting lives on community information. That is a strength, but it also creates a
-            lot of noise. This chapter filters the most common myths so you can focus on what
-            actually works.
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <PageShell width="default" padding="sm" gap="md">
+        <div className="w-full max-w-[68ch] mx-auto">
+          <nav aria-label="Breadcrumb" className="mb-3 text-sm text-[var(--text-muted)]">
+            <a href="/" className="hover:text-[var(--cta-primary)]">
+              Home
+            </a>
+            <span className="mx-1.5">/</span>
+            <a href="/guide" className="hover:text-[var(--cta-primary)]">
+              Guide
+            </a>
+            <span className="mx-1.5">/</span>
+            <span className="text-[var(--text-secondary)]">Facts vs. Myths</span>
+          </nav>
+          <PageHeader
+            title="Facts vs. Myths"
+            subtitle="Separating useful signals from rumors that waste your time."
+          />
+          <p className="mt-2 mb-8 text-xs text-[var(--text-muted)]">
+            <time dateTime="2026-02-09">Updated February 2026</time> · By Cade Allen
           </p>
+        </div>
 
-          <h2>Common misconceptions</h2>
+        <Section className="w-full max-w-[68ch] mx-auto">
+          <Prose variant="guide">
+            <p className="mb-8 text-lg leading-relaxed">
+              Penny hunting lives on community information. That is a strength, but it also creates
+              a lot of noise. This chapter filters the most common myths so you can focus on what
+              actually works.
+            </p>
 
-          <div className="space-y-12">
-            {comparisons.map((item, index) => (
-              <div key={index} className="grid md:grid-cols-2 gap-6 items-start">
-                <div className="p-6 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)] border-l-4 border-l-[var(--status-error)]">
-                  <h3 className="text-[var(--status-error)] font-bold uppercase tracking-tight text-sm mb-2 flex items-center gap-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <circle cx="12" cy="12" r="10" />
-                      <line x1="15" y1="9" x2="9" y2="15" />
-                      <line x1="9" y1="9" x2="15" y2="15" />
-                    </svg>
-                    The Myth
-                  </h3>
-                  <p className="text-[var(--text-primary)] font-medium leading-relaxed">
-                    "{item.myth}"
-                  </p>
+            <h2>Common misconceptions</h2>
+
+            <div className="space-y-12">
+              {comparisons.map((item, index) => (
+                <div key={index} className="grid md:grid-cols-2 gap-6 items-start">
+                  <div className="p-6 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)] border-l-4 border-l-[var(--status-error)]">
+                    <h3 className="text-[var(--status-error)] font-bold uppercase tracking-tight text-sm mb-2 flex items-center gap-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="15" y1="9" x2="9" y2="15" />
+                        <line x1="9" y1="9" x2="15" y2="15" />
+                      </svg>
+                      The Myth
+                    </h3>
+                    <p className="text-[var(--text-primary)] font-medium leading-relaxed">
+                      "{item.myth}"
+                    </p>
+                  </div>
+                  <div className="p-6 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)] border-l-4 border-l-[var(--cta-primary)]">
+                    <h3 className="text-[var(--cta-primary)] font-bold uppercase tracking-tight text-sm mb-2 flex items-center gap-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                      The Fact
+                    </h3>
+                    <p className="text-[var(--text-primary)] leading-relaxed">{item.fact}</p>
+                  </div>
                 </div>
-                <div className="p-6 rounded-xl bg-[var(--bg-card)] border border-[var(--border-default)] border-l-4 border-l-[var(--cta-primary)]">
-                  <h3 className="text-[var(--cta-primary)] font-bold uppercase tracking-tight text-sm mb-2 flex items-center gap-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <polyline points="20 6 9 17 4 12" />
-                    </svg>
-                    The Fact
-                  </h3>
-                  <p className="text-[var(--text-primary)] leading-relaxed">{item.fact}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
 
-          <h2>How we decide what is real</h2>
-          <ul className="mb-8">
-            {researchRules.map((rule) => (
-              <li key={rule}>{rule}</li>
-            ))}
-          </ul>
-          <p className="mb-6">
-            Community intel is most reliable when it includes a SKU or UPC, the store or region, and
-            a recent date. It is weakest when it is a cropped screenshot with no context.
-          </p>
+            <h2>How we decide what is real</h2>
+            <ul className="mb-8">
+              {researchRules.map((rule) => (
+                <li key={rule}>{rule}</li>
+              ))}
+            </ul>
+            <p className="mb-6">
+              Community intel is most reliable when it includes a SKU or UPC, the store or region,
+              and a recent date. It is weakest when it is a cropped screenshot with no context.
+            </p>
 
-          <div className="overflow-x-auto mb-8">
-            <table className="w-full border-collapse border border-[var(--border-default)]">
-              <thead>
-                <tr className="bg-[var(--bg-elevated)]">
-                  <th className="border border-[var(--border-default)] px-4 py-3 text-left font-bold">
-                    Claim
-                  </th>
-                  <th className="border border-[var(--border-default)] px-4 py-3 text-left font-bold">
-                    Reality
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {realityTable.map((row) => (
-                  <tr key={row.claim} className="hover:bg-[var(--bg-elevated)] transition-colors">
-                    <td className="border border-[var(--border-default)] px-4 py-3 font-semibold">
-                      {row.claim}
-                    </td>
-                    <td className="border border-[var(--border-default)] px-4 py-3 text-[var(--text-secondary)]">
-                      {row.reality}
-                    </td>
+            <div className="overflow-x-auto mb-8">
+              <table className="w-full border-collapse border border-[var(--border-default)]">
+                <thead>
+                  <tr className="bg-[var(--bg-elevated)]">
+                    <th className="border border-[var(--border-default)] px-4 py-3 text-left font-bold">
+                      Claim
+                    </th>
+                    <th className="border border-[var(--border-default)] px-4 py-3 text-left font-bold">
+                      Reality
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p className="text-sm text-[var(--text-secondary)] mb-4">
-            For detailed cadence breakdown, see Chapter 2.
-          </p>
+                </thead>
+                <tbody>
+                  {realityTable.map((row) => (
+                    <tr key={row.claim} className="hover:bg-[var(--bg-elevated)] transition-colors">
+                      <td className="border border-[var(--border-default)] px-4 py-3 font-semibold">
+                        {row.claim}
+                      </td>
+                      <td className="border border-[var(--border-default)] px-4 py-3 text-[var(--text-secondary)]">
+                        {row.reality}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="text-sm text-[var(--text-secondary)] mb-4">
+              For detailed cadence breakdown, see Chapter 2.
+            </p>
 
-          <h2>Red flags to ignore</h2>
-          <ul className="mb-8">
-            {redFlags.map((flag) => (
-              <li key={flag}>{flag}</li>
-            ))}
-          </ul>
+            <h2>Red flags to ignore</h2>
+            <ul className="mb-8">
+              {redFlags.map((flag) => (
+                <li key={flag}>{flag}</li>
+              ))}
+            </ul>
 
-          <h2>Why timeline myths spread so fast</h2>
-          <p className="mb-6">
-            Timeline myths feel trustworthy because they are simple. "Pennies always drop on X day"
-            sounds actionable, so people repeat it even when it fails half the time. In reality,
-            markdown timing is driven by local conditions: staffing, reset windows, inventory
-            pressure, and category behavior. A pattern that worked in one district can fail
-            immediately in another.
-          </p>
-          <p className="mb-8">
-            Treat all timing claims as probability, not certainty. If a post includes no SKU, no
-            store context, and no recent date, you are reading entertainment, not field-ready intel.
-          </p>
+            <h2>Why timeline myths spread so fast</h2>
+            <p className="mb-6">
+              Timeline myths feel trustworthy because they are simple. "Pennies always drop on X
+              day" sounds actionable, so people repeat it even when it fails half the time. In
+              reality, markdown timing is driven by local conditions: staffing, reset windows,
+              inventory pressure, and category behavior. A pattern that worked in one district can
+              fail immediately in another.
+            </p>
+            <p className="mb-8">
+              Treat all timing claims as probability, not certainty. If a post includes no SKU, no
+              store context, and no recent date, you are reading entertainment, not field-ready
+              intel.
+            </p>
 
-          <h2>90-second validation workflow</h2>
-          <p className="mb-6">
-            Use this fast screen before acting on any claim. It protects your time and keeps the
-            Penny List signal quality high.
-          </p>
-          <ol className="mb-8">
-            <li>
-              <strong>Identifier check:</strong> Confirm the post includes a SKU or UPC. If not,
-              stop there.
-            </li>
-            <li>
-              <strong>Date check:</strong> Verify the report is recent enough to matter for your
-              next trip.
-            </li>
-            <li>
-              <strong>Location check:</strong> Make sure the store/region is known and relevant to
-              your hunt.
-            </li>
-            <li>
-              <strong>Signal stack check:</strong> Look for at least one supporting signal
-              (late-stage ending, old tag date, No Home context, or multiple matching reports).
-            </li>
-            <li>
-              <strong>Decision check:</strong> If you would regret the trip without the penny, skip
-              it and wait for stronger evidence.
-            </li>
-          </ol>
+            <h2>90-second validation workflow</h2>
+            <p className="mb-6">
+              Use this fast screen before acting on any claim. It protects your time and keeps the
+              Penny List signal quality high.
+            </p>
+            <ol className="mb-8">
+              <li>
+                <strong>Identifier check:</strong> Confirm the post includes a SKU or UPC. If not,
+                stop there.
+              </li>
+              <li>
+                <strong>Date check:</strong> Verify the report is recent enough to matter for your
+                next trip.
+              </li>
+              <li>
+                <strong>Location check:</strong> Make sure the store/region is known and relevant to
+                your hunt.
+              </li>
+              <li>
+                <strong>Signal stack check:</strong> Look for at least one supporting signal
+                (late-stage ending, old tag date, No Home context, or multiple matching reports).
+              </li>
+              <li>
+                <strong>Decision check:</strong> If you would regret the trip without the penny,
+                skip it and wait for stronger evidence.
+              </li>
+            </ol>
 
-          <h2>60-second vetting checklist</h2>
-          <ol className="mb-8">
-            <li>Check the date and the specific store or region.</li>
-            <li>Look for a SKU or UPC, not just a price screenshot.</li>
-            <li>Compare the report to tag dates and price endings you can see.</li>
-            <li>See if there are multiple recent reports, not just one post.</li>
-            <li>Decide if the trip is worth it even if the penny is gone.</li>
-          </ol>
+            <h2>60-second vetting checklist</h2>
+            <ol className="mb-8">
+              <li>Check the date and the specific store or region.</li>
+              <li>Look for a SKU or UPC, not just a price screenshot.</li>
+              <li>Compare the report to tag dates and price endings you can see.</li>
+              <li>See if there are multiple recent reports, not just one post.</li>
+              <li>Decide if the trip is worth it even if the penny is gone.</li>
+            </ol>
 
-          <h2>Why myths persist</h2>
-          <p className="mb-8">
-            Penny hunting moves fast, and screenshots spread faster. A real penny find in one store
-            can turn into a rumor for every store within hours. Treat rumors as leads, not truth.
-          </p>
+            <h2>Why myths persist</h2>
+            <p className="mb-8">
+              Penny hunting moves fast, and screenshots spread faster. A real penny find in one
+              store can turn into a rumor for every store within hours. Treat rumors as leads, not
+              truth.
+            </p>
 
-          <h2>Trip ROI rule</h2>
-          <p className="mb-6">
-            A good lead should still make sense if the penny is gone. If your plan depends on one
-            unverified screenshot, your expected return is low. Build trips around clusters of
-            credible signals so each stop has more than one chance to pay off.
-          </p>
-          <ul className="mb-8">
-            <li>Group nearby departments so one failed SKU does not waste the entire trip.</li>
-            <li>Prioritize repeatable patterns over viral one-off claims.</li>
-            <li>Track what worked in your store so your next trip gets smarter, not longer.</li>
-            <li>
-              Share corrected outcomes back to the community so weak myths lose traction over time.
-            </li>
-          </ul>
+            <h2>Trip ROI rule</h2>
+            <p className="mb-6">
+              A good lead should still make sense if the penny is gone. If your plan depends on one
+              unverified screenshot, your expected return is low. Build trips around clusters of
+              credible signals so each stop has more than one chance to pay off.
+            </p>
+            <ul className="mb-8">
+              <li>Group nearby departments so one failed SKU does not waste the entire trip.</li>
+              <li>Prioritize repeatable patterns over viral one-off claims.</li>
+              <li>Track what worked in your store so your next trip gets smarter, not longer.</li>
+              <li>
+                Share corrected outcomes back to the community so weak myths lose traction over
+                time.
+              </li>
+            </ul>
 
-          <h2>Example: strong report vs. weak report</h2>
-          <p className="mb-4">
-            <strong>Strong report:</strong> Includes the SKU, the store, the date, and a clear photo
-            of the tag or UPC. You can verify it in your own context.
-          </p>
-          <p className="mb-8">
-            <strong>Weak report:</strong> A cropped screenshot with no date, no SKU, and no store.
-            It might be real, but you cannot act on it responsibly.
-          </p>
+            <h2>Example: strong report vs. weak report</h2>
+            <p className="mb-4">
+              <strong>Strong report:</strong> Includes the SKU, the store, the date, and a clear
+              photo of the tag or UPC. You can verify it in your own context.
+            </p>
+            <p className="mb-8">
+              <strong>Weak report:</strong> A cropped screenshot with no date, no SKU, and no store.
+              It might be real, but you cannot act on it responsibly.
+            </p>
 
-          <h2>Research deep dive</h2>
-          <p className="mb-6">
-            Home Depot does not publish a penny roadmap, so community intel is the best available
-            data. It is strong when it is recent, specific, and backed by receipts or tag photos. It
-            is weak when it is vague or repeated without context.
-          </p>
-          <p className="mb-8">
-            Treat every report as a lead, not a promise. The most successful hunters combine
-            community tips with their own store knowledge. If you would regret the trip without the
-            penny, skip it.
-          </p>
-        </Prose>
+            <h2>Research deep dive</h2>
+            <p className="mb-6">
+              Home Depot does not publish a penny roadmap, so community intel is the best available
+              data. It is strong when it is recent, specific, and backed by receipts or tag photos.
+              It is weak when it is vague or repeated without context.
+            </p>
+            <p className="mb-8">
+              Treat every report as a lead, not a promise. The most successful hunters combine
+              community tips with their own store knowledge. If you would regret the trip without
+              the penny, skip it.
+            </p>
+          </Prose>
 
-        <ChapterNavigation
-          prev={{
-            slug: "inside-scoop",
-            title: "Inside Scoop (2026 Context)",
-          }}
-          next={{
-            slug: "faq",
-            title: "FAQ & Quick Reference",
-          }}
-        />
-      </Section>
-    </PageShell>
+          <ChapterNavigation
+            prev={{
+              slug: "inside-scoop",
+              title: "Inside Scoop (2026 Context)",
+            }}
+            next={{
+              slug: "faq",
+              title: "FAQ & Quick Reference",
+            }}
+          />
+        </Section>
+      </PageShell>
+    </>
   )
 }

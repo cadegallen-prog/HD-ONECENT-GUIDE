@@ -241,12 +241,19 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
             Home Depot Penny Items List (Live $0.01 Finds)
           </h1>
           <p className="text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
-            Community reports of recent penny sightings.{" "}
+            Community-submitted reports of items currently scanning at $0.01 at Home Depot stores
+            nationwide. Filter by your state, sort by recency or report strength, and build a
+            shortlist before your next store run. Each entry includes the SKU, department, and how
+            many independent hunters have confirmed it.
+          </p>
+          <p className="mt-3 text-sm text-[var(--text-muted)] max-w-2xl mx-auto">
+            This is a live lead board — not a guaranteed checkout list. Always verify in-store
+            before purchasing.{" "}
             <a
               href="/guide"
               className="text-[var(--link-default)] hover:text-[var(--link-hover)] underline underline-offset-4"
             >
-              New? Learn how to find penny items first.
+              New to penny shopping? Start with the guide.
             </a>
           </p>
         </div>

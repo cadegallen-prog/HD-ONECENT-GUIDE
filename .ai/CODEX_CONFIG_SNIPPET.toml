@@ -20,6 +20,10 @@ args = ["-y", "@modelcontextprotocol/server-github"]
 command = "npx"
 args = ["-y", "@playwright/mcp"]
 
+[mcp_servers.interactive]
+command = "npx"
+args = ["-y", "interactive-mcp"]
+
 [mcp_servers.supabase]
 command = "npx"
 args = ["-y", "@supabase/mcp-server-supabase", "--read-only", "--project-ref", "djtejotbcnzzjfsogzlc"]
