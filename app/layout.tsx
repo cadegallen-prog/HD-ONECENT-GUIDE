@@ -221,7 +221,7 @@ export default function RootLayout({
                   gtag('js', new Date());
 
                   // Measurement ID: ${GA_MEASUREMENT_ID}
-                  // Initial coverage for bounces/speed; SPA transitions handled by <AnalyticsTracker />
+                  // Use GA auto page_view as the single source of truth.
                   gtag('config', '${GA_MEASUREMENT_ID}');
 
                   (function() {
