@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 8, 2026 (Guide recovery shipped to main in commit chunks; bookmarklet workflow and source artifacts synced)
+**Last updated:** Feb 9, 2026 (Guide editorial block restored across guide hub + chapters with full 4-gate verification + UI proof)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,11 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-09 (Guide editorial block restoration):** Restored the full editorial strip across guide pages and removed smaller replacement timestamp text.
+  - **Scope:** `app/guide/page.tsx` + all chapter routes (`/what-are-pennies`, `/clearance-lifecycle`, `/digital-pre-hunt`, `/in-store-strategy`, `/inside-scoop`, `/facts-vs-myths`, `/faq`).
+  - **Change detail:** Replaced inline "Updated February 2026 · By Cade Allen" metadata rows with shared `EditorialBlock` (founder byline preserved as "Written by Cade Allen").
+  - **Verification:** `npm run lint` ✅, `npm run build` ✅, `npm run test:unit` ✅ (26/26), `npm run test:e2e` ✅ (156/156), proof bundle: `reports/proof/2026-02-09T08-49-22/`.
 
 - **2026-02-09 (GA4 hardening + forensic verification):** Resolved analytics undercount/overlap risk with a single-source pageview model and recurring verification.
   - **Root cause confirmed:** Pre-fix baseline (`eb366bc`) missed landing-page pageviews in tested flows.

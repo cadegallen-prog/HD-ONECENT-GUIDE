@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
 import { TruthMatrix } from "@/components/guide/TruthMatrix"
 import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
+import { EditorialBlock } from "@/components/guide/EditorialBlock"
 
 export const metadata: Metadata = {
   title: "Home Depot Clearance Lifecycle (2026 Guide) | Penny Central",
@@ -189,9 +190,7 @@ export default function ClearanceLifecyclePage() {
             title="Clearance Lifecycle & Cadence"
             subtitle="How penny items typically move through clearance, and how to read the signals responsibly."
           />
-          <p className="mt-2 mb-8 text-xs text-[var(--text-muted)]">
-            <time dateTime="2026-02-09">Updated February 2026</time> · By Cade Allen
-          </p>
+          <EditorialBlock className="mt-2 mb-8" />
         </div>
 
         <Section className="w-full max-w-[68ch] mx-auto">

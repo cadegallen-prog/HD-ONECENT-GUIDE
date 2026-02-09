@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
 import Link from "next/link"
 import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
+import { EditorialBlock } from "@/components/guide/EditorialBlock"
 
 export const metadata: Metadata = {
   title: "What Are Penny Items? - Home Depot $0.01 Clearance Explained | Penny Central",
@@ -102,9 +103,7 @@ export default function WhatArePenniesPage() {
             title="What Are Penny Items?"
             subtitle="A beginner-friendly foundation for understanding the $0.01 clearance system."
           />
-          <p className="mt-2 mb-8 text-xs text-[var(--text-muted)]">
-            <time dateTime="2026-02-09">Updated February 2026</time> · By Cade Allen
-          </p>
+          <EditorialBlock className="mt-2 mb-8" />
         </div>
 
         <Section className="w-full max-w-[68ch] mx-auto">

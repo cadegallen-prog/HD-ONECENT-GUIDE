@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { TableOfContents } from "@/components/guide/TableOfContents"
 import { EthicalDisclosure } from "@/components/guide/EthicalDisclosure"
+import { EditorialBlock } from "@/components/guide/EditorialBlock"
 
 export const metadata: Metadata = {
   title: "Home Depot Penny Guide (2026) | Penny Central",
@@ -165,9 +166,6 @@ export default function GuideHubPage() {
             <span className="mx-1.5">/</span>
             <span className="text-[var(--text-secondary)]">Guide</span>
           </nav>
-          <p className="inline-flex items-center rounded-full border border-[var(--border-default)] bg-[var(--bg-elevated)] px-3 py-1 text-xs font-semibold uppercase tracking-wide text-[var(--text-muted)]">
-            Updated February 2026
-          </p>
           <h1 className="text-3xl font-extrabold tracking-tight text-[var(--text-primary)] md:text-5xl">
             The Home Depot Penny Guide
           </h1>
@@ -175,6 +173,7 @@ export default function GuideHubPage() {
             Practical, community-verified guidance for penny items, clearance patterns, and
             respectful in-store behavior.
           </p>
+          <EditorialBlock className="mt-1" />
           <div className="flex flex-wrap gap-3 pt-1">
             <Button asChild size="lg" variant="primary">
               <Link href="/what-are-pennies">

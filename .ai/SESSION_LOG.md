@@ -4,6 +4,38 @@
 
 ---
 
+## 2026-02-09 - Codex - Guide Editorial Block Restoration
+
+**Goal:** Restore the guide editorial block styling across guide routes and remove the smaller "Updated February 2026" replacement text while keeping founder byline.
+
+**Status:** ✅ Completed.
+
+### Changes
+
+- Restored `EditorialBlock` usage on all guide chapter pages:
+  - `app/what-are-pennies/page.tsx`
+  - `app/clearance-lifecycle/page.tsx`
+  - `app/digital-pre-hunt/page.tsx`
+  - `app/in-store-strategy/page.tsx`
+  - `app/inside-scoop/page.tsx`
+  - `app/facts-vs-myths/page.tsx`
+  - `app/faq/page.tsx`
+- Restored `EditorialBlock` on the guide hub:
+  - `app/guide/page.tsx`
+- Removed all inline small-text replacements that used `<time ...>Updated February 2026</time> · By Cade Allen`.
+- Confirmed founder attribution remains in the editorial component (`Written by Cade Allen`).
+
+### Verification
+
+- `npm run lint` ✅
+- `npm run build` ✅
+- `npm run test:unit` ✅ (26/26)
+- `npm run test:e2e` ✅ (156/156)
+- UI proof bundle (guide routes light + dark): `reports/proof/2026-02-09T08-49-22/`
+  - Console report: `reports/proof/2026-02-09T08-49-22/console-errors.txt`
+
+---
+
 ## 2026-02-09 - GitHub Copilot - Community Engagement Content
 
 **Goal:** Create social media post drafts to encourage group members to visit the website.
@@ -18,42 +50,6 @@
 ### Verification
 
 - Content provided directly to user (Cade).
-
----
-
-## 2026-02-09 - GitHub Copilot - Interactive MCP Setup
-
-**Goal:** Add interactive-mcp to the project baseline and document usage.
-
-**Status:** ✅ Completed.
-
-### Changes
-
-- Updated `.vscode/mcp.json` to include the `interactive` server.
-- Updated `.ai/MCP_BASELINE.md`, `.ai/TOOLING_MANIFEST.md`, and `.ai/MCP_SETUP.md`.
-- Updated `.ai/CODEX_CONFIG_SNIPPET.toml`.
-- Verified tool functionality using `mcp_interactive_request_user_input`.
-
-### Verification
-
-- Successful interactive input from user (Cade).
-
----
-
-## 2026-02-09 - GitHub Copilot - Remove one-off SKU fix scripts
-
-**Goal:** Remove temporary one-off scripts used to correct SKU data and record the action.
-
-**Status:** ✅ Completed.
-
-### Changes
-
-- Removed: `scripts/fix-sku-1006609478.ts`, `scripts/fix-sku-527385.ts`
-- Added learning note: `.ai/LEARNINGS.md` (entry: 'One-off SKU Fix Scripts')
-
-### Verification
-
-- Confirmed files deleted and commit pushed.
 
 ---
 

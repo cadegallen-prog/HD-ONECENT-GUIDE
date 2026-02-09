@@ -443,4 +443,18 @@ export const metadata: Metadata = {
 
 ---
 
+### 17. E2E Reuse on Port 3002 Can Produce False Failures
+
+**Problem:** `npm run test:e2e` failed with dozens of unrelated Playwright failures (MIME type/script chunk errors) after trying to reuse an already-running server on port 3002.
+
+**What We Tried:** Set `PLAYWRIGHT_REUSE_EXISTING_SERVER=1` and reran e2e.
+
+**What We Learned:** Reusing a stale Next server on port 3002 can serve mismatched chunk artifacts and trigger broad false negatives across many specs.
+
+**What to Do Instead:** If e2e reports port 3002 in use, stop the stale 3002 listener and run a clean `npm run test:e2e` so Playwright owns the server lifecycle for that run.
+
+**Date:** Feb 09, 2026
+
+---
+
 **For full learning history:** See `archive/learnings-history/LEARNINGS_full_2024-2025.md`

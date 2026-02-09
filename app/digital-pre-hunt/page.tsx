@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
 import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
+import { EditorialBlock } from "@/components/guide/EditorialBlock"
 
 export const metadata: Metadata = {
   title: "Labels, Overhead, & Pre-Hunt Strategy | Penny Central",
@@ -170,9 +171,7 @@ export default function DigitalPreHuntPage() {
             title="Labels, Overhead, & Pre-Hunt"
             subtitle="Use label signals and digital checks to cut wasted trips."
           />
-          <p className="mt-2 mb-8 text-xs text-[var(--text-muted)]">
-            <time dateTime="2026-02-09">Updated February 2026</time> · By Cade Allen
-          </p>
+          <EditorialBlock className="mt-2 mb-8" />
         </div>
 
         <Section className="w-full max-w-[68ch] mx-auto">
