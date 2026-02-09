@@ -4,6 +4,40 @@
 
 ---
 
+## 2026-02-09 - Codex - Full QA Failure Forensics + CI Green Fix
+
+**Goal:** Re-audit tiered verification rollout and fix the failing `Full QA Suite` workflow with proof.
+
+**Status:** ✅ Completed.
+
+### Changes
+
+- Forensic audit artifacts created:
+  - `reports/forensics/review2-tiered-verification.md`
+  - `reports/forensics/review2-full-qa-failure-excerpt.txt`
+- Fixed Full QA shard artifact naming bug in `.github/workflows/full-qa.yml`:
+  - replaced matrix shard labels `"1/2","2/2"` with numeric fields and slash-free artifact names (`full-e2e-shard-1-of-2`, `full-e2e-shard-2-of-2`).
+- Fixed false-failing border contrast assertion in `scripts/check-contrast.js`:
+  - border checks now compare `borderColor` against `backgroundColor` (instead of text `color` against `borderColor`).
+
+### Verification
+
+- Local:
+  - `npm run verify:fast` ✅ (`reports/forensics/review2-phase4-verify-fast-after-fix.log`)
+  - `npm run e2e:smoke` ✅ (`reports/forensics/review2-phase4-e2e-smoke-after-fix.log`)
+  - `npm run e2e:full` ✅ (`reports/forensics/review2-phase4-e2e-full-after-fix.log`)
+  - `npm run check-contrast` ✅ (`reports/forensics/review2-phase4-check-contrast-after-fix.log`)
+- CI (PR #133):
+  - FAST ✅ https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/21840056433
+  - SMOKE ✅ https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/21840056489
+  - FULL ✅ https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/21840056498
+- Failure root-cause evidence:
+  - Invalid artifact name due `/` in shard label
+  - Contrast failure false-positive due border assertion math
+  - See `reports/forensics/review2-full-qa-failure-excerpt.txt` and `reports/forensics/review2-tiered-verification.md`
+
+---
+
 ## 2026-02-09 - Codex - Tiered Verification Lanes (FAST + SMOKE + FULL)
 
 **Goal:** Forensically audit current verification behavior, then implement a strict tiered workflow that avoids full e2e on every iteration while staying enforceable across local scripts, CI, and agent docs.
@@ -74,37 +108,3 @@
   - Console report: `reports/proof/2026-02-09T08-49-22/console-errors.txt`
 
 ---
-
-## 2026-02-09 - Codex - GA4 Forensics + Analytics Guardrails
-
-**Goal:** Determine exactly what GA4 tracked before/after analytics changes, fix undercount/duplicate risk, and lock recurring verification.
-
-**Status:** ✅ Completed.
-
-### Changes
-
-- Ran commit-forensic baseline against `eb366bc` and compared to current behavior.
-  - Baseline proved missing landing-page pageviews (undercount risk).
-  - Intermediate state restored coverage but introduced duplicate-risk on SPA navigation.
-- Implemented single-source pageview model:
-  - `app/layout.tsx`: GA auto pageviews via `gtag('config', 'G-DJ4RJRX05E')`.
-  - `components/analytics-tracker.tsx`: converted to no-op placeholder (prevents dual emitters).
-  - `next.config.js`: frame-src updated for adtraffic/google frame noise stability.
-- Added recurring analytics verification automation:
-  - `scripts/ai-analytics-verify.ts`
-  - `package.json` script: `ai:analytics:verify`
-- Added analytics contract docs:
-  - `.ai/topics/ANALYTICS_CONTRACT.md`
-  - `.ai/topics/INDEX.md` entry
-
-### Verification
-
-- `npm run ai:analytics:verify` ✅
-  - Artifact: `reports/analytics-verification/2026-02-09T02-59-46-987Z/summary.md`
-  - JSON: `reports/analytics-verification/2026-02-09T02-59-46-987Z/result.json`
-- Route matrix verification (guide + canonical + legacy guide redirects) ✅
-  - Artifact: `reports/ga4-guide-routes-prod-check.json`
-- Full gate check:
-  - `npm run ai:verify` ✅ (`reports/verification/2026-02-09T02-42-09/summary.md`)
-  - `npm run lint` ✅
-  - `npm run build` ✅

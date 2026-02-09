@@ -30,6 +30,30 @@ Scan this FIRST before suggesting anything. If your idea matches an anti-pattern
 
 ## Top 10 Learnings (Most Important)
 
+### 0a. `npm ci` can fail on Windows when native binaries are locked
+
+**Problem:** `npm ci` failed with `EPERM: operation not permitted, unlink ... esbuild.exe`, leaving the repo in a partially installed state (`eslint` missing on next run).
+
+**What We Tried:**
+
+- Ran `npm ci` directly during CI forensics on branch `ci-tiered-verification`
+- Confirmed lock contention from running Node/esbuild processes
+
+**What We Learned:**
+
+- On Windows, native binaries (`esbuild`, `next-swc`, `rollup` addons) can be file-locked by active processes.
+- A failed `npm ci` can remove enough modules to break local verification scripts.
+
+**What to Do Instead:**
+
+- Prefer clean shells with minimal active Node/esbuild processes before `npm ci`.
+- If `npm ci` fails with `EPERM`, run `npm install` once to restore dependencies, then continue verification.
+- Record both attempts in forensic evidence so “local pass” claims stay truthful.
+
+**Date:** Feb 9, 2026
+
+---
+
 ### 0. Route deletion + stale Next type artifacts
 
 **Problem:** After deleting a route page, `npm run build` failed with type errors from stale generated files under `.next-playwright/types` and `.next/dev/types/app/...`.

@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 9, 2026 (Tiered verification lanes implemented: FAST + SMOKE defaults, conditional FULL in CI)
+**Last updated:** Feb 9, 2026 (Tiered verification rollout forensics complete; Full QA failure fixed and FAST/SMOKE/FULL CI now green)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,12 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-09 (Full QA failure forensic fix):** Re-verified tiered verification rollout and resolved deterministic CI failures blocking `Full QA Suite`.
+  - **Root causes proven:** (1) invalid artifact names in sharded full-e2e uploads (`full-e2e-shard-1/2`) and (2) false-positive border contrast failure caused by `scripts/check-contrast.js` comparing text color vs border color for border checks.
+  - **Fixes shipped:** `.github/workflows/full-qa.yml` shard matrix/name update (slash-free artifact names) and `scripts/check-contrast.js` border assertion correction (border color measured against background color).
+  - **CI proof:** FAST ✅ `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/21840056433`, SMOKE ✅ `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/21840056489`, FULL ✅ `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/21840056498` (PR `#133`).
+  - **Local proof:** `npm run verify:fast` ✅ (`reports/forensics/review2-phase4-verify-fast-after-fix.log`), `npm run e2e:smoke` ✅ (`reports/forensics/review2-phase4-e2e-smoke-after-fix.log`), `npm run e2e:full` ✅ (`reports/forensics/review2-phase4-e2e-full-after-fix.log`), `npm run check-contrast` ✅ (`reports/forensics/review2-phase4-check-contrast-after-fix.log`).
 
 - **2026-02-09 (Tiered CI/CD verification overhaul):** Replaced monolithic verification behavior with FAST/SMOKE/FULL lanes across scripts, tests, CI triggers, and agent instructions.
   - **Scope:** `package.json`, `tests/smoke-critical.spec.ts`, `.github/workflows/{quality.yml,smoke-e2e.yml,full-qa.yml}`, `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, `CONTRIBUTING.md`, plus canonical verification docs (`README.md`, `.ai/START_HERE.md`, `.ai/CRITICAL_RULES.md`, `.ai/VERIFICATION_REQUIRED.md`).
