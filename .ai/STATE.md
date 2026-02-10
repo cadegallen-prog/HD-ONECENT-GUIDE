@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 9, 2026 (Tiered verification rollout forensics complete; Full QA failure fixed and FAST/SMOKE/FULL CI now green)
+**Last updated:** Feb 9, 2026 (PR #133 verification pass complete; SonarCloud hotspot remediated in workflow code, pending re-analysis)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,12 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-09 (PR #133 verification pass + Sonar remediation):** Completed a fresh local verification pass and fixed the remaining SonarCloud quality-gate blocker on PR #133.
+  - **Verification refresh:** Local `verify:fast` rerun ✅ (`reports/forensics/review3-verify-fast-rerun-2026-02-09T16-44-09.log`), local `e2e:smoke` rerun ✅ (`reports/forensics/review3-e2e-smoke-rerun-2026-02-09T16-43-17.log`), and post-fix `verify:fast` ✅ (`reports/forensics/review3-postfix-verify-fast-2026-02-09T16-46-17.log`).
+  - **Sonar root cause proven:** PR check `SonarCloud Code Analysis` failed due one open security hotspot (`AZxEKXYrJwEIlETBDrFL`) in `.github/workflows/full-qa.yml:39` ("Use full commit SHA hash for this dependency.").
+  - **Fix shipped:** Pinned `dorny/paths-filter` to immutable SHA `de90cc6fb38fc0963ad72b210f1f284cd68cea36` (`v3.0.2`) in `.github/workflows/full-qa.yml`.
+  - **Status caveat:** SonarCloud will remain red on the current check run until a new PR analysis executes on the updated commit.
 
 - **2026-02-09 (Full QA failure forensic fix):** Re-verified tiered verification rollout and resolved deterministic CI failures blocking `Full QA Suite`.
   - **Root causes proven:** (1) invalid artifact names in sharded full-e2e uploads (`full-e2e-shard-1/2`) and (2) false-positive border contrast failure caused by `scripts/check-contrast.js` comparing text color vs border color for border checks.

@@ -4,6 +4,44 @@
 
 ---
 
+## 2026-02-09 - Codex - PR #133 Verification Pass + Sonar Hotspot Remediation
+
+**Goal:** Complete both requested tracks: fresh repo-side verification proof for PR #133 and start/remediate the remaining SonarCloud failure.
+
+**Status:** ✅ Completed.
+
+### Changes
+
+- Re-verified PR `#133` status and checks on latest SHA `8cabceb13d140d54c9d399fd08212b4e3f436cac`.
+- Confirmed Sonar failure root cause from check metadata:
+  - `Quality Gate failed` due `1 Security Hotspot`
+  - hotspot key `AZxEKXYrJwEIlETBDrFL`
+  - file `.github/workflows/full-qa.yml`, line 39
+  - message: "Use full commit SHA hash for this dependency."
+- Remediated hotspot by pinning `dorny/paths-filter` to a full commit SHA:
+  - `.github/workflows/full-qa.yml` now uses `dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36` (`v3.0.2`).
+- Preserved all other workflow behavior from prior Full QA fix.
+
+### Verification
+
+- Local:
+  - `npm run verify:fast` ✅ (`reports/forensics/review3-verify-fast-rerun-2026-02-09T16-44-09.log`)
+  - `npm run e2e:smoke` ✅ (`reports/forensics/review3-e2e-smoke-rerun-2026-02-09T16-43-17.log`)
+  - post-fix `npm run verify:fast` ✅ (`reports/forensics/review3-postfix-verify-fast-2026-02-09T16-46-17.log`)
+  - workflow formatting ✅ (`npx prettier --check .github/workflows/full-qa.yml`)
+- CI status baseline on PR `#133` (pre-remediation commit):
+  - FAST ✅ `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/21840293667`
+  - SMOKE ✅ `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/21840293798`
+  - FULL ✅ `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/21840293680`
+  - Sonar ❌ `https://sonarcloud.io` (fixed in code; pending re-analysis on next push)
+- Sonar evidence:
+  - check run id: `63022550845`
+  - API evidence captured via:
+    - `gh api repos/cadegallen-prog/HD-ONECENT-GUIDE/commits/8cabceb13d140d54c9d399fd08212b4e3f436cac/check-runs`
+    - `https://sonarcloud.io/api/hotspots/search?projectKey=cadegallen-prog_HD-ONECENT-GUIDE&pullRequest=133&status=TO_REVIEW`
+
+---
+
 ## 2026-02-09 - Codex - Full QA Failure Forensics + CI Green Fix
 
 **Goal:** Re-audit tiered verification rollout and fix the failing `Full QA Suite` workflow with proof.
@@ -74,37 +112,5 @@
   - `reports/forensics/phase1-e2e-trend.txt`
   - `reports/forensics/phase1-gh-fullqa-runs.json`
   - `reports/forensics/phase1-gh-fullqa-summary.txt`
-
----
-
-## 2026-02-09 - Codex - Guide Editorial Block Restoration
-
-**Goal:** Restore the guide editorial block styling across guide routes and remove the smaller "Updated February 2026" replacement text while keeping founder byline.
-
-**Status:** ✅ Completed.
-
-### Changes
-
-- Restored `EditorialBlock` usage on all guide chapter pages:
-  - `app/what-are-pennies/page.tsx`
-  - `app/clearance-lifecycle/page.tsx`
-  - `app/digital-pre-hunt/page.tsx`
-  - `app/in-store-strategy/page.tsx`
-  - `app/inside-scoop/page.tsx`
-  - `app/facts-vs-myths/page.tsx`
-  - `app/faq/page.tsx`
-- Restored `EditorialBlock` on the guide hub:
-  - `app/guide/page.tsx`
-- Removed all inline small-text replacements that used `<time ...>Updated February 2026</time> · By Cade Allen`.
-- Confirmed founder attribution remains in the editorial component (`Written by Cade Allen`).
-
-### Verification
-
-- `npm run lint` ✅
-- `npm run build` ✅
-- `npm run test:unit` ✅ (26/26)
-- `npm run test:e2e` ✅ (156/156)
-- UI proof bundle (guide routes light + dark): `reports/proof/2026-02-09T08-49-22/`
-  - Console report: `reports/proof/2026-02-09T08-49-22/console-errors.txt`
 
 ---

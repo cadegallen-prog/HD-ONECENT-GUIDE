@@ -495,4 +495,27 @@ export const metadata: Metadata = {
 
 ---
 
+### 19. Running Heavy Verification Lanes in Parallel Can Produce False Build Failures
+
+**Problem:** A combined run of `verify:fast` and `e2e:smoke` executed in parallel produced unstable build failures (`JavaScript heap out of memory` / Next build worker exit `3221226505`) despite clean reruns.
+
+**What We Tried:**
+
+- Ran both commands concurrently in one session.
+- Re-ran each lane sequentially.
+- Increased Node heap for reruns (`NODE_OPTIONS=--max-old-space-size=8192`).
+
+**What We Learned:**
+
+- Parallel heavy Next.js builds can contend for memory/worker resources and create non-deterministic false negatives.
+
+**What to Do Instead:**
+
+- Run heavy verification lanes sequentially (`verify:fast` then `e2e:smoke`).
+- If build instability appears, rerun lane in isolation with higher Node heap and keep the isolated log as canonical evidence.
+
+**Date:** Feb 09, 2026
+
+---
+
 **For full learning history:** See `archive/learnings-history/LEARNINGS_full_2024-2025.md`
