@@ -1,6 +1,6 @@
 # Context Handoff Pack (Portable, Tool-Agnostic)
 
-**Last Updated:** Feb 7, 2026 by Claude Opus 4.6
+**Last Updated:** Feb 10, 2026 by Claude Sonnet 4.5
 
 **Purpose:** Compressed, copy-paste-ready context for starting fresh chats or switching tools (Claude → Codex → Copilot).
 
@@ -14,20 +14,23 @@
 
 **Open-source Next.js PWA** helping Home Depot shoppers find "penny items" (clearance deals, often $0.01 to $10).
 
-### Current Reality (Feb 7, 2026)
+### Current Reality (Feb 10, 2026)
 
 - ✅ **Core product working:** Submissions, enrichment, Penny List page, Store Finder
-- ✅ **Guide exists:** 7 chapters + hub across 8 routes, but quality is 4.5/10
-- 🔴 **GUIDE RECOVERY PLAN APPROVED** — `.ai/impl/guide-recovery.md` is the approved implementation plan
-- 🔴 **Guide problems (verified):** AI-documentation voice (60+ hedging instances in Ch 5), 2026 intel dumped in one chapter, FAQ hidden behind 20 dropdowns, concepts referenced before introduced, Speed-to-Penny absent from entire guide
+- ✅ **900+ Home Depot product page links** already live in production
+- 📊 **CRITICAL METRIC CORRECTION:** 15,000 monthly users (not 680 daily estimate from Feb 7)
+- 🔴 **HOME DEPOT AFFILIATE ANALYSIS COMPLETED** — Full strategic report at `/root/.claude/plans/agile-gliding-kay.md`
+- ⚠️ **PREVIOUS ANALYSIS HAD FATAL FLAW:** Assumed penny hunters never buy retail (wrong - most users NEVER find pennies, still buy HD items)
+- ✅ **Revised recommendation:** Apply to Home Depot Affiliate Program (Impact) with 70-80% approval probability
+- 💰 **Revenue potential:** $500-1,500/month passive income with current traffic
+- 🔄 **AdSense status:** Rejected Feb 2-3 for "low value content", Monumetric escalation in progress
 - ✅ **Design system solid:** WCAG AAA compliant, custom tokens, guide-article CSS class
-- 📊 **Metrics:** 680 daily users, 26% conversion (HD clicks), 100% Facebook dependency
 
 ### Immediate Next Move
 
-1. **Implement Guide Recovery Phase 1** (content & voice) from `.ai/impl/guide-recovery.md`
-2. Then Phase 2 (visual/UX) — FAQ overhaul, hub redesign, CSS tuning
-3. Then Phase 3 (drift guard) — format contract document
+1. **Review Home Depot affiliate analysis** at `/root/.claude/plans/agile-gliding-kay.md`
+2. **Validate traffic assumptions** (check GA4 for actual 28-day user count)
+3. **Decide on affiliate strategy:** Option A (Amazon Associates only) vs Option B (HD affiliate application)
 
 ---
 
@@ -58,7 +61,116 @@
 
 ---
 
-## Guide Recovery Context (Critical for Next Agent)
+## Home Depot Affiliate Analysis Context (Current Priority - Feb 10, 2026)
+
+### What Was Researched
+
+A comprehensive forensic analysis of PennyCentral's feasibility for The Home Depot Affiliate Program (via Impact.com), including:
+- Site audit (brand positioning, content tone, link architecture, audience intent)
+- Affiliate program rule analysis (approval requirements, commission structure, restrictions)
+- Three strategic options (Conservative, Balanced, Aggressive)
+- Decision matrix with weighted scoring
+- Application execution playbook
+- Implementation feasibility assessment
+
+**Full Report Location:** `/root/.claude/plans/agile-gliding-kay.md` (18,000+ words)
+
+### Critical Discovery: Fundamental Business Model Misunderstanding
+
+**Initial Analysis Assumption (WRONG):**
+> "Penny hunters won't buy at retail because they're looking for $0.01 items"
+
+**Actual Reality (Confirmed by Owner):**
+> "Penny hunting is HARD. Most people never find a single penny item. They still need to buy Home Depot items because that's life."
+
+**User Journey Reality:**
+1. User searches for penny item on PennyCentral
+2. Clicks Home Depot link to verify availability (affiliate cookie set ✅)
+3. Item is NOT $0.01 (most common outcome - pennies are rare)
+4. User either:
+   - Buys it at clearance price ($5-$20)
+   - Buys a similar item
+   - Browses and buys other needed items
+   - Returns within 30 days and makes purchase (cookie still valid)
+
+**Implication:** PennyCentral users ARE Home Depot shoppers. Affiliate program is a strong fit.
+
+### Corrected Traffic Data
+
+| Metric | Initial Estimate | Actual (Owner Confirmed) | Impact |
+|--------|------------------|--------------------------|--------|
+| **Monthly Users** | ~1,000 | **15,000** | 15x higher |
+| **Home Depot Links** | Unknown | **900+** | Massive existing inventory |
+| **Click-through Rate** | Estimated 15% | Unknown (GA4 needed) | High engagement observed |
+
+### Revised Strategic Recommendation
+
+**PREVIOUS (with 1k users):** Option A - Amazon Associates only, avoid HD affiliate (87/100 score)
+
+**REVISED (with 15k users):** Option B - Apply to HD Affiliate (Balanced Approach)
+
+**Approval Probability:** 70-80% (was 40-55%)
+
+**Revenue Potential:** $500-1,500/month (was $25-75/month estimate)
+
+**Why the Change:**
+- ✅ 15,000 users clears traffic threshold easily
+- ✅ 900 HD links demonstrates established content
+- ✅ Users are actual Home Depot shoppers (not just bargain hunters)
+- ✅ 30-day cookie captures post-verification purchases
+- ✅ Home improvement niche strongly established
+
+### Three Strategic Options (from Report)
+
+**Option A - Conservative (Amazon Associates Only):**
+- No manual review, 95% approval probability
+- Revenue: $50-150/month
+- No risk of rejection
+- BUT: Not related to core penny hunting content
+
+**Option B - Balanced (Apply to HD Affiliate with Content Expansion):**
+- 70-80% approval probability (revised from 40-55%)
+- Revenue: $500-1,500/month
+- Requires minimal content additions (not major refactor)
+- Aligns with existing 900 HD links
+
+**Option C - Aggressive (Apply Immediately, Penny-Focused):**
+- 15-25% approval probability
+- High rejection risk
+- Likely $0/month (approval unlikely)
+
+### Next Steps for Opus 4.6
+
+**IMMEDIATE:**
+1. **Validate Traffic** - Check GA4 for actual 28-day user count (owner says 15k/month)
+2. **Review Full Analysis** - Read `/root/.claude/plans/agile-gliding-kay.md` completely
+3. **Assess Options** - Consider whether to:
+   - Proceed with Option B (HD affiliate application)
+   - Implement Option A first (Amazon Associates as safety net)
+   - Hybrid approach (both simultaneously)
+
+**RESEARCH QUESTIONS:**
+- What is actual click-through rate on HD links? (GA4: `home_depot_click` event)
+- What is actual conversion behavior? (Do users return to HD after clicking?)
+- What is current AdSense/Monumetric status? (Affects "low value content" risk)
+- How much time can owner commit to application process? (Option B requires ~5-10 hours)
+
+**KEY FILES:**
+- `/root/.claude/plans/agile-gliding-kay.md` - Full strategic analysis report
+- `.ai/GROWTH_STRATEGY.md` - Owner context and monetization philosophy
+- `.ai/STATE.md` - Current AdSense/Monumetric status
+- `/lib/home-depot.ts` - Existing HD link generation function
+- `/components/penny-list-card.tsx` - HD link placements
+
+**OWNER CONSTRAINTS:**
+- ✅ Must be "tasteful, not cash-grabby" (growth strategy mandate)
+- ✅ Cannot compete with Facebook group (promised group admin)
+- ✅ Wants hands-off operation (non-technical owner)
+- ⚠️ Already experienced AdSense rejection (morale consideration)
+
+---
+
+## Guide Recovery Context (Archive - Deprioritized)
 
 ### What Was Architected
 
@@ -197,25 +309,30 @@ Read in order:
 3. .ai/STATE.md
 4. .ai/HANDOFF.md
 
-Then read the APPROVED implementation plan:
-5. .ai/impl/guide-recovery.md (THE PLAN — read completely before any work)
+Current reality (Feb 10, 2026):
+- Home Depot Affiliate Program strategic analysis COMPLETED
+- Full 18,000-word forensic report at: /root/.claude/plans/agile-gliding-kay.md
+- CRITICAL CORRECTION: Site has 15,000 monthly users (not 1,000 estimated)
+- 900+ Home Depot product page links already live
+- Previous analysis had fatal flaw: assumed penny hunters never buy retail (WRONG)
+- Actual reality: Most users NEVER find pennies, still buy HD items regularly
+- Revised recommendation: Apply to HD Affiliate (Option B) - 70-80% approval probability
+- Revenue potential: $500-1,500/month with current traffic
+- AdSense status: Rejected Feb 2-3 for "low value content"
+- Monumetric: Escalation in progress
 
-Current reality (Feb 7, 2026):
-- Guide quality is 4.5/10. Approved 3-phase recovery plan exists.
-- Phase 1: Content & voice recovery (redistribute 2026 intel, kill hedging, fix concept ordering)
-- Phase 2: Visual & UX (FAQ overhaul, hub redesign, CSS tuning)
-- Phase 3: Drift guard (format contract)
-- All CSS changes pre-approved by founder
-- 5 locked copy strings must NOT be modified (see plan)
-- In-store-strategy has 4 locked strings — HIGH RISK file
+GOAL: Finalize Home Depot affiliate strategy
+WHY: Monetize existing 900 HD product links, diversify revenue beyond ads
+DONE MEANS: Strategy decision made (A/B/C), traffic validated via GA4, implementation path clear
 
-GOAL: Implement Guide Recovery from .ai/impl/guide-recovery.md
-WHY: Guide reads like AI documentation, not expert penny-hunter content. 2026 intel is dumped in one chapter. FAQ hides answers behind dropdowns.
-DONE MEANS: All acceptance criteria in the plan pass. All 4 gates green. Proof screenshots for all 8 guide routes. Locked founder copy preserved: YES.
+Next steps:
+1. Read full analysis: /root/.claude/plans/agile-gliding-kay.md
+2. Validate actual traffic (GA4: last 28 days user count)
+3. Check HD link click-through rate (GA4: home_depot_click event)
+4. Decide: Option A (Amazon only), Option B (HD affiliate), or Hybrid
+5. If Option B chosen: prepare Impact.com application using wording from Section 6
 
-Start with: /implement
-Context: Guide recovery — approved 3-phase plan
-First: Read .ai/impl/guide-recovery.md completely
+What should I focus on first?
 ```
 
 ---
@@ -223,31 +340,49 @@ First: Read .ai/impl/guide-recovery.md completely
 ## ARCHITECT Stub
 
 ```
-I'm ready to architect a feature for Penny Central.
+I'm ready to architect the Home Depot affiliate implementation for Penny Central.
 
 Read:
 - .ai/CRITICAL_RULES.md
 - .ai/DECISION_RIGHTS.md
 - .ai/CONTRACT.md
 - .ai/STATE.md
-- .ai/BACKLOG.md
-- Relevant: .ai/topics/<TOPIC>.md
+- .ai/GROWTH_STRATEGY.md (monetization philosophy: "tasteful, not cash-grabby")
+- /root/.claude/plans/agile-gliding-kay.md (full strategic analysis)
+
+Context:
+- Owner confirmed: 15,000 monthly users, 900+ HD product links
+- Strategic analysis recommends Option B (HD Affiliate via Impact.com)
+- Approval probability: 70-80%
+- Revenue potential: $500-1,500/month
+- Key constraint: Must preserve authenticity, cannot feel like coupon blog
 
 Task:
-Design the implementation plan for: [FEATURE]
+Design the implementation plan for: Home Depot Affiliate Integration (Option B)
 
 Deliverable:
-Write the plan to: .ai/impl/<feature-slug>.md
+Write the plan to: .ai/impl/home-depot-affiliate.md
 
 Plan must include:
-1) Goal + Done Means (testable)
-2) Constraints and non-negotiables
-3) Files to touch (create vs modify)
-4) Step sequence (small steps)
-5) Risks + mitigations
-6) Verification plan (lint, build, unit, e2e, proof if UI)
-7) Rollback plan
-8) Open questions (max 5) with A/B/C when needed
+1) Goal + Done Means (testable: affiliate approved, links wrapped, commission tracking)
+2) Constraints (authenticity preservation, FTC compliance, no content drift)
+3) Files to touch:
+   - lib/home-depot-affiliate.ts (new: affiliate link wrapper)
+   - components/* (update HD link calls)
+   - app/privacy-policy/page.tsx (add HD affiliate disclosure)
+   - app/affiliate-disclosure/page.tsx (new: dedicated disclosure page)
+4) Step sequence:
+   - Phase 1: Application preparation (content review, wording draft)
+   - Phase 2: Impact.com application submission
+   - Phase 3: Post-approval implementation (link wrapper, disclosures)
+5) Risks + mitigations (rejection handling, performance impact, user trust)
+6) Verification plan (link tracking works, disclosures visible, no UX degradation)
+7) Rollback plan (env var toggle to disable affiliate wrapping)
+8) Open questions:
+   - Exact traffic numbers (GA4 validation)
+   - Click-through rate on HD links
+   - Time available for application process
+   - Preference: Option B vs Hybrid (B + Amazon)
 
 Stop and ask for approval to implement.
 ```
@@ -257,31 +392,51 @@ Stop and ask for approval to implement.
 ## IMPLEMENT Stub
 
 ```
-I'm ready to implement from an approved plan.
+I'm ready to implement Home Depot affiliate integration from an approved plan.
 
 Read:
 - .ai/CRITICAL_RULES.md
 - .ai/DECISION_RIGHTS.md
 - .ai/CONTRACT.md
 - .ai/STATE.md
-- Plan: .ai/impl/<feature-slug>.md
+- Plan: .ai/impl/home-depot-affiliate.md
+- Strategic Analysis: /root/.claude/plans/agile-gliding-kay.md (Section 6: Application Playbook)
 
 Task:
-Implement exactly what the plan specifies.
+Implement exactly what the plan specifies for Option B (Balanced HD Affiliate).
+
+Phase 1 - Pre-Application:
+- Validate traffic via GA4 (confirm 15k monthly users)
+- Check HD link CTR (home_depot_click event)
+- Review existing HD link placements (lib/home-depot.ts, components/*)
+
+Phase 2 - Application:
+- Use wording from strategic analysis Section 6
+- Submit Impact.com application
+- Wait for approval (2-3 business days)
+
+Phase 3 - Post-Approval Implementation:
+- Create affiliate link wrapper (lib/home-depot-affiliate.ts)
+- Update components to use wrapper
+- Add affiliate disclosures (privacy policy, dedicated page)
+- Deploy with env var toggle (NEXT_PUBLIC_HD_AFFILIATE_ENABLED)
 
 Guardrails:
-- No scope creep. No refactors.
-- If plan is ambiguous, stop and present A/B/C.
-- Provide traceable edits: list each file touched and why.
+- Authenticity MUST be preserved (no coupon-blog content)
+- FTC compliance required (clear disclosures)
+- No scope creep beyond affiliate link wrapping
+- If rejected, pivot to Option A (Amazon Associates)
 
 Verification:
-- Run npm run ai:verify and report results.
-- If UI changed, run proof workflow and link artifacts.
+- npm run ai:verify (all 4 gates must pass)
+- Test affiliate link wrapping (manual click-through)
+- Verify disclosures visible (privacy policy + dedicated page)
+- Proof screenshots if UI changes (disclosure pages)
 
 After:
-- Update .ai/SESSION_LOG.md with changes + proof links.
-- Run /checkpoint to compress context.
-- Run /capsule <TOPIC> if it changed that topic's current reality.
+- Update .ai/SESSION_LOG.md with application status + results
+- Document approval/rejection in .ai/LEARNINGS.md
+- Run /capsule MONETIZATION to update monetization topic
 ```
 
 ---
@@ -312,4 +467,4 @@ After:
 
 ---
 
-**Last updated:** Feb 7, 2026
+**Last updated:** Feb 10, 2026 by Claude Sonnet 4.5 (Home Depot Affiliate Analysis Handoff for Opus 4.6)
