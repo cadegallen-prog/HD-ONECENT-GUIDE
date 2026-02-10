@@ -4,7 +4,14 @@ permissions:
   contents: read
 
 on:
-  # Manual trigger
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, labeled]
+  merge_group:
+    types: [checks_requested]
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 7 * * *"
   workflow_dispatch:
     inputs:
       ref:
@@ -12,73 +19,88 @@ on:
         required: false
         type: string
 
-  # Trigger when 'full-qa' label is added to a PR
-  pull_request:
-    types: [labeled]
-
-  # Auto-trigger on risky file changes to main
-  push:
-    branches: [main]
-    paths:
-      # Auth & security
-      - "middleware.ts"
-      - "app/auth/**"
-      - "lib/supabase/**"
-
-      # Database
-      - "supabase/migrations/**"
-      - "lib/fetch-penny-data.ts"
-      - "lib/penny-list-query.ts"
-
-      # API routes
-      - "app/api/**"
-
-      # Infrastructure
-      - "next.config.js"
-      - "package.json"
-      - "package-lock.json"
-      - "playwright.config.ts"
-      - ".github/workflows/**"
-
-      # Fragile components (per CLAUDE.md)
-      - "components/store-map.tsx"
-      - "app/**/layout.tsx"
-      - "app/globals.css"
+concurrency:
+  group: full-qa-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  # Gate: Only run full QA if triggered correctly
-  check-trigger:
+  evaluate-trigger:
     runs-on: ubuntu-latest
     outputs:
-      should_run: ${{ steps.check.outputs.should_run }}
-    steps:
-      - id: check
-        run: |
-          # Run if: workflow_dispatch OR full-qa label OR push to main with risky paths
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            echo "Triggered by: manual dispatch"
-            echo "should_run=true" >> $GITHUB_OUTPUT
-          elif [[ "${{ github.event_name }}" == "push" ]]; then
-            echo "Triggered by: push to main with risky file changes"
-            echo "should_run=true" >> $GITHUB_OUTPUT
-          elif [[ "${{ github.event.action }}" == "labeled" && "${{ github.event.label.name }}" == "full-qa" ]]; then
-            echo "Triggered by: full-qa label"
-            echo "should_run=true" >> $GITHUB_OUTPUT
-          else
-            echo "Trigger condition not met, skipping"
-            echo "should_run=false" >> $GITHUB_OUTPUT
-          fi
-
-  full-qa:
-    needs: check-trigger
-    if: needs.check-trigger.outputs.should_run == 'true'
-    runs-on: ubuntu-latest
-    timeout-minutes: 25
-
+      should_run: ${{ steps.decide.outputs.should_run }}
+      reason: ${{ steps.decide.outputs.reason }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.ref || github.ref }}
+          fetch-depth: 0
+
+      - name: Detect risky paths
+        id: risky
+        uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
+        with:
+          filters: |
+            risky:
+              - "middleware.ts"
+              - "app/auth/**"
+              - "lib/supabase/**"
+              - "supabase/migrations/**"
+              - "lib/fetch-penny-data.ts"
+              - "lib/penny-list-query.ts"
+              - "app/api/**"
+              - "next.config.js"
+              - "package.json"
+              - "package-lock.json"
+              - "playwright.config.ts"
+              - ".github/workflows/**"
+              - "components/store-map.tsx"
+              - "app/**/layout.tsx"
+              - "app/globals.css"
+
+      - name: Decide whether to run full QA
+        id: decide
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_ACTION: ${{ github.event.action }}
+          BASE_REF: ${{ github.base_ref }}
+          LABEL_NAME: ${{ github.event.label.name }}
+          RISKY_CHANGED: ${{ steps.risky.outputs.risky }}
+        run: |
+          should_run=false
+          reason="none"
+
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            should_run=true
+            reason="manual workflow_dispatch"
+          elif [[ "$EVENT_NAME" == "schedule" ]]; then
+            should_run=true
+            reason="nightly schedule"
+          elif [[ "$EVENT_NAME" == "merge_group" ]]; then
+            should_run=true
+            reason="merge group validation"
+          elif [[ "$EVENT_NAME" == "pull_request" && "$BASE_REF" == "main" ]]; then
+            should_run=true
+            reason="pull request targets main"
+          elif [[ "$EVENT_NAME" == "pull_request" && "$EVENT_ACTION" == "labeled" && "$LABEL_NAME" == "run-full-e2e" ]]; then
+            should_run=true
+            reason="run-full-e2e label"
+          elif [[ "$RISKY_CHANGED" == "true" ]]; then
+            should_run=true
+            reason="risky paths changed"
+          fi
+
+          echo "should_run=$should_run" >> "$GITHUB_OUTPUT"
+          echo "reason=$reason" >> "$GITHUB_OUTPUT"
+          echo "Decision: should_run=$should_run ($reason)"
+
+  fast-gate:
+    needs: evaluate-trigger
+    if: needs.evaluate-trigger.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.ref || github.sha }}
 
       - name: Setup Node
         uses: actions/setup-node@v6
@@ -103,19 +125,102 @@ jobs:
       - name: Ruff lint
         run: ruff check .
 
+      - name: Run FAST lane
+        env:
+          SUPABASE_SERVICE_ROLE_KEY: test
+          USE_FIXTURE_FALLBACK: "1"
+        run: npm run verify:fast
+
+  full-e2e:
+    needs: [evaluate-trigger, fast-gate]
+    if: needs.evaluate-trigger.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        shard_index: [1, 2]
+        shard_total: [2]
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.ref || github.sha }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
+      - name: Install dependencies
+        run: npm ci
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Run fast QA first (lint + unit tests + build)
+      - name: Run full e2e shard ${{ matrix.shard_index }}/${{ matrix.shard_total }}
         env:
-          # Unit tests exercise the submit-find route, which requires this env var to be present.
-          # A dummy value is sufficient because tests stub the service role client.
-          SUPABASE_SERVICE_ROLE_KEY: test
-          # CI does not have Supabase public credentials; for the build step, force the
-          # server-side Supabase reads to fall back to the committed fixture so dynamic SKU
-          # pages render (and SEO JSON-LD tests don't hit 404).
+          NEXT_DIST_DIR: .next-playwright
+          PLAYWRIGHT: "1"
+          NEXT_PUBLIC_EZOIC_ENABLED: "false"
+          NEXT_PUBLIC_ANALYTICS_ENABLED: "false"
           USE_FIXTURE_FALLBACK: "1"
-        run: npm run qa:fast
+          SUPABASE_SERVICE_ROLE_KEY: test
+        run: |
+          npm run build
+          npx playwright test --workers=1 --shard=${{ matrix.shard_index }}/${{ matrix.shard_total }}
+
+      - name: Upload full e2e artifacts (shard ${{ matrix.shard_index }}/${{ matrix.shard_total }})
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: full-e2e-shard-${{ matrix.shard_index }}-of-${{ matrix.shard_total }}
+          path: reports/playwright/
+          retention-days: 14
+
+  extended-ui-checks:
+    needs: [evaluate-trigger, fast-gate]
+    if: needs.evaluate-trigger.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.ref || github.sha }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
 
       - name: Build e2e server bundle (.next-playwright)
         env:
@@ -126,7 +231,7 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: test
         run: npm run build
 
-      - name: Start server for e2e tests
+      - name: Start server for extended checks
         env:
           PORT: 3001
           NEXT_DIST_DIR: .next-playwright
@@ -152,13 +257,6 @@ jobs:
           echo "Server log tail:"
           tail -n 20 /tmp/next.log
 
-      - name: Run e2e tests
-        env:
-          PLAYWRIGHT: "1"
-          NEXT_PUBLIC_ANALYTICS_ENABLED: "false"
-          PLAYWRIGHT_BASE_URL: http://localhost:3001
-        run: npx playwright test --workers=1
-
       - name: Run contrast check
         env:
           BASE_URL: http://localhost:3001
@@ -167,7 +265,7 @@ jobs:
       - name: Run accessibility check (axe)
         run: npm run check-axe
 
-      - name: Upload reports
+      - name: Upload extended check reports
         uses: actions/upload-artifact@v6
         if: always()
         with:

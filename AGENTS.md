@@ -117,10 +117,11 @@ Workflow:
 
 1. `git pull origin main`
 2. Make changes on `main`
-3. **Run all 4 quality gates** (lint, build, test:unit, test:e2e)
-4. **Use Playwright for UI changes** (screenshots required)
-5. Commit to `main` with clear message
-6. Push `main`
+3. **Run `npm run verify:fast` before every push**
+4. **Run `npm run e2e:smoke` when touching routes/forms/API/UI flows**
+5. **Use Playwright for UI changes** (screenshots required)
+6. Commit to `main` with clear message
+7. Push `main` (CI enforces FAST + SMOKE; FULL e2e runs by trigger policy)
 
 Never reference or create `dev`/`develop` branches.
 
@@ -134,9 +135,10 @@ Never reference or create `dev`/`develop` branches.
 
 You MUST provide:
 
-- All 4 test outputs (lint, build, test:unit, test:e2e)
+- `npm run verify:fast` output (lint + typecheck + unit + build)
+- `npm run e2e:smoke` output for route/form/API/UI-flow work (or explicit reason why not applicable)
+- GitHub Actions links for FAST + SMOKE checks, and FULL e2e when triggered (`PR -> main`, `run-full-e2e` label, risky paths, nightly, manual)
 - Screenshots for UI changes (Playwright)
-- GitHub Actions URL (if applicable)
 - Before/after comparison (for bug fixes)
 
 **No proof = not done.**
@@ -227,15 +229,14 @@ Rules:
 
 **BEFORE claiming "done":**
 
-1. ✅ `npm run lint` (0 errors)
-2. ✅ `npm run build` (successful)
-3. ✅ `npm run test:unit` (all passing)
-4. ✅ `npm run test:e2e` (all passing)
-5. ✅ Playwright screenshots (if UI changed)
-6. ✅ GitHub Actions check (if applicable)
-7. ✅ Update `.ai/SESSION_LOG.md` and `.ai/STATE.md`
-8. ✅ **Paste proof** using template from `.ai/VERIFICATION_REQUIRED.md`
-9. ✅ Include `Next-Agent Handoff` block per `.ai/HANDOFF_PROTOCOL.md`
+1. ✅ `npm run verify:fast` (passes)
+2. ✅ `npm run e2e:smoke` (for route/form/API/UI-flow changes)
+3. ✅ FULL e2e evidence when trigger conditions match (or when explicitly requested)
+4. ✅ Playwright screenshots (if UI changed)
+5. ✅ GitHub Actions check links (FAST + SMOKE; FULL when triggered)
+6. ✅ Update `.ai/SESSION_LOG.md` and `.ai/STATE.md`
+7. ✅ **Paste proof** using template from `.ai/VERIFICATION_REQUIRED.md`
+8. ✅ Include `Next-Agent Handoff` block per `.ai/HANDOFF_PROTOCOL.md`
 
 **Summarize changes in plain English with verification evidence.**
 

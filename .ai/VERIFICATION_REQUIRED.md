@@ -10,21 +10,23 @@ If you (the agent) did not run a gate / capture a screenshot / verify a behavior
 
 To claim “done” on a meaningful change, provide:
 
-1. **All 4 quality gates** (raw output or saved artifacts):
-   - `npm run lint`
-   - `npm run build`
-   - `npm run test:unit`
-   - `npm run test:e2e`
-2. **UI proof** (only when UI/UX/copy/layout/visuals changed):
+1. **FAST lane output** (always):
+   - `npm run verify:fast` (lint + typecheck + unit + build)
+2. **SMOKE lane output** (required for route/form/API/navigation/UI-flow changes):
+   - `npm run e2e:smoke`
+3. **FULL lane output** (required when FULL trigger conditions apply):
+   - `npm run e2e:full`
+   - FULL trigger conditions: PR to `main`, merge queue, label `run-full-e2e`, risky paths changed, nightly schedule, or manual dispatch.
+4. **UI proof** (only when UI/UX/copy/layout/visuals changed):
    - Playwright screenshots (light + dark) and a console error report
-3. **Before/after proof** (only when fixing a bug):
+5. **Before/after proof** (only when fixing a bug):
    - “Before” reproduction evidence (error text, screenshot, or steps)
    - “After” evidence showing it’s resolved
-4. **Memory updates** (for meaningful work):
+6. **Memory updates** (for meaningful work):
    - `.ai/SESSION_LOG.md` (always)
    - `.ai/STATE.md` (when it changes current reality)
    - `.ai/BACKLOG.md` (only if priorities moved)
-5. **Handoff block** (for meaningful work):
+7. **Handoff block** (for meaningful work):
    - Include a structured next-agent handoff per `.ai/HANDOFF_PROTOCOL.md`
    - Must include: completion status, changed files, verification paths, open risks, and immediate next step
 
@@ -32,15 +34,33 @@ If the change is truly docs-only and no code paths changed, you can say “Docs-
 
 ---
 
-## Preferred: One-Command Proof Bundle (Recommended)
+## Preferred Command Set (Recommended)
 
 Run:
+
+```bash
+npm run verify:fast
+```
+
+And, when applicable:
+
+```bash
+npm run e2e:smoke
+```
+
+Run full e2e only when trigger policy requires it:
+
+```bash
+npm run e2e:full
+```
+
+Legacy full-bundle command (still available):
 
 ```bash
 npm run ai:verify
 ```
 
-This runs all 4 gates and saves artifacts to:
+`ai:verify` runs lint/build/unit/e2e and saves artifacts to:
 
 - `reports/verification/<timestamp>/lint.txt`
 - `reports/verification/<timestamp>/build.txt`
@@ -81,10 +101,9 @@ Use the screenshots as the “before/after” proof when applicable.
 
 **Tests (required):**
 
-- `npm run lint`: ✅/❌ (link output or paste)
-- `npm run build`: ✅/❌ (link output or paste)
-- `npm run test:unit`: ✅/❌ (link output or paste)
-- `npm run test:e2e`: ✅/❌ (link output or paste)
+- `npm run verify:fast`: ✅/❌ (link output or paste)
+- `npm run e2e:smoke`: ✅/❌ or N/A (state why)
+- `npm run e2e:full`: ✅/❌ or N/A (state trigger status)
 
 **Bundle (preferred):**
 

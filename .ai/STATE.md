@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 9, 2026 (Guide editorial block restored across guide hub + chapters with full 4-gate verification + UI proof)
+**Last updated:** Feb 9, 2026 (PR #133 verification pass complete; SonarCloud hotspot remediated in workflow code, pending re-analysis)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,23 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-09 (PR #133 verification pass + Sonar remediation):** Completed a fresh local verification pass and fixed the remaining SonarCloud quality-gate blocker on PR #133.
+  - **Verification refresh:** Local `verify:fast` rerun ✅ (`reports/forensics/review3-verify-fast-rerun-2026-02-09T16-44-09.log`), local `e2e:smoke` rerun ✅ (`reports/forensics/review3-e2e-smoke-rerun-2026-02-09T16-43-17.log`), and post-fix `verify:fast` ✅ (`reports/forensics/review3-postfix-verify-fast-2026-02-09T16-46-17.log`).
+  - **Sonar root cause proven:** PR check `SonarCloud Code Analysis` failed due one open security hotspot (`AZxEKXYrJwEIlETBDrFL`) in `.github/workflows/full-qa.yml:39` ("Use full commit SHA hash for this dependency.").
+  - **Fix shipped:** Pinned `dorny/paths-filter` to immutable SHA `de90cc6fb38fc0963ad72b210f1f284cd68cea36` (`v3.0.2`) in `.github/workflows/full-qa.yml`.
+  - **Status caveat:** SonarCloud will remain red on the current check run until a new PR analysis executes on the updated commit.
+
+- **2026-02-09 (Full QA failure forensic fix):** Re-verified tiered verification rollout and resolved deterministic CI failures blocking `Full QA Suite`.
+  - **Root causes proven:** (1) invalid artifact names in sharded full-e2e uploads (`full-e2e-shard-1/2`) and (2) false-positive border contrast failure caused by `scripts/check-contrast.js` comparing text color vs border color for border checks.
+  - **Fixes shipped:** `.github/workflows/full-qa.yml` shard matrix/name update (slash-free artifact names) and `scripts/check-contrast.js` border assertion correction (border color measured against background color).
+  - **CI proof:** FAST ✅ `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/21840056433`, SMOKE ✅ `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/21840056489`, FULL ✅ `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/21840056498` (PR `#133`).
+  - **Local proof:** `npm run verify:fast` ✅ (`reports/forensics/review2-phase4-verify-fast-after-fix.log`), `npm run e2e:smoke` ✅ (`reports/forensics/review2-phase4-e2e-smoke-after-fix.log`), `npm run e2e:full` ✅ (`reports/forensics/review2-phase4-e2e-full-after-fix.log`), `npm run check-contrast` ✅ (`reports/forensics/review2-phase4-check-contrast-after-fix.log`).
+
+- **2026-02-09 (Tiered CI/CD verification overhaul):** Replaced monolithic verification behavior with FAST/SMOKE/FULL lanes across scripts, tests, CI triggers, and agent instructions.
+  - **Scope:** `package.json`, `tests/smoke-critical.spec.ts`, `.github/workflows/{quality.yml,smoke-e2e.yml,full-qa.yml}`, `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, `CONTRIBUTING.md`, plus canonical verification docs (`README.md`, `.ai/START_HERE.md`, `.ai/CRITICAL_RULES.md`, `.ai/VERIFICATION_REQUIRED.md`).
+  - **Change detail:** Added lane scripts (`verify:fast`, `e2e:smoke`, `e2e:full`, `verify`), created a 3-test smoke suite, added dedicated smoke workflow, converted full QA to conditional + sharded execution with Playwright browser caching, and codified `run-full-e2e` trigger policy.
+  - **Verification:** `npm run verify:fast` ✅ (`reports/forensics/phase4-verify-fast-2026-02-09T14-21-49.log`), `npm run e2e:smoke` ✅ (`reports/forensics/phase4-e2e-smoke-2026-02-09T14-23-32.log`), `npm run e2e:full` ✅ (`reports/forensics/phase4-e2e-full-2026-02-09T14-24-37.log`), workflow YAML formatting ✅ (`npx prettier --check .github/workflows/*.yml`).
 
 - **2026-02-09 (Guide editorial block restoration):** Restored the full editorial strip across guide pages and removed smaller replacement timestamp text.
   - **Scope:** `app/guide/page.tsx` + all chapter routes (`/what-are-pennies`, `/clearance-lifecycle`, `/digital-pre-hunt`, `/in-store-strategy`, `/inside-scoop`, `/facts-vs-myths`, `/faq`).

@@ -47,7 +47,7 @@ Keep these open while working:
 Once Cade says "go" / "build it", do the full loop without extra prompts:
 
 1. Implement
-2. Verify (`npm run ai:verify` or lint/build/unit/e2e)
+2. Verify (`npm run verify:fast` and `npm run e2e:smoke` for flow changes; full e2e by trigger)
 3. Self-check against `.ai/DECISION_RIGHTS.md` + `.ai/CONSTRAINTS.md`
 4. Update `.ai/SESSION_LOG.md` + `.ai/STATE.md` (+ `.ai/BACKLOG.md` if priorities moved)
 5. Report back with proof
@@ -117,7 +117,9 @@ Push back (politely but firmly) when Cade:
 
 ### Rule #1: Verification
 
-- **All 4 tests MUST pass** (lint, build, test:unit, test:e2e)
+- **FAST lane is mandatory** (`npm run verify:fast`)
+- **SMOKE lane is mandatory** for route/form/API/navigation changes (`npm run e2e:smoke`)
+- **FULL e2e is conditional** (`run-full-e2e` label, PR to `main`, merge group, risky paths, nightly, manual)
 - **Paste output** as proof
 - **Screenshots** for UI changes (Playwright)
 - **GitHub Actions** URL if applicable
@@ -227,13 +229,12 @@ You have TWO methods to interact with Supabase:
 ## Quality Gates
 
 ```bash
-npm run lint        # 0 errors
-npm run build       # successful
-npm run test:unit   # all passing
-npm run test:e2e    # all passing
+npm run verify:fast  # lint + typecheck + unit + build
+npm run e2e:smoke    # critical-flow smoke e2e
+npm run e2e:full     # full suite (conditional / explicit)
 ```
 
-**All 4 must pass. Paste output.**
+**Done-proof:** FAST always; SMOKE for flow changes; FULL when its trigger conditions apply.
 
 ---
 
@@ -255,7 +256,7 @@ Technical co-founder. Founder can't code.
 **Only `main` branch deploys to production.**
 
 1. Make changes
-2. Test (4 quality gates + Playwright)
+2. Test (`verify:fast`, then `e2e:smoke` when applicable)
 3. Commit
 4. Push to main
 5. Verify at https://pennycentral.com

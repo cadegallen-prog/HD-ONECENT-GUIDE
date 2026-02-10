@@ -30,6 +30,30 @@ Scan this FIRST before suggesting anything. If your idea matches an anti-pattern
 
 ## Top 10 Learnings (Most Important)
 
+### 0a. `npm ci` can fail on Windows when native binaries are locked
+
+**Problem:** `npm ci` failed with `EPERM: operation not permitted, unlink ... esbuild.exe`, leaving the repo in a partially installed state (`eslint` missing on next run).
+
+**What We Tried:**
+
+- Ran `npm ci` directly during CI forensics on branch `ci-tiered-verification`
+- Confirmed lock contention from running Node/esbuild processes
+
+**What We Learned:**
+
+- On Windows, native binaries (`esbuild`, `next-swc`, `rollup` addons) can be file-locked by active processes.
+- A failed `npm ci` can remove enough modules to break local verification scripts.
+
+**What to Do Instead:**
+
+- Prefer clean shells with minimal active Node/esbuild processes before `npm ci`.
+- If `npm ci` fails with `EPERM`, run `npm install` once to restore dependencies, then continue verification.
+- Record both attempts in forensic evidence so “local pass” claims stay truthful.
+
+**Date:** Feb 9, 2026
+
+---
+
 ### 0. Route deletion + stale Next type artifacts
 
 **Problem:** After deleting a route page, `npm run build` failed with type errors from stale generated files under `.next-playwright/types` and `.next/dev/types/app/...`.
@@ -452,6 +476,43 @@ export const metadata: Metadata = {
 **What We Learned:** Reusing a stale Next server on port 3002 can serve mismatched chunk artifacts and trigger broad false negatives across many specs.
 
 **What to Do Instead:** If e2e reports port 3002 in use, stop the stale 3002 listener and run a clean `npm run test:e2e` so Playwright owns the server lifecycle for that run.
+
+**Date:** Feb 09, 2026
+
+---
+
+### 18. GitHub Actions API Can Throttle Repeated `gh run list` Calls
+
+**Problem:** `gh run list` started failing with HTTP 429 while collecting workflow-run evidence artifacts.
+
+**What We Tried:** Re-ran `gh run list` with different limits immediately after prior calls.
+
+**What We Learned:** GitHub Actions endpoints can temporarily throttle repeated requests, even for authenticated clients.
+
+**What to Do Instead:** Treat already-captured successful outputs as evidence, pause before retrying, and avoid repeated immediate calls to the same workflow list endpoint in one session.
+
+**Date:** Feb 09, 2026
+
+---
+
+### 19. Running Heavy Verification Lanes in Parallel Can Produce False Build Failures
+
+**Problem:** A combined run of `verify:fast` and `e2e:smoke` executed in parallel produced unstable build failures (`JavaScript heap out of memory` / Next build worker exit `3221226505`) despite clean reruns.
+
+**What We Tried:**
+
+- Ran both commands concurrently in one session.
+- Re-ran each lane sequentially.
+- Increased Node heap for reruns (`NODE_OPTIONS=--max-old-space-size=8192`).
+
+**What We Learned:**
+
+- Parallel heavy Next.js builds can contend for memory/worker resources and create non-deterministic false negatives.
+
+**What to Do Instead:**
+
+- Run heavy verification lanes sequentially (`verify:fast` then `e2e:smoke`).
+- If build instability appears, rerun lane in isolation with higher Node heap and keep the isolated log as canonical evidence.
 
 **Date:** Feb 09, 2026
 

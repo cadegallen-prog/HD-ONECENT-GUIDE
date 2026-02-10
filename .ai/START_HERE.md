@@ -78,16 +78,22 @@ Push back (politely but firmly) when Cade:
 
 ---
 
-## Quality Gates (All 4 Required)
+## Verification Lanes (Required)
 
 ```bash
-npm run lint        # 0 errors
-npm run build       # successful
-npm run test:unit   # all passing
-npm run test:e2e    # all passing
+npm run verify:fast  # lint + typecheck + unit + build (always)
+npm run e2e:smoke    # required for route/form/API/navigation/UI flow changes
+npm run e2e:full     # run when FULL trigger policy applies
 ```
 
-**All 4 must pass. Paste output.**
+FULL trigger policy:
+
+- PR targets `main`
+- merge queue (`merge_group`)
+- label `run-full-e2e`
+- risky paths changed
+- nightly schedule
+- manual `workflow_dispatch`
 
 **No proof = not done.**
 

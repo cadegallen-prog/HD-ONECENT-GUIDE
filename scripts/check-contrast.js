@@ -237,6 +237,9 @@ async function run() {
         const tokenTextPrimary =
           parseCssColor(tokens["--text-primary"]) ??
           (theme === "dark" ? [224, 224, 224] : [28, 25, 23])
+        const tokenBorderDefault =
+          parseCssColor(tokens["--border-default"]) ??
+          (theme === "dark" ? [84, 110, 122] : [117, 117, 117])
 
         if (!tokenChecksDone.has(theme)) {
           for (const tokenCheck of tokenChecks) {
@@ -284,12 +287,13 @@ async function run() {
             continue
           }
 
-          const fg = parseColor(styles.color)
-          const bgSource = sel.role === "border" ? styles.borderColor : styles.backgroundColor
+          const fgSource = sel.role === "border" ? styles.borderColor : styles.color
+          const bgSource = styles.backgroundColor
+          const fg = parseColor(fgSource)
           const bg = parseColor(bgSource)
 
           // Default to token colors if transparent/invalid colors are encountered.
-          const safeFg = fg ?? tokenTextPrimary
+          const safeFg = fg ?? (sel.role === "border" ? tokenBorderDefault : tokenTextPrimary)
           const safeBg = bg ?? tokenBg
 
           const ratio = contrastRatio(safeFg, safeBg)

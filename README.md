@@ -136,7 +136,9 @@ Then commit the updated `public/og/*.png` files.
 
 For any meaningful change (especially UI/copy/navigation):
 
-- Paste raw outputs for: `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e`
+- Paste raw outputs for: `npm run verify:fast`
+- Add `npm run e2e:smoke` output for route/form/API/navigation/UI-flow changes
+- Add `npm run e2e:full` output when FULL trigger policy applies (or if explicitly requested)
 - UI changes: capture Playwright screenshots (light/dark, mobile/desktop) and confirm browser console has no errors
 - Docs/memory updated: `README.md`, `.ai/STATE.md`, `.ai/BACKLOG.md`, `.ai/SESSION_LOG.md`, `CHANGELOG.md`
 - Include a structured next-agent handoff block per `.ai/HANDOFF_PROTOCOL.md`
@@ -225,7 +227,7 @@ public/                 # Static assets
 - **Task closeout contract:** `.ai/HANDOFF_PROTOCOL.md` (mandatory completion + next-agent handoff schema)
 - **First session only:** Read `GROWTH_STRATEGY.md` for business context
 - **If session goal is AI workflow/tooling/verification enablement:** Also read `.ai/AI_ENABLEMENT_BLUEPRINT.md`
-- **Rules:** Default no new dependencies; run all 4 gates (lint/build/unit/e2e) on meaningful changes and record results in `SESSION_LOG.md`; work on `main`
+- **Rules:** Default no new dependencies; run `verify:fast` on meaningful changes, run `e2e:smoke` for flow changes, run `e2e:full` when FULL triggers apply, record results in `SESSION_LOG.md`; work on `main`
 
 ---
 
