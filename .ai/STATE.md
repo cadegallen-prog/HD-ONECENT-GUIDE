@@ -12,6 +12,12 @@ Every AI session must update this after meaningful work.
 
 ## Current Sprint (Last 7 Days)
 
+- **2026-02-09 (Resources redirect + footer consolidation):** Removed the obsolete `/resources` surface, consolidated footer legal/support links, and confirmed crawl hygiene.
+  - **Redirects:** Added permanent redirects for `/resources` and `/resources/` → `/guide` in `next.config.js`.
+  - **Footer cleanup:** Grouped links into Company / Support / Legal and renamed the CCPA link to “California Privacy (CCPA)” (still anchored at `/privacy-policy#ccpa`).
+  - **Route tree refresh:** Updated `ROUTE-TREE.txt` to match the current route surface (no `/resources`).
+  - **Verification:** `npm run verify:fast` ✅, `npm run e2e:smoke` ✅, redirect check (localhost) ✅, Playwright proof at `reports/proof/2026-02-09-resources-footer/`.
+
 - **2026-02-09 (PR #133 verification pass + Sonar remediation):** Completed a fresh local verification pass and fixed the remaining SonarCloud quality-gate blocker on PR #133.
   - **Verification refresh:** Local `verify:fast` rerun ✅ (`reports/forensics/review3-verify-fast-rerun-2026-02-09T16-44-09.log`), local `e2e:smoke` rerun ✅ (`reports/forensics/review3-e2e-smoke-rerun-2026-02-09T16-43-17.log`), and post-fix `verify:fast` ✅ (`reports/forensics/review3-postfix-verify-fast-2026-02-09T16-46-17.log`).
   - **Sonar root cause proven:** PR check `SonarCloud Code Analysis` failed due one open security hotspot (`AZxEKXYrJwEIlETBDrFL`) in `.github/workflows/full-qa.yml:39` ("Use full commit SHA hash for this dependency.").

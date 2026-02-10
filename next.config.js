@@ -63,6 +63,17 @@ const nextConfig = {
         destination: "/support",
         permanent: true,
       },
+      // Obsolete resources page → guide hub (keep crawl signals consolidated)
+      {
+        source: "/resources",
+        destination: "/guide",
+        permanent: true,
+      },
+      {
+        source: "/resources/",
+        destination: "/guide",
+        permanent: true,
+      },
     ]
   },
   // Security and caching headers

@@ -4,6 +4,35 @@
 
 ---
 
+## 2026-02-09 - Copilot - /resources Redirect + Footer Consolidation
+
+**Goal:** Remove the obsolete /resources surface, consolidate footer legal/support links, and tighten crawl/index hygiene.
+
+**Status:** ✅ Completed.
+
+### Changes
+
+- Added permanent redirects for `/resources` and `/resources/` → `/guide` in `next.config.js`.
+- Condensed footer links into **Company / Support / Legal** groups and renamed the CCPA link to “California Privacy (CCPA)” (still anchors to `/privacy-policy#ccpa`).
+- Updated `ROUTE-TREE.txt` to reflect the current route surface (no `/resources`).
+- Removed the empty `app/resources` directory locally (no tracked files).
+
+### Verification
+
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- Redirect checks (localhost): `/resources` → 308 `/guide`, `/resources/` → 308 `/guide`.
+- Playwright proof:
+  - `reports/proof/2026-02-09-resources-footer/before-prod-desktop-light.png`
+  - `reports/proof/2026-02-09-resources-footer/before-prod-desktop-dark.png`
+  - `reports/proof/2026-02-09-resources-footer/after-local-desktop-light.png`
+  - `reports/proof/2026-02-09-resources-footer/after-local-desktop-dark.png`
+  - `reports/proof/2026-02-09-resources-footer/before-prod-fullpage.png`
+  - `reports/proof/2026-02-09-resources-footer/after-local-fullpage.png`
+- Console notes: local dev shows a hydration warning during Fast Refresh; production console noise includes UID2 CSP block + Sentry 429 + THD preload warnings (pre-existing).
+
+---
+
 ## 2026-02-09 - Codex - PR #133 Verification Pass + Sonar Hotspot Remediation
 
 **Goal:** Complete both requested tracks: fresh repo-side verification proof for PR #133 and start/remediate the remaining SonarCloud failure.
@@ -73,44 +102,5 @@
   - Invalid artifact name due `/` in shard label
   - Contrast failure false-positive due border assertion math
   - See `reports/forensics/review2-full-qa-failure-excerpt.txt` and `reports/forensics/review2-tiered-verification.md`
-
----
-
-## 2026-02-09 - Codex - Tiered Verification Lanes (FAST + SMOKE + FULL)
-
-**Goal:** Forensically audit current verification behavior, then implement a strict tiered workflow that avoids full e2e on every iteration while staying enforceable across local scripts, CI, and agent docs.
-
-**Status:** ✅ Completed.
-
-### Changes
-
-- Added lane scripts in `package.json`:
-  - `verify:fast` (lint + typecheck + unit + build)
-  - `e2e:smoke` (critical-flow subset)
-  - `e2e:full` (full Playwright suite)
-  - `verify` (fast + smoke)
-  - Kept compatibility aliases (`test:e2e`, `qa:fast`, `qa:full`)
-- Added smoke coverage: `tests/smoke-critical.spec.ts` (app boot, `/penny-list` load, report-find interaction)
-- CI updates:
-  - `quality.yml` now runs FAST lane with cancel-in-progress concurrency
-  - New `smoke-e2e.yml` for PR/main smoke checks with Playwright browser cache
-  - Rebuilt `full-qa.yml` with conditional trigger evaluation, risky-path detection, sharded full e2e, browser cache, and retained contrast/axe checks
-- Persistent policy updates:
-  - `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, `CONTRIBUTING.md`
-  - Canonical docs aligned to lanes: `README.md`, `.ai/START_HERE.md`, `.ai/CRITICAL_RULES.md`, `.ai/VERIFICATION_REQUIRED.md`
-
-### Verification
-
-- `npm run verify:fast` ✅ (`reports/forensics/phase4-verify-fast-2026-02-09T14-21-49.log`)
-- `npm run e2e:smoke` ✅ (`reports/forensics/phase4-e2e-smoke-2026-02-09T14-23-32.log`)
-- `npm run e2e:full` ✅ (`reports/forensics/phase4-e2e-full-2026-02-09T14-24-37.log`)
-- `npm run verify` ✅ (`reports/forensics/phase4-verify-lane-2026-02-09T14-30-53.log`)
-- Workflow YAML formatting check ✅ (`npx prettier --check .github/workflows/*.yml`)
-- Baseline forensic logs retained:
-  - `reports/forensics/phase1-qa-fast-2026-02-09T14-04-15.log`
-  - `reports/forensics/phase1-test-e2e-2026-02-09T14-05-50.log`
-  - `reports/forensics/phase1-e2e-trend.txt`
-  - `reports/forensics/phase1-gh-fullqa-runs.json`
-  - `reports/forensics/phase1-gh-fullqa-summary.txt`
 
 ---

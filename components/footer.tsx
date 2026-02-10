@@ -61,41 +61,55 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Company */}
-          <div>
-            <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Company</h3>
-            <ul className="space-y-2.5">
-              <li>
-                <Link href="/about" className={navLinkClass}>
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className={navLinkClass}>
-                  Contact Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/support" className={navLinkClass}>
-                  Support & Transparency
-                </Link>
-              </li>
-              <li>
-                <Link href="/privacy-policy" className={navLinkClass}>
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms-of-service" className={navLinkClass}>
-                  Terms of Service
-                </Link>
-              </li>
-              <li>
-                <Link href="/privacy-policy#ccpa" className={navLinkClass}>
-                  Do Not Sell My Info
-                </Link>
-              </li>
-            </ul>
+          {/* Company / Support / Legal */}
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Company</h3>
+              <ul className="space-y-2.5">
+                <li>
+                  <Link href="/about" className={navLinkClass}>
+                    About
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/contact" className={navLinkClass}>
+                    Contact
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Support</h3>
+              <ul className="space-y-2.5">
+                <li>
+                  <Link href="/support" className={navLinkClass}>
+                    Support & Transparency
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Legal</h3>
+              <ul className="space-y-2.5">
+                <li>
+                  <Link href="/privacy-policy" className={navLinkClass}>
+                    Privacy Policy
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/terms-of-service" className={navLinkClass}>
+                    Terms of Service
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/privacy-policy#ccpa" className={navLinkClass}>
+                    California Privacy (CCPA)
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
 
