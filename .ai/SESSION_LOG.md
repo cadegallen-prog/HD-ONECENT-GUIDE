@@ -4,6 +4,24 @@
 
 ---
 
+## 2026-02-10 - Copilot - Ads.txt Ezoic Verification Block
+
+**Goal:** Temporarily append Ezoic reseller entries for verification while waiting on premium ad network approval.
+
+**Status:** ✅ Completed.
+
+### Changes
+
+- Appended the Ezoic reseller list to `public/ads.txt`, wrapped in `# --- START EZOIC ---` / `# --- END EZOIC ---`.
+- Added skill doc `docs/skills/ads-txt-update.md` and indexed it in `docs/skills/README.md`.
+
+### Verification
+
+- `npm run verify:fast` ✅
+- Build note: Supabase anon fetch timeouts logged during static generation (non-blocking; build succeeded).
+
+---
+
 ## 2026-02-09 - Copilot - /resources Redirect + Footer Consolidation
 
 **Goal:** Remove the obsolete /resources surface, consolidate footer legal/support links, and tighten crawl/index hygiene.
@@ -68,39 +86,3 @@
   - API evidence captured via:
     - `gh api repos/cadegallen-prog/HD-ONECENT-GUIDE/commits/8cabceb13d140d54c9d399fd08212b4e3f436cac/check-runs`
     - `https://sonarcloud.io/api/hotspots/search?projectKey=cadegallen-prog_HD-ONECENT-GUIDE&pullRequest=133&status=TO_REVIEW`
-
----
-
-## 2026-02-09 - Codex - Full QA Failure Forensics + CI Green Fix
-
-**Goal:** Re-audit tiered verification rollout and fix the failing `Full QA Suite` workflow with proof.
-
-**Status:** ✅ Completed.
-
-### Changes
-
-- Forensic audit artifacts created:
-  - `reports/forensics/review2-tiered-verification.md`
-  - `reports/forensics/review2-full-qa-failure-excerpt.txt`
-- Fixed Full QA shard artifact naming bug in `.github/workflows/full-qa.yml`:
-  - replaced matrix shard labels `"1/2","2/2"` with numeric fields and slash-free artifact names (`full-e2e-shard-1-of-2`, `full-e2e-shard-2-of-2`).
-- Fixed false-failing border contrast assertion in `scripts/check-contrast.js`:
-  - border checks now compare `borderColor` against `backgroundColor` (instead of text `color` against `borderColor`).
-
-### Verification
-
-- Local:
-  - `npm run verify:fast` ✅ (`reports/forensics/review2-phase4-verify-fast-after-fix.log`)
-  - `npm run e2e:smoke` ✅ (`reports/forensics/review2-phase4-e2e-smoke-after-fix.log`)
-  - `npm run e2e:full` ✅ (`reports/forensics/review2-phase4-e2e-full-after-fix.log`)
-  - `npm run check-contrast` ✅ (`reports/forensics/review2-phase4-check-contrast-after-fix.log`)
-- CI (PR #133):
-  - FAST ✅ https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/21840056433
-  - SMOKE ✅ https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/21840056489
-  - FULL ✅ https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/21840056498
-- Failure root-cause evidence:
-  - Invalid artifact name due `/` in shard label
-  - Contrast failure false-positive due border assertion math
-  - See `reports/forensics/review2-full-qa-failure-excerpt.txt` and `reports/forensics/review2-tiered-verification.md`
-
----

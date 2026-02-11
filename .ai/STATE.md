@@ -12,6 +12,9 @@ Every AI session must update this after meaningful work.
 
 ## Current Sprint (Last 7 Days)
 
+- **2026-02-10 (Ads.txt Ezoic verification block):** Appended the Ezoic reseller list to `public/ads.txt` with start/end comment markers for easy removal; added a new skill doc (`docs/skills/ads-txt-update.md`).
+  - **Verification:** `npm run verify:fast` ✅ (build logged Supabase anon fetch timeouts during static generation; non-blocking).
+
 - **2026-02-09 (Resources redirect + footer consolidation):** Removed the obsolete `/resources` surface, consolidated footer legal/support links, and confirmed crawl hygiene.
   - **Redirects:** Added permanent redirects for `/resources` and `/resources/` → `/guide` in `next.config.js`.
   - **Footer cleanup:** Grouped links into Company / Support / Legal and renamed the CCPA link to “California Privacy (CCPA)” (still anchored at `/privacy-policy#ccpa`).
