@@ -61,9 +61,9 @@ export default function TransparencyPage() {
                 ad exchanges to serve relevant, high-quality advertisements.
               </li>
               <li>
-                <strong>Affiliate Partnerships:</strong> PennyCentral participates in various
-                affiliate marketing programs. We may earn a commission when users purchase products
-                through our verified retailer links.
+                <strong>Affiliate Partnerships:</strong> PennyCentral participates in affiliate
+                marketing programs (such as Rakuten). We may earn a commission when users engage
+                with our affiliate or referral links.
               </li>
             </ul>
             <p>
