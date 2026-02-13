@@ -36,6 +36,18 @@
 **Focus:** Low-value-content recovery, canonical/index hygiene, approval evidence
 **Quick link:** See `.ai/STATE.md` for implemented changes and verification
 
+### [MONETIZATION_INCIDENT_REGISTER](.ai/topics/MONETIZATION_INCIDENT_REGISTER.md)
+
+**Status:** 🔄 Active command center (do not close until all incidents resolved)
+**Focus:** Cross-network incident tracking (AdSense, Ad Manager, Monumetric, Journey), evidence locking, deadlines, and close criteria
+**Quick link:** Update this register at session open/close whenever monetization work is touched
+
+### [MONETIZATION_POLICY_MATRIX](.ai/topics/MONETIZATION_POLICY_VIOLATION_MATRIX.md)
+
+**Status:** 🔄 Active gate (must pass before AdSense re-review)
+**Focus:** Fixed policy risk dimensions, required route audit set, and go/no-go criteria for re-review
+**Quick link:** Resolve all `Critical/High` findings before requesting review
+
 ### [ANALYTICS_CONTRACT](.ai/topics/ANALYTICS_CONTRACT.md)
 
 **Status:** ✅ Active guardrail

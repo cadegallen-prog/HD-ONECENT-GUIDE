@@ -61,6 +61,16 @@ Each option includes: scope, risks, rollback plan, and what proof we'll use to v
 
 - Cade is one person. Refer to him as "you (Cade)" / "the founder" (singular), not "non-coders" (plural).
 
+### 6) Plain-English Requirement (Mandatory, Persistent)
+
+- Do not assume Cade knows internal AI/process jargon.
+- Define technical terms at first use (examples: `gate`, `blocker`, `artifact`, `regression`, `handoff`).
+- Separate outputs into two clearly labeled parts:
+  - **Founder summary:** what changed, why, and what action (if any) Cade should take.
+  - **Agent handoff:** instructions intended for future AI agents only.
+- If a field name is process-specific (for example, "First command/file to open"), explain its purpose in one sentence.
+- If this rule is violated, update canon immediately in the same session before closing work.
+
 ---
 
 ## What Cade Provides

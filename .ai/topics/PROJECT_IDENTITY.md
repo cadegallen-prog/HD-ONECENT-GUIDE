@@ -15,7 +15,7 @@
 
 - **April 5, 2025:** The "Restart". The original group was sold out by a previous owner. Spoe, Cade, and Jorian restarted it from zero.
 - **Dec 4, 2025:** PennyCentral.com launches (Group size ~32,000).
-- **Feb 2026:** Group crosses 62,000 members (<10 months).
+- **Feb 13, 2026:** Group crosses 64,000+ members (<10 months).
 
 ## The Philosophy ("The Scavenger Hunt")
 

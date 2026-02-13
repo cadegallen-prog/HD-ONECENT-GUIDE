@@ -1,6 +1,6 @@
 # Penny Central
 
-The official companion site for the "Home Depot One Cent Items" Facebook community (50,000+ members and growing). A utility/reference guide for finding Home Depot clearance items marked to $0.01.
+The official companion site for the "Home Depot One Cent Items" Facebook community (64,000+ members as of February 13, 2026). A utility/reference guide for finding Home Depot clearance items marked to $0.01.
 
 **Live:** https://pennycentral.com
 
@@ -11,8 +11,8 @@ The official companion site for the "Home Depot One Cent Items" Facebook communi
 - **Penny List (Crowdsourced Reports)** ⭐ NEW — Community-powered list of reported penny finds, updated regularly (usually within about 5 minutes) from the site's "Report a Find" page (Supabase-backed).
 - **Penny Guide** — Complete reference on how clearance items reach penny status
 - **Store Finder** — Find nearby Home Depot locations with intelligent search (supports city, state name, ZIP code)
-- **Trip Tracker** — Plan and log penny hunting trips
-- **Cashback Guide** — How to stack savings with cashback apps
+- **My List** — Save and organize penny finds for your next store run
+- **Support & Cashback** — Transparent funding details + cashback/referral guidance (`/support`)
 
 ---
 
@@ -140,7 +140,7 @@ For any meaningful change (especially UI/copy/navigation):
 - Add `npm run e2e:smoke` output for route/form/API/navigation/UI-flow changes
 - Add `npm run e2e:full` output when FULL trigger policy applies (or if explicitly requested)
 - UI changes: capture Playwright screenshots (light/dark, mobile/desktop) and confirm browser console has no errors
-- Docs/memory updated: `README.md`, `.ai/STATE.md`, `.ai/BACKLOG.md`, `.ai/SESSION_LOG.md`, `CHANGELOG.md`
+- Docs/memory updated: `README.md`, `.ai/STATE.md`, `.ai/BACKLOG.md`, `.ai/SESSION_LOG.md`
 - Include a structured next-agent handoff block per `.ai/HANDOFF_PROTOCOL.md`
 - Token-only colors confirmed (no raw Tailwind palette); prefer `npm run lint:colors`
 
@@ -169,10 +169,10 @@ See: `.ai/VERIFICATION_REQUIRED.md`
 app/                    # Pages (App Router)
   page.tsx              # Homepage
   store-finder/         # Store Finder
-  trip-tracker/         # Trip Tracker
+  lists/                # My List
   guide/                # Penny Guide
   about/                # About
-  cashback/             # Cashback Guide
+  support/              # Support + cashback/referral info
 components/             # Shared components
 docs/                   # Documentation
   DESIGN-SYSTEM-AAA.md  # Color & typography spec
@@ -206,28 +206,29 @@ public/                 # Static assets
 
 | File                              | Purpose                                                              |
 | --------------------------------- | -------------------------------------------------------------------- |
+| `docs/skills/README.md`           | Task-to-skill index: fastest way to find exact implementation files  |
 | `AGENTS.md`                       | Master source of truth — behavior rules, design system, constraints  |
 | `SKILLS.md`                       | Technical stack, domain knowledge, MCP patterns                      |
 | `CLAUDE.md`                       | Claude Code instructions (points to AGENTS.md)                       |
 | `.github/copilot-instructions.md` | Copilot Chat instructions (points to AGENTS.md)                      |
 | `.ai/AI_ENABLEMENT_BLUEPRINT.md`  | When the goal is AI workflow/tooling/verification enablement         |
-| `PROJECT_ROADMAP.md`              | Current priorities and feature status; **updated Dec 7, 2025**       |
+| `.ai/STATE.md`                    | Current snapshot of what is true right now                           |
+| `.ai/BACKLOG.md`                  | Current priorities and execution order                               |
 | `docs/DESIGN-SYSTEM-AAA.md`       | Complete color and typography specification                          |
 | `docs/CROWDSOURCE-SYSTEM.md`      | Current Supabase tables and roles (Penny List + enrichment + lists)  |
 | `docs/supabase-rls.md`            | Supabase RLS + public view policy set (how reads/writes are secured) |
 | `docs/SCRAPING_COSTS.md`          | SerpApi enrichment budget + options                                  |
-| `docs/GOOGLE-FORM-PENNY-LIST.md`  | Penny list form setup, CSV export, automation                        |
 | `docs/PENNY-LIST-STRATEGY.md`     | Community intake strategy, low-effort moderation                     |
 
 ### AI Canon & Read Order (canonical entrypoint)
 
 - **Start here:** Read `VISION_CHARTER.md` first (highest authority), then `.ai/START_HERE.md`
 - The `.ai/README.md` file is now a stub that points back to this section
-- **Read sequence:** VISION_CHARTER.md → START_HERE.md → CRITICAL_RULES.md → STATE.md → BACKLOG.md → CONTRACT.md → DECISION_RIGHTS.md
+- **Read sequence:** `VISION_CHARTER.md` → `.ai/START_HERE.md` → `.ai/CRITICAL_RULES.md` → `.ai/STATE.md` → `.ai/BACKLOG.md` → `.ai/CONTRACT.md` → `.ai/DECISION_RIGHTS.md`
 - **Task closeout contract:** `.ai/HANDOFF_PROTOCOL.md` (mandatory completion + next-agent handoff schema)
-- **First session only:** Read `GROWTH_STRATEGY.md` for business context
+- **First session only:** Read `.ai/GROWTH_STRATEGY.md` for business context
 - **If session goal is AI workflow/tooling/verification enablement:** Also read `.ai/AI_ENABLEMENT_BLUEPRINT.md`
-- **Rules:** Default no new dependencies; run `verify:fast` on meaningful changes, run `e2e:smoke` for flow changes, run `e2e:full` when FULL triggers apply, record results in `SESSION_LOG.md`; work on `main`
+- **Rules:** Default no new dependencies; run `verify:fast` on meaningful changes, run `e2e:smoke` for flow changes, run `e2e:full` when FULL triggers apply, record results in `.ai/SESSION_LOG.md`; work on `main`
 - **Mandatory Alignment Gate before mutation:** GOAL / WHY / DONE MEANS / NOT DOING / CONSTRAINTS / ASSUMPTIONS / CHALLENGES
 
 ---
@@ -277,7 +278,7 @@ Use this if the session is policy/process/governance heavy:
 
 ## Community
 
-- **Facebook Group:** Home Depot One Cent Items (50K+ members)
+- **Facebook Group:** Home Depot One Cent Items (64,000+ members as of February 13, 2026)
 - **Purpose:** Educational resource for penny hunting community
 - **Penny List Form:** Collects verified penny finds from community members
 

@@ -163,7 +163,7 @@ When in doubt, ask yourself:
 
 - "I'm fixing a TypeScript error in the penny list component"
 - "I'm adding better error handling to the CSV fetch function"
-- "I'm improving the mobile layout of the trip tracker"
+- "I'm improving the mobile layout of the My List page"
 - "I'm adding comments to explain how the store search works"
 
 ### 🟡 AI Proposes First

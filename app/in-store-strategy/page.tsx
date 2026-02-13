@@ -45,17 +45,17 @@ const verifySteps = [
   {
     title: "Use the UPC, not the yellow tag",
     detail:
-      'Scan only the manufacturer barcode at self-checkout. Scanning the yellow tag can trigger a "customer needs assistance" alert that brings staff over. Exception: if there is no barcode, an employee must key in the SKU number, and they are likely to notice penny status, decline the sale, and take the item.',
+      "Use the manufacturer UPC to identify the item accurately. Yellow tags and nearby QR codes can trigger assistance prompts. If there is no scannable UPC, ask an associate to verify the SKU and current register price.",
   },
   {
     title: "Don't scan the QR code",
     detail:
-      'There are occasionally QR codes placed near the manufacturer barcode. Cover those when scanning the UPC. If you scan the QR code, it can trigger a "customer needs assistance" alert that brings the SCO attendant over.',
+      "QR codes near the UPC are often informational and may trigger assistance prompts. For price verification, use the product UPC only.",
   },
   {
-    title: "Keep it low-key",
+    title: "Use straightforward communication",
     detail:
-      "If you need help, ask for a stock check rather than a price check. It reduces the chance the item gets pulled.",
+      "If you need help, ask for item and price verification in plain terms. Keep the interaction factual, respectful, and aligned with store guidance.",
   },
   {
     title: "Pay quickly and keep the receipt",
@@ -65,22 +65,22 @@ const verifySteps = [
 ]
 
 const communityReportedTips = [
-  "Avoid bringing the item to the desk. A clear UPC photo is usually enough.",
-  "Ask for a stock check instead of a price check. A price check is more likely to result in the item being pulled.",
-  "Associates use handhelds (Zebra or FIRST). If they scan and see a penny, they may pull the item.",
-  "Associates can scan a barcode photo on your phone or look up the SKU on their device without physically taking the item, but expect pushback or extra questions.",
-  "Community members report an easier checkout experience when they scan a filler item first, then the penny item, to draw less attention to a $0.01 screen result.",
+  "Bring a clear UPC photo and SKU number to reduce identification mistakes.",
+  "Associates use handheld tools (commonly Zebra or FIRST) during verification.",
+  "If a store flags the item for removal, staff may decline the sale and pull the item.",
+  "Some associates can verify from a barcode photo or SKU lookup; process varies by store.",
+  "Use normal checkout flow and follow any staff instructions if assistance is required.",
   "Note: self-checkout terminals can notify employees through the FIRST phone (store phone, also called Zebra) when a penny item is scanned. Some stores are more proactive than others.",
 ]
 
 const rightWay = [
   "Take a photo of the UPC and shelf tag so you can verify without carrying the item around.",
-  "Ask for a stock check if you are unsure. It is less confrontational than asking for a price override.",
-  "Use self-checkout when it is quiet and you can pay quickly.",
+  "If unsure, ask for standard item and price verification, then follow store guidance.",
+  "Use normal checkout flow and keep the receipt.",
 ]
 
 const wrongWay = [
-  "Handing the item to an employee and asking for a price check. If it scans for a penny, it may be pulled.",
+  "Pressuring staff to override a refusal or policy decision.",
   "Making a scene when a cashier refuses a sale. It almost always backfires.",
   "Using employee-only ladders or restricted areas. That can get you removed from the store.",
 ]
@@ -111,8 +111,8 @@ const pennyCategories = [
 ]
 
 const checkoutTips = [
-  "Mix one penny item with a few normal items if you are worried about attention.",
-  "Avoid scanning multiple different penny SKUs in one transaction.",
+  "Keep transactions simple and honest. Avoid unnecessary complexity.",
+  "If you have many unverified SKUs, expect extra review and possible refusals.",
   "If an associate stops the sale, stay calm. Many stores simply do not allow penny sales.",
   "If you are asked to return the item after purchase, show your receipt and ask politely for guidance.",
 ]
@@ -121,7 +121,7 @@ const selfCheckoutSteps = [
   "Have your payment ready before you scan anything.",
   "Scan the UPC barcode on the product, not the yellow clearance tag.",
   "If it scans for a penny, pay immediately and print the receipt.",
-  "Leave calmly and avoid drawing attention to the screen.",
+  "If the transaction completes, keep your receipt and follow normal exit procedures.",
 ]
 
 const ifStoppedSteps = [
@@ -166,8 +166,8 @@ export default function InStoreStrategyPage() {
           <Prose variant="guide">
             <p className="mb-8 text-lg leading-relaxed">
               Finding a penny item is only half the game. The other half is verifying the price,
-              avoiding unnecessary attention, and staying respectful if a store refuses the sale.
-              This chapter covers the safest ways to check and the most common pitfalls.
+              following store process, and staying respectful if a store refuses the sale. This
+              chapter covers the safest ways to check and the most common pitfalls.
             </p>
 
             <h2>How to verify penny status in-store</h2>
@@ -177,10 +177,10 @@ export default function InStoreStrategyPage() {
             </p>
             <p className="mb-6 text-[var(--text-secondary)]">
               Verify the in-store price at self-checkout or with an employee store phone. Employee
-              verification can be risky because if the item is a penny, they may take it away. They
-              can scan a barcode photo from your phone or look up the SKU number without physically
-              taking the item, but some associates may push back or ask more questions. The safest
-              approach is usually to take the item to self-checkout and chance it there.
+              verification can lead to policy checks, and some stores may remove penny-flagged
+              items. Associates can scan a barcode photo from your phone or look up the SKU number
+              without physically taking the item, but process varies and extra questions are common.
+              Use the method available in your store and follow staff guidance.
             </p>
 
             <div className="space-y-6 mb-8">
@@ -278,7 +278,7 @@ export default function InStoreStrategyPage() {
             <h2>Checkout: keep it simple</h2>
             <p className="mb-6">
               There is no perfect method. Some stores honor penny prices. Some do not. The goal is
-              to avoid unnecessary attention and respect store discretion.
+              to use clear verification steps and respect store discretion.
             </p>
             <ul className="mb-8">
               {checkoutTips.map((tip) => (
@@ -307,8 +307,8 @@ export default function InStoreStrategyPage() {
             <h2>Locked cases and cages</h2>
             <p className="mb-6">
               Items in locked cases or cages require an employee. If the item is a penny, the
-              employee may refuse to hand it over. If you still want to try, add a normal item to
-              your cart, ask politely, and accept the answer you get.
+              employee may refuse to hand it over. Ask politely for verification and accept the
+              final answer you receive.
             </p>
 
             <div className="p-6 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-lg mb-8">

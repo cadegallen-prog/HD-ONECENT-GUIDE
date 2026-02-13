@@ -20,10 +20,21 @@
    - `.ai/STATE.md` (if current project reality changed)
    - `.ai/BACKLOG.md` (only if priorities changed)
    - `.ai/LEARNINGS.md` (if mistakes/failed approaches occurred)
+   - `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md` (required whenever any monetization incident is open or touched)
 4. **Publish next-agent handoff**
-   - Include a structured handoff block in the final response and/or session log.
-   - The handoff must let another agent continue without re-discovery.
-   - If the task involved planning docs, include canonical plan evidence (path + hash + sync status).
+
+- Include a structured handoff block in the final response and/or session log.
+- The handoff must let another agent continue without re-discovery.
+- If the task involved planning docs, include canonical plan evidence (path + hash + sync status).
+- Label this block explicitly as "for future AI agents."
+
+5. **Publish founder-readable summary**
+
+- In the same final response, include plain-English notes for Cade:
+  - what changed
+  - why it changed
+  - what action Cade should take (or "no action needed")
+- Define any technical terms used in those notes.
 
 ---
 
@@ -64,12 +75,18 @@ Use this schema every time:
 
 - Remaining risks:
 - Regressions to watch:
+- Monetization incident register updated (YES/NO):
 
 ### 6) Immediate Next Step
 
 - Single next task:
 - First command/file to open:
 ```
+
+Notes on field meaning:
+
+- "First command/file to open" is primarily for the next AI agent to resume quickly.
+- If Cade is expected to run a command personally, say so explicitly in the founder summary.
 
 ---
 

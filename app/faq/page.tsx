@@ -78,7 +78,7 @@ const faqs = [
     category: "Verification",
     question: "How can I verify a penny price without losing the item?",
     answer:
-      "Your safest workflow is to verify using a method that keeps identification accurate and interaction simple. Capture a clear UPC photo, compare SKU digits, and use quiet self-checkout verification when available. If staff help is required, ask for confirmation rather than an override request. Precision and calm communication reduce friction and mistakes.",
+      "Your safest workflow is to verify using a method that keeps identification accurate and interaction simple. Capture a clear UPC photo, compare SKU digits, and use normal checkout flow. If staff help is required, ask for price confirmation and follow the final store decision. Precision and calm communication reduce friction and mistakes.",
   },
   {
     category: "Checkout & Policy",
@@ -340,9 +340,9 @@ export default function FAQPage() {
                     <p className="text-[var(--text-secondary)]">
                       Your safest workflow is to verify using a method that keeps identification
                       accurate and interaction simple. Capture a clear UPC photo, compare SKU
-                      digits, and use quiet self-checkout verification when available. If staff help
-                      is required, ask for confirmation rather than an override request. Precision
-                      and calm communication reduce friction and mistakes.
+                      digits, and use normal checkout flow. If staff help is required, ask for price
+                      confirmation and follow the final store decision. Precision and calm
+                      communication reduce friction and mistakes.
                     </p>
                   </article>
                   <article className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">

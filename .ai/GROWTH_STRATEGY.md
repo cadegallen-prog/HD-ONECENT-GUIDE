@@ -19,14 +19,14 @@
 
 ### Facebook Group Relationship ⚠️
 
-**CRITICAL:** Cade promised a friend (group admin) the website would NOT compete with or cannibalize the Facebook group "Home Depot One Cent Items" (50,000 members).
+**CRITICAL:** Cade promised a friend (group admin) the website would NOT compete with or cannibalize the Facebook group "Home Depot One Cent Items" (64,000+ members as of February 13, 2026).
 
 **Symbiosis Goal:**
 
 - Website helps the group: searchable archive, organized data, persistent reference
 - Group drives traffic to website: organic promotion, community trust
 - **DO NOT:** Build features that replicate group functions (discussions, photo sharing, community posts)
-- **DO:** Build tools that complement the group (data organization, search, trip planning)
+- **DO:** Build tools that complement the group (data organization, search, and saved-list planning)
 
 ### Monetization Philosophy
 
@@ -166,10 +166,10 @@
 
 #### ❌ ARCHIVED
 
-| Task                      | Why Archived                                                         |
-| ------------------------- | -------------------------------------------------------------------- |
-| Trip Tracker gamification | Requires user accounts to work properly; localStorage is too fragile |
-| Trip Tracker page         | Removed in favor of My List; unclear user value                      |
+| Task                               | Why Archived                                                         |
+| ---------------------------------- | -------------------------------------------------------------------- |
+| Legacy gamification concepts       | Requires user accounts to work properly; localStorage is too fragile |
+| Legacy standalone planning surface | Replaced by My List (`/lists`) with clearer user value               |
 
 ---
 

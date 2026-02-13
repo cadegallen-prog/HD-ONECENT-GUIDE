@@ -1,0 +1,87 @@
+{
+  "captured_at_utc": "2026-02-13T07:09:23.288269+00:00",
+  "source": "live production fetch",
+  "base": "https://www.pennycentral.com",
+  "rows": [
+    {
+      "route": "/guide",
+      "url": "https://www.pennycentral.com/guide",
+      "status": 200,
+      "canonical": "https://www.pennycentral.com/guide",
+      "self_canonical": true,
+      "noindex": false
+    },
+    {
+      "route": "/in-store-strategy",
+      "url": "https://www.pennycentral.com/in-store-strategy",
+      "status": 200,
+      "canonical": "https://www.pennycentral.com/in-store-strategy",
+      "self_canonical": true,
+      "noindex": false
+    },
+    {
+      "route": "/inside-scoop",
+      "url": "https://www.pennycentral.com/inside-scoop",
+      "status": 200,
+      "canonical": "https://www.pennycentral.com/inside-scoop",
+      "self_canonical": true,
+      "noindex": false
+    },
+    {
+      "route": "/facts-vs-myths",
+      "url": "https://www.pennycentral.com/facts-vs-myths",
+      "status": 200,
+      "canonical": "https://www.pennycentral.com/facts-vs-myths",
+      "self_canonical": true,
+      "noindex": false
+    },
+    {
+      "route": "/faq",
+      "url": "https://www.pennycentral.com/faq",
+      "status": 200,
+      "canonical": "https://www.pennycentral.com/faq",
+      "self_canonical": true,
+      "noindex": false
+    },
+    {
+      "route": "/privacy-policy",
+      "url": "https://www.pennycentral.com/privacy-policy",
+      "status": 200,
+      "canonical": "https://www.pennycentral.com/privacy-policy",
+      "self_canonical": true,
+      "noindex": false
+    },
+    {
+      "route": "/terms-of-service",
+      "url": "https://www.pennycentral.com/terms-of-service",
+      "status": 200,
+      "canonical": "https://www.pennycentral.com/terms-of-service",
+      "self_canonical": true,
+      "noindex": false
+    },
+    {
+      "route": "/contact",
+      "url": "https://www.pennycentral.com/contact",
+      "status": 200,
+      "canonical": "https://www.pennycentral.com/contact",
+      "self_canonical": true,
+      "noindex": false
+    },
+    {
+      "route": "/about",
+      "url": "https://www.pennycentral.com/about",
+      "status": 200,
+      "canonical": "https://www.pennycentral.com/about",
+      "self_canonical": true,
+      "noindex": false
+    },
+    {
+      "route": "/penny-list",
+      "url": "https://www.pennycentral.com/penny-list",
+      "status": 200,
+      "canonical": "https://www.pennycentral.com/penny-list",
+      "self_canonical": true,
+      "noindex": false
+    }
+  ]
+}

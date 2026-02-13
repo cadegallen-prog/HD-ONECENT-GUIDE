@@ -1,0 +1,51 @@
+{
+  "captured_at_utc": "2026-02-13T07:42:42.4566672Z",
+  "source": "live production fetch",
+  "rows": [
+    {
+      "route": "/sku/1004038870",
+      "url": "https://www.pennycentral.com/sku/1004038870",
+      "status": 200,
+      "canonical": "https://www.pennycentral.com/sku/1004038870",
+      "self_canonical": true,
+      "noindex": true,
+      "robots": "noindex, follow"
+    },
+    {
+      "route": "/sku/1006370031",
+      "url": "https://www.pennycentral.com/sku/1006370031",
+      "status": 200,
+      "canonical": "https://www.pennycentral.com/sku/1006370031",
+      "self_canonical": true,
+      "noindex": true,
+      "robots": "noindex, follow"
+    },
+    {
+      "route": "/sku/1010591598",
+      "url": "https://www.pennycentral.com/sku/1010591598",
+      "status": 200,
+      "canonical": "https://www.pennycentral.com/sku/1010591598",
+      "self_canonical": true,
+      "noindex": true,
+      "robots": "noindex, follow"
+    },
+    {
+      "route": "/sku/1004822869",
+      "url": "https://www.pennycentral.com/sku/1004822869",
+      "status": 200,
+      "canonical": "https://www.pennycentral.com/sku/1004822869",
+      "self_canonical": true,
+      "noindex": true,
+      "robots": "noindex, follow"
+    },
+    {
+      "route": "/sku/1007976431",
+      "url": "https://www.pennycentral.com/sku/1007976431",
+      "status": 200,
+      "canonical": "https://www.pennycentral.com/sku/1007976431",
+      "self_canonical": true,
+      "noindex": true,
+      "robots": "noindex, follow"
+    }
+  ]
+}

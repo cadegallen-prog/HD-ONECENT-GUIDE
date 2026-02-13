@@ -2,7 +2,7 @@
 
 **Last updated:** 2026-02-13  
 **Owner:** Cade (founder)  
-**Status:** Runtime foundation complete (Option B policy active: provider-managed placement + hard exclusions; partner tag wiring pending tier resolution)
+**Status:** Runtime foundation complete; tier dispute + cross-network incident hardening active (Monumetric + AdSense + Ad Manager + Journey)
 
 ---
 
@@ -24,6 +24,7 @@ Use it to avoid losing context between guide work, approval-readiness, and futur
 - Related context files:
   - `.ai/topics/MONETIZATION.md`
   - `.ai/topics/ADSENSE_APPROVAL_CURRENT.md`
+  - `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`
 
 ### Monumetric Onboarding Status & Tier Dispute
 
@@ -39,6 +40,7 @@ Use it to avoid losing context between guide work, approval-readiness, and futur
 - **Feb 11:** Site approved by Monumetric. Samantha sends ad strategy proposal. Cade provides GA4 screenshot (85K pageviews, 25K sessions, 17K users) and asks about Ascend eligibility.
 - **Feb 11:** Samantha responds saying they use "active users" (17K doesn't qualify), need "3 months consistency," and accuses Cade of potentially buying traffic due to 97.6% US traffic.
 - **Feb 12 AM:** Cade researches Monumetric T&C, discovers Section 12.9 graduation vs. application distinction
+- **Feb 12 AM (parallel signal):** AdSense status moved to "We found some policy violations" (Needs Attention), replacing prior low-value-only denial state.
 - **Feb 12 PM:** Cade sends comprehensive pushback email with Facebook group proof (63.7K members, admin status), Section 12.9 legal argument, and request for written criteria clarification
 
 **The tier dispute (documented arguments):**
@@ -86,13 +88,29 @@ Cade is pathway #2 (new applicant, not Propel site). Samantha is applying pathwa
 - **Ezoic:** No traffic requirement, $0 fee, MCM already set up (can reactivate immediately)
 - **Mediavine:** 50K sessions/month required (currently at 25K — need ~2-3 months growth)
 - **Raptive:** 100K pageviews/month required (currently at 85K — need ~1-2 months growth)
-- **AdSense:** Needs "Low Value Content" rejection appeal (Samantha offered to help with this)
+- **AdSense:** State changed on Feb 12, 2026 from low-value history to "We found some policy violations"; re-review is blocked until incident gate passes.
 
 **Next follow-up:** Wait 3-5 business days (until Feb 17-19), then send check-in if no response. Escalate past Samantha if response is unsatisfactory and no compromise offered.
 
+### Cross-network incident posture (locked Feb 13, 2026)
+
+- Monumetric remains in escalation mode (Round 1 already sent on Feb 12).
+- AdSense is in policy-remediation mode (no blind re-review).
+- Current policy matrix gate result is `CONDITIONAL-GO` after deployment + refreshed evidence snapshots.
+- Ad Manager is currently in **status-split** mode:
+  - founder reports decline occurred before Ezoic re-submission on Feb 9
+  - Monumetric reported "approved by our ad providers" on Feb 11 (partner-network eligibility signal, not universal AdSense/GAM account approval)
+  - unified GAM disposition is not visible in a single console view across pathways.
+- Journey remains pending; if approved first, use as continuity-primary while unresolved incidents stay tracked.
+- Canonical tracker for all four incidents: `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`.
+- AdSense/Ad Manager re-review gate matrix: `.ai/topics/MONETIZATION_POLICY_VIOLATION_MATRIX.md`.
+
 **Reference documentation:**
 
-- Complete timeline, email text, and response scenarios: `C:\Users\cadeg\.claude\plans\jazzy-munching-peacock.md`
+- Canonical incident timeline + deadlines: `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`
+- Primary evidence bundle: `monumental/email-samanthaMelaney_publisher_sucesss_associate.pdf`
+- OCR evidence extract: `.ai/evidence/adsense/2026-02-13-monumetric-email-ocr-extract.md`
+- Route-level policy audit evidence: `.ai/evidence/adsense/2026-02-13-policy-route-audit.md`
 - Technical launch spec (ready to implement once tier resolved): `.ai/impl/monumetric-launch-spec.md`
 
 ---
@@ -189,4 +207,5 @@ These pages must preserve fast utility; runtime policy enforces hard route exclu
 - Guide execution plan: `.ai/impl/guide-recovery.md`
 - Monetization context: `.ai/topics/MONETIZATION.md`
 - Approval context: `.ai/topics/ADSENSE_APPROVAL_CURRENT.md`
+- Incident command center: `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`
 - Plan registry: `.ai/plans/INDEX.md`

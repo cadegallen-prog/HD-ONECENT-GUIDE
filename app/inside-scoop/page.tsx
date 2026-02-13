@@ -67,7 +67,7 @@ const managementFocus = [
 ]
 
 const policyPracticeNotes = [
-  "Some managers quietly honor the scan to avoid conflict. Others refuse the sale on principle.",
+  "Some managers honor the scan. Others refuse based on local policy.",
   "Enforcement can change by shift, department, or leadership style.",
   "The same store can behave differently from week to week depending on staffing and priorities.",
 ]
@@ -169,8 +169,8 @@ export default function InsideScoopPage() {
                 flag in action (introduced in Chapter 1).
               </li>
               <li>
-                Some associates re-ring at the last merchandised price to avoid a Zero-Comm
-                exception log on their store.
+                Some stores cancel or refuse penny transactions and route the item to standard
+                policy handling.
               </li>
               <li>
                 Recall or Buy-Back/RTV locks can block sale even when an item is physically present

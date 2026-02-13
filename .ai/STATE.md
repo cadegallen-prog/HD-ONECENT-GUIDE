@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 13, 2026 (Option B provider-managed placement policy implemented + verified)
+**Last updated:** Feb 13, 2026 (product-truth hardening shipped: Trip Tracker purge + member-count governance lock)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,80 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-13 (Product truth hardening - docs + governance + constants):** Removed active Trip Tracker drift, standardized member count to a single source of truth, and hardened governance checks so stale claims fail before merge.
+  - **Canonical count contract updated:** `lib/constants.ts` now defines:
+    - `COMMUNITY_MEMBER_COUNT = 64000`
+    - `COMMUNITY_MEMBER_COUNT_LAST_VERIFIED = "2026-02-13"`
+    - derived display/badge exports from the canonical raw value
+  - **Deprecated feature drift removed (active surfaces):**
+    - `README.md`
+    - `SKILLS.md`
+    - `.ai/DECISION_RIGHTS.md`
+    - `.ai/CONTEXT.md`
+    - `.ai/GROWTH_STRATEGY.md`
+    - `scripts/run-audit.ps1` (`/trip-tracker` replaced with `/report-find`)
+  - **Stale member-count claims corrected (active surfaces):**
+    - `README.md` now uses `64,000+` with explicit freshness date (`as of February 13, 2026`)
+    - `.ai/CONTEXT.md` + `.ai/GROWTH_STRATEGY.md` aligned to current count policy
+    - `.ai/topics/PROJECT_IDENTITY.md` updated to 64,000+ milestone
+  - **Drift prevention shipped:** `scripts/check-doc-governance-drift.mjs` now fails on:
+    - active Trip Tracker tokens in canonical docs/tooling
+    - stale count tokens (`50K+`, `50,000+`, `62K+`, `62,000+`) in canonical docs/tooling
+    - README/count freshness mismatch relative to `lib/constants.ts`
+  - **AI navigation hardening follow-up (same day):**
+    - `README.md`, `SKILLS.md`, and `AGENTS.md` now point to live/canonical paths only for startup docs and memory files.
+    - Added explicit location map/read-order guidance so agents can find canon, skills, constraints, verification, and historical archives without repo-wide searching.
+    - Removed/updated stale references in active navigation docs (including missing root-level roadmap/changelog/google-form doc pointers and outdated cashback route/file pointers).
+  - **Verification:** `npm run check:docs-governance` ✅, `npm run verify:fast` ✅, `npm run e2e:smoke` ✅, active-drift greps ✅, screenshot+console proof ✅ (`reports/proof/2026-02-13T13-25-45-product-truth-hardening/`, `console-check.json`).
+
+- **2026-02-13 (Founder communication canon + policy-language remediation pass):** Implemented the requested plain-English communication canon and rewrote policy-sensitive guide wording that was flagged as monetization blockers.
+  - **Canonical communication updates:** Added mandatory plain-English and term-definition requirements to:
+    - `AGENTS.md`
+    - `.ai/CONTRACT.md`
+    - `.ai/START_HERE.md`
+    - `.ai/HANDOFF_PROTOCOL.md`
+  - **Meaning lock for Monumetric phrase:** Documented that "approved by our ad providers" is a partner-network eligibility signal, not universal AdSense account approval:
+    - `.ai/topics/ADSENSE_APPROVAL_CURRENT.md`
+    - `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`
+  - **Content-policy rewrites (route pages):**
+    - `app/in-store-strategy/page.tsx` (removed attention-avoidance/evasion phrasing, shifted to compliance-first wording)
+    - `app/inside-scoop/page.tsx` (removed register-log-avoidance phrasing, replaced with neutral policy-handling wording)
+    - `app/faq/page.tsx` (replaced "quiet self-checkout" tactic phrasing with normal checkout + final store-decision wording)
+  - **Incident/matrix/evidence sync:** Updated to reflect remediation is implemented in code and pending deployment/evidence refresh:
+    - `.ai/evidence/adsense/2026-02-13-policy-route-audit.md`
+    - `.ai/topics/MONETIZATION_POLICY_VIOLATION_MATRIX.md`
+    - `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`
+    - `.ai/topics/SITE_MONETIZATION_CURRENT.md`
+    - `.ai/evidence/adsense/README.md`
+  - **Gate posture update:** AdSense gate moved from prior `NO-GO` (content blockers) to `CONDITIONAL-GO` after deployment + refreshed evidence snapshots.
+  - **Verification:** `npm run check:docs-governance` ✅, `npm run verify:fast` ✅, `npm run e2e:smoke` ✅, `npx playwright test tests/__tmp_policy_copy_proof.spec.ts --project=chromium-desktop-light --workers=1` ✅ (3/3, screenshots attached in Playwright HTML report data bundle).
+
+- **2026-02-13 (Monetization incident command center implementation - docs/governance):** Implemented the cross-network incident-memory system so AdSense/Monumetric/Ad Manager/Journey blockers cannot be dropped between sessions.
+  - **New canonical tracker:** Added `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md` with required schema (`incident_id`, `opened_date`, `last_update`, `status`, `evidence_path`, `known_facts`, `unknowns`, `next_action`, `deadline`, `close_criteria`) and four active incidents:
+    - `INC-ADSENSE-001`
+    - `INC-MONUMETRIC-001`
+    - `INC-ADMANAGER-001`
+    - `INC-JOURNEY-001`
+  - **Evidence lock updated:** Canonicalized key dates/facts:
+    - Feb 2, 2026 first AdSense low-value denial (from Monumetric email-chain evidence)
+    - ~Feb 3, 2026 AdSense re-application
+    - Feb 12, 2026 AdSense status changed to "We found some policy violations"
+    - Feb 10/11, 2026 Monumetric metric inconsistency (`session pageviews` -> `active users`)
+  - **Workflow enforcement added:** Updated `.ai/START_HERE.md` and `.ai/HANDOFF_PROTOCOL.md` to require reading/updating the incident register at session open/close for monetization work.
+  - **Cross-links synced:** Updated `.ai/BACKLOG.md`, `.ai/SESSION_LOG.md`, `.ai/topics/ADSENSE_APPROVAL_CURRENT.md`, `.ai/topics/SITE_MONETIZATION_CURRENT.md`, and `.ai/topics/INDEX.md`.
+  - **Policy gate artifact added:** `.ai/topics/MONETIZATION_POLICY_VIOLATION_MATRIX.md` with fixed risk dimensions and a locked page-level audit set.
+  - **Peer-review corrections applied:** Updated `.ai/topics/ADSENSE_APPROVAL_CURRENT.md` to remove stale homepage-canonical blocker language and replaced it with a live route snapshot (`status=200`, self-canonical, `noindex=false`) backed by `.ai/evidence/adsense/2026-02-13-route-snapshot.json`.
+  - **Incident model tightened:** `INC-ADSENSE-001` now tracks `holdover_hypothesis`, `review_request_submitted_at`, and `earliest_re_eval_date`; re-review gate includes a 7-14 day post-review time-lag rule unless explicit new policy subtype evidence appears.
+  - **Evidence hygiene added:** Created `.ai/evidence/adsense/README.md`, added a persistent transcription artifact for the Feb 12 policy-violations screenshot (`.ai/evidence/adsense/2026-02-12-needs-attention-policy-violations.md`), and added Monumetric OCR extract evidence (`.ai/evidence/adsense/2026-02-13-monumetric-email-ocr-extract.md`).
+  - **Policy gate completed:** Added route-level audit evidence `.ai/evidence/adsense/2026-02-13-policy-route-audit.md` and representative SKU metadata snapshot `.ai/evidence/adsense/2026-02-13-sku-route-snapshot.json`.
+  - **Gate decision (historical):** This earlier pass set `NO-GO` based on content-policy blockers. Later same-day remediation pass rewrote those blockers and moved state to `CONDITIONAL-GO` pending deployment evidence refresh.
+  - **Timeline lock refined:** AdSense dates are now explicit in canon:
+    - denied 2026-02-02
+    - re-applied 2026-02-03
+    - denied again (policy violations) 2026-02-12
+  - **Ad Manager status clarified:** `INC-ADMANAGER-001` moved to `OPEN-STATUS-SPLIT` with founder-reported Ezoic re-submission on 2026-02-09 and Monumetric provider-approval signal on 2026-02-11; decline artifact remains pending.
+  - **Verification:** `npm run check:docs-governance` ✅, `npm run verify:fast` ✅ (docs-only session; no app/runtime code changes).
 
 - **2026-02-13 (Monumetric Option B runtime pivot - provider-managed placement):** Implemented the founder-approved override to let Monumetric control placement by default while preserving only hard in-app exclusions.
   - **Policy change shipped:** deprecated strict app-side allow/restrict route inventory forcing in favor of provider-managed placement on all non-excluded routes.
@@ -32,7 +106,7 @@ Every AI session must update this after meaningful work.
   - **Next action:** Wait 3-5 business days (until Feb 17-19) for response. Escalate past Samantha if no response or if response is unsatisfactory with no compromise.
   - **Decision framework:** Accept Propel only if (1) $99 fee waived OR (2) written commitment to Ascend upgrade after 2 months at 80K+ pageviews. Otherwise escalate or walk.
   - **Backup plan:** Can reactivate Ezoic (MCM already set up, $0 fee, no traffic requirement) or wait 1-3 months to hit Mediavine (50K sessions) or Raptive (100K pageviews) thresholds.
-  - **Full documentation:** Complete timeline, arguments, and response scenarios in `C:\Users\cadeg\.claude\plans\jazzy-munching-peacock.md` and `.ai/topics/SITE_MONETIZATION_CURRENT.md`.
+  - **Full documentation:** Complete timeline, arguments, and response scenarios in `.ai/topics/SITE_MONETIZATION_CURRENT.md` and `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`.
   - **Verification:** Docs-only update; no code changes.
 
 - **2026-02-11 (Monumetric Phase 4 implementation - measurement + rollback operations):** Executed the fourth runtime phase from `.ai/impl/monumetric-launch-spec.md`.

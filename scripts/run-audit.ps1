@@ -2,7 +2,7 @@ $pages = @(
     "/",
     "/store-finder",
     "/guide",
-    "/trip-tracker",
+    "/report-find",
     "/about",
     "/cashback"
 )

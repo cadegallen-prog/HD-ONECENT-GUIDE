@@ -35,6 +35,12 @@ No file mutation is allowed until this exact block is complete:
 
 If any field is missing or contradictory, stop and resolve it first. No edits before gate completion.
 
+## Monetization Incident Rule (Required When Open)
+
+- If any monetization incident is open, read `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md` immediately after `STATE.md` and `BACKLOG.md`.
+- Session-start update must explicitly acknowledge each open incident ID and its current `next_action`.
+- No monetization execution begins until incident status and deadlines are confirmed from the register.
+
 ## Planning Canon (When the session is planning-only)
 
 - Open `.ai/plans/INDEX.md` to see the canonical list of plans and their current status.
@@ -68,6 +74,16 @@ If any field is missing or contradictory, stop and resolve it first. No edits be
 ## Owner Context (Critical)
 
 **Cade cannot code.** He cannot read, write, debug, or assess code quality. This changes everything.
+
+## Founder Communication Rule (Mandatory)
+
+- Use plain English by default.
+- Define technical terms the first time they appear.
+- Do not mix founder instructions with next-agent instructions.
+- In final responses, include:
+  1. `Founder Summary` (what changed, why it matters, what Cade should do next)
+  2. `Agent Handoff` (for future AI agents only)
+- If using process field labels like "First command/file to open," explain that it is for the next AI session, not for Cade unless explicitly stated.
 
 ### Your Responsibilities
 

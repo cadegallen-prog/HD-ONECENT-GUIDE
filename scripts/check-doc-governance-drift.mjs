@@ -166,11 +166,127 @@ const checkDuplicatePolicyDefinitions = () => {
   )
 }
 
+const parseMemberCountContract = () => {
+  const constantsText = readText("lib/constants.ts")
+
+  const countMatch = constantsText.match(/export const COMMUNITY_MEMBER_COUNT\s*=\s*(\d+)/)
+  if (!countMatch) {
+    addError(
+      "product-truth",
+      'lib/constants.ts must export COMMUNITY_MEMBER_COUNT as a numeric literal.'
+    )
+    return null
+  }
+
+  const verifiedMatch = constantsText.match(
+    /export const COMMUNITY_MEMBER_COUNT_LAST_VERIFIED\s*=\s*"(\d{4}-\d{2}-\d{2})"/
+  )
+  if (!verifiedMatch) {
+    addError(
+      "product-truth",
+      'lib/constants.ts must export COMMUNITY_MEMBER_COUNT_LAST_VERIFIED in "YYYY-MM-DD" format.'
+    )
+    return null
+  }
+
+  const count = Number(countMatch[1])
+  const verifiedIso = verifiedMatch[1]
+  const [yearRaw, monthRaw, dayRaw] = verifiedIso.split("-")
+  const year = Number(yearRaw)
+  const month = Number(monthRaw)
+  const day = Number(dayRaw)
+
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ]
+
+  if (!Number.isInteger(month) || month < 1 || month > 12 || !Number.isInteger(day) || day < 1 || day > 31) {
+    addError(
+      "product-truth",
+      `COMMUNITY_MEMBER_COUNT_LAST_VERIFIED has an invalid date: ${verifiedIso}.`
+    )
+    return null
+  }
+
+  return {
+    count,
+    display: `${count.toLocaleString("en-US")}+`,
+    verifiedIso,
+    verifiedHuman: `${monthNames[month - 1]} ${day}, ${year}`,
+  }
+}
+
+const checkProductTruthDrift = () => {
+  const category = "product-truth"
+  const activeFiles = [
+    "README.md",
+    "SKILLS.md",
+    "SCRIPTS-AND-GATES.txt",
+    "scripts/run-audit.ps1",
+    ".ai/DECISION_RIGHTS.md",
+    ".ai/CONTEXT.md",
+    ".ai/GROWTH_STRATEGY.md",
+  ]
+
+  const staleMemberPatterns = [
+    /\b50K\+/i,
+    /\b50,000\+/i,
+    /\b62K\+/i,
+    /\b62,000\+/i,
+  ]
+
+  for (const relativePath of activeFiles) {
+    const text = readText(relativePath)
+    if (/trip[\s_-]?tracker/i.test(text)) {
+      addError(category, `${relativePath} still references deprecated Trip Tracker copy.`)
+    }
+
+    for (const pattern of staleMemberPatterns) {
+      if (pattern.test(text)) {
+        addError(category, `${relativePath} still contains stale member-count token: ${pattern}`)
+      }
+    }
+  }
+
+  const contract = parseMemberCountContract()
+  if (!contract) {
+    return
+  }
+
+  const readmeText = readText("README.md")
+  if (!readmeText.includes(contract.display)) {
+    addError(
+      category,
+      `README.md must include current member-count display (${contract.display}) from lib/constants.ts.`
+    )
+  }
+
+  const asOfPhrase = `as of ${contract.verifiedHuman}`
+  if (!readmeText.includes(asOfPhrase)) {
+    addError(
+      category,
+      `README.md must include a freshness phrase matching COMMUNITY_MEMBER_COUNT_LAST_VERIFIED: "${asOfPhrase}".`
+    )
+  }
+}
+
 const run = () => {
   checkVerificationModelDrift()
   checkReadOrderDrift()
   checkStaleArchitectureClaims()
   checkDuplicatePolicyDefinitions()
+  checkProductTruthDrift()
 
   if (errors.length) {
     console.error("Governance drift check failed:")
@@ -184,6 +300,7 @@ const run = () => {
   notes.push("No read-order drift detected in entrypoint docs.")
   notes.push("No stale architecture claims detected in canonical operational docs.")
   notes.push("No duplicate secondary-policy definitions detected.")
+  notes.push("No deprecated Trip Tracker or stale member-count drift detected in active docs/tooling.")
 
   console.log("Governance drift check passed.")
   for (const note of notes) {

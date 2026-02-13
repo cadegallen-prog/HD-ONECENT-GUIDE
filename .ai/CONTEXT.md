@@ -34,7 +34,7 @@ More reports = more value = more users = more reports
 
 ### What Facebook CAN'T Do (Our Moat)
 
-The 50K+ member Facebook group is valuable but has structural limitations:
+The 64,000+ member Facebook group (as of February 13, 2026) is valuable but has structural limitations:
 
 - Posts get buried within hours
 - No way to aggregate reports by SKU
@@ -95,7 +95,7 @@ This is the primary “zoomed-out” framing that prevents local optimizations f
 
 ## Mission
 
-PennyCentral.com is the companion utility site for the **“Home Depot One Cent Items”** Facebook community (~50,000+ members).  
+PennyCentral.com is the companion utility site for the **“Home Depot One Cent Items”** Facebook community (64,000+ members as of February 13, 2026).  
 The mission is simple: **turn scattered penny‑hunting knowledge into a fast, reliable field guide + living intel feed.**
 
 ---
@@ -117,7 +117,7 @@ The group is conversation and proof; the site is structured memory and tooling.
 
 2. **Practical tools**
    - Store Finder for planning hunts.
-   - Trip Tracker removed (archived); focus on My List instead.
+   - My List is the active saved-items tool for planning and follow-through.
 
 3. **Crowd Reports → Penny List (The Magnum Opus)**
    - Users report finds in <30 seconds via low-friction form.

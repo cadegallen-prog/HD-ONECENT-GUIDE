@@ -1,6 +1,6 @@
 # Backlog (Top Priority Items)
 
-**Last updated:** Feb 13, 2026
+**Last updated:** Feb 13, 2026 (policy-language remediation implemented; deployment evidence refresh next)
 **Rule:** Keep ≤10 items. Archive completed/deferred items.
 
 **Auto-archive:** Full backlog history preserved in `archive/backlog-history/`
@@ -18,7 +18,26 @@ Each AI session should:
 
 ## P0 - Do Next (Analytics-Driven Growth)
 
-### 0. Governance Realignment Follow-Through (Charter-first Enforcement)
+### 0. Monetization Incident Resolution Command Center (Parallel Hardening, 14-day lock)
+
+- **Problem:** Monetization blockers are now multi-incident and cross-network, not a single AdSense issue:
+  - AdSense moved from `Low Value Content` to `We found some policy violations` on Feb 12, 2026.
+  - Monumetric tier qualification criteria remain inconsistent (`session pageviews` vs `active users` vs published `monthly pageviews`).
+  - Ad Manager domain decline via Ezoic path likely overlaps with policy/compliance signals.
+- **Progress (2026-02-13):**
+  - Plain-English communication requirements are now canonical across agent entry/collaboration docs.
+  - Policy-sensitive wording rewrites are implemented in source (`/in-store-strategy`, `/inside-scoop`, `/faq`).
+  - Matrix posture moved from content-blocked `NO-GO` to `CONDITIONAL-GO` pending deployment + refreshed evidence snapshot.
+- **Done means:**
+  - `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md` remains the single source of truth and is updated every monetization session.
+  - `.ai/topics/MONETIZATION_POLICY_VIOLATION_MATRIX.md` is maintained and used as the hard re-review gate.
+  - All open incidents (`INC-ADSENSE-001`, `INC-MONUMETRIC-001`, `INC-ADMANAGER-001`, `INC-JOURNEY-001`) have current `status`, `next_action`, `deadline`, and evidence links.
+  - AdSense re-review gate is enforced (no unresolved `Critical`/`High` policy matrix items).
+  - Monumetric escalation timeline is followed (`Feb 17` follow-up, `Feb 19` supervisor escalation if unresolved).
+  - Primary path decision is revisited after the 14-day parallel-hardening window using incident outcomes, not assumptions.
+- **Plan artifact:** `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`
+
+### 1. Governance Realignment Follow-Through (Charter-first Enforcement)
 
 - **Problem:** Charter/canon refactor is in place and `ai:verify` default mode is now codified; one follow-up remains open: run one intentional drift contradiction test in CI to prove fail behavior.
 - **Done means:**
@@ -27,7 +46,7 @@ Each AI session should:
   - Drift-test evidence logged in `STATE.md` and `SESSION_LOG.md`
 - **Plan:** `.ai/impl/vision-charter-first-governance-realignment.md`
 
-### 1. Sitewide Monetization Readiness - Route Policy + UX-Safe Revenue Architecture
+### 2. Sitewide Monetization Readiness - Route Policy + UX-Safe Revenue Architecture
 
 - **Problem:** Monetization strategy is currently fragmented (guide-focused execution, but sitewide revenue depends heavily on utility routes and first-layer IA quality signals).
 - **Progress (2026-02-13):** Runtime foundation is complete and aligned to founder-approved Option B:
@@ -46,7 +65,7 @@ Each AI session should:
   - Monumetric handoff packet is prepared and confirmed (exclusions + frequency guardrails + provider-managed placement assumptions)
 - **Plan:** `.ai/impl/monumetric-launch-spec.md` (supersedes `.ai/plans/sitewide-monetization-readiness.md` for launch decisions)
 
-### 2. Agent Autonomy Hardening - Phase 1 (Port 3001 Reliability Contract)
+### 3. Agent Autonomy Hardening - Phase 1 (Port 3001 Reliability Contract)
 
 - **Problem:** Local dev-server ownership and verification mode selection are easy to misapply, creating restart-loop confusion and blocking agent momentum.
 - **Progress (2026-02-11):** `scripts/ai-proof.ts` now supports deterministic `dev`/`test` modes, `PLAYWRIGHT_BASE_URL`, and fail-fast no-thrash server checks. Remaining work is to unify the same contract fully across `ai-doctor` + all docs/skills references.
@@ -57,7 +76,7 @@ Each AI session should:
   - Verification evidence includes one bundle for dev mode and one for test mode
 - **Plan:** `.ai/plans/agent-autonomy-hardening.md`
 
-### 3. Bloat Control - Ongoing Archive-First Hygiene
+### 4. Bloat Control - Ongoing Archive-First Hygiene
 
 - **Problem:** Deprecated/legacy/single-use docs and scripts keep accumulating, increasing AI context noise and decision drift.
 - **Done means:**
@@ -78,7 +97,7 @@ Each AI session should:
   - `archive/scripts-pruned/2026-02-03-pass3/`
   - `archive/scripts-pruned/2026-02-04-pass1/`
 
-### 4. Data Pipeline Reliability - Pre-scrape + Cron Auth (P0-0)
+### 5. Data Pipeline Reliability - Pre-scrape + Cron Auth (P0-0)
 
 - **Problem:** GitHub-hosted runners are blocked upstream (**403 + Cloudflare “Just a moment...”**), so scheduled scraping cannot be the primary freshness path right now. Separately, Vercel cron endpoints will return 401 if `CRON_SECRET` is missing/mismatched.
 - **Done means:**
@@ -88,7 +107,7 @@ Each AI session should:
   - Vercel cron logs show 200s (not 401s) for `/api/cron/seed-penny-list`, `/api/cron/trickle-finds`, `/api/cron/send-weekly-digest`
 - **Approach options (later):** self-hosted runner (home IP / VPS) vs paid residential proxy vs new data source (avoid upstream dependency where possible)
 
-### 5. SEO Improvement - Schema Markup + Internal Linking (P0-3)
+### 6. SEO Improvement - Schema Markup + Internal Linking (P0-3)
 
 - **Problem:** Zero non-branded organic clicks. Position 11.6 for "home depot penny list". 100% dependent on Facebook.
 - **Done means:**
