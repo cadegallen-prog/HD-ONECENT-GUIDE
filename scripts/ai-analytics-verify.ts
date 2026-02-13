@@ -14,7 +14,7 @@ type Hit = {
   en: string
 }
 
-const ROUTES = [
+const CANONICAL_ROUTES = [
   "/",
   "/guide",
   "/what-are-pennies",
@@ -28,6 +28,10 @@ const ROUTES = [
   "/store-finder",
   "/about",
   "/report-find",
+]
+
+// Legacy URLs are still tested for continuity, but they are not canonical.
+const LEGACY_REDIRECT_ROUTES = [
   "/guide/clearance-lifecycle",
   "/guide/digital-pre-hunt",
   "/guide/in-store-strategy",
@@ -35,6 +39,8 @@ const ROUTES = [
   "/guide/fact-vs-fiction",
   "/guide/responsible-hunting",
 ]
+
+const ROUTES = CANONICAL_ROUTES
 
 function nowStamp() {
   return new Date().toISOString().replace(/[:.]/g, "-")

@@ -74,6 +74,57 @@ const nextConfig = {
         destination: "/guide",
         permanent: true,
       },
+      // Guide URL normalization: keep root chapter URLs canonical while preserving legacy links.
+      {
+        source: "/guide/what-are-pennies",
+        destination: "/what-are-pennies",
+        permanent: true,
+      },
+      {
+        source: "/guide/facts-vs-myths",
+        destination: "/facts-vs-myths",
+        permanent: true,
+      },
+      {
+        source: "/guide/faq",
+        destination: "/faq",
+        permanent: true,
+      },
+      {
+        source: "/guide/part1",
+        destination: "/what-are-pennies",
+        permanent: true,
+      },
+      {
+        source: "/guide/part2",
+        destination: "/clearance-lifecycle",
+        permanent: true,
+      },
+      {
+        source: "/guide/part3",
+        destination: "/digital-pre-hunt",
+        permanent: true,
+      },
+      {
+        source: "/guide/part4",
+        destination: "/in-store-strategy",
+        permanent: true,
+      },
+      {
+        source: "/guide/part5",
+        destination: "/inside-scoop",
+        permanent: true,
+      },
+      {
+        source: "/guide/part6",
+        destination: "/facts-vs-myths",
+        permanent: true,
+      },
+      {
+        source: "/guide/part7",
+        destination: "/faq",
+        permanent: true,
+      },
     ]
   },
   // Security and caching headers
