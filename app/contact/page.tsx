@@ -110,8 +110,8 @@ export default function ContactPage() {
           <p>
             PennyCentral is committed to honest, community-first data. We do not accept payment to
             list or promote specific SKUs. Our monetization approach is disclosed on the{" "}
-            <a href="/about" className="text-[var(--cta-primary)] underline">
-              About
+            <a href="/transparency" className="text-[var(--cta-primary)] underline">
+              Transparency & Funding
             </a>{" "}
             page. If you believe any content on this site is misleading, inaccurate, or harmful,
             please contact us immediately so we can investigate and correct it.

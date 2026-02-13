@@ -104,9 +104,9 @@ export default function PrivacyPolicyPage() {
       <Section title="Advertising (Advertising Partners + ads.txt)">
         <Prose>
           <p>
-            PennyCentral may display ads served by advertising partners. These partners may use
-            cookies or similar technologies to deliver and measure ads, including interest-based
-            advertising.
+            PennyCentral displays ads served by Google and other advertising partners. These
+            partners may use cookies or similar technologies to deliver and measure ads, including
+            interest-based advertising.
           </p>
           <p>
             We maintain an{" "}

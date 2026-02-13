@@ -47,6 +47,12 @@ const nextConfig = {
         destination: "/penny-list",
         permanent: true,
       },
+      // Consolidation: Support -> Transparency (Feb 2026)
+      {
+        source: "/support",
+        destination: "/transparency",
+        permanent: true,
+      },
       {
         source: "/how-to-find-penny-items",
         destination: "/guide",

@@ -71,15 +71,9 @@ export function Footer() {
                     About
                   </Link>
                 </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Support</h3>
-              <ul className="space-y-2.5">
                 <li>
-                  <Link href="/support" className={navLinkClass}>
-                    Support & Transparency
+                  <Link href="/transparency" className={navLinkClass}>
+                    Transparency & Funding
                   </Link>
                 </li>
               </ul>
@@ -87,19 +81,13 @@ export function Footer() {
 
             <div>
               <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Legal</h3>
-              <div className="flex flex-wrap items-center gap-2 text-sm">
+              <div className="flex flex-col space-y-2.5">
                 <Link href="/privacy-policy" className={navLinkClass}>
                   Privacy Policy
                 </Link>
-                <span className="text-[var(--text-muted)]" aria-hidden="true">
-                  |
-                </span>
                 <Link href="/terms-of-service" className={navLinkClass}>
                   Terms of Service
                 </Link>
-                <span className="text-[var(--text-muted)]" aria-hidden="true">
-                  |
-                </span>
                 <Link href="/contact" className={navLinkClass}>
                   Contact
                 </Link>

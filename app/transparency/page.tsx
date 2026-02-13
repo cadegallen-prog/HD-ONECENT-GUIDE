@@ -2,19 +2,18 @@ import Link from "next/link"
 import type { Metadata } from "next"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
 import { Button } from "@/components/ui/button"
-import { EditorialBlock } from "@/components/guide/EditorialBlock"
 import { COMMUNITY_MEMBER_COUNT_DISPLAY } from "@/lib/constants"
 
 export const metadata: Metadata = {
-  title: "Support | PennyCentral",
+  title: "Transparency & Funding | PennyCentral",
   description:
     "Learn how PennyCentral is funded and how advertising and affiliate partnerships support free access.",
   alternates: {
-    canonical: "/support",
+    canonical: "/transparency",
   },
 }
 
-export default function SupportPage() {
+export default function TransparencyPage() {
   const webPageSchema = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -38,7 +37,7 @@ export default function SupportPage() {
       />
 
       <PageHeader
-        title="Support PennyCentral"
+        title="Transparency & Funding"
         subtitle={
           <>
             PennyCentral is free to use. No paywalls, no subscriptions, and no premium tier required
@@ -47,10 +46,6 @@ export default function SupportPage() {
           </>
         }
       />
-
-      <div className="flex justify-center mb-12">
-        <EditorialBlock />
-      </div>
 
       <Section>
         <Prose className="mb-12">
