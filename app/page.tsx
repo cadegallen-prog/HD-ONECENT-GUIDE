@@ -346,34 +346,34 @@ export default async function Home() {
       </section>
 
       {/* ============================================
-          SUPPORT SECTION
+          TRANSPARENCY + CONTACT SECTION
           ============================================ */}
       <section className="section-padding px-4 sm:px-6 bg-[var(--bg-page)]">
         <div className="container-wide">
           {/* Section header */}
           <div className="text-center mb-10">
             <h2 className="text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug">
-              Support PennyCentral
+              Transparency & Support
             </h2>
             <p className="mt-2 text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed max-w-xl mx-auto">
-              This site is free to use. Ads are being enabled now to help keep it sustainable.
-              Optional support is always appreciated, but never required.
+              PennyCentral is free to use. See exactly how the site is funded and where to contact
+              us for help.
             </p>
           </div>
 
-          {/* Support CTAs */}
+          {/* Transparency + contact CTAs */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-2xl mx-auto">
             <Link
-              href="/support"
+              href="/transparency"
               className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 min-h-[48px] rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold shadow-md hover:bg-[var(--cta-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
             >
-              Support PennyCentral
+              Transparency & Funding
             </Link>
             <Link
-              href="/support"
+              href="/contact"
               className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 min-h-[48px] rounded-lg border-2 border-[var(--border-default)] dark:border-[var(--border-strong)] bg-transparent text-[var(--text-primary)] font-semibold hover:bg-[var(--bg-elevated)] hover:border-[var(--border-strong)] dark:hover:bg-[var(--bg-elevated)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
             >
-              Support & Transparency
+              Contact Support
             </Link>
           </div>
         </div>

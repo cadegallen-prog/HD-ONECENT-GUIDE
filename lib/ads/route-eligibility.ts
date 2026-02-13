@@ -13,6 +13,7 @@ export const HARD_AD_EXCLUDED_ROUTES = [
   "/report-find",
   "/store-finder",
   "/support",
+  "/transparency",
   "/contact",
   "/privacy-policy",
   "/terms-of-service",

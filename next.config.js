@@ -63,10 +63,10 @@ const nextConfig = {
         destination: "/penny-list",
         permanent: true,
       },
-      // Pages Overhaul: consolidate legacy /cashback into /support (Jan 2026)
+      // Pages Overhaul: consolidate legacy /cashback into /transparency (Feb 2026)
       {
         source: "/cashback",
-        destination: "/support",
+        destination: "/transparency",
         permanent: true,
       },
       // Obsolete resources page → guide hub (keep crawl signals consolidated)

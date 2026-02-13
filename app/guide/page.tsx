@@ -135,9 +135,9 @@ const utilityLinks = [
     note: "Set the right store before researching or scanning.",
   },
   {
-    href: "/support",
-    label: "Support",
-    note: "Contact, transparency, and site support details.",
+    href: "/transparency",
+    label: "Transparency & Funding",
+    note: "How the site is funded, disclosures, and contact paths.",
   },
 ]
 
