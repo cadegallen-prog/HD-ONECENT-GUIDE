@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
 import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
+import { RouteAdSlots } from "@/components/ads/route-ad-slots"
 
 export const metadata: Metadata = {
   title: "Penny Hunting Facts vs Myths | Penny Central",
@@ -129,6 +130,7 @@ export default function FactsVsMythsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
+      <RouteAdSlots pathname="/facts-vs-myths" />
       <PageShell width="default" padding="sm" gap="md">
         <div className="w-full max-w-[68ch] mx-auto">
           <nav aria-label="Breadcrumb" className="mb-3 text-sm text-[var(--text-muted)]">

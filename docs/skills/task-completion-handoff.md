@@ -11,10 +11,9 @@ Use this at the end of meaningful work so completion is reproducible and handoff
 ## Required closeout sequence
 
 1. Verify work with proof
-   - `npm run lint`
-   - `npm run build`
-   - `npm run test:unit`
-   - `npm run test:e2e`
+   - `npm run verify:fast` (always)
+   - `npm run e2e:smoke` (route/form/API/navigation/UI-flow changes)
+   - `npm run e2e:full` (only when trigger policy applies)
    - UI changes: Playwright proof screenshots + console report
 2. Update memory
    - `.ai/SESSION_LOG.md` (what changed + evidence)
@@ -30,3 +29,4 @@ Use this at the end of meaningful work so completion is reproducible and handoff
 - No “done” claim without proof paths.
 - No session end without a next-agent handoff.
 - If a key fact/decision is only in chat, persist it in `.ai/` or it is considered lost.
+- Canonical verification policy lives in `.ai/VERIFICATION_REQUIRED.md`; this skill must not redefine it.

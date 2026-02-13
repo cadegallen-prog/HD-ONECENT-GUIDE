@@ -4,6 +4,7 @@ import { filterValidPennyItems, formatWindowLabel } from "@/lib/penny-list-utils
 import { queryPennyItems, getHotItems } from "@/lib/penny-list-query"
 import { PennyListClient } from "@/components/penny-list-client"
 import { getCanonicalUrl } from "@/lib/canonical"
+import { RouteAdSlots } from "@/components/ads/route-ad-slots"
 
 const VALID_PER_PAGE = [25, 50, 100] as const
 const DEFAULT_PER_PAGE = 50
@@ -221,6 +222,7 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
           }),
         }}
       />
+      <RouteAdSlots pathname="/penny-list" />
       {/* Header Section */}
       <section
         aria-labelledby="page-heading"

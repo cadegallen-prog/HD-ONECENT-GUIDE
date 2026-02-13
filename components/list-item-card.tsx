@@ -99,7 +99,7 @@ export function ListItemCard({
       const success = await copyToClipboard(item.sku)
       if (success) {
         const skuMasked = item.sku.slice(-4)
-        trackEvent("sku_copy", { skuMasked, source: "list-item" })
+        trackEvent("sku_copy", { skuMasked, ui_source: "list-item" })
         setCopied(true)
         toast.success(`Copied SKU ${formatSkuForDisplay(item.sku)}`, { duration: 2000 })
         setTimeout(() => setCopied(false), 1500)

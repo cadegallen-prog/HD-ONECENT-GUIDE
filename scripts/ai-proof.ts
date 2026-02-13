@@ -5,6 +5,169 @@ import fs from "fs"
 import path from "path"
 import net from "net"
 
+type ProofMode = "dev" | "test"
+
+function parseArgs(argv: string[]): { mode: ProofMode; routes: string[]; autoAliasUsed: boolean } {
+  let rawMode: string | undefined
+  const routes: string[] = []
+
+  for (let i = 0; i < argv.length; i++) {
+    const arg = argv[i]
+
+    if (arg === "--mode") {
+      rawMode = argv[i + 1]
+      i++
+      continue
+    }
+
+    if (arg.startsWith("--mode=")) {
+      rawMode = arg.split("=")[1]
+      continue
+    }
+
+    if (arg.startsWith("-")) continue
+
+    if ((arg === "dev" || arg === "test" || arg === "auto") && !rawMode) {
+      rawMode = arg
+      continue
+    }
+
+    routes.push(arg)
+  }
+
+  const normalized = (rawMode || "dev").trim().toLowerCase()
+
+  if (normalized === "test") return { mode: "test", routes, autoAliasUsed: false }
+  if (normalized === "auto") return { mode: "dev", routes, autoAliasUsed: true }
+  return { mode: "dev", routes, autoAliasUsed: false }
+}
+
+async function sleep(ms: number): Promise<void> {
+  await new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+async function isPortInUse(port: number): Promise<boolean> {
+  return await new Promise<boolean>((resolve) => {
+    const server = net.createServer()
+    server.once("error", () => {
+      server.close()
+      resolve(true)
+    })
+    server.once("listening", () => {
+      server.close()
+      resolve(false)
+    })
+    server.listen(port)
+  })
+}
+
+async function isHttpOkWithRetries(
+  url: string,
+  options: { attempts: number; timeoutMs: number; delayMs: number }
+): Promise<{ ok: boolean; status?: number; error?: string }> {
+  for (let attempt = 1; attempt <= options.attempts; attempt++) {
+    try {
+      const controller = new AbortController()
+      const timeout = setTimeout(() => controller.abort(), options.timeoutMs)
+      const response = await fetch(url, { signal: controller.signal })
+      clearTimeout(timeout)
+
+      if (response.ok) return { ok: true, status: response.status }
+      return { ok: false, status: response.status }
+    } catch (err: any) {
+      const message = err?.name === "AbortError" ? "timeout" : String(err?.message || err)
+      if (attempt === options.attempts) return { ok: false, error: message }
+      await sleep(options.delayMs)
+    }
+  }
+
+  return { ok: false, error: "unknown" }
+}
+
+async function resolveBaseUrl(
+  mode: ProofMode
+): Promise<{ ok: boolean; message: string; baseUrl?: string }> {
+  if (process.env.PLAYWRIGHT_BASE_URL) {
+    const baseUrl = process.env.PLAYWRIGHT_BASE_URL
+    const status = await isHttpOkWithRetries(`${baseUrl}/`, {
+      attempts: 3,
+      timeoutMs: 5000,
+      delayMs: 1000,
+    })
+
+    if (!status.ok) {
+      return {
+        ok: false,
+        message: `PLAYWRIGHT_BASE_URL is set but not responding (${baseUrl}).`,
+      }
+    }
+
+    return {
+      ok: true,
+      message: `Using PLAYWRIGHT_BASE_URL=${baseUrl}`,
+      baseUrl,
+    }
+  }
+
+  if (mode === "test") {
+    const portInUse = await isPortInUse(3002)
+    if (!portInUse) {
+      return {
+        ok: false,
+        message:
+          "Mode=test requires a healthy server on port 3002. Start one first, or set PLAYWRIGHT_BASE_URL. This command will not start/stop servers for you.",
+      }
+    }
+
+    const status = await isHttpOkWithRetries("http://127.0.0.1:3002/", {
+      attempts: 2,
+      timeoutMs: 3000,
+      delayMs: 800,
+    })
+    if (!status.ok) {
+      return {
+        ok: false,
+        message:
+          "Mode=test found port 3002 in use but HTTP is unhealthy. Fix that server and retry, or use --mode=dev.",
+      }
+    }
+
+    return {
+      ok: true,
+      message: "Using isolated server on port 3002 (mode=test)",
+      baseUrl: "http://127.0.0.1:3002",
+    }
+  }
+
+  const portInUse = await isPortInUse(3001)
+  if (!portInUse) {
+    return {
+      ok: false,
+      message:
+        'Mode=dev requires your persistent preview server on port 3001. Start it with "npm run dev", or run with --mode=test.',
+    }
+  }
+
+  const status = await isHttpOkWithRetries("http://localhost:3001/", {
+    attempts: 3,
+    timeoutMs: 5000,
+    delayMs: 1500,
+  })
+  if (!status.ok) {
+    return {
+      ok: false,
+      message:
+        "Port 3001 is occupied but HTTP is unhealthy. Fix/restart only if you own that process; this command will not kill or restart it.",
+    }
+  }
+
+  return {
+    ok: true,
+    message: "Using persistent preview server on port 3001 (mode=dev)",
+    baseUrl: "http://localhost:3001",
+  }
+}
+
 async function gotoWithRetries(page: any, url: string, attempts = 3) {
   let lastError: unknown = undefined
 
@@ -29,28 +192,6 @@ async function gotoWithRetries(page: any, url: string, attempts = 3) {
   throw lastError
 }
 
-async function checkServerRunning(): Promise<boolean> {
-  return new Promise((resolve) => {
-    const server = net.createServer()
-
-    server.once("error", (err: NodeJS.ErrnoException) => {
-      if (err.code === "EADDRINUSE") {
-        resolve(true)
-      } else {
-        resolve(false)
-      }
-      server.close()
-    })
-
-    server.once("listening", () => {
-      server.close()
-      resolve(false)
-    })
-
-    server.listen(3001)
-  })
-}
-
 async function captureUiState(page: any, outDir: string, slug: string, mode: "light" | "dark") {
   const perPageSelect = page.locator("#penny-list-items-per-page")
 
@@ -72,12 +213,30 @@ async function captureUiState(page: any, outDir: string, slug: string, mode: "li
   })
 }
 
+function toTargetUrl(route: string, baseUrl: string): string {
+  if (route.startsWith("http://") || route.startsWith("https://")) {
+    return route
+  }
+
+  const normalizedRoute = route.startsWith("/") ? route : `/${route}`
+  return `${baseUrl}${normalizedRoute}`
+}
+
+function toSlug(route: string): string {
+  const withoutOrigin = route.replace(/^https?:\/\/[^/]+/i, "")
+  const normalizedRoute = withoutOrigin.startsWith("/") ? withoutOrigin : `/${withoutOrigin}`
+  return normalizedRoute.replace(/\//g, "-").slice(1) || "home"
+}
+
 async function main() {
-  const routes = process.argv.slice(2)
+  const parsed = parseArgs(process.argv.slice(2))
+  const routes = parsed.routes
 
   if (routes.length === 0) {
     console.error("❌ Error: No routes specified")
     console.error("Usage: npm run ai:proof -- /penny-list /store-finder")
+    console.error("       npm run ai:proof -- --mode=dev /report-find")
+    console.error("       npm run ai:proof -- --mode=test /penny-list")
     process.exit(1)
   }
 
@@ -85,17 +244,18 @@ async function main() {
   console.log("   AI Proof Screenshot Capture")
   console.log("═══════════════════════════════════════\n")
 
-  // Check if dev server is running
-  const serverRunning = await checkServerRunning()
-  if (!serverRunning) {
-    console.error(
-      "❌ Error: Dev server not running on port 3001\n" +
-        'Please run "npm run dev" in another terminal first.\n'
-    )
+  if (parsed.autoAliasUsed) {
+    console.log("ℹ️  Mode=auto is deprecated; defaulting to mode=dev.\n")
+  }
+
+  const resolved = await resolveBaseUrl(parsed.mode)
+  if (!resolved.ok || !resolved.baseUrl) {
+    console.error(`❌ Error: ${resolved.message}\n`)
     process.exit(1)
   }
 
-  console.log("✅ Dev server detected on port 3001\n")
+  const baseUrl = resolved.baseUrl
+  console.log(`✅ ${resolved.message}\n`)
 
   // Create timestamp and output directory
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19)
@@ -121,14 +281,15 @@ async function main() {
 
   // Capture screenshots for each route
   for (const route of routes) {
-    const slug = route.replace(/\//g, "-").slice(1) || "home"
+    const slug = toSlug(route)
+    const targetUrl = toTargetUrl(route, baseUrl)
 
-    console.log(`  Processing ${route}...`)
+    console.log(`  Processing ${route} (${targetUrl})...`)
 
     try {
       // Light mode
       await page.emulateMedia({ colorScheme: "light" })
-      await gotoWithRetries(page, `http://localhost:3001${route}`)
+      await gotoWithRetries(page, targetUrl)
       await page.screenshot({
         path: path.join(outDir, `${slug}-light.png`),
         fullPage: false,

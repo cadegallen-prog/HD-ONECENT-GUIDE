@@ -221,13 +221,33 @@ public/                 # Static assets
 
 ### AI Canon & Read Order (canonical entrypoint)
 
-- **Start here:** Read `.ai/START_HERE.md` for the universal entry point and mandatory read order
+- **Start here:** Read `VISION_CHARTER.md` first (highest authority), then `.ai/START_HERE.md`
 - The `.ai/README.md` file is now a stub that points back to this section
-- **Read sequence:** START_HERE.md → CRITICAL_RULES.md → STATE.md → BACKLOG.md → CONTRACT.md → DECISION_RIGHTS.md
+- **Read sequence:** VISION_CHARTER.md → START_HERE.md → CRITICAL_RULES.md → STATE.md → BACKLOG.md → CONTRACT.md → DECISION_RIGHTS.md
 - **Task closeout contract:** `.ai/HANDOFF_PROTOCOL.md` (mandatory completion + next-agent handoff schema)
 - **First session only:** Read `GROWTH_STRATEGY.md` for business context
 - **If session goal is AI workflow/tooling/verification enablement:** Also read `.ai/AI_ENABLEMENT_BLUEPRINT.md`
 - **Rules:** Default no new dependencies; run `verify:fast` on meaningful changes, run `e2e:smoke` for flow changes, run `e2e:full` when FULL triggers apply, record results in `SESSION_LOG.md`; work on `main`
+- **Mandatory Alignment Gate before mutation:** GOAL / WHY / DONE MEANS / NOT DOING / CONSTRAINTS / ASSUMPTIONS / CHALLENGES
+
+---
+
+## Governance Quick Entry
+
+Use this if the session is policy/process/governance heavy:
+
+1. Read `VISION_CHARTER.md` (authority + decision hierarchy).
+2. Confirm the Alignment Gate block is complete before any file edits.
+3. Follow canonical owners only:
+   - Vision/authority: `VISION_CHARTER.md`
+   - Read order: `README.md`, `.ai/START_HERE.md`
+   - Agent behavior: `AGENTS.md`
+   - Non-negotiables: `.ai/CRITICAL_RULES.md`
+   - Technical boundaries: `.ai/CONSTRAINTS.md`
+   - Verification contract: `.ai/VERIFICATION_REQUIRED.md`
+   - Collaboration/approvals: `.ai/CONTRACT.md`, `.ai/DECISION_RIGHTS.md`
+   - Closeout/handoff: `.ai/HANDOFF_PROTOCOL.md`
+4. If secondary docs conflict with canonical owners, update secondary docs to reference canon instead of redefining policy.
 
 ---
 
@@ -249,7 +269,7 @@ public/                 # Static assets
 
 1. Pull latest `main`
 2. Make changes on `main`
-3. Run `npm run lint` and `npm run build`
+3. Run `npm run verify:fast` (and `npm run e2e:smoke` for route/form/API/navigation/UI-flow changes)
 4. Commit to `main` with a clear message
 5. Push `main` to deploy
 

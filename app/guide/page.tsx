@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { TableOfContents } from "@/components/guide/TableOfContents"
 import { EthicalDisclosure } from "@/components/guide/EthicalDisclosure"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
+import { RouteAdSlots } from "@/components/ads/route-ad-slots"
 
 export const metadata: Metadata = {
   title: "Home Depot Penny Guide (2026) | Penny Central",
@@ -157,6 +158,7 @@ export default function GuideHubPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
+      <RouteAdSlots pathname="/guide" />
       <div className="container mx-auto max-w-5xl px-4 py-7 md:px-6 md:py-9">
         <header className="mx-auto mb-6 max-w-[68ch] space-y-4">
           <nav aria-label="Breadcrumb" className="text-sm text-[var(--text-muted)]">

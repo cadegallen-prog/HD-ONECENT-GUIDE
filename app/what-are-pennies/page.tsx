@@ -3,6 +3,7 @@ import { PageHeader, PageShell, Prose, Section } from "@/components/page-templat
 import Link from "next/link"
 import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
+import { RouteAdSlots } from "@/components/ads/route-ad-slots"
 
 export const metadata: Metadata = {
   title: "What Are Penny Items? - Home Depot $0.01 Clearance Explained | Penny Central",
@@ -86,6 +87,7 @@ export default function WhatArePenniesPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
+      <RouteAdSlots pathname="/what-are-pennies" />
       <PageShell width="default" padding="sm" gap="md">
         <div className="w-full max-w-[68ch] mx-auto">
           <nav aria-label="Breadcrumb" className="mb-3 text-sm text-[var(--text-muted)]">

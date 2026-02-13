@@ -69,6 +69,12 @@ export interface EventParams {
   event_label?: string
   value?: number | string | boolean
   location?: string
+  ui_source?: string
+  placement?: string
+  pc_source?: string
+  pc_medium?: string
+  pc_campaign?: string
+  src?: string
   [key: string]: unknown
 }
 
@@ -89,15 +95,50 @@ const getPagePath = (): string => {
   return window.location.pathname
 }
 
+const RESERVED_PARAM_REMAP = {
+  source: "pc_source",
+  medium: "pc_medium",
+  campaign: "pc_campaign",
+} as const
+
+function hasValue(value: unknown): boolean {
+  return value !== undefined && value !== null && value !== ""
+}
+
+export function sanitizeEventParams(params: Record<string, unknown>): Record<string, unknown> {
+  const normalized: Record<string, unknown> = { ...params }
+
+  // Normalize legacy attribution keys before applying GA-like reserved-key remapping.
+  if (!hasValue(normalized.ui_source)) {
+    if (hasValue(normalized.src)) {
+      normalized.ui_source = normalized.src
+    } else if (hasValue(normalized.source)) {
+      normalized.ui_source = normalized.source
+    }
+  }
+  delete normalized.src
+
+  const sanitized: Record<string, unknown> = {}
+  for (const [key, value] of Object.entries(normalized)) {
+    if (value === undefined) continue
+    const safeKey = RESERVED_PARAM_REMAP[key as keyof typeof RESERVED_PARAM_REMAP] ?? key
+    if (safeKey in sanitized && key !== safeKey) continue
+    sanitized[safeKey] = value
+  }
+
+  return sanitized
+}
+
 function buildPayload(params?: EventParams): Record<string, unknown> {
   const { page, device, theme, ts, ...rest } = params || {}
+  const sanitizedParams = sanitizeEventParams(rest)
   return {
     page: page ?? getPagePath(),
     device: device ?? getDeviceType(),
     theme: theme ?? getThemeName(),
     ts: ts ?? new Date().toISOString(),
     event_category: "engagement",
-    ...rest,
+    ...sanitizedParams,
   }
 }
 

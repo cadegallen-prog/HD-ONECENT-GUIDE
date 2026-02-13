@@ -50,3 +50,6 @@ jobs:
           # A dummy value is sufficient because tests stub the service role client.
           SUPABASE_SERVICE_ROLE_KEY: test
         run: npm run verify:fast
+
+      - name: Run governance drift check
+        run: npm run check:docs-governance

@@ -2,6 +2,8 @@
 
 This file exists to prevent the single most common failure mode: shipping changes without reproducible proof.
 
+Authority note: if any secondary doc conflicts with this verification policy, this file is canonical.
+
 If you (the agent) did not run a gate / capture a screenshot / verify a behavior, say so explicitly.
 
 ---
@@ -70,8 +72,10 @@ npm run ai:verify
 
 ### Dev/Test Modes (Port Ownership)
 
-- **Dev mode (requires healthy dev server on 3001):** `npm run ai:verify -- dev`
-- **Test mode (ignore 3001; Playwright-owned server on 3002):** `npm run ai:verify -- test`
+- **Default mode (no args):** `npm run ai:verify` runs isolated **test mode** on Playwright-owned port **3002**.
+- **Dev mode (explicit opt-in; requires healthy dev server on 3001):** `npm run ai:verify -- dev`
+- **Test mode (explicit):** `npm run ai:verify -- test`
+- **Legacy alias:** `npm run ai:verify -- auto` maps to test mode for backward compatibility.
 
 When reporting back, link the generated `summary.md` plus call out any failures.
 

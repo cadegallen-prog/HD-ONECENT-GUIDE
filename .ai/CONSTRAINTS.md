@@ -302,21 +302,21 @@ Future agents: Do NOT revert these changes or compress the text hierarchy.
 
 ---
 
-### 6. Penny List CSV Fetching
+### 6. Penny List Data Fetching (Supabase-first)
 
 **Location:** `/lib/fetch-penny-data.ts`
 
 **Why It's Delicate:**
 
-- Parses Google Sheets CSV with flexible column aliases
+- Reads from Supabase (`penny_list_public` + enrichment overlays)
 - Privacy-sensitive (must not expose emails/timestamps)
 - Server-side only (can't run in browser)
 
 **Before Modifying:**
 
 - Verify email addresses stay server-side
-- Test with actual Google Sheet data
-- Ensure hourly revalidation works
+- Prefer fixture-based test mode for deterministic verification
+- Keep legacy Google Sheet import logic strictly one-off/manual (not primary runtime path)
 - If wiring the internet-SKU → product URL map, keep it backend-only, stored privately (env/Blob/Drive), never expose internet SKU in UI, and always fall back to regular SKU-based links when no mapping exists.
 
 ---
@@ -325,7 +325,10 @@ Future agents: Do NOT revert these changes or compress the text hierarchy.
 
 **Current Vars:**
 
-- `GOOGLE_SHEET_URL` (set in Vercel)
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `GOOGLE_SHEET_URL` (legacy one-off import only; not primary runtime dependency)
 
 **Why It's Sensitive:**
 
@@ -368,33 +371,33 @@ Future agents: Do NOT revert these changes or compress the text hierarchy.
 
 ---
 
-## Quality Gates (ALWAYS Required)
+## Quality Gates (Always Required, Lane Model)
 
 ### Before Considering Any Task Complete:
 
-1. **Build Check**
+1. **FAST lane (always)**
 
    ```bash
-   npm run build
+   npm run verify:fast
    ```
 
-   - Must complete without errors
-   - Warnings should be explained (and ideally fixed)
-
-2. **Lint Check**
+2. **SMOKE lane (for route/form/API/navigation/UI-flow changes)**
 
    ```bash
-   npm run lint
+   npm run e2e:smoke
    ```
 
-   - Must pass with 0 errors
-   - Fix all linting issues
+3. **FULL lane (only when trigger policy applies)**
 
-3. **Mobile Test**
+   ```bash
+   npm run e2e:full
+   ```
+
+4. **Mobile Test**
    - If user-facing: test on mobile viewport
    - Check touch targets, text size, scrolling
 
-4. **Functionality Verification**
+5. **Functionality Verification**
    - Does the feature work as intended?
 
 ---
@@ -411,7 +414,7 @@ Analytics must actively drive priorities (not just be installed).
 - If device mix shifts by **±10 points** week-over-week, treat that as a priority signal and adjust QA focus.
   - Does existing functionality still work?
 
-5. **Documentation Update**
+6. **Documentation Update**
    - Update SESSION_LOG.md
    - Add to LEARNINGS.md if relevant
 
@@ -450,7 +453,7 @@ Analytics must actively drive priorities (not just be installed).
 
 ### Current Acceptable Compromises
 
-- No database (Google Sheets as backend is intentional)
+- Supabase-first backend (legacy Google Sheets flow is archival/manual only)
 - No user auth (not needed for current features)
 - No real-time updates (hourly revalidation is sufficient)
 - No comprehensive testing suite (manual testing is acceptable)
@@ -471,4 +474,5 @@ Analytics must actively drive priorities (not just be installed).
 
 ## Version History
 
+- **v1.1 (Feb 11, 2026):** Updated architecture truth to Supabase-first and aligned quality gates to FAST/SMOKE/FULL lanes.
 - **v1.0 (Dec 7, 2025):** Initial constraints document

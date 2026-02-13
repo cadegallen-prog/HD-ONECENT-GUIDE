@@ -215,7 +215,7 @@ function ReportFindForm() {
             Report a Penny Find
           </h1>
           <p className="text-lg text-[var(--text-secondary)] max-w-xl mx-auto">
-            Takes about 30 seconds. Required: item name, SKU, state.
+            Takes about 30 seconds. Required: SKU and state (item name helps accuracy).
           </p>
         </div>
 
@@ -295,41 +295,30 @@ function ReportFindForm() {
             {/* SKU Helper (Collapsible) */}
             <details className="mb-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)]">
               <summary className="cursor-pointer px-3 py-2 text-sm font-medium text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]">
-                How to find the SKU 🔍
+                How to find the SKU
               </summary>
               <div className="px-3 pb-3 pt-2 space-y-3">
                 <p className="text-sm text-[var(--text-secondary)]">
-                  The SKU is a 6 or 10-digit number found on the shelf tag or in the Home Depot app.
+                  Use the SKU from the shelf tag or the Home Depot app product page.
                 </p>
+                <ol className="list-decimal pl-5 text-sm text-[var(--text-secondary)] space-y-1">
+                  <li>In-store shelf tag: use the SKU value (often 6 digits).</li>
+                  <li>
+                    Home Depot app/page: use the field labeled <strong>SKU</strong>, not{" "}
+                    <strong>Model #</strong> or <strong>Internet #</strong>.
+                  </li>
+                  <li>Paste only numbers; dashes/spaces are optional.</li>
+                </ol>
 
-                {/* Image grid - placeholder images for now */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="border border-[var(--border-default)] rounded-lg p-2">
-                    <div className="aspect-video bg-[var(--bg-elevated)] rounded flex items-center justify-center text-[var(--text-muted)] text-xs">
-                      [Shelf tag photo placeholder]
-                    </div>
-                    <p className="text-xs text-[var(--text-muted)] mt-1">
-                      Shelf tag: Look for 6-digit number
-                    </p>
-                  </div>
-                  <div className="border border-[var(--border-default)] rounded-lg p-2">
-                    <div className="aspect-video bg-[var(--bg-elevated)] rounded flex items-center justify-center text-[var(--text-muted)] text-xs">
-                      [HD app screenshot placeholder]
-                    </div>
-                    <p className="text-xs text-[var(--text-muted)] mt-1">
-                      Home Depot app: Find &quot;Model #&quot; or &quot;SKU&quot;
-                    </p>
-                  </div>
-                </div>
-
-                <div className="text-xs text-[var(--text-muted)] space-y-1">
+                <div className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] p-3 text-xs text-[var(--text-secondary)] space-y-1">
                   <p>
-                    ✅ <strong>SKU:</strong> 6 digits (e.g., 123-456) or 10 digits starting with
-                    &quot;10&quot; (e.g., 1001-234-567)
+                    <strong>Valid SKU examples:</strong>{" "}
+                    <span className="font-mono text-[var(--text-primary)]">824481</span> or{" "}
+                    <span className="font-mono text-[var(--text-primary)]">1009258128</span>
                   </p>
                   <p>
-                    ❌ <strong>UPC/Barcode:</strong> Usually 12-14 digits on receipts (NOT the same
-                    as SKU)
+                    <strong>Do not use:</strong> UPC/barcode numbers (often 12 to 14 digits on
+                    receipts), Store SO SKU, or Internet #.
                   </p>
                 </div>
               </div>

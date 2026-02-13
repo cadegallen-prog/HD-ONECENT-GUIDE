@@ -7,13 +7,15 @@ import { trackEvent } from "@/lib/analytics"
 interface ShareButtonProps {
   sku: string
   itemName: string
+  uiSource?: "card" | "page" | string
   source?: "card" | "page" | string
 }
 
-export function ShareButton({ sku, itemName, source = "card" }: ShareButtonProps) {
+export function ShareButton({ sku, itemName, uiSource, source }: ShareButtonProps) {
   const [showMenu, setShowMenu] = useState(false)
   const [copied, setCopied] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
+  const resolvedUiSource = uiSource ?? source ?? "card"
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -40,7 +42,11 @@ export function ShareButton({ sku, itemName, source = "card" }: ShareButtonProps
     event.stopPropagation()
     const fbShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareText)}`
     window.open(fbShareUrl, "_blank", "noopener,noreferrer,width=600,height=400")
-    trackEvent("share_click", { platform: "facebook", sku: sku.slice(-4), source })
+    trackEvent("share_click", {
+      platform: "facebook",
+      sku: sku.slice(-4),
+      ui_source: resolvedUiSource,
+    })
     setShowMenu(false)
   }
 
@@ -49,7 +55,11 @@ export function ShareButton({ sku, itemName, source = "card" }: ShareButtonProps
     event.stopPropagation()
     try {
       await navigator.clipboard.writeText(shareUrl)
-      trackEvent("share_click", { platform: "copy_link", sku: sku.slice(-4), source })
+      trackEvent("share_click", {
+        platform: "copy_link",
+        sku: sku.slice(-4),
+        ui_source: resolvedUiSource,
+      })
       setCopied(true)
       setTimeout(() => {
         setCopied(false)

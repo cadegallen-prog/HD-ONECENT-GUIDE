@@ -54,6 +54,30 @@ Scan this FIRST before suggesting anything. If your idea matches an anti-pattern
 
 ---
 
+### 0b. `apply_patch` edits can trigger Prettier CRLF warnings on Windows
+
+**Problem:** `npm run verify:fast` failed in lint with many Prettier `Insert ␍` warnings after multi-file `apply_patch` edits.
+
+**What We Tried:**
+
+- Ran verification immediately after patching.
+- Ran `npx prettier --write` only on touched files, then reran gates.
+
+**What We Learned:**
+
+- Some patch/edit paths can leave line endings in a state that Prettier flags in this repo's Windows setup.
+- The fastest safe fix is to run Prettier on exactly the modified files before retrying verification.
+
+**What to Do Instead:**
+
+- After large patch edits, run:
+  - `npx prettier --write <touched files>`
+- Then run `npm run verify:fast` again.
+
+**Date:** Feb 11, 2026
+
+---
+
 ### 0. Route deletion + stale Next type artifacts
 
 **Problem:** After deleting a route page, `npm run build` failed with type errors from stale generated files under `.next-playwright/types` and `.next/dev/types/app/...`.
@@ -93,7 +117,7 @@ Scan this FIRST before suggesting anything. If your idea matches an anti-pattern
 
 - Default: `npm run build` then `npm run test:e2e` (Playwright runs against `next start` on port 3002)
 - If port 3001 running: PowerShell: `$env:PLAYWRIGHT_BASE_URL='http://localhost:3001'; npm run test:e2e`
-- Prefer `npm run ai:verify` (auto-detects port 3001 and sets `PLAYWRIGHT_BASE_URL`)
+- Prefer `npm run ai:verify` (defaults to isolated test mode on port 3002); use `npm run ai:verify -- dev` only when intentionally validating against the human-run 3001 server.
 - If you hit `.next/lock` (not `.next/dev/lock`): stop the stuck `next start` process (check `netstat -ano | findstr :3002`) and then delete `.next/lock`.
 
 **Files:** `playwright.config.ts`, `scripts/ai-verify.ts`
@@ -515,6 +539,54 @@ export const metadata: Metadata = {
 - If build instability appears, rerun lane in isolation with higher Node heap and keep the isolated log as canonical evidence.
 
 **Date:** Feb 09, 2026
+
+---
+
+### 20. Live 3001 Dev Session Can Show Hydration-Mismatch Visual Drift During Proof Capture
+
+**Problem:** Playwright screenshots on `http://localhost:3001/report-find` intermittently showed stale client-rendered copy that did not match current source edits, while accessibility snapshots showed the new server-rendered copy.
+
+**What We Tried:**
+
+- Captured before/after screenshots directly against the founder's persistent 3001 session.
+- Reset the Playwright browser context and retried.
+
+**What We Learned:**
+
+- In active dev/HMR sessions, transient hydration mismatch can cause screenshot drift and unreliable visual proof for route-copy changes.
+
+**What to Do Instead:**
+
+- Keep 3001 untouched for founder preview.
+- Generate canonical proof from isolated mode on 3002:
+  - start temporary isolated server (`NEXT_DIST_DIR=.next-playwright ... next start -p 3002`)
+  - run `npm run ai:proof -- test <routes>`
+  - stop temporary 3002 server after capture.
+
+**Date:** Feb 11, 2026
+
+---
+
+### 21. PowerShell + npm Run Can Swallow Script Flags
+
+**Problem:** `npm run monumetric:guardrails -- --template ...` and `--input ...` were interpreted as npm CLI flags instead of script arguments in PowerShell during local verification.
+
+**What We Tried:**
+
+- Ran the new script via `npm run monumetric:guardrails` with `--template` and `--input` flags.
+
+**What We Learned:**
+
+- In this environment, npm can consume some double-dash args unexpectedly and pass only trailing values to the script.
+
+**What to Do Instead:**
+
+- Use equals-form arguments when invoking through npm scripts:
+  - `npm run monumetric:guardrails -- --template=.ai/_tmp/monumetric-guardrail-template.json`
+  - `npm run monumetric:guardrails -- --input=.ai/_tmp/monumetric-guardrail-template.json`
+- If flags still do not pass through, run `tsx scripts/monumetric-guardrail-report.ts ...` directly.
+
+**Date:** Feb 11, 2026
 
 ---
 

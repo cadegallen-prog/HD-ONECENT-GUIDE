@@ -2,6 +2,8 @@
 
 **⛔ NO PROOF = NOT DONE**
 
+If any rule here conflicts with `VISION_CHARTER.md`, the charter wins.
+
 These are the most violated rules. Agents MUST follow these without exception.
 
 ---

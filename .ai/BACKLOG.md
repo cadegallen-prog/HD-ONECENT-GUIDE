@@ -1,6 +1,6 @@
 # Backlog (Top Priority Items)
 
-**Last updated:** Feb 4, 2026
+**Last updated:** Feb 13, 2026
 **Rule:** Keep ≤10 items. Archive completed/deferred items.
 
 **Auto-archive:** Full backlog history preserved in `archive/backlog-history/`
@@ -18,19 +18,38 @@ Each AI session should:
 
 ## P0 - Do Next (Analytics-Driven Growth)
 
-### 0. Sitewide Monetization Readiness - Route Policy + UX-Safe Revenue Architecture
+### 0. Governance Realignment Follow-Through (Charter-first Enforcement)
+
+- **Problem:** Charter/canon refactor is in place and `ai:verify` default mode is now codified; one follow-up remains open: run one intentional drift contradiction test in CI to prove fail behavior.
+- **Done means:**
+  - `ai:verify` default-mode decision stays documented and drift-safe (`3002` default, `3001` dev opt-in)
+  - Drift test PR/probe shows `check:docs-governance` fails as designed on contradiction
+  - Drift-test evidence logged in `STATE.md` and `SESSION_LOG.md`
+- **Plan:** `.ai/impl/vision-charter-first-governance-realignment.md`
+
+### 1. Sitewide Monetization Readiness - Route Policy + UX-Safe Revenue Architecture
 
 - **Problem:** Monetization strategy is currently fragmented (guide-focused execution, but sitewide revenue depends heavily on utility routes and first-layer IA quality signals).
+- **Progress (2026-02-13):** Runtime foundation is complete and aligned to founder-approved Option B:
+  - analytics key hygiene + attribution normalization (`lib/analytics.ts`)
+  - hard-exclusion + provider-managed placement policy modules (`lib/ads/route-eligibility.ts`, `lib/ads/launch-config.ts`)
+  - unit coverage for sanitizer + provider-managed route policy behavior
+  - `/penny-list` mobile utility migration to top auto-hide bar (`components/penny-list-mobile-utility-bar.tsx`, `components/penny-list-client.tsx`)
+  - mobile sticky anchor reserve scaffold + prompt stack pause gating (`components/ads/mobile-sticky-anchor.tsx`, `shouldPausePennyListPromptStack(...)`)
+  - route-level slot metadata application under provider-managed mode (`lib/ads/slot-plan.ts`, `components/ads/route-ad-slots.tsx`) wired to `/`, `/penny-list`, guide surfaces, `/sku/[sku]`, and `/pennies/[state]`
+  - measurement + rollback operations (`lib/ads/guardrail-report.ts`, `scripts/monumetric-guardrail-report.ts`, `.ai/topics/ANALYTICS_CONTRACT.md` contract updates)
+- **Next:** Keep onboarding dispute as blocker, then run operational reporting windows (B/C) and complete partner tag/ID wiring using Monumetric guidance.
 - **Done means:**
-  - Route eligibility matrix exists for all major page types
+  - Hard route exclusions are enforced in-app while placement remains provider-managed on non-excluded routes
   - Thin URL lifecycle policy is implemented (keep active valid URLs; temporary noindex for thin active pages until enriched)
   - Homepage/navigation prioritize strong pages in first-layer structure
-  - Monumetric handoff packet is prepared (slot map + exclusions + frequency guardrails)
-- **Plan:** `.ai/plans/sitewide-monetization-readiness.md`
+  - Monumetric handoff packet is prepared and confirmed (exclusions + frequency guardrails + provider-managed placement assumptions)
+- **Plan:** `.ai/impl/monumetric-launch-spec.md` (supersedes `.ai/plans/sitewide-monetization-readiness.md` for launch decisions)
 
-### 1. Agent Autonomy Hardening - Phase 1 (Port 3001 Reliability Contract)
+### 2. Agent Autonomy Hardening - Phase 1 (Port 3001 Reliability Contract)
 
 - **Problem:** Local dev-server ownership and verification mode selection are easy to misapply, creating restart-loop confusion and blocking agent momentum.
+- **Progress (2026-02-11):** `scripts/ai-proof.ts` now supports deterministic `dev`/`test` modes, `PLAYWRIGHT_BASE_URL`, and fail-fast no-thrash server checks. Remaining work is to unify the same contract fully across `ai-doctor` + all docs/skills references.
 - **Done means:**
   - `scripts/ai-doctor.ts`, `scripts/ai-verify.ts`, and `scripts/ai-proof.ts` all use the same explicit server-state contract (`healthy 3001`, `3001 free`, `3001 unhealthy`)
   - `ai:verify` has deterministic non-destructive fallback behavior when 3001 is unavailable/unhealthy
@@ -38,7 +57,7 @@ Each AI session should:
   - Verification evidence includes one bundle for dev mode and one for test mode
 - **Plan:** `.ai/plans/agent-autonomy-hardening.md`
 
-### 2. Bloat Control - Ongoing Archive-First Hygiene
+### 3. Bloat Control - Ongoing Archive-First Hygiene
 
 - **Problem:** Deprecated/legacy/single-use docs and scripts keep accumulating, increasing AI context noise and decision drift.
 - **Done means:**
@@ -59,7 +78,7 @@ Each AI session should:
   - `archive/scripts-pruned/2026-02-03-pass3/`
   - `archive/scripts-pruned/2026-02-04-pass1/`
 
-### 3. Data Pipeline Reliability - Pre-scrape + Cron Auth (P0-0)
+### 4. Data Pipeline Reliability - Pre-scrape + Cron Auth (P0-0)
 
 - **Problem:** GitHub-hosted runners are blocked upstream (**403 + Cloudflare “Just a moment...”**), so scheduled scraping cannot be the primary freshness path right now. Separately, Vercel cron endpoints will return 401 if `CRON_SECRET` is missing/mismatched.
 - **Done means:**
@@ -69,7 +88,7 @@ Each AI session should:
   - Vercel cron logs show 200s (not 401s) for `/api/cron/seed-penny-list`, `/api/cron/trickle-finds`, `/api/cron/send-weekly-digest`
 - **Approach options (later):** self-hosted runner (home IP / VPS) vs paid residential proxy vs new data source (avoid upstream dependency where possible)
 
-### 4. SEO Improvement - Schema Markup + Internal Linking (P0-3)
+### 5. SEO Improvement - Schema Markup + Internal Linking (P0-3)
 
 - **Problem:** Zero non-branded organic clicks. Position 11.6 for "home depot penny list". 100% dependent on Facebook.
 - **Done means:**

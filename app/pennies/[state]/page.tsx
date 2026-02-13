@@ -4,6 +4,7 @@ import Link from "next/link"
 import { getPennyListFiltered } from "@/lib/fetch-penny-data"
 import { filterValidPennyItems, formatRelativeDate } from "@/lib/penny-list-utils"
 import { normalizeStateParam } from "@/lib/states"
+import { RouteAdSlots } from "@/components/ads/route-ad-slots"
 
 type PageParams = {
   params: Promise<{ state: string }>
@@ -48,6 +49,7 @@ export default async function StatePennyPage({ params }: PageParams) {
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
+      <RouteAdSlots pathname={`/pennies/${stateInfo.slug}`} />
       <div className="text-center mb-10">
         <p className="text-sm font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)]">
           State Spotlight

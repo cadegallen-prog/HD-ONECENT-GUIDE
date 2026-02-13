@@ -8,6 +8,7 @@ import { formatSkuForDisplay } from "@/lib/sku"
 
 interface CopySkuButtonProps {
   sku: string
+  uiSource?: "card" | "table" | "hot" | string
   source?: "card" | "table" | "hot" | string
 }
 
@@ -54,8 +55,9 @@ async function copyToClipboard(text: string): Promise<boolean> {
   }
 }
 
-export function CopySkuButton({ sku, source = "unknown" }: CopySkuButtonProps) {
+export function CopySkuButton({ sku, uiSource, source }: CopySkuButtonProps) {
   const [copied, setCopied] = useState(false)
+  const resolvedUiSource = uiSource ?? source ?? "unknown"
 
   const handleCopy = useCallback(
     async (e: React.MouseEvent) => {
@@ -65,7 +67,7 @@ export function CopySkuButton({ sku, source = "unknown" }: CopySkuButtonProps) {
       const success = await copyToClipboard(sku)
       if (success) {
         const skuMasked = sku.slice(-4)
-        trackEvent("sku_copy", { skuMasked, source })
+        trackEvent("sku_copy", { skuMasked, ui_source: resolvedUiSource })
         setCopied(true)
         toast.success(`Copied SKU ${formatSkuForDisplay(sku)}`, {
           duration: 2000,
@@ -75,7 +77,7 @@ export function CopySkuButton({ sku, source = "unknown" }: CopySkuButtonProps) {
         toast.error("Failed to copy SKU", { duration: 2000 })
       }
     },
-    [sku, source]
+    [sku, resolvedUiSource]
   )
 
   return (

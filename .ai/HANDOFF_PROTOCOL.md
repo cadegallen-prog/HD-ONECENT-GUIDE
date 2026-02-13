@@ -10,11 +10,10 @@
    - Stay within approved objective.
    - Do not include unrelated cleanup/refactors.
 2. **Run verification with proof**
-   - Required gates for meaningful code changes:
-     - `npm run lint`
-     - `npm run build`
-     - `npm run test:unit`
-     - `npm run test:e2e`
+   - Required lanes for meaningful code changes:
+     - `npm run verify:fast` (always)
+     - `npm run e2e:smoke` (route/form/API/navigation/UI-flow changes)
+     - `npm run e2e:full` (only when FULL trigger policy applies)
    - UI changes: capture Playwright proof bundle.
 3. **Update persistent memory**
    - `.ai/SESSION_LOG.md` (always for meaningful work)
@@ -52,10 +51,9 @@ Use this schema every time:
 
 ### 4) Verification Evidence
 
-- `npm run lint`:
-- `npm run build`:
-- `npm run test:unit`:
-- `npm run test:e2e`:
+- `npm run verify:fast`:
+- `npm run e2e:smoke` (or N/A + reason):
+- `npm run e2e:full` (or N/A + trigger status):
 - Playwright proof path(s):
 - Known non-blocking console noise:
 - Canonical plan path (if planning task):

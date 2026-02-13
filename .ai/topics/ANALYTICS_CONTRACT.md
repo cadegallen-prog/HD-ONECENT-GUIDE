@@ -17,15 +17,33 @@ Lock GA4 tracking behavior so future edits do not silently undercount or double-
 - `sid` (session id) must be present on pageview hits.
 - Redirect routes must track the final canonical path.
 
+## Event Param Naming Standard (Monetization-Safe)
+
+- UI attribution params must use `ui_source` (preferred) or `placement`.
+- Do not emit raw GA acquisition-like keys on custom events:
+  - `source`
+  - `medium`
+  - `campaign`
+- Analytics sanitizer (`lib/analytics.ts`) is the safety net:
+  - `source -> pc_source`
+  - `medium -> pc_medium`
+  - `campaign -> pc_campaign`
+  - legacy `src` and `source` normalize into `ui_source` when needed.
+- Dashboard/report definitions for experiment analysis must read `ui_source` (not `source`).
+
 ## Required Verification
 
 - Run `npm run ai:analytics:verify` before claiming analytics work is complete.
 - Output is written to `reports/analytics-verification/<timestamp>/`.
 - A change is not done unless the command returns PASS and artifacts exist.
+- For Monumetric launch decision windows, run:
+  - `npm run monumetric:guardrails -- --input <window-metrics.json>`
+  - Store artifacts under `reports/monumetric-guardrails/<timestamp>/`.
 
 ## Guardrails
 
 - Any change in `app/layout.tsx`, `components/analytics-tracker.tsx`, `next.config.js`, or GTM snippet requires analytics verification.
+- Any change to event attribution keys or analytics payload names requires `tests/analytics.test.ts` to stay green.
 - If GA4 suddenly diverges from Vercel analytics, run:
   1. `npm run ai:analytics:verify`
   2. `npm run ai:verify`

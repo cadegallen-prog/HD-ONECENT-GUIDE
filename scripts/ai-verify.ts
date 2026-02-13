@@ -5,24 +5,25 @@ import fs from "fs"
 import path from "path"
 import net from "net"
 
-type VerifyMode = "auto" | "dev" | "test"
+type VerifyMode = "dev" | "test"
 
-function parseMode(argv: string[]): VerifyMode {
+function parseMode(argv: string[]): { mode: VerifyMode; autoAliasUsed: boolean } {
   const modeArg = argv.find((arg) => arg === "--mode" || arg.startsWith("--mode="))
+
+  let rawValue: string | undefined
+
   if (!modeArg) {
-    const positional = argv.find((arg) => !arg.startsWith("-"))
-    if (!positional) return "auto"
-    const normalized = positional.trim().toLowerCase()
-    if (normalized === "auto" || normalized === "dev" || normalized === "test") return normalized
-    return "auto"
+    rawValue = argv.find((arg) => !arg.startsWith("-"))
+  } else {
+    rawValue = modeArg === "--mode" ? argv[argv.indexOf(modeArg) + 1] : modeArg.split("=")[1]
   }
 
-  const value = modeArg === "--mode" ? argv[argv.indexOf(modeArg) + 1] : modeArg.split("=")[1]
-  if (!value) return "auto"
+  const normalized = (rawValue || "test").trim().toLowerCase()
+  if (normalized === "dev") return { mode: "dev", autoAliasUsed: false }
+  if (normalized === "auto") return { mode: "test", autoAliasUsed: true }
+  if (normalized === "test") return { mode: "test", autoAliasUsed: false }
 
-  const normalized = value.trim().toLowerCase()
-  if (normalized === "auto" || normalized === "dev" || normalized === "test") return normalized
-  return "auto"
+  return { mode: "test", autoAliasUsed: false }
 }
 
 async function sleep(ms: number): Promise<void> {
@@ -124,14 +125,9 @@ async function checkServerHealth(mode: VerifyMode): Promise<{
     })
 
     if (!status.ok) {
-      const extra =
-        mode === "auto"
-          ? 'Rerun in test mode to use Playwright-owned server on port 3002 (no killing), or fix/restart your dev server if you own it. Example: "npm run ai:verify -- test".'
-          : "Fix/restart your dev server if you own it."
-
       return {
         ok: false,
-        message: `Port 3001 is in use but HTTP is not responding (${status.error || status.status || "unknown"}). ${extra}`,
+        message: `Port 3001 is in use but HTTP is not responding (${status.error || status.status || "unknown"}). Fix/restart your dev server if you own it, or rerun in isolated mode with "npm run ai:verify -- test".`,
       }
     }
 
@@ -141,17 +137,10 @@ async function checkServerHealth(mode: VerifyMode): Promise<{
     }
   }
 
-  if (mode === "dev") {
-    return {
-      ok: false,
-      message: 'Mode=dev: No dev server detected on port 3001. Start it with "npm run dev".',
-    }
-  }
-
   return {
-    ok: true,
+    ok: false,
     message:
-      "No dev server detected on port 3001 (Playwright will start its own server on port 3002)",
+      'Mode=dev: No dev server detected on port 3001. Start it with "npm run dev", or use "npm run ai:verify -- test" for isolated mode.',
   }
 }
 
@@ -327,8 +316,11 @@ async function main() {
   // CRITICAL: Check server health BEFORE running tests
   // This prevents infinite loops when server is crashed
   console.log("Checking server health...")
-  const mode = parseMode(process.argv.slice(2))
-  const serverHealth = await checkServerHealth(mode)
+  const parsedMode = parseMode(process.argv.slice(2))
+  if (parsedMode.autoAliasUsed) {
+    console.log("ℹ️  Mode=auto is deprecated; defaulting to mode=test (isolated port 3002).\n")
+  }
+  const serverHealth = await checkServerHealth(parsedMode.mode)
   if (!serverHealth.ok) {
     console.error("\n❌ SERVER HEALTH CHECK FAILED")
     console.error(`   ${serverHealth.message}`)

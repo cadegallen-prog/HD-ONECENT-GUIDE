@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 9, 2026 (PR #133 verification pass complete; SonarCloud hotspot remediated in workflow code, pending re-analysis)
+**Last updated:** Feb 13, 2026 (Option B provider-managed placement policy implemented + verified)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,91 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-13 (Monumetric Option B runtime pivot - provider-managed placement):** Implemented the founder-approved override to let Monumetric control placement by default while preserving only hard in-app exclusions.
+  - **Policy change shipped:** deprecated strict app-side allow/restrict route inventory forcing in favor of provider-managed placement on all non-excluded routes.
+  - **Hard exclusions preserved:** `/report-find`, legal/support/auth/list/internal/API/redirect/system routes remain ad-disabled in code.
+  - **Runtime modules updated:** `lib/ads/route-eligibility.ts`, `lib/ads/launch-config.ts`, `lib/ads/slot-plan.ts`, `components/ads/route-ad-slots.tsx`.
+  - **Safety posture:** sticky reserve remains available but is disabled by default (`MONUMETRIC_LAUNCH_CONFIG.sticky.enabled=false`) unless explicitly re-enabled after partner guidance.
+  - **Coverage updated:** `tests/ads-route-eligibility.test.ts`, `tests/ads-slot-plan.test.ts`, `tests/ads-launch-config.test.ts`.
+  - **Canonical docs synced:** `.ai/impl/monumetric-launch-spec.md` (status + override), `.ai/topics/SITE_MONETIZATION_CURRENT.md`.
+  - **Verification:** `npm run verify:fast` ✅, `npm run e2e:smoke` ✅, `npx playwright test tests/visual-smoke.spec.ts --project=chromium-mobile-light --project=chromium-mobile-dark --grep "renders /penny-list"` ✅ (2/2); `npm run ai:proof -- test /penny-list /guide /report-find` failed intentionally-fast due missing healthy port `3002` server.
+  - **Watchout:** repository remains pre-existing dirty tree; unrelated modifications were left untouched.
+
+- **2026-02-12 (Monumetric tier dispute - awaiting response):** Sent comprehensive pushback email challenging tier placement and traffic legitimacy accusation.
+  - **Blocker:** Monumetric onboarding paused pending tier resolution. Site technically ready for ad implementation (Phases 1-4 complete), but cannot proceed until tier dispute is resolved.
+  - **Context:** Samantha (Publisher Success Associate) placed site in Propel tier (10K-80K pageviews, $99 fee) despite site having 85K pageviews which qualifies for Ascend tier (80K-500K, no fee) per published criteria on Monumetric's join page, application form, and all third-party sources.
+  - **Metric inconsistency:** Samantha initially said they use "session pageviews" (Feb 4), then changed to "active users" (Feb 11). Neither metric is documented in published criteria — all sources say "monthly pageviews."
+  - **Traffic accusation:** Samantha questioned if traffic is purchased due to 97.6% US visitors. This is baseless — site serves Home Depot penny deal community (US retailer), traffic is from 63.7K-member Facebook group where Cade is admin.
+  - **Legal argument (Section 12.9):** Samantha cited "3 months consistency" requirement, but T&C Section 12.9 shows "two consecutive months" rule applies only to "Propel sites" qualifying for "graduation" — not to new applicants. Cade hasn't paid, gone live, or served ads yet; he's still an applicant whose current traffic (85K) falls in Ascend range.
+  - **Email sent:** Comprehensive pushback with Facebook group proof (link + screenshot showing 63.7K members, admin status, website in featured section), traffic source breakdown (57% Direct, 22% Organic Social, 13% Search), engagement metrics (18-28% bounce, 1-2+ min engagement, disproves bots), Section 12.9 legal citation, and request for written Ascend criteria.
+  - **Next action:** Wait 3-5 business days (until Feb 17-19) for response. Escalate past Samantha if no response or if response is unsatisfactory with no compromise.
+  - **Decision framework:** Accept Propel only if (1) $99 fee waived OR (2) written commitment to Ascend upgrade after 2 months at 80K+ pageviews. Otherwise escalate or walk.
+  - **Backup plan:** Can reactivate Ezoic (MCM already set up, $0 fee, no traffic requirement) or wait 1-3 months to hit Mediavine (50K sessions) or Raptive (100K pageviews) thresholds.
+  - **Full documentation:** Complete timeline, arguments, and response scenarios in `C:\Users\cadeg\.claude\plans\jazzy-munching-peacock.md` and `.ai/topics/SITE_MONETIZATION_CURRENT.md`.
+  - **Verification:** Docs-only update; no code changes.
+
+- **2026-02-11 (Monumetric Phase 4 implementation - measurement + rollback operations):** Executed the fourth runtime phase from `.ai/impl/monumetric-launch-spec.md`.
+  - **Guardrail engine shipped:** Added `lib/ads/guardrail-report.ts` with baseline-aware hard/soft/no-lift rollback evaluation and reason-coded outcomes.
+  - **Operations command shipped:** Added `scripts/monumetric-guardrail-report.ts` + npm script `monumetric:guardrails` to generate timestamped artifacts in `reports/monumetric-guardrails/`.
+  - **Workflow reliability hardening:** Added positional CLI fallback for npm/powershell environments where prefixed flags are swallowed.
+  - **Coverage:** Added `tests/ads-guardrail-report.test.ts` for hard rollback, soft rollback, no-lift rollback, and hold-state scenarios.
+  - **Contract updates:** Updated `.ai/topics/ANALYTICS_CONTRACT.md` with event param naming standard and required Phase 4 guardrail run command.
+  - **Verification:** `npm run monumetric:guardrails -- template .ai/_tmp/monumetric-guardrail-template.json` ✅, `npm run monumetric:guardrails -- .ai/_tmp/monumetric-guardrail-template.json` ✅, `npm run verify:fast` ✅, `npm run e2e:smoke` ✅, `npm run lint:colors` ✅, `npm run check:docs-governance` ✅, scope guard artifact ✅ (`.ai/_tmp/scope-guard-monumetric-phase4.md`).
+  - **Watchout:** scope guard continues to report `package.json` modified in worktree (pre-existing dirty tree; this phase also intentionally adds one npm script entry).
+
+- **2026-02-11 (Monumetric Phase 3 implementation - route-level slot application):** Executed the third runtime phase from `.ai/impl/monumetric-launch-spec.md`.
+  - **Route slot architecture shipped:** Added `lib/ads/slot-plan.ts` (matrix-to-inventory resolver) and `components/ads/route-ad-slots.tsx` (route-scoped slot marker renderer + route plan payload script).
+  - **Eligible templates wired:** Applied `RouteAdSlots` to `/`, `/penny-list`, `/guide`, all canonical guide chapters (`/what-are-pennies`, `/clearance-lifecycle`, `/digital-pre-hunt`, `/in-store-strategy`, `/inside-scoop`, `/facts-vs-myths`, `/faq`), plus `/sku/[sku]` and `/pennies/[state]`.
+  - **Policy behavior:** Excluded routes remain ad-empty by matrix policy; restricted/allow routes now receive only their launch-approved unit set.
+  - **Test coverage:** Added `tests/ads-slot-plan.test.ts`.
+  - **Verification:** `npm run verify:fast` ✅, `npm run e2e:smoke` ✅, `npm run lint:colors` ✅, `npm run check:docs-governance` ✅, Playwright proof ✅ (`reports/proof/2026-02-11T23-47-55/`), scope guard artifact ✅ (`.ai/_tmp/scope-guard-monumetric-phase3.md`).
+  - **Watchout:** scope guard continues to report `package.json` modified in worktree (pre-existing to this phase).
+
+- **2026-02-11 (Monumetric Phase 2 implementation - `/penny-list` mobile utility + sticky reserve):** Executed the second runtime phase from `.ai/impl/monumetric-launch-spec.md`.
+  - **Mobile utility migration shipped:** Added `components/penny-list-mobile-utility-bar.tsx` and replaced the old fixed-bottom mobile action bar in `components/penny-list-client.tsx`.
+  - **Behavior contract implemented:** Utility bar now renders below navbar, auto-hides only after `scrollY > 120` with downward delta >=16, re-shows on upward delta >=12 or near top (`scrollY <= 72`), and stays visible while filter/sort sheets are open.
+  - **Sticky reserve scaffold added:** Added `components/ads/mobile-sticky-anchor.tsx` and mounted it from `components/penny-list-client.tsx` with safe-area bottom handling and collapse control while sheets are open.
+  - **Prompt stack gate shipped:** `PennyListPageBookmarkBanner`, `EmailSignupForm`, and `PWAInstallPrompt` now pause on mobile when sticky test is active via `shouldPausePennyListPromptStack(...)`.
+  - **Test coverage:** Added `tests/ads-launch-config.test.ts`.
+  - **Verification:** `npm run verify:fast` ✅, `npm run e2e:smoke` ✅, `npm run lint:colors` ✅, Playwright proof ✅ (`reports/proof/2026-02-11T23-24-33/`), scope guard artifact ✅ (`.ai/_tmp/scope-guard-monumetric-phase2.md`).
+  - **Watchout:** scope guard continues to report `package.json` modified in worktree (pre-existing to this phase).
+
+- **2026-02-11 (Monumetric Phase 1 implementation - analytics hygiene + route config):** Executed the first runtime phase from `.ai/impl/monumetric-launch-spec.md`.
+  - **Analytics safety shipped:** `lib/analytics.ts` now sanitizes reserved-like keys (`source/medium/campaign` -> `pc_*`) and normalizes legacy attribution keys to `ui_source`.
+  - **Callsite migration:** `source` analytics params migrated to `ui_source` across primary monetization-scope surfaces (`/`, `/sku/[sku]`, navbar, penny-list card/action rows, share/copy flows), plus shared-list/list-item consistency pass.
+  - **Route policy foundation:** Added `lib/ads/route-eligibility.ts` (canonical allow/restrict/exclude matrix + helpers) and `lib/ads/launch-config.ts` (sticky/interstitial/VOLT launch flags + prompt-pause constants).
+  - **Test coverage:** Added `tests/analytics.test.ts` and `tests/ads-route-eligibility.test.ts`.
+  - **Verification:** `npm run verify:fast` ✅, `npm run e2e:smoke` ✅, scope guard artifact `.ai/_tmp/scope-guard-monumetric-phase1.md` ✅.
+  - **Watchout:** scope guard reports `package.json` modified in working tree; treated as pre-existing to this phase.
+
+- **2026-02-11 (Monumetric launch spec finalization - docs):** Finalized a decision-complete launch spec before implementation and locked route policy + guardrails.
+  - **Canonical plan:** `.ai/impl/monumetric-launch-spec.md`.
+  - **Locked outputs:** final allow/restrict/exclude route matrix, `/penny-list` mobile top auto-hide utility spec, measurement/rollback framework, Monumetric handoff message, and file-level implementation phases.
+  - **Analytics lock-in:** device mix + route/event baselines embedded from Jan 14-Feb 10, 2026.
+  - **Backlog alignment:** monetization P0 plan pointer now targets `.ai/impl/monumetric-launch-spec.md`.
+  - **Verification:** Docs-only planning update; gates not run.
+
+- **2026-02-11 (P0 UI trust fixes + ai:proof runtime contract):** Shipped the first execution pass from the trust/utility remediation plan and hardened screenshot proof runtime behavior.
+  - **UI execution (P0):**
+    - `/` hero now has one dominant action (`Browse Penny List`) with a demoted inline `Report a Find` secondary path.
+    - `/report-find` SKU helper no longer uses placeholder content; it now provides concrete SKU capture guidance and examples.
+    - `/sku/[sku]` now surfaces freshness directly in the `Identifiers` block (status + last report date).
+  - **Runtime contract execution:** `scripts/ai-proof.ts` now supports deterministic `dev`/`test` modes and `PLAYWRIGHT_BASE_URL`, with explicit fail-fast behavior for unhealthy/missing 3001/3002 servers and no server kill/restart side effects.
+  - **Verification:** `npm run verify:fast` ✅, `npm run e2e:smoke` ✅, `npm run lint:colors` ✅, `npm run check-contrast` ✅, proof bundle `reports/proof/2026-02-11T09-06-42/` ✅.
+
+- **2026-02-11 (ai:verify default mode policy codified):** Closed the remaining governance decision by making isolated test mode deterministic for `ai:verify`.
+  - **Runtime contract:** `npm run ai:verify` now defaults to Playwright-owned port `3002`; dev-server verification on `3001` requires explicit opt-in (`npm run ai:verify -- dev` or `--mode=dev`).
+  - **Compatibility:** Legacy `auto` mode now maps to test mode so old habits don’t reintroduce implicit 3001 behavior.
+  - **Governance memory:** Updated canonical policy text in `.ai/VERIFICATION_REQUIRED.md`, closed the open-decision language in `.ai/impl/vision-charter-first-governance-realignment.md`, and refreshed backlog/session memory.
+  - **Verification:** `npm run check:docs-governance` ✅, `npm run verify:fast` ✅ (build emitted non-blocking Supabase anon fetch timeouts during static generation).
+
+- **2026-02-11 (Vision Charter-first governance realignment major pass):** Completed charter authority setup, governance conflict cleanup, and drift prevention wiring.
+  - **Authority + canon:** Added `VISION_CHARTER.md` and refactored startup/canon docs to charter-first read order + mandatory fail-closed Alignment Gate.
+  - **Governance audits:** Added reset receipt, surface map, conflict matrix, harm register, and trust/utility UI audit + remediation plans under `.ai/audits/`.
+  - **Drift prevention:** Added `scripts/check-doc-governance-drift.mjs`, npm script `check:docs-governance`, and CI enforcement in `.github/workflows/quality.yml`.
+  - **Plan canonicality:** Preserved the full governance handoff in `.ai/impl/vision-charter-first-governance-realignment.md`.
+  - **Verification:** `npm run check:docs-governance` ✅, `npm run verify:fast` ✅.
 
 - **2026-02-10 (Ads.txt Ezoic verification block):** Appended the Ezoic reseller list to `public/ads.txt` with start/end comment markers for easy removal; added a new skill doc (`docs/skills/ads-txt-update.md`).
   - **Verification:** `npm run verify:fast` ✅ (build logged Supabase anon fetch timeouts during static generation; non-blocking).

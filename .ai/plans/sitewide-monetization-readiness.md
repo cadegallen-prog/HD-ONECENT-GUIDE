@@ -1,9 +1,11 @@
 # Sitewide Monetization Readiness Plan (Living)
 
 **Created:** 2026-02-08  
-**Last updated:** 2026-02-08  
-**Status:** Planning  
+**Last updated:** 2026-02-11  
+**Status:** Planning (Superseded for launch execution)  
 **Owner:** Cade (founder)
+
+> Superseded for launch decisions by `.ai/impl/monumetric-launch-spec.md`. Keep this file as historical planning context.
 
 ## 0) GOAL / WHY / DONE MEANS
 

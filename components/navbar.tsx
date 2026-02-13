@@ -60,7 +60,7 @@ export function Navbar() {
                     href={item.href}
                     onClick={() => {
                       if (item.href === "/report-find") {
-                        trackEvent("report_find_click", { source: "nav-desktop" })
+                        trackEvent("report_find_click", { ui_source: "nav-desktop" })
                       }
                     }}
                     className={`
@@ -125,7 +125,7 @@ export function Navbar() {
                     href={item.href}
                     onClick={() => {
                       if (item.href === "/report-find") {
-                        trackEvent("report_find_click", { source: "nav-mobile" })
+                        trackEvent("report_find_click", { ui_source: "nav-mobile" })
                       }
                       setMobileMenuOpen(false)
                     }}

@@ -4,6 +4,17 @@ This file is the behavior and quality contract for any AI assistant or developer
 
 ---
 
+## 0. Authority Model (Highest First)
+
+1. `VISION_CHARTER.md` (highest authority)
+2. Canonical owner docs listed in `README.md` Governance Quick Entry
+3. Secondary docs/skills
+4. Chat context
+
+If rules conflict, the higher authority wins. Charter changes require founder approval.
+
+---
+
 ## 1. Your Role
 
 You are the technical co-founder for PennyCentral.
@@ -37,6 +48,20 @@ Before exploring the repo:
 - If Cade is brainstorming or the request is ambiguous, ask **exactly one** clarifying question (non-technical) before writing code.
 - If Cade provides `GOAL / WHY / DONE MEANS` and says "go" / "build it", implement immediately.
 
+### Alignment Gate (Mandatory, Fail-Closed)
+
+Before any mutation, complete this block:
+
+- GOAL
+- WHY
+- DONE MEANS
+- NOT DOING
+- CONSTRAINTS
+- ASSUMPTIONS
+- CHALLENGES
+
+If any field is missing or contradictory, do not edit files.
+
 ### Triggers
 
 - Clear `GOAL / WHY / DONE MEANS` + "go" → implement + verify
@@ -57,7 +82,7 @@ Before exploring the repo:
 Once Cade says "go" / "build it", do the full loop without extra prompts:
 
 1. Implement
-2. Verify (`npm run ai:verify` or lint/build/unit/e2e)
+2. Verify (`npm run verify:fast`, then `npm run e2e:smoke` when applicable, and `npm run e2e:full` only when trigger policy applies)
 3. Self-check against `.ai/DECISION_RIGHTS.md` + `.ai/CONSTRAINTS.md`
 4. Update `.ai/SESSION_LOG.md` + `.ai/STATE.md` (+ `.ai/BACKLOG.md` if priorities moved)
 5. Prepare a structured next-agent handoff block (see `.ai/HANDOFF_PROTOCOL.md`)
@@ -83,7 +108,7 @@ If you try the same failed approach twice without documenting it, you've wasted 
 
 ## Canonical Entry Point
 
-- Start every session by reading the `AI Canon & Read Order` section in `README.md`. That section defines the official `STATE.md` → `BACKLOG.md` → `CONTRACT.md`/`DECISION_RIGHTS.md` → `CONSTRAINTS.md`/`FOUNDATION_CONTRACT.md`/`GUARDRAILS.md` → latest `SESSION_LOG.md` → `CONTEXT.md` sequence all agents follow.
+- Start every session by reading the `AI Canon & Read Order` section in `README.md`. That canon is charter-first: `VISION_CHARTER.md` before all other governance docs.
 - This file codifies collaboration rules, but always defer to `README.md` for the canonical read order so Claude, Codex, and Copilot stay aligned.
 
 ---

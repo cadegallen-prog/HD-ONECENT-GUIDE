@@ -12,13 +12,22 @@
 
 ## Required verification
 
-Run all four quality gates:
+Follow the canonical lane model from `.ai/VERIFICATION_REQUIRED.md`:
 
 ```bash
-npm run lint
-npm run build
-npm run test:unit
-npm run test:e2e
+npm run verify:fast
+```
+
+If the change touches route/form/API/navigation/UI flows, also run:
+
+```bash
+npm run e2e:smoke
+```
+
+Run full e2e only when trigger policy applies (or when explicitly requested):
+
+```bash
+npm run e2e:full
 ```
 
 If you touched colors/styles, also run:

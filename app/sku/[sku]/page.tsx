@@ -12,6 +12,7 @@ import { toThdImageVariant } from "@/lib/image-cache"
 import { TrackableLink } from "@/components/trackable-link"
 import { buildReportFindUrl } from "@/lib/report-find-link"
 import { getCanonicalUrl } from "@/lib/canonical"
+import { RouteAdSlots } from "@/components/ads/route-ad-slots"
 
 type PageProps = {
   params: Promise<{ sku: string }>
@@ -119,6 +120,8 @@ export default async function SkuDetailPage({ params }: PageProps) {
     moderate: "pill pill-accent",
     old: "pill pill-strong",
   }[freshness || "old"]
+  const freshnessLabel =
+    freshness === "fresh" ? "Fresh" : freshness === "moderate" ? "Moderate" : "Older"
 
   const lastSeenLabel = lastSeen
     ? new Date(lastSeen).toLocaleDateString("en-US", {
@@ -328,6 +331,7 @@ export default async function SkuDetailPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
+      <RouteAdSlots pathname={`/sku/${sku}`} />
 
       <div className="container-wide max-w-4xl mx-auto">
         <nav className="mb-6">
@@ -400,6 +404,18 @@ export default async function SkuDetailPage({ params }: PageProps) {
                       <dt className="text-[var(--text-muted)] inline">SKU:</dt>
                       <dd className="text-[var(--text-primary)] font-mono inline ml-2">
                         {formatSkuForDisplay(sku)}
+                      </dd>
+                    </div>
+
+                    <div className="sm:col-span-2">
+                      <dt className="text-[var(--text-muted)] inline">Freshness:</dt>
+                      <dd className="inline ml-2">
+                        <span className={freshnessColorClass}>{freshnessLabel}</span>
+                        <span className="ml-2 text-[var(--text-muted)]">
+                          {latestDateLabel
+                            ? `Last report: ${latestDateLabel}`
+                            : "Last report date unavailable"}
+                        </span>
                       </dd>
                     </div>
 
@@ -504,7 +520,7 @@ export default async function SkuDetailPage({ params }: PageProps) {
                   rel="noopener noreferrer"
                   className="btn-secondary w-full flex items-center justify-center gap-2 min-h-[44px] py-3 rounded-xl font-semibold text-sm"
                   eventName="home_depot_click"
-                  eventParams={{ skuMasked: sku.slice(-4), source: "sku-page" }}
+                  eventParams={{ skuMasked: sku.slice(-4), ui_source: "sku-page" }}
                 >
                   View on Home Depot
                   <ExternalLink className="w-5 h-5" />

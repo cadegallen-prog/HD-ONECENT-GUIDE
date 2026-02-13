@@ -2,6 +2,9 @@
 
 **Purpose:** Clear boundaries for what AI can decide autonomously vs. what requires Cade's approval.
 
+**Authority note:** If any guidance here conflicts with `VISION_CHARTER.md`, the charter wins.
+All implementation still requires a completed Alignment Gate before mutation.
+
 ---
 
 ## 🟢 AI Can Decide (No Approval Needed)

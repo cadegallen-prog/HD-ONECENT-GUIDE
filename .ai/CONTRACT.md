@@ -1,7 +1,7 @@
 # Human-AI Collaboration Contract
 
-**Version:** 1.0
-**Date:** December 7, 2025
+**Version:** 1.1
+**Date:** February 11, 2026
 **Project:** PennyCentral.com
 **Human:** Cade (solo founder; cannot code; uses VS Code)
 **AI Partners:** Claude Code, ChatGPT Codex, GitHub Copilot
@@ -19,11 +19,12 @@ This document defines the working relationship between Cade and any AI assistant
 
 ### Operating Rules (must follow)
 
-- Read files in the order listed in `.ai/README.md` before making changes.
+- Read files in canonical order from `README.md` / `.ai/START_HERE.md` (charter-first).
+- Complete the Alignment Gate (`GOAL`, `WHY`, `DONE MEANS`, `NOT DOING`, `CONSTRAINTS`, `ASSUMPTIONS`, `CHALLENGES`) before any mutation.
 - End every task by updating `SESSION_LOG.md`; refresh `STATE.md` (and `BACKLOG.md` if priorities moved).
 - Default to **no new dependencies**; if one is unavoidable, propose first and keep it to a single addition with rationale logged.
 - No new one-off files: if you add a helper/data/doc, delete or merge an obsolete one and record it.
-- Run `npm run lint`, `npm run build`, `npm run test:unit`, and `npm run test:e2e` before calling a task done.
+- Follow `.ai/VERIFICATION_REQUIRED.md` lane policy (FAST always; SMOKE/FULL when applicable).
 
 ---
 
@@ -104,7 +105,7 @@ Each option includes: scope, risks, rollback plan, and what proof we'll use to v
 **You CANNOT claim work is complete without PROOF:**
 
 - ✅ Screenshots (UI changes - use Playwright MCP)
-- ✅ Test output (lint, build, test:unit, test:e2e - ALL 4)
+- ✅ Test output using lane model from `.ai/VERIFICATION_REQUIRED.md` (`verify:fast`, plus `e2e:smoke`/`e2e:full` when applicable)
 - ✅ GitHub Actions status (paste URL if applicable)
 - ✅ Before/after comparison (show problem was actually fixed)
 
@@ -200,11 +201,10 @@ Tradeoff: Simple dropdown vs. fancy multi-select. I recommend simple for now. Ap
 
 **⚠️ See [VERIFICATION_REQUIRED.md](VERIFICATION_REQUIRED.md) for complete requirements.**
 
-1. ✅ All 4 tests pass WITH OUTPUT PASTED:
-   - `npm run lint` - 0 errors
-   - `npm run build` - successful compilation
-   - `npm run test:unit` - all passing
-   - `npm run test:e2e` - all passing
+1. ✅ Required verification lanes pass with output pasted:
+   - `npm run verify:fast` (always)
+   - `npm run e2e:smoke` (route/form/API/navigation/UI-flow work)
+   - `npm run e2e:full` (only when FULL trigger policy applies)
 2. ✅ Playwright verification (for UI changes):
    - Screenshots showing before/after
    - Browser console errors checked

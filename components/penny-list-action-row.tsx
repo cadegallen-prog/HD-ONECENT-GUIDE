@@ -107,7 +107,7 @@ export function PennyListActionRow({
         title="Home Depot"
         onClick={(event) => {
           stopEvent(event)
-          trackEvent("home_depot_click", { skuMasked: sku.slice(-4), source: homeDepotSource })
+          trackEvent("home_depot_click", { skuMasked: sku.slice(-4), ui_source: homeDepotSource })
         }}
       >
         <ExternalLink className="h-4 w-4" aria-hidden="true" />

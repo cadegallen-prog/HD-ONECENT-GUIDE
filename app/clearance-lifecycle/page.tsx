@@ -3,6 +3,7 @@ import { PageHeader, PageShell, Prose, Section } from "@/components/page-templat
 import { TruthMatrix } from "@/components/guide/TruthMatrix"
 import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
+import { RouteAdSlots } from "@/components/ads/route-ad-slots"
 
 export const metadata: Metadata = {
   title: "Home Depot Clearance Lifecycle (2026 Guide) | Penny Central",
@@ -173,6 +174,7 @@ export default function ClearanceLifecyclePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
+      <RouteAdSlots pathname="/clearance-lifecycle" />
       <PageShell width="default" padding="sm" gap="md">
         <div className="w-full max-w-[68ch] mx-auto">
           <nav aria-label="Breadcrumb" className="mb-3 text-sm text-[var(--text-muted)]">

@@ -8,19 +8,32 @@
 
 Follow this sequence before every session:
 
-1. **THIS FILE** - Start Here
-2. **CRITICAL_RULES.md** - Never violate these
-3. **STATE.md** - Where we are now
-4. **BACKLOG.md** - What to work on
-5. **CONTRACT.md** - How we collaborate
-6. **DECISION_RIGHTS.md** - What needs approval
-7. **HANDOFF_PROTOCOL.md** - How tasks are closed and handed to the next agent
+1. **VISION_CHARTER.md** - Highest authority (vision + decision hierarchy + conflict resolution)
+2. **THIS FILE** - Start Here
+3. **CRITICAL_RULES.md** - Never violate these
+4. **STATE.md** - Where we are now
+5. **BACKLOG.md** - What to work on
+6. **CONTRACT.md** - How we collaborate
+7. **DECISION_RIGHTS.md** - What needs approval
+8. **HANDOFF_PROTOCOL.md** - How tasks are closed and handed to the next agent
 
 **Default ignore list:** Do not load files under `archive/docs-pruned/**`, `archive/scripts-pruned/**`, or `archive/media-pruned/**` unless Cade explicitly asks to restore/review archived items.
 
 **First session only:** Read `GROWTH_STRATEGY.md` for business context
 
-**Then ask:** GOAL / WHY / DONE for this session
+## Alignment Gate (Fail-Closed, Required Before Mutation)
+
+No file mutation is allowed until this exact block is complete:
+
+- GOAL
+- WHY
+- DONE MEANS
+- NOT DOING
+- CONSTRAINTS
+- ASSUMPTIONS
+- CHALLENGES
+
+If any field is missing or contradictory, stop and resolve it first. No edits before gate completion.
 
 ## Planning Canon (When the session is planning-only)
 
@@ -132,7 +145,7 @@ These are the only technical commands Cade needs to know:
 Once Cade says "go" / "build it", do the full loop without extra prompts:
 
 1. Implement
-2. Verify (`npm run ai:verify` or lint/build/unit/e2e)
+2. Verify (`npm run verify:fast`, then `npm run e2e:smoke` when applicable, and `npm run e2e:full` only when trigger policy applies)
 3. Self-check against `DECISION_RIGHTS.md` + `CRITICAL_RULES.md`
 4. Update `SESSION_LOG.md` + `STATE.md` (+ `BACKLOG.md` if priorities moved)
 5. Create a structured next-agent handoff block per `HANDOFF_PROTOCOL.md`

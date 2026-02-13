@@ -8,13 +8,14 @@ You are helping with Penny Central (pennycentral.com), a Next.js PWA for finding
 
 Follow the canonical read order (source of truth is `.ai/START_HERE.md`):
 
-1. `.ai/START_HERE.md`
-2. `.ai/CRITICAL_RULES.md`
-3. `.ai/STATE.md`
-4. `.ai/HANDOFF.md` (portable context pack, use when switching tools or starting a fresh chat)
-5. `.ai/BACKLOG.md`
-6. `.ai/CONTRACT.md`
-7. `.ai/DECISION_RIGHTS.md`
+1. `VISION_CHARTER.md`
+2. `.ai/START_HERE.md`
+3. `.ai/CRITICAL_RULES.md`
+4. `.ai/STATE.md`
+5. `.ai/HANDOFF.md` (portable context pack, use when switching tools or starting a fresh chat)
+6. `.ai/BACKLOG.md`
+7. `.ai/CONTRACT.md`
+8. `.ai/DECISION_RIGHTS.md`
 
 **If working within a specific topic:** read `.ai/topics/INDEX.md` then the relevant `.ai/topics/<TOPIC>.md`
 
@@ -92,21 +93,20 @@ Do not rely on literal slash commands. Treat them as headings like:
 
 ---
 
-## Then ask: GOAL / WHY / DONE for this session.
+## Then complete the Alignment Gate before any edits.
 
 Use `.ai/USAGE.md` for the task template (5-min format):
 
 ```
 GOAL: [specific ask]
 WHY: [who it helps / what it fixes]
+DONE MEANS: [concrete completion criteria]
 EVIDENCE: [error message / screenshot / link / metric]
 NOT DOING: [2-3 explicit exclusions]
 CONSTRAINTS: [tokens-only colors, don't touch globals.css, etc.]
+ASSUMPTIONS: [facts you're assuming true]
+CHALLENGES: [known blockers/risks]
 EXAMPLES: Like this: [one sentence] / Not like this: [one sentence]
-DONE MEANS:
-- [success criterion]
-- [success criterion]
-- All tests pass
 ```
 
 ---

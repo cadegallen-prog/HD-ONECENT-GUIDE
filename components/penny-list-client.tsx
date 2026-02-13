@@ -13,13 +13,11 @@ import {
   Search,
   X,
   MapPin,
-  SlidersHorizontal,
-  ArrowUpDown,
-  FilePlus,
 } from "lucide-react"
 import { TrackableLink } from "@/components/trackable-link"
 import { trackEvent } from "@/lib/analytics"
 import { FeedbackWidget } from "@/components/feedback-widget"
+import { MONUMETRIC_LAUNCH_CONFIG, shouldPausePennyListPromptStack } from "@/lib/ads/launch-config"
 import {
   PennyListFilters,
   type SortOption,
@@ -34,6 +32,8 @@ import { formatWindowLabel } from "@/lib/penny-list-utils"
 import { PennyListPageBookmarkBanner } from "./penny-list-page-bookmark-banner"
 import { PWAInstallPrompt } from "./pwa-install-prompt"
 import { EmailSignupForm } from "./email-signup-form"
+import { PennyListMobileUtilityBar } from "./penny-list-mobile-utility-bar"
+import { MobileStickyAnchor } from "./ads/mobile-sticky-anchor"
 
 interface PennyListClientProps {
   initialItems: PennyItem[]
@@ -182,9 +182,22 @@ export function PennyListClient({
 
   const [isFilterSheetOpen, setIsFilterSheetOpen] = useState(false)
   const [isSortSheetOpen, setIsSortSheetOpen] = useState(false)
+  const [isMobileViewport, setIsMobileViewport] = useState(false)
 
   useEffect(() => {
     hasMountedRef.current = true
+  }, [])
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 639px)")
+    const syncViewport = () => setIsMobileViewport(mediaQuery.matches)
+
+    syncViewport()
+    mediaQuery.addEventListener("change", syncViewport)
+
+    return () => {
+      mediaQuery.removeEventListener("change", syncViewport)
+    }
   }, [])
 
   useEffect(() => {
@@ -461,6 +474,15 @@ export function PennyListClient({
 
   const hasActiveFilters =
     stateFilter !== "" || searchQuery !== "" || dateRange !== DEFAULT_DATE_RANGE
+  const isStickyAnchorEnabled =
+    MONUMETRIC_LAUNCH_CONFIG.sticky.enabled && MONUMETRIC_LAUNCH_CONFIG.sticky.mobileOnly
+  const shouldPausePromptStack = shouldPausePennyListPromptStack({
+    stickyTestEnabled: isStickyAnchorEnabled,
+    isMobile: isMobileViewport,
+  })
+  const resultsBottomPaddingClass = isStickyAnchorEnabled
+    ? "pb-[calc(66px+env(safe-area-inset-bottom))] sm:pb-0"
+    : "pb-0"
 
   // Redundant penny_list_view removed.
   // Custom metrics like itemsVisible and freshness are now tracked via config parameters
@@ -552,56 +574,12 @@ export function PennyListClient({
 
       {/* Mobile Action Bar + Sheets */}
       <div className="sm:hidden">
-        <div className="fixed inset-x-0 bottom-0 z-30 border-t border-[var(--border-default)] bg-[var(--bg-elevated)] transition-transform duration-150 ease-out">
-          <div className="grid grid-cols-4 gap-2 px-3 pt-2 pb-[calc(8px+env(safe-area-inset-bottom))]">
-            <button
-              type="button"
-              onClick={openFilterSheet}
-              aria-expanded={isFilterSheetOpen}
-              aria-controls="penny-list-filter-sheet"
-              className={`flex min-h-[44px] w-full flex-col items-center justify-center gap-1 rounded-lg border text-xs font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
-                isFilterSheetOpen
-                  ? "border-[var(--cta-primary)] bg-[var(--bg-hover)] text-[var(--text-primary)]"
-                  : "border-[var(--border-default)] bg-[var(--bg-card)] text-[var(--text-secondary)]"
-              }`}
-            >
-              <SlidersHorizontal className="h-4 w-4" aria-hidden="true" />
-              Filters
-            </button>
-            <button
-              type="button"
-              onClick={openSortSheet}
-              aria-expanded={isSortSheetOpen}
-              aria-controls="penny-list-sort-sheet"
-              className={`flex min-h-[44px] w-full flex-col items-center justify-center gap-1 rounded-lg border text-xs font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] ${
-                isSortSheetOpen
-                  ? "border-[var(--cta-primary)] bg-[var(--bg-hover)] text-[var(--text-primary)]"
-                  : "border-[var(--border-default)] bg-[var(--bg-card)] text-[var(--text-secondary)]"
-              }`}
-            >
-              <ArrowUpDown className="h-4 w-4" aria-hidden="true" />
-              Sort
-            </button>
-            <TrackableLink
-              href="/lists"
-              eventName="cta_click"
-              eventParams={{ location: "penny-list-mobile-bar-lists" }}
-              className="flex min-h-[44px] w-full flex-col items-center justify-center gap-1 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] text-xs font-semibold text-[var(--text-secondary)] transition-colors hover:bg-[var(--bg-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
-            >
-              <Heart className="h-4 w-4" aria-hidden="true" />
-              My List
-            </TrackableLink>
-            <TrackableLink
-              href="/report-find"
-              eventName="find_submit"
-              eventParams={{ location: "penny-list-mobile-bar-report" }}
-              className="flex min-h-[44px] w-full flex-col items-center justify-center gap-1 rounded-lg bg-[var(--cta-primary)] text-xs font-semibold text-[var(--cta-text)] transition-colors hover:bg-[var(--cta-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
-            >
-              <FilePlus className="h-4 w-4" aria-hidden="true" />
-              Report
-            </TrackableLink>
-          </div>
-        </div>
+        <PennyListMobileUtilityBar
+          isFilterSheetOpen={isFilterSheetOpen}
+          isSortSheetOpen={isSortSheetOpen}
+          onOpenFilterSheet={openFilterSheet}
+          onOpenSortSheet={openSortSheet}
+        />
 
         {isFilterSheetOpen && (
           <>
@@ -846,9 +824,13 @@ export function PennyListClient({
         </section>
       )}
 
-      <PennyListPageBookmarkBanner />
-      <EmailSignupForm />
-      <PWAInstallPrompt />
+      {!shouldPausePromptStack && (
+        <>
+          <PennyListPageBookmarkBanner />
+          <EmailSignupForm />
+          <PWAInstallPrompt />
+        </>
+      )}
 
       {/* Disclaimer Card */}
       <div
@@ -878,10 +860,7 @@ export function PennyListClient({
       </div>
 
       {/* Results */}
-      <section
-        aria-label="Penny list results"
-        className="pb-[calc(80px+env(safe-area-inset-bottom))] sm:pb-0"
-      >
+      <section aria-label="Penny list results" className={resultsBottomPaddingClass}>
         {/* Top pagination controls */}
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-[var(--text-secondary)]">
@@ -1027,6 +1006,11 @@ export function PennyListClient({
           </div>
         )}
       </section>
+
+      <MobileStickyAnchor
+        enabled={isStickyAnchorEnabled}
+        collapsed={isFilterSheetOpen || isSortSheetOpen}
+      />
 
       <FeedbackWidget />
 

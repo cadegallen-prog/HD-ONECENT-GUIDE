@@ -4,85 +4,100 @@
 
 ---
 
-## 2026-02-10 - Copilot - Ads.txt Ezoic Verification Block
+## 2026-02-13 - Codex - Monumetric Option B Runtime Pivot (Provider-Managed Placement)
 
-**Goal:** Temporarily append Ezoic reseller entries for verification while waiting on premium ad network approval.
-
-**Status:** ✅ Completed.
-
-### Changes
-
-- Appended the Ezoic reseller list to `public/ads.txt`, wrapped in `# --- START EZOIC ---` / `# --- END EZOIC ---`.
-- Added skill doc `docs/skills/ads-txt-update.md` and indexed it in `docs/skills/README.md`.
-
-### Verification
-
-- `npm run verify:fast` ✅
-- Build note: Supabase anon fetch timeouts logged during static generation (non-blocking; build succeeded).
-
----
-
-## 2026-02-09 - Copilot - /resources Redirect + Footer Consolidation
-
-**Goal:** Remove the obsolete /resources surface, consolidate footer legal/support links, and tighten crawl/index hygiene.
+**Goal:** Apply founder-approved Option B so Monumetric controls placement by default while the app enforces only hard exclusions.
 
 **Status:** ✅ Completed.
 
 ### Changes
 
-- Added permanent redirects for `/resources` and `/resources/` → `/guide` in `next.config.js`.
-- Condensed footer links into **Company / Support / Legal** groups and renamed the CCPA link to “California Privacy (CCPA)” (still anchors to `/privacy-policy#ccpa`).
-- Updated `ROUTE-TREE.txt` to reflect the current route surface (no `/resources`).
-- Removed the empty `app/resources` directory locally (no tracked files).
+- Updated route policy module: `lib/ads/route-eligibility.ts`.
+  - Removed strict allow/restrict inventory forcing model.
+  - Enforced hard exclusions for trust/safety/system routes.
+  - Default policy for non-excluded routes is provider-managed allow.
+- Updated launch config: `lib/ads/launch-config.ts`.
+  - Added `placement.mode = "provider-managed"` and `hardExclusionsOnly = true`.
+  - Kept sticky reserve scaffold but disabled by default (`sticky.enabled = false`).
+- Updated route planning: `lib/ads/slot-plan.ts`.
+  - Non-excluded routes resolve to `provider_managed` marker.
+  - Excluded routes resolve to empty inventory.
+- Updated route slot renderer: `components/ads/route-ad-slots.tsx`.
+  - Excluded routes render nothing.
+  - Eligible routes emit metadata JSON payload only (no forced slot markers).
+- Updated coverage:
+  - `tests/ads-route-eligibility.test.ts`
+  - `tests/ads-slot-plan.test.ts`
+  - `tests/ads-launch-config.test.ts`
+- Updated canonical docs:
+  - `.ai/impl/monumetric-launch-spec.md`
+  - `.ai/topics/SITE_MONETIZATION_CURRENT.md`
 
 ### Verification
 
 - `npm run verify:fast` ✅
 - `npm run e2e:smoke` ✅
-- Redirect checks (localhost): `/resources` → 308 `/guide`, `/resources/` → 308 `/guide`.
-- Playwright proof:
-  - `reports/proof/2026-02-09-resources-footer/before-prod-desktop-light.png`
-  - `reports/proof/2026-02-09-resources-footer/before-prod-desktop-dark.png`
-  - `reports/proof/2026-02-09-resources-footer/after-local-desktop-light.png`
-  - `reports/proof/2026-02-09-resources-footer/after-local-desktop-dark.png`
-  - `reports/proof/2026-02-09-resources-footer/before-prod-fullpage.png`
-  - `reports/proof/2026-02-09-resources-footer/after-local-fullpage.png`
-- Console notes: local dev shows a hydration warning during Fast Refresh; production console noise includes UID2 CSP block + Sentry 429 + THD preload warnings (pre-existing).
+- `npm run check:docs-governance` ✅
+- `npm run ai:proof -- test /penny-list /guide /report-find` ❌ (expected fail-fast; no healthy `3002` server)
+- `npx playwright test tests/visual-smoke.spec.ts --project=chromium-mobile-light --project=chromium-mobile-dark --grep "renders /penny-list"` ✅ (2/2)
+  - Screenshots in `reports/playwright/html/data/` (hash-named artifacts)
+- Scope guard artifact: `.ai/_tmp/scope-guard-monumetric-option-b-final.md` ✅
+
+### Notes
+
+- Pre-existing dirty worktree is still present; unrelated files were not touched/reverted.
 
 ---
 
-## 2026-02-09 - Codex - PR #133 Verification Pass + Sonar Hotspot Remediation
+## 2026-02-12 - Claude Code - Monumetric Tier Dispute Documentation
 
-**Goal:** Complete both requested tracks: fresh repo-side verification proof for PR #133 and start/remediate the remaining SonarCloud failure.
+**Goal:** Document Monumetric tier dispute, prepare corporate call strategy, draft pushback email, and centralize all context so Cade does not need to repeat details during follow-up.
+
+**Status:** ✅ Completed (awaiting Monumetric response).
+
+### Actions Taken
+
+- Prepared call strategy and escalation framing for Monumetric support.
+- Drafted and sent pushback email with traffic legitimacy proof:
+  - Facebook group evidence (`63.7K` members, admin status, site featured).
+  - Traffic source and engagement metrics showing legitimate audience behavior.
+- Documented legal/criteria challenge:
+  - Published criteria show monthly pageviews.
+  - Internal responses shifted from session pageviews to active users.
+  - Section 12.9 graduation logic likely misapplied to direct applicant path.
+- Synced context into canonical memory:
+  - `.ai/topics/SITE_MONETIZATION_CURRENT.md`
+  - `.ai/STATE.md`
+  - Tool-local investigative notes in `C:\Users\cadeg\.claude\plans\jazzy-munching-peacock.md`
+
+### Verification
+
+- Docs-only session; no code changes.
+
+---
+
+## 2026-02-11 - Codex - Monumetric Phase 4 Implementation (Measurement + Rollback Operations)
+
+**Goal:** Execute Phase 4 from `.ai/impl/monumetric-launch-spec.md` by shipping automated guardrail reporting, rollback logic, and analytics contract updates.
 
 **Status:** ✅ Completed.
 
 ### Changes
 
-- Re-verified PR `#133` status and checks on latest SHA `8cabceb13d140d54c9d399fd08212b4e3f436cac`.
-- Confirmed Sonar failure root cause from check metadata:
-  - `Quality Gate failed` due `1 Security Hotspot`
-  - hotspot key `AZxEKXYrJwEIlETBDrFL`
-  - file `.github/workflows/full-qa.yml`, line 39
-  - message: "Use full commit SHA hash for this dependency."
-- Remediated hotspot by pinning `dorny/paths-filter` to a full commit SHA:
-  - `.github/workflows/full-qa.yml` now uses `dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36` (`v3.0.2`).
-- Preserved all other workflow behavior from prior Full QA fix.
+- Added evaluator module: `lib/ads/guardrail-report.ts`.
+- Added operations command: `scripts/monumetric-guardrail-report.ts`.
+- Added npm script: `package.json` -> `monumetric:guardrails`.
+- Added unit coverage: `tests/ads-guardrail-report.test.ts`.
+- Updated analytics contract: `.ai/topics/ANALYTICS_CONTRACT.md`.
 
 ### Verification
 
-- Local:
-  - `npm run verify:fast` ✅ (`reports/forensics/review3-verify-fast-rerun-2026-02-09T16-44-09.log`)
-  - `npm run e2e:smoke` ✅ (`reports/forensics/review3-e2e-smoke-rerun-2026-02-09T16-43-17.log`)
-  - post-fix `npm run verify:fast` ✅ (`reports/forensics/review3-postfix-verify-fast-2026-02-09T16-46-17.log`)
-  - workflow formatting ✅ (`npx prettier --check .github/workflows/full-qa.yml`)
-- CI status baseline on PR `#133` (pre-remediation commit):
-  - FAST ✅ `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/21840293667`
-  - SMOKE ✅ `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/21840293798`
-  - FULL ✅ `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/21840293680`
-  - Sonar ❌ `https://sonarcloud.io` (fixed in code; pending re-analysis on next push)
-- Sonar evidence:
-  - check run id: `63022550845`
-  - API evidence captured via:
-    - `gh api repos/cadegallen-prog/HD-ONECENT-GUIDE/commits/8cabceb13d140d54c9d399fd08212b4e3f436cac/check-runs`
-    - `https://sonarcloud.io/api/hotspots/search?projectKey=cadegallen-prog_HD-ONECENT-GUIDE&pullRequest=133&status=TO_REVIEW`
+- `npm run monumetric:guardrails -- template .ai/_tmp/monumetric-guardrail-template.json` ✅
+- `npm run monumetric:guardrails -- .ai/_tmp/monumetric-guardrail-template.json` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npm run lint:colors` ✅
+- `npm run check:docs-governance` ✅
+- Scope guard artifact: `.ai/_tmp/scope-guard-monumetric-phase4.md` ✅
+
+---

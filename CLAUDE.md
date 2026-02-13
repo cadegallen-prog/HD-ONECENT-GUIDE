@@ -2,7 +2,7 @@
 
 ## Start Here
 
-Read `.ai/START_HERE.md` for the universal entry point and read order.
+Read `VISION_CHARTER.md` first, then `.ai/START_HERE.md` for the universal entry point and read order.
 
 This file contains Claude Code-specific notes only.
 
@@ -10,16 +10,17 @@ This file contains Claude Code-specific notes only.
 
 Follow the sequence in `.ai/START_HERE.md`:
 
-1. START_HERE.md
-2. CRITICAL_RULES.md
-3. STATE.md
-4. BACKLOG.md
-5. CONTRACT.md
-6. DECISION_RIGHTS.md
+1. VISION_CHARTER.md
+2. START_HERE.md
+3. CRITICAL_RULES.md
+4. STATE.md
+5. BACKLOG.md
+6. CONTRACT.md
+7. DECISION_RIGHTS.md
 
 **First session only:** Read `GROWTH_STRATEGY.md` for business context
 
-**Then ask:** GOAL / WHY / DONE for this session
+**Then complete the Alignment Gate before any edits:** GOAL / WHY / DONE MEANS / NOT DOING / CONSTRAINTS / ASSUMPTIONS / CHALLENGES
 
 Use `.ai/USAGE.md` (Habit 2) for the task template and `.ai/VERIFICATION_REQUIRED.md` for the proof bundle format.
 

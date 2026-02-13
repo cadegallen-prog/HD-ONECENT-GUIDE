@@ -9,6 +9,7 @@ import {
 import { TrackableNextLink } from "@/components/trackable-next-link"
 import { TodaysFinds } from "@/components/todays-finds"
 import { getRecentFinds } from "@/lib/fetch-penny-data"
+import { RouteAdSlots } from "@/components/ads/route-ad-slots"
 // Ensure the homepage "Today's Finds" module reflects recent Supabase enrichment fixes without redeploys.
 export const revalidate = 600 // 10 minutes
 
@@ -76,6 +77,7 @@ export default async function Home() {
           }),
         }}
       />
+      <RouteAdSlots pathname="/" />
       {/* ============================================
           HERO SECTION
           
@@ -102,8 +104,8 @@ export default async function Home() {
             Guide + community finds. {COMMUNITY_MEMBER_COUNT_DISPLAY} members strong.
           </p>
 
-          {/* CTAs - Unified button system */}
-          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+          {/* CTAs - Primary first-action + demoted secondary path */}
+          <div className="mt-8 flex justify-center">
             <Link
               href="/penny-list"
               className="btn-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold shadow-md hover:bg-[var(--cta-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
@@ -112,17 +114,20 @@ export default async function Home() {
               <List className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
               Browse Penny List
             </Link>
+          </div>
+          <p className="mt-3 text-sm text-[var(--text-secondary)]">
+            Already found one?{" "}
             <TrackableNextLink
               href="/report-find"
-              className="btn-secondary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg border-2 border-[var(--border-default)] dark:border-[var(--border-strong)] bg-transparent text-[var(--text-primary)] font-semibold hover:bg-[var(--bg-elevated)] hover:border-[var(--border-strong)] dark:hover:bg-[var(--bg-elevated)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
+              className="inline-flex items-center gap-1 text-[var(--link-default)] underline underline-offset-2 hover:text-[var(--link-hover)]"
               aria-label="Report a new penny find"
               eventName="report_find_click"
-              eventParams={{ source: "home-hero" }}
+              eventParams={{ ui_source: "home-hero-secondary" }}
             >
-              <PlusCircle className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
+              <PlusCircle className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
               Report a Find
             </TrackableNextLink>
-          </div>
+          </p>
         </div>
       </section>
 

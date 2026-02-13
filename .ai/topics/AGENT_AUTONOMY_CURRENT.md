@@ -1,6 +1,6 @@
 # Agent Autonomy Hardening - Current-State Audit
 
-**Audited:** 2026-02-03
+**Audited:** 2026-02-11
 **Scope:** Planning-only. Capture current tooling, permissions, and workflow friction that blocks autonomous progress.
 
 ## 1) User-facing surfaces
@@ -9,7 +9,9 @@
   - No direct route/page changes in this initiative (tooling + process only).
 - Entry points:
   - `npm run ai:doctor`
-  - `npm run ai:verify [auto|dev|test]`
+  - `npm run ai:verify` (default isolated test mode on port 3002)
+  - `npm run ai:verify -- dev` (explicit founder-preview mode on port 3001)
+  - `npm run ai:verify -- test` (explicit isolated mode)
   - `npm run ai:proof -- <routes>`
   - `npm run dev` (port 3001)
 - Logged-out experience:
@@ -61,6 +63,6 @@
 ### Pain points
 
 - Port policy appears in many files; drift risk is high when updates are partial.
-- Human preview workflow (persistent 3001) and agent verification workflow (isolated 3002) are both valid but not framed as a single explicit contract.
+- Keep human preview workflow (persistent 3001) and agent verification workflow (isolated 3002) documented as one explicit contract to prevent drift.
 - Access needs outside code (Vercel logs, Sentry, analytics/search/ads dashboards) are not centralized in one required-scopes table.
 - Plan memory for enablement can get lost if not anchored in canonical plan + backlog entries.

@@ -25,7 +25,7 @@ This blueprint is **only required reading** when the current session goal is:
 - Making Codex/Claude/Copilot behave consistently
 
 For normal feature/bug work, follow the standard read order first:
-`.ai/STATE.md` -> `.ai/BACKLOG.md` -> `.ai/CONTRACT.md` + `.ai/DECISION_RIGHTS.md` -> `.ai/CONSTRAINTS.md` + `.ai/FOUNDATION_CONTRACT.md` + `.ai/GUARDRAILS.md` -> latest `.ai/SESSION_LOG.md` -> `.ai/CONTEXT.md` (product calls).
+`VISION_CHARTER.md` -> `.ai/START_HERE.md` -> `.ai/STATE.md` -> `.ai/BACKLOG.md` -> `.ai/CONTRACT.md` + `.ai/DECISION_RIGHTS.md` -> `.ai/CONSTRAINTS.md` + `.ai/FOUNDATION_CONTRACT.md` + `.ai/GUARDRAILS.md` -> latest `.ai/SESSION_LOG.md` -> `.ai/CONTEXT.md` (product calls).
 
 ---
 

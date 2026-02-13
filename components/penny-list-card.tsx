@@ -112,7 +112,7 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
       const success = await copyToClipboard(item.sku)
       if (success) {
         const skuMasked = item.sku.slice(-4)
-        trackEvent("sku_copy", { skuMasked, source: "card-sku-pill" })
+        trackEvent("sku_copy", { skuMasked, ui_source: "card-sku-pill" })
         setCopiedSku(true)
         toast.success(`Copied SKU ${formatSkuForDisplay(item.sku)}`, {
           duration: 1500,
@@ -286,7 +286,7 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
                   event.stopPropagation()
                   trackEvent("home_depot_click", {
                     skuMasked: item.sku.slice(-4),
-                    source: "penny-list-card",
+                    ui_source: "penny-list-card",
                   })
                 }}
               >
@@ -377,7 +377,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
       const success = await copyToClipboard(item.sku)
       if (success) {
         const skuMasked = item.sku.slice(-4)
-        trackEvent("sku_copy", { skuMasked, source: "card-compact-pill" })
+        trackEvent("sku_copy", { skuMasked, ui_source: "card-compact-pill" })
         setCopied(true)
         toast.success(`Copied SKU ${formatSkuForDisplay(item.sku)}`, {
           duration: 2000,
@@ -552,7 +552,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
               event.stopPropagation()
               trackEvent("home_depot_click", {
                 skuMasked: item.sku.slice(-4),
-                source: "penny-list-hot-card",
+                ui_source: "penny-list-hot-card",
               })
             }}
           >

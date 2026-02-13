@@ -204,7 +204,7 @@ function SharedListItemCard({
   const handleCopy = async () => {
     const success = await copyToClipboard(item.sku)
     if (success) {
-      trackEvent("sku_copy", { skuMasked: item.sku.slice(-4), source: "shared-list" })
+      trackEvent("sku_copy", { skuMasked: item.sku.slice(-4), ui_source: "shared-list" })
       setCopied(true)
       toast.success(`Copied SKU ${formatSkuForDisplay(item.sku)}`, { duration: 2000 })
       setTimeout(() => setCopied(false), 1500)
