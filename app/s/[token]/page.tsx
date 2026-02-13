@@ -259,7 +259,7 @@ function SharedListItemCard({
             <a
               href={homeDepotUrl}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="nofollow sponsored noopener noreferrer"
               className="flex items-center gap-1 text-xs text-[var(--text-primary)] hover:text-[var(--cta-primary)] transition-colors"
             >
               Home Depot

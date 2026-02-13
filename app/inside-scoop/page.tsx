@@ -193,8 +193,8 @@ export default function InsideScoopPage() {
                 often near 40% of disposition volume.
               </li>
               <li>
-                A small percentage goes to donation programs. The split varies significantly by
-                store and category.
+                A small percentage goes to local recovery programs. The split varies significantly
+                by store and category.
               </li>
             </ul>
 

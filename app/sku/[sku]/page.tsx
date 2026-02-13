@@ -517,7 +517,7 @@ export default async function SkuDetailPage({ params }: PageProps) {
                 <TrackableLink
                   href={homeDepotUrl}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="nofollow sponsored noopener noreferrer"
                   className="btn-secondary w-full flex items-center justify-center gap-2 min-h-[44px] py-3 rounded-xl font-semibold text-sm"
                   eventName="home_depot_click"
                   eventParams={{ skuMasked: sku.slice(-4), ui_source: "sku-page" }}

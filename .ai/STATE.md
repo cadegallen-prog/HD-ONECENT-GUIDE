@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 13, 2026 (product-truth hardening shipped: Trip Tracker purge + member-count governance lock)
+**Last updated:** Feb 13, 2026 (AdSense compliance refactor shipped: support/legal solicitation purge + privacy disclosures + retailer rel hardening)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,25 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-13 (AdSense compliance refactor - support/legal trust hardening):** Executed a compliance-first monetization/legal pass to remove solicitation risk signals and strengthen reviewer-facing trust markers.
+  - **Solicitation purge completed:**
+    - Removed PayPal/donation solicitation logic and hardcoded `paypal.me/cadegallen` fallback from `/support`.
+    - Replaced the support-page solicitation block with a formal funding/editorial disclosure section (`monetization-transparency`) and kept affiliate disclosure professional.
+    - Removed donation-only leftover language from active app sources (`app/inside-scoop/page.tsx`, `lib/analytics.ts` legacy event).
+  - **Legal content updates completed:**
+    - Privacy + Terms now include a `Cookies and Data Collection` section with explicit 2026 Privacy Sandbox/Topics API + Global Privacy Control (GPC) handling text.
+    - Added Amazon Associate disclosure text to privacy and terms pages.
+    - Confirmed CCPA remains inside Privacy Policy as a sub-section (`/privacy-policy#ccpa`), while footer CCPA link was removed.
+  - **Footer/navigation refactor completed:**
+    - `components/footer.tsx` Legal area is now a single row: `Privacy Policy | Terms of Service | Contact`.
+  - **Metadata/schema hardening completed:**
+    - Injected requested `WebPage` JSON-LD block into `/about` and `/support` with publisher email `contact@pennycentral.com`.
+  - **About-page stale-count guard completed:**
+    - Replaced exact member-count phrasing with `tens of thousands of members` language on `/about`.
+  - **Outbound retailer rel hardening completed:**
+    - Applied `rel="nofollow sponsored noopener noreferrer"` to all audited retailer outbound links (`/go/rakuten`, Home Depot item links, Home Depot store-page links).
+  - **Verification:** `npm run verify:fast` ✅, `npm run e2e:smoke` ✅, `npm run ai:proof -- test /about /support /privacy-policy /terms-of-service` ✅ (`reports/proof/2026-02-13T20-27-13/`), targeted source/build scans for solicitation tokens + `donation` ✅ (no matches in app sources and targeted build route outputs), legal email scan ✅ (`contact@pennycentral.com` only on-site address).
 
 - **2026-02-13 (Product truth hardening - docs + governance + constants):** Removed active Trip Tracker drift, standardized member count to a single source of truth, and hardened governance checks so stale claims fail before merge.
   - **Canonical count contract updated:** `lib/constants.ts` now defines:
@@ -36,6 +55,10 @@ Every AI session must update this after meaningful work.
     - `README.md`, `SKILLS.md`, and `AGENTS.md` now point to live/canonical paths only for startup docs and memory files.
     - Added explicit location map/read-order guidance so agents can find canon, skills, constraints, verification, and historical archives without repo-wide searching.
     - Removed/updated stale references in active navigation docs (including missing root-level roadmap/changelog/google-form doc pointers and outdated cashback route/file pointers).
+  - **Affiliate/cashback drift cleanup follow-up (same day):**
+    - Removed stale BeFrugal-specific active copy where it no longer reflects current product reality (`.ai/CONTEXT.md`, `.ai/GROWTH_STRATEGY.md`).
+    - Updated active QA/audit route targets from `/cashback` to `/support` (`.ai/TESTING_CHECKLIST.md`, `scripts/run-audit.ps1`, `tests/live/console.spec.ts`).
+    - Drift guard now blocks stale cashback/affiliate tokens in active docs/tooling (`scripts/check-doc-governance-drift.mjs`).
   - **Verification:** `npm run check:docs-governance` ✅, `npm run verify:fast` ✅, `npm run e2e:smoke` ✅, active-drift greps ✅, screenshot+console proof ✅ (`reports/proof/2026-02-13T13-25-45-product-truth-hardening/`, `console-check.json`).
 
 - **2026-02-13 (Founder communication canon + policy-language remediation pass):** Implemented the requested plain-English communication canon and rewrote policy-sensitive guide wording that was flagged as monetization blockers.

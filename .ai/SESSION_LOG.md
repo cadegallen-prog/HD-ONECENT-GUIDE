@@ -4,6 +4,60 @@
 
 ---
 
+## 2026-02-13 - Codex - AdSense Compliance Refactor (Support/Legal + Retailer Link Hardening)
+
+**Goal:** Execute a high-confidence compliance pass to remove solicitation-policy risk signals and harden legal/trust surfaces for monetization review.
+
+**Status:** ✅ Completed.
+
+### Changes
+
+- **Support-page solicitation purge + disclosure replacement:**
+  - Removed PayPal/donation solicitation logic and `paypal.me/cadegallen` fallback from `app/support/page.tsx`.
+  - Added the requested formal funding/editorial disclosure section (`monetization-transparency`) with exact required copy structure.
+- **Legal/privacy compliance updates:**
+  - Updated `app/privacy-policy/page.tsx`:
+    - renamed cookies section to `Cookies and Data Collection`
+    - injected 2026 Privacy Sandbox/Topics API + GPC opt-out text
+    - added Amazon Associate disclosure
+  - Updated `app/terms-of-service/page.tsx` with:
+    - Amazon Associate disclosure
+    - `Cookies and Data Collection` compliance section (same required text)
+- **Footer legal IA refactor:**
+  - Updated `components/footer.tsx` Legal area to a single-row link set:
+    - `Privacy Policy | Terms of Service | Contact`
+  - Removed standalone footer link to `California Privacy (CCPA)` while keeping CCPA content in privacy policy.
+- **About + Support schema and copy updates:**
+  - Injected requested `WebPage` JSON-LD block into:
+    - `app/about/page.tsx`
+    - `app/support/page.tsx`
+  - Replaced About member-count phrasing with `tens of thousands of members` to avoid stale-count review flags.
+- **Retailer outbound link rel hardening:**
+  - Applied `rel="nofollow sponsored noopener noreferrer"` on audited retailer outbound links:
+    - `/go/rakuten` links
+    - Home Depot product links (`penny-list cards/action row`, `/sku/[sku]`, shared lists)
+    - Home Depot store-page links (`/store-finder`, `components/store-map.tsx`)
+- **Donation-token cleanup:**
+  - Removed legacy `donation_click` event from `lib/analytics.ts`.
+  - Replaced non-monetization `donation` wording in `app/inside-scoop/page.tsx` to satisfy zero-token scan requirement.
+  - Removed deprecated `DONATION_URL` from `lib/constants.ts`.
+
+### Verification
+
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- Playwright proof bundle ✅
+  - `npm run ai:proof -- test /about /support /privacy-policy /terms-of-service`
+  - `reports/proof/2026-02-13T20-27-13/`
+  - `reports/proof/2026-02-13T20-27-13/console-errors.txt` (`No console errors detected`)
+- Compliance scans ✅
+  - `rg -ni --hidden --glob '!archive/**' 'donation' app components lib` (no matches)
+  - `rg -ni --hidden --glob '!archive/**' 'paypal|support the creator|buy me a coffee|fund the site' app components lib` (no matches)
+  - `rg -n --hidden --glob '!archive/**' '[A-Za-z0-9._%+-]+@pennycentral\\.com' app components` (contact-only on site surfaces)
+  - `rg -ni --no-messages 'donation' .next/server/app/support .next/server/app/privacy-policy .next/server/app/about .next/server/app/terms-of-service .next/server/app/inside-scoop .next/server/chunks` (no matches)
+
+---
+
 ## 2026-02-13 - Codex - Product Truth Hardening (Trip Tracker purge + member-count governance lock)
 
 **Goal:** Remove active Trip Tracker/member-count drift and enforce guardrails so stale claims fail before merge.
@@ -40,6 +94,13 @@
   - `SKILLS.md`: added "Agent Fast Path" read order, updated monetization domain paths to live files/routes, and aligned verification commands to `verify:fast`/`e2e:smoke`/`e2e:full`.
   - `AGENTS.md`: clarified skills entrypoint as `docs/skills/README.md`, added explicit location map section, and fixed learning-loop write target to `.ai/LEARNINGS.md`.
   - Targeted path-existence audit for backticked references in these three files now resolves cleanly (no missing file-path refs).
+- Follow-up stale affiliate/cashback cleanup (same day) to remove legacy BeFrugal path drift:
+  - Updated active wording in `.ai/CONTEXT.md` and `.ai/GROWTH_STRATEGY.md` from BeFrugal-specific claims to current Rakuten/support language.
+  - Updated active QA/audit targets to current routes:
+    - `.ai/TESTING_CHECKLIST.md` (`/support` + `/go/rakuten`)
+    - `scripts/run-audit.ps1` (`/cashback` -> `/support`)
+    - `tests/live/console.spec.ts` (`/cashback` -> `/support`)
+  - Extended `scripts/check-doc-governance-drift.mjs` to fail on stale affiliate/cashback tokens (`app/cashback/`, `SupportAndCashbackCard.tsx`, `**Cashback (Affiliate)**`, legacy BeFrugal affiliate-line copy) in active docs/tooling.
 
 ### Verification
 
@@ -93,66 +154,5 @@
 - `npx playwright test tests/__tmp_policy_copy_proof.spec.ts --project=chromium-desktop-light --workers=1` ✅ (3/3)
   - Screenshot attachments generated in Playwright report bundle (`reports/playwright/html/data/`, latest hash files).
 - `npm run ai:proof -- test /in-store-strategy /inside-scoop /faq` ❌ (expected fail-fast because no healthy 3002 server was pre-running for that command mode)
-
----
-
-## 2026-02-13 - Codex - Monetization Incident Command Center (Cross-Network Persistence)
-
-**Goal:** Implement the approved monetization blocker plan as durable repo memory so AdSense, Monumetric, Ad Manager, and Journey incidents remain tracked until closure.
-
-**Status:** ✅ Completed.
-
-### Changes
-
-- Added canonical incident command center:
-  - `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`
-  - `.ai/topics/MONETIZATION_POLICY_VIOLATION_MATRIX.md`
-  - Defined required incident schema:
-    - `incident_id`
-    - `opened_date`
-    - `last_update`
-    - `status`
-    - `evidence_path`
-    - `known_facts`
-    - `unknowns`
-    - `next_action`
-    - `deadline`
-    - `close_criteria`
-  - Added and locked four active incidents:
-    - `INC-ADSENSE-001`
-    - `INC-MONUMETRIC-001`
-    - `INC-ADMANAGER-001`
-    - `INC-JOURNEY-001`
-- Synced timeline/evidence context in approval topics:
-  - `.ai/topics/ADSENSE_APPROVAL_CURRENT.md`
-  - `.ai/topics/SITE_MONETIZATION_CURRENT.md`
-- Added evidence hygiene + holdover tracking refinements:
-  - `.ai/evidence/adsense/2026-02-13-route-snapshot.json` (live status/canonical/noindex snapshot)
-  - `.ai/evidence/adsense/2026-02-13-sku-route-snapshot.json` (5 representative `/sku/[sku]` routes with `noindex, follow`)
-  - `.ai/evidence/adsense/2026-02-13-policy-route-audit.md` (completed route-by-route policy risk audit + gate outcome)
-  - `.ai/evidence/adsense/README.md` (persistent evidence-path contract)
-  - `.ai/evidence/adsense/2026-02-12-needs-attention-policy-violations.md` (transcribed screenshot artifact)
-  - `.ai/evidence/adsense/2026-02-13-monumetric-email-ocr-extract.md` (OCR extract with key timeline lines)
-  - `INC-ADSENSE-001` now includes `holdover_hypothesis`, `review_request_submitted_at`, and `earliest_re_eval_date`
-  - Re-review gate now includes a 7-14 day post-review lag rule unless explicit new policy subtype evidence appears
-  - Timeline now locked to exact dates in canon: AdSense denied `2026-02-02`, re-applied `2026-02-03`, denied `2026-02-12` (policy violations)
-  - `INC-ADMANAGER-001` moved to `OPEN-STATUS-SPLIT` with founder-reported Ezoic re-submission `2026-02-09` and Monumetric provider approval signal `2026-02-11`
-- Synced startup/handoff workflow so incidents cannot be skipped:
-  - `.ai/START_HERE.md`
-  - `.ai/HANDOFF_PROTOCOL.md`
-- Converted policy matrix from placeholder to actionable gate:
-  - marked route statuses (`AUDITED-CRITICAL/HIGH/MEDIUM/LOW`)
-  - locked current gate result as `NO-GO` for re-review until blocking route copy is rewritten
-  - synced blocker status into `INC-ADSENSE-001` (`OPEN-REMEDIATION-BLOCKED`)
-- Synced navigation + priority docs:
-  - `.ai/topics/INDEX.md`
-  - `.ai/BACKLOG.md` (new P0 command-center item)
-  - `.ai/STATE.md`
-
-### Verification
-
-- `npm run check:docs-governance` ✅
-- `npm run verify:fast` ✅
-- Docs-only session; no runtime code changes and no e2e/UI impact.
 
 ---

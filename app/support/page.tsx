@@ -3,22 +3,40 @@ import type { Metadata } from "next"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
 import { Button } from "@/components/ui/button"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
-import { COMMUNITY_MEMBER_COUNT_DISPLAY, DONATION_URL } from "@/lib/constants"
+import { COMMUNITY_MEMBER_COUNT_DISPLAY } from "@/lib/constants"
 
 export const metadata: Metadata = {
   title: "Support | PennyCentral",
   description:
-    "Learn how PennyCentral is funded, how ads work on the site, and how you can optionally support the project.",
+    "Learn how PennyCentral is funded and how advertising and affiliate partnerships support free access.",
   alternates: {
     canonical: "/support",
   },
 }
 
 export default function SupportPage() {
-  const hasDonationUrl = Boolean(DONATION_URL)
+  const webPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    publisher: {
+      "@type": "Organization",
+      name: "PennyCentral",
+      email: "contact@pennycentral.com",
+    },
+    mainEntity: {
+      "@type": "Service",
+      name: "Deal Hunting Community",
+      provider: "PennyCentral",
+    },
+  }
 
   return (
     <PageShell width="narrow">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+      />
+
       <PageHeader
         title="Support PennyCentral"
         subtitle={
@@ -36,33 +54,38 @@ export default function SupportPage() {
 
       <Section>
         <Prose className="mb-12">
-          <h2>Transparency First</h2>
-          <p>
-            PennyCentral is a free resource, but it costs money to run. We pay for high-speed
-            servers, database hosting (Supabase), domain names, and the tools that keep the Penny
-            List running fast and bot-free.
-          </p>
-          <p>To cover these costs without charging you a subscription, we use two methods:</p>
-          <ul>
-            <li>
-              <strong>Ads:</strong> You may see display ads on the site. We try to keep them
-              unobtrusive.
-            </li>
-            <li>
-              <strong>Affiliate Links:</strong> If you use our link to sign up for Rakuten (below),
-              we may earn a referral commission at no cost to you.
-            </li>
-          </ul>
+          <section className="monetization-transparency">
+            <h2>PennyCentral Funding & Editorial Disclosure</h2>
+            <p>
+              To ensure PennyCentral remains a 100% free resource for the deal-hunting community, we
+              utilize a professional commercial revenue model. Our operations are funded via:
+            </p>
+            <ul>
+              <li>
+                <strong>Display Advertising:</strong> We utilize Google Ad Manager and third-party
+                ad exchanges to serve relevant, high-quality advertisements.
+              </li>
+              <li>
+                <strong>Affiliate Partnerships:</strong> PennyCentral participates in various
+                affiliate marketing programs. We may earn a commission when users purchase products
+                through our verified retailer links.
+              </li>
+            </ul>
+            <p>
+              <strong>Editorial Integrity:</strong> Our monetization partnerships never influence
+              our deal-finding process. We do not accept payment for favorable placement or reviews.
+            </p>
+          </section>
         </Prose>
 
-        {/* Rakuten highlight card - primary monetization CTA */}
+        {/* Rakuten highlight card */}
         <div className="p-6 sm:p-8 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-lg">
           <h2 className="text-2xl font-semibold text-[var(--text-primary)] mb-4">
-            Save Money & Support the Site with Rakuten
+            Save Money with Rakuten
           </h2>
           <p className="text-[var(--text-secondary)] leading-relaxed mb-3">
-            Get cash back on purchases (including Home Depot!) while helping fund PennyCentral—at no
-            cost to you.
+            Get cash back on purchases (including Home Depot) while using a verified affiliate
+            pathway.
           </p>
           <p className="text-[var(--text-secondary)] leading-relaxed mb-3">
             Rakuten is a trusted cash back service used by millions:
@@ -73,7 +96,7 @@ export default function SupportPage() {
           </ul>
           <div className="flex flex-col sm:flex-row sm:items-center gap-3">
             <Button asChild variant="primary" size="lg">
-              <a href="/go/rakuten" target="_blank" rel="noopener noreferrer">
+              <a href="/go/rakuten" target="_blank" rel="nofollow sponsored noopener noreferrer">
                 Sign Up for Rakuten →
               </a>
             </Button>
@@ -83,43 +106,7 @@ export default function SupportPage() {
           </div>
         </div>
 
-        {/* Remaining content */}
         <Prose className="[&_h2]:mt-8 [&_h2:first-of-type]:mt-0">
-          <h2>Optional Support</h2>
-          {hasDonationUrl ? (
-            <>
-              <p>
-                If you&apos;d like to support PennyCentral directly, you can do so using the button
-                below.
-              </p>
-              <div className="mt-4">
-                <Button asChild variant="primary" size="lg">
-                  <a href={DONATION_URL} target="_blank" rel="noopener noreferrer">
-                    Support PennyCentral
-                  </a>
-                </Button>
-              </div>
-              <p className="text-sm text-[var(--text-muted)] mt-2">
-                Optional. If you use an ad blocker, that&apos;s fine too.
-              </p>
-            </>
-          ) : (
-            <div>
-              <p>
-                If you'd like to support PennyCentral, you can use the PayPal link:
-                <br />
-                <a
-                  href="https://paypal.me/cadegallen"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline ml-1"
-                >
-                  paypal.me/cadegallen
-                </a>
-              </p>
-            </div>
-          )}
-
           <h2>Disclosures</h2>
           <p>
             <strong>Advertising:</strong> PennyCentral may earn revenue from ads displayed on the

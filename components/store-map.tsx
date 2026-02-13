@@ -492,7 +492,7 @@ export const StoreMap = React.memo(function StoreMap({
                     <a
                       href={getStoreUrl(store)}
                       target="_blank"
-                      rel="noopener noreferrer"
+                      rel="nofollow sponsored noopener noreferrer"
                       className="store-popup-button store-popup-button-secondary"
                       onClick={() =>
                         trackEvent("map_interact", { action: "marker", markerState: store.state })

@@ -279,7 +279,7 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
               <a
                 href={resolvedHomeDepotUrl}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="nofollow sponsored noopener noreferrer"
                 className="flex items-center justify-center min-h-[44px] min-w-[44px] rounded-lg text-[var(--text-muted)] transition-colors hover:bg-[var(--bg-recessed)] hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
                 aria-label={`Open Home Depot page for ${item.name}`}
                 onClick={(event) => {
@@ -544,7 +544,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
           <a
             href={resolvedHomeDepotUrl}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="nofollow sponsored noopener noreferrer"
             className="flex items-center justify-center gap-1.5 min-h-[44px] min-w-[44px] px-2.5 rounded-lg text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
             aria-label={`Open Home Depot page for ${item.name}`}
             title="Home Depot"

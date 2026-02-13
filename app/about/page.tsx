@@ -1,7 +1,7 @@
 import Link from "next/link"
 import type { Metadata } from "next"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
-import { COMMUNITY_MEMBER_COUNT_DISPLAY, FACEBOOK_GROUP_URL } from "@/lib/constants"
+import { FACEBOOK_GROUP_URL } from "@/lib/constants"
 
 export const metadata: Metadata = {
   title: "About PennyCentral",
@@ -39,18 +39,37 @@ export default function AboutPage() {
     },
   }
 
+  const webPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    publisher: {
+      "@type": "Organization",
+      name: "PennyCentral",
+      email: "contact@pennycentral.com",
+    },
+    mainEntity: {
+      "@type": "Service",
+      name: "Deal Hunting Community",
+      provider: "PennyCentral",
+    },
+  }
+
   return (
     <PageShell width="default">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+      />
 
       <PageHeader
         title="About PennyCentral"
         subtitle="A free, community-driven guide for finding $0.01 clearance items at Home Depot."
         primaryAction={{
-          label: `Join ${COMMUNITY_MEMBER_COUNT_DISPLAY} penny hunters`,
+          label: "Join the penny hunting community",
           href: FACEBOOK_GROUP_URL,
           external: true,
           target: "_blank",
@@ -66,11 +85,10 @@ export default function AboutPage() {
           </p>
           <p>
             On April 5, 2025, we restarted the <strong>Home Depot One Cent Items</strong> community
-            from scratch. The growth was explosive—rocketing from zero to over{" "}
-            {COMMUNITY_MEMBER_COUNT_DISPLAY} members in less than 10 months. New members joined
-            every day asking the same questions: <em>How do I find them?</em> <em>Is it a scam?</em>{" "}
-            <em>What rules do I follow?</em> Check the files section, we said. But on mobile,
-            downloading files was a pain.
+            from scratch. The growth was explosive, rocketing from zero to tens of thousands of
+            members in less than 10 months. New members joined every day asking the same questions:{" "}
+            <em>How do I find them?</em> <em>Is it a scam?</em> <em>What rules do I follow?</em>{" "}
+            Check the files section, we said. But on mobile, downloading files was a pain.
           </p>
           <p>
             I&apos;m a nurse by trade, not a coder. I had zero website experience. But I figured:{" "}
@@ -83,10 +101,10 @@ export default function AboutPage() {
             in my spare time to serve that community.
           </p>
 
-          <h2>Growing with the {COMMUNITY_MEMBER_COUNT_DISPLAY}</h2>
+          <h2>Growing with tens of thousands of members</h2>
           <p>
             When I launched the site in December 2025, the group had about 32,000 members. Today, we
-            have crossed {COMMUNITY_MEMBER_COUNT_DISPLAY.replace("+", "")}.
+            have grown to tens of thousands of members.
           </p>
           <p>
             As the community grew, the needs grew. Facebook is great for conversation, but it&apos;s

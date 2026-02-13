@@ -135,14 +135,18 @@ export default function PrivacyPolicyPage() {
           <p>
             PennyCentral may include affiliate/referral links, including a link to Rakuten. If you
             sign up or make a qualifying purchase through our Rakuten referral link, we may earn a
-            commission. This helps fund the site at no additional cost to you.
+            commission. This helps support site operations at no additional cost to you.
           </p>
           <p>
             Our Rakuten referral link is available at{" "}
-            <a href="/go/rakuten" target="_blank" rel="noopener noreferrer">
+            <a href="/go/rakuten" target="_blank" rel="nofollow sponsored noopener noreferrer">
               /go/rakuten
             </a>
             .
+          </p>
+          <p>
+            As an Amazon Associate, PennyCentral earns from qualifying purchases upon our
+            participation in the program.
           </p>
         </Prose>
       </Section>
@@ -171,12 +175,18 @@ export default function PrivacyPolicyPage() {
         </Prose>
       </Section>
 
-      <Section title="Cookies">
+      <Section title="Cookies and Data Collection">
         <Prose>
           <p>
             Cookies are small files stored by your browser. We and our partners may use cookies and
             similar technologies to provide core site functionality, understand site performance,
             and deliver/measure ads.
+          </p>
+          <p>
+            PennyCentral is fully compliant with 2026 privacy standards, including the Google
+            Privacy Sandbox and Topics API. We prioritize user privacy by honoring Global Privacy
+            Control (GPC) signals. If your browser broadcasts a GPC signal, we automatically treat
+            this as an &quot;Opt-Out of Sale/Sharing&quot; request for all personal data.
           </p>
           <p>
             You can usually control cookies through your browser settings. Note that disabling some

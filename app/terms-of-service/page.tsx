@@ -63,6 +63,18 @@ export default function TermsOfServicePage() {
             Rakuten). We may earn revenue or commissions from ads or qualifying referrals. These
             third parties are not endorsed by PennyCentral unless explicitly stated.
           </p>
+          <p>
+            As an Amazon Associate, PennyCentral earns from qualifying purchases upon our
+            participation in the program.
+          </p>
+
+          <h2>Cookies and Data Collection</h2>
+          <p>
+            PennyCentral is fully compliant with 2026 privacy standards, including the Google
+            Privacy Sandbox and Topics API. We prioritize user privacy by honoring Global Privacy
+            Control (GPC) signals. If your browser broadcasts a GPC signal, we automatically treat
+            this as an &quot;Opt-Out of Sale/Sharing&quot; request for all personal data.
+          </p>
 
           <h2>Disclaimers</h2>
           <p>

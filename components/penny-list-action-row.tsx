@@ -101,7 +101,7 @@ export function PennyListActionRow({
       <a
         href={resolvedHomeDepotUrl}
         target="_blank"
-        rel="noopener noreferrer"
+        rel="nofollow sponsored noopener noreferrer"
         className="flex items-center gap-1.5 min-h-[44px] min-w-[44px] px-2.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
         aria-label={`Open Home Depot page for ${itemName}`}
         title="Home Depot"

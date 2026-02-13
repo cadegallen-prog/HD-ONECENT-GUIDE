@@ -576,11 +576,11 @@ export default function StoreFinderPage() {
       return
     }
 
-    // Check if query is a store number (3-5 digits)
+    // Check if query is a numeric store ID (3-5 digits)
     if (/^\d{3,5}$/.test(trimmedQuery)) {
-      const storeNumber = trimmedQuery.padStart(4, "0")
+      const storeCode = trimmedQuery.padStart(4, "0")
       const matchedStore = storesSource.find(
-        (s) => s.number === storeNumber || s.id === trimmedQuery || s.id === storeNumber
+        (s) => s.number === storeCode || s.id === trimmedQuery || s.id === storeCode
       )
 
       if (matchedStore) {
@@ -1217,7 +1217,7 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
                 <a
                   href={getStoreUrl(store)}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="nofollow sponsored noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
                   className="flex-1 text-xs font-medium border border-border py-2 px-3 rounded text-center hover:bg-accent hover:text-accent-foreground transition-colors flex items-center justify-center gap-1 min-h-[44px]"
                 >
@@ -1320,7 +1320,7 @@ function StoreCard({
         <a
           href={getStoreUrl(store)}
           target="_blank"
-          rel="noopener noreferrer"
+          rel="nofollow sponsored noopener noreferrer"
           className="flex-1 text-xs font-medium border border-border py-2 px-3 rounded text-center hover:bg-[var(--bg-elevated)] transition-colors flex items-center justify-center gap-1.5"
         >
           <ExternalLink className="h-3.5 w-3.5" />
