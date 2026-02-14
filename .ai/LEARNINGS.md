@@ -78,6 +78,32 @@ Scan this FIRST before suggesting anything. If your idea matches an anti-pattern
 
 ---
 
+### 0c. Never publish partner-program claims unless they are factually true
+
+**Problem:** Public legal/transparency pages stated "As an Amazon Associate..." and implied formal affiliate partnerships that were not actually in place.
+
+**What We Tried:**
+
+- Added broad monetization disclosure copy quickly during a compliance pass.
+- Reused common template language without verifying exact enrollment status.
+
+**What We Learned:**
+
+- False partner-program claims are legal/policy landmines and can undermine trust and approval workflows.
+- Disclosure copy must match the real commercial relationship exactly (for example, referral compensation vs. formal affiliate program enrollment).
+
+**What to Do Instead:**
+
+- Before publishing disclosure text, verify exact status per program:
+  - enrolled vs. not enrolled
+  - referral bonus vs. affiliate commission model
+- Keep explicit truth statements in legal pages (for example, "not part of Amazon Associates" when true).
+- Maintain automated regression tests for forbidden claims in legal/transparency routes.
+
+**Date:** Feb 14, 2026
+
+---
+
 ### 0. Route deletion + stale Next type artifacts
 
 **Problem:** After deleting a route page, `npm run build` failed with type errors from stale generated files under `.next-playwright/types` and `.next/dev/types/app/...`.

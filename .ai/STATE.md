@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 13, 2026 (AdSense compliance refactor shipped: support/legal solicitation purge + privacy disclosures + retailer rel hardening)
+**Last updated:** Feb 14, 2026 (Disclosure truth hardening shipped: removed false Amazon claim + Rakuten referral disclosure guardrails)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,20 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-14 (Disclosure truth hardening - legal/transparency correction):** Removed false partner-program claims and aligned legal disclosures to the actual Rakuten referral model.
+  - **False-claim cleanup completed:**
+    - Removed inaccurate "As an Amazon Associate..." style wording from:
+      - `app/privacy-policy/page.tsx`
+      - `app/terms-of-service/page.tsx`
+      - `app/transparency/page.tsx`
+    - Kept explicit material-connection disclosure for Rakuten referral compensation.
+    - Removed contradictory "not affiliated with Rakuten" phrasing risk.
+  - **Regression guard added:**
+    - `tests/disclosure-claims-accuracy.test.ts` now fails on reintroduced Amazon Associate claims or Rakuten-denial wording and requires Rakuten referral disclosure presence.
+  - **Canonical memory update:**
+    - Added learning `0c` in `.ai/LEARNINGS.md` to prevent future false partner-program disclosures.
+  - **Verification:** `npm run verify:fast` ✅, `npm run e2e:smoke` ✅, `npm run check:docs-governance` ✅, `npm run ai:proof -- dev /privacy-policy /terms-of-service /transparency` ⚠️ screenshots captured; console noise includes pre-existing dev hydration mismatch from global layout scripts.
 
 - **2026-02-13 (Canonical transparency hardening - approval risk reduction):** Closed route-consistency gaps that could weaken policy-review trust signals and added regression protection for legacy trust-route behavior.
   - **Canonical sitemap trust route fixed:**
@@ -30,7 +44,7 @@ Every AI session must update this after meaningful work.
     - Removed donation-only leftover language from active app sources (`app/inside-scoop/page.tsx`, `lib/analytics.ts` legacy event).
   - **Legal content updates completed:**
     - Privacy + Terms now include a `Cookies and Data Collection` section with explicit 2026 Privacy Sandbox/Topics API + Global Privacy Control (GPC) handling text.
-    - Added Amazon Associate disclosure text to privacy and terms pages.
+    - Temporary Amazon disclosure text was added in this pass and later removed on Feb 14, 2026 after factual correction.
     - Confirmed CCPA remains inside Privacy Policy as a sub-section (`/privacy-policy#ccpa`), while footer CCPA link was removed.
   - **Footer/navigation refactor completed:**
     - `components/footer.tsx` Legal area is now a single row: `Privacy Policy | Terms of Service | Contact`.

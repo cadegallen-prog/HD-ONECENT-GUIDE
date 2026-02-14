@@ -7,7 +7,7 @@ import { COMMUNITY_MEMBER_COUNT_DISPLAY } from "@/lib/constants"
 export const metadata: Metadata = {
   title: "Transparency & Funding | PennyCentral",
   description:
-    "Learn how PennyCentral is funded and how advertising and affiliate partnerships support free access.",
+    "Learn how PennyCentral is funded and how advertising plus referral links support free access.",
   alternates: {
     canonical: "/transparency",
   },
@@ -61,15 +61,15 @@ export default function TransparencyPage() {
                 ad exchanges to serve relevant, high-quality advertisements.
               </li>
               <li>
-                <strong>Affiliate Partnerships:</strong> PennyCentral participates in affiliate
-                marketing programs (such as Rakuten). We may earn a commission when users engage
-                with our affiliate or referral links.
+                <strong>Referral Links:</strong> PennyCentral includes a Rakuten referral link. If
+                someone signs up through that link, PennyCentral may receive referral compensation.
               </li>
             </ul>
             <p>
-              <strong>Editorial Integrity:</strong> Our monetization partnerships never influence
-              our deal-finding process. We do not accept payment for favorable placement or reviews.
+              <strong>Editorial Integrity:</strong> Revenue sources never influence our deal-finding
+              process. We do not accept payment for favorable placement or reviews.
             </p>
+            <p>PennyCentral is not part of the Amazon Associates program.</p>
           </section>
         </Prose>
 
@@ -79,8 +79,7 @@ export default function TransparencyPage() {
             Save Money with Rakuten
           </h2>
           <p className="text-[var(--text-secondary)] leading-relaxed mb-3">
-            Get cash back on purchases (including Home Depot) while using a verified affiliate
-            pathway.
+            Get cash back on purchases (including Home Depot) while using our referral link.
           </p>
           <p className="text-[var(--text-secondary)] leading-relaxed mb-3">
             Rakuten is a trusted cash back service used by millions:
@@ -96,7 +95,7 @@ export default function TransparencyPage() {
               </a>
             </Button>
             <p className="text-sm text-[var(--text-muted)]">
-              Affiliate disclosure: we may earn a commission on qualifying referrals.
+              Referral disclosure: we may receive a referral bonus for qualifying signups.
             </p>
           </div>
         </div>
@@ -108,8 +107,8 @@ export default function TransparencyPage() {
             site.
           </p>
           <p>
-            <strong>Affiliate/referral links:</strong> PennyCentral may earn a commission from
-            qualifying referrals (for example, Rakuten). These links will be clearly labeled.
+            <strong>Referral links:</strong> PennyCentral may receive a referral bonus for
+            qualifying signups (for example, Rakuten). These links will be clearly labeled.
           </p>
 
           <h2>Feedback</h2>
