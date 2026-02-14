@@ -29,4 +29,12 @@ test.describe("critical smoke lane", () => {
     await skuInput.fill("1009258127")
     await expect(skuInput).toHaveValue("1009-258-127")
   })
+
+  test("legacy support route resolves to canonical transparency page", async ({ page }) => {
+    await page.goto("/support")
+    await expect(page).toHaveURL(/\/transparency\/?$/)
+    await expect(
+      page.getByRole("heading", { level: 1, name: /Transparency & Funding/i })
+    ).toBeVisible()
+  })
 })

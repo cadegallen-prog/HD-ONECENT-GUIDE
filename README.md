@@ -12,7 +12,7 @@ The official companion site for the "Home Depot One Cent Items" Facebook communi
 - **Penny Guide** — Complete reference on how clearance items reach penny status
 - **Store Finder** — Find nearby Home Depot locations with intelligent search (supports city, state name, ZIP code)
 - **My List** — Save and organize penny finds for your next store run
-- **Support & Cashback** — Transparent funding details + cashback/referral guidance (`/support`)
+- **Transparency & Funding** — Funding/disclosure details plus contact paths (`/transparency`)
 
 ---
 
@@ -172,7 +172,7 @@ app/                    # Pages (App Router)
   lists/                # My List
   guide/                # Penny Guide
   about/                # About
-  support/              # Support + cashback/referral info
+  transparency/         # Transparency/funding disclosures
 components/             # Shared components
 docs/                   # Documentation
   DESIGN-SYSTEM-AAA.md  # Color & typography spec

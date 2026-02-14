@@ -4,6 +4,31 @@
 
 ---
 
+## 2026-02-13 - Codex - Canonical Transparency Hardening (Approval-Risk Reduction)
+
+**Goal:** Strengthen legitimate Google-policy readiness by removing trust-route canonical drift and adding regression coverage around legacy `/support` behavior.
+
+**Status:** ✅ Completed.
+
+### Changes
+
+- Updated sitemap canonical trust route:
+  - `app/sitemap.ts` now lists `/transparency` instead of legacy `/support`.
+- Increased regression coverage for critical route behavior:
+  - `tests/smoke-critical.spec.ts` now asserts `/support` resolves to `/transparency` and loads the expected transparency heading.
+- Locked ad-policy exclusion behavior in tests:
+  - `tests/ads-route-eligibility.test.ts` now explicitly asserts both `/support` and `/transparency` are ad-excluded.
+- Synced top-level docs with current IA:
+  - `README.md` now references Transparency/Funding on `/transparency` (instead of support/cashback wording).
+
+### Verification
+
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅ (4/4 after smoke coverage expansion)
+- `npm run check:docs-governance` ✅
+
+---
+
 ## 2026-02-13 - Codex - AdSense Compliance Refactor (Support/Legal + Retailer Link Hardening)
 
 **Goal:** Execute a high-confidence compliance pass to remove solicitation-policy risk signals and harden legal/trust surfaces for monetization review.
@@ -114,45 +139,5 @@
   - `reports/proof/2026-02-13T13-25-45-product-truth-hardening/`
   - `reports/proof/2026-02-13T13-25-45-product-truth-hardening/console-check.json`
   - Includes light/dark screenshots for `/`, `/about`, `/support`
-
----
-
-## 2026-02-13 - Codex - Plain-English Canon + Policy-Language Remediation
-
-**Goal:** Stop communication ambiguity permanently in canon and implement the next monetization unblock task by rewriting policy-sensitive guide wording.
-
-**Status:** ✅ Completed.
-
-### Changes
-
-- Added persistent plain-English communication rules (canonical, future-session durable):
-  - `AGENTS.md`
-  - `.ai/CONTRACT.md`
-  - `.ai/START_HERE.md`
-  - `.ai/HANDOFF_PROTOCOL.md`
-- Clarified Monumetric "approved by our ad providers" meaning in canon:
-  - Partner-network eligibility signal, not universal AdSense account approval.
-  - Updated in:
-    - `.ai/topics/ADSENSE_APPROVAL_CURRENT.md`
-    - `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`
-- Rewrote policy-sensitive page copy:
-  - `app/in-store-strategy/page.tsx` (removed evasion-like wording; compliance-first language)
-  - `app/inside-scoop/page.tsx` (removed register-log-avoidance phrasing; neutral policy-handling wording)
-  - `app/faq/page.tsx` (replaced "quiet self-checkout" tactical phrasing with normal checkout + final store-decision language)
-- Updated evidence + policy gate artifacts:
-  - `.ai/evidence/adsense/2026-02-13-policy-route-audit.md` (post-remediation pass)
-  - `.ai/topics/MONETIZATION_POLICY_VIOLATION_MATRIX.md`
-  - `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`
-  - `.ai/topics/SITE_MONETIZATION_CURRENT.md`
-  - `.ai/evidence/adsense/README.md`
-
-### Verification
-
-- `npm run check:docs-governance` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `npx playwright test tests/__tmp_policy_copy_proof.spec.ts --project=chromium-desktop-light --workers=1` ✅ (3/3)
-  - Screenshot attachments generated in Playwright report bundle (`reports/playwright/html/data/`, latest hash files).
-- `npm run ai:proof -- test /in-store-strategy /inside-scoop /faq` ❌ (expected fail-fast because no healthy 3002 server was pre-running for that command mode)
 
 ---

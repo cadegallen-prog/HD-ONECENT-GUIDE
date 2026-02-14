@@ -42,6 +42,8 @@ test("returns provider-managed allow policy for guide and utility routes", () =>
 test("returns exclude policy for protected/support/internal surfaces", () => {
   assert.strictEqual(getAdRoutePolicy("/report-find").eligibility, "exclude")
   assert.strictEqual(getAdRoutePolicy("/store-finder").eligibility, "exclude")
+  assert.strictEqual(getAdRoutePolicy("/support").eligibility, "exclude")
+  assert.strictEqual(getAdRoutePolicy("/transparency").eligibility, "exclude")
   assert.strictEqual(getAdRoutePolicy("/api/penny-list").eligibility, "exclude")
   assert.strictEqual(getAdRoutePolicy("/lists/abc123").eligibility, "exclude")
   assert.strictEqual(getAdRoutePolicy("/auth/callback").eligibility, "exclude")

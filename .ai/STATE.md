@@ -12,6 +12,17 @@ Every AI session must update this after meaningful work.
 
 ## Current Sprint (Last 7 Days)
 
+- **2026-02-13 (Canonical transparency hardening - approval risk reduction):** Closed route-consistency gaps that could weaken policy-review trust signals and added regression protection for legacy trust-route behavior.
+  - **Canonical sitemap trust route fixed:**
+    - `app/sitemap.ts` now emits `/transparency` (not legacy `/support`) in the indexed trust/legal set.
+  - **Critical smoke coverage expanded:**
+    - `tests/smoke-critical.spec.ts` now verifies `/support` resolves to `/transparency` and renders the expected transparency heading.
+  - **Ad-exclusion policy assertions strengthened:**
+    - `tests/ads-route-eligibility.test.ts` now explicitly locks `/support` and `/transparency` as ad-excluded routes.
+  - **Top-level IA docs synced:**
+    - `README.md` now references `Transparency & Funding` on `/transparency` to match live route intent.
+  - **Verification:** `npm run verify:fast` ✅, `npm run e2e:smoke` ✅ (4/4), `npm run check:docs-governance` ✅.
+
 - **2026-02-13 (AdSense compliance refactor - support/legal trust hardening):** Executed a compliance-first monetization/legal pass to remove solicitation risk signals and strengthen reviewer-facing trust markers.
   - **Solicitation purge completed:**
     - Removed PayPal/donation solicitation logic and hardcoded `paypal.me/cadegallen` fallback from `/support`.
