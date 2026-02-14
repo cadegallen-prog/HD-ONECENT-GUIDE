@@ -60,10 +60,10 @@ export default function TermsOfServicePage() {
           <h2>Advertising & Referral Links</h2>
           <p>
             The Site may include third-party advertising and referral links (for example, Rakuten).
-            We may earn revenue from ads and may receive referral bonuses from qualifying signups.
-            These third parties are not endorsed by PennyCentral unless explicitly stated.
+            We may earn revenue from ads and may receive referral compensation from qualifying
+            signups completed through our referral links. These third parties are not endorsed by
+            PennyCentral unless explicitly stated.
           </p>
-          <p>PennyCentral is not part of the Amazon Associates program.</p>
 
           <h2>Cookies and Data Collection</h2>
           <p>

@@ -133,9 +133,9 @@ export default function PrivacyPolicyPage() {
       <Section title="Referral Links (Rakuten)">
         <Prose>
           <p>
-            PennyCentral may include referral links, including a link to Rakuten. If you sign up
-            through our Rakuten referral link, we may receive a referral bonus. This helps support
-            site operations at no additional cost to you.
+            PennyCentral may include referral links, including a link to Rakuten. If you use our
+            Rakuten referral link and complete a qualifying signup, we may receive referral
+            compensation. This helps support site operations at no additional cost to you.
           </p>
           <p>
             Our Rakuten referral link is available at{" "}
@@ -144,7 +144,6 @@ export default function PrivacyPolicyPage() {
             </a>
             .
           </p>
-          <p>PennyCentral is not part of the Amazon Associates program.</p>
         </Prose>
       </Section>
 

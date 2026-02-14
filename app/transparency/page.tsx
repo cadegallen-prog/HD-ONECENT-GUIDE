@@ -61,15 +61,15 @@ export default function TransparencyPage() {
                 ad exchanges to serve relevant, high-quality advertisements.
               </li>
               <li>
-                <strong>Referral Links:</strong> PennyCentral includes a Rakuten referral link. If
-                someone signs up through that link, PennyCentral may receive referral compensation.
+                <strong>Referral Links:</strong> PennyCentral includes a Rakuten referral link. If a
+                visitor uses that link and completes a qualifying signup, PennyCentral may receive
+                referral compensation.
               </li>
             </ul>
             <p>
               <strong>Editorial Integrity:</strong> Revenue sources never influence our deal-finding
               process. We do not accept payment for favorable placement or reviews.
             </p>
-            <p>PennyCentral is not part of the Amazon Associates program.</p>
           </section>
         </Prose>
 
@@ -95,7 +95,7 @@ export default function TransparencyPage() {
               </a>
             </Button>
             <p className="text-sm text-[var(--text-muted)]">
-              Referral disclosure: we may receive a referral bonus for qualifying signups.
+              Referral disclosure: we may receive referral compensation for qualifying signups.
             </p>
           </div>
         </div>
@@ -107,7 +107,7 @@ export default function TransparencyPage() {
             site.
           </p>
           <p>
-            <strong>Referral links:</strong> PennyCentral may receive a referral bonus for
+            <strong>Referral links:</strong> PennyCentral may receive referral compensation for
             qualifying signups (for example, Rakuten). These links will be clearly labeled.
           </p>
 

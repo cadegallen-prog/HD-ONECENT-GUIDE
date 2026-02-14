@@ -7,6 +7,10 @@ function readSource(path: string): string {
   return readFileSync(join(process.cwd(), path), "utf8").toLowerCase()
 }
 
+function normalizeWhitespace(input: string): string {
+  return input.replace(/\s+/g, " ").trim()
+}
+
 test("public legal and transparency pages do not claim Amazon Associate status", () => {
   const targets = [
     "app/privacy-policy/page.tsx",
@@ -23,6 +27,10 @@ test("public legal and transparency pages do not claim Amazon Associate status",
     assert.ok(
       !source.includes("amazon associates earns"),
       `${target} must not use Amazon Associates earnings claim`
+    )
+    assert.ok(
+      !source.includes("amazon associates program"),
+      `${target} must not mention Amazon Associates program status`
     )
   }
 })
@@ -56,7 +64,12 @@ test("public legal and transparency pages keep Rakuten referral disclosure", () 
 
   for (const target of targets) {
     const source = readSource(target)
-    assert.ok(source.includes("rakuten"), `${target} must reference Rakuten disclosure`)
-    assert.ok(source.includes("referral"), `${target} must reference referral disclosure`)
+    const normalized = normalizeWhitespace(source)
+    assert.ok(normalized.includes("rakuten"), `${target} must reference Rakuten disclosure`)
+    assert.ok(normalized.includes("referral"), `${target} must reference referral disclosure`)
+    assert.ok(
+      normalized.includes("qualifying signup") || normalized.includes("qualifying signups"),
+      `${target} must specify qualifying-signup condition`
+    )
   }
 })
