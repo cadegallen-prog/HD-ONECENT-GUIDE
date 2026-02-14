@@ -136,7 +136,7 @@ The group is conversation and proof; the site is structured memory and tooling.
 - The guide and tools are stable, fast, mobile‑first (Lighthouse ≥90 mobile).
 - Penny List updates itself from community input with **near‑zero daily founder work**.
 - Returning users from the FB group form a weekly habit.
-- Monetization foundation (BeFrugal + tips) reliably covers hosting.
+- Monetization foundation (Rakuten referrals + optional support) reliably covers hosting.
 
 **Note:** This does not need to be a massive traffic engine to be a success. A smaller core of returning hunters is the realistic target.
 

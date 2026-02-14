@@ -72,6 +72,11 @@ export function Footer() {
                   </Link>
                 </li>
                 <li>
+                  <Link href="/contact" className={navLinkClass}>
+                    Contact
+                  </Link>
+                </li>
+                <li>
                   <Link href="/transparency" className={navLinkClass}>
                     Transparency & Funding
                   </Link>
@@ -87,9 +92,6 @@ export function Footer() {
                 </Link>
                 <Link href="/terms-of-service" className={navLinkClass}>
                   Terms of Service
-                </Link>
-                <Link href="/contact" className={navLinkClass}>
-                  Contact
                 </Link>
               </div>
             </div>

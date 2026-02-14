@@ -4,7 +4,7 @@ $pages = @(
     "/guide",
     "/report-find",
     "/about",
-    "/cashback"
+    "/support"
 )
 
 $printBaseUrl = Join-Path $PSScriptRoot "print-base-url.js"

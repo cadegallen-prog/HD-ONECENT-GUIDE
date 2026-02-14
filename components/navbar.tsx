@@ -3,9 +3,56 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Map, User, Moon, Sun, Book, Menu, X, List, PlusCircle, Heart } from "lucide-react"
+import {
+  Map,
+  User,
+  Moon,
+  Sun,
+  Book,
+  Menu,
+  X,
+  List,
+  PlusCircle,
+  Heart,
+  ChevronDown,
+  CircleHelp,
+  Mail,
+} from "lucide-react"
 import { useTheme } from "@/components/theme-provider"
 import { trackEvent } from "@/lib/analytics"
+
+const guideSectionLinks = [
+  {
+    href: "/what-are-pennies",
+    label: "What Are Penny Items",
+    description: "Foundations, definitions, and what to expect.",
+  },
+  {
+    href: "/clearance-lifecycle",
+    label: "Clearance Lifecycle",
+    description: "Timing patterns and markdown signal quality.",
+  },
+  {
+    href: "/digital-pre-hunt",
+    label: "Digital Pre-Hunt",
+    description: "How to shortlist items before leaving home.",
+  },
+  {
+    href: "/in-store-strategy",
+    label: "In-Store Strategy",
+    description: "Verification, checkout flow, and execution steps.",
+  },
+  {
+    href: "/inside-scoop",
+    label: "Inside Scoop",
+    description: "Operational context and 2026 system changes.",
+  },
+  {
+    href: "/facts-vs-myths",
+    label: "Facts vs. Myths",
+    description: "Common claims tested against real behavior.",
+  },
+]
 
 export function Navbar() {
   const pathname = usePathname()
@@ -18,14 +65,21 @@ export function Navbar() {
   }, [])
 
   const isDark = mounted && document.documentElement.classList.contains("dark")
+  const isGuideRoute = mounted
+    ? pathname === "/guide" ||
+      pathname.startsWith("/guide/") ||
+      guideSectionLinks.some((item) => pathname === item.href)
+    : false
 
   const navItems = [
     { href: "/penny-list", label: "Penny List", icon: List },
     { href: "/lists", label: "My List", icon: Heart },
     { href: "/report-find", label: "Report a Find", icon: PlusCircle },
-    { href: "/guide", label: "Guide", icon: Book },
+    { href: "/guide", label: "Guide", icon: Book, hasDropdown: true },
+    { href: "/faq", label: "FAQ", icon: CircleHelp },
     { href: "/store-finder", label: "Store Finder", icon: Map },
     { href: "/about", label: "About", icon: User },
+    { href: "/contact", label: "Contact", icon: Mail },
   ]
 
   return (
@@ -52,8 +106,65 @@ export function Navbar() {
                 const isActive = mounted
                   ? item.href === "/lists"
                     ? pathname === "/lists" || pathname.startsWith("/lists/")
-                    : pathname === item.href
+                    : item.href === "/guide"
+                      ? isGuideRoute
+                      : pathname === item.href
                   : false
+
+                if (item.hasDropdown) {
+                  return (
+                    <div key={item.href} className="relative group">
+                      <Link
+                        href={item.href}
+                        className={`
+                          inline-flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-150
+                          ${
+                            isActive
+                              ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
+                              : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-elevated)]"
+                          }
+                        `}
+                      >
+                        {item.label}
+                        <ChevronDown size={14} strokeWidth={2} className="mt-[1px]" />
+                      </Link>
+
+                      <div className="pointer-events-none invisible absolute left-0 top-full z-50 w-[22rem] pt-2 opacity-0 translate-y-1 transition-all duration-150 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-0 group-focus-within:pointer-events-auto">
+                        <div className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-2 shadow-[var(--shadow-card)]">
+                          <Link
+                            href="/guide"
+                            className="block rounded-md px-3 py-2 text-sm font-semibold text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]"
+                          >
+                            Complete Guide Hub
+                          </Link>
+                          <div className="my-1 border-t border-[var(--border-default)]" />
+                          {guideSectionLinks.map((section) => {
+                            const sectionActive = mounted ? pathname === section.href : false
+                            return (
+                              <Link
+                                key={section.href}
+                                href={section.href}
+                                className={`block rounded-md px-3 py-2 transition-colors ${
+                                  sectionActive
+                                    ? "bg-[var(--bg-elevated)]"
+                                    : "hover:bg-[var(--bg-elevated)]"
+                                }`}
+                              >
+                                <p className="text-sm font-medium text-[var(--text-primary)]">
+                                  {section.label}
+                                </p>
+                                <p className="mt-0.5 text-xs text-[var(--text-muted)]">
+                                  {section.description}
+                                </p>
+                              </Link>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  )
+                }
+
                 return (
                   <Link
                     key={item.href}
@@ -117,8 +228,56 @@ export function Navbar() {
                 const isActive = mounted
                   ? item.href === "/lists"
                     ? pathname === "/lists" || pathname.startsWith("/lists/")
-                    : pathname === item.href
+                    : item.href === "/guide"
+                      ? isGuideRoute
+                      : pathname === item.href
                   : false
+
+                if (item.hasDropdown) {
+                  return (
+                    <div key={item.href}>
+                      <Link
+                        href={item.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={`
+                          flex items-center gap-3 px-4 py-3.5 min-h-[48px] rounded-lg text-base font-medium transition-all duration-150
+                          ${
+                            isActive
+                              ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
+                              : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-elevated)] active:bg-[var(--bg-elevated)]"
+                          }
+                        `}
+                      >
+                        <Icon size={20} strokeWidth={1.5} />
+                        <span>{item.label}</span>
+                      </Link>
+
+                      <div className="ml-10 mt-1 mb-2 space-y-1 border-l border-[var(--border-default)] pl-3">
+                        {guideSectionLinks.map((section) => {
+                          const sectionActive = mounted ? pathname === section.href : false
+                          return (
+                            <Link
+                              key={section.href}
+                              href={section.href}
+                              onClick={() => setMobileMenuOpen(false)}
+                              className={`
+                                flex items-center min-h-[44px] rounded-md px-3 py-2 text-sm transition-colors
+                                ${
+                                  sectionActive
+                                    ? "bg-[var(--bg-elevated)] text-[var(--text-primary)]"
+                                    : "text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]"
+                                }
+                              `}
+                            >
+                              {section.label}
+                            </Link>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  )
+                }
+
                 return (
                   <Link
                     key={item.href}

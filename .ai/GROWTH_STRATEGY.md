@@ -45,7 +45,7 @@
 | **Better SEO**          | Rank higher on Google searches     | 7/10 - Good foundation, needs optimization             |
 | **Lower Bounce Rate**   | People staying instead of leaving  | Need engagement features                               |
 | **More Time on Site**   | People exploring multiple pages    | Internal linking exists, needs improvement             |
-| **Passive Income**      | Money coming in without daily work | BeFrugal only, untapped potential                      |
+| **Passive Income**      | Money coming in without daily work | Rakuten + optional support flow, still expandable      |
 | **Hands-Off Operation** | Minimal maintenance required       | Mostly automated, quality gates in place               |
 
 ---
@@ -62,13 +62,13 @@
 
 ### Critical Gaps
 
-| Area            | Score | Gap                                      |
-| --------------- | ----- | ---------------------------------------- |
-| SEO Foundation  | 7/10  | 11 pages missing metadata (FIXED Dec 16) |
-| Social Sharing  | 3/10  | No OG images, no share buttons           |
-| Email Capture   | 2/10  | ConvertKit exists but completely hidden  |
-| Monetization    | 5/10  | BeFrugal only, untapped potential        |
-| User Engagement | 6/10  | Good tools, missing "stickiness"         |
+| Area            | Score | Gap                                            |
+| --------------- | ----- | ---------------------------------------------- |
+| SEO Foundation  | 7/10  | 11 pages missing metadata (FIXED Dec 16)       |
+| Social Sharing  | 3/10  | No OG images, no share buttons                 |
+| Email Capture   | 2/10  | ConvertKit exists but completely hidden        |
+| Monetization    | 5/10  | Rakuten + optional support, untapped potential |
+| User Engagement | 6/10  | Good tools, missing "stickiness"               |
 
 ---
 
@@ -177,11 +177,11 @@
 
 #### 🔴 HIGH PRIORITY - Be Tasteful
 
-| Task                       | Tasteful? | Why                                         |
-| -------------------------- | --------- | ------------------------------------------- |
-| Penny Hunting Gear page    | ✅ Yes    | Genuine recommendations only                |
-| Amazon Associates          | ✅ Yes    | Helpful if someone wants full-price version |
-| Expand BeFrugal visibility | ✅ Yes    | Already doing this well                     |
+| Task                      | Tasteful? | Why                                         |
+| ------------------------- | --------- | ------------------------------------------- |
+| Penny Hunting Gear page   | ✅ Yes    | Genuine recommendations only                |
+| Amazon Associates         | ✅ Yes    | Helpful if someone wants full-price version |
+| Expand Rakuten visibility | ✅ Yes    | Already doing this well                     |
 
 #### 🟡 MEDIUM PRIORITY
 

@@ -70,12 +70,6 @@ const guideJsonLd = {
         name: "Facts vs. Myths",
         url: "https://www.pennycentral.com/facts-vs-myths",
       },
-      {
-        "@type": "ListItem",
-        position: 7,
-        name: "FAQ & Quick Reference",
-        url: "https://www.pennycentral.com/faq",
-      },
     ],
   },
 }
@@ -133,6 +127,11 @@ const utilityLinks = [
     href: "/store-finder",
     label: "Store Finder",
     note: "Set the right store before researching or scanning.",
+  },
+  {
+    href: "/faq",
+    label: "FAQ & Quick Reference",
+    note: "Fast answers without digging through full chapters.",
   },
   {
     href: "/transparency",
@@ -227,7 +226,8 @@ export default function GuideHubPage() {
             You should expect each chapter to answer one core question, not ten loosely connected
             ones. Chapter 1 explains what penny items are and why they exist. Chapter 2 explains
             cadence and signal quality. Chapters 3 and 4 convert theory into execution. Chapters 5
-            through 7 handle deeper context, myth correction, and rapid operational answers.
+            and 6 handle deeper context and myth correction, while the separate FAQ page covers
+            rapid operational answers.
           </p>
         </section>
 

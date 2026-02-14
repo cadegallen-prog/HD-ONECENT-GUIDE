@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 14, 2026 (Disclosure truth hardening shipped: removed false Amazon claim + Rakuten referral disclosure guardrails)
+**Last updated:** Feb 14, 2026 (Header navigation IA shipped: Guide dropdown + FAQ/Contact top-level links)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,19 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-14 (Header IA/navigation upgrade - guide discoverability + FAQ placement):** Updated the global header so users can jump directly to guide chapters and reach FAQ/Contact without extra page hops.
+  - **Header UX changes shipped:**
+    - `components/navbar.tsx` now includes a desktop **Guide dropdown** with direct chapter links.
+    - Added top-level **FAQ** (`/faq`) and **Contact** (`/contact`) links to the primary header navigation.
+    - Mobile menu now includes quick-access guide section links under `Guide`.
+  - **Quick-nav consistency shipped:**
+    - `components/command-palette.tsx` moves `FAQ` from the `Guide` group to `More` and adds `Contact` to `More`.
+  - **FAQ de-integration shipped:**
+    - `components/guide/TableOfContents.tsx` removes FAQ from chapter cards.
+    - `app/guide/page.tsx` removes FAQ from chapter JSON-LD and treats FAQ as a separate utility route.
+    - `app/faq/page.tsx` breadcrumb/schema now represent FAQ as a standalone page (`Home > FAQ`).
+  - **Verification:** `npm run verify:fast` ✅, `npm run e2e:smoke` ✅, `npm run ai:proof -- test / /guide /faq /contact` ✅ (`reports/proof/2026-02-14T09-06-43/`, no console errors).
 
 - **2026-02-14 (Disclosure truth hardening - legal/transparency correction):** Removed false partner-program claims and aligned legal disclosures to the actual Rakuten referral model.
   - **False-claim cleanup completed:**

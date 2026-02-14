@@ -245,6 +245,12 @@ const checkProductTruthDrift = () => {
     /\b62K\+/i,
     /\b62,000\+/i,
   ]
+  const staleAffiliatePatterns = [
+    /app\/cashback\//i,
+    /SupportAndCashbackCard\.tsx/i,
+    /\*\*Cashback \(Affiliate\)\*\*/i,
+    /BeFrugal affiliate link for site monetization/i,
+  ]
 
   for (const relativePath of activeFiles) {
     const text = readText(relativePath)
@@ -255,6 +261,12 @@ const checkProductTruthDrift = () => {
     for (const pattern of staleMemberPatterns) {
       if (pattern.test(text)) {
         addError(category, `${relativePath} still contains stale member-count token: ${pattern}`)
+      }
+    }
+
+    for (const pattern of staleAffiliatePatterns) {
+      if (pattern.test(text)) {
+        addError(category, `${relativePath} still contains stale affiliate/cashback token: ${pattern}`)
       }
     }
   }
@@ -300,7 +312,9 @@ const run = () => {
   notes.push("No read-order drift detected in entrypoint docs.")
   notes.push("No stale architecture claims detected in canonical operational docs.")
   notes.push("No duplicate secondary-policy definitions detected.")
-  notes.push("No deprecated Trip Tracker or stale member-count drift detected in active docs/tooling.")
+  notes.push(
+    "No deprecated Trip Tracker, stale member-count, or stale affiliate/cashback drift detected in active docs/tooling."
+  )
 
   console.log("Governance drift check passed.")
   for (const note of notes) {

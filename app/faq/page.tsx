@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
-import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
 import { RouteAdSlots } from "@/components/ads/route-ad-slots"
 
@@ -181,13 +180,7 @@ export default function FAQPage() {
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: "https://www.pennycentral.com" },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Guide",
-        item: "https://www.pennycentral.com/guide",
-      },
-      { "@type": "ListItem", position: 3, name: "FAQ & Quick Reference" },
+      { "@type": "ListItem", position: 2, name: "FAQ & Quick Reference" },
     ],
   }
 
@@ -211,10 +204,6 @@ export default function FAQPage() {
           <nav aria-label="Breadcrumb" className="mb-3 text-sm text-[var(--text-muted)]">
             <a href="/" className="hover:text-[var(--cta-primary)]">
               Home
-            </a>
-            <span className="mx-1.5">/</span>
-            <a href="/guide" className="hover:text-[var(--cta-primary)]">
-              Guide
             </a>
             <span className="mx-1.5">/</span>
             <span className="text-[var(--text-secondary)]">FAQ & Quick Reference</span>
@@ -517,14 +506,6 @@ export default function FAQPage() {
               ))}
             </ul>
           </Prose>
-
-          <ChapterNavigation
-            prev={{
-              slug: "facts-vs-myths",
-              title: "Facts vs. Myths",
-            }}
-            next={undefined}
-          />
         </Section>
       </PageShell>
     </>

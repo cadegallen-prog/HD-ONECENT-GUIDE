@@ -58,5 +58,11 @@
   "github.copilot.chat.anthropic.thinking.budgetTokens": 32000,
   "chat.customAgentInSubagent.enabled": true,
   "github.copilot.chat.searchSubagent.enabled": true,
-  "chat.agent.thinking.collapsedTools": "off"
+  "chat.agent.thinking.collapsedTools": "off",
+  "chat.mcp.gallery.enabled": true,
+  "chat.agent.maxRequests": 100,
+  "chat.experimental.useSkillAdherencePrompt": true,
+  "chat.mcp.assisted.nuget.enabled": true,
+  "chat.tips.enabled": true,
+  "chat.useNestedAgentsMdFiles": true
 }

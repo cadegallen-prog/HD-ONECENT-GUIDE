@@ -417,13 +417,13 @@ npm start  # If start script exists, else deploy to Vercel
 - Theme persists across pages
 - Respects OS preference if no localStorage
 
-#### 8.4 Affiliate Links (BeFrugal)
+#### 8.4 Affiliate Links (Rakuten)
 
 **Test scenarios:**
 
 ```
-1. Navigate to /cashback
-2. Click "Activate Cashback" button
+1. Navigate to /support
+2. Click "Sign Up for Rakuten" button
 3. Verify:
    - Opens in new tab (target="_blank")
    - URL includes affiliate tracking
@@ -440,10 +440,10 @@ npm start  # If start script exists, else deploy to Vercel
 **Expected behavior:**
 
 - Link opens in new tab
-- URL: /go/befrugal with proper redirect
+- URL: /go/rakuten with proper redirect
 - No CORS errors (link is <a>, not fetch)
 - Analytics tracks click
-- User lands on BeFrugal.com
+- User lands on Rakuten.com
 
 ---
 

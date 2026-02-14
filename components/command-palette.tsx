@@ -14,6 +14,7 @@ import {
   AlertCircle,
   Users,
   Heart,
+  Mail,
 } from "lucide-react"
 
 interface CommandPaletteProps {
@@ -31,14 +32,15 @@ const pages = [
   { icon: Map, label: "In-Store Strategies", path: "/in-store-strategy", group: "Guide" },
   { icon: ShoppingCart, label: "Inside Scoop", path: "/inside-scoop", group: "Guide" },
   { icon: AlertCircle, label: "Facts vs Myths", path: "/facts-vs-myths", group: "Guide" },
-  { icon: CircleHelp, label: "FAQ", path: "/faq", group: "Guide" },
   // Tools (actual pages)
   { icon: Users, label: "Community Penny List", path: "/penny-list", group: "Tools" },
   { icon: FileText, label: "Report a Find", path: "/report-find", group: "Tools" },
   { icon: Heart, label: "My List", path: "/lists", group: "Tools" },
   { icon: Map, label: "Store Finder", path: "/store-finder", group: "Tools" },
   // More
+  { icon: CircleHelp, label: "FAQ", path: "/faq", group: "More" },
   { icon: Info, label: "About", path: "/about", group: "More" },
+  { icon: Mail, label: "Contact", path: "/contact", group: "More" },
 ]
 
 export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
