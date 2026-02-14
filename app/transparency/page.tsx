@@ -1,13 +1,12 @@
 import Link from "next/link"
 import type { Metadata } from "next"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
-import { Button } from "@/components/ui/button"
 import { COMMUNITY_MEMBER_COUNT_DISPLAY } from "@/lib/constants"
 
 export const metadata: Metadata = {
   title: "Transparency & Funding | PennyCentral",
   description:
-    "Learn how PennyCentral is funded and how advertising plus referral links support free access.",
+    "How PennyCentral is funded and how editorial independence is protected for the community.",
   alternates: {
     canonical: "/transparency",
   },
@@ -40,81 +39,43 @@ export default function TransparencyPage() {
         title="Transparency & Funding"
         subtitle={
           <>
-            PennyCentral is free to use. No paywalls, no subscriptions, and no premium tier required
-            to access the core tools for the <strong>{COMMUNITY_MEMBER_COUNT_DISPLAY}</strong>{" "}
+            PennyCentral is free to use for the <strong>{COMMUNITY_MEMBER_COUNT_DISPLAY}</strong>{" "}
             member community.
           </>
         }
       />
 
       <Section>
-        <Prose className="mb-12">
-          <section className="monetization-transparency">
-            <h2>PennyCentral Funding & Editorial Disclosure</h2>
-            <p>
-              To ensure PennyCentral remains a 100% free resource for the deal-hunting community, we
-              utilize a professional commercial revenue model. Our operations are funded via:
-            </p>
-            <ul>
-              <li>
-                <strong>Display Advertising:</strong> We utilize Google Ad Manager and third-party
-                ad exchanges to serve relevant, high-quality advertisements.
-              </li>
-              <li>
-                <strong>Referral Links:</strong> PennyCentral includes a Rakuten referral link. If a
-                visitor uses that link and completes a qualifying signup, PennyCentral may receive
-                referral compensation.
-              </li>
-            </ul>
-            <p>
-              <strong>Editorial Integrity:</strong> Revenue sources never influence our deal-finding
-              process. We do not accept payment for favorable placement or reviews.
-            </p>
-          </section>
-        </Prose>
-
-        {/* Rakuten highlight card */}
-        <div className="p-6 sm:p-8 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-lg">
-          <h2 className="text-2xl font-semibold text-[var(--text-primary)] mb-4">
-            Save Money with Rakuten
-          </h2>
-          <p className="text-[var(--text-secondary)] leading-relaxed mb-3">
-            Get cash back on purchases (including Home Depot) while using our referral link.
-          </p>
-          <p className="text-[var(--text-secondary)] leading-relaxed mb-3">
-            Rakuten is a trusted cash back service used by millions:
-          </p>
-          <ul className="list-disc pl-5 space-y-1.5 mb-6 text-[var(--text-secondary)]">
-            <li>Earn up to 10%+ back at thousands of stores</li>
-            <li>$30 welcome bonus after a small qualifying spend</li>
-          </ul>
-          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-            <Button asChild variant="primary" size="lg">
-              <a href="/go/rakuten" target="_blank" rel="nofollow sponsored noopener noreferrer">
-                Sign Up for Rakuten →
-              </a>
-            </Button>
-            <p className="text-sm text-[var(--text-muted)]">
-              Referral disclosure: we may receive referral compensation for qualifying signups.
-            </p>
-          </div>
-        </div>
-
         <Prose className="[&_h2]:mt-8 [&_h2:first-of-type]:mt-0">
-          <h2>Disclosures</h2>
+          <h2>How the Site Is Funded</h2>
+          <p>PennyCentral may generate revenue through:</p>
+          <ul>
+            <li>Display advertising</li>
+            <li>Referral or affiliate links on selected outbound pages</li>
+          </ul>
+
+          <h2>What This Means for You</h2>
           <p>
-            <strong>Advertising:</strong> PennyCentral may earn revenue from ads displayed on the
-            site.
+            We do not charge users for core tools. Revenue helps cover hosting, operations, and
+            ongoing product maintenance.
           </p>
           <p>
-            <strong>Referral links:</strong> PennyCentral may receive referral compensation for
-            qualifying signups (for example, Rakuten). These links will be clearly labeled.
+            Editorial decisions are independent. We do not sell placement in the Penny List and do
+            not accept payment to manipulate ranking or visibility of reported items.
           </p>
 
-          <h2>Feedback</h2>
+          <h2>Disclosure Promise</h2>
           <p>
-            If something breaks or looks off, report it here:{" "}
-            <a href="mailto:contact@pennycentral.com">contact@pennycentral.com</a>
+            If a link may generate referral compensation, we disclose that relationship in context.
+            This includes Rakuten referral links where PennyCentral may earn compensation for
+            qualifying signups. We keep disclosure language straightforward and avoid promotional
+            pressure in trust/legal surfaces.
+          </p>
+
+          <h2>Questions or Concerns</h2>
+          <p>
+            If any monetization or disclosure language feels unclear, contact us at{" "}
+            <a href="mailto:contact@pennycentral.com">contact@pennycentral.com</a>.
           </p>
 
           <div className="mt-6">

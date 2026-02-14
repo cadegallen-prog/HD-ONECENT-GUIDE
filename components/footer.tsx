@@ -93,6 +93,9 @@ export function Footer() {
                 <Link href="/terms-of-service" className={navLinkClass}>
                   Terms of Service
                 </Link>
+                <Link href="/do-not-sell-or-share" className={navLinkClass}>
+                  Do Not Sell or Share
+                </Link>
               </div>
             </div>
           </div>

@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 14, 2026 (Header navigation IA shipped: Guide dropdown + FAQ/Contact top-level links)
+**Last updated:** Feb 14, 2026 (Trust UX PR conflicts resolved; merge-ready verification complete)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -12,18 +12,37 @@ Every AI session must update this after meaningful work.
 
 ## Current Sprint (Last 7 Days)
 
-- **2026-02-14 (Header IA/navigation upgrade - guide discoverability + FAQ placement):** Updated the global header so users can jump directly to guide chapters and reach FAQ/Contact without extra page hops.
-  - **Header UX changes shipped:**
-    - `components/navbar.tsx` now includes a desktop **Guide dropdown** with direct chapter links.
-    - Added top-level **FAQ** (`/faq`) and **Contact** (`/contact`) links to the primary header navigation.
-    - Mobile menu now includes quick-access guide section links under `Guide`.
-  - **Quick-nav consistency shipped:**
-    - `components/command-palette.tsx` moves `FAQ` from the `Guide` group to `More` and adds `Contact` to `More`.
-  - **FAQ de-integration shipped:**
-    - `components/guide/TableOfContents.tsx` removes FAQ from chapter cards.
-    - `app/guide/page.tsx` removes FAQ from chapter JSON-LD and treats FAQ as a separate utility route.
-    - `app/faq/page.tsx` breadcrumb/schema now represent FAQ as a standalone page (`Home > FAQ`).
-  - **Verification:** `npm run verify:fast` ✅, `npm run e2e:smoke` ✅, `npm run ai:proof -- test / /guide /faq /contact` ✅ (`reports/proof/2026-02-14T09-06-43/`, no console errors).
+- **2026-02-14 (PR conflict resolution + merge completion for trust UX):** Cleared unresolved merge conflicts and finalized trust/legal UX changes with full-lane verification.
+  - **Conflict resolution completed:**
+    - Resolved `.ai/STATE.md`, `app/faq/page.tsx`, `components/footer.tsx`, and `components/navbar.tsx`.
+    - Restored staged-but-missing trust files (`/do-not-sell-or-share`, legal backlink component, and trust/sitemap docs skills assets).
+  - **Behavior alignment completed:**
+    - Preserved current header IA (Guide dropdown + FAQ/Contact).
+    - Kept trust UX updates (email-only privacy request flow + calmer transparency).
+    - Added legal footer access to `/do-not-sell-or-share`.
+  - **Regression/test alignment completed:**
+    - Restored explicit Rakuten referral + qualifying-signup language in legal/transparency pages.
+    - Added privacy rights deep-link anchor (`#ccpa`).
+    - Updated legal/trust Playwright specs to match current approved copy.
+  - **Verification:** `npm run verify:fast` ✅, `npm run e2e:smoke` ✅, `npm run e2e:full` ✅ (172 passed).
+
+- **2026-02-14 (Founder-feedback refinement pass):** Reduced compliance/monetization copy friction and simplified privacy rights UX.
+  - `/do-not-sell-or-share` now uses an email-only request path (no inline form).
+  - `/transparency` rewritten to factual disclosure style without promotional/referral push blocks.
+  - Added `docs/skills/solo-dev-ads-approval-triage.md` for repeatable, lower-stress domain-approval troubleshooting.
+  - Verification: lint ✅, typecheck ✅, targeted route/sitemap tests ✅, verify/smoke blockers documented.
+
+- **2026-02-14 (Legal/IA implementation pass from founder feedback):** Replaced docs-only output with direct app-route implementation and navigation updates.
+  - Rewrote live trust/legal page content for `/privacy-policy`, `/terms-of-service`, `/about`, `/faq`, and `/contact` with cleaner structure, clearer disclaimers, and future-dated update stamps.
+  - Added first-party `/do-not-sell-or-share` route with CCPA/CPRA request form and supplemental industry links.
+  - Added reusable `← Back to Penny List` pattern on trust/legal pages via `components/legal-back-link.tsx`.
+  - Updated header/footer IA and sitemap coverage for trust pages; added ad-exclusion policy coverage for `/do-not-sell-or-share` route.
+  - Verification: `npm run lint` ✅, `npm run typecheck` ✅, targeted tests (`ads-route-eligibility` + `sitemap-canonical`) ✅, `npm run e2e:smoke` ⚠️ failed due missing local Playwright browser binary in this environment, Playwright screenshots captured via MCP browser tool.
+
+- **2026-02-14 (Sitemap + legal trust package authored):** Produced a complete implementation-ready blueprint that turns unstructured competitor notes into a structured PennyCentral package.
+  - Added `docs/sitemap-legal-masterpiece.md` with clean URL architecture, non-redundant header/footer IA, retention guidance, no-ads-on-legal recommendation, sitemap code blueprint, and full draft copy for Privacy, Terms, About, FAQ, and Contact plus a first-party `/do-not-sell-or-share` mechanism.
+  - Added reusable skill `docs/skills/legal-sitemap-trust-pages.md` and registered it in `docs/skills/README.md` for faster repeat execution in future sessions.
+  - Verification: docs/memory updates only (no runtime code path changed).
 
 - **2026-02-14 (Disclosure truth hardening - legal/transparency correction):** Removed false partner-program claims and aligned legal disclosures to the actual Rakuten referral model.
   - **False-claim cleanup completed:**

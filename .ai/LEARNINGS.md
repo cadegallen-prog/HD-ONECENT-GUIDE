@@ -617,3 +617,10 @@ export const metadata: Metadata = {
 ---
 
 **For full learning history:** See `archive/learnings-history/LEARNINGS_full_2024-2025.md`
+
+## 0d) Local Playwright smoke can fail in Codex runtime when browser binaries are absent
+
+- **Problem hit:** `npm run e2e:smoke` failed because Playwright test runner could not find `chromium_headless_shell` in `/root/.cache/ms-playwright/...`.
+- **What we tried:** Ran the normal smoke command after successful build.
+- **What we learned:** In this environment, app build can pass while Playwright e2e still fails due to missing local browser install; this is an environment dependency issue, not always an app regression.
+- **What to do instead:** Report the limitation transparently, run lint/typecheck + targeted unit tests, and capture UI proof using `mcp__browser_tools__run_playwright_script` when available.

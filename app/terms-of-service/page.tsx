@@ -1,9 +1,11 @@
 import type { Metadata } from "next"
+import { LegalBackLink } from "@/components/legal-back-link"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
 
 export const metadata: Metadata = {
   title: "Terms of Service | PennyCentral",
-  description: "Terms of service for PennyCentral.com.",
+  description:
+    "Terms governing use of PennyCentral, including real-time deal-data disclaimers, affiliate disclosures, and liability limits.",
   alternates: {
     canonical: "/terms-of-service",
   },
@@ -15,90 +17,133 @@ export const metadata: Metadata = {
     type: "article",
     url: "https://www.pennycentral.com/terms-of-service",
     title: "Terms of Service | PennyCentral",
-    description: "Terms of service for PennyCentral.com.",
+    description: "Terms governing the use of PennyCentral.",
   },
 }
 
 export default function TermsOfServicePage() {
   return (
     <PageShell width="default">
+      <LegalBackLink />
+
       <PageHeader
         title="Terms of Service"
         subtitle={
           <>
-            <strong>Effective date:</strong> January 28, 2026
+            <strong>Last Updated:</strong> March 1, 2026
           </>
         }
       />
 
-      <Section>
+      <Section title="1) Acceptance of Terms">
         <Prose>
           <p>
-            By using PennyCentral.com (the “Site”), you agree to these Terms of Service. If you do
-            not agree, please do not use the Site.
+            By using PennyCentral, you agree to these Terms of Service. If you do not agree, please
+            do not use the site.
           </p>
+        </Prose>
+      </Section>
 
-          <h2>Site Use</h2>
+      <Section title="2) Service Description">
+        <Prose>
           <p>
-            PennyCentral is provided for informational purposes only. Finds are community-sourced
-            and not guaranteed. Always verify pricing and availability in-store.
+            PennyCentral is an informational aggregator and community utility focused on markdown
+            and penny-item intelligence.
           </p>
-          <p>
-            You agree not to misuse the Site, including attempting to interfere with the Site’s
-            operation, access restricted areas, or scrape the Site in a way that degrades
-            performance.
-          </p>
+          <ul>
+            <li>We do not sell products.</li>
+            <li>We do not process customer transactions.</li>
+            <li>We do not control retailer pricing, stock, or policy decisions.</li>
+          </ul>
+        </Prose>
+      </Section>
 
-          <h2>Submissions</h2>
+      <Section title="3) Accuracy and Availability Disclaimer">
+        <Prose>
           <p>
-            If you submit information (such as reporting a find), you grant PennyCentral a
-            non-exclusive, worldwide, royalty-free license to use, reproduce, and display that
-            content to operate and improve the Site. You represent that you have the right to submit
-            the information you provide.
+            Pricing and inventory data can become outdated quickly and may be delayed, incomplete,
+            or inaccurate.
           </p>
+          <p>
+            You are responsible for confirming price, availability, and purchase terms directly with
+            the retailer before making travel or buying decisions.
+          </p>
+        </Prose>
+      </Section>
 
-          <h2>Advertising & Referral Links</h2>
-          <p>
-            The Site may include third-party advertising and referral links (for example, Rakuten).
-            We may earn revenue from ads and may receive referral compensation from qualifying
-            signups completed through our referral links. These third parties are not endorsed by
-            PennyCentral unless explicitly stated.
-          </p>
+      <Section title="4) User Responsibilities">
+        <Prose>
+          <ul>
+            <li>Use the service lawfully and respectfully.</li>
+            <li>Do not scrape, reverse engineer, or abuse site systems.</li>
+            <li>Do not submit intentionally false or misleading reports.</li>
+            <li>Follow local laws and individual store policies during purchases.</li>
+          </ul>
+        </Prose>
+      </Section>
 
-          <h2>Cookies and Data Collection</h2>
+      <Section title="5) Affiliate and Third-Party Services">
+        <Prose>
           <p>
-            PennyCentral is fully compliant with 2026 privacy standards, including the Google
-            Privacy Sandbox and Topics API. We prioritize user privacy by honoring Global Privacy
-            Control (GPC) signals. If your browser broadcasts a GPC signal, we automatically treat
-            this as an &quot;Opt-Out of Sale/Sharing&quot; request for all personal data.
+            Some outbound links may be affiliate links, including Rakuten referral links.
+            PennyCentral may receive referral compensation from qualifying signups.
           </p>
+          <p>
+            Third-party websites, promotions, and advertisers have their own terms and privacy
+            practices, which are outside our control.
+          </p>
+        </Prose>
+      </Section>
 
-          <h2>Disclaimers</h2>
+      <Section title="6) Limitation of Liability">
+        <Prose>
           <p>
-            PennyCentral is not affiliated with The Home Depot. The Site is provided “as is” and “as
-            available” without warranties of any kind, express or implied.
+            To the fullest extent permitted by law, PennyCentral is not liable for direct, indirect,
+            incidental, consequential, special, or punitive damages arising from your use of the
+            service.
           </p>
-          <p>
-            To the fullest extent permitted by law, PennyCentral will not be liable for any
-            indirect, incidental, consequential, special, or exemplary damages arising from or
-            related to your use of the Site.
-          </p>
+          <p>This includes losses related to:</p>
+          <ul>
+            <li>Outdated or inaccurate pricing/inventory information</li>
+            <li>Store refusal to honor markdowns</li>
+            <li>Travel costs, missed opportunities, or reliance on displayed data</li>
+          </ul>
+        </Prose>
+      </Section>
 
-          <h2>Changes</h2>
+      <Section title="7) Intellectual Property">
+        <Prose>
           <p>
-            We may update these terms from time to time. We will update the effective date at the
-            top of this page when changes are made.
+            Site content, software, and design are owned by PennyCentral or its licensors and are
+            protected by law. Unauthorized copying, scraping, or redistribution is prohibited.
           </p>
+        </Prose>
+      </Section>
 
-          <h2>Governing Law</h2>
-          <p>These terms are governed by the laws of the United States and the State of Georgia.</p>
-
-          <h2>Contact</h2>
+      <Section title="8) Changes to Terms">
+        <Prose>
           <p>
-            Questions about these terms? Email{" "}
-            <a href="mailto:contact@pennycentral.com">contact@pennycentral.com</a>.
+            We may update these terms at any time. Continued use after updates are posted
+            constitutes acceptance of the revised terms.
           </p>
-          <p className="text-sm text-[var(--text-muted)]">Last updated: January 28, 2026</p>
+        </Prose>
+      </Section>
+
+      <Section title="9) Governing Law">
+        <Prose>
+          <p>
+            These terms are governed by applicable United States and state law, without regard to
+            conflict-of-law rules.
+          </p>
+        </Prose>
+      </Section>
+
+      <Section title="10) Contact">
+        <Prose>
+          <p>
+            Questions about these terms:{" "}
+            <a href="mailto:contact@pennycentral.com">contact@pennycentral.com</a>
+          </p>
         </Prose>
       </Section>
     </PageShell>

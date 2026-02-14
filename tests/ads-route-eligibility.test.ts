@@ -48,6 +48,7 @@ test("returns exclude policy for protected/support/internal surfaces", () => {
   assert.strictEqual(getAdRoutePolicy("/lists/abc123").eligibility, "exclude")
   assert.strictEqual(getAdRoutePolicy("/auth/callback").eligibility, "exclude")
   assert.strictEqual(getAdRoutePolicy("/privacy-policy").eligibility, "exclude")
+  assert.strictEqual(getAdRoutePolicy("/do-not-sell-or-share").eligibility, "exclude")
 })
 
 test("defaults unknown routes to provider-managed allow", () => {

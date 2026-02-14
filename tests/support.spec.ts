@@ -9,10 +9,10 @@ test("legacy support route redirects to transparency and retains disclosures", a
     page.getByRole("heading", { level: 1, name: /Transparency & Funding/i })
   ).toBeVisible()
 
-  const rakutenCta = page.getByRole("link", { name: /Sign Up for Rakuten/i })
-  await expect(rakutenCta).toHaveAttribute("href", "/go/rakuten")
-
   const pageContent = page.locator("main#main-content")
+  await expect(pageContent).toContainText(/Rakuten/i)
+  await expect(pageContent).toContainText(/qualifying signups/i)
+  await expect(page.getByRole("link", { name: /Contact Us/i })).toHaveAttribute("href", "/contact")
   await expect(pageContent).not.toContainText(/befrugal/i)
   await expect(pageContent.locator('a[href="/cashback"]')).toHaveCount(0)
 })

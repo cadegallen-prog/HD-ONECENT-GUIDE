@@ -9,6 +9,8 @@ Short, task-focused guides to avoid repo-wide searching.
 
 ## Skills
 
+- [solo-dev-ads-approval-triage](./solo-dev-ads-approval-triage.md) — **When to use:** You want a low-stress, repeatable triage flow after AdSense/Ad Manager approval rejections.
+- [legal-sitemap-trust-pages](./legal-sitemap-trust-pages.md) — **When to use:** You need a complete sitemap + legal/trust page package (URL architecture, nav placement, draft policy copy, and CCPA/CPRA choices route).
 - [repo-map](./repo-map.md) — **When to use:** You’re unsure where things live (pages, data, scripts, tests).
 - [adsense-domain-email-setup](./adsense-domain-email-setup.md) — **When to use:** You need a professional domain email plus an AdSense reviewer checklist.
 - [ads-txt-update](./ads-txt-update.md) — **When to use:** You need to append or remove ad network blocks in `public/ads.txt` safely.

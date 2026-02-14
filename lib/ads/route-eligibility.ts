@@ -17,6 +17,7 @@ export const HARD_AD_EXCLUDED_ROUTES = [
   "/contact",
   "/privacy-policy",
   "/terms-of-service",
+  "/do-not-sell-or-share",
   "/unsubscribed",
   "/go/rakuten",
   "/go/befrugal",

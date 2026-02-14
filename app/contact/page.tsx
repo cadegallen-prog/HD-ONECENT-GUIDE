@@ -1,9 +1,10 @@
 import type { Metadata } from "next"
+import { LegalBackLink } from "@/components/legal-back-link"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
 
 export const metadata: Metadata = {
-  title: "Contact Penny Central",
-  description: "Contact Penny Central with questions, corrections, or partnership inquiries.",
+  title: "Contact PennyCentral",
+  description: "Reach PennyCentral for corrections, support, partnerships, and privacy requests.",
   alternates: {
     canonical: "/contact",
   },
@@ -14,107 +15,117 @@ export const metadata: Metadata = {
   openGraph: {
     type: "article",
     url: "https://www.pennycentral.com/contact",
-    title: "Contact Penny Central",
-    description: "Contact Penny Central with questions, corrections, or partnership inquiries.",
+    title: "Contact PennyCentral",
+    description: "Reach PennyCentral for corrections, support, partnerships, and privacy requests.",
   },
 }
 
 export default function ContactPage() {
   return (
     <PageShell width="default">
+      <LegalBackLink />
+
       <PageHeader
-        title="Contact Penny Central"
-        subtitle="Questions, corrections, or partnership ideas? Reach out anytime."
+        title="Contact PennyCentral"
+        subtitle="Questions, corrections, partnership requests, or privacy concerns — we’re reachable."
       />
 
-      <Section>
+      <Section title="Fastest Ways to Reach Us">
         <Prose>
-          <p className="lead">
-            <strong>We prioritize accuracy above everything else.</strong>
-          </p>
-          <p>
-            PennyCentral is maintained by Cade Allen and the penny hunting community. If you spot a
-            wrong SKU, an expired penny item, or a price change, we want to know immediately. Our
-            goal is to verify and fix data errors within 24 hours to keep the list safe for
-            everyone.
-          </p>
-          <p>
-            This site exists because accurate, timely penny data is hard to find. Most community
-            groups move fast and old posts get buried. PennyCentral gives that information a
-            permanent, searchable home — and your feedback is what keeps it reliable. Whether you
-            found a pricing error, have a suggestion for the guide, or want to report a new penny
-            find, the channels below will get your message to the right place.
-          </p>
+          <ul>
+            <li>
+              <strong>Corrections:</strong>{" "}
+              <a href="mailto:contact@pennycentral.com?subject=Correction">
+                contact@pennycentral.com
+              </a>
+            </li>
+            <li>
+              <strong>General support:</strong>{" "}
+              <a href="mailto:contact@pennycentral.com?subject=General%20Support">
+                contact@pennycentral.com
+              </a>
+            </li>
+            <li>
+              <strong>Partnership/media:</strong>{" "}
+              <a href="mailto:contact@pennycentral.com?subject=Partnership">
+                contact@pennycentral.com
+              </a>
+            </li>
+          </ul>
         </Prose>
+      </Section>
 
-        {/* Primary contact card */}
-        <div className="mt-8 grid gap-6 md:grid-cols-2">
-          {/* Corrections Channel */}
-          <div className="p-6 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-lg">
-            <h2 className="flex items-center gap-2 text-lg font-semibold text-[var(--text-primary)] mb-3">
-              <span className="text-[var(--status-error)]">●</span> Report a Correction
-            </h2>
-            <p className="text-sm text-[var(--text-secondary)] mb-4 leading-relaxed">
-              Found a bad SKU on the Penny List? An item that is no longer penny? A store that
-              stopped honoring sales? Let us know so we can flag or remove it. Include the SKU, your
-              state, and what you observed — the more detail, the faster we can act.
-            </p>
-            <a
-              href="mailto:contact@pennycentral.com?subject=Correction: SKU Verification"
-              className="inline-flex items-center font-medium text-[var(--cta-primary)] hover:underline"
-            >
-              contact@pennycentral.com
-            </a>
-          </div>
+      <Section title="Contact Form (Recommended Format)">
+        <div className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-6">
+          <form
+            className="grid gap-4"
+            action="mailto:contact@pennycentral.com"
+            method="post"
+            encType="text/plain"
+          >
+            <label className="grid gap-1 text-sm text-[var(--text-secondary)]">
+              Name (optional)
+              <input
+                type="text"
+                name="name"
+                className="min-h-[44px] rounded-md border border-[var(--border-default)] bg-[var(--bg-page)] px-3 text-[var(--text-primary)]"
+              />
+            </label>
 
-          {/* General Support */}
-          <div className="p-6 bg-[var(--bg-card)] border border-[var(--border-default)] rounded-lg">
-            <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-3">
-              General Inquiries
-            </h2>
-            <p className="text-sm text-[var(--text-secondary)] mb-4 leading-relaxed">
-              For feedback on the guide, partnership requests, advertising questions, or help using
-              the site. We welcome constructive suggestions from hunters of all experience levels.
-            </p>
-            <a
-              href="mailto:contact@pennycentral.com"
-              className="inline-flex items-center font-medium text-[var(--text-primary)] hover:underline"
+            <label className="grid gap-1 text-sm text-[var(--text-secondary)]">
+              Email
+              <input
+                type="email"
+                name="email"
+                required
+                className="min-h-[44px] rounded-md border border-[var(--border-default)] bg-[var(--bg-page)] px-3 text-[var(--text-primary)]"
+              />
+            </label>
+
+            <label className="grid gap-1 text-sm text-[var(--text-secondary)]">
+              Topic
+              <select
+                name="topic"
+                required
+                className="min-h-[44px] rounded-md border border-[var(--border-default)] bg-[var(--bg-page)] px-3 text-[var(--text-primary)]"
+              >
+                <option value="Data correction">Data correction</option>
+                <option value="Technical issue">Technical issue</option>
+                <option value="Partnership/media">Partnership/media</option>
+                <option value="General question">General question</option>
+                <option value="Privacy request">Privacy request</option>
+              </select>
+            </label>
+
+            <label className="grid gap-1 text-sm text-[var(--text-secondary)]">
+              Message
+              <textarea
+                name="message"
+                required
+                rows={6}
+                className="rounded-md border border-[var(--border-default)] bg-[var(--bg-page)] p-3 text-[var(--text-primary)]"
+              />
+            </label>
+
+            <button
+              type="submit"
+              className="min-h-[44px] w-fit rounded-md bg-[var(--cta-primary)] px-4 py-2 text-sm font-semibold text-[var(--cta-text)]"
             >
-              contact@pennycentral.com
-            </a>
-          </div>
+              Send Message
+            </button>
+          </form>
         </div>
+      </Section>
 
-        <Prose className="mt-8">
-          <h3>Response Time</h3>
+      <Section title="Response Windows">
+        <Prose>
+          <ul>
+            <li>Correction-related messages: usually within 24–48 hours</li>
+            <li>General inquiries and partnerships: usually within 3–5 business days</li>
+          </ul>
           <p>
-            PennyCentral is a founder-led project. Data corrections are our highest priority and are
-            typically addressed within 24 hours. General inquiries, partnership proposals, and
-            feature suggestions are reviewed weekly. If your message is time-sensitive — for
-            example, a newly discovered penny item or a safety concern — please include
-            &ldquo;Urgent&rdquo; in your subject line.
-          </p>
-
-          <h3>Community Reporting</h3>
-          <p>
-            The fastest way to contribute penny finds is through the{" "}
-            <a href="/report-find" className="text-[var(--cta-primary)] underline">
-              Report a Find
-            </a>{" "}
-            page. Submissions go directly into our verification pipeline and, once confirmed, appear
-            on the live Penny List. Email is best for corrections, partnership discussions, or
-            anything that needs a personal response.
-          </p>
-
-          <h3>Transparency</h3>
-          <p>
-            PennyCentral is committed to honest, community-first data. We do not accept payment to
-            list or promote specific SKUs. Our monetization approach is disclosed on the{" "}
-            <a href="/transparency" className="text-[var(--cta-primary)] underline">
-              Transparency & Funding
-            </a>{" "}
-            page. If you believe any content on this site is misleading, inaccurate, or harmful,
-            please contact us immediately so we can investigate and correct it.
+            For urgent data corrections, include SKU, location, observed price, and date/time to
+            help us validate quickly.
           </p>
         </Prose>
       </Section>
