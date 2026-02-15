@@ -4,6 +4,33 @@
 
 ---
 
+## 2026-02-14 - Codex - FAQ Presentation Cleanup + Guide Menu Progression UX
+
+**Goal:** Remove the heavy boxed FAQ presentation, clarify section progression, and fix mobile Guide submenu collapse behavior.
+
+**Status:** ✅ Completed.
+
+### Changes
+
+- `app/faq/page.tsx`
+  - Replaced card-style FAQ containers with a cleaner linear layout (no rounded box wrappers).
+  - Added explicit step-based flow (`Step 1` through `Step 4`) with short “what this section covers” summaries.
+  - Added a top “read in sequence” map with anchor links for faster scanning and clearer progression.
+- `components/navbar.tsx`
+  - Added explicit `Step 1`-`Step 6` progression labels and clearer coverage descriptions for Guide chapter links.
+  - Added a mobile Guide submenu toggle (`aria-expanded`) so it can collapse/expand intentionally.
+  - Ensured mobile submenu closes when a section link is selected.
+
+### Verification
+
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npm run ai:proof -- dev /faq /guide` ✅
+  - Proof bundle: `reports/proof/2026-02-14T11-36-37/`
+  - Console report: `reports/proof/2026-02-14T11-36-37/console-errors.txt` (pre-existing hydration mismatch noise)
+
+---
+
 ## 2026-02-14 - Codex - PR Conflict Resolution + Merge Completion (Trust UX)
 
 **Goal:** Resolve unmerged PR conflicts tied to trust/legal UX updates and complete merge-ready verification for `main`.

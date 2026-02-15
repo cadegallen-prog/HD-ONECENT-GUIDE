@@ -23,34 +23,40 @@ import { trackEvent } from "@/lib/analytics"
 
 const guideSectionLinks = [
   {
+    step: 1,
     href: "/what-are-pennies",
     label: "What Are Penny Items",
-    description: "Foundations, definitions, and what to expect.",
+    description: "Start here: definitions, lifecycle basics, and realistic expectations.",
   },
   {
+    step: 2,
     href: "/clearance-lifecycle",
     label: "Clearance Lifecycle",
-    description: "Timing patterns and markdown signal quality.",
+    description: "How markdown timing works and which price signals are trustworthy.",
   },
   {
+    step: 3,
     href: "/digital-pre-hunt",
     label: "Digital Pre-Hunt",
-    description: "How to shortlist items before leaving home.",
+    description: "Build a stronger shortlist before you leave home.",
   },
   {
+    step: 4,
     href: "/in-store-strategy",
     label: "In-Store Strategy",
-    description: "Verification, checkout flow, and execution steps.",
+    description: "In-store execution, verification flow, and checkout decisions.",
   },
   {
+    step: 5,
     href: "/inside-scoop",
     label: "Inside Scoop",
-    description: "Operational context and 2026 system changes.",
+    description: "Store-side context and why outcomes vary by location.",
   },
   {
+    step: 6,
     href: "/facts-vs-myths",
     label: "Facts vs. Myths",
-    description: "Common claims tested against real behavior.",
+    description: "Final pass: filter rumors and keep only proven patterns.",
   },
 ]
 
@@ -59,6 +65,7 @@ export function Navbar() {
   const { setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileGuideExpanded, setMobileGuideExpanded] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -81,6 +88,11 @@ export function Navbar() {
     { href: "/about", label: "About", icon: User },
     { href: "/contact", label: "Contact", icon: Mail },
   ]
+
+  function closeMobileMenu() {
+    setMobileMenuOpen(false)
+    setMobileGuideExpanded(false)
+  }
 
   return (
     <>
@@ -137,6 +149,9 @@ export function Navbar() {
                           >
                             Complete Guide Hub
                           </Link>
+                          <p className="px-3 pb-1 pt-0.5 text-xs text-[var(--text-muted)]">
+                            Suggested read order: Step 1 through Step 6
+                          </p>
                           <div className="my-1 border-t border-[var(--border-default)]" />
                           {guideSectionLinks.map((section) => {
                             const sectionActive = mounted ? pathname === section.href : false
@@ -150,6 +165,9 @@ export function Navbar() {
                                     : "hover:bg-[var(--bg-elevated)]"
                                 }`}
                               >
+                                <p className="text-xs font-semibold uppercase tracking-[0.04em] text-[var(--text-muted)]">
+                                  Step {section.step}
+                                </p>
                                 <p className="text-sm font-medium text-[var(--text-primary)]">
                                   {section.label}
                                 </p>
@@ -236,11 +254,13 @@ export function Navbar() {
                 if (item.hasDropdown) {
                   return (
                     <div key={item.href}>
-                      <Link
-                        href={item.href}
-                        onClick={() => setMobileMenuOpen(false)}
+                      <button
+                        type="button"
+                        onClick={() => setMobileGuideExpanded((prev) => !prev)}
+                        aria-expanded={mobileGuideExpanded}
+                        aria-controls="mobile-guide-sections"
                         className={`
-                          flex items-center gap-3 px-4 py-3.5 min-h-[48px] rounded-lg text-base font-medium transition-all duration-150
+                          flex w-full items-center gap-3 px-4 py-3.5 min-h-[48px] rounded-lg text-base font-medium transition-all duration-150
                           ${
                             isActive
                               ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
@@ -250,30 +270,52 @@ export function Navbar() {
                       >
                         <Icon size={20} strokeWidth={1.5} />
                         <span>{item.label}</span>
-                      </Link>
+                        <ChevronDown
+                          size={16}
+                          strokeWidth={2}
+                          className={`ml-auto transition-transform ${
+                            mobileGuideExpanded ? "rotate-180" : ""
+                          }`}
+                        />
+                      </button>
 
-                      <div className="ml-10 mt-1 mb-2 space-y-1 border-l border-[var(--border-default)] pl-3">
-                        {guideSectionLinks.map((section) => {
-                          const sectionActive = mounted ? pathname === section.href : false
-                          return (
-                            <Link
-                              key={section.href}
-                              href={section.href}
-                              onClick={() => setMobileMenuOpen(false)}
-                              className={`
-                                flex items-center min-h-[44px] rounded-md px-3 py-2 text-sm transition-colors
-                                ${
-                                  sectionActive
-                                    ? "bg-[var(--bg-elevated)] text-[var(--text-primary)]"
-                                    : "text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]"
-                                }
-                              `}
-                            >
-                              {section.label}
-                            </Link>
-                          )
-                        })}
-                      </div>
+                      {mobileGuideExpanded && (
+                        <div
+                          id="mobile-guide-sections"
+                          className="ml-10 mt-1 mb-2 space-y-1 border-l border-[var(--border-default)] pl-3"
+                        >
+                          <Link
+                            href="/guide"
+                            onClick={closeMobileMenu}
+                            className="flex min-h-[44px] items-center rounded-md px-3 py-2 text-sm font-semibold text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]"
+                          >
+                            Start Here: Guide Hub
+                          </Link>
+                          {guideSectionLinks.map((section) => {
+                            const sectionActive = mounted ? pathname === section.href : false
+                            return (
+                              <Link
+                                key={section.href}
+                                href={section.href}
+                                onClick={closeMobileMenu}
+                                className={`
+                                  flex min-h-[44px] flex-col items-start rounded-md px-3 py-2 text-sm transition-colors
+                                  ${
+                                    sectionActive
+                                      ? "bg-[var(--bg-elevated)] text-[var(--text-primary)]"
+                                      : "text-[var(--text-secondary)] hover:bg-[var(--bg-elevated)]"
+                                  }
+                                `}
+                              >
+                                <span className="text-xs font-semibold uppercase tracking-[0.04em] text-[var(--text-muted)]">
+                                  Step {section.step}
+                                </span>
+                                <span>{section.label}</span>
+                              </Link>
+                            )
+                          })}
+                        </div>
+                      )}
                     </div>
                   )
                 }
@@ -286,7 +328,7 @@ export function Navbar() {
                       if (item.href === "/report-find") {
                         trackEvent("report_find_click", { ui_source: "nav-mobile" })
                       }
-                      setMobileMenuOpen(false)
+                      closeMobileMenu()
                     }}
                     className={`
                       flex items-center gap-3 px-4 py-3.5 min-h-[48px] rounded-lg text-base font-medium transition-all duration-150
@@ -309,7 +351,7 @@ export function Navbar() {
               <button
                 onClick={() => {
                   setTheme(isDark ? "light" : "dark")
-                  setMobileMenuOpen(false)
+                  closeMobileMenu()
                 }}
                 className="flex items-center gap-3 px-4 py-3.5 min-h-[48px] rounded-lg w-full text-base font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-elevated)] active:bg-[var(--bg-elevated)] transition-colors"
               >

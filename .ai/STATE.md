@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 14, 2026 (Trust UX PR conflicts resolved; merge-ready verification complete)
+**Last updated:** Feb 14, 2026 (FAQ presentation simplified + Guide section progression/collapse UX refined)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,16 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-14 (FAQ presentation + Guide progression UX refinement):** Simplified FAQ readability and fixed Guide submenu interaction clarity.
+  - **FAQ cleanup shipped (`/faq`):**
+    - Removed heavy boxed FAQ cards and switched to a cleaner linear section flow.
+    - Added explicit step-based ordering and “what this section covers” summaries.
+    - Added a top read-order map with step anchors for faster scanning.
+  - **Navbar interaction clarity shipped:**
+    - Guide chapter links now include explicit `Step 1`-`Step 6` progression labels and clearer coverage descriptions.
+    - Mobile Guide submenu now has a real collapse/expand toggle and collapses after section selection.
+  - **Verification:** `npm run verify:fast` ✅, `npm run e2e:smoke` ✅, `npm run ai:proof -- dev /faq /guide` ✅ (`reports/proof/2026-02-14T11-36-37/`).
 
 - **2026-02-14 (PR conflict resolution + merge completion for trust UX):** Cleared unresolved merge conflicts and finalized trust/legal UX changes with full-lane verification.
   - **Conflict resolution completed:**
