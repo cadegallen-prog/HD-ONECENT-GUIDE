@@ -108,7 +108,7 @@ export function Footer() {
               © 2026 PennyCentral. Educational use only.
             </p>
             <p className="text-xs text-[var(--text-muted)] order-3 sm:order-2">
-              Not affiliated with Home Depot
+              Not affiliated with or endorsed by Home Depot
             </p>
             <div className="flex items-center gap-4 order-1 sm:order-3">
               <a

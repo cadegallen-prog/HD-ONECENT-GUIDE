@@ -1,6 +1,6 @@
 # Environment Variables Reference
 
-**Last Updated:** 2026-01-23
+**Last Updated:** 2026-02-16
 **Purpose:** Track environment variables across Vercel (runtime), GitHub Actions (pipelines), and local dev.
 
 ---
@@ -47,6 +47,16 @@
 | `CRON_SECRET` | Vercel (Manual) | Auth for `/api/cron/*` endpoints (Bearer) | `app/api/cron/**` |
 
 **If missing/mismatched:** Vercel Cron requests will return `401 Unauthorized` and your scheduled jobs won’t run.
+
+---
+
+### Admin API Security (1 variable)
+
+| Variable       | Where Set       | Purpose                                         | Used In            |
+| -------------- | --------------- | ----------------------------------------------- | ------------------ |
+| `ADMIN_SECRET` | Vercel (Manual) | Bearer token for `/api/admin/*` moderation APIs | `app/api/admin/**` |
+
+**If missing/mismatched:** Admin moderation endpoints return `401/403`, and the admin dashboard cannot load submission data until a valid token is provided.
 
 ---
 

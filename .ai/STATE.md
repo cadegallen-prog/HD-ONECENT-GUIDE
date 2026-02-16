@@ -12,6 +12,29 @@ Every AI session must update this after meaningful work.
 
 ## Current Sprint (Last 7 Days)
 
+- **2026-02-16 (AdSense approval readiness remediation pass):** Implemented the critical compliance/security bundle for monetization incident response and verified it locally with route-level evidence.
+  - **Security hardening shipped:**
+    - Added shared admin bearer-token guard (`ADMIN_SECRET`) and enforced it on all admin moderation APIs:
+      - `/api/admin/submissions`
+      - `/api/admin/delete-submission`
+      - `/api/admin/recent-submissions`
+    - Updated `/admin/dashboard` to require authenticated user session plus explicit admin token entry before moderation API calls.
+  - **Indexing/compliance controls shipped:**
+    - Added route-level noindex metadata for auth-gated/tokenized surfaces:
+      - `/lists` + `/lists/[id]` (`noindex, nofollow`)
+      - `/login` (`noindex, nofollow`)
+      - `/s/[token]` (`noindex, follow`)
+      - `/internal-systems` (`noindex, nofollow`)
+    - Updated privacy policy with explicit GA4, Monumetric, Ezoic, and Resend disclosures, data-deletion procedures, weekly digest usage disclosure, and Ezoic embed anchor (`#ezoic-privacy-policy-embed`).
+    - Updated GA4 Consent Mode v2 default to include region scoping (`US`, `CA`).
+    - Standardized footer disclaimer language to "Not affiliated with or endorsed by Home Depot."
+  - **Operational/docs updates shipped:**
+    - Canonicalized the external `.claude` plan into `.ai/impl/adsense-approval-readiness.md`.
+    - Added `ADMIN_SECRET` documentation to `.ai/ENVIRONMENT_VARIABLES.md`.
+    - Added `.env.example` template including `ADMIN_SECRET`.
+    - Added targeted regression coverage in `tests/adsense-readiness.spec.ts` (admin auth statuses, robots directives, sitemap count, privacy disclosures) plus Playwright screenshot artifacts.
+  - **Verification:** `npm run ai:memory:check` ✅, `npm run verify:fast` ✅, `npm run e2e:smoke` ✅, targeted Playwright readiness suite ✅ (8/8; light/dark), sitemap count check ✅ (18 URLs via readiness spec).
+
 - **2026-02-16 (Founder-prompt ambiguity hardening - permanent fix):** Converted founder-facing execution flow from optional/jargon-heavy prompts to default-execute behavior with enforceable drift guards.
   - **Canonical behavior fixes shipped:**
     - `AGENTS.md` + `.ai/START_HERE.md` now require default execution when request is clear or when top P0 is unblocked, without asking founder to provide process tokens.

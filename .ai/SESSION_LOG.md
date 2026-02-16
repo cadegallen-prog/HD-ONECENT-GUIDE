@@ -4,6 +4,57 @@
 
 ---
 
+## 2026-02-16 - Codex - AdSense Approval Readiness Implementation (Security + Compliance + Noindex)
+
+**Goal:** Execute the founder-approved AdSense readiness plan to close critical decline risks (admin security, indexing controls, privacy disclosures, consent configuration, trust-copy consistency) with proof.
+
+**Status:** ✅ Completed.
+
+### Changes
+
+- Canonicalized tool-local plan:
+  - Added `.ai/impl/adsense-approval-readiness.md` as repo-canonical plan source (synced with `.claude` draft).
+- Implemented admin API hardening:
+  - Added `lib/admin-auth.ts` (shared bearer-token guard using `ADMIN_SECRET`).
+  - Enforced guard on:
+    - `app/api/admin/submissions/route.ts`
+    - `app/api/admin/delete-submission/route.ts`
+    - `app/api/admin/recent-submissions/route.ts`
+  - Updated `app/admin/dashboard/page.tsx` to require logged-in user + explicit admin token before calling moderation APIs.
+- Implemented noindex controls for auth-gated/tokenized routes:
+  - Added `app/lists/layout.tsx` (`noindex, nofollow`)
+  - Added `app/login/layout.tsx` (`noindex, nofollow`)
+  - Added `app/s/[token]/layout.tsx` (`noindex, follow`)
+  - Updated `app/internal-systems/page.tsx` metadata (`noindex, nofollow`)
+- Implemented privacy/compliance updates:
+  - Updated `app/privacy-policy/page.tsx` with GA4/Monumetric/Ezoic/Resend disclosures, weekly digest usage disclosure, data deletion guidance, Ezoic embed anchor, and date bump.
+  - Updated `app/layout.tsx` Consent Mode v2 defaults with `region: ['US', 'CA']`.
+  - Updated `components/footer.tsx` disclaimer copy to include “or endorsed by.”
+- Environment and verification docs:
+  - Added `.env.example` including `ADMIN_SECRET`.
+  - Updated `.ai/ENVIRONMENT_VARIABLES.md` with `ADMIN_SECRET`.
+  - Updated `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md` (`INC-ADSENSE-001`) with current remediation status and evidence.
+- Added regression and proof coverage:
+  - Updated `tests/privacy-policy.spec.ts` for new disclosure expectations.
+  - Added `tests/adsense-readiness.spec.ts` for admin auth, robots directives, sitemap count (18), and privacy disclosure checks.
+  - Generated screenshot artifacts at `reports/proof/adsense-readiness/`.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npx cross-env NEXT_DIST_DIR=.next-playwright PLAYWRIGHT=1 NEXT_PUBLIC_EZOIC_ENABLED=false NEXT_PUBLIC_ANALYTICS_ENABLED=false npm run build && npx playwright test tests/adsense-readiness.spec.ts --project=chromium-desktop-light --project=chromium-desktop-dark --workers=1` ✅ (8/8)
+- `npx cross-env ADMIN_SECRET=codex-test-secret PLAYWRIGHT=1 NEXT_PUBLIC_EZOIC_ENABLED=false NEXT_PUBLIC_ANALYTICS_ENABLED=false npx playwright test tests/adsense-readiness.spec.ts -g "admin endpoints require bearer auth" --project=chromium-desktop-light --workers=1` ✅ (explicit 200-path with correct token)
+- `npm run ai:checkpoint` ✅ (`reports/context-packs/2026-02-16T08-28-22/context-pack.md`)
+- Screenshots:
+  - `reports/proof/adsense-readiness/privacy-policy-chromium-desktop-light.png`
+  - `reports/proof/adsense-readiness/privacy-policy-chromium-desktop-dark.png`
+  - `reports/proof/adsense-readiness/home-footer-chromium-desktop-light.png`
+  - `reports/proof/adsense-readiness/home-footer-chromium-desktop-dark.png`
+
+---
+
 ## 2026-02-16 - Codex - Founder-Prompt Ambiguity Permanent Fix (Default Execute + Canon Guard)
 
 **Goal:** Permanently eliminate confusing founder-facing prompt loops by forcing default execution from canonical backlog and banning process-token asks to Cade.
@@ -125,32 +176,3 @@
 - `npm run ai:memory:check` ✅
 - `npm run ai:checkpoint` ✅
 - Context pack artifact: `reports/context-packs/2026-02-16T05-53-30/context-pack.md`
-
----
-
-## 2026-02-16 - Codex - Guide SEO Schema Expansion (FAQPage + HowTo)
-
-**Goal:** Ship a high-impact user-facing growth improvement by adding missing structured data on `/guide` and locking it with regression coverage.
-
-**Status:** ✅ Completed.
-
-### Changes
-
-- Updated `app/guide/page.tsx`:
-  - Added `FAQPage` JSON-LD with operational guide Q&A.
-  - Added `HowTo` JSON-LD with actionable steps tied to core utility routes.
-  - Preserved existing `CollectionPage` and `BreadcrumbList` schema.
-- Updated `tests/seo-jsonld.spec.ts`:
-  - Added `/guide` assertion for `CollectionPage`, `BreadcrumbList`, `FAQPage`, and `HowTo` presence.
-  - Added minimum depth assertions (`FAQ` entries >= 3, `HowTo` steps >= 4).
-- Updated `tests/smoke-critical.spec.ts`:
-  - Fixed stale transparency heading assertion after `/support` redirect.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `npx playwright test tests/seo-jsonld.spec.ts --project=chromium-desktop-light --workers=1` ✅
-- `npm run ai:checkpoint` ✅
-- Context pack artifact: `reports/context-packs/2026-02-16T05-27-52/context-pack.md`

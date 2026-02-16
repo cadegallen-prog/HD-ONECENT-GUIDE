@@ -30,7 +30,7 @@ export default function PrivacyPolicyPage() {
         title="Privacy Policy"
         subtitle={
           <>
-            <strong>Last Updated:</strong> February 15, 2026
+            <strong>Last Updated:</strong> February 16, 2026
           </>
         }
       />
@@ -51,6 +51,7 @@ export default function PrivacyPolicyPage() {
             <li>IP address (used for approximate location and abuse prevention)</li>
             <li>Browser/device/operating-system metadata</li>
             <li>Pages visited, referral source, and interaction timestamps</li>
+            <li>Google Analytics tracking via GA4 (Measurement ID: G-DJ4RJRX05E)</li>
           </ul>
 
           <h3>Information You Provide</h3>
@@ -76,6 +77,10 @@ export default function PrivacyPolicyPage() {
             <li>Operate and maintain core website functionality</li>
             <li>Improve reliability, safety, and user experience</li>
             <li>Respond to corrections, support messages, and partnership outreach</li>
+            <li>
+              Send weekly email digests with new penny list items when you subscribe (unsubscribe
+              anytime using the email footer link)
+            </li>
             <li>Detect abuse, spam, and technical failures</li>
             <li>Support monetization through affiliate programs and future advertising</li>
           </ul>
@@ -155,6 +160,63 @@ export default function PrivacyPolicyPage() {
             For transparency, we may provide or update links to key third-party privacy pages when
             specific providers are active on the site.
           </p>
+
+          <h3>Third-Party Service Providers</h3>
+          <ul>
+            <li>
+              <strong>Google Analytics (GA4):</strong> We use Google Analytics to understand how
+              visitors use our site. Google may collect IP addresses, browser details, and usage
+              patterns. You can opt out with browser controls or Google&apos;s Analytics opt-out
+              tools.
+            </li>
+            <li>
+              <strong>Monumetric:</strong> Monumetric may place cookies and process data for ad
+              serving and measurement. See{" "}
+              <a
+                href="https://www.monumetric.com/privacy-policy"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Monumetric&apos;s privacy policy
+              </a>
+              .
+            </li>
+            <li>
+              <strong>Ezoic:</strong> Ezoic may place cookies and process data for ad testing,
+              optimization, and serving. See{" "}
+              <a
+                href="https://www.ezoic.com/privacy-policy/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Ezoic&apos;s privacy policy
+              </a>
+              .
+            </li>
+            <li>
+              <strong>Resend:</strong> We use Resend for email delivery (weekly digest and
+              transactional emails). Resend processes email addresses and message content. See{" "}
+              <a
+                href="https://resend.com/legal/privacy-policy"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Resend&apos;s privacy policy
+              </a>
+              .
+            </li>
+          </ul>
+
+          <h3>Ezoic-Specific Disclosure</h3>
+          <span id="ezoic-privacy-policy-embed" />
+          <p>
+            This site uses services provided by Ezoic Inc. to manage third-party interest-based
+            advertising. Ezoic technologies may use first- and third-party cookies to understand
+            visitor interactions. Data may include IP address, operating system and device
+            information, language preferences, browser type, and hashed or encrypted email
+            identifiers. Ezoic and its partners may combine this data with other independently
+            collected information to provide and measure targeted advertising.
+          </p>
         </Prose>
       </Section>
 
@@ -175,6 +237,24 @@ export default function PrivacyPolicyPage() {
             We use reasonable administrative and technical safeguards to protect personal data, but
             no internet transmission or storage method is guaranteed to be 100% secure.
           </p>
+
+          <h3>Data Deletion Requests</h3>
+          <ul>
+            <li>
+              <strong>Supabase (database):</strong> Email{" "}
+              <a href="mailto:contact@pennycentral.com">contact@pennycentral.com</a> to request
+              account-data deletion. We target completion within 30 days.
+            </li>
+            <li>
+              <strong>Resend (email):</strong> Use the unsubscribe link in any email. Inactive
+              subscriber records are deleted after one year of inactivity.
+            </li>
+            <li>
+              <strong>Google Analytics:</strong> GA4 retention follows Google&apos;s settings (14
+              months by default in our current setup). You can opt out through browser or Google
+              controls.
+            </li>
+          </ul>
         </Prose>
       </Section>
 

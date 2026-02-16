@@ -22,6 +22,10 @@ export const metadata: Metadata = {
     description: "Learn how Home Depot's internal systems work and how they affect penny hunting.",
     images: [ogImageUrl("Internal Systems")],
   },
+  robots: {
+    index: false,
+    follow: false,
+  },
   twitter: {
     card: "summary_large_image",
     images: [ogImageUrl("Internal Systems")],

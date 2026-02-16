@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getSupabaseServiceRoleClient } from "@/lib/supabase/client"
+import { authorizeAdminRequest } from "@/lib/admin-auth"
 
 export async function DELETE(request: NextRequest) {
+  const authError = authorizeAdminRequest(request)
+  if (authError) return authError
+
   try {
     const { searchParams } = new URL(request.url)
     const id = searchParams.get("id")
