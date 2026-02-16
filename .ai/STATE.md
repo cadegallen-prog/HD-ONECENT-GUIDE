@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 16, 2026 (founder-prompt ambiguity permanently hardened)
+**Last updated:** Feb 16, 2026 (transparency/internal-systems production hardening live)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,21 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-16 (Transparency + internal-systems crawler hardening, live):** Closed trust-route naming drift and fixed a crawler-facing redirect flaw before founder AdSense/Search Console resubmission.
+  - **Route behavior fixes shipped:**
+    - Converted `/support` to a permanent redirect (`308`) to canonical `/transparency`.
+    - Replaced `/internal-systems` hash redirect with a real route response and explicit `noindex, nofollow`.
+  - **Naming consistency shipped:**
+    - Standardized public UI labels to `Transparency` (footer, homepage CTA, guide utility links).
+  - **Sitemap/test hardening shipped:**
+    - Confirmed sitemap remains pillar-only at 18 URLs and excludes legacy/utility routes (`/support`, `/internal-systems`).
+    - Expanded Playwright and unit assertions to lock these exclusions and robots directives.
+    - Fixed mobile nav full-suite drift in `tests/basic.spec.ts` (Guide button/submenu assertion path).
+  - **Verification + deploy evidence:**
+    - Local: `npm run ai:memory:check` ✅, `npm run verify:fast` ✅, `npm run e2e:smoke` ✅, `npm run e2e:full` ✅ (192 passed).
+    - CI (merge commit `e9b7552`): FAST ✅, SMOKE ✅, FULL ✅.
+    - Production checks confirmed: `/support` 308->`/transparency`, `/internal-systems` 200 + noindex, sitemap count = 18.
 
 - **2026-02-16 (AdSense approval readiness remediation pass):** Implemented the critical compliance/security bundle for monetization incident response and verified it locally with route-level evidence.
   - **Security hardening shipped:**
