@@ -1,12 +1,11 @@
 import Link from "next/link"
 import type { Metadata } from "next"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
-import { COMMUNITY_MEMBER_COUNT_DISPLAY } from "@/lib/constants"
 
 export const metadata: Metadata = {
-  title: "Transparency & Funding | PennyCentral",
+  title: "Transparency | PennyCentral",
   description:
-    "How PennyCentral is funded and how editorial independence is protected for the community.",
+    "How PennyCentral is funded: advertising, affiliate links, and editorial independence.",
   alternates: {
     canonical: "/transparency",
   },
@@ -21,11 +20,6 @@ export default function TransparencyPage() {
       name: "PennyCentral",
       email: "contact@pennycentral.com",
     },
-    mainEntity: {
-      "@type": "Service",
-      name: "Deal Hunting Community",
-      provider: "PennyCentral",
-    },
   }
 
   return (
@@ -36,45 +30,43 @@ export default function TransparencyPage() {
       />
 
       <PageHeader
-        title="Transparency & Funding"
-        subtitle={
-          <>
-            PennyCentral is free to use for the <strong>{COMMUNITY_MEMBER_COUNT_DISPLAY}</strong>{" "}
-            member community.
-          </>
-        }
+        title="Transparency"
+        subtitle="How this site is funded and how editorial decisions are made."
       />
 
       <Section>
         <Prose className="[&_h2]:mt-8 [&_h2:first-of-type]:mt-0">
-          <h2>How the Site Is Funded</h2>
-          <p>PennyCentral may generate revenue through:</p>
+          <h2>Funding Sources</h2>
+          <p>PennyCentral is free to use. The site is funded through two channels:</p>
           <ul>
-            <li>Display advertising</li>
-            <li>Referral or affiliate links on selected outbound pages</li>
+            <li>
+              <strong>Advertising.</strong> Display ads are served on some pages by third-party ad
+              networks.
+            </li>
+            <li>
+              <strong>Affiliate links.</strong> Some outbound links are affiliate links, including
+              Rakuten referral links. If you click one and complete a qualifying signup,
+              PennyCentral may receive referral compensation at no extra cost to you.
+            </li>
           </ul>
 
-          <h2>What This Means for You</h2>
+          <h2>Editorial Independence</h2>
           <p>
-            We do not charge users for core tools. Revenue helps cover hosting, operations, and
-            ongoing product maintenance.
-          </p>
-          <p>
-            Editorial decisions are independent. We do not sell placement in the Penny List and do
-            not accept payment to manipulate ranking or visibility of reported items.
+            Revenue does not influence the Penny List or editorial content. We do not sell
+            placement, accept payment to alter item rankings, or promote products in exchange for
+            compensation.
           </p>
 
-          <h2>Disclosure Promise</h2>
+          <h2>Affiliate Disclosure</h2>
           <p>
-            If a link may generate referral compensation, we disclose that relationship in context.
-            This includes Rakuten referral links where PennyCentral may earn compensation for
-            qualifying signups. We keep disclosure language straightforward and avoid promotional
-            pressure in trust/legal surfaces.
+            We may earn commissions from purchases or signups made through links on this site, at no
+            extra cost to you. Where a link may generate referral compensation, we disclose that
+            relationship in context.
           </p>
 
-          <h2>Questions or Concerns</h2>
+          <h2>Contact</h2>
           <p>
-            If any monetization or disclosure language feels unclear, contact us at{" "}
+            Questions about funding or disclosures can be sent to{" "}
             <a href="mailto:contact@pennycentral.com">contact@pennycentral.com</a>.
           </p>
 
