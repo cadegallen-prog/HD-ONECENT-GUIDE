@@ -12,7 +12,6 @@ import { MetadataRoute } from "next"
  *
  * Legacy redirect routes and utility routes are intentionally excluded:
  * - /support (legacy redirect to /transparency)
- * - /internal-systems (utility reference, noindex)
  *
  * Traffic is primarily social/direct, so this has zero impact on visitor numbers.
  */
