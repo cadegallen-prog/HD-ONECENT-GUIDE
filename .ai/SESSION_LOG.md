@@ -4,6 +4,52 @@
 
 ---
 
+## 2026-02-16 - Codex - Transparency Naming + Internal Systems Route Hardening (Dev -> Main -> Production)
+
+**Goal:** Remove trust-page naming drift ("Transparency & Funding"), fix `/internal-systems` crawler behavior, and deploy with full verification evidence before founder Search Console + AdSense resubmission.
+
+**Status:** ✅ Completed and live on production.
+
+### Changes
+
+- Canonical trust naming alignment:
+  - Updated public labels from `Transparency & Funding` -> `Transparency` in:
+    - `components/footer.tsx`
+    - `app/page.tsx`
+    - `app/guide/page.tsx`
+  - Updated top-level product description in `README.md` to match.
+- `/internal-systems` route fix:
+  - Replaced broken hash redirect (`/#internal-systems`) with a real page response in `app/internal-systems/page.tsx`.
+  - Added explicit noindex metadata and canonical route metadata for crawler clarity.
+- Legacy route canonicalization:
+  - Updated `app/support/page.tsx` from temporary redirect to permanent redirect (`308`) -> `/transparency`.
+- Sitemap/crawler hardening:
+  - Clarified intentional sitemap exclusions in `app/sitemap.ts` (legacy/utility routes).
+  - Expanded regression checks:
+    - `tests/adsense-readiness.spec.ts` now verifies `/internal-systems` emits `noindex, nofollow`.
+    - `tests/adsense-readiness.spec.ts` and `tests/sitemap-canonical.test.ts` now assert sitemap excludes `/support` and `/internal-systems`.
+- Test reliability hardening:
+  - Fixed mobile nav assertion drift in `tests/basic.spec.ts` (mobile now validates Guide button + submenu behavior).
+  - Updated `tests/support.spec.ts` to match canonical transparency heading/content.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npm run e2e:full` ✅ (192 passed)
+- CI for merge commit `e9b7552c13e63de042c117c3b240de339c62c39a`:
+  - FAST ✅ `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22059947502`
+  - E2E Smoke ✅ `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22059947496`
+  - Full QA ✅ `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22059947512`
+- Production checks (`https://www.pennycentral.com`) after deploy:
+  - `/support` returns `308` -> `/transparency` ✅
+  - `/internal-systems` returns `200` with `<meta name="robots" content="noindex, nofollow">` ✅
+  - `/sitemap.xml` has exactly `18` URLs and excludes `/support` + `/internal-systems` ✅
+  - Homepage no longer shows `Transparency & Funding` label ✅
+
+---
+
 ## 2026-02-16 - Codex - AdSense Approval Readiness Implementation (Security + Compliance + Noindex)
 
 **Goal:** Execute the founder-approved AdSense readiness plan to close critical decline risks (admin security, indexing controls, privacy disclosures, consent configuration, trust-copy consistency) with proof.
@@ -150,29 +196,3 @@
 - `npm run ai:memory:check` ✅
 - `npm run ai:checkpoint` ✅
 - Context pack artifact: `reports/context-packs/2026-02-16T06-39-23/context-pack.md`
-
----
-
-## 2026-02-16 - Codex - Website-First Priority Lock + Autonomy Operating Target Capture
-
-**Goal:** Persist the founder directive that current execution should prioritize visible website improvements, while autonomy-system expansion remains explicitly queued for future cycles.
-
-**Status:** ✅ Completed.
-
-### Changes
-
-- Updated `.ai/BACKLOG.md`:
-  - Locked a website-first priority rule under P0 autonomy hardening.
-  - Added a durable 5-point operating-target checklist for future autonomy cycles.
-- Updated `.ai/topics/FOUNDER_AUTONOMY_CURRENT.md`:
-  - Added the founder directive lock (website growth first, autonomy lane secondary unless blocking).
-  - Added the 5-point autonomy operating-target section and updated immediate next actions.
-- Updated `.ai/STATE.md`:
-  - Added a current-sprint entry documenting the priority decision and why it exists.
-  - Refreshed snapshot stamp to reflect this governance/memory change.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run ai:checkpoint` ✅
-- Context pack artifact: `reports/context-packs/2026-02-16T05-53-30/context-pack.md`
