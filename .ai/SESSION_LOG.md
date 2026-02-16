@@ -4,6 +4,39 @@
 
 ---
 
+## 2026-02-16 - Codex - Internal Systems Route Retirement + Reference Scrub (Ad Review Hardening)
+
+**Goal:** Remove `/internal-systems` as a thin public page, scrub active references from runtime/test surfaces, and verify strict crawler-safe behavior for Ad Manager/AdSense readiness.
+
+**Status:** ✅ Completed (local verification green; ready for `dev` -> `main` promotion in this session).
+
+### Changes
+
+- Route retirement:
+  - Deleted `app/internal-systems/page.tsx` from the app surface.
+  - Added permanent redirects in `next.config.js`:
+    - `/internal-systems` -> `/guide`
+    - `/internal-systems/:path*` -> `/guide`
+- Reference scrub (active code paths):
+  - Removed `/internal-systems` from route-policy exclusion constants/matrix in `lib/ads/route-eligibility.ts`.
+  - Removed internal-systems mention from active sitemap notes in `app/sitemap.ts`.
+  - Updated tests to remove obsolete `/internal-systems` noindex expectations:
+    - `tests/adsense-readiness.spec.ts`
+    - `tests/sitemap-canonical.test.ts`
+  - Removed stale route entry from `ROUTE-TREE.txt`.
+- Crawler posture preserved:
+  - Sitemap remains pillar-only and unchanged at 18 URLs.
+  - Legacy utility route is now retired behind permanent redirect instead of serving thin indexed/noindex content.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npm run e2e:full` ✅ (192 passed)
+
+---
+
 ## 2026-02-16 - Codex - Transparency Naming + Internal Systems Route Hardening (Dev -> Main -> Production)
 
 **Goal:** Remove trust-page naming drift ("Transparency & Funding"), fix `/internal-systems` crawler behavior, and deploy with full verification evidence before founder Search Console + AdSense resubmission.
@@ -167,32 +200,3 @@
 - `npm run check:docs-governance` ✅
 - `npm run ai:checkpoint` ✅
 - Context pack artifact: `reports/context-packs/2026-02-16T06-50-44/context-pack.md`
-
----
-
-## 2026-02-16 - Codex - Permission-First Narrow Expansion Rule (Workload-Reduction Governance)
-
-**Goal:** Ensure agents can request only narrow workload-reduction expansions and must obtain explicit founder permission before implementation.
-
-**Status:** ✅ Completed.
-
-### Changes
-
-- Updated `AGENTS.md`:
-  - Added mandatory `Permission-First Narrow Expansion Rule`.
-  - Codified allowed narrow-request categories: permissions/access, UI/UX workflow, tools, MCP, skills.
-  - Required single-bundle scope with measurable workload-reduction intent and rollback notes.
-- Updated `.ai/DECISION_RIGHTS.md`:
-  - Added `Workload-Reduction Enablement Requests (Permission-First)` section.
-  - Locked explicit-yes approval requirement before implementation.
-  - Required request payload fields: what changes, why workload drops, risks/rollback, proof plan.
-- Updated `.ai/CONTRACT.md`:
-  - Added operating-rule bullet enforcing permission-first behavior for workload-reduction enablement changes.
-- Updated `.ai/STATE.md`:
-  - Added a sprint entry documenting the new governance lock and covered categories.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run ai:checkpoint` ✅
-- Context pack artifact: `reports/context-packs/2026-02-16T06-39-23/context-pack.md`

@@ -23,14 +23,13 @@ export const HARD_AD_EXCLUDED_ROUTES = [
   "/go/befrugal",
   "/login",
   "/auth/callback",
-  "/internal-systems",
   "/robots.txt",
   "/sitemap.xml",
 ] as const
 
 const HARD_AD_EXCLUDED_ROUTE_SET = new Set<string>(HARD_AD_EXCLUDED_ROUTES)
 
-const HARD_AD_EXCLUDED_PREFIXES = ["/lists/", "/s/", "/api/", "/admin/", "/internal-systems/"]
+const HARD_AD_EXCLUDED_PREFIXES = ["/lists/", "/s/", "/api/", "/admin/"]
 
 const PROVIDER_MANAGED_POLICY: AdRoutePolicy = {
   key: "provider-managed",
@@ -57,7 +56,6 @@ export const AD_ROUTE_MATRIX: ReadonlyArray<{
   { route: "/s/*", policy: EXCLUDED_POLICY },
   { route: "/api/*", policy: EXCLUDED_POLICY },
   { route: "/admin/*", policy: EXCLUDED_POLICY },
-  { route: "/internal-systems/*", policy: EXCLUDED_POLICY },
 ]
 
 export function normalizeRoutePath(pathname: string): string {

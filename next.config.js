@@ -53,6 +53,17 @@ const nextConfig = {
         destination: "/transparency",
         permanent: true,
       },
+      // Remove thin utility route from public surface; consolidate to guide hub.
+      {
+        source: "/internal-systems",
+        destination: "/guide",
+        permanent: true,
+      },
+      {
+        source: "/internal-systems/:path*",
+        destination: "/guide",
+        permanent: true,
+      },
       {
         source: "/how-to-find-penny-items",
         destination: "/guide",

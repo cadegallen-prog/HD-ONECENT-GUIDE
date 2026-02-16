@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 16, 2026 (transparency/internal-systems production hardening live)
+**Last updated:** Feb 16, 2026 (internal-systems retired + redirect hardening)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,26 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-16 (Internal-systems route retirement + crawler-quality hardening):** Removed a thin utility page from the public site surface and consolidated traffic to the guide hub.
+  - **Route lifecycle updates shipped:**
+    - Deleted `app/internal-systems/page.tsx`.
+    - Added permanent redirects in `next.config.js`:
+      - `/internal-systems` -> `/guide`
+      - `/internal-systems/:path*` -> `/guide`
+  - **Reference scrub shipped (active runtime/test surfaces):**
+    - Removed `/internal-systems` policy references from `lib/ads/route-eligibility.ts`.
+    - Removed stale sitemap-note mention from `app/sitemap.ts`.
+    - Updated route/sitemap assertions in:
+      - `tests/adsense-readiness.spec.ts`
+      - `tests/sitemap-canonical.test.ts`
+    - Removed stale route listing from `ROUTE-TREE.txt`.
+  - **Verification:**
+    - `npm run ai:memory:check` ✅
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` ✅
+    - `npm run e2e:full` ✅ (192 passed)
+    - Sitemap coverage remains pillar-only at 18 URLs (asserted in readiness/spec tests).
 
 - **2026-02-16 (Transparency + internal-systems crawler hardening, live):** Closed trust-route naming drift and fixed a crawler-facing redirect flaw before founder AdSense/Search Console resubmission.
   - **Route behavior fixes shipped:**
