@@ -31,6 +31,10 @@ test("auth-gated routes emit expected robots directives", async ({ page }) => {
 
   await page.goto("/s/test-token")
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "noindex, follow")
+
+  await page.goto("/internal-systems")
+  await expect(page).toHaveURL(/\/internal-systems\/?$/)
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "noindex, nofollow")
 })
 
 test("sitemap remains pillar-only with 18 urls", async ({ request }) => {
@@ -41,8 +45,10 @@ test("sitemap remains pillar-only with 18 urls", async ({ request }) => {
   const locMatches = body.match(/<loc>/g) ?? []
   expect(locMatches.length).toBe(18)
 
+  expect(body).toContain("https://www.pennycentral.com/transparency")
   expect(body).not.toContain("/lists")
   expect(body).not.toContain("/login")
+  expect(body).not.toContain("/support")
   expect(body).not.toContain("/internal-systems")
 })
 

@@ -8,4 +8,5 @@ test("sitemap includes canonical transparency route and excludes legacy support 
 
   assert.ok(urls.includes("https://www.pennycentral.com/transparency"))
   assert.ok(!urls.includes("https://www.pennycentral.com/support"))
+  assert.ok(!urls.includes("https://www.pennycentral.com/internal-systems"))
 })
