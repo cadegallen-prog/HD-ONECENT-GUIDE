@@ -158,6 +158,11 @@ Which would you prefer?"
 
    **If you touched styles/colors:** also paste `npm run lint:colors` output and confirm no raw Tailwind palette colors were introduced.
 
+   Docs-only exception (no runtime code path changes):
+   - Mark test lanes as N/A with a one-line reason.
+   - Run `npm run ai:memory:check` and `npm run ai:checkpoint`.
+   - Do not claim the app/test system is green.
+
 2. **Screenshots** (if UI changed):
    - Before/after
    - Light + dark mode
@@ -248,7 +253,7 @@ git diff .ai/topics/ .ai/STATE.md .ai/BACKLOG.md
 
 **Requirements:**
 
-- After adding a session entry, if `.ai/SESSION_LOG.md` has **more than 5 entries**, trim to keep only the **3 most recent**
+- After adding a session entry, if `.ai/SESSION_LOG.md` has **more than 7 entries**, trim to keep the **5 most recent**
 - Git history preserves everything - trimming keeps the file readable and fast to load
 
 ---

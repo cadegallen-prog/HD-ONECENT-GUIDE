@@ -21,6 +21,7 @@
    - `.ai/BACKLOG.md` (only if priorities changed)
    - `.ai/LEARNINGS.md` (if mistakes/failed approaches occurred)
    - `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md` (required whenever any monetization incident is open or touched)
+   - Run `npm run ai:checkpoint` before handoff when work spans multiple sessions/context windows
 4. **Publish next-agent handoff**
 
 - Include a structured handoff block in the final response and/or session log.
@@ -66,6 +67,7 @@ Use this schema every time:
 - `npm run e2e:smoke` (or N/A + reason):
 - `npm run e2e:full` (or N/A + trigger status):
 - Playwright proof path(s):
+- Memory checkpoint artifact path (when multi-session):
 - Known non-blocking console noise:
 - Canonical plan path (if planning task):
 - Canonical plan SHA256 (if planning task):

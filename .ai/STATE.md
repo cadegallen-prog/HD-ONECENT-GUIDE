@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 14, 2026 (FAQ presentation simplified + Guide section progression/collapse UX refined)
+**Last updated:** Feb 16, 2026 (governance rule-validity audit hardening documented)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,103 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-16 (Governance rule-validity hardening pass):** Removed low-value contradictions and aligned rule contracts to reduce blind compliance and drift.
+  - **High-impact governance fixes shipped:**
+    - Resolved branch-policy conflict by aligning agent workflow docs to `dev` -> `main` promotion.
+    - Reworked session-log retention policy from an over-aggressive 3-entry trim to a 5-entry rolling window (trim when entries exceed 7).
+    - Canonicalized duplicated non-negotiable rules by making `.ai/CRITICAL_RULES.md` the detailed source and converting `.ai/CONSTRAINTS.md` to reference mode for those items.
+    - Made GitHub Actions evidence requirement conditional on CI execution.
+    - Aligned docs-only verification wording across governance docs with `.ai/VERIFICATION_REQUIRED.md`.
+  - **Verification:** `npm run ai:memory:check` ✅, `npm run check:docs-governance` ✅ (checkpoint artifact in session log).
+
+- **2026-02-16 (Permission-first narrow expansion governance lock):** Added explicit approval gates for agent-requested scope expansions that aim to reduce founder workload.
+  - **Rule codified in canonical governance docs:**
+    - Agents must ask explicit permission and wait for a clear yes before any narrow enablement expansion request is implemented.
+    - Covered request categories: permissions/access, UI/UX workflow, tools, MCP, and skills.
+    - Requests must stay narrow, explain workload-reduction value, and include risk/rollback/proof notes.
+  - **Verification:** docs-memory update (see session log); no runtime code paths changed.
+
+- **2026-02-16 (Founder operating-target lock for execution focus):** Recorded durable priority guidance so fresh agents keep shipping website improvements first while autonomy-system hardening remains a tracked secondary lane.
+  - **Priority decision codified:**
+    - Current operating mode: user-facing website utility/growth work first.
+    - Autonomy/tooling hardening remains active but should not displace product-facing progress unless it directly unblocks delivery.
+  - **Future autonomy checklist codified:**
+    - reduce founder input,
+    - push end-to-end execution onto agents,
+    - keep only measurable-value tooling/docs/guardrails,
+    - prefer proven prebuilt systems to reduce maintenance,
+    - enforce fail-closed proof/drift gates.
+  - **Verification:** docs-memory update (see session log); no runtime code paths changed.
+
+- **2026-02-16 (Guide structured-data SEO expansion + smoke stabilization):** Shipped direct discoverability improvements on `/guide` and locked them with regression coverage.
+  - **Schema coverage shipped (`/guide`):**
+    - Added `FAQPage` JSON-LD with operational Q&A for penny-finding behavior.
+    - Added `HowTo` JSON-LD with step-based workflow tied to core utility routes (`/penny-list`, `/store-finder`, `/in-store-strategy`, `/report-find`).
+    - Kept existing `CollectionPage` + `BreadcrumbList` schema in place for continuity.
+  - **Regression coverage shipped:**
+    - Added Playwright assertions in `tests/seo-jsonld.spec.ts` requiring `/guide` to contain `CollectionPage`, `BreadcrumbList`, `FAQPage`, and `HowTo` JSON-LD blocks, with minimum FAQ/step counts.
+    - Updated stale smoke assertion in `tests/smoke-critical.spec.ts` to match current transparency H1 copy after `/support` -> `/transparency` redirect.
+  - **Verification:** `npm run ai:memory:check` ✅, `npm run verify:fast` ✅, `npm run e2e:smoke` ✅, `npx playwright test tests/seo-jsonld.spec.ts --project=chromium-desktop-light --workers=1` ✅, `npm run ai:checkpoint` ✅.
+
+- **2026-02-15 (Multi-domain conformance enforcement):** Added fail-closed memory checks that enforce the founder operating-system artifact contract during checkpoint and verify flows.
+  - **Enforcement shipped (`scripts/ai-memory.ts`):**
+    - Added required artifact existence checks for autonomy canon files:
+      - `.ai/FOUNDER_AUTONOMY_OPERATING_SYSTEM.md`
+      - `.ai/impl/founder-autonomy-memory-hardening.md`
+      - `.ai/topics/FOUNDER_AUTONOMY_CURRENT.md`
+    - Added critical conformance checks for the SOP:
+      - required multi-domain sections,
+      - required domain matrix columns,
+      - all 12 domain rows,
+      - domain-specific artifact markers.
+    - Added context-pack snapshot line for multi-domain conformance pass totals.
+  - **Verification:** `npm run ai:memory:check` ✅, `npm run verify:fast` ✅, `npm run ai:checkpoint` ✅.
+
+- **2026-02-15 (Multi-domain AI operating system implementation):** Operationalized the founder autonomy system into explicit domain-by-domain execution contracts.
+  - **Canonical SOP expansion shipped (`.ai/FOUNDER_AUTONOMY_OPERATING_SYSTEM.md`):**
+    - Added hard execution contracts for `DevOps`, `Security`, `Marketing`, `SEO`, `Affiliates`, `Advertising`, `Monetization`, `PRD`, `Planning`, `Debugging`, `MVP`, and `Future Projects`.
+    - Added required cadence + artifact + done-criteria matrix so cross-domain work is auditable and handoff-safe.
+    - Added a deterministic per-cycle loop requiring domain identification, verification, memory updates, and checkpoint handoff.
+  - **Plan/topic continuity shipped:**
+    - Updated `.ai/impl/founder-autonomy-memory-hardening.md` to mark Phase 2 complete and set Phase 3 enforcement as active.
+    - Updated `.ai/topics/FOUNDER_AUTONOMY_CURRENT.md` to reflect the multi-domain contract baseline and next hardening tasks.
+    - Updated `.ai/BACKLOG.md` to reflect progress on the top P0 autonomy item.
+  - **Verification:** `npm run ai:memory:check` ✅, `npm run verify:fast` ✅, `npm run ai:checkpoint` ✅.
+
+- **2026-02-15 (Privacy-policy provider-neutral rewrite):** Replaced vendor-specific privacy language with a stronger, network-agnostic policy tailored to current site behavior and consent obligations.
+  - **Policy reframing shipped (`/privacy-policy`):**
+    - Removed Ezoic-specific disclosure block and embed anchor.
+    - Added use-case-specific collection/disclosure language for Report a Find, Contact, and email signup data.
+    - Added ad-network-neutral personalization/opt-out wording with Google Ads Settings and AboutAds controls.
+    - Added regional consent controls section for EEA/UK/Switzerland.
+  - **Test alignment shipped:** `tests/privacy-policy.spec.ts` now enforces absence of Ezoic text and presence of neutral compliance disclosures.
+  - **Verification:** `npm run ai:memory:check` ✅, `npm run verify:fast` ✅, `npm run e2e:smoke` ✅, `npx playwright test tests/privacy-policy.spec.ts --project=chromium-desktop-light --workers=1` ✅.
+
+- **2026-02-15 (Privacy-policy disclosure hardening for ad review readiness):** Added explicit Ezoic disclosure language and required embed anchor to reduce policy-ambiguity risk during ad-network/domain reviews.
+  - **Privacy policy updates shipped (`/privacy-policy`):**
+    - Added an Ezoic-specific disclosures section with required source links:
+      - `http://g.ezoic.net/privacy/pennycentral.com`
+      - Ezoic privacy policy and advertising partners pages
+      - industry opt-out links (`youradchoices.com`, `optout.aboutads.info`)
+    - Added required manual embed anchor: `#ezoic-privacy-policy-embed`.
+    - Preserved Rakuten qualifying-signup referral disclosure language.
+  - **Test alignment shipped:** `tests/privacy-policy.spec.ts` now validates Ezoic disclosure presence and embed anchor existence.
+  - **Verification:** `npm run ai:memory:check` ✅, `npm run verify:fast` ✅, `npm run e2e:smoke` ✅, `npx playwright test tests/privacy-policy.spec.ts --project=chromium-desktop-light --workers=1` ✅.
+
+- **2026-02-15 (Persistent-memory hardening + founder-autonomy operating system):** Implemented machine-checkable memory integrity and deterministic context-pack generation to survive context-window resets.
+  - **Automation shipped:**
+    - Added `scripts/ai-memory.ts` with:
+      - `npm run ai:memory:check` (critical/warning memory contract checks)
+      - `npm run ai:memory:pack` (timestamped context artifact generation)
+      - `npm run ai:checkpoint` (blocking handoff guard: no critical failures)
+    - Integrated memory checks into `scripts/ai-verify.ts` as a first-class gate.
+  - **Canonical docs shipped:**
+    - Added `.ai/FOUNDER_AUTONOMY_OPERATING_SYSTEM.md`
+    - Added `.ai/impl/founder-autonomy-memory-hardening.md`
+    - Added `.ai/topics/FOUNDER_AUTONOMY_CURRENT.md`
+    - Updated `.ai/START_HERE.md`, `.ai/VERIFICATION_REQUIRED.md`, `.ai/USAGE.md`, and `.ai/HANDOFF_PROTOCOL.md` to include checkpoint workflow.
+  - **Verification:** `npm run ai:memory:check` ✅, `npm run ai:memory:pack` ✅, `npm run ai:checkpoint` ✅, `npm run verify:fast` ✅, `npm run check:docs-governance` ✅.
 
 - **2026-02-14 (FAQ presentation + Guide progression UX refinement):** Simplified FAQ readability and fixed Guide submenu interaction clarity.
   - **FAQ cleanup shipped (`/faq`):**

@@ -5,7 +5,7 @@ import { PageHeader, PageShell, Prose, Section } from "@/components/page-templat
 export const metadata: Metadata = {
   title: "Privacy Policy | PennyCentral",
   description:
-    "How PennyCentral collects, uses, stores, and shares data, including cookie controls and U.S. privacy rights.",
+    "How PennyCentral collects, uses, stores, and shares data, including cookie controls, ad/affiliate disclosures, and U.S. privacy rights.",
   alternates: {
     canonical: "/privacy-policy",
   },
@@ -30,7 +30,7 @@ export default function PrivacyPolicyPage() {
         title="Privacy Policy"
         subtitle={
           <>
-            <strong>Last Updated:</strong> March 1, 2026
+            <strong>Last Updated:</strong> February 15, 2026
           </>
         }
       />
@@ -57,6 +57,9 @@ export default function PrivacyPolicyPage() {
           <ul>
             <li>Report submissions (for example: SKU details and location context)</li>
             <li>Contact submissions (name, email, message, and optional context fields)</li>
+            <li>
+              Email signup data when you subscribe to updates (email address and signup metadata)
+            </li>
           </ul>
 
           <h3>Local Browser Storage</h3>
@@ -96,10 +99,38 @@ export default function PrivacyPolicyPage() {
             Where required, we will provide a consent mechanism and store your preferences before
             non-essential technologies are activated.
           </p>
+          <p>
+            If advertising features are active, third-party vendors (including Google and partner ad
+            networks) may use cookies to serve ads based on your prior visits to this website or
+            other websites.
+          </p>
+          <p>
+            You can also manage many browser-based advertising preferences through industry tools,
+            including{" "}
+            <a
+              href="https://optout.aboutads.info/?c=2&lang=EN"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              WebChoices
+            </a>{" "}
+            and{" "}
+            <a href="https://youradchoices.com/" target="_blank" rel="noopener noreferrer">
+              YourAdChoices
+            </a>
+            .
+          </p>
+          <p>
+            You can manage Google ad personalization controls at{" "}
+            <a href="https://adssettings.google.com/" target="_blank" rel="noopener noreferrer">
+              adssettings.google.com
+            </a>
+            .
+          </p>
         </Prose>
       </Section>
 
-      <Section title="5) Affiliate and Advertising Disclosures">
+      <Section title="5) Affiliate, Advertising, and Third-Party Disclosures">
         <Prose>
           <p>
             Some outbound links may be affiliate links, including Rakuten referral links. If you
@@ -107,14 +138,27 @@ export default function PrivacyPolicyPage() {
             at no extra cost to you.
           </p>
           <p>
-            PennyCentral may integrate third-party advertising partners in the future. If enabled,
-            this policy and the privacy choices page will be updated with partner-specific
-            disclosures, controls, and links.
+            PennyCentral may work with third-party analytics and advertising providers. If
+            advertising is enabled, those providers may set or read cookies and similar identifiers
+            for ad delivery, measurement, frequency capping, and fraud prevention.
+          </p>
+          <p>
+            If ads are active through Google or Google-certified ad networks, users may opt out of
+            personalized advertising via Google Ads Settings and can also opt out from many
+            participating third-party vendors through{" "}
+            <a href="http://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer">
+              aboutads.info/choices
+            </a>
+            .
+          </p>
+          <p>
+            For transparency, we may provide or update links to key third-party privacy pages when
+            specific providers are active on the site.
           </p>
         </Prose>
       </Section>
 
-      <Section title="6) Sharing and Retention">
+      <Section title="6) Sharing, Retention, and Security">
         <Prose>
           <p>We may share limited data with service providers for:</p>
           <ul>
@@ -126,6 +170,10 @@ export default function PrivacyPolicyPage() {
           <p>
             We retain information only as long as necessary for operations, security, legal
             obligations, and legitimate business records.
+          </p>
+          <p>
+            We use reasonable administrative and technical safeguards to protect personal data, but
+            no internet transmission or storage method is guaranteed to be 100% secure.
           </p>
         </Prose>
       </Section>
@@ -150,11 +198,28 @@ export default function PrivacyPolicyPage() {
         </Prose>
       </Section>
 
-      <Section title="8) Contact">
+      <Section title="8) Regional Consent Controls (EEA/UK/Switzerland)">
+        <Prose>
+          <p>
+            Where required, we obtain consent for non-essential cookies and local storage before
+            activating personalized advertising and related measurement.
+          </p>
+          <p>
+            You may withdraw or update consent choices through available consent controls and
+            browser/device settings.
+          </p>
+        </Prose>
+      </Section>
+
+      <Section title="9) Contact and Policy Updates">
         <Prose>
           <p>
             For privacy questions or requests, email{" "}
             <a href="mailto:contact@pennycentral.com">contact@pennycentral.com</a>.
+          </p>
+          <p>
+            We may update this Privacy Policy as practices or legal requirements evolve. Material
+            updates will be reflected by revising the "Last Updated" date at the top of this page.
           </p>
         </Prose>
       </Section>

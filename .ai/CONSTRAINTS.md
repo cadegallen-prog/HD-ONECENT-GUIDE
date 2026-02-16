@@ -6,114 +6,15 @@
 
 ---
 
-## 🔴 MOST VIOLATED RULES (READ FIRST)
+## 🔴 MOST VIOLATED RULES (CANONICAL REFERENCES)
 
-### ⛔ Rule #1: NEVER Kill Port 3001 (Unless Proven Unhealthy + You Own It)
+To reduce policy drift, detailed definitions for the most-violated rules are canonical in `.ai/CRITICAL_RULES.md`.
 
-**Problem:** Agents keep killing the dev server on port 3001 even though the user is intentionally running it.
+Use this file for technical boundaries and fragile-area constraints; use `CRITICAL_RULES.md` for non-negotiable behavior details.
 
-**What happens:**
-
-1. Agent notices port 3001 is in use
-2. Agent kills the process
-3. Agent starts `npm run dev` fresh
-4. **User's time wasted** - they were already previewing changes
-
-**CORRECT behavior:**
-
-```bash
-# Check if port 3001 is in use
-netstat -ano | findstr :3001
-
-# IF PORT IS IN USE:
-# ✅ USE IT - navigate to http://localhost:3001 in Playwright
-# ✅ DO NOT kill the process
-# ✅ DO NOT restart npm run dev
-
-# IF PORT IS FREE:
-# ✅ NOW you can run: npm run dev
-```
-
-**Exception:** Only kill port 3001 if:
-
-- User explicitly asks you to restart it
-- Process is **proven unhealthy** (port is LISTENING but HTTP does not respond after a few retries)
-- And you **know you own that process** (you started it in this session / terminal), or you’ve asked you (Cade) first
-
-**Default assumption:** If port 3001 is occupied = **user is running server intentionally. Use it.**
-
-**HTTP readiness check (use this before calling it “hung”):**
-
-```bash
-powershell -NoProfile -Command "try { (Invoke-WebRequest -Uri http://localhost:3001 -UseBasicParsing -TimeoutSec 5).StatusCode } catch { $_.Exception.Message }"
-```
-
----
-
-### ⛔ Rule #2: NEVER Use Generic Tailwind Colors
-
-**Problem:** Agents keep using boring, generic Tailwind colors that look cheap and unprofessional.
-
-**FORBIDDEN (DO NOT USE):**
-
-- ❌ `blue-500`, `blue-600`, `blue-700`
-- ❌ `gray-500`, `gray-600`, `gray-700`
-- ❌ `green-500`, `red-500`, `indigo-600`
-- ❌ ANY raw Tailwind color names
-
-**These look generic and lazy.**
-
-**REQUIRED APPROACH:**
-
-**Option 1: Use existing design tokens ONLY**
-
-```css
-/* ONLY use these from globals.css */
---background, --foreground
---card, --card-foreground
---primary, --primary-foreground
---cta-primary, --cta-secondary
---border-default, --border-elevated
-```
-
-**Option 2: Get approval FIRST before adding new colors**
-
-```
-"This button needs a distinct color.
-
-Current option: Use existing --cta-primary
-Alternative: Introduce new accent color (requires approval)
-
-Which would you prefer?"
-```
-
-**Rule:** NEVER add colors without either:
-
-1. Using existing tokens from globals.css, OR
-2. Getting user approval with before/after screenshots
-
----
-
-### ⛔ Rule #3: NEVER Claim "Done" Without Proof
-
-**Problem:** Agents claim "tests pass" or "bug fixed" without actually verifying.
-
-**What happens:**
-
-1. Agent: "All tests pass now!"
-2. User checks: Tests are failing
-3. **Trust broken, time wasted**
-
-**REQUIRED:** Read [VERIFICATION_REQUIRED.md](VERIFICATION_REQUIRED.md) for complete requirements.
-
-**Minimum proof for "done":**
-
-- ✅ Test output (lint, build, test:unit, test:e2e - ALL 4)
-- ✅ Screenshots (for UI changes - use Playwright)
-- ✅ GitHub Actions status (if applicable - paste URL)
-- ✅ Before/after comparison (show problem was actually fixed)
-
-**No proof = not done.**
+- Rule #1 (Port 3001 ownership and restart policy): `.ai/CRITICAL_RULES.md` -> `Rule #1`
+- Rule #2 (No raw Tailwind color palette usage): `.ai/CRITICAL_RULES.md` -> `Rule #2`
+- Rule #3 (Verification proof requirements + docs-only exception): `.ai/CRITICAL_RULES.md` -> `Rule #3` and `.ai/VERIFICATION_REQUIRED.md`
 
 ---
 

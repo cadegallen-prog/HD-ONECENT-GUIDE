@@ -205,6 +205,8 @@ When something doesn't work:
 - **`.ai/topics/INDEX.md`** - Topic capsule index (choose your domain)
 - **`.ai/impl/`** - Implementation plans (approved architectures live here)
 - **`copilot-instructions.md`** - Copilot Chat entry point (limited capabilities)
+- **`npm run ai:memory:pack`** - Generates a timestamped machine-auditable context pack under `reports/context-packs/`
+- **`npm run ai:checkpoint`** - Runs memory integrity checks + generates context pack in one step
 
 These enable fast context-loading when switching tools (Claude → Codex → Copilot) or starting fresh.
 

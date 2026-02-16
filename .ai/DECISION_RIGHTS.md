@@ -94,6 +94,22 @@ All implementation still requires a completed Alignment Gate before mutation.
 
 **Why:** Cade needs to understand the cost-benefit.
 
+### Workload-Reduction Enablement Requests (Permission-First)
+
+- Agent may request narrow expansion only after asking explicit permission and receiving a clear "yes."
+- This applies to:
+  - permissions/access changes
+  - UI/UX workflow changes
+  - tools/dependency-environment additions
+  - MCP server additions or permission changes
+  - skill additions/updates
+- Request must be narrow (single change bundle) and include:
+  - what changes,
+  - why it reduces Cade's workload,
+  - risk + rollback,
+  - proof plan.
+- Do not implement until explicit approval is provided.
+
 ---
 
 ## 🔴 AI Must NEVER Do Without Explicit Permission

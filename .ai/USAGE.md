@@ -29,7 +29,8 @@ OPTIONS (if this needs approval): A) [fast/safe] B) [balanced] C) [ambitious]
 DONE MEANS:
 - [success criterion]
 - [success criterion]
-- npm run build + npm run lint + npm run test:unit + npm run test:e2e pass
+- npm run ai:memory:check + npm run verify:fast pass
+- npm run e2e:smoke pass (for route/form/API/navigation/UI-flow changes)
 - I verified the page/flow
 ```
 
@@ -77,7 +78,7 @@ This supports multiple concurrent plans without losing track of which is approve
 **You CANNOT say "done" without PROOF:**
 
 1. ✅ Screenshots (for UI changes - use Playwright)
-2. ✅ Test output (all 4 commands: lint, build, test:unit, test:e2e)
+2. ✅ Test output (`npm run ai:memory:check` + `npm run verify:fast`, plus `npm run e2e:smoke` when applicable)
 3. ✅ GitHub Actions status (if applicable - paste URL)
 4. ✅ Before/after comparison (show the problem was actually fixed)
 
@@ -96,13 +97,14 @@ This supports multiple concurrent plans without losing track of which is approve
 6. Add new learnings to .ai/LEARNINGS.md when relevant.
 7. Record gate results (lint, build, unit, e2e).
 8. **NEVER kill port 3001** - if it's running, the user is using it intentionally.
+9. Run `npm run ai:checkpoint` before handoff when work spans multiple context windows.
 
 ---
 
 ## Critical Rules (repeat daily)
 
 - Default to **no new dependencies** and avoid one-off files; if you must add a file, prune or merge an obsolete one and log it.
-- Stay on `main`; nothing ships until `main` is pushed.
+- Implement on `dev`; promote to `main` only after verification and review.
 - Use DECISION_RIGHTS for approval checks before UI/system changes.
 - Keep edits inside the design system and constraints; prefer token-backed utilities.
 

@@ -25,6 +25,7 @@ This document defines the working relationship between Cade and any AI assistant
 - Default to **no new dependencies**; if one is unavoidable, propose first and keep it to a single addition with rationale logged.
 - No new one-off files: if you add a helper/data/doc, delete or merge an obsolete one and record it.
 - Follow `.ai/VERIFICATION_REQUIRED.md` lane policy (FAST always; SMOKE/FULL when applicable).
+- Permission-first expansion: for workload-reduction enablement changes (permissions, UI/UX workflow, tools, MCP, skills), ask for explicit approval first, keep scope narrow, and wait for a clear "yes" before implementation.
 
 ---
 

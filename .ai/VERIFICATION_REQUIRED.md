@@ -12,23 +12,25 @@ If you (the agent) did not run a gate / capture a screenshot / verify a behavior
 
 To claim “done” on a meaningful change, provide:
 
-1. **FAST lane output** (always):
+1. **Memory integrity check** (always for AI-led sessions):
+   - `npm run ai:memory:check`
+2. **FAST lane output** (always):
    - `npm run verify:fast` (lint + typecheck + unit + build)
-2. **SMOKE lane output** (required for route/form/API/navigation/UI-flow changes):
+3. **SMOKE lane output** (required for route/form/API/navigation/UI-flow changes):
    - `npm run e2e:smoke`
-3. **FULL lane output** (required when FULL trigger conditions apply):
+4. **FULL lane output** (required when FULL trigger conditions apply):
    - `npm run e2e:full`
    - FULL trigger conditions: PR to `main`, merge queue, label `run-full-e2e`, risky paths changed, nightly schedule, or manual dispatch.
-4. **UI proof** (only when UI/UX/copy/layout/visuals changed):
+5. **UI proof** (only when UI/UX/copy/layout/visuals changed):
    - Playwright screenshots (light + dark) and a console error report
-5. **Before/after proof** (only when fixing a bug):
+6. **Before/after proof** (only when fixing a bug):
    - “Before” reproduction evidence (error text, screenshot, or steps)
    - “After” evidence showing it’s resolved
-6. **Memory updates** (for meaningful work):
+7. **Memory updates** (for meaningful work):
    - `.ai/SESSION_LOG.md` (always)
    - `.ai/STATE.md` (when it changes current reality)
    - `.ai/BACKLOG.md` (only if priorities moved)
-7. **Handoff block** (for meaningful work):
+8. **Handoff block** (for meaningful work):
    - Include a structured next-agent handoff per `.ai/HANDOFF_PROTOCOL.md`
    - Must include: completion status, changed files, verification paths, open risks, and immediate next step
 
@@ -41,7 +43,14 @@ If the change is truly docs-only and no code paths changed, you can say “Docs-
 Run:
 
 ```bash
+npm run ai:memory:check
 npm run verify:fast
+```
+
+And, when switching context windows or handing off multi-step work:
+
+```bash
+npm run ai:memory:pack
 ```
 
 And, when applicable:
@@ -105,6 +114,7 @@ Use the screenshots as the “before/after” proof when applicable.
 
 **Tests (required):**
 
+- `npm run ai:memory:check`: ✅/❌
 - `npm run verify:fast`: ✅/❌ (link output or paste)
 - `npm run e2e:smoke`: ✅/❌ or N/A (state why)
 - `npm run e2e:full`: ✅/❌ or N/A (state trigger status)
@@ -112,6 +122,7 @@ Use the screenshots as the “before/after” proof when applicable.
 **Bundle (preferred):**
 
 - `reports/verification/<timestamp>/summary.md`
+- `reports/context-packs/<timestamp>/context-pack.md` (for multi-session continuity)
 
 **Playwright (UI changes only):**
 

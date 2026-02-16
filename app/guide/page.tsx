@@ -83,6 +83,72 @@ const breadcrumbJsonLd = {
   ],
 }
 
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "What are Home Depot penny items?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Home Depot penny items are clearance products that can reach a one-cent terminal price in some stores. Timing and availability vary by location.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Do online prices confirm penny status?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "No. Online and app signals are directional only. In-store UPC scan and checkout behavior are the final source of truth.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What should I do when I find a confirmed penny item?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Record SKU, store, and date, then submit a report through Penny Central so the community list stays current and trustworthy.",
+      },
+    },
+  ],
+}
+
+const howToJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "How to find Home Depot penny items",
+  description:
+    "A practical process to identify likely penny items, verify them in-store, and report findings responsibly.",
+  totalTime: "PT20M",
+  step: [
+    {
+      "@type": "HowToStep",
+      name: "Build a shortlist before visiting",
+      text: "Review the Live Penny List and shortlist SKUs relevant to your next store run.",
+      url: "https://www.pennycentral.com/penny-list",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Set your target store",
+      text: "Use Store Finder so your research is tied to the location you actually plan to visit.",
+      url: "https://www.pennycentral.com/store-finder",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Verify in-store with UPC checks",
+      text: "Use in-store verification and checkout behavior as final truth; online signals are not confirmation.",
+      url: "https://www.pennycentral.com/in-store-strategy",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Report confirmed outcomes",
+      text: "Submit confirmed finds with SKU, store, and date so the list improves for returning users.",
+      url: "https://www.pennycentral.com/report-find",
+    },
+  ],
+}
+
 const quickStart = [
   "Read in order if you are new, then bookmark the chapters you revisit most often.",
   "Use online and app signals for targeting, then verify in-store with UPC scans.",
@@ -156,6 +222,14 @@ export default function GuideHubPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
       />
       <RouteAdSlots pathname="/guide" />
       <div className="container mx-auto max-w-5xl px-4 py-7 md:px-6 md:py-9">
