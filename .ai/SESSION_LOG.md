@@ -4,6 +4,41 @@
 
 ---
 
+## 2026-02-16 - Codex - Founder-Prompt Ambiguity Permanent Fix (Default Execute + Canon Guard)
+
+**Goal:** Permanently eliminate confusing founder-facing prompt loops by forcing default execution from canonical backlog and banning process-token asks to Cade.
+
+**Status:** ✅ Completed.
+
+### Changes
+
+- Updated `AGENTS.md`:
+  - Replaced process-token trigger language with default execution behavior:
+    - execute immediately on clear founder request,
+    - execute top P0 by default when no override exists.
+  - Added explicit prohibition on asking Cade for process tokens like `GOAL / WHY / DONE MEANS` + `"go"`.
+  - Clarifying questions now allowed only for real blockers (missing decision/access/constraint conflict).
+- Updated `.ai/START_HERE.md`:
+  - Applied the same default-execution and no-process-token rules in canonical startup instructions.
+- Updated `.ai/HANDOFF_PROTOCOL.md`:
+  - Handoffs now must default to a concrete next execution task (normally top P0), not open-ended choice prompts.
+  - Added explicit rule that "Single next task" is a directive, not a question, unless blocked.
+- Updated `.ai/CONTRACT.md`:
+  - Added founder-communication guardrails: no process-token asks to Cade and default top-P0 continuation when unblocked.
+- Updated `scripts/check-doc-governance-drift.mjs`:
+  - Added `founder-prompt-clarity` checks that fail governance validation if deprecated prompt patterns return.
+- Updated `.ai/STATE.md`:
+  - Added sprint entry documenting this permanent ambiguity fix.
+
+### Verification
+
+- `npm run check:docs-governance` ✅
+- `npm run ai:memory:check` ✅
+- `npm run ai:checkpoint` ✅
+- Context pack artifact: `reports/context-packs/2026-02-16T07-13-42/context-pack.md`
+
+---
+
 ## 2026-02-16 - Codex - Governance Rule-Validity Cleanup (Cost/Benefit Follow-Through)
 
 **Goal:** Implement the approved rule-quality cleanup so agents stop blindly following contradictory or low-value governance constraints.

@@ -28,6 +28,8 @@
 - The handoff must let another agent continue without re-discovery.
 - If the task involved planning docs, include canonical plan evidence (path + hash + sync status).
 - Label this block explicitly as "for future AI agents."
+- Handoff must default to execution of the next concrete task (normally top P0 in `.ai/BACKLOG.md`) when no blocker exists.
+- Do not end handoffs with open-ended choice questions (for example, "governance cleanup or product work?") unless the founder explicitly asked for options.
 
 5. **Publish founder-readable summary**
 
@@ -89,6 +91,8 @@ Notes on field meaning:
 
 - "First command/file to open" is primarily for the next AI agent to resume quickly.
 - If Cade is expected to run a command personally, say so explicitly in the founder summary.
+- "Single next task" must be an executable directive, not a question, unless blocked.
+- If blocked, state one concrete blocker and one plain-English decision needed from Cade.
 
 ---
 

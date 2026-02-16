@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 16, 2026 (governance rule-validity audit hardening documented)
+**Last updated:** Feb 16, 2026 (founder-prompt ambiguity permanently hardened)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,16 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-16 (Founder-prompt ambiguity hardening - permanent fix):** Converted founder-facing execution flow from optional/jargon-heavy prompts to default-execute behavior with enforceable drift guards.
+  - **Canonical behavior fixes shipped:**
+    - `AGENTS.md` + `.ai/START_HERE.md` now require default execution when request is clear or when top P0 is unblocked, without asking founder to provide process tokens.
+    - Added explicit prohibition on asking Cade for `GOAL / WHY / DONE MEANS` + `"go"` phrasing as a prerequisite.
+    - `.ai/HANDOFF_PROTOCOL.md` now requires next-step handoffs to be executable directives (not open-ended choice questions) unless blocked.
+    - `.ai/CONTRACT.md` now requires plain-English blocker questions only and default top-P0 continuation when no blocker exists.
+  - **Enforcement hardening shipped:**
+    - `scripts/check-doc-governance-drift.mjs` now includes founder-prompt clarity checks and fails on deprecated prompt patterns.
+  - **Verification:** `npm run check:docs-governance` ✅, `npm run ai:memory:check` ✅, `npm run ai:checkpoint` ✅ (artifact in session log).
 
 - **2026-02-16 (Governance rule-validity hardening pass):** Removed low-value contradictions and aligned rule contracts to reduce blind compliance and drift.
   - **High-impact governance fixes shipped:**

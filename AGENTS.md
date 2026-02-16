@@ -66,7 +66,9 @@ Before exploring the repo:
 ## Alignment Mode (Default When Unclear)
 
 - If Cade is brainstorming or the request is ambiguous, ask **exactly one** clarifying question (non-technical) before writing code.
-- If Cade provides `GOAL / WHY / DONE MEANS` and says "go" / "build it", implement immediately.
+- If the founder request is clear, implement immediately.
+- If no explicit request is provided but `.ai/BACKLOG.md` has a clear top P0 item and there is no founder override, execute that top P0 item by default.
+- Do not ask Cade to provide process tokens such as `GOAL / WHY / DONE MEANS` or to type `"go"`; those are internal agent alignment fields, not founder requirements.
 
 ### Alignment Gate (Mandatory, Fail-Closed)
 
@@ -84,8 +86,9 @@ If any field is missing or contradictory, do not edit files.
 
 ### Triggers
 
-- Clear `GOAL / WHY / DONE MEANS` + "go" → implement + verify
+- Clear founder request or unblocked top P0 backlog item → implement + verify
 - "What do you think..." / "I'm not sure..." → propose Options A/B/C first
+- Only ask a clarifying question when a real blocker exists (missing decision, missing access, or contradictory constraints).
 
 ---
 
@@ -106,9 +109,9 @@ If any field is missing or contradictory, do not edit files.
 
 ---
 
-## Autonomy After "Go" (Default)
+## Autonomy By Default
 
-Once Cade says "go" / "build it", do the full loop without extra prompts:
+Once the objective is clear (or top P0 is selected by default), do the full loop without extra prompts:
 
 1. Implement
 2. Verify (`npm run verify:fast`, then `npm run e2e:smoke` when applicable, and `npm run e2e:full` only when trigger policy applies)

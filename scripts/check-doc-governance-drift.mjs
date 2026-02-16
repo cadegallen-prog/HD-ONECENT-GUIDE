@@ -98,6 +98,66 @@ const checkReadOrderDrift = () => {
   requireIncludes(".ai/START_HERE.md", ["## Alignment Gate (Fail-Closed, Required Before Mutation)"], category)
 }
 
+const checkFounderPromptClarity = () => {
+  const category = "founder-prompt-clarity"
+
+  requireIncludes(
+    "AGENTS.md",
+    [
+      "Do not ask Cade to provide process tokens",
+      "top P0 item and there is no founder override, execute that top P0 item by default.",
+    ],
+    category
+  )
+
+  requireIncludes(
+    ".ai/START_HERE.md",
+    [
+      "Do not ask Cade to provide process tokens",
+      "top P0 item and there is no founder override, execute that top P0 item by default.",
+    ],
+    category
+  )
+
+  requireIncludes(
+    ".ai/HANDOFF_PROTOCOL.md",
+    [
+      "Do not end handoffs with open-ended choice questions",
+      "Single next task\" must be an executable directive",
+    ],
+    category
+  )
+
+  const bannedPatterns = [
+    {
+      path: "AGENTS.md",
+      text: "If Cade provides `GOAL / WHY / DONE MEANS` and says \"go\" / \"build it\", implement immediately.",
+    },
+    {
+      path: "AGENTS.md",
+      text: "Clear `GOAL / WHY / DONE MEANS` + \"go\" → implement + verify",
+    },
+    {
+      path: ".ai/START_HERE.md",
+      text: "If Cade provides `GOAL / WHY / DONE MEANS` and says \"go\" / \"build it\", implement immediately.",
+    },
+    {
+      path: ".ai/START_HERE.md",
+      text: "Clear `GOAL / WHY / DONE MEANS` + \"go\" → implement + verify",
+    },
+  ]
+
+  for (const pattern of bannedPatterns) {
+    const text = readText(pattern.path)
+    if (text.includes(pattern.text)) {
+      addError(
+        category,
+        `${pattern.path} contains deprecated founder-facing prompt pattern: "${pattern.text}"`
+      )
+    }
+  }
+}
+
 const checkStaleArchitectureClaims = () => {
   const category = "architecture-truth"
   const stalePhrases = [
@@ -296,6 +356,7 @@ const checkProductTruthDrift = () => {
 const run = () => {
   checkVerificationModelDrift()
   checkReadOrderDrift()
+  checkFounderPromptClarity()
   checkStaleArchitectureClaims()
   checkDuplicatePolicyDefinitions()
   checkProductTruthDrift()
@@ -310,6 +371,7 @@ const run = () => {
 
   notes.push("No conflicting verification model detected.")
   notes.push("No read-order drift detected in entrypoint docs.")
+  notes.push("No founder-prompt clarity drift detected in canonical docs.")
   notes.push("No stale architecture claims detected in canonical operational docs.")
   notes.push("No duplicate secondary-policy definitions detected.")
   notes.push(
