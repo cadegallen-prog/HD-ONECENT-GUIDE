@@ -367,7 +367,7 @@ export default async function Home() {
               href="/transparency"
               className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 min-h-[48px] rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold shadow-md hover:bg-[var(--cta-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
             >
-              Transparency & Funding
+              Transparency
             </Link>
             <Link
               href="/contact"

@@ -1,37 +1,69 @@
-import { redirect } from "next/navigation"
-import { Metadata } from "next"
-import { ogImageUrl } from "@/lib/og"
+import type { Metadata } from "next"
+import Link from "next/link"
+import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
 
 export const metadata: Metadata = {
-  title: "Home Depot Internal Systems - Understanding Store Operations | Penny Central",
-  description:
-    "Understand Home Depot's internal systems, SKU structure, inventory management, and clearance processes from a penny hunter's perspective.",
+  title: "Internal Systems Reference | PennyCentral",
+  description: "Reference context on store-side systems that can affect clearance outcomes.",
   alternates: {
-    canonical: "/",
-  },
-  keywords: [
-    "home depot systems",
-    "sku structure",
-    "inventory management",
-    "clearance process",
-    "home depot operations",
-    "internal processes",
-  ],
-  openGraph: {
-    title: "Home Depot Internal Systems Explained",
-    description: "Learn how Home Depot's internal systems work and how they affect penny hunting.",
-    images: [ogImageUrl("Internal Systems")],
+    canonical: "/internal-systems",
   },
   robots: {
     index: false,
     follow: false,
   },
-  twitter: {
-    card: "summary_large_image",
-    images: [ogImageUrl("Internal Systems")],
-  },
 }
 
-export default function InternalSystemsRedirect() {
-  redirect("/#internal-systems")
+export default function InternalSystemsPage() {
+  return (
+    <PageShell width="narrow">
+      <p className="mb-6 text-sm text-[var(--text-secondary)]">
+        <Link className="text-[var(--cta-primary)] underline" href="/guide">
+          ← Back to Guide
+        </Link>
+      </p>
+
+      <PageHeader
+        title="Internal Systems Reference"
+        subtitle="Operational context that can affect clearance outcomes. This page is informational and intentionally not indexed."
+      />
+
+      <Section>
+        <Prose className="[&_h2]:mt-8 [&_h2:first-of-type]:mt-0">
+          <h2>What this page is</h2>
+          <p>
+            This page documents operational signals that can influence in-store clearance outcomes.
+            It exists as a reference supplement to the main Guide chapters.
+          </p>
+
+          <h2>How to use it</h2>
+          <ul>
+            <li>Treat these notes as context, not guarantees.</li>
+            <li>Use in-store scan behavior as final confirmation.</li>
+            <li>Prioritize the main Guide for day-to-day execution.</li>
+          </ul>
+
+          <h2>Key operational factors</h2>
+          <ul>
+            <li>Store-level reset timing and local inventory turnover can vary by location.</li>
+            <li>Clearance stage signals are directional and may lag real checkout outcomes.</li>
+            <li>Department-level handling can change how quickly items are pulled or repriced.</li>
+          </ul>
+
+          <h2>Related pages</h2>
+          <ul>
+            <li>
+              <Link href="/inside-scoop">Inside Scoop</Link>
+            </li>
+            <li>
+              <Link href="/in-store-strategy">In-Store Strategy</Link>
+            </li>
+            <li>
+              <Link href="/penny-list">Live Penny List</Link>
+            </li>
+          </ul>
+        </Prose>
+      </Section>
+    </PageShell>
+  )
 }

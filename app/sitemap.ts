@@ -10,6 +10,10 @@ import { MetadataRoute } from "next"
  * This prevents Google from flagging the site as "low value content" due to thin
  * programmatic pages while preserving the full user experience.
  *
+ * Legacy redirect routes and utility routes are intentionally excluded:
+ * - /support (legacy redirect to /transparency)
+ * - /internal-systems (utility reference, noindex)
+ *
  * Traffic is primarily social/direct, so this has zero impact on visitor numbers.
  */
 export default function sitemap(): MetadataRoute.Sitemap {

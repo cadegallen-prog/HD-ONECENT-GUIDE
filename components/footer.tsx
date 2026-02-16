@@ -78,7 +78,7 @@ export function Footer() {
                 </li>
                 <li>
                   <Link href="/transparency" className={navLinkClass}>
-                    Transparency & Funding
+                    Transparency
                   </Link>
                 </li>
               </ul>

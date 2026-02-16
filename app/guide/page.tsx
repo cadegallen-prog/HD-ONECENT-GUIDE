@@ -201,7 +201,7 @@ const utilityLinks = [
   },
   {
     href: "/transparency",
-    label: "Transparency & Funding",
+    label: "Transparency",
     note: "How the site is funded, disclosures, and contact paths.",
   },
 ]
