@@ -147,18 +147,21 @@ These are the only technical commands Cade needs to know:
 ## Alignment Mode (Default When Unclear)
 
 - If Cade is brainstorming or the request is ambiguous, ask **exactly one** clarifying question (non-technical) before writing code.
-- If Cade provides `GOAL / WHY / DONE MEANS` and says "go" / "build it", implement immediately.
+- If the founder request is clear, implement immediately.
+- If no explicit request is provided but `.ai/BACKLOG.md` has a clear top P0 item and there is no founder override, execute that top P0 item by default.
+- Do not ask Cade to provide process tokens such as `GOAL / WHY / DONE MEANS` or to type `"go"`; those are internal agent alignment fields, not founder requirements.
 
 ### Triggers
 
-- Clear `GOAL / WHY / DONE MEANS` + "go" → implement + verify
+- Clear founder request or unblocked top P0 backlog item → implement + verify
 - "What do you think..." / "I'm not sure..." → propose Options A/B/C first
+- Ask a clarifying question only when there is a real blocker (missing decision, missing access, or contradictory constraints).
 
 ---
 
-## Autonomy After "Go" (Default)
+## Autonomy By Default
 
-Once Cade says "go" / "build it", do the full loop without extra prompts:
+Once the objective is clear (or top P0 is selected by default), do the full loop without extra prompts:
 
 1. Implement
 2. Verify (`npm run verify:fast`, then `npm run e2e:smoke` when applicable, and `npm run e2e:full` only when trigger policy applies)
@@ -205,6 +208,8 @@ When something doesn't work:
 - **`.ai/topics/INDEX.md`** - Topic capsule index (choose your domain)
 - **`.ai/impl/`** - Implementation plans (approved architectures live here)
 - **`copilot-instructions.md`** - Copilot Chat entry point (limited capabilities)
+- **`npm run ai:memory:pack`** - Generates a timestamped machine-auditable context pack under `reports/context-packs/`
+- **`npm run ai:checkpoint`** - Runs memory integrity checks + generates context pack in one step
 
 These enable fast context-loading when switching tools (Claude → Codex → Copilot) or starting fresh.
 

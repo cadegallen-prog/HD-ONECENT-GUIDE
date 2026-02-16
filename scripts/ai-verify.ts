@@ -153,6 +153,16 @@ interface GateResult {
 }
 
 function parseGateOutput(name: string, output: string, pass: boolean): string {
+  if (name === "memory") {
+    const scoreMatch = output.match(/Integrity score\s*:\s*([\d.]+)%/i)
+    const criticalMatch = output.match(/Critical fails\s*:\s*(\d+)/i)
+    const score = scoreMatch ? `${scoreMatch[1]}%` : "unknown"
+    const critical = criticalMatch ? criticalMatch[1] : "?"
+    return pass
+      ? `Integrity ${score}, critical fails ${critical}`
+      : `Memory check failed (critical fails ${critical})`
+  }
+
   if (name === "lint") {
     if (pass) {
       return "0 errors, 0 warnings"
@@ -266,6 +276,7 @@ function generateSummary(results: GateResult[], timestamp: string): string {
   markdown += `|------|--------|---------|\n`
 
   const gateNames: Record<string, string> = {
+    memory: "Memory",
     lint: "Lint",
     build: "Build",
     unit: "Unit",
@@ -356,6 +367,7 @@ async function main() {
 
   // Define gates
   const gates: Array<{ name: string; cmd: string; env?: NodeJS.ProcessEnv }> = [
+    { name: "memory", cmd: "npm run ai:memory:check" },
     { name: "lint", cmd: "npm run lint" },
     { name: "build", cmd: "npm run build", env: buildEnv },
     { name: "unit", cmd: "npm run test:unit" },

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { promises as fs } from "fs"
 import path from "path"
+import { authorizeAdminRequest } from "@/lib/admin-auth"
 
 interface FindSubmission {
   id: string
@@ -32,7 +33,10 @@ async function writeSubmissions(submissions: FindSubmission[]): Promise<void> {
 }
 
 // GET - List all submissions
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const authError = authorizeAdminRequest(request)
+  if (authError) return authError
+
   try {
     const submissions = await readSubmissions()
     return NextResponse.json({ submissions })
@@ -44,6 +48,9 @@ export async function GET() {
 
 // PATCH - Approve or reject submission
 export async function PATCH(request: NextRequest) {
+  const authError = authorizeAdminRequest(request)
+  if (authError) return authError
+
   try {
     const { id, action } = await request.json()
 
@@ -70,6 +77,9 @@ export async function PATCH(request: NextRequest) {
 
 // DELETE - Remove submission
 export async function DELETE(request: NextRequest) {
+  const authError = authorizeAdminRequest(request)
+  if (authError) return authError
+
   try {
     const { id } = await request.json()
 

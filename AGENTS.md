@@ -37,6 +37,20 @@ If a request is unclear, ask **one** clarifying question. If it's misaligned, pr
 
 **If the session goal is AI workflow/tooling/process enablement:** also read `.ai/AI_ENABLEMENT_BLUEPRINT.md` (repo-native, cross-agent).
 
+### Permission-First Narrow Expansion Rule (Mandatory)
+
+If an agent wants to request scope expansion to reduce founder workload, it must ask for explicit approval first and wait for a clear yes before implementing.
+
+Allowed narrow-request categories:
+
+- permissions/access changes
+- UI/UX workflow changes
+- tool additions/changes
+- MCP server additions/permission changes
+- skill additions/updates
+
+Each request must stay narrow (single change bundle), explain measurable founder workload reduction, and include rollback notes.
+
 ---
 
 ## Skills System (MANDATORY)
@@ -52,7 +66,9 @@ Before exploring the repo:
 ## Alignment Mode (Default When Unclear)
 
 - If Cade is brainstorming or the request is ambiguous, ask **exactly one** clarifying question (non-technical) before writing code.
-- If Cade provides `GOAL / WHY / DONE MEANS` and says "go" / "build it", implement immediately.
+- If the founder request is clear, implement immediately.
+- If no explicit request is provided but `.ai/BACKLOG.md` has a clear top P0 item and there is no founder override, execute that top P0 item by default.
+- Do not ask Cade to provide process tokens such as `GOAL / WHY / DONE MEANS` or to type `"go"`; those are internal agent alignment fields, not founder requirements.
 
 ### Alignment Gate (Mandatory, Fail-Closed)
 
@@ -70,8 +86,9 @@ If any field is missing or contradictory, do not edit files.
 
 ### Triggers
 
-- Clear `GOAL / WHY / DONE MEANS` + "go" → implement + verify
+- Clear founder request or unblocked top P0 backlog item → implement + verify
 - "What do you think..." / "I'm not sure..." → propose Options A/B/C first
+- Only ask a clarifying question when a real blocker exists (missing decision, missing access, or contradictory constraints).
 
 ---
 
@@ -92,9 +109,9 @@ If any field is missing or contradictory, do not edit files.
 
 ---
 
-## Autonomy After "Go" (Default)
+## Autonomy By Default
 
-Once Cade says "go" / "build it", do the full loop without extra prompts:
+Once the objective is clear (or top P0 is selected by default), do the full loop without extra prompts:
 
 1. Implement
 2. Verify (`npm run verify:fast`, then `npm run e2e:smoke` when applicable, and `npm run e2e:full` only when trigger policy applies)
@@ -146,24 +163,24 @@ Anything not helping this loop is secondary.
 
 ---
 
-## 3. Git / Deployment Workflow (Main-Only)
+## 3. Git / Deployment Workflow (Dev -> Main)
 
-We run a single-branch workflow.
+We run a two-branch promotion workflow.
 
-- **`main` is the only branch**
-- Every push to remote `main` deploys to Vercel
+- **`dev`** is the active integration branch for implementation work.
+- **`main`** is the protected deployment branch.
 
 Workflow:
 
-1. `git pull origin main`
-2. Make changes on `main`
-3. **Run `npm run verify:fast` before every push**
+1. `git pull origin dev`
+2. Make changes on `dev`
+3. **Run `npm run ai:memory:check` + `npm run verify:fast` before pushing**
 4. **Run `npm run e2e:smoke` when touching routes/forms/API/UI flows**
 5. **Use Playwright for UI changes** (screenshots required)
-6. Commit to `main` with clear message
-7. Push `main` (CI enforces FAST + SMOKE; FULL e2e runs by trigger policy)
+6. Commit and push `dev`
+7. Promote to `main` only after required checks pass
 
-Never reference or create `dev`/`develop` branches.
+Do not implement directly on `main` unless you (Cade) explicitly request an emergency hotfix.
 
 ---
 
@@ -175,11 +192,12 @@ Never reference or create `dev`/`develop` branches.
 
 You MUST provide:
 
-- `npm run verify:fast` output (lint + typecheck + unit + build)
+- `npm run verify:fast` output (lint + typecheck + unit + build) for meaningful code changes
 - `npm run e2e:smoke` output for route/form/API/UI-flow work (or explicit reason why not applicable)
-- GitHub Actions links for FAST + SMOKE checks, and FULL e2e when triggered (`PR -> main`, `run-full-e2e` label, risky paths, nightly, manual)
+- GitHub Actions links for FAST + SMOKE checks (and FULL when triggered) **when CI has run**
 - Screenshots for UI changes (Playwright)
 - Before/after comparison (for bug fixes)
+- For docs-only changes with no runtime code-path impact: mark test lanes N/A with reason and run `npm run ai:memory:check` + `npm run ai:checkpoint`
 
 **No proof = not done.**
 
@@ -269,16 +287,17 @@ Rules:
 
 **BEFORE claiming "done":**
 
-1. ✅ `npm run verify:fast` (passes)
+1. ✅ `npm run verify:fast` (for meaningful code changes)
 2. ✅ `npm run e2e:smoke` (for route/form/API/UI-flow changes)
 3. ✅ FULL e2e evidence when trigger conditions match (or when explicitly requested)
 4. ✅ Playwright screenshots (if UI changed)
-5. ✅ GitHub Actions check links (FAST + SMOKE; FULL when triggered)
-6. ✅ Update `.ai/SESSION_LOG.md` and `.ai/STATE.md`
-7. ✅ **Paste proof** using template from `.ai/VERIFICATION_REQUIRED.md`
-8. ✅ Include `Next-Agent Handoff` block per `.ai/HANDOFF_PROTOCOL.md`
-9. ✅ Include a plain-English term glossary for any technical terms used in the response
-10. ✅ Clearly separate "What Cade needs to do" from "What future agents need to do"
+5. ✅ GitHub Actions check links when CI has run (FAST + SMOKE; FULL when triggered)
+6. ✅ Docs-only exception: if no runtime code path changed, mark test lanes N/A and run `npm run ai:memory:check` + `npm run ai:checkpoint`
+7. ✅ Update `.ai/SESSION_LOG.md` and `.ai/STATE.md`
+8. ✅ **Paste proof** using template from `.ai/VERIFICATION_REQUIRED.md`
+9. ✅ Include `Next-Agent Handoff` block per `.ai/HANDOFF_PROTOCOL.md`
+10. ✅ Include a plain-English term glossary for any technical terms used in the response
+11. ✅ Clearly separate "What Cade needs to do" from "What future agents need to do"
 
 **Summarize changes in plain English with verification evidence.**
 

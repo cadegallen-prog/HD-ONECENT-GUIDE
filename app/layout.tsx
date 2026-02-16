@@ -215,7 +215,8 @@ export default function RootLayout({
                     'ad_storage': 'granted',
                     'ad_user_data': 'granted',
                     'ad_personalization': 'granted',
-                    'analytics_storage': 'granted'
+                    'analytics_storage': 'granted',
+                    'region': ['US', 'CA']
                   });
 
                   gtag('js', new Date());

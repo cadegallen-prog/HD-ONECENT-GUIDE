@@ -143,6 +143,7 @@ For any meaningful change (especially UI/copy/navigation):
 - Docs/memory updated: `README.md`, `.ai/STATE.md`, `.ai/BACKLOG.md`, `.ai/SESSION_LOG.md`
 - Include a structured next-agent handoff block per `.ai/HANDOFF_PROTOCOL.md`
 - Token-only colors confirmed (no raw Tailwind palette); prefer `npm run lint:colors`
+- Docs-only exception: if no runtime code paths changed, mark test lanes N/A with reason and run `npm run ai:memory:check` + `npm run ai:checkpoint`
 
 See: `.ai/VERIFICATION_REQUIRED.md`
 
@@ -228,7 +229,7 @@ public/                 # Static assets
 - **Task closeout contract:** `.ai/HANDOFF_PROTOCOL.md` (mandatory completion + next-agent handoff schema)
 - **First session only:** Read `.ai/GROWTH_STRATEGY.md` for business context
 - **If session goal is AI workflow/tooling/verification enablement:** Also read `.ai/AI_ENABLEMENT_BLUEPRINT.md`
-- **Rules:** Default no new dependencies; run `verify:fast` on meaningful changes, run `e2e:smoke` for flow changes, run `e2e:full` when FULL triggers apply, record results in `.ai/SESSION_LOG.md`; work on `main`
+- **Rules:** Default no new dependencies; run `verify:fast` on meaningful changes, run `e2e:smoke` for flow changes, run `e2e:full` when FULL triggers apply, record results in `.ai/SESSION_LOG.md`; work on `dev` and promote verified changes to `main`
 - **Mandatory Alignment Gate before mutation:** GOAL / WHY / DONE MEANS / NOT DOING / CONSTRAINTS / ASSUMPTIONS / CHALLENGES
 
 ---
@@ -264,15 +265,16 @@ Use this if the session is policy/process/governance heavy:
 
 ## Branch Strategy
 
-- **`main`** — the only branch used locally and on remote. Every push deploys to Vercel.
+- **`dev`** — integration branch for active implementation work.
+- **`main`** — protected deployment branch. Only promote verified work from `dev`.
 
 **Workflow:**
 
-1. Pull latest `main`
-2. Make changes on `main`
-3. Run `npm run verify:fast` (and `npm run e2e:smoke` for route/form/API/navigation/UI-flow changes)
-4. Commit to `main` with a clear message
-5. Push `main` to deploy
+1. Pull latest `dev`
+2. Make and verify changes on `dev`
+3. Run `npm run ai:memory:check` + `npm run verify:fast` (and `npm run e2e:smoke` for route/form/API/navigation/UI-flow changes)
+4. Commit/push `dev`
+5. Promote to `main` only after review and all required checks pass
 
 ---
 

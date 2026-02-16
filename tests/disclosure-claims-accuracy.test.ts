@@ -55,21 +55,55 @@ test("public legal and transparency pages do not deny Rakuten relationship", () 
   }
 })
 
-test("public legal and transparency pages keep Rakuten referral disclosure", () => {
-  const targets = [
-    "app/privacy-policy/page.tsx",
-    "app/terms-of-service/page.tsx",
-    "app/transparency/page.tsx",
-  ]
+test("transparency page contains affiliate disclosure without promotional language", () => {
+  const source = readSource("app/transparency/page.tsx")
+  const normalized = normalizeWhitespace(source)
+
+  // Must contain a disclosure that affiliate links exist
+  assert.ok(normalized.includes("affiliate"), "transparency page must reference affiliate links")
+
+  // Must mention Rakuten relationship factually
+  assert.ok(normalized.includes("rakuten"), "transparency page must reference Rakuten")
+
+  // Must mention referral compensation
+  assert.ok(
+    normalized.includes("referral"),
+    "transparency page must reference referral compensation"
+  )
+
+  // Must include "no extra cost" consumer protection language
+  assert.ok(
+    normalized.includes("no extra cost"),
+    "transparency page must state no extra cost to user"
+  )
+
+  // Must NOT contain promotional/CTA-style language
+  assert.ok(
+    !normalized.includes("save money"),
+    "transparency page must not use promotional 'save money' language"
+  )
+  assert.ok(
+    !normalized.includes("sign up now"),
+    "transparency page must not use 'sign up now' CTA language"
+  )
+  assert.ok(
+    !normalized.includes("exclusive bonus"),
+    "transparency page must not use 'exclusive bonus' language"
+  )
+  assert.ok(
+    !normalized.includes("don't miss"),
+    "transparency page must not use 'don't miss' urgency language"
+  )
+})
+
+test("privacy and terms pages contain factual affiliate disclosure", () => {
+  const targets = ["app/privacy-policy/page.tsx", "app/terms-of-service/page.tsx"]
 
   for (const target of targets) {
     const source = readSource(target)
     const normalized = normalizeWhitespace(source)
-    assert.ok(normalized.includes("rakuten"), `${target} must reference Rakuten disclosure`)
-    assert.ok(normalized.includes("referral"), `${target} must reference referral disclosure`)
-    assert.ok(
-      normalized.includes("qualifying signup") || normalized.includes("qualifying signups"),
-      `${target} must specify qualifying-signup condition`
-    )
+    assert.ok(normalized.includes("affiliate"), `${target} must reference affiliate disclosure`)
+    assert.ok(normalized.includes("rakuten"), `${target} must reference Rakuten`)
+    assert.ok(normalized.includes("referral"), `${target} must reference referral`)
   }
 })

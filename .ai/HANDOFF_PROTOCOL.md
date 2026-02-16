@@ -21,12 +21,15 @@
    - `.ai/BACKLOG.md` (only if priorities changed)
    - `.ai/LEARNINGS.md` (if mistakes/failed approaches occurred)
    - `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md` (required whenever any monetization incident is open or touched)
+   - Run `npm run ai:checkpoint` before handoff when work spans multiple sessions/context windows
 4. **Publish next-agent handoff**
 
 - Include a structured handoff block in the final response and/or session log.
 - The handoff must let another agent continue without re-discovery.
 - If the task involved planning docs, include canonical plan evidence (path + hash + sync status).
 - Label this block explicitly as "for future AI agents."
+- Handoff must default to execution of the next concrete task (normally top P0 in `.ai/BACKLOG.md`) when no blocker exists.
+- Do not end handoffs with open-ended choice questions (for example, "governance cleanup or product work?") unless the founder explicitly asked for options.
 
 5. **Publish founder-readable summary**
 
@@ -66,6 +69,7 @@ Use this schema every time:
 - `npm run e2e:smoke` (or N/A + reason):
 - `npm run e2e:full` (or N/A + trigger status):
 - Playwright proof path(s):
+- Memory checkpoint artifact path (when multi-session):
 - Known non-blocking console noise:
 - Canonical plan path (if planning task):
 - Canonical plan SHA256 (if planning task):
@@ -87,6 +91,8 @@ Notes on field meaning:
 
 - "First command/file to open" is primarily for the next AI agent to resume quickly.
 - If Cade is expected to run a command personally, say so explicitly in the founder summary.
+- "Single next task" must be an executable directive, not a question, unless blocked.
+- If blocked, state one concrete blocker and one plain-English decision needed from Cade.
 
 ---
 

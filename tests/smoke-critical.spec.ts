@@ -33,8 +33,6 @@ test.describe("critical smoke lane", () => {
   test("legacy support route resolves to canonical transparency page", async ({ page }) => {
     await page.goto("/support")
     await expect(page).toHaveURL(/\/transparency\/?$/)
-    await expect(
-      page.getByRole("heading", { level: 1, name: /Transparency & Funding/i })
-    ).toBeVisible()
+    await expect(page.getByRole("heading", { level: 1, name: /^Transparency$/i })).toBeVisible()
   })
 })

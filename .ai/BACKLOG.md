@@ -1,6 +1,6 @@
 # Backlog (Top Priority Items)
 
-**Last updated:** Feb 13, 2026 (policy-language remediation implemented; deployment evidence refresh next)
+**Last updated:** Feb 16, 2026 (website-first operating target locked)
 **Rule:** Keep ≤10 items. Archive completed/deferred items.
 
 **Auto-archive:** Full backlog history preserved in `archive/backlog-history/`
@@ -18,7 +18,31 @@ Each AI session should:
 
 ## P0 - Do Next (Analytics-Driven Growth)
 
-### 0. Monetization Incident Resolution Command Center (Parallel Hardening, 14-day lock)
+### 0. Persistent Memory + Founder Autonomy Hardening (Critical Enablement)
+
+- **Problem:** Context windows are fragile and non-persistent, creating high risk of drift, repeated work, and avoidable founder burden.
+- **Progress (2026-02-16):**
+  - Founder priority lock documented: prioritize visible website utility/growth work first; keep autonomy/tooling upgrades as a secondary lane unless they directly unblock delivery.
+  - Operating-target checklist captured for future autonomy cycles:
+    - reduce founder required input,
+    - push end-to-end execution onto agents,
+    - keep only tooling/docs/guardrails with measurable user-value impact,
+    - prefer proven prebuilt systems when they reduce maintenance,
+    - enforce hard fail-closed gates for drift and missing proof.
+- **Progress (2026-02-15):**
+  - Memory integrity automation shipped (`ai:memory:check`, `ai:memory:pack`, `ai:checkpoint`).
+  - Founder autonomy SOP and canonical plan/topic docs shipped.
+  - Multi-domain operating contracts shipped in the canonical SOP (DevOps, Security, Marketing, SEO, Affiliates, Advertising, Monetization, PRD, Planning, Debugging, MVP, Future Projects).
+  - Multi-domain conformance checks now enforced in `scripts/ai-memory.ts` as critical checkpoint gates (missing SOP artifacts now fail checkpoint/verify).
+  - `ai:verify` now includes memory integrity as a first-class gate.
+- **Done means:**
+  - Every multi-session handoff includes a generated context pack artifact.
+  - `ai:checkpoint` passes with **0 critical failures** before handoff.
+  - Recovery time from fresh context to actionable state is ≤ 5 minutes.
+  - Founder required actions remain limited to approvals/strategic decisions.
+- **Plan artifacts:** `.ai/impl/founder-autonomy-memory-hardening.md`, `.ai/FOUNDER_AUTONOMY_OPERATING_SYSTEM.md`, `.ai/topics/FOUNDER_AUTONOMY_CURRENT.md`
+
+### 1. Monetization Incident Resolution Command Center (Parallel Hardening, 14-day lock)
 
 - **Problem:** Monetization blockers are now multi-incident and cross-network, not a single AdSense issue:
   - AdSense moved from `Low Value Content` to `We found some policy violations` on Feb 12, 2026.
@@ -37,7 +61,7 @@ Each AI session should:
   - Primary path decision is revisited after the 14-day parallel-hardening window using incident outcomes, not assumptions.
 - **Plan artifact:** `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`
 
-### 1. Governance Realignment Follow-Through (Charter-first Enforcement)
+### 2. Governance Realignment Follow-Through (Charter-first Enforcement)
 
 - **Problem:** Charter/canon refactor is in place and `ai:verify` default mode is now codified; one follow-up remains open: run one intentional drift contradiction test in CI to prove fail behavior.
 - **Done means:**
@@ -46,7 +70,7 @@ Each AI session should:
   - Drift-test evidence logged in `STATE.md` and `SESSION_LOG.md`
 - **Plan:** `.ai/impl/vision-charter-first-governance-realignment.md`
 
-### 2. Sitewide Monetization Readiness - Route Policy + UX-Safe Revenue Architecture
+### 3. Sitewide Monetization Readiness - Route Policy + UX-Safe Revenue Architecture
 
 - **Problem:** Monetization strategy is currently fragmented (guide-focused execution, but sitewide revenue depends heavily on utility routes and first-layer IA quality signals).
 - **Progress (2026-02-13):** Runtime foundation is complete and aligned to founder-approved Option B:
@@ -65,7 +89,7 @@ Each AI session should:
   - Monumetric handoff packet is prepared and confirmed (exclusions + frequency guardrails + provider-managed placement assumptions)
 - **Plan:** `.ai/impl/monumetric-launch-spec.md` (supersedes `.ai/plans/sitewide-monetization-readiness.md` for launch decisions)
 
-### 3. Agent Autonomy Hardening - Phase 1 (Port 3001 Reliability Contract)
+### 4. Agent Autonomy Hardening - Phase 1 (Port 3001 Reliability Contract)
 
 - **Problem:** Local dev-server ownership and verification mode selection are easy to misapply, creating restart-loop confusion and blocking agent momentum.
 - **Progress (2026-02-11):** `scripts/ai-proof.ts` now supports deterministic `dev`/`test` modes, `PLAYWRIGHT_BASE_URL`, and fail-fast no-thrash server checks. Remaining work is to unify the same contract fully across `ai-doctor` + all docs/skills references.
@@ -76,7 +100,7 @@ Each AI session should:
   - Verification evidence includes one bundle for dev mode and one for test mode
 - **Plan:** `.ai/plans/agent-autonomy-hardening.md`
 
-### 4. Bloat Control - Ongoing Archive-First Hygiene
+### 5. Bloat Control - Ongoing Archive-First Hygiene
 
 - **Problem:** Deprecated/legacy/single-use docs and scripts keep accumulating, increasing AI context noise and decision drift.
 - **Done means:**
@@ -97,7 +121,7 @@ Each AI session should:
   - `archive/scripts-pruned/2026-02-03-pass3/`
   - `archive/scripts-pruned/2026-02-04-pass1/`
 
-### 5. Data Pipeline Reliability - Pre-scrape + Cron Auth (P0-0)
+### 6. Data Pipeline Reliability - Pre-scrape + Cron Auth (P0-0)
 
 - **Problem:** GitHub-hosted runners are blocked upstream (**403 + Cloudflare “Just a moment...”**), so scheduled scraping cannot be the primary freshness path right now. Separately, Vercel cron endpoints will return 401 if `CRON_SECRET` is missing/mismatched.
 - **Done means:**
@@ -107,9 +131,14 @@ Each AI session should:
   - Vercel cron logs show 200s (not 401s) for `/api/cron/seed-penny-list`, `/api/cron/trickle-finds`, `/api/cron/send-weekly-digest`
 - **Approach options (later):** self-hosted runner (home IP / VPS) vs paid residential proxy vs new data source (avoid upstream dependency where possible)
 
-### 6. SEO Improvement - Schema Markup + Internal Linking (P0-3)
+### 7. SEO Improvement - Schema Markup + Internal Linking (P0-3)
 
 - **Problem:** Zero non-branded organic clicks. Position 11.6 for "home depot penny list". 100% dependent on Facebook.
+- **Progress (2026-02-16):**
+  - Added `FAQPage` schema on `/guide`.
+  - Added `HowTo` schema on `/guide`.
+  - Added Playwright regression assertions for `/guide` JSON-LD types and minimum FAQ/step depth.
+  - Fixed stale smoke assertion on `/support` -> `/transparency` heading expectation so smoke remains reliable.
 - **Done means:**
   - FAQ schema added to `/guide`
   - HowTo schema added to `/guide`

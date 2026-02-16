@@ -1,7 +1,9 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import { useAuth } from "@/components/auth-provider"
 import {
   CheckCircle2,
   XCircle,
@@ -10,6 +12,7 @@ import {
   MapPin,
   Calendar,
   Package,
+  KeyRound,
 } from "lucide-react"
 
 interface FindSubmission {
@@ -26,18 +29,76 @@ interface FindSubmission {
   validationScore?: number
 }
 
+const ADMIN_TOKEN_STORAGE_KEY = "pennycentral_admin_token"
+
 export default function AdminDashboard() {
+  const router = useRouter()
+  const { user, loading: authLoading } = useAuth()
+
   const [submissions, setSubmissions] = useState<FindSubmission[]>([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [filter, setFilter] = useState<"all" | "pending" | "approved" | "rejected">("pending")
+  const [adminToken, setAdminToken] = useState("")
+  const [tokenSubmitted, setTokenSubmitted] = useState(false)
+  const [authError, setAuthError] = useState<string | null>(null)
 
   useEffect(() => {
-    loadSubmissions()
+    if (!authLoading && !user) {
+      router.replace("/login?redirect=/admin/dashboard")
+    }
+  }, [authLoading, user, router])
+
+  useEffect(() => {
+    const storedToken = sessionStorage.getItem(ADMIN_TOKEN_STORAGE_KEY)
+    if (!storedToken) return
+
+    setAdminToken(storedToken)
+    setTokenSubmitted(true)
   }, [])
 
-  const loadSubmissions = async () => {
+  const clearAdminToken = useCallback(() => {
+    sessionStorage.removeItem(ADMIN_TOKEN_STORAGE_KEY)
+    setTokenSubmitted(false)
+    setAdminToken("")
+  }, [])
+
+  const getAuthHeaders = useCallback(
+    (includeJson = false): HeadersInit => {
+      const headers: Record<string, string> = {
+        Authorization: `Bearer ${adminToken}`,
+      }
+
+      if (includeJson) {
+        headers["Content-Type"] = "application/json"
+      }
+
+      return headers
+    },
+    [adminToken]
+  )
+
+  const handleAuthFailure = useCallback(() => {
+    setAuthError("Admin token rejected. Re-enter a valid token.")
+    setSubmissions([])
+    clearAdminToken()
+  }, [clearAdminToken])
+
+  const loadSubmissions = useCallback(async () => {
+    if (!adminToken) return
+
+    setLoading(true)
+    setAuthError(null)
+
     try {
-      const response = await fetch("/api/admin/submissions")
+      const response = await fetch("/api/admin/submissions", {
+        headers: getAuthHeaders(),
+      })
+
+      if (response.status === 401 || response.status === 403) {
+        handleAuthFailure()
+        return
+      }
+
       if (response.ok) {
         const data = await response.json()
         setSubmissions(data.submissions || [])
@@ -47,17 +108,28 @@ export default function AdminDashboard() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [adminToken, getAuthHeaders, handleAuthFailure])
+
+  useEffect(() => {
+    if (!user || !tokenSubmitted || !adminToken) return
+    void loadSubmissions()
+  }, [user, tokenSubmitted, adminToken, loadSubmissions])
 
   const handleApprove = async (id: string) => {
     try {
       const response = await fetch("/api/admin/submissions", {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(true),
         body: JSON.stringify({ id, action: "approve" }),
       })
+
+      if (response.status === 401 || response.status === 403) {
+        handleAuthFailure()
+        return
+      }
+
       if (response.ok) {
-        loadSubmissions()
+        await loadSubmissions()
       }
     } catch (error) {
       console.error("Error approving submission:", error)
@@ -68,11 +140,17 @@ export default function AdminDashboard() {
     try {
       const response = await fetch("/api/admin/submissions", {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(true),
         body: JSON.stringify({ id, action: "reject" }),
       })
+
+      if (response.status === 401 || response.status === 403) {
+        handleAuthFailure()
+        return
+      }
+
       if (response.ok) {
-        loadSubmissions()
+        await loadSubmissions()
       }
     } catch (error) {
       console.error("Error rejecting submission:", error)
@@ -85,11 +163,17 @@ export default function AdminDashboard() {
     try {
       const response = await fetch("/api/admin/submissions", {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(true),
         body: JSON.stringify({ id }),
       })
+
+      if (response.status === 401 || response.status === 403) {
+        handleAuthFailure()
+        return
+      }
+
       if (response.ok) {
-        loadSubmissions()
+        await loadSubmissions()
       }
     } catch (error) {
       console.error("Error deleting submission:", error)
@@ -101,6 +185,70 @@ export default function AdminDashboard() {
   )
 
   const pendingCount = submissions.filter((s) => s.status === "pending").length
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-[var(--bg-page)] flex items-center justify-center">
+        <p className="text-[var(--text-muted)]">Checking access...</p>
+      </div>
+    )
+  }
+
+  if (!user) {
+    return null
+  }
+
+  if (!tokenSubmitted) {
+    return (
+      <div className="min-h-screen bg-[var(--bg-page)] py-8 px-4 sm:px-6">
+        <div className="max-w-md mx-auto bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-lg p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <KeyRound className="w-5 h-5 text-[var(--text-primary)]" />
+            <h1 className="text-xl font-semibold text-[var(--text-primary)]">Admin Access Token</h1>
+          </div>
+
+          <p className="text-sm text-[var(--text-secondary)] mb-4">
+            Enter the `ADMIN_SECRET` value to access submission moderation endpoints.
+          </p>
+
+          {authError && (
+            <div className="mb-4 p-3 bg-[var(--bg-page)] border border-[var(--status-error)] rounded text-sm text-[var(--status-error)]">
+              {authError}
+            </div>
+          )}
+
+          <form
+            onSubmit={(event) => {
+              event.preventDefault()
+              const trimmedToken = adminToken.trim()
+              if (!trimmedToken) return
+
+              sessionStorage.setItem(ADMIN_TOKEN_STORAGE_KEY, trimmedToken)
+              setAdminToken(trimmedToken)
+              setTokenSubmitted(true)
+              setAuthError(null)
+            }}
+            className="space-y-3"
+          >
+            <input
+              type="password"
+              value={adminToken}
+              onChange={(event) => setAdminToken(event.target.value)}
+              placeholder="Paste ADMIN_SECRET"
+              autoFocus
+              className="w-full px-3 py-2 rounded border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)]"
+            />
+            <Button
+              type="submit"
+              className="w-full bg-[var(--cta-primary)] text-[var(--cta-text)] hover:opacity-90"
+            >
+              Unlock Admin Dashboard
+            </Button>
+          </form>
+        </div>
+      </div>
+    )
+  }
 
   if (loading) {
     return (
@@ -114,11 +262,22 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-[var(--bg-page)] py-8 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">Admin Dashboard</h1>
-          <p className="text-[var(--text-secondary)]">
-            Review and approve community penny find submissions
-          </p>
+        <div className="mb-8 flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">Admin Dashboard</h1>
+            <p className="text-[var(--text-secondary)]">
+              Review and approve community penny find submissions
+            </p>
+          </div>
+          <Button
+            variant="ghost"
+            onClick={() => {
+              clearAdminToken()
+              setAuthError(null)
+            }}
+          >
+            Lock Admin Token
+          </Button>
         </div>
 
         {/* Stats */}

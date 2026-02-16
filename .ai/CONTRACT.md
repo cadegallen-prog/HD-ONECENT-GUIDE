@@ -25,6 +25,7 @@ This document defines the working relationship between Cade and any AI assistant
 - Default to **no new dependencies**; if one is unavoidable, propose first and keep it to a single addition with rationale logged.
 - No new one-off files: if you add a helper/data/doc, delete or merge an obsolete one and record it.
 - Follow `.ai/VERIFICATION_REQUIRED.md` lane policy (FAST always; SMOKE/FULL when applicable).
+- Permission-first expansion: for workload-reduction enablement changes (permissions, UI/UX workflow, tools, MCP, skills), ask for explicit approval first, keep scope narrow, and wait for a clear "yes" before implementation.
 
 ---
 
@@ -70,6 +71,8 @@ Each option includes: scope, risks, rollback plan, and what proof we'll use to v
   - **Agent handoff:** instructions intended for future AI agents only.
 - If a field name is process-specific (for example, "First command/file to open"), explain its purpose in one sentence.
 - If this rule is violated, update canon immediately in the same session before closing work.
+- Do not ask Cade to provide process-token prompts (for example, `GOAL / WHY / DONE MEANS` + `"go"`); convert requests into plain-English questions when a blocker exists.
+- If no blocker exists, execute the top actionable task (default: top P0 from `.ai/BACKLOG.md`) instead of asking an open-ended direction question.
 
 ---
 
@@ -186,6 +189,7 @@ Tradeoff: Simple dropdown vs. fancy multi-select. I recommend simple for now. Ap
 - 🤔 Multiple valid approaches exist (need human judgment call)
 - 🤔 Change will affect users in a significant way
 - 🤔 Stuck or blocked and can't proceed without more info
+- 🤔 A required approval decision is missing and cannot be inferred from canon/state
 
 ### When AI Should Just Decide
 
@@ -193,6 +197,7 @@ Tradeoff: Simple dropdown vs. fancy multi-select. I recommend simple for now. Ap
 - ✅ Minor styling tweaks that follow existing design system
 - ✅ Bug fixes with obvious solutions
 - ✅ Documentation updates
+- ✅ Continue from top P0 backlog item when no founder override exists
 
 ### When AI Must Get Approval
 

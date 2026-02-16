@@ -1,7 +1,11 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { getSupabaseServiceRoleClient } from "@/lib/supabase/client"
+import { authorizeAdminRequest } from "@/lib/admin-auth"
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const authError = authorizeAdminRequest(request)
+  if (authError) return authError
+
   try {
     const supabase = getSupabaseServiceRoleClient()
 

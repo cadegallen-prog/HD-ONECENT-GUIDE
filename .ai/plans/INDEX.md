@@ -21,10 +21,11 @@
 
 ## Active / Noteworthy Plans
 
-| Plan                                           | Status                     | Priority          | Last updated | Notes                                                                   |
-| ---------------------------------------------- | -------------------------- | ----------------- | ------------ | ----------------------------------------------------------------------- |
-| `.ai/plans/sitewide-monetization-readiness.md` | Planning (Superseded)      | P0 (Monetization) | 2026-02-11   | Superseded for launch decisions by `.ai/impl/monumetric-launch-spec.md` |
-| `.ai/plans/agent-autonomy-hardening.md`        | Planning                   | P0 (Enablement)   | 2026-02-03   | Port lifecycle + access matrix + observability                          |
-| `.ai/plans/2026-research-integration.md`       | Shipped                    | P0 (Credibility)  | 2026-02-04   | Implemented + verified locally; deploy on push                          |
-| `.ai/plans/my-list-elevation.md`               | Approved (Not Implemented) | P1 (Retention)    | 2026-01-21   | 3-phase roadmap; strict infra reuse                                     |
-| `.ai/plans/ad-monetization-strategy.md`        | Planning                   | P1 (Monetization) | 2026-01-26   | Legacy context plan; superseded by sitewide readiness planning          |
+| Plan                                            | Status                     | Priority          | Last updated | Notes                                                                   |
+| ----------------------------------------------- | -------------------------- | ----------------- | ------------ | ----------------------------------------------------------------------- |
+| `.ai/plans/sitewide-monetization-readiness.md`  | Planning (Superseded)      | P0 (Monetization) | 2026-02-11   | Superseded for launch decisions by `.ai/impl/monumetric-launch-spec.md` |
+| `.ai/impl/founder-autonomy-memory-hardening.md` | In Progress                | P0 (Enablement)   | 2026-02-15   | Persistent-memory integrity + founder-effort minimization hardening     |
+| `.ai/plans/agent-autonomy-hardening.md`         | Planning                   | P0 (Enablement)   | 2026-02-03   | Port lifecycle + access matrix + observability                          |
+| `.ai/plans/2026-research-integration.md`        | Shipped                    | P0 (Credibility)  | 2026-02-04   | Implemented + verified locally; deploy on push                          |
+| `.ai/plans/my-list-elevation.md`                | Approved (Not Implemented) | P1 (Retention)    | 2026-01-21   | 3-phase roadmap; strict infra reuse                                     |
+| `.ai/plans/ad-monetization-strategy.md`         | Planning                   | P1 (Monetization) | 2026-01-26   | Legacy context plan; superseded by sitewide readiness planning          |
