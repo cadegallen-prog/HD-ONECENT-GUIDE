@@ -160,17 +160,39 @@ type PennyListRowForRealtimeSerpApi = {
   enrichment_provenance: Record<string, unknown> | null
 }
 
-type PennyListLookupQuery = {
-  select: (columns: string) => {
-    eq: (
-      column: string,
-      value: string
-    ) => {
-      limit: (count: number) => {
-        maybeSingle: () => Promise<{ data: unknown; error: unknown }>
-      }
-    }
-  }
+type SelfEnrichmentCandidate = EnrichmentData & {
+  timestamp?: string | null
+}
+
+function parseTimestampMs(value: string | null | undefined): number {
+  if (!value) return 0
+  const ms = new Date(value).getTime()
+  return Number.isFinite(ms) ? ms : 0
+}
+
+function getSelfEnrichmentScore(row: SelfEnrichmentCandidate): number {
+  let score = 0
+  if (hasNonEmptyText(row.item_name)) score += 5
+  if (hasNonEmptyText(row.brand)) score += 3
+  if (hasNonEmptyText(row.image_url)) score += 3
+  if (hasNonEmptyText(row.home_depot_url)) score += 2
+  if (hasNonEmptyText(row.model_number)) score += 2
+  if (hasNonEmptyText(row.upc)) score += 1
+  if (typeof row.internet_sku === "number" && row.internet_sku > 0) score += 1
+  if (typeof row.retail_price === "number" && row.retail_price > 0) score += 1
+  return score
+}
+
+function pickBestSelfEnrichment(rows: SelfEnrichmentCandidate[]): EnrichmentData | null {
+  if (!Array.isArray(rows) || rows.length === 0) return null
+
+  const sorted = [...rows].sort((a, b) => {
+    const scoreDiff = getSelfEnrichmentScore(b) - getSelfEnrichmentScore(a)
+    if (scoreDiff !== 0) return scoreDiff
+    return parseTimestampMs(b.timestamp) - parseTimestampMs(a.timestamp)
+  })
+
+  return sorted[0]
 }
 
 /**
@@ -178,8 +200,7 @@ type PennyListLookupQuery = {
  * This provides "self-enrichment" where previous submissions of the same SKU
  * can provide data for new submissions.
  *
- * Note: Staging queue enrichment happens AFTER insert via the
- * consume_enrichment_for_penny_item RPC (atomic operation).
+ * Note: Item Cache enrichment is applied AFTER insert via RPC.
  *
  * @returns Enrichment data from existing Penny List rows, or null
  */
@@ -193,23 +214,78 @@ async function lookupSelfEnrichment(
   }
   try {
     const pennyListTable = supabase.from("Penny List") as unknown
-    if (typeof (pennyListTable as { select?: unknown }).select !== "function") {
+    if (
+      typeof (pennyListTable as { select?: ((columns: string) => unknown) | undefined }).select !==
+      "function"
+    ) {
       return null
     }
 
-    // Check existing Penny List rows with same SKU for self-enrichment
-    const { data: existingRows, error: existingError } = await (
-      pennyListTable as PennyListLookupQuery
+    const selectBuilder = (pennyListTable as { select: (columns: string) => unknown }).select(
+      "item_name, brand, model_number, upc, image_url, home_depot_url, internet_sku, retail_price, enrichment_provenance, timestamp"
     )
-      .select(
-        "item_name, brand, model_number, upc, image_url, home_depot_url, internet_sku, retail_price, enrichment_provenance"
-      )
-      .eq("home_depot_sku_6_or_10_digits", sku)
-      .limit(1)
-      .maybeSingle()
 
-    if (!existingError && existingRows) {
-      return existingRows as EnrichmentData
+    if (
+      typeof (selectBuilder as { eq?: ((column: string, value: string) => unknown) | undefined })
+        .eq !== "function"
+    ) {
+      return null
+    }
+
+    const bySku = (selectBuilder as { eq: (column: string, value: string) => unknown }).eq(
+      "home_depot_sku_6_or_10_digits",
+      sku
+    )
+
+    // Primary path in production: fetch a small candidate set and pick most complete/recent row.
+    if (
+      typeof (
+        bySku as {
+          order?: ((column: string, options: { ascending: boolean }) => unknown) | undefined
+        }
+      ).order === "function"
+    ) {
+      const ordered = (
+        bySku as { order: (column: string, options: { ascending: boolean }) => unknown }
+      ).order("timestamp", { ascending: false })
+
+      if (
+        typeof (ordered as { limit?: ((count: number) => Promise<unknown>) | undefined }).limit ===
+        "function"
+      ) {
+        const result = (await (
+          ordered as { limit: (count: number) => Promise<{ data: unknown; error: unknown }> }
+        ).limit(20)) as {
+          data: unknown
+          error: unknown
+        }
+
+        if (!result.error && Array.isArray(result.data) && result.data.length > 0) {
+          return pickBestSelfEnrichment(result.data as SelfEnrichmentCandidate[])
+        }
+      }
+    }
+
+    // Fallback for minimal test mocks.
+    if (
+      typeof (bySku as { limit?: ((count: number) => unknown) | undefined }).limit === "function"
+    ) {
+      const limited = (bySku as { limit: (count: number) => unknown }).limit(1)
+      if (
+        typeof (limited as { maybeSingle?: (() => Promise<unknown>) | undefined }).maybeSingle ===
+        "function"
+      ) {
+        const result = (await (
+          limited as { maybeSingle: () => Promise<{ data: unknown; error: unknown }> }
+        ).maybeSingle()) as {
+          data: unknown
+          error: unknown
+        }
+
+        if (!result.error && result.data) {
+          return result.data as EnrichmentData
+        }
+      }
     }
   } catch (error) {
     // Skip enrichment if client is minimally mocked (tests) or query builder is incomplete
@@ -229,11 +305,15 @@ function hasValidRetailPrice(value: unknown): boolean {
 }
 
 function hasCanonicalGap(
-  row: Pick<PennyListRowForRealtimeSerpApi, "item_name" | "brand" | "image_url" | "retail_price">
+  row: Pick<
+    PennyListRowForRealtimeSerpApi,
+    "item_name" | "brand" | "image_url" | "home_depot_url" | "retail_price"
+  >
 ): boolean {
   if (!hasNonEmptyText(row.item_name)) return true
   if (!hasNonEmptyText(row.brand)) return true
   if (!hasNonEmptyText(row.image_url)) return true
+  if (!hasNonEmptyText(row.home_depot_url)) return true
   if (!hasValidRetailPrice(row.retail_price)) return true
   return false
 }
@@ -407,29 +487,27 @@ async function maybeRealtimeSerpApiEnrich(
 }
 
 /**
- * Consume enrichment from staging queue via atomic RPC.
- * This function is called AFTER the Penny List insert to atomically:
- * 1. Find matching staging row (by SKU or internet_number)
- * 2. Update the Penny List row with merge rules
- * 3. Delete the staging row
+ * Apply Item Cache enrichment via non-consuming RPC.
+ * This function is called AFTER insert to merge Item Cache fields and provenance.
+ * Unlike consume mode, Item Cache rows remain reusable after apply.
  *
  * @returns Result object with enrichment status
  */
-async function consumeStagingEnrichment(
+async function applyItemCacheEnrichment(
   serviceClient: SupabaseServiceRoleClientLike,
   pennyId: string,
   sku: string,
   internetSku: number | null
 ): Promise<{ enriched: boolean; matchType?: string; fieldsFilled?: string[] }> {
   try {
-    const { data, error } = await serviceClient.rpc("consume_enrichment_for_penny_item", {
+    const { data, error } = await serviceClient.rpc("apply_item_cache_enrichment_for_penny_item", {
       p_penny_id: pennyId,
       p_sku: sku,
       p_internet_number: internetSku,
     })
 
     if (error) {
-      console.warn("Staging enrichment RPC error:", error.message)
+      console.warn("Item Cache enrichment RPC error:", error.message)
       return { enriched: false }
     }
 
@@ -441,12 +519,12 @@ async function consumeStagingEnrichment(
     } | null
 
     if (result?.enriched) {
-      // Log enrichment result per spec requirements
+      // Log enrichment result per spec requirements.
       console.log("Enrichment applied:", {
         submission_id: pennyId,
         match_type: result.match_type,
         fields_filled_count: result.fields_filled?.length ?? 0,
-        staging_row_deleted: result.staging_row_deleted,
+        item_cache_row_deleted: result.staging_row_deleted,
       })
       return {
         enriched: true,
@@ -457,8 +535,8 @@ async function consumeStagingEnrichment(
 
     return { enriched: false }
   } catch (error) {
-    // Log warning but don't fail the request - staging enrichment is non-critical
-    console.warn("Staging enrichment error:", error)
+    // Log warning but don't fail the request - Item Cache enrichment is non-critical.
+    console.warn("Item Cache enrichment error:", error)
     return { enriched: false }
   }
 }
@@ -554,7 +632,7 @@ export async function POST(request: NextRequest) {
 
     const supabase = getSupabaseServerClient()
 
-    // Lookup self-enrichment from existing Penny List rows with same SKU
+    // Step 1 (canonical): lookup self-enrichment from Main List by SKU.
     const enrichment = await lookupSelfEnrichment(supabase, normalizedSku)
 
     // Build payload with enrichment data merged in (only include enrichment fields when present)
@@ -583,7 +661,7 @@ export async function POST(request: NextRequest) {
       if (typeof enrichment.internet_sku === "number")
         payload.internet_sku = enrichment.internet_sku
 
-      // Carry forward "confirmed absent" provenance for opportunistic fields, even when the value is null.
+      // Carry forward "confirmed absent" provenance for opportunistic fields, even when value is null.
       // This prevents wasting SerpApi credits attempting to fill fields staging already confirmed do not exist.
       const prov = enrichment.enrichment_provenance ?? null
       if (prov && typeof prov === "object") {
@@ -623,7 +701,7 @@ export async function POST(request: NextRequest) {
     // - Still allow low-friction submissions via this API route
     const serviceClient = getSupabaseServiceRoleServerClient()
 
-    // Insert and return the new row's ID for staging enrichment
+    // Insert row first, then apply Item Cache enrichment by RPC.
     const { data: insertedRow, error } = await serviceClient
       .from("Penny List")
       .insert(payload)
@@ -647,20 +725,24 @@ export async function POST(request: NextRequest) {
 
     recordSuccessfulSubmission(rateKey)
 
-    // Attempt atomic enrichment from staging queue (non-blocking, won't fail request)
-    // This consumes and deletes the staging row if a match is found
-    const stagingResult = await consumeStagingEnrichment(
+    // Step 2 (canonical): apply Item Cache enrichment via non-consuming RPC.
+    const itemCacheResult = await applyItemCacheEnrichment(
       serviceClient,
       insertedRow.id,
       normalizedSku,
       typeof payload.internet_sku === "number" ? payload.internet_sku : null
     )
 
-    // Preferred UX: if staging didn't match AND canonical fields are still missing, enrich immediately via SerpApi.
-    if (!stagingResult.enriched) {
-      // Fire-and-forget: never block the user response on SerpApi.
-      void maybeRealtimeSerpApiEnrich(serviceClient, insertedRow.id)
+    if (!itemCacheResult.enriched) {
+      console.log(
+        "Item Cache apply found no match; checking Web Scraper fallback for remaining gaps."
+      )
     }
+
+    // Step 3 (canonical): Web Scraper runs only if gaps remain after Main List + Item Cache.
+    // maybeRealtimeSerpApiEnrich re-reads the row and exits immediately when no canonical gaps remain.
+    // Fire-and-forget: never block user response on SerpApi.
+    void maybeRealtimeSerpApiEnrich(serviceClient, insertedRow.id)
 
     return NextResponse.json({
       success: true,

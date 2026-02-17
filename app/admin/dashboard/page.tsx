@@ -456,8 +456,9 @@ export default function AdminDashboard() {
             <div className="text-sm text-[var(--text-secondary)]">
               <p className="font-semibold mb-1">Next Steps:</p>
               <p>
-                Review pending submissions and approve legitimate finds. Approved items will need to
-                be manually added to the penny-list.json file with location data.
+                Review pending submissions and approve legitimate finds. For manual enrichment, use
+                the `/manual` JSON workflow to upsert Supabase Item Cache/Main List entries. Do not
+                edit `data/penny-list.json` for live production data.
               </p>
             </div>
           </div>

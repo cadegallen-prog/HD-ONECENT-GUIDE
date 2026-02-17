@@ -4,6 +4,106 @@
 
 ---
 
+## 2026-02-17 - Codex - Manual Add Live Upsert Validation + Fixture-Target Guardrails
+
+**Goal:** Confirm whether `data/penny-list.json` should be used for live upserts (it should not), process founder-provided missing-item payload into Supabase, and harden wording/rules to prevent future agent confusion.
+
+**Status:** ✅ Completed (live upsert done, verification done, guardrails clarified).
+
+### Changes
+
+- Live data handling clarification:
+  - Confirmed `data/penny-list.json` is local fixture/fallback data and not the production write target.
+  - Updated founder-facing admin copy in `app/admin/dashboard/page.tsx`:
+    - Removed instruction to edit `penny-list.json`.
+    - Added explicit `/manual` + Supabase workflow guidance.
+  - Reinforced policy in `AGENTS.md` Data Quality section:
+    - Never use `data/penny-list.json` for live upserts.
+- Founder payload upserted to Supabase:
+  - Executed `npm run manual:enrich -- -- --input ./.local/cade-manual-payload-2026-02-17.json`.
+  - Result summary:
+    - `received_items: 14`
+    - `cache_upserted: 14`
+    - `penny_rows_updated_by_manual: 19`
+    - `penny_rows_failed: 0`
+  - Verified live presence via Supabase query script:
+    - `unique_skus_found: 14`
+    - `missing: []`
+
+### Verification
+
+- `npm run manual:enrich -- -- --input ./.local/cade-manual-payload-2026-02-17.json` ✅
+- Supabase verification query via `npx tsx -e "<verification script>"` ✅ (`14/14` SKUs found; none missing)
+- `npm run ai:memory:check` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npm run check:docs-governance` ✅
+
+---
+
+## 2026-02-17 - Codex - Canonical Enrichment Rollout (Main List -> Item Cache -> Web Scraper -> Manual Add)
+
+**Goal:** Implement the founder-approved canonical enrichment flow end-to-end, including non-consuming Item Cache apply/backfill, `/manual` ingestion, warmer skip fix, command wiring, docs, and verification.
+
+**Status:** ✅ Completed (code + migration + docs + tests updated, verification green).
+
+### Changes
+
+- Database rollout:
+  - Added `supabase/migrations/029_item_cache_apply_and_auto_backfill.sql`:
+    - Shared merge helper `_item_cache_enrichment_core(...)`.
+    - Backward-compatible consume RPC (`consume_enrichment_for_penny_item`).
+    - New non-consuming apply RPC (`apply_item_cache_enrichment_for_penny_item`).
+    - SKU and bulk backfill RPCs:
+      - `backfill_penny_list_from_item_cache_for_sku`
+      - `backfill_penny_list_from_item_cache`
+    - Auto-backfill trigger on `enrichment_staging` insert/update.
+- Submit route order hardening (`app/api/submit-find/route.ts`):
+  - Keeps Main List self-enrichment first (best complete/recent row selection).
+  - Applies Item Cache via non-consuming RPC after insert.
+  - Always checks Web Scraper fallback after Item Cache apply; scraper exits immediately when no gaps remain.
+- Item Cache backfill command:
+  - Added `scripts/backfill-item-cache.ts`.
+  - Added package scripts:
+    - `npm run backfill:item-cache`
+    - `npm run backfill:staging` (alias)
+- Manual Add command:
+  - Added `scripts/manual-enrich.ts`.
+  - Supports single JSON object, JSON array, or keyed-object payload.
+  - Accepts `/manual` prefix and fenced JSON input.
+  - Upserts into Item Cache, then applies to matching Main List rows.
+  - Added package script `npm run manual:enrich`.
+- Warmer eligibility fix (`scripts/staging-warmer.py`):
+  - Replaced skip-all-existing-SKU behavior with skip-only-fully-enriched-SKU behavior.
+  - Partial/unenriched Main List SKUs are now eligible for Item Cache refresh/backfill.
+- Test updates:
+  - `tests/submit-find-route.test.ts`:
+    - Asserts non-consuming Item Cache RPC call after insert.
+    - Asserts best-self-enrichment row selection logic.
+- Docs/terminology updates:
+  - Added `docs/ENRICHMENT_CANON.md`.
+  - Updated `docs/skills/run-local-staging-warmer.md`.
+  - Updated `docs/SCRAPING_COSTS.md`.
+  - Updated `AGENTS.md` with mandatory `/manual` agent behavior.
+- Learning captured:
+  - Updated `.ai/LEARNINGS.md` with npm arg-forwarding safety note (`0d`) for dry-run flags.
+- Validation incident handled:
+  - A first `npm run manual:enrich -- --dry-run` check did not forward the flag in this npm setup and performed one live Item Cache upsert test.
+  - Immediately restored the affected sample SKU cache row to canonical values.
+
+### Verification
+
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npm run check:docs-governance` ✅
+- `npm run ai:memory:check` ✅
+- `npx tsx scripts/manual-enrich.ts --dry-run` (stdin `/manual` payload) ✅
+- `npm run manual:enrich -- -- --help` ✅
+- `npm run backfill:item-cache -- -- --help` ✅
+- No UI changes in this session (Playwright screenshot lane N/A).
+
+---
+
 ## 2026-02-16 - Codex - Reset Recovery + Guide/Header Clarity Reapply
 
 **Goal:** Recover from accidental local hard reset on `main`, then re-apply the founder-requested guide/header clarity fixes without touching unrelated privacy/legal scope.
@@ -133,91 +233,3 @@
   - `/internal-systems` returns `200` with `<meta name="robots" content="noindex, nofollow">` ✅
   - `/sitemap.xml` has exactly `18` URLs and excludes `/support` + `/internal-systems` ✅
   - Homepage no longer shows `Transparency & Funding` label ✅
-
----
-
-## 2026-02-16 - Codex - AdSense Approval Readiness Implementation (Security + Compliance + Noindex)
-
-**Goal:** Execute the founder-approved AdSense readiness plan to close critical decline risks (admin security, indexing controls, privacy disclosures, consent configuration, trust-copy consistency) with proof.
-
-**Status:** ✅ Completed.
-
-### Changes
-
-- Canonicalized tool-local plan:
-  - Added `.ai/impl/adsense-approval-readiness.md` as repo-canonical plan source (synced with `.claude` draft).
-- Implemented admin API hardening:
-  - Added `lib/admin-auth.ts` (shared bearer-token guard using `ADMIN_SECRET`).
-  - Enforced guard on:
-    - `app/api/admin/submissions/route.ts`
-    - `app/api/admin/delete-submission/route.ts`
-    - `app/api/admin/recent-submissions/route.ts`
-  - Updated `app/admin/dashboard/page.tsx` to require logged-in user + explicit admin token before calling moderation APIs.
-- Implemented noindex controls for auth-gated/tokenized routes:
-  - Added `app/lists/layout.tsx` (`noindex, nofollow`)
-  - Added `app/login/layout.tsx` (`noindex, nofollow`)
-  - Added `app/s/[token]/layout.tsx` (`noindex, follow`)
-  - Updated `app/internal-systems/page.tsx` metadata (`noindex, nofollow`)
-- Implemented privacy/compliance updates:
-  - Updated `app/privacy-policy/page.tsx` with GA4/Monumetric/Ezoic/Resend disclosures, weekly digest usage disclosure, data deletion guidance, Ezoic embed anchor, and date bump.
-  - Updated `app/layout.tsx` Consent Mode v2 defaults with `region: ['US', 'CA']`.
-  - Updated `components/footer.tsx` disclaimer copy to include “or endorsed by.”
-- Environment and verification docs:
-  - Added `.env.example` including `ADMIN_SECRET`.
-  - Updated `.ai/ENVIRONMENT_VARIABLES.md` with `ADMIN_SECRET`.
-  - Updated `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md` (`INC-ADSENSE-001`) with current remediation status and evidence.
-- Added regression and proof coverage:
-  - Updated `tests/privacy-policy.spec.ts` for new disclosure expectations.
-  - Added `tests/adsense-readiness.spec.ts` for admin auth, robots directives, sitemap count (18), and privacy disclosure checks.
-  - Generated screenshot artifacts at `reports/proof/adsense-readiness/`.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `npx cross-env NEXT_DIST_DIR=.next-playwright PLAYWRIGHT=1 NEXT_PUBLIC_EZOIC_ENABLED=false NEXT_PUBLIC_ANALYTICS_ENABLED=false npm run build && npx playwright test tests/adsense-readiness.spec.ts --project=chromium-desktop-light --project=chromium-desktop-dark --workers=1` ✅ (8/8)
-- `npx cross-env ADMIN_SECRET=codex-test-secret PLAYWRIGHT=1 NEXT_PUBLIC_EZOIC_ENABLED=false NEXT_PUBLIC_ANALYTICS_ENABLED=false npx playwright test tests/adsense-readiness.spec.ts -g "admin endpoints require bearer auth" --project=chromium-desktop-light --workers=1` ✅ (explicit 200-path with correct token)
-- `npm run ai:checkpoint` ✅ (`reports/context-packs/2026-02-16T08-28-22/context-pack.md`)
-- Screenshots:
-  - `reports/proof/adsense-readiness/privacy-policy-chromium-desktop-light.png`
-  - `reports/proof/adsense-readiness/privacy-policy-chromium-desktop-dark.png`
-  - `reports/proof/adsense-readiness/home-footer-chromium-desktop-light.png`
-  - `reports/proof/adsense-readiness/home-footer-chromium-desktop-dark.png`
-
----
-
-## 2026-02-16 - Codex - Founder-Prompt Ambiguity Permanent Fix (Default Execute + Canon Guard)
-
-**Goal:** Permanently eliminate confusing founder-facing prompt loops by forcing default execution from canonical backlog and banning process-token asks to Cade.
-
-**Status:** ✅ Completed.
-
-### Changes
-
-- Updated `AGENTS.md`:
-  - Replaced process-token trigger language with default execution behavior:
-    - execute immediately on clear founder request,
-    - execute top P0 by default when no override exists.
-  - Added explicit prohibition on asking Cade for process tokens like `GOAL / WHY / DONE MEANS` + `"go"`.
-  - Clarifying questions now allowed only for real blockers (missing decision/access/constraint conflict).
-- Updated `.ai/START_HERE.md`:
-  - Applied the same default-execution and no-process-token rules in canonical startup instructions.
-- Updated `.ai/HANDOFF_PROTOCOL.md`:
-  - Handoffs now must default to a concrete next execution task (normally top P0), not open-ended choice prompts.
-  - Added explicit rule that "Single next task" is a directive, not a question, unless blocked.
-- Updated `.ai/CONTRACT.md`:
-  - Added founder-communication guardrails: no process-token asks to Cade and default top-P0 continuation when unblocked.
-- Updated `scripts/check-doc-governance-drift.mjs`:
-  - Added `founder-prompt-clarity` checks that fail governance validation if deprecated prompt patterns return.
-- Updated `.ai/STATE.md`:
-  - Added sprint entry documenting this permanent ambiguity fix.
-
-### Verification
-
-- `npm run check:docs-governance` ✅
-- `npm run ai:memory:check` ✅
-- `npm run ai:checkpoint` ✅
-- Context pack artifact: `reports/context-packs/2026-02-16T07-13-42/context-pack.md`
-
----

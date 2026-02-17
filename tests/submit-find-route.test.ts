@@ -369,3 +369,143 @@ test("rejects future date", async () => {
   assert.strictEqual(inserted.length, 0, "Should not insert rejected submission")
   clearSupabaseMocks()
 })
+
+test("calls non-consuming Item Cache apply RPC after insert", async () => {
+  const rpcCalls: Array<{ fn: string; args: Record<string, unknown> }> = []
+
+  const anonReadClient: any = {
+    from: () => ({}),
+  }
+  const serviceRoleClient: any = {
+    from: () => ({
+      insert: () => ({
+        select: () => ({
+          single: async () => ({ data: { id: "test-uuid-item-cache-rpc" }, error: null }),
+        }),
+      }),
+    }),
+    rpc: async (fn: string, args: Record<string, unknown>) => {
+      rpcCalls.push({ fn, args })
+      return { data: { enriched: false }, error: null }
+    },
+  }
+
+  installSupabaseMocks({ submitAnon: anonReadClient, submitServiceRole: serviceRoleClient })
+
+  const { POST } = await import("../app/api/submit-find/route")
+  const req = new NextRequest("http://localhost/api/submit-find", {
+    method: "POST",
+    body: JSON.stringify({
+      itemName: "Test Item",
+      sku: FIXTURE_SKU,
+      storeCity: "Atlanta",
+      storeState: "GA",
+      dateFound: new Date().toISOString().split("T")[0],
+      quantity: "1",
+      notes: "",
+      website: "",
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      "x-forwarded-for": "203.0.113.40",
+    },
+  })
+
+  const res = await POST(req)
+  assert.strictEqual(res.status, 200)
+  assert.ok(
+    rpcCalls.some((call) => call.fn === "apply_item_cache_enrichment_for_penny_item"),
+    "Expected apply_item_cache_enrichment_for_penny_item RPC to be called"
+  )
+
+  clearSupabaseMocks()
+})
+
+test("uses the most complete self-enrichment row before insert", async () => {
+  const inserted: Record<string, unknown>[] = []
+
+  const anonReadClient: any = {
+    from: () => ({
+      select: () => ({
+        eq: () => ({
+          order: () => ({
+            limit: async () => ({
+              data: [
+                {
+                  item_name: "Drill",
+                  brand: null,
+                  model_number: null,
+                  upc: null,
+                  image_url: null,
+                  home_depot_url: null,
+                  internet_sku: null,
+                  retail_price: null,
+                  timestamp: "2026-02-01T00:00:00.000Z",
+                },
+                {
+                  item_name: "Milwaukee M18 FUEL Hammer Drill/Driver Kit",
+                  brand: "Milwaukee",
+                  model_number: "MLW-123",
+                  upc: "012345678901",
+                  image_url: "https://example.com/m18.jpg",
+                  home_depot_url: "https://www.homedepot.com/p/205744536",
+                  internet_sku: 205744536,
+                  retail_price: 199.0,
+                  timestamp: "2026-02-05T00:00:00.000Z",
+                },
+              ],
+              error: null,
+            }),
+          }),
+          limit: () => ({
+            maybeSingle: async () => ({ data: null, error: null }),
+          }),
+        }),
+      }),
+    }),
+  }
+
+  const serviceRoleClient: any = {
+    from: () => ({
+      insert: (payload: Record<string, unknown>) => {
+        inserted.push(payload)
+        return {
+          select: () => ({
+            single: async () => ({ data: { id: "test-uuid-best-self-row" }, error: null }),
+          }),
+        }
+      },
+    }),
+    rpc: async () => ({ data: { enriched: false }, error: null }),
+  }
+
+  installSupabaseMocks({ submitAnon: anonReadClient, submitServiceRole: serviceRoleClient })
+
+  const { POST } = await import("../app/api/submit-find/route")
+  const req = new NextRequest("http://localhost/api/submit-find", {
+    method: "POST",
+    body: JSON.stringify({
+      itemName: "drill",
+      sku: FIXTURE_SKU,
+      storeCity: "Atlanta",
+      storeState: "GA",
+      dateFound: new Date().toISOString().split("T")[0],
+      quantity: "1",
+      notes: "",
+      website: "",
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      "x-forwarded-for": "203.0.113.41",
+    },
+  })
+
+  const res = await POST(req)
+  assert.strictEqual(res.status, 200)
+  const payload = inserted[0] as Record<string, unknown>
+  assert.strictEqual(payload.item_name, "Milwaukee M18 FUEL Hammer Drill/Driver Kit")
+  assert.strictEqual(payload.brand, "Milwaukee")
+  assert.strictEqual(payload.image_url, "https://example.com/m18.jpg")
+
+  clearSupabaseMocks()
+})
