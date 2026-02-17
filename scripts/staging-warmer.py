@@ -3,13 +3,13 @@
 Staging Warmer: Fills enrichment_staging from scraper_core large-net scrape.
 
 This script:
-1. Fetches current Penny List SKUs (to skip known items)
+1. Fetches fully enriched Penny List SKUs (skip list)
 2. Runs scraper_core to fetch bulk penny item data
 3. Deduplicates by SKU and internet_number
 4. Upserts to enrichment_staging table
 5. Logs detailed statistics
 
-Runs Tue-Fri via GitHub Actions (.github/workflows/enrichment-staging-warmer.yml)
+Primary usage: run locally via `npm run warm:staging`.
 
 Environment variables:
 - PENNY_RAW_COOKIE: Cookie string for pro.scouterdev.io API (required)
@@ -126,6 +126,40 @@ def parse_price(val: Any) -> Optional[float]:
             except ValueError:
                 return None
     return None
+
+
+def has_non_empty_text(value: Any) -> bool:
+    """Return True when value is non-empty text after trim."""
+    return isinstance(value, str) and value.strip() != ""
+
+
+def has_valid_number(value: Any) -> bool:
+    """Return True when value is a positive number-like value."""
+    if value is None:
+        return False
+    if isinstance(value, bool):
+        return False
+    if isinstance(value, (int, float)):
+        return value > 0
+    try:
+        return float(str(value).strip()) > 0
+    except (TypeError, ValueError):
+        return False
+
+
+def is_fully_enriched_penny_row(row: dict) -> bool:
+    """
+    Determine whether a Penny List row already has all Item Cache-driven fields.
+    Fully enriched rows can be skipped by the warmer to save work.
+    """
+    return (
+        has_non_empty_text(row.get("item_name"))
+        and has_non_empty_text(row.get("brand"))
+        and has_non_empty_text(row.get("image_url"))
+        and has_non_empty_text(row.get("home_depot_url"))
+        and has_non_empty_text(row.get("upc"))
+        and has_valid_number(row.get("internet_sku"))
+    )
 
 
 def extract_staging_row(item: dict) -> dict:
@@ -248,28 +282,50 @@ def prune_stale_staging(supabase, retention_days: int = 60):
         return 0
 
 
-def get_existing_skus(supabase) -> Set[str]:
-    """Fetch all existing SKUs from Penny List to skip during upsert."""
-    existing_skus: Set[str] = set()
+def get_fully_enriched_skus(supabase) -> Set[str]:
+    """
+    Fetch Penny List SKUs that are already fully enriched.
+
+    Important behavior: we do NOT skip all existing Penny List SKUs.
+    Only fully enriched rows are skipped so partial/unenriched SKUs stay eligible
+    for Item Cache refresh/backfill.
+    """
+    skip_skus: Set[str] = set()
 
     try:
-        # Fetch all SKUs (paginated if large)
-        result = (
-            supabase.table("Penny List")
-            .select("home_depot_sku_6_or_10_digits")
-            .execute()
-        )
+        page_size = 1000
+        offset = 0
 
-        for row in result.data or []:
-            sku = row.get("home_depot_sku_6_or_10_digits")
-            if sku:
-                existing_skus.add(str(sku).strip())
+        while True:
+            result = (
+                supabase.table("Penny List")
+                .select(
+                    "home_depot_sku_6_or_10_digits,item_name,brand,image_url,home_depot_url,upc,internet_sku"
+                )
+                .range(offset, offset + page_size - 1)
+                .execute()
+            )
+
+            rows = result.data or []
+            if not rows:
+                break
+
+            for row in rows:
+                sku = row.get("home_depot_sku_6_or_10_digits")
+                if not sku:
+                    continue
+                if is_fully_enriched_penny_row(row):
+                    skip_skus.add(str(sku).strip())
+
+            if len(rows) < page_size:
+                break
+            offset += page_size
 
     except Exception as e:
-        print(f"WARNING: Failed to fetch existing SKUs: {e}")
-        # Continue anyway - we'll just upsert more rows than needed
+        print(f"WARNING: Failed to fetch Penny List skip set: {e}")
+        # Continue anyway - we'll only skip based on per-run dedup.
 
-    return existing_skus
+    return skip_skus
 
 
 def main():
@@ -291,10 +347,10 @@ def main():
     print("\nPruning stale staging rows...")
     prune_stale_staging(supabase, retention_days=60)
 
-    # Get existing SKUs in Penny List (to skip)
-    print("\nFetching existing SKUs from Penny List...")
-    existing_skus = get_existing_skus(supabase)
-    print(f"Found {len(existing_skus)} existing SKUs in Penny List")
+    # Get fully enriched Penny List SKUs (to skip).
+    print("\nFetching fully enriched SKUs from Penny List...")
+    fully_enriched_skus = get_fully_enriched_skus(supabase)
+    print(f"Found {len(fully_enriched_skus)} fully enriched SKUs in Penny List")
 
     # Determine zip codes
     zip_codes = config["zip_codes"] or DEFAULT_ATLANTA_ZIPS
@@ -360,7 +416,7 @@ def main():
         "valid_total": 0,
         "deduped_uniques": 0,
         "skipped_invalid_key": 0,
-        "skipped_already_in_penny_list": 0,
+        "skipped_fully_enriched_in_penny_list": 0,
         "upserted_to_staging": 0,
         "error_count": 0,
     }
@@ -383,9 +439,9 @@ def main():
 
         stats["valid_total"] += 1
 
-        # Skip if already in Penny List
-        if sku in existing_skus:
-            stats["skipped_already_in_penny_list"] += 1
+        # Skip only rows already fully enriched in Penny List.
+        if sku in fully_enriched_skus:
+            stats["skipped_fully_enriched_in_penny_list"] += 1
             continue
 
         # Dedup by SKU

@@ -1,4 +1,13 @@
-# Home Depot Scraping: Costs & Options
+# Web Scraper Costs & Fallbacks
+
+## Canonical Enrichment Order
+
+1. `Main List` self-absorption
+2. `Item Cache` apply (`enrichment_staging`)
+3. `Web Scraper` (SerpAPI) fallback only when gaps remain
+4. `Manual Add` via `/manual` JSON
+
+The Web Scraper is intentionally the last automated resort to protect monthly credits.
 
 ## Why Scraping HD is Hard
 
@@ -11,7 +20,7 @@ Home Depot uses aggressive bot detection:
 
 ## Cost Options (Pick ONE)
 
-### Option 1: SerpApi Free/Cheap Tier ✅ RECOMMENDED
+### Option 1: Web Scraper (SerpAPI) Free/Cheap Tier ✅ RECOMMENDED
 
 - Uses SerpApi's Home Depot Search API
 - They handle everything (TLS fingerprinting, CAPTCHAs, proxies)
@@ -20,10 +29,10 @@ Home Depot uses aggressive bot detection:
 - Runs autonomously via GitHub Actions
 - **95%+ success rate**
 
-### Option 2: Manual Bookmarklet (Free)
+### Option 2: Manual Add (Free)
 
 - Run bookmarklet while browsing HD manually
-- Export to JSON, import via `npm run enrich:bulk`
+- Paste JSON to `/manual` in chat (agent runs `npm run manual:enrich`)
 - 100% reliable but requires your time
 - **Cost: $0**
 
@@ -34,14 +43,14 @@ Home Depot uses aggressive bot detection:
 - May work for small batches locally
 - **Not recommended for production**
 
-## Current Setup: Option 1 (SerpApi)
+## Current Setup: Option 1 (Web Scraper)
 
 ### How It Works
 
 ```
 GitHub Actions (free, runs daily)
     ↓
-SerpApi Home Depot Search API ($0-25/mo)
+Web Scraper: SerpApi Home Depot Search API ($0-25/mo)
     ↓ fetches product data for a small batch of recent Penny List items
 "Penny List" table (Supabase)
     ↓ fills missing enrichment fields (name/brand/model/image/link/internet_sku/retail_price)
@@ -103,6 +112,12 @@ UPC/barcode: SerpApi does not reliably return UPC. The script attempts a **best-
 ```bash
 # SerpApi enrichment (recommended)
 npm run enrich:serpapi
+
+# Backfill Main List from Item Cache without Web Scraper credits
+npm run backfill:item-cache
+
+# Manual Add JSON -> Item Cache + Main List upsert
+npm run manual:enrich
 
 # SerpApi with custom limit
 npm run enrich:serpapi -- -- --limit 20

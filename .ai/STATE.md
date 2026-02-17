@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 16, 2026 (reset recovery + guide/header clarity restore)
+**Last updated:** Feb 17, 2026 (manual upsert validation + canonical enrichment rollout)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,45 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-17 (Manual Add live-upsert validation + fixture confusion guardrails):** Confirmed and enforced that `data/penny-list.json` is fixture-only, not a live write target, and completed founder payload upsert to Supabase.
+  - **Live upsert completed:**
+    - Ran `npm run manual:enrich -- -- --input ./.local/cade-manual-payload-2026-02-17.json` for 14 founder-provided SKUs.
+    - Command result: `cache_upserted: 14`, `penny_rows_updated_by_manual: 19`, `penny_rows_failed: 0`.
+  - **Live data verification completed:**
+    - Supabase verification query confirmed `unique_skus_found: 14` and `missing: []` for the 14 submitted SKUs.
+  - **Confusion-prevention guardrails shipped:**
+    - `app/admin/dashboard/page.tsx` now instructs `/manual` + Supabase workflow and explicitly says not to edit `data/penny-list.json` for production.
+    - `AGENTS.md` now states `data/penny-list.json` is dev/test fixture fallback only.
+  - **Verification:**
+    - `npm run ai:memory:check` ✅
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` ✅
+    - `npm run check:docs-governance` ✅
+
+- **2026-02-17 (Canonical enrichment rollout: Main List -> Item Cache -> Web Scraper -> Manual Add):** Completed the founder-approved enrichment architecture so previously submitted rows can auto-enrich when Item Cache data arrives later, without burning scraper credits.
+  - **Database + backfill shipped:**
+    - Added migration `supabase/migrations/029_item_cache_apply_and_auto_backfill.sql`.
+    - Added shared core merge helper and preserved backward-compatible consume RPC.
+    - Added non-consuming apply RPC `apply_item_cache_enrichment_for_penny_item`.
+    - Added backfill RPCs (`backfill_penny_list_from_item_cache_for_sku`, `backfill_penny_list_from_item_cache`) and trigger on `enrichment_staging` upserts.
+  - **Submission order enforcement shipped:**
+    - `app/api/submit-find/route.ts` now follows canonical order:
+      1. Main List self-enrichment (best complete/recent row),
+      2. Item Cache apply,
+      3. Web Scraper only if gaps remain.
+  - **Operational commands shipped:**
+    - Added `scripts/manual-enrich.ts` + `npm run manual:enrich` for one-step `/manual` JSON ingestion (single, array, keyed map).
+    - Added `scripts/backfill-item-cache.ts` + `npm run backfill:item-cache` (+ alias `backfill:staging`).
+  - **Warmer behavior fix shipped:**
+    - `scripts/staging-warmer.py` now skips only fully enriched Main List SKUs (no longer skips all existing SKUs).
+  - **Docs/tests updated:**
+    - Added `docs/ENRICHMENT_CANON.md`.
+    - Updated `docs/skills/run-local-staging-warmer.md`, `docs/SCRAPING_COSTS.md`, `AGENTS.md`.
+    - Updated `tests/submit-find-route.test.ts` for apply-RPC and deterministic self-enrichment selection.
+  - **Verification:**
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` ✅
 
 - **2026-02-16 (Reset recovery + guide/header clarity restore):** Recovered local `main` from accidental hard reset drift and restored founder-requested guide/navigation clarity improvements.
   - **Git recovery shipped:**

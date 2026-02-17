@@ -1,6 +1,6 @@
 # Skill: Run Local Staging Warmer (Local-Only)
 
-This is the **only supported** way to refresh `enrichment_staging`.
+This is the **only supported** way to refresh `enrichment_staging` (the Item Cache).
 
 GitHub Actions for the staging warmer were **permanently removed** because upstream is prone to blocking datacenter runners (Cloudflare / bot protection).
 
@@ -8,6 +8,8 @@ GitHub Actions for the staging warmer were **permanently removed** because upstr
 
 - Runs the staging warmer pipeline locally.
 - Pulls penny items from the upstream source and upserts into Supabase `enrichment_staging`.
+- Skips only SKUs that are already fully enriched in the Main List.
+- Keeps partial/unenriched Main List SKUs eligible so Item Cache backfill can enrich older rows.
 - Intended to be run from your home IP (or another “normal” residential network).
 
 ## One-time setup
@@ -65,6 +67,7 @@ npm run warm:staging -- --zip-pool 30301,10001,60601,75201,94103,98101 --zip-sam
 
 - The command prints `STAGING WARMER COMPLETE` with non-zero `upserted_to_staging`.
 - Supabase `enrichment_staging` row count increases (or existing rows update) and field coverage improves (especially `retail_price`).
+- Newly cached SKUs can auto-backfill older Main List rows through the Item Cache trigger.
 - Optional: run `tsx scripts/print-enrichment-staging-status.ts` (with your env loaded) to see counts and `retail_price` coverage.
 
 ## If it fails

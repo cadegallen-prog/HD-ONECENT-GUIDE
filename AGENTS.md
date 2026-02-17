@@ -63,6 +63,18 @@ Before exploring the repo:
 
 ---
 
+## Manual Add Slash Command (Mandatory)
+
+When Cade posts `/manual` with pasted JSON in chat:
+
+1. Run `npm run manual:enrich` with that payload immediately.
+2. Do not ask for extra confirmation or extra formatting steps.
+3. Return a plain-English summary of processed items, failures, and what was upserted.
+
+This command supports single-item JSON, arrays, and keyed-object payloads.
+
+---
+
 ## Alignment Mode (Default When Unclear)
 
 - If Cade is brainstorming or the request is ambiguous, ask **exactly one** clarifying question (non-technical) before writing code.
@@ -263,6 +275,7 @@ Rules:
 - SKU rules are the single source of truth in `lib/sku.ts`
 - Enforce SKU validation on client and server
 - Keep honeypot + basic rate limiting on submissions
+- `data/penny-list.json` is a local fixture for dev/test fallback only. Never use it to upsert live Penny List data; live writes must go to Supabase (`Penny List` / Item Cache workflows).
 
 ---
 

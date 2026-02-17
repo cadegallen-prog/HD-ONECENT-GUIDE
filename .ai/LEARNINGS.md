@@ -104,6 +104,59 @@ Scan this FIRST before suggesting anything. If your idea matches an anti-pattern
 
 ---
 
+### 0d. npm arg forwarding can skip safety flags if `--` depth is wrong
+
+**Problem:** A manual script dry-run command was executed with `npm run <script> -- --dry-run`, but the flag did not reach the script in this npm setup, so it performed live writes.
+
+**What We Tried:**
+
+- Ran manual enrichment through npm with one `--` separator.
+- Observed output showing dry-run was false and real apply steps ran.
+
+**What We Learned:**
+
+- In this repo/npm setup, some commands require extra arg separators (`-- -- --flag`) for flags to reach the script consistently.
+- For safety-critical flags (like `--dry-run`), direct execution (`tsx script.ts --dry-run`) is safer than assuming npm forwarding behavior.
+
+**What to Do Instead:**
+
+- Prefer direct execution for dry-run validation:
+  - `tsx scripts/manual-enrich.ts --dry-run`
+- If using npm script wrappers, verify the parsed flag in output before trusting side effects.
+- Keep docs explicit about npm argument separator requirements.
+
+**Date:** Feb 17, 2026
+
+---
+
+### 0e. Never treat `data/penny-list.json` as a live upsert destination
+
+**Problem:** Another agent upserted missing enrichment data into `data/penny-list.json` instead of Supabase, so the public Main List stayed incomplete.
+
+**What We Tried:**
+
+- Audited data flow and confirmed `/manual` + Item Cache/Main List logic writes to Supabase.
+- Added explicit policy/warnings in agent and admin guidance.
+
+**What We Learned:**
+
+- `data/penny-list.json` exists for local fixture/fallback/testing and can be mistaken for production storage if wording is vague.
+- Ambiguous admin copy or agent instructions can lead to silent local-file updates that do not affect live data.
+
+**What to Do Instead:**
+
+- For live upserts, always use Supabase paths:
+  - `npm run manual:enrich`
+  - Item Cache/Main List RPC flows
+- Keep explicit guardrails in:
+  - `AGENTS.md`
+  - founder-facing admin instructions
+- If a file write happened by mistake, rerun upsert through Supabase and verify SKU presence with a direct query.
+
+**Date:** Feb 17, 2026
+
+---
+
 ### 0. Route deletion + stale Next type artifacts
 
 **Problem:** After deleting a route page, `npm run build` failed with type errors from stale generated files under `.next-playwright/types` and `.next/dev/types/app/...`.
