@@ -30,9 +30,6 @@ export const FACEBOOK_GROUP_URL = "https://www.facebook.com/groups/homedepotonec
  */
 export const SUBMIT_FIND_FORM_URL = "/report-find"
 
-/** Kit (ConvertKit) Landing Page URL */
-export const NEWSLETTER_URL = "https://pennycentral.kit.com"
-
 // ============================================
 // MONETIZATION CONSTANTS
 // ============================================

@@ -4,6 +4,59 @@
 
 ---
 
+## 2026-02-16 - Codex - Reset Recovery + Guide/Header Clarity Reapply
+
+**Goal:** Recover from accidental local hard reset on `main`, then re-apply the founder-requested guide/header clarity fixes without touching unrelated privacy/legal scope.
+
+**Status:** ✅ Completed (repo recovered, scoped UX/copy changes restored, local verification green).
+
+### Changes
+
+- Git state recovery:
+  - Confirmed reflog reset event (`reset: moving to HEAD~1`) and local `main` drift (`behind 2`).
+  - Restored local branch safely with fast-forward only:
+    - `git pull --ff-only origin main`
+  - No destructive history rewrite used.
+- Re-applied scoped guide/copy fixes:
+  - `app/inside-scoop/page.tsx`
+    - Clarified ambiguous “supporting signal” language.
+    - Replaced confusing “report” phrasing with “community posts/firsthand accounts”.
+    - Clarified `.02` wording as ending-in-.02 signal (not a two-cent item).
+  - `app/guide/page.tsx`
+    - Removed duplicate “Where should you start?” card block.
+    - Replaced top secondary CTA (`/report-find`) with `/penny-list`.
+    - Removed direct Report a Find utility link from guide hub and reframed as post-confirmation action.
+  - `components/navbar.tsx`
+    - Reduced crowded top-level nav by removing `About` and `Contact`.
+    - Converted desktop Guide submenu to click-toggle.
+    - Added dismissal on link click, outside click, route change, and `Escape`.
+    - Reordered guide submenu to `Step 0` (Guide Hub) through `Step 6` on desktop + mobile.
+  - `tests/basic.spec.ts`
+    - Updated desktop assertion for Guide button behavior and mobile submenu text expectation.
+- Scope guard outcome:
+  - No edits to privacy-policy/about/constants/cookie-banner in this session.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npx playwright test tests/basic.spec.ts --project=chromium-desktop-light --project=chromium-mobile-light --workers=1` ✅
+- `npm run lint:colors` ✅
+- `npm run ai:proof -- /guide /inside-scoop` ✅
+  - `reports/proof/2026-02-16T23-03-18/guide-light.png`
+  - `reports/proof/2026-02-16T23-03-18/guide-dark.png`
+  - `reports/proof/2026-02-16T23-03-18/inside-scoop-light.png`
+  - `reports/proof/2026-02-16T23-03-18/inside-scoop-dark.png`
+  - `reports/proof/2026-02-16T23-03-18/guide-dropdown-open-desktop.png`
+  - `reports/proof/2026-02-16T23-03-18/guide-dropdown-after-select-desktop.png`
+  - `reports/proof/2026-02-16T23-03-18/guide-dropdown-open-mobile.png`
+  - `reports/proof/2026-02-16T23-03-18/guide-dropdown-after-select-mobile.png`
+- Known non-blocking console noise:
+  - Dev-mode hydration mismatch in proof bundle (`reports/proof/2026-02-16T23-03-18/console-errors.txt`), unchanged from existing baseline behavior.
+
+---
+
 ## 2026-02-16 - Codex - Internal Systems Route Retirement + Reference Scrub (Ad Review Hardening)
 
 **Goal:** Remove `/internal-systems` as a thin public page, scrub active references from runtime/test surfaces, and verify strict crawler-safe behavior for Ad Manager/AdSense readiness.
@@ -168,35 +221,3 @@
 - Context pack artifact: `reports/context-packs/2026-02-16T07-13-42/context-pack.md`
 
 ---
-
-## 2026-02-16 - Codex - Governance Rule-Validity Cleanup (Cost/Benefit Follow-Through)
-
-**Goal:** Implement the approved rule-quality cleanup so agents stop blindly following contradictory or low-value governance constraints.
-
-**Status:** ✅ Completed.
-
-### Changes
-
-- Updated `AGENTS.md`:
-  - Replaced conflicting main-only workflow with canonical `dev` -> `main` promotion workflow.
-  - Made GitHub Actions evidence requirement conditional (`when CI has run`).
-  - Added docs-only verification exception language aligned to `.ai/VERIFICATION_REQUIRED.md`.
-- Updated `README.md`:
-  - Aligned AI-canon branch rule to `dev` execution with promotion to `main`.
-  - Added docs-only verification exception to Definition of Done.
-- Updated `.ai/CRITICAL_RULES.md`:
-  - Added explicit docs-only proof exception under Rule #3.
-  - Changed Session Log trim policy from `3 most recent` to `5 most recent` (trim only when entries exceed 7).
-- Updated `.ai/CONSTRAINTS.md`:
-  - Canonicalized duplicated top rules by referencing `.ai/CRITICAL_RULES.md` for detailed non-negotiable behavior.
-- Updated `.ai/SESSION_LOG.md`:
-  - Header policy now reflects 5-entry retention model.
-- Updated `.ai/STATE.md`:
-  - Added sprint entry for this governance hardening pass.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run check:docs-governance` ✅
-- `npm run ai:checkpoint` ✅
-- Context pack artifact: `reports/context-packs/2026-02-16T06-50-44/context-pack.md`

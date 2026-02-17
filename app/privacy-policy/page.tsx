@@ -123,6 +123,14 @@ export default function PrivacyPolicyPage() {
             <a href="https://youradchoices.com/" target="_blank" rel="noopener noreferrer">
               YourAdChoices
             </a>
+            , and{" "}
+            <a
+              href="https://optout.networkadvertising.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Network Advertising Initiative (NAI) Opt-Out
+            </a>
             .
           </p>
           <p>
@@ -164,10 +172,45 @@ export default function PrivacyPolicyPage() {
           <h3>Third-Party Service Providers</h3>
           <ul>
             <li>
+              <strong>Google AdSense &amp; Ad Manager:</strong> We use Google AdSense (Publisher ID:
+              ca-pub-5302589080375312) and Google Ad Manager to serve and manage advertising on this
+              site. Google may use cookies and similar technologies to serve ads based on your prior
+              visits. Learn how Google uses data:{" "}
+              <a
+                href="https://policies.google.com/technologies/partner-sites"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                How Google uses information from sites that use its services
+              </a>
+              . Manage your ad personalization at{" "}
+              <a
+                href="https://www.google.com/settings/ads"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Google Ads Settings
+              </a>
+              .
+            </li>
+            <li>
               <strong>Google Analytics (GA4):</strong> We use Google Analytics to understand how
               visitors use our site. Google may collect IP addresses, browser details, and usage
               patterns. You can opt out with browser controls or Google&apos;s Analytics opt-out
               tools.
+            </li>
+            <li>
+              <strong>Grow by Mediavine (Engagement Platform):</strong> We use Grow by Mediavine to
+              provide social sharing features and first-party audience analytics. Grow may collect
+              browsing behavior, device information, and interaction data. See{" "}
+              <a
+                href="https://www.mediavine.com/privacy-policy/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Mediavine&apos;s privacy policy
+              </a>
+              .
             </li>
             <li>
               <strong>Monumetric:</strong> Monumetric may place cookies and process data for ad
@@ -182,8 +225,9 @@ export default function PrivacyPolicyPage() {
               .
             </li>
             <li>
-              <strong>Ezoic:</strong> Ezoic may place cookies and process data for ad testing,
-              optimization, and serving. See{" "}
+              <strong>Ezoic:</strong> PennyCentral has authorized Ezoic as an advertising partner.
+              When active, Ezoic may place cookies and process data for ad testing, optimization,
+              and serving. See{" "}
               <a
                 href="https://www.ezoic.com/privacy-policy/"
                 target="_blank"
@@ -202,6 +246,38 @@ export default function PrivacyPolicyPage() {
                 rel="noopener noreferrer"
               >
                 Resend&apos;s privacy policy
+              </a>
+              .
+            </li>
+            <li>
+              <strong>Supabase (Database &amp; Authentication):</strong> We use Supabase to manage
+              user accounts, authentication (via one-time passwords), and user data (lists,
+              subscriptions, report submissions). Supabase processes email addresses and login
+              metadata securely. See{" "}
+              <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer">
+                Supabase&apos;s privacy policy
+              </a>
+              .
+            </li>
+            <li>
+              <strong>Vercel (Hosting &amp; Performance):</strong> Our site is hosted on Vercel. We
+              use Vercel Analytics and Vercel Speed Insights to monitor page performance. These
+              services may process IP addresses, page URLs, and browser metadata. See{" "}
+              <a
+                href="https://vercel.com/legal/privacy-policy"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Vercel&apos;s privacy policy
+              </a>
+              .
+            </li>
+            <li>
+              <strong>Sentry (Error Monitoring):</strong> We use Sentry to detect and diagnose
+              technical errors. Sentry may process IP addresses, browser metadata, and error
+              context. See{" "}
+              <a href="https://sentry.io/privacy/" target="_blank" rel="noopener noreferrer">
+                Sentry&apos;s privacy policy
               </a>
               .
             </li>

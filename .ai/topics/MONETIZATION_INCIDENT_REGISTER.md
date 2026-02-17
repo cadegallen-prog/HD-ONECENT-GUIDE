@@ -72,3 +72,18 @@ All must be true before re-review:
 3. `2026-02-19`: Monumetric supervisor escalation if unresolved.
 4. `2026-02-16`: route/crawler remediation deployed to production; evidence snapshots refreshed in session/state logs.
 5. `2026-02-17` to `2026-02-19`: founder submits sitemap + re-review request and executes AdSense go/no-go decision based on matrix gate.
+
+---
+
+## 7) Session Notes (2026-02-16)
+
+- `INC-ADSENSE-001`:
+  - Policy-sensitive clarity updates were restored on `/inside-scoop` and `/guide` after local reset recovery.
+  - Header Guide submenu behavior was also restored (dismiss-on-selection and chronological ordering).
+  - Incident status remains unchanged: `OPEN-REMEDIATION-DEPLOYED`.
+  - Evidence paths:
+    - `app/inside-scoop/page.tsx`
+    - `app/guide/page.tsx`
+    - `components/navbar.tsx`
+    - `tests/basic.spec.ts`
+    - `reports/proof/2026-02-16T23-03-18/`

@@ -155,39 +155,11 @@ const quickStart = [
   "Treat guidance as directional. Store timing and enforcement can vary by location.",
 ]
 
-const triageTracks = [
-  {
-    href: "/what-are-pennies",
-    label: "New to penny hunting?",
-    note: "Start with Chapter 1 — it explains what penny items are and why they exist.",
-  },
-  {
-    href: "/digital-pre-hunt",
-    label: "Know the basics?",
-    note: "Jump to Chapter 3 — it covers how to find deals before you go to the store.",
-  },
-  {
-    href: "/in-store-strategy",
-    label: "Heading to a store today?",
-    note: "Chapter 4 is your field guide — verification, checkout, and what to expect.",
-  },
-  {
-    href: "/inside-scoop",
-    label: "Want the inside story?",
-    note: "Chapter 5 covers the operational systems behind the scenes.",
-  },
-]
-
 const utilityLinks = [
   {
     href: "/penny-list",
     label: "Live Penny List",
     note: "Community finds, updated throughout the day.",
-  },
-  {
-    href: "/report-find",
-    label: "Report a Find",
-    note: "Submit SKU + store + date to improve list quality.",
   },
   {
     href: "/store-finder",
@@ -256,7 +228,7 @@ export default function GuideHubPage() {
               </Link>
             </Button>
             <Button asChild size="lg" variant="secondary">
-              <Link href="/report-find">Report a Find</Link>
+              <Link href="/penny-list">Browse Penny List</Link>
             </Button>
           </div>
         </header>
@@ -305,36 +277,11 @@ export default function GuideHubPage() {
           </p>
         </section>
 
-        <section className="mx-auto mb-6 max-w-[68ch]">
-          <div className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
-            <h2 className="mb-3 text-xl font-semibold text-[var(--text-primary)]">
-              Where should you start?
-            </h2>
-            <p className="mb-4 text-[var(--text-secondary)]">
-              Choose the track that matches your current experience level, then return here to
-              branch into the next chapter once you complete it.
-            </p>
-            <ul className="grid gap-3 sm:grid-cols-2">
-              {triageTracks.map((track) => (
-                <li key={track.href}>
-                  <Link
-                    href={track.href}
-                    className="block h-full rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] p-4 transition-colors hover:border-[var(--cta-primary)]"
-                  >
-                    <p className="font-semibold text-[var(--text-primary)]">{track.label}</p>
-                    <p className="mt-1 text-sm text-[var(--text-secondary)]">{track.note}</p>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
         <section className="mb-6 space-y-3 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
           <h2 className="text-2xl font-bold text-[var(--text-primary)]">Guide Chapters</h2>
           <p className="text-[var(--text-secondary)]">
-            Follow the chapter order for full context, or jump directly to the section that matches
-            your next action.
+            Follow the chapter order for full context. If you are short on time, start with Chapter
+            1, then Chapter 4 before your store run.
           </p>
           <TableOfContents />
         </section>
@@ -366,8 +313,9 @@ export default function GuideHubPage() {
           <h2 className="mb-4 text-2xl font-bold text-[var(--text-primary)]">Essential Tools</h2>
           <p className="mb-4 text-[var(--text-secondary)]">
             Use these pages to move from research to action quickly. The Penny List gives you live
-            inventory signals, Report a Find strengthens data quality, and Store Finder keeps your
-            targeting aligned with the location you actually plan to visit.
+            inventory signals, and Store Finder keeps your targeting aligned with the location you
+            actually plan to visit. After you confirm a find in-store, use Report a Find from the
+            Penny List page to log it.
           </p>
           <ul className="grid gap-4 md:grid-cols-2">
             {utilityLinks.map((link) => (

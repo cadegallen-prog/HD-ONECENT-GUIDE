@@ -115,20 +115,20 @@ export default function InsideScoopPage() {
           <Prose variant="guide">
             <p className="mb-8 text-lg leading-relaxed">
               This chapter covers deeper operational context for experienced hunters. The basics —
-              Store Pulse, ZMA, and the $.02 signal — are introduced in earlier chapters. Here you
-              will find the operational logic behind what you see in-store.
+              Store Pulse, ZMA, and the ending-in-.02 signal — are introduced in earlier chapters.
+              Here you will find the operational logic behind what you see in-store.
             </p>
 
             <p className="mb-8 text-sm text-[var(--text-secondary)]">
-              Note: This section draws on community reports and public sources. Specifics vary by
-              store and region.
+              Note: This section draws on community posts, firsthand accounts, and public sources.
+              Specifics vary by store and region.
             </p>
 
             <h2>Internal terms you will see</h2>
             <p className="mb-6">
               Employees and longtime shoppers frequently reference the same internal terms on public
               forums. We cannot verify these definitions from Home Depot directly, but the
-              consistency across reports makes them useful as context.
+              consistency across posts and firsthand accounts makes them useful as context.
             </p>
             <ul className="mb-8">
               {communitySignals.map((signal) => (
@@ -138,8 +138,8 @@ export default function InsideScoopPage() {
 
             <h2>Handhelds and clearance tools</h2>
             <p className="mb-6">
-              The following notes come from employee and shopper reports. They are not confirmed by
-              Home Depot and should be treated as context only.
+              The following notes come from employee and shopper posts and firsthand accounts. They
+              are not confirmed by Home Depot and should be treated as context only.
             </p>
             <ul className="mb-8">
               {handheldNotes.map((note) => (
@@ -149,8 +149,8 @@ export default function InsideScoopPage() {
 
             <h2>Why management cares</h2>
             <p className="mb-6">
-              Strong reactions often happen when a penny item is found. Community reports suggest a
-              few reasons why stores take penny scans seriously:
+              Strong reactions often happen when a penny item is found. Community posts and
+              firsthand accounts suggest a few reasons why stores take penny scans seriously:
             </p>
             <ul className="mb-8">
               {managementFocus.map((note) => (
@@ -160,8 +160,8 @@ export default function InsideScoopPage() {
 
             <h2>Zero-Comm and register exceptions</h2>
             <p className="mb-6">
-              Community reports describe penny scans as exception events that can create extra
-              checkout work and follow-up review.
+              Community posts and firsthand accounts describe penny scans as exception events that
+              can create extra checkout work and follow-up review.
             </p>
             <ul className="mb-8">
               <li>
@@ -180,8 +180,8 @@ export default function InsideScoopPage() {
 
             <h2>ZMA disposition paths</h2>
             <p className="mb-6">
-              After an item reaches penny status, community reports describe two common disposition
-              paths rather than one universal outcome.
+              After an item reaches penny status, community posts and firsthand accounts describe
+              two common disposition paths rather than one universal outcome.
             </p>
             <ul className="mb-8">
               <li>
@@ -211,8 +211,8 @@ export default function InsideScoopPage() {
 
             <h2>MET reset timing</h2>
             <p className="mb-6">
-              Community reports often align major pulls with MET bay reset work rather than a fixed
-              customer-facing calendar.
+              Community posts and firsthand accounts often align major pulls with MET bay reset work
+              rather than a fixed customer-facing calendar.
             </p>
             <ul className="mb-8">
               <li>
@@ -220,8 +220,8 @@ export default function InsideScoopPage() {
                 bay being restructured, check it before the MET team finishes.
               </li>
               <li>
-                The $.02 buffer window (about 48 hours) before a pull exists in some stores. Others
-                skip straight from $.03 to removal. Both patterns are covered in Chapter 2.
+                Some stores show a short ending-in-.02 buffer window (about 48 hours) before a pull.
+                Others skip straight from .03 to removal. Both patterns are covered in Chapter 2.
               </li>
               <li>Use reset timing as a probability signal only, not a guaranteed schedule.</li>
             </ul>
@@ -229,11 +229,13 @@ export default function InsideScoopPage() {
             <h2>How to use this section safely</h2>
             <p className="mb-6">
               The inside-scoop terms are useful as context, not as instructions. If a post uses
-              internal acronyms, treat that as a signal that the person may have store access, not
-              as a promise that the item will penny in your store.
+              internal acronyms, treat that as a clue about store context, not as proof that an item
+              will penny in your store.
             </p>
             <ul className="mb-8">
-              <li>Look for multiple, recent reports before you act.</li>
+              <li>
+                Look for multiple, recent community posts with SKU + store + date before you act.
+              </li>
               <li>Use internal terms as a tie-breaker, not your only reason to drive.</li>
               <li>Expect store-to-store variation, even when the terms are the same.</li>
               <li>When in doubt, fall back to tag dates, price endings, and a scan.</li>
@@ -257,10 +259,11 @@ export default function InsideScoopPage() {
 
             <h2>Stacking signals the safe way</h2>
             <p className="mb-8">
-              Treat internal terms as a supporting signal. If a report mentions "No Home" and you
-              also see an old tag date plus a late-stage ending (.03/.02), the signal stack is
-              stronger. If the only evidence is an acronym with no SKU, no date, and no store, skip
-              it. Assume noise until you can corroborate it.
+              Use internal terms as a supporting signal for probability, not confirmation. Example:
+              if a Facebook group post mentions "No Home" and you also verify an older tag date plus
+              a late-stage price ending (.03 or ending in .02), confidence is higher. If the only
+              evidence is an acronym with no SKU, no date, and no store, skip it. Treat it as noise
+              until you can corroborate it.
             </p>
 
             <h2>What not to assume</h2>

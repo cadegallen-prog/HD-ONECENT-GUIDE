@@ -16,10 +16,10 @@ test("navbar shows Guide link after hydration", async ({ page }) => {
     await expect(guideButton).toBeVisible()
 
     await guideButton.click()
-    await expect(page.getByRole("link", { name: /Start Here: Guide Hub/i })).toBeVisible()
+    await expect(page.getByRole("link", { name: /Guide Hub/i })).toBeVisible()
     return
   }
 
-  const guideLink = page.getByRole("navigation").getByRole("link", { name: "Guide" }).first()
-  await expect(guideLink).toBeVisible()
+  const guideButton = page.getByRole("navigation").getByRole("button", { name: "Guide" }).first()
+  await expect(guideButton).toBeVisible()
 })
