@@ -117,6 +117,25 @@ export default function ContactPage() {
         </div>
       </Section>
 
+      <Section title="Data Deletion & Account Closure">
+        <div className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-subtle)] p-6">
+          <p className="text-sm text-[var(--text-secondary)]">
+            You have the right to request deletion of your personal data. To delete your account and
+            remove all associated data from our systems (including data stored via{" "}
+            <strong>Supabase</strong> and email records managed through <strong>Resend</strong>),
+            please email{" "}
+            <a
+              href="mailto:contact@pennycentral.com?subject=Data%20Deletion%20Request"
+              className="text-[var(--cta-primary)] underline"
+            >
+              contact@pennycentral.com
+            </a>{" "}
+            with the subject line &ldquo;Data Deletion Request.&rdquo; We will process your request
+            and confirm deletion within 30 days.
+          </p>
+        </div>
+      </Section>
+
       <Section title="Response Windows">
         <Prose>
           <ul>

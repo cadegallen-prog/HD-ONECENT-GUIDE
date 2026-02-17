@@ -49,6 +49,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/faq" className={navLinkClass}>
+                  FAQ
+                </Link>
+              </li>
+              <li>
                 <a
                   href="https://www.facebook.com/groups/homedepotonecent"
                   target="_blank"

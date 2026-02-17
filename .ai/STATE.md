@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 16, 2026 (internal-systems retired + redirect hardening)
+**Last updated:** Feb 16, 2026 (reset recovery + guide/header clarity restore)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,25 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-16 (Reset recovery + guide/header clarity restore):** Recovered local `main` from accidental hard reset drift and restored founder-requested guide/navigation clarity improvements.
+  - **Git recovery shipped:**
+    - Detected local reset rollback via reflog (`reset: moving to HEAD~1`).
+    - Restored local `main` to remote tip with `git pull --ff-only origin main`.
+    - Continued implementation from recovered canonical state with no destructive git operations.
+  - **Guide/copy clarity shipped:**
+    - `/inside-scoop`: replaced ambiguous "supporting signal/report" phrasing with explicit probability + community-post language and clarified ending-in-.02 wording.
+    - `/guide`: removed duplicate "Where should you start?" chapter cards; changed top secondary CTA from `Report a Find` to `Browse Penny List`; reframed Report a Find as post-confirmation action.
+  - **Header interaction + IA shipped:**
+    - `components/navbar.tsx`: reduced crowded nav (removed `About` + `Contact`), made desktop Guide submenu click-toggle, added dismiss-on-select/outside/escape/route-change, and reordered submenu to `Step 0` through `Step 6`.
+    - `tests/basic.spec.ts` updated to reflect Guide button/submenu interaction expectations.
+  - **Verification:**
+    - `npm run ai:memory:check` ✅
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` ✅
+    - `npx playwright test tests/basic.spec.ts --project=chromium-desktop-light --project=chromium-mobile-light --workers=1` ✅
+    - `npm run lint:colors` ✅
+    - UI proof bundle: `reports/proof/2026-02-16T23-03-18/` (includes dropdown open/dismiss captures).
 
 - **2026-02-16 (Internal-systems route retirement + crawler-quality hardening):** Removed a thin utility page from the public site surface and consolidated traffic to the guide hub.
   - **Route lifecycle updates shipped:**

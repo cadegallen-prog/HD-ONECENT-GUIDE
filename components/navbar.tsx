@@ -1,11 +1,10 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
   Map,
-  User,
   Moon,
   Sun,
   Book,
@@ -16,10 +15,16 @@ import {
   Heart,
   ChevronDown,
   CircleHelp,
-  Mail,
 } from "lucide-react"
 import { useTheme } from "@/components/theme-provider"
 import { trackEvent } from "@/lib/analytics"
+
+const guideHubLink = {
+  step: 0,
+  href: "/guide",
+  label: "Guide Hub",
+  description: "Start here for chapter order and the full workflow overview.",
+}
 
 const guideSectionLinks = [
   {
@@ -60,15 +65,48 @@ const guideSectionLinks = [
   },
 ]
 
+const orderedGuideLinks = [guideHubLink, ...guideSectionLinks]
+
 export function Navbar() {
   const pathname = usePathname()
   const { setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [mobileGuideExpanded, setMobileGuideExpanded] = useState(false)
+  const [desktopGuideOpen, setDesktopGuideOpen] = useState(false)
+  const desktopGuideDropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    setDesktopGuideOpen(false)
+  }, [pathname])
+
+  useEffect(() => {
+    const closeDesktopGuideOnOutsideClick = (event: MouseEvent | TouchEvent) => {
+      if (!desktopGuideDropdownRef.current) return
+      if (!(event.target instanceof Node)) return
+      if (!desktopGuideDropdownRef.current.contains(event.target)) {
+        setDesktopGuideOpen(false)
+      }
+    }
+
+    const closeDesktopGuideOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setDesktopGuideOpen(false)
+      }
+    }
+
+    document.addEventListener("mousedown", closeDesktopGuideOnOutsideClick)
+    document.addEventListener("touchstart", closeDesktopGuideOnOutsideClick)
+    document.addEventListener("keydown", closeDesktopGuideOnEscape)
+    return () => {
+      document.removeEventListener("mousedown", closeDesktopGuideOnOutsideClick)
+      document.removeEventListener("touchstart", closeDesktopGuideOnOutsideClick)
+      document.removeEventListener("keydown", closeDesktopGuideOnEscape)
+    }
   }, [])
 
   const isDark = mounted && document.documentElement.classList.contains("dark")
@@ -80,13 +118,11 @@ export function Navbar() {
 
   const navItems = [
     { href: "/penny-list", label: "Penny List", icon: List },
+    { href: "/guide", label: "Guide", icon: Book, hasDropdown: true },
+    { href: "/store-finder", label: "Store Finder", icon: Map },
     { href: "/lists", label: "My List", icon: Heart },
     { href: "/report-find", label: "Report a Find", icon: PlusCircle },
-    { href: "/guide", label: "Guide", icon: Book, hasDropdown: true },
     { href: "/faq", label: "FAQ", icon: CircleHelp },
-    { href: "/store-finder", label: "Store Finder", icon: Map },
-    { href: "/about", label: "About", icon: User },
-    { href: "/contact", label: "Contact", icon: Mail },
   ]
 
   function closeMobileMenu() {
@@ -112,7 +148,7 @@ export function Navbar() {
                 - Only the nav link itself reacts on hover, not parent
                 - Active page: solid CTA background for clear distinction  
                 - Hover: subtle bg change + text darkening, 150ms transition
-                - Consistent across all items including About */}
+                - Consistent across all primary items */}
             <div className="hidden md:flex items-center gap-1">
               {navItems.map((item) => {
                 const isActive = mounted
@@ -125,9 +161,13 @@ export function Navbar() {
 
                 if (item.hasDropdown) {
                   return (
-                    <div key={item.href} className="relative group">
-                      <Link
-                        href={item.href}
+                    <div key={item.href} className="relative" ref={desktopGuideDropdownRef}>
+                      <button
+                        type="button"
+                        aria-haspopup="menu"
+                        aria-expanded={desktopGuideOpen}
+                        aria-controls="desktop-guide-sections"
+                        onClick={() => setDesktopGuideOpen((prev) => !prev)}
                         className={`
                           inline-flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-150
                           ${
@@ -138,27 +178,31 @@ export function Navbar() {
                         `}
                       >
                         {item.label}
-                        <ChevronDown size={14} strokeWidth={2} className="mt-[1px]" />
-                      </Link>
+                        <ChevronDown
+                          size={14}
+                          strokeWidth={2}
+                          className={`mt-[1px] transition-transform ${
+                            desktopGuideOpen ? "rotate-180" : ""
+                          }`}
+                        />
+                      </button>
 
-                      <div className="pointer-events-none invisible absolute left-0 top-full z-50 w-[22rem] pt-2 opacity-0 translate-y-1 transition-all duration-150 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-0 group-focus-within:pointer-events-auto">
-                        <div className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-2 shadow-[var(--shadow-card)]">
-                          <Link
-                            href="/guide"
-                            className="block rounded-md px-3 py-2 text-sm font-semibold text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]"
-                          >
-                            Complete Guide Hub
-                          </Link>
+                      {desktopGuideOpen && (
+                        <div
+                          id="desktop-guide-sections"
+                          className="absolute left-0 top-full z-50 mt-2 w-[22rem] rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-2 shadow-[var(--shadow-card)]"
+                        >
                           <p className="px-3 pb-1 pt-0.5 text-xs text-[var(--text-muted)]">
-                            Suggested read order: Step 1 through Step 6
+                            Read in order: Step 0 through Step 6
                           </p>
                           <div className="my-1 border-t border-[var(--border-default)]" />
-                          {guideSectionLinks.map((section) => {
+                          {orderedGuideLinks.map((section) => {
                             const sectionActive = mounted ? pathname === section.href : false
                             return (
                               <Link
                                 key={section.href}
                                 href={section.href}
+                                onClick={() => setDesktopGuideOpen(false)}
                                 className={`block rounded-md px-3 py-2 transition-colors ${
                                   sectionActive
                                     ? "bg-[var(--bg-elevated)]"
@@ -178,7 +222,7 @@ export function Navbar() {
                             )
                           })}
                         </div>
-                      </div>
+                      )}
                     </div>
                   )
                 }
@@ -284,14 +328,7 @@ export function Navbar() {
                           id="mobile-guide-sections"
                           className="ml-10 mt-1 mb-2 space-y-1 border-l border-[var(--border-default)] pl-3"
                         >
-                          <Link
-                            href="/guide"
-                            onClick={closeMobileMenu}
-                            className="flex min-h-[44px] items-center rounded-md px-3 py-2 text-sm font-semibold text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]"
-                          >
-                            Start Here: Guide Hub
-                          </Link>
-                          {guideSectionLinks.map((section) => {
+                          {orderedGuideLinks.map((section) => {
                             const sectionActive = mounted ? pathname === section.href : false
                             return (
                               <Link
