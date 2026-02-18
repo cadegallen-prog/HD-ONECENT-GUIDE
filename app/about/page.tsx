@@ -1,6 +1,5 @@
 import Link from "next/link"
 import type { Metadata } from "next"
-import { LegalBackLink } from "@/components/legal-back-link"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
 import { COMMUNITY_MEMBER_COUNT_DISPLAY, FACEBOOK_GROUP_URL } from "@/lib/constants"
 
@@ -80,11 +79,9 @@ export default function AboutPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
       />
 
-      <LegalBackLink />
-
       <PageHeader
         title="About PennyCentral"
-        subtitle="A founder-built, community-powered home for real penny-hunting knowledge."
+        subtitle="A free, community-driven guide for finding $0.01 clearance items at Home Depot."
         primaryAction={{
           label: `Join ${COMMUNITY_MEMBER_COUNT_DISPLAY} penny hunters`,
           href: FACEBOOK_GROUP_URL,
@@ -102,8 +99,9 @@ export default function AboutPage() {
           </p>
           <p>
             On April 5, 2025, the <strong>Home Depot One Cent Items</strong> community restarted
-            from zero and grew fast. New members asked the same practical questions every day: where
-            to start, what is real, and how to hunt responsibly.
+            from zero. The growth was explosive, rocketing to over {COMMUNITY_MEMBER_COUNT_DISPLAY}{" "}
+            members. New members joined every day asking the same practical questions: where to
+            start, what is real, and how to hunt responsibly.
           </p>
           <p>
             I am a nurse by trade, not a developer. I built the first version of this site so people
@@ -153,6 +151,24 @@ export default function AboutPage() {
             <li>Transparency over ambiguity</li>
           </ol>
           <p>PennyCentral is independent and is not affiliated with or endorsed by Home Depot.</p>
+
+          <h2>The Scavenger Hunt Philosophy</h2>
+          <p>
+            For us, penny shopping isn't really about the items. (I have a storage unit that proves
+            I don't need more stuff.) It's about the hunt. It's the challenge, the scavenger hunt,
+            the thrill of finding something hidden in plain sight.
+          </p>
+          <p>
+            That shared excitement is what powers this site. Millions of items are marked down and
+            most are thrown away. When we find them, we save them from a landfill and get a great
+            deal. It's a win-win, as long as we play by the rules and treat store staff with
+            respect.
+          </p>
+
+          <p>
+            I never thought I'd be running a website with this many users. I make mistakes. I break
+            things. But as long as this community keeps hunting, I'll keep building.
+          </p>
           <p className="mt-6 text-[var(--text-muted)] italic">
             — Cade Allen, PennyCentral Creator, Home Depot One Cent Items Admin, and fellow hunter
           </p>
@@ -162,16 +178,16 @@ export default function AboutPage() {
       <Section title="Where to Start">
         <div className="mt-2 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
           <Link
-            href="/penny-list"
+            href="/guide"
             className="inline-flex min-h-[44px] items-center justify-center rounded-md bg-[var(--cta-primary)] px-5 py-3 font-semibold text-[var(--cta-text)]"
           >
-            Browse the Penny List
+            Read the Step-by-Step Guide
           </Link>
           <Link
-            href="/guide"
+            href="/penny-list"
             className="inline-flex min-h-[44px] items-center justify-center rounded-md border border-[var(--border-default)] bg-[var(--bg-elevated)] px-5 py-3 font-medium text-[var(--text-primary)]"
           >
-            Read the Step-by-Step Guide
+            Browse the Penny List
           </Link>
           <Link
             href={FACEBOOK_GROUP_URL}

@@ -117,11 +117,11 @@ export function Navbar() {
     : false
 
   const navItems = [
-    { href: "/penny-list", label: "Penny List", icon: List },
     { href: "/guide", label: "Guide", icon: Book, hasDropdown: true },
-    { href: "/store-finder", label: "Store Finder", icon: Map },
+    { href: "/penny-list", label: "Penny List", icon: List },
     { href: "/lists", label: "My List", icon: Heart },
     { href: "/report-find", label: "Report a Find", icon: PlusCircle },
+    { href: "/store-finder", label: "Store Finder", icon: Map },
     { href: "/faq", label: "FAQ", icon: CircleHelp },
   ]
 
@@ -146,7 +146,7 @@ export function Navbar() {
             {/* Desktop Navigation - Unified hover/active states
                 Interaction design:
                 - Only the nav link itself reacts on hover, not parent
-                - Active page: solid CTA background for clear distinction  
+                - Active page: solid CTA background for clear distinction
                 - Hover: subtle bg change + text darkening, 150ms transition
                 - Consistent across all primary items */}
             <div className="hidden md:flex items-center gap-1">
@@ -162,30 +162,46 @@ export function Navbar() {
                 if (item.hasDropdown) {
                   return (
                     <div key={item.href} className="relative" ref={desktopGuideDropdownRef}>
-                      <button
-                        type="button"
-                        aria-haspopup="menu"
-                        aria-expanded={desktopGuideOpen}
-                        aria-controls="desktop-guide-sections"
-                        onClick={() => setDesktopGuideOpen((prev) => !prev)}
-                        className={`
-                          inline-flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-150
-                          ${
-                            isActive
-                              ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
-                              : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-elevated)]"
-                          }
-                        `}
-                      >
-                        {item.label}
-                        <ChevronDown
-                          size={14}
-                          strokeWidth={2}
-                          className={`mt-[1px] transition-transform ${
-                            desktopGuideOpen ? "rotate-180" : ""
-                          }`}
-                        />
-                      </button>
+                      <div className="inline-flex items-center">
+                        <Link
+                          href={item.href}
+                          onClick={() => setDesktopGuideOpen(false)}
+                          className={`
+                            px-4 py-2 rounded-l-lg text-sm font-medium transition-colors duration-150
+                            ${
+                              isActive
+                                ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
+                                : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-elevated)]"
+                            }
+                          `}
+                        >
+                          {item.label}
+                        </Link>
+                        <button
+                          type="button"
+                          aria-label="Toggle guide chapters"
+                          aria-haspopup="menu"
+                          aria-expanded={desktopGuideOpen}
+                          aria-controls="desktop-guide-sections"
+                          onClick={() => setDesktopGuideOpen((prev) => !prev)}
+                          className={`
+                            inline-flex items-center px-2 py-2 rounded-r-lg text-sm font-medium transition-colors duration-150
+                            ${
+                              isActive
+                                ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
+                                : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-elevated)]"
+                            }
+                          `}
+                        >
+                          <ChevronDown
+                            size={14}
+                            strokeWidth={2}
+                            className={`mt-[1px] transition-transform ${
+                              desktopGuideOpen ? "rotate-180" : ""
+                            }`}
+                          />
+                        </button>
+                      </div>
 
                       {desktopGuideOpen && (
                         <div
@@ -273,7 +289,7 @@ export function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay 
+      {/* Mobile Menu Overlay
           MOBILE OPTIMIZATIONS:
           - 48px min-height touch targets for all nav items
           - Increased spacing between items (space-y-1 + larger padding)
@@ -298,30 +314,46 @@ export function Navbar() {
                 if (item.hasDropdown) {
                   return (
                     <div key={item.href}>
-                      <button
-                        type="button"
-                        onClick={() => setMobileGuideExpanded((prev) => !prev)}
-                        aria-expanded={mobileGuideExpanded}
-                        aria-controls="mobile-guide-sections"
-                        className={`
-                          flex w-full items-center gap-3 px-4 py-3.5 min-h-[48px] rounded-lg text-base font-medium transition-all duration-150
-                          ${
-                            isActive
-                              ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
-                              : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-elevated)] active:bg-[var(--bg-elevated)]"
-                          }
-                        `}
-                      >
-                        <Icon size={20} strokeWidth={1.5} />
-                        <span>{item.label}</span>
-                        <ChevronDown
-                          size={16}
-                          strokeWidth={2}
-                          className={`ml-auto transition-transform ${
-                            mobileGuideExpanded ? "rotate-180" : ""
-                          }`}
-                        />
-                      </button>
+                      <div className="flex items-center gap-1">
+                        <Link
+                          href={item.href}
+                          onClick={closeMobileMenu}
+                          className={`
+                            flex flex-1 items-center gap-3 px-4 py-3.5 min-h-[48px] rounded-lg text-base font-medium transition-all duration-150
+                            ${
+                              isActive
+                                ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
+                                : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-elevated)] active:bg-[var(--bg-elevated)]"
+                            }
+                          `}
+                        >
+                          <Icon size={20} strokeWidth={1.5} />
+                          <span>{item.label}</span>
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => setMobileGuideExpanded((prev) => !prev)}
+                          aria-label="Toggle guide chapters"
+                          aria-expanded={mobileGuideExpanded}
+                          aria-controls="mobile-guide-sections"
+                          className={`
+                            flex items-center justify-center w-11 min-h-[48px] rounded-lg transition-all duration-150
+                            ${
+                              isActive || mobileGuideExpanded
+                                ? "bg-[var(--cta-primary)] text-[var(--cta-text)]"
+                                : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)] dark:hover:bg-[var(--bg-elevated)] active:bg-[var(--bg-elevated)]"
+                            }
+                          `}
+                        >
+                          <ChevronDown
+                            size={16}
+                            strokeWidth={2}
+                            className={`transition-transform ${
+                              mobileGuideExpanded ? "rotate-180" : ""
+                            }`}
+                          />
+                        </button>
+                      </div>
 
                       {mobileGuideExpanded && (
                         <div
