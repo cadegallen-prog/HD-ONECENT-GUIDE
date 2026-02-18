@@ -4,8 +4,11 @@ Short, task-focused guides to avoid repo-wide searching.
 
 **How to use this (for you, Cade):**
 
-- When you start a new request, tell the agent: **"Read `docs/skills/README.md` first and follow the relevant skill."**
+- You do **not** need to remember skill names.
+- Default request opener:
+  - **"Read `docs/skills/README.md` first. Choose and run the right skills automatically. Do the work end-to-end and verify before reporting back."**
 - If the skill doesn’t exist yet, ask the agent to **add a short new skill after finishing the task** so future sessions get faster.
+- Keep `docs/FOUNDER-COMMAND-CENTER.md` open for a plain-English decision tree + copy/paste prompt bank.
 
 ## Skills
 
@@ -25,3 +28,10 @@ Short, task-focused guides to avoid repo-wide searching.
 - [stash-hygiene](./stash-hygiene.md) — **When to use:** Stashes/untracked junk are creating invisible state that confuses agents; bundle+drop to keep `git stash list` near-zero.
 - [task-completion-handoff](./task-completion-handoff.md) — **When to use:** You want strict closeout behavior (verify + memory updates + next-agent handoff) so context persists across windows.
 - [plan-canonicality](./plan-canonicality.md) — **When to use:** A plan exists in tool-local locations (like `.claude/plans`) and you need one repo-canonical source of truth in `.ai/impl/`.
+- [ux-loop-improvement](./ux-loop-improvement.md) — **When to use:** You want to improve the core user loop (`/penny-list` -> `/sku/[sku]` -> `/report-find`) without scope creep.
+- [ui-refinement-aaa](./ui-refinement-aaa.md) — **When to use:** You need UI polish/hierarchy/interaction cleanup while staying inside token-based AAA standards.
+- [writing-clarity-grammar](./writing-clarity-grammar.md) — **When to use:** You need plain-English rewrite quality, grammar cleanup, and trust-safe copy.
+- [presentation-polish](./presentation-polish.md) — **When to use:** You need better structure and scanability for long pages (guide/faq/transparency/legal).
+- [privacy-compliance-ad-readiness](./privacy-compliance-ad-readiness.md) — **When to use:** You need trust/legal/compliance checks and ad-network readiness hardening.
+- [legal-monetization-copy-guard](./legal-monetization-copy-guard.md) — **When to use:** Monetization channels changed (added/paused/retired) and legal/disclosure copy must match live reality with no stale claims.
+- [color-typography-aaa](./color-typography-aaa.md) — **When to use:** You need color/typography consistency and contrast-safe token enforcement.

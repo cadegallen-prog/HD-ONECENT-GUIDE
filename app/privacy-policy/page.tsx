@@ -5,7 +5,7 @@ import { PageHeader, PageShell, Prose, Section } from "@/components/page-templat
 export const metadata: Metadata = {
   title: "Privacy Policy | PennyCentral",
   description:
-    "How PennyCentral collects, uses, stores, and shares data, including cookie controls, ad/affiliate disclosures, and U.S. privacy rights.",
+    "How PennyCentral collects, uses, stores, and shares data, including cookie controls, advertising disclosures, and U.S. privacy rights.",
   alternates: {
     canonical: "/privacy-policy",
   },
@@ -50,7 +50,7 @@ export default function PrivacyPolicyPage() {
           <ul>
             <li>IP address (used for approximate location and abuse prevention)</li>
             <li>Browser/device/operating-system metadata</li>
-            <li>Pages visited, referral source, and interaction timestamps</li>
+            <li>Pages visited, traffic source, and interaction timestamps</li>
             <li>Google Analytics tracking via GA4 (Measurement ID: G-DJ4RJRX05E)</li>
           </ul>
 
@@ -82,7 +82,7 @@ export default function PrivacyPolicyPage() {
               anytime using the email footer link)
             </li>
             <li>Detect abuse, spam, and technical failures</li>
-            <li>Support monetization through affiliate programs and future advertising</li>
+            <li>Support operations and advertising delivery</li>
           </ul>
         </Prose>
       </Section>
@@ -143,13 +143,8 @@ export default function PrivacyPolicyPage() {
         </Prose>
       </Section>
 
-      <Section title="5) Affiliate, Advertising, and Third-Party Disclosures">
+      <Section title="5) Advertising and Third-Party Disclosures">
         <Prose>
-          <p>
-            Some outbound links may be affiliate links, including Rakuten referral links. If you
-            click and complete a qualifying signup, PennyCentral may receive referral compensation
-            at no extra cost to you.
-          </p>
           <p>
             PennyCentral may work with third-party analytics and advertising providers. If
             advertising is enabled, those providers may set or read cookies and similar identifiers
@@ -303,7 +298,7 @@ export default function PrivacyPolicyPage() {
             <li>Hosting and infrastructure</li>
             <li>Analytics and operations</li>
             <li>Fraud/abuse prevention</li>
-            <li>Affiliate or ad attribution (when applicable)</li>
+            <li>Ad attribution (when applicable)</li>
           </ul>
           <p>
             We retain information only as long as necessary for operations, security, legal

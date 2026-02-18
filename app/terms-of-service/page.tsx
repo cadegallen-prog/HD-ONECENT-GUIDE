@@ -5,7 +5,7 @@ import { PageHeader, PageShell, Prose, Section } from "@/components/page-templat
 export const metadata: Metadata = {
   title: "Terms of Service | PennyCentral",
   description:
-    "Terms governing use of PennyCentral, including real-time deal-data disclaimers, affiliate disclosures, and liability limits.",
+    "Terms governing use of PennyCentral, including real-time deal-data disclaimers, advertising disclosures, and liability limits.",
   alternates: {
     canonical: "/terms-of-service",
   },
@@ -82,12 +82,9 @@ export default function TermsOfServicePage() {
         </Prose>
       </Section>
 
-      <Section title="5) Affiliate and Third-Party Services">
+      <Section title="5) Advertising and Third-Party Services">
         <Prose>
-          <p>
-            Some outbound links may be affiliate links, including Rakuten referral links.
-            PennyCentral may receive referral compensation from qualifying signups.
-          </p>
+          <p>Some pages may include advertising or links to third-party services.</p>
           <p>
             Third-party websites, promotions, and advertisers have their own terms and privacy
             practices, which are outside our control.

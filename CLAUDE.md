@@ -84,15 +84,52 @@ Push back (politely but firmly) when Cade:
 
 ---
 
-## MCP Servers (5 available)
+## Stack & Architecture
 
-**Configuration:** `.vscode/mcp.json` (for Claude Code only)
+- **Framework:** Next.js App Router (`app/` directory), TypeScript strict mode, deployed on Vercel
+- **Styling:** Tailwind CSS with CSS custom property tokens only — **never raw Tailwind color utilities** (e.g. `blue-500`). Always use tokens like `var(--cta-primary)`, `var(--text-primary)`. Source of truth: `app/globals.css` + `docs/DESIGN-SYSTEM-AAA.md`
+- **Database:** Supabase (`lib/supabase/`) + Vercel Postgres
+- **Key directories:** `app/` (routes), `components/` (React components), `lib/` (shared utilities), `tests/` (unit + Playwright e2e), `data/` (JSON penny data), `.ai/` (AI agent docs)
+- **Unit tests:** Custom runner via `node scripts/run-unit-tests.mjs` — no Jest/Vitest root config exists. There is no single-test shortcut; the runner runs the full suite.
+- **Playwright:** Config at `playwright.config.ts`, base URL `http://127.0.0.1:3002` (isolated from dev port 3001)
+
+---
+
+## Key Commands
+
+| Command               | What It Does                                           |
+| --------------------- | ------------------------------------------------------ |
+| `npm run dev`         | Start dev server on **port 3001** (webpack mode)       |
+| `npm run dev:turbo`   | Start dev server on port 3001 (Turbo mode)             |
+| `npm run lint`        | ESLint on `app/ components/ lib/` — `--max-warnings=0` |
+| `npm run typecheck`   | `tsc --noEmit`                                         |
+| `npm run test:unit`   | Run all unit tests via custom runner                   |
+| `npm run verify:fast` | lint + typecheck + test:unit + build                   |
+| `npm run e2e:smoke`   | Playwright smoke suite (chromium-desktop, 1 worker)    |
+| `npm run e2e:full`    | Full Playwright suite (all projects, 1 worker)         |
+
+---
+
+## Fragile Files & FULL e2e Auto-Triggers
+
+Changes to any of these paths automatically trigger FULL e2e in CI — run `npm run e2e:full` locally before pushing:
+
+`middleware.ts`, `app/auth/**`, `lib/supabase/**`, `supabase/migrations/**`, `app/api/**`, `next.config.js`, `package.json`, `.github/workflows/**`, `components/store-map.tsx`, `app/**/layout.tsx`, `app/globals.css`
+
+**`components/store-map.tsx`** is additionally flagged as fragile — do not modify without explicit approval.
+
+---
+
+## MCP Servers (4 active for Claude Code)
+
+**Configuration:** `.vscode/mcp.json`
 
 1. **Filesystem** - File operations (use automatically)
 2. **GitHub** - PRs/issues/repo management (use when needed)
 3. **Playwright** - Browser testing & screenshots (REQUIRED for UI changes)
-4. **Supabase** - Database queries during development (optional, requires VSCode restart)
-5. **Vercel** - Deployment management (optional, requires VSCode restart)
+4. **Supabase** - Database queries (requires `SUPABASE_ACCESS_TOKEN` env var)
+
+**Note:** `interactive` MCP is also in `.vscode/mcp.json` but reserved for Copilot Chat only (1-credit-per-request model). Git MCP is not configured — use Bash for git operations.
 
 **Playwright required for:**
 
@@ -100,15 +137,13 @@ Push back (politely but firmly) when Cade:
 - JavaScript changes (Store Finder, interactive features)
 - "Bug fixed" claims (visual bugs need proof)
 
-**Note:** Git MCP removed (package doesn't exist) - use Bash tool for git operations instead.
-
 ## AI Tool Differentiation
 
 **When user mentions "Copilot" or GitHub Copilot:**
 
 - Refers to GitHub Copilot Chat within VSCode
-- No MCP server support
-- Primarily code completion and inline chat
+- Has MCP support (Filesystem, GitHub, Playwright, Supabase + `interactive`) via `.vscode/mcp.json`
+- See `.github/copilot-instructions.md` for full capabilities
 
 **When user mentions "Codex" or ChatGPT Codex:**
 

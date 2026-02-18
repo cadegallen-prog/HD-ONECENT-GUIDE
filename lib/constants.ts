@@ -8,10 +8,10 @@
 // ============================================
 
 /** Raw member count number (for calculations if needed). */
-export const COMMUNITY_MEMBER_COUNT = 64000
+export const COMMUNITY_MEMBER_COUNT = 70000
 
 /** ISO date when the community member count was last verified. */
-export const COMMUNITY_MEMBER_COUNT_LAST_VERIFIED = "2026-02-13"
+export const COMMUNITY_MEMBER_COUNT_LAST_VERIFIED = "2026-02-17"
 
 /** Display string for member count (use this in JSX). */
 export const COMMUNITY_MEMBER_COUNT_DISPLAY = `${COMMUNITY_MEMBER_COUNT.toLocaleString("en-US")}+`
@@ -29,10 +29,3 @@ export const FACEBOOK_GROUP_URL = "https://www.facebook.com/groups/homedepotonec
  * Internal Report Find page URL for submitting penny finds.
  */
 export const SUBMIT_FIND_FORM_URL = "/report-find"
-
-// ============================================
-// MONETIZATION CONSTANTS
-// ============================================
-
-/** Rakuten referral URL */
-export const RAKUTEN_REFERRAL_URL = "https://www.rakuten.com/r/CADEGA16?eeid=28187"

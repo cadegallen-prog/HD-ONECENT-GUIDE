@@ -35,7 +35,7 @@ test("public legal and transparency pages do not claim Amazon Associate status",
   }
 })
 
-test("public legal and transparency pages do not deny Rakuten relationship", () => {
+test("public legal and transparency pages do not reference retired referral/donation programs", () => {
   const targets = [
     "app/privacy-policy/page.tsx",
     "app/terms-of-service/page.tsx",
@@ -44,38 +44,37 @@ test("public legal and transparency pages do not deny Rakuten relationship", () 
 
   for (const target of targets) {
     const source = readSource(target)
+
+    const retiredTerms = [
+      "rakuten",
+      "befrugal",
+      "affiliate",
+      "referral compensation",
+      "paypal",
+      "donation",
+      "tip jar",
+    ]
+
+    for (const term of retiredTerms) {
+      assert.ok(!source.includes(term), `${target} must not reference retired term: ${term}`)
+    }
+
     assert.ok(
       !source.includes("not affiliated with rakuten"),
-      `${target} must not deny Rakuten relationship`
+      `${target} must not reference Rakuten relationship language`
     )
     assert.ok(
       !source.includes("not associated with rakuten"),
-      `${target} must not deny Rakuten relationship`
+      `${target} must not reference Rakuten relationship language`
     )
   }
 })
 
-test("transparency page contains affiliate disclosure without promotional language", () => {
+test("transparency page contains advertising disclosure without promotional language", () => {
   const source = readSource("app/transparency/page.tsx")
   const normalized = normalizeWhitespace(source)
 
-  // Must contain a disclosure that affiliate links exist
-  assert.ok(normalized.includes("affiliate"), "transparency page must reference affiliate links")
-
-  // Must mention Rakuten relationship factually
-  assert.ok(normalized.includes("rakuten"), "transparency page must reference Rakuten")
-
-  // Must mention referral compensation
-  assert.ok(
-    normalized.includes("referral"),
-    "transparency page must reference referral compensation"
-  )
-
-  // Must include "no extra cost" consumer protection language
-  assert.ok(
-    normalized.includes("no extra cost"),
-    "transparency page must state no extra cost to user"
-  )
+  assert.ok(normalized.includes("advertising"), "transparency page must reference advertising")
 
   // Must NOT contain promotional/CTA-style language
   assert.ok(
@@ -96,14 +95,18 @@ test("transparency page contains affiliate disclosure without promotional langua
   )
 })
 
-test("privacy and terms pages contain factual affiliate disclosure", () => {
+test("privacy and terms pages contain factual advertising disclosure", () => {
   const targets = ["app/privacy-policy/page.tsx", "app/terms-of-service/page.tsx"]
 
   for (const target of targets) {
     const source = readSource(target)
     const normalized = normalizeWhitespace(source)
-    assert.ok(normalized.includes("affiliate"), `${target} must reference affiliate disclosure`)
-    assert.ok(normalized.includes("rakuten"), `${target} must reference Rakuten`)
-    assert.ok(normalized.includes("referral"), `${target} must reference referral`)
+    assert.ok(normalized.includes("advertising"), `${target} must reference advertising`)
+    assert.ok(!normalized.includes("rakuten"), `${target} must not reference Rakuten`)
+    assert.ok(!normalized.includes("affiliate"), `${target} must not reference affiliate programs`)
+    assert.ok(
+      !normalized.includes("referral compensation"),
+      `${target} must not reference referral compensation`
+    )
   }
 })

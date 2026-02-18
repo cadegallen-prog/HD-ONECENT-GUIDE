@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 17, 2026 (manual upsert validation + canonical enrichment rollout)
+**Last updated:** Feb 18, 2026 (founder command center + retired referral/disclosure cleanup + legal monetization copy guard skill + about/contact trust restoration + project skill pack + manual upsert/canonical enrichment)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,79 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-18 (Retired referral/disclosure cleanup + legacy go-route neutralization):** Removed outdated Rakuten/referral/donation mentions from live trust/legal pages and aligned route behavior to the current non-referral state.
+  - **Runtime copy cleanup shipped:**
+    - `app/transparency/page.tsx` no longer references affiliate/referral programs.
+    - `app/privacy-policy/page.tsx` no longer references Rakuten/affiliate/referral compensation.
+    - `app/terms-of-service/page.tsx` now uses advertising-only disclosure language.
+  - **Legacy route behavior changed:**
+    - `app/go/rakuten/route.ts` now redirects to `/transparency` (no external referral forwarding).
+    - `app/go/befrugal/route.ts` now redirects to `/transparency`.
+    - Removed `RAKUTEN_REFERRAL_URL` from `lib/constants.ts`.
+  - **Test suite alignment shipped:**
+    - Updated `tests/disclosure-claims-accuracy.test.ts`.
+    - Updated `tests/privacy-policy.spec.ts`.
+    - Updated `tests/support.spec.ts`.
+  - **Process hardening shipped (docs-only):**
+    - Added `docs/skills/legal-monetization-copy-guard.md`.
+    - Registered the skill in `docs/skills/README.md`.
+    - Linked from `docs/skills/privacy-compliance-ad-readiness.md` so compliance passes route through the guard.
+    - Added `docs/FOUNDER-COMMAND-CENTER.md` as an always-open decision tree + prompt bank.
+    - Updated `docs/skills/README.md` to explicitly state Cade does not need to remember skill names.
+    - Added command-center link in `README.md`.
+    - Updated stale README affiliate guidance to match current runtime (`/go/rakuten` and `/go/befrugal` now redirect to `/transparency`).
+  - **Verification:**
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` ✅
+    - `npm run ai:proof -- /transparency /privacy-policy /terms-of-service` ✅
+    - Proof bundle: `reports/proof/2026-02-18T03-38-02/`
+    - `npm run ai:memory:check` ✅
+    - `npm run check:docs-governance` ✅
+    - `npm run ai:checkpoint` ✅
+    - Context pack artifact: `reports/context-packs/2026-02-18T05-27-52/context-pack.md`
+
+- **2026-02-18 (About/Contact trust restoration):** Reversed founder-reported trust regressions from recent trust/compliance rewrites by restoring authentic founder narrative on `/about` and simplifying `/contact` to an email-only experience.
+  - **Root cause identified:**
+    - `39b140e` replaced the richer founder-story About page with generic copy and over-sanitized structure.
+    - `39b140e` also introduced repetitive same-email contact rows and a mailto form UX.
+    - `d522bff` appended data-deletion copy on contact that duplicated privacy-policy responsibilities.
+  - **Fixes shipped:**
+    - `app/about/page.tsx` now includes:
+      - founder story/origin narrative,
+      - explicit real-person identity (`Cade Allen`),
+      - community leadership/admin context (`Spoe Jarky`, `Jorian Wulf`),
+      - site philosophy and standards,
+      - `Organization` + `AboutPage` JSON-LD with founder as `Person`.
+    - `app/contact/page.tsx` now:
+      - removes the mailto form causing insecure-browser warnings,
+      - removes repetitive same-email-per-topic rows,
+      - uses a single email-first contact path,
+      - routes privacy/deletion rights to `/privacy-policy` and `/do-not-sell-or-share`.
+  - **Verification:**
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
+    - Context pack artifact: `reports/context-packs/2026-02-18T03-31-08/context-pack.md`
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` ✅
+    - `npm run ai:proof -- /about /contact` ✅
+    - Proof bundle: `reports/proof/2026-02-18T03-28-16/`
+
+- **2026-02-17 (Project skill pack shipped for UX/UI/copy/compliance/design quality):** Added reusable repo-native skills so future agents can produce consistent, founder-safe quality across UX refinement, writing clarity, presentation, compliance readiness, and token-based design system work.
+  - **New skills added (`docs/skills/`):**
+    - `ux-loop-improvement.md`
+    - `ui-refinement-aaa.md`
+    - `writing-clarity-grammar.md`
+    - `presentation-polish.md`
+    - `privacy-compliance-ad-readiness.md`
+    - `color-typography-aaa.md`
+  - **Index update shipped:**
+    - `docs/skills/README.md` now includes all six skills with clear \"when to use\" triggers.
+  - **Verification:**
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
+    - Context pack artifact: `reports/context-packs/2026-02-17T18-26-31/context-pack.md`
+  - **Scope note:** Docs-only session; no runtime code-path changes.
 
 - **2026-02-17 (Manual Add live-upsert validation + fixture confusion guardrails):** Confirmed and enforced that `data/penny-list.json` is fixture-only, not a live write target, and completed founder payload upsert to Supabase.
   - **Live upsert completed:**

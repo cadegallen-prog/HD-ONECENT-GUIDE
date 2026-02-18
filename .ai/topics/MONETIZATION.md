@@ -1,6 +1,6 @@
 # MONETIZATION
 
-## CURRENT STATUS (Updated Feb 2, 2026)
+## CURRENT STATUS (Updated Feb 17, 2026)
 
 ### Active Infrastructure
 
@@ -12,13 +12,14 @@
 
 ### Pending
 
-- 🔄 **Monumetric MCM invite** - ACCEPTED, awaiting advertiser approval (2-6 weeks)
-- 🔄 **AdSense site approval** - Reapplied Feb 3, 2026 (previously rejected "Low Value Content")
-- ✅ **Sitemap fix deployed** - Pillar-only (20 URLs), resubmitted to GSC
+- 🔄 **Monumetric** - Ascend tier approved (Feb 17). Ad providers approved. Ad strategy confirmed. Technical team configuring ad code. GAM domain approval status through Monumetric MCM unknown — asked Samantha for clarification Feb 17.
+- 🔄 **AdSense site approval** - Remediation deployed Feb 16. Re-review pending policy matrix gate.
+- 🔄 **Ezoic GAM domain approval** - Resubmitted Feb 9 (first attempt denied). Still pending. Separate from Monumetric MCM.
+- ✅ **Sitemap fix deployed** - Pillar-only (18 URLs), resubmitted to GSC
 
 ### Removed
 
-- ❌ **Ezoic** - Infrastructure removed Feb 1, 2026 (poor UX: gray placeholder boxes)
+- ❌ **Ezoic scripts** - Infrastructure removed Feb 1, 2026 (poor UX). Still in domain approval as backup.
 
 ---
 
@@ -26,21 +27,32 @@
 
 ### What Cade Has Done (Timeline)
 
-| Date         | Action                                        | Status           |
-| ------------ | --------------------------------------------- | ---------------- |
-| Dec 4, 2025  | Site launched                                 | ✅               |
-| Jan 12, 2026 | Installed Mediavine Journey (Grow)            | ✅               |
-| Jan 14, 2026 | Privacy policy + ads.txt deployed             | ✅               |
-| Jan 17, 2026 | Ezoic integration (temporary)                 | ❌ Removed Feb 1 |
-| Jan 19, 2026 | Created AdSense account, applied for approval | ✅               |
-| Jan 19, 2026 | Received Ezoic MCM invite                     | ✅ (not pursued) |
-| Jan 19, 2026 | Received Monumetric MCM invite                | ✅ Accepted      |
-| Jan 24, 2026 | GAM PIN verification completed                | ✅               |
-| Jan 26, 2026 | Emailed Monumetric about Next.js setup        | ✅               |
-| Feb 1, 2026  | Removed all Ezoic infrastructure              | ✅               |
-| Feb 2, 2026  | AdSense rejected ("Low Value Content")        | ❌               |
-| Feb 2, 2026  | Sitemap fix deployed (pillar-only indexing)   | ✅               |
-| Feb 2, 2026  | GSC sitemap resubmitted (12 pages)            | ✅               |
+| Date         | Action                                         | Status            |
+| ------------ | ---------------------------------------------- | ----------------- |
+| Dec 4, 2025  | Site launched                                  | ✅                |
+| Jan 12, 2026 | Installed Mediavine Journey (Grow)             | ✅                |
+| Jan 14, 2026 | Privacy policy + ads.txt deployed              | ✅                |
+| Jan 17, 2026 | Ezoic integration (temporary)                  | ❌ Removed Feb 1  |
+| Jan 19, 2026 | Created AdSense account, applied for approval  | ✅                |
+| Jan 19, 2026 | Received Ezoic MCM invite                      | ✅ (not pursued)  |
+| Jan 19, 2026 | Received Monumetric MCM invite                 | ✅ Accepted       |
+| Jan 24, 2026 | GAM PIN verification completed                 | ✅                |
+| Jan 26, 2026 | Emailed Monumetric about Next.js setup         | ✅                |
+| Feb 1, 2026  | Removed all Ezoic infrastructure               | ✅                |
+| Feb 2, 2026  | AdSense rejected ("Low Value Content")         | ❌                |
+| Feb 2, 2026  | Sitemap fix deployed (pillar-only indexing)    | ✅                |
+| Feb 2, 2026  | GSC sitemap resubmitted (12 pages)             | ✅                |
+| Feb 9, 2026  | Ezoic GAM domain approval resubmitted          | 🔄 Pending        |
+| Feb 10, 2026 | Monumetric: "waiting on Google"                | ✅ (see Feb 11)   |
+| Feb 11, 2026 | Monumetric: "approved by our ad providers"     | ✅                |
+| Feb 11, 2026 | Monumetric: ad strategy sent to Cade           | ✅                |
+| Feb 12, 2026 | AdSense: "policy violations" (second denial)   | ❌                |
+| Feb 12, 2026 | Cade: tier pushback sent to Monumetric         | ✅                |
+| Feb 13, 2026 | Monumetric: Sales Lead reviewing               | ✅                |
+| Feb 16, 2026 | AdSense remediation bundle deployed to prod    | ✅                |
+| Feb 17, 2026 | Monumetric: Ascend tier approved by Sales Lead | ✅                |
+| Feb 17, 2026 | Cade: confirmed ad strategy, green-lit impl    | ✅                |
+| Feb 17, 2026 | Cade: asked about GAM domain approval status   | 🔄 Awaiting reply |
 
 ### Current Traffic (Last 30 Days)
 

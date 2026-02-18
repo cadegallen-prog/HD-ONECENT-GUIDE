@@ -1,8 +1,16 @@
 # Penny Central
 
-The official companion site for the "Home Depot One Cent Items" Facebook community (64,000+ members as of February 13, 2026). A utility/reference guide for finding Home Depot clearance items marked to $0.01.
+The official companion site for the "Home Depot One Cent Items" Facebook community (70,000+ members as of February 17, 2026). A utility/reference guide for finding Home Depot clearance items marked to $0.01.
 
 **Live:** https://pennycentral.com
+
+---
+
+## Founder Command Center (Always Open)
+
+If you (Cade) want one plain-English decision tree + prompt bank so you do not need to remember skill names, keep this open:
+
+- `docs/FOUNDER-COMMAND-CENTER.md`
 
 ---
 
@@ -255,11 +263,9 @@ Use this if the session is policy/process/governance heavy:
 
 ## Affiliate Links & Redirects
 
-- `/go/rakuten` is the canonical affiliate path. Keep the redirect logic in `app/go/rakuten/route.ts`.
-- Legacy: `/go/befrugal` redirects to `/go/rakuten` for old links.
-- Always render affiliate CTAs as plain `<a href="/go/rakuten" target="_blank" rel="noopener noreferrer">` elements. **Do not** wrap them in `next/link`, buttons, or components that prefetch.
-- Next.js prefetching can hit affiliate destinations in the background, which can trigger browser CORS errors (`net::ERR_FAILED`) even though no real click happened. Using plain anchors avoids those phantom requests and keeps referrals safe.
-- It’s fine to track clicks with `trackEvent(...)`, but never fire a `fetch` to the affiliate URL from client-side code.
+- Retired referral routes `/go/rakuten` and `/go/befrugal` now redirect to `/transparency`.
+- Do not claim active referral/affiliate programs in public copy unless monetization status is explicitly reactivated and legal pages are updated.
+- When monetization status changes, use `docs/skills/legal-monetization-copy-guard.md` to update disclosures, route behavior, and tests together.
 
 ---
 
@@ -280,7 +286,7 @@ Use this if the session is policy/process/governance heavy:
 
 ## Community
 
-- **Facebook Group:** Home Depot One Cent Items (64,000+ members as of February 13, 2026)
+- **Facebook Group:** Home Depot One Cent Items (70,000+ members as of February 17, 2026)
 - **Purpose:** Educational resource for penny hunting community
 - **Penny List Form:** Collects verified penny finds from community members
 

@@ -157,6 +157,83 @@ Scan this FIRST before suggesting anything. If your idea matches an anti-pattern
 
 ---
 
+### 0f. Keep `.ai/SESSION_LOG.md` at 5 entries or checkpoint will fail
+
+**Problem:** `npm run ai:memory:check` and `npm run ai:checkpoint` failed after adding a new session entry because `.ai/SESSION_LOG.md` exceeded the enforced 5-entry cap.
+
+**What We Tried:**
+
+- Added a sixth session entry without trimming.
+- Re-ran memory/checkpoint and hit a critical failure.
+
+**What We Learned:**
+
+- Current memory gate enforcement for this repo is strict: `SESSION_LOG` must stay at 5 entries.
+- Even if docs mention trim-at-7 behavior, the active check script is the runtime truth for pass/fail.
+
+**What to Do Instead:**
+
+- After adding a new session entry, run `rg "^## " .ai/SESSION_LOG.md` to confirm count.
+- If count is >5, trim the oldest entry immediately.
+- Re-run `npm run ai:memory:check` and `npm run ai:checkpoint` before claiming completion.
+
+**Date:** Feb 17, 2026
+
+---
+
+### 0g. Do not sanitize founder identity out of trust pages
+
+**Problem:** A trust/compliance rewrite replaced the founder-authentic About story with generic copy and converted Contact into a repetitive/insecure-feeling mailto form flow.
+
+**What We Tried:**
+
+- Reframed About/Contact to satisfy legal/ad-readiness with template-like language.
+- Added repetitive category rows using the same email and a browser-handled mailto form.
+
+**What We Learned:**
+
+- Removing founder identity (name, origin story, real community context) weakens trust and makes pages feel AI-generated.
+- Browser mailto forms can show insecure warnings and harm perceived professionalism.
+- Privacy/deletion details belong primarily in privacy-policy rights sections; Contact should stay simple and actionable.
+
+**What to Do Instead:**
+
+- Keep About explicitly founder-led with real human context and leadership names where approved.
+- Keep Contact email-first with one clear inbox and optional subject-line guidance.
+- Route rights/deletion policy detail to `/privacy-policy` and `/do-not-sell-or-share`, with simple Contact links.
+
+**Date:** Feb 18, 2026
+
+---
+
+### 0h. Remove stale monetization disclosures immediately when a program is retired
+
+**Problem:** Trust/legal pages kept references to Rakuten referral links and donation-style funding language after those channels were removed, creating user confusion and trust friction.
+
+**What We Tried:**
+
+- Left older disclosure wording in place during compliance-focused updates.
+- Preserved legacy affiliate routes for backward compatibility without re-validating current business intent.
+
+**What We Learned:**
+
+- Outdated monetization copy is as damaging as missing disclosure copy because it contradicts current reality.
+- Users read these pages as the source of truth; stale text makes the site feel inconsistent and unfinished.
+
+**What to Do Instead:**
+
+- Whenever a funding channel is retired, run a same-session sweep of:
+  - `/transparency`
+  - `/privacy-policy`
+  - `/terms-of-service`
+  - legacy redirect routes under `/go/*`
+- Update tests in the same change to enforce the new truth and prevent regression.
+- Keep legal copy specific to active channels only.
+
+**Date:** Feb 18, 2026
+
+---
+
 ### 0. Route deletion + stale Next type artifacts
 
 **Problem:** After deleting a route page, `npm run build` failed with type errors from stale generated files under `.next-playwright/types` and `.next/dev/types/app/...`.

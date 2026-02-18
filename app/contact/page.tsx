@@ -27,125 +27,74 @@ export default function ContactPage() {
 
       <PageHeader
         title="Contact PennyCentral"
-        subtitle="Questions, corrections, partnership requests, or privacy concerns — we’re reachable."
+        subtitle="Email is the primary contact path. One inbox, clear routing, no form friction."
       />
 
-      <Section title="Fastest Ways to Reach Us">
+      <Section title="Best Way to Reach Us">
         <Prose>
-          <ul>
-            <li>
-              <strong>Corrections:</strong>{" "}
-              <a href="mailto:contact@pennycentral.com?subject=Correction">
-                contact@pennycentral.com
-              </a>
-            </li>
-            <li>
-              <strong>General support:</strong>{" "}
-              <a href="mailto:contact@pennycentral.com?subject=General%20Support">
-                contact@pennycentral.com
-              </a>
-            </li>
-            <li>
-              <strong>Partnership/media:</strong>{" "}
-              <a href="mailto:contact@pennycentral.com?subject=Partnership">
-                contact@pennycentral.com
-              </a>
-            </li>
-          </ul>
-        </Prose>
-      </Section>
-
-      <Section title="Contact Form (Recommended Format)">
-        <div className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-6">
-          <form
-            className="grid gap-4"
-            action="mailto:contact@pennycentral.com"
-            method="post"
-            encType="text/plain"
-          >
-            <label className="grid gap-1 text-sm text-[var(--text-secondary)]">
-              Name (optional)
-              <input
-                type="text"
-                name="name"
-                className="min-h-[44px] rounded-md border border-[var(--border-default)] bg-[var(--bg-page)] px-3 text-[var(--text-primary)]"
-              />
-            </label>
-
-            <label className="grid gap-1 text-sm text-[var(--text-secondary)]">
-              Email
-              <input
-                type="email"
-                name="email"
-                required
-                className="min-h-[44px] rounded-md border border-[var(--border-default)] bg-[var(--bg-page)] px-3 text-[var(--text-primary)]"
-              />
-            </label>
-
-            <label className="grid gap-1 text-sm text-[var(--text-secondary)]">
-              Topic
-              <select
-                name="topic"
-                required
-                className="min-h-[44px] rounded-md border border-[var(--border-default)] bg-[var(--bg-page)] px-3 text-[var(--text-primary)]"
-              >
-                <option value="Data correction">Data correction</option>
-                <option value="Technical issue">Technical issue</option>
-                <option value="Partnership/media">Partnership/media</option>
-                <option value="General question">General question</option>
-                <option value="Privacy request">Privacy request</option>
-              </select>
-            </label>
-
-            <label className="grid gap-1 text-sm text-[var(--text-secondary)]">
-              Message
-              <textarea
-                name="message"
-                required
-                rows={6}
-                className="rounded-md border border-[var(--border-default)] bg-[var(--bg-page)] p-3 text-[var(--text-primary)]"
-              />
-            </label>
-
-            <button
-              type="submit"
-              className="min-h-[44px] w-fit rounded-md bg-[var(--cta-primary)] px-4 py-2 text-sm font-semibold text-[var(--cta-text)]"
-            >
-              Send Message
-            </button>
-          </form>
-        </div>
-      </Section>
-
-      <Section title="Data Deletion & Account Closure">
-        <div className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-subtle)] p-6">
-          <p className="text-sm text-[var(--text-secondary)]">
-            You have the right to request deletion of your personal data. To delete your account and
-            remove all associated data from our systems (including data stored via{" "}
-            <strong>Supabase</strong> and email records managed through <strong>Resend</strong>),
-            please email{" "}
+          <p>
+            Email us at{" "}
             <a
-              href="mailto:contact@pennycentral.com?subject=Data%20Deletion%20Request"
+              href="mailto:contact@pennycentral.com"
               className="text-[var(--cta-primary)] underline"
             >
               contact@pennycentral.com
-            </a>{" "}
-            with the subject line &ldquo;Data Deletion Request.&rdquo; We will process your request
-            and confirm deletion within 30 days.
+            </a>
+            . We read every message and prioritize corrections that improve Penny List accuracy.
           </p>
-        </div>
+          <p>Recommended subject lines (optional):</p>
+          <ul>
+            <li>
+              <strong>Correction:</strong> for SKU/store/price updates
+            </li>
+            <li>
+              <strong>General:</strong> for support or site feedback
+            </li>
+            <li>
+              <strong>Partnership:</strong> for media or collaboration requests
+            </li>
+            <li>
+              <strong>Privacy Request:</strong> for personal-data rights requests
+            </li>
+          </ul>
+          <p>
+            For urgent correction emails, include SKU, store location, observed price, and date/time
+            to help us validate quickly.
+          </p>
+        </Prose>
+      </Section>
+
+      <Section title="Privacy and Data Requests">
+        <Prose>
+          <p>Privacy rights and deletion details live on the privacy pages:</p>
+          <ul>
+            <li>
+              <a href="/privacy-policy" className="text-[var(--cta-primary)] underline">
+                Privacy Policy
+              </a>
+            </li>
+            <li>
+              <a href="/do-not-sell-or-share" className="text-[var(--cta-primary)] underline">
+                Do Not Sell or Share
+              </a>
+            </li>
+          </ul>
+          <p>
+            You can still email{" "}
+            <a href="mailto:contact@pennycentral.com?subject=Privacy%20Request">
+              contact@pennycentral.com
+            </a>{" "}
+            for any privacy request.
+          </p>
+        </Prose>
       </Section>
 
       <Section title="Response Windows">
         <Prose>
           <ul>
-            <li>Correction-related messages: usually within 24–48 hours</li>
-            <li>General inquiries and partnerships: usually within 3–5 business days</li>
+            <li>Corrections: usually within 24-48 hours</li>
+            <li>General and partnership inquiries: usually within 3-5 business days</li>
           </ul>
-          <p>
-            For urgent data corrections, include SKU, location, observed price, and date/time to
-            help us validate quickly.
-          </p>
         </Prose>
       </Section>
     </PageShell>
