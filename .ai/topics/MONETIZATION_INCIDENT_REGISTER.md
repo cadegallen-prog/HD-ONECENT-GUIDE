@@ -1,6 +1,6 @@
 # MONETIZATION_INCIDENT_REGISTER
 
-**Last updated:** 2026-02-17
+**Last updated:** 2026-02-18
 **Owner:** Cade (founder)  
 **Purpose:** Single source of truth for unresolved monetization incidents across ad networks.
 
@@ -96,3 +96,19 @@ All must be true before re-review:
   - Key insight: Monumetric's MCM pathway is completely independent from Ezoic's MCM pathway. Ezoic GAM domain denial (resubmitted Feb 9) has no bearing on Monumetric's submission. Monumetric does not expose GAM domain status to publishers the way Ezoic does — founder is reliant on Samantha for this info.
   - Status changed from `OPEN-ESCALATION-R1-SENT` to `OPEN-ASCEND-APPROVED-AWAITING-IMPLEMENTATION`.
   - Next: await Samantha's response. Escalate to supervisor Feb 19 if silent.
+
+## 9) Session Notes (2026-02-18)
+
+- `INC-ADSENSE-001`:
+  - Founder reported a third AdSense review cycle is currently in progress (after prior low-value and policy-violation denials, and post-remediation deployment on Feb 16).
+  - No explicit new policy subtype has been provided yet by Google; status remains unresolved until review returns.
+- `INC-ADMANAGER-001`:
+  - Founder reported Ezoic pathway is in a second GAM domain review cycle and still pending.
+  - Status remains split because Ezoic and Monumetric pathways do not expose one shared final disposition.
+- `INC-MONUMETRIC-001`:
+  - Founder reported Monumetric confirmed advertiser approval but did not clearly confirm whether that includes final GAM domain approval in Monumetric's MCM pathway.
+  - Technical implementation is still pending Monumetric handoff.
+- Compliance audit evidence captured on 2026-02-18:
+  - `npx tsx scripts/ads-readiness-check.ts --production` -> 7/7 passed.
+  - `npx cross-env PLAYWRIGHT_BASE_URL=https://www.pennycentral.com playwright test tests/adsense-readiness.spec.ts --project=chromium-desktop-light --workers=1` -> 4/4 passed.
+  - Live route check confirmed required trust/legal + crawler endpoints return `200`.

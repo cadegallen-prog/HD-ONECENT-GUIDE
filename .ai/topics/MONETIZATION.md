@@ -1,6 +1,6 @@
 # MONETIZATION
 
-## CURRENT STATUS (Updated Feb 17, 2026)
+## CURRENT STATUS (Updated Feb 18, 2026)
 
 ### Active Infrastructure
 
@@ -13,8 +13,8 @@
 ### Pending
 
 - 🔄 **Monumetric** - Ascend tier approved (Feb 17). Ad providers approved. Ad strategy confirmed. Technical team configuring ad code. GAM domain approval status through Monumetric MCM unknown — asked Samantha for clarification Feb 17.
-- 🔄 **AdSense site approval** - Remediation deployed Feb 16. Re-review pending policy matrix gate.
-- 🔄 **Ezoic GAM domain approval** - Resubmitted Feb 9 (first attempt denied). Still pending. Separate from Monumetric MCM.
+- 🔄 **AdSense site approval** - Founder-reported third review in progress (as of Feb 18) after prior low-value/policy-violation denials and Feb 16 remediation deployment.
+- 🔄 **Ezoic GAM domain approval** - Founder-reported second review cycle still pending (as of Feb 18). Separate pathway from Monumetric MCM.
 - ✅ **Sitemap fix deployed** - Pillar-only (18 URLs), resubmitted to GSC
 
 ### Removed
@@ -53,6 +53,8 @@
 | Feb 17, 2026 | Monumetric: Ascend tier approved by Sales Lead | ✅                |
 | Feb 17, 2026 | Cade: confirmed ad strategy, green-lit impl    | ✅                |
 | Feb 17, 2026 | Cade: asked about GAM domain approval status   | 🔄 Awaiting reply |
+| Feb 18, 2026 | AdSense third review reported as in progress   | 🔄 In review      |
+| Feb 18, 2026 | Ezoic GAM second review reported as pending    | 🔄 Pending        |
 
 ### Current Traffic (Last 30 Days)
 
@@ -108,17 +110,16 @@ Based on research:
 
 ## MONUMETRIC SPECIFICS
 
-### Your Tier: Propel (10k-80k pageviews)
+### Your Tier: Ascend (80k-500k pageviews)
 
-- **Setup fee:** $99 (already paid)
-- **Platform requirement:** WordPress/Blogger officially, but exceptions exist for custom sites
-- **You've already communicated:** Next.js site, Monumetric is aware
+- **Setup fee:** Waived (Sales Lead approved Ascend placement)
+- **Platform requirement:** Custom site implementation path is active with Monumetric technical team
+- **Implementation status:** Ad strategy approved by founder; waiting for Monumetric code delivery/activation steps
 
 ### The 80k Threshold
 
-- You're at ~70k pageviews, approaching 80k
-- At 80k+ (Ascend tier): No setup fee, any platform supported
-- **If you hit 80k before ads go live:** You'd qualify for Ascend, but since you already paid $99, this is moot
+- Ascend approval has already been granted.
+- Remaining blocker is operational: ad code deployment and explicit GAM status confirmation through Monumetric.
 
 ### What Monumetric Is Waiting On (Per Your Emails)
 

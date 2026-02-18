@@ -127,6 +127,7 @@ const REQUIRED_ROUTES = [
   "/transparency",
   "/privacy-policy",
   "/terms-of-service",
+  "/do-not-sell-or-share",
 ]
 
 async function checkSitemapXml() {

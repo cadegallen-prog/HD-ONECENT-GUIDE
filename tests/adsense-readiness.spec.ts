@@ -42,6 +42,7 @@ test("sitemap remains pillar-only with 18 urls", async ({ request }) => {
   expect(locMatches.length).toBe(18)
 
   expect(body).toContain("https://www.pennycentral.com/transparency")
+  expect(body).toContain("https://www.pennycentral.com/do-not-sell-or-share")
   expect(body).not.toContain("/lists")
   expect(body).not.toContain("/login")
   expect(body).not.toContain("/support")

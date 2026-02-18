@@ -1,8 +1,10 @@
 # SITE_MONETIZATION_CURRENT
 
-**Last updated:** 2026-02-13  
+**Last updated:** 2026-02-18  
 **Owner:** Cade (founder)  
 **Status:** Runtime foundation complete; tier dispute + cross-network incident hardening active (Monumetric + AdSense + Ad Manager + Journey)
+
+> 2026-02-18 update: Ascend tier has since been approved by Monumetric Sales Lead. Remaining uncertainty is explicit GAM domain-approval confirmation and technical go-live timing.
 
 ---
 

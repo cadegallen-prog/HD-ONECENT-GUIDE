@@ -1,8 +1,8 @@
 # ADSENSE_APPROVAL_CURRENT
 
-**Last updated:** 2026-02-13  
+**Last updated:** 2026-02-18  
 **Owner:** Cade (founder)  
-**Status:** Active (policy-language remediation implemented in source; deploy + evidence refresh pending before review decision)
+**Status:** Active (remediation deployed; founder-reported third AdSense review in progress; awaiting Google decision)
 
 ---
 
@@ -26,7 +26,7 @@ Primary incident tracker: `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md` (`INC-A
   - `https://pennycentral.com` → `https://www.pennycentral.com` (301)
   - `https://www.pennycentral.com` → `200`
 - `https://pennycentral.com/sitemap.xml` redirects to `https://www.pennycentral.com/sitemap.xml` (301).
-- Live sitemap currently contains **19 URLs** (pillar-only).
+- Live sitemap currently contains **18 URLs** (pillar-only).
 
 ### Indexing/crawl signals from provided exports
 
@@ -104,7 +104,7 @@ These patterns are handled via `next.config.js` or page-level redirects and shou
 ### Monetization context (approval in progress)
 
 - **Monumetric:** review/approval in progress; required disclosures + `ads.txt` must remain intact.
-- **AdSense:** currently "Needs attention" with policy-violations state; re-review is blocked until policy matrix gate passes.
+- **AdSense:** founder-reported third review cycle is in progress as of 2026-02-18.
 
 ### Approval timeline (evidence-locked, updated Feb 13, 2026)
 

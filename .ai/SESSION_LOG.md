@@ -4,6 +4,34 @@
 
 ---
 
+## 2026-02-18 - Codex - Ad Approval Readiness Audit + Monetization Memory Refresh
+
+**Goal:** Produce a concrete pass/fail audit for privacy/compliance/ad-readiness (AdSense + GAM domain pathways), tighten readiness checks, and persist founder context so status does not need to be re-explained in future sessions.
+
+**Status:** ✅ Completed (audit delivered, checks hardened, monetization docs refreshed to current review state).
+
+### Changes
+
+- Hardened readiness checks/tests:
+  - `scripts/ads-readiness-check.ts` now enforces `/do-not-sell-or-share` in required sitemap routes.
+  - `tests/adsense-readiness.spec.ts` now asserts `/do-not-sell-or-share` is present in sitemap output.
+  - `tests/privacy-policy.spec.ts` now scopes assertions to `main#main-content` to avoid false positives from global footer copy (`Not affiliated ...`).
+- Updated canonical monetization docs to current founder-reported state:
+  - `.ai/topics/MONETIZATION_POLICY_VIOLATION_MATRIX.md` rewritten to a requirement-by-requirement pass/at-risk matrix using current Google source criteria and live evidence.
+  - `.ai/topics/MONETIZATION.md` updated with Feb 18 status (AdSense third review in progress, Ezoic second GAM review pending, Monumetric Ascend approved but GAM clarity still pending).
+  - `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md` updated with 2026-02-18 session notes and verification artifacts.
+  - `.ai/topics/ADSENSE_APPROVAL_CURRENT.md` refreshed (`Last updated`, sitemap count corrected to 18, current review state).
+  - `.ai/topics/SITE_MONETIZATION_CURRENT.md` annotated with Feb 18 Ascend approval update note.
+
+### Verification
+
+- `npx tsx scripts/ads-readiness-check.ts --production` ✅ (7/7 passed)
+- `npx cross-env PLAYWRIGHT_BASE_URL=https://www.pennycentral.com playwright test tests/adsense-readiness.spec.ts --project=chromium-desktop-light --workers=1` ✅ (4/4 passed)
+- `npx cross-env PLAYWRIGHT_BASE_URL=https://www.pennycentral.com playwright test tests/privacy-policy.spec.ts --project=chromium-desktop-light --workers=1` ✅ (2/2 passed)
+- `npx tsx --import ./tests/setup.ts --test tests/disclosure-claims-accuracy.test.ts tests/sitemap-canonical.test.ts` ✅ (5/5 passed)
+
+---
+
 ## 2026-02-18 - Codex - Remove Retired Rakuten/Donation Disclosures + Disable Legacy Go Routes
 
 **Goal:** Remove stale affiliate/referral/donation references from the live website and align legal/transparency copy to the current monetization setup.
@@ -153,38 +181,3 @@
 - No UI/runtime code paths changed in this session.
 
 ---
-
-## 2026-02-17 - Codex - Manual Add Live Upsert Validation + Fixture-Target Guardrails
-
-**Goal:** Confirm whether `data/penny-list.json` should be used for live upserts (it should not), process founder-provided missing-item payload into Supabase, and harden wording/rules to prevent future agent confusion.
-
-**Status:** ✅ Completed (live upsert done, verification done, guardrails clarified).
-
-### Changes
-
-- Live data handling clarification:
-  - Confirmed `data/penny-list.json` is local fixture/fallback data and not the production write target.
-  - Updated founder-facing admin copy in `app/admin/dashboard/page.tsx`:
-    - Removed instruction to edit `penny-list.json`.
-    - Added explicit `/manual` + Supabase workflow guidance.
-  - Reinforced policy in `AGENTS.md` Data Quality section:
-    - Never use `data/penny-list.json` for live upserts.
-- Founder payload upserted to Supabase:
-  - Executed `npm run manual:enrich -- -- --input ./.local/cade-manual-payload-2026-02-17.json`.
-  - Result summary:
-    - `received_items: 14`
-    - `cache_upserted: 14`
-    - `penny_rows_updated_by_manual: 19`
-    - `penny_rows_failed: 0`
-  - Verified live presence via Supabase query script:
-    - `unique_skus_found: 14`
-    - `missing: []`
-
-### Verification
-
-- `npm run manual:enrich -- -- --input ./.local/cade-manual-payload-2026-02-17.json` ✅
-- Supabase verification query via `npx tsx -e "<verification script>"` ✅ (`14/14` SKUs found; none missing)
-- `npm run ai:memory:check` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `npm run check:docs-governance` ✅

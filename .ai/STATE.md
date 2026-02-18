@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 18, 2026 (founder command center + retired referral/disclosure cleanup + legal monetization copy guard skill + about/contact trust restoration + project skill pack + manual upsert/canonical enrichment)
+**Last updated:** Feb 18, 2026 (ad approval readiness audit + monetization memory refresh + compliance check hardening + prior trust/legal updates)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,23 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-18 (Ad approval readiness audit + monetization memory refresh):** Completed a founder-requested pass/fail audit for privacy/compliance and Google ad approval readiness, then updated canonical monetization docs so future sessions start from current reality.
+  - **Compliance check hardening shipped:**
+    - `scripts/ads-readiness-check.ts` now enforces `/do-not-sell-or-share` in required sitemap route checks.
+    - `tests/adsense-readiness.spec.ts` now asserts `/do-not-sell-or-share` is in sitemap output.
+    - `tests/privacy-policy.spec.ts` fixed false-positive matching by scoping assertions to `main#main-content`.
+  - **Monetization memory updates shipped:**
+    - `.ai/topics/MONETIZATION_POLICY_VIOLATION_MATRIX.md` rewritten to a current requirement-level pass/at-risk matrix.
+    - `.ai/topics/MONETIZATION.md` updated with Feb 18 founder-reported status (AdSense third review in progress, Ezoic second GAM review pending, Monumetric Ascend approved but GAM confirmation still unclear).
+    - `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md` updated with a new Feb 18 session note and latest pathway status context.
+    - `.ai/topics/ADSENSE_APPROVAL_CURRENT.md` corrected to current sitemap count and review state.
+    - `.ai/topics/SITE_MONETIZATION_CURRENT.md` annotated with Ascend approval update note.
+  - **Verification:**
+    - `npx tsx scripts/ads-readiness-check.ts --production` ✅ (7/7)
+    - `npx cross-env PLAYWRIGHT_BASE_URL=https://www.pennycentral.com playwright test tests/adsense-readiness.spec.ts --project=chromium-desktop-light --workers=1` ✅ (4/4)
+    - `npx cross-env PLAYWRIGHT_BASE_URL=https://www.pennycentral.com playwright test tests/privacy-policy.spec.ts --project=chromium-desktop-light --workers=1` ✅ (2/2)
+    - `npx tsx --import ./tests/setup.ts --test tests/disclosure-claims-accuracy.test.ts tests/sitemap-canonical.test.ts` ✅ (5/5)
 
 - **2026-02-18 (Retired referral/disclosure cleanup + legacy go-route neutralization):** Removed outdated Rakuten/referral/donation mentions from live trust/legal pages and aligned route behavior to the current non-referral state.
   - **Runtime copy cleanup shipped:**
