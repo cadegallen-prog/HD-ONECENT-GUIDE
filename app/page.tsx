@@ -1,12 +1,11 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { BookOpen, ExternalLink, Users, Map, List, PlusCircle } from "lucide-react"
+import { BookOpen, ExternalLink, Users, Map } from "lucide-react"
 import {
   COMMUNITY_MEMBER_COUNT_DISPLAY,
   MEMBER_COUNT_BADGE_TEXT,
   FACEBOOK_GROUP_URL,
 } from "@/lib/constants"
-import { TrackableNextLink } from "@/components/trackable-next-link"
 import { TodaysFinds } from "@/components/todays-finds"
 import { getRecentFinds } from "@/lib/fetch-penny-data"
 import { RouteAdSlots } from "@/components/ads/route-ad-slots"
@@ -80,12 +79,12 @@ export default async function Home() {
       <RouteAdSlots pathname="/" />
       {/* ============================================
           HERO SECTION
-          
+
           Typography: Uses unified type scale
           - H1: text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight
           - Lead: text-lg sm:text-xl leading-relaxed
           - Body: text-base leading-relaxed
-          
+
           Spacing: Unified section padding system
           - py-12 sm:py-16 lg:py-20 for main sections
           - Badge → H1: mt-4
@@ -96,37 +95,40 @@ export default async function Home() {
         <div className="max-w-4xl mx-auto text-center">
           {/* H1 - Unified type scale */}
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[var(--text-primary)] leading-tight">
-            Live Home Depot Penny Finds
+            Learn Home Depot penny items. Check current community finds.
           </h1>
 
           {/* Lead text */}
           <p className="mt-3 text-lg sm:text-xl text-[var(--text-secondary)] leading-relaxed">
-            Guide + community finds. {COMMUNITY_MEMBER_COUNT_DISPLAY} members strong.
+            A penny item is clearance inventory that may ring at $0.01 in some stores. Finds are
+            submitted by shoppers from the {COMMUNITY_MEMBER_COUNT_DISPLAY} member Home Depot One
+            Cent Items Facebook community and organized here.
           </p>
 
           {/* CTAs - Primary first-action + demoted secondary path */}
           <div className="mt-8 flex justify-center">
             <Link
-              href="/penny-list"
+              href="/guide"
               className="btn-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold shadow-md hover:bg-[var(--cta-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
-              aria-label="Browse the community penny list"
+              aria-label="Start with the step-by-step guide"
             >
-              <List className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
-              Browse Penny List
+              <BookOpen className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
+              Start with the Guide
             </Link>
           </div>
           <p className="mt-3 text-sm text-[var(--text-secondary)]">
-            Already found one?{" "}
-            <TrackableNextLink
-              href="/report-find"
+            Already read the guide?{" "}
+            <Link
+              href="/penny-list"
               className="inline-flex items-center gap-1 text-[var(--link-default)] underline underline-offset-2 hover:text-[var(--link-hover)]"
-              aria-label="Report a new penny find"
-              eventName="report_find_click"
-              eventParams={{ ui_source: "home-hero-secondary" }}
+              aria-label="Browse the community penny list"
             >
-              <PlusCircle className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
-              Report a Find
-            </TrackableNextLink>
+              Browse Penny List
+            </Link>
+          </p>
+          <p className="mt-2 text-xs sm:text-sm text-[var(--text-muted)]">
+            {COMMUNITY_MEMBER_COUNT_DISPLAY} member community | Founder-led site |
+            Community-submitted reports
           </p>
         </div>
       </section>
@@ -353,7 +355,7 @@ export default async function Home() {
           {/* Section header */}
           <div className="text-center mb-10">
             <h2 className="text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug">
-              Transparency & Support
+              Transparency & Contact
             </h2>
             <p className="mt-2 text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed max-w-xl mx-auto">
               PennyCentral is free to use. See exactly how the site is funded and where to contact
@@ -373,7 +375,7 @@ export default async function Home() {
               href="/contact"
               className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 min-h-[48px] rounded-lg border-2 border-[var(--border-default)] dark:border-[var(--border-strong)] bg-transparent text-[var(--text-primary)] font-semibold hover:bg-[var(--bg-elevated)] hover:border-[var(--border-strong)] dark:hover:bg-[var(--bg-elevated)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
             >
-              Contact Support
+              Contact
             </Link>
           </div>
         </div>

@@ -11,15 +11,22 @@ test("navbar shows Guide link after hydration", async ({ page }) => {
 
   if (width < 768) {
     await page.getByRole("button", { name: /toggle menu/i }).click()
+    const mobileMenu = page.locator("div.mobile-menu-animate")
 
-    const guideButton = page.getByRole("button", { name: /^Guide$/i })
-    await expect(guideButton).toBeVisible()
-
-    await guideButton.click()
-    await expect(page.getByRole("link", { name: /Guide Hub/i })).toBeVisible()
+    const guideLink = mobileMenu.getByRole("link", { name: /^Guide$/i })
+    await expect(guideLink).toBeVisible()
+    const guideToggle = mobileMenu.getByRole("button", { name: /toggle guide chapters/i })
+    await expect(guideToggle).toBeVisible()
+    await guideToggle.click()
+    await expect(mobileMenu.getByRole("link", { name: /Guide Hub/i })).toBeVisible()
     return
   }
 
-  const guideButton = page.getByRole("navigation").getByRole("button", { name: "Guide" }).first()
-  await expect(guideButton).toBeVisible()
+  const guideLink = page.getByRole("navigation").getByRole("link", { name: "Guide" }).first()
+  await expect(guideLink).toBeVisible()
+  const guideToggle = page
+    .getByRole("navigation")
+    .getByRole("button", { name: /toggle guide chapters/i })
+    .first()
+  await expect(guideToggle).toBeVisible()
 })

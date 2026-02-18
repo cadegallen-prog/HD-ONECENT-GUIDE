@@ -4,6 +4,79 @@
 
 ---
 
+## 2026-02-18 - Codex - Remove "Back to Penny List" Across Trust/Legal Pages
+
+**Goal:** Remove the shared "Back to Penny List" UI from About/Contact/Privacy/Terms/Do-Not-Sell pages.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- Updated `components/legal-back-link.tsx` to return `null`.
+- Because this component is shared, the backlink was removed everywhere it was rendered:
+  - `/about`
+  - `/contact`
+  - `/privacy-policy`
+  - `/terms-of-service`
+  - `/do-not-sell-or-share`
+- Confirmed no remaining `"Back to Penny List"` string in app/components.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npm run lint:colors` ✅
+- `npm run ai:proof -- /about /contact /privacy-policy /terms-of-service /do-not-sell-or-share` ✅
+  - Proof bundle: `reports/proof/2026-02-18T08-46-35/`
+  - Includes light/dark route screenshots + console report.
+  - Note: console report contains existing dev-mode hydration mismatch noise tied to global script injection order.
+
+---
+
+## 2026-02-18 - Codex - Homepage Guide-First Flow + Navigation/Footer Consistency Cleanup
+
+**Goal:** Shift first-time user flow to Guide-first while preserving a fast Penny List path for returning users.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- Updated homepage hero in `app/page.tsx`:
+  - New H1 and explanatory subtext focused on first-visit clarity/trust.
+  - Primary CTA switched to `Start with the Guide` (`/guide`).
+  - Secondary text link set to `Already read the guide? Browse Penny List`.
+  - Added trust row beneath hero CTAs using community/source framing.
+- Updated navigation in `components/navbar.tsx`:
+  - Header order is now `Guide`, `Penny List`, `My List`, `Report a Find`, `Store Finder`, `FAQ`.
+  - Guide default action now routes directly to `/guide` hub on desktop and mobile.
+  - Guide chapter jump menu remains available via a dedicated chevron toggle on desktop and mobile.
+- Updated footer and supporting labels for IA consistency:
+  - `components/footer.tsx` Navigate links now match the same priority order as the header.
+  - Removed external `Community` quick-link from footer Navigate list.
+  - Consolidated footer disclaimer placement so copyright + non-affiliation read as one line.
+- Removed user-facing "Support" wording from homepage UI:
+  - `app/page.tsx` section heading changed from `Transparency & Support` to `Transparency & Contact`.
+  - `app/page.tsx` CTA label changed from `Contact Support` to `Contact`.
+- Normalized command palette label in `components/command-palette.tsx`:
+  - `Community Penny List` -> `Penny List`.
+- Updated smoke assertion in `tests/smoke-critical.spec.ts` for the new homepage H1 copy.
+- Updated guide-nav Playwright coverage in `tests/basic.spec.ts` so mobile assertions target the menu container and the new guide-toggle behavior.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npm run lint:colors` ✅
+- `npx playwright test tests/basic.spec.ts --project=chromium-desktop-light --project=chromium-mobile-light --workers=1` ✅
+- `npm run ai:proof -- / /guide /penny-list /transparency` ✅
+  - Proof bundle: `reports/proof/2026-02-18T08-26-14/`
+  - Includes light/dark route screenshots and console report.
+  - Note: console report contains existing dev-mode hydration mismatch noise tied to external script injection order.
+
+---
+
 ## 2026-02-18 - Codex - Ad Approval Readiness Audit + Monetization Memory Refresh
 
 **Goal:** Produce a concrete pass/fail audit for privacy/compliance/ad-readiness (AdSense + GAM domain pathways), tighten readiness checks, and persist founder context so status does not need to be re-explained in future sessions.
@@ -120,64 +193,3 @@
   - `reports/proof/2026-02-18T03-28-16/contact-dark.png`
   - `reports/proof/2026-02-18T03-28-16/console-errors.txt`
 - Note: proof bundle includes known dev-mode hydration mismatch noise from global script injection order; no new route-specific runtime failures were observed.
-
----
-
-## 2026-02-17 - Claude Code - Monumetric Email Response & Documentation Update
-
-**Goal:** Help Cade respond to Monumetric's Feb 17 email (Ascend approval + ad provider approval restatement) and update all monetization documentation.
-
-**Status:** ✅ Completed
-
-### What Happened
-
-- Monumetric (Samantha) emailed Feb 17: Sales Lead approved Ascend tier after Cade's Feb 12 pushback. "Approved by our ad providers" restated (same as Feb 11). Ad strategy re-sent.
-- Cade sent follow-up: confirmed ad strategy, told them to submit to technical team immediately, asked whether "approved by ad providers" includes GAM domain approval through Monumetric's MCM.
-- Key finding: Ezoic MCM and Monumetric MCM are completely separate GAM domain approval pathways. Ezoic's denial has no bearing on Monumetric. Monumetric doesn't expose GAM status to publishers.
-
-### Files Updated
-
-- `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md` — INC-MONUMETRIC-001 updated to `OPEN-ASCEND-APPROVED-AWAITING-IMPLEMENTATION`, session notes added, scheduled actions updated
-- `.ai/topics/MONETIZATION.md` — Current status and timeline updated through Feb 17
-
-### Next Actions
-
-- Await Samantha's response on GAM domain approval question
-- Escalate to supervisor Feb 19 if silent
-- Monitor Monumetric dashboard for status change from onboarding to active
-
----
-
-## 2026-02-17 - Codex - Project Skill Pack for UX/UI/Copy/Compliance/Design Quality
-
-**Goal:** Create reusable, project-specific skills so future agents can consistently deliver higher quality UX/UI, writing clarity, presentation structure, compliance readiness, and design-system-safe output for Cade.
-
-**Status:** ✅ Completed (6 new skills added, index updated, docs-only verification complete).
-
-### Changes
-
-- Added new skills in `docs/skills/`:
-  - `ux-loop-improvement.md`
-  - `ui-refinement-aaa.md`
-  - `writing-clarity-grammar.md`
-  - `presentation-polish.md`
-  - `privacy-compliance-ad-readiness.md`
-  - `color-typography-aaa.md`
-- Updated `docs/skills/README.md` to register all six new skills with clear \"when to use\" triggers.
-- Each skill is adapted to PennyCentral constraints:
-  - core-loop prioritization (`/penny-list` -> `/sku/[sku]` -> `/report-find`)
-  - founder-readable output requirements
-  - token-only color rules
-  - AAA readability expectations
-  - trust/legal/ad-readiness checks
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run ai:checkpoint` ✅
-  - Context pack artifact: `reports/context-packs/2026-02-17T18-26-31/context-pack.md`
-- Checkpoint guardrail handled: initial rerun failed because `SESSION_LOG.md` exceeded the enforced 5-entry cap; trimmed oldest entry and reran to green.
-- Docs-only session: runtime lanes marked N/A (`verify:fast`, `e2e:smoke`, `e2e:full`).
-- No UI/runtime code paths changed in this session.
-
----

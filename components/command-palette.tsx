@@ -33,7 +33,7 @@ const pages = [
   { icon: ShoppingCart, label: "Inside Scoop", path: "/inside-scoop", group: "Guide" },
   { icon: AlertCircle, label: "Facts vs Myths", path: "/facts-vs-myths", group: "Guide" },
   // Tools (actual pages)
-  { icon: Users, label: "Community Penny List", path: "/penny-list", group: "Tools" },
+  { icon: Users, label: "Penny List", path: "/penny-list", group: "Tools" },
   { icon: FileText, label: "Report a Find", path: "/report-find", group: "Tools" },
   { icon: Heart, label: "My List", path: "/lists", group: "Tools" },
   { icon: Map, label: "Store Finder", path: "/store-finder", group: "Tools" },

@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 18, 2026 (ad approval readiness audit + monetization memory refresh + compliance check hardening + prior trust/legal updates)
+**Last updated:** Feb 18, 2026 (removed shared "Back to Penny List" from trust/legal pages + prior nav/footer cleanup)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,52 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-18 (Remove "Back to Penny List" from trust/legal pages):** Removed the shared backlink component output so About/Contact/Privacy/Terms/Do-Not-Sell pages no longer show "Back to Penny List".
+  - **Runtime UI cleanup shipped:**
+    - `components/legal-back-link.tsx` now returns `null`.
+    - Effective removal on routes using `LegalBackLink`:
+      - `/about`
+      - `/contact`
+      - `/privacy-policy`
+      - `/terms-of-service`
+      - `/do-not-sell-or-share`
+  - **Verification:**
+    - `npm run ai:memory:check` ✅
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` ✅
+    - `npm run lint:colors` ✅
+    - `npm run ai:proof -- /about /contact /privacy-policy /terms-of-service /do-not-sell-or-share` ✅
+    - Proof bundle: `reports/proof/2026-02-18T08-46-35/`
+
+- **2026-02-18 (Homepage guide-first conversion flow + header order realignment):** Implemented founder-approved first-visit flow changes so new users are routed to the Guide first while returning users keep fast list access.
+  - **Homepage hero updates shipped (`app/page.tsx`):**
+    - H1 rewritten for first-visit clarity: "Learn Home Depot penny items. Check current community finds."
+    - Subtext now defines penny items and data source in plain language.
+    - Primary CTA changed from `/penny-list` to `/guide` (`Start with the Guide`).
+    - Secondary hero path changed to text link: "Already read the guide? Browse Penny List."
+    - Added trust row beneath CTAs with community/source framing.
+  - **Header/navigation updates shipped (`components/navbar.tsx`):**
+    - Main nav order changed to `Guide`, `Penny List`, `My List`, `Report a Find`, `Store Finder`, `FAQ`.
+    - Guide default click now routes to `/guide` hub on desktop and mobile.
+    - Guide chapter quick-jump remains available through separate chevron toggles.
+  - **Footer/label consistency updates shipped:**
+    - `components/footer.tsx` Navigate links now mirror the same priority order as header nav.
+    - Removed `Community` quick-link from footer Navigate list to avoid mismatch with core IA.
+    - Footer legal/disclaimer line consolidated into a single line for cleaner readability.
+    - `app/page.tsx` updated `Transparency & Support` -> `Transparency & Contact` and `Contact Support` -> `Contact`.
+    - `components/command-palette.tsx` updated `Community Penny List` -> `Penny List`.
+  - **Regression coverage update shipped:**
+    - Updated homepage smoke assertion in `tests/smoke-critical.spec.ts` to the new H1.
+    - Updated `tests/basic.spec.ts` mobile nav assertions to target the menu container and guide chapter toggle.
+  - **Verification:**
+    - `npm run ai:memory:check` ✅
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` ✅ (after updating smoke selector to match new H1)
+    - `npm run lint:colors` ✅
+    - `npx playwright test tests/basic.spec.ts --project=chromium-desktop-light --project=chromium-mobile-light --workers=1` ✅
+    - `npm run ai:proof -- / /guide /penny-list /transparency` ✅
+    - Proof bundle: `reports/proof/2026-02-18T08-26-14/`
 
 - **2026-02-18 (Ad approval readiness audit + monetization memory refresh):** Completed a founder-requested pass/fail audit for privacy/compliance and Google ad approval readiness, then updated canonical monetization docs so future sessions start from current reality.
   - **Compliance check hardening shipped:**

@@ -5,7 +5,10 @@ test.describe("critical smoke lane", () => {
     await page.goto("/")
     await expect(page).toHaveTitle(/penny/i)
     await expect(
-      page.getByRole("heading", { level: 1, name: /Live Home Depot Penny Finds/i })
+      page.getByRole("heading", {
+        level: 1,
+        name: /Learn Home Depot penny items\. Check current community finds\./i,
+      })
     ).toBeVisible()
   })
 

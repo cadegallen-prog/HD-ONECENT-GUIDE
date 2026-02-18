@@ -29,18 +29,18 @@ export function Footer() {
             <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Navigate</h3>
             <ul className="space-y-2.5">
               <li>
-                <Link href="/penny-list" className={navLinkClass}>
-                  Penny List
-                </Link>
-              </li>
-              <li>
                 <Link href="/guide" className={navLinkClass}>
                   Guide
                 </Link>
               </li>
               <li>
-                <Link href="/store-finder" className={navLinkClass}>
-                  Store Finder
+                <Link href="/penny-list" className={navLinkClass}>
+                  Penny List
+                </Link>
+              </li>
+              <li>
+                <Link href="/lists" className={navLinkClass}>
+                  My List
                 </Link>
               </li>
               <li>
@@ -49,24 +49,19 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/store-finder" className={navLinkClass}>
+                  Store Finder
+                </Link>
+              </li>
+              <li>
                 <Link href="/faq" className={navLinkClass}>
                   FAQ
                 </Link>
               </li>
-              <li>
-                <a
-                  href="https://www.facebook.com/groups/homedepotonecent"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={navLinkClass}
-                >
-                  Community
-                </a>
-              </li>
             </ul>
           </div>
 
-          {/* Company / Support / Legal */}
+          {/* Company + Legal */}
           <div className="space-y-6">
             <div>
               <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Company</h3>
@@ -110,10 +105,8 @@ export function Footer() {
         <div className="mt-10 pt-8 border-t border-[var(--border-default)]">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <p className="text-xs text-[var(--text-muted)] order-2 sm:order-1">
-              © 2026 PennyCentral. Educational use only.
-            </p>
-            <p className="text-xs text-[var(--text-muted)] order-3 sm:order-2">
-              Not affiliated with or endorsed by Home Depot
+              © 2026 PennyCentral. Educational use only. Not affiliated with or endorsed by Home
+              Depot.
             </p>
             <div className="flex items-center gap-4 order-1 sm:order-3">
               <a
