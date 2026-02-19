@@ -4,6 +4,38 @@
 
 ---
 
+## 2026-02-19 - Codex - Added `dev:reset-3001` One-Command Local Recovery
+
+**Goal:** Give the founder a single command to recover when port `3001` is stuck/in use but `localhost:3001` is not loading.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- Added `scripts/dev-reset-3001.mjs`:
+  - checks `http://localhost:3001` health,
+  - kills `3001` listener(s) only when unhealthy (or when explicitly forced),
+  - starts `npm run dev` automatically after reset.
+- Added npm scripts in `package.json`:
+  - `dev:reset-3001`
+  - `dev:Reset-3001` (alias matching founder-requested command style)
+  - `dev:reset-3001:cleanup`
+  - `dev:Reset-3001:cleanup` (mixed-case cleanup alias)
+  - `dev:reset-3001:force`
+- Updated `docs/skills/local-dev-faststart.md` with the new command and helper variants.
+- Fixed Windows process-launch reliability in the helper by using shell mode for `npm run dev` spawn.
+
+### Verification
+
+- `npm run dev:reset-3001:cleanup` ✅
+- `npm run dev:Reset-3001:cleanup` ✅
+- `node scripts/dev-reset-3001.mjs --help` ✅
+- `npm run ai:memory:check` ✅
+- `$env:NEXT_PRIVATE_BUILD_WORKER='1'; npm run verify:fast` ✅
+- `npm run e2e:smoke` N/A (no route/form/API/navigation/UI-flow change)
+
+---
+
 ## 2026-02-19 - Codex - Submit-Flow Name Quality Guard (Prevent Generic Name Lock-In)
 
 **Goal:** Reduce founder manual cleanup by preventing low-quality item names from persisting when better enrichment names are available.
@@ -139,31 +171,3 @@
   - Proof bundle: `reports/proof/2026-02-18T08-26-14/`
   - Includes light/dark route screenshots and console report.
   - Note: console report contains existing dev-mode hydration mismatch noise tied to external script injection order.
-
----
-
-## 2026-02-18 - Codex - Ad Approval Readiness Audit + Monetization Memory Refresh
-
-**Goal:** Produce a concrete pass/fail audit for privacy/compliance/ad-readiness (AdSense + GAM domain pathways), tighten readiness checks, and persist founder context so status does not need to be re-explained in future sessions.
-
-**Status:** ✅ Completed (audit delivered, checks hardened, monetization docs refreshed to current review state).
-
-### Changes
-
-- Hardened readiness checks/tests:
-  - `scripts/ads-readiness-check.ts` now enforces `/do-not-sell-or-share` in required sitemap routes.
-  - `tests/adsense-readiness.spec.ts` now asserts `/do-not-sell-or-share` is present in sitemap output.
-  - `tests/privacy-policy.spec.ts` now scopes assertions to `main#main-content` to avoid false positives from global footer copy (`Not affiliated ...`).
-- Updated canonical monetization docs to current founder-reported state:
-  - `.ai/topics/MONETIZATION_POLICY_VIOLATION_MATRIX.md` rewritten to a requirement-by-requirement pass/at-risk matrix using current Google source criteria and live evidence.
-  - `.ai/topics/MONETIZATION.md` updated with Feb 18 status (AdSense third review in progress, Ezoic second GAM review pending, Monumetric Ascend approved but GAM clarity still pending).
-  - `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md` updated with 2026-02-18 session notes and verification artifacts.
-  - `.ai/topics/ADSENSE_APPROVAL_CURRENT.md` refreshed (`Last updated`, sitemap count corrected to 18, current review state).
-  - `.ai/topics/SITE_MONETIZATION_CURRENT.md` annotated with Feb 18 Ascend approval update note.
-
-### Verification
-
-- `npx tsx scripts/ads-readiness-check.ts --production` ✅ (7/7 passed)
-- `npx cross-env PLAYWRIGHT_BASE_URL=https://www.pennycentral.com playwright test tests/adsense-readiness.spec.ts --project=chromium-desktop-light --workers=1` ✅ (4/4 passed)
-- `npx cross-env PLAYWRIGHT_BASE_URL=https://www.pennycentral.com playwright test tests/privacy-policy.spec.ts --project=chromium-desktop-light --workers=1` ✅ (2/2 passed)
-- `npx tsx --import ./tests/setup.ts --test tests/disclosure-claims-accuracy.test.ts tests/sitemap-canonical.test.ts` ✅ (5/5 passed)

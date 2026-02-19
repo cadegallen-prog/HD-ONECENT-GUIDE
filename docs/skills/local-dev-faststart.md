@@ -36,3 +36,24 @@ Authoritative reference: `.ai/ENVIRONMENT_VARIABLES.md`.
 3. **If 3001 is free,** run `npm run dev`.
 
 Rule source: `.ai/CRITICAL_RULES.md` and `AGENTS.md`.
+
+## One-command stuck-port reset (founder helper)
+
+If `3001` is occupied but the page is not loading:
+
+```bash
+npm run dev:reset-3001
+```
+
+What it does:
+
+- Checks `http://localhost:3001` health
+- Kills stale `3001` listener(s) only when unhealthy
+- Starts `npm run dev`
+
+Related helpers:
+
+- `npm run dev:Reset-3001` (same command alias)
+- `npm run dev:reset-3001:cleanup` (cleanup only, no dev start)
+- `npm run dev:Reset-3001:cleanup` (cleanup alias)
+- `npm run dev:reset-3001:force` (restart even if healthy)

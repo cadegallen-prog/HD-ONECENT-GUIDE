@@ -6,6 +6,11 @@
   "scripts": {
     "dev": "next dev --webpack -p 3001",
     "dev:turbo": "next dev --turbo -p 3001",
+    "dev:reset-3001": "node scripts/dev-reset-3001.mjs",
+    "dev:Reset-3001": "node scripts/dev-reset-3001.mjs",
+    "dev:reset-3001:cleanup": "node scripts/dev-reset-3001.mjs --cleanup-only",
+    "dev:Reset-3001:cleanup": "node scripts/dev-reset-3001.mjs --cleanup-only",
+    "dev:reset-3001:force": "node scripts/dev-reset-3001.mjs --force",
     "build": "next build",
     "start": "next start -p 3001",
     "lint": "eslint app components lib --ext .ts,.tsx --max-warnings=0",

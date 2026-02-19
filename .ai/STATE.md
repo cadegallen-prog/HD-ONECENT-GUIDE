@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 19, 2026 (submit-flow name quality guard + Item Cache warmer success)
+**Last updated:** Feb 19, 2026 (added `dev:reset-3001` local recovery command)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,24 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-19 (Port 3001 founder recovery command):** Added a one-command local reset helper so stuck `3001` sessions can be recovered without manual `netstat` + `taskkill` steps.
+  - **Developer workflow hardening shipped:**
+    - Added `scripts/dev-reset-3001.mjs` to:
+      - probe `localhost:3001` health,
+      - kill stale `3001` listeners only when unhealthy (or when explicitly forced),
+      - start `npm run dev` automatically after cleanup.
+    - Added package scripts:
+      - `npm run dev:reset-3001`
+      - `npm run dev:Reset-3001` (alias)
+      - `npm run dev:reset-3001:cleanup`
+      - `npm run dev:reset-3001:force`
+    - Updated `docs/skills/local-dev-faststart.md` with command usage.
+  - **Verification:**
+    - `npm run dev:reset-3001:cleanup` ✅
+    - `node scripts/dev-reset-3001.mjs --help` ✅
+    - `npm run ai:memory:check` ✅
+    - `$env:NEXT_PRIVATE_BUILD_WORKER='1'; npm run verify:fast` ✅
 
 - **2026-02-19 (Submit-flow name quality guard + Item Cache refresh):** Added durable name-quality logic so generic names no longer win over better enrichment names, then confirmed Item Cache warmer health.
   - **Runtime/API hardening shipped:**
