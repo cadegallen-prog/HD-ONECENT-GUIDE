@@ -10,12 +10,13 @@ Follow this sequence before every session:
 
 1. **VISION_CHARTER.md** - Highest authority (vision + decision hierarchy + conflict resolution)
 2. **THIS FILE** - Start Here
-3. **CRITICAL_RULES.md** - Never violate these
-4. **STATE.md** - Where we are now
-5. **BACKLOG.md** - What to work on
-6. **CONTRACT.md** - How we collaborate
-7. **DECISION_RIGHTS.md** - What needs approval
-8. **HANDOFF_PROTOCOL.md** - How tasks are closed and handed to the next agent
+3. **../PENNYCENTRAL_MASTER_CONTEXT.md** - Founder strategic intent + cognitive-load protocol
+4. **CRITICAL_RULES.md** - Never violate these
+5. **STATE.md** - Where we are now
+6. **BACKLOG.md** - What to work on
+7. **CONTRACT.md** - How we collaborate
+8. **DECISION_RIGHTS.md** - What needs approval
+9. **HANDOFF_PROTOCOL.md** - How tasks are closed and handed to the next agent
 
 **Default ignore list:** Do not load files under `archive/docs-pruned/**`, `archive/scripts-pruned/**`, or `archive/media-pruned/**` unless Cade explicitly asks to restore/review archived items.
 

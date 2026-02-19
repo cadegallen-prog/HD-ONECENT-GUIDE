@@ -17,6 +17,31 @@ Lock GA4 tracking behavior so future edits do not silently undercount or double-
 - `sid` (session id) must be present on pageview hits.
 - Redirect routes must track the final canonical path.
 
+## Resilience + Diversification KPI Set (Founder Priority)
+
+Use these as weekly decision metrics for contingency progress:
+
+- `non_fb_session_share`
+  - Definition: percent of sessions not sourced from Facebook.
+  - Goal direction: up and stable over rolling 4-week windows.
+- `non_branded_organic_clicks`
+  - Definition: Search Console clicks excluding branded terms.
+  - Goal direction: consistent upward trend.
+- `adjacent_intent_session_share`
+  - Definition: percent of sessions landing on non-penny-adjacent educational/decision pages.
+  - Goal direction: up without degrading core-loop metrics.
+- `core_loop_guardrail_submit_rate`
+  - Definition: `find_submit / report-find views`.
+  - Goal direction: stable or improving while diversification expands.
+- `core_loop_guardrail_report_find_click_rate`
+  - Definition: `report_find_click / penny-list views`.
+  - Goal direction: stable or improving while diversification expands.
+
+Operational rule:
+
+- Do not claim diversification success if non-Facebook growth rises while core-loop guardrails collapse.
+- Diversification is valid only when growth and trust-loop metrics can coexist.
+
 ## Event Param Naming Standard (Monetization-Safe)
 
 - UI attribution params must use `ui_source` (preferred) or `placement`.

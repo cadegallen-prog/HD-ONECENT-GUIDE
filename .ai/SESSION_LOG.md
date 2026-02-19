@@ -4,6 +4,76 @@
 
 ---
 
+## 2026-02-19 - Codex - Resilience + Diversification Contingency Planning Package
+
+**Goal:** Start a long, founder-requested contingency task that reduces strategic dependency on penny-item permanence and concentrated traffic sources, while preserving current core-loop strength.
+
+**Status:** ✅ Completed (planning package created; no runtime implementation yet)
+
+### Changes
+
+- Added `.ai/topics/RESILIENCE_GROWTH_CURRENT.md`:
+  - current-state audit for diversification/resilience,
+  - reusable infrastructure map,
+  - strengths/pain-points baseline for non-fragile growth.
+- Added `.ai/impl/pennycentral-resilience-diversification-plan.md`:
+  - completed alignment gate block,
+  - two-engine strategy (core penny utility + additive adjacent value),
+  - phased roadmap (4 phases),
+  - autonomous execution protocol for future agents,
+  - execution queue with approval/no-approval task gating,
+  - drift-check appendix from `pc-plan-drift-check`.
+- Updated `.ai/topics/INDEX.md` with `RESILIENCE_GROWTH` capsule registration.
+- Updated `.ai/BACKLOG.md`:
+  - added explicit founder-override lane for resilience/diversification contingency.
+- Updated `.ai/topics/ANALYTICS_CONTRACT.md` with a new diversification KPI set:
+  - non-Facebook session share,
+  - non-branded organic clicks,
+  - adjacent-intent session share,
+  - plus core-loop guardrails to prevent trust-loop regression during diversification.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run ai:checkpoint` ✅
+- `npm run verify:fast` N/A (docs-only change; no runtime code-path impact)
+- `npm run e2e:smoke` N/A (docs-only change; no route/form/API/navigation/UI-flow change)
+- `npm run e2e:full` N/A (docs-only change; FULL triggers not applicable)
+
+---
+
+## 2026-02-19 - Codex - Added Canonical `PENNYCENTRAL_MASTER_CONTEXT.md`
+
+**Goal:** Convert founder transcript context into a durable, future-agent-ready master document so Cade does not need to repeatedly re-explain the same strategic framework.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- Added `PENNYCENTRAL_MASTER_CONTEXT.md` at repo root.
+- Captured founder strategic intent in a single canonical document, including:
+  - core strategic tension (`truth` vs `engagement` vs `revenue`),
+  - dual-audience model (power users + newcomers),
+  - expert reasoning standard for future AI,
+  - cognitive-load protocol (single next action default),
+  - ethical boundaries and anti-manipulation stance,
+  - survivability thesis beyond penny items,
+  - input-fidelity handling for speech-to-text noise.
+- Added explicit maintenance rule so future strategic shifts are logged to `.ai/SESSION_LOG.md` and updated in the master context file.
+- Updated canonical read order docs so future sessions auto-ingest this context:
+  - `README.md` AI canon read sequence now includes `PENNYCENTRAL_MASTER_CONTEXT.md`.
+  - `.ai/START_HERE.md` mandatory read order now includes `../PENNYCENTRAL_MASTER_CONTEXT.md`.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run ai:checkpoint` ✅
+- `npm run verify:fast` N/A (docs-only change; no runtime code-path impact)
+- `npm run e2e:smoke` N/A (docs-only change; no route/form/API/navigation/UI-flow change)
+- `npm run e2e:full` N/A (docs-only change; FULL triggers not applicable)
+
+---
+
 ## 2026-02-19 - Codex - Added `dev:reset-3001` One-Command Local Recovery
 
 **Goal:** Give the founder a single command to recover when port `3001` is stuck/in use but `localhost:3001` is not loading.
@@ -98,76 +168,3 @@
 - `npm run ai:proof -- test /penny-list /sku/1014-011-639` ✅
   - Proof bundle: `reports/proof/2026-02-19T06-27-00/`
   - Note: console report includes one `404` static-resource error on `/sku/1014-011-639` (`console-errors.txt`).
-
----
-
-## 2026-02-18 - Codex - Remove "Back to Penny List" Across Trust/Legal Pages
-
-**Goal:** Remove the shared "Back to Penny List" UI from About/Contact/Privacy/Terms/Do-Not-Sell pages.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- Updated `components/legal-back-link.tsx` to return `null`.
-- Because this component is shared, the backlink was removed everywhere it was rendered:
-  - `/about`
-  - `/contact`
-  - `/privacy-policy`
-  - `/terms-of-service`
-  - `/do-not-sell-or-share`
-- Confirmed no remaining `"Back to Penny List"` string in app/components.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `npm run lint:colors` ✅
-- `npm run ai:proof -- /about /contact /privacy-policy /terms-of-service /do-not-sell-or-share` ✅
-  - Proof bundle: `reports/proof/2026-02-18T08-46-35/`
-  - Includes light/dark route screenshots + console report.
-  - Note: console report contains existing dev-mode hydration mismatch noise tied to global script injection order.
-
----
-
-## 2026-02-18 - Codex - Homepage Guide-First Flow + Navigation/Footer Consistency Cleanup
-
-**Goal:** Shift first-time user flow to Guide-first while preserving a fast Penny List path for returning users.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- Updated homepage hero in `app/page.tsx`:
-  - New H1 and explanatory subtext focused on first-visit clarity/trust.
-  - Primary CTA switched to `Start with the Guide` (`/guide`).
-  - Secondary text link set to `Already read the guide? Browse Penny List`.
-  - Added trust row beneath hero CTAs using community/source framing.
-- Updated navigation in `components/navbar.tsx`:
-  - Header order is now `Guide`, `Penny List`, `My List`, `Report a Find`, `Store Finder`, `FAQ`.
-  - Guide default action now routes directly to `/guide` hub on desktop and mobile.
-  - Guide chapter jump menu remains available via a dedicated chevron toggle on desktop and mobile.
-- Updated footer and supporting labels for IA consistency:
-  - `components/footer.tsx` Navigate links now match the same priority order as the header.
-  - Removed external `Community` quick-link from footer Navigate list.
-  - Consolidated footer disclaimer placement so copyright + non-affiliation read as one line.
-- Removed user-facing "Support" wording from homepage UI:
-  - `app/page.tsx` section heading changed from `Transparency & Support` to `Transparency & Contact`.
-  - `app/page.tsx` CTA label changed from `Contact Support` to `Contact`.
-- Normalized command palette label in `components/command-palette.tsx`:
-  - `Community Penny List` -> `Penny List`.
-- Updated smoke assertion in `tests/smoke-critical.spec.ts` for the new homepage H1 copy.
-- Updated guide-nav Playwright coverage in `tests/basic.spec.ts` so mobile assertions target the menu container and the new guide-toggle behavior.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `npm run lint:colors` ✅
-- `npx playwright test tests/basic.spec.ts --project=chromium-desktop-light --project=chromium-mobile-light --workers=1` ✅
-- `npm run ai:proof -- / /guide /penny-list /transparency` ✅
-  - Proof bundle: `reports/proof/2026-02-18T08-26-14/`
-  - Includes light/dark route screenshots and console report.
-  - Note: console report contains existing dev-mode hydration mismatch noise tied to external script injection order.

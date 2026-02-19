@@ -1,6 +1,6 @@
 # Backlog (Top Priority Items)
 
-**Last updated:** Feb 16, 2026 (website-first operating target locked)
+**Last updated:** Feb 19, 2026 (added founder-requested resilience/diversification contingency lane)
 **Rule:** Keep ≤10 items. Archive completed/deferred items.
 
 **Auto-archive:** Full backlog history preserved in `archive/backlog-history/`
@@ -149,6 +149,18 @@ Each AI session should:
 - **Verify:** All 4 gates + schema validation
 - **Evidence:** Search Console shows 80 clicks, all branded ("penny central"). Zero clicks for "home depot penny list" despite 6 impressions.
 - **Timeline:** 2-3 weeks for Google to respond after deployment
+
+### 8. Resilience + Diversification Contingency Program (Founder Override)
+
+- **Problem:** Website value and potential income are still concentrated in penny-item permanence + channel concentration risk. Founder explicitly requested a durable contingency path that can grow with or without Facebook dominance and with reduced dependence on Home Depot penny-policy continuity.
+- **Done means:**
+  - A phased diversification plan is maintained and executable without re-discovery.
+  - At least one recurring-value content/product layer is live that remains useful even during low penny-item windows.
+  - Tracking exists for non-Facebook traffic share and adjacent-intent engagement.
+  - Core loop guardrails (`/penny-list` usage + `/report-find` quality/throughput) remain stable while adjacent growth expands.
+- **Plan artifacts:**
+  - `.ai/impl/pennycentral-resilience-diversification-plan.md`
+  - `.ai/topics/RESILIENCE_GROWTH_CURRENT.md`
 
 ---
 

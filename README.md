@@ -220,6 +220,7 @@ public/                 # Static assets
 | `SKILLS.md`                       | Technical stack, domain knowledge, MCP patterns                      |
 | `CLAUDE.md`                       | Claude Code instructions (points to AGENTS.md)                       |
 | `.github/copilot-instructions.md` | Copilot Chat instructions (points to AGENTS.md)                      |
+| `PENNYCENTRAL_MASTER_CONTEXT.md`  | Founder strategic intent + cognitive-load protocol for future agents |
 | `.ai/AI_ENABLEMENT_BLUEPRINT.md`  | When the goal is AI workflow/tooling/verification enablement         |
 | `.ai/STATE.md`                    | Current snapshot of what is true right now                           |
 | `.ai/BACKLOG.md`                  | Current priorities and execution order                               |
@@ -233,7 +234,7 @@ public/                 # Static assets
 
 - **Start here:** Read `VISION_CHARTER.md` first (highest authority), then `.ai/START_HERE.md`
 - The `.ai/README.md` file is now a stub that points back to this section
-- **Read sequence:** `VISION_CHARTER.md` → `.ai/START_HERE.md` → `.ai/CRITICAL_RULES.md` → `.ai/STATE.md` → `.ai/BACKLOG.md` → `.ai/CONTRACT.md` → `.ai/DECISION_RIGHTS.md`
+- **Read sequence:** `VISION_CHARTER.md` → `.ai/START_HERE.md` → `PENNYCENTRAL_MASTER_CONTEXT.md` → `.ai/CRITICAL_RULES.md` → `.ai/STATE.md` → `.ai/BACKLOG.md` → `.ai/CONTRACT.md` → `.ai/DECISION_RIGHTS.md`
 - **Task closeout contract:** `.ai/HANDOFF_PROTOCOL.md` (mandatory completion + next-agent handoff schema)
 - **First session only:** Read `.ai/GROWTH_STRATEGY.md` for business context
 - **If session goal is AI workflow/tooling/verification enablement:** Also read `.ai/AI_ENABLEMENT_BLUEPRINT.md`

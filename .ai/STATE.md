@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 19, 2026 (added `dev:reset-3001` local recovery command)
+**Last updated:** Feb 19, 2026 (added resilience/diversification contingency planning package)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,45 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-19 (Resilience + diversification contingency planning package):** Created founder-requested long-horizon plan to reduce dependency on penny-item permanence and concentrated traffic sources while preserving the core Penny List loop.
+  - **Planning artifacts shipped:**
+    - Added current-state capsule: `.ai/topics/RESILIENCE_GROWTH_CURRENT.md`
+    - Added canonical phased plan: `.ai/impl/pennycentral-resilience-diversification-plan.md`
+    - Registered topic in `.ai/topics/INDEX.md`
+    - Added backlog lane in `.ai/BACKLOG.md` as explicit founder override priority
+    - Updated `.ai/topics/ANALYTICS_CONTRACT.md` with diversification KPI definitions and guardrail interpretation rules
+  - **Plan scope highlights:**
+    - Two-engine strategy: protect current penny utility while building additive clearance/deal intelligence value
+    - Four-phase execution map (decision framework layer -> adjacent utility spine -> channel independence loop -> revenue resilience hardening)
+    - Autonomous execution protocol for future agents when founder is offline
+    - Execution queue with approval/no-approval gating per task
+    - Drift-check appendix captured via `pc-plan-drift-check` script output
+  - **Verification (docs-only lane):**
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
+    - `npm run verify:fast` N/A (docs-only; no runtime code-path change)
+    - `npm run e2e:smoke` N/A (docs-only; no route/form/API/navigation/UI-flow change)
+
+- **2026-02-19 (Founder strategic context canonized):** Added a single durable context file so future AI sessions can inherit founder strategy without repeated chat re-explanations.
+  - **Docs/system memory hardening shipped:**
+    - Added `PENNYCENTRAL_MASTER_CONTEXT.md` at repo root as a founder-intent operating document.
+    - Added canonical ingestion wiring so future agents read this by default:
+      - `README.md` AI read sequence now includes `PENNYCENTRAL_MASTER_CONTEXT.md`.
+      - `.ai/START_HERE.md` read order now includes `../PENNYCENTRAL_MASTER_CONTEXT.md`.
+    - Captured non-negotiable strategy and communication expectations:
+      - trust/engagement/revenue alignment model,
+      - dual-audience requirement (power users + new users),
+      - expert-level reasoning standard for penny-item analysis,
+      - cognitive-load protocol (default to one concrete next action),
+      - anti-manipulation ethics boundary,
+      - survivability direction beyond penny-item dependency,
+      - transcription-noise handling guidance for future AI.
+  - **Verification (docs-only lane):**
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
+    - `npm run verify:fast` N/A (docs-only; no runtime code-path change)
+    - `npm run e2e:smoke` N/A (docs-only; no route/form/API/navigation/UI-flow change)
 
 - **2026-02-19 (Port 3001 founder recovery command):** Added a one-command local reset helper so stuck `3001` sessions can be recovered without manual `netstat` + `taskkill` steps.
   - **Developer workflow hardening shipped:**

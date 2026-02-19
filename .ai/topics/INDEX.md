@@ -12,6 +12,12 @@
 **Focus:** Persistent-memory reliability + founder-effort minimization operating model
 **Quick link:** See `.ai/impl/founder-autonomy-memory-hardening.md` and `.ai/FOUNDER_AUTONOMY_OPERATING_SYSTEM.md`
 
+### [RESILIENCE_GROWTH](.ai/topics/RESILIENCE_GROWTH_CURRENT.md)
+
+**Status:** 🔄 In progress (contingency/diversification planning active)
+**Focus:** De-risk traffic/revenue concentration and build additive growth beyond penny-only dependency
+**Quick link:** See `.ai/impl/pennycentral-resilience-diversification-plan.md`
+
 ### [MY_LIST](.ai/topics/MY_LIST_FEATURE_CURRENT.md)
 
 **Status:** Planning (Phases 1-3 documented)
