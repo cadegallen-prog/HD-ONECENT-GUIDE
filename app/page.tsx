@@ -262,6 +262,27 @@ export default async function Home() {
         </div>
       </section>
 
+      <section className="section-padding-sm px-4 sm:px-6 bg-[var(--bg-page)]">
+        <div className="max-w-4xl mx-auto rounded-xl border border-[var(--border-default)] bg-[var(--bg-elevated)] p-5 sm:p-6">
+          <h2 className="text-xl sm:text-2xl font-semibold text-[var(--text-primary)] leading-snug">
+            Decision Quality Shortcut
+          </h2>
+          <p className="mt-3 text-[var(--text-secondary)] leading-relaxed">
+            Use the Decision Quality chapter when you need quick guidance on whether an item is
+            worth your time, storage, and effort before checkout.
+          </p>
+          <p className="mt-3 text-[var(--text-secondary)] leading-relaxed">
+            This keeps your runs focused on high-confidence pickups instead of low-value clutter.
+          </p>
+          <Link
+            href="/in-store-strategy"
+            className="mt-4 inline-flex items-center gap-1 font-medium text-[var(--link-default)] underline underline-offset-2 hover:text-[var(--link-hover)]"
+          >
+            Open the Decision Quality chapter
+          </Link>
+        </div>
+      </section>
+
       {/* ============================================
           TOOLS SECTION
 

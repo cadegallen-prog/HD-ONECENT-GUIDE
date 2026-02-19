@@ -86,6 +86,23 @@ If any field is missing or contradictory, stop and resolve it first. No edits be
   2. `Agent Handoff` (for future AI agents only)
 - If using process field labels like "First command/file to open," explain that it is for the next AI session, not for Cade unless explicitly stated.
 
+## Founder Confidence Protocol (Mandatory)
+
+- During meaningful implementation work, provide short progress updates in plain English that include:
+  1. what is being changed now,
+  2. why this change is being made now,
+  3. key risks/tradeoffs being considered.
+- For navigation/layout/interaction decisions, explicitly call out mobile impact first.
+  - Current operating reality: mobile traffic is typically >=85-90%, so mobile impact is the default priority unless Cade overrides.
+- Evidence over assurance:
+  - never ask Cade to "take your word for it",
+  - state what is verified vs not yet verified,
+  - include command + artifact paths when verification runs.
+- If Cade shares a new working preference in chat, persist it in canonical memory in the same session:
+  - `PENNYCENTRAL_MASTER_CONTEXT.md`
+  - `.ai/SESSION_LOG.md`
+  - `.ai/STATE.md` (if current operating reality changed)
+
 ### Your Responsibilities
 
 | Responsibility | What This Means                                                                                      |

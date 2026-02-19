@@ -391,6 +391,17 @@ type AggregatedItem = Omit<PennyItem, "tier"> & {
   latestSeenAtMs: number
 }
 
+function buildAggregationKey(sku: string, internetNumber?: string): string {
+  return internetNumber ? `internet:${internetNumber}` : `sku:${sku}`
+}
+
+function choosePreferredDisplaySku(existingSku: string, candidateSku: string): string {
+  // Prefer canonical 6-digit store SKU when both represent the same item.
+  if (existingSku.length === 6 && candidateSku.length === 10) return existingSku
+  if (existingSku.length === 10 && candidateSku.length === 6) return candidateSku
+  return existingSku
+}
+
 export function buildPennyItemsFromRows(rows: SupabasePennyRow[]): PennyItem[] {
   const grouped = new Map<string, AggregatedItem>()
   const nowMs = Date.now()
@@ -416,10 +427,24 @@ export function buildPennyItemsFromRows(rows: SupabasePennyRow[]): PennyItem[] {
     const upc = row.upc?.trim()
     const retailPrice = parsePriceValue(row.retail_price)
 
-    const existing = grouped.get(sku)
+    const skuKey = buildAggregationKey(sku)
+    const internetKey = internetNumber ? buildAggregationKey(sku, internetNumber) : null
+
+    // If we first saw this item before internet SKU was known (sku-keyed),
+    // and now we have internet SKU, move that aggregate into internet-keyed slot.
+    if (internetKey && !grouped.has(internetKey) && grouped.has(skuKey)) {
+      const skuGrouped = grouped.get(skuKey)
+      if (skuGrouped) {
+        grouped.delete(skuKey)
+        grouped.set(internetKey, skuGrouped)
+      }
+    }
+
+    const aggregateKey = internetKey ?? skuKey
+    const existing = grouped.get(aggregateKey)
 
     if (!existing) {
-      grouped.set(sku, {
+      grouped.set(aggregateKey, {
         id: sku,
         sku,
         name: name || `SKU ${sku}`,
@@ -473,6 +498,12 @@ export function buildPennyItemsFromRows(rows: SupabasePennyRow[]): PennyItem[] {
 
     if (internetNumber && !existing.internetNumber) {
       existing.internetNumber = internetNumber
+    }
+
+    const preferredSku = choosePreferredDisplaySku(existing.sku, sku)
+    if (preferredSku !== existing.sku) {
+      existing.sku = preferredSku
+      existing.id = preferredSku
     }
 
     if (homeDepotUrl && !existing.homeDepotUrl) {

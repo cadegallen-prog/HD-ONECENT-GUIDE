@@ -38,6 +38,7 @@
   - why it changed
   - what action Cade should take (or "no action needed")
 - Define any technical terms used in those notes.
+- If founder collaboration preferences were updated in chat, state where those preferences were persisted in canonical memory.
 
 ---
 
@@ -80,6 +81,7 @@ Use this schema every time:
 - Remaining risks:
 - Regressions to watch:
 - Monetization incident register updated (YES/NO):
+- Continuity updates made this session (YES/NO + path list):
 
 ### 6) Immediate Next Step
 
@@ -105,6 +107,7 @@ To survive context windows, convert volatile chat context into durable repo cont
 3. **Priority decisions** -> `.ai/BACKLOG.md`
 4. **Domain-specific durable context** -> `.ai/topics/<TOPIC>_CURRENT.md`
 5. **Failure pattern + prevention** -> `.ai/LEARNINGS.md`
+6. **Founder collaboration preferences** -> `PENNYCENTRAL_MASTER_CONTEXT.md` (+ `.ai/SESSION_LOG.md`, `.ai/STATE.md` when relevant)
 
 If it is not in `.ai/`, assume it will be lost.
 

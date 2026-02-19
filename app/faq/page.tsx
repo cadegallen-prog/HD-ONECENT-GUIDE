@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
+import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
 import { RouteAdSlots } from "@/components/ads/route-ad-slots"
 
@@ -293,6 +294,13 @@ export default function FAQPage() {
             </ul>
           </Prose>
         </Section>
+        <ChapterNavigation
+          prev={{
+            slug: "facts-vs-myths",
+            title: "Facts vs. Myths",
+          }}
+          next={undefined}
+        />
       </PageShell>
     </>
   )

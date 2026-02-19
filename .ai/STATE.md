@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 19, 2026 (added resilience/diversification contingency planning package)
+**Last updated:** Feb 19, 2026 (continuity + analytics/search-console/MCP persistence codified)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,96 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-19 (Collaboration continuity requirements codified; analytics/search/MCP included):** Captured founder-critical observability/tooling expectations as durable context so future agents do not miss them after context resets.
+  - **Canonical memory updates shipped:**
+    - Added `Instrumentation + Search Visibility Operating Rule` to `PENNYCENTRAL_MASTER_CONTEXT.md`.
+    - Added `MCP Capability Parity + Expansion Rule` to `PENNYCENTRAL_MASTER_CONTEXT.md`.
+    - Added clarification that this is a collaboration-continuity requirement (not analytics-only autonomy mandate).
+    - Added P0 backlog execution lane `9. Collaboration Continuity Loop (Analytics/Search/MCP Included)` in `.ai/BACKLOG.md` with explicit done criteria and default next task.
+    - Updated `.ai/SESSION_LOG.md` with explicit continuity notes for analytics/search-console/MCP handling.
+  - **Verification (docs-only lane):**
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
+      - Context pack: `reports/context-packs/2026-02-19T21-41-20/context-pack.md`
+    - `npm run verify:fast` N/A (docs-only; no runtime code-path change)
+    - `npm run e2e:smoke` N/A (docs-only; no route/form/API/navigation/UI-flow change)
+
+- **2026-02-19 (Cross-agent continuity hardening for founder communication style):** Codified founder-requested communication and context-retention preferences so Codex, Claude, and Copilot stay aligned.
+  - **Canonical governance updates shipped:**
+    - Added Founder Confidence Protocol to `.ai/START_HERE.md` (progress transparency, evidence-first communication, and mobile-first risk callout requirement).
+    - Added durable founder preference sections to `PENNYCENTRAL_MASTER_CONTEXT.md`:
+      - Founder Confidence + Transparency Preference
+      - Mobile-First Resource Allocation Rule (`>=85-90%` mobile assumption)
+      - Context-Loss Anxiety Protocol
+    - Updated `.ai/CONTRACT.md` with mandatory Founder Confidence + Visibility Protocol.
+    - Updated `.ai/HANDOFF_PROTOCOL.md` to require continuity-note persistence paths in handoffs.
+    - Updated `.github/copilot-instructions.md` to remove token-gated behavior drift and align with plain-English/default-autonomy canon.
+  - **Verification (docs-only lane):**
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
+      - Context pack: `reports/context-packs/2026-02-19T21-23-35/context-pack.md`
+    - `npm run verify:fast` N/A (docs-only; no runtime code-path change)
+    - `npm run e2e:smoke` N/A (docs-only; no route/form/API/navigation/UI-flow change)
+
+- **2026-02-19 (R3 Option B implemented: balanced discoverability layer):** Completed the founder-approved runtime IA step from the resilience plan.
+  - **Runtime/UI changes shipped:**
+    - Added a homepage Decision Quality shortcut block linking to `/in-store-strategy` (`app/page.tsx`).
+    - Added a guide-hub Decision Quality next-step block linking to `/in-store-strategy` (`app/guide/page.tsx`).
+    - Added one `Decision Quality` navbar entry (`components/navbar.tsx`) and one matching footer entry (`components/footer.tsx`).
+  - **Regression coverage shipped:**
+    - Updated `tests/smoke-critical.spec.ts` for home + guide Decision Quality link assertions.
+    - Updated `tests/basic.spec.ts` to assert `Decision Quality` appears in desktop/mobile nav.
+  - **Verification:**
+    - `npm run ai:memory:check` ✅
+    - `$env:NEXT_PRIVATE_BUILD_WORKER='1'; npm run verify:fast` ✅
+    - `$env:NEXT_PRIVATE_BUILD_WORKER='1'; npm run e2e:smoke` ✅
+    - `npm run lint:colors` ✅
+    - `npm run ai:proof -- -- --mode=test / /guide /penny-list` ✅
+      - Proof bundle: `reports/proof/2026-02-19T10-19-37/`
+      - Console errors: none
+
+- **2026-02-19 (R2 follow-through: guardrail status + R3 approval pack):** Completed the next execution step after R2 by recording objective guardrail-readiness status and drafting approval-ready R3 options.
+  - **Planning/memory changes shipped:**
+    - Updated `.ai/topics/RESILIENCE_GROWTH_CURRENT.md` with a dated R1 guardrail status of `INCONCLUSIVE` (no valid 7-day post-R1 window yet) and set **2026-02-26** as the earliest valid evaluation date.
+    - Added R3 founder approval matrix (A/B/C with scope, risk, rollback, proof plan) to `.ai/impl/pennycentral-resilience-diversification-plan.md`.
+    - Re-ran drift heuristics (`.ai/_tmp/drift-check.md`) and recorded no new runtime drift blockers.
+  - **Verification (docs-only lane):**
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
+    - `npm run verify:fast` N/A (docs-only; no runtime code-path change)
+    - `npm run e2e:smoke` N/A (docs-only; no route/form/API/navigation/UI-flow change)
+
+- **2026-02-19 (R2 diversification metrics contract hardening completed):** Finalized the resilience measurement contract so diversification progress can be evaluated with fail-closed thresholds instead of subjective trend reads.
+  - **Docs/contract changes shipped:**
+    - Hardened `.ai/topics/ANALYTICS_CONTRACT.md` KPI definitions with locked formulas, source systems, rolling-window reads, and explicit signal thresholds.
+    - Added fail-closed interpretation rules that block "success" claims when core-loop guardrails degrade.
+    - Locked adjacent-intent route-set accounting rules and minimum branded-query exclusion list for non-branded SEO reads.
+  - **Resilience status updates shipped:**
+    - Updated `.ai/topics/RESILIENCE_GROWTH_CURRENT.md` to mark `R2` completed, preserve `R3` as next approval-gated execution task, and set immediate guardrail-validation actions.
+  - **Verification (docs-only lane):**
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
+    - `npm run verify:fast` N/A (docs-only; no runtime code-path change)
+    - `npm run e2e:smoke` N/A (docs-only; no route/form/API/navigation/UI-flow change)
+
+- **2026-02-19 (R1 Worth-It Filter scaffold shipped on `/guide`):** Implemented the first runtime step from the resilience/diversification roadmap as a guide-hub-only decision-quality layer.
+  - **Runtime/content changes shipped:**
+    - Replaced legacy/unwired `components/guide/sections/ResponsibleHunting.tsx` with a reusable Worth-It Filter module.
+    - Added explicit decision lanes (`Use`, `Gift`, `Donate`, `Resell`, `Skip`) plus high-headache/low-value skip signals.
+    - Added execution CTA to `/in-store-strategy` to keep guidance tied to practical flow.
+    - Integrated the module into `app/guide/page.tsx` after `EthicalDisclosure` and before Guide Chapters.
+    - Softened guide intro framing to practical/balanced language (removed quit-now style copy).
+    - Updated guide JSON-LD freshness marker (`dateModified`) to `2026-02-19`.
+  - **Regression coverage shipped:**
+    - Added a new smoke test for `/guide` ensuring Worth-It heading, five lane labels, and CTA presence.
+  - **Verification:**
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` ✅
+    - `npm run lint:colors` ✅
+    - `npm run ai:proof -- -- --mode=test /guide` ✅
+      - Proof bundle: `reports/proof/2026-02-19T09-37-16/`
+      - Console errors: none
 
 - **2026-02-19 (Resilience + diversification contingency planning package):** Created founder-requested long-horizon plan to reduce dependency on penny-item permanence and concentrated traffic sources while preserving the core Penny List loop.
   - **Planning artifacts shipped:**

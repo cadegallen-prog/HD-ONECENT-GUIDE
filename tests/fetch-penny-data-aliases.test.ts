@@ -92,6 +92,37 @@ test("stores enrichment fields from Supabase rows", async () => {
   clearSupabaseMocks()
 })
 
+test("merges SO SKU and regular SKU rows by shared internet SKU and prefers 6-digit display SKU", async () => {
+  installSupabaseMocks({})
+  const { buildPennyItemsFromRows } = await import("../lib/fetch-penny-data")
+
+  const items = buildPennyItemsFromRows([
+    clone(baseRow, {
+      id: "row-so",
+      home_depot_sku_6_or_10_digits: "1001092170",
+      internet_sku: 205654866,
+      item_name: "Chamberlain Universal Wireless Garage Door Keypad",
+      store_city_state: "Bridgewater, MA",
+      timestamp: "2026-02-16T03:25:45.943Z",
+    }),
+    clone(baseRow, {
+      id: "row-regular",
+      home_depot_sku_6_or_10_digits: "684283",
+      internet_sku: 205654866,
+      item_name: "Universal Wireless Garage Door Keypad",
+      store_city_state: "Manual Add",
+      timestamp: "2026-02-17T06:20:45.861Z",
+    }),
+  ])
+
+  assert.strictEqual(items.length, 1)
+  assert.strictEqual(items[0].sku, "684283")
+  assert.strictEqual(items[0].internetNumber, "205654866")
+  assert.deepStrictEqual(items[0].locations, { MA: 1 })
+
+  clearSupabaseMocks()
+})
+
 test("applies enrichment metadata and overrides core fields", async () => {
   installSupabaseMocks({})
   const { buildPennyItemsFromRows, applyEnrichment } = await import("../lib/fetch-penny-data")

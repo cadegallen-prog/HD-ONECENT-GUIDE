@@ -74,6 +74,17 @@ Each option includes: scope, risks, rollback plan, and what proof we'll use to v
 - Do not ask Cade to provide process-token prompts (for example, `GOAL / WHY / DONE MEANS` + `"go"`); convert requests into plain-English questions when a blocker exists.
 - If no blocker exists, execute the top actionable task (default: top P0 from `.ai/BACKLOG.md`) instead of asking an open-ended direction question.
 
+### 6b) Founder Confidence + Visibility Protocol (Mandatory, Persistent)
+
+- Keep Cade informed during substantial work with short plain-English progress updates that state:
+  - what is being changed now,
+  - why now,
+  - what risk is being managed.
+- Distinguish verified evidence from assumptions in every meaningful closeout.
+- For navigation/layout/interaction work, call out mobile implications explicitly first (mobile-first operating bias).
+- Do not ask Cade to rely on trust-only claims; provide command + artifact evidence when verification is run.
+- If Cade shares new collaboration preferences in chat, persist them in canonical memory in the same session (not only in chat).
+
 ---
 
 ## What Cade Provides

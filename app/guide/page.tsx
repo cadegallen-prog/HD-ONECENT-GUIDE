@@ -1,7 +1,9 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 import { TableOfContents } from "@/components/guide/TableOfContents"
 import { EthicalDisclosure } from "@/components/guide/EthicalDisclosure"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
+import { ResponsibleHunting } from "@/components/guide/sections/ResponsibleHunting"
 import { RouteAdSlots } from "@/components/ads/route-ad-slots"
 
 export const metadata: Metadata = {
@@ -27,7 +29,7 @@ const guideJsonLd = {
     url: "https://www.pennycentral.com",
     logo: { "@type": "ImageObject", url: "https://www.pennycentral.com/icon.svg" },
   },
-  dateModified: "2026-02-18",
+  dateModified: "2026-02-19",
   mainEntity: {
     "@type": "ItemList",
     itemListElement: [
@@ -189,31 +191,41 @@ export default function GuideHubPage() {
           <div className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5 space-y-3 text-[var(--text-secondary)] leading-relaxed">
             <p className="text-lg font-semibold text-[var(--text-primary)]">Before you start.</p>
             <p>
-              You're not going to find a penny item tomorrow. Probably not this week either. Your
-              first one might take weeks of driving, scanning, and walking out empty handed. Most
-              people won't last that long.
-            </p>
-            <p>That's the barrier to entry. That's why it works.</p>
-            <p>
-              If you're here because TikTok made it look like free money, save yourself the gas and
-              quit now. No hard feelings. This isn't a side hustle. It's a scavenger hunt with a
-              brutal learning curve.
+              Most hunts end with zero penny finds. That does not mean you are doing it wrong; it
+              means this is a pattern-and-discipline game, not guaranteed instant savings.
             </p>
             <p>
-              But if you read that and thought &ldquo;weeks of effort for something that rings up
-              $0.01&rdquo; sounds like a good trade? You're already thinking like us. Read the
-              guide. Join the Facebook group. Put in the hours.
+              Expect empty trips, changing store behavior, and occasional dead-end leads. The wins
+              come from stronger decisions: planning routes, verifying with UPC scans, and knowing
+              when to skip low-value pickups.
             </p>
             <p>
-              When you finally hold that first one in your hand, something worth $50 that you paid a
-              penny for, you'll understand why the rest of us are obsessed.
+              Treat penny hunting like a skill. The goal is not to collect everything that rings at
+              $0.01. The goal is to leave each run with decisions that were worth your time and
+              effort.
             </p>
             <p className="font-medium text-[var(--text-primary)]">
-              Start with the guide. Then come find us in the group.
+              Start with the guide, then use the Worth-It Filter before checkout.
             </p>
           </div>
 
           <EthicalDisclosure />
+          <ResponsibleHunting />
+          <div className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
+            <h2 className="text-xl font-semibold text-[var(--text-primary)]">
+              Decision Quality Next Step
+            </h2>
+            <p className="mt-2 text-[var(--text-secondary)] leading-relaxed">
+              If you want the shortest route from planning to checkout decisions, jump to the
+              chapter focused on verification flow and worth-it calls.
+            </p>
+            <Link
+              href="/in-store-strategy"
+              className="mt-4 inline-flex items-center gap-1 font-medium text-[var(--link-default)] underline underline-offset-2 hover:text-[var(--link-hover)]"
+            >
+              Review the Decision Quality chapter
+            </Link>
+          </div>
         </section>
 
         <section className="mb-6 space-y-3 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">

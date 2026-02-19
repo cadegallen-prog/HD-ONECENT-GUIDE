@@ -379,6 +379,33 @@ function toStagingUpsertRow(row: ManualNormalizedRow): StagingUpsertRow {
   return staging
 }
 
+function buildStagingUpdatePatch(row: StagingUpsertRow): Record<string, unknown> {
+  const patch: Record<string, unknown> = {}
+
+  if ("item_name" in row) patch.item_name = row.item_name ?? null
+  if ("brand" in row) patch.brand = row.brand ?? null
+  if ("barcode_upc" in row) patch.barcode_upc = row.barcode_upc ?? null
+  if ("internet_number" in row) patch.internet_number = row.internet_number ?? null
+  if ("image_url" in row) patch.image_url = row.image_url ?? null
+  if ("product_link" in row) patch.product_link = row.product_link ?? null
+  if ("retail_price" in row) patch.retail_price = row.retail_price ?? null
+
+  return patch
+}
+
+function isInternetNumberUniqueConflict(
+  error: { message?: string; details?: string } | null
+): boolean {
+  const message = String(error?.message || "")
+  const details = String(error?.details || "")
+
+  return (
+    message.includes("idx_staging_internet_number") ||
+    details.includes("idx_staging_internet_number") ||
+    (message.includes("duplicate key") && details.includes("internet_number"))
+  )
+}
+
 function buildManualPennyPatch(row: ManualNormalizedRow): Record<string, unknown> {
   const patch: Record<string, unknown> = {}
 
@@ -657,18 +684,35 @@ async function main() {
 
     const stagingRows = deduped.merged.map(toStagingUpsertRow)
 
-    const batchSize = 100
     let upserted = 0
-    for (let i = 0; i < stagingRows.length; i += batchSize) {
-      const batch = stagingRows.slice(i, i + batchSize)
-      const { error } = await supabase.from("enrichment_staging").upsert(batch, {
+    for (const stagingRow of stagingRows) {
+      const { error } = await supabase.from("enrichment_staging").upsert(stagingRow, {
         onConflict: "sku",
       })
 
       if (error) {
-        throw new Error(`Item Cache upsert failed: ${error.message}`)
+        const internetConflict =
+          stagingRow.internet_number != null &&
+          isInternetNumberUniqueConflict(error as { message?: string; details?: string } | null)
+
+        if (!internetConflict || stagingRow.internet_number == null) {
+          throw new Error(`Item Cache upsert failed: ${error.message}`)
+        }
+
+        const fallbackPatch = buildStagingUpdatePatch(stagingRow)
+        const { error: fallbackError } = await supabase
+          .from("enrichment_staging")
+          .update(fallbackPatch)
+          .eq("internet_number", stagingRow.internet_number)
+
+        if (fallbackError) {
+          throw new Error(
+            `Item Cache internet_number fallback update failed: ${fallbackError.message}`
+          )
+        }
       }
-      upserted += batch.length
+
+      upserted += 1
     }
     summary.cache_upserted = upserted
 

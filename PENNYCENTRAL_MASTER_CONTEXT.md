@@ -165,3 +165,71 @@ Use this exact stance:
 When founder strategy changes materially, update this file in the same session and log the change in `.ai/SESSION_LOG.md`.
 
 If this context only lives in chat and not in this file, assume it will be lost.
+
+## 13) Founder Confidence + Transparency Preference (Added 2026-02-19)
+
+Cade strongly prefers transparent, high-visibility collaboration over black-box execution.
+
+Required behavior for future AI agents:
+
+1. Explain decisions in plain English while work is happening, not only at the end.
+2. Surface high-level considerations and tradeoffs explicitly (for example, risk, scope, regression exposure).
+3. Separate verified facts from assumptions.
+4. Use evidence-first communication (commands run + artifact paths), not "trust me" language.
+5. Provide durable next-agent handoffs so continuity does not depend on one context window.
+
+Failure mode to avoid:
+
+- Silent or vague implementation summaries that force Cade to guess what changed and why.
+
+## 14) Mobile-First Resource Allocation Rule (Added 2026-02-19)
+
+Current operating assumption: mobile traffic is typically >=85-90% of total sessions.
+
+Execution implications:
+
+1. Default QA emphasis should prioritize mobile interaction quality and readability.
+2. Navigation/IA changes must call out mobile clutter and touch-target risk explicitly.
+3. If desktop and mobile priorities conflict, default to the mobile-safe choice unless Cade says otherwise.
+
+## 15) Context-Loss Anxiety Protocol (Added 2026-02-19)
+
+When Cade expresses concern that context may be lost:
+
+1. Persist the concern and operating preference in canonical docs in the same session.
+2. Update `.ai/SESSION_LOG.md` with what was codified and where.
+3. Update `.ai/STATE.md` if this changes collaboration reality.
+4. Include a "for future AI agents" handoff note confirming continuity status.
+
+## 16) Instrumentation + Search Visibility Operating Rule (Added 2026-02-19)
+
+Cade treats analytics and search data as required operating infrastructure, not optional reporting.
+
+Clarification (2026-02-19): mentions of GA4, Search Console, and MCP in collaboration discussions are examples of visibility/continuity standards, not a request to replace the normal product roadmap with analytics-only autonomy work.
+
+Required behavior for future AI agents:
+
+1. Use GA4 and Google Search Console as default evidence inputs for growth, SEO, and IA decisions.
+2. Before claiming improvement, state the exact metric window and source system.
+3. If GA4 or Search Console access is missing/incomplete, mark status as `BLOCKED` or `INCONCLUSIVE` (fail-closed) and log the gap in `.ai/SESSION_LOG.md`.
+4. Keep `.ai/topics/ANALYTICS_CONTRACT.md` and `.ai/ANALYTICS_WEEKLY_REVIEW.md` aligned with runtime tracking behavior.
+5. For analytics implementation changes, run `npm run ai:analytics:verify` and record artifact paths under `reports/analytics-verification/`.
+
+Failure mode to avoid:
+
+- Making SEO or growth decisions from assumptions when instrumentation coverage is unknown.
+
+## 17) MCP Capability Parity + Expansion Rule (Added 2026-02-19)
+
+Cade prefers consistent capability and behavior across Codex, Claude, and Copilot.
+
+Required behavior for future AI agents:
+
+1. Maintain baseline MCP parity using `.ai/MCP_BASELINE.md` and `.ai/MCP_SETUP.md`.
+2. When an MCP capability is missing in the active tool, state the limitation and fallback explicitly.
+3. Follow permission-first narrow expansion for MCP additions/changes: one change bundle, measurable founder workload reduction, and rollback notes.
+4. Persist MCP-related workflow decisions in `.ai/SESSION_LOG.md` (and `.ai/STATE.md` when operating reality changes).
+
+Failure mode to avoid:
+
+- Tool-specific drift where one agent has critical context/tooling and others silently do not.

@@ -4,167 +4,158 @@
 
 ---
 
-## 2026-02-19 - Codex - Resilience + Diversification Contingency Planning Package
+## 2026-02-19 - Codex - Collaboration Continuity Persistence (Analytics/Search/MCP Included)
 
-**Goal:** Start a long, founder-requested contingency task that reduces strategic dependency on penny-item permanence and concentrated traffic sources, while preserving current core-loop strength.
+**Goal:** Persist founder collaboration-continuity expectations (with analytics/search visibility and MCP consistency examples) so they survive context resets and are enforced across future agents.
 
-**Status:** ✅ Completed (planning package created; no runtime implementation yet)
+**Status:** ✅ Completed (docs-only)
 
 ### Changes
 
-- Added `.ai/topics/RESILIENCE_GROWTH_CURRENT.md`:
-  - current-state audit for diversification/resilience,
-  - reusable infrastructure map,
-  - strengths/pain-points baseline for non-fragile growth.
-- Added `.ai/impl/pennycentral-resilience-diversification-plan.md`:
-  - completed alignment gate block,
-  - two-engine strategy (core penny utility + additive adjacent value),
-  - phased roadmap (4 phases),
-  - autonomous execution protocol for future agents,
-  - execution queue with approval/no-approval task gating,
-  - drift-check appendix from `pc-plan-drift-check`.
-- Updated `.ai/topics/INDEX.md` with `RESILIENCE_GROWTH` capsule registration.
+- Updated `PENNYCENTRAL_MASTER_CONTEXT.md`:
+  - added `Instrumentation + Search Visibility Operating Rule` (GA4 + Search Console are required operating inputs, fail-closed when coverage is missing).
+  - added `MCP Capability Parity + Expansion Rule` (baseline parity, explicit fallback disclosure, permission-first MCP expansion).
+  - added clarification that analytics/search/MCP references are examples of visibility expectations, not an analytics-only autonomy directive.
 - Updated `.ai/BACKLOG.md`:
-  - added explicit founder-override lane for resilience/diversification contingency.
-- Updated `.ai/topics/ANALYTICS_CONTRACT.md` with a new diversification KPI set:
-  - non-Facebook session share,
-  - non-branded organic clicks,
-  - adjacent-intent session share,
-  - plus core-loop guardrails to prevent trust-loop regression during diversification.
+  - added P0 lane `9. Collaboration Continuity Loop (Analytics/Search/MCP Included)` so future agents have a concrete default execution queue without over-scoping roadmap priorities.
+- Updated `.ai/STATE.md`:
+  - added a new sprint entry recording this continuity requirement as current operating reality.
 
 ### Verification
 
 - `npm run ai:memory:check` ✅
 - `npm run ai:checkpoint` ✅
-- `npm run verify:fast` N/A (docs-only change; no runtime code-path impact)
-- `npm run e2e:smoke` N/A (docs-only change; no route/form/API/navigation/UI-flow change)
-- `npm run e2e:full` N/A (docs-only change; FULL triggers not applicable)
+  - Context pack: `reports/context-packs/2026-02-19T21-41-20/context-pack.md`
+- `npm run verify:fast` N/A (docs-only; no runtime code-path impact)
+- `npm run e2e:smoke` N/A (docs-only; no route/form/API/navigation/UI-flow change)
+- `npm run e2e:full` N/A (docs-only; FULL triggers not applicable)
 
 ---
 
-## 2026-02-19 - Codex - Added Canonical `PENNYCENTRAL_MASTER_CONTEXT.md`
+## 2026-02-19 - Codex - Cross-Agent Communication Continuity Hardening
 
-**Goal:** Convert founder transcript context into a durable, future-agent-ready master document so Cade does not need to repeatedly re-explain the same strategic framework.
+**Goal:** Preserve founder communication preferences and context-retention requirements in canonical docs so future Codex/Claude/Copilot sessions operate with the same plain-English, evidence-first collaboration style.
 
-**Status:** ✅ Completed
+**Status:** ✅ Completed (docs-only)
 
 ### Changes
 
-- Added `PENNYCENTRAL_MASTER_CONTEXT.md` at repo root.
-- Captured founder strategic intent in a single canonical document, including:
-  - core strategic tension (`truth` vs `engagement` vs `revenue`),
-  - dual-audience model (power users + newcomers),
-  - expert reasoning standard for future AI,
-  - cognitive-load protocol (single next action default),
-  - ethical boundaries and anti-manipulation stance,
-  - survivability thesis beyond penny items,
-  - input-fidelity handling for speech-to-text noise.
-- Added explicit maintenance rule so future strategic shifts are logged to `.ai/SESSION_LOG.md` and updated in the master context file.
-- Updated canonical read order docs so future sessions auto-ingest this context:
-  - `README.md` AI canon read sequence now includes `PENNYCENTRAL_MASTER_CONTEXT.md`.
-  - `.ai/START_HERE.md` mandatory read order now includes `../PENNYCENTRAL_MASTER_CONTEXT.md`.
+- Updated `.ai/START_HERE.md`:
+  - added `Founder Confidence Protocol (Mandatory)` for progress transparency, evidence-over-assurance, and mobile-first risk callouts.
+- Updated `PENNYCENTRAL_MASTER_CONTEXT.md`:
+  - added durable founder preference sections for communication transparency, mobile-first allocation (`>=85-90%` mobile assumption), and context-loss handling.
+- Updated `.ai/CONTRACT.md`:
+  - added mandatory `Founder Confidence + Visibility Protocol`.
+- Updated `.ai/HANDOFF_PROTOCOL.md`:
+  - required continuity-path reporting when founder collaboration preferences change.
+- Updated `.github/copilot-instructions.md`:
+  - removed process-token gating drift and aligned Copilot defaults with canonical plain-English/autonomy rules.
+- Updated memory snapshot:
+  - `.ai/STATE.md` updated with this continuity hardening entry.
 
 ### Verification
 
 - `npm run ai:memory:check` ✅
 - `npm run ai:checkpoint` ✅
-- `npm run verify:fast` N/A (docs-only change; no runtime code-path impact)
-- `npm run e2e:smoke` N/A (docs-only change; no route/form/API/navigation/UI-flow change)
-- `npm run e2e:full` N/A (docs-only change; FULL triggers not applicable)
+  - Context pack: `reports/context-packs/2026-02-19T21-23-35/context-pack.md`
+- `npm run verify:fast` N/A (docs-only; no runtime code-path impact)
+- `npm run e2e:smoke` N/A (docs-only; no route/form/API/navigation/UI-flow change)
+- `npm run e2e:full` N/A (docs-only; FULL triggers not applicable)
 
 ---
 
-## 2026-02-19 - Codex - Added `dev:reset-3001` One-Command Local Recovery
+## 2026-02-19 - Codex - R3 Option B Implemented (Balanced Discoverability)
 
-**Goal:** Give the founder a single command to recover when port `3001` is stuck/in use but `localhost:3001` is not loading.
+**Goal:** Implement the founder-approved `R3` Option `B` from the resilience plan by adding a minimal Decision Quality discoverability layer across home, guide, navbar, and footer.
 
 **Status:** ✅ Completed
 
 ### Changes
 
-- Added `scripts/dev-reset-3001.mjs`:
-  - checks `http://localhost:3001` health,
-  - kills `3001` listener(s) only when unhealthy (or when explicitly forced),
-  - starts `npm run dev` automatically after reset.
-- Added npm scripts in `package.json`:
-  - `dev:reset-3001`
-  - `dev:Reset-3001` (alias matching founder-requested command style)
-  - `dev:reset-3001:cleanup`
-  - `dev:Reset-3001:cleanup` (mixed-case cleanup alias)
-  - `dev:reset-3001:force`
-- Updated `docs/skills/local-dev-faststart.md` with the new command and helper variants.
-- Fixed Windows process-launch reliability in the helper by using shell mode for `npm run dev` spawn.
+- Updated `app/page.tsx`:
+  - added a new `Decision Quality Shortcut` block with internal link to `/in-store-strategy`.
+- Updated `app/guide/page.tsx`:
+  - added a new `Decision Quality Next Step` block with internal link to `/in-store-strategy`.
+- Updated `components/navbar.tsx`:
+  - added one new primary nav item: `Decision Quality` -> `/in-store-strategy`.
+  - prevented double-active highlight by excluding `/in-store-strategy` from Guide active-state styling.
+- Updated `components/footer.tsx`:
+  - added one matching `Decision Quality` link in the Navigate section.
+- Updated regression tests:
+  - `tests/smoke-critical.spec.ts` now asserts the new home + guide Decision Quality links.
+  - `tests/basic.spec.ts` now asserts `Decision Quality` appears in desktop/mobile nav.
+- Updated resilience memory/plan docs:
+  - `.ai/topics/RESILIENCE_GROWTH_CURRENT.md`
+  - `.ai/impl/pennycentral-resilience-diversification-plan.md`
+  - `.ai/STATE.md`
 
 ### Verification
 
-- `npm run dev:reset-3001:cleanup` ✅
-- `npm run dev:Reset-3001:cleanup` ✅
-- `node scripts/dev-reset-3001.mjs --help` ✅
 - `npm run ai:memory:check` ✅
+- `npm run verify:fast` ❌ first attempt (build worker OOM)
 - `$env:NEXT_PRIVATE_BUILD_WORKER='1'; npm run verify:fast` ✅
-- `npm run e2e:smoke` N/A (no route/form/API/navigation/UI-flow change)
+- `$env:NEXT_PRIVATE_BUILD_WORKER='1'; npm run e2e:smoke` ❌ first attempt (port `3002` already in use)
+- `$env:NEXT_PRIVATE_BUILD_WORKER='1'; npm run e2e:smoke` ✅ after clearing stale `next start -p 3002` listener
+- `npm run lint:colors` ✅
+- `npm run ai:proof -- -- --mode=test / /guide /penny-list` ✅
+  - Proof bundle: `reports/proof/2026-02-19T10-19-37/`
+  - Console errors: none
 
 ---
 
-## 2026-02-19 - Codex - Submit-Flow Name Quality Guard (Prevent Generic Name Lock-In)
+## 2026-02-19 - Codex - R2 Follow-Through (R1 Guardrail Status + R3 Approval Pack)
 
-**Goal:** Reduce founder manual cleanup by preventing low-quality item names from persisting when better enrichment names are available.
+**Goal:** Continue the resilience lane after R2 by recording the post-R1 guardrail-evaluation status and preparing an approval-ready R3 internal-link proposal.
 
-**Status:** ✅ Completed
+**Status:** ✅ Completed (docs-only)
 
 ### Changes
 
-- Added `lib/item-name-quality.ts` with deterministic helpers:
-  - `isLowQualityItemName(...)`
-  - `shouldPreferEnrichedName(...)`
-- Updated `app/api/submit-find/route.ts`:
-  - Main payload now prefers enrichment `item_name` only when it is clearly better than user text.
-  - Realtime SerpApi path can now replace an existing low-quality non-empty `item_name` when a better name is returned.
-  - Canonical-gap detection now treats low-quality `item_name` as a gap, allowing quality remediation.
-- Added regression coverage:
-  - `tests/item-name-quality.test.ts` (quality heuristics)
-  - `tests/submit-find-route.test.ts` new case ensuring low-quality enrichment does **not** overwrite a better user name.
+- Updated `.ai/topics/RESILIENCE_GROWTH_CURRENT.md`:
+  - marked 7-day post-R1 guardrail validation as `INCONCLUSIVE` (fail-closed compliant),
+  - set earliest valid evaluation date to `2026-02-26`,
+  - updated immediate actions to require founder approval before R3 runtime IA changes.
+- Updated `.ai/impl/pennycentral-resilience-diversification-plan.md`:
+  - added `R3` approval proposal options A/B/C with scope, risk, rollback plan, and proof plan.
+- Ran plan drift scan and refreshed artifact:
+  - `python C:\\Users\\cadeg\\.codex\\skills\\pc-plan-drift-check\\scripts\\drift_check.py --out .ai/_tmp/drift-check.md`
+  - no new runtime blockers identified.
 
 ### Verification
 
-- `npm run test:unit` ✅
-- `$env:NEXT_PRIVATE_BUILD_WORKER='1'; npm run verify:fast` ✅
-- `$env:NEXT_PRIVATE_BUILD_WORKER='1'; npm run e2e:smoke` ✅
-- Operational check: `npm run warm:staging` ✅
-  - `upserted_to_staging: 1107`
-  - `error_count: 0`
+- `npm run ai:memory:check` ✅
+- `npm run ai:checkpoint` ✅
+  - Context pack: `reports/context-packs/2026-02-19T10-03-02/context-pack.md`
+- `npm run verify:fast` N/A (docs-only; no runtime code-path impact)
+- `npm run e2e:smoke` N/A (docs-only; no route/form/API/navigation/UI-flow change)
+- `npm run e2e:full` N/A (docs-only; FULL triggers not applicable)
 
 ---
 
-## 2026-02-19 - Codex - Coast Headlamp Name Correction (SKU 1014011639)
+## 2026-02-19 - Codex - R2 Diversification Metrics Contract Hardened
 
-**Goal:** Review prior agent work on the Coast headlamp listing and correct the wrong display name path end-to-end.
+**Goal:** Complete `R2` from the resilience plan by hardening diversification KPI definitions and interpretation rules so future execution decisions stay measurable and fail-closed.
 
-**Status:** ✅ Completed
+**Status:** ✅ Completed (docs-only)
 
 ### Changes
 
-- Audited the prior SKU-page patch and traced the active data path for `SKU 1014011639`.
-- Confirmed live row issue: `item_name` was `"Coast headlamp"` while enrichment fields (brand/model/upc/image/internet SKU/url/price) were already present.
-- Ran the canonical manual-enrichment workflow for this SKU with corrected product title:
-  - `Coast FLX65R 700 Lumen Bilingual Voice Control Rechargeable LED Headlamp`
-  - This updated both Item Cache and the existing `Penny List` row/provenance.
-- Kept the SKU page brand-strip guard in `app/sku/[sku]/page.tsx` (prevents collapsing to one-word generic names).
-- Added a list/table display normalization hardening in `lib/penny-list-utils.ts` so model-style tokens (letters+digits) stay uppercase (for example `FLX65R`, `M18`).
-- Added regression assertions in `tests/penny-list-utils.test.ts` for the new normalization behavior.
+- Updated `.ai/topics/ANALYTICS_CONTRACT.md`:
+  - locked formulas, source systems, and rolling-window reads for all resilience KPIs,
+  - added threshold-based interpretation rules (signal, warning, blocker),
+  - defined adjacent-intent route accounting and branded-query exclusion minimums.
+- Updated `.ai/topics/RESILIENCE_GROWTH_CURRENT.md`:
+  - moved status to `Phase 1 active; R1 + R2 completed`,
+  - captured `R3` as the next queued approval-gated task,
+  - rewrote immediate actions around guardrail validation + R3 proposal prep.
 
 ### Verification
 
-- `npm run manual:enrich -- -- --json {...}` ✅
-  - Summary: `cache_upserted: 1`, `penny_rows_updated_by_manual: 1`, `penny_rows_failed: 0`
-  - Report: `reports/manual-enrich/2026-02-19T06-12-21.178Z.json`
-- DB verification query for `home_depot_sku_6_or_10_digits = 1014011639` ✅
-  - Confirmed `item_name` now equals `Coast FLX65R 700 Lumen Bilingual Voice Control Rechargeable LED Headlamp`
-  - Confirmed `enrichment_provenance.item_name.source = manual`
-- `npx tsx -e "normalizeProductName(...)"` ✅
-  - Confirmed list-display normalization now yields `FLX65R 700 Lumen Bilingual Voice Control Rechargeable LED Headlamp`
-- `$env:NEXT_PRIVATE_BUILD_WORKER='1'; npm run verify:fast` ✅
-- `$env:NEXT_PRIVATE_BUILD_WORKER='1'; npm run e2e:smoke` ✅
-- `npm run ai:proof -- test /penny-list /sku/1014-011-639` ✅
-  - Proof bundle: `reports/proof/2026-02-19T06-27-00/`
-  - Note: console report includes one `404` static-resource error on `/sku/1014-011-639` (`console-errors.txt`).
+- `npm run ai:memory:check` ✅
+- `npm run ai:checkpoint` ✅
+  - Context pack: `reports/context-packs/2026-02-19T09-48-12/context-pack.md`
+- `npm run verify:fast` N/A (docs-only; no runtime code-path impact)
+- `npm run e2e:smoke` N/A (docs-only; no route/form/API/navigation/UI-flow change)
+- `npm run e2e:full` N/A (docs-only; FULL triggers not applicable)
+
+---

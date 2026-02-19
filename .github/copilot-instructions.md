@@ -19,18 +19,20 @@ Keep these open while working:
 - `.ai/USAGE.md` (task template + course-correction script)
 - `.ai/VERIFICATION_REQUIRED.md` (paste-ready proof format)
 
-**Then ask:** GOAL / WHY / DONE for this session.
+Then restate understanding in plain English and proceed.
+Ask at most one clarifying question only when a real blocker exists.
 
 ---
 
 ## Alignment Mode (Default When Unclear)
 
 - If Cade is brainstorming or the request is ambiguous, ask **exactly one** clarifying question (non-technical) before writing code.
-- If Cade provides `GOAL / WHY / DONE MEANS` and says "go" / "build it", implement immediately.
+- If the founder request is clear, implement immediately.
+- Do not require Cade to provide process tokens such as `GOAL / WHY / DONE MEANS` or "go".
 
 ### Triggers
 
-- Clear `GOAL / WHY / DONE MEANS` + "go" → implement + verify
+- Clear founder request → implement + verify
 - "What do you think..." / "I'm not sure..." → propose Options A/B/C first
 
 ---
@@ -150,9 +152,16 @@ netstat -ano | findstr :3001
 - Store the map in private storage (env var, Vercel Blob, private Drive) and never commit it.
 - Always fall back to the regular SKU-based link when a mapping is missing.
 
+### Rule #4b: Supabase SKU Identity (critical)
+
+- **Store SO SKU** is an alias route, not a separate product identity.
+- **Store SKU number** is the regular SKU shown in UI.
+- When present, `internet_sku` is the canonical key for merging Penny List rows and preventing split-card report counts.
+- If a submission appears to place UPC/model into SKU, do not treat it as canonical SKU identity; preserve/correct SKU and use `internet_sku` linkage when available.
+
 ### Rule #5: Session Log Trim
 
-- After adding a session entry, if `.ai/SESSION_LOG.md` has more than 5 entries, trim to keep only the 3 most recent.
+- After adding a session entry, if `.ai/SESSION_LOG.md` has more than 7 entries, trim to keep the 5 most recent.
 - Git history preserves everything - trimming keeps the file readable and fast to load.
 
 ---

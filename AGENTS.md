@@ -73,6 +73,13 @@ When Cade posts `/manual` with pasted JSON in chat:
 
 This command supports single-item JSON, arrays, and keyed-object payloads.
 
+**Identity guardrail for Manual Add / Supabase work:**
+
+- Treat **Store SO SKU** as an alias path, not a different product.
+- Treat **store SKU number** as the normal SKU identifier shown in UI.
+- When present, `internet_sku` is the canonical cross-SKU identity key for merging report rows.
+- If submission data looks like wrong-field input (for example UPC/model in SKU), do not force it as SKU identity; request/correct the real store SKU and keep the row linked by `internet_sku` when available.
+
 ---
 
 ## Alignment Mode (Default When Unclear)
@@ -275,6 +282,7 @@ Rules:
 - SKU rules are the single source of truth in `lib/sku.ts`
 - Enforce SKU validation on client and server
 - Keep honeypot + basic rate limiting on submissions
+- For Supabase aggregation/upserts, merge SO SKU and regular SKU as one item when `internet_sku` matches.
 - `data/penny-list.json` is a local fixture for dev/test fallback only. Never use it to upsert live Penny List data; live writes must go to Supabase (`Penny List` / Item Cache workflows).
 
 ---

@@ -1,5 +1,13 @@
 import Link from "next/link"
-import { BookOpen, Calendar, CheckCircle2, Search, ShoppingCart, Store } from "lucide-react"
+import {
+  BookOpen,
+  Calendar,
+  CheckCircle2,
+  HelpCircle,
+  Search,
+  ShoppingCart,
+  Store,
+} from "lucide-react"
 
 const chapters = [
   {
@@ -43,6 +51,13 @@ const chapters = [
     icon: CheckCircle2,
     desc: "Common misconceptions debunked with evidence.",
     href: "/facts-vs-myths",
+  },
+  {
+    title: "FAQ & Quick Reference",
+    slug: "faq",
+    icon: HelpCircle,
+    desc: "Answers to the most common questions on finding, verifying, and checking out penny items.",
+    href: "/faq",
   },
 ]
 

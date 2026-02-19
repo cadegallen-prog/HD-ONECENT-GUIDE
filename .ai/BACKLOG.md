@@ -1,6 +1,6 @@
 # Backlog (Top Priority Items)
 
-**Last updated:** Feb 19, 2026 (added founder-requested resilience/diversification contingency lane)
+**Last updated:** Feb 19, 2026 (added collaboration continuity execution lane with analytics/search/MCP guardrails)
 **Rule:** Keep ≤10 items. Archive completed/deferred items.
 
 **Auto-archive:** Full backlog history preserved in `archive/backlog-history/`
@@ -161,6 +161,24 @@ Each AI session should:
 - **Plan artifacts:**
   - `.ai/impl/pennycentral-resilience-diversification-plan.md`
   - `.ai/topics/RESILIENCE_GROWTH_CURRENT.md`
+
+### 9. Collaboration Continuity Loop (Analytics/Search/MCP Included)
+
+- **Problem:** Future agents can drift in communication quality and operational visibility unless continuity expectations are translated into repeatable execution behavior.
+- **Done means:**
+  - Sessions that touch growth/SEO/IA include explicit evidence inputs (GA4/Search Console when relevant) and fail-closed status language when data is missing.
+  - Sessions that touch tooling/capability include MCP parity/fallback disclosure against `.ai/MCP_BASELINE.md`.
+  - Every meaningful session yields at least one explicit next task in backlog/state/session log so founder input stays minimal.
+  - Analytics-focused sessions may produce `reports/analytics-weekly/<YYYY-MM-DD>/summary.md` using `.ai/ANALYTICS_WEEKLY_REVIEW.md` when that lane is relevant.
+  - MCP capability parity is checked against `.ai/MCP_BASELINE.md`; any missing capability is logged with fallback and one explicit founder action only when absolutely required.
+  - Growth/SEO claims stay fail-closed: if GA4 or Search Console coverage is missing, status is `BLOCKED` or `INCONCLUSIVE` and no success claim is made.
+- **Canonical references:**
+  - `.ai/topics/ANALYTICS_CONTRACT.md`
+  - `.ai/ANALYTICS_WEEKLY_REVIEW.md`
+  - `.ai/MCP_BASELINE.md`
+  - `.ai/MCP_SETUP.md`
+  - `.ai/TOOLING_MANIFEST.md`
+- **First default task for future agents:** on the next growth/SEO-oriented session, produce one `reports/analytics-weekly/<YYYY-MM-DD>/summary.md` snapshot and queue the top 1-3 high-impact actions in this backlog; otherwise apply this continuity loop to the active top-priority lane.
 
 ---
 

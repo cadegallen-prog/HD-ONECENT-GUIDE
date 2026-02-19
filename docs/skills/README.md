@@ -12,6 +12,8 @@ Short, task-focused guides to avoid repo-wide searching.
 
 ## Skills
 
+- [supabase-penny-identity-upsert](./supabase-penny-identity-upsert.md) — **When to use:** Penny List rows split across SO SKU vs regular SKU, report counts look wrong, or manual upsert behavior is confusing.
+
 - [solo-dev-ads-approval-triage](./solo-dev-ads-approval-triage.md) — **When to use:** You want a low-stress, repeatable triage flow after AdSense/Ad Manager approval rejections.
 - [legal-sitemap-trust-pages](./legal-sitemap-trust-pages.md) — **When to use:** You need a complete sitemap + legal/trust page package (URL architecture, nav placement, draft policy copy, and CCPA/CPRA choices route).
 - [repo-map](./repo-map.md) — **When to use:** You’re unsure where things live (pages, data, scripts, tests).

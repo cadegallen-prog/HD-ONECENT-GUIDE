@@ -1,6 +1,6 @@
-# PennyCentral Resilience + Diversification Plan (Planning Only)
+# PennyCentral Resilience + Diversification Plan
 
-**Status:** READY FOR IMPLEMENTATION (Phase 1 queue prepared)  
+**Status:** PHASE 1 IN PROGRESS (`R1` + `R2` + `R3` completed; `R4` next)  
 **Created:** 2026-02-19  
 **Last updated:** 2026-02-19  
 **Owner:** Cade (founder)
@@ -216,13 +216,89 @@ When Cade is offline or overloaded:
 
 ## 6) Execution Queue (Ready Now)
 
-| ID  | Task                                                                              | Approval Needed                   | First file(s)                                                                 | Expected impact                                       |
-| --- | --------------------------------------------------------------------------------- | --------------------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------- |
-| R1  | Draft canonical Worth-It Filter content scaffold (guide copy only)                | Yes (UI copy touches)             | `components/guide/sections/ResponsibleHunting.tsx`, `app/guide/page.tsx`      | Reduces beginner overwhelm; improves decision quality |
-| R2  | Define metrics contract for diversification (non-FB mix, recurring-value signals) | No (docs/analytics contract only) | `.ai/topics/ANALYTICS_CONTRACT.md`, `.ai/topics/RESILIENCE_GROWTH_CURRENT.md` | Enables measurable progress                           |
-| R3  | Add internal-link plan for new adjacent-intent pages                              | Yes (IA/copy changes)             | `app/page.tsx`, `components/navbar.tsx`, `components/footer.tsx`              | Improves discoverability and survivability            |
-| R4  | Build weekly "Decision Quality" digest section spec                               | No (planning/doc)                 | `app/api/cron/send-weekly-digest/route.ts`, `emails/*`, `.ai/impl/*`          | Recurrent value beyond penny-only spikes              |
-| R5  | Prepare first non-penny-adjacent article briefs from founder heuristics           | No (docs)                         | `docs/` or `.ai/topics/` planning artifacts                                   | Seeds organic diversification backlog                 |
+| ID  | Task                                                                    | Approval Needed                   | First file(s)                                                                          | Expected impact                                       |
+| --- | ----------------------------------------------------------------------- | --------------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| R1  | ✅ Completed - Worth-It Filter scaffold on guide hub                    | Yes (UI copy touches)             | `components/guide/sections/ResponsibleHunting.tsx`, `app/guide/page.tsx`               | Reduces beginner overwhelm; improves decision quality |
+| R2  | ✅ Completed - diversification metrics contract hardened                | No (docs/analytics contract only) | `.ai/topics/ANALYTICS_CONTRACT.md`, `.ai/topics/RESILIENCE_GROWTH_CURRENT.md`          | Enables measurable progress                           |
+| R3  | ✅ Completed - Option B balanced discoverability links                  | Yes (IA/copy changes)             | `app/page.tsx`, `app/guide/page.tsx`, `components/navbar.tsx`, `components/footer.tsx` | Improves discoverability and survivability            |
+| R4  | Build weekly "Decision Quality" digest section spec                     | No (planning/doc)                 | `app/api/cron/send-weekly-digest/route.ts`, `emails/*`, `.ai/impl/*`                   | Recurrent value beyond penny-only spikes              |
+| R5  | Prepare first non-penny-adjacent article briefs from founder heuristics | No (docs)                         | `docs/` or `.ai/topics/` planning artifacts                                            | Seeds organic diversification backlog                 |
+
+---
+
+## 6A) R3 Approval Proposal (Prepared 2026-02-19)
+
+R3 is approval-gated because it changes user-facing IA/copy. Provide one explicit founder choice before implementation.
+
+### Option A - Minimal Internal-Link Layer
+
+- Scope:
+  - Add one "Decision Quality" internal-link block on `app/page.tsx`.
+  - Add one matching internal-link block on `app/guide/page.tsx`.
+  - No navbar/footer changes.
+- Time/risk:
+  - Lowest effort and lowest regression risk.
+  - Lower discoverability lift vs options B/C.
+- Rollback:
+  - Revert `app/page.tsx` and `app/guide/page.tsx`.
+- Proof plan:
+  - `npm run verify:fast`
+  - `npm run e2e:smoke`
+  - `npm run lint:colors`
+  - `npm run ai:proof -- -- --mode=test / /guide`
+
+### Option B - Balanced Discoverability (Recommended)
+
+- Scope:
+  - All Option A changes.
+  - Add one Guide-adjacent internal link entry in `components/navbar.tsx`.
+  - Add one matching footer discoverability link in `components/footer.tsx`.
+- Time/risk:
+  - Medium effort, medium regression risk (navigation touches).
+  - Best balance of visibility and safety for Phase 1 continuity.
+- Rollback:
+  - Revert `app/page.tsx`, `app/guide/page.tsx`, `components/navbar.tsx`, `components/footer.tsx`.
+- Proof plan:
+  - `npm run verify:fast`
+  - `npm run e2e:smoke`
+  - `npm run lint:colors`
+  - `npm run ai:proof -- -- --mode=test / /guide /penny-list`
+
+### Option C - Aggressive IA Push
+
+- Scope:
+  - All Option B changes.
+  - Add persistent adjacent-intent link clusters in both header and footer with multi-link expansion.
+  - Add homepage section-level link group for adjacent-intent pages.
+- Time/risk:
+  - Highest effort and highest regression risk (navigation clutter risk + mobile nav complexity).
+  - Highest potential discoverability lift if executed cleanly.
+- Rollback:
+  - Revert all IA/copy edits in home/nav/footer surfaces.
+- Proof plan:
+  - `npm run verify:fast`
+  - `npm run e2e:smoke`
+  - `npm run lint:colors`
+  - `npm run ai:proof -- -- --mode=test / /guide /penny-list /faq`
+
+## 6B) R3 Implementation Status (Completed 2026-02-19)
+
+- Founder approval used: Option `B` (balanced discoverability).
+- Runtime surfaces updated:
+  - `app/page.tsx`: new Decision Quality shortcut block to `/in-store-strategy`.
+  - `app/guide/page.tsx`: new Decision Quality next-step block to `/in-store-strategy`.
+  - `components/navbar.tsx`: added one `Decision Quality` nav item.
+  - `components/footer.tsx`: added one matching `Decision Quality` link.
+- Regression coverage updated:
+  - `tests/smoke-critical.spec.ts`
+  - `tests/basic.spec.ts`
+- Verification artifacts:
+  - `npm run ai:memory:check` ✅
+  - `$env:NEXT_PRIVATE_BUILD_WORKER='1'; npm run verify:fast` ✅
+  - `$env:NEXT_PRIVATE_BUILD_WORKER='1'; npm run e2e:smoke` ✅
+  - `npm run lint:colors` ✅
+  - `npm run ai:proof -- -- --mode=test / /guide /penny-list` ✅
+    - Proof bundle: `reports/proof/2026-02-19T10-19-37/`
 
 ---
 
@@ -234,12 +310,13 @@ Source: `python C:\Users\cadeg\.codex\skills\pc-plan-drift-check\scripts\drift_c
 - Risky active-route `includes(...)` logic: none found.
 - Touch-target sub-44px hints: none found.
 - Documentation icon-language drift still exists in legacy planning artifacts (bookmark vs heart wording in older docs). Non-blocking for this plan but should be cleaned during adjacent docs passes.
+- R3 prep refresh (`.ai/_tmp/drift-check.md` regenerated on 2026-02-19): no new runtime blockers; same legacy-doc icon-language drift remains non-blocking.
 
 ---
 
-## 8) Out of Scope (This Session)
+## 8) Out of Scope (Current Phase 1 Continuation)
 
-- Runtime implementation of new routes/components.
+- Any R3 Option C IA expansion beyond the approved Option B scope.
 - Any dependency additions.
 - Database migrations.
 - Monetization config changes in production.
