@@ -4,6 +4,7 @@ import { validateSku } from "@/lib/sku"
 import { getSupabaseClient, getSupabaseServiceRoleClient } from "@/lib/supabase/client"
 import { enrichHomeDepotSkuWithSerpApi } from "@/lib/enrichment/serpapi-home-depot-enrich"
 import { getSerpApiDeliveryZip, SerpApiCreditsExhaustedError } from "@/lib/serpapi/home-depot"
+import { isLowQualityItemName, shouldPreferEnrichedName } from "@/lib/item-name-quality"
 
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000 // 1 hour
 const RATE_LIMIT_MAX = 30 // Allows batch submissions (e.g., stack of receipts)
@@ -311,6 +312,7 @@ function hasCanonicalGap(
   >
 ): boolean {
   if (!hasNonEmptyText(row.item_name)) return true
+  if (isLowQualityItemName(row.item_name, row.brand)) return true
   if (!hasNonEmptyText(row.brand)) return true
   if (!hasNonEmptyText(row.image_url)) return true
   if (!hasNonEmptyText(row.home_depot_url)) return true
@@ -427,8 +429,14 @@ async function maybeRealtimeSerpApiEnrich(
     const provEntry = { source: "serpapi", at: nowIso, delivery_zip: deliveryZip }
     const patch: Record<string, unknown> = {}
 
-    if (!hasNonEmptyText(typedRow.item_name) && hasNonEmptyText(result.item_name)) {
-      patch.item_name = result.item_name
+    if (
+      shouldPreferEnrichedName(
+        typedRow.item_name,
+        result.item_name,
+        typedRow.brand || result.brand || null
+      )
+    ) {
+      patch.item_name = result.item_name?.trim()
       nextProv.item_name = provEntry
     }
     if (!hasNonEmptyText(typedRow.brand) && hasNonEmptyText(result.brand)) {
@@ -636,6 +644,16 @@ export async function POST(request: NextRequest) {
     const enrichment = await lookupSelfEnrichment(supabase, normalizedSku)
 
     // Build payload with enrichment data merged in (only include enrichment fields when present)
+    const userItemName = body.itemName.trim()
+    const enrichmentItemName = enrichment?.item_name?.trim()
+    const preferredItemName = shouldPreferEnrichedName(
+      userItemName,
+      enrichmentItemName,
+      enrichment?.brand ?? null
+    )
+      ? enrichmentItemName
+      : userItemName
+
     const payload: Record<string, unknown> = {
       // User-provided canonical data (always from user input)
       home_depot_sku_6_or_10_digits: normalizedSku,
@@ -645,8 +663,8 @@ export async function POST(request: NextRequest) {
       notes_optional: body.notes?.trim() || null,
       timestamp: new Date().toISOString(),
 
-      // Enrichment name override (preferred) or user-provided item name
-      item_name: enrichment?.item_name?.trim() || body.itemName.trim(),
+      // Prefer enriched name only when it is clearly better than user-provided text.
+      item_name: preferredItemName,
     }
 
     if (enrichment) {

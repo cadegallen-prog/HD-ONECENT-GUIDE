@@ -391,7 +391,17 @@ export default async function SkuDetailPage({ params }: PageProps) {
                   </span>
                 )}
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[var(--text-primary)] leading-tight mb-4">
-                  {brand && name.startsWith(brand) ? name.substring(brand.length).trim() : name}
+                  {(() => {
+                    if (!brand) return name
+                    // Strip brand prefix only if what remains is a meaningful descriptor (>= 3 words or >= 20 chars)
+                    const stripped = name.startsWith(brand)
+                      ? name.substring(brand.length).trim()
+                      : name
+                    const isStripped = stripped !== name
+                    const isMeaningful =
+                      stripped.split(/\s+/).filter(Boolean).length >= 3 || stripped.length >= 20
+                    return isStripped && !isMeaningful ? name : stripped
+                  })()}
                 </h1>
 
                 {/* Product Identifiers Section */}

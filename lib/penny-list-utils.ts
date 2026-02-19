@@ -70,6 +70,11 @@ export function normalizeProductName(
     normalized = normalized.replace(withoutPeriod, `$1 ${unit}.`)
   }
 
+  // Preserve model-like tokens that include letters + digits (e.g. FLX65R, M18, HD58302-174405).
+  normalized = normalized.replace(/\b([A-Za-z]+[0-9][A-Za-z0-9-]*)\b/g, (token) =>
+    token.toUpperCase()
+  )
+
   // Truncate if needed
   if (normalized.length > maxLength) {
     normalized = normalized.slice(0, maxLength - 3).trim() + "..."

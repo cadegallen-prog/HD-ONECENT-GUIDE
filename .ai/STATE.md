@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 18, 2026 (removed shared "Back to Penny List" from trust/legal pages + prior nav/footer cleanup)
+**Last updated:** Feb 19, 2026 (submit-flow name quality guard + Item Cache warmer success)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,46 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-19 (Submit-flow name quality guard + Item Cache refresh):** Added durable name-quality logic so generic names no longer win over better enrichment names, then confirmed Item Cache warmer health.
+  - **Runtime/API hardening shipped:**
+    - Added `lib/item-name-quality.ts` with `isLowQualityItemName` + `shouldPreferEnrichedName`.
+    - `app/api/submit-find/route.ts` now:
+      - prefers enrichment `item_name` only when it is clearly better than user-entered text,
+      - treats low-quality existing names as canonical gaps for realtime enrichment,
+      - allows realtime SerpApi to replace low-quality non-empty names when a higher-quality name is returned.
+  - **Test coverage shipped:**
+    - Added `tests/item-name-quality.test.ts`.
+    - Added route regression in `tests/submit-find-route.test.ts` to prevent low-quality enrichment names from overwriting better user input.
+  - **Operational verification:**
+    - `npm run warm:staging` ✅
+      - `upserted_to_staging: 1107`
+      - `error_count: 0`
+  - **Code verification:**
+    - `npm run test:unit` ✅
+    - `$env:NEXT_PRIVATE_BUILD_WORKER='1'; npm run verify:fast` ✅
+    - `$env:NEXT_PRIVATE_BUILD_WORKER='1'; npm run e2e:smoke` ✅
+
+- **2026-02-19 (Coast headlamp listing name correction, SKU 1014011639):** Reviewed prior agent output, confirmed source-data mismatch, and corrected both data and display behavior so the listing no longer degrades to a generic one-word name.
+  - **Root-cause findings:**
+    - Live `Penny List` row stored `item_name = "Coast headlamp"` while enrichment fields were already populated.
+    - Prior SKU-page guard prevented `Coast headlamp` -> `headlamp` collapse on detail pages, but list/table normalization still needed model-token casing preservation.
+  - **Data correction shipped (live):**
+    - Ran `manual:enrich` for `1014011639` with corrected title:
+      - `Coast FLX65R 700 Lumen Bilingual Voice Control Rechargeable LED Headlamp`
+    - Manual flow updated Item Cache + existing Penny List row with manual provenance (`item_name.source = manual`).
+  - **Runtime hardening shipped:**
+    - `lib/penny-list-utils.ts` now preserves model-like alphanumeric tokens in uppercase (`FLX65R`, `M18`, etc.) during `normalizeProductName`.
+    - Added regression assertions in `tests/penny-list-utils.test.ts`.
+    - Kept/validated SKU-page meaningful-strip guard in `app/sku/[sku]/page.tsx`.
+  - **Verification:**
+    - `npm run manual:enrich -- -- --json {...}` ✅
+      - Report: `reports/manual-enrich/2026-02-19T06-12-21.178Z.json`
+    - DB verification query for SKU `1014011639` ✅ (name + provenance updated)
+    - `$env:NEXT_PRIVATE_BUILD_WORKER='1'; npm run verify:fast` ✅
+    - `$env:NEXT_PRIVATE_BUILD_WORKER='1'; npm run e2e:smoke` ✅
+    - `npm run ai:proof -- test /penny-list /sku/1014-011-639` ✅
+      - Proof bundle: `reports/proof/2026-02-19T06-27-00/`
 
 - **2026-02-18 (Remove "Back to Penny List" from trust/legal pages):** Removed the shared backlink component output so About/Contact/Privacy/Terms/Do-Not-Sell pages no longer show "Back to Penny List".
   - **Runtime UI cleanup shipped:**

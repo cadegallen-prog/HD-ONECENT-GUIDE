@@ -4,6 +4,7 @@ import {
   extractStateFromLocation,
   filterValidPennyItems,
   formatRelativeDate,
+  normalizeProductName,
 } from "../lib/penny-list-utils"
 import type { PennyItem } from "../lib/fetch-penny-data"
 
@@ -80,6 +81,18 @@ assert.strictEqual(formatRelativeDate("2025-11-26", new Date("2025-12-10")), "14
 assert.strictEqual(formatRelativeDate("2025-11-25", new Date("2025-12-10")), "Nov 24")
 assert.strictEqual(formatRelativeDate("invalid-date", new Date("2025-12-10")), "invalid-date")
 assert.strictEqual(formatRelativeDate("2025-12-11", new Date("2025-12-10")), "Dec 10")
+
+// Product name normalization
+assert.strictEqual(
+  normalizeProductName("Coast FLX65R 700 Lumen Bilingual Voice Control Rechargeable LED Headlamp", {
+    brand: "Coast",
+  }),
+  "FLX65R 700 Lumen Bilingual Voice Control Rechargeable LED Headlamp"
+)
+assert.strictEqual(
+  normalizeProductName("Milwaukee M18 FUEL Hammer Drill/Driver Kit", { brand: "Milwaukee" }),
+  "M18 Fuel Hammer Drill/Driver Kit"
+)
 
 // Validation - comprehensive edge cases
 const complexValidation = filterValidPennyItems([

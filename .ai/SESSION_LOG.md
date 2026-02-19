@@ -4,6 +4,71 @@
 
 ---
 
+## 2026-02-19 - Codex - Submit-Flow Name Quality Guard (Prevent Generic Name Lock-In)
+
+**Goal:** Reduce founder manual cleanup by preventing low-quality item names from persisting when better enrichment names are available.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- Added `lib/item-name-quality.ts` with deterministic helpers:
+  - `isLowQualityItemName(...)`
+  - `shouldPreferEnrichedName(...)`
+- Updated `app/api/submit-find/route.ts`:
+  - Main payload now prefers enrichment `item_name` only when it is clearly better than user text.
+  - Realtime SerpApi path can now replace an existing low-quality non-empty `item_name` when a better name is returned.
+  - Canonical-gap detection now treats low-quality `item_name` as a gap, allowing quality remediation.
+- Added regression coverage:
+  - `tests/item-name-quality.test.ts` (quality heuristics)
+  - `tests/submit-find-route.test.ts` new case ensuring low-quality enrichment does **not** overwrite a better user name.
+
+### Verification
+
+- `npm run test:unit` ✅
+- `$env:NEXT_PRIVATE_BUILD_WORKER='1'; npm run verify:fast` ✅
+- `$env:NEXT_PRIVATE_BUILD_WORKER='1'; npm run e2e:smoke` ✅
+- Operational check: `npm run warm:staging` ✅
+  - `upserted_to_staging: 1107`
+  - `error_count: 0`
+
+---
+
+## 2026-02-19 - Codex - Coast Headlamp Name Correction (SKU 1014011639)
+
+**Goal:** Review prior agent work on the Coast headlamp listing and correct the wrong display name path end-to-end.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- Audited the prior SKU-page patch and traced the active data path for `SKU 1014011639`.
+- Confirmed live row issue: `item_name` was `"Coast headlamp"` while enrichment fields (brand/model/upc/image/internet SKU/url/price) were already present.
+- Ran the canonical manual-enrichment workflow for this SKU with corrected product title:
+  - `Coast FLX65R 700 Lumen Bilingual Voice Control Rechargeable LED Headlamp`
+  - This updated both Item Cache and the existing `Penny List` row/provenance.
+- Kept the SKU page brand-strip guard in `app/sku/[sku]/page.tsx` (prevents collapsing to one-word generic names).
+- Added a list/table display normalization hardening in `lib/penny-list-utils.ts` so model-style tokens (letters+digits) stay uppercase (for example `FLX65R`, `M18`).
+- Added regression assertions in `tests/penny-list-utils.test.ts` for the new normalization behavior.
+
+### Verification
+
+- `npm run manual:enrich -- -- --json {...}` ✅
+  - Summary: `cache_upserted: 1`, `penny_rows_updated_by_manual: 1`, `penny_rows_failed: 0`
+  - Report: `reports/manual-enrich/2026-02-19T06-12-21.178Z.json`
+- DB verification query for `home_depot_sku_6_or_10_digits = 1014011639` ✅
+  - Confirmed `item_name` now equals `Coast FLX65R 700 Lumen Bilingual Voice Control Rechargeable LED Headlamp`
+  - Confirmed `enrichment_provenance.item_name.source = manual`
+- `npx tsx -e "normalizeProductName(...)"` ✅
+  - Confirmed list-display normalization now yields `FLX65R 700 Lumen Bilingual Voice Control Rechargeable LED Headlamp`
+- `$env:NEXT_PRIVATE_BUILD_WORKER='1'; npm run verify:fast` ✅
+- `$env:NEXT_PRIVATE_BUILD_WORKER='1'; npm run e2e:smoke` ✅
+- `npm run ai:proof -- test /penny-list /sku/1014-011-639` ✅
+  - Proof bundle: `reports/proof/2026-02-19T06-27-00/`
+  - Note: console report includes one `404` static-resource error on `/sku/1014-011-639` (`console-errors.txt`).
+
+---
+
 ## 2026-02-18 - Codex - Remove "Back to Penny List" Across Trust/Legal Pages
 
 **Goal:** Remove the shared "Back to Penny List" UI from About/Contact/Privacy/Terms/Do-Not-Sell pages.
@@ -102,94 +167,3 @@
 - `npx cross-env PLAYWRIGHT_BASE_URL=https://www.pennycentral.com playwright test tests/adsense-readiness.spec.ts --project=chromium-desktop-light --workers=1` ✅ (4/4 passed)
 - `npx cross-env PLAYWRIGHT_BASE_URL=https://www.pennycentral.com playwright test tests/privacy-policy.spec.ts --project=chromium-desktop-light --workers=1` ✅ (2/2 passed)
 - `npx tsx --import ./tests/setup.ts --test tests/disclosure-claims-accuracy.test.ts tests/sitemap-canonical.test.ts` ✅ (5/5 passed)
-
----
-
-## 2026-02-18 - Codex - Remove Retired Rakuten/Donation Disclosures + Disable Legacy Go Routes
-
-**Goal:** Remove stale affiliate/referral/donation references from the live website and align legal/transparency copy to the current monetization setup.
-
-**Status:** ✅ Completed (runtime copy cleaned, outdated referral routes neutralized, tests updated).
-
-### Changes
-
-- Removed outdated referral/disclosure language from user-facing trust pages:
-  - `app/transparency/page.tsx`
-  - `app/privacy-policy/page.tsx`
-  - `app/terms-of-service/page.tsx`
-- Updated legal wording from affiliate/referral framing to advertising-only framing.
-- Removed stale Rakuten constant from `lib/constants.ts`.
-- Neutralized legacy referral route behavior:
-  - `app/go/rakuten/route.ts` now redirects to `/transparency`
-  - `app/go/befrugal/route.ts` now redirects to `/transparency`
-- Updated assertions to match current product reality:
-  - `tests/disclosure-claims-accuracy.test.ts`
-  - `tests/privacy-policy.spec.ts`
-  - `tests/support.spec.ts`
-- Added a dedicated repeatable skill for future drift prevention:
-  - `docs/skills/legal-monetization-copy-guard.md`
-  - registered in `docs/skills/README.md`
-  - linked from `docs/skills/privacy-compliance-ad-readiness.md`
-- Added a founder-facing command bank + decision tree so skill selection is automatic from Cade's perspective:
-  - `docs/FOUNDER-COMMAND-CENTER.md`
-  - updated `docs/skills/README.md` to explicitly remove skill-name memory burden
-  - linked command center in `README.md`
-  - corrected stale affiliate section in `README.md` to match retired referral routes
-
-### Verification
-
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `npm run ai:proof -- /transparency /privacy-policy /terms-of-service` ✅
-  - `reports/proof/2026-02-18T03-38-02/transparency-light.png`
-  - `reports/proof/2026-02-18T03-38-02/transparency-dark.png`
-  - `reports/proof/2026-02-18T03-38-02/privacy-policy-light.png`
-  - `reports/proof/2026-02-18T03-38-02/privacy-policy-dark.png`
-  - `reports/proof/2026-02-18T03-38-02/terms-of-service-light.png`
-  - `reports/proof/2026-02-18T03-38-02/terms-of-service-dark.png`
-  - `reports/proof/2026-02-18T03-38-02/console-errors.txt`
-- `npm run ai:memory:check` ✅
-- `npm run check:docs-governance` ✅
-- `npm run ai:checkpoint` ✅
-  - Context pack artifact: `reports/context-packs/2026-02-18T05-27-52/context-pack.md`
-
----
-
-## 2026-02-18 - Codex - About/Contact Trust Restoration (Founder Story + Email-Only Contact)
-
-**Goal:** Resolve founder-reported trust regressions by restoring the About page's real-person narrative and simplifying Contact to a clean email-first workflow.
-
-**Status:** ✅ Completed (about narrative restored, contact form removed, privacy routing clarified).
-
-### Changes
-
-- Root-cause audit completed:
-  - Confirmed the major rewrite happened in `39b140e` (Resolve PR conflicts: trust UX privacy + transparency).
-  - Confirmed `d522bff` added the contact-page deletion panel referencing Supabase/Resend.
-- About page restored to founder-authentic direction in `app/about/page.tsx`:
-  - Reintroduced founder story and build origin context.
-  - Reintroduced explicit human identity and byline (`Cade Allen`).
-  - Reintroduced community leadership/admin mentions and hunting philosophy.
-  - Added `Organization` + `AboutPage` JSON-LD with founder as `Person` (`Cade Allen`) for stronger real-person trust signals.
-  - Kept canonical metadata and token-safe styling.
-- Contact page simplified in `app/contact/page.tsx`:
-  - Removed the insecure `mailto` form block entirely.
-  - Removed repetitive same-email-per-row list and replaced with one clear primary email path.
-  - Removed the standalone Data Deletion panel from Contact.
-  - Added explicit links to `/privacy-policy` and `/do-not-sell-or-share` for rights/deletion flows.
-  - Kept response-window guidance concise.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run ai:checkpoint` ✅
-  - Context pack artifact: `reports/context-packs/2026-02-18T03-31-08/context-pack.md`
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `npm run ai:proof -- /about /contact` ✅
-  - `reports/proof/2026-02-18T03-28-16/about-light.png`
-  - `reports/proof/2026-02-18T03-28-16/about-dark.png`
-  - `reports/proof/2026-02-18T03-28-16/contact-light.png`
-  - `reports/proof/2026-02-18T03-28-16/contact-dark.png`
-  - `reports/proof/2026-02-18T03-28-16/console-errors.txt`
-- Note: proof bundle includes known dev-mode hydration mismatch noise from global script injection order; no new route-specific runtime failures were observed.

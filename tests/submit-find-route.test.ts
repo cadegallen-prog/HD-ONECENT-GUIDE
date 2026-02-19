@@ -215,6 +215,78 @@ test("always overwrites item_name with enrichment canonical name", async () => {
   clearSupabaseMocks()
 })
 
+test("keeps user item_name when enrichment name is lower quality", async () => {
+  const inserted: Record<string, unknown>[] = []
+
+  const anonReadClient: any = {
+    from: () => ({
+      select: () => ({
+        eq: () => ({
+          limit: () => ({
+            maybeSingle: async () => ({
+              data: {
+                item_name: "Coast headlamp",
+                brand: "Coast",
+                retail_price: 19.88,
+                image_url: "https://example.com/headlamp.jpg",
+              },
+              error: null,
+            }),
+          }),
+        }),
+      }),
+    }),
+  }
+
+  const serviceRoleClient: any = {
+    from: () => ({
+      insert: (payload: Record<string, unknown>) => {
+        inserted.push(payload)
+        return {
+          select: () => ({
+            single: async () => ({ data: { id: "test-uuid-keep-user-name" }, error: null }),
+          }),
+        }
+      },
+    }),
+    rpc: async () => ({ data: { enriched: false }, error: null }),
+  }
+
+  installSupabaseMocks({ submitAnon: anonReadClient, submitServiceRole: serviceRoleClient })
+
+  const { POST } = await import("../app/api/submit-find/route")
+  const req = new NextRequest("http://localhost/api/submit-find", {
+    method: "POST",
+    body: JSON.stringify({
+      itemName: "Coast FLX65R 700 Lumen Bilingual Voice Control Rechargeable LED Headlamp",
+      sku: FIXTURE_SKU,
+      storeCity: "Atlanta",
+      storeState: "GA",
+      dateFound: new Date().toISOString().split("T")[0],
+      quantity: "1",
+      notes: "",
+      website: "",
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      "x-forwarded-for": "203.0.113.31",
+    },
+  })
+
+  const res = await POST(req)
+  assert.strictEqual(res.status, 200)
+  const payload = inserted[0] as Record<string, unknown>
+
+  assert.strictEqual(
+    payload.item_name,
+    "Coast FLX65R 700 Lumen Bilingual Voice Control Rechargeable LED Headlamp"
+  )
+  assert.strictEqual(payload.brand, "Coast")
+  assert.strictEqual(payload.retail_price, 19.88)
+
+  clearSupabaseMocks()
+})
+
 // Date validation tests
 test("accepts date from 15 days ago", async () => {
   const inserted: Record<string, unknown>[] = []
