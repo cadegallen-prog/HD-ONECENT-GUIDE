@@ -15,7 +15,6 @@ import {
   Heart,
   ChevronDown,
   CircleHelp,
-  Target,
 } from "lucide-react"
 import { useTheme } from "@/components/theme-provider"
 import { trackEvent } from "@/lib/analytics"
@@ -116,11 +115,8 @@ export function Navbar() {
       pathname.startsWith("/guide/") ||
       guideSectionLinks.some((item) => pathname === item.href)
     : false
-  const isDecisionQualityRoute = mounted ? pathname === "/in-store-strategy" : false
-
   const navItems = [
     { href: "/guide", label: "Guide", icon: Book, hasDropdown: true },
-    { href: "/in-store-strategy", label: "Decision Quality", icon: Target },
     { href: "/penny-list", label: "Penny List", icon: List },
     { href: "/lists", label: "My List", icon: Heart },
     { href: "/report-find", label: "Report a Find", icon: PlusCircle },
@@ -158,7 +154,7 @@ export function Navbar() {
                   ? item.href === "/lists"
                     ? pathname === "/lists" || pathname.startsWith("/lists/")
                     : item.href === "/guide"
-                      ? isGuideRoute && !isDecisionQualityRoute
+                      ? isGuideRoute
                       : pathname === item.href
                   : false
 
@@ -310,7 +306,7 @@ export function Navbar() {
                   ? item.href === "/lists"
                     ? pathname === "/lists" || pathname.startsWith("/lists/")
                     : item.href === "/guide"
-                      ? isGuideRoute && !isDecisionQualityRoute
+                      ? isGuideRoute
                       : pathname === item.href
                   : false
 

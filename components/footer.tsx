@@ -34,11 +34,6 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/in-store-strategy" className={navLinkClass}>
-                  Decision Quality
-                </Link>
-              </li>
-              <li>
                 <Link href="/penny-list" className={navLinkClass}>
                   Penny List
                 </Link>

@@ -10,14 +10,6 @@ test.describe("critical smoke lane", () => {
         name: /Learn Home Depot penny items\. Check current community finds\./i,
       })
     ).toBeVisible()
-    await expect(
-      page.getByRole("heading", { level: 2, name: /Decision Quality Shortcut/i })
-    ).toBeVisible()
-    const decisionQualityLink = page.getByRole("link", {
-      name: /Open the Decision Quality chapter/i,
-    })
-    await expect(decisionQualityLink).toBeVisible()
-    await expect(decisionQualityLink).toHaveAttribute("href", "/in-store-strategy")
   })
 
   test("critical route /penny-list loads", async ({ page }) => {
@@ -46,12 +38,6 @@ test.describe("critical smoke lane", () => {
     const cta = worthItSection.getByRole("link", { name: /Apply the in-store strategy/i })
     await expect(cta).toBeVisible()
     await expect(cta).toHaveAttribute("href", "/in-store-strategy")
-
-    const decisionQualityLink = page.getByRole("link", {
-      name: /Review the Decision Quality chapter/i,
-    })
-    await expect(decisionQualityLink).toBeVisible()
-    await expect(decisionQualityLink).toHaveAttribute("href", "/in-store-strategy")
   })
 
   test("core interaction works on report-find prefill edit", async ({ page }) => {

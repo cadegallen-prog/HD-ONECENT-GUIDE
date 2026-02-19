@@ -15,8 +15,6 @@ test("navbar shows Guide link after hydration", async ({ page }) => {
 
     const guideLink = mobileMenu.getByRole("link", { name: /^Guide$/i })
     await expect(guideLink).toBeVisible()
-    const decisionQualityLink = mobileMenu.getByRole("link", { name: /^Decision Quality$/i })
-    await expect(decisionQualityLink).toBeVisible()
     const guideToggle = mobileMenu.getByRole("button", { name: /toggle guide chapters/i })
     await expect(guideToggle).toBeVisible()
     await guideToggle.click()
@@ -26,11 +24,6 @@ test("navbar shows Guide link after hydration", async ({ page }) => {
 
   const guideLink = page.getByRole("navigation").getByRole("link", { name: "Guide" }).first()
   await expect(guideLink).toBeVisible()
-  const decisionQualityLink = page
-    .getByRole("navigation")
-    .getByRole("link", { name: /^Decision Quality$/i })
-    .first()
-  await expect(decisionQualityLink).toBeVisible()
   const guideToggle = page
     .getByRole("navigation")
     .getByRole("button", { name: /toggle guide chapters/i })

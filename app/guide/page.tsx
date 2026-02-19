@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 import { TableOfContents } from "@/components/guide/TableOfContents"
 import { EthicalDisclosure } from "@/components/guide/EthicalDisclosure"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
@@ -211,21 +210,6 @@ export default function GuideHubPage() {
 
           <EthicalDisclosure />
           <ResponsibleHunting />
-          <div className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
-            <h2 className="text-xl font-semibold text-[var(--text-primary)]">
-              Decision Quality Next Step
-            </h2>
-            <p className="mt-2 text-[var(--text-secondary)] leading-relaxed">
-              If you want the shortest route from planning to checkout decisions, jump to the
-              chapter focused on verification flow and worth-it calls.
-            </p>
-            <Link
-              href="/in-store-strategy"
-              className="mt-4 inline-flex items-center gap-1 font-medium text-[var(--link-default)] underline underline-offset-2 hover:text-[var(--link-hover)]"
-            >
-              Review the Decision Quality chapter
-            </Link>
-          </div>
         </section>
 
         <section className="mb-6 space-y-3 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
