@@ -3,29 +3,7 @@
   "redirects": [
     {
       "source": "/ads.txt",
-      "has": [
-        {
-          "type": "host",
-          "value": "pennycentral.com"
-        },
-        {
-          "type": "header",
-          "key": "x-forwarded-proto",
-          "value": "http"
-        }
-      ],
-      "destination": "https://www.pennycentral.com/ads.txt",
-      "permanent": true
-    },
-    {
-      "source": "/ads.txt",
-      "has": [
-        {
-          "type": "host",
-          "value": "pennycentral.com"
-        }
-      ],
-      "destination": "https://www.pennycentral.com/ads.txt",
+      "destination": "https://monu.delivery/adstxt/1/d/65ab12-7f57-43c6-a5b7-76b6b4c6548c.txt",
       "permanent": true
     }
   ],

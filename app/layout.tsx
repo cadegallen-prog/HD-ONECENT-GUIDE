@@ -122,15 +122,16 @@ export default function RootLayout({
       <head>
         {!process.env.PLAYWRIGHT && (
           <script
-            async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5302589080375312"
-            crossOrigin="anonymous"
+            type="text/javascript"
+            src="https://monu.delivery/site/1/d/65ab12-7f57-43c6-a5b7-76b6b4c6548c.js"
+            data-cfasync="false"
           />
         )}
 
         {/* Performance hints for critical third-party origins */}
         <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://www.google-analytics.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://monu.delivery" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://va.vercel-scripts.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://faves.grow.me" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://tile.openstreetmap.org" crossOrigin="anonymous" />

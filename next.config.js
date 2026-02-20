@@ -175,14 +175,13 @@ const nextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              // Ad Networks: Google AdSense (approved), Mediavine Journey/Grow.me (approved), ID5 identity service
-              // Future: Monumetric (under review) - add domains when approved
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://faves.grow.me https://*.grow.me https://cdn.id5-sync.com https://*.id5-sync.com https://ep2.adtrafficquality.google",
+              // Ad Networks: Monumetric (active), Mediavine Journey/Grow.me (active), ID5 identity service
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://va.vercel-scripts.com https://monu.delivery https://*.monu.delivery https://faves.grow.me https://*.grow.me https://cdn.id5-sync.com https://*.id5-sync.com https://ep2.adtrafficquality.google",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: blob: https://*.tile.openstreetmap.org https://*.google-analytics.com https://*.googletagmanager.com https:",
-              "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://*.doubleclick.net https://*.adtrafficquality.google https://va.vercel-scripts.com https://pagead2.googlesyndication.com https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.id5-sync.com https://id5-sync.com",
-              "frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://app.grow.me https://*.grow.me https://*.adtrafficquality.google https://www.google.com",
+              "connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://*.doubleclick.net https://*.adtrafficquality.google https://va.vercel-scripts.com https://monu.delivery https://*.monu.delivery https://nominatim.openstreetmap.org https://*.sentry.io https://*.ingest.us.sentry.io https://*.supabase.co https://faves.grow.me https://*.grow.me https://*.growplow.events https://client-rapi-mediavine.recombee.com https://*.id5-sync.com https://id5-sync.com",
+              "frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://app.grow.me https://*.grow.me https://*.adtrafficquality.google https://www.google.com https://monu.delivery https://*.monu.delivery",
               "frame-ancestors 'none'",
               "object-src 'none'",
               "base-uri 'self'",
