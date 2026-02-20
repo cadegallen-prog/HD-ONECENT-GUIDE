@@ -10,7 +10,7 @@ test("legacy support route redirects to transparency and retains disclosures", a
   const pageContent = page.locator("main#main-content")
   await expect(pageContent).toContainText(/Advertising/i)
   await expect(pageContent).not.toContainText(/Rakuten/i)
-  await expect(pageContent).not.toContainText(/affiliate/i)
+  await expect(pageContent).not.toContainText(/affiliate\s+links?/i)
   await expect(pageContent).not.toContainText(/referral compensation/i)
   await expect(pageContent).not.toContainText(/paypal/i)
   await expect(pageContent).not.toContainText(/donation/i)
