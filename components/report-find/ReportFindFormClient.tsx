@@ -13,6 +13,13 @@ function getRawSku(input: string): string {
   return input.replace(/\D/g, "")
 }
 
+/** Format a number with ordinal suffix (1st, 2nd, 3rd, 4th, 11th, 12th, etc.) */
+function ordinal(n: number): string {
+  const s = ["th", "st", "nd", "rd"]
+  const v = n % 100
+  return n + (s[(v - 20) % 10] || s[v] || s[0])
+}
+
 const USER_STATE_KEY = "pennycentral_user_state"
 
 function ReportFindForm() {
@@ -37,6 +44,11 @@ function ReportFindForm() {
   const [result, setResult] = useState<{
     success: boolean
     message: string
+    stats?: {
+      totalReports: number
+      stateCount: number
+      isFirstReport: boolean
+    }
   } | null>(null)
 
   useEffect(() => {
@@ -171,6 +183,7 @@ function ReportFindForm() {
         setResult({
           success: true,
           message: data.message,
+          stats: data.stats,
         })
         // Reset form
         const today = todayIso || new Date().toLocaleDateString("en-CA")
@@ -487,7 +500,17 @@ function ReportFindForm() {
             )}
             <div className="flex-1">
               <p className="text-sm font-medium text-[var(--text-primary)]">
-                {result.success ? "Thanks! Your find is live on the Penny List." : result.message}
+                {result.success
+                  ? result.stats?.isFirstReport
+                    ? "You\u2019re the first to report this item! Your find is now live for the community."
+                    : result.stats
+                      ? `You\u2019re the ${ordinal(result.stats.totalReports)} person to report this item${
+                          result.stats.stateCount > 1
+                            ? ` across ${result.stats.stateCount} states`
+                            : ""
+                        }.`
+                      : "Thanks! Your find is live on the Penny List."
+                  : result.message}
               </p>
               {result.success && (
                 <>

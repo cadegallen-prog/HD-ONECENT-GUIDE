@@ -762,9 +762,38 @@ export async function POST(request: NextRequest) {
     // Fire-and-forget: never block user response on SerpApi.
     void maybeRealtimeSerpApiEnrich(serviceClient, insertedRow.id)
 
+    // Gratification stats — how many times this SKU has been reported and across how many states.
+    // Enhancement only: if this query fails, we still return a successful response without stats.
+    let stats: { totalReports: number; stateCount: number; isFirstReport: boolean } | null = null
+    try {
+      const { data: skuRows } = await serviceClient
+        .from("Penny List")
+        .select("store_city_state")
+        .eq("home_depot_sku_6_or_10_digits", normalizedSku)
+
+      if (skuRows && skuRows.length > 0) {
+        const totalReports = skuRows.length
+        const states = new Set(
+          skuRows
+            .map((r: { store_city_state: string | null }) =>
+              r.store_city_state?.split(", ").pop()?.trim()
+            )
+            .filter(Boolean)
+        )
+        stats = {
+          totalReports,
+          stateCount: states.size,
+          isFirstReport: totalReports === 1,
+        }
+      }
+    } catch {
+      // Stats are enhancement — silent fallback
+    }
+
     return NextResponse.json({
       success: true,
       message: "Thanks — your find is now on the Penny List.",
+      ...(stats && { stats }),
     })
   } catch (error) {
     // Log unexpected errors with stack trace for debugging

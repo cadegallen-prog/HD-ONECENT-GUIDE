@@ -493,6 +493,222 @@ test("calls non-consuming Item Cache apply RPC after insert", async () => {
   clearSupabaseMocks()
 })
 
+// --- Gratification stats tests ---
+
+test("returns gratification stats with totalReports, stateCount, and isFirstReport", async () => {
+  const anonReadClient: any = {
+    from: () => ({}),
+  }
+  const serviceRoleClient: any = {
+    from: () => ({
+      insert: () => ({
+        select: () => ({
+          single: async () => ({ data: { id: "test-uuid-stats" }, error: null }),
+        }),
+      }),
+      select: () => ({
+        eq: async () => ({
+          data: [
+            { store_city_state: "Atlanta, GA" },
+            { store_city_state: "Denver, CO" },
+            { store_city_state: "Tampa, FL" },
+          ],
+          error: null,
+        }),
+      }),
+    }),
+    rpc: async () => ({ data: { enriched: false }, error: null }),
+  }
+
+  installSupabaseMocks({ submitAnon: anonReadClient, submitServiceRole: serviceRoleClient })
+
+  const { POST } = await import("../app/api/submit-find/route")
+  const req = new NextRequest("http://localhost/api/submit-find", {
+    method: "POST",
+    body: JSON.stringify({
+      itemName: "Test Item",
+      sku: FIXTURE_SKU,
+      storeCity: "Atlanta",
+      storeState: "GA",
+      dateFound: new Date().toISOString().split("T")[0],
+      quantity: "1",
+      notes: "",
+      website: "",
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      "x-forwarded-for": "203.0.113.50",
+    },
+  })
+
+  const res = await POST(req)
+  assert.strictEqual(res.status, 200)
+  const data = await res.json()
+  assert.ok(data.success)
+  assert.ok(data.stats, "Response should include stats")
+  assert.strictEqual(data.stats.totalReports, 3)
+  assert.strictEqual(data.stats.stateCount, 3)
+  assert.strictEqual(data.stats.isFirstReport, false)
+  clearSupabaseMocks()
+})
+
+test("stats show isFirstReport when only one report exists", async () => {
+  const anonReadClient: any = {
+    from: () => ({}),
+  }
+  const serviceRoleClient: any = {
+    from: () => ({
+      insert: () => ({
+        select: () => ({
+          single: async () => ({ data: { id: "test-uuid-first" }, error: null }),
+        }),
+      }),
+      select: () => ({
+        eq: async () => ({
+          data: [{ store_city_state: "Atlanta, GA" }],
+          error: null,
+        }),
+      }),
+    }),
+    rpc: async () => ({ data: { enriched: false }, error: null }),
+  }
+
+  installSupabaseMocks({ submitAnon: anonReadClient, submitServiceRole: serviceRoleClient })
+
+  const { POST } = await import("../app/api/submit-find/route")
+  const req = new NextRequest("http://localhost/api/submit-find", {
+    method: "POST",
+    body: JSON.stringify({
+      itemName: "Test Item",
+      sku: FIXTURE_SKU,
+      storeCity: "Atlanta",
+      storeState: "GA",
+      dateFound: new Date().toISOString().split("T")[0],
+      quantity: "1",
+      notes: "",
+      website: "",
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      "x-forwarded-for": "203.0.113.51",
+    },
+  })
+
+  const res = await POST(req)
+  assert.strictEqual(res.status, 200)
+  const data = await res.json()
+  assert.ok(data.stats)
+  assert.strictEqual(data.stats.totalReports, 1)
+  assert.strictEqual(data.stats.stateCount, 1)
+  assert.strictEqual(data.stats.isFirstReport, true)
+  clearSupabaseMocks()
+})
+
+test("stats fall back gracefully when count query fails", async () => {
+  const anonReadClient: any = {
+    from: () => ({}),
+  }
+  const serviceRoleClient: any = {
+    from: () => ({
+      insert: () => ({
+        select: () => ({
+          single: async () => ({ data: { id: "test-uuid-stats-fail" }, error: null }),
+        }),
+      }),
+      select: () => ({
+        eq: () => {
+          throw new Error("Simulated stats query failure")
+        },
+      }),
+    }),
+    rpc: async () => ({ data: { enriched: false }, error: null }),
+  }
+
+  installSupabaseMocks({ submitAnon: anonReadClient, submitServiceRole: serviceRoleClient })
+
+  const { POST } = await import("../app/api/submit-find/route")
+  const req = new NextRequest("http://localhost/api/submit-find", {
+    method: "POST",
+    body: JSON.stringify({
+      itemName: "Test Item",
+      sku: FIXTURE_SKU,
+      storeCity: "Atlanta",
+      storeState: "GA",
+      dateFound: new Date().toISOString().split("T")[0],
+      quantity: "1",
+      notes: "",
+      website: "",
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      "x-forwarded-for": "203.0.113.52",
+    },
+  })
+
+  const res = await POST(req)
+  assert.strictEqual(res.status, 200)
+  const data = await res.json()
+  assert.ok(data.success, "Should still return success")
+  assert.strictEqual(data.stats, undefined, "Should not include stats when query fails")
+  clearSupabaseMocks()
+})
+
+test("stats correctly dedup same state from different cities", async () => {
+  const anonReadClient: any = {
+    from: () => ({}),
+  }
+  const serviceRoleClient: any = {
+    from: () => ({
+      insert: () => ({
+        select: () => ({
+          single: async () => ({ data: { id: "test-uuid-dedup" }, error: null }),
+        }),
+      }),
+      select: () => ({
+        eq: async () => ({
+          data: [
+            { store_city_state: "Atlanta, GA" },
+            { store_city_state: "Savannah, GA" },
+            { store_city_state: "Denver, CO" },
+          ],
+          error: null,
+        }),
+      }),
+    }),
+    rpc: async () => ({ data: { enriched: false }, error: null }),
+  }
+
+  installSupabaseMocks({ submitAnon: anonReadClient, submitServiceRole: serviceRoleClient })
+
+  const { POST } = await import("../app/api/submit-find/route")
+  const req = new NextRequest("http://localhost/api/submit-find", {
+    method: "POST",
+    body: JSON.stringify({
+      itemName: "Test Item",
+      sku: FIXTURE_SKU,
+      storeCity: "Atlanta",
+      storeState: "GA",
+      dateFound: new Date().toISOString().split("T")[0],
+      quantity: "1",
+      notes: "",
+      website: "",
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      "x-forwarded-for": "203.0.113.53",
+    },
+  })
+
+  const res = await POST(req)
+  assert.strictEqual(res.status, 200)
+  const data = await res.json()
+  assert.ok(data.stats)
+  assert.strictEqual(data.stats.totalReports, 3, "Should count all 3 reports")
+  assert.strictEqual(data.stats.stateCount, 2, "GA + CO = 2 distinct states")
+  assert.strictEqual(data.stats.isFirstReport, false)
+  clearSupabaseMocks()
+})
+
 test("uses the most complete self-enrichment row before insert", async () => {
   const inserted: Record<string, unknown>[] = []
 
