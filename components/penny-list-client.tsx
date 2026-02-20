@@ -186,6 +186,23 @@ export function PennyListClient({
 
   useEffect(() => {
     hasMountedRef.current = true
+
+    // Restore scroll position when returning from a SKU detail page.
+    // Waits two frames so the layout (ads, images, cards) stabilizes first.
+    try {
+      const saved = sessionStorage.getItem("penny-list-scroll")
+      if (saved) {
+        sessionStorage.removeItem("penny-list-scroll")
+        const y = Number(saved)
+        if (Number.isFinite(y) && y > 0) {
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              window.scrollTo({ top: y, behavior: "instant" })
+            })
+          })
+        }
+      }
+    } catch {}
   }, [])
 
   useEffect(() => {
@@ -980,6 +997,9 @@ export function PennyListClient({
                 onClick={() => {
                   goToPage(clampedPage - 1)
                   window.scrollTo({ top: 0, behavior: "smooth" })
+                  try {
+                    sessionStorage.removeItem("penny-list-scroll")
+                  } catch {}
                 }}
                 disabled={clampedPage === 1}
                 className="inline-flex items-center justify-center min-h-[44px] rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] px-4 py-2 text-sm font-semibold text-[var(--text-primary)] transition hover:border-[var(--cta-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] disabled:cursor-not-allowed disabled:opacity-50"
@@ -995,6 +1015,9 @@ export function PennyListClient({
                 onClick={() => {
                   goToPage(clampedPage + 1)
                   window.scrollTo({ top: 0, behavior: "smooth" })
+                  try {
+                    sessionStorage.removeItem("penny-list-scroll")
+                  } catch {}
                 }}
                 disabled={clampedPage === pageCount}
                 className="inline-flex items-center justify-center min-h-[44px] rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] px-4 py-2 text-sm font-semibold text-[var(--text-primary)] transition hover:border-[var(--cta-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] disabled:cursor-not-allowed disabled:opacity-50"

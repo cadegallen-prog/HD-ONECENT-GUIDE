@@ -188,7 +188,12 @@ export function PennyListTable({
               const upc = item.upc?.trim()
               const skuPageUrl = `/sku/${item.sku}`
 
-              const openSkuPage = () => router.push(skuPageUrl)
+              const openSkuPage = () => {
+                try {
+                  sessionStorage.setItem("penny-list-scroll", String(window.scrollY))
+                } catch {}
+                router.push(skuPageUrl)
+              }
 
               const handleRowKeyDown = (event: ReactKeyboardEvent<HTMLTableRowElement>) => {
                 if (event.currentTarget !== event.target) return

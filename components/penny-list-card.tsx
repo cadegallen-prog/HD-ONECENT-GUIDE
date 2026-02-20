@@ -96,7 +96,12 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
   const thumbnailSrc = item.imageUrl ? toPennyListThumbnailUrl(item.imageUrl) : item.imageUrl
   const totalReports = item.locations ? getTotalReports(item.locations) : 0
 
-  const openSkuPage = () => router.push(skuPageUrl)
+  const openSkuPage = () => {
+    try {
+      sessionStorage.setItem("penny-list-scroll", String(window.scrollY))
+    } catch {}
+    router.push(skuPageUrl)
+  }
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter" || event.key === " ") {
@@ -274,13 +279,13 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
               Report Find
             </Button>
 
-            {/* Secondary: icon-only, no borders */}
+            {/* Secondary: icon + micro-label, no borders */}
             <div className="flex justify-center gap-2.5">
               <a
                 href={resolvedHomeDepotUrl}
                 target="_blank"
                 rel="nofollow sponsored noopener noreferrer"
-                className="flex items-center justify-center min-h-[44px] min-w-[44px] rounded-lg text-[var(--text-muted)] transition-colors hover:bg-[var(--bg-recessed)] hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+                className="flex flex-col items-center justify-center min-h-[44px] min-w-[44px] rounded-lg text-[var(--text-muted)] transition-colors hover:bg-[var(--bg-recessed)] hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
                 aria-label={`Open Home Depot page for ${item.name}`}
                 onClick={(event) => {
                   event.stopPropagation()
@@ -291,6 +296,7 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
                 }}
               >
                 <ExternalLink className="w-5 h-5" aria-hidden="true" />
+                <span className="text-[10px] leading-tight mt-0.5">HD</span>
               </a>
               {hasUpc && (
                 <button
@@ -300,18 +306,24 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
                     event.stopPropagation()
                     setIsBarcodeOpen(true)
                   }}
-                  className="flex items-center justify-center min-h-[44px] min-w-[44px] rounded-lg text-[var(--text-muted)] transition-colors hover:bg-[var(--bg-recessed)] hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
+                  className="flex flex-col items-center justify-center min-h-[44px] min-w-[44px] rounded-lg text-[var(--text-muted)] transition-colors hover:bg-[var(--bg-recessed)] hover:text-[var(--text-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
                   aria-label={`Show barcode for ${item.name}`}
                 >
                   <Barcode className="w-5 h-5" aria-hidden="true" />
+                  <span className="text-[10px] leading-tight mt-0.5">Barcode</span>
                 </button>
               )}
-              <AddToListButton
-                sku={item.sku}
-                itemName={item.name}
-                variant="icon"
-                className="min-h-[44px] min-w-[44px] text-[var(--text-muted)] hover:bg-[var(--bg-recessed)] hover:text-[var(--text-primary)]"
-              />
+              <div className="flex flex-col items-center justify-center">
+                <AddToListButton
+                  sku={item.sku}
+                  itemName={item.name}
+                  variant="icon"
+                  className="min-h-[44px] min-w-[44px] text-[var(--text-muted)] hover:bg-[var(--bg-recessed)] hover:text-[var(--text-primary)]"
+                />
+                <span className="text-[10px] leading-tight mt-0.5 text-[var(--text-muted)]">
+                  Save
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -360,7 +372,12 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
   const compactFormattedRetail = retailPrice ? formatCurrency(retailPrice) : null
   const thumbnailSrc = item.imageUrl ? toPennyListThumbnailUrl(item.imageUrl) : item.imageUrl
 
-  const openSkuPage = () => router.push(skuPageUrl)
+  const openSkuPage = () => {
+    try {
+      sessionStorage.setItem("penny-list-scroll", String(window.scrollY))
+    } catch {}
+    router.push(skuPageUrl)
+  }
 
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Enter" || event.key === " ") {
