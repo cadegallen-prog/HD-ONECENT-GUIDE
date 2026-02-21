@@ -4,6 +4,7 @@ const FIXED_NOW = new Date("2025-12-10T12:00:00Z").getTime()
 
 test.describe("store finder popup (screenshots)", () => {
   test("popup is compact and readable", async ({ page, context }, testInfo) => {
+    const isMobileProject = testInfo.project.name.includes("mobile")
     const consoleErrors: string[] = []
     page.on("pageerror", (err) => consoleErrors.push(err.message))
     page.on("console", (msg) => {
@@ -73,6 +74,13 @@ test.describe("store finder popup (screenshots)", () => {
     const markers = page.locator(".leaflet-marker-icon")
     await expect(markers.first()).toBeVisible({ timeout: 20000 })
 
+    if (isMobileProject) {
+      const halfSheetButton = page.getByRole("button", { name: /Show half store sheet/i })
+      if (await halfSheetButton.isVisible()) {
+        await halfSheetButton.click()
+      }
+    }
+
     // Wait for at least one tile to load so the map look is representative.
     await page.locator(".leaflet-tile-loaded").first().waitFor({ timeout: 60000 })
 
@@ -83,27 +91,32 @@ test.describe("store finder popup (screenshots)", () => {
     const itemToSelect = (await listItems.count()) > 1 ? listItems.nth(1) : listItems.first()
     await itemToSelect.click()
 
-    const leafletPopup = page.locator(".leaflet-popup.store-popup").last()
-    await expect(leafletPopup).toBeVisible()
+    if (isMobileProject) {
+      await expect(page.locator(".leaflet-popup.store-popup")).toHaveCount(0)
+    } else {
+      const leafletPopup = page.locator(".leaflet-popup.store-popup").last()
+      await expect(leafletPopup).toBeVisible()
 
-    const popup = page.locator(".store-popup-card").last()
-    await expect(popup).toBeVisible()
+      const popup = page.locator(".store-popup-card").last()
+      await expect(popup).toBeVisible()
 
-    // Leaflet may pan/position the popup right after click; let it settle.
-    await page.waitForTimeout(800)
+      // Leaflet may pan/position the popup right after click; let it settle.
+      await page.waitForTimeout(800)
 
-    // Attach screenshots for review (desktop/mobile, light/dark via Playwright projects).
-    await testInfo.attach("store-finder-popup", {
-      body: await page.locator(".store-popup-card").last().screenshot(),
-      contentType: "image/png",
-    })
+      // Attach popup screenshot for desktop review.
+      await testInfo.attach("store-finder-popup", {
+        body: await page.locator(".store-popup-card").last().screenshot(),
+        contentType: "image/png",
+      })
+    }
 
     await testInfo.attach("store-finder-page", {
       body: await page.screenshot({ fullPage: true }),
       contentType: "image/png",
     })
 
-    const allowedConsoleRegex = /(ezoic|id5-sync|g\.ezoic\.net|cdn\.id5-sync\.com|ezintegration)/i
+    const allowedConsoleRegex =
+      /(ezoic|id5-sync|g\.ezoic\.net|cdn\.id5-sync\.com|ezintegration|monu\.delivery)/i
     const filtered = consoleErrors.filter((m) => !allowedConsoleRegex.test(m))
     expect(filtered, "Console errors on /store-finder (filtered)").toEqual([])
   })

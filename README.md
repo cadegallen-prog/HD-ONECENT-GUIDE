@@ -148,6 +148,7 @@ For any meaningful change (especially UI/copy/navigation):
 - Add `npm run e2e:smoke` output for route/form/API/navigation/UI-flow changes
 - Add `npm run e2e:full` output when FULL trigger policy applies (or if explicitly requested)
 - UI changes: capture Playwright screenshots (light/dark, mobile/desktop) and confirm browser console has no errors
+- Branch hygiene evidence: branch used, commit SHA(s), push status, and session-end `git status --short`
 - Docs/memory updated: `README.md`, `.ai/STATE.md`, `.ai/BACKLOG.md`, `.ai/SESSION_LOG.md`
 - Include a structured next-agent handoff block per `.ai/HANDOFF_PROTOCOL.md`
 - Token-only colors confirmed (no raw Tailwind palette); prefer `npm run lint:colors`
@@ -277,11 +278,14 @@ Use this if the session is policy/process/governance heavy:
 
 **Workflow:**
 
-1. Pull latest `dev`
-2. Make and verify changes on `dev`
-3. Run `npm run ai:memory:check` + `npm run verify:fast` (and `npm run e2e:smoke` for route/form/API/navigation/UI-flow changes)
-4. Commit/push `dev`
-5. Promote to `main` only after review and all required checks pass
+1. `git checkout dev && git pull origin dev`
+2. Run `git status --short` before new work. If dirty, close carryover first (commit/push or explicit blocker resolution) before starting another objective.
+3. Make scoped changes for one objective on `dev`.
+4. Stage intentionally (`git add <paths>`) and verify staged scope with `git diff --cached --name-only`.
+5. Run `npm run ai:memory:check` + `npm run verify:fast` (and `npm run e2e:smoke` for route/form/API/navigation/UI-flow changes).
+6. Commit/push `dev`.
+7. Re-run `git status --short`; clean is expected before starting the next task.
+8. Promote to `main` only after review and all required checks pass.
 
 ---
 

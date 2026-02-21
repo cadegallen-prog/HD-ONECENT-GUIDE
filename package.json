@@ -37,6 +37,7 @@
     "ai:proof": "tsx scripts/ai-proof.ts",
     "ads:check": "tsx scripts/ads-readiness-check.ts",
     "ai:analytics:verify": "tsx scripts/ai-analytics-verify.ts",
+    "analytics:archive": "tsx scripts/archive-google-analytics.ts",
     "ai:guide:guardrails": "tsx scripts/guide-guardrails.ts",
     "monumetric:guardrails": "tsx scripts/monumetric-guardrail-report.ts",
     "export:pennycentral": "tsx scripts/export-pennycentral-json.ts",

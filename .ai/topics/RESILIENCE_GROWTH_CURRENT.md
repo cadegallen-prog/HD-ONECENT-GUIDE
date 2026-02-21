@@ -1,6 +1,6 @@
 # RESILIENCE_GROWTH_CURRENT
 
-**Status:** 🔄 In progress (Phase 1 active; R1 + R2 + R3 completed)  
+**Status:** 🔄 In progress (Phase 1 active; R1 + R2 + R3 + R4-spec + R5-spec completed)  
 **Last updated:** 2026-02-19
 
 ---
@@ -111,15 +111,23 @@
   - guide-hub Decision Quality next-step block on `/guide`,
   - one new `Decision Quality` navbar entry to `/in-store-strategy`,
   - one matching footer discoverability link.
-- Next queued task from canonical plan: `R4` weekly "Decision Quality" digest section spec (planning/docs lane).
+- `R4` completed (planning/docs lane only):
+  - weekly "Decision Quality" digest section spec added in canonical plan,
+  - includes purpose/audience, data inputs + scoring draft, copy framework, fail-closed guardrails, rollback, and proof plan,
+  - runtime implementation explicitly deferred to a separate task.
+- `R5` completed (planning/docs lane only):
+  - first non-penny-adjacent article brief pack added in canonical plan,
+  - includes three implementation-ready briefs (timing reality, storage/effort cost, beginner skip signals),
+  - includes pilot prioritization logic, fail-closed guardrails, rollback, and proof plan.
+- Next queued task from canonical plan: `R6` select one pilot brief and map runtime publish surface (approval-gated runtime copy/IA touch).
 
 ---
 
 ## 8) Immediate next actions
 
 1. On **2026-02-26**, run the first valid post-R1 7-day guardrail check (`report_find_click`, `find_submit`) using the R2 fail-closed thresholds.
-2. Execute `R4` planning spec work for the weekly "Decision Quality" digest section (no runtime change).
-3. Preserve core Penny List + Report a Find loop while evaluating discoverability impact.
+2. Keep `R4` in implementation-pending status until a separate scoped runtime task is approved/executed.
+3. Prepare `R6` approval packet (pilot brief selection + runtime publish surface recommendation) while preserving core-loop guardrails.
 
 ---
 

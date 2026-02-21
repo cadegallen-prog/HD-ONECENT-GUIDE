@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 19, 2026 (continuity + analytics/search-console/MCP persistence codified)
+**Last updated:** Feb 21, 2026 (Store Finder mobile UX follow-up: detents + popup + controls)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,131 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-21 (`/store-finder` mobile UX follow-up completed):** Applied founder-requested usability corrections after live validation: detents were reworked to stay usable, mobile marker popup interference was removed, and mobile location controls were simplified.
+  - **Runtime/UI changes shipped:**
+    - `app/store-finder/page.tsx`
+      - added explicit `follow` vs `explore` map interaction mode,
+      - added explicit recenter-token flow (`mapRecenterToken`) so recentering only happens on user intent (search, locate, recenter, select-store one-shot),
+      - changed mobile controls to one contextual `Locate/Recenter` action (desktop keeps separate controls),
+      - repaired mobile detent behavior so list rows remain accessible across `peek`/`half`/`expanded`,
+      - tuned map/sheet height balance to reduce clipped/awkward states.
+    - `components/store-map.tsx`
+      - manual map drag/zoom now flips mode to explore (`onExploreMode`),
+      - selected-store auto-pan only in follow mode,
+      - explicit recenter requests are honored once-per-token via `map.setView(...)`,
+      - desktop popup remains available but mobile popup rendering is disabled to prevent map obstruction.
+    - `components/store-map.css`
+      - reduced popup density and added bounded height/overflow for cleaner desktop popup behavior.
+    - `tests/store-finder-popup.spec.ts`
+      - updated assertions to validate the new mobile popup behavior while keeping desktop popup checks.
+  - **Proof artifacts:**
+    - `reports/playwright/manual/store-finder-desktop-light-fix-2026-02-21.png`
+    - `reports/playwright/manual/store-finder-desktop-dark-fix-2026-02-21.png`
+    - `reports/playwright/manual/store-finder-mobile-light-half-fix-2026-02-21.png`
+    - `reports/playwright/manual/store-finder-mobile-dark-half-fix-2026-02-21.png`
+  - **Verification:**
+    - `npm run ai:memory:check` ✅
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` ✅
+    - `npm run lint:colors` ✅
+    - `npx playwright test tests/store-finder-popup.spec.ts --workers=1` ✅
+
+- **2026-02-20 (Dev-branch clean-worktree protocol hardening):** Integrated canonical branch-hygiene rules so future sessions fail-closed on dirty carryover instead of stacking local changes.
+  - **Governance/docs updates shipped:**
+    - `AGENTS.md` and `README.md` branch workflows now require: pre-task `git status --short`, staged-scope checks (`git diff --cached --name-only`), and post-push clean-tree confirmation.
+    - `.ai/CRITICAL_RULES.md` now includes `Rule #7: Clean Worktree + Scoped Commit Loop (Dev Branch)`.
+    - `.ai/HANDOFF_PROTOCOL.md` and `.ai/VERIFICATION_REQUIRED.md` now require branch hygiene evidence (branch, commit SHA(s), push status, and session-end `git status --short`).
+    - Corrected drift in secondary guidance that still implied main-only/single-branch operation:
+      - `docs/skills/ship-safely.md`
+      - `.ai/AI_ENABLEMENT_BLUEPRINT.md`
+      - `.ai/CONSTRAINTS_TECHNICAL.md`
+  - **Verification (docs-only lane):**
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
+      - Context pack: `reports/context-packs/2026-02-20T13-11-07/context-pack.md`
+    - `npm run verify:fast` N/A (docs-only governance changes; no runtime code-path impact)
+    - `npm run e2e:smoke` N/A (docs-only; no route/form/API/navigation/UI-flow change)
+    - `npm run e2e:full` N/A (docs-only; FULL triggers not applicable)
+
+- **2026-02-20 (First weekly analytics decision snapshot from local archive):** Executed the backlog continuity default task by turning newly archived GA4/GSC data into a weekly decision artifact with fail-closed status and queued actions.
+  - **Artifact shipped:**
+    - `reports/analytics-weekly/2026-02-20/summary.md`
+  - **Weekly outputs (last 7d vs prior 7d):**
+    - GSC clicks: `463` vs `377` (`+22.81%`)
+    - GSC non-branded clicks: `68` vs `27` (`+151.85%`)
+    - GA4 `/penny-list` sessions: `3,823` vs `4,037` (`-5.30%`)
+    - GA4 `/report-find` sessions: `266` vs `230` (`+15.65%`)
+    - Proxy rate (`/report-find` sessions per `/penny-list` session): `+22.13%`
+  - **Decision output (founder-readable):**
+    - Top leak: high-impression pages with weak CTR (`/guide`, `/what-are-pennies`, `/faq`, `/report-find`).
+    - Top opportunity: non-branded query cluster growth around `home depot penny items/list/app`.
+    - Top guardrail: canonical core-loop guardrails remain `BLOCKED/INCONCLUSIVE` until event export coverage is added.
+  - **Verification (docs/data lane):**
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
+      - Context pack: `reports/context-packs/2026-02-20T09-27-03/context-pack.md`
+    - `npm run verify:fast` N/A (no runtime code-path changes in this snapshot step)
+    - `npm run e2e:smoke` N/A (no route/form/API/navigation/UI-flow change)
+
+- **2026-02-20 (GA4 + GSC local archive automation with ADC support):** Added a repeatable local analytics export lane so GA4/Search Console data can be snapshotted and preserved outside third-party dashboards.
+  - **Tooling/workflow updates shipped:**
+    - Installed Google Cloud SDK and completed ADC auth:
+      - `gcloud auth application-default login`
+      - `gcloud auth application-default set-quota-project analytics-485810`
+    - Added export script: `scripts/archive-google-analytics.ts`
+      - pulls GSC reports (`daily_totals`, `daily_queries`, `daily_pages`, `daily_countries`, `daily_devices`)
+      - pulls GA4 reports (`daily_channel`, `daily_pages`)
+      - writes timestamped local artifacts under `.local/analytics-history/runs/<timestamp>/`
+      - appends additive run timeline to `.local/analytics-history/run-index.jsonl`
+      - supports OAuth refresh-token auth with ADC (`gcloud`) fallback.
+    - Added npm command:
+      - `npm run analytics:archive`
+    - Added reusable skill:
+      - `docs/skills/google-ga4-gsc-local-archive.md`
+      - indexed in `docs/skills/README.md`.
+  - **Initial extraction evidence:**
+    - Full successful run: `.local/analytics-history/runs/2026-02-20T08-46-15-006Z/summary.md`
+    - Coverage observed:
+      - GSC: `2025-12-17` to `2026-02-19`
+      - GA4: `2025-11-28` to `2026-02-20`
+  - **Verification:**
+    - `npm run analytics:archive` ✅
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` N/A (no route/form/API navigation runtime change)
+    - `npm run e2e:full` N/A (no FULL trigger in this change)
+
+- **2026-02-19 (R5 planning completed: first non-penny-adjacent article brief pack):** Executed the next queued resilience docs-only task after `R4` by drafting implementation-ready adjacent-intent brief specs from founder heuristics.
+  - **Canonical planning updates shipped:**
+    - Expanded `.ai/impl/pennycentral-resilience-diversification-plan.md` with completed `R5` brief pack (`6D`) including three briefs:
+      - clearance timing reality check,
+      - storage/effort cost framework,
+      - beginner skip signals playbook.
+    - Added pilot prioritization model and fail-closed guardrails for future runtime selection (`R6`).
+    - Updated execution queue/status in `.ai/impl/pennycentral-resilience-diversification-plan.md` to mark `R5` planning complete and queue `R6` as the next approval-gated runtime task.
+    - Updated `.ai/topics/RESILIENCE_GROWTH_CURRENT.md` to reflect `R5` completion and set `R6` as next queued work.
+    - Refreshed drift artifact: `.ai/_tmp/drift-check.md` (no new naming/route/touch-target blockers for this update; legacy icon-language docs drift remains non-blocking).
+  - **Verification (docs-only lane):**
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
+      - Context pack: `reports/context-packs/2026-02-19T22-14-34/context-pack.md`
+    - `npm run verify:fast` N/A (docs-only; no runtime code-path change)
+    - `npm run e2e:smoke` N/A (docs-only; no route/form/API/navigation/UI-flow change)
+    - `npm run e2e:full` N/A (docs-only; FULL triggers not applicable)
+
+- **2026-02-19 (R4 planning completed: weekly Decision Quality digest section spec):** Finished the next queued resilience docs-only task after R1/R2/R3, producing an implementation-ready digest section specification without runtime changes.
+  - **Canonical planning updates shipped:**
+    - Expanded `.ai/impl/pennycentral-resilience-diversification-plan.md` with completed `R4` spec covering purpose/audience, data sources + draft scoring logic, copy framework, fail-closed guardrails, rollback, and proof plan.
+    - Updated execution queue/status in `.ai/impl/pennycentral-resilience-diversification-plan.md` to mark `R4` spec complete and `R5` as next queued task.
+    - Updated `.ai/topics/RESILIENCE_GROWTH_CURRENT.md` to reflect `R4` docs completion and preserve the first valid guardrail-evaluation date of **2026-02-26**.
+    - Refreshed drift artifact: `.ai/_tmp/drift-check.md` (no new naming/route/touch-target blockers for this update; legacy icon-language docs drift remains non-blocking).
+  - **Verification (docs-only lane):**
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
+      - Context pack: `reports/context-packs/2026-02-19T22-07-14/context-pack.md`
+    - `npm run verify:fast` N/A (docs-only; no runtime code-path change)
+    - `npm run e2e:smoke` N/A (docs-only; no route/form/API/navigation/UI-flow change)
+    - `npm run e2e:full` N/A (docs-only; FULL triggers not applicable)
 
 - **2026-02-19 (Collaboration continuity requirements codified; analytics/search/MCP included):** Captured founder-critical observability/tooling expectations as durable context so future agents do not miss them after context resets.
   - **Canonical memory updates shipped:**

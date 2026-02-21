@@ -15,14 +15,18 @@
      - `npm run e2e:smoke` (route/form/API/navigation/UI-flow changes)
      - `npm run e2e:full` (only when FULL trigger policy applies)
    - UI changes: capture Playwright proof bundle.
-3. **Update persistent memory**
+3. **Close git loop (branch hygiene)**
+   - Work on `dev` unless an explicit emergency override is approved.
+   - Record commit SHA(s) and push status.
+   - Capture `git status --short` at session end (clean expected). If dirty, list carryover files and reason.
+4. **Update persistent memory**
    - `.ai/SESSION_LOG.md` (always for meaningful work)
    - `.ai/STATE.md` (if current project reality changed)
    - `.ai/BACKLOG.md` (only if priorities changed)
    - `.ai/LEARNINGS.md` (if mistakes/failed approaches occurred)
    - `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md` (required whenever any monetization incident is open or touched)
    - Run `npm run ai:checkpoint` before handoff when work spans multiple sessions/context windows
-4. **Publish next-agent handoff**
+5. **Publish next-agent handoff**
 
 - Include a structured handoff block in the final response and/or session log.
 - The handoff must let another agent continue without re-discovery.
@@ -31,7 +35,7 @@
 - Handoff must default to execution of the next concrete task (normally top P0 in `.ai/BACKLOG.md`) when no blocker exists.
 - Do not end handoffs with open-ended choice questions (for example, "governance cleanup or product work?") unless the founder explicitly asked for options.
 
-5. **Publish founder-readable summary**
+6. **Publish founder-readable summary**
 
 - In the same final response, include plain-English notes for Cade:
   - what changed
@@ -69,6 +73,10 @@ Use this schema every time:
 - `npm run verify:fast`:
 - `npm run e2e:smoke` (or N/A + reason):
 - `npm run e2e:full` (or N/A + trigger status):
+- Branch used:
+- Commit SHA(s):
+- Push status (`pushed` / `not pushed` + reason):
+- `git status --short` at session end:
 - Playwright proof path(s):
 - Memory checkpoint artifact path (when multi-session):
 - Known non-blocking console noise:
@@ -95,6 +103,7 @@ Notes on field meaning:
 - If Cade is expected to run a command personally, say so explicitly in the founder summary.
 - "Single next task" must be an executable directive, not a question, unless blocked.
 - If blocked, state one concrete blocker and one plain-English decision needed from Cade.
+- `git status --short` at session end should be clean by default; if not, the file list and reason must be explicit.
 
 ---
 
@@ -118,3 +127,4 @@ If it is not in `.ai/`, assume it will be lost.
 - No "done" claim without verification proof paths.
 - No handoff without explicit next step.
 - No memory update means no durable completion.
+- No silent carryover: dirty session-end worktree must be disclosed with file list + reason.

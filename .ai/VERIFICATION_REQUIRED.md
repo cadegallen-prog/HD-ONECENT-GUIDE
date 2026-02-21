@@ -33,6 +33,10 @@ To claim “done” on a meaningful change, provide:
 8. **Handoff block** (for meaningful work):
    - Include a structured next-agent handoff per `.ai/HANDOFF_PROTOCOL.md`
    - Must include: completion status, changed files, verification paths, open risks, and immediate next step
+9. **Branch hygiene evidence** (required for implementation/workflow sessions):
+   - branch used (normally `dev`)
+   - commit SHA(s) + push status (or explicit "not pushed" reason)
+   - `git status --short` at session end (clean expected; if dirty, list carryover files + blocker reason)
 
 If the change is truly docs-only and no code paths changed, you can say “Docs-only change; gates not run” — but do not claim the system is green.
 
@@ -118,6 +122,13 @@ Use the screenshots as the “before/after” proof when applicable.
 - `npm run verify:fast`: ✅/❌ (link output or paste)
 - `npm run e2e:smoke`: ✅/❌ or N/A (state why)
 - `npm run e2e:full`: ✅/❌ or N/A (state trigger status)
+
+**Branch hygiene:**
+
+- Branch used:
+- Commit SHA(s):
+- Push status:
+- `git status --short` at session end:
 
 **Bundle (preferred):**
 

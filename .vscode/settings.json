@@ -64,5 +64,7 @@
   "chat.experimental.useSkillAdherencePrompt": true,
   "chat.mcp.assisted.nuget.enabled": true,
   "chat.tips.enabled": true,
-  "chat.useNestedAgentsMdFiles": true
+  "chat.useNestedAgentsMdFiles": true,
+  "editor.experimentalGpuAcceleration": "off",
+  "editor.mouseWheelZoom": true
 }

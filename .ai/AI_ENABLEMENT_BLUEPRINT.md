@@ -53,7 +53,8 @@ These are enforced elsewhere, but enablement changes must keep them intact:
 - **Verification required:** see `.ai/VERIFICATION_REQUIRED.md` (no proof = not done).
 - **Port 3001 rule:** never kill it unless explicitly asked; reuse if running.
 - **Color rule:** no raw Tailwind palette colors; use tokens/CSS variables.
-- **Main-only workflow:** `main` is the only branch.
+- **Dev -> main promotion workflow:** implement on `dev`, then promote verified changes to `main`.
+- **Clean-worktree gate:** start/end each objective with `git status --short`; do not stack unrelated carryover changes.
 - **No surprise deps/env vars:** if needed, justify and document.
 
 ---

@@ -94,10 +94,12 @@
   border: 1px solid var(--border-default);
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  padding: 14px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
+  max-height: min(52vh, 340px);
+  overflow-y: auto;
 }
 
 .store-popup-card::-webkit-scrollbar {

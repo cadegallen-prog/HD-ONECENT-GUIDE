@@ -290,6 +290,41 @@ if (Test-Path $local) {
 
 ---
 
+## Rule #7: Clean Worktree + Scoped Commit Loop (Dev Branch)
+
+**Purpose:** Prevent stacked local changes, mixed-scope commits, and hidden carryover drift between sessions.
+
+**Requirements:**
+
+- Start each objective on `dev` with:
+  - `git checkout dev`
+  - `git pull origin dev`
+  - `git status --short`
+- If `git status --short` is non-empty and changes are outside the current objective, **STOP** and close carryover first:
+  - Option A: finish verification and commit/push the carryover scope to `dev`
+  - Option B: ask Cade for one explicit scope decision when ownership/scope is ambiguous
+- Before each commit, verify staged scope:
+  - `git diff --cached --name-only`
+- After push, run `git status --short` again:
+  - clean is expected
+  - if still dirty, list remaining files and mark status as `BLOCKED`/carryover in handoff
+- Do not start a new backlog item with unrelated dirty local changes.
+
+**Quick command loop (PowerShell):**
+
+```powershell
+git checkout dev
+git pull origin dev
+git status --short
+git add <paths>
+git diff --cached --name-only
+git commit -m "scope message"
+git push origin dev
+git status --short
+```
+
+---
+
 ## Stopping Criteria
 
 **The Meta-Rule:** If you've accomplished the user's goal and passed all quality gates, **STOP**.
