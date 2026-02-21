@@ -120,22 +120,61 @@ Changes to any of these paths automatically trigger FULL e2e in CI — run `npm 
 
 ---
 
-## MCP Servers (4 active for Claude Code)
+## MCP Servers (5 active for Claude Code)
 
-**Configuration:** `.vscode/mcp.json`
+**Configuration:** `.claude/settings.json` (project-level)
 
 1. **Filesystem** - File operations (use automatically)
-2. **GitHub** - PRs/issues/repo management (use when needed)
-3. **Playwright** - Browser testing & screenshots (REQUIRED for UI changes)
-4. **Supabase** - Database queries (requires `SUPABASE_ACCESS_TOKEN` env var)
+2. **Git** - Version control operations
+3. **GitHub** - PRs/issues/repo management (use when needed)
+4. **Playwright** - Browser testing & screenshots (REQUIRED for UI changes)
+5. **Supabase** - Database queries (requires `SUPABASE_ACCESS_TOKEN` env var)
 
-**Note:** `interactive` MCP is also in `.vscode/mcp.json` but reserved for Copilot Chat only (1-credit-per-request model). Git MCP is not configured — use Bash for git operations.
+**Note:** `.vscode/mcp.json` is for Copilot Chat only (includes `interactive` MCP). Claude Code uses `.claude/settings.json`.
 
 **Playwright required for:**
 
 - UI changes (buttons, forms, layouts, colors)
 - JavaScript changes (Store Finder, interactive features)
 - "Bug fixed" claims (visual bugs need proof)
+
+---
+
+## GA4 + GSC Analytics Access
+
+**Not an MCP server** — uses a custom archive script with OAuth refresh-token auth.
+
+**Credentials:** `.env.local` contains `GA4_PROPERTY_ID`, `GSC_SITE_URL`, `GOOGLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_SECRET`, `GOOGLE_OAUTH_REFRESH_TOKEN`
+
+**Command:** `npm run analytics:archive` (runs `scripts/archive-google-analytics.ts`)
+
+**Usage:**
+| Command | What It Does |
+| ------- | ------------ |
+| `npm run analytics:delta` | Smart delta pull (only new data since last run) — **preferred** |
+| `npm run analytics:archive` | Full pull (default: 2024-01-01 to today) |
+| `npm run analytics:archive -- -- --start-date=YYYY-MM-DD --end-date=YYYY-MM-DD` | Custom date range |
+| `npm run analytics:archive -- -- --skip-ga4` | GSC only |
+| `npm run analytics:archive -- -- --skip-gsc` | GA4 only |
+
+**Automation:** Windows Task Scheduler runs `analytics:delta` every Sunday at 2am. If the PC was off, it catches up on next boot. Log at `.local/analytics-history/scheduled-run.log`. Task name: `PennyCentral-AnalyticsDelta`.
+
+---
+
+## Staging Warmer Automation
+
+**Script:** `npm run warm:staging` (runs `scripts/staging-warmer.py` via `scripts/run-local-staging-warmer.mjs`)
+
+**Auth:** `PENNY_RAW_COOKIE` + `PENNY_GUILD_ID` in `.env.local` (Scouter Pro session cookie — expires periodically)
+
+**Automation:** Windows Task Scheduler runs the warmer Mon/Wed/Fri at 6am. If the cookie has expired and the script fails, a Windows toast notification pops up telling Cade to update the cookie. Task name: `PennyCentral-StagingWarmer`.
+
+**Logs:** `.local/staging-warmer-scheduled.log`
+
+**When cookie expires:** Update `PENNY_RAW_COOKIE` in `.env.local` with a fresh cookie from Scouter Pro, then run `npm run warm:staging` manually to verify.
+
+**Output:** `.local/analytics-history/runs/<timestamp>/` (git-ignored, local-only)
+**Docs:** `docs/skills/google-ga4-gsc-local-archive.md`
 
 ## AI Tool Differentiation
 
@@ -154,7 +193,8 @@ Changes to any of these paths automatically trigger FULL e2e in CI — run `npm 
 **When user mentions "Claude" or Claude Code:**
 
 - Refers to Claude Code VSCode extension (Sonnet 4.5 or Opus 4.5)
-- Uses MCPs configured in `.vscode/mcp.json`
+- Uses MCPs configured in `.claude/settings.json`
+- Has GA4/GSC access via `npm run analytics:archive` (OAuth refresh token in `.env.local`)
 - Full development agent with MCP server integration
 
 ---

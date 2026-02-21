@@ -36,15 +36,48 @@ Use `.ai/USAGE.md` (Habit 2) for the task template and `.ai/VERIFICATION_REQUIRE
 
 Your config file: `~/.codex/config.toml`
 
-Verify all 5 servers are configured:
+Active servers:
 
 1. **Filesystem** - File operations (automatically available)
-2. **GitHub** - PR/issue/repo management (use when needed)
-3. **Playwright** - Browser testing & screenshots (REQUIRED for UI changes)
-4. **Supabase** - Database queries (optional, requires env vars)
-5. **Vercel** - Deployment management (optional)
+2. **Git** - Version control operations
+3. **GitHub** - PR/issue/repo management (use when needed)
+4. **Playwright** - Browser testing & screenshots (REQUIRED for UI changes)
+5. **Supabase** - Database queries (requires env vars)
+6. **OpenAI Developer Docs** - API reference
 
-**Reference template:** `.ai/CODEX_CONFIG_SNIPPET.toml`
+**Other agents' MCP configs:**
+
+- **Copilot:** `.vscode/mcp.json` (includes `interactive` MCP — Copilot-only)
+- **Claude Code:** `.claude/settings.json` (project-level)
+
+---
+
+## GA4 + GSC Analytics Access
+
+**Not an MCP server** — uses a custom archive script with OAuth refresh-token auth.
+
+**Credentials:** `.env.local` contains `GA4_PROPERTY_ID`, `GSC_SITE_URL`, `GOOGLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_SECRET`, `GOOGLE_OAUTH_REFRESH_TOKEN`
+
+| Command                     | What It Does                                                    |
+| --------------------------- | --------------------------------------------------------------- |
+| `npm run analytics:delta`   | Smart delta pull (only new data since last run) — **preferred** |
+| `npm run analytics:archive` | Full pull (default: 2024-01-01 to today)                        |
+
+**Automation:** Windows Task Scheduler runs `analytics:delta` every Sunday at 2am. Catches up on next boot if PC was off. Task: `PennyCentral-AnalyticsDelta`. Log: `.local/analytics-history/scheduled-run.log`.
+
+**Output:** `.local/analytics-history/runs/<timestamp>/` (git-ignored, local-only)
+
+---
+
+## Staging Warmer Automation
+
+**Script:** `npm run warm:staging` (scrapes Scouter Pro → populates item cache in Supabase)
+
+**Auth:** `PENNY_RAW_COOKIE` + `PENNY_GUILD_ID` in `.env.local` (session cookie — expires periodically)
+
+**Automation:** Windows Task Scheduler runs Mon/Wed/Fri at 6am. On failure (expired cookie), a Windows toast notification alerts Cade. Task: `PennyCentral-StagingWarmer`. Log: `.local/staging-warmer-scheduled.log`.
+
+**When cookie expires:** Update `PENNY_RAW_COOKIE` in `.env.local` with fresh cookie from Scouter Pro.
 
 ---
 

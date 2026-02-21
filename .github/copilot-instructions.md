@@ -202,30 +202,58 @@ You have TWO methods to interact with Supabase:
 
 ## MCP Servers (Available to All AI Agents)
 
-**Configuration:**
+**Configuration per tool:**
 
-- **GitHub Copilot:** ✅ Full MCP support (via VS Code Chat)
-- **Claude Code:** ✅ Full MCP support (`.vscode/mcp.json`)
-- **Codex:** ✅ Full MCP support (`~/.codex/config.toml`)
+- **GitHub Copilot:** `.vscode/mcp.json` (includes `interactive` MCP — Copilot-only)
+- **Claude Code:** `.claude/settings.json` (project-level)
+- **Codex:** `~/.codex/config.toml`
 
-**5 Available Servers:**
+**Servers:**
 
 1. **Filesystem** - File operations (create, read, edit, move)
-2. **GitHub** - PRs/issues/repo management
-3. **Playwright** - Browser testing & screenshots (REQUIRED for UI changes)
-4. **Supabase** - Database migrations, queries, schema management (ALL AGENTS HAVE ACCESS)
+2. **Git** - Version control (Claude Code + Codex only)
+3. **GitHub** - PRs/issues/repo management
+4. **Playwright** - Browser testing & screenshots (REQUIRED for UI changes)
+5. **Supabase** - Database migrations, queries, schema management (ALL AGENTS HAVE ACCESS)
 
-**Note:** Git MCP removed (package doesn't exist) - use terminal for git operations instead.
+---
+
+## GA4 + GSC Analytics Access
+
+**Not an MCP server** — uses a custom archive script with OAuth refresh-token auth.
+
+**Credentials:** `.env.local` contains `GA4_PROPERTY_ID`, `GSC_SITE_URL`, `GOOGLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_SECRET`, `GOOGLE_OAUTH_REFRESH_TOKEN`
+
+| Command                     | What It Does                                                    |
+| --------------------------- | --------------------------------------------------------------- |
+| `npm run analytics:delta`   | Smart delta pull (only new data since last run) — **preferred** |
+| `npm run analytics:archive` | Full pull (default: 2024-01-01 to today)                        |
+
+**Automation:** Windows Task Scheduler runs `analytics:delta` every Sunday at 2am. Catches up on next boot if PC was off. Task: `PennyCentral-AnalyticsDelta`. Log: `.local/analytics-history/scheduled-run.log`.
+
+**Output:** `.local/analytics-history/runs/<timestamp>/` (git-ignored, local-only)
+
+---
+
+## Staging Warmer Automation
+
+**Script:** `npm run warm:staging` (scrapes Scouter Pro → populates item cache in Supabase)
+
+**Auth:** `PENNY_RAW_COOKIE` + `PENNY_GUILD_ID` in `.env.local` (session cookie — expires periodically)
+
+**Automation:** Windows Task Scheduler runs Mon/Wed/Fri at 6am. On failure (expired cookie), a Windows toast notification alerts Cade. Task: `PennyCentral-StagingWarmer`. Log: `.local/staging-warmer-scheduled.log`.
+
+**When cookie expires:** Update `PENNY_RAW_COOKIE` in `.env.local` with fresh cookie from Scouter Pro.
 
 ---
 
 ## AI Tool Comparison
 
-| Tool             | MCP Support        | Best For                               | Entry Point                       |
-| ---------------- | ------------------ | -------------------------------------- | --------------------------------- |
-| **Copilot Chat** | ✅ Yes (4 servers) | Code completion, quick questions       | (No special setup needed)         |
-| **Claude Code**  | ✅ Yes (4 servers) | Full development, testing, deployment  | `.github/copilot-instructions.md` |
-| **Codex**        | ✅ Yes (4 servers) | Architecture, high-reasoning decisions | `.ai/CODEX_ENTRY.md`              |
+| Tool             | MCP Support        | Config Location         | Best For                               |
+| ---------------- | ------------------ | ----------------------- | -------------------------------------- |
+| **Copilot Chat** | ✅ Yes (5 servers) | `.vscode/mcp.json`      | Code completion, quick questions       |
+| **Claude Code**  | ✅ Yes (5 servers) | `.claude/settings.json` | Full development, testing, deployment  |
+| **Codex**        | ✅ Yes (5 servers) | `~/.codex/config.toml`  | Architecture, high-reasoning decisions |
 
 **Default workflow:**
 
