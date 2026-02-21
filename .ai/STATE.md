@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 21, 2026 (Store Finder mobile UX follow-up: detents + popup + controls)
+**Last updated:** Feb 21, 2026 (Store Finder follow-up patch + GA4/GSC OAuth access reconfirmed)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,27 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-21 (`/store-finder` post-review hardening patch completed):** Applied a scoped follow-up patch after code review findings to keep desktop marker popups visible near map edges and keep mobile contextual location controls predictable.
+  - **Runtime/test updates shipped:**
+    - `components/store-map.tsx`
+      - desktop popup behavior now keeps popups in-view (`autoPan` + `keepInView` enabled),
+      - added programmatic-move guards so auto-pan/recenter actions do not falsely trigger explore-mode transitions.
+    - `app/store-finder/page.tsx`
+      - tightened mobile contextual recenter gating so simple store selection in follow mode does not force recenter state.
+    - `tests/store-finder-popup.spec.ts`
+      - added mobile assertion that exactly one contextual location control is visible (no dual-control conflict),
+      - preserved desktop popup + mobile popup suppression coverage.
+  - **Verification:**
+    - `npx playwright test tests/store-finder-popup.spec.ts --workers=1` ✅
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` ✅
+    - `npm run lint:colors` ✅
+  - **Analytics auth reconfirmed (founder request):**
+    - `npm run analytics:archive -- -- --start-date=2026-02-20 --end-date=2026-02-20` ✅
+      - artifact: `.local/analytics-history/runs/2026-02-21T07-36-36-822Z/summary.md`
+      - auth mode: `oauth_refresh_token`
+    - `gcloud auth application-default print-access-token` ✅ (ADC fallback remains available)
 
 - **2026-02-21 (`/store-finder` mobile UX follow-up completed):** Applied founder-requested usability corrections after live validation: detents were reworked to stay usable, mobile marker popup interference was removed, and mobile location controls were simplified.
   - **Runtime/UI changes shipped:**

@@ -120,4 +120,30 @@ test.describe("store finder popup (screenshots)", () => {
     const filtered = consoleErrors.filter((m) => !allowedConsoleRegex.test(m))
     expect(filtered, "Console errors on /store-finder (filtered)").toEqual([])
   })
+
+  test("mobile uses one contextual location control", async ({ page }, testInfo) => {
+    test.skip(!testInfo.project.name.includes("mobile"), "mobile-only behavior")
+
+    await page.goto("/store-finder")
+
+    const markers = page.locator(".leaflet-marker-icon")
+    await expect(markers.first()).toBeVisible({ timeout: 20000 })
+
+    const halfSheetButton = page.getByRole("button", { name: /Show half store sheet/i })
+    if (await halfSheetButton.isVisible()) {
+      await halfSheetButton.click()
+    }
+
+    const list = page.locator(".divide-y.divide-border").first()
+    const listItems = list.locator("> div")
+    await expect(listItems.first()).toBeVisible()
+    await listItems.first().click()
+
+    await expect(
+      page.locator(
+        'button[aria-label="Use my current location"]:visible, button[aria-label="Recenter the map"]:visible, button[aria-label="Locating your position"]:visible'
+      )
+    ).toHaveCount(1)
+    await expect(page.getByRole("button", { name: "My Location" })).toHaveCount(0)
+  })
 })

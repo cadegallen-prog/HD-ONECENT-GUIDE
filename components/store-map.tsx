@@ -55,6 +55,9 @@ function MapController({
   const lastSelectedIdRef = React.useRef<string | null>(null)
   const lastRecenterTokenRef = React.useRef<number>(0)
   const hasInvalidatedRef = React.useRef(false)
+  const programmaticMoveRef = React.useRef(false)
+  const pendingUserInteractionRef = React.useRef(false)
+  const pendingUserInteractionTimeoutRef = React.useRef<number | null>(null)
   const panTrackedRef = React.useRef(false)
   const zoomTrackedRef = React.useRef(false)
 
@@ -86,7 +89,30 @@ function MapController({
 
   // Track manual user interactions to disable auto-centering
   React.useEffect(() => {
+    const container = map.getContainer()
+
+    const markPendingUserInteraction = () => {
+      pendingUserInteractionRef.current = true
+      if (pendingUserInteractionTimeoutRef.current !== null) {
+        window.clearTimeout(pendingUserInteractionTimeoutRef.current)
+      }
+      pendingUserInteractionTimeoutRef.current = window.setTimeout(() => {
+        pendingUserInteractionRef.current = false
+        pendingUserInteractionTimeoutRef.current = null
+      }, 1200)
+    }
+
+    const resetProgrammaticMove = () => {
+      programmaticMoveRef.current = false
+      pendingUserInteractionRef.current = false
+      if (pendingUserInteractionTimeoutRef.current !== null) {
+        window.clearTimeout(pendingUserInteractionTimeoutRef.current)
+        pendingUserInteractionTimeoutRef.current = null
+      }
+    }
+
     const onDragStart = () => {
+      if (programmaticMoveRef.current || !pendingUserInteractionRef.current) return
       onExploreMode?.()
       if (!panTrackedRef.current) {
         panTrackedRef.current = true
@@ -94,6 +120,7 @@ function MapController({
       }
     }
     const onZoomStart = () => {
+      if (programmaticMoveRef.current || !pendingUserInteractionRef.current) return
       onExploreMode?.()
       if (!zoomTrackedRef.current) {
         zoomTrackedRef.current = true
@@ -101,12 +128,26 @@ function MapController({
       }
     }
 
+    container.addEventListener("pointerdown", markPendingUserInteraction, { passive: true })
+    container.addEventListener("touchstart", markPendingUserInteraction, { passive: true })
+    container.addEventListener("wheel", markPendingUserInteraction, { passive: true })
     map.on("dragstart", onDragStart)
     map.on("zoomstart", onZoomStart)
+    map.on("moveend", resetProgrammaticMove)
+    map.on("zoomend", resetProgrammaticMove)
 
     return () => {
+      container.removeEventListener("pointerdown", markPendingUserInteraction)
+      container.removeEventListener("touchstart", markPendingUserInteraction)
+      container.removeEventListener("wheel", markPendingUserInteraction)
       map.off("dragstart", onDragStart)
       map.off("zoomstart", onZoomStart)
+      map.off("moveend", resetProgrammaticMove)
+      map.off("zoomend", resetProgrammaticMove)
+      if (pendingUserInteractionTimeoutRef.current !== null) {
+        window.clearTimeout(pendingUserInteractionTimeoutRef.current)
+        pendingUserInteractionTimeoutRef.current = null
+      }
     }
   }, [map, onExploreMode])
 
@@ -144,6 +185,7 @@ function MapController({
       lastSelectedIdRef.current = selectedStore.id
 
       // Pan to the store (keep current zoom) without nudging position to avoid unwanted recentering
+      programmaticMoveRef.current = true
       map.panTo([selectedStore.lat, selectedStore.lng], {
         animate: true,
         duration: 0.5,
@@ -156,6 +198,7 @@ function MapController({
     if (recenterRequestToken <= 0 || recenterRequestToken === lastRecenterTokenRef.current) return
 
     lastRecenterTokenRef.current = recenterRequestToken
+    programmaticMoveRef.current = true
     map.setView(center, map.getZoom(), { animate: true })
   }, [center, map, recenterRequestToken])
 
@@ -453,9 +496,9 @@ export const StoreMap = React.memo(function StoreMap({
               {!isMobileViewport ? (
                 <Popup
                   className="store-popup"
-                  autoPan={false}
+                  autoPan={true}
                   autoPanPadding={[32, 72]}
-                  keepInView={false}
+                  keepInView={true}
                   maxWidth={popupWidth.maxWidth}
                   minWidth={popupWidth.minWidth}
                   closeButton={false}

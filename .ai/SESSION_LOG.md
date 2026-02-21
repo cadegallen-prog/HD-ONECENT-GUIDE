@@ -4,6 +4,39 @@
 
 ---
 
+## 2026-02-21 - Codex - Store Finder Follow-up Patch (Popup In-View + Contextual Control Guardrails)
+
+**Goal:** Apply post-review hardening on `/store-finder` by fixing desktop popup edge clipping and tightening mobile contextual location-control behavior.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- Updated `components/store-map.tsx`:
+  - re-enabled in-view popup behavior on desktop markers (`autoPan: true`, `keepInView: true`) to prevent edge clipping,
+  - added guardrails so programmatic map movement (selection/recenter) is not misclassified as user exploration.
+- Updated `app/store-finder/page.tsx`:
+  - narrowed mobile recenter eligibility so the contextual button does not flip into recenter mode just from store selection while in follow mode.
+- Updated `tests/store-finder-popup.spec.ts`:
+  - retained desktop popup checks + mobile popup suppression assertions,
+  - added mobile assertion that exactly one contextual location control is visible (no duplicate mobile/desktop control conflict).
+
+### Verification
+
+- `npx playwright test tests/store-finder-popup.spec.ts --workers=1` ✅ (6 passed, 2 desktop-only skips)
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npm run lint:colors` ✅
+
+### Analytics / OAuth Access Re-Check (founder request)
+
+- `npm run analytics:archive -- -- --start-date=2026-02-20 --end-date=2026-02-20` ✅
+  - run artifact: `.local/analytics-history/runs/2026-02-21T07-36-36-822Z/summary.md`
+  - auth mode confirmed: `oauth_refresh_token`
+- `gcloud auth application-default print-access-token` ✅ (ADC fallback path available)
+
+---
+
 ## 2026-02-21 - Codex - Store Finder Mobile UX Follow-up (Detents + Popup + Controls)
 
 **Goal:** Resolve founder-reported mobile regressions on `/store-finder`: poor detent behavior, oversized/clipped pin popup behavior, and confusing dual location controls.
@@ -181,39 +214,3 @@
 - Canonical plan path: `.ai/impl/pennycentral-resilience-diversification-plan.md`
 - Canonical plan SHA256: `C66245E0C3A29E68A161806A611A7403124BC9F4EC5A8B021C7775572D8E7293`
 - No unsynced tool-local plan: `NO` (local draft `C:\Users\cadeg\.claude\plans\wild-wishing-widget.md` exists and remains out-of-sync)
-
----
-
-## 2026-02-19 - Codex - R4 Weekly Decision Quality Digest Spec (Planning Only)
-
-**Goal:** Execute resilience task `R4` as docs-only work by producing an approval-ready weekly "Decision Quality" digest section specification and syncing resilience memory files.
-
-**Status:** ✅ Completed (docs-only)
-
-### Changes
-
-- Updated `.ai/impl/pennycentral-resilience-diversification-plan.md`:
-  - marked `R4` as completed planning work and moved queue next-step to `R5`,
-  - added full `R4` section spec (purpose/audience, inputs + draft scoring model, section copy framework, guardrails/fail-closed rules, rollback, proof plan),
-  - refreshed drift-check notes using `.ai/_tmp/drift-check.md`.
-- Updated `.ai/topics/RESILIENCE_GROWTH_CURRENT.md`:
-  - status now reflects `R1 + R2 + R3 + R4-spec` completed,
-  - immediate actions keep **2026-02-26** as the first valid post-R1 guardrail window date,
-  - `R5` set as next queued docs task.
-- Updated `.ai/STATE.md`:
-  - added current-sprint entry for this `R4` planning completion and docs-only verification lane evidence.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run ai:checkpoint` ✅
-  - Context pack: `reports/context-packs/2026-02-19T22-07-14/context-pack.md`
-- `npm run verify:fast` N/A (docs-only; no runtime code-path impact)
-- `npm run e2e:smoke` N/A (docs-only; no route/form/API/navigation/UI-flow change)
-- `npm run e2e:full` N/A (docs-only; FULL triggers not applicable)
-
-### Plan Canonicality
-
-- Canonical plan path: `.ai/impl/pennycentral-resilience-diversification-plan.md`
-- Canonical plan SHA256: `F5CE3A5BC14354D755027EDB4D34F9F4DADF97881258D9119D0FA0330594F5A7`
-- No unsynced tool-local plan: `NO` (unrelated local draft exists at `C:\Users\cadeg\.claude\plans\wild-wishing-widget.md`; no missing R4 spec content identified for this task)

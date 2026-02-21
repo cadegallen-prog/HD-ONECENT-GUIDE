@@ -428,7 +428,9 @@ export default function StoreFinderPage() {
     () => (selectedStore ? applyCoordinateCorrection(selectedStore) : null),
     [applyCoordinateCorrection, selectedStore]
   )
-  const mapHasRecenterTarget = Boolean(correctedSelectedStore || userLocation)
+  const mapHasRecenterTarget = Boolean(
+    userLocation || (mapInteractionMode === "explore" && correctedSelectedStore)
+  )
   const mobileSheetSummaryStore = correctedSelectedStore || correctedStoresToRender[0] || null
   const mobileSheetHeightClass =
     mobileSheetDetent === "peek"
@@ -986,7 +988,9 @@ export default function StoreFinderPage() {
             <div className="flex gap-2 justify-start flex-wrap">
               <Button
                 onClick={handleLocateOrRecenter}
-                variant={mapInteractionMode === "explore" ? "primary" : "secondary"}
+                variant={
+                  mapHasRecenterTarget && mapInteractionMode === "explore" ? "primary" : "secondary"
+                }
                 size="sm"
                 className="md:hidden flex items-center justify-center gap-2 min-h-[44px] px-3"
                 disabled={locatingUser}
