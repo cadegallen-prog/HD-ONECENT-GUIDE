@@ -4,6 +4,45 @@
 
 ---
 
+## 2026-02-22 - Codex - Weekly Analytics Snapshot Refresh (Pre-Rollout Baseline)
+
+**Goal:** Execute the next queued analytics continuity task by generating a new weekly decision snapshot with the expanded GA4 report-flow slices (`daily_events`, `daily_report_paths`).
+
+**Status:** ✅ Completed (docs/data lane)
+
+### Changes
+
+- Ran a fresh GA4 + GSC archive window:
+  - `npm run analytics:archive -- -- --start-date=2026-02-08 --end-date=2026-02-21`
+  - Artifact: `.local/analytics-history/runs/2026-02-22T00-29-57-156Z/summary.md`
+- Produced new weekly decision artifact:
+  - `reports/analytics-weekly/2026-02-22/summary.md`
+- Snapshot now includes report-flow participation reads from canonical archive slices:
+  - reports/day proxy via `find_submit`,
+  - reports/session via `find_submit / report-route sessions`,
+  - source mix via `/report-find?src=...` path buckets.
+
+### Key outputs (2026-02-15..2026-02-21 vs 2026-02-08..2026-02-14)
+
+- GSC clicks: `467` vs `397` (`+17.63%`)
+- GSC non-branded clicks: `83` vs `34` (`+144.12%`)
+- GA4 `/penny-list` sessions: `4,181` vs `4,118` (`+1.53%`)
+- GA4 `/report-find` sessions: `286` vs `234` (`+22.22%`)
+- `find_submit`: `122` vs `109` (`+11.93%`)
+- `report_find_click`: `37` vs `38` (`-2.63%`)
+- reports per report-route session: `0.3861` vs `0.4360` (`-11.45%`)
+
+### Verification
+
+- `npm run analytics:archive -- -- --start-date=2026-02-08 --end-date=2026-02-21` ✅
+- `npm run ai:memory:check` ✅
+- `npm run ai:checkpoint` ✅
+  - Context pack: `reports/context-packs/2026-02-22T00-33-37/context-pack.md`
+- `npm run verify:fast` N/A (docs/data artifact refresh; no runtime code-path mutation)
+- `npm run e2e:smoke` N/A (no route/form/API/navigation/UI-flow mutation)
+
+---
+
 ## 2026-02-22 - Codex - Report Find Participation Lift v1 (Decomposed Program Execution)
 
 **Goal:** Execute the approved decomposed program end-to-end: anti-mega-plan policy codification, report-flow measurement integrity fixes, basket UX implementation, event taxonomy expansion, GA4 archive slice extensions, and aligned test/docs updates.
@@ -183,62 +222,3 @@
 - `npm run e2e:full` N/A (docs-only; FULL triggers not applicable)
 
 ---
-
-## 2026-02-20 - Codex - Google Analytics Local Archive Lane (GA4 + GSC + ADC)
-
-**Goal:** Stand up a repeatable, local-only analytics extraction process (GA4 + Search Console) with reliable auth so future optimization decisions can use preserved chronological snapshots.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- Installed Google Cloud SDK locally and configured ADC auth:
-  - `gcloud auth application-default login`
-  - `gcloud auth application-default set-quota-project analytics-485810`
-- Added a new archive script:
-  - `scripts/archive-google-analytics.ts`
-  - pulls GSC + GA4 report sets,
-  - writes timestamped CSV/JSON snapshots under `.local/analytics-history/runs/<timestamp>/`,
-  - appends run metadata to `.local/analytics-history/run-index.jsonl`,
-  - supports OAuth refresh-token auth with ADC (`gcloud`) fallback.
-- Added npm command:
-  - `npm run analytics:archive`
-- Added reusable skill doc and index wiring:
-  - `docs/skills/google-ga4-gsc-local-archive.md`
-  - `docs/skills/README.md`
-
-### Extraction Evidence
-
-- Full run artifact:
-  - `.local/analytics-history/runs/2026-02-20T08-46-15-006Z/summary.md`
-- Coverage windows from the run:
-  - GSC data returned from `2025-12-17` to `2026-02-19`
-  - GA4 data returned from `2025-11-28` to `2026-02-20`
-- Quick parsed takeaways from this snapshot:
-  - GSC totals: `2024` clicks / `13,806` impressions.
-  - GA4 channel totals: `48,509` sessions / `163,475` pageviews.
-  - GSC top query remains branded-heavy (`penny central`, `pennycentral`), with non-branded `home depot penny list` still low-click relative to impressions.
-
-### Verification
-
-- `npm run analytics:archive` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` N/A (no runtime route/form/API flow change)
-- `npm run e2e:full` N/A (no FULL trigger)
-
-### Follow-up (same session): Weekly Decision Snapshot
-
-- Produced weekly analytics decision artifact:
-  - `reports/analytics-weekly/2026-02-20/summary.md`
-- Key outputs:
-  - GSC clicks `+22.81%` (463 vs 377), non-branded clicks `+151.85%` (68 vs 27),
-  - GA4 `/penny-list` sessions `-5.30%` (3823 vs 4037),
-  - GA4 `/report-find` sessions `+15.65%` (266 vs 230),
-  - `/report-find` per `/penny-list` session proxy `+22.13%`.
-- Fail-closed interpretation:
-  - non-branded SEO is directionally positive,
-  - canonical core-loop guardrails remain `BLOCKED/INCONCLUSIVE` until event-level exports include `report_find_click` and `find_submit`.
-- Next actions queued in backlog:
-  - add event export coverage for canonical guardrails,
-  - run CTR remediation on high-impression low-CTR pages (`/guide`, `/what-are-pennies`, `/faq`, `/report-find`),
-  - rerun weekly snapshot and require rolling-window confirmation.

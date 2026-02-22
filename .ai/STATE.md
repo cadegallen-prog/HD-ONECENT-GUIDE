@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 22, 2026 (Report Find Participation Lift v1 decomposed program shipped)
+**Last updated:** Feb 22, 2026 (weekly analytics snapshot refreshed with report-flow slices)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,27 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-22 (Weekly analytics snapshot refreshed - pre-rollout baseline):** Ran a new weekly decision pass using the expanded GA4 report-flow archive slices and published a fresh founder-readable snapshot.
+  - **Artifacts:**
+    - Archive run: `.local/analytics-history/runs/2026-02-22T00-29-57-156Z/summary.md`
+    - Weekly summary: `reports/analytics-weekly/2026-02-22/summary.md`
+  - **Key outputs (last 7d vs prior 7d):**
+    - GSC clicks: `467` vs `397` (`+17.63%`)
+    - GSC non-branded clicks: `83` vs `34` (`+144.12%`)
+    - GA4 `/penny-list` sessions: `4,181` vs `4,118` (`+1.53%`)
+    - GA4 `/report-find` sessions: `286` vs `234` (`+22.22%`)
+    - `find_submit`: `122` vs `109` (`+11.93%`)
+    - `report_find_click`: `37` vs `38` (`-2.63%`)
+    - reports per report-route session: `0.3861` vs `0.4360` (`-11.45%`)
+  - **Decision output:**
+    - Top leak: CTR lag on high-impression informational pages (impressions up faster than clicks).
+    - Top opportunity: non-branded intent growth remains strong (`home depot penny items/list/app` cluster).
+    - Top guardrail: treat this as pre-rollout baseline; evaluate participation-lift release impact only after post-deploy windows mature.
+  - **Verification (docs/data lane):**
+    - `npm run analytics:archive -- -- --start-date=2026-02-08 --end-date=2026-02-21` ✅
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
 
 - **2026-02-22 (Report Find Participation Lift v1 decomposed program shipped):** Completed the approved slice-by-slice execution program across governance, measurement integrity, basket UX, taxonomy, archive reporting, and coverage updates.
   - **Policy/governance (`P0-S1`) completed:**

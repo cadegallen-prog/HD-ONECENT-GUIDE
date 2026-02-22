@@ -1,6 +1,6 @@
 # Backlog (Top Priority Items)
 
-**Last updated:** Feb 22, 2026 (Report Find Participation Lift v1 decomposed program execution)
+**Last updated:** Feb 22, 2026 (weekly analytics snapshot refreshed with report-flow slices)
 **Rule:** Keep ≤10 items. Archive completed/deferred items.
 
 **Auto-archive:** Full backlog history preserved in `archive/backlog-history/`
@@ -171,12 +171,21 @@ Each AI session should:
     - `ga4/daily_report_paths.csv|json` (`date,pagePathPlusQueryString,sessions`) filtered to report-route paths
   - Verified archive run with new slices:
     - `.local/analytics-history/runs/2026-02-22T00-15-22-963Z/summary.md`
+  - Produced refreshed weekly analytics snapshot using new slices:
+    - `reports/analytics-weekly/2026-02-22/summary.md`
+    - source run: `.local/analytics-history/runs/2026-02-22T00-29-57-156Z/summary.md`
+  - Snapshot readout (last 7d vs prior 7d):
+    - GSC non-branded clicks: `83` vs `34` (`+144.12%`)
+    - `/report-find` sessions: `286` vs `234` (`+22.22%`)
+    - `find_submit`: `122` vs `109` (`+11.93%`)
+    - reports/report-route-session: `0.3861` vs `0.4360` (`-11.45%`)
   - Updated analytics operating docs for participation-lift reads:
     - `.ai/topics/ANALYTICS_CONTRACT.md`
     - `.ai/ANALYTICS_WEEKLY_REVIEW.md`
   - Remaining queued actions from this lane:
+    - deploy participation-lift release and establish explicit post-deploy baseline window,
     - run CTR remediation pass on high-impression/low-CTR pages (`/guide`, `/what-are-pennies`, `/faq`, `/report-find`),
-    - rerun weekly snapshot and require 4-week confirmation before success claims.
+    - rerun weekly snapshot after 48h+ post-deploy and require 4-week confirmation before success claims.
 - **Progress (2026-02-20):**
   - Generated first weekly analytics snapshot artifact from local archive:
     - `reports/analytics-weekly/2026-02-20/summary.md`
