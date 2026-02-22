@@ -7,12 +7,13 @@ description: Start a new coding session with proper context
 
 ## 1. Read Required Docs
 
-Follow `.ai/START_HERE.md` Tier 1 (mandatory every session):
+Start with `VISION_CHARTER.md`, then follow `.ai/START_HERE.md` Tier 1 (mandatory every session):
 
-1. `.ai/START_HERE.md` - Entry point + alignment gate
-2. `.ai/CRITICAL_RULES.md` - Never violate
-3. `.ai/STATE.md` - Current snapshot
-4. `.ai/BACKLOG.md` - Prioritized work
+1. `VISION_CHARTER.md` - Highest authority
+2. `.ai/START_HERE.md` - Entry point + alignment gate
+3. `.ai/CRITICAL_RULES.md` - Never violate
+4. `.ai/STATE.md` - Current snapshot
+5. `.ai/BACKLOG.md` - Prioritized work
 
 Also skim: latest entry in `.ai/SESSION_LOG.md`
 
@@ -28,13 +29,17 @@ Get from user:
 
 - **GOAL:** What will be accomplished
 - **WHY:** Business value
-- **DONE:** Success criteria
+- **DONE MEANS:** Success criteria
+- **NOT DOING:** Explicit exclusions
+- **CONSTRAINTS:** Hard boundaries
+- **ASSUMPTIONS:** Temporary assumptions to validate
+- **CHALLENGES:** Known risks or blockers
 
 Push back if request is unclear or problematic.
 
 ## 4. Check Session Log Size
 
-If `.ai/SESSION_LOG.md` > 5 entries, trim to 3 (Rule #5).
+If `.ai/SESSION_LOG.md` has more than 7 entries, trim to keep the 5 most recent (Rule #5).
 
 ## 5. Confirm Ready
 

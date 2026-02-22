@@ -11,15 +11,20 @@ Safely end a session, compress context, and optionally prepare for tool switchin
 
 ---
 
-## Phase 1: Verification (Always)
+## Phase 1: Verification (Required, Lane-Based)
 
-### 1. Run Verification
+### 1. Choose Verification Lane
 
-Execute: `npm run ai:verify`
+Use `.ai/VERIFICATION_REQUIRED.md` as canonical policy:
 
-**All 4 gates MUST pass.** If any fail, fix before ending.
+- **Runtime/code-path changes:** run `npm run verify:fast` always; run `npm run e2e:smoke` for route/form/API/navigation/UI-flow changes; run `npm run e2e:full` only when FULL trigger policy applies.
+- **Docs-only/no runtime impact:** run `npm run ai:memory:check` + `npm run ai:checkpoint`; mark FAST/SMOKE/FULL as N/A with reason.
 
-### 2. Update SESSION_LOG.md
+### 2. Run Required Commands
+
+If any required lane fails, fix before ending.
+
+### 3. Update SESSION_LOG.md
 
 Update current entry with:
 
@@ -29,7 +34,7 @@ Update current entry with:
 - **Proof Links:** (reports/verification/ or reports/proof/)
 - **For Next AI:** (handoff notes)
 
-### 3. Check for Learnings
+### 4. Check for Learnings
 
 If anything unexpected happened, add to `.ai/LEARNINGS.md`.
 
@@ -59,7 +64,9 @@ Ask Cade:
 
 ## Full Session Checklist
 
-- [ ] Run `npm run ai:verify` (all 4 gates pass)
+- [ ] Select verification lane per `.ai/VERIFICATION_REQUIRED.md`
+- [ ] Runtime lane: run `npm run verify:fast` (+ `npm run e2e:smoke` when applicable, + `npm run e2e:full` only on trigger)
+- [ ] Docs-only lane: run `npm run ai:memory:check` + `npm run ai:checkpoint`; mark FAST/SMOKE/FULL as N/A with reason
 - [ ] Update `.ai/SESSION_LOG.md` with outcome + proof links
 - [ ] Add learnings to `.ai/LEARNINGS.md` if applicable
 - [ ] Run `/checkpoint` to compress STATE
@@ -73,13 +80,13 @@ Ask Cade:
 
 **Quick Session (no major changes):**
 
-1. Run `npm run ai:verify`
+1. Run `npm run ai:memory:check`
 2. Run `/checkpoint`
 3. Done
 
 **Tool Switch (leaving for Codex/Copilot):**
 
-1. Run `npm run ai:verify`
+1. Run required lane commands per `.ai/VERIFICATION_REQUIRED.md`
 2. Run `/checkpoint`
 3. Run `/handoff`
 4. Copy/paste New Session Primer to next session

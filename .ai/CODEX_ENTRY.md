@@ -14,7 +14,7 @@ This file contains Codex-specific notes only.
 
 Follow `.ai/START_HERE.md` — it defines the canonical tiered read order for all tools.
 
-Tier 1 (every session): START_HERE → CRITICAL_RULES → STATE → BACKLOG
+Tier 1 (every session): VISION_CHARTER → START_HERE → CRITICAL_RULES → STATE → BACKLOG
 Tier 2 (before implementing): CONTRACT → DECISION_RIGHTS
 Tier 3 (contextual): See START_HERE.md for the full list.
 

@@ -2,9 +2,9 @@
 
 ## Read First (in order)
 
-Follow `.ai/START_HERE.md` — it defines the canonical tiered read order for all tools.
+Read `VISION_CHARTER.md` first, then follow `.ai/START_HERE.md` — it defines the canonical tiered read order for all tools.
 
-Tier 1 (every session): START_HERE → CRITICAL_RULES → STATE → BACKLOG
+Tier 1 (every session): VISION_CHARTER → START_HERE → CRITICAL_RULES → STATE → BACKLOG
 Tier 2 (before implementing): CONTRACT → DECISION_RIGHTS
 Tier 3 (contextual): See START_HERE.md for the full list.
 
@@ -35,9 +35,9 @@ Ask at most one clarifying question only when a real blocker exists.
 
 ---
 
-## Autonomy After "Go" (Default)
+## Autonomy By Default
 
-Once Cade says "go" / "build it", do the full loop without extra prompts:
+Once the objective is clear (or top P0 is selected by default), do the full loop without extra prompts:
 
 1. Implement
 2. Verify (`npm run verify:fast` and `npm run e2e:smoke` for flow changes; full e2e by trigger)
@@ -65,7 +65,7 @@ If you try the same failed approach twice without documenting it, you've wasted 
 
 ## Canonical Entry Point
 
-- Begin every session by reading `.ai/START_HERE.md`. It defines the canonical tiered read order for all agents (Claude, Codex, Copilot). This doc adds Copilot-specific capability notes afterward.
+- Begin every session by reading `VISION_CHARTER.md`, then `.ai/START_HERE.md`. These define the canonical read order for all agents (Claude, Codex, Copilot). This doc adds Copilot-specific capability notes afterward.
 
 ## Owner Context (Read This First)
 
@@ -281,13 +281,13 @@ Technical co-founder. Founder can't code.
 
 ## Git Workflow
 
-**Only `main` branch deploys to production.**
+Use the repo workflow in `AGENTS.md`:
 
-1. Make changes
-2. Test (`verify:fast`, then `e2e:smoke` when applicable)
-3. Commit
-4. Push to main
-5. Verify at https://pennycentral.com
+1. Start on `dev` (`git checkout dev && git pull origin dev`)
+2. Make scoped changes
+3. Test (`verify:fast`, then `e2e:smoke` when applicable)
+4. Commit and push to `dev`
+5. Promote `dev -> main` only after required checks pass
 
 ---
 

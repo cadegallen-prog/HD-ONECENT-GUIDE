@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 22, 2026 (single-writer lock protocol shipped for parallel-agent safety)
+**Last updated:** Feb 22, 2026 (canon read-order/verification/branch workflow realignment patch shipped)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,26 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-22 (Canon realignment patch shipped after cross-agent doc simplification):** Applied a scoped docs-only correction pass so tool-specific instruction files remain consistent with charter authority, canonical verification lanes, and `dev -> main` promotion flow.
+  - **Docs corrected (drift fixes):**
+    - Charter-first read order restored in:
+      - `.ai/START_HERE.md`
+      - `.ai/CODEX_ENTRY.md`
+      - `CLAUDE.md`
+      - `.github/copilot-instructions.md`
+    - Session command policy corrections in:
+      - `.claude/commands/session-start.md` (full alignment-gate fields + correct session-log trim behavior)
+      - `.claude/commands/session-end.md` (lane-based verification aligned to `.ai/VERIFICATION_REQUIRED.md`; docs-only lane preserved)
+    - Workflow correction in:
+      - `.github/copilot-instructions.md` (`dev` integration branch first, promote to `main` after checks)
+  - **Verification (docs-only lane):**
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
+      - context pack artifact: `reports/context-packs/2026-02-22T13-16-49/context-pack.md`
+    - `npm run verify:fast` N/A (docs-only governance patch; no runtime code-path mutation)
+    - `npm run e2e:smoke` N/A (docs-only; no route/form/API/navigation/UI-flow mutation)
+    - `npm run e2e:full` N/A (docs-only; FULL triggers not applicable)
 
 - **2026-02-22 (Single-writer lock protocol shipped for parallel-agent sessions):** Added a lock-based coordination layer for shared-memory `.ai` files so multiple agents can run with low merge friction.
   - **Tooling shipped:**

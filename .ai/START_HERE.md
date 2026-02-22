@@ -8,10 +8,11 @@
 
 ### Tier 1 — Always (every session, ~2 min)
 
-1. **THIS FILE** - Start Here (you're reading it)
-2. **CRITICAL_RULES.md** - Never violate these
-3. **STATE.md** - Where we are now
-4. **BACKLOG.md** - What to work on
+1. **VISION_CHARTER.md** - Highest authority, always first
+2. **THIS FILE** - Start Here (you're reading it)
+3. **CRITICAL_RULES.md** - Never violate these
+4. **STATE.md** - Where we are now
+5. **BACKLOG.md** - What to work on
 
 ### Tier 2 — Before implementing (skim if already familiar)
 
@@ -24,7 +25,6 @@
 - **VERIFICATION_REQUIRED.md** — Canonical proof format (before claiming done)
 - **HANDOFF_PROTOCOL.md** — Before closing a task
 - **GROWTH_STRATEGY.md** — First session only (business context)
-- **VISION_CHARTER.md** — First session only (highest authority, stable)
 - **../PENNYCENTRAL_MASTER_CONTEXT.md** — First session only (founder strategic intent)
 - **topics/\<TOPIC\>.md** — Domain-specific work
 

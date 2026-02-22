@@ -4,6 +4,44 @@
 
 ---
 
+## 2026-02-22 - Codex - Canon Realignment Patch (Post-Simplification Guardrail Fixes)
+
+**Goal:** Reconcile cross-agent instruction drift introduced by docs simplification so charter authority, verification lanes, and branch workflow remain consistent across Codex, Claude, and Copilot entry points.
+
+**Status:** ✅ Completed (docs-only governance patch)
+
+### Changes
+
+- Restored charter-first read-order consistency:
+  - `.ai/START_HERE.md` (Tier 1 now starts with `VISION_CHARTER.md`; removed wording that implied charter is first-session-only)
+  - `.ai/CODEX_ENTRY.md` and `CLAUDE.md` Tier 1 summaries updated to include charter-first order
+  - `.github/copilot-instructions.md` read-order and canonical-entry wording aligned to charter-first
+- Corrected Claude session command guidance to match canonical alignment gate + memory policy:
+  - `.claude/commands/session-start.md`
+    - includes charter-first startup step,
+    - uses full alignment fields (`DONE MEANS`, `NOT DOING`, `CONSTRAINTS`, `ASSUMPTIONS`, `CHALLENGES`),
+    - fixes session-log trim guidance to the current Rule #5 behavior (trim when >7, keep 5).
+- Corrected verification policy drift in:
+  - `.claude/commands/session-end.md`
+    - removed blanket "all 4 gates always" requirement,
+    - replaced with lane-based policy that defers to `.ai/VERIFICATION_REQUIRED.md`,
+    - preserves docs-only exception (`ai:memory:check` + `ai:checkpoint`, FAST/SMOKE/FULL marked N/A with reason).
+- Corrected Copilot workflow drift:
+  - `.github/copilot-instructions.md`
+    - changed autonomy wording to objective-clear default (not dependent on literal "go"),
+    - restored `dev -> main` promotion flow instead of direct `main` push language.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run ai:checkpoint` ✅
+  - Context pack: `reports/context-packs/2026-02-22T13-16-49/context-pack.md`
+- `npm run verify:fast` N/A (docs-only governance changes; no runtime code-path mutation)
+- `npm run e2e:smoke` N/A (docs-only; no route/form/API/navigation/UI-flow mutation)
+- `npm run e2e:full` N/A (docs-only; FULL triggers not applicable)
+
+---
+
 ## 2026-02-22 - Codex - Single-Writer Lock Protocol (Parallel-Agent Shared Memory Safety)
 
 **Goal:** Implement a low-friction single-writer protocol so multiple agents can work in parallel without conflicting edits in shared `.ai` continuity files.
@@ -185,48 +223,3 @@
   - run artifact: `.local/analytics-history/runs/2026-02-21T07-36-36-822Z/summary.md`
   - auth mode confirmed: `oauth_refresh_token`
 - `gcloud auth application-default print-access-token` ✅ (ADC fallback path available)
-
----
-
-## 2026-02-21 - Codex - Store Finder Mobile UX Follow-up (Detents + Popup + Controls)
-
-**Goal:** Resolve founder-reported mobile regressions on `/store-finder`: poor detent behavior, oversized/clipped pin popup behavior, and confusing dual location controls.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- Updated `app/store-finder/page.tsx`:
-  - added explicit map interaction state: `follow` vs `explore`,
-  - added explicit recenter trigger token (no continuous recenter loop),
-  - wired manual map interaction to switch into explore mode,
-  - changed mobile controls to a single contextual `Locate/Recenter` action (removes dual-icon confusion on mobile),
-  - kept separate `My Location` + `Recenter` controls on desktop/tablet only,
-  - repaired mobile detent behavior (`peek` / `half` / `expanded`) with list visibility preserved in all detents,
-  - tuned map/sheet height balance and map minimum height to avoid clipped/awkward detent states.
-- Updated `components/store-map.tsx`:
-  - added `followMode`, `onExploreMode`, `recenterRequestToken` props,
-  - on manual `dragstart`/`zoomstart`, parent is switched to explore mode,
-  - selected-store pan only runs while in follow mode,
-  - explicit recenter requests call `map.setView(...)` exactly once per token,
-  - kept desktop popup behavior but removed mobile popup rendering so pin taps do not cover the map,
-  - tightened desktop popup width constraints and auto-pan padding.
-- Updated `components/store-map.css`:
-  - reduced popup card density and added max-height + overflow handling so desktop popup remains compact/readable.
-- Updated `tests/store-finder-popup.spec.ts`:
-  - aligned mobile assertions to the new behavior (no intrusive marker popup on mobile),
-  - preserved popup assertions for desktop,
-  - allowlisted known Monumetric console noise in this spec.
-- Captured Playwright screenshot artifacts:
-  - `reports/playwright/manual/store-finder-desktop-light-fix-2026-02-21.png`
-  - `reports/playwright/manual/store-finder-desktop-dark-fix-2026-02-21.png`
-  - `reports/playwright/manual/store-finder-mobile-light-half-fix-2026-02-21.png`
-  - `reports/playwright/manual/store-finder-mobile-dark-half-fix-2026-02-21.png`
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `npm run lint:colors` ✅
-- `npx playwright test tests/store-finder-popup.spec.ts --workers=1` ✅ (4/4 projects passed)
