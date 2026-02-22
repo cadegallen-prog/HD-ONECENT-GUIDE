@@ -98,7 +98,8 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
 
   const openSkuPage = () => {
     try {
-      sessionStorage.setItem("penny-list-scroll", String(window.scrollY))
+      const page = Number(new URLSearchParams(window.location.search).get("page")) || 1
+      sessionStorage.setItem("penny-list-scroll", JSON.stringify({ y: window.scrollY, page }))
     } catch {}
     router.push(skuPageUrl)
   }
@@ -374,7 +375,8 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
 
   const openSkuPage = () => {
     try {
-      sessionStorage.setItem("penny-list-scroll", String(window.scrollY))
+      const page = Number(new URLSearchParams(window.location.search).get("page")) || 1
+      sessionStorage.setItem("penny-list-scroll", JSON.stringify({ y: window.scrollY, page }))
     } catch {}
     router.push(skuPageUrl)
   }

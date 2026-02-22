@@ -184,22 +184,37 @@ export function PennyListClient({
   const [isSortSheetOpen, setIsSortSheetOpen] = useState(false)
   const [isMobileViewport, setIsMobileViewport] = useState(false)
 
+  // Pending scroll restoration target — set when we need to wait for a page
+  // fetch to complete before scrolling (e.g. returning to page 3 from a detail page).
+  const pendingScrollRef = useRef<number | null>(null)
+
   useEffect(() => {
     hasMountedRef.current = true
 
     // Restore scroll position when returning from a SKU detail page.
-    // Waits two frames so the layout (ads, images, cards) stabilizes first.
+    // We saved both scrollY and the page number so we can restore the correct page first.
     try {
-      const saved = sessionStorage.getItem("penny-list-scroll")
-      if (saved) {
+      const savedRaw = sessionStorage.getItem("penny-list-scroll")
+      if (savedRaw) {
         sessionStorage.removeItem("penny-list-scroll")
-        const y = Number(saved)
+        const parsed = JSON.parse(savedRaw) as { y: number; page?: number }
+        const y = parsed.y
+        const savedPage = parsed.page ?? 1
+
         if (Number.isFinite(y) && y > 0) {
-          requestAnimationFrame(() => {
+          if (savedPage === currentPage) {
+            // Already on the right page (server rendered correctly) — scroll now.
             requestAnimationFrame(() => {
-              window.scrollTo({ top: y, behavior: "instant" })
+              requestAnimationFrame(() => {
+                window.scrollTo({ top: y, behavior: "instant" })
+              })
             })
-          })
+          } else {
+            // Wrong page — navigate to the saved page, then scroll after data loads.
+            pendingScrollRef.current = y
+            setCurrentPage(savedPage)
+            updateURL({ page: savedPage === 1 ? null : String(savedPage) })
+          }
         }
       }
     } catch {}
@@ -402,6 +417,18 @@ export function PennyListClient({
       console.error("Error fetching penny list:", error)
     } finally {
       setIsLoading(false)
+
+      // If we have a pending scroll restore (returning from detail page on page 2+),
+      // apply it now that the correct page's data has rendered.
+      const pendingY = pendingScrollRef.current
+      if (pendingY !== null) {
+        pendingScrollRef.current = null
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            window.scrollTo({ top: pendingY, behavior: "instant" })
+          })
+        })
+      }
     }
   }, [stateFilter, searchQuery, sortOption, dateRange, currentPage, itemsPerPage])
 
