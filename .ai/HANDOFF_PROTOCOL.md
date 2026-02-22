@@ -9,12 +9,7 @@
 1. **Implement scope exactly**
    - Stay within approved objective.
    - Do not include unrelated cleanup/refactors.
-2. **Run verification with proof**
-   - Required lanes for meaningful code changes:
-     - `npm run verify:fast` (always)
-     - `npm run e2e:smoke` (route/form/API/navigation/UI-flow changes)
-     - `npm run e2e:full` (only when FULL trigger policy applies)
-   - UI changes: capture Playwright proof bundle.
+2. **Run verification with proof** (per `.ai/VERIFICATION_REQUIRED.md` — the canonical source for all gate definitions and proof templates)
 3. **Close git loop (branch hygiene)**
    - Work on `dev` unless an explicit emergency override is approved.
    - Record commit SHA(s) and push status.

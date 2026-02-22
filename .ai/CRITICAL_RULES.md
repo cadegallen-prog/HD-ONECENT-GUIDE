@@ -134,103 +134,19 @@ Which would you prefer?"
 2. User checks: Tests are failing
 3. **Trust broken, time wasted**
 
-**REQUIRED:** Before claiming "done", you MUST provide:
+**REQUIRED:** Before claiming "done", you MUST run verification gates and provide proof.
 
-### Required for "Done"
+**Full requirements, gate definitions, and paste-ready template:** See `.ai/VERIFICATION_REQUIRED.md` (canonical source of truth for all verification).
 
-1. **FAST lane passes** (paste output):
+**Quick summary (not a substitute for reading VERIFICATION_REQUIRED.md):**
 
-   ```bash
-   npm run verify:fast # lint + typecheck + unit + build
-   ```
+- `npm run verify:fast` — always
+- `npm run e2e:smoke` — for route/form/API/navigation/UI changes
+- `npm run e2e:full` — when FULL trigger conditions apply
+- Screenshots (before/after, light + dark) for UI changes
+- Docs updated (SESSION_LOG, STATE, BACKLOG as applicable)
 
-   For route/form/API/navigation/UI-flow changes, also paste:
-
-   ```bash
-   npm run e2e:smoke
-   ```
-
-   For FULL-trigger conditions (PR to main, merge queue, `run-full-e2e` label, risky paths, nightly, manual), also paste:
-
-   ```bash
-   npm run e2e:full
-   ```
-
-   **If you touched styles/colors:** also paste `npm run lint:colors` output and confirm no raw Tailwind palette colors were introduced.
-
-   Docs-only exception (no runtime code path changes):
-   - Mark test lanes as N/A with a one-line reason.
-   - Run `npm run ai:memory:check` and `npm run ai:checkpoint`.
-   - Do not claim the app/test system is green.
-
-2. **Screenshots** (if UI changed):
-   - Before/after
-   - Light + dark mode
-   - Browser console (no errors)
-
-3. **Docs/memory updated** (if meaningful change):
-   - `SESSION_LOG.md` (required)
-   - `STATE.md` (if meaningful change)
-   - `BACKLOG.md` (if priorities moved)
-
-4. **GitHub Actions** (if applicable):
-   - Paste URL: `https://github.com/.../runs/{id}`
-   - Status must be ✅ green
-
-5. **Proof problem is fixed**:
-   - Show bug existed
-   - Show bug is gone
-
-6. **Documentation updated (proof required)**:
-
-   ```bash
-   git diff .ai/topics/ .ai/STATE.md .ai/BACKLOG.md
-   ```
-
-   - If no output = docs didn't change = not actually done yet
-   - Paste the diff so user can see what changed
-
-**No exceptions.**
-
-### Template: Claiming Done
-
-````markdown
-## Verification
-
-**Tests:**
-
-- lint: ✅ 0 errors
-- build: ✅ success
-- test:unit: ✅ 1/1 passing
-- test:e2e: ✅ 28/28 passing
-
-**Playwright:**
-
-- Before: [screenshot]
-- After: [screenshot]
-- Console: no errors
-- Modes: light + dark tested
-
-**GitHub Actions:**
-
-- ✅ https://github.com/.../runs/12345
-
-**Problem fixed:**
-
-- Before: [describe/screenshot]
-- After: [describe/screenshot]
-
-**Docs updated:**
-
-```bash
-git diff .ai/topics/ .ai/STATE.md .ai/BACKLOG.md
-[paste output here or "no changes"]
-```
-````
-
-````
-
-**Use this template. No shortcuts.**
+**No exceptions. No proof = not done.**
 
 ---
 
@@ -286,7 +202,7 @@ if (Test-Path $local) {
 } else {
   "local_file_missing_ok=True"
 }
-````
+```
 
 ---
 

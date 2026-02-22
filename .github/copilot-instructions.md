@@ -2,22 +2,13 @@
 
 ## Read First (in order)
 
-Follow the canonical read order (source of truth is the root `README.md`, “AI Canon & Read Order”):
+Follow `.ai/START_HERE.md` — it defines the canonical tiered read order for all tools.
 
-1. `.ai/START_HERE.md`
-2. `.ai/CRITICAL_RULES.md`
-3. `.ai/STATE.md`
-4. `.ai/BACKLOG.md`
-5. `.ai/CONTRACT.md`
-6. `.ai/DECISION_RIGHTS.md`
+Tier 1 (every session): START_HERE → CRITICAL_RULES → STATE → BACKLOG
+Tier 2 (before implementing): CONTRACT → DECISION_RIGHTS
+Tier 3 (contextual): See START_HERE.md for the full list.
 
-**First session only:** `.ai/GROWTH_STRATEGY.md`
-**If goal is AI workflow/tooling/verification enablement:** `.ai/AI_ENABLEMENT_BLUEPRINT.md`
-
-Keep these open while working:
-
-- `.ai/USAGE.md` (task template + course-correction script)
-- `.ai/VERIFICATION_REQUIRED.md` (paste-ready proof format)
+Keep open while working: `.ai/VERIFICATION_REQUIRED.md` (paste-ready proof format)
 
 Then restate understanding in plain English and proceed.
 Ask at most one clarifying question only when a real blocker exists.
@@ -39,8 +30,8 @@ Ask at most one clarifying question only when a real blocker exists.
 
 ## Session Start Protocol (MANDATORY)
 
-- Follow the canonical `AI Canon & Read Order` in the root `README.md`.
-- After reading, summarize: current state (`.ai/STATE.md`), top priority (`.ai/BACKLOG.md`), key constraints (`.ai/CONSTRAINTS.md` + `.ai/FOUNDATION_CONTRACT.md` + `.ai/GUARDRAILS.md`), and any recent notes (`.ai/SESSION_LOG.md`).
+- Follow `.ai/START_HERE.md` tiered read order.
+- After reading, summarize: current state (`.ai/STATE.md`), top priority (`.ai/BACKLOG.md`), key constraints (`.ai/CRITICAL_RULES.md`), and any recent notes (`.ai/SESSION_LOG.md`).
 
 ---
 
@@ -74,7 +65,7 @@ If you try the same failed approach twice without documenting it, you've wasted 
 
 ## Canonical Entry Point
 
-- Begin every session by reading the `AI Canon & Read Order` section in `README.md`. That canonical sequence (`STATE.md` → `BACKLOG.md` → `CONTRACT.md`/`DECISION_RIGHTS.md` → `CONSTRAINTS.md`/`FOUNDATION_CONTRACT.md`/`GUARDRAILS.md` → latest `SESSION_LOG.md` → `CONTEXT.md`) applies to all agents; this doc simply adds the Copilot-specific capability notes afterward.
+- Begin every session by reading `.ai/START_HERE.md`. It defines the canonical tiered read order for all agents (Claude, Codex, Copilot). This doc adds Copilot-specific capability notes afterward.
 
 ## Owner Context (Read This First)
 

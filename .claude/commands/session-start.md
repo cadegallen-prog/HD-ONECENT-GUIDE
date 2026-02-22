@@ -7,12 +7,14 @@ description: Start a new coding session with proper context
 
 ## 1. Read Required Docs
 
-1. `.ai/VERIFICATION_REQUIRED.md` - Quality gates
-2. `.ai/CONSTRAINTS.md` - Rules and fragile areas
-3. `.ai/GROWTH_STRATEGY.md` - Business goals
-4. `.ai/STATE.md` - Current snapshot
-5. `.ai/BACKLOG.md` - Prioritized work
-6. Latest entry in `.ai/SESSION_LOG.md`
+Follow `.ai/START_HERE.md` Tier 1 (mandatory every session):
+
+1. `.ai/START_HERE.md` - Entry point + alignment gate
+2. `.ai/CRITICAL_RULES.md` - Never violate
+3. `.ai/STATE.md` - Current snapshot
+4. `.ai/BACKLOG.md` - Prioritized work
+
+Also skim: latest entry in `.ai/SESSION_LOG.md`
 
 ## 2. Run Health Check
 

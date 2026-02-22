@@ -6,21 +6,29 @@
 
 ## Read Order (Mandatory)
 
-Follow this sequence before every session:
+### Tier 1 — Always (every session, ~2 min)
 
-1. **VISION_CHARTER.md** - Highest authority (vision + decision hierarchy + conflict resolution)
-2. **THIS FILE** - Start Here
-3. **../PENNYCENTRAL_MASTER_CONTEXT.md** - Founder strategic intent + cognitive-load protocol
-4. **CRITICAL_RULES.md** - Never violate these
-5. **STATE.md** - Where we are now
-6. **BACKLOG.md** - What to work on
-7. **CONTRACT.md** - How we collaborate
-8. **DECISION_RIGHTS.md** - What needs approval
-9. **HANDOFF_PROTOCOL.md** - How tasks are closed and handed to the next agent
+1. **THIS FILE** - Start Here (you're reading it)
+2. **CRITICAL_RULES.md** - Never violate these
+3. **STATE.md** - Where we are now
+4. **BACKLOG.md** - What to work on
+
+### Tier 2 — Before implementing (skim if already familiar)
+
+5. **CONTRACT.md** - How we collaborate
+6. **DECISION_RIGHTS.md** - What needs approval
+
+### Tier 3 — Contextual (read when relevant)
+
+- **HANDOFF.md** — When starting fresh or switching tools
+- **VERIFICATION_REQUIRED.md** — Canonical proof format (before claiming done)
+- **HANDOFF_PROTOCOL.md** — Before closing a task
+- **GROWTH_STRATEGY.md** — First session only (business context)
+- **VISION_CHARTER.md** — First session only (highest authority, stable)
+- **../PENNYCENTRAL_MASTER_CONTEXT.md** — First session only (founder strategic intent)
+- **topics/\<TOPIC\>.md** — Domain-specific work
 
 **Default ignore list:** Do not load files under `archive/docs-pruned/**`, `archive/scripts-pruned/**`, or `archive/media-pruned/**` unless Cade explicitly asks to restore/review archived items.
-
-**First session only:** Read `GROWTH_STRATEGY.md` for business context
 
 ## Alignment Gate (Fail-Closed, Required Before Mutation)
 
@@ -221,7 +229,7 @@ When something doesn't work:
 
 **For context portability across sessions/tools:**
 
-- **`.ai/HANDOFF.md`** - Compressed context pack (5 min read, copy/paste primers)
+- **`.ai/HANDOFF.md`** - Compressed context pack (5 min read, tool-agnostic)
 - **`.ai/HANDOFF_PROTOCOL.md`** - Mandatory task closeout + next-agent handoff contract
 - **`.ai/topics/INDEX.md`** - Topic capsule index (choose your domain)
 - **`.ai/impl/`** - Implementation plans (approved architectures live here)

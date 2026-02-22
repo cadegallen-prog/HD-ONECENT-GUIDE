@@ -2,27 +2,19 @@
 
 ## Start Here
 
-Read `VISION_CHARTER.md` first, then `.ai/START_HERE.md` for the universal entry point and read order.
+Read `.ai/START_HERE.md` for the universal entry point and tiered read order.
 
 This file contains Claude Code-specific notes only.
 
 ## Read Order (Mandatory)
 
-Follow the sequence in `.ai/START_HERE.md`:
+Follow `.ai/START_HERE.md` — it defines the canonical tiered read order for all tools.
 
-1. VISION_CHARTER.md
-2. START_HERE.md
-3. CRITICAL_RULES.md
-4. STATE.md
-5. BACKLOG.md
-6. CONTRACT.md
-7. DECISION_RIGHTS.md
+Tier 1 (every session): START_HERE → CRITICAL_RULES → STATE → BACKLOG
+Tier 2 (before implementing): CONTRACT → DECISION_RIGHTS
+Tier 3 (contextual): See START_HERE.md for the full list.
 
-**First session only:** Read `GROWTH_STRATEGY.md` for business context
-
-**Then complete the Alignment Gate before any edits:** GOAL / WHY / DONE MEANS / NOT DOING / CONSTRAINTS / ASSUMPTIONS / CHALLENGES
-
-Use `.ai/USAGE.md` (Habit 2) for the task template and `.ai/VERIFICATION_REQUIRED.md` for the proof bundle format.
+Use `.ai/VERIFICATION_REQUIRED.md` for the proof bundle format.
 
 ---
 

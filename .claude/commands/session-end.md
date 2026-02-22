@@ -52,7 +52,7 @@ Ask Cade:
 
 **"Switching tools in next session? (Claude → Codex → Copilot)"**
 
-- **If YES:** Run `/handoff` to generate portable context pack + New Chat Primer
+- **If YES:** Run `/handoff` to generate portable context pack + New Session Primer
 - **If NO:** Done (return to Cade)
 
 ---
@@ -64,7 +64,7 @@ Ask Cade:
 - [ ] Add learnings to `.ai/LEARNINGS.md` if applicable
 - [ ] Run `/checkpoint` to compress STATE
 - [ ] Ask: "Switching tools? (y/n)"
-  - If yes: Run `/handoff` and print New Chat Primer
+  - If yes: Run `/handoff` and print New Session Primer
   - If no: Done
 
 ---
@@ -82,7 +82,7 @@ Ask Cade:
 1. Run `npm run ai:verify`
 2. Run `/checkpoint`
 3. Run `/handoff`
-4. Copy/paste New Chat Primer to next session
+4. Copy/paste New Session Primer to next session
 
 ---
 
