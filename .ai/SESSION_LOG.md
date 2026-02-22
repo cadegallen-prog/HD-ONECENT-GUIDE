@@ -4,6 +4,37 @@
 
 ---
 
+## 2026-02-22 - Claude Opus 4.6 - Penny List Scroll Fix + Spam Cleanup
+
+**Goal:** Fix scroll restoration bug on penny list pages 2+ and investigate/clean up suspicious Supabase submissions.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- **Scroll restoration fix (commit `836c738`):**
+  - `components/penny-list-card.tsx` — Both `PennyListCard` and `PennyListCardCompact` `openSkuPage()` now save `JSON.stringify({ y: scrollY, page })` instead of `String(scrollY)`. Page read from `window.location.search` at click time.
+  - `components/penny-list-client.tsx` — Added `pendingScrollRef`. Mount effect parses `{ y, page }` from sessionStorage. If page matches, scrolls immediately (double-RAF). If mismatched, navigates to saved page and defers scroll. `fetchItems` `finally` block checks `pendingScrollRef` and applies deferred scroll after data loads.
+  - `components/penny-list-table.tsx` — Same save-format update as card component.
+
+- **Supabase spam cleanup (direct DB operations, no code changes):**
+  - Investigated SKU `1013362340` (Ryobi 4000W Generator): 12 reports from 3 states. 10 were duplicate submissions from "PA" in a 2-minute burst — one person button-mashing.
+  - Deleted 10 duplicate rows (9 copies of SKU `1013362340`, 1 copy of SKU `1013362339`).
+  - Kept 1 report per unique SKU from the PA burst session. Butler PA, WV, and Wylie TX reports retained.
+
+### Verification
+
+- `npm run lint` ✅ (0 errors, 0 warnings)
+- `npm run typecheck` ✅
+- `npm run test:unit` ✅ (71/71)
+- `npm run build` ✅
+
+### Deferred
+
+- **Anti-spam protections** for the submit-find form: duplicate SKU throttling per session, submission cooldowns, client-side debounce. This was identified as the next priority topic during this session.
+
+---
+
 ## 2026-02-22 - Codex - Canon Realignment Patch (Post-Simplification Guardrail Fixes)
 
 **Goal:** Reconcile cross-agent instruction drift introduced by docs simplification so charter authority, verification lanes, and branch workflow remain consistent across Codex, Claude, and Copilot entry points.

@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 22, 2026 (canon read-order/verification/branch workflow realignment patch shipped)
+**Last updated:** Feb 22, 2026 (penny-list scroll restoration fix shipped + spam cleanup)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,18 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-22 (Penny list scroll restoration fix + Supabase spam cleanup):** Fixed scroll-save bug where returning from a detail page on pages 2+ reset the list to page 1. Also investigated and cleaned up spam submissions in the Penny List Supabase table.
+  - **Scroll fix (`836c738`):**
+    - Root cause: `sessionStorage["penny-list-scroll"]` saved only `window.scrollY` but not the page number. On back-navigation, the page defaulted to 1 and the saved Y offset was meaningless.
+    - Fix: Save `{ y, page }` JSON. On restore, if `savedPage !== currentPage`, navigate to the correct page first and defer scroll to after the API fetch via `pendingScrollRef`.
+    - Files changed: `penny-list-client.tsx`, `penny-list-card.tsx`, `penny-list-table.tsx`
+  - **Spam cleanup (Supabase direct):**
+    - SKU `1013362340` (Ryobi 4000W Generator, $729) had 10 duplicate submissions from "PA" (no city) within 2 minutes — button-mashing spam.
+    - Also 1 duplicate of SKU `1013362339` (2500W Generator) from same PA burst session.
+    - Deleted 10 duplicate rows, kept 1 per unique SKU. Legitimate reports from Butler PA, WV, and Wylie TX retained.
+  - **Deferred:** Anti-spam protections for the submit form (duplicate SKU throttling, submission cooldowns). See handoff.
+  - **Verification:** `npm run verify:fast` ✅ (lint + typecheck + unit 71/71 + build)
 
 - **2026-02-22 (Canon realignment patch shipped after cross-agent doc simplification):** Applied a scoped docs-only correction pass so tool-specific instruction files remain consistent with charter authority, canonical verification lanes, and `dev -> main` promotion flow.
   - **Docs corrected (drift fixes):**
