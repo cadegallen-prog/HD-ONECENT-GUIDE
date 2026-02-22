@@ -241,6 +241,7 @@ public/                 # Static assets
 - **If session goal is AI workflow/tooling/verification enablement:** Also read `.ai/AI_ENABLEMENT_BLUEPRINT.md`
 - **Rules:** Default no new dependencies; run `verify:fast` on meaningful changes, run `e2e:smoke` for flow changes, run `e2e:full` when FULL triggers apply, record results in `.ai/SESSION_LOG.md`; work on `dev` and promote verified changes to `main`
 - **Planning rule (mandatory):** Decompose large plans into parent + child implementation slices (default: one user outcome per slice), with acceptance/rollback/verification per slice and a stop-go checkpoint after each slice.
+- **Parallel-agent rule (mandatory when >1 agent is active):** use the shared-memory single-writer lock for `.ai/HANDOFF.md`, `.ai/STATE.md`, `.ai/SESSION_LOG.md`, `.ai/BACKLOG.md` via `ai:writer-lock:*` commands.
 - **Mandatory Alignment Gate before mutation:** GOAL / WHY / DONE MEANS / NOT DOING / CONSTRAINTS / ASSUMPTIONS / CHALLENGES
 
 ---
@@ -281,12 +282,16 @@ Use this if the session is policy/process/governance heavy:
 
 1. `git checkout dev && git pull origin dev`
 2. Run `git status --short` before new work. If dirty, close carryover first (commit/push or explicit blocker resolution) before starting another objective.
-3. Make scoped changes for one objective on `dev`.
-4. Stage intentionally (`git add <paths>`) and verify staged scope with `git diff --cached --name-only`.
-5. Run `npm run ai:memory:check` + `npm run verify:fast` (and `npm run e2e:smoke` for route/form/API/navigation/UI-flow changes).
-6. Commit/push `dev`.
-7. Re-run `git status --short`; clean is expected before starting the next task.
-8. Promote to `main` only after review and all required checks pass.
+3. If more than one agent/session is active, claim shared-memory lock before editing `.ai/HANDOFF.md`, `.ai/STATE.md`, `.ai/SESSION_LOG.md`, `.ai/BACKLOG.md`:
+   - `npm run ai:writer-lock:claim -- <agent-name> "<task>"`
+   - `npm run ai:writer-lock:status`
+   - `npm run ai:writer-lock:release -- <agent-name>` after memory updates
+4. Make scoped changes for one objective on `dev`.
+5. Stage intentionally (`git add <paths>`) and verify staged scope with `git diff --cached --name-only`.
+6. Run `npm run ai:memory:check` + `npm run verify:fast` (and `npm run e2e:smoke` for route/form/API/navigation/UI-flow changes).
+7. Commit/push `dev`.
+8. Re-run `git status --short`; clean is expected before starting the next task.
+9. Promote to `main` only after review and all required checks pass.
 
 ---
 

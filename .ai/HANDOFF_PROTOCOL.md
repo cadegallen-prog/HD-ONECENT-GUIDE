@@ -20,6 +20,10 @@
    - Record commit SHA(s) and push status.
    - Capture `git status --short` at session end (clean expected). If dirty, list carryover files and reason.
 4. **Update persistent memory**
+   - If multiple agents/sessions are active, hold shared-memory single-writer lock before editing:
+     - `npm run ai:writer-lock:claim -- <agent-name> "<task>"`
+     - `npm run ai:writer-lock:status`
+     - `npm run ai:writer-lock:release -- <agent-name>` after memory updates
    - `.ai/SESSION_LOG.md` (always for meaningful work)
    - `.ai/STATE.md` (if current project reality changed)
    - `.ai/BACKLOG.md` (only if priorities changed)
@@ -77,6 +81,7 @@ Use this schema every time:
 - Commit SHA(s):
 - Push status (`pushed` / `not pushed` + reason):
 - `git status --short` at session end:
+- Shared-memory lock status (if concurrent agents were active):
 - Playwright proof path(s):
 - Memory checkpoint artifact path (when multi-session):
 - Known non-blocking console noise:

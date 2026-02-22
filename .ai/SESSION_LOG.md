@@ -4,6 +4,48 @@
 
 ---
 
+## 2026-02-22 - Codex - Single-Writer Lock Protocol (Parallel-Agent Shared Memory Safety)
+
+**Goal:** Implement a low-friction single-writer protocol so multiple agents can work in parallel without conflicting edits in shared `.ai` continuity files.
+
+**Status:** ✅ Completed (workflow/docs + helper tooling)
+
+### Changes
+
+- Added shared-memory lock helper script:
+  - `scripts/ai-shared-writer-lock.ts`
+  - Commands supported: `status`, `claim`, `heartbeat`, `release`
+  - Tracks owner, heartbeat timestamp, scope, process/host metadata, stale-lock takeover.
+- Added npm command wrappers:
+  - `ai:writer-lock:status`
+  - `ai:writer-lock:claim`
+  - `ai:writer-lock:heartbeat`
+  - `ai:writer-lock:release`
+- Added lock file ignore rule:
+  - `.gitignore` -> `.ai/.shared-writer-lock.json`
+- Codified protocol in canonical docs:
+  - `AGENTS.md` (new critical rule: single-writer lock for shared memory)
+  - `README.md` (canon + branch workflow updates)
+  - `.ai/HANDOFF_PROTOCOL.md` (lock requirement during memory updates when concurrent)
+  - `.ai/VERIFICATION_REQUIRED.md` (lock evidence requirement when concurrent)
+  - `.ai/CRITICAL_RULES.md` (new Rule #8)
+- Added reusable skill for future sessions:
+  - `docs/skills/single-writer-lock.md`
+  - `docs/skills/README.md` index update
+
+### Verification
+
+- `npm run ai:writer-lock:status` ✅
+- `npm run ai:writer-lock:claim -- codex "protocol-validation"` ✅
+- `npm run ai:writer-lock:heartbeat -- codex` ✅
+- `npm run ai:writer-lock:release -- codex` ✅
+- `npm run verify:fast` ✅
+- `npm run ai:memory:check` ✅
+- `npm run ai:checkpoint` ✅
+  - Context pack: `reports/context-packs/2026-02-22T04-35-52/context-pack.md`
+
+---
+
 ## 2026-02-22 - Codex - Weekly Analytics Snapshot Refresh (Pre-Rollout Baseline)
 
 **Goal:** Execute the next queued analytics continuity task by generating a new weekly decision snapshot with the expanded GA4 report-flow slices (`daily_events`, `daily_report_paths`).
@@ -188,37 +230,3 @@
 - `npm run e2e:smoke` ✅
 - `npm run lint:colors` ✅
 - `npx playwright test tests/store-finder-popup.spec.ts --workers=1` ✅ (4/4 projects passed)
-
----
-
-## 2026-02-20 - Codex - Dev Branch Clean-Worktree Protocol Integration (Docs-Only)
-
-**Goal:** Add a canonical commit/push hygiene loop so future sessions stop stacking unrelated local changes and always close the `dev` branch loop cleanly.
-
-**Status:** ✅ Completed (docs-only governance hardening)
-
-### Changes
-
-- Updated branch workflow canon and done-checklists:
-  - `AGENTS.md`
-  - `README.md`
-- Added a new non-negotiable guardrail:
-  - `.ai/CRITICAL_RULES.md` (`Rule #7: Clean Worktree + Scoped Commit Loop`)
-- Required branch hygiene proof in handoff/verification contracts:
-  - `.ai/HANDOFF_PROTOCOL.md`
-  - `.ai/VERIFICATION_REQUIRED.md`
-- Corrected secondary-doc drift that still implied main-only flow:
-  - `docs/skills/ship-safely.md`
-  - `.ai/AI_ENABLEMENT_BLUEPRINT.md`
-  - `.ai/CONSTRAINTS_TECHNICAL.md`
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run ai:checkpoint` ✅
-  - Context pack: `reports/context-packs/2026-02-20T13-11-07/context-pack.md`
-- `npm run verify:fast` N/A (docs-only governance changes; no runtime code-path impact)
-- `npm run e2e:smoke` N/A (docs-only; no route/form/API/navigation/UI-flow change)
-- `npm run e2e:full` N/A (docs-only; FULL triggers not applicable)
-
----

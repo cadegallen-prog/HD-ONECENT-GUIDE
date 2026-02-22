@@ -266,6 +266,26 @@ Never kill port 3001 unless user asks.
 - ✅ After each slice, run a stop/go checkpoint before starting the next slice.
 - ❌ Do not execute a multi-milestone plan as one uninterrupted implementation batch.
 
+### ⛔ Rule #6: Single-Writer Lock For Shared Memory (When Agents Run In Parallel)
+
+- Shared memory files are:
+  - `.ai/HANDOFF.md`
+  - `.ai/STATE.md`
+  - `.ai/SESSION_LOG.md`
+  - `.ai/BACKLOG.md`
+- ✅ Only one active agent may edit shared memory files at a time.
+- ✅ Claim lock before touching shared memory files:
+  - `npm run ai:writer-lock:claim -- <agent-name> "<task>"`
+- ✅ Check lock status anytime:
+  - `npm run ai:writer-lock:status`
+- ✅ For long sessions, refresh heartbeat periodically:
+  - `npm run ai:writer-lock:heartbeat -- <agent-name>`
+- ✅ Release lock after shared-memory updates are complete:
+  - `npm run ai:writer-lock:release -- <agent-name>`
+- ❌ If lock is active for another owner, do not edit shared memory files.
+- ✅ Stale locks can be reclaimed after heartbeat timeout (default 30m).
+- ✅ Parallel coding remains allowed for isolated feature files (prefer separate git worktrees).
+
 ---
 
 ## 5. Design System

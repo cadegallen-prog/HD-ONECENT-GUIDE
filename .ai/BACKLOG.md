@@ -1,6 +1,6 @@
 # Backlog (Top Priority Items)
 
-**Last updated:** Feb 22, 2026 (weekly analytics snapshot refreshed with report-flow slices)
+**Last updated:** Feb 22, 2026 (single-writer lock protocol added for parallel-agent safety)
 **Rule:** Keep ≤10 items. Archive completed/deferred items.
 
 **Auto-archive:** Full backlog history preserved in `archive/backlog-history/`
@@ -166,6 +166,12 @@ Each AI session should:
 
 - **Problem:** Future agents can drift in communication quality and operational visibility unless continuity expectations are translated into repeatable execution behavior.
 - **Progress (2026-02-22):**
+  - Added shared-memory single-writer lock protocol for concurrent agents:
+    - script: `scripts/ai-shared-writer-lock.ts`
+    - commands: `ai:writer-lock:status|claim|heartbeat|release`
+    - lock scope: `.ai/HANDOFF.md`, `.ai/STATE.md`, `.ai/SESSION_LOG.md`, `.ai/BACKLOG.md`
+    - canon docs updated: `AGENTS.md`, `README.md`, `.ai/HANDOFF_PROTOCOL.md`, `.ai/VERIFICATION_REQUIRED.md`, `.ai/CRITICAL_RULES.md`
+    - reusable skill added: `docs/skills/single-writer-lock.md`
   - Implemented report-flow event export coverage in `scripts/archive-google-analytics.ts`:
     - `ga4/daily_events.csv|json` (`date,eventName,eventCount`)
     - `ga4/daily_report_paths.csv|json` (`date,pagePathPlusQueryString,sessions`) filtered to report-route paths
@@ -183,6 +189,7 @@ Each AI session should:
     - `.ai/topics/ANALYTICS_CONTRACT.md`
     - `.ai/ANALYTICS_WEEKLY_REVIEW.md`
   - Remaining queued actions from this lane:
+    - apply single-writer lock workflow whenever more than one agent/session is active,
     - deploy participation-lift release and establish explicit post-deploy baseline window,
     - run CTR remediation pass on high-impression/low-CTR pages (`/guide`, `/what-are-pennies`, `/faq`, `/report-find`),
     - rerun weekly snapshot after 48h+ post-deploy and require 4-week confirmation before success claims.

@@ -325,6 +325,35 @@ git status --short
 
 ---
 
+## Rule #8: Single-Writer Lock For Shared Memory (Concurrent Agents)
+
+**Purpose:** Prevent multi-agent overwrite/conflicts in continuity files while still allowing parallel feature implementation.
+
+**Shared-memory files (single writer only):**
+
+- `.ai/HANDOFF.md`
+- `.ai/STATE.md`
+- `.ai/SESSION_LOG.md`
+- `.ai/BACKLOG.md`
+
+**Requirements:**
+
+- If more than one agent/session is active, claim lock before editing shared-memory files:
+  - `npm run ai:writer-lock:claim -- <agent-name> "<task>"`
+- Check status before memory updates:
+  - `npm run ai:writer-lock:status`
+- Release lock after shared-memory edits:
+  - `npm run ai:writer-lock:release -- <agent-name>`
+- Do not edit shared-memory files while another owner has an active lock.
+- Stale lock takeover is allowed after timeout (default `30m`) with explicit note.
+
+**Parallelism rule:**
+
+- Parallel coding is allowed for isolated feature files (prefer separate git worktrees).
+- Single-writer lock applies only to shared-memory continuity files.
+
+---
+
 ## Stopping Criteria
 
 **The Meta-Rule:** If you've accomplished the user's goal and passed all quality gates, **STOP**.

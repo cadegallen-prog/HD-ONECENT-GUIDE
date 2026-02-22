@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 22, 2026 (weekly analytics snapshot refreshed with report-flow slices)
+**Last updated:** Feb 22, 2026 (single-writer lock protocol shipped for parallel-agent safety)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,35 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-22 (Single-writer lock protocol shipped for parallel-agent sessions):** Added a lock-based coordination layer for shared-memory `.ai` files so multiple agents can run with low merge friction.
+  - **Tooling shipped:**
+    - `scripts/ai-shared-writer-lock.ts`
+      - commands: `status`, `claim`, `heartbeat`, `release`
+      - lock file: `.ai/.shared-writer-lock.json` (gitignored)
+      - scope: `.ai/HANDOFF.md`, `.ai/STATE.md`, `.ai/SESSION_LOG.md`, `.ai/BACKLOG.md`
+    - `package.json` scripts:
+      - `ai:writer-lock:status`
+      - `ai:writer-lock:claim`
+      - `ai:writer-lock:heartbeat`
+      - `ai:writer-lock:release`
+  - **Governance/docs codified:**
+    - `AGENTS.md` (new critical rule for shared-memory single-writer lock)
+    - `README.md` (canon + branch workflow updates for concurrent sessions)
+    - `.ai/HANDOFF_PROTOCOL.md` (lock requirement during memory updates when concurrent)
+    - `.ai/VERIFICATION_REQUIRED.md` (lock evidence requirement when concurrent)
+    - `.ai/CRITICAL_RULES.md` (new Rule #8)
+  - **Skill added (repeatable workflow):**
+    - `docs/skills/single-writer-lock.md`
+    - `docs/skills/README.md` index update
+  - **Verification:**
+    - `npm run ai:writer-lock:status` ✅
+    - `npm run ai:writer-lock:claim -- codex "protocol-validation"` ✅
+    - `npm run ai:writer-lock:heartbeat -- codex` ✅
+    - `npm run ai:writer-lock:release -- codex` ✅
+    - `npm run verify:fast` ✅
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
 
 - **2026-02-22 (Weekly analytics snapshot refreshed - pre-rollout baseline):** Ran a new weekly decision pass using the expanded GA4 report-flow archive slices and published a fresh founder-readable snapshot.
   - **Artifacts:**

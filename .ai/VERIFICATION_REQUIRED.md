@@ -37,6 +37,7 @@ To claim “done” on a meaningful change, provide:
    - branch used (normally `dev`)
    - commit SHA(s) + push status (or explicit "not pushed" reason)
    - `git status --short` at session end (clean expected; if dirty, list carryover files + blocker reason)
+   - if concurrent agents were active, include shared-memory lock evidence (`ai:writer-lock:status` output and owner)
 
 If the change is truly docs-only and no code paths changed, you can say “Docs-only change; gates not run” — but do not claim the system is green.
 
@@ -49,6 +50,12 @@ Run:
 ```bash
 npm run ai:memory:check
 npm run verify:fast
+```
+
+If multiple agents/sessions are active in parallel, also run:
+
+```bash
+npm run ai:writer-lock:status
 ```
 
 And, when switching context windows or handing off multi-step work:
@@ -129,6 +136,7 @@ Use the screenshots as the “before/after” proof when applicable.
 - Commit SHA(s):
 - Push status:
 - `git status --short` at session end:
+- Shared-memory lock status (if concurrent agents active):
 
 **Bundle (preferred):**
 

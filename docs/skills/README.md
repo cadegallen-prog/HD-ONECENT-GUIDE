@@ -25,6 +25,7 @@ Short, task-focused guides to avoid repo-wide searching.
 - [backfill-homedepot-enrichment-json](./backfill-homedepot-enrichment-json.md) — **When to use:** You have a HomeDepot.com scrape JSON and want to refresh Penny List enrichment fields only (including retail price).
 - [run-local-staging-warmer](./run-local-staging-warmer.md) — **When to use:** GitHub Actions is blocked (Cloudflare) and you need to refresh `enrichment_staging` from your home IP.
 - [ship-safely](./ship-safely.md) — **When to use:** You’re getting ready to commit, verify, or roll back safely.
+- [single-writer-lock](./single-writer-lock.md) — **When to use:** More than one agent/session may be active and you need conflict-safe shared-memory updates while keeping parallel feature work.
 - [codex-mcp-setup](./codex-mcp-setup.md) — **When to use:** Codex can’t see MCP tools/data or env vars, or you need to update Codex.
 - [google-ga4-gsc-local-archive](./google-ga4-gsc-local-archive.md) — **When to use:** You need repeatable, additive local snapshots from GA4 + GSC for trend analysis and optimization decisions.
 - [archive-first-prune](./archive-first-prune.md) — **When to use:** You need to reduce AI/doc/script bloat safely by archiving legacy files with restore manifests instead of deleting.

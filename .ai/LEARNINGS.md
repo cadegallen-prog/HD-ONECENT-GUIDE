@@ -234,6 +234,33 @@ Scan this FIRST before suggesting anything. If your idea matches an anti-pattern
 
 ---
 
+### 0i. Lock lifecycle commands must run sequentially
+
+**Problem:** Running `claim`, `heartbeat`, and `release` in parallel caused a race where `release` executed before lock creation, leaving lock state inconsistent for validation.
+
+**What We Tried:**
+
+- Fired lock lifecycle commands in a parallel batch.
+- Observed `release` returning "No writer lock to release" while `claim` had succeeded in another process.
+
+**What We Learned:**
+
+- Lock lifecycle steps are state-dependent and must be ordered.
+- Parallel execution is correct for independent reads, not for lock state transitions.
+
+**What to Do Instead:**
+
+- Run lock lifecycle commands in order:
+  1. `status`
+  2. `claim`
+  3. `heartbeat` (optional)
+  4. `release`
+- Re-check `status` after `release` when validating workflow.
+
+**Date:** Feb 22, 2026
+
+---
+
 ### 0. Route deletion + stale Next type artifacts
 
 **Problem:** After deleting a route page, `npm run build` failed with type errors from stale generated files under `.next-playwright/types` and `.next/dev/types/app/...`.
