@@ -76,6 +76,7 @@ This plan is grounded in high-signal engineering standards:
 - Add failure-mode drills (simulate context resets and verify recovery time).
 - Expand drift checks to include memory-contract conformance.
 - 2026-02-15 progress: `scripts/ai-memory.ts` now enforces multi-domain SOP conformance as critical checks; failures block `ai:checkpoint` and therefore fail `ai:verify` (memory gate).
+- 2026-02-22 progress: failure-mode drill command added to `scripts/ai-memory.ts` with reversible scenarios (`missing-file`, `corrupt-heading`) and explicit remediation output; npm wrappers added (`ai:memory:drill`, `ai:memory:drill:missing`, `ai:memory:drill:heading`).
 
 ### Done means
 
@@ -112,4 +113,4 @@ This plan is grounded in high-signal engineering standards:
 
 ## Immediate next task
 
-Add failure-mode drill commands that intentionally remove/alter a required memory artifact and confirm checkpoint fails fast with explicit remediation guidance.
+Add weekly memory-integrity trend reporting (checkpoint pass rate + integrity score trend) so autonomy hardening is tracked over time with measurable drift signals.

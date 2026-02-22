@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 22, 2026 (penny-list scroll restoration fix shipped + spam cleanup)
+**Last updated:** Feb 22, 2026 (memory drill hardening slice shipped for fail-closed checkpoint validation)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,33 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-22 (Memory failure-mode drill commands shipped):** Completed the next scoped hardening slice from the founder-autonomy plan by adding reversible drill scenarios that intentionally break required memory artifacts and verify fail-closed detection + remediation output.
+  - **Tooling shipped:**
+    - `scripts/ai-memory.ts`
+      - new `drill` command
+      - scenarios: `missing-file` and `corrupt-heading`
+      - supports `--scenario` and `--target`
+      - prints explicit remediation guidance for critical failures
+      - auto-restores mutated/removed artifacts before exit
+      - cleanup hardening: no lingering `.drill-bak-*` artifacts after failed drill paths
+    - `package.json` scripts:
+      - `ai:memory:drill`
+      - `ai:memory:drill:missing`
+      - `ai:memory:drill:heading`
+  - **Planning/memory updates:**
+    - `.ai/impl/founder-autonomy-memory-hardening.md`
+    - `.ai/topics/FOUNDER_AUTONOMY_CURRENT.md`
+    - `.ai/BACKLOG.md`
+  - **Verification:**
+    - `npm run ai:memory:drill` ✅
+    - `npm run ai:memory:drill:heading` ✅
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
+      - context pack artifact: `reports/context-packs/2026-02-22T13-57-03/context-pack.md`
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` N/A (no route/form/API/navigation/UI-flow mutation)
+    - `npm run e2e:full` N/A (FULL triggers not applicable)
 
 - **2026-02-22 (Penny list scroll restoration fix + Supabase spam cleanup):** Fixed scroll-save bug where returning from a detail page on pages 2+ reset the list to page 1. Also investigated and cleaned up spam submissions in the Penny List Supabase table.
   - **Scroll fix (`836c738`):**

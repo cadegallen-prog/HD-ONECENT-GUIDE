@@ -103,15 +103,31 @@ const REQUIRED_DOMAIN_ARTIFACT_NEEDLES: Array<{ domain: string; needle: string }
   { domain: "Future Projects", needle: ".ai/BACKLOG.md" },
 ]
 
+type MemoryCommand = "check" | "pack" | "checkpoint" | "drill"
+type DrillScenario = "missing-file" | "corrupt-heading"
+
+const DEFAULT_DRILL_TARGET = ".ai/STATE.md"
+const DEFAULT_DRILL_SCENARIO: DrillScenario = "missing-file"
+
 const parseArgs = (argv: string[]) => {
   const command = (argv[0] || "check").toLowerCase()
   const strict = !argv.includes("--no-strict")
+  const scenarioArg = argv.find((arg) => arg.startsWith("--scenario="))
+  const targetArg = argv.find((arg) => arg.startsWith("--target="))
+
+  const parsedScenario = (scenarioArg?.split("=")[1] || DEFAULT_DRILL_SCENARIO).toLowerCase()
+  const scenario: DrillScenario =
+    parsedScenario === "corrupt-heading" ? "corrupt-heading" : "missing-file"
+
+  const target = targetArg?.slice("--target=".length) || DEFAULT_DRILL_TARGET
 
   return {
-    command: ["check", "pack", "checkpoint"].includes(command)
-      ? (command as "check" | "pack" | "checkpoint")
+    command: ["check", "pack", "checkpoint", "drill"].includes(command)
+      ? (command as MemoryCommand)
       : "check",
     strict,
+    scenario,
+    target,
   }
 }
 
@@ -366,6 +382,136 @@ const printCheckSummary = (summary: CheckSummary) => {
   console.log(`Warnings        : ${summary.warnings}`)
 }
 
+const printRemediationGuidance = (summary: CheckSummary) => {
+  const criticalFailures = summary.checks.filter(
+    (check) => check.severity === "critical" && !check.passed
+  )
+  if (criticalFailures.length === 0) return
+
+  console.log("\n🔧 Remediation guidance")
+
+  for (const check of criticalFailures) {
+    if (check.id.startsWith("exists:")) {
+      const filePath = check.id.slice("exists:".length)
+      console.log(
+        `- Restore missing file \`${filePath}\` from git (for example: \`git checkout -- ${filePath}\`) or from the latest context-pack artifact.`
+      )
+      continue
+    }
+
+    if (check.id.startsWith("heading:")) {
+      const parts = check.id.split(":")
+      const filePath = parts[1] || "target file"
+      console.log(
+        `- Restore required heading content in \`${filePath}\` from canonical docs/templates, then rerun \`npm run ai:checkpoint\`.`
+      )
+      continue
+    }
+
+    if (check.id === "session-log-entry-count") {
+      console.log("- Trim `.ai/SESSION_LOG.md` to 5 entries, then rerun `npm run ai:checkpoint`.")
+      continue
+    }
+
+    if (check.id === "backlog-done-means") {
+      console.log(
+        "- Add measurable `Done means` criteria in `.ai/BACKLOG.md`, then rerun checkpoint."
+      )
+      continue
+    }
+  }
+
+  console.log("- Re-run: `npm run ai:checkpoint`")
+}
+
+const runDrill = (scenario: DrillScenario, target: string) => {
+  const targetPath = absolutePath(target)
+  if (!fileExists(target)) {
+    console.error(`\n❌ Drill target does not exist: ${target}`)
+    process.exit(1)
+  }
+
+  const backupPath = `${targetPath}.drill-bak-${Date.now()}-${process.pid}`
+  let expectedFailureId = ""
+  let actionDescription = ""
+  let headingNeedle = ""
+
+  if (scenario === "missing-file") {
+    if (!REQUIRED_FILES.includes(target)) {
+      console.error(
+        `\n❌ Target must be one of REQUIRED_FILES for missing-file drill.\n   Received: ${target}`
+      )
+      process.exit(1)
+    }
+
+    expectedFailureId = `exists:${target}`
+    actionDescription = `Temporarily removing required file: ${target}`
+    fs.renameSync(targetPath, backupPath)
+  } else {
+    const headingRequirement = REQUIRED_HEADINGS.find((item) => item.filePath === target)
+    if (!headingRequirement) {
+      console.error(
+        `\n❌ Target must have a REQUIRED_HEADINGS entry for corrupt-heading drill.\n   Received: ${target}`
+      )
+      process.exit(1)
+    }
+
+    headingNeedle = headingRequirement.needle
+    expectedFailureId = `heading:${target}:${headingNeedle}`
+    actionDescription = `Temporarily corrupting required heading in: ${target}`
+
+    const original = readText(target)
+    const exactHeadingLine = new RegExp(`^${escapeRegExp(headingNeedle)}\\s*$`, "m")
+    const corrupted = exactHeadingLine.test(original)
+      ? original.replace(exactHeadingLine, "# DRILL_CORRUPTED_REQUIRED_HEADING")
+      : original.replace(headingNeedle, "DRILL_CORRUPTED_REQUIRED_HEADING")
+    fs.copyFileSync(targetPath, backupPath)
+    fs.writeFileSync(targetPath, corrupted)
+  }
+
+  try {
+    let drillError: Error | null = null
+
+    console.log(`\n🧪 Memory drill (${scenario})`)
+    console.log(`- ${actionDescription}`)
+
+    const summary = buildChecks()
+    printCheckSummary(summary)
+    printRemediationGuidance(summary)
+
+    const expectedFailure = summary.checks.find((check) => check.id === expectedFailureId)
+    const passed =
+      !!expectedFailure &&
+      !expectedFailure.passed &&
+      expectedFailure.severity === "critical" &&
+      summary.criticalFailures > 0
+
+    if (!passed) {
+      drillError = new Error(
+        `Drill failed: expected critical failure "${expectedFailureId}" was not detected.`
+      )
+    } else {
+      console.log(
+        `\n✅ Drill succeeded: expected critical failure "${expectedFailureId}" was detected.`
+      )
+      console.log("✅ Files will now be restored automatically.")
+    }
+    return drillError
+  } finally {
+    if (fs.existsSync(backupPath)) {
+      if (scenario === "missing-file") {
+        if (fs.existsSync(targetPath)) {
+          fs.rmSync(targetPath)
+        }
+        fs.renameSync(backupPath, targetPath)
+      } else {
+        fs.copyFileSync(backupPath, targetPath)
+        fs.rmSync(backupPath)
+      }
+    }
+  }
+}
+
 const generateContextPack = (summary: CheckSummary) => {
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19)
   const outDir = path.join(ROOT, "reports", "context-packs", timestamp)
@@ -455,7 +601,7 @@ const generateContextPack = (summary: CheckSummary) => {
 }
 
 const main = () => {
-  const { command, strict } = parseArgs(process.argv.slice(2))
+  const { command, strict, scenario, target } = parseArgs(process.argv.slice(2))
 
   if (command === "check") {
     const summary = buildChecks()
@@ -493,6 +639,15 @@ const main = () => {
     console.log("\n✅ Checkpoint complete")
     console.log(`- ${pack.contextPackPath}`)
     console.log(`- ${pack.resumePromptPath}`)
+    process.exit(0)
+  }
+
+  if (command === "drill") {
+    const drillError = runDrill(scenario, target)
+    if (drillError) {
+      console.error(`\n❌ ${drillError.message}`)
+      process.exit(1)
+    }
     process.exit(0)
   }
 }

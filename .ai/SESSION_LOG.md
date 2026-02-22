@@ -4,6 +4,48 @@
 
 ---
 
+## 2026-02-22 - Codex - Memory Failure-Mode Drill Commands (Phase 3 Hardening Slice)
+
+**Goal:** Implement the next scoped P0 autonomy hardening slice by adding failure-mode drill commands that intentionally remove/alter required memory artifacts and prove fail-closed detection with remediation guidance.
+
+**Status:** ✅ Completed (tooling + docs)
+
+### Changes
+
+- Added drill command support in `scripts/ai-memory.ts`:
+  - new command: `drill`
+  - scenarios:
+    - `missing-file` (default)
+    - `corrupt-heading`
+  - options:
+    - `--scenario=<missing-file|corrupt-heading>`
+    - `--target=<path>`
+- Added explicit remediation guidance output for failed critical checks (missing required files, heading drift, session-log overflow, backlog done-means drift).
+- Added automatic rollback behavior in drill mode:
+  - temporary file mutation/removal is always restored before command exit.
+  - fixed cleanup edge case so drill failure no longer leaves `.drill-bak-*` artifacts.
+- Added npm wrappers in `package.json`:
+  - `ai:memory:drill`
+  - `ai:memory:drill:missing`
+  - `ai:memory:drill:heading`
+- Updated canonical autonomy planning/state docs:
+  - `.ai/impl/founder-autonomy-memory-hardening.md`
+  - `.ai/topics/FOUNDER_AUTONOMY_CURRENT.md`
+  - `.ai/BACKLOG.md`
+
+### Verification
+
+- `npm run ai:memory:drill` ✅
+- `npm run ai:memory:drill:heading` ✅
+- `npm run ai:memory:check` ✅
+- `npm run ai:checkpoint` ✅
+  - Context pack: `reports/context-packs/2026-02-22T13-57-03/context-pack.md`
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` N/A (no route/form/API/navigation/UI-flow change)
+- `npm run e2e:full` N/A (FULL triggers not applicable)
+
+---
+
 ## 2026-02-22 - Claude Opus 4.6 - Penny List Scroll Fix + Spam Cleanup
 
 **Goal:** Fix scroll restoration bug on penny list pages 2+ and investigate/clean up suspicious Supabase submissions.
@@ -153,104 +195,3 @@
 - `npm run e2e:smoke` N/A (no route/form/API/navigation/UI-flow mutation)
 
 ---
-
-## 2026-02-22 - Codex - Report Find Participation Lift v1 (Decomposed Program Execution)
-
-**Goal:** Execute the approved decomposed program end-to-end: anti-mega-plan policy codification, report-flow measurement integrity fixes, basket UX implementation, event taxonomy expansion, GA4 archive slice extensions, and aligned test/docs updates.
-
-**Status:** ✅ Completed (runtime + docs)
-
-### Changes
-
-- Policy codification slice (`P0-S1`) completed:
-  - `AGENTS.md`
-  - `README.md`
-  - `.ai/plans/_TEMPLATE.md`
-  - Added anti-mega-plan governance: parent/child slice dependency model, one-outcome-per-slice default, per-slice acceptance/rollback/verification, and stop/go checkpoints.
-- Measurement integrity milestone (`M1`) completed:
-  - Fixed semantic misuse of `find_submit` on report-entry CTAs in:
-    - `components/penny-list-client.tsx`
-    - `components/penny-list-mobile-utility-bar.tsx`
-  - Standardized report entry attribution (`?src=`) in:
-    - `components/footer.tsx`
-    - `app/pennies/[state]/page.tsx`
-    - `app/penny-list/page.tsx`
-    - `components/command-palette.tsx`
-  - Scrubbed raw report-adjacent item identifiers from analytics payload surfaces in:
-    - `components/penny-list-card.tsx`
-    - `components/penny-list-action-row.tsx`
-    - `app/sku/[sku]/page.tsx`
-    - `lib/analytics.ts` sanitizer redaction
-- Basket UX milestone (`M2`) completed in `components/report-find/ReportFindFormClient.tsx`:
-  - shared haul fields (`storeState` + `dateFound` required, `storeCity` optional),
-  - item draft + basket list model,
-  - SKU dedupe merge with quantity cap 99,
-  - session persistence (`pc_report_basket_v1`),
-  - deep-link prefill auto-add once-per-session without draft overwrite,
-  - sequential submit-all via existing `/api/submit-find` with mixed result summary and failed-item retention,
-  - success action `Copy for Facebook` using Safari-safe clipboard fallback utility pattern.
-- Event taxonomy + archive milestone (`M3`) completed:
-  - Expanded `EventName` in `lib/analytics.ts` with:
-    - `report_open`
-    - `item_add_manual`
-    - `item_add_prefill`
-    - `item_add_scan` (reserved)
-    - `report_submit_single`
-    - `report_submit_batch`
-    - `copy_for_facebook`
-  - Extended `scripts/archive-google-analytics.ts` with:
-    - `ga4/daily_events.csv|json` (`date,eventName,eventCount`)
-    - `ga4/daily_report_paths.csv|json` (`date,pagePathPlusQueryString,sessions`) filtered to report routes
-  - Synced analytics contract/review docs:
-    - `.ai/topics/ANALYTICS_CONTRACT.md`
-    - `.ai/ANALYTICS_WEEKLY_REVIEW.md`
-- Tests updated for basket + semantics + privacy:
-  - `tests/report-find-prefill.spec.ts`
-  - `tests/report-find-batch.spec.ts` (new)
-  - `tests/smoke-critical.spec.ts`
-  - `tests/analytics.test.ts`
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `npm run lint:colors` ✅
-- `npx playwright test tests/report-find-prefill.spec.ts tests/report-find-batch.spec.ts --project=chromium-desktop-light --workers=1` ✅
-- `npm run analytics:archive -- -- --start-date=2026-02-20 --end-date=2026-02-20` ✅
-  - archive artifact: `.local/analytics-history/runs/2026-02-22T00-15-22-963Z/summary.md`
-- `npm run ai:proof -- -- --mode=dev /report-find /penny-list` ✅
-  - proof artifact root: `reports/proof/2026-02-22T00-16-09/`
-
----
-
-## 2026-02-21 - Codex - Store Finder Follow-up Patch (Popup In-View + Contextual Control Guardrails)
-
-**Goal:** Apply post-review hardening on `/store-finder` by fixing desktop popup edge clipping and tightening mobile contextual location-control behavior.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- Updated `components/store-map.tsx`:
-  - re-enabled in-view popup behavior on desktop markers (`autoPan: true`, `keepInView: true`) to prevent edge clipping,
-  - added guardrails so programmatic map movement (selection/recenter) is not misclassified as user exploration.
-- Updated `app/store-finder/page.tsx`:
-  - narrowed mobile recenter eligibility so the contextual button does not flip into recenter mode just from store selection while in follow mode.
-- Updated `tests/store-finder-popup.spec.ts`:
-  - retained desktop popup checks + mobile popup suppression assertions,
-  - added mobile assertion that exactly one contextual location control is visible (no duplicate mobile/desktop control conflict).
-
-### Verification
-
-- `npx playwright test tests/store-finder-popup.spec.ts --workers=1` ✅ (6 passed, 2 desktop-only skips)
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `npm run lint:colors` ✅
-
-### Analytics / OAuth Access Re-Check (founder request)
-
-- `npm run analytics:archive -- -- --start-date=2026-02-20 --end-date=2026-02-20` ✅
-  - run artifact: `.local/analytics-history/runs/2026-02-21T07-36-36-822Z/summary.md`
-  - auth mode confirmed: `oauth_refresh_token`
-- `gcloud auth application-default print-access-token` ✅ (ADC fallback path available)

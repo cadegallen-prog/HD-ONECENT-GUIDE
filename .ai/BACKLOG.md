@@ -29,6 +29,12 @@ Each AI session should:
     - keep only tooling/docs/guardrails with measurable user-value impact,
     - prefer proven prebuilt systems when they reduce maintenance,
     - enforce hard fail-closed gates for drift and missing proof.
+- **Progress (2026-02-22):**
+  - Shipped memory failure-mode drill commands for checkpoint fail-closed validation:
+    - `ai:memory:drill`
+    - `ai:memory:drill:missing`
+    - `ai:memory:drill:heading`
+  - Drill output now includes explicit remediation guidance for missing required artifacts and heading drift.
 - **Progress (2026-02-15):**
   - Memory integrity automation shipped (`ai:memory:check`, `ai:memory:pack`, `ai:checkpoint`).
   - Founder autonomy SOP and canonical plan/topic docs shipped.
