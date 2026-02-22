@@ -2,7 +2,7 @@
 
 **Status:** Active  
 **Owner:** AI agents (execution), Cade (business approvals only)  
-**Last updated:** 2026-02-15
+**Last updated:** 2026-02-22
 
 ---
 
@@ -77,6 +77,12 @@ This plan is grounded in high-signal engineering standards:
 - Expand drift checks to include memory-contract conformance.
 - 2026-02-15 progress: `scripts/ai-memory.ts` now enforces multi-domain SOP conformance as critical checks; failures block `ai:checkpoint` and therefore fail `ai:verify` (memory gate).
 - 2026-02-22 progress: failure-mode drill command added to `scripts/ai-memory.ts` with reversible scenarios (`missing-file`, `corrupt-heading`) and explicit remediation output; npm wrappers added (`ai:memory:drill`, `ai:memory:drill:missing`, `ai:memory:drill:heading`).
+- 2026-02-22 progress: weekly trend reporting shipped in `scripts/ai-memory.ts` with:
+  - new command: `trend` (supports `--days=<n>`)
+  - npm wrappers: `ai:memory:trend`, `ai:memory:trend:30`
+  - checkpoint run-history ledger: `reports/memory-integrity/checkpoint-history.jsonl`
+  - weekly artifact bundle: `reports/memory-integrity-weekly/<YYYY-MM-DD>/{summary.md,metrics.json}`
+  - fail-closed behavior for missing history windows and strict SLO breach detection.
 
 ### Done means
 
@@ -113,4 +119,4 @@ This plan is grounded in high-signal engineering standards:
 
 ## Immediate next task
 
-Add weekly memory-integrity trend reporting (checkpoint pass rate + integrity score trend) so autonomy hardening is tracked over time with measurable drift signals.
+Define a weekly operating cadence for `ai:memory:trend` review and predeclare remediation steps when pass-rate/integrity SLOs fail (so drift response is automatic, not ad hoc).

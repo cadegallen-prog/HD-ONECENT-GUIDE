@@ -4,6 +4,47 @@
 
 ---
 
+## 2026-02-22 - Codex - Weekly Memory Integrity Trend Reporting (Phase 3 Hardening Slice)
+
+**Goal:** Complete the remaining founder-autonomy hardening slice by shipping weekly checkpoint pass-rate and integrity-score trend reporting with durable artifacts and fail-closed SLO signaling.
+
+**Status:** ✅ Completed (tooling + docs)
+
+### Changes
+
+- Extended `scripts/ai-memory.ts` with:
+  - new command: `trend` (`--days=<n>` support),
+  - checkpoint run-history ledger write path on each `ai:checkpoint` run:
+    - `reports/memory-integrity/checkpoint-history.jsonl`,
+  - context-pack backfill ingestion so existing context packs seed baseline trend history,
+  - weekly artifact generation:
+    - `reports/memory-integrity-weekly/<YYYY-MM-DD>/summary.md`
+    - `reports/memory-integrity-weekly/<YYYY-MM-DD>/metrics.json`,
+  - strict fail-closed behavior for trend SLO breaches (pass-rate/integrity) and empty history windows.
+- Added npm wrappers in `package.json`:
+  - `ai:memory:trend`
+  - `ai:memory:trend:30`
+- Updated canonical autonomy docs:
+  - `.ai/impl/founder-autonomy-memory-hardening.md`
+  - `.ai/topics/FOUNDER_AUTONOMY_CURRENT.md`
+  - `.ai/BACKLOG.md`
+
+### Verification
+
+- `npm run ai:memory:trend` ✅
+  - Artifact: `reports/memory-integrity-weekly/2026-02-22/summary.md`
+  - Artifact: `reports/memory-integrity-weekly/2026-02-22/metrics.json`
+- `npm run ai:memory:check` ✅
+- `npm run ai:checkpoint` ✅
+  - Context pack: `reports/context-packs/2026-02-22T21-31-09/context-pack.md`
+- `npm run ai:memory:drill` ✅
+- `npm run ai:memory:drill:heading` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` N/A (no route/form/API/navigation/UI-flow change)
+- `npm run e2e:full` N/A (FULL triggers not applicable)
+
+---
+
 ## 2026-02-22 - Codex - Memory Failure-Mode Drill Commands (Phase 3 Hardening Slice)
 
 **Goal:** Implement the next scoped P0 autonomy hardening slice by adding failure-mode drill commands that intentionally remove/alter required memory artifacts and prove fail-closed detection with remediation guidance.
@@ -154,44 +195,5 @@
 - `npm run ai:memory:check` ✅
 - `npm run ai:checkpoint` ✅
   - Context pack: `reports/context-packs/2026-02-22T04-35-52/context-pack.md`
-
----
-
-## 2026-02-22 - Codex - Weekly Analytics Snapshot Refresh (Pre-Rollout Baseline)
-
-**Goal:** Execute the next queued analytics continuity task by generating a new weekly decision snapshot with the expanded GA4 report-flow slices (`daily_events`, `daily_report_paths`).
-
-**Status:** ✅ Completed (docs/data lane)
-
-### Changes
-
-- Ran a fresh GA4 + GSC archive window:
-  - `npm run analytics:archive -- -- --start-date=2026-02-08 --end-date=2026-02-21`
-  - Artifact: `.local/analytics-history/runs/2026-02-22T00-29-57-156Z/summary.md`
-- Produced new weekly decision artifact:
-  - `reports/analytics-weekly/2026-02-22/summary.md`
-- Snapshot now includes report-flow participation reads from canonical archive slices:
-  - reports/day proxy via `find_submit`,
-  - reports/session via `find_submit / report-route sessions`,
-  - source mix via `/report-find?src=...` path buckets.
-
-### Key outputs (2026-02-15..2026-02-21 vs 2026-02-08..2026-02-14)
-
-- GSC clicks: `467` vs `397` (`+17.63%`)
-- GSC non-branded clicks: `83` vs `34` (`+144.12%`)
-- GA4 `/penny-list` sessions: `4,181` vs `4,118` (`+1.53%`)
-- GA4 `/report-find` sessions: `286` vs `234` (`+22.22%`)
-- `find_submit`: `122` vs `109` (`+11.93%`)
-- `report_find_click`: `37` vs `38` (`-2.63%`)
-- reports per report-route session: `0.3861` vs `0.4360` (`-11.45%`)
-
-### Verification
-
-- `npm run analytics:archive -- -- --start-date=2026-02-08 --end-date=2026-02-21` ✅
-- `npm run ai:memory:check` ✅
-- `npm run ai:checkpoint` ✅
-  - Context pack: `reports/context-packs/2026-02-22T00-33-37/context-pack.md`
-- `npm run verify:fast` N/A (docs/data artifact refresh; no runtime code-path mutation)
-- `npm run e2e:smoke` N/A (no route/form/API/navigation/UI-flow mutation)
 
 ---

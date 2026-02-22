@@ -40,6 +40,8 @@
     "ai:memory:drill": "tsx scripts/ai-memory.ts drill",
     "ai:memory:drill:missing": "tsx scripts/ai-memory.ts drill --scenario=missing-file --target=.ai/STATE.md",
     "ai:memory:drill:heading": "tsx scripts/ai-memory.ts drill --scenario=corrupt-heading --target=.ai/STATE.md",
+    "ai:memory:trend": "tsx scripts/ai-memory.ts trend",
+    "ai:memory:trend:30": "tsx scripts/ai-memory.ts trend --days=30",
     "ai:verify": "tsx scripts/ai-verify.ts",
     "ai:proof": "tsx scripts/ai-proof.ts",
     "ads:check": "tsx scripts/ads-readiness-check.ts",

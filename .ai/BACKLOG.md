@@ -1,6 +1,6 @@
 # Backlog (Top Priority Items)
 
-**Last updated:** Feb 22, 2026 (single-writer lock protocol added for parallel-agent safety)
+**Last updated:** Feb 22, 2026 (memory trend reporting slice shipped for autonomy hardening)
 **Rule:** Keep ≤10 items. Archive completed/deferred items.
 
 **Auto-archive:** Full backlog history preserved in `archive/backlog-history/`
@@ -35,6 +35,14 @@ Each AI session should:
     - `ai:memory:drill:missing`
     - `ai:memory:drill:heading`
   - Drill output now includes explicit remediation guidance for missing required artifacts and heading drift.
+- **Progress (2026-02-22):**
+  - Shipped weekly memory-integrity trend reporting with strict fail-closed SLO checks:
+    - `ai:memory:trend`
+    - `ai:memory:trend:30`
+  - Added checkpoint run-history ledger and weekly artifact generation:
+    - `reports/memory-integrity/checkpoint-history.jsonl`
+    - `reports/memory-integrity-weekly/<YYYY-MM-DD>/summary.md`
+    - `reports/memory-integrity-weekly/<YYYY-MM-DD>/metrics.json`
 - **Progress (2026-02-15):**
   - Memory integrity automation shipped (`ai:memory:check`, `ai:memory:pack`, `ai:checkpoint`).
   - Founder autonomy SOP and canonical plan/topic docs shipped.
@@ -44,6 +52,7 @@ Each AI session should:
 - **Done means:**
   - Every multi-session handoff includes a generated context pack artifact.
   - `ai:checkpoint` passes with **0 critical failures** before handoff.
+  - Weekly trend artifact exists with checkpoint pass-rate + integrity-score history.
   - Recovery time from fresh context to actionable state is ≤ 5 minutes.
   - Founder required actions remain limited to approvals/strategic decisions.
 - **Plan artifacts:** `.ai/impl/founder-autonomy-memory-hardening.md`, `.ai/FOUNDER_AUTONOMY_OPERATING_SYSTEM.md`, `.ai/topics/FOUNDER_AUTONOMY_CURRENT.md`

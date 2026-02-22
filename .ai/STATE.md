@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 22, 2026 (memory drill hardening slice shipped for fail-closed checkpoint validation)
+**Last updated:** Feb 22, 2026 (weekly memory trend reporting slice shipped for autonomy hardening)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,37 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-22 (Weekly memory integrity trend reporting shipped):** Completed the remaining Phase 3 autonomy hardening slice by adding weekly checkpoint pass-rate + integrity-score trend reporting with durable artifacts and strict fail-closed SLO behavior.
+  - **Tooling shipped:**
+    - `scripts/ai-memory.ts`
+      - new `trend` command (`--days=<n>`)
+      - checkpoint run-history ledger persisted at `reports/memory-integrity/checkpoint-history.jsonl`
+      - context-pack backfill parser to seed trend baseline from existing artifacts
+      - weekly artifact generation:
+        - `reports/memory-integrity-weekly/<YYYY-MM-DD>/summary.md`
+        - `reports/memory-integrity-weekly/<YYYY-MM-DD>/metrics.json`
+      - strict fail-closed trend signaling on SLO breach (pass-rate/integrity targets)
+  - **Script wiring:**
+    - `package.json`
+      - `ai:memory:trend`
+      - `ai:memory:trend:30`
+  - **Planning/memory updates:**
+    - `.ai/impl/founder-autonomy-memory-hardening.md`
+    - `.ai/topics/FOUNDER_AUTONOMY_CURRENT.md`
+    - `.ai/BACKLOG.md`
+  - **Verification:**
+    - `npm run ai:memory:trend` ✅
+      - artifact: `reports/memory-integrity-weekly/2026-02-22/summary.md`
+      - artifact: `reports/memory-integrity-weekly/2026-02-22/metrics.json`
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
+      - context pack artifact: `reports/context-packs/2026-02-22T21-31-09/context-pack.md`
+    - `npm run ai:memory:drill` ✅
+    - `npm run ai:memory:drill:heading` ✅
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` N/A (no route/form/API/navigation/UI-flow mutation)
+    - `npm run e2e:full` N/A (FULL triggers not applicable)
 
 - **2026-02-22 (Memory failure-mode drill commands shipped):** Completed the next scoped hardening slice from the founder-autonomy plan by adding reversible drill scenarios that intentionally break required memory artifacts and verify fail-closed detection + remediation output.
   - **Tooling shipped:**

@@ -31,6 +31,7 @@ Short, task-focused guides to avoid repo-wide searching.
 - [archive-first-prune](./archive-first-prune.md) — **When to use:** You need to reduce AI/doc/script bloat safely by archiving legacy files with restore manifests instead of deleting.
 - [stash-hygiene](./stash-hygiene.md) — **When to use:** Stashes/untracked junk are creating invisible state that confuses agents; bundle+drop to keep `git stash list` near-zero.
 - [task-completion-handoff](./task-completion-handoff.md) — **When to use:** You want strict closeout behavior (verify + memory updates + next-agent handoff) so context persists across windows.
+- [memory-integrity-trend-reporting](./memory-integrity-trend-reporting.md) — **When to use:** You need a weekly fail-closed readout of checkpoint pass-rate + memory integrity score trends for autonomy hardening.
 - [plan-canonicality](./plan-canonicality.md) — **When to use:** A plan exists in tool-local locations (like `.claude/plans`) and you need one repo-canonical source of truth in `.ai/impl/`.
 - [ux-loop-improvement](./ux-loop-improvement.md) — **When to use:** You want to improve the core user loop (`/penny-list` -> `/sku/[sku]` -> `/report-find`) without scope creep.
 - [ui-refinement-aaa](./ui-refinement-aaa.md) — **When to use:** You need UI polish/hierarchy/interaction cleanup while staying inside token-based AAA standards.
