@@ -69,8 +69,10 @@ test("inserts only allowed fields into Supabase", async () => {
     exact_quantity_found: 2,
     notes_optional: "Example note",
     timestamp: payload.timestamp,
+    submitter_hash: payload.submitter_hash,
   })
   assert.ok(typeof payload.timestamp === "string")
+  assert.ok(typeof payload.submitter_hash === "string", "submitter_hash should be a string")
   clearSupabaseMocks()
 })
 

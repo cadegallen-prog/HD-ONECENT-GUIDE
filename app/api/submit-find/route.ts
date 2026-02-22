@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto"
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 import { validateSku } from "@/lib/sku"
@@ -163,6 +164,10 @@ function recordSubmitTime(clientKey: string) {
   for (const [key, ts] of lastSubmitMap) {
     if (ts < cutoff) lastSubmitMap.delete(key)
   }
+}
+
+function hashClientIdentifier(ip: string): string {
+  return createHash("sha256").update(ip).digest("hex")
 }
 
 type SupabaseClientLike = ReturnType<typeof getSupabaseClient>
@@ -721,6 +726,9 @@ export async function POST(request: NextRequest) {
       ? enrichmentItemName
       : userItemName
 
+    const clientIp = getClientIp(request)
+    const submitterHash = clientIp && clientIp !== "unknown" ? hashClientIdentifier(clientIp) : null
+
     const payload: Record<string, unknown> = {
       // User-provided canonical data (always from user input)
       home_depot_sku_6_or_10_digits: normalizedSku,
@@ -729,6 +737,7 @@ export async function POST(request: NextRequest) {
       exact_quantity_found: qty ?? null,
       notes_optional: body.notes?.trim() || null,
       timestamp: new Date().toISOString(),
+      submitter_hash: submitterHash,
 
       // Prefer enriched name only when it is clearly better than user-provided text.
       item_name: preferredItemName,
