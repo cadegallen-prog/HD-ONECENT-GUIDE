@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 22, 2026 (weekly memory trend reporting slice shipped for autonomy hardening)
+**Last updated:** Feb 22, 2026 (anti-spam protections shipped for report-find form + remaining PA spam purged)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,21 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-22 (Anti-spam protections for report-find + spam cleanup):** Built three-layer anti-spam protections for the Report a Find submission flow and purged remaining spam Ryobi generator entries from Supabase.
+  - **Spam cleanup (Supabase direct):**
+    - Deleted 5 remaining PA entries from Feb 21 spam session (SKUs: 1008546712, 1013362341, 1013362339, 1003241156, 1013362340). All originated from a single spam burst (15 submissions in 10 min, no city).
+    - Preserved 2 organic reports for SKU 1013362340 from WV and Wylie, TX (different IPs, different states = credible).
+  - **Server-side protections (`app/api/submit-find/route.ts`):**
+    - Duplicate SKU throttle: Same IP + same SKU blocked for 10 minutes. Prevents identical-item spam while allowing diverse batch submissions.
+    - Rapid-fire cooldown: 5-second minimum interval between submissions from same IP. Catches button-mashing across any SKUs.
+    - Both use in-memory Maps (same pattern as existing rate limiter) with automatic pruning.
+  - **Client-side debounce (`components/report-find/ReportFindFormClient.tsx`):**
+    - Submit button disabled for 3 seconds after batch submission completes. UX guard only — server-side is the real protection.
+  - **What didn't change:** The existing 30/hour rate limit stays as-is for legitimate batch users.
+  - **Verification:**
+    - `npm run verify:fast` ✅ (lint + typecheck + unit 71/71 + build)
+    - `npm run e2e:smoke` ✅ (5/5 including report-find basket flow)
 
 - **2026-02-22 (Weekly memory integrity trend reporting shipped):** Completed the remaining Phase 3 autonomy hardening slice by adding weekly checkpoint pass-rate + integrity-score trend reporting with durable artifacts and strict fail-closed SLO behavior.
   - **Tooling shipped:**
@@ -79,7 +94,7 @@ Every AI session must update this after meaningful work.
     - SKU `1013362340` (Ryobi 4000W Generator, $729) had 10 duplicate submissions from "PA" (no city) within 2 minutes — button-mashing spam.
     - Also 1 duplicate of SKU `1013362339` (2500W Generator) from same PA burst session.
     - Deleted 10 duplicate rows, kept 1 per unique SKU. Legitimate reports from Butler PA, WV, and Wylie TX retained.
-  - **Deferred:** Anti-spam protections for the submit form (duplicate SKU throttling, submission cooldowns). See handoff.
+  - **Resolved:** Anti-spam protections shipped in subsequent session (duplicate SKU throttling, rapid-fire cooldown, client debounce).
   - **Verification:** `npm run verify:fast` ✅ (lint + typecheck + unit 71/71 + build)
 
 - **2026-02-22 (Canon realignment patch shipped after cross-agent doc simplification):** Applied a scoped docs-only correction pass so tool-specific instruction files remain consistent with charter authority, canonical verification lanes, and `dev -> main` promotion flow.

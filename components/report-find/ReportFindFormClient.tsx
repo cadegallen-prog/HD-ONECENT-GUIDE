@@ -132,6 +132,7 @@ function ReportFindForm() {
     message: string
   } | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [submitCooldown, setSubmitCooldown] = useState(false)
   const [result, setResult] = useState<SubmitResult | null>(null)
   const [lastSuccessfulItems, setLastSuccessfulItems] = useState<BasketItem[]>([])
   const [copyFeedback, setCopyFeedback] = useState("")
@@ -447,6 +448,8 @@ function ReportFindForm() {
     })
 
     setSubmitting(false)
+    setSubmitCooldown(true)
+    setTimeout(() => setSubmitCooldown(false), 3000)
   }
 
   const handleCopyForFacebook = async () => {
@@ -487,7 +490,7 @@ function ReportFindForm() {
     setCopyFeedback("Could not copy automatically. Please try again.")
   }
 
-  const submitDisabled = submitting || basket.length === 0
+  const submitDisabled = submitting || submitCooldown || basket.length === 0
 
   return (
     <div className="max-w-2xl mx-auto">

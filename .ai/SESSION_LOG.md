@@ -4,6 +4,30 @@
 
 ---
 
+## 2026-02-22 - Claude Code - Anti-Spam Protections for Report a Find
+
+**Goal:** Purge remaining spam Ryobi generator entries from Supabase and build three-layer anti-spam protections to prevent future button-mashing spam.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- Deleted 5 remaining PA spam entries from Supabase (Feb 21 spam session). Preserved 2 organic WV/TX reports.
+- `app/api/submit-find/route.ts`:
+  - Duplicate SKU throttle (10-min window per IP+SKU)
+  - Rapid-fire cooldown (5-second minimum between submissions per IP)
+  - Both in-memory Maps with automatic pruning (same pattern as existing rate limiter)
+- `components/report-find/ReportFindFormClient.tsx`:
+  - 3-second post-submit cooldown on the submit button
+- `.ai/STATE.md` and `.ai/SESSION_LOG.md` updated
+
+### Verification
+
+- `npm run verify:fast` ✅ (lint + typecheck + unit 71/71 + build)
+- `npm run e2e:smoke` ✅ (5/5 including report-find basket flow)
+
+---
+
 ## 2026-02-22 - Codex - Weekly Memory Integrity Trend Reporting (Phase 3 Hardening Slice)
 
 **Goal:** Complete the remaining founder-autonomy hardening slice by shipping weekly checkpoint pass-rate and integrity-score trend reporting with durable artifacts and fail-closed SLO signaling.

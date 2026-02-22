@@ -9,12 +9,29 @@ import { isLowQualityItemName, shouldPreferEnrichedName } from "@/lib/item-name-
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000 // 1 hour
 const RATE_LIMIT_MAX = 30 // Allows batch submissions (e.g., stack of receipts)
 
+const DUPLICATE_SKU_WINDOW_MS = 10 * 60 * 1000 // 10 minutes
+const RAPID_FIRE_COOLDOWN_MS = 5_000 // 5 seconds between submissions
+
 type RateBucket = number[]
 const rateLimitMap: Map<string, RateBucket> =
   (globalThis as unknown as { __pennyRateLimit?: Map<string, RateBucket> }).__pennyRateLimit ??
   new Map()
 ;(globalThis as unknown as { __pennyRateLimit?: Map<string, RateBucket> }).__pennyRateLimit =
   rateLimitMap
+
+// Tracks last submission time of each SKU per client: "ip:sku" -> timestamp
+const skuThrottleMap: Map<string, number> =
+  (globalThis as unknown as { __pennySkuThrottle?: Map<string, number> }).__pennySkuThrottle ??
+  new Map()
+;(globalThis as unknown as { __pennySkuThrottle?: Map<string, number> }).__pennySkuThrottle =
+  skuThrottleMap
+
+// Tracks last submission timestamp per client for rapid-fire detection
+const lastSubmitMap: Map<string, number> =
+  (globalThis as unknown as { __pennyLastSubmit?: Map<string, number> }).__pennyLastSubmit ??
+  new Map()
+;(globalThis as unknown as { __pennyLastSubmit?: Map<string, number> }).__pennyLastSubmit =
+  lastSubmitMap
 
 const submissionSchema = z
   .object({
@@ -113,6 +130,39 @@ function recordSuccessfulSubmission(key: string) {
   const recent = bucket.filter((ts) => now - ts < RATE_LIMIT_WINDOW_MS)
   recent.push(now)
   rateLimitMap.set(key, recent)
+}
+
+function isDuplicateSkuThrottled(clientKey: string, sku: string): boolean {
+  const compositeKey = `${clientKey}:${sku}`
+  const lastTime = skuThrottleMap.get(compositeKey)
+  if (lastTime && Date.now() - lastTime < DUPLICATE_SKU_WINDOW_MS) return true
+  return false
+}
+
+function recordSkuSubmission(clientKey: string, sku: string) {
+  skuThrottleMap.set(`${clientKey}:${sku}`, Date.now())
+
+  // Prune entries older than the window to prevent unbounded growth
+  const cutoff = Date.now() - DUPLICATE_SKU_WINDOW_MS
+  for (const [key, ts] of skuThrottleMap) {
+    if (ts < cutoff) skuThrottleMap.delete(key)
+  }
+}
+
+function isRapidFire(clientKey: string): boolean {
+  const lastTime = lastSubmitMap.get(clientKey)
+  if (lastTime && Date.now() - lastTime < RAPID_FIRE_COOLDOWN_MS) return true
+  return false
+}
+
+function recordSubmitTime(clientKey: string) {
+  lastSubmitMap.set(clientKey, Date.now())
+
+  // Prune stale entries
+  const cutoff = Date.now() - RAPID_FIRE_COOLDOWN_MS * 2
+  for (const [key, ts] of lastSubmitMap) {
+    if (ts < cutoff) lastSubmitMap.delete(key)
+  }
 }
 
 type SupabaseClientLike = ReturnType<typeof getSupabaseClient>
@@ -559,6 +609,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    if (isRapidFire(rateKey)) {
+      return NextResponse.json(
+        { error: "Please wait a few seconds between submissions." },
+        { status: 429 }
+      )
+    }
+
     // Parse JSON with explicit error handling
     let requestBody: unknown
     try {
@@ -591,6 +648,16 @@ export async function POST(request: NextRequest) {
     }
 
     const normalizedSku = skuCheck.normalized
+
+    if (isDuplicateSkuThrottled(rateKey, normalizedSku)) {
+      return NextResponse.json(
+        {
+          error:
+            "You already reported this item. If you found it at a different store, try again in a few minutes.",
+        },
+        { status: 429 }
+      )
+    }
 
     // Validate date is within the last 30 days
     const dateValidation = validateDateWithin30Days(body.dateFound)
@@ -742,6 +809,8 @@ export async function POST(request: NextRequest) {
     }
 
     recordSuccessfulSubmission(rateKey)
+    recordSkuSubmission(rateKey, normalizedSku)
+    recordSubmitTime(rateKey)
 
     // Step 2 (canonical): apply Item Cache enrichment via non-consuming RPC.
     const itemCacheResult = await applyItemCacheEnrichment(
