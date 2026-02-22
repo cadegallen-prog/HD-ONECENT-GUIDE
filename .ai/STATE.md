@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 21, 2026 (Store Finder follow-up patch + GA4/GSC OAuth access reconfirmed)
+**Last updated:** Feb 22, 2026 (Report Find Participation Lift v1 decomposed program shipped)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,54 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-22 (Report Find Participation Lift v1 decomposed program shipped):** Completed the approved slice-by-slice execution program across governance, measurement integrity, basket UX, taxonomy, archive reporting, and coverage updates.
+  - **Policy/governance (`P0-S1`) completed:**
+    - Added anti-mega-plan planning rules in:
+      - `AGENTS.md`
+      - `README.md`
+      - `.ai/plans/_TEMPLATE.md`
+    - Enforced decomposition defaults: parent + child slices, one outcome per slice, explicit acceptance/rollback/verification lane, stop/go checkpoint after each slice.
+  - **Measurement integrity (`M1`) completed:**
+    - `find_submit` semantic misuse removed from report-entry CTAs and replaced with `report_find_click` in:
+      - `components/penny-list-client.tsx`
+      - `components/penny-list-mobile-utility-bar.tsx`
+    - Source attribution normalized on report-entry links (`?src=`) in:
+      - `components/footer.tsx`
+      - `app/pennies/[state]/page.tsx`
+      - `app/penny-list/page.tsx`
+      - `components/command-palette.tsx`
+    - Raw item identifiers removed from report-adjacent analytics payloads in:
+      - `components/penny-list-card.tsx`
+      - `components/penny-list-action-row.tsx`
+      - `app/sku/[sku]/page.tsx`
+      - `lib/analytics.ts` (sanitizer redaction keys)
+  - **Basket UX (`M2`) completed in `components/report-find/ReportFindFormClient.tsx`:**
+    - shared haul fields with required state/date and optional city,
+    - add-to-basket workflow with dedupe merge by SKU (quantity cap 99),
+    - session persistence (`pc_report_basket_v1`),
+    - prefill auto-add once-per-session without draft overwrite,
+    - sequential submit-all to existing `/api/submit-find`,
+    - partial-failure summary + failed-item retention for retry,
+    - success action: Safari-safe `Copy for Facebook`.
+  - **Taxonomy + archive (`M3`) completed:**
+    - `lib/analytics.ts` event set expanded with report/basket events (`report_open`, `item_add_manual`, `item_add_prefill`, `item_add_scan`, `report_submit_single`, `report_submit_batch`, `copy_for_facebook`).
+    - `scripts/archive-google-analytics.ts` extended with:
+      - `ga4/daily_events.csv|json`
+      - `ga4/daily_report_paths.csv|json`
+    - Contract/review docs synchronized:
+      - `.ai/topics/ANALYTICS_CONTRACT.md`
+      - `.ai/ANALYTICS_WEEKLY_REVIEW.md`
+  - **Verification evidence:**
+    - `npm run ai:memory:check` ✅
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` ✅
+    - `npm run lint:colors` ✅
+    - `npx playwright test tests/report-find-prefill.spec.ts tests/report-find-batch.spec.ts --project=chromium-desktop-light --workers=1` ✅
+    - `npm run analytics:archive -- -- --start-date=2026-02-20 --end-date=2026-02-20` ✅
+      - artifact: `.local/analytics-history/runs/2026-02-22T00-15-22-963Z/summary.md`
+    - `npm run ai:proof -- -- --mode=dev /report-find /penny-list` ✅
+      - artifacts: `reports/proof/2026-02-22T00-16-09/`
 
 - **2026-02-21 (`/store-finder` post-review hardening patch completed):** Applied a scoped follow-up patch after code review findings to keep desktop marker popups visible near map edges and keep mobile contextual location controls predictable.
   - **Runtime/test updates shipped:**

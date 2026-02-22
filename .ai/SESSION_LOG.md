@@ -4,6 +4,76 @@
 
 ---
 
+## 2026-02-22 - Codex - Report Find Participation Lift v1 (Decomposed Program Execution)
+
+**Goal:** Execute the approved decomposed program end-to-end: anti-mega-plan policy codification, report-flow measurement integrity fixes, basket UX implementation, event taxonomy expansion, GA4 archive slice extensions, and aligned test/docs updates.
+
+**Status:** ✅ Completed (runtime + docs)
+
+### Changes
+
+- Policy codification slice (`P0-S1`) completed:
+  - `AGENTS.md`
+  - `README.md`
+  - `.ai/plans/_TEMPLATE.md`
+  - Added anti-mega-plan governance: parent/child slice dependency model, one-outcome-per-slice default, per-slice acceptance/rollback/verification, and stop/go checkpoints.
+- Measurement integrity milestone (`M1`) completed:
+  - Fixed semantic misuse of `find_submit` on report-entry CTAs in:
+    - `components/penny-list-client.tsx`
+    - `components/penny-list-mobile-utility-bar.tsx`
+  - Standardized report entry attribution (`?src=`) in:
+    - `components/footer.tsx`
+    - `app/pennies/[state]/page.tsx`
+    - `app/penny-list/page.tsx`
+    - `components/command-palette.tsx`
+  - Scrubbed raw report-adjacent item identifiers from analytics payload surfaces in:
+    - `components/penny-list-card.tsx`
+    - `components/penny-list-action-row.tsx`
+    - `app/sku/[sku]/page.tsx`
+    - `lib/analytics.ts` sanitizer redaction
+- Basket UX milestone (`M2`) completed in `components/report-find/ReportFindFormClient.tsx`:
+  - shared haul fields (`storeState` + `dateFound` required, `storeCity` optional),
+  - item draft + basket list model,
+  - SKU dedupe merge with quantity cap 99,
+  - session persistence (`pc_report_basket_v1`),
+  - deep-link prefill auto-add once-per-session without draft overwrite,
+  - sequential submit-all via existing `/api/submit-find` with mixed result summary and failed-item retention,
+  - success action `Copy for Facebook` using Safari-safe clipboard fallback utility pattern.
+- Event taxonomy + archive milestone (`M3`) completed:
+  - Expanded `EventName` in `lib/analytics.ts` with:
+    - `report_open`
+    - `item_add_manual`
+    - `item_add_prefill`
+    - `item_add_scan` (reserved)
+    - `report_submit_single`
+    - `report_submit_batch`
+    - `copy_for_facebook`
+  - Extended `scripts/archive-google-analytics.ts` with:
+    - `ga4/daily_events.csv|json` (`date,eventName,eventCount`)
+    - `ga4/daily_report_paths.csv|json` (`date,pagePathPlusQueryString,sessions`) filtered to report routes
+  - Synced analytics contract/review docs:
+    - `.ai/topics/ANALYTICS_CONTRACT.md`
+    - `.ai/ANALYTICS_WEEKLY_REVIEW.md`
+- Tests updated for basket + semantics + privacy:
+  - `tests/report-find-prefill.spec.ts`
+  - `tests/report-find-batch.spec.ts` (new)
+  - `tests/smoke-critical.spec.ts`
+  - `tests/analytics.test.ts`
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npm run lint:colors` ✅
+- `npx playwright test tests/report-find-prefill.spec.ts tests/report-find-batch.spec.ts --project=chromium-desktop-light --workers=1` ✅
+- `npm run analytics:archive -- -- --start-date=2026-02-20 --end-date=2026-02-20` ✅
+  - archive artifact: `.local/analytics-history/runs/2026-02-22T00-15-22-963Z/summary.md`
+- `npm run ai:proof -- -- --mode=dev /report-find /penny-list` ✅
+  - proof artifact root: `reports/proof/2026-02-22T00-16-09/`
+
+---
+
 ## 2026-02-21 - Codex - Store Finder Follow-up Patch (Popup In-View + Contextual Control Guardrails)
 
 **Goal:** Apply post-review hardening on `/store-finder` by fixing desktop popup edge clipping and tightening mobile contextual location-control behavior.
@@ -172,45 +242,3 @@
   - add event export coverage for canonical guardrails,
   - run CTR remediation on high-impression low-CTR pages (`/guide`, `/what-are-pennies`, `/faq`, `/report-find`),
   - rerun weekly snapshot and require rolling-window confirmation.
-
----
-
-## 2026-02-19 - Codex - R5 Non-Penny-Adjacent Article Brief Pack (Planning Only)
-
-**Goal:** Execute resilience task `R5` as docs-only work by producing the first non-penny-adjacent article brief set and syncing resilience memory files.
-
-**Status:** ✅ Completed (docs-only)
-
-### Changes
-
-- Updated `.ai/impl/pennycentral-resilience-diversification-plan.md`:
-  - marked `R5` as completed planning work and queued `R6` as next runtime-gated task,
-  - added full `R5` brief pack section (`6D`) with three implementation-ready briefs:
-    - clearance timing reality check,
-    - storage + effort cost framework,
-    - beginner skip signals playbook,
-  - added pilot prioritization model, guardrails/fail-closed rules, rollback, and proof plan.
-- Updated `.ai/topics/RESILIENCE_GROWTH_CURRENT.md`:
-  - status now reflects `R1 + R2 + R3 + R4-spec + R5-spec` completed,
-  - next queued task set to `R6` (pilot brief selection + publish surface mapping),
-  - immediate actions updated while preserving **2026-02-26** as first valid post-R1 guardrail evaluation date.
-- Updated `.ai/STATE.md`:
-  - added current-sprint entry for this `R5` planning completion and docs-only verification evidence.
-- Refreshed drift artifact:
-  - `python C:\Users\cadeg\.codex\skills\pc-plan-drift-check\scripts\drift_check.py --out .ai/_tmp/drift-check.md`
-  - no new naming/route/touch-target blockers; legacy icon-language docs drift remains non-blocking.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run ai:checkpoint` ✅
-  - Context pack: `reports/context-packs/2026-02-19T22-14-34/context-pack.md`
-- `npm run verify:fast` N/A (docs-only; no runtime code-path impact)
-- `npm run e2e:smoke` N/A (docs-only; no route/form/API/navigation/UI-flow change)
-- `npm run e2e:full` N/A (docs-only; FULL triggers not applicable)
-
-### Plan Canonicality
-
-- Canonical plan path: `.ai/impl/pennycentral-resilience-diversification-plan.md`
-- Canonical plan SHA256: `C66245E0C3A29E68A161806A611A7403124BC9F4EC5A8B021C7775572D8E7293`
-- No unsynced tool-local plan: `NO` (local draft `C:\Users\cadeg\.claude\plans\wild-wishing-widget.md` exists and remains out-of-sync)

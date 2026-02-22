@@ -1112,9 +1112,9 @@ export function PennyListClient({
           Help the community by reporting your find. It will appear on this list automatically.
         </p>
         <TrackableLink
-          href="/report-find"
-          eventName="find_submit"
-          eventParams={{ location: "penny-list" }}
+          href="/report-find?src=penny-list-cta"
+          eventName="report_find_click"
+          eventParams={{ ui_source: "penny-list-cta", location: "penny-list" }}
           className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-medium transition-colors duration-150 hover:bg-[var(--cta-hover)] shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] min-h-[44px]"
           aria-label="Submit a penny find to the community"
         >

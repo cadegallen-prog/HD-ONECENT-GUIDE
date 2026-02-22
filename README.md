@@ -240,6 +240,7 @@ public/                 # Static assets
 - **First session only:** Read `.ai/GROWTH_STRATEGY.md` for business context
 - **If session goal is AI workflow/tooling/verification enablement:** Also read `.ai/AI_ENABLEMENT_BLUEPRINT.md`
 - **Rules:** Default no new dependencies; run `verify:fast` on meaningful changes, run `e2e:smoke` for flow changes, run `e2e:full` when FULL triggers apply, record results in `.ai/SESSION_LOG.md`; work on `dev` and promote verified changes to `main`
+- **Planning rule (mandatory):** Decompose large plans into parent + child implementation slices (default: one user outcome per slice), with acceptance/rollback/verification per slice and a stop-go checkpoint after each slice.
 - **Mandatory Alignment Gate before mutation:** GOAL / WHY / DONE MEANS / NOT DOING / CONSTRAINTS / ASSUMPTIONS / CHALLENGES
 
 ---

@@ -1,6 +1,6 @@
 # Backlog (Top Priority Items)
 
-**Last updated:** Feb 20, 2026 (first weekly analytics snapshot generated from local GA4/GSC archive)
+**Last updated:** Feb 22, 2026 (Report Find Participation Lift v1 decomposed program execution)
 **Rule:** Keep ≤10 items. Archive completed/deferred items.
 
 **Auto-archive:** Full backlog history preserved in `archive/backlog-history/`
@@ -165,6 +165,18 @@ Each AI session should:
 ### 9. Collaboration Continuity Loop (Analytics/Search/MCP Included)
 
 - **Problem:** Future agents can drift in communication quality and operational visibility unless continuity expectations are translated into repeatable execution behavior.
+- **Progress (2026-02-22):**
+  - Implemented report-flow event export coverage in `scripts/archive-google-analytics.ts`:
+    - `ga4/daily_events.csv|json` (`date,eventName,eventCount`)
+    - `ga4/daily_report_paths.csv|json` (`date,pagePathPlusQueryString,sessions`) filtered to report-route paths
+  - Verified archive run with new slices:
+    - `.local/analytics-history/runs/2026-02-22T00-15-22-963Z/summary.md`
+  - Updated analytics operating docs for participation-lift reads:
+    - `.ai/topics/ANALYTICS_CONTRACT.md`
+    - `.ai/ANALYTICS_WEEKLY_REVIEW.md`
+  - Remaining queued actions from this lane:
+    - run CTR remediation pass on high-impression/low-CTR pages (`/guide`, `/what-are-pennies`, `/faq`, `/report-find`),
+    - rerun weekly snapshot and require 4-week confirmation before success claims.
 - **Progress (2026-02-20):**
   - Generated first weekly analytics snapshot artifact from local archive:
     - `reports/analytics-weekly/2026-02-20/summary.md`
@@ -194,6 +206,13 @@ Each AI session should:
 
 ## ✅ Recently Completed
 
+- **2026-02-22:** Report Find Participation Lift v1 decomposed program completed (policy + measurement + basket + taxonomy + archive):
+  - policy anti-mega-plan rules codified in `AGENTS.md`, `README.md`, `.ai/plans/_TEMPLATE.md`,
+  - `find_submit` semantics corrected on report-entry CTAs and `?src=` attribution standardized across report-entry links,
+  - report basket UX shipped in `components/report-find/ReportFindFormClient.tsx` with session persistence, dedupe merge, prefill auto-add, sequential submit-all, mixed-result handling, and copy-for-facebook action,
+  - analytics taxonomy expanded + report-payload privacy redaction strengthened in `lib/analytics.ts`,
+  - GA4 archive script extended with `daily_events` and `daily_report_paths` slices in `scripts/archive-google-analytics.ts`,
+  - verification: `verify:fast`, `e2e:smoke`, `lint:colors`, targeted Playwright suite, archive run (`.local/analytics-history/runs/2026-02-22T00-15-22-963Z/summary.md`), and proof bundle (`reports/proof/2026-02-22T00-16-09/`).
 - **2026-02-04:** Bloat reduction (pass 6): archived SEO export CSVs + legacy Playwright baselines/screenshots to new cold-storage snapshots and hardened `ai:verify` to build with `.next-playwright` when 3001 is in use. Proof: `reports/verification/2026-02-04T13-31-17/summary.md`.
 - **2026-02-04:** Bloat reduction (pass 5): added `npm run prune:audit`, archived large non-production media to `archive/media-pruned/2026-02-04-pass1/`, removed tracked generated reports/logs (`reports/playwright/console-report-*.json`, axe/contrast outputs) and expanded `.gitignore` so these artifacts don’t come back.
 - **2026-02-03:** Archive-first bloat pass 4 completed: moved `.ai/enablement-prompts/*` into `archive/docs-pruned/2026-02-03-pass4/`, moved low-reference helper `scripts/normalize-image-urls.ts` into `archive/scripts-pruned/2026-02-03-pass3/`, added per-snapshot manifests, and updated `.ai/AI_ENABLEMENT_BLUEPRINT.md` + `.gitignore` (`/reports/playwright/console-report-*.json`) to reduce future noise.

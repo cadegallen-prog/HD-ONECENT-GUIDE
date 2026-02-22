@@ -12,7 +12,7 @@
 
 ## Rules (Non‑Negotiable)
 
-- **No PII:** never export/store emails, names, full URLs with query params, or anything that identifies a person.
+- **No PII:** never export/store emails, names, or anything that identifies a person. Route-level query buckets like `/report-find?src=...` are allowed.
 - **Compare windows consistently:** default to **last 7 days vs prior 7 days** for weekly review.
 - **Wait for signal:** judge impact starting **48 hours after deploy**; compare 7‑day windows.
 - **Change one thing at a time:** avoid shipping multiple large changes with the same “expected impact”.
@@ -71,19 +71,24 @@ Look at top pages by **Views** and scan for:
 
 Goal: confirm the flywheel is spinning and identify the tightest bottleneck.
 
-Use the events already tracked in this repo (see `lib/analytics.ts` and `app/layout.tsx`):
+Use archived GA4 slices from `.local/analytics-history/runs/<timestamp>/ga4/`:
 
-- `penny_list_view`
-- `report_find_click`
-- `find_submit`
-- `return_visit`
-- `email_signup`
+- `daily_events` for event counts (`report_find_click`, `report_open`, `find_submit`, `report_submit_single`, `report_submit_batch`)
+- `daily_report_paths` for report-route sessions and `src` attribution buckets
+- `daily_pages` for `/penny-list` session context
 
 **Simple diagnosis**
 
 - If `report_find_click` is stable but `find_submit` drops → **Report Find is the bottleneck**.
-- If `penny_list_view` rises but `return_visit` falls → **Penny List retention is the bottleneck**.
+- If `/penny-list` sessions rise but `report_find_click` falls → **entry-to-report intent is the bottleneck**.
 - If both drop → **acquisition, reliability, or performance** is the bottleneck.
+
+**Participation-lift reads**
+
+- Reports/day: sum `find_submit` by date from `daily_events`.
+- Reports/session: `find_submit` divided by report-route sessions from `daily_report_paths`.
+- Single vs batch share: compare `report_submit_single` vs `report_submit_batch`.
+- Entry source mix: group `daily_report_paths` by `/report-find?src=...`.
 
 **Action rule**
 

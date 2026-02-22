@@ -254,6 +254,18 @@ Never kill port 3001 unless user asks.
   - `No unsynced tool-local plan: YES/NO`
 - ✅ Handoffs must reference repo plan paths only (not `.claude` paths)
 
+### ⛔ Rule #5: No One-Shot Mega-Plan Implementations
+
+- ✅ Large features must be split into a parent plan + child implementation slices.
+- ✅ Default slice size is **one user outcome per slice**.
+- ✅ Each slice must declare:
+  - explicit dependency on prior slices,
+  - acceptance criteria,
+  - rollback path,
+  - verification lane (`verify:fast`, `e2e:smoke`, `e2e:full` trigger status, Playwright if UI).
+- ✅ After each slice, run a stop/go checkpoint before starting the next slice.
+- ❌ Do not execute a multi-milestone plan as one uninterrupted implementation batch.
+
 ---
 
 ## 5. Design System

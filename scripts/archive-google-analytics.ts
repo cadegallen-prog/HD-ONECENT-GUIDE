@@ -479,6 +479,7 @@ async function runGa4Report(config: {
   endDate: string
   dimensions: string[]
   metrics: string[]
+  dimensionFilter?: Record<string, unknown>
   runDir: string
 }): Promise<RunResult> {
   const endpoint = `https://analyticsdata.googleapis.com/v1beta/properties/${config.propertyId}:runReport`
@@ -495,6 +496,7 @@ async function runGa4Report(config: {
       limit: String(pageSize),
       offset: String(offset),
       keepEmptyRows: false,
+      ...(config.dimensionFilter ? { dimensionFilter: config.dimensionFilter } : {}),
     }
 
     const response = await fetchJsonWithRetry(
@@ -679,7 +681,12 @@ async function main() {
   }
 
   if (options.includeGa4 && ga4PropertyId) {
-    const ga4Reports = [
+    const ga4Reports: Array<{
+      name: string
+      dimensions: string[]
+      metrics: string[]
+      dimensionFilter?: Record<string, unknown>
+    }> = [
       {
         name: "daily_channel",
         dimensions: ["date", "sessionDefaultChannelGroup"],
@@ -704,6 +711,25 @@ async function main() {
           "averageSessionDuration",
         ],
       },
+      {
+        name: "daily_events",
+        dimensions: ["date", "eventName"],
+        metrics: ["eventCount"],
+      },
+      {
+        name: "daily_report_paths",
+        dimensions: ["date", "pagePathPlusQueryString"],
+        metrics: ["sessions"],
+        dimensionFilter: {
+          filter: {
+            fieldName: "pagePathPlusQueryString",
+            stringFilter: {
+              matchType: "CONTAINS",
+              value: "/report-find",
+            },
+          },
+        },
+      },
     ]
 
     for (const report of ga4Reports) {
@@ -716,6 +742,7 @@ async function main() {
           endDate: options.endDate,
           dimensions: report.dimensions,
           metrics: report.metrics,
+          ...(report.dimensionFilter ? { dimensionFilter: report.dimensionFilter } : {}),
           runDir,
         })
         ga4Results.push(result)

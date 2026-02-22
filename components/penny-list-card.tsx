@@ -266,9 +266,9 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
               onClick={(event) => {
                 event.preventDefault()
                 trackEvent("report_duplicate_click", {
-                  sku: item.sku,
-                  name: item.name,
-                  src: "card",
+                  ui_source: "card",
+                  skuMasked: item.sku.slice(-4),
+                  hasItemName: Boolean(item.name),
                 })
                 router.push(buildReportFindUrl({ sku: item.sku, name: item.name, src: "card" }))
               }}
@@ -544,9 +544,9 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
               e.preventDefault()
               e.stopPropagation()
               trackEvent("report_duplicate_click", {
-                sku: item.sku,
-                name: item.name,
-                src: "card-compact",
+                ui_source: "card-compact",
+                skuMasked: item.sku.slice(-4),
+                hasItemName: Boolean(item.name),
               })
               router.push(
                 buildReportFindUrl({ sku: item.sku, name: item.name, src: "card-compact" })

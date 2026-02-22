@@ -26,6 +26,13 @@ export type EventName =
   | "report_duplicate_click"
   | "report_prefill_loaded"
   | "report_find_click"
+  | "report_open"
+  | "item_add_manual"
+  | "item_add_prefill"
+  | "item_add_scan"
+  | "report_submit_single"
+  | "report_submit_batch"
+  | "copy_for_facebook"
   // Personal list events
   | "add_to_list_clicked"
   | "add_to_list_completed"
@@ -100,6 +107,16 @@ const RESERVED_PARAM_REMAP = {
   campaign: "pc_campaign",
 } as const
 
+// Never send raw report identifiers in analytics payloads.
+const REDACTED_EVENT_PARAM_KEYS = new Set([
+  "sku",
+  "name",
+  "itemName",
+  "upc",
+  "internet_sku",
+  "internetSku",
+])
+
 function hasValue(value: unknown): boolean {
   return value !== undefined && value !== null && value !== ""
 }
@@ -120,6 +137,7 @@ export function sanitizeEventParams(params: Record<string, unknown>): Record<str
   const sanitized: Record<string, unknown> = {}
   for (const [key, value] of Object.entries(normalized)) {
     if (value === undefined) continue
+    if (REDACTED_EVENT_PARAM_KEYS.has(key)) continue
     const safeKey = RESERVED_PARAM_REMAP[key as keyof typeof RESERVED_PARAM_REMAP] ?? key
     if (safeKey in sanitized && key !== safeKey) continue
     sanitized[safeKey] = value

@@ -373,7 +373,11 @@ export default async function SkuDetailPage({ params }: PageProps) {
                 <TrackableLink
                   href={reportFindUrl}
                   eventName="report_duplicate_click"
-                  eventParams={{ sku, name, src: "sku-page" }}
+                  eventParams={{
+                    ui_source: "sku-page",
+                    skuMasked: sku.slice(-4),
+                    hasItemName: Boolean(name),
+                  }}
                   className="btn-primary flex items-center justify-center gap-2 w-full min-h-[44px] px-4 py-3 rounded-xl text-sm font-bold"
                   aria-label={`Report finding ${name}`}
                 >

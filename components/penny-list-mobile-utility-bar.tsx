@@ -163,9 +163,12 @@ export function PennyListMobileUtilityBar({
             My List
           </TrackableLink>
           <TrackableLink
-            href="/report-find"
-            eventName="find_submit"
-            eventParams={{ location: "penny-list-mobile-bar-report" }}
+            href="/report-find?src=penny-list-mobile-bar"
+            eventName="report_find_click"
+            eventParams={{
+              ui_source: "penny-list-mobile-bar-report",
+              location: "penny-list-mobile-bar-report",
+            }}
             className="flex h-full w-full flex-col items-center justify-center gap-1 rounded-lg bg-[var(--cta-primary)] text-xs font-semibold text-[var(--cta-text)] transition-colors hover:bg-[var(--cta-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
           >
             <FilePlus className="h-4 w-4" aria-hidden="true" />

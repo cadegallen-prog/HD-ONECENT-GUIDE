@@ -360,7 +360,7 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
                 <li>
                   Submit confirmed findings through{" "}
                   <a
-                    href="/report-find"
+                    href="/report-find?src=penny-list-inline"
                     className="text-[var(--link-default)] hover:text-[var(--link-hover)] underline underline-offset-4"
                   >
                     Report a Find
