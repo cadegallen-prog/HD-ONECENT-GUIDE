@@ -2,6 +2,8 @@ import { NextResponse } from "next/server"
 import { writeFile, mkdir } from "node:fs/promises"
 import { join } from "node:path"
 
+export const runtime = "nodejs"
+
 const MAX_SNIPPET_LENGTH = 200
 const MAX_PAYLOAD_SIZE = 32_768
 
