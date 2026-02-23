@@ -335,3 +335,15 @@
   filter: var(--map-tile-filter, none);
   transition: filter 150ms ease;
 }
+
+/* Mobile-minimal popup: compact name + directions only */
+.store-popup-card--minimal {
+  padding: 8px 10px;
+  gap: 6px;
+  max-height: none;
+  overflow-y: visible;
+}
+
+.store-popup--mobile .leaflet-popup-tip-container {
+  display: none;
+}

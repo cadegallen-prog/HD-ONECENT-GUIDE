@@ -23,6 +23,7 @@
 # next.js
 /.next/
 /.next-playwright/
+/.next-visual/
 /.next-build/
 /out/
 

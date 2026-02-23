@@ -74,13 +74,6 @@ test.describe("store finder popup (screenshots)", () => {
     const markers = page.locator(".leaflet-marker-icon")
     await expect(markers.first()).toBeVisible({ timeout: 20000 })
 
-    if (isMobileProject) {
-      const halfSheetButton = page.getByRole("button", { name: /Show half store sheet/i })
-      if (await halfSheetButton.isVisible()) {
-        await halfSheetButton.click()
-      }
-    }
-
     // Wait for at least one tile to load so the map look is representative.
     await page.locator(".leaflet-tile-loaded").first().waitFor({ timeout: 60000 })
 
@@ -92,7 +85,11 @@ test.describe("store finder popup (screenshots)", () => {
     await itemToSelect.click()
 
     if (isMobileProject) {
-      await expect(page.locator(".leaflet-popup.store-popup")).toHaveCount(0)
+      // Mobile now shows a minimal popup (store name + directions)
+      const mobilePopup = page.locator(".leaflet-popup.store-popup")
+      await expect(mobilePopup).toHaveCount(1)
+      // Confirm it is the minimal variant (no hours section)
+      await expect(page.locator(".store-popup-section")).toHaveCount(0)
     } else {
       const leafletPopup = page.locator(".leaflet-popup.store-popup").last()
       await expect(leafletPopup).toBeVisible()
@@ -128,11 +125,6 @@ test.describe("store finder popup (screenshots)", () => {
 
     const markers = page.locator(".leaflet-marker-icon")
     await expect(markers.first()).toBeVisible({ timeout: 20000 })
-
-    const halfSheetButton = page.getByRole("button", { name: /Show half store sheet/i })
-    if (await halfSheetButton.isVisible()) {
-      await halfSheetButton.click()
-    }
 
     const list = page.locator(".divide-y.divide-border").first()
     const listItems = list.locator("> div")

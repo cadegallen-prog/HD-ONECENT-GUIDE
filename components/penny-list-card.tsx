@@ -193,6 +193,7 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
               aria-label={`Copy SKU ${formatSkuForDisplay(item.sku)}`}
               title="Click to copy SKU"
               data-test="penny-card-sku"
+              data-pc-id="penny-list.card-sku"
             >
               SKU {formatSkuForDisplay(item.sku)}
               {copiedSku && (
@@ -264,6 +265,7 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
               type="button"
               variant="primary"
               size="sm"
+              data-pc-id="penny-list.card-report-action"
               onClick={(event) => {
                 event.preventDefault()
                 trackEvent("report_duplicate_click", {

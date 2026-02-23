@@ -1,0 +1,124 @@
+import type { SourceAnchorMeta } from "@/lib/visual-pointer/types"
+
+/**
+ * Explicit mapping from data-pc-id values to their source component location.
+ *
+ * This registry is maintained manually so that AI agents receiving a capture
+ * packet can jump directly to the file and line that owns the target element.
+ *
+ * Convention: pcId format is "<route>.<surface>.<element>"
+ */
+
+const REGISTRY: Record<string, Omit<SourceAnchorMeta, "pcId">> = {
+  // ── /penny-list ──────────────────────────────────────────────
+  "penny-list.search-input": {
+    route: "/penny-list",
+    component: "PennyListClient",
+    file: "components/penny-list-client.tsx",
+    line: 0,
+  },
+  "penny-list.state-filter": {
+    route: "/penny-list",
+    component: "PennyListClient",
+    file: "components/penny-list-client.tsx",
+    line: 0,
+  },
+  "penny-list.sort-trigger": {
+    route: "/penny-list",
+    component: "PennyListClient",
+    file: "components/penny-list-client.tsx",
+    line: 0,
+  },
+  "penny-list.report-cta": {
+    route: "/penny-list",
+    component: "PennyListClient",
+    file: "components/penny-list-client.tsx",
+    line: 0,
+  },
+  "penny-list.pagination-prev": {
+    route: "/penny-list",
+    component: "PennyListClient",
+    file: "components/penny-list-client.tsx",
+    line: 0,
+  },
+  "penny-list.pagination-next": {
+    route: "/penny-list",
+    component: "PennyListClient",
+    file: "components/penny-list-client.tsx",
+    line: 0,
+  },
+  "penny-list.card-sku": {
+    route: "/penny-list",
+    component: "PennyListClient",
+    file: "components/penny-list-client.tsx",
+    line: 0,
+  },
+  "penny-list.card-report-action": {
+    route: "/penny-list",
+    component: "PennyListClient",
+    file: "components/penny-list-client.tsx",
+    line: 0,
+  },
+
+  // ── /store-finder ────────────────────────────────────────────
+  "store-finder.search-input": {
+    route: "/store-finder",
+    component: "StoreFinderPage",
+    file: "app/store-finder/page.tsx",
+    line: 0,
+  },
+  "store-finder.search-submit": {
+    route: "/store-finder",
+    component: "StoreFinderPage",
+    file: "app/store-finder/page.tsx",
+    line: 0,
+  },
+  "store-finder.locate-recenter": {
+    route: "/store-finder",
+    component: "StoreFinderPage",
+    file: "app/store-finder/page.tsx",
+    line: 0,
+  },
+  "store-finder.view-map": {
+    route: "/store-finder",
+    component: "StoreFinderPage",
+    file: "app/store-finder/page.tsx",
+    line: 0,
+  },
+  "store-finder.view-list": {
+    route: "/store-finder",
+    component: "StoreFinderPage",
+    file: "app/store-finder/page.tsx",
+    line: 0,
+  },
+  "store-finder.list-item": {
+    route: "/store-finder",
+    component: "StoreFinderPage",
+    file: "app/store-finder/page.tsx",
+    line: 0,
+  },
+  "store-finder.popup-directions": {
+    route: "/store-finder",
+    component: "StoreMap",
+    file: "components/store-map.tsx",
+    line: 0,
+  },
+  "store-finder.popup-store-page": {
+    route: "/store-finder",
+    component: "StoreMap",
+    file: "components/store-map.tsx",
+    line: 0,
+  },
+}
+
+export function lookupSource(pcId: string): SourceAnchorMeta | "source_unavailable" {
+  const entry = REGISTRY[pcId]
+  if (!entry) {
+    return "source_unavailable"
+  }
+  return { pcId, ...entry }
+}
+
+export function getAllRegisteredIds(): string[] {
+  return Object.keys(REGISTRY)
+}

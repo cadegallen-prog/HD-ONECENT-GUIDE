@@ -184,6 +184,7 @@ export function PennyListFilters({
           </label>
           <select
             id="state-filter"
+            data-pc-id="penny-list.state-filter"
             value={stateFilter}
             onChange={(e) => setStateFilter(e.target.value)}
             className="w-full px-3 py-2.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] text-sm min-h-[44px] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent transition-shadow"
@@ -270,6 +271,7 @@ export function PennyListFilters({
           </label>
           <input
             id="search"
+            data-pc-id="penny-list.search-input"
             name="search"
             value={localSearch}
             onChange={(e) => setLocalSearch(e.target.value)}
@@ -318,6 +320,7 @@ export function PennyListFilters({
           </label>
           <select
             id="sort-filter"
+            data-pc-id="penny-list.sort-trigger"
             value={sortOption}
             onChange={(e) => setSortOption(e.target.value as SortOption)}
             className="w-full px-3 py-2.5 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] text-sm min-h-[44px] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent transition-shadow"

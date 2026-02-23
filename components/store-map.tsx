@@ -205,7 +205,7 @@ function MapController({
   return null
 }
 
-export const StoreMap = React.memo(function StoreMap({
+const StoreMap = React.memo(function StoreMap({
   stores,
   center = [39.8283, -98.5795],
   zoom = 10,
@@ -402,13 +402,9 @@ export const StoreMap = React.memo(function StoreMap({
   React.useEffect(() => {
     if (selectedStore) {
       const marker = markersRef.current[selectedStore.id]
-      if (isMobileViewport) {
-        marker?.closePopup()
-      } else {
-        marker?.openPopup()
-      }
+      marker?.openPopup()
     }
-  }, [isMobileViewport, selectedStore])
+  }, [selectedStore])
 
   if (!mounted) {
     return (
@@ -493,7 +489,38 @@ export const StoreMap = React.memo(function StoreMap({
                 }
               }}
             >
-              {!isMobileViewport ? (
+              {isMobileViewport ? (
+                <Popup
+                  className="store-popup store-popup--mobile"
+                  autoPan={false}
+                  keepInView={false}
+                  closeButton={false}
+                  maxWidth={200}
+                  minWidth={160}
+                >
+                  <div className="store-popup-card store-popup-card--minimal">
+                    <p
+                      className="store-popup-title"
+                      style={{ fontSize: "13px", marginBottom: "6px" }}
+                    >
+                      {store.name}
+                    </p>
+                    <a
+                      href={`https://www.google.com/maps/dir/?api=1&destination=${store.lat},${store.lng}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      data-pc-id="store-finder.popup-directions"
+                      className="store-popup-button store-popup-button-primary"
+                      onClick={() =>
+                        trackEvent("directions_click", { storeId: store.id, state: store.state })
+                      }
+                    >
+                      <Navigation className="w-3.5 h-3.5" />
+                      Directions
+                    </a>
+                  </div>
+                </Popup>
+              ) : (
                 <Popup
                   className="store-popup"
                   autoPan={true}
@@ -568,6 +595,7 @@ export const StoreMap = React.memo(function StoreMap({
                         href={`https://www.google.com/maps/dir/?api=1&destination=${store.lat},${store.lng}`}
                         target="_blank"
                         rel="noopener noreferrer"
+                        data-pc-id="store-finder.popup-directions"
                         className="store-popup-button store-popup-button-primary"
                         onClick={() =>
                           trackEvent("directions_click", { storeId: store.id, state: store.state })
@@ -580,6 +608,7 @@ export const StoreMap = React.memo(function StoreMap({
                         href={getStoreUrl(store)}
                         target="_blank"
                         rel="nofollow sponsored noopener noreferrer"
+                        data-pc-id="store-finder.popup-store-page"
                         className="store-popup-button store-popup-button-secondary"
                         onClick={() =>
                           trackEvent("map_interact", { action: "marker", markerState: store.state })
@@ -591,7 +620,7 @@ export const StoreMap = React.memo(function StoreMap({
                     </div>
                   </div>
                 </Popup>
-              ) : null}
+              )}
             </Marker>
           )
         })}
@@ -599,3 +628,6 @@ export const StoreMap = React.memo(function StoreMap({
     </div>
   )
 })
+
+export { StoreMap }
+export default StoreMap

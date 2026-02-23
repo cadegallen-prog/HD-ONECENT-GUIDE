@@ -30,15 +30,10 @@ import type { StoreLocation } from "@/lib/stores"
 import { trackEvent } from "@/lib/analytics"
 
 // Dynamically import StoreMap to avoid SSR issues with Leaflet
-const StoreMap = dynamic(
-  () => import("@/components/store-map").then((mod) => ({ default: mod.StoreMap })),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="h-full min-h-[320px] bg-muted/30 rounded-xl animate-pulse"></div>
-    ),
-  }
-)
+const StoreMap = dynamic(() => import("@/components/store-map"), {
+  ssr: false,
+  loading: () => <div className="h-full min-h-[320px] bg-muted/30 rounded-xl animate-pulse"></div>,
+})
 
 // Temporary proof-of-concept mode: intentionally load every store to validate data completeness
 const PROOF_OF_CONCEPT_MODE = false
@@ -209,8 +204,6 @@ const getAverageCoordinates = (stores: StoreLocation[]) => {
 
 // Pre-compute initial stores for immediate display
 const initialDisplayedStores: StoreLocation[] = []
-type MobileSheetDetent = "peek" | "half" | "expanded"
-
 export default function StoreFinderPage() {
   const [displayedStores, setDisplayedStores] = useState<StoreLocation[]>(initialDisplayedStores)
   const [loadingStores, setLoadingStores] = useState(false)
@@ -222,7 +215,6 @@ export default function StoreFinderPage() {
   const [mapCenter, setMapCenter] = useState<[number, number]>(DEFAULT_CENTER)
   const [mapInteractionMode, setMapInteractionMode] = useState<"follow" | "explore">("follow")
   const [mapRecenterToken, setMapRecenterToken] = useState(0)
-  const [mobileSheetDetent, setMobileSheetDetent] = useState<MobileSheetDetent>("peek")
   const [selectedStore, setSelectedStore] = useState<StoreLocation | null>(
     initialDisplayedStores[0] || null
   )
@@ -432,12 +424,6 @@ export default function StoreFinderPage() {
     userLocation || (mapInteractionMode === "explore" && correctedSelectedStore)
   )
   const mobileSheetSummaryStore = correctedSelectedStore || correctedStoresToRender[0] || null
-  const mobileSheetHeightClass =
-    mobileSheetDetent === "peek"
-      ? "h-[168px]"
-      : mobileSheetDetent === "half"
-        ? "h-[48%]"
-        : "h-[72%]"
 
   // Load favorites from localStorage
   useEffect(() => {
@@ -874,7 +860,6 @@ export default function StoreFinderPage() {
       setMapCenter([corrected.lat, corrected.lng])
       setMapInteractionMode("follow")
       setMapRecenterToken((value) => value + 1)
-      setMobileSheetDetent((current) => (current === "peek" ? "half" : current))
       validateStoreCoordinates(store)
     },
     [applyCoordinateCorrection, validateStoreCoordinates]
@@ -966,6 +951,7 @@ export default function StoreFinderPage() {
                 />
                 <input
                   id="store-search"
+                  data-pc-id="store-finder.search-input"
                   type="search"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -976,6 +962,7 @@ export default function StoreFinderPage() {
                 />
               </div>
               <Button
+                data-pc-id="store-finder.search-submit"
                 onClick={handleSearch}
                 size="sm"
                 className="px-4 sm:px-6 min-h-[48px] sm:min-h-[44px]"
@@ -987,6 +974,7 @@ export default function StoreFinderPage() {
             {/* Location + View Toggle - Row on mobile */}
             <div className="flex gap-2 justify-start flex-wrap">
               <Button
+                data-pc-id="store-finder.locate-recenter"
                 onClick={handleLocateOrRecenter}
                 variant={
                   mapHasRecenterTarget && mapInteractionMode === "explore" ? "primary" : "secondary"
@@ -1044,6 +1032,7 @@ export default function StoreFinderPage() {
 
               <div className="flex border border-border rounded-lg overflow-hidden">
                 <button
+                  data-pc-id="store-finder.view-map"
                   onClick={() => setViewMode("map")}
                   aria-label="Map view"
                   title="Map view"
@@ -1056,6 +1045,7 @@ export default function StoreFinderPage() {
                   <MapIcon className="h-4 w-4" />
                 </button>
                 <button
+                  data-pc-id="store-finder.view-list"
                   onClick={() => setViewMode("list")}
                   aria-label="List view"
                   title="List view"
@@ -1101,9 +1091,9 @@ export default function StoreFinderPage() {
         {/* Map View */}
         {viewMode === "map" && (
           <div className="flex-1 p-0 sm:p-4 lg:p-6">
-            <div className="flex flex-col lg:flex-row h-[calc(100svh-220px)] min-h-[440px] max-h-[980px] max-w-7xl mx-auto bg-card sm:border sm:border-border sm:rounded-xl overflow-hidden shadow-sm">
-              {/* Map Panel - keeps most viewport visible while sheet detent changes */}
-              <div className="relative min-h-[120px] flex-1 lg:min-h-0 lg:h-full order-1 lg:order-2 z-0">
+            <div className="relative lg:flex lg:flex-row h-[calc(100svh-220px)] min-h-[440px] max-h-[980px] max-w-7xl mx-auto bg-card sm:border sm:border-border sm:rounded-xl overflow-hidden shadow-sm">
+              {/* Map Panel - fills full container; sheet overlays on mobile */}
+              <div className="absolute inset-0 lg:static lg:flex-1 lg:h-full lg:order-2 z-0">
                 <StoreMap
                   stores={correctedStoresToRender}
                   center={mapCenter}
@@ -1116,36 +1106,17 @@ export default function StoreFinderPage() {
                 />
               </div>
 
-              {/* Store List Panel - Bottom-sheet detents on mobile, side panel on desktop */}
+              {/* Store List Panel - Fixed overlay on mobile, side panel on desktop */}
               <div
                 ref={listContainerRef}
-                className={`order-2 lg:order-1 lg:flex-none lg:w-80 xl:w-96 ${mobileSheetHeightClass} lg:h-full overflow-y-auto border-t lg:border-t-0 lg:border-r border-border bg-card rounded-t-2xl lg:rounded-none shadow-[0_-10px_28px_rgba(0,0,0,0.14)] lg:shadow-none pb-[calc(env(safe-area-inset-bottom)+0.5rem)]`}
+                className="absolute bottom-0 left-0 right-0 h-[200px] z-10 lg:static lg:z-auto lg:order-1 lg:flex-none lg:w-80 xl:w-96 lg:h-full overflow-y-auto border-t lg:border-t-0 lg:border-r border-border bg-card rounded-t-2xl lg:rounded-none shadow-[0_-10px_28px_rgba(0,0,0,0.14)] lg:shadow-none pb-[calc(env(safe-area-inset-bottom)+0.5rem)]"
               >
-                <div className="lg:hidden sticky top-0 z-10 bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/90 border-b border-border px-4 pt-2 pb-2">
-                  <div className="mx-auto h-1.5 w-10 rounded-full bg-[var(--border-strong)]" />
-                  <div className="mt-2 flex items-center justify-between gap-2">
-                    <p className="text-xs font-medium text-[var(--text-secondary)]">
-                      {mobileSheetSummaryStore
-                        ? `${getStoreTitle(mobileSheetSummaryStore)} (${correctedStoresToRender.length})`
-                        : `${correctedStoresToRender.length} stores`}
-                    </p>
-                    <div className="flex items-center rounded-md border border-border overflow-hidden">
-                      {(["peek", "half", "expanded"] as MobileSheetDetent[]).map((detent) => (
-                        <button
-                          key={detent}
-                          onClick={() => setMobileSheetDetent(detent)}
-                          className={`px-2.5 min-h-[44px] text-xs font-semibold capitalize border-l first:border-l-0 border-border transition-colors ${
-                            mobileSheetDetent === detent
-                              ? "bg-[var(--text-primary)] text-[var(--bg-page)]"
-                              : "bg-card text-[var(--text-secondary)]"
-                          }`}
-                          aria-label={`Show ${detent} store sheet`}
-                        >
-                          {detent}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+                <div className="lg:hidden sticky top-0 z-10 bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/90 border-b border-border px-4 py-2">
+                  <p className="text-xs font-medium text-[var(--text-secondary)]">
+                    {mobileSheetSummaryStore
+                      ? `${getStoreTitle(mobileSheetSummaryStore)} (${correctedStoresToRender.length})`
+                      : `${correctedStoresToRender.length} stores`}
+                  </p>
                 </div>
 
                 {loadingStores && correctedStoresToRender.length === 0 ? (
@@ -1231,6 +1202,7 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
     return (
       <div
         ref={ref}
+        data-pc-id="store-finder.list-item"
         onClick={onSelect}
         className={`p-4 cursor-pointer transition-all duration-150 ${
           isSelected

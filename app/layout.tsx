@@ -10,6 +10,7 @@ import { AuthProvider } from "@/components/auth-provider"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { AnalyticsTracker } from "@/components/analytics-tracker"
+import VisualPointerShell from "@/components/dev/visual-pointer-shell"
 import { ogImageUrl } from "@/lib/og"
 import { CANONICAL_BASE } from "@/lib/canonical"
 
@@ -303,6 +304,7 @@ export default function RootLayout({
                 <Footer />
               </main>
 
+              <VisualPointerShell />
               <Toaster />
             </CommandPaletteProvider>
           </AuthProvider>

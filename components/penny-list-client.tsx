@@ -939,6 +939,7 @@ export function PennyListClient({
           <div className="flex items-center gap-2">
             <button
               type="button"
+              data-pc-id="penny-list.pagination-prev"
               onClick={() => goToPage(clampedPage - 1)}
               disabled={clampedPage === 1}
               className="inline-flex items-center justify-center min-h-[44px] rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] px-3 py-2 text-xs font-semibold text-[var(--text-primary)] transition hover:border-[var(--cta-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] disabled:cursor-not-allowed disabled:opacity-50"
@@ -951,6 +952,7 @@ export function PennyListClient({
             </span>
             <button
               type="button"
+              data-pc-id="penny-list.pagination-next"
               onClick={() => goToPage(clampedPage + 1)}
               disabled={clampedPage === pageCount}
               className="inline-flex items-center justify-center min-h-[44px] rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] px-3 py-2 text-xs font-semibold text-[var(--text-primary)] transition hover:border-[var(--cta-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] disabled:cursor-not-allowed disabled:opacity-50"
@@ -1140,6 +1142,7 @@ export function PennyListClient({
         </p>
         <TrackableLink
           href="/report-find?src=penny-list-cta"
+          data-pc-id="penny-list.report-cta"
           eventName="report_find_click"
           eventParams={{ ui_source: "penny-list-cta", location: "penny-list" }}
           className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-medium transition-colors duration-150 hover:bg-[var(--cta-hover)] shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] min-h-[44px]"

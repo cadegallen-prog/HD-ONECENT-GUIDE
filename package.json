@@ -22,6 +22,7 @@
     "e2e:smoke": "cross-env NEXT_DIST_DIR=.next-playwright PLAYWRIGHT=1 NEXT_PUBLIC_EZOIC_ENABLED=false NEXT_PUBLIC_ANALYTICS_ENABLED=false npm run build && playwright test tests/smoke-critical.spec.ts --project=chromium-desktop-light --workers=1",
     "e2e:full": "cross-env NEXT_DIST_DIR=.next-playwright PLAYWRIGHT=1 NEXT_PUBLIC_EZOIC_ENABLED=false NEXT_PUBLIC_ANALYTICS_ENABLED=false npm run build && playwright test --workers=1",
     "test:e2e": "npm run e2e:full",
+    "visual-pointer:proof": "tsx scripts/visual-pointer-proof.ts",
     "verify": "npm run verify:fast && npm run e2e:smoke",
     "test:unit": "node scripts/run-unit-tests.mjs",
     "check-contrast": "node scripts/check-contrast.js",
