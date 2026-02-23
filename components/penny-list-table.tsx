@@ -296,7 +296,6 @@ export function PennyListTable({
         upc={barcodeItem?.upc ?? ""}
         onClose={() => setBarcodeItem(null)}
         productName={barcodeItem?.name}
-        pennyPrice={barcodeItem?.price}
       />
       <StateBreakdownSheet
         open={Boolean(stateSheetItem)}

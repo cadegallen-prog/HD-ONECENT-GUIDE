@@ -3,14 +3,11 @@
 import { useEffect, useRef } from "react"
 import { createPortal } from "react-dom"
 import { X } from "lucide-react"
-import { formatCurrency } from "@/lib/penny-list-utils"
-
 interface BarcodeModalProps {
   open: boolean
   upc: string
   onClose: () => void
   productName?: string
-  pennyPrice?: number
 }
 
 function computeModulo10Checksum(digits: string, weightOddFromRight: number): number {
@@ -40,12 +37,8 @@ function isValidEan13(value: string): boolean {
   return Number.isFinite(expected) && expected === actual
 }
 
-export function BarcodeModal({ open, upc, onClose, productName, pennyPrice }: BarcodeModalProps) {
+export function BarcodeModal({ open, upc, onClose, productName }: BarcodeModalProps) {
   const svgRef = useRef<SVGSVGElement | null>(null)
-  const formattedPrice =
-    typeof pennyPrice === "number" && Number.isFinite(pennyPrice)
-      ? formatCurrency(pennyPrice)
-      : null
 
   useEffect(() => {
     if (!open || !upc || !svgRef.current) return
@@ -166,10 +159,7 @@ export function BarcodeModal({ open, upc, onClose, productName, pennyPrice }: Ba
                 {productName}
               </p>
             )}
-            {formattedPrice && (
-              <p className="text-xs text-[var(--text-secondary)]">Penny price {formattedPrice}</p>
-            )}
-            {!productName && !formattedPrice && (
+            {!productName && (
               <p className="text-xs text-[var(--text-secondary)]">
                 Show this to a cashier or scanner app
               </p>
@@ -178,7 +168,6 @@ export function BarcodeModal({ open, upc, onClose, productName, pennyPrice }: Ba
           <div className="mt-5 rounded-2xl border border-[var(--border-default)] bg-white p-4 text-center">
             <svg ref={svgRef} className="mx-auto h-24 w-full" aria-hidden="true" />
           </div>
-          <p className="mt-3 text-center text-sm font-mono text-[var(--text-secondary)]">{upc}</p>
           <button
             type="button"
             onClick={() => onClose()}

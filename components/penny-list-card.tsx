@@ -334,7 +334,6 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
         upc={upc || ""}
         onClose={() => setIsBarcodeOpen(false)}
         productName={displayName}
-        pennyPrice={item.price}
       />
       <StateBreakdownSheet
         open={isStateBreakdownOpen}
