@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 22, 2026 (anti-spam protections shipped for report-find form + remaining PA spam purged)
+**Last updated:** Feb 22, 2026 (visual pointing tool v1 canonical implementation plan added)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,25 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-22 (Visual Pointing Tool v1 canonical plan created):** Added a decision-complete, implementation-ready plan for a dev-only visual pointing workflow pilot targeting `/penny-list` and `/store-finder`.
+  - **Canonical plan artifact:**
+    - `.ai/impl/visual-pointing-tool.md`
+  - **What the plan locks:**
+    - dev-only in-app overlay capture model,
+    - stable selector bundle + ranked fallbacks,
+    - explicit `data-pc-id` source registry mapping for anchored elements,
+    - dev-only local artifact persistence (`reports/visual-pointing/...`),
+    - Playwright replay/proof flow for validation.
+  - **Delivery decomposition:**
+    - 6 implementation slices with stop/go checkpoints after each slice,
+    - acceptance criteria + rollback + verification lane for each slice.
+  - **Verification (docs-only lane):**
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
+    - `npm run verify:fast` N/A (docs-only planning work; no runtime code-path mutation)
+    - `npm run e2e:smoke` N/A (no route/form/API/navigation/UI-flow mutation)
+    - `npm run e2e:full` N/A (FULL triggers not applicable)
 
 - **2026-02-22 (Anti-spam protections for report-find + spam cleanup):** Built three-layer anti-spam protections for the Report a Find submission flow and purged remaining spam Ryobi generator entries from Supabase.
   - **Spam cleanup (Supabase direct):**

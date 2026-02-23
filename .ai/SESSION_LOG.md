@@ -4,6 +4,37 @@
 
 ---
 
+## 2026-02-22 - Codex - Visual Pointing Tool v1 Canonical Plan (Two-Route Pilot)
+
+**Goal:** Convert founder-provided Visual Pointing Tool v1 specification into a repo-canonical, implementation-ready plan artifact with explicit slices, contracts, and verification lanes.
+
+**Status:** ✅ Completed (planning-only docs scope)
+
+### Changes
+
+- Added canonical implementation plan:
+  - `.ai/impl/visual-pointing-tool.md`
+- Plan includes:
+  - locked product decisions (dev-only overlay, two-route pilot, mobile-first weighting),
+  - complete interface contracts (`VisualPointerCapture`, selector/source types),
+  - API contract + guardrails for `POST /api/dev/visual-pointer/report`,
+  - pilot anchor inventory for `/penny-list` and `/store-finder`,
+  - six implementation slices with explicit dependency, acceptance, rollback, and verification lane per slice,
+  - replay/proof architecture using Playwright as validation layer (not primary capture UI).
+- Updated continuity snapshot:
+  - `.ai/STATE.md` updated to reflect the new canonical plan.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run ai:checkpoint` ✅
+  - Context pack: `reports/context-packs/2026-02-22T22-38-13/context-pack.md`
+- `npm run verify:fast` N/A (docs-only planning change; no runtime code-path mutation)
+- `npm run e2e:smoke` N/A (docs-only; no route/form/API/navigation/UI-flow mutation)
+- `npm run e2e:full` N/A (docs-only; FULL triggers not applicable)
+
+---
+
 ## 2026-02-22 - Claude Code - Anti-Spam Protections for Report a Find
 
 **Goal:** Purge remaining spam Ryobi generator entries from Supabase and build three-layer anti-spam protections to prevent future button-mashing spam.
@@ -139,85 +170,5 @@
 ### Deferred
 
 - **Anti-spam protections** for the submit-find form: duplicate SKU throttling per session, submission cooldowns, client-side debounce. This was identified as the next priority topic during this session.
-
----
-
-## 2026-02-22 - Codex - Canon Realignment Patch (Post-Simplification Guardrail Fixes)
-
-**Goal:** Reconcile cross-agent instruction drift introduced by docs simplification so charter authority, verification lanes, and branch workflow remain consistent across Codex, Claude, and Copilot entry points.
-
-**Status:** ✅ Completed (docs-only governance patch)
-
-### Changes
-
-- Restored charter-first read-order consistency:
-  - `.ai/START_HERE.md` (Tier 1 now starts with `VISION_CHARTER.md`; removed wording that implied charter is first-session-only)
-  - `.ai/CODEX_ENTRY.md` and `CLAUDE.md` Tier 1 summaries updated to include charter-first order
-  - `.github/copilot-instructions.md` read-order and canonical-entry wording aligned to charter-first
-- Corrected Claude session command guidance to match canonical alignment gate + memory policy:
-  - `.claude/commands/session-start.md`
-    - includes charter-first startup step,
-    - uses full alignment fields (`DONE MEANS`, `NOT DOING`, `CONSTRAINTS`, `ASSUMPTIONS`, `CHALLENGES`),
-    - fixes session-log trim guidance to the current Rule #5 behavior (trim when >7, keep 5).
-- Corrected verification policy drift in:
-  - `.claude/commands/session-end.md`
-    - removed blanket "all 4 gates always" requirement,
-    - replaced with lane-based policy that defers to `.ai/VERIFICATION_REQUIRED.md`,
-    - preserves docs-only exception (`ai:memory:check` + `ai:checkpoint`, FAST/SMOKE/FULL marked N/A with reason).
-- Corrected Copilot workflow drift:
-  - `.github/copilot-instructions.md`
-    - changed autonomy wording to objective-clear default (not dependent on literal "go"),
-    - restored `dev -> main` promotion flow instead of direct `main` push language.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run ai:checkpoint` ✅
-  - Context pack: `reports/context-packs/2026-02-22T13-16-49/context-pack.md`
-- `npm run verify:fast` N/A (docs-only governance changes; no runtime code-path mutation)
-- `npm run e2e:smoke` N/A (docs-only; no route/form/API/navigation/UI-flow mutation)
-- `npm run e2e:full` N/A (docs-only; FULL triggers not applicable)
-
----
-
-## 2026-02-22 - Codex - Single-Writer Lock Protocol (Parallel-Agent Shared Memory Safety)
-
-**Goal:** Implement a low-friction single-writer protocol so multiple agents can work in parallel without conflicting edits in shared `.ai` continuity files.
-
-**Status:** ✅ Completed (workflow/docs + helper tooling)
-
-### Changes
-
-- Added shared-memory lock helper script:
-  - `scripts/ai-shared-writer-lock.ts`
-  - Commands supported: `status`, `claim`, `heartbeat`, `release`
-  - Tracks owner, heartbeat timestamp, scope, process/host metadata, stale-lock takeover.
-- Added npm command wrappers:
-  - `ai:writer-lock:status`
-  - `ai:writer-lock:claim`
-  - `ai:writer-lock:heartbeat`
-  - `ai:writer-lock:release`
-- Added lock file ignore rule:
-  - `.gitignore` -> `.ai/.shared-writer-lock.json`
-- Codified protocol in canonical docs:
-  - `AGENTS.md` (new critical rule: single-writer lock for shared memory)
-  - `README.md` (canon + branch workflow updates)
-  - `.ai/HANDOFF_PROTOCOL.md` (lock requirement during memory updates when concurrent)
-  - `.ai/VERIFICATION_REQUIRED.md` (lock evidence requirement when concurrent)
-  - `.ai/CRITICAL_RULES.md` (new Rule #8)
-- Added reusable skill for future sessions:
-  - `docs/skills/single-writer-lock.md`
-  - `docs/skills/README.md` index update
-
-### Verification
-
-- `npm run ai:writer-lock:status` ✅
-- `npm run ai:writer-lock:claim -- codex "protocol-validation"` ✅
-- `npm run ai:writer-lock:heartbeat -- codex` ✅
-- `npm run ai:writer-lock:release -- codex` ✅
-- `npm run verify:fast` ✅
-- `npm run ai:memory:check` ✅
-- `npm run ai:checkpoint` ✅
-  - Context pack: `reports/context-packs/2026-02-22T04-35-52/context-pack.md`
 
 ---
