@@ -875,3 +875,259 @@ test("uses the most complete self-enrichment row before insert", async () => {
 
   clearSupabaseMocks()
 })
+
+test("batch submit supports partial success in one request", async () => {
+  const inserted: Record<string, unknown>[] = []
+
+  const anonReadClient: any = {
+    from: () => ({}),
+  }
+
+  const serviceRoleClient: any = {
+    from: () => ({
+      insert: (payload: Record<string, unknown>) => {
+        inserted.push(payload)
+        return {
+          select: () => ({
+            single: async () => ({ data: { id: `test-batch-${inserted.length}` }, error: null }),
+          }),
+        }
+      },
+    }),
+    rpc: async () => ({ data: { enriched: false }, error: null }),
+  }
+
+  installSupabaseMocks({ submitAnon: anonReadClient, submitServiceRole: serviceRoleClient })
+
+  const { POST } = await import("../app/api/submit-find/route")
+  const req = new NextRequest("http://localhost/api/submit-find", {
+    method: "POST",
+    body: JSON.stringify({
+      items: [
+        {
+          itemName: "Batch Item One",
+          sku: FIXTURE_SKU,
+          storeCity: "Atlanta",
+          storeState: "GA",
+          dateFound: new Date().toISOString().split("T")[0],
+          quantity: "1",
+          notes: "",
+          website: "",
+        },
+        {
+          itemName: "Batch Item Two",
+          sku: "1009258127",
+          storeCity: "Atlanta",
+          storeState: "GA",
+          dateFound: new Date().toISOString().split("T")[0],
+          quantity: "100",
+          notes: "",
+          website: "",
+        },
+      ],
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      "x-forwarded-for": "203.0.113.61",
+    },
+  })
+
+  const res = await POST(req)
+  assert.strictEqual(res.status, 200)
+  const data = await res.json()
+  assert.strictEqual(data.mode, "batch")
+  assert.strictEqual(data.attempted, 2)
+  assert.strictEqual(data.successCount, 1)
+  assert.strictEqual(data.failedCount, 1)
+  assert.strictEqual(inserted.length, 1, "Only one valid item should be inserted")
+
+  clearSupabaseMocks()
+})
+
+test("batch submit rejects more than max allowed items", async () => {
+  const items = Array.from({ length: 11 }, (_, index) => ({
+    itemName: `Item ${index + 1}`,
+    sku: FIXTURE_SKU,
+    storeCity: "Atlanta",
+    storeState: "GA",
+    dateFound: new Date().toISOString().split("T")[0],
+    quantity: "1",
+    notes: "",
+    website: "",
+  }))
+
+  const { POST } = await import("../app/api/submit-find/route")
+  const req = new NextRequest("http://localhost/api/submit-find", {
+    method: "POST",
+    body: JSON.stringify({ items }),
+    headers: {
+      "Content-Type": "application/json",
+      "x-forwarded-for": "203.0.113.62",
+    },
+  })
+
+  const res = await POST(req)
+  assert.strictEqual(res.status, 400)
+  const data = await res.json()
+  assert.ok(
+    data.error.includes("Missing or invalid required fields"),
+    "Should return schema validation failure for oversized batch"
+  )
+})
+
+test("batch submit skips realtime SerpApi slot claim", async () => {
+  const rpcCalls: string[] = []
+  const originalSerpApiKey = process.env.SERPAPI_KEY
+  process.env.SERPAPI_KEY = "test-serpapi-key"
+
+  const anonReadClient: any = {
+    from: () => ({}),
+  }
+
+  const serviceRoleClient: any = {
+    from: () => ({
+      insert: () => ({
+        select: () => ({
+          single: async () => ({ data: { id: "test-batch-skip-realtime" }, error: null }),
+        }),
+      }),
+    }),
+    rpc: async (fn: string) => {
+      rpcCalls.push(fn)
+      return { data: { enriched: false }, error: null }
+    },
+  }
+
+  installSupabaseMocks({ submitAnon: anonReadClient, submitServiceRole: serviceRoleClient })
+
+  try {
+    const { POST } = await import("../app/api/submit-find/route")
+    const req = new NextRequest("http://localhost/api/submit-find", {
+      method: "POST",
+      body: JSON.stringify({
+        items: [
+          {
+            itemName: "Batch Item One",
+            sku: FIXTURE_SKU,
+            storeCity: "Atlanta",
+            storeState: "GA",
+            dateFound: new Date().toISOString().split("T")[0],
+            quantity: "1",
+            notes: "",
+            website: "",
+          },
+          {
+            itemName: "Batch Item Two",
+            sku: "1009258127",
+            storeCity: "Atlanta",
+            storeState: "GA",
+            dateFound: new Date().toISOString().split("T")[0],
+            quantity: "1",
+            notes: "",
+            website: "",
+          },
+        ],
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        "x-forwarded-for": "203.0.113.63",
+      },
+    })
+
+    const res = await POST(req)
+    assert.strictEqual(res.status, 200)
+    assert.ok(
+      !rpcCalls.includes("claim_serpapi_realtime_slot"),
+      "Batch requests should not claim realtime SerpApi slots"
+    )
+  } finally {
+    process.env.SERPAPI_KEY = originalSerpApiKey
+    clearSupabaseMocks()
+  }
+})
+
+test("dry run mode validates submissions without DB writes or RPC calls", async () => {
+  const originalDryRun = process.env.SUBMIT_FIND_DRY_RUN
+  const originalServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+  process.env.SUBMIT_FIND_DRY_RUN = "true"
+  delete process.env.SUPABASE_SERVICE_ROLE_KEY
+
+  let anonFromCalls = 0
+  let serviceFromCalls = 0
+  let rpcCalls = 0
+
+  const anonReadClient: any = {
+    from: () => {
+      anonFromCalls += 1
+      return {}
+    },
+  }
+
+  const serviceRoleClient: any = {
+    from: () => {
+      serviceFromCalls += 1
+      return {
+        insert: () => ({
+          select: () => ({
+            single: async () => ({ data: { id: "should-not-write" }, error: null }),
+          }),
+        }),
+      }
+    },
+    rpc: async () => {
+      rpcCalls += 1
+      return { data: { enriched: false }, error: null }
+    },
+  }
+
+  installSupabaseMocks({ submitAnon: anonReadClient, submitServiceRole: serviceRoleClient })
+
+  try {
+    const { POST } = await import("../app/api/submit-find/route")
+    const req = new NextRequest("http://localhost/api/submit-find", {
+      method: "POST",
+      body: JSON.stringify({
+        itemName: "Dry Run Item",
+        sku: FIXTURE_SKU,
+        storeCity: "Atlanta",
+        storeState: "GA",
+        dateFound: new Date().toISOString().split("T")[0],
+        quantity: "1",
+        notes: "",
+        website: "",
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        "x-forwarded-for": "203.0.113.64",
+      },
+    })
+
+    const res = await POST(req)
+    assert.strictEqual(res.status, 200)
+    const data = await res.json()
+    assert.strictEqual(data.success, true)
+    assert.strictEqual(data.dryRun, true)
+    assert.ok(
+      String(data.message).toLowerCase().includes("dry run"),
+      "Dry run response should clearly indicate non-live behavior"
+    )
+    assert.strictEqual(anonFromCalls, 0, "Dry run should not read Supabase tables")
+    assert.strictEqual(serviceFromCalls, 0, "Dry run should not write Supabase tables")
+    assert.strictEqual(rpcCalls, 0, "Dry run should not call enrichment RPCs")
+  } finally {
+    if (originalDryRun === undefined) {
+      delete process.env.SUBMIT_FIND_DRY_RUN
+    } else {
+      process.env.SUBMIT_FIND_DRY_RUN = originalDryRun
+    }
+
+    if (originalServiceRoleKey === undefined) {
+      delete process.env.SUPABASE_SERVICE_ROLE_KEY
+    } else {
+      process.env.SUPABASE_SERVICE_ROLE_KEY = originalServiceRoleKey
+    }
+
+    clearSupabaseMocks()
+  }
+})

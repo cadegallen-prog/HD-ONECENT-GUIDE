@@ -6,29 +6,26 @@ test.describe("Report Find Batch Submit", () => {
 
     await page.route("**/api/submit-find", async (route) => {
       submitCount += 1
-      if (submitCount === 1) {
-        await route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: JSON.stringify({
-            success: true,
-            message: "ok",
-            stats: { totalReports: 3, stateCount: 2, isFirstReport: false },
-          }),
-        })
-        return
-      }
-
       await route.fulfill({
-        status: 500,
+        status: 200,
         contentType: "application/json",
-        body: JSON.stringify({ error: "Simulated failure" }),
+        body: JSON.stringify({
+          success: true,
+          mode: "batch",
+          attempted: 2,
+          successCount: 1,
+          failedCount: 1,
+          succeeded: [{ index: 0, sku: "1009258128" }],
+          failed: [{ index: 1, sku: "1009258127", message: "Simulated failure" }],
+          message: "Submitted 1 of 2 item(s).",
+        }),
       })
     })
 
     await page.goto("/report-find")
 
     await page.locator("#storeState").selectOption("FL")
+    await page.locator("#dateFound").fill(new Date().toISOString().split("T")[0])
 
     await page.locator("#itemName").fill("Item One")
     await page.locator("#sku").fill("1009258128")
@@ -45,5 +42,6 @@ test.describe("Report Find Batch Submit", () => {
 
     await expect(page.locator("[data-testid='basket-item-1009258127']")).toBeVisible()
     await expect(page.locator("[data-testid='basket-item-1009258128']")).toHaveCount(0)
+    expect(submitCount).toBe(1)
   })
 })

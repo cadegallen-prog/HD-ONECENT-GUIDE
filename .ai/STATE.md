@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 24, 2026 (proof noise gating + replay robustness hardening)
+**Last updated:** Feb 24, 2026 (submit-find dry-run safety flag documented for local testing)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,23 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-24 (Submit-find local dry-run safety mode + env documentation):** Added and documented a local-safe submission mode so localhost testing does not write to live Supabase or consume SERPAPI credits.
+  - **Safety behavior shipped:**
+    - `app/api/submit-find/route.ts`
+      - `SUBMIT_FIND_DRY_RUN` env flag support (`true` = validate-only, no writes),
+      - when dry-run is enabled, skips Supabase insert, Item Cache RPC, and realtime SerpApi.
+    - `components/report-find/ReportFindFormClient.tsx`
+      - surfaces explicit dry-run result copy and suppresses live-submit analytics/actions.
+    - `.env.example`
+      - documents `SUBMIT_FIND_DRY_RUN` for future agent/operator awareness.
+  - **Operational note for future agents:**
+    - If `.env.local` changes, restart `npm run dev` to load updated env values.
+  - **Verification:**
+    - `npx tsx --import ./tests/setup.ts --test tests/submit-find-route.test.ts` ✅
+    - `npx playwright test tests/report-find-batch.spec.ts --project=chromium-desktop-light --workers=1` ✅
+    - `npm run e2e:smoke` ✅
+    - `npm run verify:fast` ⚠️ blocked by unrelated pre-existing lint warnings in `app/store-finder/page.tsx`
 
 - **2026-02-24 (Proof noise gating + replay robustness hardening):** Improved proof fidelity by blocking noisy third-party requests during screenshot runs, handling expected geolocation failures without error noise, and making replay location checks more resilient.
   - **Hardening shipped:**

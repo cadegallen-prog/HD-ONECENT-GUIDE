@@ -96,14 +96,19 @@
 ### Changes
 
 - `app/api/submit-find/route.ts` trusted-source precedence for `item_name` with guarded realtime updates.
+- `app/api/submit-find/route.ts` added `SUBMIT_FIND_DRY_RUN` safety mode (`true` => validate-only, no Supabase writes/RPC/SerpApi usage).
+- `components/report-find/ReportFindFormClient.tsx` now surfaces dry-run copy and suppresses live-submit actions/analytics while dry-run is active.
 - `tests/submit-find-route.test.ts` expanded trusted-source coverage.
+- `tests/submit-find-route.test.ts` added dry-run regression coverage to verify no DB/RPC side effects.
+- `.env.example` now documents `SUBMIT_FIND_DRY_RUN` so future agents/operators can test safely from localhost.
 - `tests/penny-list-utils.test.ts` aligned expectation to `M18 FUEL`.
 
 ### Verification
 
 - `npx tsx --import ./tests/setup.ts --test tests/submit-find-route.test.ts` ✅
+- `npx playwright test tests/report-find-batch.spec.ts --project=chromium-desktop-light --workers=1` ✅
 - `npx tsx --import ./tests/setup.ts --test tests/penny-list-utils.test.ts` ✅
-- `npm run verify:fast` ✅
+- `npm run verify:fast` ⚠️ blocked by unrelated pre-existing lint warnings in `app/store-finder/page.tsx`
 - `npm run e2e:smoke` ✅
 
 ---
