@@ -11,6 +11,9 @@
        See: docs/DESIGN-SYSTEM-AAA.md
        =============================================== */
 
+    /* Reserve scrollbar gutter to prevent layout shift on modal open/close */
+    scrollbar-gutter: stable;
+
     /* ===============================================
        MOTION TOKENS
        Consistent animation timing across components
