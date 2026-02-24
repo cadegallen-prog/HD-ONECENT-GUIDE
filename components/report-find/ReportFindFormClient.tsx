@@ -39,6 +39,7 @@ type SubmitResult = {
   attempted: number
   successCount: number
   failed: SubmitFailure[]
+  dryRun?: boolean
   stats?: {
     totalReports: number
     stateCount: number
@@ -369,17 +370,20 @@ function ReportFindForm() {
     const failures: SubmitFailure[] = []
     const successes: BasketItem[] = []
     let firstStats: SubmitResult["stats"]
+    let dryRun = false
 
-    for (const item of basket) {
-      const payload = {
-        itemName: item.itemName,
-        sku: item.sku,
-        storeCity: sharedData.storeCity,
-        storeState: sharedData.storeState,
-        dateFound: sharedData.dateFound,
-        quantity: item.quantity !== null ? String(item.quantity) : "",
-        website: sharedData.website,
-      }
+    const toApiItem = (item: BasketItem) => ({
+      itemName: item.itemName,
+      sku: item.sku,
+      storeCity: sharedData.storeCity,
+      storeState: sharedData.storeState,
+      dateFound: sharedData.dateFound,
+      quantity: item.quantity !== null ? String(item.quantity) : "",
+      website: sharedData.website,
+    })
+
+    if (basket.length === 1) {
+      const payload = toApiItem(basket[0])
 
       try {
         const response = await fetch("/api/submit-find", {
@@ -391,35 +395,144 @@ function ReportFindForm() {
         const data = await response.json()
 
         if (response.ok) {
-          successes.push(item)
+          successes.push(basket[0])
+          if (data?.dryRun === true) dryRun = true
           if (!firstStats && data?.stats) {
             firstStats = data.stats as SubmitResult["stats"]
           }
-          trackEvent("find_submit", { event_label: "success", value: 1 })
-          continue
+        } else {
+          failures.push({
+            item: basket[0],
+            message: data?.error || "Something went wrong. Please try again.",
+          })
         }
-
-        failures.push({
-          item,
-          message: data?.error || "Something went wrong. Please try again.",
-        })
       } catch {
         failures.push({
-          item,
+          item: basket[0],
           message: "Network error. Please check your connection and try again.",
         })
+      }
+    } else {
+      const batchPayload = { items: basket.map(toApiItem) }
+
+      try {
+        const response = await fetch("/api/submit-find", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(batchPayload),
+        })
+
+        const data = await response.json()
+
+        if (!response.ok) {
+          const message = data?.error || "Something went wrong. Please try again."
+          for (const item of basket) {
+            failures.push({ item, message })
+          }
+        } else {
+          if (data?.dryRun === true) dryRun = true
+          const statusByIndex: Array<"success" | "failed" | undefined> = Array(basket.length).fill(
+            undefined
+          )
+          const failureMessageByIndex = new Map<number, string>()
+
+          if (Array.isArray(data?.succeeded)) {
+            for (const entry of data.succeeded) {
+              if (
+                typeof entry?.index === "number" &&
+                Number.isInteger(entry.index) &&
+                entry.index >= 0 &&
+                entry.index < basket.length
+              ) {
+                statusByIndex[entry.index] = "success"
+              }
+            }
+          }
+
+          if (Array.isArray(data?.failed)) {
+            for (const entry of data.failed) {
+              const message =
+                typeof entry?.message === "string" && entry.message.trim().length > 0
+                  ? entry.message
+                  : "Something went wrong. Please try again."
+
+              if (
+                typeof entry?.index === "number" &&
+                Number.isInteger(entry.index) &&
+                entry.index >= 0 &&
+                entry.index < basket.length
+              ) {
+                statusByIndex[entry.index] = "failed"
+                failureMessageByIndex.set(entry.index, message)
+                continue
+              }
+
+              if (typeof entry?.sku === "string") {
+                const normalizedSku = normalizeSku(entry.sku).slice(0, 10)
+                const fallbackIndex = basket.findIndex((item) => item.sku === normalizedSku)
+                if (fallbackIndex >= 0) {
+                  statusByIndex[fallbackIndex] = "failed"
+                  failureMessageByIndex.set(fallbackIndex, message)
+                }
+              }
+            }
+          }
+
+          if (typeof data?.successCount === "number" && data.successCount > 0) {
+            let assignedSuccesses = statusByIndex.filter((status) => status === "success").length
+
+            for (
+              let i = 0;
+              i < statusByIndex.length && assignedSuccesses < data.successCount;
+              i++
+            ) {
+              if (statusByIndex[i] !== undefined) continue
+              statusByIndex[i] = "success"
+              assignedSuccesses += 1
+            }
+          }
+
+          for (let i = 0; i < basket.length; i++) {
+            if (statusByIndex[i] === "success") {
+              successes.push(basket[i])
+              continue
+            }
+
+            failures.push({
+              item: basket[i],
+              message: failureMessageByIndex.get(i) || "Something went wrong. Please try again.",
+            })
+          }
+        }
+      } catch {
+        for (const item of basket) {
+          failures.push({
+            item,
+            message: "Network error. Please check your connection and try again.",
+          })
+        }
       }
     }
 
     const attempted = basket.length
     const successCount = successes.length
 
-    if (successCount > 0) {
-      const successfulSkuSet = new Set(successes.map((item) => item.sku))
-      setBasket((prev) => prev.filter((item) => !successfulSkuSet.has(item.sku)))
-      setLastSuccessfulItems(successes)
+    if (!dryRun) {
+      for (let i = 0; i < successes.length; i++) {
+        trackEvent("find_submit", { event_label: "success", value: 1 })
+      }
+    }
 
-      if (attempted === 1 && successCount === 1) {
+    if (successCount > 0) {
+      if (!dryRun) {
+        const successfulSkuSet = new Set(successes.map((item) => item.sku))
+        setBasket((prev) => prev.filter((item) => !successfulSkuSet.has(item.sku)))
+        setLastSuccessfulItems(successes)
+      } else {
+        setLastSuccessfulItems([])
+      }
+
+      if (!dryRun && attempted === 1 && successCount === 1) {
         trackEvent("report_submit_single", {
           ui_source: "report-find-submit",
           attempted,
@@ -428,7 +541,7 @@ function ReportFindForm() {
         })
       }
 
-      if (attempted > 1) {
+      if (!dryRun && attempted > 1) {
         trackEvent("report_submit_batch", {
           ui_source: "report-find-submit",
           attempted,
@@ -444,6 +557,7 @@ function ReportFindForm() {
       attempted,
       successCount,
       failed: failures,
+      dryRun,
       ...(firstStats ? { stats: firstStats } : {}),
     })
 
@@ -762,17 +876,21 @@ function ReportFindForm() {
             <div className="flex-1 space-y-2">
               <p className="text-sm font-medium text-[var(--text-primary)]">
                 {result.successCount > 0
-                  ? result.attempted === 1 && result.successCount === 1
-                    ? result.stats?.isFirstReport
-                      ? "You are the first to report this item. Your find is now live for the community."
-                      : result.stats
-                        ? `You are the ${ordinal(result.stats.totalReports)} person to report this item${
-                            result.stats.stateCount > 1
-                              ? ` across ${result.stats.stateCount} states`
-                              : ""
-                          }.`
-                        : "Thanks. Your find is live on the Penny List."
-                    : `Submitted ${result.successCount} of ${result.attempted} item(s).`
+                  ? result.dryRun
+                    ? result.attempted === 1
+                      ? "Dry run only: validated this item. Nothing was written to the live Penny List."
+                      : `Dry run only: validated ${result.successCount} of ${result.attempted} item(s). Nothing was written to the live Penny List.`
+                    : result.attempted === 1 && result.successCount === 1
+                      ? result.stats?.isFirstReport
+                        ? "You are the first to report this item. Your find is now live for the community."
+                        : result.stats
+                          ? `You are the ${ordinal(result.stats.totalReports)} person to report this item${
+                              result.stats.stateCount > 1
+                                ? ` across ${result.stats.stateCount} states`
+                                : ""
+                            }.`
+                          : "Thanks. Your find is live on the Penny List."
+                      : `Submitted ${result.successCount} of ${result.attempted} item(s).`
                   : result.failed[0]?.message || "Something went wrong. Please try again."}
               </p>
 
@@ -794,17 +912,19 @@ function ReportFindForm() {
 
               {result.successCount > 0 && (
                 <div className="mt-3 flex flex-col sm:flex-row gap-2">
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    size="sm"
-                    onClick={() => {
-                      window.location.href = "/penny-list?fresh=1"
-                    }}
-                    className="flex-1"
-                  >
-                    View on Penny List
-                  </Button>
+                  {!result.dryRun && (
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => {
+                        window.location.href = "/penny-list?fresh=1"
+                      }}
+                      className="flex-1"
+                    >
+                      View on Penny List
+                    </Button>
+                  )}
                   <Button
                     type="button"
                     variant="secondary"
@@ -817,15 +937,17 @@ function ReportFindForm() {
                   >
                     Report Another Find
                   </Button>
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    size="sm"
-                    onClick={handleCopyForFacebook}
-                    className="flex-1"
-                  >
-                    Copy for Facebook
-                  </Button>
+                  {!result.dryRun && (
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      size="sm"
+                      onClick={handleCopyForFacebook}
+                      className="flex-1"
+                    >
+                      Copy for Facebook
+                    </Button>
+                  )}
                 </div>
               )}
 
