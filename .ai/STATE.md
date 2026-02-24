@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 24, 2026 (visual pointer store-finder directions anchor disambiguated)
+**Last updated:** Feb 24, 2026 (proof noise gating + replay robustness hardening)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,24 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-24 (Proof noise gating + replay robustness hardening):** Improved proof fidelity by blocking noisy third-party requests during screenshot runs, handling expected geolocation failures without error noise, and making replay location checks more resilient.
+  - **Hardening shipped:**
+    - `scripts/ai-proof.ts`
+      - blocks third-party ad/analytics domains during proof capture runs,
+      - filters expected blocked-third-party console errors so proof output stays signal-first.
+    - `app/store-finder/page.tsx`
+      - geolocation permission/timeout/unavailable paths are treated as expected user flow,
+      - only unexpected geolocation failures are logged as errors.
+    - `scripts/visual-pointer-proof.ts`
+      - adds scroll-into-view fallback and a second-pass retry to selector replay.
+  - **Verification (all green):**
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` ✅
+    - `npm run ai:proof -- /store-finder` ✅
+      - proof artifact: `reports/proof/2026-02-24T09-31-18/`
+      - console report: `reports/proof/2026-02-24T09-31-18/console-errors.txt` (`No console errors detected`)
+    - `npm run visual-pointer:proof -- reports/visual-pointing/manual-check-visible-2026-02-23T17-03-04/capture.json` ✅
 
 - **2026-02-24 (Visual Pointer store-finder directions anchor disambiguation):** Closed the remaining low-priority anchor ambiguity by assigning distinct IDs for mobile vs desktop directions actions while keeping source-registry precision intact.
   - **Anchor split shipped:**

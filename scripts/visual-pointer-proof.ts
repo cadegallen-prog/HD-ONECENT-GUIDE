@@ -9,7 +9,7 @@
  *   npx tsx scripts/visual-pointer-proof.ts --artifact <path-to-capture.json>
  */
 
-import { chromium, type Page, type BrowserContext } from "playwright"
+import { chromium, type Page, type BrowserContext, type Locator } from "playwright"
 import { readFile, writeFile, mkdir } from "node:fs/promises"
 import { join, dirname } from "node:path"
 
@@ -97,20 +97,47 @@ async function tryLocate(
   usedStrategy: string | null
   usedSelector: string | null
 }> {
-  for (const candidate of candidates) {
-    const selector = toPlaywrightSelector(candidate)
-    if (!selector) continue
-
+  async function isVisibleWithScroll(locator: Locator): Promise<boolean> {
     try {
-      const locator = page.locator(selector).first()
-      const visible = await locator.isVisible({ timeout: 3000 })
-      if (visible) {
-        return { found: true, usedStrategy: candidate.strategy, usedSelector: selector }
+      if (await locator.isVisible({ timeout: 1500 })) {
+        return true
       }
     } catch {
-      // Selector didn't match or timed out, try next
+      // keep trying with scroll fallback
+    }
+
+    try {
+      await locator.scrollIntoViewIfNeeded({ timeout: 1500 })
+      return await locator.isVisible({ timeout: 2000 })
+    } catch {
+      return false
     }
   }
+
+  // Retry once to handle delayed rendering after navigation.
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    for (const candidate of candidates) {
+      const selector = toPlaywrightSelector(candidate)
+      if (!selector) continue
+
+      try {
+        const locator = page.locator(selector).first()
+        const count = await locator.count()
+        if (count === 0) continue
+
+        if (await isVisibleWithScroll(locator)) {
+          return { found: true, usedStrategy: candidate.strategy, usedSelector: selector }
+        }
+      } catch {
+        // Selector didn't match or timed out, try next
+      }
+    }
+
+    if (attempt === 1) {
+      await page.waitForTimeout(350)
+    }
+  }
+
   return { found: false, usedStrategy: null, usedSelector: null }
 }
 
@@ -148,6 +175,9 @@ async function main() {
 
     // Highlight the target element
     const locator = page.locator(result.usedSelector).first()
+    await locator.scrollIntoViewIfNeeded({ timeout: 1500 }).catch(() => {
+      // Best effort. If scrolling fails, still attempt highlight/screenshot.
+    })
     await locator.evaluate((el) => {
       el.style.outline = "3px solid #e74c3c"
       el.style.outlineOffset = "2px"

@@ -4,9 +4,38 @@
 
 ---
 
+## 2026-02-24 - Codex - Proof Noise Gating + Replay Robustness Hardening
+
+**Goal:** Improve Visual Pointer proof fidelity by reducing irrelevant console noise and making replay more resilient.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `scripts/ai-proof.ts`
+  - blocks known third-party ad/analytics hosts during proof capture,
+  - filters expected blocked-third-party console errors from `console-errors.txt`.
+- `app/store-finder/page.tsx`
+  - treats expected geolocation denials/timeouts as non-error paths,
+  - only logs unexpected geolocation failures.
+- `scripts/visual-pointer-proof.ts`
+  - adds scroll-into-view + retry behavior in selector replay,
+  - keeps positional artifact path support.
+
+### Verification
+
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npm run ai:proof -- /store-finder` ✅
+  - artifact: `reports/proof/2026-02-24T09-31-18/`
+  - console report: `reports/proof/2026-02-24T09-31-18/console-errors.txt` (`No console errors detected`)
+- `npm run visual-pointer:proof -- reports/visual-pointing/manual-check-visible-2026-02-23T17-03-04/capture.json` ✅
+
+---
+
 ## 2026-02-24 - Codex - Visual Pointer Anchor Disambiguation (Store-Finder Directions)
 
-**Goal:** Remove the remaining Visual Pointer anchor ambiguity by giving mobile and desktop store-finder directions links distinct `data-pc-id` values.
+**Goal:** Remove remaining Visual Pointer anchor ambiguity by giving mobile and desktop store-finder directions links distinct `data-pc-id` values.
 
 **Status:** ✅ Completed
 
@@ -15,10 +44,10 @@
 - `components/store-map.tsx`
   - mobile directions anchor changed to `store-finder.popup-directions-mobile`.
 - `lib/visual-pointer/source-registry.ts`
-  - `store-finder.popup-directions` now maps to desktop popup source line,
-  - added `store-finder.popup-directions-mobile` mapping to mobile popup source line.
+  - `store-finder.popup-directions` maps to desktop line metadata,
+  - added `store-finder.popup-directions-mobile` mapping to mobile line metadata.
 - `tests/source-registry.test.ts`
-  - added explicit test coverage for `store-finder.popup-directions-mobile`.
+  - added coverage for `store-finder.popup-directions-mobile`.
 
 ### Verification
 
@@ -26,21 +55,20 @@
 - `PLAYWRIGHT_BASE_URL=http://127.0.0.1:3001 npx playwright test tests/visual-pointer-capture.spec.ts --project=chromium-desktop-light --workers=1` ✅
 - `npm run verify:fast` ✅
 - `npm run e2e:smoke` ✅
-- `npm run ai:proof -- --mode=dev /store-finder` ✅
-  - Proof artifacts: `reports/proof/2026-02-24T07-44-21/`
+- `npm run ai:proof -- /store-finder` ✅
 
 ---
 
 ## 2026-02-24 - Codex - Carryover Closure (Visual Pointer Hardening + SKU Name Normalization Reuse)
 
-**Goal:** Finish and ship the previously dirty carryover scope on `dev`.
+**Goal:** Finish and ship previously dirty carryover scope on `dev`.
 
 **Status:** ✅ Completed
 
 ### Changes
 
-- `app/sku/[sku]/page.tsx` now reuses `normalizeProductName(...)` for title cleanup.
-- `lib/penny-list-utils.ts` preserves captured acronym casing during normalization.
+- `app/sku/[sku]/page.tsx` now reuses `normalizeProductName(...)`.
+- `lib/penny-list-utils.ts` preserves captured acronym casing.
 - Visual Pointer hardening bundle landed across:
   - `lib/visual-pointer/source-registry.ts`
   - `playwright.config.ts`
@@ -61,18 +89,15 @@
 
 ## 2026-02-24 - Codex - Submit-Find Name Priority Hardening + Unit Mismatch Resolution
 
-**Goal:** Enforce strict trusted-source `item_name` priority and clear the blocking unit mismatch.
+**Goal:** Enforce strict trusted-source `item_name` priority and clear blocking unit mismatch.
 
 **Status:** ✅ Completed
 
 ### Changes
 
-- `app/api/submit-find/route.ts`
-  - trusted source precedence for `item_name` (`staging`, `serpapi`, `manual`) with guarded realtime updates.
-- `tests/submit-find-route.test.ts`
-  - updated/expanded trusted-source coverage.
-- `tests/penny-list-utils.test.ts`
-  - aligned expectation to current normalization behavior (`M18 FUEL`).
+- `app/api/submit-find/route.ts` trusted-source precedence for `item_name` with guarded realtime updates.
+- `tests/submit-find-route.test.ts` expanded trusted-source coverage.
+- `tests/penny-list-utils.test.ts` aligned expectation to `M18 FUEL`.
 
 ### Verification
 
@@ -91,42 +116,14 @@
 
 ### Changes
 
-- `lib/visual-pointer/source-registry.ts`:
-  - replaced placeholder line metadata,
-  - corrected ownership mappings for filters/cards.
-- `tests/source-registry.test.ts`:
-  - owner mapping assertion update,
-  - `line > 0` assertions.
-- `tests/visual-pointer-capture.spec.ts`:
-  - anchored `/penny-list` + `/store-finder` checks,
-  - unanchored fallback check.
+- `lib/visual-pointer/source-registry.ts`: concrete line metadata + corrected ownership.
+- `tests/source-registry.test.ts`: owner assertion update + `line > 0` checks.
+- `tests/visual-pointer-capture.spec.ts`: anchored `/penny-list` + `/store-finder` checks plus unanchored fallback.
 - `playwright.config.ts`: added `chromium-mobile-light-390x844`.
-- `scripts/visual-pointer-proof.ts`: accepts `--artifact` or positional path.
+- `scripts/visual-pointer-proof.ts`: supports `--artifact` or positional path.
 
 ### Verification
 
 - targeted source-registry + capture specs ✅
 - `npm run e2e:smoke` ✅
 - `npm run verify:fast` was blocked at the time by unrelated carryover in `lib/penny-list-utils.ts` (resolved in later session).
-
----
-
-## 2026-02-22 - Codex - Visual Pointing Tool v1 Canonical Plan (Two-Route Pilot)
-
-**Goal:** Publish a decision-complete canonical plan for the dev-only visual pointing pilot (`/penny-list`, `/store-finder`).
-
-**Status:** ✅ Completed (planning-only)
-
-### Changes
-
-- Added `.ai/impl/visual-pointing-tool.md` with:
-  - contract definitions,
-  - route anchor inventory,
-  - sliced implementation sequence with acceptance/rollback/verification per slice.
-- Updated `.ai/STATE.md` to reflect canonical plan availability.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run ai:checkpoint` ✅
-- Runtime lanes N/A (docs-only planning work)

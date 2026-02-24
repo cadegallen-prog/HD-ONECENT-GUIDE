@@ -38,6 +38,9 @@ const StoreMap = dynamic(() => import("@/components/store-map"), {
 // Temporary proof-of-concept mode: intentionally load every store to validate data completeness
 const PROOF_OF_CONCEPT_MODE = false
 const MAX_STORES = PROOF_OF_CONCEPT_MODE ? 5000 : 20
+const GEOLOCATION_PERMISSION_DENIED = 1
+const GEOLOCATION_POSITION_UNAVAILABLE = 2
+const GEOLOCATION_TIMEOUT = 3
 
 const STATE_ABBREV_MAP: Record<string, string> = {
   alabama: "AL",
@@ -511,9 +514,21 @@ export default function StoreFinderPage() {
           setLocatingUser(false)
         },
         (error) => {
-          console.error("Error getting location:", error)
+          const isExpectedError =
+            error.code === GEOLOCATION_PERMISSION_DENIED ||
+            error.code === GEOLOCATION_POSITION_UNAVAILABLE ||
+            error.code === GEOLOCATION_TIMEOUT
+
+          if (!isExpectedError) {
+            console.error("Unexpected geolocation error:", error)
+          }
+
           setLocatingUser(false)
           setGeolocationResolved(false)
+          if (error.code === GEOLOCATION_PERMISSION_DENIED) {
+            alert("Location access was blocked. Please search by ZIP code instead.")
+            return
+          }
           alert("Could not get your location. Please try searching by ZIP code instead.")
         },
         {
