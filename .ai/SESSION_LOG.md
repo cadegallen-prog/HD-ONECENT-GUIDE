@@ -4,6 +4,71 @@
 
 ---
 
+## 2026-02-24 - Codex - Submit-Find Name Priority Hardening + Unit Mismatch Resolution
+
+**Goal:** Complete both requested tasks: fix the outstanding unit mismatch and enforce stricter `item_name` source priority in submit-find.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `app/api/submit-find/route.ts`
+  - Added trusted item-name source guards for self-enrichment (`staging`, `serpapi`, `manual`).
+  - Insert-time `item_name` now follows strict order: trusted self-enriched name first, otherwise user fallback.
+  - Carried trusted `item_name` provenance forward on insert when self-enrichment supplies the chosen name.
+  - Realtime SerpApi now only updates `item_name` when current name source is untrusted.
+- `tests/submit-find-route.test.ts`
+  - Updated self-enrichment tests for trusted-source behavior.
+  - Added regression coverage that untrusted historical names are not reused.
+  - Updated expectation to reflect strict trusted-self precedence over user-typed text.
+- `tests/penny-list-utils.test.ts`
+  - Resolved casing mismatch by aligning expectation with current normalization behavior (`M18 FUEL`).
+
+### Verification
+
+- `npx tsx --import ./tests/setup.ts --test tests/submit-find-route.test.ts` ✅ (14/14)
+- `npx tsx --import ./tests/setup.ts --test tests/penny-list-utils.test.ts` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅ (5/5)
+
+---
+
+## 2026-02-23 - Codex - Visual Pointer v1 Hardening (Source Precision + Anchored Capture + 390x844)
+
+**Goal:** Complete the highest-impact remaining Visual Pointer v1 hardening gaps so live behavior matches the approved two-route pilot plan.
+
+**Status:** ✅ Completed (with one unrelated pre-existing verify blocker)
+
+### Changes
+
+- `lib/visual-pointer/source-registry.ts`
+  - replaced all placeholder `line: 0` values with concrete source lines,
+  - corrected ownership for filter and card anchors (`PennyListFilters`, `PennyListCard`).
+- `tests/source-registry.test.ts`
+  - updated expected penny-list search-input owner to `PennyListFilters`,
+  - added `line > 0` assertions for known anchor metadata.
+- `tests/visual-pointer-capture.spec.ts`
+  - refactored capture helpers,
+  - added anchored capture assertion on `/penny-list` (`penny-list.report-cta`),
+  - retained unanchored heading assertion (`source_unavailable`),
+  - added anchored capture assertion on `/store-finder` (`store-finder.search-input`).
+- `playwright.config.ts`
+  - added explicit `chromium-mobile-light-390x844` project (iPhone 12 viewport) to satisfy dual mobile-size validation.
+- `scripts/visual-pointer-proof.ts`
+  - argument parser now accepts either `--artifact <path>` or positional `<path>` for npm/shell compatibility.
+
+### Verification
+
+- `npx tsx --import ./tests/setup.ts --test tests/source-registry.test.ts` ✅
+- `PLAYWRIGHT_BASE_URL=http://127.0.0.1:3001 npx playwright test tests/visual-pointer-capture.spec.ts --project=chromium-desktop-light --workers=1` ✅
+- `PLAYWRIGHT_BASE_URL=http://127.0.0.1:3001 npx playwright test tests/visual-pointer-capture.spec.ts --project=chromium-mobile-light --workers=1` ✅
+- `PLAYWRIGHT_BASE_URL=http://127.0.0.1:3001 npx playwright test tests/visual-pointer-capture.spec.ts --project=chromium-mobile-light-390x844 --workers=1` ✅
+- `npm run visual-pointer:proof -- --artifact <artifact-path>` ✅ (script succeeds; npm still warns about `--artifact` forwarding but positional fallback handles execution)
+- `npm run e2e:smoke` ✅
+- `npm run verify:fast` ⚠️ fails due unrelated carryover unit assertion in `tests/penny-list-utils.test.ts` from dirty local file `lib/penny-list-utils.ts` (not part of this slice)
+
+---
+
 ## 2026-02-22 - Codex - Visual Pointing Tool v1 Canonical Plan (Two-Route Pilot)
 
 **Goal:** Convert founder-provided Visual Pointing Tool v1 specification into a repo-canonical, implementation-ready plan artifact with explicit slices, contracts, and verification lanes.
@@ -97,78 +162,5 @@
 - `npm run verify:fast` ✅
 - `npm run e2e:smoke` N/A (no route/form/API/navigation/UI-flow change)
 - `npm run e2e:full` N/A (FULL triggers not applicable)
-
----
-
-## 2026-02-22 - Codex - Memory Failure-Mode Drill Commands (Phase 3 Hardening Slice)
-
-**Goal:** Implement the next scoped P0 autonomy hardening slice by adding failure-mode drill commands that intentionally remove/alter required memory artifacts and prove fail-closed detection with remediation guidance.
-
-**Status:** ✅ Completed (tooling + docs)
-
-### Changes
-
-- Added drill command support in `scripts/ai-memory.ts`:
-  - new command: `drill`
-  - scenarios:
-    - `missing-file` (default)
-    - `corrupt-heading`
-  - options:
-    - `--scenario=<missing-file|corrupt-heading>`
-    - `--target=<path>`
-- Added explicit remediation guidance output for failed critical checks (missing required files, heading drift, session-log overflow, backlog done-means drift).
-- Added automatic rollback behavior in drill mode:
-  - temporary file mutation/removal is always restored before command exit.
-  - fixed cleanup edge case so drill failure no longer leaves `.drill-bak-*` artifacts.
-- Added npm wrappers in `package.json`:
-  - `ai:memory:drill`
-  - `ai:memory:drill:missing`
-  - `ai:memory:drill:heading`
-- Updated canonical autonomy planning/state docs:
-  - `.ai/impl/founder-autonomy-memory-hardening.md`
-  - `.ai/topics/FOUNDER_AUTONOMY_CURRENT.md`
-  - `.ai/BACKLOG.md`
-
-### Verification
-
-- `npm run ai:memory:drill` ✅
-- `npm run ai:memory:drill:heading` ✅
-- `npm run ai:memory:check` ✅
-- `npm run ai:checkpoint` ✅
-  - Context pack: `reports/context-packs/2026-02-22T13-57-03/context-pack.md`
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` N/A (no route/form/API/navigation/UI-flow change)
-- `npm run e2e:full` N/A (FULL triggers not applicable)
-
----
-
-## 2026-02-22 - Claude Opus 4.6 - Penny List Scroll Fix + Spam Cleanup
-
-**Goal:** Fix scroll restoration bug on penny list pages 2+ and investigate/clean up suspicious Supabase submissions.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- **Scroll restoration fix (commit `836c738`):**
-  - `components/penny-list-card.tsx` — Both `PennyListCard` and `PennyListCardCompact` `openSkuPage()` now save `JSON.stringify({ y: scrollY, page })` instead of `String(scrollY)`. Page read from `window.location.search` at click time.
-  - `components/penny-list-client.tsx` — Added `pendingScrollRef`. Mount effect parses `{ y, page }` from sessionStorage. If page matches, scrolls immediately (double-RAF). If mismatched, navigates to saved page and defers scroll. `fetchItems` `finally` block checks `pendingScrollRef` and applies deferred scroll after data loads.
-  - `components/penny-list-table.tsx` — Same save-format update as card component.
-
-- **Supabase spam cleanup (direct DB operations, no code changes):**
-  - Investigated SKU `1013362340` (Ryobi 4000W Generator): 12 reports from 3 states. 10 were duplicate submissions from "PA" in a 2-minute burst — one person button-mashing.
-  - Deleted 10 duplicate rows (9 copies of SKU `1013362340`, 1 copy of SKU `1013362339`).
-  - Kept 1 report per unique SKU from the PA burst session. Butler PA, WV, and Wylie TX reports retained.
-
-### Verification
-
-- `npm run lint` ✅ (0 errors, 0 warnings)
-- `npm run typecheck` ✅
-- `npm run test:unit` ✅ (71/71)
-- `npm run build` ✅
-
-### Deferred
-
-- **Anti-spam protections** for the submit-find form: duplicate SKU throttling per session, submission cooldowns, client-side debounce. This was identified as the next priority topic during this session.
 
 ---

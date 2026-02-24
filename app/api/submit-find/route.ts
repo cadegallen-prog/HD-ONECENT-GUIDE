@@ -5,7 +5,7 @@ import { validateSku } from "@/lib/sku"
 import { getSupabaseClient, getSupabaseServiceRoleClient } from "@/lib/supabase/client"
 import { enrichHomeDepotSkuWithSerpApi } from "@/lib/enrichment/serpapi-home-depot-enrich"
 import { getSerpApiDeliveryZip, SerpApiCreditsExhaustedError } from "@/lib/serpapi/home-depot"
-import { isLowQualityItemName, shouldPreferEnrichedName } from "@/lib/item-name-quality"
+import { isLowQualityItemName } from "@/lib/item-name-quality"
 
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000 // 1 hour
 const RATE_LIMIT_MAX = 30 // Allows batch submissions (e.g., stack of receipts)
@@ -220,6 +220,24 @@ type SelfEnrichmentCandidate = EnrichmentData & {
   timestamp?: string | null
 }
 
+function hasTrustedItemNameSource(provenance: Record<string, unknown> | null | undefined): boolean {
+  const itemNameEntry = (provenance?.item_name ?? null) as {
+    source?: unknown
+  } | null
+  const source = typeof itemNameEntry?.source === "string" ? itemNameEntry.source : ""
+  return source === "staging" || source === "serpapi" || source === "manual"
+}
+
+function getTrustedItemNameProvenance(
+  provenance: Record<string, unknown> | null | undefined
+): Record<string, unknown> | null {
+  const itemNameEntry = (provenance?.item_name ?? null) as Record<string, unknown> | null
+  if (!itemNameEntry || typeof itemNameEntry !== "object") return null
+  const source = typeof itemNameEntry.source === "string" ? itemNameEntry.source : ""
+  if (source !== "staging" && source !== "serpapi" && source !== "manual") return null
+  return itemNameEntry
+}
+
 function parseTimestampMs(value: string | null | undefined): number {
   if (!value) return 0
   const ms = new Date(value).getTime()
@@ -228,7 +246,8 @@ function parseTimestampMs(value: string | null | undefined): number {
 
 function getSelfEnrichmentScore(row: SelfEnrichmentCandidate): number {
   let score = 0
-  if (hasNonEmptyText(row.item_name)) score += 5
+  if (hasNonEmptyText(row.item_name) && hasTrustedItemNameSource(row.enrichment_provenance))
+    score += 5
   if (hasNonEmptyText(row.brand)) score += 3
   if (hasNonEmptyText(row.image_url)) score += 3
   if (hasNonEmptyText(row.home_depot_url)) score += 2
@@ -485,11 +504,8 @@ async function maybeRealtimeSerpApiEnrich(
     const patch: Record<string, unknown> = {}
 
     if (
-      shouldPreferEnrichedName(
-        typedRow.item_name,
-        result.item_name,
-        typedRow.brand || result.brand || null
-      )
+      !hasTrustedItemNameSource(typedRow.enrichment_provenance) &&
+      hasNonEmptyText(result.item_name)
     ) {
       patch.item_name = result.item_name?.trim()
       nextProv.item_name = provEntry
@@ -717,14 +733,10 @@ export async function POST(request: NextRequest) {
 
     // Build payload with enrichment data merged in (only include enrichment fields when present)
     const userItemName = body.itemName.trim()
-    const enrichmentItemName = enrichment?.item_name?.trim()
-    const preferredItemName = shouldPreferEnrichedName(
-      userItemName,
-      enrichmentItemName,
-      enrichment?.brand ?? null
-    )
-      ? enrichmentItemName
-      : userItemName
+    const enrichmentItemName = hasTrustedItemNameSource(enrichment?.enrichment_provenance)
+      ? enrichment?.item_name?.trim()
+      : null
+    const preferredItemName = enrichmentItemName || userItemName
 
     const clientIp = getClientIp(request)
     const submitterHash = clientIp && clientIp !== "unknown" ? hashClientIdentifier(clientIp) : null
@@ -739,7 +751,7 @@ export async function POST(request: NextRequest) {
       timestamp: new Date().toISOString(),
       submitter_hash: submitterHash,
 
-      // Prefer enriched name only when it is clearly better than user-provided text.
+      // Strict order: trusted self-enriched name first, then user fallback.
       item_name: preferredItemName,
     }
 
@@ -765,6 +777,7 @@ export async function POST(request: NextRequest) {
         const internetProv = (prov as Record<string, unknown>).internet_sku as
           | { source?: unknown; confirmed_absent?: unknown }
           | undefined
+        const itemNameProv = getTrustedItemNameProvenance(prov)
 
         const carried: Record<string, unknown> = {}
         if (upcProv?.source === "staging" && upcProv?.confirmed_absent === true) {
@@ -772,6 +785,9 @@ export async function POST(request: NextRequest) {
         }
         if (internetProv?.source === "staging" && internetProv?.confirmed_absent === true) {
           carried.internet_sku = internetProv
+        }
+        if (enrichmentItemName && itemNameProv) {
+          carried.item_name = itemNameProv
         }
 
         if (Object.keys(carried).length > 0) {

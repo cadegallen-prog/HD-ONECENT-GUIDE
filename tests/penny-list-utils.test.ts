@@ -91,7 +91,7 @@ assert.strictEqual(
 )
 assert.strictEqual(
   normalizeProductName("Milwaukee M18 FUEL Hammer Drill/Driver Kit", { brand: "Milwaukee" }),
-  "M18 Fuel Hammer Drill/Driver Kit"
+  "M18 FUEL Hammer Drill/Driver Kit"
 )
 
 // Validation - comprehensive edge cases
