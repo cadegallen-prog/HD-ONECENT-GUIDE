@@ -186,32 +186,35 @@ export function PennyListClient({
 
   // Pending scroll restoration target — set when we need to wait for a page
   // fetch to complete before scrolling (e.g. returning to page 3 from a detail page).
-  const pendingScrollRef = useRef<number | null>(null)
+  const pendingScrollRef = useRef<string | null>(null)
 
   useEffect(() => {
     hasMountedRef.current = true
 
     // Restore scroll position when returning from a SKU detail page.
-    // We saved both scrollY and the page number so we can restore the correct page first.
+    // We saved the clicked item's SKU and page so we can scroll it into view.
     try {
       const savedRaw = sessionStorage.getItem("penny-list-scroll")
       if (savedRaw) {
         sessionStorage.removeItem("penny-list-scroll")
-        const parsed = JSON.parse(savedRaw) as { y: number; page?: number }
-        const y = parsed.y
+        const parsed = JSON.parse(savedRaw) as { sku?: string; page?: number }
+        const sku = parsed.sku
         const savedPage = parsed.page ?? 1
 
-        if (Number.isFinite(y) && y > 0) {
+        if (sku) {
           if (savedPage === currentPage) {
-            // Already on the right page (server rendered correctly) — scroll now.
+            // Already on the right page — scroll to the card now.
             requestAnimationFrame(() => {
               requestAnimationFrame(() => {
-                window.scrollTo({ top: y, behavior: "instant" })
+                const el = document.querySelector(`[data-sku="${CSS.escape(sku)}"]`)
+                if (el) {
+                  el.scrollIntoView({ block: "center", behavior: "instant" })
+                }
               })
             })
           } else {
             // Wrong page — navigate to the saved page, then scroll after data loads.
-            pendingScrollRef.current = y
+            pendingScrollRef.current = sku
             setCurrentPage(savedPage)
             updateURL({ page: savedPage === 1 ? null : String(savedPage) })
           }
@@ -420,12 +423,15 @@ export function PennyListClient({
 
       // If we have a pending scroll restore (returning from detail page on page 2+),
       // apply it now that the correct page's data has rendered.
-      const pendingY = pendingScrollRef.current
-      if (pendingY !== null) {
+      const pendingSku = pendingScrollRef.current
+      if (pendingSku !== null) {
         pendingScrollRef.current = null
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
-            window.scrollTo({ top: pendingY, behavior: "instant" })
+            const el = document.querySelector(`[data-sku="${CSS.escape(pendingSku)}"]`)
+            if (el) {
+              el.scrollIntoView({ block: "center", behavior: "instant" })
+            }
           })
         })
       }

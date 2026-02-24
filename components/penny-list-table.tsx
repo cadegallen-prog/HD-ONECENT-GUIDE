@@ -193,7 +193,7 @@ export function PennyListTable({
                   const page = Number(new URLSearchParams(window.location.search).get("page")) || 1
                   sessionStorage.setItem(
                     "penny-list-scroll",
-                    JSON.stringify({ y: window.scrollY, page })
+                    JSON.stringify({ sku: item.sku, page })
                   )
                 } catch {}
                 router.push(skuPageUrl)
@@ -210,6 +210,7 @@ export function PennyListTable({
               return (
                 <tr
                   key={item.id}
+                  data-sku={item.sku}
                   tabIndex={0}
                   aria-label={`View details for ${displayName} (SKU ${item.sku})`}
                   onClick={openSkuPage}

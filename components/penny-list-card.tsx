@@ -99,7 +99,7 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
   const openSkuPage = () => {
     try {
       const page = Number(new URLSearchParams(window.location.search).get("page")) || 1
-      sessionStorage.setItem("penny-list-scroll", JSON.stringify({ y: window.scrollY, page }))
+      sessionStorage.setItem("penny-list-scroll", JSON.stringify({ sku: item.sku, page }))
     } catch {}
     router.push(skuPageUrl)
   }
@@ -137,6 +137,7 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
       tabIndex={0}
       onClick={openSkuPage}
       onKeyDown={handleKeyDown}
+      data-sku={item.sku}
       className="rounded-2xl glass-card h-full flex flex-col cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
       aria-label={`View details for ${item.name} (SKU ${item.sku})`}
       aria-labelledby={`item-${item.id}-name`}
@@ -377,7 +378,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
   const openSkuPage = () => {
     try {
       const page = Number(new URLSearchParams(window.location.search).get("page")) || 1
-      sessionStorage.setItem("penny-list-scroll", JSON.stringify({ y: window.scrollY, page }))
+      sessionStorage.setItem("penny-list-scroll", JSON.stringify({ sku: item.sku, page }))
     } catch {}
     router.push(skuPageUrl)
   }
@@ -416,6 +417,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
       tabIndex={0}
       onClick={openSkuPage}
       onKeyDown={handleKeyDown}
+      data-sku={item.sku}
       className="rounded-lg border border-[var(--border-strong)] elevation-card p-4 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] group"
       aria-label={`View details for ${item.name} (SKU ${item.sku})`}
       aria-labelledby={`hot-item-${item.id}-name`}
