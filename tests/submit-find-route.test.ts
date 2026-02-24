@@ -69,8 +69,10 @@ test("inserts only allowed fields into Supabase", async () => {
     exact_quantity_found: 2,
     notes_optional: "Example note",
     timestamp: payload.timestamp,
+    submitter_hash: payload.submitter_hash,
   })
   assert.ok(typeof payload.timestamp === "string")
+  assert.ok(typeof payload.submitter_hash === "string", "submitter_hash should be a string")
   clearSupabaseMocks()
 })
 
@@ -137,7 +139,7 @@ test("uses service role insert (works even when anon inserts are blocked)", asyn
   clearSupabaseMocks()
 })
 
-test("always overwrites item_name with enrichment canonical name", async () => {
+test("uses trusted enrichment canonical item_name when available", async () => {
   const inserted: Record<string, unknown>[] = []
 
   // Mock anon client with enrichment lookup that returns canonical name
@@ -152,6 +154,9 @@ test("always overwrites item_name with enrichment canonical name", async () => {
                 brand: "Milwaukee",
                 retail_price: 199.0,
                 image_url: "https://example.com/image.jpg",
+                enrichment_provenance: {
+                  item_name: { source: "staging", at: "2026-02-24T00:00:00.000Z" },
+                },
               },
               error: null,
             }),
@@ -215,7 +220,7 @@ test("always overwrites item_name with enrichment canonical name", async () => {
   clearSupabaseMocks()
 })
 
-test("keeps user item_name when enrichment name is lower quality", async () => {
+test("prefers trusted self-enrichment name over user-typed name", async () => {
   const inserted: Record<string, unknown>[] = []
 
   const anonReadClient: any = {
@@ -229,6 +234,9 @@ test("keeps user item_name when enrichment name is lower quality", async () => {
                 brand: "Coast",
                 retail_price: 19.88,
                 image_url: "https://example.com/headlamp.jpg",
+                enrichment_provenance: {
+                  item_name: { source: "staging", at: "2026-02-24T00:00:00.000Z" },
+                },
               },
               error: null,
             }),
@@ -277,12 +285,78 @@ test("keeps user item_name when enrichment name is lower quality", async () => {
   assert.strictEqual(res.status, 200)
   const payload = inserted[0] as Record<string, unknown>
 
-  assert.strictEqual(
-    payload.item_name,
-    "Coast FLX65R 700 Lumen Bilingual Voice Control Rechargeable LED Headlamp"
-  )
+  assert.strictEqual(payload.item_name, "Coast headlamp")
   assert.strictEqual(payload.brand, "Coast")
   assert.strictEqual(payload.retail_price, 19.88)
+
+  clearSupabaseMocks()
+})
+
+test("does not reuse self-enrichment item_name when source is untrusted", async () => {
+  const inserted: Record<string, unknown>[] = []
+
+  const anonReadClient: any = {
+    from: () => ({
+      select: () => ({
+        eq: () => ({
+          limit: () => ({
+            maybeSingle: async () => ({
+              data: {
+                item_name: "Milwaukee M18 FUEL Hammer Drill/Driver Kit",
+                brand: "Milwaukee",
+                retail_price: 199.0,
+                image_url: "https://example.com/image.jpg",
+                enrichment_provenance: {},
+              },
+              error: null,
+            }),
+          }),
+        }),
+      }),
+    }),
+  }
+
+  const serviceRoleClient: any = {
+    from: () => ({
+      insert: (payload: Record<string, unknown>) => {
+        inserted.push(payload)
+        return {
+          select: () => ({
+            single: async () => ({ data: { id: "test-uuid-untrusted-self-name" }, error: null }),
+          }),
+        }
+      },
+    }),
+    rpc: async () => ({ data: { enriched: false }, error: null }),
+  }
+
+  installSupabaseMocks({ submitAnon: anonReadClient, submitServiceRole: serviceRoleClient })
+
+  const { POST } = await import("../app/api/submit-find/route")
+  const req = new NextRequest("http://localhost/api/submit-find", {
+    method: "POST",
+    body: JSON.stringify({
+      itemName: "drill",
+      sku: FIXTURE_SKU,
+      storeCity: "Atlanta",
+      storeState: "GA",
+      dateFound: new Date().toISOString().split("T")[0],
+      quantity: "1",
+      notes: "",
+      website: "",
+    }),
+    headers: {
+      "Content-Type": "application/json",
+      "x-forwarded-for": "203.0.113.32",
+    },
+  })
+
+  const res = await POST(req)
+  assert.strictEqual(res.status, 200)
+  const payload = inserted[0] as Record<string, unknown>
+
+  assert.strictEqual(payload.item_name, "drill")
+  assert.strictEqual(payload.brand, "Milwaukee")
 
   clearSupabaseMocks()
 })
@@ -728,6 +802,7 @@ test("uses the most complete self-enrichment row before insert", async () => {
                   home_depot_url: null,
                   internet_sku: null,
                   retail_price: null,
+                  enrichment_provenance: {},
                   timestamp: "2026-02-01T00:00:00.000Z",
                 },
                 {
@@ -739,6 +814,9 @@ test("uses the most complete self-enrichment row before insert", async () => {
                   home_depot_url: "https://www.homedepot.com/p/205744536",
                   internet_sku: 205744536,
                   retail_price: 199.0,
+                  enrichment_provenance: {
+                    item_name: { source: "staging", at: "2026-02-05T00:00:00.000Z" },
+                  },
                   timestamp: "2026-02-05T00:00:00.000Z",
                 },
               ],
