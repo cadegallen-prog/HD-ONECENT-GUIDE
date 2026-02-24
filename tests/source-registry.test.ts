@@ -9,8 +9,9 @@ describe("source-registry", () => {
     if (result === "source_unavailable") return
     assert.equal(result.pcId, "penny-list.search-input")
     assert.equal(result.route, "/penny-list")
-    assert.equal(result.component, "PennyListClient")
-    assert.match(result.file, /penny-list-client\.tsx$/)
+    assert.equal(result.component, "PennyListFilters")
+    assert.match(result.file, /penny-list-filters\.tsx$/)
+    assert.ok(result.line > 0, `expected line > 0, got ${result.line}`)
   })
 
   it("returns anchor metadata for a known store-finder pcId", () => {
@@ -21,6 +22,7 @@ describe("source-registry", () => {
     assert.equal(result.route, "/store-finder")
     assert.equal(result.component, "StoreMap")
     assert.match(result.file, /store-map\.tsx$/)
+    assert.ok(result.line > 0, `expected line > 0, got ${result.line}`)
   })
 
   it("returns source_unavailable for an unknown pcId", () => {

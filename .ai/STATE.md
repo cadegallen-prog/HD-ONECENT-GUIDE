@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 24, 2026 (submit-find strict name priority + mismatch resolved)
+**Last updated:** Feb 24, 2026 (carryover closure: visual pointer hardening + verification green)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,22 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-24 (Carryover closure - visual pointer hardening + SKU name normalization reuse):** Closed and validated the previously dirty carryover scope after founder approval to continue with carryover as active objective.
+  - **Carryover implementation shipped:**
+    - `app/sku/[sku]/page.tsx`: replaced inline title cleanup with shared `normalizeProductName(...)`.
+    - `lib/penny-list-utils.ts`: preserves captured all-caps acronyms during name normalization.
+    - `lib/visual-pointer/source-registry.ts`: filled line-level source metadata and corrected anchor component/file ownership.
+    - `playwright.config.ts`: added `chromium-mobile-light-390x844` viewport lane.
+    - `scripts/visual-pointer-proof.ts`: supports positional artifact path fallback.
+    - `tests/source-registry.test.ts`, `tests/visual-pointer-capture.spec.ts`: hardened anchored/unanchored capture assertions and source metadata checks.
+  - **Verification (all green):**
+    - `npx tsx --import ./tests/setup.ts --test tests/source-registry.test.ts` ✅
+    - `npx tsx --import ./tests/setup.ts --test tests/penny-list-utils.test.ts` ✅
+    - `PLAYWRIGHT_BASE_URL=http://127.0.0.1:3001 npx playwright test tests/visual-pointer-capture.spec.ts --project=chromium-desktop-light --project=chromium-mobile-light --project=chromium-mobile-light-390x844 --workers=1` ✅
+    - `npm run ai:memory:check` ✅
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` ✅
 
 - **2026-02-24 (Submit-find strict name priority + mismatch resolution):** Completed requested hardening by enforcing trusted-source name precedence in submission flow and resolving the outstanding unit mismatch that was blocking full verification.
   - **API route logic (`app/api/submit-find/route.ts`):**

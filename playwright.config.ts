@@ -47,6 +47,14 @@ export default defineConfig({
         colorScheme: "dark",
       },
     },
+    {
+      name: "chromium-mobile-light-390x844",
+      use: {
+        ...devices["iPhone 12"],
+        viewport: { width: 390, height: 844 },
+        colorScheme: "light",
+      },
+    },
   ],
   // If PLAYWRIGHT_BASE_URL is provided (e.g. CI starts its own server), do not start another server.
   webServer: process.env.PLAYWRIGHT_BASE_URL

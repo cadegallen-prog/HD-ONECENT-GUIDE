@@ -4,6 +4,40 @@
 
 ---
 
+## 2026-02-24 - Codex - Carryover Closure (Visual Pointer Hardening + SKU Name Normalization Reuse)
+
+**Goal:** Finish and ship the existing dirty carryover scope on `dev` after founder approval to continue implementation with carryover as active scope.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `app/sku/[sku]/page.tsx`
+  - Replaced inline H1 brand-prefix stripping logic with shared `normalizeProductName(...)` utility usage.
+- `lib/penny-list-utils.ts`
+  - Preserved detected all-caps acronyms while still normalizing product names to title case.
+- `lib/visual-pointer/source-registry.ts`
+  - Filled pilot anchors with concrete source metadata (`component`, `file`, `line`) and corrected ownership mappings.
+- `playwright.config.ts`
+  - Added explicit `chromium-mobile-light-390x844` viewport project.
+- `scripts/visual-pointer-proof.ts`
+  - Added positional artifact-path fallback in addition to `--artifact` flag parsing.
+- `tests/source-registry.test.ts`
+  - Updated expected anchor ownership and added `line > 0` assertions.
+- `tests/visual-pointer-capture.spec.ts`
+  - Expanded coverage for anchored `/penny-list` and `/store-finder` packets plus unanchored fallback.
+
+### Verification
+
+- `npx tsx --import ./tests/setup.ts --test tests/source-registry.test.ts` ✅
+- `npx tsx --import ./tests/setup.ts --test tests/penny-list-utils.test.ts` ✅
+- `PLAYWRIGHT_BASE_URL=http://127.0.0.1:3001 npx playwright test tests/visual-pointer-capture.spec.ts --project=chromium-desktop-light --project=chromium-mobile-light --project=chromium-mobile-light-390x844 --workers=1` ✅
+- `npm run ai:memory:check` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+
+---
+
 ## 2026-02-24 - Codex - Submit-Find Name Priority Hardening + Unit Mismatch Resolution
 
 **Goal:** Complete both requested tasks: fix the outstanding unit mismatch and enforce stricter `item_name` source priority in submit-find.

@@ -43,11 +43,20 @@ const BASE_URL = process.env.BASE_URL || "http://127.0.0.1:3001"
 function parseArgs(): { artifactPath: string } {
   const args = process.argv.slice(2)
   const flagIndex = args.indexOf("--artifact")
-  if (flagIndex === -1 || !args[flagIndex + 1]) {
-    console.error("Usage: npx tsx scripts/visual-pointer-proof.ts --artifact <path>")
-    process.exit(1)
+
+  if (flagIndex !== -1 && args[flagIndex + 1]) {
+    return { artifactPath: args[flagIndex + 1] }
   }
-  return { artifactPath: args[flagIndex + 1] }
+
+  const positionalPath = args.find((value) => !value.startsWith("-"))
+  if (positionalPath) {
+    return { artifactPath: positionalPath }
+  }
+
+  console.error(
+    "Usage: npx tsx scripts/visual-pointer-proof.ts --artifact <path>  (or positional <path>)"
+  )
+  process.exit(1)
 }
 
 async function loadArtifact(path: string): Promise<Artifact> {
