@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 24, 2026 (carryover closure: visual pointer hardening + verification green)
+**Last updated:** Feb 24, 2026 (visual pointer store-finder directions anchor disambiguated)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,24 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-24 (Visual Pointer store-finder directions anchor disambiguation):** Closed the remaining low-priority anchor ambiguity by assigning distinct IDs for mobile vs desktop directions actions while keeping source-registry precision intact.
+  - **Anchor split shipped:**
+    - `components/store-map.tsx`
+      - mobile popup now uses `data-pc-id="store-finder.popup-directions-mobile"`,
+      - desktop popup retains `data-pc-id="store-finder.popup-directions"`.
+    - `lib/visual-pointer/source-registry.ts`
+      - `store-finder.popup-directions` remapped to desktop source line,
+      - new `store-finder.popup-directions-mobile` mapped to mobile source line.
+    - `tests/source-registry.test.ts`
+      - added explicit lookup/assertions for the new mobile anchor and ID inclusion coverage.
+  - **Verification (all green):**
+    - `npx tsx --import ./tests/setup.ts --test tests/source-registry.test.ts` ✅
+    - `PLAYWRIGHT_BASE_URL=http://127.0.0.1:3001 npx playwright test tests/visual-pointer-capture.spec.ts --project=chromium-desktop-light --workers=1` ✅
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` ✅
+    - `npm run ai:proof -- --mode=dev /store-finder` ✅
+      - proof artifact: `reports/proof/2026-02-24T07-44-21/`
 
 - **2026-02-24 (Carryover closure - visual pointer hardening + SKU name normalization reuse):** Closed and validated the previously dirty carryover scope after founder approval to continue with carryover as active objective.
   - **Carryover implementation shipped:**

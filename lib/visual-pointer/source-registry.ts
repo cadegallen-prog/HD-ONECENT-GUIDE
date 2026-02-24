@@ -101,6 +101,12 @@ const REGISTRY: Record<string, Omit<SourceAnchorMeta, "pcId">> = {
     route: "/store-finder",
     component: "StoreMap",
     file: "components/store-map.tsx",
+    line: 598,
+  },
+  "store-finder.popup-directions-mobile": {
+    route: "/store-finder",
+    component: "StoreMap",
+    file: "components/store-map.tsx",
     line: 512,
   },
   "store-finder.popup-store-page": {

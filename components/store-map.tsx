@@ -509,7 +509,7 @@ const StoreMap = React.memo(function StoreMap({
                       href={`https://www.google.com/maps/dir/?api=1&destination=${store.lat},${store.lng}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      data-pc-id="store-finder.popup-directions"
+                      data-pc-id="store-finder.popup-directions-mobile"
                       className="store-popup-button store-popup-button-primary"
                       onClick={() =>
                         trackEvent("directions_click", { storeId: store.id, state: store.state })

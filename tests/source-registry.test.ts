@@ -25,6 +25,17 @@ describe("source-registry", () => {
     assert.ok(result.line > 0, `expected line > 0, got ${result.line}`)
   })
 
+  it("returns anchor metadata for mobile store-finder directions", () => {
+    const result = lookupSource("store-finder.popup-directions-mobile")
+    assert.notEqual(result, "source_unavailable")
+    if (result === "source_unavailable") return
+    assert.equal(result.pcId, "store-finder.popup-directions-mobile")
+    assert.equal(result.route, "/store-finder")
+    assert.equal(result.component, "StoreMap")
+    assert.match(result.file, /store-map\.tsx$/)
+    assert.ok(result.line > 0, `expected line > 0, got ${result.line}`)
+  })
+
   it("returns source_unavailable for an unknown pcId", () => {
     const result = lookupSource("unknown.element")
     assert.equal(result, "source_unavailable")
@@ -35,5 +46,6 @@ describe("source-registry", () => {
     assert.ok(ids.length >= 16, `expected at least 16 anchors, got ${ids.length}`)
     assert.ok(ids.includes("penny-list.search-input"))
     assert.ok(ids.includes("store-finder.popup-directions"))
+    assert.ok(ids.includes("store-finder.popup-directions-mobile"))
   })
 })
