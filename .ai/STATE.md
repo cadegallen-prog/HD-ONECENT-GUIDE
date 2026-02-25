@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 25, 2026 (submit-find canonical item-name authority lock + SKU-only report input)
+**Last updated:** Feb 25, 2026 (Full QA CI stabilization: visual-pointer + ChromeDriver sync)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,22 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-25 (Full QA CI stabilization - visual pointer lane + Axe driver sync):** Closed the active Full QA breakage on `main` by patching Playwright project/browser alignment, visual-pointer e2e enablement for CI production builds, and runner Chrome/ChromeDriver mismatch handling for axe checks.
+  - **CI/e2e stability fixes shipped:**
+    - `playwright.config.ts`
+      - `chromium-mobile-light-390x844` now explicitly sets `browserName: "chromium"` so CI no longer requests missing WebKit binaries.
+    - `.github/workflows/full-qa.yml`
+      - `full-e2e` now sets `NEXT_PUBLIC_VISUAL_POINTER_ENABLED="true"` so visual-pointer capture specs can run in production-style Playwright builds.
+      - `extended-ui-checks` now runs `npx browser-driver-manager install chrome` before `npm run check-axe` to sync ChromeDriver with runner Chrome.
+    - `tests/live/console.spec.ts`
+      - raised test timeout to `180000ms` to prevent false failures from slow external page loads during console-audit checks.
+  - **Verification:**
+    - `npm run ai:memory:check` ✅
+    - `$env:SUBMIT_FIND_DRY_RUN='false'; npm run verify:fast` ✅
+    - `$env:NEXT_DIST_DIR='.next-playwright'; $env:PLAYWRIGHT='1'; $env:NEXT_PUBLIC_VISUAL_POINTER_ENABLED='true'; $env:NEXT_PUBLIC_EZOIC_ENABLED='false'; $env:NEXT_PUBLIC_ANALYTICS_ENABLED='false'; $env:USE_FIXTURE_FALLBACK='1'; $env:SUPABASE_SERVICE_ROLE_KEY='test'; npx playwright test tests/visual-pointer-capture.spec.ts --project=chromium-desktop-light --project=chromium-desktop-dark --project=chromium-mobile-light --project=chromium-mobile-dark --project=chromium-mobile-light-390x844 --workers=1` ✅
+    - `$env:NEXT_DIST_DIR='.next-playwright'; $env:PLAYWRIGHT='1'; $env:NEXT_PUBLIC_EZOIC_ENABLED='false'; $env:NEXT_PUBLIC_ANALYTICS_ENABLED='false'; $env:USE_FIXTURE_FALLBACK='1'; $env:SUPABASE_SERVICE_ROLE_KEY='test'; npx playwright test tests/live/console.spec.ts --project=chromium-desktop-dark --workers=1` ✅
+    - Manual Full QA dispatch on `dev` SHA `6950a54cf9922c76dd4b7a4d6fc3a0e510d4f591`: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22408795587` ✅ (`fast-gate`, `full-e2e 1/2`, `full-e2e 2/2`, and `extended-ui-checks` all green).
 
 - **2026-02-25 (Submit-find canonical item-name authority lock + SKU-only report input):** Removed user-submitted item-name authority from the submission pipeline and aligned report UI/tests to SKU-only manual input so bad typed names cannot become canonical.
   - **API authority hardening (`app/api/submit-find/route.ts`):**
