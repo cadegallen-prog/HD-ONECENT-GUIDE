@@ -261,6 +261,32 @@ Scan this FIRST before suggesting anything. If your idea matches an anti-pattern
 
 ---
 
+### 0j. Unit test runs can appear to "hang" when `SUBMIT_FIND_DRY_RUN=true` leaks from `.env.local`
+
+**Problem:** `npm run verify:fast` repeatedly stalled with no useful output in this workspace.
+
+**What We Tried:**
+
+- Re-ran `verify:fast` as one chained command.
+- Broke it into `lint`, `typecheck`, `test:unit`, `build` and added command-level timeouts.
+- Isolated unit files and confirmed `tests/submit-find-route.test.ts` was the hang candidate under local env defaults.
+
+**What We Learned:**
+
+- Local `.env.local` had `SUBMIT_FIND_DRY_RUN=true`, which changed `submit-find` test behavior and caused long-running/unstable unit execution.
+- The stall root cause was not "verify wrapper" itself; it was environment-sensitive unit behavior and missing fail-fast timeout handling.
+
+**What to Do Instead:**
+
+- Force deterministic unit env in script:
+  - `test:unit` must run with `SUBMIT_FIND_DRY_RUN=false`.
+- Keep a hard timeout in `scripts/run-unit-tests.mjs` and exit with explicit code/message (`124`) when timed out.
+- If verification appears stuck, run gates separately and isolate the exact test file before retrying full chains.
+
+**Date:** Feb 25, 2026
+
+---
+
 ### 0. Route deletion + stale Next type artifacts
 
 **Problem:** After deleting a route page, `npm run build` failed with type errors from stale generated files under `.next-playwright/types` and `.next/dev/types/app/...`.

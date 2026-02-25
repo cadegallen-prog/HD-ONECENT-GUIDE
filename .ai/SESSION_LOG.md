@@ -4,6 +4,48 @@
 
 ---
 
+## 2026-02-25 - Codex - Monumetric CSP Update + Verify Stall Root-Cause Fix
+
+**Goal:** Complete Monumetric CSP blocker remediation and stop repeated local verification stalls before they consume more founder time.
+
+**Status:** ✅ Completed (with founder-directed non-build verification lane)
+
+### Changes
+
+- `next.config.js`
+  - added both Monumetric-requested `script-src` domains:
+    - `https://securepubads.g.doubleclick.net`
+    - `https://cdn.confiant-integrations.net`
+- `package.json`
+  - added `build:verify` using isolated output dir (`NEXT_DIST_DIR=.next-playwright`) to reduce `.next` contention risk.
+  - updated `verify:fast` to call `build:verify`.
+  - updated `test:unit` to force deterministic env: `SUBMIT_FIND_DRY_RUN=false`.
+- `scripts/run-unit-tests.mjs`
+  - added hard timeout support (`UNIT_TEST_TIMEOUT_MS`, default 10m).
+  - added explicit timeout failure handling (exit `124`) so hangs fail fast with clear messaging.
+- `tests/setup.ts`
+  - silenced dotenv tip noise (`quiet: true`) for cleaner unit output.
+- Scope hygiene:
+  - removed unrelated carryover edit from `.claude/settings.local.json` via explicit founder approval.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run lint` ✅
+- `npm run typecheck` ✅
+- `npm run test:unit` ✅
+- `npx tsx scripts/ads-readiness-check.ts --production` ✅ (7/7 passed)
+- Endpoint checks (production):
+  - `curl -D - https://www.pennycentral.com` ✅ (CSP header present, current production still pending deploy for new domains)
+  - `curl https://www.pennycentral.com | rg "monu.delivery/site"` ✅ (Monumetric head script present)
+  - `curl -I https://www.pennycentral.com/ads.txt` ✅ (`308` redirect to Monumetric hosted ads.txt)
+  - `curl https://www.pennycentral.com/sitemap.xml` ✅ (`loc_count=18`, canonical trust routes present)
+- Not run by explicit founder instruction:
+  - `npm run verify:fast` (blocked: includes build)
+  - `npm run e2e:smoke` (blocked: includes build)
+
+---
+
 ## 2026-02-25 - Codex - Promote Full QA Stabilization Fixes to Main
 
 **Goal:** Ensure production (`main`) includes the recent Full QA CI stabilization fixes already validated on `dev`.
@@ -136,32 +178,3 @@
 - `npm run verify:fast` ✅ (executed with `$env:SUBMIT_FIND_DRY_RUN='false'` because local `.env.local` has `SUBMIT_FIND_DRY_RUN=true` for safe localhost testing)
 - `npm run e2e:smoke` ✅
 - `npm run check:docs-governance` ✅
-
----
-
-## 2026-02-24 - Codex - Proof Noise Gating + Replay Robustness Hardening
-
-**Goal:** Improve Visual Pointer proof fidelity by reducing irrelevant console noise and making replay more resilient.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `scripts/ai-proof.ts`
-  - blocks known third-party ad/analytics hosts during proof capture,
-  - filters expected blocked-third-party console errors from `console-errors.txt`.
-- `app/store-finder/page.tsx`
-  - treats expected geolocation denials/timeouts as non-error paths,
-  - only logs unexpected geolocation failures.
-- `scripts/visual-pointer-proof.ts`
-  - adds scroll-into-view + retry behavior in selector replay,
-  - keeps positional artifact path support.
-
-### Verification
-
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `npm run ai:proof -- /store-finder` ✅
-  - artifact: `reports/proof/2026-02-24T09-31-18/`
-  - console report: `reports/proof/2026-02-24T09-31-18/console-errors.txt` (`No console errors detected`)
-- `npm run visual-pointer:proof -- reports/visual-pointing/manual-check-visible-2026-02-23T17-03-04/capture.json` ✅
