@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 25, 2026 (Monumetric CSP blocker update + local verify-stall root cause fixed)
+**Last updated:** Feb 25, 2026 (Monumetric CSP production unblock complete with zero violations on / + /guide)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,22 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-25 (Monumetric CSP production unblock complete):** Completed iterative CSP expansion and production redeploy cycle for Monumetric ad-chain compliance, including requested domains plus post-unblock follow-up domains discovered by live Playwright scans.
+  - **Code scope (single file):**
+    - `next.config.js` CSP header updated additively only (no meta tag, no removals).
+  - **Requested blocker domains shipped to production:**
+    - `script-src`: `securepubads.g.doubleclick.net`, `cdn.confiant-integrations.net`, `cdn.prod.uidapi.com`
+    - `connect-src`: `id.a-mx.com`, `match.adsrvr.org`, `prebid.cootlogix.com`, `prebid.a-mo.net`, `rtb.openx.net`, `fastlane.rubiconproject.com`, `*.eu-1-id5-sync.com`
+    - `frame-src`: `u.openx.net`, `sync.cootlogix.com`, `prebid.a-mo.net`, `eus.rubiconproject.com`
+  - **Follow-up domains/protocols added from production scan chain:**
+    - `script-src`: `blob:`, `static.criteo.net`, `resources.infolinks.com`, `pagead2.googlesyndication.com`, `tpc.googlesyndication.com`
+    - `connect-src`: `c3.a-mo.net`, `pagead2.googlesyndication.com`
+    - `frame-src`: `cm.g.doubleclick.net`, `*.safeframe.googlesyndication.com`, `bloggernetwork-d.openx.net`, `gum.criteo.com`
+  - **Verification summary:**
+    - local gates: `npm run ai:memory:check` ✅, `npm run verify:fast` ✅, `npm run e2e:smoke` ✅
+    - production checks: homepage CSP header includes new domains ✅, Monumetric script present ✅, `/ads.txt` 308 redirect ✅
+    - Playwright CSP scan on `/` + `/guide`: final artifact `reports/playwright/csp-scan-production-final-2026-02-25T20-19-58-251Z.json` with `totalCspViolations: 0`, `target13StillBlocked: []`, `newBlockedHosts: []`.
 
 - **2026-02-25 (Monumetric CSP blocker update + verify-stall root cause fix):** Completed the Monumetric-requested CSP `script-src` allowlist patch locally and fixed repeated verification stalls by hardening test/build scripts against local env drift and indefinite unit hangs.
   - **Monumetric CSP change (local `dev` branch):**

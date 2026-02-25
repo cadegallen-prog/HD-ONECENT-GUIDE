@@ -4,6 +4,55 @@
 
 ---
 
+## 2026-02-25 - Codex - Monumetric CSP Production Unblock + Follow-up Domain Expansion
+
+**Goal:** Fully unblock Monumetric ad-chain CSP violations in production, verify required domains live, and clear production CSP violations on `/` and `/guide`.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `next.config.js`
+  - Added requested domain set:
+    - `script-src`: `securepubads.g.doubleclick.net`, `cdn.confiant-integrations.net`, `cdn.prod.uidapi.com`
+    - `connect-src`: `id.a-mx.com`, `match.adsrvr.org`, `prebid.cootlogix.com`, `prebid.a-mo.net`, `rtb.openx.net`, `fastlane.rubiconproject.com`, `*.eu-1-id5-sync.com`
+    - `frame-src`: `u.openx.net`, `sync.cootlogix.com`, `prebid.a-mo.net`, `eus.rubiconproject.com`
+  - Added follow-up production-scan domains/protocols that surfaced only after first unblock:
+    - `script-src`: `blob:`, `static.criteo.net`, `resources.infolinks.com`, `pagead2.googlesyndication.com`, `tpc.googlesyndication.com`
+    - `connect-src`: `c3.a-mo.net`, `pagead2.googlesyndication.com`
+    - `frame-src`: `cm.g.doubleclick.net`, `*.safeframe.googlesyndication.com`, `bloggernetwork-d.openx.net`, `gum.criteo.com`
+- No files outside `next.config.js` were modified for code scope.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- Production checks:
+  - `curl -I https://www.pennycentral.com` ✅ (CSP header includes requested + follow-up domains)
+  - `curl -s https://www.pennycentral.com | rg "monu.delivery/site"` ✅
+  - `curl -I https://www.pennycentral.com/ads.txt` ✅ (`308` to Monumetric hosted ads.txt)
+- Production Playwright CSP scans (`/` + `/guide`):
+  - interim scan artifact: `reports/playwright/csp-scan-production-2026-02-25T20-09-17-999Z.json`
+  - rerun artifact: `reports/playwright/csp-scan-production-rerun-2026-02-25T20-14-53-693Z.json`
+  - final artifact: `reports/playwright/csp-scan-production-final-2026-02-25T20-19-58-251Z.json` ✅
+    - `target13StillBlocked: []`
+    - `newBlockedHosts: []`
+
+### Branch / Promotion
+
+- `dev` commits:
+  - `89313e0` - initial requested CSP domains
+  - `045f0d7` - follow-up domains from first production scan
+  - `bafdd59` - final remaining pagead/criteo domain gaps
+- `main` merge commits:
+  - `afba972` - first dev promotion in this session chain
+  - `f810d11` - second dev promotion
+  - `c4d7ef5` - final dev promotion (current production)
+- Local branch restored to `dev` at session close.
+
+---
+
 ## 2026-02-25 - Codex - Monumetric CSP Update + Verify Stall Root-Cause Fix
 
 **Goal:** Complete Monumetric CSP blocker remediation and stop repeated local verification stalls before they consume more founder time.
@@ -147,34 +196,3 @@
 - `$env:NEXT_DIST_DIR='.next-playwright'; $env:PLAYWRIGHT='1'; $env:NEXT_PUBLIC_EZOIC_ENABLED='false'; $env:NEXT_PUBLIC_ANALYTICS_ENABLED='false'; npx playwright test tests/report-find-prefill.spec.ts tests/report-find-batch.spec.ts tests/smoke-critical.spec.ts --project=chromium-desktop-light --workers=1` ✅
 - `$env:SUBMIT_FIND_DRY_RUN='false'; npm run verify:fast` ✅
 - `npm run e2e:smoke` ✅
-
----
-
-## 2026-02-25 - Codex - SKU Name Regression Fix (Item Cache Source + Name Downgrade Guard)
-
-**Goal:** Stop low-quality names (for example `"Item One"`) from overriding canonical item names, and restore display-time enrichment reads to the active Item Cache table path.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `lib/fetch-penny-data.ts`
-  - enrichment overlay now queries `enrichment_staging` first (aliased to expected enrichment fields),
-  - legacy fallback to `penny_item_enrichment` is retained for compatibility,
-  - display-name replacement now uses quality-aware comparison (`shouldPreferEnrichedName`) so low-quality newer names cannot downgrade a detailed existing name.
-- `tests/fetch-penny-data-aliases.test.ts`
-  - added regression test proving a newer low-quality `"Item One"` row does not replace a detailed existing product name.
-- `tests/fetch-penny-data-supabase-fallback.test.ts`
-  - added test proving fetch overlay hydrates from `enrichment_staging`,
-  - added fallback test proving legacy table fallback still works when staging is unavailable.
-- `CLAUDE.md`
-  - post-push CI follow-up: startup read-order now explicitly mentions `VISION_CHARTER.md` to satisfy governance drift checks.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npx tsx --import ./tests/setup.ts --test tests/fetch-penny-data-aliases.test.ts` ✅
-- `npx tsx --import ./tests/setup.ts --test tests/fetch-penny-data-supabase-fallback.test.ts` ✅
-- `npm run verify:fast` ✅ (executed with `$env:SUBMIT_FIND_DRY_RUN='false'` because local `.env.local` has `SUBMIT_FIND_DRY_RUN=true` for safe localhost testing)
-- `npm run e2e:smoke` ✅
-- `npm run check:docs-governance` ✅
