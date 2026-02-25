@@ -8,6 +8,7 @@ import { PLACEHOLDER_IMAGE_URL } from "./image-cache"
 import { getSupabaseClient } from "./supabase/client"
 import { normalizeSku, validateSku } from "./sku"
 import { filterValidPennyItems } from "./penny-list-utils"
+import { shouldPreferEnrichedName } from "./item-name-quality"
 
 const envConfigured =
   Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL) &&
@@ -402,6 +403,24 @@ function choosePreferredDisplaySku(existingSku: string, candidateSku: string): s
   return existingSku
 }
 
+function shouldReplaceDisplayName(
+  currentName: string,
+  candidateName: string,
+  currentBrand: string | undefined,
+  candidateBrand: string | undefined,
+  candidateTimestampMs: number,
+  previousTimestampMs: number
+): boolean {
+  const qualityBrand = candidateBrand || currentBrand
+  if (shouldPreferEnrichedName(currentName, candidateName, qualityBrand)) {
+    return true
+  }
+  if (shouldPreferEnrichedName(candidateName, currentName, qualityBrand)) {
+    return false
+  }
+  return candidateTimestampMs > previousTimestampMs
+}
+
 export function buildPennyItemsFromRows(rows: SupabasePennyRow[]): PennyItem[] {
   const grouped = new Map<string, AggregatedItem>()
   const nowMs = Date.now()
@@ -484,8 +503,21 @@ export function buildPennyItemsFromRows(rows: SupabasePennyRow[]): PennyItem[] {
       existing.lastSeenAt = lastSeenInfo.iso
     }
 
-    if (name && (!existing.name || timestampMs > previousTimestampMs)) {
-      existing.name = name
+    if (name) {
+      if (!existing.name) {
+        existing.name = name
+      } else if (
+        shouldReplaceDisplayName(
+          existing.name,
+          name,
+          existing.brand,
+          brand,
+          timestampMs,
+          previousTimestampMs
+        )
+      ) {
+        existing.name = name
+      }
     }
 
     if (notes && (!existing.notes || timestampMs > previousTimestampMs)) {
@@ -648,37 +680,65 @@ async function fetchEnrichmentRows(
   label: "anon",
   skuList?: string[]
 ): Promise<SupabasePennyEnrichmentRow[] | null> {
-  let query = client
-    .from("penny_item_enrichment")
-    .select(
-      "sku,item_name,brand,model_number,upc,image_url,home_depot_url,internet_sku,retail_price,updated_at"
-    )
+  const queryForTable = (
+    tableName: "enrichment_staging" | "penny_item_enrichment",
+    selectClause: string
+  ) => {
+    let query = client.from(tableName).select(selectClause)
 
-  // Filter by SKUs if provided - dramatically reduces egress
-  if (skuList && skuList.length > 0) {
-    query = query.in("sku", skuList)
-  }
-
-  const { data, error } = await query
-
-  if (error) {
-    const code = (error as { code?: unknown } | null)?.code
-    if (code === "PGRST205") {
-      if (!fetchWarningsLogged.enrichmentMissing && process.env.NODE_ENV === "development") {
-        console.warn(
-          `Supabase enrichment table is not available yet (penny_item_enrichment missing); skipping enrichment (${label}).`
-        )
-        fetchWarningsLogged.enrichmentMissing = true
-      }
-      return null
+    // Filter by SKUs if provided - dramatically reduces egress.
+    if (skuList && skuList.length > 0) {
+      query = query.in("sku", skuList)
     }
 
-    console.error(`Error fetching penny enrichment from Supabase (${label}):`, error)
+    return query
+  }
+
+  const stagingQuery = queryForTable(
+    "enrichment_staging",
+    "sku,item_name,brand,upc:barcode_upc,image_url,home_depot_url:product_link,internet_sku:internet_number,retail_price,updated_at:created_at"
+  )
+  const stagingResult = await stagingQuery
+
+  if (!stagingResult.error) {
+    return (stagingResult.data as unknown as SupabasePennyEnrichmentRow[] | null) ?? []
+  }
+
+  const stagingCode = (stagingResult.error as { code?: unknown } | null)?.code
+  if (stagingCode !== "PGRST205") {
+    console.error(
+      `Error fetching item cache enrichment from Supabase (${label}):`,
+      stagingResult.error
+    )
     return null
   }
 
-  const rows = (data as unknown as SupabasePennyEnrichmentRow[] | null) ?? []
-  return rows
+  // Backward compatibility for environments that still use the legacy table name.
+  const legacyQuery = queryForTable(
+    "penny_item_enrichment",
+    "sku,item_name,brand,model_number,upc,image_url,home_depot_url,internet_sku,retail_price,updated_at"
+  )
+  const legacyResult = await legacyQuery
+  if (!legacyResult.error) {
+    return (legacyResult.data as unknown as SupabasePennyEnrichmentRow[] | null) ?? []
+  }
+
+  const legacyCode = (legacyResult.error as { code?: unknown } | null)?.code
+  if (legacyCode === "PGRST205") {
+    if (!fetchWarningsLogged.enrichmentMissing && process.env.NODE_ENV === "development") {
+      console.warn(
+        `Supabase enrichment tables are unavailable (enrichment_staging and penny_item_enrichment missing); skipping enrichment (${label}).`
+      )
+      fetchWarningsLogged.enrichmentMissing = true
+    }
+    return null
+  }
+
+  console.error(
+    `Error fetching legacy penny enrichment from Supabase (${label}):`,
+    legacyResult.error
+  )
+  return null
 }
 
 /**

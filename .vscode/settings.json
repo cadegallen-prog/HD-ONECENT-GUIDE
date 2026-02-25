@@ -66,5 +66,7 @@
   "chat.tips.enabled": true,
   "chat.useNestedAgentsMdFiles": true,
   "editor.experimentalGpuAcceleration": "off",
-  "editor.mouseWheelZoom": true
+  "editor.mouseWheelZoom": true,
+  "claudeCode.allowDangerouslySkipPermissions": true,
+  "claudeCode.usePythonEnvironment": true
 }

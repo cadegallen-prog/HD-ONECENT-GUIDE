@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 24, 2026 (submit-find dry-run safety flag documented for local testing)
+**Last updated:** Feb 25, 2026 (SKU name regression patched in fetch pipeline)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,27 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-25 (SKU name regression fix - active Item Cache source + quality-aware display naming):** Patched the Penny List fetch pipeline so canonical Item Cache names are read from the live table path and low-quality newer submissions (for example `"Item One"`) cannot overwrite a better existing display name.
+  - **Pipeline fix shipped:**
+    - `lib/fetch-penny-data.ts`
+      - Item Cache enrichment fetch now reads `enrichment_staging` first (with field aliases), and falls back to legacy `penny_item_enrichment` only when needed.
+      - Added quality-aware display-name replacement logic so timestamp recency still updates freshness signals, but low-quality names no longer downgrade a detailed existing name.
+  - **Regression coverage added:**
+    - `tests/fetch-penny-data-aliases.test.ts`
+      - new test proving a newer `"Item One"` row does not replace a detailed existing product name.
+    - `tests/fetch-penny-data-supabase-fallback.test.ts`
+      - new test proving enrichment overlay reads from `enrichment_staging`,
+      - new fallback test proving legacy `penny_item_enrichment` still works when staging is unavailable.
+  - **Before/after evidence (SKU `1009258128`):**
+    - Before: newest row had `item_name = "Item One"` and won aggregation.
+    - After (post-patch local probe): `getPennyListFiltered(..., { skuList: ["1009258128"] })` returns canonical name `Glacier Bay Modern 1-Spray 7.9 in. Dual Tub Wall Mount Fixed and Handheld Shower Heads 1.8 GPM in Matte Gold HD58302-174405`.
+  - **Verification:**
+    - `npm run ai:memory:check` ✅
+    - `npx tsx --import ./tests/setup.ts --test tests/fetch-penny-data-aliases.test.ts` ✅
+    - `npx tsx --import ./tests/setup.ts --test tests/fetch-penny-data-supabase-fallback.test.ts` ✅
+    - `npm run verify:fast` ✅ (run with local override `$env:SUBMIT_FIND_DRY_RUN='false'` because this workstation `.env.local` defaults dry-run to true for safe local form testing)
+    - `npm run e2e:smoke` ✅
 
 - **2026-02-24 (Submit-find local dry-run safety mode + env documentation):** Added and documented a local-safe submission mode so localhost testing does not write to live Supabase or consume SERPAPI credits.
   - **Safety behavior shipped:**
