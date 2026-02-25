@@ -121,8 +121,14 @@ test.describe("live site console audit", () => {
 
       await page.goto(url, { waitUntil: "load", timeout: 120000 })
 
-      // give deferred scripts a chance to run/respond
-      await page.waitForLoadState("networkidle")
+      // Give deferred scripts a chance to run/respond.
+      // Live pages can keep ad/analytics connections open indefinitely,
+      // especially on mobile user agents, so this is best-effort only.
+      try {
+        await page.waitForLoadState("networkidle", { timeout: 10000 })
+      } catch {
+        // Continue with the fixed settle delay below.
+      }
       // small scroll to trigger lazy load
       await page.evaluate(() => {
         try {
