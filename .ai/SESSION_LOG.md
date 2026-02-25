@@ -4,6 +4,36 @@
 
 ---
 
+## 2026-02-25 - Codex - Full QA CI Stabilization (Visual Pointer + Axe Driver Sync)
+
+**Goal:** Recover failing Full QA runs by fixing deterministic Playwright/CI infra mismatches without changing product behavior.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `playwright.config.ts`
+  - forced `chromium-mobile-light-390x844` to `browserName: "chromium"` so CI no longer tries to launch missing WebKit binaries.
+- `.github/workflows/full-qa.yml`
+  - set `NEXT_PUBLIC_VISUAL_POINTER_ENABLED: "true"` for `full-e2e` job to allow visual-pointer capture tests in production-style Playwright builds.
+  - added `Sync ChromeDriver with runner Chrome` step (`npx browser-driver-manager install chrome`) before `check-axe` in `extended-ui-checks`.
+- `tests/live/console.spec.ts`
+  - increased test timeout to 180s to prevent false failures from slow external page loads during console-audit runs.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `$env:SUBMIT_FIND_DRY_RUN='false'; npm run verify:fast` ✅
+- `$env:NEXT_DIST_DIR='.next-playwright'; $env:PLAYWRIGHT='1'; $env:NEXT_PUBLIC_VISUAL_POINTER_ENABLED='true'; $env:NEXT_PUBLIC_EZOIC_ENABLED='false'; $env:NEXT_PUBLIC_ANALYTICS_ENABLED='false'; $env:USE_FIXTURE_FALLBACK='1'; $env:SUPABASE_SERVICE_ROLE_KEY='test'; npx playwright test tests/visual-pointer-capture.spec.ts --project=chromium-desktop-light --project=chromium-desktop-dark --project=chromium-mobile-light --project=chromium-mobile-dark --project=chromium-mobile-light-390x844 --workers=1` ✅
+- `$env:NEXT_DIST_DIR='.next-playwright'; $env:PLAYWRIGHT='1'; $env:NEXT_PUBLIC_EZOIC_ENABLED='false'; $env:NEXT_PUBLIC_ANALYTICS_ENABLED='false'; $env:USE_FIXTURE_FALLBACK='1'; $env:SUPABASE_SERVICE_ROLE_KEY='test'; npx playwright test tests/live/console.spec.ts --project=chromium-desktop-dark --workers=1` ✅
+- Manual Full QA workflow on `dev` (`6950a54cf9922c76dd4b7a4d6fc3a0e510d4f591`): `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22408795587` ✅
+  - `fast-gate` ✅
+  - `full-e2e (1/2)` ✅
+  - `full-e2e (2/2)` ✅
+  - `extended-ui-checks` ✅
+
+---
+
 ## 2026-02-25 - Codex - Submit-Find Canonical Name Authority Lock + SKU-Only Report Input
 
 **Goal:** Ensure user-submitted item names never become canonical authority, align report-find UX to SKU-only manual submission, and ship with full verification.
@@ -123,33 +153,3 @@
 - `npm run verify:fast` ✅
 - `npm run e2e:smoke` ✅
 - `npm run ai:proof -- /store-finder` ✅
-
----
-
-## 2026-02-24 - Codex - Carryover Closure (Visual Pointer Hardening + SKU Name Normalization Reuse)
-
-**Goal:** Finish and ship previously dirty carryover scope on `dev`.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `app/sku/[sku]/page.tsx` now reuses `normalizeProductName(...)`.
-- `lib/penny-list-utils.ts` preserves captured acronym casing.
-- Visual Pointer hardening bundle landed across:
-  - `lib/visual-pointer/source-registry.ts`
-  - `playwright.config.ts`
-  - `scripts/visual-pointer-proof.ts`
-  - `tests/source-registry.test.ts`
-  - `tests/visual-pointer-capture.spec.ts`
-
-### Verification
-
-- `npx tsx --import ./tests/setup.ts --test tests/source-registry.test.ts` ✅
-- `npx tsx --import ./tests/setup.ts --test tests/penny-list-utils.test.ts` ✅
-- `PLAYWRIGHT_BASE_URL=http://127.0.0.1:3001 npx playwright test tests/visual-pointer-capture.spec.ts --project=chromium-desktop-light --project=chromium-mobile-light --project=chromium-mobile-light-390x844 --workers=1` ✅
-- `npm run ai:memory:check` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-
----
