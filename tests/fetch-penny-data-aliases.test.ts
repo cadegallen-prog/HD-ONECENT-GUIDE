@@ -54,6 +54,37 @@ test("aggregates duplicate SKUs and prefers the latest timestamp for freshness +
   clearSupabaseMocks()
 })
 
+test("keeps detailed name when a newer low-quality name is submitted", async () => {
+  installSupabaseMocks({})
+  const { buildPennyItemsFromRows } = await import("../lib/fetch-penny-data")
+
+  const items = buildPennyItemsFromRows([
+    clone(baseRow, {
+      id: "row-detailed",
+      item_name:
+        "Modern 1-Spray 7.9 in. Dual Tub Wall Mount Fixed and Handheld Shower Heads 1.8 GPM in Matte Gold",
+      brand: "Glacier Bay",
+      timestamp: "2026-02-17T06:08:45.434Z",
+    }),
+    clone(baseRow, {
+      id: "row-generic",
+      item_name: "Item One",
+      brand: null,
+      timestamp: "2026-02-24T08:20:51.511Z",
+    }),
+  ])
+
+  assert.strictEqual(items.length, 1)
+  assert.strictEqual(
+    items[0].name,
+    "Modern 1-Spray 7.9 in. Dual Tub Wall Mount Fixed and Handheld Shower Heads 1.8 GPM in Matte Gold"
+  )
+  assert.strictEqual(items[0].dateAdded, new Date("2026-02-24T08:20:51.511Z").toISOString())
+  assert.strictEqual(items[0].lastSeenAt, new Date("2026-02-24T08:20:51.511Z").toISOString())
+
+  clearSupabaseMocks()
+})
+
 test("reuses the first non-empty image and falls back to placeholder when absent", async () => {
   installSupabaseMocks({})
   const { buildPennyItemsFromRows } = await import("../lib/fetch-penny-data")

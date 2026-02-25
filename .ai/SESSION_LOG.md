@@ -4,6 +4,34 @@
 
 ---
 
+## 2026-02-25 - Codex - SKU Name Regression Fix (Item Cache Source + Name Downgrade Guard)
+
+**Goal:** Stop low-quality names (for example `"Item One"`) from overriding canonical item names, and restore display-time enrichment reads to the active Item Cache table path.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `lib/fetch-penny-data.ts`
+  - enrichment overlay now queries `enrichment_staging` first (aliased to expected enrichment fields),
+  - legacy fallback to `penny_item_enrichment` is retained for compatibility,
+  - display-name replacement now uses quality-aware comparison (`shouldPreferEnrichedName`) so low-quality newer names cannot downgrade a detailed existing name.
+- `tests/fetch-penny-data-aliases.test.ts`
+  - added regression test proving a newer low-quality `"Item One"` row does not replace a detailed existing product name.
+- `tests/fetch-penny-data-supabase-fallback.test.ts`
+  - added test proving fetch overlay hydrates from `enrichment_staging`,
+  - added fallback test proving legacy table fallback still works when staging is unavailable.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npx tsx --import ./tests/setup.ts --test tests/fetch-penny-data-aliases.test.ts` ✅
+- `npx tsx --import ./tests/setup.ts --test tests/fetch-penny-data-supabase-fallback.test.ts` ✅
+- `npm run verify:fast` ✅ (executed with `$env:SUBMIT_FIND_DRY_RUN='false'` because local `.env.local` has `SUBMIT_FIND_DRY_RUN=true` for safe localhost testing)
+- `npm run e2e:smoke` ✅
+
+---
+
 ## 2026-02-24 - Codex - Proof Noise Gating + Replay Robustness Hardening
 
 **Goal:** Improve Visual Pointer proof fidelity by reducing irrelevant console noise and making replay more resilient.
@@ -112,23 +140,3 @@
 - `npm run e2e:smoke` ✅
 
 ---
-
-## 2026-02-23 - Codex - Visual Pointer v1 Hardening (Source Precision + Anchored Capture + 390x844)
-
-**Goal:** Close key Visual Pointer v1 plan drift for source precision, anchored capture assertions, and dual mobile viewport coverage.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `lib/visual-pointer/source-registry.ts`: concrete line metadata + corrected ownership.
-- `tests/source-registry.test.ts`: owner assertion update + `line > 0` checks.
-- `tests/visual-pointer-capture.spec.ts`: anchored `/penny-list` + `/store-finder` checks plus unanchored fallback.
-- `playwright.config.ts`: added `chromium-mobile-light-390x844`.
-- `scripts/visual-pointer-proof.ts`: supports `--artifact` or positional path.
-
-### Verification
-
-- targeted source-registry + capture specs ✅
-- `npm run e2e:smoke` ✅
-- `npm run verify:fast` was blocked at the time by unrelated carryover in `lib/penny-list-utils.ts` (resolved in later session).
