@@ -21,18 +21,16 @@ test.describe("Report Find Prefill", () => {
   test("merges duplicate manual add by SKU and increments quantity", async ({ page }) => {
     await page.goto("/report-find")
 
-    await page.getByLabel(/^Item Name/i).fill("First Item")
     await page.locator("#sku").fill("1009258128")
     await page.locator("#quantity").fill("2")
     await page.getByRole("button", { name: "Add item" }).click()
 
-    await page.getByLabel(/^Item Name/i).fill("Updated Item")
     await page.locator("#sku").fill("1009258128")
     await page.locator("#quantity").fill("3")
     await page.getByRole("button", { name: "Add item" }).click()
 
     const basketItem = page.locator("[data-testid='basket-item-1009258128']")
-    await expect(basketItem).toContainText("Updated Item")
+    await expect(basketItem).toContainText("SKU 1009-258-128")
     await expect(basketItem).toContainText("Qty 5")
     await expect(page.locator("[data-testid='report-basket-list'] li")).toHaveCount(1)
   })

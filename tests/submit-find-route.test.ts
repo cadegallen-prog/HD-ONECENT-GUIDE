@@ -41,7 +41,6 @@ test("inserts only allowed fields into Supabase", async () => {
   const req = new NextRequest("http://localhost/api/submit-find", {
     method: "POST",
     body: JSON.stringify({
-      itemName: "Test Item",
       sku: FIXTURE_SKU,
       storeCity: "Atlanta",
       storeState: "GA",
@@ -62,7 +61,7 @@ test("inserts only allowed fields into Supabase", async () => {
   assert.strictEqual(res.status, 200)
   const payload = inserted[0] as Record<string, unknown>
   assert.deepStrictEqual(payload, {
-    item_name: "Test Item",
+    item_name: null,
     home_depot_sku_6_or_10_digits: FIXTURE_SKU,
     store_city_state: "Atlanta, GA",
     purchase_date: new Date().toISOString().split("T")[0],
@@ -292,7 +291,7 @@ test("prefers trusted self-enrichment name over user-typed name", async () => {
   clearSupabaseMocks()
 })
 
-test("does not reuse self-enrichment item_name when source is untrusted", async () => {
+test("reuses self-enrichment item_name when canonical signals exist even without trusted provenance", async () => {
   const inserted: Record<string, unknown>[] = []
 
   const anonReadClient: any = {
@@ -355,7 +354,7 @@ test("does not reuse self-enrichment item_name when source is untrusted", async 
   assert.strictEqual(res.status, 200)
   const payload = inserted[0] as Record<string, unknown>
 
-  assert.strictEqual(payload.item_name, "drill")
+  assert.strictEqual(payload.item_name, "Milwaukee M18 FUEL Hammer Drill/Driver Kit")
   assert.strictEqual(payload.brand, "Milwaukee")
 
   clearSupabaseMocks()

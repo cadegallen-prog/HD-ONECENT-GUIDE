@@ -41,9 +41,6 @@ export default function ReportFindPage() {
           <h3 className="text-sm font-semibold text-[var(--text-primary)]">What You Will Need</h3>
           <ul className="list-disc pl-5 space-y-1">
             <li>
-              <strong>Item name</strong> — a short description of what you found.
-            </li>
-            <li>
               <strong>SKU number</strong> — the 6- or 10-digit SKU from the shelf tag or the Home
               Depot app (not the UPC from the receipt).
             </li>
@@ -54,6 +51,7 @@ export default function ReportFindPage() {
               <strong>Date found</strong> — when you spotted it (within the last 30 days).
             </li>
           </ul>
+          <p>Item names are auto-resolved from trusted enrichment sources after submission.</p>
           <p>City and quantity are optional but help the community spot regional patterns.</p>
         </section>
       </div>
