@@ -4,6 +4,44 @@
 
 ---
 
+## 2026-02-25 - Codex - Promote Full QA Stabilization Fixes to Main
+
+**Goal:** Ensure production (`main`) includes the recent Full QA CI stabilization fixes already validated on `dev`.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- Promoted `dev` into `main` with merge commit `345a22f`:
+  - carried `5509098` (`fix(ci): stabilize full-qa playwright lanes`)
+  - carried `6950a54` (`fix(ci): sync chromedriver before axe checks`)
+- Switched branch back to `dev` after promotion, as requested.
+
+### Verification
+
+- Branch containment check before promotion:
+  - `git diff --name-status origin/main..origin/dev` showed missing fix files on `main`:
+    - `.github/workflows/full-qa.yml`
+    - `playwright.config.ts`
+    - `tests/live/console.spec.ts`
+- Promotion commands:
+  - `git checkout dev`
+  - `git pull origin dev`
+  - `git checkout main`
+  - `git pull origin main`
+  - `git merge --no-ff origin/dev -m "Merge dev: promote full QA CI stabilization fixes"`
+  - `git push origin main`
+  - `git checkout dev`
+- Post-push CI on `main` SHA `345a22fb2b7406f383af603d0ca3d3d8682cb52e`:
+  - FAST: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22409205329` (in progress at handoff time)
+  - SMOKE: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22409205277` (in progress at handoff time)
+  - FULL: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22409205332` (queued at handoff time)
+- Session-end branch hygiene:
+  - current branch: `dev`
+  - `git status --short`: clean
+
+---
+
 ## 2026-02-25 - Codex - Full QA CI Stabilization (Visual Pointer + Axe Driver Sync)
 
 **Goal:** Recover failing Full QA runs by fixing deterministic Playwright/CI infra mismatches without changing product behavior.
@@ -127,29 +165,3 @@
   - artifact: `reports/proof/2026-02-24T09-31-18/`
   - console report: `reports/proof/2026-02-24T09-31-18/console-errors.txt` (`No console errors detected`)
 - `npm run visual-pointer:proof -- reports/visual-pointing/manual-check-visible-2026-02-23T17-03-04/capture.json` ✅
-
----
-
-## 2026-02-24 - Codex - Visual Pointer Anchor Disambiguation (Store-Finder Directions)
-
-**Goal:** Remove remaining Visual Pointer anchor ambiguity by giving mobile and desktop store-finder directions links distinct `data-pc-id` values.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `components/store-map.tsx`
-  - mobile directions anchor changed to `store-finder.popup-directions-mobile`.
-- `lib/visual-pointer/source-registry.ts`
-  - `store-finder.popup-directions` maps to desktop line metadata,
-  - added `store-finder.popup-directions-mobile` mapping to mobile line metadata.
-- `tests/source-registry.test.ts`
-  - added coverage for `store-finder.popup-directions-mobile`.
-
-### Verification
-
-- `npx tsx --import ./tests/setup.ts --test tests/source-registry.test.ts` ✅
-- `PLAYWRIGHT_BASE_URL=http://127.0.0.1:3001 npx playwright test tests/visual-pointer-capture.spec.ts --project=chromium-desktop-light --workers=1` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `npm run ai:proof -- /store-finder` ✅

@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 25, 2026 (Full QA CI stabilization: visual-pointer + ChromeDriver sync)
+**Last updated:** Feb 25, 2026 (Promoted Full QA stabilization fixes from dev to main)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,26 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-25 (Promotion: Full QA stabilization fixes to production/main):** Confirmed `main` was missing the recent CI stabilization fixes from `dev`, promoted via merge, and returned local working branch to `dev`.
+  - **Promotion details:**
+    - branch diff before promotion (`origin/main..origin/dev`) included:
+      - `.github/workflows/full-qa.yml`
+      - `playwright.config.ts`
+      - `tests/live/console.spec.ts`
+      - `.ai/STATE.md`
+      - `.ai/SESSION_LOG.md`
+    - merge commit on `main`: `345a22f` (`Merge dev: promote full QA CI stabilization fixes`)
+    - included fix commits:
+      - `5509098` (`fix(ci): stabilize full-qa playwright lanes`)
+      - `6950a54` (`fix(ci): sync chromedriver before axe checks`)
+  - **Post-push CI for `main` SHA `345a22fb2b7406f383af603d0ca3d3d8682cb52e`:**
+    - FAST: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22409205329` (in progress at session close)
+    - SMOKE: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22409205277` (in progress at session close)
+    - FULL: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22409205332` (queued at session close)
+  - **Branch hygiene:**
+    - local branch restored to `dev` after promotion
+    - session-end `git status --short`: clean
 
 - **2026-02-25 (Full QA CI stabilization - visual pointer lane + Axe driver sync):** Closed the active Full QA breakage on `main` by patching Playwright project/browser alignment, visual-pointer e2e enablement for CI production builds, and runner Chrome/ChromeDriver mismatch handling for axe checks.
   - **CI/e2e stability fixes shipped:**
