@@ -173,6 +173,7 @@ jobs:
         env:
           NEXT_DIST_DIR: .next-playwright
           PLAYWRIGHT: "1"
+          NEXT_PUBLIC_VISUAL_POINTER_ENABLED: "true"
           NEXT_PUBLIC_EZOIC_ENABLED: "false"
           NEXT_PUBLIC_ANALYTICS_ENABLED: "false"
           USE_FIXTURE_FALLBACK: "1"

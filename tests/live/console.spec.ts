@@ -8,6 +8,8 @@ test.describe("live site console audit", () => {
   test("captures console, pageerrors and failed requests across key pages and writes a report", async ({
     page,
   }, testInfo) => {
+    test.setTimeout(180000)
+
     const base = process.env.PLAYWRIGHT_BASE_URL || "https://pennycentral.com"
     const ts = new Date().toISOString().replace(/[:.]/g, "-")
     const report: any = {

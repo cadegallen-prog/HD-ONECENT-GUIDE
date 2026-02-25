@@ -51,6 +51,7 @@ export default defineConfig({
       name: "chromium-mobile-light-390x844",
       use: {
         ...devices["iPhone 12"],
+        browserName: "chromium",
         viewport: { width: 390, height: 844 },
         colorScheme: "light",
       },
