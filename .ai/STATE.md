@@ -32,6 +32,9 @@ Every AI session must update this after meaningful work.
     - `npx tsx --import ./tests/setup.ts --test tests/fetch-penny-data-supabase-fallback.test.ts` ✅
     - `npm run verify:fast` ✅ (run with local override `$env:SUBMIT_FIND_DRY_RUN='false'` because this workstation `.env.local` defaults dry-run to true for safe local form testing)
     - `npm run e2e:smoke` ✅
+  - **CI follow-up after push:**
+    - `CLAUDE.md` startup read-order line updated to explicitly reference `VISION_CHARTER.md` so `check:docs-governance` passes in CI.
+    - `npm run check:docs-governance` ✅
 
 - **2026-02-24 (Submit-find local dry-run safety mode + env documentation):** Added and documented a local-safe submission mode so localhost testing does not write to live Supabase or consume SERPAPI credits.
   - **Safety behavior shipped:**

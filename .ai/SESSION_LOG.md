@@ -21,6 +21,8 @@
 - `tests/fetch-penny-data-supabase-fallback.test.ts`
   - added test proving fetch overlay hydrates from `enrichment_staging`,
   - added fallback test proving legacy table fallback still works when staging is unavailable.
+- `CLAUDE.md`
+  - post-push CI follow-up: startup read-order now explicitly mentions `VISION_CHARTER.md` to satisfy governance drift checks.
 
 ### Verification
 
@@ -29,6 +31,7 @@
 - `npx tsx --import ./tests/setup.ts --test tests/fetch-penny-data-supabase-fallback.test.ts` ✅
 - `npm run verify:fast` ✅ (executed with `$env:SUBMIT_FIND_DRY_RUN='false'` because local `.env.local` has `SUBMIT_FIND_DRY_RUN=true` for safe localhost testing)
 - `npm run e2e:smoke` ✅
+- `npm run check:docs-governance` ✅
 
 ---
 
