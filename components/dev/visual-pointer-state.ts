@@ -1,11 +1,9 @@
 "use client"
 
+import { isVisualPointerEnvironmentEnabled } from "@/lib/visual-pointer/env"
+
 export const VISUAL_POINTER_MODE_STORAGE_KEY = "pc_visual_pointer_mode_v1"
 export const VISUAL_POINTER_MODE_EVENT = "pc-visual-pointer:mode"
-
-function isLocalPreviewHost(hostname: string): boolean {
-  return hostname === "localhost" || hostname === "127.0.0.1"
-}
 
 function hasVisualPointerQueryOverride(): boolean {
   if (typeof window === "undefined") {
@@ -19,8 +17,7 @@ export function isVisualPointerEnabledEnv(): boolean {
     return false
   }
 
-  const isLocalPreview = isLocalPreviewHost(window.location.hostname)
-  const isEnabledEnv = process.env.NODE_ENV === "development" || isLocalPreview
+  const isEnabledEnv = isVisualPointerEnvironmentEnabled()
   const blockedForPlaywright = process.env.PLAYWRIGHT === "1" && !hasVisualPointerQueryOverride()
 
   return isEnabledEnv && !blockedForPlaywright

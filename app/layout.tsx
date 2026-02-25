@@ -13,6 +13,7 @@ import { AnalyticsTracker } from "@/components/analytics-tracker"
 import VisualPointerShell from "@/components/dev/visual-pointer-shell"
 import { ogImageUrl } from "@/lib/og"
 import { CANONICAL_BASE } from "@/lib/canonical"
+import { isVisualPointerEnvironmentEnabled } from "@/lib/visual-pointer/env"
 
 const DEFAULT_OG_IMAGE = `https://www.pennycentral.com${ogImageUrl("homepage")}`
 
@@ -31,6 +32,7 @@ const ENABLE_VERCEL_SCRIPTS =
   IS_VERCEL &&
   IS_VERCEL_PROD
 const ENABLE_VERCEL_ANALYTICS = ANALYTICS_ENABLED && ENABLE_VERCEL_SCRIPTS
+const ENABLE_VISUAL_POINTER = isVisualPointerEnvironmentEnabled()
 
 const inter = localFont({
   src: [
@@ -304,7 +306,7 @@ export default function RootLayout({
                 <Footer />
               </main>
 
-              <VisualPointerShell />
+              {ENABLE_VISUAL_POINTER && <VisualPointerShell />}
               <Toaster />
             </CommandPaletteProvider>
           </AuthProvider>

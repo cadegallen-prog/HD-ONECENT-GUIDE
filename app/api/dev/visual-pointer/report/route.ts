@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { writeFile, mkdir } from "node:fs/promises"
 import { join } from "node:path"
+import { isVisualPointerEnvironmentEnabled } from "@/lib/visual-pointer/env"
 
 export const runtime = "nodejs"
 
@@ -17,8 +18,8 @@ function formatTimestamp(): string {
 }
 
 export async function POST(request: Request) {
-  if (process.env.NODE_ENV !== "development") {
-    return NextResponse.json({ ok: false, error: "forbidden" }, { status: 403 })
+  if (!isVisualPointerEnvironmentEnabled()) {
+    return NextResponse.json({ ok: false, error: "not found" }, { status: 404 })
   }
 
   const contentLength = request.headers.get("content-length")
