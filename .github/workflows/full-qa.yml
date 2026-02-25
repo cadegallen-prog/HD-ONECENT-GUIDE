@@ -263,6 +263,9 @@ jobs:
           BASE_URL: http://localhost:3001
         run: npm run check-contrast
 
+      - name: Sync ChromeDriver with runner Chrome
+        run: npx browser-driver-manager install chrome
+
       - name: Run accessibility check (axe)
         run: npm run check-axe
 
