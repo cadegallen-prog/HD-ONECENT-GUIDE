@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 19, 2026 (continuity + analytics/search-console/MCP persistence codified)
+**Last updated:** Feb 24, 2026 (submit-find dry-run safety flag documented for local testing)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,484 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-24 (Submit-find local dry-run safety mode + env documentation):** Added and documented a local-safe submission mode so localhost testing does not write to live Supabase or consume SERPAPI credits.
+  - **Safety behavior shipped:**
+    - `app/api/submit-find/route.ts`
+      - `SUBMIT_FIND_DRY_RUN` env flag support (`true` = validate-only, no writes),
+      - when dry-run is enabled, skips Supabase insert, Item Cache RPC, and realtime SerpApi.
+    - `components/report-find/ReportFindFormClient.tsx`
+      - surfaces explicit dry-run result copy and suppresses live-submit analytics/actions.
+    - `.env.example`
+      - documents `SUBMIT_FIND_DRY_RUN` for future agent/operator awareness.
+  - **Operational note for future agents:**
+    - If `.env.local` changes, restart `npm run dev` to load updated env values.
+  - **Verification:**
+    - `npx tsx --import ./tests/setup.ts --test tests/submit-find-route.test.ts` ✅
+    - `npx playwright test tests/report-find-batch.spec.ts --project=chromium-desktop-light --workers=1` ✅
+    - `npm run e2e:smoke` ✅
+    - `npm run verify:fast` ⚠️ blocked by unrelated pre-existing lint warnings in `app/store-finder/page.tsx`
+
+- **2026-02-24 (Proof noise gating + replay robustness hardening):** Improved proof fidelity by blocking noisy third-party requests during screenshot runs, handling expected geolocation failures without error noise, and making replay location checks more resilient.
+  - **Hardening shipped:**
+    - `scripts/ai-proof.ts`
+      - blocks third-party ad/analytics domains during proof capture runs,
+      - filters expected blocked-third-party console errors so proof output stays signal-first.
+    - `app/store-finder/page.tsx`
+      - geolocation permission/timeout/unavailable paths are treated as expected user flow,
+      - only unexpected geolocation failures are logged as errors.
+    - `scripts/visual-pointer-proof.ts`
+      - adds scroll-into-view fallback and a second-pass retry to selector replay.
+  - **Verification (all green):**
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` ✅
+    - `npm run ai:proof -- /store-finder` ✅
+      - proof artifact: `reports/proof/2026-02-24T09-31-18/`
+      - console report: `reports/proof/2026-02-24T09-31-18/console-errors.txt` (`No console errors detected`)
+    - `npm run visual-pointer:proof -- reports/visual-pointing/manual-check-visible-2026-02-23T17-03-04/capture.json` ✅
+
+- **2026-02-24 (Visual Pointer store-finder directions anchor disambiguation):** Closed the remaining low-priority anchor ambiguity by assigning distinct IDs for mobile vs desktop directions actions while keeping source-registry precision intact.
+  - **Anchor split shipped:**
+    - `components/store-map.tsx`
+      - mobile popup now uses `data-pc-id="store-finder.popup-directions-mobile"`,
+      - desktop popup retains `data-pc-id="store-finder.popup-directions"`.
+    - `lib/visual-pointer/source-registry.ts`
+      - `store-finder.popup-directions` remapped to desktop source line,
+      - new `store-finder.popup-directions-mobile` mapped to mobile source line.
+    - `tests/source-registry.test.ts`
+      - added explicit lookup/assertions for the new mobile anchor and ID inclusion coverage.
+  - **Verification (all green):**
+    - `npx tsx --import ./tests/setup.ts --test tests/source-registry.test.ts` ✅
+    - `PLAYWRIGHT_BASE_URL=http://127.0.0.1:3001 npx playwright test tests/visual-pointer-capture.spec.ts --project=chromium-desktop-light --workers=1` ✅
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` ✅
+    - `npm run ai:proof -- --mode=dev /store-finder` ✅
+      - proof artifact: `reports/proof/2026-02-24T07-44-21/`
+
+- **2026-02-24 (Carryover closure - visual pointer hardening + SKU name normalization reuse):** Closed and validated the previously dirty carryover scope after founder approval to continue with carryover as active objective.
+  - **Carryover implementation shipped:**
+    - `app/sku/[sku]/page.tsx`: replaced inline title cleanup with shared `normalizeProductName(...)`.
+    - `lib/penny-list-utils.ts`: preserves captured all-caps acronyms during name normalization.
+    - `lib/visual-pointer/source-registry.ts`: filled line-level source metadata and corrected anchor component/file ownership.
+    - `playwright.config.ts`: added `chromium-mobile-light-390x844` viewport lane.
+    - `scripts/visual-pointer-proof.ts`: supports positional artifact path fallback.
+    - `tests/source-registry.test.ts`, `tests/visual-pointer-capture.spec.ts`: hardened anchored/unanchored capture assertions and source metadata checks.
+  - **Verification (all green):**
+    - `npx tsx --import ./tests/setup.ts --test tests/source-registry.test.ts` ✅
+    - `npx tsx --import ./tests/setup.ts --test tests/penny-list-utils.test.ts` ✅
+    - `PLAYWRIGHT_BASE_URL=http://127.0.0.1:3001 npx playwright test tests/visual-pointer-capture.spec.ts --project=chromium-desktop-light --project=chromium-mobile-light --project=chromium-mobile-light-390x844 --workers=1` ✅
+    - `npm run ai:memory:check` ✅
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` ✅
+
+- **2026-02-24 (Submit-find strict name priority + mismatch resolution):** Completed requested hardening by enforcing trusted-source name precedence in submission flow and resolving the outstanding unit mismatch that was blocking full verification.
+  - **API route logic (`app/api/submit-find/route.ts`):**
+    - added trusted-source helpers for `item_name` provenance (`staging`, `serpapi`, `manual`),
+    - insert-time `item_name` now uses strict order (trusted self-enriched name first, then user fallback),
+    - carried trusted `item_name` provenance forward when self-enrichment provides the selected name,
+    - realtime SerpApi now updates `item_name` only when current name source is untrusted.
+  - **Test coverage:**
+    - `tests/submit-find-route.test.ts`: updated trusted-source fixtures, added untrusted-source regression, and aligned expectations for strict trusted-self precedence.
+    - `tests/penny-list-utils.test.ts`: aligned normalization assertion (`M18 FUEL`) to match current utility behavior.
+  - **Verification:**
+    - `npx tsx --import ./tests/setup.ts --test tests/submit-find-route.test.ts` ✅ (14/14)
+    - `npx tsx --import ./tests/setup.ts --test tests/penny-list-utils.test.ts` ✅
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` ✅
+
+- **2026-02-23 (Visual Pointing Tool v1 hardening pass):** Closed key implementation drift so the live pilot behavior is aligned with the approved plan for source precision, anchored proofing, and mobile viewport coverage.
+  - **Source mapping precision shipped:**
+    - `lib/visual-pointer/source-registry.ts`
+      - replaced placeholder `line: 0` with concrete source lines for all pilot anchors,
+      - corrected component/file ownership for penny-list filter anchors and card anchors.
+  - **Capture assertions strengthened:**
+    - `tests/visual-pointer-capture.spec.ts`
+      - added anchored capture assertions for `/penny-list` (`penny-list.report-cta`) and `/store-finder` (`store-finder.search-input`),
+      - retained unanchored capture fallback assertion (`source_unavailable`) for a heading target.
+    - `tests/source-registry.test.ts`
+      - now asserts `line > 0` for known anchors.
+  - **Mobile viewport coverage expanded:**
+    - `playwright.config.ts`
+      - added `chromium-mobile-light-390x844` (iPhone 12) alongside existing `375x667` lane.
+  - **Replay script CLI resilience:**
+    - `scripts/visual-pointer-proof.ts`
+      - now accepts either `--artifact <path>` or positional `<path>` for cross-shell npm forwarding reliability.
+  - **Verification:**
+    - `npx tsx --import ./tests/setup.ts --test tests/source-registry.test.ts` ✅
+    - `PLAYWRIGHT_BASE_URL=http://127.0.0.1:3001 npx playwright test tests/visual-pointer-capture.spec.ts --project=chromium-desktop-light --workers=1` ✅
+    - `PLAYWRIGHT_BASE_URL=http://127.0.0.1:3001 npx playwright test tests/visual-pointer-capture.spec.ts --project=chromium-mobile-light --workers=1` ✅
+    - `PLAYWRIGHT_BASE_URL=http://127.0.0.1:3001 npx playwright test tests/visual-pointer-capture.spec.ts --project=chromium-mobile-light-390x844 --workers=1` ✅
+    - `npm run visual-pointer:proof -- --artifact <artifact-path>` ✅ (script succeeded via positional fallback path parsing)
+    - `npm run e2e:smoke` ✅
+    - `npm run verify:fast` ⚠️ blocked by existing unrelated failing unit assertion in `tests/penny-list-utils.test.ts` tied to dirty carryover in `lib/penny-list-utils.ts` (`"M18 Fuel"` vs `"M18 FUEL"` casing expectation)
+
+- **2026-02-22 (Visual Pointing Tool v1 canonical plan created):** Added a decision-complete, implementation-ready plan for a dev-only visual pointing workflow pilot targeting `/penny-list` and `/store-finder`.
+  - **Canonical plan artifact:**
+    - `.ai/impl/visual-pointing-tool.md`
+  - **What the plan locks:**
+    - dev-only in-app overlay capture model,
+    - stable selector bundle + ranked fallbacks,
+    - explicit `data-pc-id` source registry mapping for anchored elements,
+    - dev-only local artifact persistence (`reports/visual-pointing/...`),
+    - Playwright replay/proof flow for validation.
+  - **Delivery decomposition:**
+    - 6 implementation slices with stop/go checkpoints after each slice,
+    - acceptance criteria + rollback + verification lane for each slice.
+  - **Verification (docs-only lane):**
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
+    - `npm run verify:fast` N/A (docs-only planning work; no runtime code-path mutation)
+    - `npm run e2e:smoke` N/A (no route/form/API/navigation/UI-flow mutation)
+    - `npm run e2e:full` N/A (FULL triggers not applicable)
+
+- **2026-02-22 (Anti-spam protections for report-find + spam cleanup):** Built three-layer anti-spam protections for the Report a Find submission flow and purged remaining spam Ryobi generator entries from Supabase.
+  - **Spam cleanup (Supabase direct):**
+    - Deleted 5 remaining PA entries from Feb 21 spam session (SKUs: 1008546712, 1013362341, 1013362339, 1003241156, 1013362340). All originated from a single spam burst (15 submissions in 10 min, no city).
+    - Preserved 2 organic reports for SKU 1013362340 from WV and Wylie, TX (different IPs, different states = credible).
+  - **Server-side protections (`app/api/submit-find/route.ts`):**
+    - Duplicate SKU throttle: Same IP + same SKU blocked for 10 minutes. Prevents identical-item spam while allowing diverse batch submissions.
+    - Rapid-fire cooldown: 5-second minimum interval between submissions from same IP. Catches button-mashing across any SKUs.
+    - Both use in-memory Maps (same pattern as existing rate limiter) with automatic pruning.
+  - **Client-side debounce (`components/report-find/ReportFindFormClient.tsx`):**
+    - Submit button disabled for 3 seconds after batch submission completes. UX guard only — server-side is the real protection.
+  - **What didn't change:** The existing 30/hour rate limit stays as-is for legitimate batch users.
+  - **Verification:**
+    - `npm run verify:fast` ✅ (lint + typecheck + unit 71/71 + build)
+    - `npm run e2e:smoke` ✅ (5/5 including report-find basket flow)
+
+- **2026-02-22 (Weekly memory integrity trend reporting shipped):** Completed the remaining Phase 3 autonomy hardening slice by adding weekly checkpoint pass-rate + integrity-score trend reporting with durable artifacts and strict fail-closed SLO behavior.
+  - **Tooling shipped:**
+    - `scripts/ai-memory.ts`
+      - new `trend` command (`--days=<n>`)
+      - checkpoint run-history ledger persisted at `reports/memory-integrity/checkpoint-history.jsonl`
+      - context-pack backfill parser to seed trend baseline from existing artifacts
+      - weekly artifact generation:
+        - `reports/memory-integrity-weekly/<YYYY-MM-DD>/summary.md`
+        - `reports/memory-integrity-weekly/<YYYY-MM-DD>/metrics.json`
+      - strict fail-closed trend signaling on SLO breach (pass-rate/integrity targets)
+  - **Script wiring:**
+    - `package.json`
+      - `ai:memory:trend`
+      - `ai:memory:trend:30`
+  - **Planning/memory updates:**
+    - `.ai/impl/founder-autonomy-memory-hardening.md`
+    - `.ai/topics/FOUNDER_AUTONOMY_CURRENT.md`
+    - `.ai/BACKLOG.md`
+  - **Verification:**
+    - `npm run ai:memory:trend` ✅
+      - artifact: `reports/memory-integrity-weekly/2026-02-22/summary.md`
+      - artifact: `reports/memory-integrity-weekly/2026-02-22/metrics.json`
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
+      - context pack artifact: `reports/context-packs/2026-02-22T21-31-09/context-pack.md`
+    - `npm run ai:memory:drill` ✅
+    - `npm run ai:memory:drill:heading` ✅
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` N/A (no route/form/API/navigation/UI-flow mutation)
+    - `npm run e2e:full` N/A (FULL triggers not applicable)
+
+- **2026-02-22 (Memory failure-mode drill commands shipped):** Completed the next scoped hardening slice from the founder-autonomy plan by adding reversible drill scenarios that intentionally break required memory artifacts and verify fail-closed detection + remediation output.
+  - **Tooling shipped:**
+    - `scripts/ai-memory.ts`
+      - new `drill` command
+      - scenarios: `missing-file` and `corrupt-heading`
+      - supports `--scenario` and `--target`
+      - prints explicit remediation guidance for critical failures
+      - auto-restores mutated/removed artifacts before exit
+      - cleanup hardening: no lingering `.drill-bak-*` artifacts after failed drill paths
+    - `package.json` scripts:
+      - `ai:memory:drill`
+      - `ai:memory:drill:missing`
+      - `ai:memory:drill:heading`
+  - **Planning/memory updates:**
+    - `.ai/impl/founder-autonomy-memory-hardening.md`
+    - `.ai/topics/FOUNDER_AUTONOMY_CURRENT.md`
+    - `.ai/BACKLOG.md`
+  - **Verification:**
+    - `npm run ai:memory:drill` ✅
+    - `npm run ai:memory:drill:heading` ✅
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
+      - context pack artifact: `reports/context-packs/2026-02-22T13-57-03/context-pack.md`
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` N/A (no route/form/API/navigation/UI-flow mutation)
+    - `npm run e2e:full` N/A (FULL triggers not applicable)
+
+- **2026-02-22 (Penny list scroll restoration fix + Supabase spam cleanup):** Fixed scroll-save bug where returning from a detail page on pages 2+ reset the list to page 1. Also investigated and cleaned up spam submissions in the Penny List Supabase table.
+  - **Scroll fix (`836c738`):**
+    - Root cause: `sessionStorage["penny-list-scroll"]` saved only `window.scrollY` but not the page number. On back-navigation, the page defaulted to 1 and the saved Y offset was meaningless.
+    - Fix: Save `{ y, page }` JSON. On restore, if `savedPage !== currentPage`, navigate to the correct page first and defer scroll to after the API fetch via `pendingScrollRef`.
+    - Files changed: `penny-list-client.tsx`, `penny-list-card.tsx`, `penny-list-table.tsx`
+  - **Spam cleanup (Supabase direct):**
+    - SKU `1013362340` (Ryobi 4000W Generator, $729) had 10 duplicate submissions from "PA" (no city) within 2 minutes — button-mashing spam.
+    - Also 1 duplicate of SKU `1013362339` (2500W Generator) from same PA burst session.
+    - Deleted 10 duplicate rows, kept 1 per unique SKU. Legitimate reports from Butler PA, WV, and Wylie TX retained.
+  - **Resolved:** Anti-spam protections shipped in subsequent session (duplicate SKU throttling, rapid-fire cooldown, client debounce).
+  - **Verification:** `npm run verify:fast` ✅ (lint + typecheck + unit 71/71 + build)
+
+- **2026-02-22 (Canon realignment patch shipped after cross-agent doc simplification):** Applied a scoped docs-only correction pass so tool-specific instruction files remain consistent with charter authority, canonical verification lanes, and `dev -> main` promotion flow.
+  - **Docs corrected (drift fixes):**
+    - Charter-first read order restored in:
+      - `.ai/START_HERE.md`
+      - `.ai/CODEX_ENTRY.md`
+      - `CLAUDE.md`
+      - `.github/copilot-instructions.md`
+    - Session command policy corrections in:
+      - `.claude/commands/session-start.md` (full alignment-gate fields + correct session-log trim behavior)
+      - `.claude/commands/session-end.md` (lane-based verification aligned to `.ai/VERIFICATION_REQUIRED.md`; docs-only lane preserved)
+    - Workflow correction in:
+      - `.github/copilot-instructions.md` (`dev` integration branch first, promote to `main` after checks)
+  - **Verification (docs-only lane):**
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
+      - context pack artifact: `reports/context-packs/2026-02-22T13-16-49/context-pack.md`
+    - `npm run verify:fast` N/A (docs-only governance patch; no runtime code-path mutation)
+    - `npm run e2e:smoke` N/A (docs-only; no route/form/API/navigation/UI-flow mutation)
+    - `npm run e2e:full` N/A (docs-only; FULL triggers not applicable)
+
+- **2026-02-22 (Single-writer lock protocol shipped for parallel-agent sessions):** Added a lock-based coordination layer for shared-memory `.ai` files so multiple agents can run with low merge friction.
+  - **Tooling shipped:**
+    - `scripts/ai-shared-writer-lock.ts`
+      - commands: `status`, `claim`, `heartbeat`, `release`
+      - lock file: `.ai/.shared-writer-lock.json` (gitignored)
+      - scope: `.ai/HANDOFF.md`, `.ai/STATE.md`, `.ai/SESSION_LOG.md`, `.ai/BACKLOG.md`
+    - `package.json` scripts:
+      - `ai:writer-lock:status`
+      - `ai:writer-lock:claim`
+      - `ai:writer-lock:heartbeat`
+      - `ai:writer-lock:release`
+  - **Governance/docs codified:**
+    - `AGENTS.md` (new critical rule for shared-memory single-writer lock)
+    - `README.md` (canon + branch workflow updates for concurrent sessions)
+    - `.ai/HANDOFF_PROTOCOL.md` (lock requirement during memory updates when concurrent)
+    - `.ai/VERIFICATION_REQUIRED.md` (lock evidence requirement when concurrent)
+    - `.ai/CRITICAL_RULES.md` (new Rule #8)
+  - **Skill added (repeatable workflow):**
+    - `docs/skills/single-writer-lock.md`
+    - `docs/skills/README.md` index update
+  - **Verification:**
+    - `npm run ai:writer-lock:status` ✅
+    - `npm run ai:writer-lock:claim -- codex "protocol-validation"` ✅
+    - `npm run ai:writer-lock:heartbeat -- codex` ✅
+    - `npm run ai:writer-lock:release -- codex` ✅
+    - `npm run verify:fast` ✅
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
+
+- **2026-02-22 (Weekly analytics snapshot refreshed - pre-rollout baseline):** Ran a new weekly decision pass using the expanded GA4 report-flow archive slices and published a fresh founder-readable snapshot.
+  - **Artifacts:**
+    - Archive run: `.local/analytics-history/runs/2026-02-22T00-29-57-156Z/summary.md`
+    - Weekly summary: `reports/analytics-weekly/2026-02-22/summary.md`
+  - **Key outputs (last 7d vs prior 7d):**
+    - GSC clicks: `467` vs `397` (`+17.63%`)
+    - GSC non-branded clicks: `83` vs `34` (`+144.12%`)
+    - GA4 `/penny-list` sessions: `4,181` vs `4,118` (`+1.53%`)
+    - GA4 `/report-find` sessions: `286` vs `234` (`+22.22%`)
+    - `find_submit`: `122` vs `109` (`+11.93%`)
+    - `report_find_click`: `37` vs `38` (`-2.63%`)
+    - reports per report-route session: `0.3861` vs `0.4360` (`-11.45%`)
+  - **Decision output:**
+    - Top leak: CTR lag on high-impression informational pages (impressions up faster than clicks).
+    - Top opportunity: non-branded intent growth remains strong (`home depot penny items/list/app` cluster).
+    - Top guardrail: treat this as pre-rollout baseline; evaluate participation-lift release impact only after post-deploy windows mature.
+  - **Verification (docs/data lane):**
+    - `npm run analytics:archive -- -- --start-date=2026-02-08 --end-date=2026-02-21` ✅
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
+
+- **2026-02-22 (Report Find Participation Lift v1 decomposed program shipped):** Completed the approved slice-by-slice execution program across governance, measurement integrity, basket UX, taxonomy, archive reporting, and coverage updates.
+  - **Policy/governance (`P0-S1`) completed:**
+    - Added anti-mega-plan planning rules in:
+      - `AGENTS.md`
+      - `README.md`
+      - `.ai/plans/_TEMPLATE.md`
+    - Enforced decomposition defaults: parent + child slices, one outcome per slice, explicit acceptance/rollback/verification lane, stop/go checkpoint after each slice.
+  - **Measurement integrity (`M1`) completed:**
+    - `find_submit` semantic misuse removed from report-entry CTAs and replaced with `report_find_click` in:
+      - `components/penny-list-client.tsx`
+      - `components/penny-list-mobile-utility-bar.tsx`
+    - Source attribution normalized on report-entry links (`?src=`) in:
+      - `components/footer.tsx`
+      - `app/pennies/[state]/page.tsx`
+      - `app/penny-list/page.tsx`
+      - `components/command-palette.tsx`
+    - Raw item identifiers removed from report-adjacent analytics payloads in:
+      - `components/penny-list-card.tsx`
+      - `components/penny-list-action-row.tsx`
+      - `app/sku/[sku]/page.tsx`
+      - `lib/analytics.ts` (sanitizer redaction keys)
+  - **Basket UX (`M2`) completed in `components/report-find/ReportFindFormClient.tsx`:**
+    - shared haul fields with required state/date and optional city,
+    - add-to-basket workflow with dedupe merge by SKU (quantity cap 99),
+    - session persistence (`pc_report_basket_v1`),
+    - prefill auto-add once-per-session without draft overwrite,
+    - sequential submit-all to existing `/api/submit-find`,
+    - partial-failure summary + failed-item retention for retry,
+    - success action: Safari-safe `Copy for Facebook`.
+  - **Taxonomy + archive (`M3`) completed:**
+    - `lib/analytics.ts` event set expanded with report/basket events (`report_open`, `item_add_manual`, `item_add_prefill`, `item_add_scan`, `report_submit_single`, `report_submit_batch`, `copy_for_facebook`).
+    - `scripts/archive-google-analytics.ts` extended with:
+      - `ga4/daily_events.csv|json`
+      - `ga4/daily_report_paths.csv|json`
+    - Contract/review docs synchronized:
+      - `.ai/topics/ANALYTICS_CONTRACT.md`
+      - `.ai/ANALYTICS_WEEKLY_REVIEW.md`
+  - **Verification evidence:**
+    - `npm run ai:memory:check` ✅
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` ✅
+    - `npm run lint:colors` ✅
+    - `npx playwright test tests/report-find-prefill.spec.ts tests/report-find-batch.spec.ts --project=chromium-desktop-light --workers=1` ✅
+    - `npm run analytics:archive -- -- --start-date=2026-02-20 --end-date=2026-02-20` ✅
+      - artifact: `.local/analytics-history/runs/2026-02-22T00-15-22-963Z/summary.md`
+    - `npm run ai:proof -- -- --mode=dev /report-find /penny-list` ✅
+      - artifacts: `reports/proof/2026-02-22T00-16-09/`
+
+- **2026-02-21 (`/store-finder` post-review hardening patch completed):** Applied a scoped follow-up patch after code review findings to keep desktop marker popups visible near map edges and keep mobile contextual location controls predictable.
+  - **Runtime/test updates shipped:**
+    - `components/store-map.tsx`
+      - desktop popup behavior now keeps popups in-view (`autoPan` + `keepInView` enabled),
+      - added programmatic-move guards so auto-pan/recenter actions do not falsely trigger explore-mode transitions.
+    - `app/store-finder/page.tsx`
+      - tightened mobile contextual recenter gating so simple store selection in follow mode does not force recenter state.
+    - `tests/store-finder-popup.spec.ts`
+      - added mobile assertion that exactly one contextual location control is visible (no dual-control conflict),
+      - preserved desktop popup + mobile popup suppression coverage.
+  - **Verification:**
+    - `npx playwright test tests/store-finder-popup.spec.ts --workers=1` ✅
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` ✅
+    - `npm run lint:colors` ✅
+  - **Analytics auth reconfirmed (founder request):**
+    - `npm run analytics:archive -- -- --start-date=2026-02-20 --end-date=2026-02-20` ✅
+      - artifact: `.local/analytics-history/runs/2026-02-21T07-36-36-822Z/summary.md`
+      - auth mode: `oauth_refresh_token`
+    - `gcloud auth application-default print-access-token` ✅ (ADC fallback remains available)
+
+- **2026-02-21 (`/store-finder` mobile UX follow-up completed):** Applied founder-requested usability corrections after live validation: detents were reworked to stay usable, mobile marker popup interference was removed, and mobile location controls were simplified.
+  - **Runtime/UI changes shipped:**
+    - `app/store-finder/page.tsx`
+      - added explicit `follow` vs `explore` map interaction mode,
+      - added explicit recenter-token flow (`mapRecenterToken`) so recentering only happens on user intent (search, locate, recenter, select-store one-shot),
+      - changed mobile controls to one contextual `Locate/Recenter` action (desktop keeps separate controls),
+      - repaired mobile detent behavior so list rows remain accessible across `peek`/`half`/`expanded`,
+      - tuned map/sheet height balance to reduce clipped/awkward states.
+    - `components/store-map.tsx`
+      - manual map drag/zoom now flips mode to explore (`onExploreMode`),
+      - selected-store auto-pan only in follow mode,
+      - explicit recenter requests are honored once-per-token via `map.setView(...)`,
+      - desktop popup remains available but mobile popup rendering is disabled to prevent map obstruction.
+    - `components/store-map.css`
+      - reduced popup density and added bounded height/overflow for cleaner desktop popup behavior.
+    - `tests/store-finder-popup.spec.ts`
+      - updated assertions to validate the new mobile popup behavior while keeping desktop popup checks.
+  - **Proof artifacts:**
+    - `reports/playwright/manual/store-finder-desktop-light-fix-2026-02-21.png`
+    - `reports/playwright/manual/store-finder-desktop-dark-fix-2026-02-21.png`
+    - `reports/playwright/manual/store-finder-mobile-light-half-fix-2026-02-21.png`
+    - `reports/playwright/manual/store-finder-mobile-dark-half-fix-2026-02-21.png`
+  - **Verification:**
+    - `npm run ai:memory:check` ✅
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` ✅
+    - `npm run lint:colors` ✅
+    - `npx playwright test tests/store-finder-popup.spec.ts --workers=1` ✅
+
+- **2026-02-20 (Dev-branch clean-worktree protocol hardening):** Integrated canonical branch-hygiene rules so future sessions fail-closed on dirty carryover instead of stacking local changes.
+  - **Governance/docs updates shipped:**
+    - `AGENTS.md` and `README.md` branch workflows now require: pre-task `git status --short`, staged-scope checks (`git diff --cached --name-only`), and post-push clean-tree confirmation.
+    - `.ai/CRITICAL_RULES.md` now includes `Rule #7: Clean Worktree + Scoped Commit Loop (Dev Branch)`.
+    - `.ai/HANDOFF_PROTOCOL.md` and `.ai/VERIFICATION_REQUIRED.md` now require branch hygiene evidence (branch, commit SHA(s), push status, and session-end `git status --short`).
+    - Corrected drift in secondary guidance that still implied main-only/single-branch operation:
+      - `docs/skills/ship-safely.md`
+      - `.ai/AI_ENABLEMENT_BLUEPRINT.md`
+      - `.ai/CONSTRAINTS_TECHNICAL.md`
+  - **Verification (docs-only lane):**
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
+      - Context pack: `reports/context-packs/2026-02-20T13-11-07/context-pack.md`
+    - `npm run verify:fast` N/A (docs-only governance changes; no runtime code-path impact)
+    - `npm run e2e:smoke` N/A (docs-only; no route/form/API/navigation/UI-flow change)
+    - `npm run e2e:full` N/A (docs-only; FULL triggers not applicable)
+
+- **2026-02-20 (First weekly analytics decision snapshot from local archive):** Executed the backlog continuity default task by turning newly archived GA4/GSC data into a weekly decision artifact with fail-closed status and queued actions.
+  - **Artifact shipped:**
+    - `reports/analytics-weekly/2026-02-20/summary.md`
+  - **Weekly outputs (last 7d vs prior 7d):**
+    - GSC clicks: `463` vs `377` (`+22.81%`)
+    - GSC non-branded clicks: `68` vs `27` (`+151.85%`)
+    - GA4 `/penny-list` sessions: `3,823` vs `4,037` (`-5.30%`)
+    - GA4 `/report-find` sessions: `266` vs `230` (`+15.65%`)
+    - Proxy rate (`/report-find` sessions per `/penny-list` session): `+22.13%`
+  - **Decision output (founder-readable):**
+    - Top leak: high-impression pages with weak CTR (`/guide`, `/what-are-pennies`, `/faq`, `/report-find`).
+    - Top opportunity: non-branded query cluster growth around `home depot penny items/list/app`.
+    - Top guardrail: canonical core-loop guardrails remain `BLOCKED/INCONCLUSIVE` until event export coverage is added.
+  - **Verification (docs/data lane):**
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
+      - Context pack: `reports/context-packs/2026-02-20T09-27-03/context-pack.md`
+    - `npm run verify:fast` N/A (no runtime code-path changes in this snapshot step)
+    - `npm run e2e:smoke` N/A (no route/form/API/navigation/UI-flow change)
+
+- **2026-02-20 (GA4 + GSC local archive automation with ADC support):** Added a repeatable local analytics export lane so GA4/Search Console data can be snapshotted and preserved outside third-party dashboards.
+  - **Tooling/workflow updates shipped:**
+    - Installed Google Cloud SDK and completed ADC auth:
+      - `gcloud auth application-default login`
+      - `gcloud auth application-default set-quota-project analytics-485810`
+    - Added export script: `scripts/archive-google-analytics.ts`
+      - pulls GSC reports (`daily_totals`, `daily_queries`, `daily_pages`, `daily_countries`, `daily_devices`)
+      - pulls GA4 reports (`daily_channel`, `daily_pages`)
+      - writes timestamped local artifacts under `.local/analytics-history/runs/<timestamp>/`
+      - appends additive run timeline to `.local/analytics-history/run-index.jsonl`
+      - supports OAuth refresh-token auth with ADC (`gcloud`) fallback.
+    - Added npm command:
+      - `npm run analytics:archive`
+    - Added reusable skill:
+      - `docs/skills/google-ga4-gsc-local-archive.md`
+      - indexed in `docs/skills/README.md`.
+  - **Initial extraction evidence:**
+    - Full successful run: `.local/analytics-history/runs/2026-02-20T08-46-15-006Z/summary.md`
+    - Coverage observed:
+      - GSC: `2025-12-17` to `2026-02-19`
+      - GA4: `2025-11-28` to `2026-02-20`
+  - **Verification:**
+    - `npm run analytics:archive` ✅
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` N/A (no route/form/API navigation runtime change)
+    - `npm run e2e:full` N/A (no FULL trigger in this change)
+
+- **2026-02-19 (R5 planning completed: first non-penny-adjacent article brief pack):** Executed the next queued resilience docs-only task after `R4` by drafting implementation-ready adjacent-intent brief specs from founder heuristics.
+  - **Canonical planning updates shipped:**
+    - Expanded `.ai/impl/pennycentral-resilience-diversification-plan.md` with completed `R5` brief pack (`6D`) including three briefs:
+      - clearance timing reality check,
+      - storage/effort cost framework,
+      - beginner skip signals playbook.
+    - Added pilot prioritization model and fail-closed guardrails for future runtime selection (`R6`).
+    - Updated execution queue/status in `.ai/impl/pennycentral-resilience-diversification-plan.md` to mark `R5` planning complete and queue `R6` as the next approval-gated runtime task.
+    - Updated `.ai/topics/RESILIENCE_GROWTH_CURRENT.md` to reflect `R5` completion and set `R6` as next queued work.
+    - Refreshed drift artifact: `.ai/_tmp/drift-check.md` (no new naming/route/touch-target blockers for this update; legacy icon-language docs drift remains non-blocking).
+  - **Verification (docs-only lane):**
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
+      - Context pack: `reports/context-packs/2026-02-19T22-14-34/context-pack.md`
+    - `npm run verify:fast` N/A (docs-only; no runtime code-path change)
+    - `npm run e2e:smoke` N/A (docs-only; no route/form/API/navigation/UI-flow change)
+    - `npm run e2e:full` N/A (docs-only; FULL triggers not applicable)
+
+- **2026-02-19 (R4 planning completed: weekly Decision Quality digest section spec):** Finished the next queued resilience docs-only task after R1/R2/R3, producing an implementation-ready digest section specification without runtime changes.
+  - **Canonical planning updates shipped:**
+    - Expanded `.ai/impl/pennycentral-resilience-diversification-plan.md` with completed `R4` spec covering purpose/audience, data sources + draft scoring logic, copy framework, fail-closed guardrails, rollback, and proof plan.
+    - Updated execution queue/status in `.ai/impl/pennycentral-resilience-diversification-plan.md` to mark `R4` spec complete and `R5` as next queued task.
+    - Updated `.ai/topics/RESILIENCE_GROWTH_CURRENT.md` to reflect `R4` docs completion and preserve the first valid guardrail-evaluation date of **2026-02-26**.
+    - Refreshed drift artifact: `.ai/_tmp/drift-check.md` (no new naming/route/touch-target blockers for this update; legacy icon-language docs drift remains non-blocking).
+  - **Verification (docs-only lane):**
+    - `npm run ai:memory:check` ✅
+    - `npm run ai:checkpoint` ✅
+      - Context pack: `reports/context-packs/2026-02-19T22-07-14/context-pack.md`
+    - `npm run verify:fast` N/A (docs-only; no runtime code-path change)
+    - `npm run e2e:smoke` N/A (docs-only; no route/form/API/navigation/UI-flow change)
+    - `npm run e2e:full` N/A (docs-only; FULL triggers not applicable)
 
 - **2026-02-19 (Collaboration continuity requirements codified; analytics/search/MCP included):** Captured founder-critical observability/tooling expectations as durable context so future agents do not miss them after context resets.
   - **Canonical memory updates shipped:**
@@ -1222,170 +1700,6 @@ From `.ai/ANALYTICS_WEEKLY_REVIEW.md`:
 
 - **2026-01-22 (SEO: Global Canonical Tags):** Implemented self-referencing canonical tags across the entire site to fix Google Search Console issue where `/penny-list` was "Crawled - currently not indexed". Created `lib/canonical.ts` with `CANONICAL_BASE` constant and helper functions. Updated root `app/layout.tsx` metadata to include `alternates.canonical` field (Next.js automatically renders as `<link rel="canonical" ... />` in `<head>`). Updated `app/penny-list/page.tsx` and `app/sku/[sku]/page.tsx` metadata to include their own dynamic canonical tags. Result: every page now declares itself as the canonical version (homepage, penny list, SKU pages, etc.), consolidating Google's ranking authority on the new URLs and away from old redirects. All 4 gates passing (lint/build/unit/e2e). Verification: `reports/verification/2026-01-22T06-53-56/summary.md`.
 
-- **2026-01-21 (My List Phase 2):** Implemented Phase 2 of the My List elevation plan: removed the guest redirect wall on `/lists` and added locked preview UI (hero with benefit bullets + 6 sample items from `/api/penny-list`), updated guest save clicks to redirect with intent params (`/login?redirect=/lists?pc_intent=save_to_my_list&pc_sku=${sku}&pc_intent_id=${uuid}`), implemented intent resume logic on `/lists` that auto-saves after login using sessionStorage idempotency guard and cleans URL via `router.replace("/lists")`, and ensured all new copy uses "My List" (singular) branding. Files modified: add-to-list-button.tsx (guest redirect), app/lists/page.tsx (preview UI + intent resume). Ready for testing (guest save flow, idempotency, URL cleaning).
-
-- **2026-01-21 (My List Phase 1):** Implemented Phase 1 of the My List elevation plan: swapped Bookmark icons to Heart (with fill="currentColor" for saved state), updated all UI labels to "My List" (singular), enforced 44px mobile tap targets on secondary action buttons (Home Depot, Barcode, Save) with desktop overrides (sm:min-h-[36px]), added "My List" to navbar and command palette with Heart icon, and implemented prefix-safe active state logic (pathname === "/lists" || pathname.startsWith("/lists/")). Files modified: add-to-list-button.tsx, penny-list-client.tsx, penny-list-card.tsx, navbar.tsx, command-palette.tsx. Ready for UI verification (mobile + desktop).
-
-- **2026-01-21 (Process):** Standardized planning docs so all agentic coders (Codex/Claude/Copilot) follow the same pipeline: canonical registry at `.ai/plans/INDEX.md`, plan template at `.ai/plans/_TEMPLATE.md`, and a planning pointer in `.ai/START_HERE.md` + `.ai/USAGE.md`. The "My List" roadmap is now anchored via `.ai/plans/my-list-elevation.md` and `.ai/topics/MY_LIST_FEATURE_CURRENT.md`.
-
-- **2026-01-18:** SKU detail page now places the "Report this find" CTA directly under the hero image with explicit "tap this to report" guidance; the button deep-links to `/report-find` with SKU/name prefilled (via `buildReportFindUrl`) and tracks via `TrackableLink`. Playwright tests filter known Ezoic/ID5 CSP console noise so e2e only fails on real app errors. Ezoic scripts are now gated to Vercel production only (disabled in CI/Playwright) so Full QA Suite `check-axe` stays green.
-
-- **2026-01-21:** SKU detail page (mobile-first) now prioritizes community intel and contributions: moved “Where it was found” above “Related penny items”, added inline state chips under “Community Reports” for immediate payoff, made “Report this find” the primary CTA, demoted “View on Home Depot” styling to secondary, and restored “New to Penny Hunting?” to a boxed card. Verified via `reports/verification/2026-01-21T22-17-23/summary.md` + Playwright screenshots under `reports/verification/sku-related-items-chromium-mobile-*.png`.
-
-- **2026-01-21:** Fixed a layout regression where the "Report this find" CTA could appear to the right of the hero image on larger viewports; changed the image container to a column layout so the CTA stacks under the image consistently. Also simplified the `Internet #` identifier to `Internet #:` and removed the extra explanatory subtext so the identifier reads inline (e.g., `Internet #: 1234567890`).
-
-- **2026-01-21:** Fixed a Vercel/local build failure on `/lists` caused by importing a non-existent `@/lib/types` and missing `<Suspense>` boundary for `useSearchParams()`. Verified with `npm run ai:verify -- test` (`reports/verification/2026-01-21T12-24-30/summary.md`).
-
-- **2026-01-18:** Replaced the fake `data/penny-list.json` fixture with a one-time Supabase snapshot of real SKUs (sanitized + timestamp-rebased for deterministic Playwright runs) and removed placeholder SKUs from tests/examples; regenerate manually via `npm run fixture:snapshot` (no cron).
-
-- **2026-01-18:** Evaluated "old SKU" impact and decided **not** to add any historical tagging or "active only" UX at this time; documented a narrow, approval-gated plan to harden SKU page performance without user-visible changes (`.ai/impl/sku-page-performance-hardening-plan.md`).
-
-- **Weekly Email Digest (Jan 17):** Implemented P0-4c weekly email cron that sends penny list updates to all active subscribers every Sunday 8 AM UTC. Created `emails/weekly-digest.tsx` (React Email template with product cards, summary stats, responsive design for email clients), `lib/email-sender.ts` (Resend API wrapper with error handling, 100ms rate limiting), and `app/api/cron/send-weekly-digest/route.ts` (cron endpoint that queries active subscribers + penny items from last 7 days, processes/aggregates by SKU, renders template, sends via Resend with unsubscribe links). Added cron schedule to `vercel.json` (Sunday 8 AM UTC: `0 8 * * 0`). Installed `resend`, `@react-email/components`, `react-email` (136 packages, 0 vulnerabilities). All 4 gates passing (lint/build/unit/e2e).
-
-- **Email Signup Form (Jan 16):** Implemented P0-4b email signup form on `/penny-list` to capture users for weekly updates. Created `email_subscribers` table (migration 015) with RLS policies and indexes, `app/api/subscribe/route.ts` (POST endpoint with Zod validation, rate limiting 5/hour per IP, honeypot protection, crypto-secure token generation), `app/api/unsubscribe/route.ts` (GET endpoint with token-based unsubscribe), `components/email-signup-form.tsx` (dismissible form that appears after 25s OR 600px scroll, localStorage persistence, GA4 tracking), and `app/unsubscribed/page.tsx` (confirmation page). Wired into penny-list-client. All 4 gates passing (lint/build/unit/e2e).
-
-- **PWA Install Prompt (Jan 16):** Implemented "Add to Home Screen" prompt on `/penny-list` to improve Day 7 retention (currently ~0%). Created app icons (192px, 512px) from existing SVG using Playwright, updated `site.webmanifest` with proper PWA metadata (name: "Penny Central", start_url: "/penny-list"), added dismissible prompt component with localStorage persistence and GA4 tracking (pwa_prompt_shown, pwa_install_started, pwa_prompt_dismissed), and wired into penny-list-client. Prompt appears after scroll (200px) or 20s delay, respects prefers-reduced-motion, and detects existing installations. All 4 gates passing (lint/build/unit/e2e).
-
-- **Skimlinks env vars cleaned up (Jan 16):** Removed SKIMLINKS_DISABLED env vars from CI workflow since Skimlinks script is fully removed. Verified with all 4 gates passing.
-
-- **Penny List freshness + missing items fixed (Jan 13):** Public updates now target ~5 minutes (`/api/penny-list` CDN caching `s-maxage=300` + `/penny-list` `revalidate=300`), submitter flow can bypass once via `?fresh=1` (no-store) without global polling, and the enrichment overlay no longer hides SKUs that lack `penny_item_enrichment` rows (root cause of “some items missing”). Proof: `reports/verification/2026-01-13T08-16-40/summary.md` and `reports/proof/2026-01-13T08-22-19/console-errors.txt`.
-
-- **Full QA Suite stabilized (Jan 13):** Fixed CI E2E hydration crash when `NEXT_PUBLIC_SUPABASE_*` is missing by making `AuthProvider` skip Supabase initialization when not configured. Ensured `/sku/[sku]` pages exist in Full QA builds by setting `USE_FIXTURE_FALLBACK=1` during the build step (CI has no Supabase creds). Reduced Sentry email noise by suppressing reporting on localhost and Vercel previews.
-
-- **Canonical global analytics setup (Jan 12):** Made `app/layout.tsx` the single source of truth for global scripts. Grow now ships as a real `<script src="https://faves.grow.me/main.js" ...>` in `<head>` (crawler-detectable), GA4 fires on SPA route changes (history hooks), Vercel Analytics + SpeedInsights render only on Vercel production, removed invalid wildcard `preconnect` links, and updated CSP to allow `faves.grow.me` / `*.grow.me` without console errors. Verified with `reports/verification/2026-01-12T22-29-04/summary.md`.
-
-- **Grow connectivity checker hardening (Jan 13):** Updated the Grow install in `app/layout.tsx` to match the Grow portal's canonical single-tag initializer snippet (injects `https://faves.grow.me/main.js` + sets `data-grow-faves-site-id`) to reduce false-negative "Check Grow Connectivity" failures. Local gates green; production re-check pending.
-
-- **Privacy Policy page for Monumetric (Jan 14):** Added `/privacy-policy` (linked in global footer + sitemap) containing Monumetric's required advertising disclosure and a stable link for Monumetric onboarding. Verified locally via `reports/verification/2026-01-14T20-23-25/summary.md`.
-
-- **Monumetric ads.txt (Jan 14):** Added `public/ads.txt` so `https://www.pennycentral.com/ads.txt` serves Monumetric's required `ads.txt` lines for interim ads onboarding. Verified locally via `reports/verification/2026-01-14T20-40-02/summary.md`.
-
-- **Autonomous automation (Jan 15):** Implemented Dependabot weekly updates and scheduled Snyk daily scans. (Supabase backup cron was later disabled per Cade’s preference; use one-time/manual snapshots only.) Enforced Python tooling via `ruff` + `.pre-commit-config.yaml` and updated VS Code Python settings; added `.ai/SENTRY_ALERTS_MANUAL.md` with steps to tune Sentry. Verified via `reports/verification/2026-01-15T11-11-41/summary.md`.
-
-- **Mediavine Journey (Grow) installation (Jan 12):** Integrated Mediavine's Grow script for first-party data and monetization readiness. Added `preconnect` and initializer to `app/layout.tsx`. Verified with production build and zero-warning lint.
-
-- **Report Find submissions restored (Jan 12):** Root cause was Supabase RLS/privileges now blocking direct `anon` INSERTs into `public."Penny List"` while `/api/submit-find` was still using the anon key. Fixed by inserting via the Supabase service role key in `app/api/submit-find/route.ts` (keeps DB locked down from direct anon inserts), and rate limiting now counts only successful submissions (so a transient server error doesn't lock out users). Updated `docs/supabase-rls.md` to match current reality. Verified with `reports/verification/2026-01-12T05-37-14/summary.md`.
-
-- **Supabase egress optimization (Jan 11):** Reduced payload per query by excluding notes from list queries (include only on detail pages). Made `notes_optional` optional in `SupabasePennyRow`, removed unused `source` column from enrichment type, added `includeNotes` flag to `getPennyListFiltered()`, updated list queries to use lightweight fetch. Expected impact: 6.30 GB → ~3.30 GB (stays under 5 GB limit). Also leverages Supabase Cache layer (currently 0.00 GB) via existing Cache-Control headers + ISR page caching (30 min). Tests pending verification.
-
-- **Decision frame documented (Jan 11):** Added a stable "Decision Frame" (steelman/strawman for submissions vs retention vs SEO, plus stability + pipeline) to `.ai/CONTEXT.md` so agents keep perspective on what matters.
-
-- **Agent alignment + proof canon (Jan 11):** Added missing `.ai/VERIFICATION_REQUIRED.md` (paste-ready proof format) and expanded `.ai/USAGE.md` (Goldilocks task spec + course-correction script). Linked from `.ai/START_HERE.md`, `.ai/CODEX_ENTRY.md`, `CLAUDE.md`, and `.github/copilot-instructions.md` so Codex/Claude/Copilot follow the same protocol.
-
-- **Dev/Test mode protocol (Jan 11):** Standardized dev-server ownership to reduce Copilot hang/port loops: `ai:verify` supports `dev`/`test` modes with HTTP readiness retries, Playwright uses a Playwright-owned `next start` server on port 3002 by default (no reuse unless `PLAYWRIGHT_REUSE_EXISTING_SERVER=1`), and port 3001 guidance is now "kill only if proven unhealthy + you own it".
-
-- **Penny Deal Card final converged design (Jan 11):** Updated Penny List cards so brand is attached to the image edge and subordinate, recency is the only top-right element (calendar + muted text), Save is icon-only and moved into secondary actions, state pills are muted (max 4) with a single smaller "X reports total" line, and explicit "$X off" savings lines are removed while $0.01 remains the hero price.
-
-- **Data pipeline P0 bootstrap (Jan 10):** Added `scripts/validate-scrape-json.ts` to normalize and validate raw scrape JSON (SKU validation, field presence stats, cleaned output to `.local/`), and wired npm scripts for `export:pennycentral` (existing export script runner) and `validate:scrape`.
-
-- **Data pipeline P0 continue (Jan 10):** Added `scripts/scrape-to-enrichment-csv.ts` (fill-blanks-only CSV from cleaned scrape + current enrichment) and `scripts/enrichment-diff.ts` (Markdown diff summary). Wired npm scripts: `convert:scrape`, `diff:enrichment`.
-
-- **Penny List card tightening + trust soften (Jan 10):** Reduced card padding, image size to 64px, smaller SKU chip, inline info-style trust row, compressed primary/secondary action heights; submit-find enrichment lookup now skips when mocks are minimal and only attaches enrichment fields when present (no null payload clutter).
-
-- **Penny List CTA tuned to moderate blue (Jan 10):** Kept brass/gold accents for small badges and green for success only, but moved the primary CTA to a moderate blue (light + dark) so it no longer competes with gold/brass; Penny List card hierarchy updated (72x72 image, SKU pill, reduced $0.01 dominance, trust row prominence, savings not green) and green glow removed from list cards.
-
-- **Penny List thumbnail image parity fix (Jan 10):** Fixed an image resolution divergence where list cards could show a generic/placeholder thumbnail while SKU pages showed the correct product image; list cards now use a reliable THD `-64_400` thumbnail variant helper instead of generating `-64_300` URLs.
-
-- **Penny List HD link fix (Jan 10):** Fixed a UI parity bug where the Penny List "Hot Right Now" cards were missing the Home Depot link even though SKU pages had it; Hot cards now render a Home Depot link using the same fallback URL builder as SKU pages, and a Playwright assertion covers it.
-
-- **Guide visual upgrade (Jan 09):** Rewrote `/guide` meta description to match actual search queries ("Find Home Depot penny items in 5 minutes..."); added Section II-B (Visual Label Recognition) with 6 real label photos + full clearance cycle example; added Section II-C (Overhead Hunting) with wide/close overhead photos + Zebra scan risk warning; added Section III-A (How to Verify Penny Status) with step-by-step "Right Way" vs. "Wrong Way" + self-checkout tactics; updated Section IV to note clearance endcaps being phased out; added strong conversion CTA section linking to `/penny-list` and `/report-find`. Expected impact: CTR from 0.39% → 2-3% within 2-3 weeks.
-
-- **Returning users nudge (Jan 08):** Added a small, dismissible “Bookmark this page” banner on `/penny-list` (shows after scroll or ~20s, then stays dismissed) to increase repeat visits; updated `scripts/ai-proof.ts` to be more resilient when capturing Playwright screenshots.
-
-- **Image URL normalization (Jan 08):** Standardized all product image URLs to -64_600.jpg in database (canonical source). Components downconvert at display time: SKU pages use 600px (full-size, ~60-80 KB), related items cards use 400px (~40-60 KB), Penny List thumbnails use 300px (~20-30 KB). Strategy balances quality with bandwidth efficiency. Script `normalize-image-urls.ts` normalizes DB; removed brand duplication from SKU page titles; enlarged SKU page image area; moved related items higher on page.
-
-- **SEO intent landing pages (Jan 08):** Added `/home-depot-penny-items`, `/home-depot-penny-list`, and `/how-to-find-penny-items` and included them in the sitemap to target high-intent keyword phrases and funnel to `/guide` + `/penny-list`.
-
-- **Homepage freshness (Jan 06):** `/` now revalidates every 5 minutes so "Today's Finds" reflects Supabase enrichment fixes without redeploys.
-
-- **Thumbnail reliability (Jan 08):** Standardized thumbnails to the more reliable Home Depot `-64_400` variant (the `-64_300` variant is not consistently available and can cause 404s/blank images).
-
-- **Penny List thumbnail fallback (Jan 06):** If a THD image request fails, Penny List thumbnails fall back to `-64_1000` automatically so cards don't show blank images.
-
-- **Vercel analytics fail-safe (Jan 06):** Vercel Web Analytics now enables automatically on Vercel production unless explicitly disabled (`NEXT_PUBLIC_ANALYTICS_ENABLED=false`), avoiding silent drops when `NEXT_PUBLIC_ANALYTICS_PROVIDER` is unset/mismatched.
-
-- **Barcode modal reliability (Jan 06):** Barcode rendering now validates UPC-A/EAN-13 check digits and falls back to `CODE128` when invalid, preventing blank barcode boxes.
-
-- **Penny List audit counts (Jan 06):** Added `npm run penny:count` (`scripts/print-penny-list-count.ts`) to print report vs. SKU counts and explain "imported history looks recent" (timestamp) vs. true last-seen (purchase_date).
-
-- **Card view parity + shared UI (Jan 05):** Extracted shared `StateBreakdownSheet` and `PennyListActionRow`, centralized Line A/B formatting helpers, and updated card/table to use the shared components with lastSeenAt + state spread.
-
-- **Purchase date parsing resilience (Jan 05):** Added a `parsePurchaseDateValue` helper so both `pickBestDate` and `pickLastSeenDate` treat timestamp-like `purchase_date` strings as valid dates instead of falling back to the submission `timestamp`.
-
-- **Barcode modal stability (Jan 05):** Barcode modal now picks `UPC`, `EAN13`, or `CODE128` based on the UPC length so `JsBarcode` can draw bars for every SKU rather than silently failing on 13-digit values.
-
-- **Penny List "Last seen" precedence (Jan 05):** Added server-side `lastSeenAt` (purchase_date when valid and not future, else report timestamp) and table Line A now uses it (fallback to `dateAdded`).
-
-- **Penny List date/sort consistency (Jan 05):** Aligned SSR/API/client defaults to 30d, standardized window label to `(30d)`, made Newest/Oldest sort follow `lastSeenAt`, and tightened date-window filtering to “last seen” semantics (purchase_date when present, else timestamp).
-
-- **Penny List card redesign spec alignment (Jan 05):** Updated `.ai/PENNY-LIST-REDESIGN.md` to require SKU on card face, Home Depot action button, report counts in Line B with window label, and window consistency across card + state sheet. Guardrails updated to allow dense metadata text and card padding exceptions.
-
-- **Unified green brand (Jan 03):** Light mode CTAs updated from slate blue to forest green (#15803d), matching dark mode's Technical Grid emerald green (#43A047). Both modes now use consistent "savings green" psychology (research: 33% higher trust in savings contexts). All contrast ratios meet WCAG AAA. Documentation synced.
-
-- **Reduced editor hint noise (Jan 03):** Disabled VS Code webhint diagnostics in `.vscode/settings.json` to avoid TSX false-positives; rely on repo verification (`check-axe`/Playwright) for real accessibility regressions.
-
-- **Supabase enrichment import (Jan 03):** Imported `scripts/GHETTO_SCRAPER/penny_scrape_2026-01-03T11-15-29-344Z.json` into `penny_item_enrichment` (processed 100; skipped 7 `$0.00` rows).
-
-- **Bulk enrichment safety (Jan 03):** `scripts/bulk-enrich.ts` now accepts Tampermonkey scrape JSON directly, defaults to fill-blanks-only merge, and hard-skips explicit `$0.00` retail prices.
-
-- **SerpApi fill-blanks enrichment (Jan 03):** `scripts/serpapi-enrich.ts` now enriches when any core fields are missing (not "image-only"), upserts fill-blanks-only by default (`--force` to overwrite), and avoids wiping fields on `not_found`.
-
-- **SerpApi Actions budget (Jan 03):** `.github/workflows/serpapi-enrich.yml` runs every 6 hours with default `--limit 1` (includes `--retry`) to stay within the 250 searches/mo free tier.
-
-- **Docs alignment (Jan 03):** `README.md`, `docs/CROWDSOURCE-SYSTEM.md`, and `docs/SCRAPING_COSTS.md` now reflect the current Supabase-based system (Google Sheets is legacy/deprecated).
-
-- **Playwright e2e reliability (Jan 03):** `playwright.config.ts` runs Playwright against `next start` (avoids `.next/dev/lock` conflicts when `next dev` is already running on port 3001).
-
-- **Scraper controller price-aware skipping (Jan 03):** `scripts/GHETTO_SCRAPER/pennycentral_scraper_controller_4to10s_resilient_retry.html` now only skips items that already have a valid `retailPrice`, and upgrades existing entries when a new scrape finally yields a price.
-
-- **Scraper controller pause/stop + exports (Jan 03):** Added Pause/Resume + Stop Session controls, kept main JSON export + failures JSON export, and ensured saved entries include a canonical Home Depot URL.
-
-- **Tampermonkey retries restored + failure export (Jan 03):** Userscript now redirects `/s/` searches to PDPs, retries when data is missing, reports bot/region blocks, and the controller gained a single "Export Failures JSON" button.
-
-- **Scraper controller HTML hint cleanup (Jan 03):** Added `lang`/`charset`/`viewport`, labeled form controls, and removed inline button styles in `scripts/GHETTO_SCRAPER/pennycentral_scraper_controller_4to10s_resilient_retry.html` to reduce VS Code Edge Tools noise.
-
-- **OCE protocol + proof workflow (Jan 02):** Embedded an "Objective Collaborative Engineering" protocol into `.ai/CONTRACT.md` + `.ai/DECISION_RIGHTS.md` + `.ai/USAGE.md`, added VS Code tasks for `ai:*`, and fixed `npm run ai:verify` to reuse the running dev server on port 3001 (avoids `.next/dev/lock` conflicts).
-
-- **Penny List card density (Jan 01):** Tightened mobile card layout, kept identifiers always visible, added UPC block, compacted state pills, and simplified actions while preserving Save/Report/Share/HD links.
-
-- **Penny List mobile action bar (Jan 02):** Added a mobile-only bottom action bar on `/penny-list` with filter + sort bottom sheets, safe-area padding, and extra results padding so cards stay visible; desktop filters remain unchanged.
-
-- **Penny List hydration mismatch (Jan 02):** Suppressed a search-input hydration warning on `/penny-list`, eliminating Playwright console errors in dev.
-
-- **Auto-enrich guardrails (Jan 01):** Cron normalizes brand/name, uses canonical HD URL, and skips upserts when `item_name` is missing; added scrape tooling (`scripts/transform-scrape.ts`, `scripts/analyze-scrape-coverage.ts`) and ignore rules for local scrape artifacts.
-
-- **Proxy migration (Dec 31):** `middleware.ts` renamed to `proxy.ts` with `proxy` export (Next 16 deprecation resolved).
-
-- **OTel warning fix (Dec 31):** npm `overrides` pin `import-in-the-middle@2.0.1` and `require-in-the-middle@8.0.1`, silencing Turbopack warnings.
-
-- **State pages (Dec 31):** Added `app/pennies/[state]/page.tsx` + `lib/states.ts`; sitemap includes all state slugs; pages filter 6m penny finds by state.
-
-- **Guide timeline (Dec 31):** Added clearance cadence timeline + tag examples to `components/GuideContent.tsx`.
-
-- **Penny list API (Dec 31):** Date-window filtering at DB level across `timestamp`/`purchase_date` for 1m-24m windows; response shape unchanged.
-
-- **Homepage (Dec 31):** "Today's Finds" module below hero using 48h `getRecentFinds`; mobile horizontal scroll, desktop grid, state badges, relative time, CTA to `/penny-list`.
-
----
-
-## Recent History (Last 30 Days)
-
-**Dec 30:** RLS Migration - Applied `008_apply_penny_list_rls.sql`, created `penny_list_public` view, enabled RLS on tables. Performance + SEO + RLS PRs merged (#63, #64, #65).
-
-**Dec 28-29:** Penny List polish - identifiers row, grid density, thumbnail styling, card typography hierarchy, SKU page polish. Auth + Personal Lists + Sharing (PR-3): magic-link login, save to list, list detail with toggles, public sharing.
-
-**Dec 27:** PR-1 and PR-2 complete - SKU copy UX with tap-to-copy, Report Find prefill + validation. MCP availability + env wiring. 6-PR roadmap established.
-
-**Dec 26:** Documentation cleanup (deleted 11 deprecated files), agent system created (AGENT_POOL.md, ORCHESTRATION.md), AI automation scripts complete (`ai:doctor`, `ai:verify`, `ai:proof`), screenshot automation, pre-commit hooks (security:scan, lint:colors).
-
-**Dec 25:** Supabase migration complete - `Penny List` table with server-side pagination, enrichment overlay (`penny_item_enrichment`), RLS hardening plan. All 4 quality gates passing.
-
-**Dec 23-24:** OG image redesign - switched to static PNGs for Facebook reliability, left-aligned layout, coin quality improvements, kept under 1 MB Vercel edge function cap.
-
-**Dec 21:** Dynamic OG generation switched to hybrid static + dynamic approach (Playwright screenshots for main pages, dynamic for SKU pages with 24hr caching).
-
-**Dec 19:** Verified Pennies feature removed (privacy) - `/verified-pennies` redirects to `/penny-list`, SKU pages derive from Penny List only.
-
 ---
 
 ## Key Metrics
@@ -1400,4 +1714,4 @@ From `.ai/ANALYTICS_WEEKLY_REVIEW.md`:
 
 ---
 
-**For full history:** See `archive/state-history/STATE_2024-12-01_to_2025-01-03.md`
+**For full history:** See `archive/state-history/` (entries older than 30 days are auto-archived)

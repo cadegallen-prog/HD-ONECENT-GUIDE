@@ -35,11 +35,19 @@ export function normalizeProductName(
     }
   }
 
+  // Capture all-caps words before lowercasing (these are acronyms like TGS, LED, USB)
+  const allCapsWords = new Set<string>()
+  normalized.replace(/\b([A-Z]{2,})\b/g, (_, word) => {
+    allCapsWords.add(word)
+    return word
+  })
+
   // Convert to Title Case (lowercase everything, then capitalize first letter of each word)
   normalized = normalized.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase())
 
-  // Handle common abbreviations that should stay uppercase
-  const uppercaseWords = [
+  // Restore all-caps acronyms (both those captured above and a hardcoded safety list)
+  const uppercaseWords = new Set([
+    ...allCapsWords,
     "HD",
     "LED",
     "USB",
@@ -54,7 +62,7 @@ export function normalizeProductName(
     "RPM",
     "GPM",
     "BTU",
-  ]
+  ])
   for (const word of uppercaseWords) {
     const regex = new RegExp(`\\b${word}\\b`, "gi")
     normalized = normalized.replace(regex, word)

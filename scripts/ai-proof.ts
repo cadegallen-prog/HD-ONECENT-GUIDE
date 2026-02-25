@@ -7,6 +7,43 @@ import net from "net"
 
 type ProofMode = "dev" | "test"
 
+const PROOF_BLOCKED_THIRD_PARTY_HOSTS = [
+  "googletagmanager.com",
+  "google-analytics.com",
+  "va.vercel-scripts.com",
+  "monu.delivery",
+  "grow.me",
+  "id5-sync.com",
+  "adtrafficquality.google",
+]
+
+function normalizeHost(rawUrl: string): string | null {
+  try {
+    return new URL(rawUrl).hostname.toLowerCase()
+  } catch {
+    return null
+  }
+}
+
+function shouldBlockThirdPartyRequest(rawUrl: string): boolean {
+  const host = normalizeHost(rawUrl)
+  if (!host) return false
+  return PROOF_BLOCKED_THIRD_PARTY_HOSTS.some(
+    (blockedHost) => host === blockedHost || host.endsWith(`.${blockedHost}`)
+  )
+}
+
+function isExpectedProofConsoleNoise(locationUrl: string, messageText: string): boolean {
+  const combined = `${locationUrl} ${messageText}`.toLowerCase()
+  if (PROOF_BLOCKED_THIRD_PARTY_HOSTS.some((host) => combined.includes(host))) {
+    return true
+  }
+  if (combined.includes("err_blocked_by_client")) {
+    return true
+  }
+  return false
+}
+
 function parseArgs(argv: string[]): { mode: ProofMode; routes: string[]; autoAliasUsed: boolean } {
   let rawMode: string | undefined
   const routes: string[] = []
@@ -269,13 +306,26 @@ async function main() {
   // Launch browser
   const browser = await chromium.launch()
   const context = await browser.newContext({ viewport: { width: 1280, height: 720 } })
+
+  // Keep proof signal clean by blocking third-party ad/analytics domains.
+  await context.route("**/*", (route) => {
+    if (shouldBlockThirdPartyRequest(route.request().url())) {
+      return route.abort("blockedbyclient")
+    }
+    return route.continue()
+  })
+
   const page = await context.newPage()
 
   // Track console errors
   const consoleErrors: string[] = []
   page.on("console", (msg) => {
     if (msg.type() === "error") {
-      consoleErrors.push(`[${msg.location().url}] ${msg.text()}`)
+      const locationUrl = msg.location().url || ""
+      const text = msg.text()
+      if (!isExpectedProofConsoleNoise(locationUrl, text)) {
+        consoleErrors.push(`[${locationUrl}] ${text}`)
+      }
     }
   })
 

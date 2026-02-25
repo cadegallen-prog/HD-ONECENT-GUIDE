@@ -85,6 +85,42 @@ Operational rule:
   - legacy `src` and `source` normalize into `ui_source` when needed.
 - Dashboard/report definitions for experiment analysis must read `ui_source` (not `source`).
 
+## Report Flow Event Contract (Participation Lift v1)
+
+- `find_submit`:
+  - Meaning: one successful submitted item only.
+  - Prohibited: click-to-open report CTA usage.
+- `report_find_click`:
+  - Meaning: user clicked/tapped into report flow.
+  - Attribution: include `ui_source` and/or `src` path query on entry links.
+- `report_open`:
+  - Meaning: `/report-find` page opened.
+- `item_add_manual`, `item_add_prefill`, `item_add_scan`:
+  - `item_add_scan` is reserved in v1 and should not emit yet.
+- `report_submit_single`, `report_submit_batch`:
+  - Emitted when at least one submit succeeds for single vs multi-item attempt.
+- `copy_for_facebook`:
+  - Emitted on successful clipboard copy from the success panel.
+
+Privacy rule for report events:
+
+- Never send raw `sku`, `name`, `itemName`, `upc`, or `internet_sku`.
+- Allowed examples: `skuMasked`, booleans, counts, `ui_source`, and coarse state/path context.
+
+## Local GA4 Archive Output Contract (Decision Slices)
+
+`scripts/archive-google-analytics.ts` must include:
+
+- `ga4/daily_events.csv|json` with dimensions `date,eventName` and metric `eventCount`.
+- `ga4/daily_report_paths.csv|json` with dimensions `date,pagePathPlusQueryString` and metric `sessions`, filtered to report-route paths.
+
+These outputs are required for:
+
+- reports/day (`find_submit` count),
+- reports/session (`find_submit` / report-route sessions),
+- single-vs-batch adoption (`report_submit_single` vs `report_submit_batch`),
+- source bucket reads from `/report-find?src=...` paths.
+
 ## Required Verification
 
 - Run `npm run ai:analytics:verify` before claiming analytics work is complete.

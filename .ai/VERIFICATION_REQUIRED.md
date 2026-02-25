@@ -33,6 +33,11 @@ To claim “done” on a meaningful change, provide:
 8. **Handoff block** (for meaningful work):
    - Include a structured next-agent handoff per `.ai/HANDOFF_PROTOCOL.md`
    - Must include: completion status, changed files, verification paths, open risks, and immediate next step
+9. **Branch hygiene evidence** (required for implementation/workflow sessions):
+   - branch used (normally `dev`)
+   - commit SHA(s) + push status (or explicit "not pushed" reason)
+   - `git status --short` at session end (clean expected; if dirty, list carryover files + blocker reason)
+   - if concurrent agents were active, include shared-memory lock evidence (`ai:writer-lock:status` output and owner)
 
 If the change is truly docs-only and no code paths changed, you can say “Docs-only change; gates not run” — but do not claim the system is green.
 
@@ -45,6 +50,12 @@ Run:
 ```bash
 npm run ai:memory:check
 npm run verify:fast
+```
+
+If multiple agents/sessions are active in parallel, also run:
+
+```bash
+npm run ai:writer-lock:status
 ```
 
 And, when switching context windows or handing off multi-step work:
@@ -118,6 +129,14 @@ Use the screenshots as the “before/after” proof when applicable.
 - `npm run verify:fast`: ✅/❌ (link output or paste)
 - `npm run e2e:smoke`: ✅/❌ or N/A (state why)
 - `npm run e2e:full`: ✅/❌ or N/A (state trigger status)
+
+**Branch hygiene:**
+
+- Branch used:
+- Commit SHA(s):
+- Push status:
+- `git status --short` at session end:
+- Shared-memory lock status (if concurrent agents active):
 
 **Bundle (preferred):**
 

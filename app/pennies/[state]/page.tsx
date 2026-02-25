@@ -68,7 +68,7 @@ export default async function StatePennyPage({ params }: PageParams) {
             View full penny list for {stateInfo.code}
           </Link>
           <Link
-            href="/report-find"
+            href="/report-find?src=state-page"
             className="btn-secondary inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg border-2 border-[var(--border-default)]"
           >
             Report a new find

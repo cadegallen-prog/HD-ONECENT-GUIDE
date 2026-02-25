@@ -1,6 +1,6 @@
 # PennyCentral Resilience + Diversification Plan
 
-**Status:** PHASE 1 IN PROGRESS (`R1` + `R2` + `R3` completed; `R4` next)  
+**Status:** PHASE 1 IN PROGRESS (`R1` + `R2` + `R3` + `R4-spec` + `R5-spec` completed; `R6` next)  
 **Created:** 2026-02-19  
 **Last updated:** 2026-02-19  
 **Owner:** Cade (founder)
@@ -216,13 +216,14 @@ When Cade is offline or overloaded:
 
 ## 6) Execution Queue (Ready Now)
 
-| ID  | Task                                                                    | Approval Needed                   | First file(s)                                                                          | Expected impact                                       |
-| --- | ----------------------------------------------------------------------- | --------------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------- |
-| R1  | ✅ Completed - Worth-It Filter scaffold on guide hub                    | Yes (UI copy touches)             | `components/guide/sections/ResponsibleHunting.tsx`, `app/guide/page.tsx`               | Reduces beginner overwhelm; improves decision quality |
-| R2  | ✅ Completed - diversification metrics contract hardened                | No (docs/analytics contract only) | `.ai/topics/ANALYTICS_CONTRACT.md`, `.ai/topics/RESILIENCE_GROWTH_CURRENT.md`          | Enables measurable progress                           |
-| R3  | ✅ Completed - Option B balanced discoverability links                  | Yes (IA/copy changes)             | `app/page.tsx`, `app/guide/page.tsx`, `components/navbar.tsx`, `components/footer.tsx` | Improves discoverability and survivability            |
-| R4  | Build weekly "Decision Quality" digest section spec                     | No (planning/doc)                 | `app/api/cron/send-weekly-digest/route.ts`, `emails/*`, `.ai/impl/*`                   | Recurrent value beyond penny-only spikes              |
-| R5  | Prepare first non-penny-adjacent article briefs from founder heuristics | No (docs)                         | `docs/` or `.ai/topics/` planning artifacts                                            | Seeds organic diversification backlog                 |
+| ID  | Task                                                                           | Approval Needed                   | First file(s)                                                                                         | Expected impact                                        |
+| --- | ------------------------------------------------------------------------------ | --------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| R1  | ✅ Completed - Worth-It Filter scaffold on guide hub                           | Yes (UI copy touches)             | `components/guide/sections/ResponsibleHunting.tsx`, `app/guide/page.tsx`                              | Reduces beginner overwhelm; improves decision quality  |
+| R2  | ✅ Completed - diversification metrics contract hardened                       | No (docs/analytics contract only) | `.ai/topics/ANALYTICS_CONTRACT.md`, `.ai/topics/RESILIENCE_GROWTH_CURRENT.md`                         | Enables measurable progress                            |
+| R3  | ✅ Completed - Option B balanced discoverability links                         | Yes (IA/copy changes)             | `app/page.tsx`, `app/guide/page.tsx`, `components/navbar.tsx`, `components/footer.tsx`                | Improves discoverability and survivability             |
+| R4  | ✅ Completed (planning only) - weekly "Decision Quality" digest section spec   | No (planning/doc)                 | `.ai/impl/pennycentral-resilience-diversification-plan.md`, `.ai/topics/RESILIENCE_GROWTH_CURRENT.md` | Implementation-ready recurring value contract          |
+| R5  | ✅ Completed (planning only) - first non-penny-adjacent article brief pack     | No (docs)                         | `.ai/impl/pennycentral-resilience-diversification-plan.md`, `.ai/topics/RESILIENCE_GROWTH_CURRENT.md` | Seeds adjacent-intent growth backlog with ready specs  |
+| R6  | Select 1 pilot brief and map runtime publish surface (no new route by default) | Yes (runtime copy/IA touch)       | `app/inside-scoop/page.tsx`, `app/guide/page.tsx`, `components/navbar.tsx` (if needed)                | Converts planning output into measurable shipped value |
 
 ---
 
@@ -300,6 +301,266 @@ R3 is approval-gated because it changes user-facing IA/copy. Provide one explici
   - `npm run ai:proof -- -- --mode=test / /guide /penny-list` ✅
     - Proof bundle: `reports/proof/2026-02-19T10-19-37/`
 
+## 6C) R4 Weekly "Decision Quality" Digest Section Spec (Completed 2026-02-19, planning-only)
+
+Scope boundary:
+
+- This is a docs/spec artifact only.
+- No runtime edits to `app/api/cron/send-weekly-digest/route.ts` or `emails/*` in this step.
+
+### Purpose + audience
+
+Purpose:
+
+- Add one weekly digest section that teaches subscribers how to make better "go/no-go" decisions (not just consume a raw item list).
+- Preserve trust by prioritizing practical decision framing over hype.
+
+Primary audience segments:
+
+1. Returning power users who want confidence-ranked signals quickly.
+2. Beginners who need clear "worth it vs skip it" guidance in plain language.
+3. Busy/lapsed subscribers who need one fast weekly action path.
+
+### Input data sources + scoring logic (no schema change)
+
+Canonical input sources:
+
+1. Existing weekly digest query output from `app/api/cron/send-weekly-digest/route.ts` (last-7-day item set).
+2. Existing Penny List fields already used by digest payloads (SKU, name, report volume, recency/state spread, optional retail/enrichment context when present).
+3. Existing trust/guardrail interpretation policy in `.ai/topics/ANALYTICS_CONTRACT.md` (for fail-closed status language).
+
+Draft scoring model (implementation target):
+
+- `confidence_score` (0-4):
+  - +2 if report count >= 3, +1 if report count = 2, else 0.
+  - +1 if seen in >= 2 states, else 0.
+  - +1 if last report timestamp is within 72 hours, else 0.
+- `value_signal_score` (0-2):
+  - +2 if retail context exists and suggests meaningful discount potential.
+  - +1 if partial value context exists.
+  - 0 if value context is missing.
+- `headache_penalty` (0 to -2):
+  - -1 for low-quality/ambiguous naming or missing identifiers.
+  - -1 for known low-liquidity/high-friction item patterns (keyword list to be maintained in code, no new dependency).
+- `decision_quality_score = confidence_score + value_signal_score + headache_penalty`
+
+Eligibility rules (draft):
+
+- A "high-confidence move" callout requires `decision_quality_score >= 4`.
+- If no item meets threshold, section must fail closed to education-only guidance (no winner claim).
+
+### Section structure + copy framework (draft template)
+
+Section heading:
+
+- `Decision Quality This Week`
+
+Block A: `High-Confidence Move` (max 1 item)
+
+- Copy frame: "If you can make one stop this week, prioritize: {item_name} ({sku})."
+- Evidence line: "{report_count} reports across {state_count} state(s), last seen {relative_time}."
+- Action line: "Check details in Penny List before driving."
+
+Block B: `Worth-It vs Skip Signals` (2 bullets each, concise)
+
+- `Worth-It signals`: concrete examples from top-scoring items.
+- `Skip signals`: concrete examples from low-confidence/high-headache patterns.
+
+Block C: `One Next Step`
+
+- Internal-first CTA: `/penny-list`
+- Secondary contribution CTA: `/report-find`
+- Copy frame: "Verify first, then submit what you actually find."
+
+Mobile-first formatting requirements (email):
+
+- Single-column rendering; no side-by-side cards.
+- Keep the section above the fold in common mobile inbox previews.
+- Keep each bullet <= 120 characters when possible for scan speed.
+
+### Guardrails + fail-closed rules
+
+1. Never promise resale profit or certainty language.
+2. Never output "high-confidence move" when threshold is not met.
+3. If source fields are missing/incomplete, degrade to neutral educational copy and mark status as `INCONCLUSIVE`.
+4. Respect core-loop guardrails from `.ai/topics/ANALYTICS_CONTRACT.md`; do not interpret diversification as success if `/penny-list` -> `/report-find` guardrails degrade.
+5. Do not claim post-R1 guardrail pass/fail before the first valid 7-day window date: **2026-02-26**.
+6. Keep analytics/search/MCP framing as collaboration continuity requirements, not a roadmap override.
+
+### Rollback plan
+
+Planning-step rollback (this session):
+
+- Revert this `6C` section and restore `R4` queue row to "not completed."
+
+Future runtime rollback (when implementation begins):
+
+1. Remove/disable Decision Quality section generation in weekly digest composer.
+2. Revert digest template back to current baseline sections only.
+3. Keep event naming unchanged to avoid analytics schema drift.
+4. Re-run verification lanes before redeploy.
+
+### Proof + verification plan
+
+For this planning-only completion:
+
+- `npm run ai:memory:check`
+- `npm run ai:checkpoint`
+- `npm run verify:fast` N/A (docs-only; no runtime code-path change)
+- `npm run e2e:smoke` N/A (docs-only; no route/form/API/navigation/UI-flow change)
+- `npm run e2e:full` N/A (docs-only; FULL trigger not applicable)
+
+For future runtime implementation task (separate session):
+
+- `npm run verify:fast` (required)
+- `npm run e2e:smoke` (API flow touched)
+- Add/adjust tests for digest section selection + fail-closed fallback behavior
+- Capture digest render proof artifact (generated email payload snapshot/log path)
+
+## 6D) R5 Non-Penny-Adjacent Article Brief Pack (Completed 2026-02-19, planning-only)
+
+Scope boundary:
+
+- This is a docs/spec artifact only.
+- No route/component/content publishing in this step.
+
+### Objective
+
+- Convert founder heuristics into reusable adjacent-intent article briefs that remain useful during low penny-item windows.
+- Keep outputs tied to practical shopping outcomes, not generic deal-blog content.
+
+### Audience + intent framing
+
+Primary audiences:
+
+1. Beginner hunters who need practical rules and confidence.
+2. Returning hunters who want better filtering and less wasted effort.
+3. Time-limited shoppers who need one clear go/no-go framework per visit.
+
+Intent target rules:
+
+- Prioritize adjacent-intent utility queries (clearance timing, skip signals, storage cost, effort vs payoff).
+- Avoid broad entertainment-style deal content that does not connect back to the core loop.
+
+### Brief Pack v1 (implementation-ready)
+
+#### Brief 1: Clearance Timing Reality Check (non-penny-specific)
+
+- Working title: `Clearance Timing by Department: What Actually Moves vs What Sits`
+- Core problem solved:
+  - Users overgeneralize markdown timing and waste trips on weak timing assumptions.
+- Audience:
+  - Beginners + intermediate hunters.
+- Content outcome:
+  - Teach department-level timing variability and confidence tiers.
+- Draft structure:
+  - H1: clearance timing reality check.
+  - H2: why timing myths fail (store variance, demand variance).
+  - H2: high-confidence timing signals (what to watch).
+  - H2: low-confidence timing signals (what to ignore).
+  - H2: one-week execution checklist (mobile scannable bullets).
+- Proof inputs (future implementation):
+  - Aggregated recency/state-spread patterns from `Penny List` trends.
+  - Founder field heuristics for variance caveats.
+- Internal links:
+  - Primary CTA: `/penny-list`
+  - Secondary CTA: `/guide`
+
+#### Brief 2: Storage and Effort Cost Framework
+
+- Working title: `When a Cheap Find Is Still a Bad Decision: Storage + Effort Cost`
+- Core problem solved:
+  - Users treat low purchase price as automatic value and ignore total effort/storage cost.
+- Audience:
+  - Power users and resell-curious users.
+- Content outcome:
+  - Replace price-only thinking with practical total-cost decision checks.
+- Draft structure:
+  - H1: cheap does not always mean worth it.
+  - H2: hidden costs (storage space, time, transport, relisting friction).
+  - H2: quick scoring rubric (keep / gift / donate / skip).
+  - H2: headache triggers that should force a skip decision.
+  - H2: one-action close: verify in list, then report only confirmed wins.
+- Proof inputs (future implementation):
+  - Existing Worth-It framework language from `/guide`.
+  - Founder heuristics on low-liquidity/high-friction categories.
+- Internal links:
+  - Primary CTA: `/in-store-strategy`
+  - Secondary CTA: `/report-find`
+
+#### Brief 3: Beginner Skip Signals Playbook
+
+- Working title: `10 Skip Signals Before Checkout (So You Do Not Burn Time)`
+- Core problem solved:
+  - New users lose momentum by pursuing low-confidence items that are unlikely to be good outcomes.
+- Audience:
+  - New and overwhelmed users.
+- Content outcome:
+  - Provide fast skip rules that improve decision quality and reduce frustration.
+- Draft structure:
+  - H1: fast skip signals.
+  - H2: product-quality red flags.
+  - H2: confidence red flags (weak evidence, stale recency, no spread).
+  - H2: behavior red flags (panic buying, over-accumulation).
+  - H2: recovery workflow: what to do instead in the same trip.
+- Proof inputs (future implementation):
+  - Current R4 decision-quality language conventions.
+  - Existing guide sections for ethics/strategy framing.
+- Internal links:
+  - Primary CTA: `/guide`
+  - Secondary CTA: `/penny-list`
+
+### Prioritization model for pilot publish (R6 input)
+
+Rank each brief on 1-5 scales:
+
+1. `utility_impact` (likely to improve in-store decision quality quickly).
+2. `core_loop_support` (strength of link-back to `/penny-list` + `/report-find`).
+3. `implementation_effort` (lower effort scores higher priority).
+4. `search_adjacent_potential` (non-branded adjacent-intent potential).
+
+Pilot selection rule:
+
+- Choose the brief with the highest combined score while keeping core-loop support >= 4.
+
+### Guardrails + fail-closed rules
+
+1. No certainty or income-guarantee claims.
+2. No anti-community framing (guidance must support, not shame, users).
+3. No dilution of core loop: every brief must include at least one link back to `/penny-list` or `/report-find`.
+4. If evidence is weak for a claim, use caution language and explicitly label as heuristic.
+5. Keep mobile-first readability explicit (single-column, short paragraphs, scan-friendly bullets).
+6. Keep guardrail language aligned with analytics continuity rules; no success claims without metric coverage.
+
+### Rollback plan
+
+Planning-step rollback (this session):
+
+- Revert `6D` and restore `R5` queue row to pending.
+
+Future runtime rollback (R6+ when publishing starts):
+
+1. Remove the pilot brief from publish surface.
+2. Keep nav/IA unchanged unless measured value justifies persistence.
+3. Revert related copy-only commits if guardrail metrics degrade.
+
+### Proof + verification plan
+
+For this planning-only completion:
+
+- `npm run ai:memory:check`
+- `npm run ai:checkpoint`
+- `npm run verify:fast` N/A (docs-only; no runtime code-path change)
+- `npm run e2e:smoke` N/A (docs-only; no route/form/API/navigation/UI-flow change)
+- `npm run e2e:full` N/A (docs-only; FULL trigger not applicable)
+
+For future runtime implementation task (R6+):
+
+- `npm run verify:fast`
+- `npm run e2e:smoke` (route/content publish touchpoints)
+- Capture one before/after internal-link path proof (source page -> core loop target)
+- Record adjacent-intent + core-loop guardrail reads per `.ai/topics/ANALYTICS_CONTRACT.md`
+
 ---
 
 ## 7) Drift Checks (2026-02-19)
@@ -311,12 +572,16 @@ Source: `python C:\Users\cadeg\.codex\skills\pc-plan-drift-check\scripts\drift_c
 - Touch-target sub-44px hints: none found.
 - Documentation icon-language drift still exists in legacy planning artifacts (bookmark vs heart wording in older docs). Non-blocking for this plan but should be cleaned during adjacent docs passes.
 - R3 prep refresh (`.ai/_tmp/drift-check.md` regenerated on 2026-02-19): no new runtime blockers; same legacy-doc icon-language drift remains non-blocking.
+- R4 planning refresh (`.ai/_tmp/drift-check.md` regenerated on 2026-02-19): no new naming/route/touch-target blockers affecting this plan update; legacy icon-language docs drift remains non-blocking.
+- R5 planning refresh (`.ai/_tmp/drift-check.md` regenerated on 2026-02-19): no new naming/route/touch-target blockers affecting this plan update; legacy icon-language docs drift remains non-blocking.
 
 ---
 
 ## 8) Out of Scope (Current Phase 1 Continuation)
 
 - Any R3 Option C IA expansion beyond the approved Option B scope.
+- Any R4 runtime digest implementation in this session (spec only).
+- Any R5 runtime article publishing in this session (spec only).
 - Any dependency additions.
 - Database migrations.
 - Monetization config changes in production.

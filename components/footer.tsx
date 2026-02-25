@@ -44,7 +44,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/report-find" className={navLinkClass}>
+                <Link href="/report-find?src=footer-nav" className={navLinkClass}>
                   Report a Find
                 </Link>
               </li>

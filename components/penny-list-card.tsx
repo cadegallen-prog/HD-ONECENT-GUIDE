@@ -98,7 +98,8 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
 
   const openSkuPage = () => {
     try {
-      sessionStorage.setItem("penny-list-scroll", String(window.scrollY))
+      const page = Number(new URLSearchParams(window.location.search).get("page")) || 1
+      sessionStorage.setItem("penny-list-scroll", JSON.stringify({ sku: item.sku, page }))
     } catch {}
     router.push(skuPageUrl)
   }
@@ -136,6 +137,7 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
       tabIndex={0}
       onClick={openSkuPage}
       onKeyDown={handleKeyDown}
+      data-sku={item.sku}
       className="rounded-2xl glass-card h-full flex flex-col cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
       aria-label={`View details for ${item.name} (SKU ${item.sku})`}
       aria-labelledby={`item-${item.id}-name`}
@@ -192,6 +194,7 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
               aria-label={`Copy SKU ${formatSkuForDisplay(item.sku)}`}
               title="Click to copy SKU"
               data-test="penny-card-sku"
+              data-pc-id="penny-list.card-sku"
             >
               SKU {formatSkuForDisplay(item.sku)}
               {copiedSku && (
@@ -263,12 +266,13 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
               type="button"
               variant="primary"
               size="sm"
+              data-pc-id="penny-list.card-report-action"
               onClick={(event) => {
                 event.preventDefault()
                 trackEvent("report_duplicate_click", {
-                  sku: item.sku,
-                  name: item.name,
-                  src: "card",
+                  ui_source: "card",
+                  skuMasked: item.sku.slice(-4),
+                  hasItemName: Boolean(item.name),
                 })
                 router.push(buildReportFindUrl({ sku: item.sku, name: item.name, src: "card" }))
               }}
@@ -333,7 +337,6 @@ export function PennyListCard({ item, windowLabel, userState }: PennyListCardPro
         upc={upc || ""}
         onClose={() => setIsBarcodeOpen(false)}
         productName={displayName}
-        pennyPrice={item.price}
       />
       <StateBreakdownSheet
         open={isStateBreakdownOpen}
@@ -374,7 +377,8 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
 
   const openSkuPage = () => {
     try {
-      sessionStorage.setItem("penny-list-scroll", String(window.scrollY))
+      const page = Number(new URLSearchParams(window.location.search).get("page")) || 1
+      sessionStorage.setItem("penny-list-scroll", JSON.stringify({ sku: item.sku, page }))
     } catch {}
     router.push(skuPageUrl)
   }
@@ -413,6 +417,7 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
       tabIndex={0}
       onClick={openSkuPage}
       onKeyDown={handleKeyDown}
+      data-sku={item.sku}
       className="rounded-lg border border-[var(--border-strong)] elevation-card p-4 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] group"
       aria-label={`View details for ${item.name} (SKU ${item.sku})`}
       aria-labelledby={`hot-item-${item.id}-name`}
@@ -544,9 +549,9 @@ export function PennyListCardCompact({ item }: PennyListCardProps) {
               e.preventDefault()
               e.stopPropagation()
               trackEvent("report_duplicate_click", {
-                sku: item.sku,
-                name: item.name,
-                src: "card-compact",
+                ui_source: "card-compact",
+                skuMasked: item.sku.slice(-4),
+                hasItemName: Boolean(item.name),
               })
               router.push(
                 buildReportFindUrl({ sku: item.sku, name: item.name, src: "card-compact" })

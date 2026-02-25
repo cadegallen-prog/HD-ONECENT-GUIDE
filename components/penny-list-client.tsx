@@ -184,22 +184,40 @@ export function PennyListClient({
   const [isSortSheetOpen, setIsSortSheetOpen] = useState(false)
   const [isMobileViewport, setIsMobileViewport] = useState(false)
 
+  // Pending scroll restoration target — set when we need to wait for a page
+  // fetch to complete before scrolling (e.g. returning to page 3 from a detail page).
+  const pendingScrollRef = useRef<string | null>(null)
+
   useEffect(() => {
     hasMountedRef.current = true
 
     // Restore scroll position when returning from a SKU detail page.
-    // Waits two frames so the layout (ads, images, cards) stabilizes first.
+    // We saved the clicked item's SKU and page so we can scroll it into view.
     try {
-      const saved = sessionStorage.getItem("penny-list-scroll")
-      if (saved) {
+      const savedRaw = sessionStorage.getItem("penny-list-scroll")
+      if (savedRaw) {
         sessionStorage.removeItem("penny-list-scroll")
-        const y = Number(saved)
-        if (Number.isFinite(y) && y > 0) {
-          requestAnimationFrame(() => {
+        const parsed = JSON.parse(savedRaw) as { sku?: string; page?: number }
+        const sku = parsed.sku
+        const savedPage = parsed.page ?? 1
+
+        if (sku) {
+          if (savedPage === currentPage) {
+            // Already on the right page — scroll to the card now.
             requestAnimationFrame(() => {
-              window.scrollTo({ top: y, behavior: "instant" })
+              requestAnimationFrame(() => {
+                const el = document.querySelector(`[data-sku="${CSS.escape(sku)}"]`)
+                if (el) {
+                  el.scrollIntoView({ block: "center", behavior: "instant" })
+                }
+              })
             })
-          })
+          } else {
+            // Wrong page — navigate to the saved page, then scroll after data loads.
+            pendingScrollRef.current = sku
+            setCurrentPage(savedPage)
+            updateURL({ page: savedPage === 1 ? null : String(savedPage) })
+          }
         }
       }
     } catch {}
@@ -402,6 +420,21 @@ export function PennyListClient({
       console.error("Error fetching penny list:", error)
     } finally {
       setIsLoading(false)
+
+      // If we have a pending scroll restore (returning from detail page on page 2+),
+      // apply it now that the correct page's data has rendered.
+      const pendingSku = pendingScrollRef.current
+      if (pendingSku !== null) {
+        pendingScrollRef.current = null
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            const el = document.querySelector(`[data-sku="${CSS.escape(pendingSku)}"]`)
+            if (el) {
+              el.scrollIntoView({ block: "center", behavior: "instant" })
+            }
+          })
+        })
+      }
     }
   }, [stateFilter, searchQuery, sortOption, dateRange, currentPage, itemsPerPage])
 
@@ -912,6 +945,7 @@ export function PennyListClient({
           <div className="flex items-center gap-2">
             <button
               type="button"
+              data-pc-id="penny-list.pagination-prev"
               onClick={() => goToPage(clampedPage - 1)}
               disabled={clampedPage === 1}
               className="inline-flex items-center justify-center min-h-[44px] rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] px-3 py-2 text-xs font-semibold text-[var(--text-primary)] transition hover:border-[var(--cta-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] disabled:cursor-not-allowed disabled:opacity-50"
@@ -924,6 +958,7 @@ export function PennyListClient({
             </span>
             <button
               type="button"
+              data-pc-id="penny-list.pagination-next"
               onClick={() => goToPage(clampedPage + 1)}
               disabled={clampedPage === pageCount}
               className="inline-flex items-center justify-center min-h-[44px] rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] px-3 py-2 text-xs font-semibold text-[var(--text-primary)] transition hover:border-[var(--cta-primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] disabled:cursor-not-allowed disabled:opacity-50"
@@ -1112,9 +1147,10 @@ export function PennyListClient({
           Help the community by reporting your find. It will appear on this list automatically.
         </p>
         <TrackableLink
-          href="/report-find"
-          eventName="find_submit"
-          eventParams={{ location: "penny-list" }}
+          href="/report-find?src=penny-list-cta"
+          data-pc-id="penny-list.report-cta"
+          eventName="report_find_click"
+          eventParams={{ ui_source: "penny-list-cta", location: "penny-list" }}
           className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-medium transition-colors duration-150 hover:bg-[var(--cta-hover)] shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)] min-h-[44px]"
           aria-label="Submit a penny find to the community"
         >

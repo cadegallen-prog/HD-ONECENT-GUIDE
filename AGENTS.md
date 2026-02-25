@@ -191,13 +191,20 @@ We run a two-branch promotion workflow.
 
 Workflow:
 
-1. `git pull origin dev`
-2. Make changes on `dev`
-3. **Run `npm run ai:memory:check` + `npm run verify:fast` before pushing**
-4. **Run `npm run e2e:smoke` when touching routes/forms/API/UI flows**
-5. **Use Playwright for UI changes** (screenshots required)
-6. Commit and push `dev`
-7. Promote to `main` only after required checks pass
+1. `git checkout dev && git pull origin dev`
+2. Run `git status --short` before starting:
+   - If clean, continue.
+   - If dirty, do **not** start a new objective until carryover changes are closed (commit/push) or explicitly resolved with you (Cade).
+3. Make scoped changes on `dev` for one objective at a time.
+4. Stage narrowly (`git add <paths>`) and verify staged scope with `git diff --cached --name-only`.
+5. **Run `npm run ai:memory:check` + `npm run verify:fast` before pushing**
+6. **Run `npm run e2e:smoke` when touching routes/forms/API/UI flows**
+7. **Use Playwright for UI changes** (screenshots required)
+8. Commit and push `dev`
+9. Run `git status --short` after push:
+   - Clean is the expected end state.
+   - If still dirty, report exact carryover files and why before starting another task.
+10. Promote to `main` only after required checks pass
 
 Do not implement directly on `main` unless you (Cade) explicitly request an emergency hotfix.
 
@@ -246,6 +253,38 @@ Never kill port 3001 unless user asks.
   - SHA256 hash of the canonical plan file
   - `No unsynced tool-local plan: YES/NO`
 - ✅ Handoffs must reference repo plan paths only (not `.claude` paths)
+
+### ⛔ Rule #5: No One-Shot Mega-Plan Implementations
+
+- ✅ Large features must be split into a parent plan + child implementation slices.
+- ✅ Default slice size is **one user outcome per slice**.
+- ✅ Each slice must declare:
+  - explicit dependency on prior slices,
+  - acceptance criteria,
+  - rollback path,
+  - verification lane (`verify:fast`, `e2e:smoke`, `e2e:full` trigger status, Playwright if UI).
+- ✅ After each slice, run a stop/go checkpoint before starting the next slice.
+- ❌ Do not execute a multi-milestone plan as one uninterrupted implementation batch.
+
+### ⛔ Rule #6: Single-Writer Lock For Shared Memory (When Agents Run In Parallel)
+
+- Shared memory files are:
+  - `.ai/HANDOFF.md`
+  - `.ai/STATE.md`
+  - `.ai/SESSION_LOG.md`
+  - `.ai/BACKLOG.md`
+- ✅ Only one active agent may edit shared memory files at a time.
+- ✅ Claim lock before touching shared memory files:
+  - `npm run ai:writer-lock:claim -- <agent-name> "<task>"`
+- ✅ Check lock status anytime:
+  - `npm run ai:writer-lock:status`
+- ✅ For long sessions, refresh heartbeat periodically:
+  - `npm run ai:writer-lock:heartbeat -- <agent-name>`
+- ✅ Release lock after shared-memory updates are complete:
+  - `npm run ai:writer-lock:release -- <agent-name>`
+- ❌ If lock is active for another owner, do not edit shared memory files.
+- ✅ Stale locks can be reclaimed after heartbeat timeout (default 30m).
+- ✅ Parallel coding remains allowed for isolated feature files (prefer separate git worktrees).
 
 ---
 
@@ -319,6 +358,7 @@ Rules:
 9. ✅ Include `Next-Agent Handoff` block per `.ai/HANDOFF_PROTOCOL.md`
 10. ✅ Include a plain-English term glossary for any technical terms used in the response
 11. ✅ Clearly separate "What Cade needs to do" from "What future agents need to do"
+12. ✅ Include branch hygiene evidence (`branch`, `commit SHA(s)`, `push status`, and session-end `git status --short`)
 
 **Summarize changes in plain English with verification evidence.**
 

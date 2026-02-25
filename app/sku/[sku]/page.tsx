@@ -3,7 +3,11 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { MapPin, Calendar, ExternalLink, ShoppingBag } from "lucide-react"
 import { getPennyList } from "@/lib/fetch-penny-data"
-import { filterValidPennyItems, formatRelativeDate } from "@/lib/penny-list-utils"
+import {
+  filterValidPennyItems,
+  formatRelativeDate,
+  normalizeProductName,
+} from "@/lib/penny-list-utils"
 import { validateSku, formatSkuForDisplay } from "@/lib/sku"
 import { getHomeDepotProductUrl } from "@/lib/home-depot"
 import { getFreshness } from "@/lib/freshness-utils"
@@ -373,7 +377,11 @@ export default async function SkuDetailPage({ params }: PageProps) {
                 <TrackableLink
                   href={reportFindUrl}
                   eventName="report_duplicate_click"
-                  eventParams={{ sku, name, src: "sku-page" }}
+                  eventParams={{
+                    ui_source: "sku-page",
+                    skuMasked: sku.slice(-4),
+                    hasItemName: Boolean(name),
+                  }}
                   className="btn-primary flex items-center justify-center gap-2 w-full min-h-[44px] px-4 py-3 rounded-xl text-sm font-bold"
                   aria-label={`Report finding ${name}`}
                 >
@@ -391,17 +399,7 @@ export default async function SkuDetailPage({ params }: PageProps) {
                   </span>
                 )}
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[var(--text-primary)] leading-tight mb-4">
-                  {(() => {
-                    if (!brand) return name
-                    // Strip brand prefix only if what remains is a meaningful descriptor (>= 3 words or >= 20 chars)
-                    const stripped = name.startsWith(brand)
-                      ? name.substring(brand.length).trim()
-                      : name
-                    const isStripped = stripped !== name
-                    const isMeaningful =
-                      stripped.split(/\s+/).filter(Boolean).length >= 3 || stripped.length >= 20
-                    return isStripped && !isMeaningful ? name : stripped
-                  })()}
+                  {normalizeProductName(name, { brand: brand ?? undefined, maxLength: 200 })}
                 </h1>
 
                 {/* Product Identifiers Section */}

@@ -12,9 +12,7 @@ Produce a portable context pack for starting a fresh chat or switching tools (Cl
 **Outcome:**
 
 - Updates `.ai/HANDOFF.md` with current reality
-- Prints **New Chat Primer** (copy/paste into next session)
-- Prints **ARCHITECT stub** (for designing implementations)
-- Prints **IMPLEMENT stub** (for building approved plans)
+- Prints ONE copy-paste block (the "New Session Primer") for Cade to paste into the next chat
 - Enables next agent to load context fast, even on constrained tools
 
 ---
@@ -112,85 +110,34 @@ Rewrite `.ai/HANDOFF.md` with these sections in order:
 ```markdown
 ### Claude Code
 
-- ✅ MCP: filesystem, github, playwright, supabase, vercel
-- ✅ Agents: 14 skills (plan, architect, implement, test, review, debug, document, brainstorm, doctor, verify, proof, session-start, session-end, checkpoint, capsule, handoff)
+- ✅ MCP: filesystem, github, playwright, supabase
+- ✅ Skills: plan, architect, implement, test, review, debug, etc.
 - ✅ Ideal for: Full feature development
 
 ### Codex (GPT-5.2)
 
 - ✅ MCP: Same (if ~/.codex/config.toml synced)
-- ✅ Agents: Same (if configured)
 - ✅ Ideal for: Full feature development, alternative to Claude
 
 ### Copilot Chat
 
-- ❌ MCP: None
-- ❌ Agents: None
-- ✅ Ideal for: Q&A only
-- ⚠️ Escalate when: >3 files, refactoring, major UX changes, proof needed
+- ✅ MCP: filesystem, github, playwright, supabase (via .vscode/mcp.json)
+- ✅ Ideal for: Quick development + Supabase migrations
 ```
 
-#### 4) New Chat Primer (Copy/Paste Block)
-
-```markdown
-## New Chat Primer (Copy/Paste into Chat)
-
-**Use this when starting a fresh session:**
-
-[Paste the primer from section E of AUDIT output or from previous session]
-
-Or shorter version:
-```
-
-I'm starting fresh on Penny Central.
-
-Read: .ai/START_HERE.md, .ai/CRITICAL_RULES.md, .ai/STATE.md, .ai/HANDOFF.md
-
-Current: [TL;DR facts from above]
-
-My goal: [GOAL / WHY / DONE MEANS]
-
-```
-
-```
-
-#### 5) Stubs (ARCHITECT and IMPLEMENT Templates)
-
-**ARCHITECT stub** (write to `.ai/impl/<feature-slug>.md`):
-
-```markdown
-## ARCHITECT Stub
-
-Use this when you need to design before implementing:
-
-[Include the /architect command text from earlier output, but adapted for this session's focus]
-
-Key: Must write to `.ai/impl/<feature-slug>.md`, not just chat.
-```
-
-**IMPLEMENT stub** (read from `.ai/impl/<feature-slug>.md`):
-
-```markdown
-## IMPLEMENT Stub
-
-Use this after a plan is approved:
-
-[Include the /implement command text, but adapted for this session's focus]
-
-Key: Must read the approved `.ai/impl/<feature-slug>.md` plan first.
-```
+Include any additional context-specific sections the agent deems useful (e.g., "What Just Happened", "Uncommitted Changes", "Key Files by Purpose", "Emergency Checklist").
 
 ---
 
-### Step 3: Generate Output Blocks
+### Step 3: Generate Output Block
 
-After updating `.ai/HANDOFF.md`, generate and print **three output blocks** to Cade:
+After updating `.ai/HANDOFF.md`, generate and print **one output block** to Cade:
 
-#### Block A: New Chat Primer
+#### New Session Primer
 
 ```
 ---
-NEW CHAT PRIMER (Copy/Paste into Next Session)
+NEW SESSION PRIMER (Copy/Paste into Next Chat)
 ---
 
 I'm starting fresh on Penny Central.
@@ -206,87 +153,26 @@ Current reality (YYYY-MM-DD):
 - [TL;DR bullet 2]
 - ...
 
-My goal: [GOAL / WHY / DONE MEANS]
-
-What should I read or do next?
+My goal: _______________________________________________
+(Fill in what you want this session — e.g., "commit the store finder fix",
+"design a plan for the visual pointing tool", "improve guide chapter 1")
 ```
 
-#### Block B: ARCHITECT Stub
+**That's it.** One block. Cade pastes it, fills in his goal, and the next agent takes it from there.
 
-```
----
-ARCHITECT STUB (Design before implementing)
----
+The next agent will:
 
-I'm ready to architect a feature for Penny Central.
-
-Read:
-- .ai/CRITICAL_RULES.md
-- .ai/DECISION_RIGHTS.md
-- .ai/CONTRACT.md
-- .ai/STATE.md
-- .ai/BACKLOG.md
-- Relevant: .ai/topics/<TOPIC>.md
-
-Task:
-Design the implementation plan for: [FEATURE]
-
-Deliverable:
-Write the plan to: .ai/impl/<feature-slug>.md
-
-Plan must include:
-1) Goal + Done Means (testable)
-2) Constraints and non-negotiables
-3) Files to touch (create vs modify)
-4) Step sequence (small steps)
-5) Risks + mitigations
-6) Verification plan (lint, build, unit, e2e, proof if UI)
-7) Rollback plan
-8) Open questions (max 5) with A/B/C when needed
-
-Stop and ask for approval to implement.
-```
-
-#### Block C: IMPLEMENT Stub
-
-```
----
-IMPLEMENT STUB (Build approved plan)
----
-
-I'm ready to implement from an approved plan.
-
-Read:
-- .ai/CRITICAL_RULES.md
-- .ai/DECISION_RIGHTS.md
-- .ai/CONTRACT.md
-- .ai/STATE.md
-- Plan: .ai/impl/<feature-slug>.md
-
-Task:
-Implement exactly what the plan specifies.
-
-Guardrails:
-- No scope creep. No refactors.
-- If plan is ambiguous, stop and present A/B/C.
-- Provide traceable edits: list each file touched and why.
-
-Verification:
-- Run npm run ai:verify and report results.
-- If UI changed, run proof workflow and link artifacts.
-
-After:
-- Update .ai/SESSION_LOG.md with changes + proof links.
-- Run /checkpoint to compress context.
-- Run /capsule <TOPIC> if it changed that topic's current reality.
-```
+- Read the docs listed above
+- Discover its role from `.ai/ORCHESTRATION.md` (Auto-Chain is default)
+- Design + implement + test + review automatically
+- If Cade wants design-only, he writes that in the goal field (e.g., "Design a plan for X, don't implement yet")
 
 ---
 
 ## Finish
 
-1. **Confirm `.ai/HANDOFF.md` is updated** (print: "✅ HANDOFF.md updated")
-2. **Print the three output blocks** (A, B, C above) so they're copy-paste ready
+1. **Confirm `.ai/HANDOFF.md` is updated** (print: "HANDOFF.md updated")
+2. **Print the New Session Primer** so it's copy-paste ready
 3. **Recommend next step:**
    - "Ready to switch to [tool name]" (if user is switching)
    - "Ready for `/checkpoint` to compress context further" (if staying)
@@ -335,4 +221,4 @@ After:
 
 ---
 
-**When done:** Paste the 3 output blocks (New Chat Primer, ARCHITECT Stub, IMPLEMENT Stub) and confirm Cade is ready to switch tools or continue.
+**When done:** Print the New Session Primer and confirm Cade is ready to switch tools or continue.

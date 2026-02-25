@@ -1,6 +1,6 @@
 # Backlog (Top Priority Items)
 
-**Last updated:** Feb 19, 2026 (added collaboration continuity execution lane with analytics/search/MCP guardrails)
+**Last updated:** Feb 22, 2026 (memory trend reporting slice shipped for autonomy hardening)
 **Rule:** Keep ≤10 items. Archive completed/deferred items.
 
 **Auto-archive:** Full backlog history preserved in `archive/backlog-history/`
@@ -29,6 +29,20 @@ Each AI session should:
     - keep only tooling/docs/guardrails with measurable user-value impact,
     - prefer proven prebuilt systems when they reduce maintenance,
     - enforce hard fail-closed gates for drift and missing proof.
+- **Progress (2026-02-22):**
+  - Shipped memory failure-mode drill commands for checkpoint fail-closed validation:
+    - `ai:memory:drill`
+    - `ai:memory:drill:missing`
+    - `ai:memory:drill:heading`
+  - Drill output now includes explicit remediation guidance for missing required artifacts and heading drift.
+- **Progress (2026-02-22):**
+  - Shipped weekly memory-integrity trend reporting with strict fail-closed SLO checks:
+    - `ai:memory:trend`
+    - `ai:memory:trend:30`
+  - Added checkpoint run-history ledger and weekly artifact generation:
+    - `reports/memory-integrity/checkpoint-history.jsonl`
+    - `reports/memory-integrity-weekly/<YYYY-MM-DD>/summary.md`
+    - `reports/memory-integrity-weekly/<YYYY-MM-DD>/metrics.json`
 - **Progress (2026-02-15):**
   - Memory integrity automation shipped (`ai:memory:check`, `ai:memory:pack`, `ai:checkpoint`).
   - Founder autonomy SOP and canonical plan/topic docs shipped.
@@ -38,6 +52,7 @@ Each AI session should:
 - **Done means:**
   - Every multi-session handoff includes a generated context pack artifact.
   - `ai:checkpoint` passes with **0 critical failures** before handoff.
+  - Weekly trend artifact exists with checkpoint pass-rate + integrity-score history.
   - Recovery time from fresh context to actionable state is ≤ 5 minutes.
   - Founder required actions remain limited to approvals/strategic decisions.
 - **Plan artifacts:** `.ai/impl/founder-autonomy-memory-hardening.md`, `.ai/FOUNDER_AUTONOMY_OPERATING_SYSTEM.md`, `.ai/topics/FOUNDER_AUTONOMY_CURRENT.md`
@@ -165,6 +180,44 @@ Each AI session should:
 ### 9. Collaboration Continuity Loop (Analytics/Search/MCP Included)
 
 - **Problem:** Future agents can drift in communication quality and operational visibility unless continuity expectations are translated into repeatable execution behavior.
+- **Progress (2026-02-22):**
+  - Added shared-memory single-writer lock protocol for concurrent agents:
+    - script: `scripts/ai-shared-writer-lock.ts`
+    - commands: `ai:writer-lock:status|claim|heartbeat|release`
+    - lock scope: `.ai/HANDOFF.md`, `.ai/STATE.md`, `.ai/SESSION_LOG.md`, `.ai/BACKLOG.md`
+    - canon docs updated: `AGENTS.md`, `README.md`, `.ai/HANDOFF_PROTOCOL.md`, `.ai/VERIFICATION_REQUIRED.md`, `.ai/CRITICAL_RULES.md`
+    - reusable skill added: `docs/skills/single-writer-lock.md`
+  - Implemented report-flow event export coverage in `scripts/archive-google-analytics.ts`:
+    - `ga4/daily_events.csv|json` (`date,eventName,eventCount`)
+    - `ga4/daily_report_paths.csv|json` (`date,pagePathPlusQueryString,sessions`) filtered to report-route paths
+  - Verified archive run with new slices:
+    - `.local/analytics-history/runs/2026-02-22T00-15-22-963Z/summary.md`
+  - Produced refreshed weekly analytics snapshot using new slices:
+    - `reports/analytics-weekly/2026-02-22/summary.md`
+    - source run: `.local/analytics-history/runs/2026-02-22T00-29-57-156Z/summary.md`
+  - Snapshot readout (last 7d vs prior 7d):
+    - GSC non-branded clicks: `83` vs `34` (`+144.12%`)
+    - `/report-find` sessions: `286` vs `234` (`+22.22%`)
+    - `find_submit`: `122` vs `109` (`+11.93%`)
+    - reports/report-route-session: `0.3861` vs `0.4360` (`-11.45%`)
+  - Updated analytics operating docs for participation-lift reads:
+    - `.ai/topics/ANALYTICS_CONTRACT.md`
+    - `.ai/ANALYTICS_WEEKLY_REVIEW.md`
+  - Remaining queued actions from this lane:
+    - apply single-writer lock workflow whenever more than one agent/session is active,
+    - deploy participation-lift release and establish explicit post-deploy baseline window,
+    - run CTR remediation pass on high-impression/low-CTR pages (`/guide`, `/what-are-pennies`, `/faq`, `/report-find`),
+    - rerun weekly snapshot after 48h+ post-deploy and require 4-week confirmation before success claims.
+- **Progress (2026-02-20):**
+  - Generated first weekly analytics snapshot artifact from local archive:
+    - `reports/analytics-weekly/2026-02-20/summary.md`
+  - Fail-closed outcome from snapshot:
+    - non-branded search trend is directionally positive,
+    - core-loop guardrail formulas remain `BLOCKED/INCONCLUSIVE` until event-level exports are included.
+  - Queued next actions from the snapshot:
+    - add GA4 event export coverage for `report_find_click` and `find_submit`,
+    - run CTR remediation pass on high-impression/low-CTR pages (`/guide`, `/what-are-pennies`, `/faq`, `/report-find`),
+    - rerun weekly snapshot and require 4-week confirmation before success claims.
 - **Done means:**
   - Sessions that touch growth/SEO/IA include explicit evidence inputs (GA4/Search Console when relevant) and fail-closed status language when data is missing.
   - Sessions that touch tooling/capability include MCP parity/fallback disclosure against `.ai/MCP_BASELINE.md`.
@@ -184,6 +237,13 @@ Each AI session should:
 
 ## ✅ Recently Completed
 
+- **2026-02-22:** Report Find Participation Lift v1 decomposed program completed (policy + measurement + basket + taxonomy + archive):
+  - policy anti-mega-plan rules codified in `AGENTS.md`, `README.md`, `.ai/plans/_TEMPLATE.md`,
+  - `find_submit` semantics corrected on report-entry CTAs and `?src=` attribution standardized across report-entry links,
+  - report basket UX shipped in `components/report-find/ReportFindFormClient.tsx` with session persistence, dedupe merge, prefill auto-add, sequential submit-all, mixed-result handling, and copy-for-facebook action,
+  - analytics taxonomy expanded + report-payload privacy redaction strengthened in `lib/analytics.ts`,
+  - GA4 archive script extended with `daily_events` and `daily_report_paths` slices in `scripts/archive-google-analytics.ts`,
+  - verification: `verify:fast`, `e2e:smoke`, `lint:colors`, targeted Playwright suite, archive run (`.local/analytics-history/runs/2026-02-22T00-15-22-963Z/summary.md`), and proof bundle (`reports/proof/2026-02-22T00-16-09/`).
 - **2026-02-04:** Bloat reduction (pass 6): archived SEO export CSVs + legacy Playwright baselines/screenshots to new cold-storage snapshots and hardened `ai:verify` to build with `.next-playwright` when 3001 is in use. Proof: `reports/verification/2026-02-04T13-31-17/summary.md`.
 - **2026-02-04:** Bloat reduction (pass 5): added `npm run prune:audit`, archived large non-production media to `archive/media-pruned/2026-02-04-pass1/`, removed tracked generated reports/logs (`reports/playwright/console-report-*.json`, axe/contrast outputs) and expanded `.gitignore` so these artifacts don’t come back.
 - **2026-02-03:** Archive-first bloat pass 4 completed: moved `.ai/enablement-prompts/*` into `archive/docs-pruned/2026-02-03-pass4/`, moved low-reference helper `scripts/normalize-image-urls.ts` into `archive/scripts-pruned/2026-02-03-pass3/`, added per-snapshot manifests, and updated `.ai/AI_ENABLEMENT_BLUEPRINT.md` + `.gitignore` (`/reports/playwright/console-report-*.json`) to reduce future noise.

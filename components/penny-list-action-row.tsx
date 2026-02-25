@@ -62,7 +62,11 @@ export function PennyListActionRow({
         onClick={(event) => {
           event.preventDefault()
           stopEvent(event)
-          trackEvent("report_duplicate_click", { sku, name: itemName, src: reportSource })
+          trackEvent("report_duplicate_click", {
+            ui_source: reportSource,
+            skuMasked: sku.slice(-4),
+            hasItemName: Boolean(itemName),
+          })
           router.push(buildReportFindUrl({ sku, name: itemName, src: reportSource }))
         }}
         className="relative z-10 pointer-events-auto min-h-[44px] px-3 text-sm leading-snug whitespace-normal text-left"

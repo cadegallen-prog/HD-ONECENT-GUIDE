@@ -190,7 +190,11 @@ export function PennyListTable({
 
               const openSkuPage = () => {
                 try {
-                  sessionStorage.setItem("penny-list-scroll", String(window.scrollY))
+                  const page = Number(new URLSearchParams(window.location.search).get("page")) || 1
+                  sessionStorage.setItem(
+                    "penny-list-scroll",
+                    JSON.stringify({ sku: item.sku, page })
+                  )
                 } catch {}
                 router.push(skuPageUrl)
               }
@@ -206,6 +210,7 @@ export function PennyListTable({
               return (
                 <tr
                   key={item.id}
+                  data-sku={item.sku}
                   tabIndex={0}
                   aria-label={`View details for ${displayName} (SKU ${item.sku})`}
                   onClick={openSkuPage}
@@ -292,7 +297,6 @@ export function PennyListTable({
         upc={barcodeItem?.upc ?? ""}
         onClose={() => setBarcodeItem(null)}
         productName={barcodeItem?.name}
-        pennyPrice={barcodeItem?.price}
       />
       <StateBreakdownSheet
         open={Boolean(stateSheetItem)}

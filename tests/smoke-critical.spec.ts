@@ -40,18 +40,16 @@ test.describe("critical smoke lane", () => {
     await expect(cta).toHaveAttribute("href", "/in-store-strategy")
   })
 
-  test("core interaction works on report-find prefill edit", async ({ page }) => {
+  test("core interaction works on report-find prefill basket flow", async ({ page }) => {
     await page.goto("/report-find?sku=1009258128&name=Smoke%20Item&src=card")
 
-    const skuInput = page.locator("#sku")
-    const editButton = page.getByRole("button", { name: "Edit SKU number" })
+    await expect(page.locator("[data-testid='basket-item-1009258128']")).toBeVisible()
 
-    await expect(skuInput).toHaveValue("1009-258-128")
-    await expect(skuInput).toBeDisabled()
-    await editButton.click()
-    await expect(skuInput).toBeEnabled()
-    await skuInput.fill("1009258127")
-    await expect(skuInput).toHaveValue("1009-258-127")
+    await page.locator("#itemName").fill("Second Item")
+    await page.locator("#sku").fill("1009258127")
+    await page.getByRole("button", { name: "Add item" }).click()
+
+    await expect(page.locator("[data-testid='report-basket-list'] li")).toHaveCount(2)
   })
 
   test("legacy support route resolves to canonical transparency page", async ({ page }) => {

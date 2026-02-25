@@ -30,19 +30,17 @@ import type { StoreLocation } from "@/lib/stores"
 import { trackEvent } from "@/lib/analytics"
 
 // Dynamically import StoreMap to avoid SSR issues with Leaflet
-const StoreMap = dynamic(
-  () => import("@/components/store-map").then((mod) => ({ default: mod.StoreMap })),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="h-full min-h-[500px] bg-muted/30 rounded-xl animate-pulse"></div>
-    ),
-  }
-)
+const StoreMap = dynamic(() => import("@/components/store-map"), {
+  ssr: false,
+  loading: () => <div className="h-full min-h-[320px] bg-muted/30 rounded-xl animate-pulse"></div>,
+})
 
 // Temporary proof-of-concept mode: intentionally load every store to validate data completeness
 const PROOF_OF_CONCEPT_MODE = false
 const MAX_STORES = PROOF_OF_CONCEPT_MODE ? 5000 : 20
+const GEOLOCATION_PERMISSION_DENIED = 1
+const GEOLOCATION_POSITION_UNAVAILABLE = 2
+const GEOLOCATION_TIMEOUT = 3
 
 const STATE_ABBREV_MAP: Record<string, string> = {
   alabama: "AL",
@@ -209,7 +207,6 @@ const getAverageCoordinates = (stores: StoreLocation[]) => {
 
 // Pre-compute initial stores for immediate display
 const initialDisplayedStores: StoreLocation[] = []
-
 export default function StoreFinderPage() {
   const [displayedStores, setDisplayedStores] = useState<StoreLocation[]>(initialDisplayedStores)
   const [loadingStores, setLoadingStores] = useState(false)
@@ -219,6 +216,8 @@ export default function StoreFinderPage() {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [geolocationResolved, setGeolocationResolved] = useState(false)
   const [mapCenter, setMapCenter] = useState<[number, number]>(DEFAULT_CENTER)
+  const [mapInteractionMode, setMapInteractionMode] = useState<"follow" | "explore">("follow")
+  const [mapRecenterToken, setMapRecenterToken] = useState(0)
   const [selectedStore, setSelectedStore] = useState<StoreLocation | null>(
     initialDisplayedStores[0] || null
   )
@@ -242,9 +241,20 @@ export default function StoreFinderPage() {
   // Helper to update displayed stores AND ranking center atomically
   // This ensures ranking is stable unless explicitly changed by search/geolocation
   const setDisplayedStoresAndRankingCenter = useCallback(
-    (stores: StoreLocation[], rankCenter: [number, number]) => {
+    (
+      stores: StoreLocation[],
+      rankCenter: [number, number],
+      options?: {
+        followMap?: boolean
+      }
+    ) => {
       setDisplayedStores(stores)
       rankingCenterRef.current = rankCenter
+      if (options?.followMap) {
+        setMapCenter(rankCenter)
+        setMapInteractionMode("follow")
+        setMapRecenterToken((value) => value + 1)
+      }
     },
     []
   )
@@ -413,6 +423,10 @@ export default function StoreFinderPage() {
     () => (selectedStore ? applyCoordinateCorrection(selectedStore) : null),
     [applyCoordinateCorrection, selectedStore]
   )
+  const mapHasRecenterTarget = Boolean(
+    userLocation || (mapInteractionMode === "explore" && correctedSelectedStore)
+  )
+  const mobileSheetSummaryStore = correctedSelectedStore || correctedStoresToRender[0] || null
 
   // Load favorites from localStorage
   useEffect(() => {
@@ -460,7 +474,6 @@ export default function StoreFinderPage() {
           }
           setUserLocation({ lat, lng })
           setGeolocationResolved(true)
-          setMapCenter([lat, lng])
 
           // Fetch stores with server-side distance calculation for accuracy
           try {
@@ -471,7 +484,7 @@ export default function StoreFinderPage() {
                 .map(normalizeStore)
                 .filter((s) => isValidStore(s.name) && hasValidCoordinates(s))
               const corrected = normalized.map(applyCoordinateCorrection)
-              setDisplayedStoresAndRankingCenter(corrected, [lat, lng])
+              setDisplayedStoresAndRankingCenter(corrected, [lat, lng], { followMap: true })
               if (corrected.length > 0) {
                 setSelectedStore(corrected[0])
               }
@@ -484,7 +497,7 @@ export default function StoreFinderPage() {
                 coordinateCorrections
               )
               const corrected = closestStores.map(applyCoordinateCorrection)
-              setDisplayedStoresAndRankingCenter(corrected, [lat, lng])
+              setDisplayedStoresAndRankingCenter(corrected, [lat, lng], { followMap: true })
               if (corrected.length > 0) {
                 setSelectedStore(corrected[0])
               }
@@ -493,7 +506,7 @@ export default function StoreFinderPage() {
             // Fallback to client-side calculation
             const closestStores = getClosestStores(allLoadedStores, lat, lng, coordinateCorrections)
             const corrected = closestStores.map(applyCoordinateCorrection)
-            setDisplayedStoresAndRankingCenter(corrected, [lat, lng])
+            setDisplayedStoresAndRankingCenter(corrected, [lat, lng], { followMap: true })
             if (corrected.length > 0) {
               setSelectedStore(corrected[0])
             }
@@ -501,9 +514,21 @@ export default function StoreFinderPage() {
           setLocatingUser(false)
         },
         (error) => {
-          console.error("Error getting location:", error)
+          const isExpectedError =
+            error.code === GEOLOCATION_PERMISSION_DENIED ||
+            error.code === GEOLOCATION_POSITION_UNAVAILABLE ||
+            error.code === GEOLOCATION_TIMEOUT
+
+          if (!isExpectedError) {
+            console.error("Unexpected geolocation error:", error)
+          }
+
           setLocatingUser(false)
           setGeolocationResolved(false)
+          if (error.code === GEOLOCATION_PERMISSION_DENIED) {
+            alert("Location access was blocked. Please search by ZIP code instead.")
+            return
+          }
           alert("Could not get your location. Please try searching by ZIP code instead.")
         },
         {
@@ -548,7 +573,8 @@ export default function StoreFinderPage() {
       )
       setDisplayedStoresAndRankingCenter(
         initialStores.map(applyCoordinateCorrection),
-        DEFAULT_CENTER
+        DEFAULT_CENTER,
+        { followMap: true }
       )
       if (initialStores.length > 0) {
         setSelectedStore(initialStores[0])
@@ -566,7 +592,13 @@ export default function StoreFinderPage() {
       const lng = parseFloat(latLngMatch[3])
       if (!Number.isNaN(lat) && !Number.isNaN(lng)) {
         const closestStores = getClosestStores(storesSource, lat, lng, coordinateCorrections)
-        setDisplayedStoresAndRankingCenter(closestStores.map(applyCoordinateCorrection), [lat, lng])
+        setDisplayedStoresAndRankingCenter(
+          closestStores.map(applyCoordinateCorrection),
+          [lat, lng],
+          {
+            followMap: true,
+          }
+        )
         setSelectedStore(closestStores[0] || null)
         trackEvent("store_finder_search", {
           queryType: "other",
@@ -590,10 +622,11 @@ export default function StoreFinderPage() {
           matchedStore.lng,
           coordinateCorrections
         )
-        setDisplayedStoresAndRankingCenter(closestStores.map(applyCoordinateCorrection), [
-          matchedStore.lat,
-          matchedStore.lng,
-        ])
+        setDisplayedStoresAndRankingCenter(
+          closestStores.map(applyCoordinateCorrection),
+          [matchedStore.lat, matchedStore.lng],
+          { followMap: true }
+        )
         setSelectedStore(closestStores[0] || matchedStore)
         trackEvent("store_finder_search", {
           queryType: "zip",
@@ -618,10 +651,11 @@ export default function StoreFinderPage() {
           centerStore.lng,
           coordinateCorrections
         )
-        setDisplayedStoresAndRankingCenter(closestStores.map(applyCoordinateCorrection), [
-          centerStore.lat,
-          centerStore.lng,
-        ])
+        setDisplayedStoresAndRankingCenter(
+          closestStores.map(applyCoordinateCorrection),
+          [centerStore.lat, centerStore.lng],
+          { followMap: true }
+        )
         setSelectedStore(closestStores[0] || centerStore)
         trackEvent("store_finder_search", {
           queryType: "zip",
@@ -651,10 +685,11 @@ export default function StoreFinderPage() {
                   lng,
                   coordinateCorrections
                 )
-                setDisplayedStoresAndRankingCenter(closestStores.map(applyCoordinateCorrection), [
-                  lat,
-                  lng,
-                ])
+                setDisplayedStoresAndRankingCenter(
+                  closestStores.map(applyCoordinateCorrection),
+                  [lat, lng],
+                  { followMap: true }
+                )
                 setSelectedStore(closestStores[0] || null)
                 trackEvent("store_finder_search", {
                   queryType: "zip",
@@ -683,10 +718,11 @@ export default function StoreFinderPage() {
             )
             if (valid) {
               const closestStores = getClosestStores(storesSource, lat, lng, coordinateCorrections)
-              setDisplayedStoresAndRankingCenter(closestStores.map(applyCoordinateCorrection), [
-                lat,
-                lng,
-              ])
+              setDisplayedStoresAndRankingCenter(
+                closestStores.map(applyCoordinateCorrection),
+                [lat, lng],
+                { followMap: true }
+              )
               setSelectedStore(closestStores[0] || null)
               trackEvent("store_finder_search", {
                 queryType: "zip",
@@ -774,10 +810,11 @@ export default function StoreFinderPage() {
         centerPoint.lng,
         coordinateCorrections
       )
-      setDisplayedStoresAndRankingCenter(closestStores.map(applyCoordinateCorrection), [
-        centerPoint.lat,
-        centerPoint.lng,
-      ])
+      setDisplayedStoresAndRankingCenter(
+        closestStores.map(applyCoordinateCorrection),
+        [centerPoint.lat, centerPoint.lng],
+        { followMap: true }
+      )
       setSelectedStore(closestStores[0] || null)
       trackEvent("store_finder_search", {
         queryType: tokens.some((token) => STATE_ABBREV_MAP[token]) ? "state" : "city",
@@ -795,10 +832,11 @@ export default function StoreFinderPage() {
         geocoded.lng,
         coordinateCorrections
       )
-      setDisplayedStoresAndRankingCenter(closestStores.map(applyCoordinateCorrection), [
-        geocoded.lat,
-        geocoded.lng,
-      ])
+      setDisplayedStoresAndRankingCenter(
+        closestStores.map(applyCoordinateCorrection),
+        [geocoded.lat, geocoded.lng],
+        { followMap: true }
+      )
       setSelectedStore(closestStores[0] || null)
       trackEvent("store_finder_search", {
         queryType: "city",
@@ -834,6 +872,9 @@ export default function StoreFinderPage() {
     (store: StoreLocation) => {
       const corrected = applyCoordinateCorrection(store)
       setSelectedStore(corrected)
+      setMapCenter([corrected.lat, corrected.lng])
+      setMapInteractionMode("follow")
+      setMapRecenterToken((value) => value + 1)
       validateStoreCoordinates(store)
     },
     [applyCoordinateCorrection, validateStoreCoordinates]
@@ -861,6 +902,31 @@ export default function StoreFinderPage() {
       validateStoreCoordinates(selectedStore)
     }
   }, [selectedStore, validateStoreCoordinates])
+
+  const handleMapExplore = useCallback(() => {
+    setMapInteractionMode((current) => (current === "explore" ? current : "explore"))
+  }, [])
+
+  const recenterMap = useCallback(() => {
+    const targetCenter = correctedSelectedStore
+      ? ([correctedSelectedStore.lat, correctedSelectedStore.lng] as [number, number])
+      : userLocation
+        ? ([userLocation.lat, userLocation.lng] as [number, number])
+        : DEFAULT_CENTER
+
+    setMapCenter(targetCenter)
+    setMapInteractionMode("follow")
+    setMapRecenterToken((value) => value + 1)
+    trackEvent("map_interact", { action: "recenter" })
+  }, [correctedSelectedStore, userLocation])
+
+  const handleLocateOrRecenter = useCallback(() => {
+    if (mapHasRecenterTarget) {
+      recenterMap()
+      return
+    }
+    getUserLocation()
+  }, [getUserLocation, mapHasRecenterTarget, recenterMap])
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -900,6 +966,7 @@ export default function StoreFinderPage() {
                 />
                 <input
                   id="store-search"
+                  data-pc-id="store-finder.search-input"
                   type="search"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -910,6 +977,7 @@ export default function StoreFinderPage() {
                 />
               </div>
               <Button
+                data-pc-id="store-finder.search-submit"
                 onClick={handleSearch}
                 size="sm"
                 className="px-4 sm:px-6 min-h-[48px] sm:min-h-[44px]"
@@ -919,30 +987,71 @@ export default function StoreFinderPage() {
             </div>
 
             {/* Location + View Toggle - Row on mobile */}
-            <div className="flex gap-2 justify-between sm:justify-start">
+            <div className="flex gap-2 justify-start flex-wrap">
               <Button
-                onClick={getUserLocation}
-                variant="secondary"
+                data-pc-id="store-finder.locate-recenter"
+                onClick={handleLocateOrRecenter}
+                variant={
+                  mapHasRecenterTarget && mapInteractionMode === "explore" ? "primary" : "secondary"
+                }
                 size="sm"
-                className="flex-1 sm:flex-initial flex items-center justify-center gap-2 min-h-[44px]"
+                className="md:hidden flex items-center justify-center gap-2 min-h-[44px] px-3"
                 disabled={locatingUser}
-                aria-label={locatingUser ? "Locating your position" : "Use my current location"}
+                aria-label={
+                  locatingUser
+                    ? "Locating your position"
+                    : mapHasRecenterTarget
+                      ? "Recenter the map"
+                      : "Use my current location"
+                }
               >
-                <Navigation
-                  className={`h-4 w-4 ${locatingUser ? "animate-pulse" : ""}`}
-                  aria-hidden="true"
-                />
-                <span className="hidden sm:inline">
-                  {locatingUser ? "Locating..." : "My Location"}
+                {mapHasRecenterTarget ? (
+                  <MapPin className="h-4 w-4" aria-hidden="true" />
+                ) : (
+                  <Navigation
+                    className={`h-4 w-4 ${locatingUser ? "animate-pulse" : ""}`}
+                    aria-hidden="true"
+                  />
+                )}
+                <span>
+                  {locatingUser ? "Locating..." : mapHasRecenterTarget ? "Recenter" : "Locate"}
                 </span>
               </Button>
 
+              <div className="hidden md:flex items-center gap-2">
+                <Button
+                  onClick={getUserLocation}
+                  variant="secondary"
+                  size="sm"
+                  className="flex items-center justify-center gap-2 min-h-[44px] px-3 sm:px-4"
+                  disabled={locatingUser}
+                  aria-label={locatingUser ? "Locating your position" : "Use my current location"}
+                >
+                  <Navigation
+                    className={`h-4 w-4 ${locatingUser ? "animate-pulse" : ""}`}
+                    aria-hidden="true"
+                  />
+                  <span>{locatingUser ? "Locating..." : "My Location"}</span>
+                </Button>
+                <Button
+                  onClick={recenterMap}
+                  variant={mapInteractionMode === "explore" ? "primary" : "secondary"}
+                  size="sm"
+                  className="flex items-center justify-center gap-2 min-h-[44px] px-3 sm:px-4"
+                  aria-label="Recenter the map"
+                >
+                  <MapPin className="h-4 w-4" aria-hidden="true" />
+                  <span>Recenter</span>
+                </Button>
+              </div>
+
               <div className="flex border border-border rounded-lg overflow-hidden">
                 <button
+                  data-pc-id="store-finder.view-map"
                   onClick={() => setViewMode("map")}
                   aria-label="Map view"
                   title="Map view"
-                  className={`px-3 py-2 text-sm font-medium transition-colors ${
+                  className={`px-3 py-2 min-h-[44px] text-sm font-medium transition-colors ${
                     viewMode === "map"
                       ? "bg-[var(--text-primary)] text-[var(--bg-page)]"
                       : "bg-background text-muted-foreground hover:text-foreground"
@@ -951,6 +1060,7 @@ export default function StoreFinderPage() {
                   <MapIcon className="h-4 w-4" />
                 </button>
                 <button
+                  data-pc-id="store-finder.view-list"
                   onClick={() => setViewMode("list")}
                   aria-label="List view"
                   title="List view"
@@ -996,12 +1106,34 @@ export default function StoreFinderPage() {
         {/* Map View */}
         {viewMode === "map" && (
           <div className="flex-1 p-0 sm:p-4 lg:p-6">
-            <div className="flex flex-col lg:flex-row h-[calc(100vh-220px)] min-h-[500px] max-h-[800px] max-w-7xl mx-auto bg-card sm:border sm:border-border sm:rounded-xl overflow-hidden shadow-sm">
-              {/* Store List Panel - Scrollable on mobile */}
+            <div className="relative lg:flex lg:flex-row h-[calc(100svh-220px)] min-h-[440px] max-h-[980px] max-w-7xl mx-auto bg-card sm:border sm:border-border sm:rounded-xl overflow-hidden shadow-sm">
+              {/* Map Panel - fills full container; sheet overlays on mobile */}
+              <div className="absolute inset-0 lg:static lg:flex-1 lg:h-full lg:order-2 z-0">
+                <StoreMap
+                  stores={correctedStoresToRender}
+                  center={mapCenter}
+                  selectedStore={correctedSelectedStore}
+                  onSelect={selectStore}
+                  userLocation={userLocation}
+                  followMode={mapInteractionMode}
+                  onExploreMode={handleMapExplore}
+                  recenterRequestToken={mapRecenterToken}
+                />
+              </div>
+
+              {/* Store List Panel - Fixed overlay on mobile, side panel on desktop */}
               <div
                 ref={listContainerRef}
-                className="flex-1 lg:flex-none lg:w-80 xl:w-96 min-h-[200px] lg:min-h-0 lg:h-full overflow-y-auto border-t lg:border-t-0 lg:border-r border-border bg-card order-2 lg:order-1"
+                className="absolute bottom-0 left-0 right-0 h-[200px] z-10 lg:static lg:z-auto lg:order-1 lg:flex-none lg:w-80 xl:w-96 lg:h-full overflow-y-auto border-t lg:border-t-0 lg:border-r border-border bg-card rounded-t-2xl lg:rounded-none shadow-[0_-10px_28px_rgba(0,0,0,0.14)] lg:shadow-none pb-[calc(env(safe-area-inset-bottom)+0.5rem)]"
               >
+                <div className="lg:hidden sticky top-0 z-10 bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/90 border-b border-border px-4 py-2">
+                  <p className="text-xs font-medium text-[var(--text-secondary)]">
+                    {mobileSheetSummaryStore
+                      ? `${getStoreTitle(mobileSheetSummaryStore)} (${correctedStoresToRender.length})`
+                      : `${correctedStoresToRender.length} stores`}
+                  </p>
+                </div>
+
                 {loadingStores && correctedStoresToRender.length === 0 ? (
                   <div className="p-4 space-y-3">
                     {[...Array(5)].map((_, i) => (
@@ -1029,17 +1161,6 @@ export default function StoreFinderPage() {
                     ))}
                   </div>
                 )}
-              </div>
-
-              {/* Map Panel - Constrained on mobile, flex on desktop */}
-              <div className="h-[280px] sm:h-[320px] lg:flex-1 lg:h-full order-1 lg:order-2 relative z-0">
-                <StoreMap
-                  stores={correctedStoresToRender}
-                  center={mapCenter}
-                  selectedStore={correctedSelectedStore}
-                  onSelect={selectStore}
-                  userLocation={userLocation}
-                />
               </div>
             </div>
           </div>
@@ -1096,6 +1217,7 @@ const StoreListItem = forwardRef<HTMLDivElement, StoreListItemProps>(
     return (
       <div
         ref={ref}
+        data-pc-id="store-finder.list-item"
         onClick={onSelect}
         className={`p-4 cursor-pointer transition-all duration-150 ${
           isSelected

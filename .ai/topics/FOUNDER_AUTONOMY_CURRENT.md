@@ -1,7 +1,7 @@
 # FOUNDER_AUTONOMY_CURRENT
 
-**Status:** 🔄 In progress (memory + multi-domain operating model shipped; execution-priority lock documented)  
-**Last updated:** 2026-02-16
+**Status:** 🔄 In progress (memory + multi-domain operating model shipped; failure-mode drills + weekly trend reporting shipped; execution-priority lock documented)  
+**Last updated:** 2026-02-22
 
 ---
 
@@ -27,6 +27,17 @@
   - MVP
   - Future Projects
 - `scripts/ai-memory.ts` now enforces multi-domain SOP conformance as critical checks (required sections, domain rows, and artifact markers); checkpoint fails if these drift.
+- Failure-mode drill lane shipped for memory enforcement validation:
+  - `npm run ai:memory:drill` (default missing-file scenario)
+  - `npm run ai:memory:drill:missing`
+  - `npm run ai:memory:drill:heading`
+  - Drill scenarios are reversible and auto-restore mutated files after verification.
+- Weekly integrity-trend lane shipped for measurable drift tracking:
+  - `npm run ai:memory:trend` (default 7-day window)
+  - `npm run ai:memory:trend:30` (30-day window)
+  - trend source ledger: `reports/memory-integrity/checkpoint-history.jsonl`
+  - weekly artifact bundle: `reports/memory-integrity-weekly/<YYYY-MM-DD>/summary.md` + `metrics.json`
+  - strict mode is fail-closed when trend SLO targets are breached or no window data exists.
 - Founder directive lock (2026-02-16): prioritize visible website improvements first; autonomy/system hardening work stays active as a secondary lane unless it is required to unblock delivery.
 
 ### Operating target for future autonomy cycles
@@ -59,9 +70,8 @@
 ## Immediate next actions
 
 1. Keep current cycle selection website-growth-first unless the founder explicitly switches priority.
-2. Add failure-mode drill command(s) to validate that checkpoint blocks when a required memory artifact is removed or corrupted.
-3. Add weekly trend reporting for memory integrity score and checkpoint pass rate.
-4. Align remaining docs that still reference outdated branch/workflow wording.
+2. Establish a fixed weekly review cadence for `ai:memory:trend` and codify explicit remediation playbooks for SLO misses.
+3. Align remaining docs that still reference outdated branch/workflow wording.
 
 ---
 

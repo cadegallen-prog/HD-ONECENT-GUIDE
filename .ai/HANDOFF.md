@@ -1,6 +1,6 @@
 # Context Handoff Pack (Portable, Tool-Agnostic)
 
-**Last Updated:** Feb 18, 2026 by Claude Sonnet 4.6
+**Last Updated:** Feb 22, 2026 by Claude Opus 4.6
 
 **Purpose:** Compressed, copy-paste-ready context for starting fresh chats or switching tools (Claude / Codex / Copilot).
 
@@ -12,61 +12,83 @@
 
 **Open-source Next.js PWA** helping Home Depot shoppers find "penny items" (clearance deals, often $0.01 to $10). Live at pennycentral.com.
 
-### Current Reality (2026-02-18)
+### Current Reality (2026-02-22)
 
 - ✅ **Core product working:** Submissions, enrichment, Penny List, Store Finder, 6-chapter guide + hub + FAQ
-- ✅ **Guide hub overhauled:** Removed 4 AI-voiced sections, added personal intro in Cade's voice, removed hero CTAs, updated chapter grid subtitle
-- ✅ **About page restored:** Scavenger Hunt Philosophy, honest sign-off, growth story with 70K+ members, CTA reordered (Guide primary)
-- ✅ **Nav glitch fixed:** Guide split-button animation flash resolved (transition-all to transition-colors)
-- ✅ **Homepage guide-first flow:** Primary CTA now routes to /guide, secondary text link to Penny List
-- ✅ **Navigation reordered:** Guide > Penny List > My List > Report a Find > Store Finder > FAQ
+- ✅ **Penny list scroll restoration fixed (Feb 22, `836c738`):** Pages 2+ now correctly restore both page number and scroll position after back-navigation from detail pages.
+- ✅ **Report Find Participation Lift v1 shipped (Feb 22):** Basket UX, measurement integrity fixes, event taxonomy expansion, anti-mega-plan governance — all completed by Codex
+- ✅ **Store Finder mobile UX fixed (Feb 21, uncommitted):** Replaced broken 3-detent bottom sheet with fixed-height overlay panel + restored minimal mobile popup. All gates passed (lint, typecheck, unit, build, e2e:full 198/198).
 - ✅ **Design system solid:** WCAG AAA compliant, custom CSS variable tokens, guide-article CSS class
-- ✅ **Ad readiness audited:** Privacy/compliance checks hardened, monetization docs refreshed
-- 🔄 **Monetization blocked:** AdSense third review (policy violations), Ezoic GAM review pending, Monumetric Ascend approved but GAM confirmation unclear
-- 🔄 **Guide content quality:** Hub is clean now, but chapter content still needs voice/intel recovery pass (was 4.5/10, approved recovery plan exists)
+- 🔄 **Monetization blocked:** AdSense policy violations, Monumetric Ascend approved, Ezoic GAM pending
+- 🔄 **Anti-spam needed:** Submit-find form has no duplicate SKU throttling. A Feb 21 spam incident produced 10 duplicate generator submissions in 2 minutes from "PA". Cleaned manually but protections needed.
+- 🔄 **Visual pointing tool requested:** Cade wants a way to click/tap elements on the live site and have the selection translate to an unambiguous element reference the agent can act on. NOT yet designed or implemented — see "Open Design Work" below.
 - 📊 **Metrics:** ~680 daily users, 26% conversion (HD clicks), 100% Facebook dependency, 70K+ community members
 
 ### Immediate Next Move
 
-1. **Guide Chapter 1 content improvements** (from the briefing conversation: ZMA explanation gap, Store Pulse specificity, Zero-Comm report context, "the app" unnamed, timing gap)
-2. **Guide Recovery Phase 1** (content & voice) from `.ai/impl/guide-recovery.md` if doing full pass
-3. **Monetization follow-up** per incident register timelines
+1. **Anti-spam protections for submit-find form** — duplicate SKU throttling, submission cooldowns, client-side debounce (identified as next priority this session)
+2. **Commit Store Finder mobile UX fix** (changes are verified but uncommitted — stage only the 4 store-finder files, not the Codex batch report files)
+3. **Design + implement the Visual Pointing Tool** (see "Open Design Work" below)
 
 ---
 
-## What Just Happened (This Session, Feb 18)
+## What Just Happened (This Session, Feb 21)
 
-### Guide Hub (/guide) -- SHIPPED to main
+### Store Finder Mobile UX Fix — VERIFIED, NOT COMMITTED
 
-- **Removed:** "Execution Standards Before You Hunt" section (AI ops checklist voice)
-- **Removed:** "Essential Tools" section (redundant with header/footer nav)
-- **Removed:** "How to Use This Guide" box (over-explained friction)
-- **Removed:** "Why This Guide Format Works" box (AI explaining its own architecture)
-- **Removed:** Both hero CTA buttons ("Start Chapter 1" + "Browse Penny List")
-- **Removed:** `quickStart`, `utilityLinks`, `workflowGuardrails` arrays + unused imports
-- **Added:** Personal intro block ("Before you start.") with confrontational/filtering tone in Cade's voice
-- **Updated:** Chapter grid subtitle to "Read in order. Each chapter builds on the one before it."
-- **Updated:** `dateModified` in JSON-LD to 2026-02-18
+**Problem:** The 3-detent bottom sheet (peek/half/expanded) from commits `27fe7b4`/`6540d3c` was broken on mobile:
 
-### About Page (/about) -- SHIPPED to main
+- Content clipped in peek/half states (sticky header consumed most of the 168px)
+- "Expanded" state crushed the map to ~168px (unusable)
+- No popup on mobile — tapping a marker gave zero feedback on the map
+- Three detent states were redundant with the existing Map View / List View toggle
+- Detent buttons labeled "peek"/"half"/"expanded" (dev jargon)
 
-- **Changed:** Subtitle to "A free, community-driven guide for finding $0.01 clearance items at Home Depot."
-- **Updated:** Growth story with `COMMUNITY_MEMBER_COUNT_DISPLAY` (70,000+), no time reference (evergreen)
-- **Added:** "The Scavenger Hunt Philosophy" section (storage unit line, scavenger hunt framing)
-- **Added:** Honest sign-off ("I make mistakes. I break things.")
-- **Reordered:** "Where to Start" CTAs (Guide = primary, Penny List = secondary, Facebook = tertiary)
-- **Removed:** `LegalBackLink` import and usage
+**What was done:**
 
-### Navbar (components/navbar.tsx) -- SHIPPED to main
+| File                               | Change                                                                                                                                                                                                                                                     |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `app/store-finder/page.tsx`        | Removed entire detent system (type, state, height classes, buttons, drag handle). Converted mobile layout from push (flex-col) to overlay (sheet is `absolute bottom-0 h-[200px] z-10`, map fills full container behind it). Desktop side-panel unchanged. |
+| `components/store-map.tsx`         | Restored minimal popup on mobile (store name + Directions link). Updated effect to open popups on both mobile and desktop.                                                                                                                                 |
+| `components/store-map.css`         | Added `.store-popup-card--minimal` compact style + hid popup tip arrow on mobile.                                                                                                                                                                          |
+| `tests/store-finder-popup.spec.ts` | Removed detent button references. Updated mobile popup assertion from "expect 0" to "expect 1 minimal popup".                                                                                                                                              |
 
-- **Fixed:** `transition-all` to `transition-colors` on both halves of the desktop Guide split button, preventing SVG rotate-180 from triggering background color flash
+**Verification:** All gates green:
 
-### Also shipped (from earlier Codex sessions same day)
+- `npm run verify:fast` ✅ (lint + typecheck + unit + build)
+- `npm run e2e:smoke` ✅ (5/5)
+- `npm run e2e:full` ✅ (198 passed, 2 skipped)
 
-- Homepage guide-first conversion flow + header/footer nav reorder
-- "Back to Penny List" removed from all trust/legal pages
-- Ad approval readiness audit + monetization memory refresh
-- Retired referral/disclosure cleanup + legacy go-route neutralization
+**⚠️ NOT COMMITTED YET.** The work tree also has uncommitted changes from a Codex session (Report Find Participation Lift v1). When committing, stage ONLY the store-finder files for this commit:
+
+- `app/store-finder/page.tsx`
+- `components/store-map.tsx`
+- `components/store-map.css`
+- `tests/store-finder-popup.spec.ts`
+
+### Visual Pointing Tool — CONCEPT ONLY, NOT IMPLEMENTED
+
+**Cade's request:** He wants a way to precisely communicate which element on the site he's talking about when giving UX feedback. Currently he describes things vaguely ("the thing at the bottom that clips") and agents have to guess.
+
+**What he wants:** Click/tap an element on the live site → the system identifies it (CSS selector, component name, file/line number) → agent knows exactly what "this" refers to. The purpose is exclusively for non-technical UX/UI feedback from a layperson's perspective.
+
+**Status:** Concept understood and confirmed with Cade. No design or implementation work has been done yet. This needs an architect pass to determine the right approach (browser extension? dev-mode overlay? bookmarklet?).
+
+---
+
+## Uncommitted Changes (Work Tree Status)
+
+The `dev` branch has uncommitted changes from TWO sessions:
+
+**Session 1 (Codex, Feb 22):** Report Find Participation Lift v1
+
+- ~20 files across governance docs, analytics, report-find components, tests
+
+**Session 2 (Claude, Feb 21):** Store Finder mobile UX fix
+
+- 4 files (listed above)
+
+**Recommendation:** Commit these as two separate commits. The Codex changes should be committed first (or separately) since they're a distinct feature.
 
 ---
 
@@ -94,40 +116,6 @@
 - `.ai/CONTRACT.md`
 - `.ai/DECISION_RIGHTS.md`
 - `.ai/CONSTRAINTS.md`
-
----
-
-## Pending Work Context
-
-### Guide Chapter 1 Improvements (discussed but not implemented)
-
-Cade reviewed /what-are-pennies with another AI and identified these gaps:
-
-- ZMA mentioned but never connected to actionable takeaways for hunters
-- Store Pulse lacks specificity (when did it replace IMS? what changed?)
-- Zero-Comm report is vague (who sees it? does it affect the employee?)
-- "The app" mentioned but never named (should say "the Home Depot app")
-- No mention of timing (when do items penny out?)
-- "Can you buy penny items?" answer is unsatisfying (needs concrete guidance)
-- Intro paragraph buries the lede (should hook with validation first)
-
-### Guide Recovery Plan (broader, from Feb 7)
-
-3-phase approved plan exists at `.ai/impl/guide-recovery.md`:
-
-- Phase 1: Content & voice (redistribute 2026 intel, kill hedging, fix concept ordering)
-- Phase 2: Visual & UX (FAQ overhaul, hub redesign done, CSS tuning)
-- Phase 3: Drift guard (format contract)
-
-### Voice Rules (for all guide copy)
-
-- No em dashes
-- Short sentences
-- First person where reflecting Cade's experience
-- No: "field operations," "signal interpretation," "execution standards," "rumor loops"
-- Use contractions ("isn't," "you're," "I'll")
-- Write like a person talking to a person, not documentation
-- Reader should feel a specific human behind the words
 
 ---
 
@@ -177,4 +165,4 @@ Cade reviewed /what-are-pennies with another AI and identified these gaps:
 
 ---
 
-**Last updated:** Feb 18, 2026
+**Last updated:** Feb 21, 2026

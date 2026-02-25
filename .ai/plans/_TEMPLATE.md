@@ -39,40 +39,48 @@ Record decisions that must not be re-decided later:
 - Active-route matching rules:
 - Infra reuse:
 
-## 4) Phase Plan (Implementation Specs)
+## 4) Execution Topology (Required for Large Work)
 
-### Phase 1 - Quick wins (lowest risk)
+- Parent plan objective:
+- Child slice list (ordered):
+  - `S1`:
+  - `S2`:
+  - `S3`:
+- Slice dependency graph:
+  - `S2` depends on:
+  - `S3` depends on:
+- Default slice-size rule: one user outcome per slice unless founder-approved exception is recorded.
+- Stop/Go checkpoint rule: do not start next slice until current slice acceptance + verification lane pass.
 
-- **Goal:**
+## 5) Slice Specs (Implementation-Ready)
+
+### Slice S1 - <Name>
+
+- **Goal (single outcome):**
 - **Exact files to modify:**
-- **Exact UI/copy changes:**
+- **Copy/naming changes:**
 - **Mobile/a11y requirements:**
 - **Risks / edge cases:**
-- **Metrics:**
+- **Acceptance criteria:**
+- **Rollback path:**
+- **Verification lane:**
 
-### Phase 2 - Onboarding / friction removal
+### Slice S2 - <Name>
 
-- **Goal:**
+- **Goal (single outcome):**
 - **Exact files to modify:**
-- **Auth / intent persistence / idempotency:**
+- **Copy/naming changes:**
+- **Mobile/a11y requirements:**
 - **Risks / edge cases:**
-- **Metrics:**
+- **Acceptance criteria:**
+- **Rollback path:**
+- **Verification lane:**
 
-### Phase 3 - Data correctness + performance safety
-
-- **Goal:**
-- **Exact files to modify:**
-- **Deterministic ops:**
-- **Default entities (check-and-create/upsert):**
-- **Performance plan (batching/caching):**
-- **Risks / edge cases:**
-- **Metrics:**
-
-## 5) Open Questions (Plan is incomplete until resolved)
+## 6) Open Questions (Plan is incomplete until resolved)
 
 -
 
-## 6) Rollback Plan
+## 7) Rollback Plan
 
 - How to revert safely if this change causes issues:
 

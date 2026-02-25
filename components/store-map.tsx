@@ -32,14 +32,32 @@ interface StoreMapProps {
   selectedStore?: StoreLocation | null
   onSelect?: (store: StoreLocation) => void
   userLocation?: { lat: number; lng: number } | null
+  followMode?: "follow" | "explore"
+  onExploreMode?: () => void
+  recenterRequestToken?: number
 }
 
 // Component to handle map view changes and ensure proper initialization
-function MapController({ selectedStore }: { selectedStore?: StoreLocation | null }) {
+function MapController({
+  center,
+  selectedStore,
+  followMode,
+  onExploreMode,
+  recenterRequestToken,
+}: {
+  center: [number, number]
+  selectedStore?: StoreLocation | null
+  followMode: "follow" | "explore"
+  onExploreMode?: () => void
+  recenterRequestToken: number
+}) {
   const map = useMap()
   const lastSelectedIdRef = React.useRef<string | null>(null)
+  const lastRecenterTokenRef = React.useRef<number>(0)
   const hasInvalidatedRef = React.useRef(false)
-  const userHasInteractedRef = React.useRef(false)
+  const programmaticMoveRef = React.useRef(false)
+  const pendingUserInteractionRef = React.useRef(false)
+  const pendingUserInteractionTimeoutRef = React.useRef<number | null>(null)
   const panTrackedRef = React.useRef(false)
   const zoomTrackedRef = React.useRef(false)
 
@@ -71,29 +89,67 @@ function MapController({ selectedStore }: { selectedStore?: StoreLocation | null
 
   // Track manual user interactions to disable auto-centering
   React.useEffect(() => {
+    const container = map.getContainer()
+
+    const markPendingUserInteraction = () => {
+      pendingUserInteractionRef.current = true
+      if (pendingUserInteractionTimeoutRef.current !== null) {
+        window.clearTimeout(pendingUserInteractionTimeoutRef.current)
+      }
+      pendingUserInteractionTimeoutRef.current = window.setTimeout(() => {
+        pendingUserInteractionRef.current = false
+        pendingUserInteractionTimeoutRef.current = null
+      }, 1200)
+    }
+
+    const resetProgrammaticMove = () => {
+      programmaticMoveRef.current = false
+      pendingUserInteractionRef.current = false
+      if (pendingUserInteractionTimeoutRef.current !== null) {
+        window.clearTimeout(pendingUserInteractionTimeoutRef.current)
+        pendingUserInteractionTimeoutRef.current = null
+      }
+    }
+
     const onDragStart = () => {
-      userHasInteractedRef.current = true
+      if (programmaticMoveRef.current || !pendingUserInteractionRef.current) return
+      onExploreMode?.()
       if (!panTrackedRef.current) {
         panTrackedRef.current = true
         trackEvent("map_interact", { action: "pan" })
       }
     }
     const onZoomStart = () => {
-      userHasInteractedRef.current = true
+      if (programmaticMoveRef.current || !pendingUserInteractionRef.current) return
+      onExploreMode?.()
       if (!zoomTrackedRef.current) {
         zoomTrackedRef.current = true
         trackEvent("map_interact", { action: "zoom" })
       }
     }
 
+    container.addEventListener("pointerdown", markPendingUserInteraction, { passive: true })
+    container.addEventListener("touchstart", markPendingUserInteraction, { passive: true })
+    container.addEventListener("wheel", markPendingUserInteraction, { passive: true })
     map.on("dragstart", onDragStart)
     map.on("zoomstart", onZoomStart)
+    map.on("moveend", resetProgrammaticMove)
+    map.on("zoomend", resetProgrammaticMove)
 
     return () => {
+      container.removeEventListener("pointerdown", markPendingUserInteraction)
+      container.removeEventListener("touchstart", markPendingUserInteraction)
+      container.removeEventListener("wheel", markPendingUserInteraction)
       map.off("dragstart", onDragStart)
       map.off("zoomstart", onZoomStart)
+      map.off("moveend", resetProgrammaticMove)
+      map.off("zoomend", resetProgrammaticMove)
+      if (pendingUserInteractionTimeoutRef.current !== null) {
+        window.clearTimeout(pendingUserInteractionTimeoutRef.current)
+        pendingUserInteractionTimeoutRef.current = null
+      }
     }
-  }, [map])
+  }, [map, onExploreMode])
 
   // Ensure scroll-wheel gestures over the popup zoom the map instead of scrolling the page
   React.useEffect(() => {
@@ -122,35 +178,48 @@ function MapController({ selectedStore }: { selectedStore?: StoreLocation | null
     }
   }, [map])
 
-  // Only pan to selected store when it changes and user hasn't manually interacted
+  // Pan once to newly selected stores only while in follow mode
   React.useEffect(() => {
+    if (followMode !== "follow") return
     if (selectedStore && selectedStore.id !== lastSelectedIdRef.current) {
       lastSelectedIdRef.current = selectedStore.id
 
-      if (userHasInteractedRef.current) return
-
       // Pan to the store (keep current zoom) without nudging position to avoid unwanted recentering
+      programmaticMoveRef.current = true
       map.panTo([selectedStore.lat, selectedStore.lng], {
         animate: true,
         duration: 0.5,
       })
     }
-  }, [selectedStore, map])
+  }, [followMode, map, selectedStore])
+
+  // Explicit recenter requests (button tap / search / locate) should always be honored
+  React.useEffect(() => {
+    if (recenterRequestToken <= 0 || recenterRequestToken === lastRecenterTokenRef.current) return
+
+    lastRecenterTokenRef.current = recenterRequestToken
+    programmaticMoveRef.current = true
+    map.setView(center, map.getZoom(), { animate: true })
+  }, [center, map, recenterRequestToken])
 
   return null
 }
 
-export const StoreMap = React.memo(function StoreMap({
+const StoreMap = React.memo(function StoreMap({
   stores,
   center = [39.8283, -98.5795],
   zoom = 10,
   selectedStore,
   onSelect,
   userLocation,
+  followMode = "follow",
+  onExploreMode,
+  recenterRequestToken = 0,
 }: StoreMapProps) {
   const [mounted, setMounted] = React.useState(false)
   const { theme } = useTheme()
   const [isDarkMode, setIsDarkMode] = React.useState(false)
+  const [isMobileViewport, setIsMobileViewport] = React.useState(false)
   const [popupWidth, setPopupWidth] = React.useState({ minWidth: 260, maxWidth: 260 })
   const markersRef = React.useRef<Record<string, LeafletMarker | null>>({})
 
@@ -305,12 +374,19 @@ export const StoreMap = React.memo(function StoreMap({
 
     const calculatePopupWidth = () => {
       const viewportWidth = window.innerWidth
-      const safePadding = 48
+      const coarsePointer = window.matchMedia("(pointer: coarse)").matches
+      const mobileViewport = viewportWidth < 1024 || coarsePointer
+      const safePadding = mobileViewport ? 32 : 48
       const availableWidth = Math.max(viewportWidth - safePadding, 220)
 
-      const minWidth = Math.min(260, availableWidth)
-      const maxWidth = Math.min(320, availableWidth)
+      const minWidth = mobileViewport
+        ? Math.min(220, availableWidth)
+        : Math.min(250, availableWidth)
+      const maxWidth = mobileViewport
+        ? Math.min(240, availableWidth)
+        : Math.min(290, availableWidth)
 
+      setIsMobileViewport(mobileViewport)
       setPopupWidth({ minWidth, maxWidth })
     }
 
@@ -358,7 +434,13 @@ export const StoreMap = React.memo(function StoreMap({
         style={{ height: "100%", width: "100%", minHeight: "300px" }}
         scrollWheelZoom={true}
       >
-        <MapController selectedStore={selectedStore} />
+        <MapController
+          center={center}
+          selectedStore={selectedStore}
+          followMode={followMode}
+          onExploreMode={onExploreMode}
+          recenterRequestToken={recenterRequestToken}
+        />
         <TileLayer
           attribution={tileConfig.attribution}
           url={tileConfig.url}
@@ -407,103 +489,138 @@ export const StoreMap = React.memo(function StoreMap({
                 }
               }}
             >
-              <Popup
-                className="store-popup"
-                autoPan={true}
-                autoPanPadding={[50, 100]}
-                keepInView={true}
-                maxWidth={popupWidth.maxWidth}
-                minWidth={popupWidth.minWidth}
-                closeButton={false}
-              >
-                <div className="store-popup-card">
-                  <div className="store-popup-header">
-                    <div className="store-popup-heading">
-                      <h3 className="store-popup-title">
-                        {store.name}
-                        {store.number ? (
-                          <span className="store-popup-store-number">
-                            #{formatStoreNumber(store.number)}
-                          </span>
-                        ) : null}
-                      </h3>
-                    </div>
-                  </div>
-
-                  <div className="store-popup-meta">
-                    <div>{store.address}</div>
-                    <div>
-                      {store.city}, {store.state} {store.zip}
-                    </div>
-                    {store.phone && (
-                      <a
-                        href={`tel:${store.phone.replace(/[^0-9]/g, "")}`}
-                        className="store-popup-phone"
-                      >
-                        {store.phone}
-                      </a>
-                    )}
-                  </div>
-
-                  <div className="store-popup-section">
-                    <div className="store-popup-section-label">Hours</div>
-                    <div className="store-popup-hours">
-                      {mergedHours.isExpanded
-                        ? (() => {
-                            const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-                            const dayValues = [
-                              dayHours.monday,
-                              dayHours.tuesday,
-                              dayHours.wednesday,
-                              dayHours.thursday,
-                              dayHours.friday,
-                              dayHours.saturday,
-                              dayHours.sunday,
-                            ]
-                            return dayLabels.map((label, index) => (
-                              <div key={label} className="store-popup-hour-row">
-                                <span className="store-popup-hour-day">{label}</span>
-                                <span className="store-popup-hour-value">{dayValues[index]}</span>
-                              </div>
-                            ))
-                          })()
-                        : mergedHours.ranges.map((range) => (
-                            <div key={range.days} className="store-popup-hour-row">
-                              <span className="store-popup-hour-day">{range.days}</span>
-                              <span className="store-popup-hour-value">{range.hours}</span>
-                            </div>
-                          ))}
-                    </div>
-                  </div>
-
-                  <div className="store-popup-actions">
+              {isMobileViewport ? (
+                <Popup
+                  className="store-popup store-popup--mobile"
+                  autoPan={false}
+                  keepInView={false}
+                  closeButton={false}
+                  maxWidth={200}
+                  minWidth={160}
+                >
+                  <div className="store-popup-card store-popup-card--minimal">
+                    <p
+                      className="store-popup-title"
+                      style={{ fontSize: "13px", marginBottom: "6px" }}
+                    >
+                      {store.name}
+                    </p>
                     <a
                       href={`https://www.google.com/maps/dir/?api=1&destination=${store.lat},${store.lng}`}
                       target="_blank"
                       rel="noopener noreferrer"
+                      data-pc-id="store-finder.popup-directions-mobile"
                       className="store-popup-button store-popup-button-primary"
                       onClick={() =>
                         trackEvent("directions_click", { storeId: store.id, state: store.state })
                       }
                     >
-                      <Navigation className="w-4 h-4" />
+                      <Navigation className="w-3.5 h-3.5" />
                       Directions
                     </a>
-                    <a
-                      href={getStoreUrl(store)}
-                      target="_blank"
-                      rel="nofollow sponsored noopener noreferrer"
-                      className="store-popup-button store-popup-button-secondary"
-                      onClick={() =>
-                        trackEvent("map_interact", { action: "marker", markerState: store.state })
-                      }
-                    >
-                      <Info className="w-4 h-4" />
-                      Details
-                    </a>
                   </div>
-                </div>
-              </Popup>
+                </Popup>
+              ) : (
+                <Popup
+                  className="store-popup"
+                  autoPan={true}
+                  autoPanPadding={[32, 72]}
+                  keepInView={true}
+                  maxWidth={popupWidth.maxWidth}
+                  minWidth={popupWidth.minWidth}
+                  closeButton={false}
+                >
+                  <div className="store-popup-card">
+                    <div className="store-popup-header">
+                      <div className="store-popup-heading">
+                        <h3 className="store-popup-title">
+                          {store.name}
+                          {store.number ? (
+                            <span className="store-popup-store-number">
+                              #{formatStoreNumber(store.number)}
+                            </span>
+                          ) : null}
+                        </h3>
+                      </div>
+                    </div>
+
+                    <div className="store-popup-meta">
+                      <div>{store.address}</div>
+                      <div>
+                        {store.city}, {store.state} {store.zip}
+                      </div>
+                      {store.phone && (
+                        <a
+                          href={`tel:${store.phone.replace(/[^0-9]/g, "")}`}
+                          className="store-popup-phone"
+                        >
+                          {store.phone}
+                        </a>
+                      )}
+                    </div>
+
+                    <div className="store-popup-section">
+                      <div className="store-popup-section-label">Hours</div>
+                      <div className="store-popup-hours">
+                        {mergedHours.isExpanded
+                          ? (() => {
+                              const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+                              const dayValues = [
+                                dayHours.monday,
+                                dayHours.tuesday,
+                                dayHours.wednesday,
+                                dayHours.thursday,
+                                dayHours.friday,
+                                dayHours.saturday,
+                                dayHours.sunday,
+                              ]
+                              return dayLabels.map((label, index) => (
+                                <div key={label} className="store-popup-hour-row">
+                                  <span className="store-popup-hour-day">{label}</span>
+                                  <span className="store-popup-hour-value">{dayValues[index]}</span>
+                                </div>
+                              ))
+                            })()
+                          : mergedHours.ranges.map((range) => (
+                              <div key={range.days} className="store-popup-hour-row">
+                                <span className="store-popup-hour-day">{range.days}</span>
+                                <span className="store-popup-hour-value">{range.hours}</span>
+                              </div>
+                            ))}
+                      </div>
+                    </div>
+
+                    <div className="store-popup-actions">
+                      <a
+                        href={`https://www.google.com/maps/dir/?api=1&destination=${store.lat},${store.lng}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        data-pc-id="store-finder.popup-directions"
+                        className="store-popup-button store-popup-button-primary"
+                        onClick={() =>
+                          trackEvent("directions_click", { storeId: store.id, state: store.state })
+                        }
+                      >
+                        <Navigation className="w-4 h-4" />
+                        Directions
+                      </a>
+                      <a
+                        href={getStoreUrl(store)}
+                        target="_blank"
+                        rel="nofollow sponsored noopener noreferrer"
+                        data-pc-id="store-finder.popup-store-page"
+                        className="store-popup-button store-popup-button-secondary"
+                        onClick={() =>
+                          trackEvent("map_interact", { action: "marker", markerState: store.state })
+                        }
+                      >
+                        <Info className="w-4 h-4" />
+                        Details
+                      </a>
+                    </div>
+                  </div>
+                </Popup>
+              )}
             </Marker>
           )
         })}
@@ -511,3 +628,6 @@ export const StoreMap = React.memo(function StoreMap({
     </div>
   )
 })
+
+export { StoreMap }
+export default StoreMap

@@ -23,6 +23,7 @@
 # next.js
 /.next/
 /.next-playwright/
+/.next-visual/
 /.next-build/
 /out/
 
@@ -113,6 +114,7 @@ reports/penny-list-console-capture.png
 # privacy: analytics screenshots (local-only)
 .ai/analytics/
 .ai/_tmp/
+.ai/.shared-writer-lock.json
 
 # local-only analytics screenshots that were moved into cold storage during prune
 archive/media-pruned/**/.ai/analytics/**/*.jpg
@@ -148,3 +150,6 @@ __pycache__/
 *.egg-info/
 .pytest_cache/
 .ruff_cache/
+
+# local email artifacts
+emails/*.pdf

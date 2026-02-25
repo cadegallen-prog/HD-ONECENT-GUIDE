@@ -148,6 +148,7 @@ For any meaningful change (especially UI/copy/navigation):
 - Add `npm run e2e:smoke` output for route/form/API/navigation/UI-flow changes
 - Add `npm run e2e:full` output when FULL trigger policy applies (or if explicitly requested)
 - UI changes: capture Playwright screenshots (light/dark, mobile/desktop) and confirm browser console has no errors
+- Branch hygiene evidence: branch used, commit SHA(s), push status, and session-end `git status --short`
 - Docs/memory updated: `README.md`, `.ai/STATE.md`, `.ai/BACKLOG.md`, `.ai/SESSION_LOG.md`
 - Include a structured next-agent handoff block per `.ai/HANDOFF_PROTOCOL.md`
 - Token-only colors confirmed (no raw Tailwind palette); prefer `npm run lint:colors`
@@ -239,6 +240,8 @@ public/                 # Static assets
 - **First session only:** Read `.ai/GROWTH_STRATEGY.md` for business context
 - **If session goal is AI workflow/tooling/verification enablement:** Also read `.ai/AI_ENABLEMENT_BLUEPRINT.md`
 - **Rules:** Default no new dependencies; run `verify:fast` on meaningful changes, run `e2e:smoke` for flow changes, run `e2e:full` when FULL triggers apply, record results in `.ai/SESSION_LOG.md`; work on `dev` and promote verified changes to `main`
+- **Planning rule (mandatory):** Decompose large plans into parent + child implementation slices (default: one user outcome per slice), with acceptance/rollback/verification per slice and a stop-go checkpoint after each slice.
+- **Parallel-agent rule (mandatory when >1 agent is active):** use the shared-memory single-writer lock for `.ai/HANDOFF.md`, `.ai/STATE.md`, `.ai/SESSION_LOG.md`, `.ai/BACKLOG.md` via `ai:writer-lock:*` commands.
 - **Mandatory Alignment Gate before mutation:** GOAL / WHY / DONE MEANS / NOT DOING / CONSTRAINTS / ASSUMPTIONS / CHALLENGES
 
 ---
@@ -277,11 +280,18 @@ Use this if the session is policy/process/governance heavy:
 
 **Workflow:**
 
-1. Pull latest `dev`
-2. Make and verify changes on `dev`
-3. Run `npm run ai:memory:check` + `npm run verify:fast` (and `npm run e2e:smoke` for route/form/API/navigation/UI-flow changes)
-4. Commit/push `dev`
-5. Promote to `main` only after review and all required checks pass
+1. `git checkout dev && git pull origin dev`
+2. Run `git status --short` before new work. If dirty, close carryover first (commit/push or explicit blocker resolution) before starting another objective.
+3. If more than one agent/session is active, claim shared-memory lock before editing `.ai/HANDOFF.md`, `.ai/STATE.md`, `.ai/SESSION_LOG.md`, `.ai/BACKLOG.md`:
+   - `npm run ai:writer-lock:claim -- <agent-name> "<task>"`
+   - `npm run ai:writer-lock:status`
+   - `npm run ai:writer-lock:release -- <agent-name>` after memory updates
+4. Make scoped changes for one objective on `dev`.
+5. Stage intentionally (`git add <paths>`) and verify staged scope with `git diff --cached --name-only`.
+6. Run `npm run ai:memory:check` + `npm run verify:fast` (and `npm run e2e:smoke` for route/form/API/navigation/UI-flow changes).
+7. Commit/push `dev`.
+8. Re-run `git status --short`; clean is expected before starting the next task.
+9. Promote to `main` only after review and all required checks pass.
 
 ---
 

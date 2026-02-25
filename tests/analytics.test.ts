@@ -46,3 +46,20 @@ test("preserves explicit safe keys over remapped duplicates", () => {
     ui_source: "legacy-key",
   })
 })
+
+test("removes sensitive report identifiers from payload params", () => {
+  const result = sanitizeEventParams({
+    sku: "1009258128",
+    name: "Sensitive Name",
+    itemName: "Sensitive Item",
+    upc: "123456789012",
+    internet_sku: 123456,
+    skuMasked: "8128",
+    ui_source: "card",
+  })
+
+  assert.deepStrictEqual(result, {
+    skuMasked: "8128",
+    ui_source: "card",
+  })
+})

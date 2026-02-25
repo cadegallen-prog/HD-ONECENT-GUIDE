@@ -2,22 +2,13 @@
 
 ## Read First (in order)
 
-Follow the canonical read order (source of truth is the root `README.md`, “AI Canon & Read Order”):
+Read `VISION_CHARTER.md` first, then follow `.ai/START_HERE.md` — it defines the canonical tiered read order for all tools.
 
-1. `.ai/START_HERE.md`
-2. `.ai/CRITICAL_RULES.md`
-3. `.ai/STATE.md`
-4. `.ai/BACKLOG.md`
-5. `.ai/CONTRACT.md`
-6. `.ai/DECISION_RIGHTS.md`
+Tier 1 (every session): VISION_CHARTER → START_HERE → CRITICAL_RULES → STATE → BACKLOG
+Tier 2 (before implementing): CONTRACT → DECISION_RIGHTS
+Tier 3 (contextual): See START_HERE.md for the full list.
 
-**First session only:** `.ai/GROWTH_STRATEGY.md`
-**If goal is AI workflow/tooling/verification enablement:** `.ai/AI_ENABLEMENT_BLUEPRINT.md`
-
-Keep these open while working:
-
-- `.ai/USAGE.md` (task template + course-correction script)
-- `.ai/VERIFICATION_REQUIRED.md` (paste-ready proof format)
+Keep open while working: `.ai/VERIFICATION_REQUIRED.md` (paste-ready proof format)
 
 Then restate understanding in plain English and proceed.
 Ask at most one clarifying question only when a real blocker exists.
@@ -39,14 +30,14 @@ Ask at most one clarifying question only when a real blocker exists.
 
 ## Session Start Protocol (MANDATORY)
 
-- Follow the canonical `AI Canon & Read Order` in the root `README.md`.
-- After reading, summarize: current state (`.ai/STATE.md`), top priority (`.ai/BACKLOG.md`), key constraints (`.ai/CONSTRAINTS.md` + `.ai/FOUNDATION_CONTRACT.md` + `.ai/GUARDRAILS.md`), and any recent notes (`.ai/SESSION_LOG.md`).
+- Follow `.ai/START_HERE.md` tiered read order.
+- After reading, summarize: current state (`.ai/STATE.md`), top priority (`.ai/BACKLOG.md`), key constraints (`.ai/CRITICAL_RULES.md`), and any recent notes (`.ai/SESSION_LOG.md`).
 
 ---
 
-## Autonomy After "Go" (Default)
+## Autonomy By Default
 
-Once Cade says "go" / "build it", do the full loop without extra prompts:
+Once the objective is clear (or top P0 is selected by default), do the full loop without extra prompts:
 
 1. Implement
 2. Verify (`npm run verify:fast` and `npm run e2e:smoke` for flow changes; full e2e by trigger)
@@ -74,7 +65,7 @@ If you try the same failed approach twice without documenting it, you've wasted 
 
 ## Canonical Entry Point
 
-- Begin every session by reading the `AI Canon & Read Order` section in `README.md`. That canonical sequence (`STATE.md` → `BACKLOG.md` → `CONTRACT.md`/`DECISION_RIGHTS.md` → `CONSTRAINTS.md`/`FOUNDATION_CONTRACT.md`/`GUARDRAILS.md` → latest `SESSION_LOG.md` → `CONTEXT.md`) applies to all agents; this doc simply adds the Copilot-specific capability notes afterward.
+- Begin every session by reading `VISION_CHARTER.md`, then `.ai/START_HERE.md`. These define the canonical read order for all agents (Claude, Codex, Copilot). This doc adds Copilot-specific capability notes afterward.
 
 ## Owner Context (Read This First)
 
@@ -202,30 +193,58 @@ You have TWO methods to interact with Supabase:
 
 ## MCP Servers (Available to All AI Agents)
 
-**Configuration:**
+**Configuration per tool:**
 
-- **GitHub Copilot:** ✅ Full MCP support (via VS Code Chat)
-- **Claude Code:** ✅ Full MCP support (`.vscode/mcp.json`)
-- **Codex:** ✅ Full MCP support (`~/.codex/config.toml`)
+- **GitHub Copilot:** `.vscode/mcp.json` (includes `interactive` MCP — Copilot-only)
+- **Claude Code:** `.claude/settings.json` (project-level)
+- **Codex:** `~/.codex/config.toml`
 
-**5 Available Servers:**
+**Servers:**
 
 1. **Filesystem** - File operations (create, read, edit, move)
-2. **GitHub** - PRs/issues/repo management
-3. **Playwright** - Browser testing & screenshots (REQUIRED for UI changes)
-4. **Supabase** - Database migrations, queries, schema management (ALL AGENTS HAVE ACCESS)
+2. **Git** - Version control (Claude Code + Codex only)
+3. **GitHub** - PRs/issues/repo management
+4. **Playwright** - Browser testing & screenshots (REQUIRED for UI changes)
+5. **Supabase** - Database migrations, queries, schema management (ALL AGENTS HAVE ACCESS)
 
-**Note:** Git MCP removed (package doesn't exist) - use terminal for git operations instead.
+---
+
+## GA4 + GSC Analytics Access
+
+**Not an MCP server** — uses a custom archive script with OAuth refresh-token auth.
+
+**Credentials:** `.env.local` contains `GA4_PROPERTY_ID`, `GSC_SITE_URL`, `GOOGLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_SECRET`, `GOOGLE_OAUTH_REFRESH_TOKEN`
+
+| Command                     | What It Does                                                    |
+| --------------------------- | --------------------------------------------------------------- |
+| `npm run analytics:delta`   | Smart delta pull (only new data since last run) — **preferred** |
+| `npm run analytics:archive` | Full pull (default: 2024-01-01 to today)                        |
+
+**Automation:** Windows Task Scheduler runs `analytics:delta` every Sunday at 2am. Catches up on next boot if PC was off. Task: `PennyCentral-AnalyticsDelta`. Log: `.local/analytics-history/scheduled-run.log`.
+
+**Output:** `.local/analytics-history/runs/<timestamp>/` (git-ignored, local-only)
+
+---
+
+## Staging Warmer Automation
+
+**Script:** `npm run warm:staging` (scrapes Scouter Pro → populates item cache in Supabase)
+
+**Auth:** `PENNY_RAW_COOKIE` + `PENNY_GUILD_ID` in `.env.local` (session cookie — expires periodically)
+
+**Automation:** Windows Task Scheduler runs Mon/Wed/Fri at 6am. On failure (expired cookie), a Windows toast notification alerts Cade. Task: `PennyCentral-StagingWarmer`. Log: `.local/staging-warmer-scheduled.log`.
+
+**When cookie expires:** Update `PENNY_RAW_COOKIE` in `.env.local` with fresh cookie from Scouter Pro.
 
 ---
 
 ## AI Tool Comparison
 
-| Tool             | MCP Support        | Best For                               | Entry Point                       |
-| ---------------- | ------------------ | -------------------------------------- | --------------------------------- |
-| **Copilot Chat** | ✅ Yes (4 servers) | Code completion, quick questions       | (No special setup needed)         |
-| **Claude Code**  | ✅ Yes (4 servers) | Full development, testing, deployment  | `.github/copilot-instructions.md` |
-| **Codex**        | ✅ Yes (4 servers) | Architecture, high-reasoning decisions | `.ai/CODEX_ENTRY.md`              |
+| Tool             | MCP Support        | Config Location         | Best For                               |
+| ---------------- | ------------------ | ----------------------- | -------------------------------------- |
+| **Copilot Chat** | ✅ Yes (5 servers) | `.vscode/mcp.json`      | Code completion, quick questions       |
+| **Claude Code**  | ✅ Yes (5 servers) | `.claude/settings.json` | Full development, testing, deployment  |
+| **Codex**        | ✅ Yes (5 servers) | `~/.codex/config.toml`  | Architecture, high-reasoning decisions |
 
 **Default workflow:**
 
@@ -262,13 +281,13 @@ Technical co-founder. Founder can't code.
 
 ## Git Workflow
 
-**Only `main` branch deploys to production.**
+Use the repo workflow in `AGENTS.md`:
 
-1. Make changes
-2. Test (`verify:fast`, then `e2e:smoke` when applicable)
-3. Commit
-4. Push to main
-5. Verify at https://pennycentral.com
+1. Start on `dev` (`git checkout dev && git pull origin dev`)
+2. Make scoped changes
+3. Test (`verify:fast`, then `e2e:smoke` when applicable)
+4. Commit and push to `dev`
+5. Promote `dev -> main` only after required checks pass
 
 ---
 

@@ -34,7 +34,12 @@ const pages = [
   { icon: AlertCircle, label: "Facts vs Myths", path: "/facts-vs-myths", group: "Guide" },
   // Tools (actual pages)
   { icon: Users, label: "Penny List", path: "/penny-list", group: "Tools" },
-  { icon: FileText, label: "Report a Find", path: "/report-find", group: "Tools" },
+  {
+    icon: FileText,
+    label: "Report a Find",
+    path: "/report-find?src=command-palette",
+    group: "Tools",
+  },
   { icon: Heart, label: "My List", path: "/lists", group: "Tools" },
   { icon: Map, label: "Store Finder", path: "/store-finder", group: "Tools" },
   // More
