@@ -71,7 +71,7 @@ function readBasketFromSessionStorage(): BasketItem[] {
           quantity = normalizedQty
         }
 
-        if (!sku || !itemName) return null
+        if (!sku) return null
 
         return { sku, itemName, quantity, addedVia }
       })
@@ -105,6 +105,11 @@ function effectiveQuantity(item: BasketItem): number {
   return item.quantity ?? 1
 }
 
+function getBasketItemDisplayName(item: BasketItem): string {
+  const name = item.itemName.trim()
+  return name || `SKU ${formatSkuForDisplay(item.sku)}`
+}
+
 function ReportFindForm() {
   const searchParams = useSearchParams()
   const trackedReportOpenRef = useRef(false)
@@ -120,7 +125,6 @@ function ReportFindForm() {
   })
 
   const [draft, setDraft] = useState({
-    itemName: "",
     sku: "",
     quantity: "",
   })
@@ -196,9 +200,9 @@ function ReportFindForm() {
     const nameParam = (searchParams.get("name") ?? "").trim().slice(0, 75)
     const src = (searchParams.get("src") ?? "direct").trim().slice(0, 64)
 
-    if (!skuParam || !nameParam) return
+    if (!skuParam) return
 
-    const visitMarker = `${PREFILL_VISIT_KEY}:${skuParam}:${nameParam}:${src}`
+    const visitMarker = `${PREFILL_VISIT_KEY}:${skuParam}:${src}`
 
     try {
       if (sessionStorage.getItem(visitMarker) === "1") return
@@ -225,7 +229,7 @@ function ReportFindForm() {
     trackEvent("report_prefill_loaded", {
       ui_source: src || "direct",
       skuMasked: skuParam.slice(-4),
-      hasItemName: true,
+      hasItemName: Boolean(nameParam),
     })
     trackEvent("item_add_prefill", {
       ui_source: src || "direct",
@@ -260,12 +264,6 @@ function ReportFindForm() {
     setResult(null)
     setCopyFeedback("")
 
-    const itemName = draft.itemName.trim().slice(0, 75)
-    if (!itemName) {
-      setAddFeedback({ type: "error", message: "Item name is required." })
-      return
-    }
-
     const skuCheck = validateSku(draft.sku)
     if (skuCheck.error) {
       setSkuError(skuCheck.error)
@@ -293,7 +291,7 @@ function ReportFindForm() {
           ...prev,
           {
             sku: normalizedSku,
-            itemName,
+            itemName: "",
             quantity: incomingQuantity,
             addedVia: "manual",
           },
@@ -308,7 +306,6 @@ function ReportFindForm() {
       const next = [...prev]
       next[existingIndex] = {
         ...existing,
-        itemName,
         quantity: nextQuantity,
         addedVia: "manual",
       }
@@ -336,7 +333,7 @@ function ReportFindForm() {
       })
     }
 
-    setDraft({ itemName: "", sku: "", quantity: "" })
+    setDraft({ sku: "", quantity: "" })
     setSkuDisplay("")
     setSkuError("")
   }
@@ -373,7 +370,6 @@ function ReportFindForm() {
     let dryRun = false
 
     const toApiItem = (item: BasketItem) => ({
-      itemName: item.itemName,
       sku: item.sku,
       storeCity: sharedData.storeCity,
       storeState: sharedData.storeState,
@@ -580,7 +576,7 @@ function ReportFindForm() {
 
     const lines = lastSuccessfulItems.map((item) => {
       const qtyText = item.quantity ? ` x${item.quantity}` : ""
-      return `- ${item.itemName} (SKU ${formatSkuForDisplay(item.sku)})${qtyText}`
+      return `- ${getBasketItemDisplayName(item)}${qtyText}`
     })
 
     const text = [
@@ -714,27 +710,6 @@ function ReportFindForm() {
 
           <div>
             <label
-              htmlFor="itemName"
-              className="block text-sm font-medium text-[var(--text-primary)] mb-2"
-            >
-              Item Name{" "}
-              <span className="text-[var(--status-error)]" aria-hidden="true">
-                *
-              </span>
-            </label>
-            <input
-              type="text"
-              id="itemName"
-              maxLength={75}
-              value={draft.itemName}
-              onChange={(e) => setDraft((prev) => ({ ...prev, itemName: e.target.value }))}
-              placeholder="e.g., Milwaukee Drill Set"
-              className="w-full px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent"
-            />
-          </div>
-
-          <div>
-            <label
               htmlFor="sku"
               className="block text-sm font-medium text-[var(--text-primary)] mb-2"
             >
@@ -766,6 +741,9 @@ function ReportFindForm() {
                 Enter the 6 or 10-digit SKU from the shelf tag or Home Depot app.
               </p>
             )}
+            <p className="mt-1 text-xs text-[var(--text-muted)]">
+              Item name is auto-resolved from trusted enrichment sources after submit.
+            </p>
             {skuWarning && (
               <p className="mt-1 text-xs text-[var(--status-warning)] flex items-start gap-1.5">
                 <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" aria-hidden="true" />
@@ -831,7 +809,7 @@ function ReportFindForm() {
                 >
                   <div className="min-w-0">
                     <p className="text-sm font-medium text-[var(--text-primary)] truncate">
-                      {item.itemName}
+                      {getBasketItemDisplayName(item)}
                     </p>
                     <p className="text-xs text-[var(--text-secondary)] font-mono">
                       SKU {formatSkuForDisplay(item.sku)}
@@ -842,7 +820,7 @@ function ReportFindForm() {
                     type="button"
                     onClick={() => removeBasketItem(item.sku)}
                     className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cta-primary)]"
-                    aria-label={`Remove ${item.itemName} from basket`}
+                    aria-label={`Remove ${getBasketItemDisplayName(item)} from basket`}
                   >
                     <Trash2 className="w-4 h-4" aria-hidden="true" />
                   </button>
@@ -902,8 +880,7 @@ function ReportFindForm() {
                   <ul className="space-y-1 text-xs text-[var(--text-secondary)]">
                     {result.failed.map((failure) => (
                       <li key={failure.item.sku}>
-                        {failure.item.itemName} (SKU {formatSkuForDisplay(failure.item.sku)}):{" "}
-                        {failure.message}
+                        {getBasketItemDisplayName(failure.item)}: {failure.message}
                       </li>
                     ))}
                   </ul>

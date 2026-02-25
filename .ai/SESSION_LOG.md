@@ -4,6 +4,42 @@
 
 ---
 
+## 2026-02-25 - Codex - Submit-Find Canonical Name Authority Lock + SKU-Only Report Input
+
+**Goal:** Ensure user-submitted item names never become canonical authority, align report-find UX to SKU-only manual submission, and ship with full verification.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `app/api/submit-find/route.ts`
+  - `itemName` is now optional input-only compatibility data,
+  - canonical `item_name` assignment now comes from self-enrichment/trusted enrichment paths only,
+  - trusted `item_name` provenance now accepts `self_enriched`,
+  - added canonical-signal fallback logic so prior self-enriched names can still be reused when provenance metadata is missing.
+- `components/report-find/ReportFindFormClient.tsx`
+  - removed manual `Item Name` input from Add Item UX,
+  - manual basket adds now use SKU + optional quantity only,
+  - API payload mapping no longer sends `itemName`,
+  - display fallback now renders `SKU {formatted}` when no prefill name exists.
+- `app/report-find/page.tsx`
+  - updated static explainer copy to remove “Item name required” guidance and document trusted auto-resolution.
+- Tests updated:
+  - `tests/submit-find-route.test.ts`
+  - `tests/report-find-batch.spec.ts`
+  - `tests/report-find-prefill.spec.ts`
+  - `tests/smoke-critical.spec.ts`
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `$env:SUBMIT_FIND_DRY_RUN='false'; npx tsx --import ./tests/setup.ts --test tests/submit-find-route.test.ts` ✅
+- `$env:NEXT_DIST_DIR='.next-playwright'; $env:PLAYWRIGHT='1'; $env:NEXT_PUBLIC_EZOIC_ENABLED='false'; $env:NEXT_PUBLIC_ANALYTICS_ENABLED='false'; npx playwright test tests/report-find-prefill.spec.ts tests/report-find-batch.spec.ts tests/smoke-critical.spec.ts --project=chromium-desktop-light --workers=1` ✅
+- `$env:SUBMIT_FIND_DRY_RUN='false'; npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+
+---
+
 ## 2026-02-25 - Codex - SKU Name Regression Fix (Item Cache Source + Name Downgrade Guard)
 
 **Goal:** Stop low-quality names (for example `"Item One"`) from overriding canonical item names, and restore display-time enrichment reads to the active Item Cache table path.
@@ -114,32 +150,6 @@
 - `PLAYWRIGHT_BASE_URL=http://127.0.0.1:3001 npx playwright test tests/visual-pointer-capture.spec.ts --project=chromium-desktop-light --project=chromium-mobile-light --project=chromium-mobile-light-390x844 --workers=1` ✅
 - `npm run ai:memory:check` ✅
 - `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-
----
-
-## 2026-02-24 - Codex - Submit-Find Name Priority Hardening + Unit Mismatch Resolution
-
-**Goal:** Enforce strict trusted-source `item_name` priority and clear blocking unit mismatch.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `app/api/submit-find/route.ts` trusted-source precedence for `item_name` with guarded realtime updates.
-- `app/api/submit-find/route.ts` added `SUBMIT_FIND_DRY_RUN` safety mode (`true` => validate-only, no Supabase writes/RPC/SerpApi usage).
-- `components/report-find/ReportFindFormClient.tsx` now surfaces dry-run copy and suppresses live-submit actions/analytics while dry-run is active.
-- `tests/submit-find-route.test.ts` expanded trusted-source coverage.
-- `tests/submit-find-route.test.ts` added dry-run regression coverage to verify no DB/RPC side effects.
-- `.env.example` now documents `SUBMIT_FIND_DRY_RUN` so future agents/operators can test safely from localhost.
-- `tests/penny-list-utils.test.ts` aligned expectation to `M18 FUEL`.
-
-### Verification
-
-- `npx tsx --import ./tests/setup.ts --test tests/submit-find-route.test.ts` ✅
-- `npx playwright test tests/report-find-batch.spec.ts --project=chromium-desktop-light --workers=1` ✅
-- `npx tsx --import ./tests/setup.ts --test tests/penny-list-utils.test.ts` ✅
-- `npm run verify:fast` ⚠️ blocked by unrelated pre-existing lint warnings in `app/store-finder/page.tsx`
 - `npm run e2e:smoke` ✅
 
 ---

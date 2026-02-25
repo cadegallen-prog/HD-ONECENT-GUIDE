@@ -57,7 +57,7 @@ const lastSubmitMap: Map<string, number> =
 
 const submissionItemSchema = z
   .object({
-    itemName: z.string().min(1).max(75),
+    itemName: z.string().trim().max(75).optional(),
     sku: z.string(),
     storeCity: z.string().optional(),
     storeState: z.string().min(2).max(2),
@@ -263,7 +263,12 @@ function hasTrustedItemNameSource(provenance: Record<string, unknown> | null | u
     source?: unknown
   } | null
   const source = typeof itemNameEntry?.source === "string" ? itemNameEntry.source : ""
-  return source === "staging" || source === "serpapi" || source === "manual"
+  return (
+    source === "staging" ||
+    source === "serpapi" ||
+    source === "manual" ||
+    source === "self_enriched"
+  )
 }
 
 function getTrustedItemNameProvenance(
@@ -272,8 +277,40 @@ function getTrustedItemNameProvenance(
   const itemNameEntry = (provenance?.item_name ?? null) as Record<string, unknown> | null
   if (!itemNameEntry || typeof itemNameEntry !== "object") return null
   const source = typeof itemNameEntry.source === "string" ? itemNameEntry.source : ""
-  if (source !== "staging" && source !== "serpapi" && source !== "manual") return null
+  if (
+    source !== "staging" &&
+    source !== "serpapi" &&
+    source !== "manual" &&
+    source !== "self_enriched"
+  ) {
+    return null
+  }
   return itemNameEntry
+}
+
+function getSelfEnrichedCanonicalItemName(
+  enrichment: EnrichmentData | null | undefined
+): string | null {
+  if (!enrichment?.item_name || typeof enrichment.item_name !== "string") return null
+  const candidateName = enrichment.item_name.trim()
+  if (!candidateName) return null
+
+  if (hasTrustedItemNameSource(enrichment.enrichment_provenance)) {
+    return candidateName
+  }
+
+  const hasSupportingCanonicalSignals =
+    hasNonEmptyText(enrichment.brand) ||
+    hasNonEmptyText(enrichment.model_number) ||
+    hasNonEmptyText(enrichment.upc) ||
+    hasNonEmptyText(enrichment.image_url) ||
+    hasNonEmptyText(enrichment.home_depot_url) ||
+    (typeof enrichment.internet_sku === "number" && enrichment.internet_sku > 0)
+
+  if (!hasSupportingCanonicalSignals) return null
+  if (isLowQualityItemName(candidateName, enrichment.brand)) return null
+
+  return candidateName
 }
 
 function parseTimestampMs(value: string | null | undefined): number {
@@ -284,8 +321,7 @@ function parseTimestampMs(value: string | null | undefined): number {
 
 function getSelfEnrichmentScore(row: SelfEnrichmentCandidate): number {
   let score = 0
-  if (hasNonEmptyText(row.item_name) && hasTrustedItemNameSource(row.enrichment_provenance))
-    score += 5
+  if (getSelfEnrichedCanonicalItemName(row)) score += 5
   if (hasNonEmptyText(row.brand)) score += 3
   if (hasNonEmptyText(row.image_url)) score += 3
   if (hasNonEmptyText(row.home_depot_url)) score += 2
@@ -828,12 +864,10 @@ async function processSubmissionItem(params: {
   const enrichment =
     dryRunEnabled || !supabase ? null : await lookupSelfEnrichment(supabase, normalizedSku)
 
-  // Build payload with enrichment data merged in (only include enrichment fields when present)
-  const userItemName = body.itemName.trim()
-  const enrichmentItemName = hasTrustedItemNameSource(enrichment?.enrichment_provenance)
-    ? enrichment?.item_name?.trim()
-    : null
-  const preferredItemName = enrichmentItemName || userItemName
+  // Build payload with enrichment data merged in (only include enrichment fields when present).
+  // User-submitted itemName is never canonical authority.
+  const enrichmentItemName = getSelfEnrichedCanonicalItemName(enrichment)
+  const timestampIso = new Date().toISOString()
 
   const clientIp = getClientIp(request)
   const submitterHash = clientIp && clientIp !== "unknown" ? hashClientIdentifier(clientIp) : null
@@ -845,11 +879,11 @@ async function processSubmissionItem(params: {
     purchase_date: body.dateFound || null,
     exact_quantity_found: qty ?? null,
     notes_optional: body.notes?.trim() || null,
-    timestamp: new Date().toISOString(),
+    timestamp: timestampIso,
     submitter_hash: submitterHash,
 
-    // Strict order: trusted self-enriched name first, then user fallback.
-    item_name: preferredItemName,
+    // Canonical item_name only comes from self-enrichment / trusted enrichment paths.
+    item_name: enrichmentItemName || null,
   }
 
   if (enrichment) {
@@ -880,8 +914,11 @@ async function processSubmissionItem(params: {
       if (internetProv?.source === "staging" && internetProv?.confirmed_absent === true) {
         carried.internet_sku = internetProv
       }
-      if (enrichmentItemName && itemNameProv) {
-        carried.item_name = itemNameProv
+      if (enrichmentItemName) {
+        carried.item_name = itemNameProv ?? {
+          source: "self_enriched",
+          at: timestampIso,
+        }
       }
 
       if (Object.keys(carried).length > 0) {

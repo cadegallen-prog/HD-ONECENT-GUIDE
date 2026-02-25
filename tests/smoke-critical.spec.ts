@@ -45,7 +45,6 @@ test.describe("critical smoke lane", () => {
 
     await expect(page.locator("[data-testid='basket-item-1009258128']")).toBeVisible()
 
-    await page.locator("#itemName").fill("Second Item")
     await page.locator("#sku").fill("1009258127")
     await page.getByRole("button", { name: "Add item" }).click()
 

@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 25, 2026 (SKU name regression patched in fetch pipeline)
+**Last updated:** Feb 25, 2026 (submit-find canonical item-name authority lock + SKU-only report input)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,28 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-25 (Submit-find canonical item-name authority lock + SKU-only report input):** Removed user-submitted item-name authority from the submission pipeline and aligned report UI/tests to SKU-only manual input so bad typed names cannot become canonical.
+  - **API authority hardening (`app/api/submit-find/route.ts`):**
+    - `itemName` is optional input only (no longer canonical authority),
+    - canonical `item_name` now comes from self-enrichment/trusted enrichment paths only,
+    - trusted provenance now includes `self_enriched`,
+    - when provenance is missing but canonical enrichment signals are strong, the self-enriched name is still reused and tagged as `self_enriched`.
+  - **Report form UX hardening (`components/report-find/ReportFindFormClient.tsx`, `app/report-find/page.tsx`):**
+    - removed manual `Item Name` field from Add Item flow,
+    - API payloads now submit SKU/date/location/quantity only,
+    - basket/success/failure display now falls back to `SKU {formatted}` when no prefill name exists,
+    - report page explainer copy updated to reflect SKU-first flow and automatic trusted-name resolution.
+  - **Regression coverage updates:**
+    - `tests/submit-find-route.test.ts` updated for null canonical name without enrichment and canonical self-enrichment reuse behavior,
+    - `tests/report-find-batch.spec.ts`, `tests/report-find-prefill.spec.ts`, `tests/smoke-critical.spec.ts` updated for SKU-only manual add flow.
+  - **Verification:**
+    - `npm run ai:memory:check` ✅
+    - `$env:SUBMIT_FIND_DRY_RUN='false'; npm run verify:fast` ✅
+    - `npm run e2e:smoke` ✅
+    - targeted confidence checks:
+      - `$env:SUBMIT_FIND_DRY_RUN='false'; npx tsx --import ./tests/setup.ts --test tests/submit-find-route.test.ts` ✅
+      - `npx playwright test tests/report-find-prefill.spec.ts tests/report-find-batch.spec.ts tests/smoke-critical.spec.ts --project=chromium-desktop-light --workers=1` ✅ (after rebuilding `.next-playwright`)
 
 - **2026-02-25 (SKU name regression fix - active Item Cache source + quality-aware display naming):** Patched the Penny List fetch pipeline so canonical Item Cache names are read from the live table path and low-quality newer submissions (for example `"Item One"`) cannot overwrite a better existing display name.
   - **Pipeline fix shipped:**
