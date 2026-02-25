@@ -28,6 +28,24 @@ if (testFiles.length === 0) {
 const result = spawnSync("tsx", ["--import", "./tests/setup.ts", "--test", ...testFiles], {
   stdio: "inherit",
   shell: process.platform === "win32",
+  timeout: Number.parseInt(process.env.UNIT_TEST_TIMEOUT_MS || "600000", 10),
+  killSignal: "SIGTERM",
 })
+
+const timeoutMs = Number.parseInt(process.env.UNIT_TEST_TIMEOUT_MS || "600000", 10)
+const timedOut =
+  result.error?.code === "ETIMEDOUT" || (result.status === null && result.signal === "SIGTERM")
+
+if (timedOut) {
+  console.error(
+    `Unit tests timed out after ${timeoutMs}ms. Set UNIT_TEST_TIMEOUT_MS to a higher value if needed.`
+  )
+  process.exit(124)
+}
+
+if (result.error) {
+  console.error(result.error.message)
+  process.exit(1)
+}
 
 process.exit(result.status ?? 1)

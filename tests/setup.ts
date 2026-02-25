@@ -1,7 +1,7 @@
 import { config } from "dotenv"
 import Module from "node:module"
 
-config({ path: ".env.local", override: false })
+config({ path: ".env.local", override: false, quiet: true })
 
 /**
  * Test setup file to mock server-only package.
