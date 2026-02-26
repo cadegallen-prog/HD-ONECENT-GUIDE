@@ -365,7 +365,14 @@ function collectTotals(
 }
 
 function filterAdditiveGa4Metrics(metrics: string[]): string[] {
-  const additive = new Set(["sessions", "screenPageViews", "engagedSessions", "eventCount"])
+  const additive = new Set([
+    "sessions",
+    "screenPageViews",
+    "engagedSessions",
+    "eventCount",
+    "keyEvents",
+    "conversions",
+  ])
   return metrics.filter((metric) => additive.has(metric))
 }
 
@@ -714,7 +721,7 @@ async function main() {
       {
         name: "daily_events",
         dimensions: ["date", "eventName"],
-        metrics: ["eventCount"],
+        metrics: ["eventCount", "keyEvents"],
       },
       {
         name: "daily_report_paths",

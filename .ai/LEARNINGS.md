@@ -129,6 +129,32 @@ Scan this FIRST before suggesting anything. If your idea matches an anti-pattern
 
 ---
 
+### 0f. Do not parallelize build-dependent verification gates
+
+**Problem:** `npm run verify:fast` failed with Next.js lock contention (`.next-playwright/lock`) when run in parallel with another build-using gate.
+
+**What We Tried:**
+
+- Started `verify:fast` and `e2e:smoke` at the same time.
+- `e2e:smoke` succeeded, but `verify:fast` failed at `build:verify` due to lock collision.
+
+**What We Learned:**
+
+- Build-dependent gates are not safe to parallelize because they contend for Next.js build locks and can create false failures.
+- Parallel execution should be limited to truly independent read-only commands.
+
+**What to Do Instead:**
+
+- Run verification gates sequentially:
+  1. `npm run ai:memory:check`
+  2. `npm run verify:fast`
+  3. `npm run e2e:smoke` (when required)
+- Only use parallel tool execution for commands that cannot block each other.
+
+**Date:** Feb 26, 2026
+
+---
+
 ### 0e. Never treat `data/penny-list.json` as a live upsert destination
 
 **Problem:** Another agent upserted missing enrichment data into `data/penny-list.json` instead of Supabase, so the public Main List stayed incomplete.
