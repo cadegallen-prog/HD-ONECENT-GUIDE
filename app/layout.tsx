@@ -23,6 +23,8 @@ const DEFAULT_OG_IMAGE = `https://www.pennycentral.com${ogImageUrl("homepage")}`
 const GA_MEASUREMENT_ID = "G-DJ4RJRX05E"
 const ANALYTICS_FLAG = process.env.NEXT_PUBLIC_ANALYTICS_ENABLED
 const ANALYTICS_ENABLED = ANALYTICS_FLAG !== "false"
+const MONUMETRIC_FLAG = process.env.NEXT_PUBLIC_MONUMETRIC_ENABLED
+const MONUMETRIC_ENABLED = MONUMETRIC_FLAG === "true"
 
 const IS_VERCEL = process.env.VERCEL === "1" || Boolean(process.env.NEXT_PUBLIC_VERCEL_ENV)
 const IS_VERCEL_PROD = process.env.VERCEL_ENV === "production"
@@ -123,7 +125,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={inter.variable}>
       <head>
-        {!process.env.PLAYWRIGHT && (
+        {!process.env.PLAYWRIGHT && MONUMETRIC_ENABLED && (
           <script
             type="text/javascript"
             src="https://monu.delivery/site/1/d/65ab12-7f57-43c6-a5b7-76b6b4c6548c.js"
@@ -134,7 +136,9 @@ export default function RootLayout({
         {/* Performance hints for critical third-party origins */}
         <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://www.google-analytics.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://monu.delivery" crossOrigin="anonymous" />
+        {MONUMETRIC_ENABLED && (
+          <link rel="preconnect" href="https://monu.delivery" crossOrigin="anonymous" />
+        )}
         <link rel="preconnect" href="https://va.vercel-scripts.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://faves.grow.me" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://tile.openstreetmap.org" crossOrigin="anonymous" />

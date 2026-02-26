@@ -1,5 +1,6 @@
 const MONUMETRIC_IN_CONTENT_SLOT_ID = "39b97adf-dc3e-4795-b4a4-39f0da3c68dd"
 const MONUMETRIC_IN_CONTENT_DOM_ID = `mmt-${MONUMETRIC_IN_CONTENT_SLOT_ID}`
+const MONUMETRIC_ENABLED = process.env.NEXT_PUBLIC_MONUMETRIC_ENABLED === "true"
 
 const MONUMETRIC_IN_CONTENT_SCRIPT = `
 window.$MMT = window.$MMT || {};
@@ -12,6 +13,8 @@ window.$MMT.cmd.push(function () {
 `.trim()
 
 export function MonumetricInContentSlot() {
+  if (!MONUMETRIC_ENABLED) return null
+
   return (
     <section
       aria-label="Advertisement"
