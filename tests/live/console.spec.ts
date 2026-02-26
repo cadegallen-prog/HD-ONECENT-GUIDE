@@ -2,7 +2,8 @@ import { test } from "@playwright/test"
 import { promises as fs } from "node:fs"
 import path from "node:path"
 
-const PAGES = ["/", "/store-finder", "/guide", "/about", "/support"]
+const PAGES = ["/", "/penny-list", "/store-finder", "/guide", "/about", "/support"]
+const MONETIZATION_PAGES = new Set(["/", "/guide", "/penny-list"])
 
 test.describe("live site console audit", () => {
   test("captures console, pageerrors and failed requests across key pages and writes a report", async ({
@@ -28,9 +29,9 @@ test.describe("live site console audit", () => {
       },
     }
 
-    // CSP violations blocking these domains are CRITICAL (site config issues, not third-party noise)
-    // These affect core functionality: analytics, database, error tracking
-    const CRITICAL_CSP_DOMAINS = [
+    // CSP violations blocking these domains are always CRITICAL.
+    // These affect core functionality (analytics, database, error tracking).
+    const CORE_CRITICAL_CSP_DOMAINS = [
       /google-analytics\.com/i,
       /analytics\.google\.com/i,
       /googletagmanager\.com/i,
@@ -39,26 +40,58 @@ test.describe("live site console audit", () => {
       /vercel-scripts\.com/i,
     ]
 
+    // CSP violations for these ad-chain hosts are CRITICAL on monetization pages.
+    // This turns previously "informational" monetization blockers into CI blockers.
+    const MONETIZATION_CRITICAL_CSP_DOMAINS = [
+      /securepubads\.g\.doubleclick\.net/i,
+      /pagead2\.googlesyndication\.com/i,
+      /tpc\.googlesyndication\.com/i,
+      /cm\.g\.doubleclick\.net/i,
+      /\.safeframe\.googlesyndication\.com$/i,
+      /cdn\.confiant-integrations\.net/i,
+      /cdn\.prod\.uidapi\.com/i,
+      /id\.a-mx\.com/i,
+      /match\.adsrvr\.org/i,
+      /prebid\.cootlogix\.com/i,
+      /sync\.cootlogix\.com/i,
+      /(?:^|\.)a-mo\.net$/i,
+      /rtb\.openx\.net/i,
+      /(?:^|\.)openx\.net$/i,
+      /fastlane\.rubiconproject\.com/i,
+      /(?:^|\.)rubiconproject\.com$/i,
+      /(?:^|\.)eu-1-id5-sync\.com$/i,
+      /static\.criteo\.net/i,
+      /gum\.criteo\.com/i,
+      /resources\.infolinks\.com/i,
+    ]
+
     // Detect CSP violation messages
     const isCSPViolation = (text: string) =>
       /Content Security Policy|violates the following.*directive/i.test(text)
 
     // Extract blocked domain from CSP error message
     const extractBlockedDomain = (text: string): string | null => {
-      const match = text.match(/Connecting to ['"](https?:\/\/[^'"\/]+)/i)
-      if (match) {
+      const urlMatches = Array.from(text.matchAll(/https?:\/\/[^\s'")]+/gi))
+      for (const match of urlMatches) {
         try {
-          return new URL(match[1]).hostname
+          const host = new URL(match[0]).hostname
+          if (host) return host
         } catch {}
       }
       return null
     }
 
-    // Check if CSP violation blocks a critical service
-    const isCriticalCSPViolation = (text: string): boolean => {
-      const blockedDomain = extractBlockedDomain(text)
+    // Check if CSP violation blocks a critical service.
+    const isCriticalCSPViolation = (blockedDomain: string | null, pagePath: string): boolean => {
       if (!blockedDomain) return false
-      return CRITICAL_CSP_DOMAINS.some((regex) => regex.test(blockedDomain))
+      if (CORE_CRITICAL_CSP_DOMAINS.some((regex) => regex.test(blockedDomain))) return true
+      if (
+        MONETIZATION_PAGES.has(pagePath) &&
+        MONETIZATION_CRITICAL_CSP_DOMAINS.some((regex) => regex.test(blockedDomain))
+      ) {
+        return true
+      }
+      return false
     }
 
     // Regexes for noisy/known third-party libraries we don't want to treat as site errors
@@ -68,6 +101,7 @@ test.describe("live site console audit", () => {
       /ResizeObserver loop limit exceeded/i,
       /^Script error\.$/i,
       /favicon/i,
+      /Error getting location: GeolocationPositionError/i,
     ]
 
     const baseHostname = (() => {
@@ -203,8 +237,8 @@ test.describe("live site console audit", () => {
 
         // Detect CSP violations
         const cspViolation = isCSPViolation(text)
-        const criticalCsp = cspViolation && isCriticalCSPViolation(text)
         const blockedDomain = cspViolation ? extractBlockedDomain(text) : null
+        const criticalCsp = cspViolation && isCriticalCSPViolation(blockedDomain, pagePath)
 
         // Is this an actionable error for the site team?
         let actionable = false
@@ -226,6 +260,7 @@ test.describe("live site console audit", () => {
 
         const processed = {
           ...m,
+          pagePath,
           text,
           origin: urlOrigin,
           originHost,
@@ -280,23 +315,25 @@ test.describe("live site console audit", () => {
 
     console.log("Console audit saved to:", reportPath)
 
-    // CRITICAL CSP violations get top billing - these break analytics/database
+    // CRITICAL CSP violations get top billing - these break analytics/DB/monetization chains.
     if (criticalCspErrors.length > 0) {
+      console.log(`\n🚨 CRITICAL: Found ${criticalCspErrors.length} blocking CSP violation(s)!`)
       console.log(
-        `\n🚨 CRITICAL: Found ${criticalCspErrors.length} CSP violation(s) blocking essential services!`
+        "   These are SITE CONFIG issues in next.config.js CSP (not ignorable third-party noise)."
       )
-      console.log(
-        "   These are SITE CONFIG issues in next.config.js CSP, not third-party problems."
-      )
-      console.log("   Blocked domains:")
-      const seenDomains = new Set<string>()
+      console.log("   Blocked domain(s) and page(s):")
+      const seenDomainPage = new Set<string>()
       for (const e of criticalCspErrors) {
-        if (e.blockedDomain && !seenDomains.has(e.blockedDomain)) {
-          seenDomains.add(e.blockedDomain)
-          console.log(`   - ${e.blockedDomain}`)
+        if (e.blockedDomain) {
+          const key = `${e.blockedDomain}@@${e.pagePath || "unknown"}`
+          if (seenDomainPage.has(key)) continue
+          seenDomainPage.add(key)
+          console.log(`   - ${e.blockedDomain} (page: ${e.pagePath || "unknown"})`)
         }
       }
-      console.log("\n   Fix: Add these domains to connect-src in next.config.js")
+      console.log(
+        "\n   Fix: Add the blocked host(s) to the correct CSP directive in next.config.js"
+      )
     }
 
     if (siteErrors.length > 0) {
@@ -326,5 +363,14 @@ test.describe("live site console audit", () => {
     }
 
     console.log(`\nFull report: ${reportPath}`)
+
+    if (criticalCspErrors.length > 0) {
+      const criticalDomains = Array.from(
+        new Set(criticalCspErrors.map((m: any) => m.blockedDomain).filter(Boolean))
+      ).join(", ")
+      throw new Error(
+        `Critical CSP violations detected (${criticalCspErrors.length}). Blocked domain(s): ${criticalDomains}`
+      )
+    }
   })
 })
