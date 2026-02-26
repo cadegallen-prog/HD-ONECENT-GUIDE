@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 25, 2026 (FULL QA flake fixed and green on dev + main after live console timeout hardening)
+**Last updated:** Feb 26, 2026 (GA4 archive now includes keyEvents in daily event export + carryover hygiene closed)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,79 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-26 (GA4 archive key-events enhancement + release hygiene closeout):** Completed the requested carryover cleanup lane and shipped an analytics archive update so key-event/conversion coverage gaps are visible without manual extra pulls.
+  - **Code + docs changes:**
+    - `scripts/archive-google-analytics.ts`
+      - `ga4/daily_events` now exports `eventCount` and `keyEvents`.
+      - additive GA4 totals now include `keyEvents`/`conversions` when present.
+    - `.ai/topics/ANALYTICS_CONTRACT.md`
+      - archive contract updated to require `keyEvents` in `daily_events`.
+    - `.ai/ANALYTICS_WEEKLY_REVIEW.md`
+      - weekly review now explicitly reads key-event/conversion counts from `daily_events`.
+    - `.ai/LEARNINGS.md`
+      - added anti-pattern: do not parallelize build-dependent verification gates (avoids `.next-playwright/lock` false failures).
+  - **Validation artifacts:**
+    - short GA4-only archive run:
+      - command: `npm run analytics:archive -- -- --start-date=2026-02-24 --end-date=2026-02-25 --skip-gsc`
+      - artifact: `.local/analytics-history/runs/2026-02-26T04-59-02-718Z/ga4/daily_events.csv`
+      - header verified: `date,eventName,eventCount,keyEvents`
+  - **Verification summary:**
+    - `npm run ai:memory:check` ✅
+    - `npm run verify:fast` ✅
+    - `npm run e2e:smoke` ✅
+  - **Hygiene closeout:**
+    - removed local `.ai/tmp-*.log` scratch files that were left from prior diagnostics.
+
+- **2026-02-26 (CSP blocker gate + production CSP expansion for monetization pages):** Upgraded the live console audit to fail CI on monetization-critical CSP violations, then promoted additive CSP fixes so production no longer blocks `use3-sync.a-mo.net` and related ad-chain hosts.
+  - **Code changes:**
+    - `tests/live/console.spec.ts`
+      - added `/penny-list` to audited routes.
+      - added monetization-page critical CSP classification (`/`, `/guide`, `/penny-list`) for known ad-chain hosts.
+      - improved blocked-host extraction from CSP messages.
+      - made critical CSP violations hard-fail the test (CI blocker), while leaving non-critical third-party noise as informational.
+      - ignored known geolocation console noise (`GeolocationPositionError`) to reduce false-actionable logs.
+    - `next.config.js`
+      - CSP allowlist expansions:
+        - `script-src`: `https://router.infolinks.com`
+        - `connect-src`: `https://*.a-mo.net`
+        - `frame-src`: `https://*.a-mo.net`, `https://router.infolinks.com`
+  - **Verification summary:**
+    - local gates: `npm run ai:memory:check` ✅, `$env:SUBMIT_FIND_DRY_RUN='false'; npm run verify:fast` ✅, `npm run e2e:smoke` ✅
+    - production header check: `curl -I https://www.pennycentral.com` confirms new `a-mo.net` + `router.infolinks.com` entries ✅
+    - production console audit:  
+      `$env:PLAYWRIGHT_BASE_URL='https://www.pennycentral.com'; npx playwright test tests/live/console.spec.ts --project=chromium-desktop-light --project=chromium-mobile-light --workers=1` ✅
+      - report artifacts:
+        - `reports/playwright/console-report-2026-02-26T03-24-51-904Z.json`
+        - `reports/playwright/console-report-2026-02-26T03-25-35-238Z.json`
+      - result: no critical CSP violations; only non-critical third-party CSP noise remains.
+  - **CI confirmation (`main` SHA `679f982b0ebe51bfade5b054317d013314af9d74`):**
+    - FAST: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22426323091` ✅
+    - SMOKE: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22426323090` ✅
+    - FULL: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22426323100` ✅
+
+- **2026-02-25 (GA4 + GSC 30-day performance and discrepancy audit):** Pulled a complete local snapshot for `2026-01-27` to `2026-02-25`, produced page-level performance buckets, and completed a GA4-vs-GSC cross-source discrepancy audit.
+  - **Archive run evidence:**
+    - command: `npm run analytics:archive -- -- --start-date=2026-01-27 --end-date=2026-02-25`
+    - output folder: `.local/analytics-history/runs/2026-02-25T21-08-20-611Z/`
+    - summary: `.local/analytics-history/runs/2026-02-25T21-08-20-611Z/run-summary.json`
+    - result: both sources complete, `errors: []`
+  - **Coverage snapshot (30d):**
+    - GSC pages: `1,970 clicks`, `25,141 impressions`
+    - GA4 landing pages: `26,138 sessions`, `17,174 engaged sessions`
+    - overlap: `59` pages in both datasets
+    - GSC-only pages: `55` (only `5` clicks total, mostly legacy redirects/technical URLs)
+  - **High-performance concentration (clear winners):**
+    - `/`, `/penny-list`, and `/guide` drove `1,922 / 1,970` GSC page clicks (`97.56%`) and `22,533 / 26,138` GA4 landing sessions (`86.21%`)
+  - **Underperforming content cluster (high impressions + weak CTR + low engagement):**
+    - `/about`, `/report-find`, `/faq`, `/in-store-strategy`, `/clearance-lifecycle`
+  - **Data collection gap findings:**
+    - no high-severity undercount case found (no page with `>=10` GSC clicks and `0` GA4 landing sessions)
+    - medium discrepancy pattern was GA4 sessions far above GSC clicks on `"/"`, `"/penny-list"`, `"/guide"` (interpreted as channel-mix concentration, not missing GA4 collection)
+    - conversion tracking gap remains: GA4 landing-page `keyEvents` and `conversions` both totaled `0`, while `find_submit` event volume was `422` in `ga4/daily_events.json`
+  - **Analysis artifacts:**
+    - `.local/analytics-history/runs/2026-02-25T21-08-20-611Z/analysis-30d.json`
+    - `.local/analytics-history/runs/2026-02-25T21-08-20-611Z/analysis-30d.md`
 
 - **2026-02-25 (FULL QA stability restoration for live console audit):** Fixed recurring `FULL: QA` failures caused by mobile-only network-idle timeouts in the live console audit test and confirmed green FULL runs on both `dev` and `main`.
   - **Root cause:**

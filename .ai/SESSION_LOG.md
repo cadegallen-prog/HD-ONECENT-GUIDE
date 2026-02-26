@@ -4,6 +4,134 @@
 
 ---
 
+## 2026-02-26 - Codex - GA4 Daily Events KeyEvents Enhancement + Release Hygiene
+
+**Goal:** Complete requested carryover hygiene and implement the analytics change so conversion/key-event gaps are visible in standard archive runs.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- scripts/archive-google-analytics.ts
+  - ga4/daily_events now exports ventCount + keyEvents (GA4 conversion metric) in default archive runs.
+  - additive GA4 totals now include keyEvents and conversions when present.
+- .ai/topics/ANALYTICS_CONTRACT.md
+  - updated archive contract to require keyEvents in daily_events output.
+- .ai/ANALYTICS_WEEKLY_REVIEW.md
+  - updated weekly review guidance to read key-event/conversion counts from daily_events.
+- Local hygiene cleanup:
+  - removed stale .ai/tmp-\*.log scratch files.
+  - normalized .ai/LEARNINGS.md with a new anti-pattern entry: do not parallelize build-dependent verification gates.
+
+### Verification
+
+- pm run analytics:archive -- -- --start-date=2026-02-24 --end-date=2026-02-25 --skip-gsc ✅
+  - artifact: .local/analytics-history/runs/2026-02-26T04-59-02-718Z/ga4/daily_events.csv
+  - confirmed header: date,eventName,eventCount,keyEvents
+- pm run ai:memory:check ✅
+- pm run verify:fast ✅
+- pm run e2e:smoke ✅
+
+### Branch Hygiene
+
+- Branch: dev
+- Push status: pending in this session (implementation complete, commit/push next)
+
+---## 2026-02-26 - Codex - Full QA CSP Blocker Gate + Production CSP Allowlist Fixes
+
+**Goal:** Make monetization-impacting CSP violations fail in FULL QA (instead of warning-only) and clear the newly surfaced production blocker host.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `tests/live/console.spec.ts`
+  - expanded audited routes to include `/penny-list`.
+  - added monetization-critical CSP host matching for `/`, `/guide`, `/penny-list`.
+  - improved blocked-host extraction from CSP messages (URL scanning, not connect-only format).
+  - converted critical CSP findings into hard test failure (`throw new Error(...)`).
+  - ignored geolocation console noise (`Error getting location: GeolocationPositionError`) to reduce false actionable logs.
+- `next.config.js`
+  - added ad-chain domains:
+    - `script-src`: `https://router.infolinks.com`
+    - `connect-src`: `https://*.a-mo.net`
+    - `frame-src`: `https://*.a-mo.net`, `https://router.infolinks.com`
+
+### Verification
+
+- Local:
+  - `npm run ai:memory:check` ✅
+  - `$env:SUBMIT_FIND_DRY_RUN='false'; npm run verify:fast` ✅
+  - `npm run e2e:smoke` ✅
+- Production CSP header:
+  - `curl -I https://www.pennycentral.com | rg -i \"content-security-policy|a-mo\\.net|router\\.infolinks\\.com\"` ✅
+- Production live console audit (post-deploy):
+  - `$env:PLAYWRIGHT_BASE_URL='https://www.pennycentral.com'; npx playwright test tests/live/console.spec.ts --project=chromium-desktop-light --project=chromium-mobile-light --workers=1` ✅
+  - reports:
+    - `reports/playwright/console-report-2026-02-26T03-24-51-904Z.json`
+    - `reports/playwright/console-report-2026-02-26T03-25-35-238Z.json`
+  - outcome: zero critical CSP blockers; only non-critical third-party CSP noise.
+- CI on `main` SHA `679f982b0ebe51bfade5b054317d013314af9d74`:
+  - FAST: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22426323091` ✅
+  - SMOKE: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22426323090` ✅
+  - FULL: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22426323100` ✅
+
+### Branch / Promotion
+
+- Runtime commit on `dev`: `fc2e22c` (`fix(csp): enforce monetization CSP blockers in full QA and allow a-mo sync frames`)
+- Promoted to `main` via merge commit:
+  - `679f982` (`Merge dev: enforce monetization CSP blockers + expand ad-chain CSP allowlist`)
+- Promotion method used to avoid dirty local `.ai` carryover conflicts:
+  - temporary worktree on `main`, merge `origin/dev`, push `main`, then remove worktree.
+- Local branch at closeout: `dev`
+- Local carryover note: `.ai/STATE.md`, `.ai/SESSION_LOG.md`, and `.ai/tmp-*.log` remain dirty/untracked in local workspace from prior/diagnostic activity.
+
+---
+
+## 2026-02-25 - Codex - GA4 + GSC Last-30-Days Retrieval and Performance/Gap Audit
+
+**Goal:** Execute the GA4 + GSC retrieval process for the last 30 days and deliver a founder-readable split between high-performing content, underperforming content, and data-collection discrepancies.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- No source/runtime code was changed.
+- Pulled archive snapshot for `2026-01-27` to `2026-02-25`:
+  - `npm run analytics:archive -- -- --start-date=2026-01-27 --end-date=2026-02-25`
+- Added run-local GA4 landing-page artifacts (for direct GSC cross-reference):
+  - `.local/analytics-history/runs/2026-02-25T21-08-20-611Z/ga4/landing_pages_30d.json`
+  - `.local/analytics-history/runs/2026-02-25T21-08-20-611Z/ga4/landing_pages_conversions_30d.json`
+- Produced a run-local synthesized analysis bundle:
+  - `.local/analytics-history/runs/2026-02-25T21-08-20-611Z/analysis-30d.json`
+  - `.local/analytics-history/runs/2026-02-25T21-08-20-611Z/analysis-30d.md`
+
+### Key Findings (30-Day Window)
+
+- High performers: `/`, `/penny-list`, `/guide` (97.56% of GSC page-click volume; 86.21% of GA4 landing sessions).
+- Underperforming high-impression/low-engagement pages: `/about`, `/report-find`, `/faq`, `/in-store-strategy`, `/clearance-lifecycle`.
+- Discrepancy audit:
+  - no critical undercount mismatch (no page with `>=10` GSC clicks and zero GA4 landing sessions),
+  - 55 GSC-only pages exist but account for only 5 clicks total (mostly legacy redirects/technical endpoints),
+  - GA4 conversion coverage gap: landing-page `keyEvents` and `conversions` returned `0`, while `find_submit` event count was `422`.
+
+### Verification
+
+- Retrieval run summary (complete, no source failures):
+  - `.local/analytics-history/runs/2026-02-25T21-08-20-611Z/run-summary.json` (`errors: []`)
+- Docs/memory update lane:
+  - `npm run ai:writer-lock:status` ✅ (`UNLOCKED` before claim)
+  - `npm run ai:writer-lock:claim -- codex "GA4+GSC 30-day retrieval + analysis"` ✅
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Commit SHA touched: none (docs-only memory update + local analytics artifacts only)
+- Push status: not pushed (no implementation commit requested)
+- Session-end `git status --short`: clean expected after writer-lock release
+
+---
+
 ## 2026-02-25 - Codex - FULL QA Flake Fix (Live Console Network-Idle Timeout)
 
 **Goal:** Stop recurring `FULL: QA` failures on recent commits by fixing the root-cause flake in the live console audit test.
@@ -86,115 +214,5 @@
   - `f810d11` - second dev promotion
   - `c4d7ef5` - final dev promotion (current production)
 - Local branch restored to `dev` at session close.
-
----
-
-## 2026-02-25 - Codex - Monumetric CSP Update + Verify Stall Root-Cause Fix
-
-**Goal:** Complete Monumetric CSP blocker remediation and stop repeated local verification stalls before they consume more founder time.
-
-**Status:** ✅ Completed (with founder-directed non-build verification lane)
-
-### Changes
-
-- `next.config.js`
-  - added both Monumetric-requested `script-src` domains:
-    - `https://securepubads.g.doubleclick.net`
-    - `https://cdn.confiant-integrations.net`
-- `package.json`
-  - added `build:verify` using isolated output dir (`NEXT_DIST_DIR=.next-playwright`) to reduce `.next` contention risk.
-  - updated `verify:fast` to call `build:verify`.
-  - updated `test:unit` to force deterministic env: `SUBMIT_FIND_DRY_RUN=false`.
-- `scripts/run-unit-tests.mjs`
-  - added hard timeout support (`UNIT_TEST_TIMEOUT_MS`, default 10m).
-  - added explicit timeout failure handling (exit `124`) so hangs fail fast with clear messaging.
-- `tests/setup.ts`
-  - silenced dotenv tip noise (`quiet: true`) for cleaner unit output.
-- Scope hygiene:
-  - removed unrelated carryover edit from `.claude/settings.local.json` via explicit founder approval.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run lint` ✅
-- `npm run typecheck` ✅
-- `npm run test:unit` ✅
-- `npx tsx scripts/ads-readiness-check.ts --production` ✅ (7/7 passed)
-- Endpoint checks (production):
-  - `curl -D - https://www.pennycentral.com` ✅ (CSP header present, current production still pending deploy for new domains)
-  - `curl https://www.pennycentral.com | rg "monu.delivery/site"` ✅ (Monumetric head script present)
-  - `curl -I https://www.pennycentral.com/ads.txt` ✅ (`308` redirect to Monumetric hosted ads.txt)
-  - `curl https://www.pennycentral.com/sitemap.xml` ✅ (`loc_count=18`, canonical trust routes present)
-- Not run by explicit founder instruction:
-  - `npm run verify:fast` (blocked: includes build)
-  - `npm run e2e:smoke` (blocked: includes build)
-
----
-
-## 2026-02-25 - Codex - Promote Full QA Stabilization Fixes to Main
-
-**Goal:** Ensure production (`main`) includes the recent Full QA CI stabilization fixes already validated on `dev`.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- Promoted `dev` into `main` with merge commit `345a22f`:
-  - carried `5509098` (`fix(ci): stabilize full-qa playwright lanes`)
-  - carried `6950a54` (`fix(ci): sync chromedriver before axe checks`)
-- Switched branch back to `dev` after promotion, as requested.
-
-### Verification
-
-- Branch containment check before promotion:
-  - `git diff --name-status origin/main..origin/dev` showed missing fix files on `main`:
-    - `.github/workflows/full-qa.yml`
-    - `playwright.config.ts`
-    - `tests/live/console.spec.ts`
-- Promotion commands:
-  - `git checkout dev`
-  - `git pull origin dev`
-  - `git checkout main`
-  - `git pull origin main`
-  - `git merge --no-ff origin/dev -m "Merge dev: promote full QA CI stabilization fixes"`
-  - `git push origin main`
-  - `git checkout dev`
-- Post-push CI on `main` SHA `345a22fb2b7406f383af603d0ca3d3d8682cb52e`:
-  - FAST: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22409205329` (in progress at handoff time)
-  - SMOKE: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22409205277` (in progress at handoff time)
-  - FULL: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22409205332` (queued at handoff time)
-- Session-end branch hygiene:
-  - current branch: `dev`
-  - `git status --short`: clean
-
----
-
-## 2026-02-25 - Codex - Full QA CI Stabilization (Visual Pointer + Axe Driver Sync)
-
-**Goal:** Recover failing Full QA runs by fixing deterministic Playwright/CI infra mismatches without changing product behavior.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `playwright.config.ts`
-  - forced `chromium-mobile-light-390x844` to `browserName: "chromium"` so CI no longer tries to launch missing WebKit binaries.
-- `.github/workflows/full-qa.yml`
-  - set `NEXT_PUBLIC_VISUAL_POINTER_ENABLED: "true"` for `full-e2e` job to allow visual-pointer capture tests in production-style Playwright builds.
-  - added `Sync ChromeDriver with runner Chrome` step (`npx browser-driver-manager install chrome`) before `check-axe` in `extended-ui-checks`.
-- `tests/live/console.spec.ts`
-  - increased test timeout to 180s to prevent false failures from slow external page loads during console-audit runs.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `$env:SUBMIT_FIND_DRY_RUN='false'; npm run verify:fast` ✅
-- `$env:NEXT_DIST_DIR='.next-playwright'; $env:PLAYWRIGHT='1'; $env:NEXT_PUBLIC_VISUAL_POINTER_ENABLED='true'; $env:NEXT_PUBLIC_EZOIC_ENABLED='false'; $env:NEXT_PUBLIC_ANALYTICS_ENABLED='false'; $env:USE_FIXTURE_FALLBACK='1'; $env:SUPABASE_SERVICE_ROLE_KEY='test'; npx playwright test tests/visual-pointer-capture.spec.ts --project=chromium-desktop-light --project=chromium-desktop-dark --project=chromium-mobile-light --project=chromium-mobile-dark --project=chromium-mobile-light-390x844 --workers=1` ✅
-- `$env:NEXT_DIST_DIR='.next-playwright'; $env:PLAYWRIGHT='1'; $env:NEXT_PUBLIC_EZOIC_ENABLED='false'; $env:NEXT_PUBLIC_ANALYTICS_ENABLED='false'; $env:USE_FIXTURE_FALLBACK='1'; $env:SUPABASE_SERVICE_ROLE_KEY='test'; npx playwright test tests/live/console.spec.ts --project=chromium-desktop-dark --workers=1` ✅
-- Manual Full QA workflow on `dev` (`6950a54cf9922c76dd4b7a4d6fc3a0e510d4f591`): `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22408795587` ✅
-  - `fast-gate` ✅
-  - `full-e2e (1/2)` ✅
-  - `full-e2e (2/2)` ✅
-  - `extended-ui-checks` ✅
 
 ---

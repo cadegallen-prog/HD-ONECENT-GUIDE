@@ -73,7 +73,7 @@ Goal: confirm the flywheel is spinning and identify the tightest bottleneck.
 
 Use archived GA4 slices from `.local/analytics-history/runs/<timestamp>/ga4/`:
 
-- `daily_events` for event counts (`report_find_click`, `report_open`, `find_submit`, `report_submit_single`, `report_submit_batch`)
+- `daily_events` for event counts + key-event/conversion counts (`report_find_click`, `report_open`, `find_submit`, `report_submit_single`, `report_submit_batch`)
 - `daily_report_paths` for report-route sessions and `src` attribution buckets
 - `daily_pages` for `/penny-list` session context
 

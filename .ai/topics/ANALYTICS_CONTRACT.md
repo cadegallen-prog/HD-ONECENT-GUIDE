@@ -111,7 +111,7 @@ Privacy rule for report events:
 
 `scripts/archive-google-analytics.ts` must include:
 
-- `ga4/daily_events.csv|json` with dimensions `date,eventName` and metric `eventCount`.
+- `ga4/daily_events.csv|json` with dimensions `date,eventName` and metrics `eventCount`, `keyEvents` (`keyEvents` is the GA4 conversion metric).
 - `ga4/daily_report_paths.csv|json` with dimensions `date,pagePathPlusQueryString` and metric `sessions`, filtered to report-route paths.
 
 These outputs are required for:
