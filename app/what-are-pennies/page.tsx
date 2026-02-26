@@ -4,6 +4,7 @@ import Link from "next/link"
 import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
 import { RouteAdSlots } from "@/components/ads/route-ad-slots"
+import { MonumetricInContentSlot } from "@/components/ads/monumetric-in-content-slot"
 
 export const metadata: Metadata = {
   title: "What Are Penny Items? - Home Depot $0.01 Clearance Explained | Penny Central",
@@ -109,6 +110,7 @@ export default function WhatArePenniesPage() {
         </div>
 
         <Section className="w-full max-w-[68ch] mx-auto">
+          <MonumetricInContentSlot />
           <Prose variant="guide">
             <p className="mb-8 text-lg leading-relaxed">
               A penny item is a product that scans for $0.01 because it has reached the final stage

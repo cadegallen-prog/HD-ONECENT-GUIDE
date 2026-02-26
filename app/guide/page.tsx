@@ -4,6 +4,7 @@ import { EthicalDisclosure } from "@/components/guide/EthicalDisclosure"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
 import { ResponsibleHunting } from "@/components/guide/sections/ResponsibleHunting"
 import { RouteAdSlots } from "@/components/ads/route-ad-slots"
+import { MonumetricInContentSlot } from "@/components/ads/monumetric-in-content-slot"
 
 export const metadata: Metadata = {
   title: "Home Depot Penny Guide (2026) | Penny Central",
@@ -211,6 +212,8 @@ export default function GuideHubPage() {
           <EthicalDisclosure />
           <ResponsibleHunting />
         </section>
+
+        <MonumetricInContentSlot />
 
         <section className="mb-6 space-y-3 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
           <h2 className="text-2xl font-bold text-[var(--text-primary)]">Guide Chapters</h2>

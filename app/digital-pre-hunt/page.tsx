@@ -3,6 +3,7 @@ import { PageHeader, PageShell, Prose, Section } from "@/components/page-templat
 import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
 import { RouteAdSlots } from "@/components/ads/route-ad-slots"
+import { MonumetricInContentSlot } from "@/components/ads/monumetric-in-content-slot"
 
 export const metadata: Metadata = {
   title: "Labels, Overhead, & Pre-Hunt Strategy | Penny Central",
@@ -177,6 +178,7 @@ export default function DigitalPreHuntPage() {
         </div>
 
         <Section className="w-full max-w-[68ch] mx-auto">
+          <MonumetricInContentSlot />
           <Prose variant="guide">
             <p className="mb-8 text-lg leading-relaxed">
               The best penny hunters do most of their work before they drive. This chapter teaches

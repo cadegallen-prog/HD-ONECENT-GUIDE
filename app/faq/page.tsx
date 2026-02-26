@@ -3,6 +3,7 @@ import { PageHeader, PageShell, Prose, Section } from "@/components/page-templat
 import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
 import { RouteAdSlots } from "@/components/ads/route-ad-slots"
+import { MonumetricInContentSlot } from "@/components/ads/monumetric-in-content-slot"
 
 export const metadata: Metadata = {
   title: "Penny Hunting FAQ & Quick Reference | Penny Central",
@@ -249,6 +250,7 @@ export default function FAQPage() {
         </div>
 
         <Section className="mx-auto w-full max-w-[68ch]">
+          <MonumetricInContentSlot />
           <Prose variant="guide">
             <p className="mb-4">
               Read this page in sequence. It starts with fundamentals, then verification, then

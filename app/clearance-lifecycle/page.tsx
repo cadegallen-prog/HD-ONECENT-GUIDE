@@ -4,6 +4,7 @@ import { TruthMatrix } from "@/components/guide/TruthMatrix"
 import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
 import { RouteAdSlots } from "@/components/ads/route-ad-slots"
+import { MonumetricInContentSlot } from "@/components/ads/monumetric-in-content-slot"
 
 export const metadata: Metadata = {
   title: "Home Depot Clearance Lifecycle (2026 Guide) | Penny Central",
@@ -196,6 +197,7 @@ export default function ClearanceLifecyclePage() {
         </div>
 
         <Section className="w-full max-w-[68ch] mx-auto">
+          <MonumetricInContentSlot />
           <Prose variant="guide">
             <p className="mb-8 text-lg leading-relaxed">
               Penny items are the final stage of clearance, not a public promotion. Home Depot does
