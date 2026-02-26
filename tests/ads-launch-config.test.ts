@@ -49,6 +49,8 @@ test("launch config keeps sticky test prompt pause list stable", () => {
   assert.strictEqual(MONUMETRIC_LAUNCH_CONFIG.sticky.enabled, false)
   assert.strictEqual(MONUMETRIC_LAUNCH_CONFIG.sticky.route, "/penny-list")
   assert.strictEqual(MONUMETRIC_LAUNCH_CONFIG.sticky.size, "320x50")
+  assert.strictEqual(MONUMETRIC_LAUNCH_CONFIG.interstitial.enabled, false)
+  assert.strictEqual(MONUMETRIC_LAUNCH_CONFIG.volt.enabled, false)
 })
 
 test("provider-managed mode resolves generic inventory marker", () => {

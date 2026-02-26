@@ -28,11 +28,11 @@ export const MONUMETRIC_LAUNCH_CONFIG = {
     size: "320x50",
   },
   interstitial: {
-    enabled: true,
+    enabled: false,
     frequencyPerUserHours: 1,
   },
   volt: {
-    enabled: true,
+    enabled: false,
     pilotRoutes: GUIDE_CHAPTER_ROUTES,
     includeGuideHub: false,
   },

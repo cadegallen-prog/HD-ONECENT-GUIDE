@@ -3,6 +3,7 @@ import { PageHeader, PageShell, Prose, Section } from "@/components/page-templat
 import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
 import { RouteAdSlots } from "@/components/ads/route-ad-slots"
+import { MonumetricInContentSlot } from "@/components/ads/monumetric-in-content-slot"
 
 export const metadata: Metadata = {
   title: "Penny Hunting Facts vs Myths | Penny Central",
@@ -152,6 +153,7 @@ export default function FactsVsMythsPage() {
         </div>
 
         <Section className="w-full max-w-[68ch] mx-auto">
+          <MonumetricInContentSlot />
           <Prose variant="guide">
             <p className="mb-8 text-lg leading-relaxed">
               Penny hunting lives on community information. That is a strength, but it also creates

@@ -3,6 +3,7 @@ import { PageHeader, PageShell, Prose, Section } from "@/components/page-templat
 import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
 import { RouteAdSlots } from "@/components/ads/route-ad-slots"
+import { MonumetricInContentSlot } from "@/components/ads/monumetric-in-content-slot"
 
 export const metadata: Metadata = {
   title: "Inside Scoop: Operational Context for Experienced Hunters | Penny Central",
@@ -112,6 +113,7 @@ export default function InsideScoopPage() {
         </div>
 
         <Section className="w-full max-w-[68ch] mx-auto">
+          <MonumetricInContentSlot />
           <Prose variant="guide">
             <p className="mb-8 text-lg leading-relaxed">
               This chapter covers deeper operational context for experienced hunters. The basics —

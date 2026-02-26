@@ -3,6 +3,7 @@ import { PageHeader, PageShell, Prose, Section } from "@/components/page-templat
 import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
 import { RouteAdSlots } from "@/components/ads/route-ad-slots"
+import { MonumetricInContentSlot } from "@/components/ads/monumetric-in-content-slot"
 
 export const metadata: Metadata = {
   title: "Verify & In-Store Penny Strategy | Penny Central",
@@ -163,6 +164,7 @@ export default function InStoreStrategyPage() {
         </div>
 
         <Section className="w-full max-w-[68ch] mx-auto">
+          <MonumetricInContentSlot />
           <Prose variant="guide">
             <p className="mb-8 text-lg leading-relaxed">
               Finding a penny item is only half the game. The other half is verifying the price,
