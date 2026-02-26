@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 25, 2026 (Monumetric CSP production unblock complete with zero violations on / + /guide)
+**Last updated:** Feb 25, 2026 (FULL QA flake fixed and green on dev + main after live console timeout hardening)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,23 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-25 (FULL QA stability restoration for live console audit):** Fixed recurring `FULL: QA` failures caused by mobile-only network-idle timeouts in the live console audit test and confirmed green FULL runs on both `dev` and `main`.
+  - **Root cause:**
+    - `tests/live/console.spec.ts` used a hard `page.waitForLoadState("networkidle")` on live production pages; mobile ad/analytics traffic can keep background connections active indefinitely, causing false timeouts.
+  - **Patch:**
+    - updated the network-idle wait to best-effort with `timeout: 10000` and non-fatal fallback.
+  - **Verification summary:**
+    - local gates: `npm run ai:memory:check` ✅, `$env:SUBMIT_FIND_DRY_RUN='false'; npm run verify:fast` ✅, `npm run e2e:smoke` ✅, `$env:NEXT_PUBLIC_VISUAL_POINTER_ENABLED='true'; npm run e2e:full` ✅
+    - targeted mobile repro command for `tests/live/console.spec.ts` passed across:
+      - `chromium-mobile-light`
+      - `chromium-mobile-dark`
+      - `chromium-mobile-light-390x844`
+    - CI confirmation:
+      - `dev` manual FULL: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22415282781` ✅
+      - `main` FULL after promotion (`554e2b2`): `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22415512456` ✅
+      - `main` FAST: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22415512457` ✅
+      - `main` SMOKE: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22415512472` ✅
 
 - **2026-02-25 (Monumetric CSP production unblock complete):** Completed iterative CSP expansion and production redeploy cycle for Monumetric ad-chain compliance, including requested domains plus post-unblock follow-up domains discovered by live Playwright scans.
   - **Code scope (single file):**

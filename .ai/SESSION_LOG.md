@@ -4,6 +4,42 @@
 
 ---
 
+## 2026-02-25 - Codex - FULL QA Flake Fix (Live Console Network-Idle Timeout)
+
+**Goal:** Stop recurring `FULL: QA` failures on recent commits by fixing the root-cause flake in the live console audit test.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `tests/live/console.spec.ts`
+  - changed `page.waitForLoadState("networkidle")` to a best-effort wait with a `10000ms` timeout and non-fatal fallback.
+  - rationale: live ad/analytics traffic on mobile can keep network connections open indefinitely, so hard-failing on network-idle is flaky and non-actionable.
+
+### Verification
+
+- Local:
+  - `npm run ai:memory:check` ✅
+  - `$env:SUBMIT_FIND_DRY_RUN='false'; npm run verify:fast` ✅
+  - `npm run e2e:smoke` ✅
+  - `$env:NEXT_PUBLIC_VISUAL_POINTER_ENABLED='true'; npm run e2e:full` ✅
+  - targeted repro command (previously failing paths):  
+    `$env:NEXT_DIST_DIR='.next-playwright'; $env:PLAYWRIGHT='1'; $env:NEXT_PUBLIC_VISUAL_POINTER_ENABLED='true'; $env:NEXT_PUBLIC_EZOIC_ENABLED='false'; $env:NEXT_PUBLIC_ANALYTICS_ENABLED='false'; $env:USE_FIXTURE_FALLBACK='1'; $env:SUPABASE_SERVICE_ROLE_KEY='test'; npm run build; npx playwright test tests/live/console.spec.ts --workers=1 --project=chromium-mobile-light --project=chromium-mobile-dark --project=chromium-mobile-light-390x844` ✅
+- GitHub Actions:
+  - manual FULL on `dev` (fixed commit): `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22415282781` ✅
+  - post-promotion `main` FULL: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22415512456` ✅
+  - post-promotion `main` FAST: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22415512457` ✅
+  - post-promotion `main` SMOKE: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22415512472` ✅
+
+### Branch / Promotion
+
+- `dev` commit: `5224f48` (`fix(ci): make live console audit network-idle wait best effort`)
+- promoted to `main` via merge commit: `554e2b2` (`Merge dev: stabilize full QA live console audit`)
+- local branch restored to `dev`
+- session-end `git status --short`: clean
+
+---
+
 ## 2026-02-25 - Codex - Monumetric CSP Production Unblock + Follow-up Domain Expansion
 
 **Goal:** Fully unblock Monumetric ad-chain CSP violations in production, verify required domains live, and clear production CSP violations on `/` and `/guide`.
@@ -162,37 +198,3 @@
   - `extended-ui-checks` ✅
 
 ---
-
-## 2026-02-25 - Codex - Submit-Find Canonical Name Authority Lock + SKU-Only Report Input
-
-**Goal:** Ensure user-submitted item names never become canonical authority, align report-find UX to SKU-only manual submission, and ship with full verification.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `app/api/submit-find/route.ts`
-  - `itemName` is now optional input-only compatibility data,
-  - canonical `item_name` assignment now comes from self-enrichment/trusted enrichment paths only,
-  - trusted `item_name` provenance now accepts `self_enriched`,
-  - added canonical-signal fallback logic so prior self-enriched names can still be reused when provenance metadata is missing.
-- `components/report-find/ReportFindFormClient.tsx`
-  - removed manual `Item Name` input from Add Item UX,
-  - manual basket adds now use SKU + optional quantity only,
-  - API payload mapping no longer sends `itemName`,
-  - display fallback now renders `SKU {formatted}` when no prefill name exists.
-- `app/report-find/page.tsx`
-  - updated static explainer copy to remove “Item name required” guidance and document trusted auto-resolution.
-- Tests updated:
-  - `tests/submit-find-route.test.ts`
-  - `tests/report-find-batch.spec.ts`
-  - `tests/report-find-prefill.spec.ts`
-  - `tests/smoke-critical.spec.ts`
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `$env:SUBMIT_FIND_DRY_RUN='false'; npx tsx --import ./tests/setup.ts --test tests/submit-find-route.test.ts` ✅
-- `$env:NEXT_DIST_DIR='.next-playwright'; $env:PLAYWRIGHT='1'; $env:NEXT_PUBLIC_EZOIC_ENABLED='false'; $env:NEXT_PUBLIC_ANALYTICS_ENABLED='false'; npx playwright test tests/report-find-prefill.spec.ts tests/report-find-batch.spec.ts tests/smoke-critical.spec.ts --project=chromium-desktop-light --workers=1` ✅
-- `$env:SUBMIT_FIND_DRY_RUN='false'; npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
