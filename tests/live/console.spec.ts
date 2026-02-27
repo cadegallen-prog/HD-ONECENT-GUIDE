@@ -69,9 +69,26 @@ test.describe("live site console audit", () => {
     const isCSPViolation = (text: string) =>
       /Content Security Policy|violates the following.*directive/i.test(text)
 
-    // Extract blocked domain from CSP error message
+    // Extract the resource actually blocked by CSP. Some messages include the entire
+    // allowlist directive afterward, so scanning every URL in the string can mislabel
+    // an allowed host as the blocked target.
     const extractBlockedDomain = (text: string): string | null => {
-      const urlMatches = Array.from(text.matchAll(/https?:\/\/[^\s'")]+/gi))
+      const directTarget = text.match(
+        /(?:Connecting to|Loading the script|Loading the image|Framing|Refused to connect to|Refused to frame|Refused to load)\s+'([^']+)'/i
+      )?.[1]
+
+      if (directTarget) {
+        if (/^(data|blob|about):/i.test(directTarget)) return null
+        try {
+          const host = new URL(directTarget).hostname
+          if (host) return host
+        } catch {}
+      }
+
+      const relevantSegment = text.split(
+        /violates the following Content Security Policy directive|because it violates/i
+      )[0]
+      const urlMatches = Array.from(relevantSegment.matchAll(/https?:\/\/[^\s'")]+/gi))
       for (const match of urlMatches) {
         try {
           const host = new URL(match[0]).hostname
