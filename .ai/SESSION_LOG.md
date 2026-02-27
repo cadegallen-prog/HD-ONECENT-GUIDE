@@ -4,6 +4,53 @@
 
 ---
 
+## 2026-02-27 - Codex - Baseline Export + Monumetric Production Reactivation
+
+**Goal:** Lock the clean pre-ad baseline, reactivate Monumetric in production, and verify the live site truthfully.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `analytics/baselines/Baseline_Stable_PreAds.json`
+  - saved the stable GA4 baseline using `2026-02-18` through `2026-02-24`.
+  - included engagement, bounce, pages/session, session totals, and device split fields for later guardrail comparisons.
+- Vercel production operations
+  - set `NEXT_PUBLIC_MONUMETRIC_ENABLED=true` in production.
+  - redeployed the current production deployment and confirmed `www.pennycentral.com` is serving Monumetric again.
+- `tests/live/console.spec.ts`
+  - fixed CSP blocked-target extraction so the live console audit no longer mislabels `data:` CSP failures as `www.google-analytics.com`.
+- `.ai/STATE.md`
+  - updated current reality to reflect that Monumetric is live again in production and the 7-day validation window is active.
+- `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`
+  - advanced `INC-MONUMETRIC-001` from reactivation-pending to live validation.
+- `.ai/SESSION_LOG.md`
+  - added this closeout entry.
+
+### Summary
+
+- Stable pre-ad reference window locked: `2026-02-18` to `2026-02-24`.
+- Monumetric is live again on production as of `2026-02-27`.
+- Immediate post-reactivation live audit passed on desktop and mobile.
+- Remaining console findings are non-critical third-party ad/tracking noise, not a PennyCentral production blocker.
+
+### Verification
+
+- `curl -s https://www.pennycentral.com | rg "monu.delivery/site"` ✅
+- `npm run verify:fast` ✅
+- `$env:PLAYWRIGHT_BASE_URL='https://www.pennycentral.com'; npx playwright test tests/live/console.spec.ts --project=chromium-desktop-light --project=chromium-mobile-light --workers=1` ✅
+  - artifacts:
+    - `reports/playwright/console-report-2026-02-27T22-58-09-641Z.json`
+    - `reports/playwright/console-report-2026-02-27T22-58-54-314Z.json`
+- Runtime smoke lane: N/A (no app route/UI code changed in this closeout lane; live production verification was run directly against the deployed site)
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Scope: baseline artifact + verification-tool hardening + memory updates
+
+---
+
 ## 2026-02-27 - Codex - Monumetric Response Received - Controlled Reactivation Strategy Initiated
 
 **Goal:** Persist the new founder-approved posture after Samantha's response so future agents stop treating Monumetric as a passive wait-state.
@@ -161,51 +208,3 @@
 
 - Branch: `dev`
 - Scope: memory/docs only (no runtime code changes)
-
----
-
-## 2026-02-26 - Codex - GA4 Daily Events KeyEvents Enhancement + Release Hygiene
-
-**Goal:** Complete requested carryover hygiene and implement the analytics change so conversion/key-event gaps are visible in standard archive runs.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- scripts/archive-google-analytics.ts
-  - ga4/daily_events now exports eventCount + keyEvents (GA4 conversion metric) in default archive runs.
-  - additive GA4 totals now include keyEvents and conversions when present.
-  - hardening follow-up: `validateDateInput` now strictly rejects impossible calendar dates (for example `2026-02-31`) instead of accepting JS date rollover.
-- .ai/topics/ANALYTICS_CONTRACT.md
-  - updated archive contract to require keyEvents in daily_events output.
-- .ai/ANALYTICS_WEEKLY_REVIEW.md
-  - updated weekly review guidance to read key-event/conversion counts from daily_events.
-- .ai/SESSION_LOG.md
-  - fixed malformed section separator so the next heading starts on a new line (`---` then `## ...`), improving log readability/parsing.
-- Local hygiene cleanup:
-  - removed stale .ai/tmp-\*.log scratch files.
-  - normalized .ai/LEARNINGS.md with a new anti-pattern entry: do not parallelize build-dependent verification gates.
-
-### Verification
-
-- npm run analytics:archive -- -- --start-date=2026-02-24 --end-date=2026-02-25 --skip-gsc ✅
-  - artifact: .local/analytics-history/runs/2026-02-26T04-59-02-718Z/ga4/daily_events.csv
-  - confirmed header: date,eventName,eventCount,keyEvents
-- npm run ai:memory:check ✅
-- npm run verify:fast ✅
-- npm run e2e:smoke ✅
-- npm run analytics:archive -- -- --start-date=2026-02-31 --end-date=2026-03-01 ❌ (expected fail-closed check)
-  - output: `--start-date is not a valid date`
-- follow-up validation run:
-  - `npm run analytics:archive -- -- --start-date=2026-01-27 --end-date=2026-02-26` ✅
-  - artifact: `.local/analytics-history/runs/2026-02-26T06-50-04-577Z/ga4/daily_events.csv`
-  - `find_submit` totals: `eventCount=425`, `keyEvents=0` (30 rows)
-  - GA4 `daily_events` totals: `eventCount=328205`, `keyEvents=0`
-
-### Branch Hygiene
-
-- Branch: dev
-- Commits: `dev=2c092fe`, `main merge=d52cdb5`
-- Push status: pushed (`origin/dev`, `origin/main`)
-
----

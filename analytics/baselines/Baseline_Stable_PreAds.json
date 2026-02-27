@@ -1,0 +1,166 @@
+{
+  "Baseline_Stable_PreAds": {
+    "source": {
+      "analytics_platform": "GA4",
+      "property_id": "514549225",
+      "query_auth_mode": "adc_gcloud",
+      "extraction_date_utc": "2026-02-27"
+    },
+    "selected_date_range": {
+      "start_date": "2026-02-18",
+      "end_date": "2026-02-24",
+      "consecutive_days": 7
+    },
+    "explicit_exclusions": {
+      "transition_and_incident_window": ["2026-02-25", "2026-02-26", "2026-02-27"],
+      "exclusion_reason": "First live obstructive Monumetric behavior and subsequent volatility window."
+    },
+    "metrics_7_day_baseline": {
+      "total_sessions": 8780,
+      "avg_sessions_per_day": 1254.2857,
+      "engaged_sessions": 6044,
+      "engagement_rate": 0.6884,
+      "bounce_rate": 0.3116,
+      "screen_page_views": 38997,
+      "pages_per_session": 4.4416,
+      "user_engagement_duration_seconds": 1006453,
+      "avg_engagement_time_per_session_seconds": 114.6302,
+      "avg_engagement_time_per_session_hms": "00:01:55",
+      "average_session_duration_seconds": 371.1859
+    },
+    "device_split_by_sessions": {
+      "mobile": {
+        "sessions": 7760,
+        "engaged_sessions": 5274,
+        "engagement_rate": 0.6796,
+        "bounce_rate": 0.3204,
+        "screen_page_views": 33869,
+        "pages_per_session": 4.3646,
+        "user_engagement_duration_seconds": 840692,
+        "avg_engagement_time_per_session_seconds": 108.3366,
+        "avg_engagement_time_per_session_hms": "00:01:48",
+        "average_session_duration_seconds": 321.0383,
+        "session_share": 0.8838
+      },
+      "desktop": {
+        "sessions": 941,
+        "engaged_sessions": 704,
+        "engagement_rate": 0.7481,
+        "bounce_rate": 0.2519,
+        "screen_page_views": 4831,
+        "pages_per_session": 5.1339,
+        "user_engagement_duration_seconds": 157346,
+        "avg_engagement_time_per_session_seconds": 167.2115,
+        "avg_engagement_time_per_session_hms": "00:02:47",
+        "average_session_duration_seconds": 800.1126,
+        "session_share": 0.1072
+      },
+      "tablet": {
+        "sessions": 62,
+        "engaged_sessions": 40,
+        "engagement_rate": 0.6452,
+        "bounce_rate": 0.3548,
+        "screen_page_views": 297,
+        "pages_per_session": 4.7903,
+        "user_engagement_duration_seconds": 8415,
+        "avg_engagement_time_per_session_seconds": 135.7258,
+        "avg_engagement_time_per_session_hms": "00:02:16",
+        "average_session_duration_seconds": 239.4968,
+        "session_share": 0.0071
+      }
+    },
+    "daily_observations": [
+      {
+        "date": "2026-02-18",
+        "sessions": 926,
+        "engaged_sessions": 642,
+        "engagement_rate": 0.6933,
+        "bounce_rate": 0.3067,
+        "screen_page_views": 3916,
+        "pages_per_session": 4.2289,
+        "user_engagement_duration_seconds": 115311,
+        "avg_engagement_time_per_session_seconds": 124.5259,
+        "avg_engagement_time_per_session_hms": "00:02:05",
+        "average_session_duration_seconds": 313.2279
+      },
+      {
+        "date": "2026-02-19",
+        "sessions": 946,
+        "engaged_sessions": 642,
+        "engagement_rate": 0.6786,
+        "bounce_rate": 0.3214,
+        "screen_page_views": 4014,
+        "pages_per_session": 4.2431,
+        "user_engagement_duration_seconds": 105276,
+        "avg_engagement_time_per_session_seconds": 111.2854,
+        "avg_engagement_time_per_session_hms": "00:01:51",
+        "average_session_duration_seconds": 385.3928
+      },
+      {
+        "date": "2026-02-20",
+        "sessions": 797,
+        "engaged_sessions": 527,
+        "engagement_rate": 0.6612,
+        "bounce_rate": 0.3388,
+        "screen_page_views": 3542,
+        "pages_per_session": 4.4442,
+        "user_engagement_duration_seconds": 108141,
+        "avg_engagement_time_per_session_seconds": 135.6851,
+        "avg_engagement_time_per_session_hms": "00:02:16",
+        "average_session_duration_seconds": 625.1908
+      },
+      {
+        "date": "2026-02-21",
+        "sessions": 964,
+        "engaged_sessions": 681,
+        "engagement_rate": 0.7064,
+        "bounce_rate": 0.2936,
+        "screen_page_views": 4971,
+        "pages_per_session": 5.1566,
+        "user_engagement_duration_seconds": 125948,
+        "avg_engagement_time_per_session_seconds": 130.6515,
+        "avg_engagement_time_per_session_hms": "00:02:11",
+        "average_session_duration_seconds": 380.1724
+      },
+      {
+        "date": "2026-02-22",
+        "sessions": 2441,
+        "engaged_sessions": 1667,
+        "engagement_rate": 0.6829,
+        "bounce_rate": 0.3171,
+        "screen_page_views": 10369,
+        "pages_per_session": 4.2478,
+        "user_engagement_duration_seconds": 267621,
+        "avg_engagement_time_per_session_seconds": 109.6358,
+        "avg_engagement_time_per_session_hms": "00:01:50",
+        "average_session_duration_seconds": 306.3552
+      },
+      {
+        "date": "2026-02-23",
+        "sessions": 1512,
+        "engaged_sessions": 1026,
+        "engagement_rate": 0.6786,
+        "bounce_rate": 0.3214,
+        "screen_page_views": 6306,
+        "pages_per_session": 4.1706,
+        "user_engagement_duration_seconds": 148325,
+        "avg_engagement_time_per_session_seconds": 98.0985,
+        "avg_engagement_time_per_session_hms": "00:01:38",
+        "average_session_duration_seconds": 399.8817
+      },
+      {
+        "date": "2026-02-24",
+        "sessions": 1299,
+        "engaged_sessions": 845,
+        "engagement_rate": 0.6505,
+        "bounce_rate": 0.3495,
+        "screen_page_views": 5879,
+        "pages_per_session": 4.5258,
+        "user_engagement_duration_seconds": 135831,
+        "avg_engagement_time_per_session_seconds": 104.5658,
+        "avg_engagement_time_per_session_hms": "00:01:45",
+        "average_session_duration_seconds": 298.0632
+      }
+    ]
+  }
+}

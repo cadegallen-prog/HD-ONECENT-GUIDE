@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 27, 2026 (Monumetric response received; transitioning to controlled reactivation test)
+**Last updated:** Feb 27, 2026 (Baseline locked; Monumetric reactivated in production under live validation)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,18 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-27 (Baseline locked + Monumetric reactivated in production):** Exported the clean pre-ad GA4 baseline, turned Monumetric back on in Vercel production, and verified the live site after correcting a false-positive console audit classifier.
+  - **What changed:**
+    - saved `analytics/baselines/Baseline_Stable_PreAds.json` using the stable window `2026-02-18` through `2026-02-24`.
+    - production env `NEXT_PUBLIC_MONUMETRIC_ENABLED=true` was set in Vercel and the current production deployment was redeployed; `www.pennycentral.com` now serves the Monumetric runtime again.
+    - live production verification initially showed a fake Google Analytics CSP blocker on `/about`; root cause was the audit parser reading the CSP allowlist instead of the blocked target.
+    - `tests/live/console.spec.ts` now extracts the actual blocked resource before classifying CSP severity, so `data:`/allowlist text no longer mislabels core domains as blocked.
+  - **Why:** the controlled reactivation needed two things at once: a trustworthy pre-ad baseline and an honest live verification lane.
+  - **Status:**
+    - Monumetric is live in production as of `2026-02-27`.
+    - the 7-day validation window is now active against `Baseline_Stable_PreAds`.
+    - immediate post-reactivation desktop/mobile console audits passed; remaining console noise is non-critical third-party ad/tracking noise only.
 
 - **2026-02-27 (Monumetric response received + controlled reactivation posture):** Samantha responded with partial confirmation, and the operating posture has shifted from passive wait-state to a controlled reactivation test model.
   - **What changed:**
