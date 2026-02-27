@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 27, 2026 (Baseline locked; Monumetric reactivated in production under live validation)
+**Last updated:** Feb 27, 2026 (Monumetric emergency rollback reactivated after live header/refresh failure)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,17 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-02-27 (Monumetric emergency rollback reactivated):** Founder reported the live site was still blocking the header and refreshing nonstop, so the production kill switch was re-applied immediately.
+  - **What changed:**
+    - Vercel production env `NEXT_PUBLIC_MONUMETRIC_ENABLED` was set back to `false`.
+    - the current production deployment was redeployed without shipping new app code.
+    - live HTML verification on `https://www.pennycentral.com` confirmed the Monumetric runtime script and `monu.delivery` preconnect were removed again.
+  - **Why:** this is a direct kill-switch condition: structural interference plus unstable runtime behavior.
+  - **Status:**
+    - Monumetric is off again in production as of `2026-02-27`.
+    - the previously started live validation window is aborted.
+    - do not re-enable until the refresh/header failure has a concrete root-cause explanation and a safer reactivation plan.
 
 - **2026-02-27 (Baseline locked + Monumetric reactivated in production):** Exported the clean pre-ad GA4 baseline, turned Monumetric back on in Vercel production, and verified the live site after correcting a false-positive console audit classifier.
   - **What changed:**

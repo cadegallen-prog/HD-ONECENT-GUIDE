@@ -4,6 +4,47 @@
 
 ---
 
+## 2026-02-27 - Codex - Monumetric Emergency Production Rollback Reactivated
+
+**Goal:** Shut Monumetric back off in production after founder-reported header obstruction and nonstop refresh behavior.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- Vercel production operations
+  - removed the production `NEXT_PUBLIC_MONUMETRIC_ENABLED=true` setting and re-added it as `false`.
+  - redeployed the current production deployment instead of shipping local app code.
+- Live verification
+  - confirmed `www.pennycentral.com` no longer serves the Monumetric runtime script or `monu.delivery` preconnect.
+- `.ai/STATE.md`
+  - updated current reality to show the rollback is active again.
+- `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`
+  - moved `INC-MONUMETRIC-001` back from live validation to active rollback.
+- `.ai/SESSION_LOG.md`
+  - added this closeout entry and trimmed the log back to 5 sessions.
+
+### Summary
+
+- Founder-reported live behavior still crossed the kill-switch line.
+- Monumetric is off again in production.
+- This rollback was operational only; no new site code was deployed.
+
+### Verification
+
+- `npx --yes vercel@latest env ls production --scope allens-projects-6bce9cc6` ✅
+- `npx --yes vercel@latest redeploy https://hd-onecent-guide-jize3ocv7-allens-projects-6bce9cc6.vercel.app --target production --scope allens-projects-6bce9cc6` ✅
+- `curl -s https://www.pennycentral.com | rg "monu.delivery/site|https://monu.delivery"` ✅
+  - result: no Monumetric runtime script or `monu.delivery` preconnect present in live HTML
+- Runtime verification lanes: N/A (operational env rollback only; no local runtime code-path change)
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Scope: memory/docs update only; production rollback was executed operationally in Vercel
+
+---
+
 ## 2026-02-27 - Codex - Baseline Export + Monumetric Production Reactivation
 
 **Goal:** Lock the clean pre-ad baseline, reactivate Monumetric in production, and verify the live site truthfully.
@@ -175,36 +216,3 @@
 - Local carryover remains (outside this scoped objective): `.ai/SESSION_LOG.md`, `.ai/STATE.md`, `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`, `scripts/archive-google-analytics.ts`
 
 ---
-
-## 2026-02-26 - Codex - Monumetric UX Incident Context Preservation (Founder Email Sent)
-
-**Goal:** Preserve the current Monumetric incident context with explicit status, what changed, and why, after founder escalation email was sent.
-
-**Status:** ✅ Completed (docs/memory update only)
-
-### Changes
-
-- `.ai/STATE.md`
-  - added a current-sprint incident entry for the Monumetric UX regression and founder escalation.
-  - recorded the reported engagement drop (`~1:50-2:00` to `~0:22`, evening of 2026-02-25) and rationale for conservative rollback requests.
-- `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`
-  - updated `INC-MONUMETRIC-001` status/next action/deadline to reflect founder email sent and active UX-first rollback request.
-  - appended new session note with current decision posture and requested implementation controls.
-- `.ai/SESSION_LOG.md`
-  - appended this session summary so future agents inherit the incident context and exact founder direction.
-
-### Evidence Anchors
-
-- `reports/monumetric-audit/2026-02-26T17-36-26-640Z/summary.md`
-- `reports/monumetric-audit/2026-02-26T17-38-49-063Z-mobile-stress/summary.md`
-- `reports/monumetric-audit/2026-02-26T17-56-57-948Z-menu-block-proof/summary.md`
-- `reports/analytics-verification/2026-02-26T17-52-51-293Z/summary.md`
-
-### Verification
-
-- `npm run ai:memory:check` (run after memory updates) ✅
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Scope: memory/docs only (no runtime code changes)
