@@ -17,6 +17,7 @@ type CliOptions = {
 type AuthResult = {
   accessToken: string
   mode: "oauth_refresh_token" | "adc_gcloud"
+  quotaProjectId?: string
 }
 
 type RunResult = {
@@ -34,6 +35,7 @@ type RunSummary = {
   startDate: string
   endDate: string
   authMode: AuthResult["mode"]
+  quotaProjectId?: string
   gsc: RunResult[]
   ga4: RunResult[]
   errors: string[]
@@ -48,6 +50,11 @@ const GCLOUD_FALLBACK_PATH = path.join(
   "google-cloud-sdk",
   "bin",
   "gcloud.cmd"
+)
+const ADC_CREDENTIALS_PATH = path.join(
+  process.env.APPDATA ?? "",
+  "gcloud",
+  "application_default_credentials.json"
 )
 
 function nowUtcDate(): string {
@@ -165,8 +172,14 @@ function validateDateInput(value: string, flag: string) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
     throw new Error(`${flag} must be YYYY-MM-DD`)
   }
-  const date = new Date(`${value}T00:00:00Z`)
-  if (Number.isNaN(date.getTime())) {
+  const [yearText, monthText, dayText] = value.split("-")
+  const year = Number(yearText)
+  const month = Number(monthText)
+  const day = Number(dayText)
+  const date = new Date(Date.UTC(year, month - 1, day))
+  const isExactMatch =
+    date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day
+  if (!isExactMatch) {
     throw new Error(`${flag} is not a valid date`)
   }
 }
@@ -200,6 +213,45 @@ function getEnv(
   envFallback: Record<string, string>
 ): string | undefined {
   return process.env[key] ?? envLocal[key] ?? envFallback[key]
+}
+
+function readAdcQuotaProjectId(): string | undefined {
+  if (!ADC_CREDENTIALS_PATH || !fs.existsSync(ADC_CREDENTIALS_PATH)) return undefined
+  try {
+    const parsed = JSON.parse(fs.readFileSync(ADC_CREDENTIALS_PATH, "utf8")) as {
+      quota_project_id?: unknown
+    }
+    const quotaProjectId =
+      typeof parsed.quota_project_id === "string" ? parsed.quota_project_id.trim() : ""
+    return quotaProjectId || undefined
+  } catch {
+    return undefined
+  }
+}
+
+function resolveQuotaProjectId(
+  envLocal: Record<string, string>,
+  envFallback: Record<string, string>
+): string | undefined {
+  return (
+    getEnv("GOOGLE_API_QUOTA_PROJECT", envLocal, envFallback) ??
+    getEnv("GOOGLE_CLOUD_QUOTA_PROJECT", envLocal, envFallback) ??
+    readAdcQuotaProjectId()
+  )
+}
+
+function buildGoogleApiHeaders(
+  accessToken: string,
+  quotaProjectId?: string
+): Record<string, string> {
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${accessToken}`,
+    "Content-Type": "application/json",
+  }
+  if (quotaProjectId) {
+    headers["x-goog-user-project"] = quotaProjectId
+  }
+  return headers
 }
 
 async function sleep(ms: number) {
@@ -274,6 +326,7 @@ async function getAccessToken(
   envLocal: Record<string, string>,
   envFallback: Record<string, string>
 ): Promise<AuthResult> {
+  const quotaProjectId = resolveQuotaProjectId(envLocal, envFallback)
   const clientId = getEnv("GOOGLE_OAUTH_CLIENT_ID", envLocal, envFallback)
   const clientSecret = getEnv("GOOGLE_OAUTH_CLIENT_SECRET", envLocal, envFallback)
   const refreshToken = getEnv("GOOGLE_OAUTH_REFRESH_TOKEN", envLocal, envFallback)
@@ -298,11 +351,11 @@ async function getAccessToken(
     if (!accessToken || typeof accessToken !== "string") {
       throw new Error("OAuth response did not include access_token.")
     }
-    return { accessToken, mode: "oauth_refresh_token" }
+    return { accessToken, mode: "oauth_refresh_token", quotaProjectId }
   }
 
   const adcToken = getAccessTokenViaGcloud()
-  return { accessToken: adcToken, mode: "adc_gcloud" }
+  return { accessToken: adcToken, mode: "adc_gcloud", quotaProjectId }
 }
 
 function ensureDir(dirPath: string) {
@@ -378,6 +431,7 @@ function filterAdditiveGa4Metrics(metrics: string[]): string[] {
 
 async function runGscReport(config: {
   accessToken: string
+  quotaProjectId?: string
   reportName: string
   siteUrl: string
   startDate: string
@@ -408,10 +462,7 @@ async function runGscReport(config: {
       endpoint,
       {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${config.accessToken}`,
-          "Content-Type": "application/json",
-        },
+        headers: buildGoogleApiHeaders(config.accessToken, config.quotaProjectId),
         body: JSON.stringify(payload),
       },
       `GSC report ${config.reportName} page ${page}`
@@ -480,6 +531,7 @@ function normalizeGa4Date(value: string): string {
 
 async function runGa4Report(config: {
   accessToken: string
+  quotaProjectId?: string
   reportName: string
   propertyId: string
   startDate: string
@@ -510,10 +562,7 @@ async function runGa4Report(config: {
       endpoint,
       {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${config.accessToken}`,
-          "Content-Type": "application/json",
-        },
+        headers: buildGoogleApiHeaders(config.accessToken, config.quotaProjectId),
         body: JSON.stringify(payload),
       },
       `GA4 report ${config.reportName} offset ${offset}`
@@ -594,6 +643,7 @@ function writeSummaryMarkdown(runDir: string, summary: RunSummary) {
     "",
     `- Date range: \`${summary.startDate}\` to \`${summary.endDate}\``,
     `- Auth mode: \`${summary.authMode}\``,
+    `- Quota project: \`${summary.quotaProjectId ?? "none"}\``,
     "",
     "## GSC",
     ...(summary.gsc.length
@@ -670,6 +720,7 @@ async function main() {
       try {
         const result = await runGscReport({
           accessToken: auth.accessToken,
+          quotaProjectId: auth.quotaProjectId,
           reportName: report.name,
           siteUrl: gscSiteUrl,
           startDate: options.startDate,
@@ -743,6 +794,7 @@ async function main() {
       try {
         const result = await runGa4Report({
           accessToken: auth.accessToken,
+          quotaProjectId: auth.quotaProjectId,
           reportName: report.name,
           propertyId: ga4PropertyId,
           startDate: options.startDate,
@@ -767,6 +819,7 @@ async function main() {
     startDate: options.startDate,
     endDate: options.endDate,
     authMode: auth.mode,
+    quotaProjectId: auth.quotaProjectId,
     gsc: gscResults,
     ga4: ga4Results,
     errors,

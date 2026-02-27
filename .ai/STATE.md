@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 26, 2026 (GA4 archive now includes keyEvents in daily event export + carryover hygiene closed)
+**Last updated:** Feb 27, 2026 (Monumetric response received; transitioning to controlled reactivation test)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -12,11 +12,61 @@ Every AI session must update this after meaningful work.
 
 ## Current Sprint (Last 7 Days)
 
+- **2026-02-27 (Monumetric response received + controlled reactivation posture):** Samantha responded with partial confirmation, and the operating posture has shifted from passive wait-state to a controlled reactivation test model.
+  - **What changed:**
+    - partner-confirmed items: interstitial disabled, video disabled, `/report-find` excluded, mobile header adjusted to avoid nav obstruction, dashboard access activated, ads expected live once plugin/runtime is reactivated.
+    - missing explicit confirmation: 60-second refresh cap, stacking limits, anchor removal, and precise propagation timing.
+    - expectation updated: publisher-associate communication appears onboarding-oriented rather than technically precise; future monetization decisions should be governed by internal guardrails, not partner reassurance.
+  - **Why:** the prior obstruction event is already documented as a structural UX failure with severe engagement damage; current strategy is to manage reactivation as calculated risk rather than remain in indefinite external wait-state.
+  - **Current strategy:**
+    - current Monumetric posture = `response received / partial confirmation / transitioning to controlled reactivation test`
+    - baseline reference = `Baseline_Stable_PreAds`
+    - reactivation window = 7-day validation period once ads are turned back on
+    - kill switch = trigger immediate shutdown on structural interference or `>40%` engagement drop versus baseline
+    - rule = no emotional toggling; all decisions must follow predefined thresholds
+  - **Status:** ads are still disabled at this moment of documentation; this entry records the strategy shift only and does not re-enable runtime.
+
+- **2026-02-27 (Monumetric wait-state confirmation locked in memory):** Founder sent the follow-up configuration email to Samantha and is now waiting for written confirmation from Monumetric before re-enabling ads.
+  - **What changed:** Added explicit memory contract that Monumetric runtime remains disabled while waiting for partner confirmation/ETA.
+  - **Why:** prevent future-agent drift (no accidental recommendation to re-enable before confirmation).
+  - **Status:** `NEXT_PUBLIC_MONUMETRIC_ENABLED=false` remains the current production posture; do not re-enable until Samantha confirms requested settings are live or provides pending-item ETA.
+
+- **2026-02-27 (Monumetric in-content rollout + emergency runtime disable hotfix):** Shipped requested in-content placements, then protected UX with a reversible global Monumetric runtime kill switch and promoted the hotfix to production.
+  - **What changed:**
+    - rollout lane on `dev`:
+      - added repeatable in-content slot component: `components/ads/monumetric-in-content-slot.tsx`
+      - mounted in-content slots on guide surfaces (`/guide` + chapter pages) only
+      - kept video/interstitial deferred in launch config (`lib/ads/launch-config.ts`, `tests/ads-launch-config.test.ts`)
+    - emergency UX lane:
+      - added env gate `NEXT_PUBLIC_MONUMETRIC_ENABLED` (default `false`) in `.env.example`
+      - gated Monumetric runtime script/preconnect in `app/layout.tsx`
+      - gated in-content slot render in `components/ads/monumetric-in-content-slot.tsx`
+      - effective behavior with default flag: Monumetric script and in-content slots are off globally.
+  - **Why:** preserve a reversible implementation path while preventing current sticky/interstitial/video side effects from degrading usability during partner-side remediation.
+  - **Verification + deploy evidence:**
+    - local gates: `npm run ai:memory:check`, `npm run verify:fast`, `npm run e2e:smoke` (all passed)
+    - proof artifacts: `reports/proof/2026-02-26T19-56-28/` (rollout), `reports/proof/2026-02-26T22-24-47/` (hotfix)
+    - production promotion:
+      - rollout commit on `dev`: `ee9a332`; merge on `main`: `a82855d`
+      - hotfix commit on `dev`: `7a681ee`; merge on `main`: `defb769`
+    - CI (`main` SHA `defb7694fbf2ba5f27b301e44c8ee1ed0d79e462`):
+      - FAST: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22463864816` ✅
+      - SMOKE: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22463864837` ✅
+      - FULL: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22463864821` ✅
+  - **Status:** local runtime guard is active (`NEXT_PUBLIC_MONUMETRIC_ENABLED=false`); keep off until Monumetric confirms sticky/interstitial/video fixes and post-confirmation audits pass.
+
+- **2026-02-26 (Monumetric UX incident capture + founder escalation sent):** Preserved incident context for ad-behavior regression and founder action after live-site verification evidence review.
+  - **What changed:** founder (Cade) sent a neutral implementation email requesting immediate UX-first ad rollback controls (mobile top sticky removal now, interstitial/vignette disable, `/report-find` ad exclusion, video rollout pause).
+  - **Why:** average engagement per session reportedly dropped from roughly `1:50-2:00` to about `0:22` on the evening of `2026-02-25`, and reproduced mobile behavior showed sticky/header and overlay scenarios that can block navigation controls.
+  - **Evidence captured:** `reports/monumetric-audit/2026-02-26T17-36-26-640Z/summary.md`, `reports/monumetric-audit/2026-02-26T17-38-49-063Z-mobile-stress/summary.md`, `reports/monumetric-audit/2026-02-26T17-56-57-948Z-menu-block-proof/summary.md`, `reports/analytics-verification/2026-02-26T17-52-51-293Z/summary.md`.
+  - **Status:** awaiting Monumetric confirmation of applied changes + propagation window, then re-audit mobile/desktop and verify `/report-find` remains ad-free.
+
 - **2026-02-26 (GA4 archive key-events enhancement + release hygiene closeout):** Completed the requested carryover cleanup lane and shipped an analytics archive update so key-event/conversion coverage gaps are visible without manual extra pulls.
   - **Code + docs changes:**
     - `scripts/archive-google-analytics.ts`
       - `ga4/daily_events` now exports `eventCount` and `keyEvents`.
       - additive GA4 totals now include `keyEvents`/`conversions` when present.
+      - `validateDateInput` now rejects impossible calendar dates fail-closed (prevents silent JS date rollover acceptance).
     - `.ai/topics/ANALYTICS_CONTRACT.md`
       - archive contract updated to require `keyEvents` in `daily_events`.
     - `.ai/ANALYTICS_WEEKLY_REVIEW.md`
@@ -28,6 +78,15 @@ Every AI session must update this after meaningful work.
       - command: `npm run analytics:archive -- -- --start-date=2026-02-24 --end-date=2026-02-25 --skip-gsc`
       - artifact: `.local/analytics-history/runs/2026-02-26T04-59-02-718Z/ga4/daily_events.csv`
       - header verified: `date,eventName,eventCount,keyEvents`
+    - 30-day follow-up archive run:
+      - command: `npm run analytics:archive -- -- --start-date=2026-01-27 --end-date=2026-02-26`
+      - artifact: `.local/analytics-history/runs/2026-02-26T06-50-04-577Z/ga4/daily_events.csv`
+      - `find_submit` totals: `eventCount=425`, `keyEvents=0`
+      - GA4 `daily_events` totals: `eventCount=328205`, `keyEvents=0`
+      - interpretation: conversion mapping is still missing at GA4 Admin key-event configuration level.
+    - input hardening check:
+      - command: `npm run analytics:archive -- -- --start-date=2026-02-31 --end-date=2026-03-01`
+      - result: fails as expected with `--start-date is not a valid date`
   - **Verification summary:**
     - `npm run ai:memory:check` ✅
     - `npm run verify:fast` ✅
