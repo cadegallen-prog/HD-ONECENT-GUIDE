@@ -4,6 +4,166 @@
 
 ---
 
+## 2026-02-27 - Codex - Monumetric Response Received - Controlled Reactivation Strategy Initiated
+
+**Goal:** Persist the new founder-approved posture after Samantha's response so future agents stop treating Monumetric as a passive wait-state.
+
+**Status:** ✅ Completed (memory/docs update only)
+
+### Changes
+
+- `.ai/STATE.md`
+  - changed the active Monumetric posture from "awaiting Samantha confirmation" to "response received / partial confirmation / transitioning to controlled reactivation test".
+  - recorded the 7-day validation window, `Baseline_Stable_PreAds` reference, and kill-switch rule (`>40%` engagement drop or structural interference).
+- `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`
+  - appended a post-response session note documenting the strategy shift from external dependency to internally governed risk thresholds.
+- `.ai/SESSION_LOG.md`
+  - added this entry so the new posture is the most recent session truth while preserving the earlier wait-state entry as history.
+
+### Summary
+
+- Samantha replied with partial confirmations:
+  - interstitial disabled
+  - video disabled
+  - `/report-find` excluded
+  - mobile header adjusted to avoid covering navigation
+  - dashboard access enabled
+- Missing explicit confirmations remain:
+  - refresh cap
+  - stacking limits
+  - anchor removal
+  - propagation/ETA detail
+- Decision: move to a controlled test model rather than wait indefinitely for deeper technical precision from an onboarding-oriented contact.
+- This is not blind trust.
+- This is calculated risk under defined monitoring thresholds.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run ai:checkpoint` ✅
+- Runtime verification lanes: N/A (docs-only memory update; no runtime code-path changes)
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Scope: docs/memory only (no ad toggle, no monetization code change)
+
+---
+
+## 2026-02-27 - Codex - Monumetric Wait-State Memory Lock (Ads Still Disabled)
+
+**Goal:** Persist the founder-confirmed operational state so future agents do not drift: ads are still disabled, and re-enable is blocked until Samantha confirms final Monumetric settings/ETA.
+
+**Status:** ✅ Completed (memory/docs update only)
+
+### Changes
+
+- `.ai/STATE.md`
+  - updated current-state summary and sprint notes to explicitly reflect the current wait-state.
+  - recorded that runtime remains disabled while waiting for Samantha's written confirmation.
+- `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`
+  - appended a session note documenting the exact founder posture: follow-up email already sent; no re-enable yet.
+- `.ai/SESSION_LOG.md`
+  - added this entry to persist the wait-state in the recent-session timeline.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run ai:checkpoint` ✅
+- Runtime verification lanes: N/A (docs-only memory update; no runtime code-path changes)
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Scope: docs/memory only (no runtime ad-policy mutation)
+
+---
+
+## 2026-02-27 - Codex - Monumetric In-Content Rollout + Emergency Runtime Disable (Reversible)
+
+**Goal:** Deploy in-content Monumetric tags, then immediately protect UX by disabling Monumetric runtime globally with a one-flag reversible switch.
+
+**Status:** ✅ Completed (runtime + deploy + CI confirmation)
+
+### Changes
+
+- Initial in-content rollout:
+  - added repeatable in-content slot component: `components/ads/monumetric-in-content-slot.tsx`
+  - mounted slot on guide hub + chapter pages only (`/guide`, `/what-are-pennies`, `/clearance-lifecycle`, `/digital-pre-hunt`, `/in-store-strategy`, `/inside-scoop`, `/facts-vs-myths`, `/faq`)
+  - kept video/interstitial deferred in launch config:
+    - `lib/ads/launch-config.ts` -> `interstitial.enabled=false`, `volt.enabled=false`
+    - test lock added in `tests/ads-launch-config.test.ts`
+- Emergency UX hotfix (reversible):
+  - added env kill switch: `NEXT_PUBLIC_MONUMETRIC_ENABLED` (default `false`) in `.env.example`
+  - gated Monumetric runtime script + preconnect in `app/layout.tsx`
+  - gated in-content slot render in `components/ads/monumetric-in-content-slot.tsx`
+  - behavior now: when flag is `false`, Monumetric script and in-content slots are both off.
+
+### Verification
+
+- Local gates:
+  - `npm run ai:memory:check` ✅
+  - `npm run verify:fast` ✅
+  - `npm run e2e:smoke` ✅
+- UI proof:
+  - rollout proof: `reports/proof/2026-02-26T19-56-28/`
+  - hotfix proof: `reports/proof/2026-02-26T22-24-47/`
+- Runtime checks:
+  - before hotfix: in-content slot present on guide surfaces
+  - after hotfix (`flag=false`): `monu.delivery/site` script absent + in-content slot absent on `/`, `/guide`, `/faq`
+- Main CI (`defb7694fbf2ba5f27b301e44c8ee1ed0d79e462`):
+  - FAST: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22463864816` ✅
+  - SMOKE: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22463864837` ✅
+  - FULL: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22463864821` ✅
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Commit SHAs:
+  - rollout commit on `dev`: `ee9a332`
+  - rollout merge on `main`: `a82855d`
+  - emergency kill-switch hotfix on `dev`: `7a681ee`
+  - emergency hotfix merge on `main`: `defb769`
+- Push status: pushed to `origin/dev` and `origin/main`
+- Local carryover remains (outside this scoped objective): `.ai/SESSION_LOG.md`, `.ai/STATE.md`, `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`, `scripts/archive-google-analytics.ts`
+
+---
+
+## 2026-02-26 - Codex - Monumetric UX Incident Context Preservation (Founder Email Sent)
+
+**Goal:** Preserve the current Monumetric incident context with explicit status, what changed, and why, after founder escalation email was sent.
+
+**Status:** ✅ Completed (docs/memory update only)
+
+### Changes
+
+- `.ai/STATE.md`
+  - added a current-sprint incident entry for the Monumetric UX regression and founder escalation.
+  - recorded the reported engagement drop (`~1:50-2:00` to `~0:22`, evening of 2026-02-25) and rationale for conservative rollback requests.
+- `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`
+  - updated `INC-MONUMETRIC-001` status/next action/deadline to reflect founder email sent and active UX-first rollback request.
+  - appended new session note with current decision posture and requested implementation controls.
+- `.ai/SESSION_LOG.md`
+  - appended this session summary so future agents inherit the incident context and exact founder direction.
+
+### Evidence Anchors
+
+- `reports/monumetric-audit/2026-02-26T17-36-26-640Z/summary.md`
+- `reports/monumetric-audit/2026-02-26T17-38-49-063Z-mobile-stress/summary.md`
+- `reports/monumetric-audit/2026-02-26T17-56-57-948Z-menu-block-proof/summary.md`
+- `reports/analytics-verification/2026-02-26T17-52-51-293Z/summary.md`
+
+### Verification
+
+- `npm run ai:memory:check` (run after memory updates) ✅
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Scope: memory/docs only (no runtime code changes)
+
+---
+
 ## 2026-02-26 - Codex - GA4 Daily Events KeyEvents Enhancement + Release Hygiene
 
 **Goal:** Complete requested carryover hygiene and implement the analytics change so conversion/key-event gaps are visible in standard archive runs.
@@ -13,206 +173,39 @@
 ### Changes
 
 - scripts/archive-google-analytics.ts
-  - ga4/daily_events now exports ventCount + keyEvents (GA4 conversion metric) in default archive runs.
+  - ga4/daily_events now exports eventCount + keyEvents (GA4 conversion metric) in default archive runs.
   - additive GA4 totals now include keyEvents and conversions when present.
+  - hardening follow-up: `validateDateInput` now strictly rejects impossible calendar dates (for example `2026-02-31`) instead of accepting JS date rollover.
 - .ai/topics/ANALYTICS_CONTRACT.md
   - updated archive contract to require keyEvents in daily_events output.
 - .ai/ANALYTICS_WEEKLY_REVIEW.md
   - updated weekly review guidance to read key-event/conversion counts from daily_events.
+- .ai/SESSION_LOG.md
+  - fixed malformed section separator so the next heading starts on a new line (`---` then `## ...`), improving log readability/parsing.
 - Local hygiene cleanup:
   - removed stale .ai/tmp-\*.log scratch files.
   - normalized .ai/LEARNINGS.md with a new anti-pattern entry: do not parallelize build-dependent verification gates.
 
 ### Verification
 
-- pm run analytics:archive -- -- --start-date=2026-02-24 --end-date=2026-02-25 --skip-gsc ✅
+- npm run analytics:archive -- -- --start-date=2026-02-24 --end-date=2026-02-25 --skip-gsc ✅
   - artifact: .local/analytics-history/runs/2026-02-26T04-59-02-718Z/ga4/daily_events.csv
   - confirmed header: date,eventName,eventCount,keyEvents
-- pm run ai:memory:check ✅
-- pm run verify:fast ✅
-- pm run e2e:smoke ✅
+- npm run ai:memory:check ✅
+- npm run verify:fast ✅
+- npm run e2e:smoke ✅
+- npm run analytics:archive -- -- --start-date=2026-02-31 --end-date=2026-03-01 ❌ (expected fail-closed check)
+  - output: `--start-date is not a valid date`
+- follow-up validation run:
+  - `npm run analytics:archive -- -- --start-date=2026-01-27 --end-date=2026-02-26` ✅
+  - artifact: `.local/analytics-history/runs/2026-02-26T06-50-04-577Z/ga4/daily_events.csv`
+  - `find_submit` totals: `eventCount=425`, `keyEvents=0` (30 rows)
+  - GA4 `daily_events` totals: `eventCount=328205`, `keyEvents=0`
 
 ### Branch Hygiene
 
 - Branch: dev
-- Push status: pending in this session (implementation complete, commit/push next)
-
----## 2026-02-26 - Codex - Full QA CSP Blocker Gate + Production CSP Allowlist Fixes
-
-**Goal:** Make monetization-impacting CSP violations fail in FULL QA (instead of warning-only) and clear the newly surfaced production blocker host.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `tests/live/console.spec.ts`
-  - expanded audited routes to include `/penny-list`.
-  - added monetization-critical CSP host matching for `/`, `/guide`, `/penny-list`.
-  - improved blocked-host extraction from CSP messages (URL scanning, not connect-only format).
-  - converted critical CSP findings into hard test failure (`throw new Error(...)`).
-  - ignored geolocation console noise (`Error getting location: GeolocationPositionError`) to reduce false actionable logs.
-- `next.config.js`
-  - added ad-chain domains:
-    - `script-src`: `https://router.infolinks.com`
-    - `connect-src`: `https://*.a-mo.net`
-    - `frame-src`: `https://*.a-mo.net`, `https://router.infolinks.com`
-
-### Verification
-
-- Local:
-  - `npm run ai:memory:check` ✅
-  - `$env:SUBMIT_FIND_DRY_RUN='false'; npm run verify:fast` ✅
-  - `npm run e2e:smoke` ✅
-- Production CSP header:
-  - `curl -I https://www.pennycentral.com | rg -i \"content-security-policy|a-mo\\.net|router\\.infolinks\\.com\"` ✅
-- Production live console audit (post-deploy):
-  - `$env:PLAYWRIGHT_BASE_URL='https://www.pennycentral.com'; npx playwright test tests/live/console.spec.ts --project=chromium-desktop-light --project=chromium-mobile-light --workers=1` ✅
-  - reports:
-    - `reports/playwright/console-report-2026-02-26T03-24-51-904Z.json`
-    - `reports/playwright/console-report-2026-02-26T03-25-35-238Z.json`
-  - outcome: zero critical CSP blockers; only non-critical third-party CSP noise.
-- CI on `main` SHA `679f982b0ebe51bfade5b054317d013314af9d74`:
-  - FAST: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22426323091` ✅
-  - SMOKE: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22426323090` ✅
-  - FULL: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22426323100` ✅
-
-### Branch / Promotion
-
-- Runtime commit on `dev`: `fc2e22c` (`fix(csp): enforce monetization CSP blockers in full QA and allow a-mo sync frames`)
-- Promoted to `main` via merge commit:
-  - `679f982` (`Merge dev: enforce monetization CSP blockers + expand ad-chain CSP allowlist`)
-- Promotion method used to avoid dirty local `.ai` carryover conflicts:
-  - temporary worktree on `main`, merge `origin/dev`, push `main`, then remove worktree.
-- Local branch at closeout: `dev`
-- Local carryover note: `.ai/STATE.md`, `.ai/SESSION_LOG.md`, and `.ai/tmp-*.log` remain dirty/untracked in local workspace from prior/diagnostic activity.
-
----
-
-## 2026-02-25 - Codex - GA4 + GSC Last-30-Days Retrieval and Performance/Gap Audit
-
-**Goal:** Execute the GA4 + GSC retrieval process for the last 30 days and deliver a founder-readable split between high-performing content, underperforming content, and data-collection discrepancies.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- No source/runtime code was changed.
-- Pulled archive snapshot for `2026-01-27` to `2026-02-25`:
-  - `npm run analytics:archive -- -- --start-date=2026-01-27 --end-date=2026-02-25`
-- Added run-local GA4 landing-page artifacts (for direct GSC cross-reference):
-  - `.local/analytics-history/runs/2026-02-25T21-08-20-611Z/ga4/landing_pages_30d.json`
-  - `.local/analytics-history/runs/2026-02-25T21-08-20-611Z/ga4/landing_pages_conversions_30d.json`
-- Produced a run-local synthesized analysis bundle:
-  - `.local/analytics-history/runs/2026-02-25T21-08-20-611Z/analysis-30d.json`
-  - `.local/analytics-history/runs/2026-02-25T21-08-20-611Z/analysis-30d.md`
-
-### Key Findings (30-Day Window)
-
-- High performers: `/`, `/penny-list`, `/guide` (97.56% of GSC page-click volume; 86.21% of GA4 landing sessions).
-- Underperforming high-impression/low-engagement pages: `/about`, `/report-find`, `/faq`, `/in-store-strategy`, `/clearance-lifecycle`.
-- Discrepancy audit:
-  - no critical undercount mismatch (no page with `>=10` GSC clicks and zero GA4 landing sessions),
-  - 55 GSC-only pages exist but account for only 5 clicks total (mostly legacy redirects/technical endpoints),
-  - GA4 conversion coverage gap: landing-page `keyEvents` and `conversions` returned `0`, while `find_submit` event count was `422`.
-
-### Verification
-
-- Retrieval run summary (complete, no source failures):
-  - `.local/analytics-history/runs/2026-02-25T21-08-20-611Z/run-summary.json` (`errors: []`)
-- Docs/memory update lane:
-  - `npm run ai:writer-lock:status` ✅ (`UNLOCKED` before claim)
-  - `npm run ai:writer-lock:claim -- codex "GA4+GSC 30-day retrieval + analysis"` ✅
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Commit SHA touched: none (docs-only memory update + local analytics artifacts only)
-- Push status: not pushed (no implementation commit requested)
-- Session-end `git status --short`: clean expected after writer-lock release
-
----
-
-## 2026-02-25 - Codex - FULL QA Flake Fix (Live Console Network-Idle Timeout)
-
-**Goal:** Stop recurring `FULL: QA` failures on recent commits by fixing the root-cause flake in the live console audit test.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `tests/live/console.spec.ts`
-  - changed `page.waitForLoadState("networkidle")` to a best-effort wait with a `10000ms` timeout and non-fatal fallback.
-  - rationale: live ad/analytics traffic on mobile can keep network connections open indefinitely, so hard-failing on network-idle is flaky and non-actionable.
-
-### Verification
-
-- Local:
-  - `npm run ai:memory:check` ✅
-  - `$env:SUBMIT_FIND_DRY_RUN='false'; npm run verify:fast` ✅
-  - `npm run e2e:smoke` ✅
-  - `$env:NEXT_PUBLIC_VISUAL_POINTER_ENABLED='true'; npm run e2e:full` ✅
-  - targeted repro command (previously failing paths):  
-    `$env:NEXT_DIST_DIR='.next-playwright'; $env:PLAYWRIGHT='1'; $env:NEXT_PUBLIC_VISUAL_POINTER_ENABLED='true'; $env:NEXT_PUBLIC_EZOIC_ENABLED='false'; $env:NEXT_PUBLIC_ANALYTICS_ENABLED='false'; $env:USE_FIXTURE_FALLBACK='1'; $env:SUPABASE_SERVICE_ROLE_KEY='test'; npm run build; npx playwright test tests/live/console.spec.ts --workers=1 --project=chromium-mobile-light --project=chromium-mobile-dark --project=chromium-mobile-light-390x844` ✅
-- GitHub Actions:
-  - manual FULL on `dev` (fixed commit): `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22415282781` ✅
-  - post-promotion `main` FULL: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22415512456` ✅
-  - post-promotion `main` FAST: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22415512457` ✅
-  - post-promotion `main` SMOKE: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22415512472` ✅
-
-### Branch / Promotion
-
-- `dev` commit: `5224f48` (`fix(ci): make live console audit network-idle wait best effort`)
-- promoted to `main` via merge commit: `554e2b2` (`Merge dev: stabilize full QA live console audit`)
-- local branch restored to `dev`
-- session-end `git status --short`: clean
-
----
-
-## 2026-02-25 - Codex - Monumetric CSP Production Unblock + Follow-up Domain Expansion
-
-**Goal:** Fully unblock Monumetric ad-chain CSP violations in production, verify required domains live, and clear production CSP violations on `/` and `/guide`.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `next.config.js`
-  - Added requested domain set:
-    - `script-src`: `securepubads.g.doubleclick.net`, `cdn.confiant-integrations.net`, `cdn.prod.uidapi.com`
-    - `connect-src`: `id.a-mx.com`, `match.adsrvr.org`, `prebid.cootlogix.com`, `prebid.a-mo.net`, `rtb.openx.net`, `fastlane.rubiconproject.com`, `*.eu-1-id5-sync.com`
-    - `frame-src`: `u.openx.net`, `sync.cootlogix.com`, `prebid.a-mo.net`, `eus.rubiconproject.com`
-  - Added follow-up production-scan domains/protocols that surfaced only after first unblock:
-    - `script-src`: `blob:`, `static.criteo.net`, `resources.infolinks.com`, `pagead2.googlesyndication.com`, `tpc.googlesyndication.com`
-    - `connect-src`: `c3.a-mo.net`, `pagead2.googlesyndication.com`
-    - `frame-src`: `cm.g.doubleclick.net`, `*.safeframe.googlesyndication.com`, `bloggernetwork-d.openx.net`, `gum.criteo.com`
-- No files outside `next.config.js` were modified for code scope.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- Production checks:
-  - `curl -I https://www.pennycentral.com` ✅ (CSP header includes requested + follow-up domains)
-  - `curl -s https://www.pennycentral.com | rg "monu.delivery/site"` ✅
-  - `curl -I https://www.pennycentral.com/ads.txt` ✅ (`308` to Monumetric hosted ads.txt)
-- Production Playwright CSP scans (`/` + `/guide`):
-  - interim scan artifact: `reports/playwright/csp-scan-production-2026-02-25T20-09-17-999Z.json`
-  - rerun artifact: `reports/playwright/csp-scan-production-rerun-2026-02-25T20-14-53-693Z.json`
-  - final artifact: `reports/playwright/csp-scan-production-final-2026-02-25T20-19-58-251Z.json` ✅
-    - `target13StillBlocked: []`
-    - `newBlockedHosts: []`
-
-### Branch / Promotion
-
-- `dev` commits:
-  - `89313e0` - initial requested CSP domains
-  - `045f0d7` - follow-up domains from first production scan
-  - `bafdd59` - final remaining pagead/criteo domain gaps
-- `main` merge commits:
-  - `afba972` - first dev promotion in this session chain
-  - `f810d11` - second dev promotion
-  - `c4d7ef5` - final dev promotion (current production)
-- Local branch restored to `dev` at session close.
+- Commits: `dev=2c092fe`, `main merge=d52cdb5`
+- Push status: pushed (`origin/dev`, `origin/main`)
 
 ---

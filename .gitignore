@@ -153,3 +153,5 @@ __pycache__/
 
 # local email artifacts
 emails/*.pdf
+emails/monumetric-reengagement-draft.md
+emails/monumetric-reengagement-final.md
