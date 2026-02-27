@@ -28,9 +28,11 @@ test.describe("Report Find Batch Submit", () => {
     await page.locator("#dateFound").fill(new Date().toISOString().split("T")[0])
 
     await page.locator("#sku").fill("1009258128")
+    await page.locator("#itemName").fill("Batch Item One")
     await page.getByRole("button", { name: "Add item" }).click()
 
     await page.locator("#sku").fill("1009258127")
+    await page.locator("#itemName").fill("Batch Item Two")
     await page.getByRole("button", { name: "Add item" }).click()
 
     await page.getByRole("button", { name: /Submit all \(2\)/i }).click()

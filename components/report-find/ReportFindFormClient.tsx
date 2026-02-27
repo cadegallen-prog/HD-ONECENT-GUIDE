@@ -126,6 +126,7 @@ function ReportFindForm() {
 
   const [draft, setDraft] = useState({
     sku: "",
+    itemName: "",
     quantity: "",
   })
 
@@ -264,6 +265,12 @@ function ReportFindForm() {
     setResult(null)
     setCopyFeedback("")
 
+    const itemName = draft.itemName.trim().slice(0, 75)
+    if (!itemName) {
+      setAddFeedback({ type: "error", message: "Item name is required." })
+      return
+    }
+
     const skuCheck = validateSku(draft.sku)
     if (skuCheck.error) {
       setSkuError(skuCheck.error)
@@ -291,7 +298,7 @@ function ReportFindForm() {
           ...prev,
           {
             sku: normalizedSku,
-            itemName: "",
+            itemName,
             quantity: incomingQuantity,
             addedVia: "manual",
           },
@@ -333,7 +340,7 @@ function ReportFindForm() {
       })
     }
 
-    setDraft({ sku: "", quantity: "" })
+    setDraft({ sku: "", itemName: "", quantity: "" })
     setSkuDisplay("")
     setSkuError("")
   }
@@ -371,6 +378,7 @@ function ReportFindForm() {
 
     const toApiItem = (item: BasketItem) => ({
       sku: item.sku,
+      itemName: item.itemName,
       storeCity: sharedData.storeCity,
       storeState: sharedData.storeState,
       dateFound: sharedData.dateFound,
@@ -741,15 +749,38 @@ function ReportFindForm() {
                 Enter the 6 or 10-digit SKU from the shelf tag or Home Depot app.
               </p>
             )}
-            <p className="mt-1 text-xs text-[var(--text-muted)]">
-              Item name is auto-resolved from trusted enrichment sources after submit.
-            </p>
             {skuWarning && (
               <p className="mt-1 text-xs text-[var(--status-warning)] flex items-start gap-1.5">
                 <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" aria-hidden="true" />
                 <span>{skuWarning}</span>
               </p>
             )}
+          </div>
+
+          <div>
+            <label
+              htmlFor="itemName"
+              className="block text-sm font-medium text-[var(--text-primary)] mb-2"
+            >
+              Item Name{" "}
+              <span className="text-[var(--status-error)]" aria-hidden="true">
+                *
+              </span>
+            </label>
+            <input
+              type="text"
+              id="itemName"
+              required
+              aria-required="true"
+              maxLength={75}
+              value={draft.itemName}
+              onChange={(e) => setDraft((prev) => ({ ...prev, itemName: e.target.value }))}
+              placeholder="e.g., Legrand GFCI Outlet"
+              className="w-full px-4 py-2 rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] text-[var(--text-primary)] focus:ring-2 focus:ring-[var(--cta-primary)] focus:border-transparent"
+            />
+            <p className="mt-1 text-xs text-[var(--text-muted)]">
+              The product name from the shelf tag or Home Depot app.
+            </p>
           </div>
 
           <div>

@@ -46,6 +46,7 @@ test.describe("critical smoke lane", () => {
     await expect(page.locator("[data-testid='basket-item-1009258128']")).toBeVisible()
 
     await page.locator("#sku").fill("1009258127")
+    await page.locator("#itemName").fill("Smoke Manual Item")
     await page.getByRole("button", { name: "Add item" }).click()
 
     await expect(page.locator("[data-testid='report-basket-list'] li")).toHaveCount(2)
