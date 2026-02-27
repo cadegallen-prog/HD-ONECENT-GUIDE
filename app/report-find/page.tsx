@@ -45,13 +45,15 @@ export default function ReportFindPage() {
               Depot app (not the UPC from the receipt).
             </li>
             <li>
+              <strong>Item name</strong> — the product name from the shelf tag or Home Depot app.
+            </li>
+            <li>
               <strong>State</strong> — the U.S. state where you found the item.
             </li>
             <li>
               <strong>Date found</strong> — when you spotted it (within the last 30 days).
             </li>
           </ul>
-          <p>Item names are auto-resolved from trusted enrichment sources after submission.</p>
           <p>City and quantity are optional but help the community spot regional patterns.</p>
         </section>
       </div>

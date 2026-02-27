@@ -22,10 +22,12 @@ test.describe("Report Find Prefill", () => {
     await page.goto("/report-find")
 
     await page.locator("#sku").fill("1009258128")
+    await page.locator("#itemName").fill("Test Merge Item")
     await page.locator("#quantity").fill("2")
     await page.getByRole("button", { name: "Add item" }).click()
 
     await page.locator("#sku").fill("1009258128")
+    await page.locator("#itemName").fill("Test Merge Item")
     await page.locator("#quantity").fill("3")
     await page.getByRole("button", { name: "Add item" }).click()
 

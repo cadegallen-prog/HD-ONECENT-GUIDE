@@ -41,6 +41,7 @@ test("inserts only allowed fields into Supabase", async () => {
   const req = new NextRequest("http://localhost/api/submit-find", {
     method: "POST",
     body: JSON.stringify({
+      itemName: "Test Item",
       sku: FIXTURE_SKU,
       storeCity: "Atlanta",
       storeState: "GA",

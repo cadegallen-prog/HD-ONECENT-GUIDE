@@ -57,7 +57,7 @@ const lastSubmitMap: Map<string, number> =
 
 const submissionItemSchema = z
   .object({
-    itemName: z.string().trim().max(75).optional(),
+    itemName: z.string().trim().min(1).max(75),
     sku: z.string(),
     storeCity: z.string().optional(),
     storeState: z.string().min(2).max(2),
