@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 27, 2026 (Monumetric emergency rollback reactivated after live header/refresh failure)
+**Last updated:** Mar 1, 2026 (Copilot workflow standardized on native VS Code agents and prompts)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,14 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-01 (Copilot native workflow only):** Standardized Copilot guidance around native VS Code agents and prompt files.
+  - **What changed:**
+    - rewrote `.github/copilot-instructions.md` so it points only to native Copilot agents/prompts and explicitly rejects repo-local orchestration.
+    - added native Copilot agent definitions in `.github/agents/` and prompt files in `.github/prompts/`.
+    - marked `.ai/impl/copilot-agentic-orchestration.md` as superseded and documented the native path as canonical.
+  - **Why:** the native path is easier to reason about and avoids unsafe repo-wide review behavior or shared-memory edits without an explicit writer lock.
+  - **Status:** Copilot is now documented as an IDE-native workflow only; any future headless orchestration must come back as a new approved plan.
 
 - **2026-02-27 (Monumetric emergency rollback reactivated):** Founder reported the live site was still blocking the header and refreshing nonstop, so the production kill switch was re-applied immediately.
   - **What changed:**

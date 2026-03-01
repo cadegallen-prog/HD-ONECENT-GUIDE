@@ -4,6 +4,43 @@
 
 ---
 
+## 2026-03-01 - Codex - Copilot Native Workflow Hardening
+
+**Goal:** Standardize Copilot usage around native VS Code agents and prompt files, and explicitly reject repo-local orchestration.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `.github/copilot-instructions.md`
+  - rewrote the Copilot entrypoint around native IDE agents and prompts only.
+  - added explicit writer-lock guidance for shared-memory edits.
+- `.github/agents/coder.md`, `.github/agents/documenter.md`, `.github/agents/orchestrator.md`, `.github/agents/planner.md`, `.github/agents/researcher.md`, `.github/agents/reviewer.md`, `.github/agents/tester.md`
+  - documented the native sub-agent roles and tightened scope, verification, and writer-lock requirements.
+- `.github/prompts/debug.prompt.md`, `.github/prompts/explore.prompt.md`, `.github/prompts/implement.prompt.md`, `.github/prompts/review.prompt.md`, `.github/prompts/session-end.prompt.md`, `.github/prompts/verify.prompt.md`
+  - aligned the prompt workflow to the same scoped-review and writer-lock rules.
+- `.ai/impl/copilot-agentic-orchestration.md`
+  - marked repo-local Copilot orchestration as superseded and documented the native path as canonical.
+
+### Summary
+
+- PennyCentral Copilot now has one documented workflow: native custom agents and prompt files inside VS Code.
+- Repo-local Copilot orchestration is now explicitly unsupported in repo canon.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run ai:checkpoint` ✅
+- Runtime verification lanes: N/A (docs-only workflow change; no route/form/API/UI/runtime code-path changes)
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Commit base: `27e3cc3`
+- Push: not pushed
+
+---
+
 ## 2026-02-27 - Codex - Monumetric Emergency Production Rollback Reactivated
 
 **Goal:** Shut Monumetric back off in production after founder-reported header obstruction and nonstop refresh behavior.
@@ -164,55 +201,5 @@
 
 - Branch: `dev`
 - Scope: docs/memory only (no runtime ad-policy mutation)
-
----
-
-## 2026-02-27 - Codex - Monumetric In-Content Rollout + Emergency Runtime Disable (Reversible)
-
-**Goal:** Deploy in-content Monumetric tags, then immediately protect UX by disabling Monumetric runtime globally with a one-flag reversible switch.
-
-**Status:** ✅ Completed (runtime + deploy + CI confirmation)
-
-### Changes
-
-- Initial in-content rollout:
-  - added repeatable in-content slot component: `components/ads/monumetric-in-content-slot.tsx`
-  - mounted slot on guide hub + chapter pages only (`/guide`, `/what-are-pennies`, `/clearance-lifecycle`, `/digital-pre-hunt`, `/in-store-strategy`, `/inside-scoop`, `/facts-vs-myths`, `/faq`)
-  - kept video/interstitial deferred in launch config:
-    - `lib/ads/launch-config.ts` -> `interstitial.enabled=false`, `volt.enabled=false`
-    - test lock added in `tests/ads-launch-config.test.ts`
-- Emergency UX hotfix (reversible):
-  - added env kill switch: `NEXT_PUBLIC_MONUMETRIC_ENABLED` (default `false`) in `.env.example`
-  - gated Monumetric runtime script + preconnect in `app/layout.tsx`
-  - gated in-content slot render in `components/ads/monumetric-in-content-slot.tsx`
-  - behavior now: when flag is `false`, Monumetric script and in-content slots are both off.
-
-### Verification
-
-- Local gates:
-  - `npm run ai:memory:check` ✅
-  - `npm run verify:fast` ✅
-  - `npm run e2e:smoke` ✅
-- UI proof:
-  - rollout proof: `reports/proof/2026-02-26T19-56-28/`
-  - hotfix proof: `reports/proof/2026-02-26T22-24-47/`
-- Runtime checks:
-  - before hotfix: in-content slot present on guide surfaces
-  - after hotfix (`flag=false`): `monu.delivery/site` script absent + in-content slot absent on `/`, `/guide`, `/faq`
-- Main CI (`defb7694fbf2ba5f27b301e44c8ee1ed0d79e462`):
-  - FAST: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22463864816` ✅
-  - SMOKE: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22463864837` ✅
-  - FULL: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22463864821` ✅
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Commit SHAs:
-  - rollout commit on `dev`: `ee9a332`
-  - rollout merge on `main`: `a82855d`
-  - emergency kill-switch hotfix on `dev`: `7a681ee`
-  - emergency hotfix merge on `main`: `defb769`
-- Push status: pushed to `origin/dev` and `origin/main`
-- Local carryover remains (outside this scoped objective): `.ai/SESSION_LOG.md`, `.ai/STATE.md`, `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`, `scripts/archive-google-analytics.ts`
 
 ---
