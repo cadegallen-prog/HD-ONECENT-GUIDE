@@ -1,22 +1,7 @@
 import Link from "next/link"
-import {
-  BookOpen,
-  Calendar,
-  CheckCircle2,
-  HelpCircle,
-  Search,
-  ShoppingCart,
-  Store,
-} from "lucide-react"
+import { Calendar, CheckCircle2, HelpCircle, Search, ShoppingCart, Store } from "lucide-react"
 
 const chapters = [
-  {
-    title: "What Are Penny Items? (Start Here)",
-    slug: "what-are-pennies",
-    icon: BookOpen,
-    desc: "What penny items are, why they exist, and how the system works.",
-    href: "/what-are-pennies",
-  },
   {
     title: "Clearance Lifecycle & Cadence",
     slug: "clearance-lifecycle",
@@ -75,7 +60,7 @@ export function TableOfContents() {
               <chapter.icon className="h-5 w-5" />
             </div>
             <span className="rounded-sm border border-[var(--border-default)] bg-[var(--bg-subtle)] px-2 py-1 text-[12px] font-bold uppercase tracking-widest text-[var(--text-muted)] transition-colors group-hover:border-[var(--cta-primary)] group-hover:bg-[var(--bg-elevated)] group-hover:text-[var(--text-primary)]">
-              Part {index + 1}
+              Part {index + 2}
             </span>
           </div>
 

@@ -4,6 +4,44 @@
 
 ---
 
+## 2026-03-01 - Codex - Guide Hub Search-Intent Refocus
+
+**Goal:** Recover the parked `/guide` refocus work from the local backup branch and ship it as its own clean slice.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `app/guide/page.tsx`
+  - rewrote the hub so the page itself acts as Part 1 instead of leading with lower-priority side material.
+  - changed the metadata and JSON-LD to match the search-intent framing around how penny items work.
+  - moved the ethical-use disclosure higher and replaced the old intro block with a direct primer on penny items.
+- `components/guide/TableOfContents.tsx`
+  - removed the duplicate `What Are Penny Items? (Start Here)` card from the chapter grid.
+  - renumbered the visible chapter badges so the grid now begins at `Part 2`.
+- `tests/smoke-critical.spec.ts`
+  - updated the smoke assertion to verify the new Part 1 primer and Guide Chapters flow.
+
+### Summary
+
+- `/guide` now answers the first real user question immediately: what penny items are and why they hit `$0.01`.
+- The chapter grid now behaves like the continuation of the guide instead of duplicating the introduction.
+- This guide work was recovered from the parked backup branch and shipped separately from the Copilot workflow cleanup.
+
+### Verification
+
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `tsx scripts/ai-proof.ts --mode=test /guide` ✅
+  - artifacts: `reports/proof/2026-03-01T09-54-14/`
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Scope: guide hub route + table of contents + smoke assertion
+
+---
+
 ## 2026-03-01 - Codex - Copilot Native Workflow Hardening
 
 **Goal:** Standardize Copilot usage around native VS Code agents and prompt files, and explicitly reject repo-local orchestration.
@@ -172,34 +210,5 @@
 
 - Branch: `dev`
 - Scope: docs/memory only (no ad toggle, no monetization code change)
-
----
-
-## 2026-02-27 - Codex - Monumetric Wait-State Memory Lock (Ads Still Disabled)
-
-**Goal:** Persist the founder-confirmed operational state so future agents do not drift: ads are still disabled, and re-enable is blocked until Samantha confirms final Monumetric settings/ETA.
-
-**Status:** ✅ Completed (memory/docs update only)
-
-### Changes
-
-- `.ai/STATE.md`
-  - updated current-state summary and sprint notes to explicitly reflect the current wait-state.
-  - recorded that runtime remains disabled while waiting for Samantha's written confirmation.
-- `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`
-  - appended a session note documenting the exact founder posture: follow-up email already sent; no re-enable yet.
-- `.ai/SESSION_LOG.md`
-  - added this entry to persist the wait-state in the recent-session timeline.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run ai:checkpoint` ✅
-- Runtime verification lanes: N/A (docs-only memory update; no runtime code-path changes)
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Scope: docs/memory only (no runtime ad-policy mutation)
 
 ---

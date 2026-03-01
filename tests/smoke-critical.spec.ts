@@ -19,25 +19,26 @@ test.describe("critical smoke lane", () => {
     ).toBeVisible()
   })
 
-  test("guide hub shows worth-it filter scaffold", async ({ page }) => {
+  test("guide hub prioritizes the quick-start path", async ({ page }) => {
     await page.goto("/guide")
 
-    const worthItSection = page.locator("#worth-it-filter")
-
     await expect(
-      worthItSection.getByRole("heading", { level: 2, name: /Worth-It Filter/i })
+      page.getByRole("heading", { level: 1, name: /How to Find Home Depot Penny Items/i })
     ).toBeVisible()
 
-    const lanes = ["Use", "Gift", "Donate", "Resell", "Skip"]
-    for (const lane of lanes) {
-      await expect(
-        worthItSection.getByRole("heading", { level: 3, name: new RegExp(`^${lane}$`) })
-      ).toBeVisible()
-    }
+    await expect(
+      page.getByRole("heading", { level: 2, name: /What are penny items\?/i })
+    ).toBeVisible()
+    await expect(
+      page.getByText(/Penny items are clearance products that reach a final price of \$0\.01\./i)
+    ).toBeVisible()
 
-    const cta = worthItSection.getByRole("link", { name: /Apply the in-store strategy/i })
-    await expect(cta).toBeVisible()
-    await expect(cta).toHaveAttribute("href", "/in-store-strategy")
+    await expect(page.getByRole("heading", { level: 2, name: /Guide Chapters/i })).toBeVisible()
+    await expect(page.getByText(/Start with Part 2 below and keep going in order/i)).toBeVisible()
+
+    const partTwoChapter = page.getByRole("link", { name: /Clearance Lifecycle & Cadence/i })
+    await expect(partTwoChapter).toBeVisible()
+    await expect(partTwoChapter).toHaveAttribute("href", "/clearance-lifecycle")
   })
 
   test("core interaction works on report-find prefill basket flow", async ({ page }) => {

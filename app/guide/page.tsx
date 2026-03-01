@@ -1,26 +1,41 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 import { TableOfContents } from "@/components/guide/TableOfContents"
 import { EthicalDisclosure } from "@/components/guide/EthicalDisclosure"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
-import { ResponsibleHunting } from "@/components/guide/sections/ResponsibleHunting"
 import { RouteAdSlots } from "@/components/ads/route-ad-slots"
 import { MonumetricInContentSlot } from "@/components/ads/monumetric-in-content-slot"
 
 export const metadata: Metadata = {
-  title: "Home Depot Penny Guide (2026) | Penny Central",
+  title: "How to Find Home Depot Penny Items (2026 Guide) | Penny Central",
   description:
-    "Start here. A field-tested, community-verified guide to Home Depot penny items, clearance patterns, and responsible hunting.",
+    "Learn how Home Depot penny items work, why they reach $0.01, and which guide chapters to read next if you want to find them in store.",
+  keywords: [
+    "how to find home depot penny items",
+    "home depot penny guide",
+    "home depot one cent items",
+    "how to find penny items at home depot",
+    "penny item guide",
+  ],
   alternates: {
     canonical: "/guide",
+  },
+  openGraph: {
+    title: "How to Find Home Depot Penny Items (2026 Guide)",
+    description:
+      "Learn how Home Depot penny items work and which guide chapters to read next if you want to find them in store.",
+  },
+  twitter: {
+    card: "summary_large_image",
   },
 }
 
 const guideJsonLd = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
-  name: "Home Depot Penny Guide (2026)",
+  name: "How to Find Home Depot Penny Items (2026 Guide)",
   description:
-    "A field-tested, community-verified guide to Home Depot penny items, clearance patterns, and responsible hunting.",
+    "A practical guide to finding Home Depot penny items, understanding clearance patterns, verifying in store, and reporting confirmed finds.",
   url: "https://www.pennycentral.com/guide",
   author: { "@type": "Person", name: "Cade Allen", url: "https://www.pennycentral.com/about" },
   publisher: {
@@ -29,45 +44,45 @@ const guideJsonLd = {
     url: "https://www.pennycentral.com",
     logo: { "@type": "ImageObject", url: "https://www.pennycentral.com/icon.svg" },
   },
-  dateModified: "2026-02-19",
+  dateModified: "2026-02-28",
   mainEntity: {
     "@type": "ItemList",
     itemListElement: [
       {
         "@type": "ListItem",
         position: 1,
-        name: "What Are Penny Items?",
-        url: "https://www.pennycentral.com/what-are-pennies",
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
         name: "Clearance Lifecycle & Cadence",
         url: "https://www.pennycentral.com/clearance-lifecycle",
       },
       {
         "@type": "ListItem",
-        position: 3,
+        position: 2,
         name: "Labels, Overhead, & Pre-Hunt",
         url: "https://www.pennycentral.com/digital-pre-hunt",
       },
       {
         "@type": "ListItem",
-        position: 4,
+        position: 3,
         name: "Verify & In-Store Strategy",
         url: "https://www.pennycentral.com/in-store-strategy",
       },
       {
         "@type": "ListItem",
-        position: 5,
+        position: 4,
         name: "Inside Scoop (2026 Context)",
         url: "https://www.pennycentral.com/inside-scoop",
       },
       {
         "@type": "ListItem",
-        position: 6,
+        position: 5,
         name: "Facts vs. Myths",
         url: "https://www.pennycentral.com/facts-vs-myths",
+      },
+      {
+        "@type": "ListItem",
+        position: 6,
+        name: "FAQ & Quick Reference",
+        url: "https://www.pennycentral.com/faq",
       },
     ],
   },
@@ -171,57 +186,53 @@ export default function GuideHubPage() {
       <div className="container mx-auto max-w-5xl px-4 py-7 md:px-6 md:py-9">
         <header className="mx-auto mb-6 max-w-[68ch] space-y-4">
           <nav aria-label="Breadcrumb" className="text-sm text-[var(--text-muted)]">
-            <a href="/" className="hover:text-[var(--cta-primary)]">
+            <Link href="/" className="hover:text-[var(--cta-primary)]">
               Home
-            </a>
+            </Link>
             <span className="mx-1.5">/</span>
             <span className="text-[var(--text-secondary)]">Guide</span>
           </nav>
           <h1 className="text-3xl font-extrabold tracking-tight text-[var(--text-primary)] md:text-5xl">
-            The Home Depot Penny Guide
+            How to Find Home Depot Penny Items
           </h1>
           <p className="text-lg leading-relaxed text-[var(--text-secondary)] md:text-xl">
-            Practical, community-verified guidance for penny items, clearance patterns, and
-            respectful in-store behavior.
+            You are here to learn how penny items work, why they reach $0.01, and what clues matter
+            when you try to find them.
           </p>
           <EditorialBlock className="mt-1" />
+          <EthicalDisclosure />
         </header>
 
-        <section className="mx-auto mb-6 max-w-[68ch] space-y-4">
-          <div className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5 space-y-3 text-[var(--text-secondary)] leading-relaxed">
-            <p className="text-lg font-semibold text-[var(--text-primary)]">Before you start.</p>
-            <p>
-              Most hunts end with zero penny finds. That does not mean you are doing it wrong; it
-              means this is a pattern-and-discipline game, not guaranteed instant savings.
-            </p>
-            <p>
-              Expect empty trips, changing store behavior, and occasional dead-end leads. The wins
-              come from stronger decisions: planning routes, verifying with UPC scans, and knowing
-              when to skip low-value pickups.
-            </p>
-            <p>
-              Treat penny hunting like a skill. The goal is not to collect everything that rings at
-              $0.01. The goal is to leave each run with decisions that were worth your time and
-              effort.
-            </p>
-            <p className="font-medium text-[var(--text-primary)]">
-              Start with the guide, then use the Worth-It Filter before checkout.
-            </p>
-          </div>
-
-          <EthicalDisclosure />
-          <ResponsibleHunting />
+        <section className="mx-auto mb-6 max-w-[68ch] space-y-4 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5 md:p-6">
+          <h2 className="text-2xl font-bold text-[var(--text-primary)] md:text-3xl">
+            What are penny items?
+          </h2>
+          <p className="text-[var(--text-secondary)] leading-relaxed md:text-lg">
+            Penny items are clearance products that reach a final price of $0.01. They are not a
+            public sale. They are the last step in the clearance process, which is why timing and
+            store-by-store variation matter so much.
+          </p>
+          <p className="text-[var(--text-secondary)] leading-relaxed">
+            Some items get pulled right away. Others stay on the shelf long enough for shoppers to
+            find them. That is why people pay attention to clearance timing, label changes, and
+            in-store verification instead of treating penny hunting like random luck.
+          </p>
+          <p className="text-[var(--text-secondary)] leading-relaxed">
+            This page is Part 1. If you are new, read the chapters below in order. If you already
+            know the basics, jump to the part that answers your next question.
+          </p>
         </section>
-
-        <MonumetricInContentSlot />
 
         <section className="mb-6 space-y-3 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
           <h2 className="text-2xl font-bold text-[var(--text-primary)]">Guide Chapters</h2>
           <p className="text-[var(--text-secondary)]">
-            Read in order. Each chapter builds on the one before it.
+            Start with Part 2 below and keep going in order unless you are returning for one
+            specific topic.
           </p>
           <TableOfContents />
         </section>
+
+        <MonumetricInContentSlot />
       </div>
     </>
   )

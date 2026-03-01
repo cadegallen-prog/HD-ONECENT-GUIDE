@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Mar 1, 2026 (Copilot workflow standardized on native VS Code agents and prompts)
+**Last updated:** Mar 1, 2026 (Guide hub Part 1 refocus recovered and shipped cleanly)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,15 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-01 (Guide hub recovered and shipped as its own slice):** Restored the parked `/guide` refocus work from the local backup branch and shipped it separately from the Copilot cleanup.
+  - **What changed:**
+    - `/guide` now opens with a direct Part 1 primer explaining what penny items are and why they reach `$0.01`.
+    - the ethical-use disclosure now sits directly under the editorial block.
+    - the chapter grid no longer duplicates the introduction and now starts at `Part 2`.
+    - smoke coverage was updated to assert the new guide-start flow, and proof screenshots were captured for `/guide`.
+  - **Why:** the branch cleanup parked this guide work temporarily; recovering it as a separate slice preserves the improved user funnel without mixing it into unrelated tooling changes.
+  - **Status:** the guide hub refocus is now shipped cleanly on `dev` as its own verified slice.
 
 - **2026-03-01 (Copilot native workflow only):** Standardized Copilot guidance around native VS Code agents and prompt files.
   - **What changed:**
