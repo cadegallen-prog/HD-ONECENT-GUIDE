@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 import { PageHeader, PageShell, Prose, Section } from "@/components/page-templates"
 import { ChapterNavigation } from "@/components/guide/ChapterNavigation"
 import { EditorialBlock } from "@/components/guide/EditorialBlock"
@@ -6,9 +7,23 @@ import { RouteAdSlots } from "@/components/ads/route-ad-slots"
 import { MonumetricInContentSlot } from "@/components/ads/monumetric-in-content-slot"
 
 export const metadata: Metadata = {
-  title: "Penny Hunting FAQ & Quick Reference | Penny Central",
+  title: "Home Depot Penny Items FAQ (2026) | Penny Central",
   description:
-    "Clear answers to the most common penny hunting questions, plus a quick reference cheat sheet.",
+    "Get clear answers about Home Depot penny items, checkout behavior, verification, and what to do next when you find one.",
+  keywords: [
+    "home depot penny items faq",
+    "penny hunting faq",
+    "home depot penny item questions",
+    "how do home depot penny items work",
+  ],
+  openGraph: {
+    title: "Home Depot Penny Items FAQ (2026)",
+    description:
+      "Clear answers about Home Depot penny items, verification, checkout behavior, and next steps.",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
   alternates: {
     canonical: "/faq",
   },
@@ -236,15 +251,19 @@ export default function FAQPage() {
       <PageShell width="default" padding="sm" gap="md">
         <div className="mx-auto w-full max-w-[68ch]">
           <nav aria-label="Breadcrumb" className="mb-3 text-sm text-[var(--text-muted)]">
-            <a href="/" className="hover:text-[var(--cta-primary)]">
+            <Link href="/" className="hover:text-[var(--cta-primary)]">
               Home
-            </a>
+            </Link>
+            <span className="mx-1.5">/</span>
+            <Link href="/guide" className="hover:text-[var(--cta-primary)]">
+              Guide
+            </Link>
             <span className="mx-1.5">/</span>
             <span className="text-[var(--text-secondary)]">FAQ & Quick Reference</span>
           </nav>
           <PageHeader
-            title="Frequently Asked Questions"
-            subtitle="Clear answers and a quick reference for penny hunting."
+            title="Home Depot Penny Items FAQ"
+            subtitle="Clear answers, faster decisions, and direct next steps when you are checking a store."
           />
           <EditorialBlock className="mb-8 mt-2" />
         </div>
@@ -256,6 +275,41 @@ export default function FAQPage() {
               Read this page in sequence. It starts with fundamentals, then verification, then
               checkout policy, and ends with community behavior standards.
             </p>
+
+            <div className="mb-8 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
+              <h2 className="mb-3 text-2xl font-bold text-[var(--text-primary)]">
+                Use this FAQ with the right next step
+              </h2>
+              <ul className="space-y-2 text-[var(--text-secondary)]">
+                <li>
+                  New to penny items?{" "}
+                  <Link
+                    href="/what-are-pennies"
+                    className="font-semibold text-[var(--cta-primary)] underline"
+                  >
+                    Start with What Are Penny Items?
+                  </Link>
+                </li>
+                <li>
+                  Checking a store run today?{" "}
+                  <Link
+                    href="/penny-list"
+                    className="font-semibold text-[var(--cta-primary)] underline"
+                  >
+                    Browse the live Penny List
+                  </Link>
+                </li>
+                <li>
+                  Confirmed a scan already?{" "}
+                  <Link
+                    href="/report-find?src=faq-next-step"
+                    className="font-semibold text-[var(--cta-primary)] underline"
+                  >
+                    Report a Find
+                  </Link>
+                </li>
+              </ul>
+            </div>
 
             <ol className="mb-8 space-y-1">
               {groupedFaqs.map((group) => (
@@ -294,6 +348,39 @@ export default function FAQPage() {
                 <li key={item}>{item}</li>
               ))}
             </ul>
+
+            <div className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
+              <h2 className="mb-3 text-2xl font-bold text-[var(--text-primary)]">
+                Still deciding what to do next?
+              </h2>
+              <p className="mb-4 text-[var(--text-secondary)]">
+                Use the guide when you need process, the Penny List when you need current SKUs, and
+                Report a Find when you have a confirmed result worth sharing.
+              </p>
+              <ul className="space-y-2 text-[var(--text-secondary)]">
+                <li>
+                  <Link href="/guide" className="font-semibold text-[var(--cta-primary)] underline">
+                    Read the full guide in order
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/penny-list"
+                    className="font-semibold text-[var(--cta-primary)] underline"
+                  >
+                    Check today&apos;s Penny List
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/report-find?src=faq-footer"
+                    className="font-semibold text-[var(--cta-primary)] underline"
+                  >
+                    Submit a verified find
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </Prose>
         </Section>
         <ChapterNavigation

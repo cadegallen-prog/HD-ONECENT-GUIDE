@@ -4,6 +4,118 @@
 
 ---
 
+## 2026-03-01 - Codex - FAQ Core-Loop CTR Remediation
+
+**Goal:** Strengthen `/faq` so it answers search intent faster and sends readers directly into the Penny List and Report a Find flow.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `app/faq/page.tsx`
+  - retitled the page and metadata around the explicit "Home Depot penny items FAQ" search intent.
+  - added breadcrumb support back to `/guide`.
+  - inserted a top CTA block that routes readers to `/what-are-pennies`, `/penny-list`, and `/report-find?src=faq-next-step`.
+  - inserted a bottom CTA block that routes readers to `/guide`, `/penny-list`, and `/report-find?src=faq-footer`.
+- `tests/smoke-critical.spec.ts`
+  - added smoke coverage to verify the new FAQ headline, next-step section, and tracked CTA targets.
+  - tightened the `Report a Find` assertion to target the tracked FAQ CTA instead of the global header nav link.
+
+### Summary
+
+- `/faq` now behaves more like a routing hub instead of a dead-end reference page.
+- Metadata and on-page copy now match the query intent more directly.
+- Internal links now push readers into the product loop instead of leaving them stranded after the FAQ answers.
+
+### Verification
+
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `tsx scripts/ai-proof.ts --mode=test /faq` ✅
+  - artifacts: `reports/proof/2026-03-01T10-11-31/`
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Scope: FAQ route + smoke assertion
+
+---
+
+## 2026-03-01 - Codex - Guide Hub Search-Intent Refocus
+
+**Goal:** Recover the parked `/guide` refocus work from the local backup branch and ship it as its own clean slice.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `app/guide/page.tsx`
+  - rewrote the hub so the page itself acts as Part 1 instead of leading with lower-priority side material.
+  - changed the metadata and JSON-LD to match the search-intent framing around how penny items work.
+  - moved the ethical-use disclosure higher and replaced the old intro block with a direct primer on penny items.
+- `components/guide/TableOfContents.tsx`
+  - removed the duplicate `What Are Penny Items? (Start Here)` card from the chapter grid.
+  - renumbered the visible chapter badges so the grid now begins at `Part 2`.
+- `tests/smoke-critical.spec.ts`
+  - updated the smoke assertion to verify the new Part 1 primer and Guide Chapters flow.
+
+### Summary
+
+- `/guide` now answers the first real user question immediately: what penny items are and why they hit `$0.01`.
+- The chapter grid now behaves like the continuation of the guide instead of duplicating the introduction.
+- This guide work was recovered from the parked backup branch and shipped separately from the Copilot workflow cleanup.
+
+### Verification
+
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `tsx scripts/ai-proof.ts --mode=test /guide` ✅
+  - artifacts: `reports/proof/2026-03-01T09-54-14/`
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Scope: guide hub route + table of contents + smoke assertion
+
+---
+
+## 2026-03-01 - Codex - Copilot Native Workflow Hardening
+
+**Goal:** Standardize Copilot usage around native VS Code agents and prompt files, and explicitly reject repo-local orchestration.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `.github/copilot-instructions.md`
+  - rewrote the Copilot entrypoint around native IDE agents and prompts only.
+  - added explicit writer-lock guidance for shared-memory edits.
+- `.github/agents/coder.md`, `.github/agents/documenter.md`, `.github/agents/orchestrator.md`, `.github/agents/planner.md`, `.github/agents/researcher.md`, `.github/agents/reviewer.md`, `.github/agents/tester.md`
+  - documented the native sub-agent roles and tightened scope, verification, and writer-lock requirements.
+- `.github/prompts/debug.prompt.md`, `.github/prompts/explore.prompt.md`, `.github/prompts/implement.prompt.md`, `.github/prompts/review.prompt.md`, `.github/prompts/session-end.prompt.md`, `.github/prompts/verify.prompt.md`
+  - aligned the prompt workflow to the same scoped-review and writer-lock rules.
+- `.ai/impl/copilot-agentic-orchestration.md`
+  - marked repo-local Copilot orchestration as superseded and documented the native path as canonical.
+
+### Summary
+
+- PennyCentral Copilot now has one documented workflow: native custom agents and prompt files inside VS Code.
+- Repo-local Copilot orchestration is now explicitly unsupported in repo canon.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run ai:checkpoint` ✅
+- Runtime verification lanes: N/A (docs-only workflow change; no route/form/API/UI/runtime code-path changes)
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Commit base: `27e3cc3`
+- Push: not pushed
+
+---
+
 ## 2026-02-27 - Codex - Monumetric Emergency Production Rollback Reactivated
 
 **Goal:** Shut Monumetric back off in production after founder-reported header obstruction and nonstop refresh behavior.
@@ -89,130 +201,5 @@
 
 - Branch: `dev`
 - Scope: baseline artifact + verification-tool hardening + memory updates
-
----
-
-## 2026-02-27 - Codex - Monumetric Response Received - Controlled Reactivation Strategy Initiated
-
-**Goal:** Persist the new founder-approved posture after Samantha's response so future agents stop treating Monumetric as a passive wait-state.
-
-**Status:** ✅ Completed (memory/docs update only)
-
-### Changes
-
-- `.ai/STATE.md`
-  - changed the active Monumetric posture from "awaiting Samantha confirmation" to "response received / partial confirmation / transitioning to controlled reactivation test".
-  - recorded the 7-day validation window, `Baseline_Stable_PreAds` reference, and kill-switch rule (`>40%` engagement drop or structural interference).
-- `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`
-  - appended a post-response session note documenting the strategy shift from external dependency to internally governed risk thresholds.
-- `.ai/SESSION_LOG.md`
-  - added this entry so the new posture is the most recent session truth while preserving the earlier wait-state entry as history.
-
-### Summary
-
-- Samantha replied with partial confirmations:
-  - interstitial disabled
-  - video disabled
-  - `/report-find` excluded
-  - mobile header adjusted to avoid covering navigation
-  - dashboard access enabled
-- Missing explicit confirmations remain:
-  - refresh cap
-  - stacking limits
-  - anchor removal
-  - propagation/ETA detail
-- Decision: move to a controlled test model rather than wait indefinitely for deeper technical precision from an onboarding-oriented contact.
-- This is not blind trust.
-- This is calculated risk under defined monitoring thresholds.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run ai:checkpoint` ✅
-- Runtime verification lanes: N/A (docs-only memory update; no runtime code-path changes)
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Scope: docs/memory only (no ad toggle, no monetization code change)
-
----
-
-## 2026-02-27 - Codex - Monumetric Wait-State Memory Lock (Ads Still Disabled)
-
-**Goal:** Persist the founder-confirmed operational state so future agents do not drift: ads are still disabled, and re-enable is blocked until Samantha confirms final Monumetric settings/ETA.
-
-**Status:** ✅ Completed (memory/docs update only)
-
-### Changes
-
-- `.ai/STATE.md`
-  - updated current-state summary and sprint notes to explicitly reflect the current wait-state.
-  - recorded that runtime remains disabled while waiting for Samantha's written confirmation.
-- `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`
-  - appended a session note documenting the exact founder posture: follow-up email already sent; no re-enable yet.
-- `.ai/SESSION_LOG.md`
-  - added this entry to persist the wait-state in the recent-session timeline.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run ai:checkpoint` ✅
-- Runtime verification lanes: N/A (docs-only memory update; no runtime code-path changes)
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Scope: docs/memory only (no runtime ad-policy mutation)
-
----
-
-## 2026-02-27 - Codex - Monumetric In-Content Rollout + Emergency Runtime Disable (Reversible)
-
-**Goal:** Deploy in-content Monumetric tags, then immediately protect UX by disabling Monumetric runtime globally with a one-flag reversible switch.
-
-**Status:** ✅ Completed (runtime + deploy + CI confirmation)
-
-### Changes
-
-- Initial in-content rollout:
-  - added repeatable in-content slot component: `components/ads/monumetric-in-content-slot.tsx`
-  - mounted slot on guide hub + chapter pages only (`/guide`, `/what-are-pennies`, `/clearance-lifecycle`, `/digital-pre-hunt`, `/in-store-strategy`, `/inside-scoop`, `/facts-vs-myths`, `/faq`)
-  - kept video/interstitial deferred in launch config:
-    - `lib/ads/launch-config.ts` -> `interstitial.enabled=false`, `volt.enabled=false`
-    - test lock added in `tests/ads-launch-config.test.ts`
-- Emergency UX hotfix (reversible):
-  - added env kill switch: `NEXT_PUBLIC_MONUMETRIC_ENABLED` (default `false`) in `.env.example`
-  - gated Monumetric runtime script + preconnect in `app/layout.tsx`
-  - gated in-content slot render in `components/ads/monumetric-in-content-slot.tsx`
-  - behavior now: when flag is `false`, Monumetric script and in-content slots are both off.
-
-### Verification
-
-- Local gates:
-  - `npm run ai:memory:check` ✅
-  - `npm run verify:fast` ✅
-  - `npm run e2e:smoke` ✅
-- UI proof:
-  - rollout proof: `reports/proof/2026-02-26T19-56-28/`
-  - hotfix proof: `reports/proof/2026-02-26T22-24-47/`
-- Runtime checks:
-  - before hotfix: in-content slot present on guide surfaces
-  - after hotfix (`flag=false`): `monu.delivery/site` script absent + in-content slot absent on `/`, `/guide`, `/faq`
-- Main CI (`defb7694fbf2ba5f27b301e44c8ee1ed0d79e462`):
-  - FAST: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22463864816` ✅
-  - SMOKE: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22463864837` ✅
-  - FULL: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22463864821` ✅
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Commit SHAs:
-  - rollout commit on `dev`: `ee9a332`
-  - rollout merge on `main`: `a82855d`
-  - emergency kill-switch hotfix on `dev`: `7a681ee`
-  - emergency hotfix merge on `main`: `defb769`
-- Push status: pushed to `origin/dev` and `origin/main`
-- Local carryover remains (outside this scoped objective): `.ai/SESSION_LOG.md`, `.ai/STATE.md`, `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`, `scripts/archive-google-analytics.ts`
 
 ---

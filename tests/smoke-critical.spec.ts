@@ -40,6 +40,28 @@ test.describe("critical smoke lane", () => {
     await expect(cta).toHaveAttribute("href", "/in-store-strategy")
   })
 
+  test("faq page links readers into the core loop", async ({ page }) => {
+    await page.goto("/faq")
+
+    await expect(
+      page.getByRole("heading", { level: 1, name: /Home Depot Penny Items FAQ/i })
+    ).toBeVisible()
+    await expect(
+      page.getByRole("heading", { level: 2, name: /Use this FAQ with the right next step/i })
+    ).toBeVisible()
+
+    await expect(
+      page.getByRole("link", { name: /Start with What Are Penny Items\?/i })
+    ).toHaveAttribute("href", "/what-are-pennies")
+    await expect(page.getByRole("link", { name: /Browse the live Penny List/i })).toHaveAttribute(
+      "href",
+      "/penny-list"
+    )
+    const faqNextStepLink = page.locator('a[href="/report-find?src=faq-next-step"]')
+    await expect(faqNextStepLink).toHaveText(/Report a Find/i)
+    await expect(faqNextStepLink).toHaveAttribute("href", "/report-find?src=faq-next-step")
+  })
+
   test("core interaction works on report-find prefill basket flow", async ({ page }) => {
     await page.goto("/report-find?sku=1009258128&name=Smoke%20Item&src=card")
 

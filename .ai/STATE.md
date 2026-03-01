@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 27, 2026 (Monumetric emergency rollback reactivated after live header/refresh failure)
+**Last updated:** Mar 1, 2026 (FAQ CTR remediation shipped cleanly)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,33 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-01 (FAQ internal-link CTR remediation shipped):** Updated `/faq` so it behaves like a better search-intent landing page and routes readers into the core product loop.
+  - **What changed:**
+    - retitled the page and metadata around the explicit "Home Depot penny items FAQ" query intent.
+    - added breadcrumb continuity back to `/guide`.
+    - inserted a top next-step box linking to `/what-are-pennies`, `/penny-list`, and tracked `/report-find?src=faq-next-step`.
+    - inserted a bottom next-step box linking to `/guide`, `/penny-list`, and tracked `/report-find?src=faq-footer`.
+    - smoke coverage now verifies the FAQ headline and the tracked CTA path.
+  - **Why:** analytics already flagged `/faq` as a weak CTR page, so this slice improves the odds that FAQ readers move into Penny List browsing or verified submission instead of exiting.
+  - **Status:** the FAQ route is now a verified internal-link hub on `dev`, with proof screenshots captured for `/faq`.
+
+- **2026-03-01 (Guide hub recovered and shipped as its own slice):** Restored the parked `/guide` refocus work from the local backup branch and shipped it separately from the Copilot cleanup.
+  - **What changed:**
+    - `/guide` now opens with a direct Part 1 primer explaining what penny items are and why they reach `$0.01`.
+    - the ethical-use disclosure now sits directly under the editorial block.
+    - the chapter grid no longer duplicates the introduction and now starts at `Part 2`.
+    - smoke coverage was updated to assert the new guide-start flow, and proof screenshots were captured for `/guide`.
+  - **Why:** the branch cleanup parked this guide work temporarily; recovering it as a separate slice preserves the improved user funnel without mixing it into unrelated tooling changes.
+  - **Status:** the guide hub refocus is now shipped cleanly on `dev` as its own verified slice.
+
+- **2026-03-01 (Copilot native workflow only):** Standardized Copilot guidance around native VS Code agents and prompt files.
+  - **What changed:**
+    - rewrote `.github/copilot-instructions.md` so it points only to native Copilot agents/prompts and explicitly rejects repo-local orchestration.
+    - added native Copilot agent definitions in `.github/agents/` and prompt files in `.github/prompts/`.
+    - marked `.ai/impl/copilot-agentic-orchestration.md` as superseded and documented the native path as canonical.
+  - **Why:** the native path is easier to reason about and avoids unsafe repo-wide review behavior or shared-memory edits without an explicit writer lock.
+  - **Status:** Copilot is now documented as an IDE-native workflow only; any future headless orchestration must come back as a new approved plan.
 
 - **2026-02-27 (Monumetric emergency rollback reactivated):** Founder reported the live site was still blocking the header and refreshing nonstop, so the production kill switch was re-applied immediately.
   - **What changed:**
