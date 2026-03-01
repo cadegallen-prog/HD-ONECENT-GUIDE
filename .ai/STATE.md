@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Mar 1, 2026 (Guide hub Part 1 refocus recovered and shipped cleanly)
+**Last updated:** Mar 1, 2026 (FAQ CTR remediation shipped cleanly)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,16 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-01 (FAQ internal-link CTR remediation shipped):** Updated `/faq` so it behaves like a better search-intent landing page and routes readers into the core product loop.
+  - **What changed:**
+    - retitled the page and metadata around the explicit "Home Depot penny items FAQ" query intent.
+    - added breadcrumb continuity back to `/guide`.
+    - inserted a top next-step box linking to `/what-are-pennies`, `/penny-list`, and tracked `/report-find?src=faq-next-step`.
+    - inserted a bottom next-step box linking to `/guide`, `/penny-list`, and tracked `/report-find?src=faq-footer`.
+    - smoke coverage now verifies the FAQ headline and the tracked CTA path.
+  - **Why:** analytics already flagged `/faq` as a weak CTR page, so this slice improves the odds that FAQ readers move into Penny List browsing or verified submission instead of exiting.
+  - **Status:** the FAQ route is now a verified internal-link hub on `dev`, with proof screenshots captured for `/faq`.
 
 - **2026-03-01 (Guide hub recovered and shipped as its own slice):** Restored the parked `/guide` refocus work from the local backup branch and shipped it separately from the Copilot cleanup.
   - **What changed:**

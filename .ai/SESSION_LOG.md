@@ -4,6 +4,43 @@
 
 ---
 
+## 2026-03-01 - Codex - FAQ Core-Loop CTR Remediation
+
+**Goal:** Strengthen `/faq` so it answers search intent faster and sends readers directly into the Penny List and Report a Find flow.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `app/faq/page.tsx`
+  - retitled the page and metadata around the explicit "Home Depot penny items FAQ" search intent.
+  - added breadcrumb support back to `/guide`.
+  - inserted a top CTA block that routes readers to `/what-are-pennies`, `/penny-list`, and `/report-find?src=faq-next-step`.
+  - inserted a bottom CTA block that routes readers to `/guide`, `/penny-list`, and `/report-find?src=faq-footer`.
+- `tests/smoke-critical.spec.ts`
+  - added smoke coverage to verify the new FAQ headline, next-step section, and tracked CTA targets.
+  - tightened the `Report a Find` assertion to target the tracked FAQ CTA instead of the global header nav link.
+
+### Summary
+
+- `/faq` now behaves more like a routing hub instead of a dead-end reference page.
+- Metadata and on-page copy now match the query intent more directly.
+- Internal links now push readers into the product loop instead of leaving them stranded after the FAQ answers.
+
+### Verification
+
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `tsx scripts/ai-proof.ts --mode=test /faq` ✅
+  - artifacts: `reports/proof/2026-03-01T10-11-31/`
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Scope: FAQ route + smoke assertion
+
+---
+
 ## 2026-03-01 - Codex - Guide Hub Search-Intent Refocus
 
 **Goal:** Recover the parked `/guide` refocus work from the local backup branch and ship it as its own clean slice.
@@ -164,51 +201,5 @@
 
 - Branch: `dev`
 - Scope: baseline artifact + verification-tool hardening + memory updates
-
----
-
-## 2026-02-27 - Codex - Monumetric Response Received - Controlled Reactivation Strategy Initiated
-
-**Goal:** Persist the new founder-approved posture after Samantha's response so future agents stop treating Monumetric as a passive wait-state.
-
-**Status:** ✅ Completed (memory/docs update only)
-
-### Changes
-
-- `.ai/STATE.md`
-  - changed the active Monumetric posture from "awaiting Samantha confirmation" to "response received / partial confirmation / transitioning to controlled reactivation test".
-  - recorded the 7-day validation window, `Baseline_Stable_PreAds` reference, and kill-switch rule (`>40%` engagement drop or structural interference).
-- `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`
-  - appended a post-response session note documenting the strategy shift from external dependency to internally governed risk thresholds.
-- `.ai/SESSION_LOG.md`
-  - added this entry so the new posture is the most recent session truth while preserving the earlier wait-state entry as history.
-
-### Summary
-
-- Samantha replied with partial confirmations:
-  - interstitial disabled
-  - video disabled
-  - `/report-find` excluded
-  - mobile header adjusted to avoid covering navigation
-  - dashboard access enabled
-- Missing explicit confirmations remain:
-  - refresh cap
-  - stacking limits
-  - anchor removal
-  - propagation/ETA detail
-- Decision: move to a controlled test model rather than wait indefinitely for deeper technical precision from an onboarding-oriented contact.
-- This is not blind trust.
-- This is calculated risk under defined monitoring thresholds.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run ai:checkpoint` ✅
-- Runtime verification lanes: N/A (docs-only memory update; no runtime code-path changes)
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Scope: docs/memory only (no ad toggle, no monetization code change)
 
 ---
