@@ -1,6 +1,6 @@
 # Backlog (Top Priority Items)
 
-**Last updated:** Feb 22, 2026 (memory trend reporting slice shipped for autonomy hardening)
+**Last updated:** Mar 1, 2026 (report-find CTR remediation shipped)
 **Rule:** Keep ≤10 items. Archive completed/deferred items.
 
 **Auto-archive:** Full backlog history preserved in `archive/backlog-history/`
@@ -208,6 +208,12 @@ Each AI session should:
     - deploy participation-lift release and establish explicit post-deploy baseline window,
     - run CTR remediation pass on high-impression/low-CTR pages (`/guide`, `/what-are-pennies`, `/faq`, `/report-find`),
     - rerun weekly snapshot after 48h+ post-deploy and require 4-week confirmation before success claims.
+- **Progress (2026-03-01):**
+  - CTR remediation slices shipped for `/guide`, `/faq`, and `/report-find`.
+  - Remaining page in the originally queued set: `/what-are-pennies`.
+  - Latest report-find verification artifacts:
+    - `reports/proof/2026-03-01T11-17-35/`
+    - smoke lane covers the new heading, prep section, and internal links.
 - **Progress (2026-02-20):**
   - Generated first weekly analytics snapshot artifact from local archive:
     - `reports/analytics-weekly/2026-02-20/summary.md`

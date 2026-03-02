@@ -3,9 +3,11 @@ import { Metadata } from "next"
 import { COMMUNITY_MEMBER_COUNT_DISPLAY } from "@/lib/constants"
 
 export const metadata: Metadata = {
-  title: "Report a Home Depot Penny Find (Live Verification) | Penny Central",
+  title: "Report a Home Depot Penny Item | Submit a Penny Find | Penny Central",
   description: `Submit a penny find in seconds to help verify live sightings for ${COMMUNITY_MEMBER_COUNT_DISPLAY} shoppers. Your report updates the intel.`,
   keywords: [
+    "report a home depot penny item",
+    "report home depot penny item",
     "report penny item",
     "submit penny find",
     "home depot penny sighting",
@@ -19,8 +21,8 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "https://www.pennycentral.com/report-find",
-    title: "Report a Penny Find",
-    description: `Help ${COMMUNITY_MEMBER_COUNT_DISPLAY} shoppers verify live $0.01 sightings. Fast report, real impact.`,
+    title: "Report a Home Depot Penny Item",
+    description: `Submit the SKU, item name, state, and date found. Reports usually reach the Penny List in about five minutes for ${COMMUNITY_MEMBER_COUNT_DISPLAY} shoppers.`,
     images: [
       {
         url: "/api/og?page=report-find",
@@ -31,8 +33,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Report a Penny Find",
-    description: `Help ${COMMUNITY_MEMBER_COUNT_DISPLAY} shoppers verify live $0.01 sightings. Fast report, real impact.`,
+    title: "Report a Home Depot Penny Item",
+    description: `Submit the SKU, item name, state, and date found. Reports usually reach the Penny List in about five minutes.`,
     images: ["/api/og?page=report-find"],
   },
 }

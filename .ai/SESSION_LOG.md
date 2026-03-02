@@ -4,6 +4,93 @@
 
 ---
 
+## 2026-03-01 - Codex - Dead-Link-Safe Founder References
+
+**Goal:** Make founder-facing file and proof references repeatable and low-friction by codifying plain-path output instead of dead local markdown links.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `.ai/START_HERE.md`
+  - added an explicit founder-communication rule to use plain absolute Windows paths for repo files and local proof artifacts.
+- `docs/skills/README.md`
+  - registered a new local skill for dead-link-safe reference formatting.
+- `docs/skills/dead-link-safe-paths.md`
+  - added a short skill describing when to use plain paths, what format to use, and when clickable links are still appropriate.
+- `.ai/STATE.md`
+  - updated current operating reality so future sessions know dead local links are a friction point in this chat surface.
+- `.ai/SESSION_LOG.md`
+  - added this closeout entry.
+
+### Summary
+
+- Future agents now have an explicit session-start instruction not to rely on markdown local links in founder-facing replies.
+- Local files, reports, and artifacts should be delivered as plain absolute Windows paths so Cade can copy them without fighting dead links.
+- Real web URLs can still be clickable; local repo paths should not assume chat support.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run ai:checkpoint` ✅
+- Runtime verification lanes: N/A (docs-only collaboration rule update; no runtime code paths changed)
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Scope: docs/memory/skill update only
+- Push: not pushed
+
+---
+
+## 2026-03-01 - Codex - Report Find Core-Loop CTR Remediation
+
+**Goal:** Strengthen `/report-find` so it better matches reporting intent, explains the submission path faster, and adds low-distraction internal links back into the core loop.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `app/report-find/layout.tsx`
+  - retitled metadata around the explicit "report a Home Depot penny item" search intent.
+  - tightened Open Graph and Twitter descriptions around the exact submission details users need.
+- `app/report-find/page.tsx`
+  - added breadcrumb continuity.
+  - replaced the thin intro with a server-rendered trust/speed/required-details section.
+  - added compact links back to `/penny-list` and `/guide` for users who still need context before submitting.
+- `components/report-find/ReportFindFormClient.tsx`
+  - rewrote the intro panel so it explains fast publication, trust expectations, and no-guarantee framing more directly.
+- `tests/smoke-critical.spec.ts`
+  - added smoke coverage for the new report-find heading, prep section, and internal links.
+- `tests/visual-smoke.spec.ts`
+  - updated the route heading expectation to the new H1.
+
+### Summary
+
+- `/report-find` now behaves more like a search-intent landing page instead of a thin form wrapper.
+- The page explains what users need, how fast reports surface, and why accuracy matters before they start typing.
+- Internal links now send uncertain users back to the live list or guide without turning submission into a secondary action.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run lint:colors` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npm run ai:proof -- --mode=dev /report-find` ✅
+  - artifacts: `reports/proof/2026-03-01T11-17-35/`
+  - desktop proof: `report-find-light.png`, `report-find-dark.png`
+  - mobile proof: `report-find-mobile-390-light.png`, `report-find-mobile-390-dark.png`, `report-find-mobile-375-light.png`, `report-find-mobile-375-dark.png`
+  - console: `reports/proof/2026-03-01T11-17-35/console-errors.txt`
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Scope: report-find route + report form intro + smoke/visual assertions
+- Push: not pushed
+
+---
+
 ## 2026-03-01 - Codex - FAQ Core-Loop CTR Remediation
 
 **Goal:** Strengthen `/faq` so it answers search intent faster and sends readers directly into the Penny List and Report a Find flow.
@@ -113,93 +200,5 @@
 - Branch: `dev`
 - Commit base: `27e3cc3`
 - Push: not pushed
-
----
-
-## 2026-02-27 - Codex - Monumetric Emergency Production Rollback Reactivated
-
-**Goal:** Shut Monumetric back off in production after founder-reported header obstruction and nonstop refresh behavior.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- Vercel production operations
-  - removed the production `NEXT_PUBLIC_MONUMETRIC_ENABLED=true` setting and re-added it as `false`.
-  - redeployed the current production deployment instead of shipping local app code.
-- Live verification
-  - confirmed `www.pennycentral.com` no longer serves the Monumetric runtime script or `monu.delivery` preconnect.
-- `.ai/STATE.md`
-  - updated current reality to show the rollback is active again.
-- `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`
-  - moved `INC-MONUMETRIC-001` back from live validation to active rollback.
-- `.ai/SESSION_LOG.md`
-  - added this closeout entry and trimmed the log back to 5 sessions.
-
-### Summary
-
-- Founder-reported live behavior still crossed the kill-switch line.
-- Monumetric is off again in production.
-- This rollback was operational only; no new site code was deployed.
-
-### Verification
-
-- `npx --yes vercel@latest env ls production --scope allens-projects-6bce9cc6` ✅
-- `npx --yes vercel@latest redeploy https://hd-onecent-guide-jize3ocv7-allens-projects-6bce9cc6.vercel.app --target production --scope allens-projects-6bce9cc6` ✅
-- `curl -s https://www.pennycentral.com | rg "monu.delivery/site|https://monu.delivery"` ✅
-  - result: no Monumetric runtime script or `monu.delivery` preconnect present in live HTML
-- Runtime verification lanes: N/A (operational env rollback only; no local runtime code-path change)
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Scope: memory/docs update only; production rollback was executed operationally in Vercel
-
----
-
-## 2026-02-27 - Codex - Baseline Export + Monumetric Production Reactivation
-
-**Goal:** Lock the clean pre-ad baseline, reactivate Monumetric in production, and verify the live site truthfully.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `analytics/baselines/Baseline_Stable_PreAds.json`
-  - saved the stable GA4 baseline using `2026-02-18` through `2026-02-24`.
-  - included engagement, bounce, pages/session, session totals, and device split fields for later guardrail comparisons.
-- Vercel production operations
-  - set `NEXT_PUBLIC_MONUMETRIC_ENABLED=true` in production.
-  - redeployed the current production deployment and confirmed `www.pennycentral.com` is serving Monumetric again.
-- `tests/live/console.spec.ts`
-  - fixed CSP blocked-target extraction so the live console audit no longer mislabels `data:` CSP failures as `www.google-analytics.com`.
-- `.ai/STATE.md`
-  - updated current reality to reflect that Monumetric is live again in production and the 7-day validation window is active.
-- `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`
-  - advanced `INC-MONUMETRIC-001` from reactivation-pending to live validation.
-- `.ai/SESSION_LOG.md`
-  - added this closeout entry.
-
-### Summary
-
-- Stable pre-ad reference window locked: `2026-02-18` to `2026-02-24`.
-- Monumetric is live again on production as of `2026-02-27`.
-- Immediate post-reactivation live audit passed on desktop and mobile.
-- Remaining console findings are non-critical third-party ad/tracking noise, not a PennyCentral production blocker.
-
-### Verification
-
-- `curl -s https://www.pennycentral.com | rg "monu.delivery/site"` ✅
-- `npm run verify:fast` ✅
-- `$env:PLAYWRIGHT_BASE_URL='https://www.pennycentral.com'; npx playwright test tests/live/console.spec.ts --project=chromium-desktop-light --project=chromium-mobile-light --workers=1` ✅
-  - artifacts:
-    - `reports/playwright/console-report-2026-02-27T22-58-09-641Z.json`
-    - `reports/playwright/console-report-2026-02-27T22-58-54-314Z.json`
-- Runtime smoke lane: N/A (no app route/UI code changed in this closeout lane; live production verification was run directly against the deployed site)
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Scope: baseline artifact + verification-tool hardening + memory updates
 
 ---

@@ -63,6 +63,26 @@ test.describe("critical smoke lane", () => {
     await expect(faqNextStepLink).toHaveAttribute("href", "/report-find?src=faq-next-step")
   })
 
+  test("report-find page explains the submission path before the form", async ({ page }) => {
+    await page.goto("/report-find")
+
+    await expect(
+      page.getByRole("heading", { level: 1, name: /Report a Home Depot Penny Item/i })
+    ).toBeVisible()
+    await expect(page.getByRole("heading", { level: 2, name: /What to have ready/i })).toBeVisible()
+    await expect(
+      page.getByText(/You only need the SKU, item name, state, and date found\./i)
+    ).toBeVisible()
+    await expect(page.getByRole("link", { name: /Check the live Penny List/i })).toHaveAttribute(
+      "href",
+      "/penny-list"
+    )
+    await expect(page.getByRole("link", { name: /Read the full guide/i })).toHaveAttribute(
+      "href",
+      "/guide"
+    )
+  })
+
   test("core interaction works on report-find prefill basket flow", async ({ page }) => {
     await page.goto("/report-find?sku=1009258128&name=Smoke%20Item&src=card")
 

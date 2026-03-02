@@ -89,6 +89,7 @@ If any field is missing or contradictory, stop and resolve it first. No edits be
 - Use plain English by default.
 - Define technical terms the first time they appear.
 - Do not mix founder instructions with next-agent instructions.
+- For repo files, local artifacts, and report folders, do not rely on markdown local-file links in founder-facing responses. Use plain absolute Windows paths instead, optionally with a line number or a one-line open command. Reserve clickable links for real web URLs only.
 - In final responses, include:
   1. `Founder Summary` (what changed, why it matters, what Cade should do next)
   2. `Agent Handoff` (for future AI agents only)

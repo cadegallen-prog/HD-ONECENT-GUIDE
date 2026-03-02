@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Mar 1, 2026 (FAQ CTR remediation shipped cleanly)
+**Last updated:** Mar 1, 2026 (dead-link-safe founder reference preference codified)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,24 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-01 (Dead-link-safe founder references codified):** Founder-facing file and artifact references are now documented as plain absolute Windows paths, not markdown local links that may render dead in chat.
+  - **What changed:**
+    - added a founder-communication rule in `.ai/START_HERE.md` to use plain absolute Windows paths for local files and proof artifacts.
+    - added a local skill for dead-link-safe references under `docs/skills/`.
+    - updated `.ai/SESSION_LOG.md` so the preference persists across sessions.
+  - **Why:** dead local links in chat create avoidable friction and make proof/artifact references harder for Cade to use.
+  - **Status:** future agents now have a session-start rule and a repo skill telling them to use copyable local paths instead of dead markdown links.
+
+- **2026-03-01 (Report Find CTR remediation shipped):** Updated `/report-find` so it matches search intent better and explains the reporting path more clearly before the form.
+  - **What changed:**
+    - retitled the route metadata around the explicit "report a Home Depot penny item" intent.
+    - replaced the thin server-rendered intro with a clearer trust/speed/required-details block plus breadcrumb support.
+    - added low-distraction internal links back to `/penny-list` and `/guide`.
+    - rewrote the form intro box so it explains fast publication, trust expectations, and no-guarantee framing more directly.
+    - smoke coverage now verifies the new heading, prep section, and internal links; proof screenshots were captured for desktop and mobile.
+  - **Why:** analytics already flagged `/report-find` as a high-impression/low-CTR page, and this route sits closest to the verified-find outcome in the core loop.
+  - **Status:** the report-find route is now a stronger search-intent landing page on `dev`, with proof artifacts captured at `reports/proof/2026-03-01T11-17-35/`.
 
 - **2026-03-01 (FAQ internal-link CTR remediation shipped):** Updated `/faq` so it behaves like a better search-intent landing page and routes readers into the core product loop.
   - **What changed:**

@@ -615,13 +615,14 @@ function ReportFindForm() {
       <div className="rounded-lg border border-[var(--border-default)] border-l-4 border-l-[var(--status-info)] bg-[var(--bg-elevated)] p-4 mb-8 flex gap-3 items-start">
         <Info className="w-5 h-5 text-[var(--status-info)] flex-shrink-0 mt-0.5" />
         <div className="text-sm text-[var(--text-secondary)]">
-          <p className="font-semibold mb-2">About this form</p>
+          <p className="font-semibold mb-2">How this form works</p>
           <p className="mb-2">
             Add one or more items to your basket, then submit everything at once.
           </p>
           <ul className="list-disc pl-4 space-y-1">
-            <li>Submissions are not individually confirmed.</li>
-            <li>The Penny List may contain mistakes, sold-out items, or prices that changed.</li>
+            <li>Most reports reach the Penny List in about five minutes.</li>
+            <li>There is no manual review step for each item, so only submit what you verified.</li>
+            <li>The Penny List is live community intel, not a guarantee of stock or price.</li>
             <li>For receipts and discussion, use the Facebook group.</li>
           </ul>
         </div>
