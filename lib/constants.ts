@@ -29,3 +29,8 @@ export const FACEBOOK_GROUP_URL = "https://www.facebook.com/groups/homedepotonec
  * Internal Report Find page URL for submitting penny finds.
  */
 export const SUBMIT_FIND_FORM_URL = "/report-find"
+
+/**
+ * Maximum number of items allowed in one Report Find basket submission.
+ */
+export const REPORT_FIND_BASKET_ITEM_LIMIT = 30

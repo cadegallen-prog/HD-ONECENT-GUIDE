@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Feb 26, 2026 (GA4 archive now includes keyEvents in daily event export + carryover hygiene closed)
+**Last updated:** Mar 3, 2026 (`/report-find` basket submit hotfix shipped)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,86 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-03 (`/report-find` basket submit hotfix shipped):** Restored the basket submit path after the new basket flow blocked submit on a blank draft field and rejected 16-item baskets at the API boundary.
+  - **What changed:**
+    - added a shared `REPORT_FIND_BASKET_ITEM_LIMIT = 30` constant in `lib/constants.ts`.
+    - aligned `app/api/submit-find/route.ts` to the shared 30-item limit and added a specific oversized-basket error message.
+    - updated `components/report-find/ReportFindFormClient.tsx` so the draft `Item Name` input no longer blocks `Submit all`, and manual/prefilled adds now respect the same 30-item cap.
+    - added regression coverage for a restored 16-item basket submit in `tests/report-find-batch.spec.ts` and updated the route oversized-batch test in `tests/submit-find-route.test.ts`.
+  - **Why:** founder testing exposed a core-loop break: valid basket items could not be submitted reliably, and the UI/API size mismatch turned large baskets into misleading generic failures.
+  - **Status:** the basket flow is verified again with passing `verify:fast`, `e2e:smoke`, targeted batch-submit tests, and fresh proof screenshots at `reports/proof/2026-03-03T06-00-57-440Z/`. The planned site-recovery sequence is still paused only long enough for this hotfix; `S2 - Homepage Proof Front Door` remains the next planned slice.
+- **2026-02-27 (Monumetric emergency rollback reactivated):** Founder reported the live site was still blocking the header and refreshing nonstop, so the production kill switch was re-applied immediately.
+  - **What changed:**
+    - Vercel production env `NEXT_PUBLIC_MONUMETRIC_ENABLED` was set back to `false`.
+    - the current production deployment was redeployed without shipping new app code.
+    - live HTML verification on `https://www.pennycentral.com` confirmed the Monumetric runtime script and `monu.delivery` preconnect were removed again.
+  - **Why:** this is a direct kill-switch condition: structural interference plus unstable runtime behavior.
+  - **Status:**
+    - Monumetric is off again in production as of `2026-02-27`.
+    - the previously started live validation window is aborted.
+    - do not re-enable until the refresh/header failure has a concrete root-cause explanation and a safer reactivation plan.
+
+- **2026-02-27 (Baseline locked + Monumetric reactivated in production):** Exported the clean pre-ad GA4 baseline, turned Monumetric back on in Vercel production, and verified the live site after correcting a false-positive console audit classifier.
+  - **What changed:**
+    - saved `analytics/baselines/Baseline_Stable_PreAds.json` using the stable window `2026-02-18` through `2026-02-24`.
+    - production env `NEXT_PUBLIC_MONUMETRIC_ENABLED=true` was set in Vercel and the current production deployment was redeployed; `www.pennycentral.com` now serves the Monumetric runtime again.
+    - live production verification initially showed a fake Google Analytics CSP blocker on `/about`; root cause was the audit parser reading the CSP allowlist instead of the blocked target.
+    - `tests/live/console.spec.ts` now extracts the actual blocked resource before classifying CSP severity, so `data:`/allowlist text no longer mislabels core domains as blocked.
+  - **Why:** the controlled reactivation needed two things at once: a trustworthy pre-ad baseline and an honest live verification lane.
+  - **Status:**
+    - Monumetric is live in production as of `2026-02-27`.
+    - the 7-day validation window is now active against `Baseline_Stable_PreAds`.
+    - immediate post-reactivation desktop/mobile console audits passed; remaining console noise is non-critical third-party ad/tracking noise only.
+
+- **2026-02-27 (Monumetric response received + controlled reactivation posture):** Samantha responded with partial confirmation, and the operating posture has shifted from passive wait-state to a controlled reactivation test model.
+  - **What changed:**
+    - partner-confirmed items: interstitial disabled, video disabled, `/report-find` excluded, mobile header adjusted to avoid nav obstruction, dashboard access activated, ads expected live once plugin/runtime is reactivated.
+    - missing explicit confirmation: 60-second refresh cap, stacking limits, anchor removal, and precise propagation timing.
+    - expectation updated: publisher-associate communication appears onboarding-oriented rather than technically precise; future monetization decisions should be governed by internal guardrails, not partner reassurance.
+  - **Why:** the prior obstruction event is already documented as a structural UX failure with severe engagement damage; current strategy is to manage reactivation as calculated risk rather than remain in indefinite external wait-state.
+  - **Current strategy:**
+    - current Monumetric posture = `response received / partial confirmation / transitioning to controlled reactivation test`
+    - baseline reference = `Baseline_Stable_PreAds`
+    - reactivation window = 7-day validation period once ads are turned back on
+    - kill switch = trigger immediate shutdown on structural interference or `>40%` engagement drop versus baseline
+    - rule = no emotional toggling; all decisions must follow predefined thresholds
+  - **Status:** ads are still disabled at this moment of documentation; this entry records the strategy shift only and does not re-enable runtime.
+
+- **2026-02-27 (Monumetric wait-state confirmation locked in memory):** Founder sent the follow-up configuration email to Samantha and is now waiting for written confirmation from Monumetric before re-enabling ads.
+  - **What changed:** Added explicit memory contract that Monumetric runtime remains disabled while waiting for partner confirmation/ETA.
+  - **Why:** prevent future-agent drift (no accidental recommendation to re-enable before confirmation).
+  - **Status:** `NEXT_PUBLIC_MONUMETRIC_ENABLED=false` remains the current production posture; do not re-enable until Samantha confirms requested settings are live or provides pending-item ETA.
+
+- **2026-02-27 (Monumetric in-content rollout + emergency runtime disable hotfix):** Shipped requested in-content placements, then protected UX with a reversible global Monumetric runtime kill switch and promoted the hotfix to production.
+  - **What changed:**
+    - rollout lane on `dev`:
+      - added repeatable in-content slot component: `components/ads/monumetric-in-content-slot.tsx`
+      - mounted in-content slots on guide surfaces (`/guide` + chapter pages) only
+      - kept video/interstitial deferred in launch config (`lib/ads/launch-config.ts`, `tests/ads-launch-config.test.ts`)
+    - emergency UX lane:
+      - added env gate `NEXT_PUBLIC_MONUMETRIC_ENABLED` (default `false`) in `.env.example`
+      - gated Monumetric runtime script/preconnect in `app/layout.tsx`
+      - gated in-content slot render in `components/ads/monumetric-in-content-slot.tsx`
+      - effective behavior with default flag: Monumetric script and in-content slots are off globally.
+  - **Why:** preserve a reversible implementation path while preventing current sticky/interstitial/video side effects from degrading usability during partner-side remediation.
+  - **Verification + deploy evidence:**
+    - local gates: `npm run ai:memory:check`, `npm run verify:fast`, `npm run e2e:smoke` (all passed)
+    - proof artifacts: `reports/proof/2026-02-26T19-56-28/` (rollout), `reports/proof/2026-02-26T22-24-47/` (hotfix)
+    - production promotion:
+      - rollout commit on `dev`: `ee9a332`; merge on `main`: `a82855d`
+      - hotfix commit on `dev`: `7a681ee`; merge on `main`: `defb769`
+    - CI (`main` SHA `defb7694fbf2ba5f27b301e44c8ee1ed0d79e462`):
+      - FAST: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22463864816` ✅
+      - SMOKE: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22463864837` ✅
+      - FULL: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22463864821` ✅
+  - **Status:** local runtime guard is active (`NEXT_PUBLIC_MONUMETRIC_ENABLED=false`); keep off until Monumetric confirms sticky/interstitial/video fixes and post-confirmation audits pass.
+
+- **2026-02-26 (Monumetric UX incident capture + founder escalation sent):** Preserved incident context for ad-behavior regression and founder action after live-site verification evidence review.
+  - **What changed:** founder (Cade) sent a neutral implementation email requesting immediate UX-first ad rollback controls (mobile top sticky removal now, interstitial/vignette disable, `/report-find` ad exclusion, video rollout pause).
+  - **Why:** average engagement per session reportedly dropped from roughly `1:50-2:00` to about `0:22` on the evening of `2026-02-25`, and reproduced mobile behavior showed sticky/header and overlay scenarios that can block navigation controls.
+  - **Evidence captured:** `reports/monumetric-audit/2026-02-26T17-36-26-640Z/summary.md`, `reports/monumetric-audit/2026-02-26T17-38-49-063Z-mobile-stress/summary.md`, `reports/monumetric-audit/2026-02-26T17-56-57-948Z-menu-block-proof/summary.md`, `reports/analytics-verification/2026-02-26T17-52-51-293Z/summary.md`.
+  - **Status:** awaiting Monumetric confirmation of applied changes + propagation window, then re-audit mobile/desktop and verify `/report-find` remains ad-free.
 
 - **2026-02-26 (GA4 archive key-events enhancement + release hygiene closeout):** Completed the requested carryover cleanup lane and shipped an analytics archive update so key-event/conversion coverage gaps are visible without manual extra pulls.
   - **Code + docs changes:**
@@ -1929,3 +2009,31 @@ From `.ai/ANALYTICS_WEEKLY_REVIEW.md`:
 ---
 
 **For full history:** See `archive/state-history/` (entries older than 30 days are auto-archived)
+
+---
+
+## 2026-03-02 - Site Recovery Program (Canonical planning spine shipped)
+
+- **Objective:** Create a repo-native recovery program so homepage, guide, Penny List, Report Find, Store Finder, typography, and trust-page work can compound across sessions instead of resetting with each new context window.
+- **Authoritative parent plan:** `.ai/impl/site-recovery-program.md`
+- **Authoritative current-state audit:** `.ai/topics/SITE_RECOVERY_CURRENT.md`
+- **Child plans created:**
+  - `.ai/impl/site-recovery-s1-hydration-stability.md`
+  - `.ai/impl/site-recovery-s2-homepage-proof-front-door.md`
+  - `.ai/impl/site-recovery-s3-guide-core-rebuild.md`
+  - `.ai/impl/site-recovery-s4-penny-list-mobile-focus.md`
+  - `.ai/impl/site-recovery-s5-report-find-compression.md`
+  - `.ai/impl/site-recovery-s6-typography-template-consistency.md`
+  - `.ai/impl/site-recovery-s7-store-finder-supporting-role.md`
+  - `.ai/impl/site-recovery-s8-trust-pages-hardening.md`
+- **Registry bridge:** `.ai/plans/INDEX.md` now points to the parent plan and explicitly notes that the authoritative file lives in `.ai/impl/` while registry governance is still split.
+- **Priority continuity:** `.ai/BACKLOG.md` now names the site-recovery program as the active product-priority sequence and points future agents to the parent plan.
+- **Founder-calibrated product read persisted:**
+  - homepage is currently too bland/generic and lacks a strong focal point,
+  - current guide architecture is not acceptable as the main teaching experience,
+  - Penny List remains the strongest product surface,
+  - Store Finder is currently a supporting utility, not a front-door feature.
+- **Hydration diagnosis resolved:** the audited dev mismatch was caused by the Grow script bootstrap mutating `<head>` order before hydration. `S1` replaced that loader with a hydration-safe `next/script` pattern and added route-sweep coverage to keep the mismatch from returning silently.
+- **Hydration diagnosis status:** `S1` has now removed the Grow pre-hydration head mutation and added regression coverage for the audited routes.
+- **Implementation status:** `S0` complete (docs-only). `S1 - Hydration Stability` complete and verified. `S2 - Homepage Proof Front Door` is the next implementation slice.
+- **Code/runtime impact:** none in this session. No product route files were edited.

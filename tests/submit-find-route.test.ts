@@ -3,6 +3,7 @@ import test from "node:test"
 import fs from "node:fs"
 import path from "node:path"
 import { NextRequest } from "next/server"
+import { REPORT_FIND_BASKET_ITEM_LIMIT } from "../lib/constants"
 import { installSupabaseMocks, clearSupabaseMocks } from "./test-utils/supabase-mocks"
 
 function getFixtureSku(): string {
@@ -945,7 +946,7 @@ test("batch submit supports partial success in one request", async () => {
 })
 
 test("batch submit rejects more than max allowed items", async () => {
-  const items = Array.from({ length: 11 }, (_, index) => ({
+  const items = Array.from({ length: REPORT_FIND_BASKET_ITEM_LIMIT + 1 }, (_, index) => ({
     itemName: `Item ${index + 1}`,
     sku: FIXTURE_SKU,
     storeCity: "Atlanta",
@@ -969,9 +970,10 @@ test("batch submit rejects more than max allowed items", async () => {
   const res = await POST(req)
   assert.strictEqual(res.status, 400)
   const data = await res.json()
-  assert.ok(
-    data.error.includes("Missing or invalid required fields"),
-    "Should return schema validation failure for oversized batch"
+  assert.strictEqual(
+    data.error,
+    `You can submit up to ${REPORT_FIND_BASKET_ITEM_LIMIT} items at once. Split the basket and try again.`,
+    "Should return a clear oversized batch message"
   )
 })
 

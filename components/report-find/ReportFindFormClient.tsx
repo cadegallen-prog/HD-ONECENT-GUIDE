@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { AlertCircle, CheckCircle2, Calendar, Info, PlusCircle, Trash2 } from "lucide-react"
 import { trackEvent } from "@/lib/analytics"
+import { REPORT_FIND_BASKET_ITEM_LIMIT } from "@/lib/constants"
 import { US_STATES } from "@/lib/us-states"
 import { normalizeSku, validateSku, formatSkuForDisplay } from "@/lib/sku"
 import { copyToClipboard } from "@/components/copy-sku-button"
@@ -212,11 +213,24 @@ function ReportFindForm() {
     }
 
     let added = false
+    let limitReached = false
     setBasket((prev) => {
       if (prev.some((item) => item.sku === skuParam)) return prev
+      if (prev.length >= REPORT_FIND_BASKET_ITEM_LIMIT) {
+        limitReached = true
+        return prev
+      }
       added = true
       return [...prev, { sku: skuParam, itemName: nameParam, quantity: null, addedVia: "prefill" }]
     })
+
+    if (limitReached) {
+      setAddFeedback({
+        type: "error",
+        message: `Basket limit reached (${REPORT_FIND_BASKET_ITEM_LIMIT} items). Submit this batch before adding more items.`,
+      })
+      return
+    }
 
     if (!added) return
 
@@ -286,14 +300,23 @@ function ReportFindForm() {
 
     const normalizedSku = skuCheck.normalized
     const incomingQuantity = quantityCheck.quantity
+    const existingIndex = basket.findIndex((item) => item.sku === normalizedSku)
+
+    if (existingIndex === -1 && basket.length >= REPORT_FIND_BASKET_ITEM_LIMIT) {
+      setAddFeedback({
+        type: "error",
+        message: `Basket limit reached (${REPORT_FIND_BASKET_ITEM_LIMIT} items). Submit this batch before adding more items.`,
+      })
+      return
+    }
 
     let merged = false
     let mergedQuantity = 0
 
     setBasket((prev) => {
-      const existingIndex = prev.findIndex((item) => item.sku === normalizedSku)
+      const existingIndexInBasket = prev.findIndex((item) => item.sku === normalizedSku)
 
-      if (existingIndex === -1) {
+      if (existingIndexInBasket === -1) {
         return [
           ...prev,
           {
@@ -306,12 +329,12 @@ function ReportFindForm() {
       }
 
       merged = true
-      const existing = prev[existingIndex]
+      const existing = prev[existingIndexInBasket]
       const nextQuantity = Math.min(99, effectiveQuantity(existing) + (incomingQuantity ?? 1))
       mergedQuantity = nextQuantity
 
       const next = [...prev]
-      next[existingIndex] = {
+      next[existingIndexInBasket] = {
         ...existing,
         quantity: nextQuantity,
         addedVia: "manual",
@@ -770,8 +793,6 @@ function ReportFindForm() {
             <input
               type="text"
               id="itemName"
-              required
-              aria-required="true"
               maxLength={75}
               value={draft.itemName}
               onChange={(e) => setDraft((prev) => ({ ...prev, itemName: e.target.value }))}
@@ -827,6 +848,9 @@ function ReportFindForm() {
             <p className="text-sm font-semibold text-[var(--text-primary)]">Basket</p>
             <p className="text-xs text-[var(--text-muted)]">{basket.length} item(s)</p>
           </div>
+          <p className="text-xs text-[var(--text-muted)]">
+            Up to {REPORT_FIND_BASKET_ITEM_LIMIT} items per basket.
+          </p>
 
           {basket.length === 0 ? (
             <p className="text-sm text-[var(--text-muted)]">No items added yet.</p>

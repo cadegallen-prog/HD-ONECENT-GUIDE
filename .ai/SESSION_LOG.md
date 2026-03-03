@@ -4,6 +4,57 @@
 
 ---
 
+## 2026-03-03 - Codex - Report Find Basket Submit Hotfix
+
+**Goal:** Restore the `/report-find` basket flow so multi-item baskets submit again and stop the blank draft `Item Name` field from blocking `Submit all`.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `lib/constants.ts`
+  - added `REPORT_FIND_BASKET_ITEM_LIMIT = 30` as the shared basket-size source of truth.
+- `app/api/submit-find/route.ts`
+  - aligned the batch submit cap to the shared 30-item basket limit.
+  - added a clear oversized-basket error message instead of the generic schema failure text.
+- `components/report-find/ReportFindFormClient.tsx`
+  - removed the draft `Item Name` field from native submit validation so a filled basket no longer gets blocked by an empty draft row.
+  - enforced the same 30-item limit on manual adds and prefilled basket adds.
+  - added visible basket-limit copy so the cap is not hidden from users.
+- `tests/report-find-batch.spec.ts`
+  - kept the mixed-result batch-submit coverage.
+  - added a regression test that restores a 16-item basket from session storage and verifies submit still works while the draft item fields are blank.
+- `tests/submit-find-route.test.ts`
+  - updated the oversized-batch route test to use the shared 30-item limit and assert the new user-facing error message.
+
+### Summary
+
+- Root cause 1: the browser was validating the empty draft `Item Name` input on form submit even when the basket was already populated, so `Submit all` got blocked before the request fired.
+- Root cause 2: the API only accepted 10 basket items while the UI allowed more, so a 16-item basket failed with the same generic error for every item.
+- The basket submit path now accepts up to 30 items in one request, the draft field no longer blocks batch submit, and oversized baskets now fail with a specific message instead of a misleading required-fields error.
+
+### Verification
+
+- Before fix reproduction:
+  - `npx playwright test tests/report-find-batch.spec.ts --project=chromium-desktop-light --workers=1` ❌
+  - failure signature: the batch-submit UI test never reached the success summary because `Submit all` was blocked by the empty draft `Item Name` field.
+- `npm run ai:memory:check` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npx tsx --import ./tests/setup.ts --test --test-name-pattern "batch submit rejects more than max allowed items" tests/submit-find-route.test.ts` ✅
+- `$env:SUBMIT_FIND_DRY_RUN='false'; npx tsx --import ./tests/setup.ts --test --test-name-pattern "batch submit supports partial success in one request" tests/submit-find-route.test.ts` ✅
+- `$env:NEXT_DIST_DIR='.next-playwright'; $env:PLAYWRIGHT='1'; $env:NEXT_PUBLIC_EZOIC_ENABLED='false'; $env:NEXT_PUBLIC_ANALYTICS_ENABLED='false'; npx playwright test tests/report-find-batch.spec.ts --project=chromium-desktop-light --workers=1` ✅
+- Playwright proof screenshots captured via temporary local proof spec (removed after capture):
+  - artifacts: `reports/proof/2026-03-03T06-00-57-440Z/`
+  - console: `reports/proof/2026-03-03T06-00-57-440Z/console-errors.txt`
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Scope: report-find basket submit hotfix + regression coverage
+- Push: not pushed
+
+---
 ## 2026-02-26 - Codex - GA4 Daily Events KeyEvents Enhancement + Release Hygiene
 
 **Goal:** Complete requested carryover hygiene and implement the analytics change so conversion/key-event gaps are visible in standard archive runs.
