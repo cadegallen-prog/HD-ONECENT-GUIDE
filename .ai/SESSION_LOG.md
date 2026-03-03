@@ -4,6 +4,61 @@
 
 ---
 
+## 2026-03-03 - Codex - Report Find Share + Basket UX Hardening
+
+**Goal:** Finish the founder-requested `/report-find` follow-up slice by making the Facebook copy SKU-only, restoring the basket cap to `10`, safely blocking restored over-limit baskets, and explaining the Back-button workflow.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `components/report-find/ReportFindFormClient.tsx`
+  - moved the Facebook/share text onto a submit-time snapshot so the success-state preview/copy reflects the actual submitted location/date instead of live form edits.
+  - replaced the name-based share text with a SKU-only preview/copy flow, renamed the action to `Copy Facebook post`, added the inline `<details>` preview, and added the helper line clarifying that only plain-text SKUs are copied.
+  - restored the basket cap to `10`, removed the always-visible basket-limit helper, added the saved-basket over-limit warning/submit disable rule, and shortened the add-time full-basket message.
+  - added the explicit Penny List Back-button guidance in the intro box.
+  - fixed the prefill hydration race so a saved full basket now blocks extra prefill adds deterministically instead of showing a false success message.
+- `lib/constants.ts`
+  - changed `REPORT_FIND_BASKET_ITEM_LIMIT` from `30` back to `10` so the client and route share one source of truth again.
+- `lib/report-find-share.ts`
+  - added a pure share formatter that builds stable SKU-only Facebook text with location/date context and quantity suffixes only when quantity is greater than `1`.
+- `tests/report-find-batch.spec.ts`
+  - added coverage for the success-state preview/copy text, the restored valid `10`-item submit regression, and the restored over-limit basket warning/disable flow.
+- `tests/report-find-prefill.spec.ts`
+  - added the `11th` manual add rejection coverage and the prefill-at-cap rejection coverage.
+- `tests/report-find-share.test.ts`
+  - added exact-string unit coverage for the new share formatter.
+- `tests/smoke-critical.spec.ts`
+  - added smoke coverage for the Back-button guidance in the report-find explainer.
+
+### Summary
+
+- Facebook/share text on `/report-find` now copies clean plain text with formatted SKUs only, plus the submitted location/date line and PennyCentral CTA.
+- The basket is back to a hard `10`-item cap on both client and server, without advertising that cap in normal UI.
+- Older saved baskets above `10` are preserved, clearly warned, and blocked until the user trims them into separate batches.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run lint:colors` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npx playwright test tests/report-find-prefill.spec.ts tests/report-find-batch.spec.ts tests/smoke-critical.spec.ts --project=chromium-desktop-light --workers=1` ✅
+- `npx playwright test tests/report-find-prefill.spec.ts tests/report-find-batch.spec.ts tests/smoke-critical.spec.ts --project=chromium-mobile-light --workers=1` ✅
+- UI proof captured via one-off local Playwright script:
+  - artifacts: `reports/proof/2026-03-03-report-find-share-proof/`
+  - desktop proof: `reports/proof/2026-03-03-report-find-share-proof/report-find-success-desktop-light.png`
+  - mobile proof: `reports/proof/2026-03-03-report-find-share-proof/report-find-success-mobile-light.png`
+  - console: `reports/proof/2026-03-03-report-find-share-proof/console-errors.txt`
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Scope: report-find share/cap/preview hardening + targeted regression coverage
+- Push: pending at memory-write time
+
+---
+
 ## 2026-03-03 - Codex - Report Find Basket Submit Hotfix
 
 **Goal:** Restore the `/report-find` basket flow so multi-item baskets submit again and stop the blank draft `Item Name` field from blocking `Submit all`.
@@ -55,215 +110,164 @@
 - Push: not pushed
 
 ---
-## 2026-02-26 - Codex - GA4 Daily Events KeyEvents Enhancement + Release Hygiene
 
-**Goal:** Complete requested carryover hygiene and implement the analytics change so conversion/key-event gaps are visible in standard archive runs.
+## 2026-03-03 - Codex - Site Recovery S1 Hydration Stability
 
-**Status:** ✅ Completed
-
-### Changes
-
-- scripts/archive-google-analytics.ts
-  - ga4/daily_events now exports ventCount + keyEvents (GA4 conversion metric) in default archive runs.
-  - additive GA4 totals now include keyEvents and conversions when present.
-- .ai/topics/ANALYTICS_CONTRACT.md
-  - updated archive contract to require keyEvents in daily_events output.
-- .ai/ANALYTICS_WEEKLY_REVIEW.md
-  - updated weekly review guidance to read key-event/conversion counts from daily_events.
-- Local hygiene cleanup:
-  - removed stale .ai/tmp-\*.log scratch files.
-  - normalized .ai/LEARNINGS.md with a new anti-pattern entry: do not parallelize build-dependent verification gates.
-
-### Verification
-
-- pm run analytics:archive -- -- --start-date=2026-02-24 --end-date=2026-02-25 --skip-gsc ✅
-  - artifact: .local/analytics-history/runs/2026-02-26T04-59-02-718Z/ga4/daily_events.csv
-  - confirmed header: date,eventName,eventCount,keyEvents
-- pm run ai:memory:check ✅
-- pm run verify:fast ✅
-- pm run e2e:smoke ✅
-
-### Branch Hygiene
-
-- Branch: dev
-- Push status: pending in this session (implementation complete, commit/push next)
-
----## 2026-02-26 - Codex - Full QA CSP Blocker Gate + Production CSP Allowlist Fixes
-
-**Goal:** Make monetization-impacting CSP violations fail in FULL QA (instead of warning-only) and clear the newly surfaced production blocker host.
+**Goal:** Remove the global hydration mismatch and lock the Penny List text regression before any visual site-recovery slice starts.
 
 **Status:** ✅ Completed
 
 ### Changes
 
-- `tests/live/console.spec.ts`
-  - expanded audited routes to include `/penny-list`.
-  - added monetization-critical CSP host matching for `/`, `/guide`, `/penny-list`.
-  - improved blocked-host extraction from CSP messages (URL scanning, not connect-only format).
-  - converted critical CSP findings into hard test failure (`throw new Error(...)`).
-  - ignored geolocation console noise (`Error getting location: GeolocationPositionError`) to reduce false actionable logs.
-- `next.config.js`
-  - added ad-chain domains:
-    - `script-src`: `https://router.infolinks.com`
-    - `connect-src`: `https://*.a-mo.net`
-    - `frame-src`: `https://*.a-mo.net`, `https://router.infolinks.com`
+- `app/layout.tsx`
+  - replaced the Grow DOM-insertion bootstrap with `next/script` `afterInteractive` scripts so the server-rendered head is no longer mutated before hydration.
+- `lib/penny-list-utils.ts`
+  - added `DIY` to the protected uppercase word set in `normalizeProductName(...)`.
+- `tests/visual-smoke.spec.ts`
+  - expanded the route sweep to all nine audited recovery routes and made hydration mismatch console output a first-class failure.
+- `tests/smoke-critical.spec.ts`
+  - added a Penny List rendered-surface assertion that fails if `Diy` appears.
+- `tests/penny-list-utils.test.ts`
+  - added deterministic helper coverage for mixed-case `DIY` input.
+- `.ai/impl/site-recovery-program.md`
+  - marked the parent recovery program in progress with `S1` shipped and `S2` next.
+- `.ai/impl/site-recovery-s1-hydration-stability.md`
+  - marked the slice shipped and recorded the implementation outcome.
+- `.ai/plans/INDEX.md`
+  - updated the registry status to match the canonical `.ai/impl/` plan.
+- `.ai/BACKLOG.md`
+  - advanced the immediate next slice from `S1` to `S2 - Homepage Proof Front Door`.
+- `.ai/STATE.md`
+  - updated current project reality to reflect the shipped hydration fix and next slice.
+- `.ai/LEARNINGS.md`
+  - documented that direct `node` execution is the wrong lane for repo TypeScript test files.
+
+### Summary
+
+- The audited hydration mismatch is no longer reproducible across `/`, `/guide`, `/penny-list`, `/report-find`, `/faq`, `/what-are-pennies`, `/store-finder`, `/about`, and `/transparency`.
+- The Grow integration now loads in a hydration-safe way without mutating head order before React starts.
+- The site-recovery program can now move from stabilization into `S2 - Homepage Proof Front Door`.
 
 ### Verification
 
-- Local:
-  - `npm run ai:memory:check` ✅
-  - `$env:SUBMIT_FIND_DRY_RUN='false'; npm run verify:fast` ✅
-  - `npm run e2e:smoke` ✅
-- Production CSP header:
-  - `curl -I https://www.pennycentral.com | rg -i \"content-security-policy|a-mo\\.net|router\\.infolinks\\.com\"` ✅
-- Production live console audit (post-deploy):
-  - `$env:PLAYWRIGHT_BASE_URL='https://www.pennycentral.com'; npx playwright test tests/live/console.spec.ts --project=chromium-desktop-light --project=chromium-mobile-light --workers=1` ✅
-  - reports:
-    - `reports/playwright/console-report-2026-02-26T03-24-51-904Z.json`
-    - `reports/playwright/console-report-2026-02-26T03-25-35-238Z.json`
-  - outcome: zero critical CSP blockers; only non-critical third-party CSP noise.
-- CI on `main` SHA `679f982b0ebe51bfade5b054317d013314af9d74`:
-  - FAST: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22426323091` ✅
-  - SMOKE: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22426323090` ✅
-  - FULL: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22426323100` ✅
-
-### Branch / Promotion
-
-- Runtime commit on `dev`: `fc2e22c` (`fix(csp): enforce monetization CSP blockers in full QA and allow a-mo sync frames`)
-- Promoted to `main` via merge commit:
-  - `679f982` (`Merge dev: enforce monetization CSP blockers + expand ad-chain CSP allowlist`)
-- Promotion method used to avoid dirty local `.ai` carryover conflicts:
-  - temporary worktree on `main`, merge `origin/dev`, push `main`, then remove worktree.
-- Local branch at closeout: `dev`
-- Local carryover note: `.ai/STATE.md`, `.ai/SESSION_LOG.md`, and `.ai/tmp-*.log` remain dirty/untracked in local workspace from prior/diagnostic activity.
-
----
-
-## 2026-02-25 - Codex - GA4 + GSC Last-30-Days Retrieval and Performance/Gap Audit
-
-**Goal:** Execute the GA4 + GSC retrieval process for the last 30 days and deliver a founder-readable split between high-performing content, underperforming content, and data-collection discrepancies.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- No source/runtime code was changed.
-- Pulled archive snapshot for `2026-01-27` to `2026-02-25`:
-  - `npm run analytics:archive -- -- --start-date=2026-01-27 --end-date=2026-02-25`
-- Added run-local GA4 landing-page artifacts (for direct GSC cross-reference):
-  - `.local/analytics-history/runs/2026-02-25T21-08-20-611Z/ga4/landing_pages_30d.json`
-  - `.local/analytics-history/runs/2026-02-25T21-08-20-611Z/ga4/landing_pages_conversions_30d.json`
-- Produced a run-local synthesized analysis bundle:
-  - `.local/analytics-history/runs/2026-02-25T21-08-20-611Z/analysis-30d.json`
-  - `.local/analytics-history/runs/2026-02-25T21-08-20-611Z/analysis-30d.md`
-
-### Key Findings (30-Day Window)
-
-- High performers: `/`, `/penny-list`, `/guide` (97.56% of GSC page-click volume; 86.21% of GA4 landing sessions).
-- Underperforming high-impression/low-engagement pages: `/about`, `/report-find`, `/faq`, `/in-store-strategy`, `/clearance-lifecycle`.
-- Discrepancy audit:
-  - no critical undercount mismatch (no page with `>=10` GSC clicks and zero GA4 landing sessions),
-  - 55 GSC-only pages exist but account for only 5 clicks total (mostly legacy redirects/technical endpoints),
-  - GA4 conversion coverage gap: landing-page `keyEvents` and `conversions` returned `0`, while `find_submit` event count was `422`.
-
-### Verification
-
-- Retrieval run summary (complete, no source failures):
-  - `.local/analytics-history/runs/2026-02-25T21-08-20-611Z/run-summary.json` (`errors: []`)
-- Docs/memory update lane:
-  - `npm run ai:writer-lock:status` ✅ (`UNLOCKED` before claim)
-  - `npm run ai:writer-lock:claim -- codex "GA4+GSC 30-day retrieval + analysis"` ✅
+- Before fix reproduction:
+  - `$env:PLAYWRIGHT_BASE_URL='http://localhost:3001'; npx playwright test tests/visual-smoke.spec.ts --project=chromium-desktop-light --workers=1` ❌
+  - failure signature: `A tree hydrated but some attributes of the server rendered HTML didn't match...`
+- `npm run ai:memory:check` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `$env:PLAYWRIGHT_BASE_URL='http://localhost:3001'; npx playwright test tests/visual-smoke.spec.ts --project=chromium-desktop-light --workers=1` ✅
+- `$env:PLAYWRIGHT_BASE_URL='http://localhost:3001'; npx playwright test tests/smoke-critical.spec.ts --project=chromium-desktop-light --workers=1` ✅
+- `npm run ai:proof -- / /guide /penny-list /report-find /faq /what-are-pennies /store-finder /about /transparency` ✅
+  - artifacts: `reports/proof/2026-03-03T00-44-54/`
+  - console: `reports/proof/2026-03-03T00-44-54/console-errors.txt`
 
 ### Branch Hygiene
 
 - Branch: `dev`
-- Commit SHA touched: none (docs-only memory update + local analytics artifacts only)
-- Push status: not pushed (no implementation commit requested)
-- Session-end `git status --short`: clean expected after writer-lock release
+- Scope: `S1` hydration fix + regression coverage + continuity updates
+- Push: not pushed
 
 ---
 
-## 2026-02-25 - Codex - FULL QA Flake Fix (Live Console Network-Idle Timeout)
+## 2026-03-02 - Codex - Site Recovery Planning Spine (S0)
 
-**Goal:** Stop recurring `FULL: QA` failures on recent commits by fixing the root-cause flake in the live console audit test.
+**Goal:** Convert the site-recovery intent into durable repo memory so future agents can execute a coherent multi-slice recovery program without re-deriving it from chat.
 
 **Status:** ✅ Completed
 
 ### Changes
 
-- `tests/live/console.spec.ts`
-  - changed `page.waitForLoadState("networkidle")` to a best-effort wait with a `10000ms` timeout and non-fatal fallback.
-  - rationale: live ad/analytics traffic on mobile can keep network connections open indefinitely, so hard-failing on network-idle is flaky and non-actionable.
+- `.ai/topics/SITE_RECOVERY_CURRENT.md`
+  - added the current-state audit for `/`, `/guide`, `/penny-list`, `/report-find`, `/faq`, `/what-are-pennies`, `/store-finder`, `/about`, and `/transparency`.
+  - persisted founder-calibrated quality feedback so it does not die with the context window.
+  - documented mobile issues, coherence issues, top 3 ROI improvements, and the hydration root-cause assessment.
+- `.ai/impl/site-recovery-program.md`
+  - created the authoritative parent recovery plan in `.ai/impl/`.
+  - locked the program decisions, dependency order, stop/go rules, and immediate next task.
+- `.ai/impl/site-recovery-s1-hydration-stability.md`
+  - created the implementation-ready plan for the global hydration mismatch and Penny List text determinism fix.
+- `.ai/impl/site-recovery-s2-homepage-proof-front-door.md`
+  - created the implementation-ready plan for the homepage redesign.
+- `.ai/impl/site-recovery-s3-guide-core-rebuild.md`
+  - created the implementation-ready plan for rebuilding `/guide` into the canonical long-form guide and demoting supporting routes.
+- `.ai/impl/site-recovery-s4-penny-list-mobile-focus.md`
+  - created the implementation-ready plan for Penny List mobile hierarchy cleanup.
+- `.ai/impl/site-recovery-s5-report-find-compression.md`
+  - created the implementation-ready plan for reducing pre-form friction on `/report-find`.
+- `.ai/impl/site-recovery-s6-typography-template-consistency.md`
+  - created the implementation-ready plan for type/spacing/template normalization.
+- `.ai/impl/site-recovery-s7-store-finder-supporting-role.md`
+  - created the implementation-ready plan for calming Store Finder and demoting it to a supporting role.
+- `.ai/impl/site-recovery-s8-trust-pages-hardening.md`
+  - created the implementation-ready plan for `/about` and `/transparency`.
+- `.ai/plans/INDEX.md`
+  - registered the new parent plan and explicitly documented the `.ai/plans/` vs `.ai/impl/` authority split.
+- `.ai/BACKLOG.md`
+  - persisted the site-recovery program as the active product-priority sequence.
+- `.ai/STATE.md`
+  - updated current project reality so fresh agents can identify the new canonical program and next slice.
+- `.ai/LEARNINGS.md`
+  - documented the fail-closed rule that `.ai/SESSION_LOG.md` must stay at 5 live entries before rerunning `ai:checkpoint`.
 
-### Verification
+### Summary
 
-- Local:
-  - `npm run ai:memory:check` ✅
-  - `$env:SUBMIT_FIND_DRY_RUN='false'; npm run verify:fast` ✅
-  - `npm run e2e:smoke` ✅
-  - `$env:NEXT_PUBLIC_VISUAL_POINTER_ENABLED='true'; npm run e2e:full` ✅
-  - targeted repro command (previously failing paths):  
-    `$env:NEXT_DIST_DIR='.next-playwright'; $env:PLAYWRIGHT='1'; $env:NEXT_PUBLIC_VISUAL_POINTER_ENABLED='true'; $env:NEXT_PUBLIC_EZOIC_ENABLED='false'; $env:NEXT_PUBLIC_ANALYTICS_ENABLED='false'; $env:USE_FIXTURE_FALLBACK='1'; $env:SUPABASE_SERVICE_ROLE_KEY='test'; npm run build; npx playwright test tests/live/console.spec.ts --workers=1 --project=chromium-mobile-light --project=chromium-mobile-dark --project=chromium-mobile-light-390x844` ✅
-- GitHub Actions:
-  - manual FULL on `dev` (fixed commit): `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22415282781` ✅
-  - post-promotion `main` FULL: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22415512456` ✅
-  - post-promotion `main` FAST: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22415512457` ✅
-  - post-promotion `main` SMOKE: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22415512472` ✅
-
-### Branch / Promotion
-
-- `dev` commit: `5224f48` (`fix(ci): make live console audit network-idle wait best effort`)
-- promoted to `main` via merge commit: `554e2b2` (`Merge dev: stabilize full QA live console audit`)
-- local branch restored to `dev`
-- session-end `git status --short`: clean
-
----
-
-## 2026-02-25 - Codex - Monumetric CSP Production Unblock + Follow-up Domain Expansion
-
-**Goal:** Fully unblock Monumetric ad-chain CSP violations in production, verify required domains live, and clear production CSP violations on `/` and `/guide`.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `next.config.js`
-  - Added requested domain set:
-    - `script-src`: `securepubads.g.doubleclick.net`, `cdn.confiant-integrations.net`, `cdn.prod.uidapi.com`
-    - `connect-src`: `id.a-mx.com`, `match.adsrvr.org`, `prebid.cootlogix.com`, `prebid.a-mo.net`, `rtb.openx.net`, `fastlane.rubiconproject.com`, `*.eu-1-id5-sync.com`
-    - `frame-src`: `u.openx.net`, `sync.cootlogix.com`, `prebid.a-mo.net`, `eus.rubiconproject.com`
-  - Added follow-up production-scan domains/protocols that surfaced only after first unblock:
-    - `script-src`: `blob:`, `static.criteo.net`, `resources.infolinks.com`, `pagead2.googlesyndication.com`, `tpc.googlesyndication.com`
-    - `connect-src`: `c3.a-mo.net`, `pagead2.googlesyndication.com`
-    - `frame-src`: `cm.g.doubleclick.net`, `*.safeframe.googlesyndication.com`, `bloggernetwork-d.openx.net`, `gum.criteo.com`
-- No files outside `next.config.js` were modified for code scope.
+- Penny Central now has one repo-canonical site recovery program instead of chat-only intent.
+- The planning spine is complete and the next implementation slice is unambiguous: `S1 - Hydration Stability`.
+- Future agents now have a route-by-route audit, a parent plan, and eight child plans to execute in order.
 
 ### Verification
 
 - `npm run ai:memory:check` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- Production checks:
-  - `curl -I https://www.pennycentral.com` ✅ (CSP header includes requested + follow-up domains)
-  - `curl -s https://www.pennycentral.com | rg "monu.delivery/site"` ✅
-  - `curl -I https://www.pennycentral.com/ads.txt` ✅ (`308` to Monumetric hosted ads.txt)
-- Production Playwright CSP scans (`/` + `/guide`):
-  - interim scan artifact: `reports/playwright/csp-scan-production-2026-02-25T20-09-17-999Z.json`
-  - rerun artifact: `reports/playwright/csp-scan-production-rerun-2026-02-25T20-14-53-693Z.json`
-  - final artifact: `reports/playwright/csp-scan-production-final-2026-02-25T20-19-58-251Z.json` ✅
-    - `target13StillBlocked: []`
-    - `newBlockedHosts: []`
+- `npm run ai:checkpoint` ✅
+  - artifacts:
+    - `reports/context-packs/2026-03-02T04-41-00/context-pack.md`
+    - `reports/context-packs/2026-03-02T04-41-00/resume-prompt.txt`
+- Runtime verification lanes: N/A (docs-only planning/memory work; no route/form/API/runtime code paths changed)
 
-### Branch / Promotion
+### Branch Hygiene
 
-- `dev` commits:
-  - `89313e0` - initial requested CSP domains
-  - `045f0d7` - follow-up domains from first production scan
-  - `bafdd59` - final remaining pagead/criteo domain gaps
-- `main` merge commits:
-  - `afba972` - first dev promotion in this session chain
-  - `f810d11` - second dev promotion
-  - `c4d7ef5` - final dev promotion (current production)
-- Local branch restored to `dev` at session close.
+- Branch: `dev`
+- Scope: planning docs + registry + shared memory
+- Push: not pushed
+
+---
+
+## 2026-03-01 - Codex - Dead-Link-Safe Founder References
+
+**Goal:** Make founder-facing file and proof references repeatable and low-friction by codifying plain-path output instead of dead local markdown links.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `.ai/START_HERE.md`
+  - added an explicit founder-communication rule to use plain absolute Windows paths for repo files and local proof artifacts.
+- `docs/skills/README.md`
+  - registered a new local skill for dead-link-safe reference formatting.
+- `docs/skills/dead-link-safe-paths.md`
+  - added a short skill describing when to use plain paths, what format to use, and when clickable links are still appropriate.
+- `.ai/STATE.md`
+  - updated current operating reality so future sessions know dead local links are a friction point in this chat surface.
+- `.ai/SESSION_LOG.md`
+  - added this closeout entry.
+
+### Summary
+
+- Future agents now have an explicit session-start instruction not to rely on markdown local links in founder-facing replies.
+- Local files, reports, and artifacts should be delivered as plain absolute Windows paths so Cade can copy them without fighting dead links.
+- Real web URLs can still be clickable; local repo paths should not assume chat support.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run ai:checkpoint` ✅
+- Runtime verification lanes: N/A (docs-only collaboration rule update; no runtime code paths changed)
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Scope: docs/memory/skill update only
+- Push: not pushed
 
 ---

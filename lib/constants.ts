@@ -33,4 +33,4 @@ export const SUBMIT_FIND_FORM_URL = "/report-find"
 /**
  * Maximum number of items allowed in one Report Find basket submission.
  */
-export const REPORT_FIND_BASKET_ITEM_LIMIT = 30
+export const REPORT_FIND_BASKET_ITEM_LIMIT = 10

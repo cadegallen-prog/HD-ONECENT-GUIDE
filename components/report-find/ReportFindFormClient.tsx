@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { AlertCircle, CheckCircle2, Calendar, Info, PlusCircle, Trash2 } from "lucide-react"
 import { trackEvent } from "@/lib/analytics"
 import { REPORT_FIND_BASKET_ITEM_LIMIT } from "@/lib/constants"
+import { buildFacebookShareText, type ReportFindShareContext } from "@/lib/report-find-share"
 import { US_STATES } from "@/lib/us-states"
 import { normalizeSku, validateSku, formatSkuForDisplay } from "@/lib/sku"
 import { copyToClipboard } from "@/components/copy-sku-button"
@@ -23,6 +24,7 @@ function ordinal(n: number): string {
 const USER_STATE_KEY = "pennycentral_user_state"
 const BASKET_STORAGE_KEY = "pc_report_basket_v1"
 const PREFILL_VISIT_KEY = "pc_report_prefill_seen_v1"
+const BASKET_FULL_MESSAGE = `Basket full. Submit these ${REPORT_FIND_BASKET_ITEM_LIMIT} items first, then add more.`
 
 type BasketItem = {
   sku: string
@@ -114,7 +116,6 @@ function getBasketItemDisplayName(item: BasketItem): string {
 function ReportFindForm() {
   const searchParams = useSearchParams()
   const trackedReportOpenRef = useRef(false)
-  const basketHydratedRef = useRef(false)
   const [todayIso, setTodayIso] = useState("")
   const [minDateIso, setMinDateIso] = useState("")
 
@@ -132,6 +133,7 @@ function ReportFindForm() {
   })
 
   const [basket, setBasket] = useState<BasketItem[]>([])
+  const [basketHydrated, setBasketHydrated] = useState(false)
   const [skuDisplay, setSkuDisplay] = useState("")
   const [skuError, setSkuError] = useState("")
   const [addFeedback, setAddFeedback] = useState<{
@@ -142,7 +144,16 @@ function ReportFindForm() {
   const [submitCooldown, setSubmitCooldown] = useState(false)
   const [result, setResult] = useState<SubmitResult | null>(null)
   const [lastSuccessfulItems, setLastSuccessfulItems] = useState<BasketItem[]>([])
+  const [lastSuccessfulShareContext, setLastSuccessfulShareContext] =
+    useState<ReportFindShareContext | null>(null)
   const [copyFeedback, setCopyFeedback] = useState("")
+
+  const clearSuccessState = () => {
+    setResult(null)
+    setLastSuccessfulItems([])
+    setLastSuccessfulShareContext(null)
+    setCopyFeedback("")
+  }
 
   useEffect(() => {
     const today = new Date()
@@ -179,13 +190,13 @@ function ReportFindForm() {
   useEffect(() => {
     const restoredBasket = readBasketFromSessionStorage()
     setBasket(restoredBasket)
-    basketHydratedRef.current = true
+    setBasketHydrated(true)
   }, [])
 
   useEffect(() => {
-    if (!basketHydratedRef.current) return
+    if (!basketHydrated) return
     writeBasketToSessionStorage(basket)
-  }, [basket])
+  }, [basket, basketHydrated])
 
   useEffect(() => {
     if (trackedReportOpenRef.current) return
@@ -196,7 +207,7 @@ function ReportFindForm() {
   }, [searchParams])
 
   useEffect(() => {
-    if (!basketHydratedRef.current) return
+    if (!basketHydrated) return
 
     const skuParam = normalizeSku(searchParams.get("sku") ?? "").slice(0, 10)
     const nameParam = (searchParams.get("name") ?? "").trim().slice(0, 75)
@@ -212,27 +223,32 @@ function ReportFindForm() {
       // Ignore storage failures.
     }
 
-    let added = false
-    let limitReached = false
-    setBasket((prev) => {
-      if (prev.some((item) => item.sku === skuParam)) return prev
-      if (prev.length >= REPORT_FIND_BASKET_ITEM_LIMIT) {
-        limitReached = true
-        return prev
-      }
-      added = true
-      return [...prev, { sku: skuParam, itemName: nameParam, quantity: null, addedVia: "prefill" }]
-    })
+    const hydratedBasket = basket.length > 0 ? basket : readBasketFromSessionStorage()
 
-    if (limitReached) {
+    if (hydratedBasket.some((item) => item.sku === skuParam)) return
+
+    if (hydratedBasket.length >= REPORT_FIND_BASKET_ITEM_LIMIT) {
+      setResult(null)
+      setLastSuccessfulItems([])
+      setLastSuccessfulShareContext(null)
+      setCopyFeedback("")
       setAddFeedback({
         type: "error",
-        message: `Basket limit reached (${REPORT_FIND_BASKET_ITEM_LIMIT} items). Submit this batch before adding more items.`,
+        message: BASKET_FULL_MESSAGE,
       })
       return
     }
 
-    if (!added) return
+    setResult(null)
+    setLastSuccessfulItems([])
+    setLastSuccessfulShareContext(null)
+    setCopyFeedback("")
+
+    setBasket((prev) => {
+      if (prev.some((item) => item.sku === skuParam)) return prev
+      if (prev.length >= REPORT_FIND_BASKET_ITEM_LIMIT) return prev
+      return [...prev, { sku: skuParam, itemName: nameParam, quantity: null, addedVia: "prefill" }]
+    })
 
     try {
       sessionStorage.setItem(visitMarker, "1")
@@ -250,7 +266,7 @@ function ReportFindForm() {
       ui_source: src || "direct",
       skuMasked: skuParam.slice(-4),
     })
-  }, [searchParams])
+  }, [basket, basketHydrated, searchParams])
 
   const skuWarning =
     draft.sku.length === 10 && !draft.sku.startsWith("10")
@@ -276,8 +292,7 @@ function ReportFindForm() {
 
   const handleAddItem = () => {
     setAddFeedback(null)
-    setResult(null)
-    setCopyFeedback("")
+    clearSuccessState()
 
     const itemName = draft.itemName.trim().slice(0, 75)
     if (!itemName) {
@@ -305,7 +320,7 @@ function ReportFindForm() {
     if (existingIndex === -1 && basket.length >= REPORT_FIND_BASKET_ITEM_LIMIT) {
       setAddFeedback({
         type: "error",
-        message: `Basket limit reached (${REPORT_FIND_BASKET_ITEM_LIMIT} items). Submit this batch before adding more items.`,
+        message: BASKET_FULL_MESSAGE,
       })
       return
     }
@@ -390,9 +405,15 @@ function ReportFindForm() {
       return
     }
 
+    const submittedShareContext: ReportFindShareContext = {
+      storeCity: sharedData.storeCity.trim(),
+      storeState: sharedData.storeState,
+      dateFound: sharedData.dateFound,
+    }
+    const submittedWebsite = sharedData.website
+
     setSubmitting(true)
-    setResult(null)
-    setCopyFeedback("")
+    clearSuccessState()
 
     const failures: SubmitFailure[] = []
     const successes: BasketItem[] = []
@@ -402,11 +423,11 @@ function ReportFindForm() {
     const toApiItem = (item: BasketItem) => ({
       sku: item.sku,
       itemName: item.itemName,
-      storeCity: sharedData.storeCity,
-      storeState: sharedData.storeState,
-      dateFound: sharedData.dateFound,
+      storeCity: submittedShareContext.storeCity,
+      storeState: submittedShareContext.storeState,
+      dateFound: submittedShareContext.dateFound,
       quantity: item.quantity !== null ? String(item.quantity) : "",
-      website: sharedData.website,
+      website: submittedWebsite,
     })
 
     if (basket.length === 1) {
@@ -555,8 +576,10 @@ function ReportFindForm() {
         const successfulSkuSet = new Set(successes.map((item) => item.sku))
         setBasket((prev) => prev.filter((item) => !successfulSkuSet.has(item.sku)))
         setLastSuccessfulItems(successes)
+        setLastSuccessfulShareContext(submittedShareContext)
       } else {
         setLastSuccessfulItems([])
+        setLastSuccessfulShareContext(null)
       }
 
       if (!dryRun && attempted === 1 && successCount === 1) {
@@ -578,6 +601,7 @@ function ReportFindForm() {
       }
     } else {
       setLastSuccessfulItems([])
+      setLastSuccessfulShareContext(null)
     }
 
     setResult({
@@ -594,33 +618,12 @@ function ReportFindForm() {
   }
 
   const handleCopyForFacebook = async () => {
-    if (lastSuccessfulItems.length === 0) return
+    if (!facebookShareText) return
 
-    const placeLabel = sharedData.storeCity
-      ? `${sharedData.storeCity}, ${sharedData.storeState}`
-      : sharedData.storeState
-
-    const header =
-      lastSuccessfulItems.length === 1
-        ? `I reported 1 penny find at Home Depot (${placeLabel}) on ${sharedData.dateFound}:`
-        : `I reported ${lastSuccessfulItems.length} penny finds at Home Depot (${placeLabel}) on ${sharedData.dateFound}:`
-
-    const lines = lastSuccessfulItems.map((item) => {
-      const qtyText = item.quantity ? ` x${item.quantity}` : ""
-      return `- ${getBasketItemDisplayName(item)}${qtyText}`
-    })
-
-    const text = [
-      header,
-      ...lines,
-      "",
-      "Report your own finds: https://www.pennycentral.com/report-find",
-    ].join("\n")
-
-    const copied = await copyToClipboard(text)
+    const copied = await copyToClipboard(facebookShareText)
 
     if (copied) {
-      setCopyFeedback("Copied. Paste it into your Facebook post.")
+      setCopyFeedback("Copied Facebook post text. Paste it into Facebook.")
       trackEvent("copy_for_facebook", {
         ui_source: "report-find-success",
         item_count: lastSuccessfulItems.length,
@@ -631,7 +634,19 @@ function ReportFindForm() {
     setCopyFeedback("Could not copy automatically. Please try again.")
   }
 
-  const submitDisabled = submitting || submitCooldown || basket.length === 0
+  const basketOverLimit = basket.length > REPORT_FIND_BASKET_ITEM_LIMIT
+  const basketOverLimitCount = Math.max(0, basket.length - REPORT_FIND_BASKET_ITEM_LIMIT)
+  const basketLimitWarning = basketOverLimit
+    ? `This saved basket has ${basket.length} item${basket.length === 1 ? "" : "s"}. The current limit is ${REPORT_FIND_BASKET_ITEM_LIMIT}. Remove ${basketOverLimitCount} item${basketOverLimitCount === 1 ? "" : "s"}, submit this batch, then send the rest in a second batch.`
+    : ""
+  const facebookShareText =
+    lastSuccessfulItems.length > 0 && lastSuccessfulShareContext
+      ? buildFacebookShareText(
+          lastSuccessfulItems.map((item) => ({ sku: item.sku, quantity: item.quantity })),
+          lastSuccessfulShareContext
+        )
+      : ""
+  const submitDisabled = submitting || submitCooldown || basket.length === 0 || basketOverLimit
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -641,6 +656,10 @@ function ReportFindForm() {
           <p className="font-semibold mb-2">About this form</p>
           <p className="mb-2">
             Add one or more items to your basket, then submit everything at once.
+          </p>
+          <p className="mb-2">
+            Coming from the Penny List? Use your browser Back button in this tab to return to the
+            list and keep adding items before you submit. Your basket stays here.
           </p>
           <ul className="list-disc pl-4 space-y-1">
             <li>Submissions are not individually confirmed.</li>
@@ -848,9 +867,15 @@ function ReportFindForm() {
             <p className="text-sm font-semibold text-[var(--text-primary)]">Basket</p>
             <p className="text-xs text-[var(--text-muted)]">{basket.length} item(s)</p>
           </div>
-          <p className="text-xs text-[var(--text-muted)]">
-            Up to {REPORT_FIND_BASKET_ITEM_LIMIT} items per basket.
-          </p>
+
+          {basketLimitWarning && (
+            <p
+              data-testid="report-basket-limit-warning"
+              className="rounded-lg border border-[var(--status-warning)] bg-[var(--bg-elevated)] px-3 py-2 text-xs text-[var(--text-secondary)]"
+            >
+              {basketLimitWarning}
+            </p>
+          )}
 
           {basket.length === 0 ? (
             <p className="text-sm text-[var(--text-muted)]">No items added yet.</p>
@@ -961,10 +986,7 @@ function ReportFindForm() {
                     type="button"
                     variant="secondary"
                     size="sm"
-                    onClick={() => {
-                      setResult(null)
-                      setCopyFeedback("")
-                    }}
+                    onClick={clearSuccessState}
                     className="flex-1"
                   >
                     Report Another Find
@@ -975,11 +997,34 @@ function ReportFindForm() {
                       variant="secondary"
                       size="sm"
                       onClick={handleCopyForFacebook}
+                      data-testid="copy-facebook-button"
                       className="flex-1"
                     >
-                      Copy for Facebook
+                      Copy Facebook post
                     </Button>
                   )}
+                </div>
+              )}
+
+              {!result.dryRun && facebookShareText && (
+                <div className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-page)] p-3 space-y-3">
+                  <p className="text-xs text-[var(--text-secondary)]">
+                    Copies plain text with SKUs only.
+                  </p>
+                  <details className="rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] px-4 py-3">
+                    <summary
+                      data-testid="facebook-copy-preview-summary"
+                      className="cursor-pointer py-1 text-sm font-semibold text-[var(--cta-primary)] underline decoration-[var(--cta-primary)] underline-offset-2"
+                    >
+                      Preview copied text
+                    </summary>
+                    <pre
+                      data-testid="facebook-copy-preview"
+                      className="mt-3 whitespace-pre-wrap break-words text-xs text-[var(--text-secondary)] sm:text-sm"
+                    >
+                      {facebookShareText}
+                    </pre>
+                  </details>
                 </div>
               )}
 

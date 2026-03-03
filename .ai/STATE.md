@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Mar 3, 2026 (`/report-find` basket submit hotfix shipped)
+**Last updated:** Mar 3, 2026 (`/report-find` share + basket UX hardening verified locally)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,16 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-03 (`/report-find` share + basket UX hardening shipped locally):** Finished the founder-requested follow-up slice on top of the basket hotfix so the success-state copy is trustworthy again and the basket limit is safely back at `10`.
+  - **What changed:**
+    - changed `REPORT_FIND_BASKET_ITEM_LIMIT` back to `10` in `lib/constants.ts`, which re-tightens the shared client/server submit cap.
+    - added `lib/report-find-share.ts` so the Facebook/share text is built from one pure SKU-only formatter with location/date context and quantity suffixes only when needed.
+    - updated `components/report-find/ReportFindFormClient.tsx` to snapshot share context at submit time, rename the action to `Copy Facebook post`, add the tap-friendly preview disclosure, remove the always-on cap helper, show the restored-basket over-limit warning, disable submit above the cap, and explain the Penny List Back-button workflow.
+    - fixed the saved-basket hydration race so a full restored basket now blocks extra prefill adds deterministically instead of surfacing a false success message.
+    - added unit + Playwright coverage in `tests/report-find-share.test.ts`, `tests/report-find-batch.spec.ts`, `tests/report-find-prefill.spec.ts`, and `tests/smoke-critical.spec.ts`.
+  - **Why:** the founder flagged three remaining UX problems after the hotfix: misleading Facebook copy, a spam-prone `30`-item cap that no longer matched the desired workflow, and missing guidance for building a basket from Penny List in one tab.
+  - **Status:** locally verified with passing `ai:memory:check`, `lint:colors`, `verify:fast`, `e2e:smoke`, targeted desktop/mobile report-find suites, and fresh desktop/mobile proof screenshots at `reports/proof/2026-03-03-report-find-share-proof/`. The broader site-recovery sequence is still paused only for this report-find follow-up; `S2 - Homepage Proof Front Door` remains the next planned slice once this branch is promoted.
 
 - **2026-03-03 (`/report-find` basket submit hotfix shipped):** Restored the basket submit path after the new basket flow blocked submit on a blank draft field and rejected 16-item baskets at the API boundary.
   - **What changed:**
