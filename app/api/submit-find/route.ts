@@ -6,10 +6,11 @@ import { getSupabaseClient, getSupabaseServiceRoleClient } from "@/lib/supabase/
 import { enrichHomeDepotSkuWithSerpApi } from "@/lib/enrichment/serpapi-home-depot-enrich"
 import { getSerpApiDeliveryZip, SerpApiCreditsExhaustedError } from "@/lib/serpapi/home-depot"
 import { isLowQualityItemName } from "@/lib/item-name-quality"
+import { REPORT_FIND_BASKET_ITEM_LIMIT } from "@/lib/constants"
 
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000 // 1 hour
 const RATE_LIMIT_MAX = 30 // Allows batch submissions (e.g., stack of receipts)
-const BATCH_SUBMIT_MAX_ITEMS = 10
+const BATCH_SUBMIT_MAX_ITEMS = REPORT_FIND_BASKET_ITEM_LIMIT
 
 const DUPLICATE_SKU_WINDOW_MS = 10 * 60 * 1000 // 10 minutes
 const RAPID_FIRE_COOLDOWN_MS = 5_000 // 5 seconds between submissions
@@ -1068,6 +1069,23 @@ export async function POST(request: NextRequest) {
       requestMode = "batch"
       items = parsedBatch.data.items
     } else {
+      const rawItems =
+        requestBody &&
+        typeof requestBody === "object" &&
+        !Array.isArray(requestBody) &&
+        Array.isArray((requestBody as { items?: unknown }).items)
+          ? ((requestBody as { items: unknown[] }).items ?? [])
+          : null
+
+      if (rawItems && rawItems.length > BATCH_SUBMIT_MAX_ITEMS) {
+        return NextResponse.json(
+          {
+            error: `You can submit up to ${BATCH_SUBMIT_MAX_ITEMS} items at once. Split the basket and try again.`,
+          },
+          { status: 400 }
+        )
+      }
+
       const parsedSingle = submissionItemSchema.safeParse(requestBody)
       if (!parsedSingle.success) {
         return NextResponse.json(

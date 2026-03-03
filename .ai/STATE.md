@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Mar 1, 2026 (dead-link-safe founder reference preference codified)
+**Last updated:** Mar 3, 2026 (`/report-find` basket submit hotfix shipped)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,24 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-03 (`/report-find` basket submit hotfix shipped):** Restored the basket submit path after the new basket flow blocked submit on a blank draft field and rejected 16-item baskets at the API boundary.
+  - **What changed:**
+    - added a shared `REPORT_FIND_BASKET_ITEM_LIMIT = 30` constant in `lib/constants.ts`.
+    - aligned `app/api/submit-find/route.ts` to the shared 30-item limit and added a specific oversized-basket error message.
+    - updated `components/report-find/ReportFindFormClient.tsx` so the draft `Item Name` input no longer blocks `Submit all`, and manual/prefilled adds now respect the same 30-item cap.
+    - added regression coverage for a restored 16-item basket submit in `tests/report-find-batch.spec.ts` and updated the route oversized-batch test in `tests/submit-find-route.test.ts`.
+  - **Why:** founder testing exposed a core-loop break: valid basket items could not be submitted reliably, and the UI/API size mismatch turned large baskets into misleading generic failures.
+  - **Status:** the basket flow is verified again with passing `verify:fast`, `e2e:smoke`, targeted batch-submit tests, and fresh proof screenshots at `reports/proof/2026-03-03T06-00-57-440Z/`. The planned site-recovery sequence is still paused only long enough for this hotfix; `S2 - Homepage Proof Front Door` remains the next planned slice.
+
+- **2026-03-03 (`S1` hydration stability shipped):** Removed the global dev hydration mismatch source and locked regression coverage before any visual recovery slice proceeds.
+  - **What changed:**
+    - replaced the Grow DOM-insertion bootstrap in `app/layout.tsx` with a `next/script` `afterInteractive` load pattern so the server-rendered head stays stable through hydration.
+    - hardened `normalizeProductName(...)` in `lib/penny-list-utils.ts` so mixed-case `DIY` values normalize back to uppercase.
+    - expanded `tests/visual-smoke.spec.ts` to sweep all nine audited recovery routes and fail on hydration mismatch console output.
+    - added Penny List text regression coverage in `tests/smoke-critical.spec.ts` and `tests/penny-list-utils.test.ts`.
+  - **Why:** the repeated hydration warning was polluting proof on multiple routes and needed to be removed before homepage or guide redesign work.
+  - **Status:** `S1` is complete with passing `verify:fast`, `e2e:smoke`, and proof artifacts at `reports/proof/2026-03-03T00-44-54/`. The next recovery slice is `S2 - Homepage Proof Front Door`.
 
 - **2026-03-01 (Dead-link-safe founder references codified):** Founder-facing file and artifact references are now documented as plain absolute Windows paths, not markdown local links that may render dead in chat.
   - **What changed:**
@@ -2056,3 +2074,31 @@ From `.ai/ANALYTICS_WEEKLY_REVIEW.md`:
 ---
 
 **For full history:** See `archive/state-history/` (entries older than 30 days are auto-archived)
+
+---
+
+## 2026-03-02 - Site Recovery Program (Canonical planning spine shipped)
+
+- **Objective:** Create a repo-native recovery program so homepage, guide, Penny List, Report Find, Store Finder, typography, and trust-page work can compound across sessions instead of resetting with each new context window.
+- **Authoritative parent plan:** `.ai/impl/site-recovery-program.md`
+- **Authoritative current-state audit:** `.ai/topics/SITE_RECOVERY_CURRENT.md`
+- **Child plans created:**
+  - `.ai/impl/site-recovery-s1-hydration-stability.md`
+  - `.ai/impl/site-recovery-s2-homepage-proof-front-door.md`
+  - `.ai/impl/site-recovery-s3-guide-core-rebuild.md`
+  - `.ai/impl/site-recovery-s4-penny-list-mobile-focus.md`
+  - `.ai/impl/site-recovery-s5-report-find-compression.md`
+  - `.ai/impl/site-recovery-s6-typography-template-consistency.md`
+  - `.ai/impl/site-recovery-s7-store-finder-supporting-role.md`
+  - `.ai/impl/site-recovery-s8-trust-pages-hardening.md`
+- **Registry bridge:** `.ai/plans/INDEX.md` now points to the parent plan and explicitly notes that the authoritative file lives in `.ai/impl/` while registry governance is still split.
+- **Priority continuity:** `.ai/BACKLOG.md` now names the site-recovery program as the active product-priority sequence and points future agents to the parent plan.
+- **Founder-calibrated product read persisted:**
+  - homepage is currently too bland/generic and lacks a strong focal point,
+  - current guide architecture is not acceptable as the main teaching experience,
+  - Penny List remains the strongest product surface,
+  - Store Finder is currently a supporting utility, not a front-door feature.
+- **Hydration diagnosis resolved:** the audited dev mismatch was caused by the Grow script bootstrap mutating `<head>` order before hydration. `S1` replaced that loader with a hydration-safe `next/script` pattern and added route-sweep coverage to keep the mismatch from returning silently.
+- **Hydration diagnosis status:** `S1` has now removed the Grow pre-hydration head mutation and added regression coverage for the audited routes.
+- **Implementation status:** `S0` complete (docs-only). `S1 - Hydration Stability` complete and verified. `S2 - Homepage Proof Front Door` is the next implementation slice.
+- **Code/runtime impact:** none in this session. No product route files were edited.
