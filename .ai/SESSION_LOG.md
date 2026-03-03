@@ -4,6 +4,61 @@
 
 ---
 
+## 2026-03-03 - Codex - Report Find Share + Basket UX Hardening
+
+**Goal:** Finish the founder-requested `/report-find` follow-up slice by making the Facebook copy SKU-only, restoring the basket cap to `10`, safely blocking restored over-limit baskets, and explaining the Back-button workflow.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `components/report-find/ReportFindFormClient.tsx`
+  - moved the Facebook/share text onto a submit-time snapshot so the success-state preview/copy reflects the actual submitted location/date instead of live form edits.
+  - replaced the name-based share text with a SKU-only preview/copy flow, renamed the action to `Copy Facebook post`, added the inline `<details>` preview, and added the helper line clarifying that only plain-text SKUs are copied.
+  - restored the basket cap to `10`, removed the always-visible basket-limit helper, added the saved-basket over-limit warning/submit disable rule, and shortened the add-time full-basket message.
+  - added the explicit Penny List Back-button guidance in the intro box.
+  - fixed the prefill hydration race so a saved full basket now blocks extra prefill adds deterministically instead of showing a false success message.
+- `lib/constants.ts`
+  - changed `REPORT_FIND_BASKET_ITEM_LIMIT` from `30` back to `10` so the client and route share one source of truth again.
+- `lib/report-find-share.ts`
+  - added a pure share formatter that builds stable SKU-only Facebook text with location/date context and quantity suffixes only when quantity is greater than `1`.
+- `tests/report-find-batch.spec.ts`
+  - added coverage for the success-state preview/copy text, the restored valid `10`-item submit regression, and the restored over-limit basket warning/disable flow.
+- `tests/report-find-prefill.spec.ts`
+  - added the `11th` manual add rejection coverage and the prefill-at-cap rejection coverage.
+- `tests/report-find-share.test.ts`
+  - added exact-string unit coverage for the new share formatter.
+- `tests/smoke-critical.spec.ts`
+  - added smoke coverage for the Back-button guidance in the report-find explainer.
+
+### Summary
+
+- Facebook/share text on `/report-find` now copies clean plain text with formatted SKUs only, plus the submitted location/date line and PennyCentral CTA.
+- The basket is back to a hard `10`-item cap on both client and server, without advertising that cap in normal UI.
+- Older saved baskets above `10` are preserved, clearly warned, and blocked until the user trims them into separate batches.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run lint:colors` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npx playwright test tests/report-find-prefill.spec.ts tests/report-find-batch.spec.ts tests/smoke-critical.spec.ts --project=chromium-desktop-light --workers=1` ✅
+- `npx playwright test tests/report-find-prefill.spec.ts tests/report-find-batch.spec.ts tests/smoke-critical.spec.ts --project=chromium-mobile-light --workers=1` ✅
+- UI proof captured via one-off local Playwright script:
+  - artifacts: `reports/proof/2026-03-03-report-find-share-proof/`
+  - desktop proof: `reports/proof/2026-03-03-report-find-share-proof/report-find-success-desktop-light.png`
+  - mobile proof: `reports/proof/2026-03-03-report-find-share-proof/report-find-success-mobile-light.png`
+  - console: `reports/proof/2026-03-03-report-find-share-proof/console-errors.txt`
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Scope: report-find share/cap/preview hardening + targeted regression coverage
+- Push: pending at memory-write time
+
+---
+
 ## 2026-03-03 - Codex - Report Find Basket Submit Hotfix
 
 **Goal:** Restore the `/report-find` basket flow so multi-item baskets submit again and stop the blank draft `Item Name` field from blocking `Submit all`.
@@ -213,54 +268,6 @@
 
 - Branch: `dev`
 - Scope: docs/memory/skill update only
-- Push: not pushed
-
----
-
-## 2026-03-01 - Codex - Report Find Core-Loop CTR Remediation
-
-**Goal:** Strengthen `/report-find` so it better matches reporting intent, explains the submission path faster, and adds low-distraction internal links back into the core loop.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `app/report-find/layout.tsx`
-  - retitled metadata around the explicit "report a Home Depot penny item" search intent.
-  - tightened Open Graph and Twitter descriptions around the exact submission details users need.
-- `app/report-find/page.tsx`
-  - added breadcrumb continuity.
-  - replaced the thin intro with a server-rendered trust/speed/required-details section.
-  - added compact links back to `/penny-list` and `/guide` for users who still need context before submitting.
-- `components/report-find/ReportFindFormClient.tsx`
-  - rewrote the intro panel so it explains fast publication, trust expectations, and no-guarantee framing more directly.
-- `tests/smoke-critical.spec.ts`
-  - added smoke coverage for the new report-find heading, prep section, and internal links.
-- `tests/visual-smoke.spec.ts`
-  - updated the route heading expectation to the new H1.
-
-### Summary
-
-- `/report-find` now behaves more like a search-intent landing page instead of a thin form wrapper.
-- The page explains what users need, how fast reports surface, and why accuracy matters before they start typing.
-- Internal links now send uncertain users back to the live list or guide without turning submission into a secondary action.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run lint:colors` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `npm run ai:proof -- --mode=dev /report-find` ✅
-  - artifacts: `reports/proof/2026-03-01T11-17-35/`
-  - desktop proof: `report-find-light.png`, `report-find-dark.png`
-  - mobile proof: `report-find-mobile-390-light.png`, `report-find-mobile-390-dark.png`, `report-find-mobile-375-light.png`, `report-find-mobile-375-dark.png`
-  - console: `reports/proof/2026-03-01T11-17-35/console-errors.txt`
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Scope: report-find route + report form intro + smoke/visual assertions
 - Push: not pushed
 
 ---

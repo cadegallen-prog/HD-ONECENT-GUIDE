@@ -77,6 +77,11 @@ test.describe("critical smoke lane", () => {
       "href",
       "/penny-list"
     )
+    await expect(
+      page.getByText(
+        /Coming from the Penny List\? Use your browser Back button in this tab to return to the list and keep adding items before you submit\. Your basket stays here\./i
+      )
+    ).toBeVisible()
     await expect(page.getByRole("link", { name: /Read the full guide/i })).toHaveAttribute(
       "href",
       "/guide"
