@@ -7,9 +7,11 @@ test.describe("critical smoke lane", () => {
     await expect(
       page.getByRole("heading", {
         level: 1,
-        name: /Learn Home Depot penny items\. Check current community finds\./i,
+        name: /See live Home Depot penny finds before you make the trip\./i,
       })
     ).toBeVisible()
+    await expect(page.getByRole("link", { name: /Learn how it works/i }).first()).toBeVisible()
+    await expect(page.getByRole("link", { name: /Check the Penny List/i }).first()).toBeVisible()
   })
 
   test("critical route /penny-list loads", async ({ page }) => {
@@ -19,25 +21,17 @@ test.describe("critical smoke lane", () => {
     ).toBeVisible()
   })
 
-  test("guide hub shows worth-it filter scaffold", async ({ page }) => {
+  test("guide hub shows part 1 intro and chapter list", async ({ page }) => {
     await page.goto("/guide")
 
-    const worthItSection = page.locator("#worth-it-filter")
-
     await expect(
-      worthItSection.getByRole("heading", { level: 2, name: /Worth-It Filter/i })
+      page.getByRole("heading", { level: 2, name: /What are penny items\?/i })
     ).toBeVisible()
-
-    const lanes = ["Use", "Gift", "Donate", "Resell", "Skip"]
-    for (const lane of lanes) {
-      await expect(
-        worthItSection.getByRole("heading", { level: 3, name: new RegExp(`^${lane}$`) })
-      ).toBeVisible()
-    }
-
-    const cta = worthItSection.getByRole("link", { name: /Apply the in-store strategy/i })
-    await expect(cta).toBeVisible()
-    await expect(cta).toHaveAttribute("href", "/in-store-strategy")
+    await expect(page.getByText(/This page is Part 1\./i)).toBeVisible()
+    await expect(page.getByRole("heading", { level: 2, name: /Guide Chapters/i })).toBeVisible()
+    await expect(
+      page.getByRole("link", { name: /Clearance Lifecycle & Cadence/i }).first()
+    ).toHaveAttribute("href", "/clearance-lifecycle")
   })
 
   test("report-find page includes Back-button basket guidance", async ({ page }) => {

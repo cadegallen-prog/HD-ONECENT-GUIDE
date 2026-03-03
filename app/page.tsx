@@ -1,15 +1,14 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { BookOpen, ExternalLink, Users, Map } from "lucide-react"
-import {
-  COMMUNITY_MEMBER_COUNT_DISPLAY,
-  MEMBER_COUNT_BADGE_TEXT,
-  FACEBOOK_GROUP_URL,
-} from "@/lib/constants"
-import { TodaysFinds } from "@/components/todays-finds"
+import { BookOpen, List, Search } from "lucide-react"
+import { MEMBER_COUNT_BADGE_TEXT, FACEBOOK_GROUP_URL } from "@/lib/constants"
+import { HomePathSplit } from "@/components/home/HomePathSplit"
+import { HomeProofHero } from "@/components/home/HomeProofHero"
+import { HomeProofStrip } from "@/components/home/HomeProofStrip"
 import { getRecentFinds } from "@/lib/fetch-penny-data"
 import { RouteAdSlots } from "@/components/ads/route-ad-slots"
-// Ensure the homepage "Today's Finds" module reflects recent Supabase enrichment fixes without redeploys.
+
+// Ensure the homepage proof modules reflect recent Supabase enrichment fixes without redeploys.
 export const revalidate = 600 // 10 minutes
 
 export const metadata: Metadata = {
@@ -77,306 +76,93 @@ export default async function Home() {
         }}
       />
       <RouteAdSlots pathname="/" />
-      {/* ============================================
-          HERO SECTION
+      <HomeProofHero items={recentFinds} />
+      <HomePathSplit />
+      <HomeProofStrip items={recentFinds} />
 
-          Typography: Uses unified type scale
-          - H1: text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight
-          - Lead: text-lg sm:text-xl leading-relaxed
-          - Body: text-base leading-relaxed
-
-          Spacing: Unified section padding system
-          - py-12 sm:py-16 lg:py-20 for main sections
-          - Badge → H1: mt-4
-          - H1 → Lead: mt-3
-          - Lead → CTAs: mt-6
-          ============================================ */}
-      <section className="section-padding px-4 sm:px-6 bg-[var(--bg-page)]">
-        <div className="max-w-4xl mx-auto text-center">
-          {/* H1 - Unified type scale */}
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[var(--text-primary)] leading-tight">
-            Learn Home Depot penny items. Check current community finds.
-          </h1>
-
-          {/* Lead text */}
-          <p className="mt-3 text-lg sm:text-xl text-[var(--text-secondary)] leading-relaxed">
-            A penny item is clearance inventory that may ring at $0.01 in some stores. Finds are
-            submitted by shoppers from the {COMMUNITY_MEMBER_COUNT_DISPLAY} member Home Depot One
-            Cent Items Facebook community and organized here.
-          </p>
-
-          {/* CTAs - Primary first-action + demoted secondary path */}
-          <div className="mt-8 flex justify-center">
-            <Link
-              href="/guide"
-              className="btn-primary w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold shadow-md hover:bg-[var(--cta-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
-              aria-label="Start with the step-by-step guide"
-            >
-              <BookOpen className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
-              Start with the Guide
-            </Link>
-          </div>
-          <p className="mt-3 text-sm text-[var(--text-secondary)]">
-            Already read the guide?{" "}
-            <Link
-              href="/penny-list"
-              className="inline-flex items-center gap-1 text-[var(--link-default)] underline underline-offset-2 hover:text-[var(--link-hover)]"
-              aria-label="Browse the community penny list"
-            >
-              Browse Penny List
-            </Link>
-          </p>
-          <p className="mt-2 text-xs sm:text-sm text-[var(--text-muted)]">
-            {COMMUNITY_MEMBER_COUNT_DISPLAY} member community | Founder-led site |
-            Community-submitted reports
-          </p>
-        </div>
-      </section>
-
-      <TodaysFinds items={recentFinds} />
-
-      {/* ============================================
-          HOW IT WORKS SECTION
-          Scannable steps with unified typography
-          ============================================ */}
-      <section className="section-padding px-4 sm:px-6 bg-[var(--bg-page)]">
-        <div className="max-w-4xl mx-auto">
-          {/* Section header */}
-          <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug">
-              How Penny Hunting Works
-            </h2>
-            <p className="mt-2 text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed">
-              Home Depot markdown behavior is not random. It follows operational patterns you can
-              track, verify, and execute against.
-            </p>
-          </div>
-
-          {/* Steps grid */}
-          <div className="mb-6 rounded-xl border border-[var(--border-default)] bg-[var(--bg-elevated)] p-5">
-            <p className="text-[var(--text-secondary)] leading-relaxed">
-              Penny pricing is a final-stage inventory state, not a public sale campaign. Items move
-              through clearance endings until the system flags them for removal. That is why speed,
-              verification discipline, and location context matter more than luck. Use this
-              four-step model to avoid wasted trips and to focus on decisions that produce
-              repeatable results.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-            {/* Step 1 */}
-            <div className="rounded-xl border border-[var(--border-default)] bg-[var(--bg-elevated)] p-5">
-              <div className="w-12 h-12 rounded-full bg-[var(--bg-page)] dark:bg-[var(--bg-tertiary)] mb-3 flex items-center justify-center border border-[var(--border-default)]">
-                <span className="text-base font-bold text-[var(--cta-primary)]">1</span>
-              </div>
-              <h3 className="text-base font-semibold text-[var(--text-primary)] leading-snug">
-                Learn the Cycle
-              </h3>
-              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed">
-                Items commonly move through markdown endings before reaching $0.01. When you
-                understand stage progression and timing windows, you stop treating each store trip
-                as a gamble. The goal is to identify late-stage candidates, then validate in-store
-                with UPC-based checks.
-              </p>
-            </div>
-
-            {/* Step 2 */}
-            <div className="rounded-xl border border-[var(--border-default)] bg-[var(--bg-elevated)] p-5">
-              <div className="w-12 h-12 rounded-full bg-[var(--bg-page)] dark:bg-[var(--bg-tertiary)] mb-3 flex items-center justify-center border border-[var(--border-default)]">
-                <span className="text-base font-bold text-[var(--cta-primary)]">2</span>
-              </div>
-              <h3 className="text-base font-semibold text-[var(--text-primary)] leading-snug">
-                Scout First
-              </h3>
-              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed">
-                Use digital signals to build a focused shortlist before you leave home. App and web
-                inventory can narrow targets, but they are directional. Treat them as a planning
-                layer, then confirm with on-site scan behavior so you do not burn time on false
-                positives.
-              </p>
-            </div>
-
-            {/* Step 3 */}
-            <div className="rounded-xl border border-[var(--border-default)] bg-[var(--bg-elevated)] p-5">
-              <div className="w-12 h-12 rounded-full bg-[var(--bg-page)] dark:bg-[var(--bg-tertiary)] mb-3 flex items-center justify-center border border-[var(--border-default)]">
-                <span className="text-base font-bold text-[var(--cta-primary)]">3</span>
-              </div>
-              <h3 className="text-base font-semibold text-[var(--text-primary)] leading-snug">
-                Hunt Smart
-              </h3>
-              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed">
-                Prioritize likely zones based on current reset behavior, home-bay placement, and
-                neglected inventory signals. Efficiency beats volume. A disciplined route through
-                the store gives you more verified scans and fewer random checks in the same amount
-                of time.
-              </p>
-            </div>
-
-            {/* Step 4 */}
-            <div className="rounded-xl border border-[var(--border-default)] bg-[var(--bg-elevated)] p-5">
-              <div className="w-12 h-12 rounded-full bg-[var(--bg-page)] dark:bg-[var(--bg-tertiary)] mb-3 flex items-center justify-center border border-[var(--border-default)]">
-                <span className="text-base font-bold text-[var(--cta-primary)]">4</span>
-              </div>
-              <h3 className="text-base font-semibold text-[var(--text-primary)] leading-snug">
-                Checkout
-              </h3>
-              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed">
-                Verification and checkout behavior can vary by store and by item state. Stay calm,
-                follow store policy, and focus on clean verification steps rather than
-                confrontation. Process discipline protects your time and improves repeat success
-                rates over the long run.
-              </p>
-            </div>
-          </div>
-
-          {/* CTA link (mobile-only; desktop already has the hero CTA in view) */}
-          <div className="mt-8 text-center sm:hidden">
-            <Link
-              href="/guide"
-              className="inline-flex items-center gap-2 text-[var(--link-default)] font-medium hover:underline hover:text-[var(--link-hover)]"
-            >
-              Read the full guide →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="section-padding-sm px-4 sm:px-6 bg-[var(--bg-page)]">
-        <div className="max-w-4xl mx-auto rounded-xl border border-[var(--border-default)] bg-[var(--bg-elevated)] p-5 sm:p-6">
-          <h2 className="text-xl sm:text-2xl font-semibold text-[var(--text-primary)] leading-snug">
-            Why this site is structured this way
-          </h2>
-          <p className="mt-3 text-[var(--text-secondary)] leading-relaxed">
-            PennyCentral is built as a utility plus education system. The utility layer helps you
-            act quickly with live reports, filters, and store-aware targeting. The education layer
-            helps you make better decisions by explaining verification rules, clearance behavior,
-            and risk signals that reduce wasted trips. Both are necessary. Utility alone becomes
-            noisy; education alone becomes slow.
-          </p>
-          <p className="mt-3 text-[var(--text-secondary)] leading-relaxed">
-            That is why the homepage points you to three core routes: the Penny List for live
-            targeting, the Guide for structured process, and Report a Find for data quality. The
-            better the report quality, the stronger the list becomes for everyone. The stronger the
-            guide adherence, the fewer false assumptions people make at checkout.
-          </p>
-        </div>
-      </section>
-
-      {/* ============================================
-          TOOLS SECTION
-
-          Layout: Unified container + grid system
-          Typography: H2 + supporting text
-          Cards: card-interactive class for hover states
-          ============================================ */}
-      <section className="section-padding px-4 sm:px-6 bg-[var(--bg-page)]">
+      <section className="px-4 pb-16 sm:px-6 lg:pb-20 bg-[var(--bg-page)]">
         <div className="container-wide">
-          {/* Section header */}
-          <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug">
-              Tools
-            </h2>
-            <p className="mt-2 text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed">
-              Tools to help you plan trips and find penny items
-            </p>
-          </div>
-
-          {/* Tool cards grid - 2 tools */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-            {/* Read the Guide Card */}
-            <Link
-              href="/guide"
-              className="card-interactive group flex flex-col bg-[var(--bg-elevated)] rounded-xl p-6 border border-[var(--border-default)]"
-            >
-              <div className="w-12 h-12 rounded-xl bg-[var(--bg-page)] border border-[var(--border-default)] flex items-center justify-center mb-4">
-                <BookOpen className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
-              </div>
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
-                Read the Guide
-              </h3>
-              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed flex-grow">
-                Step-by-step tips for the full penny hunting cycle.
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)]">
+            <div className="rounded-[28px] border border-[var(--border-default)] bg-[var(--bg-elevated)] p-6 shadow-[var(--shadow-card)] sm:p-8">
+              <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[var(--text-muted)]">
+                How Penny Central helps
               </p>
-            </Link>
-
-            {/* Store Finder Card */}
-            <Link
-              href="/store-finder"
-              className="card-interactive group flex flex-col bg-[var(--bg-elevated)] rounded-xl p-6 border border-[var(--border-default)]"
-            >
-              <div className="w-12 h-12 rounded-xl bg-[var(--bg-page)] border border-[var(--border-default)] flex items-center justify-center mb-4">
-                <Map className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
-              </div>
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] leading-snug">
-                Store Finder Map
-              </h3>
-              <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed flex-grow">
-                Locate nearby Home Depot stores and plan your trips.
+              <h2 className="mt-3 text-3xl font-semibold leading-tight text-[var(--text-primary)]">
+                Proof first. Guide when you need context. Penny List when you already know the
+                drill.
+              </h2>
+              <p className="mt-4 text-base leading-relaxed text-[var(--text-secondary)]">
+                Use the homepage to answer the first question quickly: is there enough current proof
+                here to justify opening the list or learning the process? Once that is clear, the
+                rest of the site becomes easier to navigate.
               </p>
-            </Link>
-          </div>
-        </div>
-      </section>
+              <p className="mt-4 text-sm leading-relaxed text-[var(--text-secondary)]">
+                Need the trust details?{" "}
+                <Link
+                  href="/transparency"
+                  className="text-[var(--link-default)] underline underline-offset-4"
+                >
+                  Read transparency
+                </Link>
+                . Want the community loop that keeps the list useful?{" "}
+                <a
+                  href={FACEBOOK_GROUP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[var(--link-default)] underline underline-offset-4"
+                >
+                  See the Facebook group
+                </a>
+                .
+              </p>
+            </div>
 
-      {/* ============================================
-          COMMUNITY SECTION
-          Social proof + community CTA
-          ============================================ */}
-      <section className="section-padding px-4 sm:px-6 bg-[var(--bg-elevated)] dark:bg-[var(--bg-card)]">
-        <div className="max-w-3xl mx-auto text-center">
-          <div className="w-12 h-12 rounded-full bg-[var(--bg-page)] mx-auto mb-4 flex items-center justify-center border border-[var(--border-default)]">
-            <Users className="w-6 h-6 text-[var(--cta-primary)]" aria-hidden="true" />
-          </div>
-          <h2 className="text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug">
-            Join {COMMUNITY_MEMBER_COUNT_DISPLAY} Active Hunters
-          </h2>
-          <p className="mt-3 text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed max-w-xl mx-auto">
-            Join {COMMUNITY_MEMBER_COUNT_DISPLAY} active hunters sharing real-time finds,
-            verification tips, and store-specific clearance patterns. Get notified when penny waves
-            hit your area.
-          </p>
-          <a
-            href={FACEBOOK_GROUP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-primary mt-6 w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[48px] rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold shadow-md hover:bg-[var(--cta-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-card)]"
-          >
-            Join the Facebook Group
-            <ExternalLink className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
-          </a>
-        </div>
-      </section>
-
-      {/* ============================================
-          TRANSPARENCY + CONTACT SECTION
-          ============================================ */}
-      <section className="section-padding px-4 sm:px-6 bg-[var(--bg-page)]">
-        <div className="container-wide">
-          {/* Section header */}
-          <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-semibold text-[var(--text-primary)] leading-snug">
-              Transparency & Contact
-            </h2>
-            <p className="mt-2 text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed max-w-xl mx-auto">
-              PennyCentral is free to use. See exactly how the site is funded and where to contact
-              us for help.
-            </p>
+            <div className="grid gap-4 md:grid-cols-3">
+              {[
+                {
+                  icon: List,
+                  title: "Check live proof",
+                  body: "Use current list activity and SKU pages to decide whether the trip is worth your time.",
+                },
+                {
+                  icon: BookOpen,
+                  title: "Learn the cycle",
+                  body: "Use the guide when you need the markdown pattern, in-store reality, and the why behind penny items.",
+                },
+                {
+                  icon: Search,
+                  title: "Tighten the trip",
+                  body: "Once you already have target SKUs, layer in store planning instead of wandering the aisles blindly.",
+                },
+              ].map((step) => (
+                <article
+                  key={step.title}
+                  className="rounded-[24px] border border-[var(--border-default)] bg-[var(--bg-page)] p-5 shadow-[var(--shadow-card)]"
+                >
+                  <step.icon className="h-6 w-6 text-[var(--cta-primary)]" aria-hidden="true" />
+                  <h3 className="mt-4 text-xl font-semibold leading-snug text-[var(--text-primary)]">
+                    {step.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)] sm:text-base">
+                    {step.body}
+                  </p>
+                </article>
+              ))}
+            </div>
           </div>
 
-          {/* Transparency + contact CTAs */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-2xl mx-auto">
+          <div className="mt-6 rounded-[24px] border border-[var(--border-default)] bg-[var(--bg-page)] p-5 text-sm leading-relaxed text-[var(--text-secondary)] shadow-[var(--shadow-card)] sm:p-6">
+            Found something in-store after you check the list?{" "}
             <Link
-              href="/transparency"
-              className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 min-h-[48px] rounded-lg bg-[var(--cta-primary)] text-[var(--cta-text)] font-semibold shadow-md hover:bg-[var(--cta-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
+              href="/report-find"
+              className="font-semibold text-[var(--link-default)] underline underline-offset-4"
             >
-              Transparency
-            </Link>
-            <Link
-              href="/contact"
-              className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 min-h-[48px] rounded-lg border-2 border-[var(--border-default)] dark:border-[var(--border-strong)] bg-transparent text-[var(--text-primary)] font-semibold hover:bg-[var(--bg-elevated)] hover:border-[var(--border-strong)] dark:hover:bg-[var(--bg-elevated)] focus:outline-none focus:ring-2 focus:ring-[var(--cta-primary)] focus:ring-offset-2 dark:focus:ring-offset-[var(--bg-page)]"
-            >
-              Contact
-            </Link>
+              Report a find
+            </Link>{" "}
+            so the next shopper gets stronger proof, faster.
+            <span className="mt-3 block">
+              Use Store Finder only after you already know what SKUs you want to chase.
+            </span>
           </div>
         </div>
       </section>

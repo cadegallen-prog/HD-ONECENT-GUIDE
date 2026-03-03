@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Mar 3, 2026 (`/report-find` share + basket UX hardening verified locally)
+**Last updated:** Mar 3, 2026 (`S2` homepage proof front door verified locally from a clean worktree)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,17 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-03 (`S2 - Homepage Proof Front Door` shipped locally from clean worktree):** Rebuilt the homepage into a proof-first front door so first-time visitors see what Penny Central is, why it is real, and what to do next within the first screen.
+  - **What changed:**
+    - replaced the old centered guide-first homepage in `app/page.tsx` with a proof-first composition built from `HomeProofHero`, `HomePathSplit`, and `HomeProofStrip`.
+    - added `components/home/HomeProofHero.tsx` for the split hero, live-data stat cards, and proof-card fallback behavior.
+    - added `components/home/HomePathSplit.tsx` for the locked beginner-vs-returning-user route split.
+    - added `components/home/HomeProofStrip.tsx` for recent-find proof cards sourced from homepage data.
+    - updated `tests/smoke-critical.spec.ts` and `tests/visual-smoke.spec.ts` so the homepage assertions match the new focal point and CTA hierarchy; the stale `/guide` smoke assertion was also repaired to the current Part 1 intro + chapter list.
+    - synced the canonical site-recovery docs into this branch under `.ai/impl/` plus `.ai/topics/SITE_RECOVERY_CURRENT.md` because shared memory already referenced them while `origin/dev` did not contain them.
+  - **Why:** the homepage was still too bland, too generic, and too guide-first for the recovery program goals. This slice raises the proof layer, clarifies the two main routes, and gives the site a stronger first impression without widening scope into guide or Penny List rebuild work.
+  - **Status:** locally verified from clean worktree branch `codex/s2-homepage-proof-front-door-20260303` with passing `lint:colors`, `verify:fast`, `e2e:smoke`, targeted four-project `visual-smoke`, and Playwright proof at `reports/proof/2026-03-03T10-15-22/` and `reports/proof/2026-03-03T10-16-48/`. The next recovery slice is `S3 - Guide Core Rebuild`.
 
 - **2026-03-03 (`/report-find` share + basket UX hardening shipped locally):** Finished the founder-requested follow-up slice on top of the basket hotfix so the success-state copy is trustworthy again and the basket limit is safely back at `10`.
   - **What changed:**
@@ -2110,5 +2121,5 @@ From `.ai/ANALYTICS_WEEKLY_REVIEW.md`:
   - Store Finder is currently a supporting utility, not a front-door feature.
 - **Hydration diagnosis resolved:** the audited dev mismatch was caused by the Grow script bootstrap mutating `<head>` order before hydration. `S1` replaced that loader with a hydration-safe `next/script` pattern and added route-sweep coverage to keep the mismatch from returning silently.
 - **Hydration diagnosis status:** `S1` has now removed the Grow pre-hydration head mutation and added regression coverage for the audited routes.
-- **Implementation status:** `S0` complete (docs-only). `S1 - Hydration Stability` complete and verified. `S2 - Homepage Proof Front Door` is the next implementation slice.
+- **Implementation status:** `S0` complete (docs-only). `S1 - Hydration Stability` complete and verified. `S2 - Homepage Proof Front Door` is complete and locally verified from a clean worktree. `S3 - Guide Core Rebuild` is the next implementation slice.
 - **Code/runtime impact:** none in this session. No product route files were edited.

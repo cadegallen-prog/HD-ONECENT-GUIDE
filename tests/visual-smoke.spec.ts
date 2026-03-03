@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test"
 
 const routes = [
-  { path: "/", heading: "Learn Home Depot penny items. Check current community finds." },
+  { path: "/", heading: "See live Home Depot penny finds before you make the trip." },
   { path: "/penny-list", heading: "Home Depot Penny Items List (Live $0.01 Finds)" },
   { path: "/report-find", heading: "Report a Home Depot Penny Item" },
   { path: "/store-finder", heading: "Store Finder" },
@@ -45,6 +45,18 @@ test.describe("visual smoke (light/dark, mobile/desktop)", () => {
       await page.goto(path)
 
       await expect(page.getByRole("heading", { level: 1, name: heading })).toBeVisible()
+      if (path === "/") {
+        await expect(page.getByRole("link", { name: /Learn how it works/i }).first()).toBeVisible()
+        await expect(
+          page.getByRole("link", { name: /Check the Penny List/i }).first()
+        ).toBeVisible()
+        await expect(
+          page.getByRole("heading", {
+            level: 2,
+            name: /Choose the route that matches what you need next\./i,
+          })
+        ).toBeVisible()
+      }
 
       await page.evaluate(() => {
         const active = document.activeElement as HTMLElement | null
