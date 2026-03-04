@@ -233,3 +233,20 @@ Required behavior for future AI agents:
 Failure mode to avoid:
 
 - Tool-specific drift where one agent has critical context/tooling and others silently do not.
+
+## 18) Multi-Agent Simplicity Preference (Added 2026-03-04)
+
+Cade strongly prefers a low-friction multi-agent workflow over git purity theater.
+
+Required behavior for future AI agents:
+
+1. Default to the main repo folder on `dev`.
+2. Do not treat unrelated dirty files as an automatic blocker; inspect overlap first.
+3. Use the shared-memory writer lock for `.ai` continuity files instead of freezing on unrelated local changes.
+4. Do not create a separate worktree silently. Only do it when file overlap, long-running git operations, or branch-switching risk make the main folder unsafe, and explain the reason plainly.
+
+Failure modes to avoid:
+
+- freezing on harmless unrelated local edits
+- forcing Cade to manually clean git state just to let an agent continue
+- creating surprise worktrees or branch structures that increase founder confusion

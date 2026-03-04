@@ -4,6 +4,56 @@
 
 ---
 
+## 2026-03-04 - Codex - Overlap-First Multi-Agent Workflow Patch
+
+**Goal:** Stop false freezes in multi-agent sessions by changing the repo workflow from "any dirty worktree blocks work" to "inspect overlap first," while keeping shared-memory locking strict.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `AGENTS.md`
+  - changed the branch-hygiene workflow so dirty files trigger an overlap check instead of an automatic stop.
+  - codified that separate worktrees are optional, not default, and must not be created silently.
+- `README.md`
+  - aligned the branch-strategy workflow to the same overlap-first rule for dirty files and clarified that clean status is preferred, not mandatory, when unrelated carryover is disclosed.
+- `.ai/CRITICAL_RULES.md`
+  - replaced the hard-stop clean-worktree rule with an overlap-first dirty-worktree rule.
+  - clarified that separate worktrees are optional isolation tools and the main repo folder on `dev` is the default workflow.
+- `.ai/HANDOFF_PROTOCOL.md`
+  - updated handoff branch-hygiene wording so dirty session-end state must include overlap status, not just a generic blocker label.
+- `.ai/VERIFICATION_REQUIRED.md`
+  - aligned branch-hygiene proof wording to require carryover file list + overlap status + reason when a worktree is dirty.
+- `.ai/AI_ENABLEMENT_BLUEPRINT.md`
+  - updated the enablement non-negotiable from a hard clean-worktree gate to an overlap-first worktree gate.
+- `docs/skills/ship-safely.md`
+  - updated the skill to continue when dirty files are unrelated and only stop on true file overlap.
+- `docs/skills/single-writer-lock.md`
+  - updated the multi-agent workflow to default to the main repo folder on `dev` and treat separate worktrees as optional.
+- `PENNYCENTRAL_MASTER_CONTEXT.md`
+  - added the founder preference that multi-agent workflow must favor simplicity, overlap-first dirty-file checks, and no silent worktree creation.
+- `.ai/THREAD.md`, `.ai/STATE.md`
+  - updated continuity so future agents inherit the new workflow rule instead of rediscovering the frustration from chat.
+
+### Summary
+
+- Agents should now stop only for true file overlap, unclear ownership, or missing shared-memory lock.
+- Unrelated dirty files are no longer supposed to freeze the whole session.
+- Separate worktrees are still allowed, but they are now documented as optional isolation tools rather than the default answer.
+
+### Verification
+
+- `npm run ai:writer-lock:status` ✅
+- `npm run ai:writer-lock:claim -- codex "patch dirty-worktree policy for overlap-first multi-agent flow"` ✅
+- `npm run ai:memory:check` ✅
+- `npm run ai:checkpoint` ✅
+  - artifacts: `reports/context-packs/2026-03-04T07-48-59/`
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Scope: workflow-policy docs + shared-memory updates only
+
 ## 2026-03-04 - Codex - Branch/Worktree Canon Clarification
 
 **Goal:** Remove current repo-continuity confusion by restoring the missing root founder-context file, correcting stale shared-memory references, and documenting the verified branch/worktree topology in plain English.
@@ -155,62 +205,3 @@
 ### Next Steps
 
 - Dependabot PR triage (see plan file Follow-Up section) — merge low-risk PRs first, review zod 3->4 separately
-
-## 2026-03-03 - Codex - Site Recovery S2 Homepage Proof Front Door
-
-**Goal:** Ship the homepage recovery slice from a clean worktree so the site front door leads with proof, a clear focal point, and two obvious next paths instead of generic guide-first copy.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `app/page.tsx`
-  - replaced the centered guide-first homepage with a proof-first composition built around the new hero, path split, proof strip, and a compact closing explainer.
-  - removed the old `TodaysFinds`, tools, community CTA, and transparency/contact homepage sections that were diluting the first screen.
-- `components/home/HomeProofHero.tsx`
-  - added a split hero with live-data stat cards, the locked two-CTA hierarchy, a proof card that can show real recent finds, and a fallback proof state when recent data is unavailable.
-- `components/home/HomePathSplit.tsx`
-  - added the beginner-vs-returning-user route split, while keeping `/report-find` and `/store-finder` demoted to supporting links.
-- `components/home/HomeProofStrip.tsx`
-  - added a recent-find proof grid sourced from homepage data and avoided duplicating the hero item when enough proof cards are available.
-- `tests/smoke-critical.spec.ts`
-  - updated the homepage heading assertions for the new front door.
-  - repaired the stale `/guide` smoke check so it now matches the current Part 1 intro + chapter list that actually renders on the guide hub.
-- `tests/visual-smoke.spec.ts`
-  - updated the homepage heading and added homepage CTA/path-split assertions across desktop/mobile light/dark runs.
-- `.ai/impl/site-recovery-program.md`
-  - synced the canonical site-recovery parent plan into this clean worktree because shared memory already referenced it but `origin/dev` did not contain it.
-- `.ai/impl/site-recovery-s1-hydration-stability.md`
-  - synced the prerequisite slice doc into this clean worktree for continuity.
-- `.ai/impl/site-recovery-s2-homepage-proof-front-door.md`
-  - synced the homepage slice plan into this clean worktree so the implemented slice has its canonical repo path.
-- `.ai/impl/site-recovery-s3-guide-core-rebuild.md`
-  - synced the next planned slice doc into this clean worktree so the next step is durable.
-- `.ai/topics/SITE_RECOVERY_CURRENT.md`
-  - synced the current-state audit into this clean worktree so the recovery context survives past chat history.
-- `.ai/plans/INDEX.md`
-  - synced the planning registry bridge so the copied `.ai/impl` recovery docs are discoverable from the plan index again.
-
-### Summary
-
-- The homepage now opens with a proof-first split layout that tells visitors what Penny Central is and gives them two clear choices: learn the system or open the live Penny List.
-- Real recent-find proof cards now sit near the top of the page when recent data is available, while the fallback state still keeps the front door specific and useful when recent data is sparse.
-- The clean worktree now also contains the canonical site-recovery docs that the shared memory layer already referenced, so future agents can continue from repo files instead of chat-only context.
-
-### Verification
-
-- `python C:\\Users\\cadeg\\.codex\\skills\\pc-scope-guard\\scripts\\scope_guard.py` ✅
-- `npm run lint:colors` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `$env:PLAYWRIGHT_BASE_URL='http://127.0.0.1:3002'; npx playwright test tests/visual-smoke.spec.ts --project=chromium-desktop-light --project=chromium-desktop-dark --project=chromium-mobile-light --project=chromium-mobile-dark --workers=1` ✅
-- `npx tsx scripts/ai-proof.ts /` ✅
-  - artifacts: `reports/proof/2026-03-03T10-15-22/`
-- `npx tsx scripts/ai-proof.ts --mode=test /` ✅
-  - artifacts: `reports/proof/2026-03-03T10-16-48/`
-
-### Branch Hygiene
-
-- Branch: `codex/s2-homepage-proof-front-door-20260303`
-- Scope: homepage recovery slice + smoke maintenance + canonical site-recovery doc sync
-- Push: not pushed

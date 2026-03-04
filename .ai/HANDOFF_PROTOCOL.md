@@ -13,7 +13,7 @@
 3. **Close git loop (branch hygiene)**
    - Work on `dev` unless an explicit emergency override is approved.
    - Record commit SHA(s) and push status.
-   - Capture `git status --short` at session end (clean expected). If dirty, list carryover files and reason.
+   - Capture `git status --short` at session end (clean preferred). If dirty, list carryover files, reason, and whether they overlapped the finished objective.
 4. **Update persistent memory**
    - If multiple agents/sessions are active, hold shared-memory single-writer lock before editing:
      - `npm run ai:writer-lock:claim -- <agent-name> "<task>"`
@@ -131,4 +131,4 @@ If it is not in `.ai/`, assume it will be lost.
 - No "done" claim without verification proof paths.
 - No handoff without explicit next step.
 - No memory update means no durable completion.
-- No silent carryover: dirty session-end worktree must be disclosed with file list + reason.
+- No silent carryover: dirty session-end worktree must be disclosed with file list, reason, and overlap status.

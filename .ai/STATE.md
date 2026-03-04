@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Mar 4, 2026 (branch/worktree canon clarified; root founder context restored)
+**Last updated:** Mar 4, 2026 (overlap-first multi-agent workflow rule codified)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,15 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-04 (Workflow policy patch: overlap-first dirty-worktree rule + no-silent-worktree default):** Replaced the repo's false-stop git behavior with an overlap-first rule so multiple agents can work without freezing on unrelated local changes.
+  - **What changed:**
+    - updated `AGENTS.md`, `README.md`, `.ai/CRITICAL_RULES.md`, `.ai/HANDOFF_PROTOCOL.md`, `.ai/VERIFICATION_REQUIRED.md`, `.ai/AI_ENABLEMENT_BLUEPRINT.md`, `docs/skills/ship-safely.md`, and `docs/skills/single-writer-lock.md` so dirty worktrees are inspected for file overlap before blocking.
+    - codified that shared-memory `.ai` files still require the writer lock, but unrelated dirty feature files are not an automatic blocker.
+    - codified that the main repo folder on `dev` is the default workflow and separate worktrees are optional isolation tools, not the default path.
+    - added the founder preference to `PENNYCENTRAL_MASTER_CONTEXT.md` and updated continuity memory in `.ai/THREAD.md` + `.ai/SESSION_LOG.md`.
+  - **Why:** the old hard-stop dirty-worktree rule was causing avoidable freezes in multi-agent sessions and increasing founder frustration without improving actual safety.
+  - **Status:** docs-only workflow patch; runtime test lanes are N/A. Memory/proof lanes required by docs-only policy passed, with checkpoint artifacts under `reports/context-packs/2026-03-04T07-48-59/`.
 
 - **2026-03-04 (Canon clarity patch: root founder context restored + branch/worktree topology documented):** Repaired continuity drift so the repo's actual branch/worktree model is explicit again and the canonical read order no longer points at a missing file.
   - **What changed:**

@@ -4,13 +4,15 @@
 
 1. `git checkout dev && git pull origin dev`
 2. Run `git status --short` before new work.
-3. If dirty, close carryover first (commit/push that scope) or stop and get one explicit scope decision from Cade.
+3. If dirty, inspect overlap first.
+   - If dirty files are unrelated to your objective, leave them alone and continue.
+   - If dirty files overlap the files you need to edit, close carryover first or get one explicit scope decision from Cade.
 4. Make the smallest possible change for one objective.
 5. Stage intentionally (`git add <paths>`) and check staged scope: `git diff --cached --name-only`.
 6. Run verification (below).
 7. Commit with a clear message.
 8. Push `dev`.
-9. Re-run `git status --short`; clean is the expected end state before starting the next objective.
+9. Re-run `git status --short`; clean is preferred before starting the next objective. If unrelated carryover remains, disclose the exact files and confirm they did not overlap your finished scope.
 10. Promote to `main` only after required checks pass.
 
 **Never** force-push or rewrite history. Do not stack unrelated local changes across objectives.

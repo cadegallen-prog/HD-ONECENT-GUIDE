@@ -54,7 +54,7 @@ These are enforced elsewhere, but enablement changes must keep them intact:
 - **Port 3001 rule:** never kill it unless explicitly asked; reuse if running.
 - **Color rule:** no raw Tailwind palette colors; use tokens/CSS variables.
 - **Dev -> main promotion workflow:** implement on `dev`, then promote verified changes to `main`.
-- **Clean-worktree gate:** start/end each objective with `git status --short`; do not stack unrelated carryover changes.
+- **Overlap-first worktree gate:** start/end each objective with `git status --short`; do not stack unrelated carryover into the current objective, but do not hard-stop on unrelated dirty files.
 - **No surprise deps/env vars:** if needed, justify and document.
 
 ---

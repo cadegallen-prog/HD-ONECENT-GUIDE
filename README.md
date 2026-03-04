@@ -281,7 +281,11 @@ Use this if the session is policy/process/governance heavy:
 **Workflow:**
 
 1. `git checkout dev && git pull origin dev`
-2. Run `git status --short` before new work. If dirty, close carryover first (commit/push or explicit blocker resolution) before starting another objective.
+2. Run `git status --short` before new work.
+   - If clean, continue.
+   - If dirty, inspect overlap with the intended files first.
+   - If dirty files are unrelated to the current objective, leave them alone and continue.
+   - If dirty files overlap the files you need to edit, or ownership is unclear, resolve carryover first.
 3. If more than one agent/session is active, claim shared-memory lock before editing `.ai/HANDOFF.md`, `.ai/STATE.md`, `.ai/SESSION_LOG.md`, `.ai/BACKLOG.md`:
    - `npm run ai:writer-lock:claim -- <agent-name> "<task>"`
    - `npm run ai:writer-lock:status`
@@ -290,7 +294,7 @@ Use this if the session is policy/process/governance heavy:
 5. Stage intentionally (`git add <paths>`) and verify staged scope with `git diff --cached --name-only`.
 6. Run `npm run ai:memory:check` + `npm run verify:fast` (and `npm run e2e:smoke` for route/form/API/navigation/UI-flow changes).
 7. Commit/push `dev`.
-8. Re-run `git status --short`; clean is expected before starting the next task.
+8. Re-run `git status --short`; clean is preferred before starting the next task. If unrelated carryover remains, disclose the exact files and confirm they did not overlap the finished objective.
 9. Promote to `main` only after review and all required checks pass.
 
 ---

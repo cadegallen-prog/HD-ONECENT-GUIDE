@@ -194,7 +194,9 @@ Workflow:
 1. `git checkout dev && git pull origin dev`
 2. Run `git status --short` before starting:
    - If clean, continue.
-   - If dirty, do **not** start a new objective until carryover changes are closed (commit/push) or explicitly resolved with you (Cade).
+   - If dirty, inspect overlap with the current objective before deciding to stop.
+   - If dirty files are unrelated to the current objective, leave them alone and continue.
+   - If dirty files overlap the files you need to edit, or ownership is unclear, close carryover first or get one explicit scope decision from you (Cade).
 3. Make scoped changes on `dev` for one objective at a time.
 4. Stage narrowly (`git add <paths>`) and verify staged scope with `git diff --cached --name-only`.
 5. **Run `npm run ai:memory:check` + `npm run verify:fast` before pushing**
@@ -202,8 +204,8 @@ Workflow:
 7. **Use Playwright for UI changes** (screenshots required)
 8. Commit and push `dev`
 9. Run `git status --short` after push:
-   - Clean is the expected end state.
-   - If still dirty, report exact carryover files and why before starting another task.
+   - Clean is preferred.
+   - If still dirty, report exact carryover files, confirm whether they overlapped the finished objective, and explain why they were left untouched.
 10. Promote to `main` only after required checks pass
 
 Do not implement directly on `main` unless you (Cade) explicitly request an emergency hotfix.
@@ -284,7 +286,11 @@ Never kill port 3001 unless user asks.
   - `npm run ai:writer-lock:release -- <agent-name>`
 - ❌ If lock is active for another owner, do not edit shared memory files.
 - ✅ Stale locks can be reclaimed after heartbeat timeout (default 30m).
-- ✅ Parallel coding remains allowed for isolated feature files (prefer separate git worktrees).
+- ✅ Parallel coding remains allowed for isolated feature files.
+- ✅ Separate git worktrees are optional, not default.
+- ✅ Default operating mode is the main repo folder on `dev`.
+- ✅ Only create a separate worktree when file overlap, long-running git operations, or branch-switching risk make the main folder unsafe.
+- ✅ If a separate worktree is used, state why in a progress update and record it in `.ai/SESSION_LOG.md`.
 
 ---
 

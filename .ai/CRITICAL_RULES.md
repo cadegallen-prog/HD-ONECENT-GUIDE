@@ -206,9 +206,9 @@ if (Test-Path $local) {
 
 ---
 
-## Rule #7: Clean Worktree + Scoped Commit Loop (Dev Branch)
+## Rule #7: Overlap-First Dirty Worktree Check (Dev Branch)
 
-**Purpose:** Prevent stacked local changes, mixed-scope commits, and hidden carryover drift between sessions.
+**Purpose:** Prevent stacked local changes and hidden carryover drift without freezing harmless multi-agent work.
 
 **Requirements:**
 
@@ -216,15 +216,19 @@ if (Test-Path $local) {
   - `git checkout dev`
   - `git pull origin dev`
   - `git status --short`
-- If `git status --short` is non-empty and changes are outside the current objective, **STOP** and close carryover first:
-  - Option A: finish verification and commit/push the carryover scope to `dev`
-  - Option B: ask Cade for one explicit scope decision when ownership/scope is ambiguous
+- If `git status --short` is non-empty, perform an overlap check before blocking:
+  - Safe to continue: dirty files are unrelated to the current objective and you are not editing shared-memory files owned by another active agent
+  - Must stop/rescope: dirty files overlap the files you need to edit, the scope owner is unclear, or you need shared-memory files without holding the writer lock
+- When continuing with unrelated dirty files:
+  - leave them untouched
+  - keep your staged scope narrow
+  - disclose the carryover file list in the handoff/final report
 - Before each commit, verify staged scope:
   - `git diff --cached --name-only`
 - After push, run `git status --short` again:
-  - clean is expected
-  - if still dirty, list remaining files and mark status as `BLOCKED`/carryover in handoff
-- Do not start a new backlog item with unrelated dirty local changes.
+  - clean is preferred
+  - if still dirty, list remaining files and explicitly state whether they overlapped the finished objective
+- Do not edit another agent's in-progress files based on assumption.
 
 **Quick command loop (PowerShell):**
 
@@ -265,8 +269,11 @@ git status --short
 
 **Parallelism rule:**
 
-- Parallel coding is allowed for isolated feature files (prefer separate git worktrees).
+- Parallel coding is allowed for isolated feature files.
 - Single-writer lock applies only to shared-memory continuity files.
+- Separate worktrees are optional, not default.
+- Default operating mode is the main repo folder on `dev`.
+- Do not create a separate worktree silently; state the isolation reason first and record it in `.ai/SESSION_LOG.md` if the work is meaningful.
 
 ---
 

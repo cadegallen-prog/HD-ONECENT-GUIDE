@@ -36,7 +36,7 @@ To claim “done” on a meaningful change, provide:
 9. **Branch hygiene evidence** (required for implementation/workflow sessions):
    - branch used (normally `dev`)
    - commit SHA(s) + push status (or explicit "not pushed" reason)
-   - `git status --short` at session end (clean expected; if dirty, list carryover files + blocker reason)
+   - `git status --short` at session end (clean preferred; if dirty, list carryover files + overlap status + reason)
    - if concurrent agents were active, include shared-memory lock evidence (`ai:writer-lock:status` output and owner)
 
 If the change is truly docs-only and no code paths changed, you can say “Docs-only change; gates not run” — but do not claim the system is green.
@@ -136,6 +136,7 @@ Use the screenshots as the “before/after” proof when applicable.
 - Commit SHA(s):
 - Push status:
 - `git status --short` at session end:
+  - If dirty: list carryover files, overlap status, and reason
 - Shared-memory lock status (if concurrent agents active):
 
 **Bundle (preferred):**

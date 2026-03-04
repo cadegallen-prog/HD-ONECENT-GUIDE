@@ -18,7 +18,7 @@ Three continuity facts now matter together:
 
 1. **Site Recovery Program** (`.ai/impl/site-recovery-program.md`) is still the main product lane, and `S3 - Guide Core Rebuild` is the next implementation slice on `dev`.
 2. **Manual data pipeline hardening** remains important: `manual:enrich` and `manual:cade-fast-track` are intentionally separate workflows and must stay that way.
-3. **Branch/worktree clarity is now explicit**: `dev` is the canonical integration branch, a separate Sentry worktree exists for `feature/sentry-spam-fix-and-autofix`, and `develop` still exists only as a stale side branch that should not silently become the default target.
+3. **Branch/worktree clarity is now explicit**: `dev` is the canonical integration branch, a separate Sentry worktree exists for `feature/sentry-spam-fix-and-autofix`, `develop` still exists only as a stale side branch, and dirty-file checks are now overlap-first instead of hard-stop by default.
 
 ### Where we just were
 
@@ -31,7 +31,7 @@ In this session chain, we verified:
 - `dev` is ahead of `develop` by 4 commits
 - the Sentry feature branch is based on `develop`, not `dev`
 
-The continuity fix was to restore the missing root founder-context file, correct the stale `S2` -> `S3` recovery reference, and persist the verified branch/worktree reality in shared memory so future agents stop guessing.
+The continuity fix was to restore the missing root founder-context file, correct the stale `S2` -> `S3` recovery reference, persist the verified branch/worktree reality in shared memory, and then patch the workflow rules so future agents stop freezing on unrelated dirty files.
 
 ### Where the next link goes
 
@@ -44,6 +44,10 @@ Next sessions should prioritize:
 3. **Treat branch-topology cleanup as its own explicit git objective.**
    - Do not merge, delete, or re-target `develop`/Sentry branches based on assumption.
    - If Cade wants branch cleanup, start from the verified topology captured in `STATE.md` and `SESSION_LOG.md`.
+4. **Use overlap-first dirty-file checks in multi-agent sessions.**
+   - Unrelated dirty files are not an automatic blocker.
+   - Shared-memory files still require the writer lock.
+   - Separate worktrees are optional isolation tools, not the default workflow.
 
 The thread connection: founder trust depends on continuity being understandable. Clarifying branch/worktree reality reduces future context loss the same way data-path clarification reduced manual workflow errors.
 
@@ -61,6 +65,8 @@ If you make a change that doesn't serve the surface's stated job, or if you can'
 **Manual workflow contract is part of continuity.** Future agents should not assume `/manual` is allowed to create Penny List rows. Creation is founder-only fast-track behavior via `/manual:cade` / `manual:cade-fast-track`.
 
 **Branch policy is also part of continuity now.** Use `dev` as the default implementation lane. `develop` exists but currently lags `dev`; do not treat it as canon unless Cade explicitly changes the policy.
+
+**Multi-agent workflow preference is part of continuity now.** Default to the main repo folder on `dev`, inspect dirty-file overlap before blocking, and use separate worktrees only when there is a stated isolation reason.
 
 ---
 

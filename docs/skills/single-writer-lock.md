@@ -51,7 +51,9 @@ npm run ai:writer-lock:release -- --force
 
 ## Merge model with multiple worktrees
 
-1. Each agent works in its own worktree/branch.
-2. One integration owner merges verified branches into `dev`.
-3. Promote `dev` to `main` after required checks.
-4. Do not auto-merge unrelated agent branches without explicit merge instruction.
+1. Default to the main repo folder on `dev`.
+2. Use the writer lock for shared-memory files and an overlap check for dirty files before creating extra git structure.
+3. Create a separate worktree only when file overlap, long-running git operations, or branch-switching risk make the main folder unsafe.
+4. One integration owner merges verified branches into `dev`.
+5. Promote `dev` to `main` after required checks.
+6. Do not auto-merge unrelated agent branches without explicit merge instruction.
