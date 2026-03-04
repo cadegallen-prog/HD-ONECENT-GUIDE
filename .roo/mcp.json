@@ -28,7 +28,8 @@
       "args": ["-y", "@upstash/context7-mcp"],
       "env": {
         "DEFAULT_MINIMUM_TOKENS": ""
-      }
+      },
+      "alwaysAllow": ["resolve-library-id", "query-docs"]
     },
     "youtube": {
       "command": "npx",
