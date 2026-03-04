@@ -4,6 +4,35 @@
 
 ---
 
+## 2026-03-03 - Claude Code (Sonnet 4.6) - Branch Cleanup & Consolidation
+
+**Goal:** Clean up git branch/worktree mess on dev — commit 38 uncommitted files, remove orphaned worktrees, delete 14 stale local branches, 4 stale remote branches, close PR #143.
+
+**Status:** ✅ Implemented
+
+### Changes
+
+- Removed 2 orphaned worktrees (s2-homepage-proof, release-main) — git records pruned; s2-homepage-proof folder has a few locked log files (harmless, git-unaware)
+- Committed 38 uncommitted files as 4 logical commits on dev
+- Resolved rebase conflicts: test heading strings (kept remote's correct headings), BACKLOG.md (kept local newer version), added `/guide` route to visual-smoke
+- Pushed rebased dev to origin (dev advanced `fdbc857` → `3a3a11b`)
+- Synced local main with origin/main (fast-forward, 3 new commits)
+- Deleted 14 stale local branches (pr-76 through pr-92, dead features, rescues)
+- Deleted 4 stale remote branches (rescue, pr-84, ci-tiered-verification, claude/affiliate-program-analysis)
+- Closed PR #143 as superseded with explanatory comment
+- Added `archive/root-level-orphans/experimental_scraper/` and `archive/root-level-orphans/backups-legacy-scripts/` to `.gitignore` (37MB + PII patterns)
+
+**Deviations from plan:**
+
+- `backups-legacy-scripts/` scripts blocked by security scanner (PII patterns in content/filename) — gitignored entire directory instead of committing
+- `s2-homepage-proof` folder has 3 locked log files remaining (a process holds them) — git has no record of it; cleanup is harmless deferred work
+
+### Next Steps
+
+- Dependabot PR triage (see plan file Follow-Up section) — merge low-risk PRs first, review zod 3→4 separately
+
+---
+
 ## 2026-03-03 - Codex - Site Recovery S2 Homepage Proof Front Door
 
 **Goal:** Ship the homepage recovery slice from a clean worktree so the site front door leads with proof, a clear focal point, and two obvious next paths instead of generic guide-first copy.
