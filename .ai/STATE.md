@@ -12,6 +12,13 @@ Every AI session must update this after meaningful work.
 
 ## Current Sprint (Last 7 Days)
 
+- **2026-03-04 (Roo research carryover rule documented):** Clarified that `.roo/**` research artifacts are optional external-tool inputs, not suspicious blockers or repo canon.
+  - **What changed:**
+    - updated `AGENTS.md` and `.ai/CRITICAL_RULES.md` so future agents treat `.roo/research/**` and `.roo/mcp.json` as normal carryover unless the current task actually overlaps them.
+    - updated continuity memory in `.ai/THREAD.md`, `.ai/STATE.md`, and `.ai/SESSION_LOG.md` so the founder's intent is explicit: Roo research is allowed to be useful, useless, ignored, or deleted later without drama.
+  - **Why:** Cade is intentionally using free Roo/GLM credits to explore possible improvement ideas. That research should lighten higher-skill work, not create false blockers or workflow anxiety.
+  - **Status:** docs-only continuity patch; runtime test lanes are N/A. Required memory lanes passed with `npm run ai:memory:check` and `npm run ai:checkpoint` (`reports/context-packs/2026-03-04T09-13-54/`).
+
 - **2026-03-04 (`S3B - /guide` long-form implementation shipped):** Rebuilt `/guide` into the canonical one-page beginner narrative so the site now has one primary teaching spine instead of a hub that pushes users back into route hopping.
   - **What changed:**
     - replaced the old `/guide` hub posture in `app/guide/page.tsx` with a seven-section long-form guide that matches `.ai/topics/GUIDE_CORE_CONTENT_MAP.md`, keeps SSR-first rendering, and links out to supporting routes only when readers want deeper detail.

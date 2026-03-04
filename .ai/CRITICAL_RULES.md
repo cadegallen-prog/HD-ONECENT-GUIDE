@@ -219,6 +219,10 @@ if (Test-Path $local) {
 - If `git status --short` is non-empty, perform an overlap check before blocking:
   - Safe to continue: dirty files are unrelated to the current objective and you are not editing shared-memory files owned by another active agent
   - Must stop/rescope: dirty files overlap the files you need to edit, the scope owner is unclear, or you need shared-memory files without holding the writer lock
+- `.roo/**` research files and `.roo/mcp.json` are normally optional external-tool carryover:
+  - do not treat them as blockers unless the current objective overlaps those files
+  - they are not canonical memory or product source of truth
+  - they may be used as optional research input and ignored or deleted later if they are not useful
 - When continuing with unrelated dirty files:
   - leave them untouched
   - keep your staged scope narrow

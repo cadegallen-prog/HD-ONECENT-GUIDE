@@ -53,6 +53,7 @@ Next sessions should prioritize:
    - If Cade wants branch cleanup, start from the verified topology captured in `STATE.md` and `SESSION_LOG.md`.
 5. **Use overlap-first dirty-file checks in multi-agent sessions.**
    - Unrelated dirty files are not an automatic blocker.
+   - `.roo/**` research files and `.roo/mcp.json` are usually optional carryover, not blockers.
    - Shared-memory files still require the writer lock.
    - Separate worktrees are optional isolation tools, not the default workflow.
 
@@ -78,6 +79,8 @@ If you make a change that doesn't serve the surface's stated job, or if you can'
 **Supporting routes must be repositioned, not gutted.** `S3C1` and `S3C2` should add canonical-guide framing before unique detail, not remove all useful reference content.
 
 **Standalone visual smoke now has a known shell rule.** In this environment, use `npx cross-env ...` for one-off Playwright build/test commands instead of assuming `cross-env` is directly on PATH.
+
+**Roo research files are optional input, not canon.** `.roo/research/**` and `.roo/mcp.json` may exist because Cade is using free Roo/GLM credits to probe for possible improvements. Treat that material as optional scratch research: useful when it helps the current objective, safe to ignore when it does not, and never a blocker unless the task actually overlaps those files.
 
 **Manual workflow contract is part of continuity.** Future agents should not assume `/manual` is allowed to create Penny List rows. Creation is founder-only fast-track behavior via `/manual:cade` / `manual:cade-fast-track`.
 

@@ -125,6 +125,10 @@ If any field is missing or contradictory, do not edit files.
 - Verification contract: `.ai/VERIFICATION_REQUIRED.md`
 - Constraints + approvals: `.ai/CONSTRAINTS.md`, `.ai/DECISION_RIGHTS.md`, `.ai/CONTRACT.md`
 - Historical records (read only when asked): `.ai/audits/**`, `archive/**`
+- Optional external-tool research workspace: `.roo/research/**`, `.roo/mcp.json`
+  - Treat these as non-canonical scratch/research inputs from Roo Code or similar tools.
+  - They are not blockers by default and do not override repo canon.
+  - Use them only when the current objective benefits from extra research; otherwise ignore them.
 
 ---
 
@@ -197,6 +201,7 @@ Workflow:
    - If dirty, inspect overlap with the current objective before deciding to stop.
    - If dirty files are unrelated to the current objective, leave them alone and continue.
    - If dirty files overlap the files you need to edit, or ownership is unclear, close carryover first or get one explicit scope decision from you (Cade).
+   - `.roo/**` research files and `.roo/mcp.json` are usually optional carryover, not blockers. Treat them as overlap only if the current task actually needs those files.
 3. Make scoped changes on `dev` for one objective at a time.
 4. Stage narrowly (`git add <paths>`) and verify staged scope with `git diff --cached --name-only`.
 5. **Run `npm run ai:memory:check` + `npm run verify:fast` before pushing**

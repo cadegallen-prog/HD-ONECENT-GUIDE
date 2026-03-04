@@ -4,6 +4,41 @@
 
 ---
 
+## 2026-03-04 - Codex - Roo Research Carryover Rule
+
+**Goal:** Stop future agents from overreacting to Roo Code research files by documenting that `.roo/**` is optional carryover unless a task actually needs it.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `AGENTS.md`
+  - added an explicit location-map note that `.roo/research/**` and `.roo/mcp.json` are optional external-tool research inputs, not canonical memory.
+  - added a dirty-worktree note that `.roo/**` usually counts as unrelated carryover unless the current task overlaps it.
+- `.ai/CRITICAL_RULES.md`
+  - added the same overlap-first clarification so future agents do not treat Roo research as a blocker by default.
+- `.ai/THREAD.md`, `.ai/STATE.md`
+  - recorded the founder intent: Roo/GLM research is a low-cost exploration lane that can produce useful ideas or disposable noise, and either outcome is acceptable.
+
+### Summary
+
+- `.roo/**` is now explicitly documented as optional research carryover, not canon and not a blocker by default.
+- Future agents may use Roo research when it helps, ignore it when it does not, and avoid turning it into workflow drama.
+- This patch exists to protect founder time while still making use of free research credits.
+
+### Verification
+
+- `npm run ai:writer-lock:claim -- codex "record Roo research carryover rule in canon and memory"` ✅
+- `npm run ai:memory:check` ✅
+- `npm run ai:checkpoint` ✅
+  - artifacts: `reports/context-packs/2026-03-04T09-13-54/`
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Scope: docs-only workflow/memory clarification
+- Push: not pushed
+
 ## 2026-03-04 - Codex - `/guide` Long-Form Rebuild (`S3B`)
 
 **Goal:** Turn `/guide` into the canonical one-page beginner guide so users can learn the full flow without bouncing across a hub and multiple chapter routes.
@@ -175,41 +210,3 @@
 
 - Branch: `dev`
 - Scope: root context restore + shared-memory clarification only
-
-## 2026-03-04 - GitHub Copilot (GPT-5.3-Codex) - Manual Workflow Split + Founder Fast-Track Validation
-
-**Goal:** Separate enrichment-only behavior from founder direct-submit behavior, correct the bad-state DAP row, and validate no-credit founder upload path end-to-end.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `scripts/manual-cade-fast-track.ts`
-  - fixed keyed payload parsing so SKU-keyed JSON maps are processed as item lists.
-  - fixed SKU validation handling to match `validateSku(...)` return contract (`error`-based), preventing all-valid payloads from being rejected.
-- Supabase (`public."Penny List"`)
-  - corrected DAP row (`SKU 1006465750`, id `ffbbf36b-e5d3-4010-b47d-b34712db960c`) `store_city_state` from `Manual Add` to `Georgia`.
-- Founder fast-track execution
-  - ran `manual:cade-fast-track` on founder-provided payload.
-  - result: `cache_upserted=14`, `penny_list_created=14`, `penny_rows_enriched_by_cache=14`, `penny_rows_failed=0`.
-  - report: `reports/manual-cade-fast-track/2026-03-04T03-34-04.996Z.json`.
-- Documentation updates
-  - updated `docs/ENRICHMENT_CANON.md`, `docs/SCRAPING_COSTS.md`, `docs/FOUNDER-COMMAND-CENTER.md`, and added `docs/skills/manual-enrichment-fast-track-split.md`.
-
-### Summary
-
-- `/manual` is now documented as enrich-only for existing rows.
-- `/manual:cade` is documented as founder direct submission path with no SerpAPI dependency.
-- Founder path now reliably preserves scrape credits when pre-scraped payloads are available.
-
-### Verification
-
-- `npm run typecheck` ✅
-- `npm run verify:fast` ✅
-- Supabase row checks ✅ (DAP state corrected; 14 created fast-track rows confirmed `Georgia`, `complete`, quantity `0`)
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Scope: manual workflow scripts + docs/memory updates + founder data operation
-- Push: not pushed
