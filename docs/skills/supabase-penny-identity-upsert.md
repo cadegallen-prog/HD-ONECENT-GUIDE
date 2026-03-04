@@ -25,7 +25,10 @@ Use this when Penny List behavior looks inconsistent across SKU variants, especi
 
 ## Operational guidance for agents
 
-1. For manual updates, use `npm run manual:enrich` first.
+1. For manual updates to existing rows, use `npm run manual:enrich`.
+
+- If founder explicitly wants direct row creation from pre-scraped payloads, use `npm run manual:cade-fast-track` instead.
+
 2. If SO/regular SKU mismatch exists, ensure rows share the same `internet_sku`.
 3. Verify card/report behavior after update (do not assume metadata patch alone fixes aggregation).
 4. Explain results in founder language: "same product identity" vs "separate rows".

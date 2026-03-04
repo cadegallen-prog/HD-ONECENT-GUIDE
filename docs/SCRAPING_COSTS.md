@@ -5,7 +5,8 @@
 1. `Main List` self-absorption
 2. `Item Cache` apply (`enrichment_staging`)
 3. `Web Scraper` (SerpAPI) fallback only when gaps remain
-4. `Manual Add` via `/manual` JSON
+4. `Manual Enrich` via `/manual` JSON (existing Penny List rows only)
+5. `Cade Fast-Track` via `/manual:cade` JSON (direct founder submission path)
 
 The Web Scraper is intentionally the last automated resort to protect monthly credits.
 
@@ -29,14 +30,21 @@ Home Depot uses aggressive bot detection:
 - Runs autonomously via GitHub Actions
 - **95%+ success rate**
 
-### Option 2: Manual Add (Free)
+### Option 2: Manual Enrich (Free)
 
 - Run bookmarklet while browsing HD manually
 - Paste JSON to `/manual` in chat (agent runs `npm run manual:enrich`)
-- 100% reliable but requires your time
+- Updates existing Penny List rows and Item Cache (no new Penny List row creation)
 - **Cost: $0**
 
-### Option 3: Stealth Scraper (Unreliable)
+### Option 3: Founder Fast-Track Submit (Free, no SerpAPI credits)
+
+- Paste scraped JSON to `/manual:cade` in chat (agent runs `npm run manual:cade-fast-track`)
+- Upserts Item Cache and creates Penny List submissions directly (`Georgia`, `status=complete`, quantity `0`)
+- Bypasses the website form and bypasses SerpAPI scraping entirely
+- **Cost: $0**
+
+### Option 4: Stealth Scraper (Unreliable)
 
 - Playwright + stealth + proxies
 - **Often fails** due to TLS fingerprinting
@@ -118,6 +126,9 @@ npm run backfill:item-cache
 
 # Manual Add JSON -> Item Cache + Main List upsert
 npm run manual:enrich
+
+# Founder fast-track JSON -> Item Cache + direct Penny List creation (no SerpAPI)
+npm run manual:cade-fast-track
 
 # SerpApi with custom limit
 npm run enrich:serpapi -- -- --limit 20

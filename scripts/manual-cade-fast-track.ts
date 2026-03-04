@@ -194,10 +194,10 @@ function normalizeOne(raw: unknown):
   const skuRaw = String(skuPick.value).trim()
   const skuVal = validateSku(skuRaw)
 
-  if (!skuVal.valid) {
+  if (skuVal.error) {
     return {
       ok: false,
-      reason: `Invalid SKU format: ${skuVal.reason}`,
+      reason: `Invalid SKU format: ${skuVal.error}`,
       rawSku: skuRaw,
     }
   }
@@ -470,8 +470,8 @@ async function main() {
       rawItems = Array.isArray(parsed)
         ? parsed
         : typeof parsed === "object" && parsed !== null
-          ? [parsed]
-          : Object.values(parsed)
+          ? Object.values(parsed as Record<string, unknown>)
+          : []
     } catch (e) {
       throw new Error(`Failed to parse JSON: ${e instanceof Error ? e.message : String(e)}`)
     }

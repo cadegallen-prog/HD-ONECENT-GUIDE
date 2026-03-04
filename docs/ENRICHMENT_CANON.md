@@ -10,7 +10,8 @@ Every Main List item should converge to complete enrichment while minimizing Web
 1. `Main List` self-absorption (same SKU, best existing row).
 2. `Item Cache` apply (`enrichment_staging`, non-consuming).
 3. `Web Scraper` (SerpAPI) only if gaps remain.
-4. `Manual Add` via `/manual` JSON when automated sources cannot complete enrichment.
+4. `Manual Enrich` via `/manual` JSON (`npm run manual:enrich`) for existing Main List rows.
+5. `Cade Fast-Track` via `/manual:cade` JSON (`npm run manual:cade-fast-track`) when founder wants direct no-scrape submissions.
 
 ## Automatic Backfill Rule
 
@@ -37,7 +38,8 @@ When a SKU is inserted/updated in `Item Cache`, previously submitted Main List r
 1. `npm run warm:staging` - fill Item Cache from Cache Loader.
 2. `npm run backfill:item-cache` - bulk backfill gap rows from Item Cache.
 3. `npm run backfill:staging` - alias for `backfill:item-cache`.
-4. `npm run manual:enrich` - parse Manual Add JSON and apply to Item Cache + Main List.
+4. `npm run manual:enrich` - parse Manual Add JSON, upsert Item Cache, and update existing Main List rows only (no row creation).
+5. `npm run manual:cade-fast-track` - parse founder JSON, upsert Item Cache, create Main List rows (`Georgia`, `status=complete`, `quantity=0`), then apply Item Cache enrichment.
 
 ## Manual Add Payloads
 
@@ -65,6 +67,7 @@ Example:
 - `Item Cache`: `enrichment_staging` table (reusable cache of item details).
 - `Main List`: `Penny List` table shown publicly.
 - `Web Scraper`: SerpAPI fallback source.
-- `Manual Add`: founder-provided JSON enrichment input.
+- `Manual Enrich`: founder-provided JSON applied only to existing Main List entries.
+- `Cade Fast-Track`: founder-only JSON path that creates submissions directly without using site form or SerpAPI.
 - `Upsert`: insert new row or update existing row for same key.
 - `Cache Loader`: warmer/manual processes that fill Item Cache.

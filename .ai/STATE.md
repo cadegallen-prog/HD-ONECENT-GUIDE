@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Mar 3, 2026 (`S2` homepage proof front door verified locally from a clean worktree)
+**Last updated:** Mar 4, 2026 (manual workflow split hardened + founder fast-track validated on `dev`)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,26 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-04 (Manual enrichment split hardened + founder fast-track validated):** Locked manual data operations into two explicit paths so enrichment no longer creates unintended list entries and founder pre-scraped uploads bypass scrape-credit spend.
+  - **What changed:**
+    - fixed `scripts/manual-cade-fast-track.ts` keyed-payload parsing and SKU validation contract handling so founder payloads process reliably.
+    - confirmed `scripts/manual-enrich.ts` behavior remains enrich-only for existing Penny List rows (skip when row missing).
+    - corrected the previously created DAP row (`SKU 1006465750`) from `store_city_state="Manual Add"` to `store_city_state="Georgia"`.
+    - executed founder fast-track upload for the provided fan SKU payload and confirmed created rows are `Georgia`, `status=complete`, `exact_quantity_found=0`.
+    - updated docs and skills index to codify the split contract (`manual:enrich` vs `manual:cade-fast-track`).
+  - **Why:** founder workflow needed a zero-credit direct submission lane for pre-scraped items and a separate enrich-only lane for existing community submissions; mixing those behaviors causes bad state and trust confusion.
+  - **Status:** validated live against Supabase and locally verified with `npm run verify:fast` after code changes.
+
+- **2026-03-04 (Homepage proof hardening follow-up verified locally on `dev`):** Tightened the shipped homepage proof slice so remote image failures do not leave blank panels and the hero proof metadata stays truthful.
+  - **What changed:**
+    - added `components/home/HomeProofImage.tsx` so homepage proof media now degrades to an intentional fallback state instead of a blank image box when remote product imagery fails.
+    - changed `components/home/HomeProofHero.tsx` and `components/home/HomeProofStrip.tsx` to use the guarded proof-image component and safer `600px`/`400px` image variants instead of the brittle `1000px` requests.
+    - corrected the homepage hero proof metadata by computing freshest activity from the newest `dateAdded` or `lastSeenAt` value across the visible proof set and replacing the misleading quantity pill with concrete SKU metadata.
+    - added `lib/home-proof.ts` plus `tests/home-proof.test.ts` so the freshness logic is unit-tested.
+    - updated `tests/smoke-critical.spec.ts` and `tests/visual-smoke.spec.ts` so the homepage proof media must resolve to `loaded` or `fallback`, not remain a blank unresolved panel.
+  - **Why:** the proof-first homepage direction was right, but the first implementation still over-trusted remote imagery and used proof copy that could overstate what the data meant. This follow-up keeps the same homepage strategy while making it more trustworthy.
+  - **Status:** verified locally on `dev` with passing `lint:colors`, `verify:fast`, `e2e:smoke`, and four-project `visual-smoke`. Saved screenshot evidence is available through `reports/playwright/html/index.html`. The `ai-proof.ts` wrapper was attempted but blocked by this session’s shell policy when launching a temporary background server; no app-code blocker remains. `S3 - Guide Core Rebuild` remains the next recovery slice.
 
 - **2026-03-03 (`S2 - Homepage Proof Front Door` shipped locally from clean worktree):** Rebuilt the homepage into a proof-first front door so first-time visitors see what Penny Central is, why it is real, and what to do next within the first screen.
   - **What changed:**
@@ -2122,4 +2142,5 @@ From `.ai/ANALYTICS_WEEKLY_REVIEW.md`:
 - **Hydration diagnosis resolved:** the audited dev mismatch was caused by the Grow script bootstrap mutating `<head>` order before hydration. `S1` replaced that loader with a hydration-safe `next/script` pattern and added route-sweep coverage to keep the mismatch from returning silently.
 - **Hydration diagnosis status:** `S1` has now removed the Grow pre-hydration head mutation and added regression coverage for the audited routes.
 - **Implementation status:** `S0` complete (docs-only). `S1 - Hydration Stability` complete and verified. `S2 - Homepage Proof Front Door` is complete and locally verified from a clean worktree. `S3 - Guide Core Rebuild` is the next implementation slice.
-- **Code/runtime impact:** none in this session. No product route files were edited.
+- **Homepage proof status:** the `S2` slice has now been hardened on `dev` so proof imagery falls back intentionally, hero metadata reads more precisely, and smoke/visual coverage asserts the proof media state directly.
+- **Code/runtime impact:** homepage proof components, one helper, and homepage-focused smoke/visual tests were edited in this session. No other product routes were changed.

@@ -12,6 +12,8 @@ Short, task-focused guides to avoid repo-wide searching.
 
 ## Skills
 
+- [manual-enrichment-fast-track-split](./manual-enrichment-fast-track-split.md) — **When to use:** You need to decide between enriching existing Penny List rows (`manual:enrich`) vs founder direct submissions without SerpAPI (`manual:cade-fast-track`).
+
 - [supabase-penny-identity-upsert](./supabase-penny-identity-upsert.md) — **When to use:** Penny List rows split across SO SKU vs regular SKU, report counts look wrong, or manual upsert behavior is confusing.
 
 - [solo-dev-ads-approval-triage](./solo-dev-ads-approval-triage.md) — **When to use:** You want a low-stress, repeatable triage flow after AdSense/Ad Manager approval rejections.

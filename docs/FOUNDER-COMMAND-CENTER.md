@@ -57,10 +57,17 @@ Refine color and typography consistency using existing tokens only, keep contras
 ```
 
 7. Is this a manual data update with JSON payload?
-   Send:
+   - Existing Penny List item needs enrichment only:
 
 ```text
 /manual
+<paste JSON here>
+```
+
+- Your own scraped finds should be submitted directly (no SerpAPI credits):
+
+```text
+/manual:cade
 <paste JSON here>
 ```
 

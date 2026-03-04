@@ -313,6 +313,56 @@ Scan this FIRST before suggesting anything. If your idea matches an anti-pattern
 
 ---
 
+### 0k. Do not set `PLAYWRIGHT_BASE_URL` for standalone local Playwright runs unless a server is already running
+
+**Problem:** A standalone `npx playwright test ...` run failed with `ERR_CONNECTION_REFUSED` on `127.0.0.1:3002` even though the same suite passes when Playwright manages its own local server.
+
+**What We Tried:**
+
+- Set `PLAYWRIGHT_BASE_URL=http://127.0.0.1:3002` before running `npx playwright test ...`.
+- Assumed Playwright would still start its configured local web server.
+
+**What We Learned:**
+
+- In this repo’s `playwright.config.ts`, setting `PLAYWRIGHT_BASE_URL` disables the built-in `webServer` startup path.
+- If no external server is already healthy on that URL, the suite fails with connection-refused errors that look like app failures but are really harness failures.
+
+**What to Do Instead:**
+
+- For local standalone Playwright runs where you want Playwright to start the app automatically:
+  - do **not** set `PLAYWRIGHT_BASE_URL`
+- Only set `PLAYWRIGHT_BASE_URL` when:
+  - port `3001` is already healthy and you intend to reuse it, or
+  - you started another explicit server yourself and verified it first.
+
+**Date:** Mar 4, 2026
+
+---
+
+### 0l. Manual JSON ingestion scripts must match the shared SKU validator contract exactly
+
+**Problem:** `manual:cade-fast-track` rejected a valid founder payload with `All payload items were invalid`.
+
+**What We Tried:**
+
+- Ran the founder keyed-object JSON payload directly into `manual:cade-fast-track`.
+- Investigated parser and SKU validation checks in `scripts/manual-cade-fast-track.ts`.
+
+**What We Learned:**
+
+- `validateSku(...)` returns `{ normalized, error? }`, not `{ valid, reason }`.
+- A keyed-object payload must be parsed with `Object.values(...)` for item iteration; wrapping the object as `[parsed]` makes normalization fail.
+
+**What to Do Instead:**
+
+- In manual ingestion scripts, treat SKU validity as `if (skuVal.error) ...`.
+- For keyed payloads, normalize with `Object.values(parsed as Record<string, unknown>)`.
+- After script fixes, run a real founder payload once before claiming the workflow is ready.
+
+**Date:** Mar 4, 2026
+
+---
+
 ### 0. Route deletion + stale Next type artifacts
 
 **Problem:** After deleting a route page, `npm run build` failed with type errors from stale generated files under `.next-playwright/types` and `.next/dev/types/app/...`.
