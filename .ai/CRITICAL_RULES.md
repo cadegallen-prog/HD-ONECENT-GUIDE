@@ -206,18 +206,19 @@ if (Test-Path $local) {
 
 ---
 
-## Rule #7: Clean Worktree + Scoped Commit Loop (Dev Branch)
+## Rule #7: Clean Worktree + Scoped Commit Loop (Develop + Feature Branches)
 
 **Purpose:** Prevent stacked local changes, mixed-scope commits, and hidden carryover drift between sessions.
 
 **Requirements:**
 
-- Start each objective on `dev` with:
-  - `git checkout dev`
-  - `git pull origin dev`
+- Start each objective from `develop` with:
+  - `git checkout develop`
+  - `git pull origin develop`
   - `git status --short`
+- Create a scoped `feature/<slug>` branch or worktree from `develop` before editing files.
 - If `git status --short` is non-empty and changes are outside the current objective, **STOP** and close carryover first:
-  - Option A: finish verification and commit/push the carryover scope to `dev`
+  - Option A: finish verification and commit/push the carryover scope to the current `feature/*` branch
   - Option B: ask Cade for one explicit scope decision when ownership/scope is ambiguous
 - Before each commit, verify staged scope:
   - `git diff --cached --name-only`
@@ -229,13 +230,14 @@ if (Test-Path $local) {
 **Quick command loop (PowerShell):**
 
 ```powershell
-git checkout dev
-git pull origin dev
+git checkout develop
+git pull origin develop
 git status --short
+git checkout -b feature/<slug>
 git add <paths>
 git diff --cached --name-only
 git commit -m "scope message"
-git push origin dev
+git push -u origin feature/<slug>
 git status --short
 ```
 

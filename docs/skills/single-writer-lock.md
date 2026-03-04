@@ -52,6 +52,6 @@ npm run ai:writer-lock:release -- --force
 ## Merge model with multiple worktrees
 
 1. Each agent works in its own worktree/branch.
-2. One integration owner merges verified branches into `dev`.
-3. Promote `dev` to `main` after required checks.
+2. One integration owner merges verified branches into `develop`.
+3. Promote `develop` to `main` after required checks.
 4. Do not auto-merge unrelated agent branches without explicit merge instruction.

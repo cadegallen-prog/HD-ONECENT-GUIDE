@@ -110,7 +110,7 @@ These prompts are IDE-native guidance. They are not npm commands.
 
 ## Git and MCP Notes
 
-- Work on `dev`, keep changes scoped, and verify before push.
+- Work on a scoped `feature/*` branch from `develop`, keep changes scoped, and verify before push.
 - Copilot uses the repo MCP configuration in `.vscode/mcp.json`.
 - Do not claim missing CLI tools when MCP access exists.
 

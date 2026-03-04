@@ -34,7 +34,7 @@ To claim “done” on a meaningful change, provide:
    - Include a structured next-agent handoff per `.ai/HANDOFF_PROTOCOL.md`
    - Must include: completion status, changed files, verification paths, open risks, and immediate next step
 9. **Branch hygiene evidence** (required for implementation/workflow sessions):
-   - branch used (normally `dev`)
+   - branch used (normally `feature/*` based on `develop`)
    - commit SHA(s) + push status (or explicit "not pushed" reason)
    - `git status --short` at session end (clean expected; if dirty, list carryover files + blocker reason)
    - if concurrent agents were active, include shared-memory lock evidence (`ai:writer-lock:status` output and owner)
