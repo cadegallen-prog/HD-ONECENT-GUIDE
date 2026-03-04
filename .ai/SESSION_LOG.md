@@ -53,6 +53,8 @@
 
 - Branch: `dev`
 - Scope: workflow-policy docs + shared-memory updates only
+- Commit: `2d5f10a`
+- Push: pushed to `origin/dev`
 
 ## 2026-03-04 - Codex - Branch/Worktree Canon Clarification
 
