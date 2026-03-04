@@ -57,11 +57,14 @@ data/skus-to-enrich.txt
 backups/
 
 # local experiments / scratch
-experimental_scraper/
 Experimental_archive_test_pic_iteratation/
 nul
 
 # archive (repo-tracked). Keep local-only scratch ignored explicitly (not the whole folder).
+# experimental_scraper is 37MB / 1508 files — never commit
+archive/root-level-orphans/experimental_scraper/
+# legacy backup scripts contain PII patterns — keep local only
+archive/root-level-orphans/backups-legacy-scripts/
 archive/COOKBOOK.md
 archive/DECISIONS.md
 archive/docs-history/
@@ -127,7 +130,6 @@ data/Google Search Console Stats/
 data/monumetric analytics dump/
 /Thanks for applying! (2).pdf
 PICTURES_PENNY_CENTRAL/
-Console_logs/
 Guide Remodel/~$*.docx
 
 # sentry
