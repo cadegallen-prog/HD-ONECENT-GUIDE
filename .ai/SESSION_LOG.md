@@ -4,11 +4,11 @@
 
 ---
 
-## 2026-03-04 - Codex - Sentry Workflow Migration + Slice 2 Runtime Hardening
+## 2026-03-04 - Codex - Sentry Workflow Migration + Slice 3 Dashboard Hardening
 
-**Goal:** Replace the repo's old `dev/main` branch model with `feature/* -> develop -> main`, isolate Sentry work in its own worktree, and ship the repo-side Sentry hardening slice that reduces production noise before dashboard Autofix work.
+**Goal:** Replace the repo's old `dev/main` branch model with `feature/* -> develop -> main`, isolate Sentry work in its own worktree, ship repo-side hardening, and complete the live Sentry dashboard slice so production noise is separated from real failures.
 
-**Status:** 🟡 In Progress (repo-side slices complete; dashboard slice blocked on Sentry auth)
+**Status:** ✅ Completed through Slice 3
 
 ### Changes
 
@@ -27,12 +27,24 @@
   - updated `instrumentation-client.ts`, `sentry.server.config.ts`, and `sentry.edge.config.ts` to use the shared helper, explicit `sampleRate`, runtime tags, and noise filters.
   - added `tests/sentry-runtime.test.ts` for environment mapping, message normalization, and noise-drop behavior.
   - updated `.ai/ENVIRONMENT_VARIABLES.md` and `.ai/SENTRY_ALERTS_MANUAL.md` so the Sentry operational docs match the shipped runtime behavior and the pending dashboard settings.
+- Sentry Slice 3:
+  - used authenticated Playwright access to Sentry org `pennycentral` / project `javascript-nextjs`.
+  - deleted legacy noisy issue alert `16552275` (`Send a notification for high priority issues`).
+  - created production-only issue rules:
+    - `16751148` `Production - New unhandled issue`
+    - `16751153` `Production - Regressed unhandled issue`
+  - created production crash-rate alert `409707` (`Production - Crash-free session rate below 97% (30m)`) after confirming Sentry rejects a `10m` crash-rate window for this alert type.
+  - enabled the `localhost` inbound filter and confirmed the browser-extension and crawler filters remain enabled.
+  - verified GitHub repo integration for `cadegallen-prog/HD-ONECENT-GUIDE` and confirmed recent production releases resolve against GitHub-backed commit association, while preview releases still show `origin` / `unknown`.
+  - verified Seer org defaults, kept new-project PR creation off, connected the project repo, and set the saved project stopping point to `solution`.
+  - captured proof artifacts under `reports/sentry/2026-03-04/` and documented the dashboard state in `reports/sentry/2026-03-04/settings-summary.md`.
 
 ### Summary
 
 - The branch model is now standardized around `develop` and isolated `feature/*` worktrees instead of direct work on `dev`.
 - Sentry runtime behavior is now much stricter: only production sends should get through, preview/development are tagged separately, and common browser/network noise is filtered before it counts against quota.
-- The remaining work is the dashboard slice: alerts/inbound filters/GitHub integration/Autofix. That is blocked only because there is no Sentry login or API token available in this shell, and Playwright lands on the Sentry sign-in page.
+- The dashboard slice is now complete: production-only alerts are live, the main noisy rule is gone, GitHub integration is verified, and Seer Autofix is capped at the backend `solution` stopping point for phase 1.
+- The next Sentry work is Slice 4 onward only after promotion and production stabilization; the plan now waits on merge/deploy plus the planned `24h` or `100+` production-event checkpoint.
 
 ### Verification
 
@@ -43,17 +55,23 @@
 - `npm run verify:fast` ✅
 - `gh auth status` ✅
 - `git worktree list` ✅
+- Sentry dashboard/API verification via authenticated Playwright ✅
+  - issue rules: `16751148`, `16751153`
+  - metric alert: `409707`
+  - Seer project preference: `automated_run_stopping_point = solution`
+  - proof bundle: `reports/sentry/2026-03-04/`
 
 ### Branch Hygiene
 
 - Branch: `feature/sentry-spam-fix-and-autofix`
-- Scope: workflow migration bootstrap + Sentry Slice 2 runtime hardening
+- Scope: workflow migration bootstrap + Sentry Slice 2 runtime hardening + Slice 3 dashboard hardening proof
 - Commits:
   - `5eca55f docs(plans): add sentry migration canon and memory trim`
   - `52bf1c4 docs(workflow): adopt develop plus feature branches`
   - `8e7b249 refactor(sentry): centralize runtime filtering to cut production noise`
-- Push: pushed to origin (`origin/feature/sentry-spam-fix-and-autofix`)
-- Current blocker: Sentry dashboard slice requires either an authenticated Sentry browser session that Playwright can use or a valid Sentry API token with settings/integration scopes
+  - `1cb3731 docs(ai): record sentry workflow status and access blocker`
+- Push: pushed to origin (`origin/feature/sentry-spam-fix-and-autofix`); dashboard-proof commit pending at memory-write time
+- Next blocker: do not start Slice 4 until this branch is merged/promoted and fresh production data is available for real issue triage
 
 ---
 

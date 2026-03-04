@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Mar 4, 2026 (`develop` workflow migration + Sentry Slice 2 shipped on isolated feature worktree)
+**Last updated:** Mar 4, 2026 (`develop` workflow migration + Sentry Slice 3 dashboard hardening captured on isolated feature worktree)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,21 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-04 (`develop` migration + Sentry Slice 3 dashboard hardening captured on isolated feature worktree):** The repo workflow is aligned to `feature/* -> develop -> main`, the repo-side Sentry hardening slice is complete, and the live Sentry dashboard is now narrowed enough for a conservative production-only rollout.
+  - **What changed:**
+    - used an authenticated Playwright Sentry session to finish the dashboard slice on org `pennycentral` / project `javascript-nextjs`.
+    - deleted legacy noisy issue alert `16552275` (`Send a notification for high priority issues`).
+    - created production-only issue rules:
+      - `16751148` `Production - New unhandled issue`
+      - `16751153` `Production - Regressed unhandled issue`
+    - created production crash-rate metric alert `409707` (`Production - Crash-free session rate below 97% (30m)`), after verifying that Sentry does not allow the requested `10m` crash-rate window for this alert type.
+    - enabled the `localhost` inbound filter and confirmed browser-extension and crawler filters remain enabled.
+    - verified GitHub repo integration for `cadegallen-prog/HD-ONECENT-GUIDE` and confirmed current production releases resolve against GitHub-backed commit association, while preview releases still show `origin` / `unknown`.
+    - hardened Seer Autofix for this project so the saved backend preference is `automated_run_stopping_point = solution`, with the project linked to the GitHub repo and org defaults keeping PR creation off for new projects.
+    - captured proof artifacts under `reports/sentry/2026-03-04/`, including rules, filters, Seer defaults, connected repo screenshots, and `settings-summary.md`.
+  - **Why:** the founder priority is to stop quota burn and alert fatigue immediately, while keeping Autofix conservative enough that Sentry cannot open or advance code changes beyond the approved phase-1 workflow.
+  - **Status:** dashboard slice is complete on `feature/sentry-spam-fix-and-autofix`. The remaining Sentry work is Slice 4 onward: merge/promote, let production data stabilize, then triage real production issues one-by-one on child branches. One UI caveat was documented in the proof bundle: the project Seer checkbox surface was inconsistent with the saved backend state, so the API-backed `solution` stopping point is the authoritative setting.
 
 - **2026-03-04 (`develop` migration + Sentry Slice 2 shipped on isolated feature worktree):** The repo workflow is now aligned to `feature/* -> develop -> main`, and the code-side Sentry hardening slice is complete on an isolated Sentry worktree.
   - **What changed:**
