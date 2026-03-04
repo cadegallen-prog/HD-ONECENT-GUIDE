@@ -4,6 +4,59 @@
 
 ---
 
+## 2026-03-04 - Codex - Sentry Workflow Migration + Slice 2 Runtime Hardening
+
+**Goal:** Replace the repo's old `dev/main` branch model with `feature/* -> develop -> main`, isolate Sentry work in its own worktree, and ship the repo-side Sentry hardening slice that reduces production noise before dashboard Autofix work.
+
+**Status:** 🟡 In Progress (repo-side slices complete; dashboard slice blocked on Sentry auth)
+
+### Changes
+
+- Branch/bootstrap:
+  - created local `develop` from `origin/dev` and pushed it to origin.
+  - created isolated worktree `C:\Users\cadeg\Projects\HD-ONECENT-GUIDE-sentry` on `feature/sentry-spam-fix-and-autofix`.
+  - changed GitHub default branch to `develop`.
+  - applied branch protection to `develop` and `main` with required checks `quality-fast` + `smoke-e2e`, one approving review, and conversation resolution.
+- Canon/docs/CI:
+  - added canonical plan file `.ai/impl/sentry-spam-autofix-workflow-migration.md` and registered it in `.ai/plans/INDEX.md`.
+  - updated workflow canon across `README.md`, `AGENTS.md`, `.ai/CRITICAL_RULES.md`, `.ai/VERIFICATION_REQUIRED.md`, `.ai/AI_ENABLEMENT_BLUEPRINT.md`, `.ai/HANDOFF_PROTOCOL.md`, `.github/copilot-instructions.md`, `docs/skills/ship-safely.md`, `docs/skills/single-writer-lock.md`, `.github/agents/documenter.md`, `.ai/USAGE.md`, `.ai/CONSTRAINTS_TECHNICAL.md`, and `scripts/check-doc-governance-drift.mjs`.
+  - added `develop` push triggers to `.github/workflows/quality.yml` and `.github/workflows/smoke-e2e.yml`.
+  - trimmed `.ai/SESSION_LOG.md` to five entries so `ai:checkpoint` would stop failing on memory size.
+- Sentry Slice 2:
+  - added `lib/monitoring/sentry-runtime.ts` to centralize DSN use, client/server environment mapping, runtime tags, first-party URL allow rules, event normalization, and drop logic.
+  - updated `instrumentation-client.ts`, `sentry.server.config.ts`, and `sentry.edge.config.ts` to use the shared helper, explicit `sampleRate`, runtime tags, and noise filters.
+  - added `tests/sentry-runtime.test.ts` for environment mapping, message normalization, and noise-drop behavior.
+  - updated `.ai/ENVIRONMENT_VARIABLES.md` and `.ai/SENTRY_ALERTS_MANUAL.md` so the Sentry operational docs match the shipped runtime behavior and the pending dashboard settings.
+
+### Summary
+
+- The branch model is now standardized around `develop` and isolated `feature/*` worktrees instead of direct work on `dev`.
+- Sentry runtime behavior is now much stricter: only production sends should get through, preview/development are tagged separately, and common browser/network noise is filtered before it counts against quota.
+- The remaining work is the dashboard slice: alerts/inbound filters/GitHub integration/Autofix. That is blocked only because there is no Sentry login or API token available in this shell, and Playwright lands on the Sentry sign-in page.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run ai:checkpoint` ✅
+- `npm run check:docs-governance` ✅
+- `npx tsx --import ./tests/setup.ts --test tests/sentry-runtime.test.ts` ✅
+- `npm run verify:fast` ✅
+- `gh auth status` ✅
+- `git worktree list` ✅
+
+### Branch Hygiene
+
+- Branch: `feature/sentry-spam-fix-and-autofix`
+- Scope: workflow migration bootstrap + Sentry Slice 2 runtime hardening
+- Commits:
+  - `5eca55f docs(plans): add sentry migration canon and memory trim`
+  - `52bf1c4 docs(workflow): adopt develop plus feature branches`
+  - `8e7b249 refactor(sentry): centralize runtime filtering to cut production noise`
+- Push: pushed to origin (`origin/feature/sentry-spam-fix-and-autofix`)
+- Current blocker: Sentry dashboard slice requires either an authenticated Sentry browser session that Playwright can use or a valid Sentry API token with settings/integration scopes
+
+---
+
 ## 2026-03-03 - Claude Code (Sonnet 4.6) - Branch Cleanup & Consolidation
 
 **Goal:** Clean up git branch/worktree mess on dev — commit 38 uncommitted files, remove orphaned worktrees, delete 14 stale local branches, 4 stale remote branches, close PR #143.
@@ -200,63 +253,3 @@
 - Push: not pushed
 
 ---
-
-## 2026-03-03 - Codex - Site Recovery S1 Hydration Stability
-
-**Goal:** Remove the global hydration mismatch and lock the Penny List text regression before any visual site-recovery slice starts.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `app/layout.tsx`
-  - replaced the Grow DOM-insertion bootstrap with `next/script` `afterInteractive` scripts so the server-rendered head is no longer mutated before hydration.
-- `lib/penny-list-utils.ts`
-  - added `DIY` to the protected uppercase word set in `normalizeProductName(...)`.
-- `tests/visual-smoke.spec.ts`
-  - expanded the route sweep to all nine audited recovery routes and made hydration mismatch console output a first-class failure.
-- `tests/smoke-critical.spec.ts`
-  - added a Penny List rendered-surface assertion that fails if `Diy` appears.
-- `tests/penny-list-utils.test.ts`
-  - added deterministic helper coverage for mixed-case `DIY` input.
-- `.ai/impl/site-recovery-program.md`
-  - marked the parent recovery program in progress with `S1` shipped and `S2` next.
-- `.ai/impl/site-recovery-s1-hydration-stability.md`
-  - marked the slice shipped and recorded the implementation outcome.
-- `.ai/plans/INDEX.md`
-  - updated the registry status to match the canonical `.ai/impl/` plan.
-- `.ai/BACKLOG.md`
-  - advanced the immediate next slice from `S1` to `S2 - Homepage Proof Front Door`.
-- `.ai/STATE.md`
-  - updated current project reality to reflect the shipped hydration fix and next slice.
-- `.ai/LEARNINGS.md`
-  - documented that direct `node` execution is the wrong lane for repo TypeScript test files.
-
-### Summary
-
-- The audited hydration mismatch is no longer reproducible across `/`, `/guide`, `/penny-list`, `/report-find`, `/faq`, `/what-are-pennies`, `/store-finder`, `/about`, and `/transparency`.
-- The Grow integration now loads in a hydration-safe way without mutating head order before React starts.
-- The site-recovery program can now move from stabilization into `S2 - Homepage Proof Front Door`.
-
-### Verification
-
-- Before fix reproduction:
-  - `$env:PLAYWRIGHT_BASE_URL='http://localhost:3001'; npx playwright test tests/visual-smoke.spec.ts --project=chromium-desktop-light --workers=1` ❌
-  - failure signature: `A tree hydrated but some attributes of the server rendered HTML didn't match...`
-- `npm run ai:memory:check` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `$env:PLAYWRIGHT_BASE_URL='http://localhost:3001'; npx playwright test tests/visual-smoke.spec.ts --project=chromium-desktop-light --workers=1` ✅
-- `$env:PLAYWRIGHT_BASE_URL='http://localhost:3001'; npx playwright test tests/smoke-critical.spec.ts --project=chromium-desktop-light --workers=1` ✅
-- `npm run ai:proof -- / /guide /penny-list /report-find /faq /what-are-pennies /store-finder /about /transparency` ✅
-  - artifacts: `reports/proof/2026-03-03T00-44-54/`
-  - console: `reports/proof/2026-03-03T00-44-54/console-errors.txt`
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Scope: `S1` hydration fix + regression coverage + continuity updates
-- Push: not pushed
-
----
-

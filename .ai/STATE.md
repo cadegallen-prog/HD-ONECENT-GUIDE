@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Mar 3, 2026 (`S2` homepage proof front door verified locally from a clean worktree)
+**Last updated:** Mar 4, 2026 (`develop` workflow migration + Sentry Slice 2 shipped on isolated feature worktree)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,18 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-04 (`develop` migration + Sentry Slice 2 shipped on isolated feature worktree):** The repo workflow is now aligned to `feature/* -> develop -> main`, and the code-side Sentry hardening slice is complete on an isolated Sentry worktree.
+  - **What changed:**
+    - created and pushed `develop` from clean `origin/dev`, leaving local `dev` and its two unpublished commits untouched.
+    - created isolated worktree `C:\Users\cadeg\Projects\HD-ONECENT-GUIDE-sentry` on branch `feature/sentry-spam-fix-and-autofix`.
+    - updated canonical workflow docs and CI triggers so `develop` is the integration branch and `quality.yml` / `smoke-e2e.yml` now run on `develop`.
+    - changed GitHub default branch to `develop` and applied matching branch protection to `develop` plus `main`.
+    - added shared runtime helper `lib/monitoring/sentry-runtime.ts` and targeted coverage in `tests/sentry-runtime.test.ts`.
+    - updated `instrumentation-client.ts`, `sentry.server.config.ts`, and `sentry.edge.config.ts` so runtime tags, environment tagging, sample rates, first-party allow rules, and low-signal noise filtering are centralized.
+    - updated `.ai/ENVIRONMENT_VARIABLES.md` and `.ai/SENTRY_ALERTS_MANUAL.md` so the Sentry runbook matches the runtime behavior and the pending dashboard slice.
+  - **Why:** the founder set a new mandatory workflow contract and a Sentry cleanup priority after noise and alert volume made the current setup too expensive and too distracting.
+  - **Status:** verified on `feature/sentry-spam-fix-and-autofix` with passing `ai:memory:check`, `ai:checkpoint`, `check:docs-governance`, targeted Sentry unit tests, and `verify:fast`. Current branch commits: `5eca55f`, `52bf1c4`, `8e7b249`. Remote branch exists. Slice 3 is blocked only by missing Sentry login/API access in this shell; Playwright lands on the Sentry sign-in wall and no local `SENTRY_*` env vars or Vercel CLI are available.
 
 - **2026-03-03 (`S2 - Homepage Proof Front Door` shipped locally from clean worktree):** Rebuilt the homepage into a proof-first front door so first-time visitors see what Penny Central is, why it is real, and what to do next within the first screen.
   - **What changed:**
@@ -2121,5 +2133,5 @@ From `.ai/ANALYTICS_WEEKLY_REVIEW.md`:
   - Store Finder is currently a supporting utility, not a front-door feature.
 - **Hydration diagnosis resolved:** the audited dev mismatch was caused by the Grow script bootstrap mutating `<head>` order before hydration. `S1` replaced that loader with a hydration-safe `next/script` pattern and added route-sweep coverage to keep the mismatch from returning silently.
 - **Hydration diagnosis status:** `S1` has now removed the Grow pre-hydration head mutation and added regression coverage for the audited routes.
-- **Implementation status:** `S0` complete (docs-only). `S1 - Hydration Stability` complete and verified. `S2 - Homepage Proof Front Door` is complete and locally verified from a clean worktree. `S3 - Guide Core Rebuild` is the next implementation slice.
+- **Implementation status:** `S0` complete (docs-only). `S1 - Hydration Stability` complete and verified. `S2 - Homepage Proof Front Door` is complete and locally verified from a clean worktree. The active founder override is now the Sentry workflow migration plan on `feature/sentry-spam-fix-and-autofix`; its Slice 0, Slice 1, and Slice 2 are complete, while Slice 3 is blocked on Sentry access. `S3 - Guide Core Rebuild` remains the next site-recovery slice after the Sentry override clears.
 - **Code/runtime impact:** none in this session. No product route files were edited.
