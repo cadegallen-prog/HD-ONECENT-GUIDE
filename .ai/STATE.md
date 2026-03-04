@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Mar 4, 2026 (manual workflow split hardened + founder fast-track validated on `dev`)
+**Last updated:** Mar 4, 2026 (branch/worktree canon clarified; root founder context restored)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,15 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-04 (Canon clarity patch: root founder context restored + branch/worktree topology documented):** Repaired continuity drift so the repo's actual branch/worktree model is explicit again and the canonical read order no longer points at a missing file.
+  - **What changed:**
+    - restored `PENNYCENTRAL_MASTER_CONTEXT.md` to the repo root so `README.md`, `.ai/START_HERE.md`, and `.ai/HANDOFF_PROTOCOL.md` point at a real canonical file again.
+    - verified current git topology: main worktree `C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE` is clean on `dev`; Sentry worktree `C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE-sentry` is clean on `feature/sentry-spam-fix-and-autofix`; `dev` is ahead of `develop` by 4 commits; the Sentry feature branch is based on `develop`, not `dev`.
+    - corrected `.ai/BACKLOG.md` so the active site-recovery next slice is `S3 - Guide Core Rebuild`, not the already-finished `S2 - Homepage Proof Front Door`.
+    - updated `.ai/THREAD.md` and `.ai/SESSION_LOG.md` so future agents inherit the verified branch/worktree reality instead of rediscovering it from chat.
+  - **Why:** branch/worktree confusion was consuming founder attention and creating a real risk that future agents would target the wrong branch or treat missing canon files as normal.
+  - **Status:** docs-only continuity fix; verify lanes are N/A by code-path rules. Shared-memory proof captured with `npm run ai:memory:check` and `npm run ai:checkpoint` (`reports/context-packs/2026-03-04T07-33-56/`).
 
 - **2026-03-04 (Manual enrichment split hardened + founder fast-track validated):** Locked manual data operations into two explicit paths so enrichment no longer creates unintended list entries and founder pre-scraped uploads bypass scrape-credit spend.
   - **What changed:**

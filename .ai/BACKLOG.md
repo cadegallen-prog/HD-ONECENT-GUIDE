@@ -1,6 +1,6 @@
 # Backlog (Top Priority Items)
 
-**Last updated:** Mar 3, 2026 (`S1` hydration stability shipped)
+**Last updated:** Mar 4, 2026 (branch/worktree canon clarified; `S3` restored as next recovery slice)
 **Rule:** Keep ≤10 items. Archive completed/deferred items.
 
 **Auto-archive:** Full backlog history preserved in `archive/backlog-history/`
@@ -13,7 +13,7 @@ Each AI session should:
 4. Update `.ai/SESSION_LOG.md`, `.ai/STATE.md`, and this file
 
 **Planning (canonical):** See `.ai/plans/INDEX.md` for all concurrent plans and their statuses.
-**Founder override (active):** Site recovery is the current product-priority program. Start from `.ai/impl/site-recovery-program.md`. `S1 - Hydration Stability` is complete; the immediate next implementation slice is `S2 - Homepage Proof Front Door`.
+**Founder override (active):** Site recovery is the current product-priority program. Start from `.ai/impl/site-recovery-program.md`. `S2 - Homepage Proof Front Door` is complete; the immediate next implementation slice is `S3 - Guide Core Rebuild`. `dev` remains the canonical integration branch; treat `develop` as legacy/stale unless Cade explicitly changes branch policy.
 
 ---
 

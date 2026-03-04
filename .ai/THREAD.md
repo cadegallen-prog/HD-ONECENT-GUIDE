@@ -4,7 +4,7 @@
 
 **Rule:** Every agent — Claude, Codex, Copilot — must read this file at session start and update it at session end. If you don't update this file, the next agent starts disconnected. That wastes everything you just did.
 
-**Last updated:** 2026-03-04 by GitHub Copilot (GPT-5.3-Codex)
+**Last updated:** 2026-03-04 by Codex
 
 ---
 
@@ -12,42 +12,40 @@
 
 ### What we're building toward (near-term)
 
-The product thread is still the same: make PennyCentral more trustworthy and easier to use so the core loop compounds (`/penny-list` habit → submit finds → better data → stronger trust).
+The product thread is still the same: make PennyCentral more trustworthy and easier to use so the core loop compounds (`/penny-list` habit -> submit finds -> better data -> stronger trust).
 
-Two active tracks now matter in parallel:
+Three continuity facts now matter together:
 
-1. **Site Recovery Program** (`.ai/impl/site-recovery-program.md`) continues, with `S3 - Guide Core Rebuild` as the next major product slice.
-2. **Manual data pipeline hardening** is now explicit and split into two workflows so founder operations do not accidentally consume SerpAPI credits or create malformed rows.
-
-Manual workflow split (now canonical):
-
-- `manual:enrich` = enrich existing Penny List rows only (no row creation)
-- `manual:cade-fast-track` = founder direct submit path (Item Cache upsert + Penny List create + apply enrichment), designed to avoid scrape-credit spend for pre-scraped payloads
+1. **Site Recovery Program** (`.ai/impl/site-recovery-program.md`) is still the main product lane, and `S3 - Guide Core Rebuild` is the next implementation slice on `dev`.
+2. **Manual data pipeline hardening** remains important: `manual:enrich` and `manual:cade-fast-track` are intentionally separate workflows and must stay that way.
+3. **Branch/worktree clarity is now explicit**: `dev` is the canonical integration branch, a separate Sentry worktree exists for `feature/sentry-spam-fix-and-autofix`, and `develop` still exists only as a stale side branch that should not silently become the default target.
 
 ### Where we just were
 
-The immediate operational issue was data-path confusion: manual enrichment logic had drifted into row-creation behavior, which broke founder expectations and created non-standard entries (for example, `store_city_state="Manual Add"` instead of `Georgia` in a founder-owned context).
+The immediate problem was not product behavior but continuity drift. The repo canon pointed to a missing root `PENNYCENTRAL_MASTER_CONTEXT.md`, the backlog still named the wrong next recovery slice, and a parallel Sentry worktree created confusion about whether `dev` or `develop` was the real integration lane.
 
-In this session chain, we:
+In this session chain, we verified:
 
-- fixed the DAP manual-created row state to `Georgia`
-- repaired `manual:cade-fast-track` parsing + SKU validation contract so founder keyed JSON payloads process correctly
-- successfully submitted a founder payload through fast-track with no SerpAPI path involved
-- updated founder and engineering docs so the workflow split is explicit and repeatable
+- main worktree `C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE` is clean on `dev`
+- Sentry worktree `C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE-sentry` is clean on `feature/sentry-spam-fix-and-autofix`
+- `dev` is ahead of `develop` by 4 commits
+- the Sentry feature branch is based on `develop`, not `dev`
 
-The key reasoning update: **manual enrichment and founder submission are different jobs and must stay separate by design.**
+The continuity fix was to restore the missing root founder-context file, correct the stale `S2` -> `S3` recovery reference, and persist the verified branch/worktree reality in shared memory so future agents stop guessing.
 
 ### Where the next link goes
 
 Next sessions should prioritize:
 
-1. **Keep manual workflow boundaries strict.**
+1. **Continue Site Recovery at `S3 - Guide Core Rebuild` on `dev`.**
+2. **Keep manual workflow boundaries strict.**
    - Use `manual:enrich` only when Penny List rows already exist.
    - Use `manual:cade-fast-track` for founder direct submissions from pre-scraped payloads.
-2. **Continue Site Recovery at `S3 - Guide Core Rebuild`** once current branch hygiene is clean.
-3. **Preserve no-credit founder path** when Cade already has scraped item payloads; do not route those through scrape fallback.
+3. **Treat branch-topology cleanup as its own explicit git objective.**
+   - Do not merge, delete, or re-target `develop`/Sentry branches based on assumption.
+   - If Cade wants branch cleanup, start from the verified topology captured in `STATE.md` and `SESSION_LOG.md`.
 
-The thread connection: reducing founder operational friction and preserving scrape budget directly supports the same trust/quality goals as the recovery program.
+The thread connection: founder trust depends on continuity being understandable. Clarifying branch/worktree reality reduces future context loss the same way data-path clarification reduced manual workflow errors.
 
 ### What the agent must understand before working
 
@@ -60,7 +58,9 @@ The thread connection: reducing founder operational friction and preserving scra
 
 If you make a change that doesn't serve the surface's stated job, or if you can't articulate _why_ your change makes the surface better at its job, stop and reconsider. "Tests pass" is not the same as "this is an improvement."
 
-**Manual workflow contract is now part of continuity.** Future agents should not assume `/manual` is allowed to create Penny List rows. Creation is founder-only fast-track behavior via `/manual:cade` / `manual:cade-fast-track`.
+**Manual workflow contract is part of continuity.** Future agents should not assume `/manual` is allowed to create Penny List rows. Creation is founder-only fast-track behavior via `/manual:cade` / `manual:cade-fast-track`.
+
+**Branch policy is also part of continuity now.** Use `dev` as the default implementation lane. `develop` exists but currently lags `dev`; do not treat it as canon unless Cade explicitly changes the policy.
 
 ---
 

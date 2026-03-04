@@ -4,6 +4,43 @@
 
 ---
 
+## 2026-03-04 - Codex - Branch/Worktree Canon Clarification
+
+**Goal:** Remove current repo-continuity confusion by restoring the missing root founder-context file, correcting stale shared-memory references, and documenting the verified branch/worktree topology in plain English.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `PENNYCENTRAL_MASTER_CONTEXT.md`
+  - restored the missing canonical root file from the archived orphan content so the repo read order points at a real founder-context document again.
+- `.ai/BACKLOG.md`
+  - corrected the founder-override note so the next recovery slice is `S3 - Guide Core Rebuild`, not the already-completed `S2 - Homepage Proof Front Door`.
+  - added an explicit continuity note that `dev` remains the canonical integration branch and `develop` should be treated as legacy/stale unless Cade changes policy.
+- `.ai/THREAD.md`
+  - rewrote the active continuity thread to include the verified branch/worktree reality and the rule that branch-topology cleanup must be its own explicit git objective.
+- `.ai/STATE.md`
+  - recorded the verified topology facts for both worktrees and why the continuity patch was needed.
+
+### Summary
+
+- The repo canon no longer points at a missing founder-context file.
+- Shared memory now matches reality: `S3` is next, `dev` is the active integration branch, and the separate Sentry worktree is real but should not silently redefine branch policy.
+- This was a docs-only clarity pass; no code paths changed.
+
+### Verification
+
+- `npm run ai:writer-lock:status` ✅ (`Writer lock: UNLOCKED` before claim)
+- `npm run ai:writer-lock:claim -- codex "clarify branch-worktree canon and shared memory"` ✅
+- `npm run ai:memory:check` ✅
+- `npm run ai:checkpoint` ✅
+  - artifacts: `reports/context-packs/2026-03-04T07-33-56/`
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Scope: root context restore + shared-memory clarification only
+
 ## 2026-03-04 - GitHub Copilot (GPT-5.3-Codex) - Manual Workflow Split + Founder Fast-Track Validation
 
 **Goal:** Separate enrichment-only behavior from founder direct-submit behavior, correct the bad-state DAP row, and validate no-credit founder upload path end-to-end.
@@ -92,8 +129,6 @@
 - Scope: homepage proof hardening follow-up only
 - Push: not pushed
 
----
-
 ## 2026-03-03 - Claude Code (Sonnet 4.6) - Branch Cleanup & Consolidation
 
 **Goal:** Clean up git branch/worktree mess on dev — commit 38 uncommitted files, remove orphaned worktrees, delete 14 stale local branches, 4 stale remote branches, close PR #143.
@@ -105,7 +140,7 @@
 - Removed 2 orphaned worktrees (s2-homepage-proof, release-main) — git records pruned; s2-homepage-proof folder has a few locked log files (harmless, git-unaware)
 - Committed 38 uncommitted files as 4 logical commits on dev
 - Resolved rebase conflicts: test heading strings (kept remote's correct headings), BACKLOG.md (kept local newer version), added `/guide` route to visual-smoke
-- Pushed rebased dev to origin (dev advanced `fdbc857` → `3a3a11b`)
+- Pushed rebased dev to origin (dev advanced `fdbc857` -> `3a3a11b`)
 - Synced local main with origin/main (fast-forward, 3 new commits)
 - Deleted 14 stale local branches (pr-76 through pr-92, dead features, rescues)
 - Deleted 4 stale remote branches (rescue, pr-84, ci-tiered-verification, claude/affiliate-program-analysis)
@@ -119,9 +154,7 @@
 
 ### Next Steps
 
-- Dependabot PR triage (see plan file Follow-Up section) — merge low-risk PRs first, review zod 3→4 separately
-
----
+- Dependabot PR triage (see plan file Follow-Up section) — merge low-risk PRs first, review zod 3->4 separately
 
 ## 2026-03-03 - Codex - Site Recovery S2 Homepage Proof Front Door
 
@@ -166,7 +199,7 @@
 
 ### Verification
 
-- `python C:\Users\cadeg\.codex\skills\pc-scope-guard\scripts\scope_guard.py` ✅
+- `python C:\\Users\\cadeg\\.codex\\skills\\pc-scope-guard\\scripts\\scope_guard.py` ✅
 - `npm run lint:colors` ✅
 - `npm run verify:fast` ✅
 - `npm run e2e:smoke` ✅
@@ -181,60 +214,3 @@
 - Branch: `codex/s2-homepage-proof-front-door-20260303`
 - Scope: homepage recovery slice + smoke maintenance + canonical site-recovery doc sync
 - Push: not pushed
-
----
-
-## 2026-03-03 - Codex - Report Find Share + Basket UX Hardening
-
-**Goal:** Finish the founder-requested `/report-find` follow-up slice by making the Facebook copy SKU-only, restoring the basket cap to `10`, safely blocking restored over-limit baskets, and explaining the Back-button workflow.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `components/report-find/ReportFindFormClient.tsx`
-  - moved the Facebook/share text onto a submit-time snapshot so the success-state preview/copy reflects the actual submitted location/date instead of live form edits.
-  - replaced the name-based share text with a SKU-only preview/copy flow, renamed the action to `Copy Facebook post`, added the inline `<details>` preview, and added the helper line clarifying that only plain-text SKUs are copied.
-  - restored the basket cap to `10`, removed the always-visible basket-limit helper, added the saved-basket over-limit warning/submit disable rule, and shortened the add-time full-basket message.
-  - added the explicit Penny List Back-button guidance in the intro box.
-  - fixed the prefill hydration race so a saved full basket now blocks extra prefill adds deterministically instead of showing a false success message.
-- `lib/constants.ts`
-  - changed `REPORT_FIND_BASKET_ITEM_LIMIT` from `30` back to `10` so the client and route share one source of truth again.
-- `lib/report-find-share.ts`
-  - added a pure share formatter that builds stable SKU-only Facebook text with location/date context and quantity suffixes only when quantity is greater than `1`.
-- `tests/report-find-batch.spec.ts`
-  - added coverage for the success-state preview/copy text, the restored valid `10`-item submit regression, and the restored over-limit basket warning/disable flow.
-- `tests/report-find-prefill.spec.ts`
-  - added the `11th` manual add rejection coverage and the prefill-at-cap rejection coverage.
-- `tests/report-find-share.test.ts`
-  - added exact-string unit coverage for the new share formatter.
-- `tests/smoke-critical.spec.ts`
-  - added smoke coverage for the Back-button guidance in the report-find explainer.
-
-### Summary
-
-- Facebook/share text on `/report-find` now copies clean plain text with formatted SKUs only, plus the submitted location/date line and PennyCentral CTA.
-- The basket is back to a hard `10`-item cap on both client and server, without advertising that cap in normal UI.
-- Older saved baskets above `10` are preserved, clearly warned, and blocked until the user trims them into separate batches.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run lint:colors` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `npx playwright test tests/report-find-prefill.spec.ts tests/report-find-batch.spec.ts tests/smoke-critical.spec.ts --project=chromium-desktop-light --workers=1` ✅
-- `npx playwright test tests/report-find-prefill.spec.ts tests/report-find-batch.spec.ts tests/smoke-critical.spec.ts --project=chromium-mobile-light --workers=1` ✅
-- UI proof captured via one-off local Playwright script:
-  - artifacts: `reports/proof/2026-03-03-report-find-share-proof/`
-  - desktop proof: `reports/proof/2026-03-03-report-find-share-proof/report-find-success-desktop-light.png`
-  - mobile proof: `reports/proof/2026-03-03-report-find-share-proof/report-find-success-mobile-light.png`
-  - console: `reports/proof/2026-03-03-report-find-share-proof/console-errors.txt`
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Scope: report-find share/cap/preview hardening + targeted regression coverage
-- Push: pending at memory-write time
-
----
