@@ -184,7 +184,7 @@ jobs:
 
       - name: Upload full e2e artifacts (shard ${{ matrix.shard_index }}/${{ matrix.shard_total }})
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: full-e2e-shard-${{ matrix.shard_index }}-of-${{ matrix.shard_total }}
           path: reports/playwright/
@@ -270,7 +270,7 @@ jobs:
         run: npm run check-axe
 
       - name: Upload extended check reports
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: full-qa-reports
