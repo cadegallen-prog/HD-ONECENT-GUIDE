@@ -21,7 +21,21 @@ test.describe("critical smoke lane", () => {
     ).toBeVisible()
   })
 
-  test("guide hub shows part 1 intro and chapter list", async ({ page }) => {
+  test("penny-list never renders DIY as title case", async ({ page }) => {
+    await page.goto("/penny-list")
+    await expect(
+      page.getByRole("heading", { level: 1, name: /Home Depot Penny Items List/i })
+    ).toBeVisible()
+
+    const pageText = await page.locator("main").innerText()
+    expect(pageText).not.toMatch(/\bDiy\b/)
+
+    if (/\bDIY\b/.test(pageText)) {
+      await expect(page.getByText(/\bDIY\b/).first()).toBeVisible()
+    }
+  })
+
+  test("guide hub prioritizes the quick-start path", async ({ page }) => {
     await page.goto("/guide")
 
     await expect(

@@ -93,6 +93,15 @@ assert.strictEqual(
   normalizeProductName("Milwaukee M18 FUEL Hammer Drill/Driver Kit", { brand: "Milwaukee" }),
   "M18 FUEL Hammer Drill/Driver Kit"
 )
+assert.strictEqual(
+  normalizeProductName(
+    "Diy 22.5 SEER2 18,000 BTU Wi-Fi 1.5-Ton Ductless Mini Split Air Conditioner",
+    {
+      brand: "Hessaire",
+    }
+  ),
+  "DIY 22.5 SEER2 18,000 BTU Wi-Fi 1.5-Ton Ductless Mini Split Air Conditioner"
+)
 
 // Validation - comprehensive edge cases
 const complexValidation = filterValidPennyItems([

@@ -49,6 +49,7 @@ export function normalizeProductName(
   const uppercaseWords = new Set([
     ...allCapsWords,
     "HD",
+    "DIY",
     "LED",
     "USB",
     "AC",

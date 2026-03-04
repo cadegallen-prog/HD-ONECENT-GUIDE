@@ -2,11 +2,18 @@ import { test, expect } from "@playwright/test"
 
 const routes = [
   { path: "/", heading: "See live Home Depot penny finds before you make the trip." },
+  { path: "/guide", heading: "How to Find Home Depot Penny Items" },
   { path: "/penny-list", heading: "Home Depot Penny Items List (Live $0.01 Finds)" },
   { path: "/report-find", heading: "Report a Home Depot Penny Item" },
+  { path: "/faq", heading: "Home Depot Penny Items FAQ" },
+  { path: "/what-are-pennies", heading: "What Are Penny Items?" },
   { path: "/store-finder", heading: "Store Finder" },
   { path: "/about", heading: "About PennyCentral" },
+  { path: "/transparency", heading: "Transparency" },
 ] as const
+
+const HYDRATION_MISMATCH_REGEX =
+  /A tree hydrated but some attributes of the server rendered HTML didn't match/i
 
 test.describe("visual smoke (light/dark, mobile/desktop)", () => {
   for (const { path, heading } of routes) {
@@ -75,6 +82,10 @@ test.describe("visual smoke (light/dark, mobile/desktop)", () => {
       // our tests only fail on real application errors.
       const allowedConsoleRegex = /(ezoic|id5-sync|g\.ezoic\.net|cdn\.id5-sync\.com|ezintegration)/i
       const filtered = consoleErrors.filter((m) => !allowedConsoleRegex.test(m))
+      const hydrationMismatches = filtered.filter((message) =>
+        HYDRATION_MISMATCH_REGEX.test(message)
+      )
+      expect(hydrationMismatches, `Hydration mismatch on ${path}`).toEqual([])
       expect(filtered, `Console errors on ${path} (filtered)`).toEqual([])
     })
   }
