@@ -473,42 +473,15 @@ async function fetchPennyRowsForSku(
   return (data ?? []) as PennyRowForManual[]
 }
 
-async function ensurePennyRowsForSku(
+// Manual enrichment: only updates existing Penny List entries, never creates new ones.
+// Use manual:cade-fast-track if you want to auto-create entries for your scraped items.
+async function getOrSkipPennyRowsForSku(
   supabase: ReturnType<typeof createClient>,
-  row: ManualNormalizedRow,
-  atIso: string
-): Promise<{ inserted: number; rows: PennyRowForManual[] }> {
-  const existing = await fetchPennyRowsForSku(supabase, row.sku)
-  if (existing.length > 0) {
-    return { inserted: 0, rows: existing }
-  }
-
-  const patch = buildManualPennyPatch(row)
-  const insertPayload: Record<string, unknown> = {
-    home_depot_sku_6_or_10_digits: row.sku,
-    item_name:
-      (typeof patch.item_name === "string" && patch.item_name.trim().length > 0
-        ? patch.item_name
-        : `Manual Add SKU ${row.sku}`) ?? `Manual Add SKU ${row.sku}`,
-    store_city_state: "Manual Add",
-    purchase_date: atIso.slice(0, 10),
-    exact_quantity_found: 1,
-    notes_optional: "Manual Add via /manual",
-    timestamp: atIso,
-    status: "pending",
-    ...patch,
-    enrichment_provenance: buildManualProvenance(null, row, atIso),
-  }
-
-  const { error } = await supabase.from("Penny List").insert(insertPayload)
-  if (error)
-    throw new Error(`Failed to insert missing Penny List row for ${row.sku}: ${error.message}`)
-
-  const insertedRows = await fetchPennyRowsForSku(supabase, row.sku)
-  return {
-    inserted: 1,
-    rows: insertedRows,
-  }
+  sku: string
+): Promise<PennyRowForManual[] | null> {
+  const rows = await fetchPennyRowsForSku(supabase, sku)
+  // Return null if no existing entry found (signal to skip this SKU)
+  return rows.length > 0 ? rows : null
 }
 
 async function applyItemCacheToPennyRowsForSku(
@@ -642,7 +615,7 @@ async function main() {
       dry_run: args.dryRun,
       cache_upserted: 0,
       penny_rows_found: 0,
-      penny_rows_inserted: 0,
+      penny_rows_skipped_no_entry: 0,
       penny_rows_enriched_by_cache: 0,
       penny_rows_cache_apply_skipped: 0,
       penny_rows_updated_by_manual: 0,
@@ -719,11 +692,17 @@ async function main() {
     const nowIso = new Date().toISOString()
 
     for (const row of deduped.merged) {
-      const ensured = await ensurePennyRowsForSku(supabase, row, nowIso)
-      summary.penny_rows_inserted = Number(summary.penny_rows_inserted) + ensured.inserted
+      // Manual enrichment only updates existing Penny List entries, never creates new ones.
+      const rows = await getOrSkipPennyRowsForSku(supabase, row.sku)
+      if (rows === null) {
+        // No existing Penny List entry found; skip this SKU
+        summary.penny_rows_skipped_no_entry = Number(summary.penny_rows_skipped_no_entry) + 1
+        continue
+      }
+
+      summary.penny_rows_found = Number(summary.penny_rows_found) + rows.length
 
       const applyResult = await applyItemCacheToPennyRowsForSku(supabase, row.sku)
-      summary.penny_rows_found = Number(summary.penny_rows_found) + applyResult.pennyRowsFound
       summary.penny_rows_enriched_by_cache =
         Number(summary.penny_rows_enriched_by_cache) + applyResult.pennyRowsEnriched
       summary.penny_rows_failed = Number(summary.penny_rows_failed) + applyResult.pennyRowsFailed
