@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Mar 4, 2026 (overlap-first multi-agent workflow rule codified)
+**Last updated:** Mar 4, 2026 (`S3B` guide long-form implementation shipped; `S3C1` next)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,24 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-04 (`S3B - /guide` long-form implementation shipped):** Rebuilt `/guide` into the canonical one-page beginner narrative so the site now has one primary teaching spine instead of a hub that pushes users back into route hopping.
+  - **What changed:**
+    - replaced the old `/guide` hub posture in `app/guide/page.tsx` with a seven-section long-form guide that matches `.ai/topics/GUIDE_CORE_CONTENT_MAP.md`, keeps SSR-first rendering, and links out to supporting routes only when readers want deeper detail.
+    - added `components/guide/GuideJumpNav.tsx` so readers can jump directly into scouting, in-store verification, myths, and post-find reporting without leaving the page.
+    - updated `tests/smoke-critical.spec.ts` so smoke now asserts the canonical guide structure instead of the retired chapter-grid behavior.
+    - added a new learning entry in `.ai/LEARNINGS.md` so future standalone visual-smoke retries use `npx cross-env ...` in this shell instead of failing on PATH assumptions.
+  - **Why:** `S3A` proved the guide problem was information-architecture overlap. `S3B` resolves that by giving beginners one authored route through the material while keeping chapter pages as secondary references.
+  - **Status:** runtime slice verified with `npm run lint:colors`, `npm run verify:fast`, `npm run e2e:smoke`, and standalone four-project `npx playwright test tests/visual-smoke.spec.ts --project=chromium-desktop-light --project=chromium-desktop-dark --project=chromium-mobile-light --project=chromium-mobile-dark --workers=1`. Screenshot proof captured at `guide-before-s3b.png`, `guide-after-s3b-desktop.png`, and `guide-after-s3b-mobile.png`. The next guide slice is `S3C1 - supporting chapter-route demotion` for `/what-are-pennies`, `/clearance-lifecycle`, and `/digital-pre-hunt`.
+
+- **2026-03-04 (`S3A - Guide information architecture lock` shipped):** Locked the guide rebuild before runtime edits so `/guide`, `/faq`, `/what-are-pennies`, and the chapter routes now have explicit content ownership.
+  - **What changed:**
+    - created `.ai/topics/GUIDE_CORE_CONTENT_MAP.md` with the seven-section canonical `/guide` outline, source-route mapping, and explicit keep/merge/drop decisions.
+    - updated `.ai/impl/site-recovery-program.md` so the parent plan no longer claims `S2` is next; `S2` is marked shipped, `S3A` is complete, and `S3B` is the next runtime slice.
+    - updated `.ai/impl/site-recovery-s3-guide-core-rebuild.md` with the `S3A` progress note, content-map artifact reference, and drift-check note.
+    - updated continuity memory in `.ai/THREAD.md`, `.ai/STATE.md`, `.ai/BACKLOG.md`, and `.ai/SESSION_LOG.md` so future agents start at `S3B` instead of rediscovering the guide overlap problem.
+  - **Why:** the guide issue is architecture, not missing words. Freezing ownership first prevents the `/guide` rebuild from becoming another overlapping hub.
+  - **Status:** docs-only slice; runtime test lanes are N/A. Memory/proof lanes passed with `npm run ai:memory:check` and `npm run ai:checkpoint` (`reports/context-packs/2026-03-04T08-12-52/`).
 
 - **2026-03-04 (Workflow policy patch: overlap-first dirty-worktree rule + no-silent-worktree default):** Replaced the repo's false-stop git behavior with an overlap-first rule so multiple agents can work without freezing on unrelated local changes.
   - **What changed:**
@@ -2159,6 +2177,7 @@ From `.ai/ANALYTICS_WEEKLY_REVIEW.md`:
   - Store Finder is currently a supporting utility, not a front-door feature.
 - **Hydration diagnosis resolved:** the audited dev mismatch was caused by the Grow script bootstrap mutating `<head>` order before hydration. `S1` replaced that loader with a hydration-safe `next/script` pattern and added route-sweep coverage to keep the mismatch from returning silently.
 - **Hydration diagnosis status:** `S1` has now removed the Grow pre-hydration head mutation and added regression coverage for the audited routes.
-- **Implementation status:** `S0` complete (docs-only). `S1 - Hydration Stability` complete and verified. `S2 - Homepage Proof Front Door` is complete and locally verified from a clean worktree. `S3 - Guide Core Rebuild` is the next implementation slice.
+- **Guide IA lock artifact:** `.ai/topics/GUIDE_CORE_CONTENT_MAP.md`
+- **Implementation status:** `S0` complete (docs-only). `S1 - Hydration Stability` complete and verified. `S2 - Homepage Proof Front Door` is complete and locally verified from a clean worktree. `S3A - Guide information architecture lock` is complete as a docs-only slice. `S3B - /guide long-form implementation` is the next runtime slice.
 - **Homepage proof status:** the `S2` slice has now been hardened on `dev` so proof imagery falls back intentionally, hero metadata reads more precisely, and smoke/visual coverage asserts the proof media state directly.
 - **Code/runtime impact:** homepage proof components, one helper, and homepage-focused smoke/visual tests were edited in this session. No other product routes were changed.

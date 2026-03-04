@@ -4,6 +4,89 @@
 
 ---
 
+## 2026-03-04 - Codex - `/guide` Long-Form Rebuild (`S3B`)
+
+**Goal:** Turn `/guide` into the canonical one-page beginner guide so users can learn the full flow without bouncing across a hub and multiple chapter routes.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `app/guide/page.tsx`
+  - replaced the old guide hub/chapter-grid posture with a seven-section long-form narrative that follows `.ai/topics/GUIDE_CORE_CONTENT_MAP.md`.
+  - kept the page SSR-first, retained the editorial/disclosure/ad infrastructure, and shifted supporting-route links into secondary deep-dive handoffs instead of primary route cards.
+  - updated the route metadata/structured-data posture so `/guide` now behaves like a canonical editorial guide instead of a collection hub.
+- `components/guide/GuideJumpNav.tsx`
+  - added the reusable jump-navigation card grid for the seven guide sections.
+- `tests/smoke-critical.spec.ts`
+  - replaced the stale guide-hub smoke assertions with canonical long-form guide assertions (H1, jump nav, and long-form section headings).
+- `.ai/LEARNINGS.md`
+  - added the shell-specific learning that standalone visual-smoke retries should use `npx cross-env ...` in this PowerShell/Codex environment.
+- `.ai/BACKLOG.md`, `.ai/STATE.md`, `.ai/THREAD.md`, `.ai/impl/site-recovery-program.md`, `.ai/impl/site-recovery-s3-guide-core-rebuild.md`
+  - updated continuity so future agents start at `S3C1` instead of trying to reopen `/guide` as the next slice.
+
+### Summary
+
+- `/guide` is now the canonical long-form beginner route instead of a chapter hub.
+- Supporting routes still exist, but they are now secondary references rather than the main teaching spine.
+- The next recovery slice is `S3C1 - supporting chapter-route demotion` for `/what-are-pennies`, `/clearance-lifecycle`, and `/digital-pre-hunt`.
+
+### Verification
+
+- `netstat -ano | findstr :3001` ✅
+- `Invoke-WebRequest http://localhost:3001/guide` ✅ (`200`)
+- `npm run lint:colors` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npx cross-env NEXT_DIST_DIR=.next-playwright PLAYWRIGHT=1 NEXT_PUBLIC_EZOIC_ENABLED=false NEXT_PUBLIC_ANALYTICS_ENABLED=false npm run build` ✅
+- `npx playwright test tests/visual-smoke.spec.ts --project=chromium-desktop-light --project=chromium-desktop-dark --project=chromium-mobile-light --project=chromium-mobile-dark --workers=1` ✅
+- Screenshot evidence: `guide-before-s3b.png`, `guide-after-s3b-desktop.png`, `guide-after-s3b-mobile.png`
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Scope: `/guide` long-form rebuild + smoke update + continuity updates
+- Push: not pushed
+
+## 2026-03-04 - Codex - Guide IA Lock (`S3A`)
+
+**Goal:** Freeze guide content ownership before runtime edits so the `/guide` rebuild can remove overlap instead of recreating it.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `.ai/topics/GUIDE_CORE_CONTENT_MAP.md`
+  - created the canonical seven-section `/guide` outline for the rebuilt long-form guide.
+  - mapped current route material into keep/merge/drop decisions for `/guide`, `/faq`, `/what-are-pennies`, and the supporting chapter routes.
+  - locked the route-role decisions that `S3B`, `S3C`, and `S3D` must follow.
+- `.ai/impl/site-recovery-program.md`
+  - corrected stale parent-plan status so `S2` is marked shipped, `S3A` is complete, and `S3B` is the immediate next runtime slice.
+- `.ai/impl/site-recovery-s3-guide-core-rebuild.md`
+  - marked `S3A` complete, linked the new content-map artifact, and recorded the drift-check note.
+- `.ai/BACKLOG.md`, `.ai/STATE.md`, `.ai/THREAD.md`
+  - updated continuity so future agents start at `S3B - /guide long-form implementation` instead of rediscovering the guide overlap problem.
+
+### Summary
+
+- Guide recovery now has a locked ownership map before any route code changes start.
+- `/guide` owns the full beginner narrative, `/faq` is tactical, and `/what-are-pennies` becomes the narrower supporting explainer.
+- The next runtime slice is `S3B - /guide long-form implementation`.
+
+### Verification
+
+- `npm run ai:writer-lock:status` ✅
+- `npm run ai:writer-lock:claim -- codex "complete S3A guide IA lock and update continuity memory"` ✅
+- `npm run ai:memory:check` ✅
+- `npm run ai:checkpoint` ✅
+  - artifacts: `reports/context-packs/2026-03-04T08-12-52/`
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Scope: guide-planning docs + shared-memory updates only
+- Push: not pushed
+
 ## 2026-03-04 - Codex - Overlap-First Multi-Agent Workflow Patch
 
 **Goal:** Stop false freezes in multi-agent sessions by changing the repo workflow from "any dirty worktree blocks work" to "inspect overlap first," while keeping shared-memory locking strict.
@@ -130,80 +213,3 @@
 - Branch: `dev`
 - Scope: manual workflow scripts + docs/memory updates + founder data operation
 - Push: not pushed
-
-## 2026-03-04 - Codex - Homepage Proof Hardening Follow-Up
-
-**Goal:** Harden the shipped homepage proof slice after review by fixing brittle product-image behavior, correcting misleading proof metadata, and tightening the homepage proof assertions.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `components/home/HomeProofImage.tsx`
-  - added a client-side homepage proof image wrapper that degrades to an intentional fallback state instead of leaving blank media panels when remote product images fail.
-  - added a safer canonical-source retry path so smaller homepage proof variants can fall back to the stored original source before showing the explicit fallback state.
-- `components/home/HomeProofHero.tsx`
-  - replaced the raw homepage hero/supporting proof `<img>` usage with the new guarded proof-image component.
-  - stopped requesting brittle `1000px` hero imagery and moved the homepage proof surface onto `600px`/`400px` variants that better match the repo’s image-cache assumptions.
-  - changed the misleading hero stat copy from item-count-as-reports to a more precise `Recent items` readout.
-  - changed the freshness stat to use the newest `dateAdded` or `lastSeenAt` timestamp across the visible proof set instead of assuming the first item is freshest.
-  - replaced the misleading quantity pill (`X reported`) with concrete SKU metadata.
-- `components/home/HomeProofStrip.tsx`
-  - replaced the raw proof-strip image rendering with the guarded proof-image component and the safer `600px` variant target.
-- `lib/home-proof.ts`
-  - added a small helper for selecting the freshest homepage proof timestamp deterministically.
-- `tests/home-proof.test.ts`
-  - added direct coverage for the freshest-proof timestamp helper so the corrected hero stat logic is pinned down in unit tests.
-- `tests/smoke-critical.spec.ts`
-  - added a homepage assertion that the hero proof media resolves to either `loaded` or `fallback`, so smoke now catches the blank-hero failure mode.
-- `tests/visual-smoke.spec.ts`
-  - added the same homepage proof-media resolution assertion across desktop/mobile light/dark runs.
-
-### Summary
-
-- The homepage proof surface no longer depends on optimistic remote image loads to look complete.
-- The proof-first hero now uses more trustworthy metadata: freshest activity is actually freshest, and quantity no longer implies multiple reports when it only reflects units found in one submission.
-- The verification lane now protects the proof panel itself, not just the headline and CTA copy.
-
-### Verification
-
-- `npm run lint:colors` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `npx playwright test tests/visual-smoke.spec.ts --project=chromium-desktop-light --project=chromium-desktop-dark --project=chromium-mobile-light --project=chromium-mobile-dark --workers=1` ✅
-  - HTML report: `reports/playwright/html/index.html`
-- `npx tsx scripts/ai-proof.ts --mode=test /` ⚠️ not completed
-  - blocker: temporary background server launch for the wrapper command was blocked by the shell policy in this session, so screenshot evidence comes from the saved Playwright HTML report instead.
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Scope: homepage proof hardening follow-up only
-- Push: not pushed
-
-## 2026-03-03 - Claude Code (Sonnet 4.6) - Branch Cleanup & Consolidation
-
-**Goal:** Clean up git branch/worktree mess on dev — commit 38 uncommitted files, remove orphaned worktrees, delete 14 stale local branches, 4 stale remote branches, close PR #143.
-
-**Status:** ✅ Implemented
-
-### Changes
-
-- Removed 2 orphaned worktrees (s2-homepage-proof, release-main) — git records pruned; s2-homepage-proof folder has a few locked log files (harmless, git-unaware)
-- Committed 38 uncommitted files as 4 logical commits on dev
-- Resolved rebase conflicts: test heading strings (kept remote's correct headings), BACKLOG.md (kept local newer version), added `/guide` route to visual-smoke
-- Pushed rebased dev to origin (dev advanced `fdbc857` -> `3a3a11b`)
-- Synced local main with origin/main (fast-forward, 3 new commits)
-- Deleted 14 stale local branches (pr-76 through pr-92, dead features, rescues)
-- Deleted 4 stale remote branches (rescue, pr-84, ci-tiered-verification, claude/affiliate-program-analysis)
-- Closed PR #143 as superseded with explanatory comment
-- Added `archive/root-level-orphans/experimental_scraper/` and `archive/root-level-orphans/backups-legacy-scripts/` to `.gitignore` (37MB + PII patterns)
-
-**Deviations from plan:**
-
-- `backups-legacy-scripts/` scripts blocked by security scanner (PII patterns in content/filename) — gitignored entire directory instead of committing
-- `s2-homepage-proof` folder has 3 locked log files remaining (a process holds them) — git has no record of it; cleanup is harmless deferred work
-
-### Next Steps
-
-- Dependabot PR triage (see plan file Follow-Up section) — merge low-risk PRs first, review zod 3->4 separately

@@ -1,9 +1,9 @@
 # Site Recovery Program (Canonical)
 
-**Status:** In Progress (`S1` shipped; `S2` next)  
+**Status:** In Progress (`S1` and `S2` shipped; `S3A` and `S3B` complete; `S3C1` next)  
 **Owner:** Cade (approvals), AI agents (execution)  
 **Created:** 2026-03-02  
-**Last updated:** 2026-03-03  
+**Last updated:** 2026-03-04  
 **Current-state audit:** `.ai/topics/SITE_RECOVERY_CURRENT.md`
 
 ## 0) Objective
@@ -77,21 +77,21 @@ Artifacts created by `S0`:
 - `.ai/impl/site-recovery-s7-store-finder-supporting-role.md`
 - `.ai/impl/site-recovery-s8-trust-pages-hardening.md`
 
-This means the next implementation task is **not** another planning step. `S1` has been completed, so the next slice is `S2`.
+This means the next implementation task is **not** another planning step. `S1` and `S2` have been completed, `S3A` locked the guide information architecture, `S3B` rebuilt `/guide` into the canonical long-form route, and the next slice is `S3C1`.
 
 ## 6) Ordered Recovery Topology
 
-| Slice | Status                     | Depends on | Purpose                                                            |
-| ----- | -------------------------- | ---------- | ------------------------------------------------------------------ |
-| `S0`  | Shipped (docs-only)        | none       | Create the durable planning spine                                  |
-| `S1`  | Shipped                    | `S0`       | Remove hydration mismatch + deterministic Penny List text mismatch |
-| `S2`  | Approved (Not Implemented) | `S1`       | Rebuild homepage into a proof-first front door                     |
-| `S3`  | Approved (Not Implemented) | `S2`       | Rebuild guide into one canonical long-form experience              |
-| `S4`  | Approved (Not Implemented) | `S2`       | Simplify Penny List mobile hierarchy while protecting utility      |
-| `S5`  | Approved (Not Implemented) | `S2`       | Compress Report Find pre-form friction                             |
-| `S6`  | Approved (Not Implemented) | `S2`, `S3` | Normalize typography/template hierarchy                            |
-| `S7`  | Approved (Not Implemented) | `S2`, `S4` | Reposition Store Finder as a supporting utility                    |
-| `S8`  | Approved (Not Implemented) | `S2`, `S3` | Harden trust pages                                                 |
+| Slice | Status                             | Depends on | Purpose                                                            |
+| ----- | ---------------------------------- | ---------- | ------------------------------------------------------------------ |
+| `S0`  | Shipped (docs-only)                | none       | Create the durable planning spine                                  |
+| `S1`  | Shipped                            | `S0`       | Remove hydration mismatch + deterministic Penny List text mismatch |
+| `S2`  | Shipped                            | `S1`       | Rebuild homepage into a proof-first front door                     |
+| `S3`  | In Progress (`S3A` and `S3B` done) | `S2`       | Rebuild guide into one canonical long-form experience              |
+| `S4`  | Approved (Not Implemented)         | `S2`       | Simplify Penny List mobile hierarchy while protecting utility      |
+| `S5`  | Approved (Not Implemented)         | `S2`       | Compress Report Find pre-form friction                             |
+| `S6`  | Approved (Not Implemented)         | `S2`, `S3` | Normalize typography/template hierarchy                            |
+| `S7`  | Approved (Not Implemented)         | `S2`, `S4` | Reposition Store Finder as a supporting utility                    |
+| `S8`  | Approved (Not Implemented)         | `S2`, `S3` | Harden trust pages                                                 |
 
 ## 7) Child Plan Registry
 
@@ -175,12 +175,15 @@ Do not continue directly into the next slice in the same uninterrupted batch.
 
 ## 14) Immediate Next Task
 
-**Single next task:** `S2 - Homepage Proof Front Door`
+**Single next task:** `S3C1 - supporting chapter-route demotion`
 
-**Why it is next:** The site recovery program can now move into visual/front-door work because the audited hydration mismatch has been removed and the Penny List text regression is covered.
+**Why it is next:** `S3B` made `/guide` the canonical long-form route, so the next risk is that supporting chapter pages still behave like competing guide surfaces. `S3C1` fixes that for the first three supporting routes without widening scope into FAQ cleanup or the second chapter batch.
 
 **First files to open:**
 
-- `.ai/impl/site-recovery-s2-homepage-proof-front-door.md`
+- `.ai/impl/site-recovery-s3-guide-core-rebuild.md`
+- `.ai/topics/GUIDE_CORE_CONTENT_MAP.md`
 - `.ai/topics/SITE_RECOVERY_CURRENT.md`
-- `app/page.tsx`
+- `app/what-are-pennies/page.tsx`
+- `app/clearance-lifecycle/page.tsx`
+- `app/digital-pre-hunt/page.tsx`

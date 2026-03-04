@@ -363,6 +363,55 @@ Scan this FIRST before suggesting anything. If your idea matches an anti-pattern
 
 ---
 
+### 0m. Standalone visual-smoke runs need the same `.next-playwright` build env as the repo e2e scripts
+
+**Problem:** `npx playwright test tests/visual-smoke.spec.ts ...` failed with "Could not find a production build in the '.next-playwright' directory" even though a prior smoke run had passed.
+
+**What We Tried:**
+
+- Ran the visual-smoke spec directly after a successful e2e smoke pass.
+- Playwright webServer startup failed because the expected `.next-playwright` build was not present in the way the config expected.
+
+**What We Learned:**
+
+- In this repo, standalone visual Playwright runs should use the same env wrapper as `e2e:smoke`:
+  - `NEXT_DIST_DIR=.next-playwright`
+  - `PLAYWRIGHT=1`
+  - analytics/ad-disabling env vars
+- A plain `npx playwright test ...` call can fail as a harness issue even when app code is fine.
+
+**What to Do Instead:**
+
+- For standalone visual-smoke runs, use:
+  - `cross-env NEXT_DIST_DIR=.next-playwright PLAYWRIGHT=1 NEXT_PUBLIC_EZOIC_ENABLED=false NEXT_PUBLIC_ANALYTICS_ENABLED=false npm run build && playwright test tests/visual-smoke.spec.ts ...`
+- Treat "missing .next-playwright build" as a verification-command issue first, not an app regression.
+
+**Date:** Mar 4, 2026
+
+---
+
+### 0n. In this PowerShell session, `cross-env` must be invoked through `npx` or an npm script
+
+**Problem:** A direct `cross-env ...` command failed with "The term 'cross-env' is not recognized" even though the package exists in `devDependencies`.
+
+**What We Tried:**
+
+- Ran `cross-env NEXT_DIST_DIR=.next-playwright ...` directly from PowerShell.
+
+**What We Learned:**
+
+- In this repo/runtime, `cross-env` is available through npm-script resolution but not as a direct shell command.
+
+**What to Do Instead:**
+
+- Use:
+  - `npx cross-env ...`
+- Or wrap the env setup inside an npm script when repeating the command often.
+
+**Date:** Mar 4, 2026
+
+---
+
 ### 0. Route deletion + stale Next type artifacts
 
 **Problem:** After deleting a route page, `npm run build` failed with type errors from stale generated files under `.next-playwright/types` and `.next/dev/types/app/...`.
@@ -911,3 +960,31 @@ export const metadata: Metadata = {
 **What to Do Instead:** Use the repo verification commands (`npm run verify:fast`, `npm run e2e:smoke`, or the existing test script wrappers) instead of invoking TypeScript test files directly with `node`.
 
 **Date:** Mar 02, 2026
+
+---
+
+### 24. Direct `cross-env` Invocation Is Not Reliable In This PowerShell Session
+
+**Problem:** A standalone visual-smoke retry failed before build startup because `cross-env` was not recognized as a command in this PowerShell/Codex shell.
+
+**What We Tried:** Ran `cross-env NEXT_DIST_DIR=.next-playwright PLAYWRIGHT=1 NEXT_PUBLIC_EZOIC_ENABLED=false NEXT_PUBLIC_ANALYTICS_ENABLED=false npm run build` directly as part of a one-off visual test command.
+
+**What We Learned:** In this shell, package binaries are not always exposed for direct invocation outside `npm run` or `npx`, so `cross-env` can fail even when it exists in project dependencies.
+
+**What to Do Instead:** Use `npx cross-env ...` for one-off shell commands in this environment, or wrap the env setup in an npm script before retrying standalone Playwright lanes.
+
+**Date:** Mar 04, 2026
+
+---
+
+### 25. `cross-env` Variable Assignments Must Be Passed As Separate Tokens
+
+**Problem:** A follow-up standalone visual-smoke retry polluted `NEXT_DIST_DIR`, added bad `tsconfig.json` include entries, and created a bogus build folder because the env assignments were passed to `npx cross-env` as one quoted string instead of separate arguments.
+
+**What We Tried:** Stored `NEXT_DIST_DIR=.next-playwright PLAYWRIGHT=1 NEXT_PUBLIC_EZOIC_ENABLED=false NEXT_PUBLIC_ANALYTICS_ENABLED=false` in one shell variable and passed that variable to `npx cross-env ... npm run build`.
+
+**What We Learned:** In this shell, `cross-env` needs each `KEY=value` assignment as its own token. Passing the whole assignment block as one argument can make Next treat the extra text as part of `NEXT_DIST_DIR`, which dirties repo files and build output paths.
+
+**What to Do Instead:** Invoke the command as separate arguments, for example: `npx cross-env NEXT_DIST_DIR=.next-playwright PLAYWRIGHT=1 NEXT_PUBLIC_EZOIC_ENABLED=false NEXT_PUBLIC_ANALYTICS_ENABLED=false npm run build`.
+
+**Date:** Mar 04, 2026

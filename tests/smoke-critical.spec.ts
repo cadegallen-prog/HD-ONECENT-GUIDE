@@ -39,17 +39,22 @@ test.describe("critical smoke lane", () => {
     }
   })
 
-  test("guide hub prioritizes the quick-start path", async ({ page }) => {
+  test("guide route now acts as the canonical long-form guide", async ({ page }) => {
     await page.goto("/guide")
 
     await expect(
-      page.getByRole("heading", { level: 2, name: /What are penny items\?/i })
+      page.getByRole("heading", { level: 1, name: /How to Find Home Depot Penny Items/i })
     ).toBeVisible()
-    await expect(page.getByText(/This page is Part 1\./i)).toBeVisible()
-    await expect(page.getByRole("heading", { level: 2, name: /Guide Chapters/i })).toBeVisible()
+    await expect(page.getByTestId("guide-jump-nav")).toBeVisible()
     await expect(
-      page.getByRole("link", { name: /Clearance Lifecycle & Cadence/i }).first()
-    ).toHaveAttribute("href", "/clearance-lifecycle")
+      page.getByRole("link", { name: /How to scout before a store trip/i }).first()
+    ).toHaveAttribute("href", "#scout-before-a-store-trip")
+    await expect(
+      page.getByRole("heading", { level: 2, name: /What penny items are/i })
+    ).toBeVisible()
+    await expect(
+      page.getByRole("heading", { level: 2, name: /What to do after a confirmed find/i })
+    ).toBeVisible()
   })
 
   test("report-find page includes Back-button basket guidance", async ({ page }) => {

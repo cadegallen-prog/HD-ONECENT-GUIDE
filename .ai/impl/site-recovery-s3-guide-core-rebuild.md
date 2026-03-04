@@ -1,13 +1,21 @@
 # Site Recovery S3 - Guide Core Rebuild
 
-**Status:** Approved (Not Implemented)  
+**Status:** In Progress (`S3A` and `S3B` complete; `S3C1` next)  
 **Depends on:** `S2` homepage proof front door  
 **Owner:** AI agents  
-**Last updated:** 2026-03-02
+**Last updated:** 2026-03-04
 
 ## Summary
 
 Restore a real editorial spine by making `/guide` the canonical long-form guide and demoting the existing chapter pages into supporting references.
+
+## Progress Note
+
+- `S3A` is complete.
+- `S3B` is complete.
+- Canonical content-ownership artifact: `.ai/topics/GUIDE_CORE_CONTENT_MAP.md`
+- `/guide` is now the canonical seven-section long-form route with jump navigation.
+- Immediate next runtime slice: `S3C1 - supporting chapter-route demotion` for `/what-are-pennies`, `/clearance-lifecycle`, and `/digital-pre-hunt`
 
 ## Why This Slice Exists
 
@@ -65,6 +73,11 @@ The current guide system is not failing because it lacks content volume. It is f
 - Keep the page SSR-first.
 - Use jump navigation for section access.
 - Keep the guide readable on mobile without forcing separate route-hopping.
+
+**Completion note (2026-03-04)**
+
+- implemented in `app/guide/page.tsx` with `components/guide/GuideJumpNav.tsx`.
+- verified with `npm run verify:fast`, `npm run e2e:smoke`, and standalone four-project `tests/visual-smoke.spec.ts`.
 
 ### `S3C` - Supporting chapter-route demotion
 
@@ -157,3 +170,10 @@ Each `S3` child slice requires:
 - The main risk is trying to "improve copy" without actually collapsing the information architecture.
 - The canonical guide will fail if it becomes a dressed-up hub rather than a real narrative.
 - Supporting routes should not become thin shells; each one must either retain unique value or be visibly repositioned as a support page.
+
+## Drift Checks (2026-03-04)
+
+- No guide-specific naming collisions surfaced in the drift scan.
+- No risky active-route substring matching patterns surfaced for the planned guide work.
+- No mobile touch-target regressions surfaced in the current guide-related surfaces.
+- Unrelated My List bookmark-history references were found in older planning artifacts and shared memory; they are out of scope for `S3`.

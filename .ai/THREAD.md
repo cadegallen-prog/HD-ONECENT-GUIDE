@@ -16,40 +16,47 @@ The product thread is still the same: make PennyCentral more trustworthy and eas
 
 Three continuity facts now matter together:
 
-1. **Site Recovery Program** (`.ai/impl/site-recovery-program.md`) is still the main product lane, and `S3 - Guide Core Rebuild` is the next implementation slice on `dev`.
-2. **Manual data pipeline hardening** remains important: `manual:enrich` and `manual:cade-fast-track` are intentionally separate workflows and must stay that way.
-3. **Branch/worktree clarity is now explicit**: `dev` is the canonical integration branch, a separate Sentry worktree exists for `feature/sentry-spam-fix-and-autofix`, `develop` still exists only as a stale side branch, and dirty-file checks are now overlap-first instead of hard-stop by default.
+1. **Site Recovery Program** (`.ai/impl/site-recovery-program.md`) is still the main product lane, and `/guide` is now the canonical long-form beginner route on `dev`.
+2. **The next guide slice is no longer `/guide` itself.** `S3B` is complete, so the next runtime work is `S3C1 - supporting chapter-route demotion` for `/what-are-pennies`, `/clearance-lifecycle`, and `/digital-pre-hunt`.
+3. **Manual workflow and branch workflow rules remain strict:** `manual:enrich` vs `manual:cade-fast-track` stay separate, `dev` remains the canonical branch, and dirty-file checks are overlap-first instead of hard-stop by default.
 
 ### Where we just were
 
-The immediate problem was not product behavior but continuity drift. The repo canon pointed to a missing root `PENNYCENTRAL_MASTER_CONTEXT.md`, the backlog still named the wrong next recovery slice, and a parallel Sentry worktree created confusion about whether `dev` or `develop` was the real integration lane.
+After the workflow cleanup and `S3A` ownership lock, the remaining risk was that `/guide` could still become a dressed-up hub instead of a real teaching route. The content map solved "what belongs where," but not the actual beginner experience.
 
-In this session chain, we verified:
+This session executed `S3B` as the runtime follow-through:
 
-- main worktree `C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE` is clean on `dev`
-- Sentry worktree `C:\\Users\\cadeg\\Projects\\HD-ONECENT-GUIDE-sentry` is clean on `feature/sentry-spam-fix-and-autofix`
-- `dev` is ahead of `develop` by 4 commits
-- the Sentry feature branch is based on `develop`, not `dev`
+- replaced the old hub/chapter-grid posture on `/guide` with one seven-section long-form narrative,
+- added jump navigation so returning users can reach the exact section they need without route-hopping,
+- kept supporting-route links as secondary deep dives instead of the main spine,
+- updated smoke coverage and verified the route with fast, smoke, and standalone visual-smoke lanes,
+- recorded the shell-specific `npx cross-env` learning so future standalone Playwright retries do not repeat the same PATH mistake.
 
-The continuity fix was to restore the missing root founder-context file, correct the stale `S2` -> `S3` recovery reference, persist the verified branch/worktree reality in shared memory, and then patch the workflow rules so future agents stop freezing on unrelated dirty files.
+The key lesson carried forward is that guide recovery only works if `/guide` keeps ownership of the full beginner flow. If a future agent reintroduces a chapter-grid-first posture, the architecture regression will be immediate even if the copy looks better.
 
 ### Where the next link goes
 
 Next sessions should prioritize:
 
-1. **Continue Site Recovery at `S3 - Guide Core Rebuild` on `dev`.**
-2. **Keep manual workflow boundaries strict.**
+1. **Implement `S3C1 - supporting chapter-route demotion` on `dev`.**
+   - Start with `/what-are-pennies`, `/clearance-lifecycle`, and `/digital-pre-hunt`.
+   - Each route should visibly point back to `/guide` as the canonical path before its unique detail begins.
+   - Preserve the useful detail; do not turn the routes into empty shells.
+2. **Keep `/faq` untouched until `S3D`.**
+   - `S3B` already moved the primary conceptual teaching onto `/guide`.
+   - Do not widen scope into FAQ cleanup during `S3C1`.
+3. **Keep manual workflow boundaries strict.**
    - Use `manual:enrich` only when Penny List rows already exist.
    - Use `manual:cade-fast-track` for founder direct submissions from pre-scraped payloads.
-3. **Treat branch-topology cleanup as its own explicit git objective.**
+4. **Treat branch-topology cleanup as its own explicit git objective.**
    - Do not merge, delete, or re-target `develop`/Sentry branches based on assumption.
    - If Cade wants branch cleanup, start from the verified topology captured in `STATE.md` and `SESSION_LOG.md`.
-4. **Use overlap-first dirty-file checks in multi-agent sessions.**
+5. **Use overlap-first dirty-file checks in multi-agent sessions.**
    - Unrelated dirty files are not an automatic blocker.
    - Shared-memory files still require the writer lock.
    - Separate worktrees are optional isolation tools, not the default workflow.
 
-The thread connection: founder trust depends on continuity being understandable. Clarifying branch/worktree reality reduces future context loss the same way data-path clarification reduced manual workflow errors.
+The thread connection: founder trust depends on continuity being understandable. The branch/worktree cleanup removed operational confusion, `S3A` removed content-ownership confusion, and `S3B` finally turned `/guide` into the primary learning path. `S3C1` matters next because supporting routes still need to acknowledge that new hierarchy instead of competing with it.
 
 ### What the agent must understand before working
 
@@ -61,6 +68,16 @@ The thread connection: founder trust depends on continuity being understandable.
 - Current baseline performance
 
 If you make a change that doesn't serve the surface's stated job, or if you can't articulate _why_ your change makes the surface better at its job, stop and reconsider. "Tests pass" is not the same as "this is an improvement."
+
+**The guide content map is now canon for `S3`.** `.ai/topics/GUIDE_CORE_CONTENT_MAP.md` is the ownership lock for `/guide`, `/faq`, `/what-are-pennies`, and the chapter routes. Update that map first if you need to change ownership decisions.
+
+**`/guide` is already rebuilt.** Do not reintroduce the old chapter-grid hub posture on `app/guide/page.tsx`. The page now owns the full beginner narrative and should stay the canonical long-form teaching surface.
+
+**Route roles are now explicit.** `/guide` owns the full beginner narrative, `/faq` is tactical, `/what-are-pennies` is the short supporting explainer, and the other chapter routes are supporting reference pages with unique detail.
+
+**Supporting routes must be repositioned, not gutted.** `S3C1` and `S3C2` should add canonical-guide framing before unique detail, not remove all useful reference content.
+
+**Standalone visual smoke now has a known shell rule.** In this environment, use `npx cross-env ...` for one-off Playwright build/test commands instead of assuming `cross-env` is directly on PATH.
 
 **Manual workflow contract is part of continuity.** Future agents should not assume `/manual` is allowed to create Penny List rows. Creation is founder-only fast-track behavior via `/manual:cade` / `manual:cade-fast-track`.
 
