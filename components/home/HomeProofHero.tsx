@@ -2,8 +2,10 @@ import Link from "next/link"
 import { ArrowRight, BookOpen, Clock3, MapPin, Users } from "lucide-react"
 import { COMMUNITY_MEMBER_COUNT_DISPLAY } from "@/lib/constants"
 import type { PennyItem } from "@/lib/fetch-penny-data"
-import { PLACEHOLDER_IMAGE_URL, toThdImageVariant } from "@/lib/image-cache"
+import { PLACEHOLDER_IMAGE_URL } from "@/lib/image-cache"
+import { getFreshestHomeProofTimestamp } from "@/lib/home-proof"
 import { formatCurrency, formatRelativeDate, formatReportCount } from "@/lib/penny-list-utils"
+import { HomeProofImage } from "./HomeProofImage"
 
 function hasUsableName(item: PennyItem) {
   const name = item.name?.trim()
@@ -30,12 +32,6 @@ function getStateLabel(item: PennyItem) {
   return `Seen in ${stateCount} states`
 }
 
-function getQuantityLabel(item: PennyItem) {
-  const quantity = Number(item.quantityFound)
-  if (!Number.isFinite(quantity) || quantity <= 1) return null
-  return `${quantity} reported`
-}
-
 export function HomeProofHero({ items }: { items: PennyItem[] }) {
   const renderableItems = getRenderableItems(items)
   const imageBackedItems = renderableItems.filter(hasUsableImage)
@@ -43,6 +39,7 @@ export function HomeProofHero({ items }: { items: PennyItem[] }) {
   const supportingItems = renderableItems
     .filter((item) => item.sku !== primaryItem?.sku)
     .slice(0, 2)
+  const freshestActivityTimestamp = getFreshestHomeProofTimestamp(renderableItems)
 
   const uniqueStateCount = new Set(
     renderableItems.flatMap((item) => Object.keys(item.locations ?? {}))
@@ -52,9 +49,9 @@ export function HomeProofHero({ items }: { items: PennyItem[] }) {
     renderableItems.length > 0
       ? [
           {
-            label: "Recent finds",
+            label: "Recent items",
             value: formatReportCount(renderableItems.length),
-            detail: "reported in the last 48 hours",
+            detail: "added to the list in the last 48 hours",
           },
           {
             label: "State coverage",
@@ -62,11 +59,11 @@ export function HomeProofHero({ items }: { items: PennyItem[] }) {
             detail: uniqueStateCount === 1 ? "state represented" : "states represented",
           },
           {
-            label: "Freshest report",
-            value: formatRelativeDate(
-              renderableItems[0].lastSeenAt ?? renderableItems[0].dateAdded
-            ),
-            detail: "based on the newest list activity",
+            label: "Freshest activity",
+            value: freshestActivityTimestamp
+              ? formatRelativeDate(freshestActivityTimestamp)
+              : "Recently",
+            detail: "based on the newest report or follow-up sighting",
           },
         ]
       : [
@@ -156,27 +153,18 @@ export function HomeProofHero({ items }: { items: PennyItem[] }) {
 
             <div className="grid gap-4">
               <article className="overflow-hidden rounded-[24px] border border-[var(--border-default)] bg-[var(--bg-page)] shadow-[var(--shadow-card)]">
-                {primaryItem && hasUsableImage(primaryItem) ? (
-                  <div className="aspect-[4/3] bg-[var(--bg-recessed)]">
-                    <img
-                      src={toThdImageVariant(primaryItem.imageUrl, 1000)}
-                      alt={primaryItem.name}
-                      className="h-full w-full object-cover"
-                      loading="lazy"
-                      referrerPolicy="no-referrer"
-                    />
-                  </div>
-                ) : (
-                  <div className="border-b border-[var(--border-default)] bg-[var(--bg-subtle)] px-5 py-4 sm:px-6">
-                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--text-muted)]">
-                      Proof snapshot
-                    </p>
-                    <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
-                      Live reports feed into SKU pages and the Penny List so the homepage can prove
-                      value before it asks for trust.
-                    </p>
-                  </div>
-                )}
+                <HomeProofImage
+                  src={primaryItem?.imageUrl}
+                  alt={primaryItem?.name ?? "Recent penny item proof"}
+                  target={600}
+                  loading="eager"
+                  fetchPriority="high"
+                  testId="home-proof-hero-media"
+                  wrapperClassName="aspect-[4/3]"
+                  imageClassName="h-full w-full object-cover bg-[var(--bg-recessed)]"
+                  fallbackLabel="Proof snapshot"
+                  fallbackCopy="Live reports feed into SKU pages and the Penny List, so the homepage still shows product proof even when a remote photo does not load."
+                />
 
                 <div className="p-5 sm:p-6">
                   <div className="flex flex-wrap items-center gap-3 text-sm text-[var(--text-muted)]">
@@ -211,9 +199,7 @@ export function HomeProofHero({ items }: { items: PennyItem[] }) {
                       {primaryItem ? getStateLabel(primaryItem) : "Guide + Penny List"}
                     </span>
                     {primaryItem ? (
-                      <span className="pill">
-                        {getQuantityLabel(primaryItem) ?? "Open the SKU page for details"}
-                      </span>
+                      <span className="pill">SKU {primaryItem.sku}</span>
                     ) : (
                       <span className="pill">Built for first-time and returning hunters</span>
                     )}
@@ -238,12 +224,14 @@ export function HomeProofHero({ items }: { items: PennyItem[] }) {
                         className="group flex gap-3 rounded-2xl border border-[var(--border-default)] bg-[var(--bg-page)] p-4 transition-colors hover:bg-[var(--bg-subtle)]"
                       >
                         {hasUsableImage(item) ? (
-                          <img
-                            src={toThdImageVariant(item.imageUrl, 400)}
+                          <HomeProofImage
+                            src={item.imageUrl}
                             alt={item.name}
-                            className="h-20 w-20 flex-shrink-0 rounded-xl bg-[var(--bg-recessed)] object-cover"
-                            loading="lazy"
-                            referrerPolicy="no-referrer"
+                            target={400}
+                            loading="eager"
+                            wrapperClassName="h-20 w-20 flex-shrink-0 rounded-xl"
+                            imageClassName="h-full w-full rounded-xl bg-[var(--bg-recessed)] object-cover"
+                            compactFallback
                           />
                         ) : (
                           <div className="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-xl bg-[var(--bg-recessed)] text-[var(--text-muted)]">

@@ -2,8 +2,9 @@ import Link from "next/link"
 import { ArrowRight, Clock3, MapPin, Users } from "lucide-react"
 import { COMMUNITY_MEMBER_COUNT_DISPLAY } from "@/lib/constants"
 import type { PennyItem } from "@/lib/fetch-penny-data"
-import { PLACEHOLDER_IMAGE_URL, toThdImageVariant } from "@/lib/image-cache"
+import { PLACEHOLDER_IMAGE_URL } from "@/lib/image-cache"
 import { formatCurrency, formatRelativeDate } from "@/lib/penny-list-utils"
+import { HomeProofImage } from "./HomeProofImage"
 
 function hasUsableName(item: PennyItem) {
   const name = item.name?.trim()
@@ -67,15 +68,14 @@ export function HomeProofStrip({ items }: { items: PennyItem[] }) {
                 key={item.sku}
                 className="overflow-hidden rounded-[24px] border border-[var(--border-default)] bg-[var(--bg-page)]"
               >
-                <div className="aspect-[4/3] bg-[var(--bg-recessed)]">
-                  <img
-                    src={toThdImageVariant(item.imageUrl, 1000)}
-                    alt={item.name}
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                    referrerPolicy="no-referrer"
-                  />
-                </div>
+                <HomeProofImage
+                  src={item.imageUrl}
+                  alt={item.name}
+                  target={600}
+                  wrapperClassName="aspect-[4/3]"
+                  imageClassName="h-full w-full object-cover bg-[var(--bg-recessed)]"
+                  fallbackCopy="The SKU page still carries the item details even if a remote product image is unavailable."
+                />
 
                 <div className="p-5">
                   <div className="flex flex-wrap items-center gap-3 text-sm text-[var(--text-muted)]">

@@ -63,6 +63,12 @@ test.describe("visual smoke (light/dark, mobile/desktop)", () => {
             name: /Choose the route that matches what you need next\./i,
           })
         ).toBeVisible()
+        await expect(page.getByTestId("home-proof-hero-media")).toBeVisible()
+        await expect
+          .poll(async () =>
+            page.getByTestId("home-proof-hero-media").getAttribute("data-proof-visual")
+          )
+          .toMatch(/loaded|fallback/)
       }
 
       await page.evaluate(() => {

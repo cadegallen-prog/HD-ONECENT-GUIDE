@@ -12,6 +12,10 @@ test.describe("critical smoke lane", () => {
     ).toBeVisible()
     await expect(page.getByRole("link", { name: /Learn how it works/i }).first()).toBeVisible()
     await expect(page.getByRole("link", { name: /Check the Penny List/i }).first()).toBeVisible()
+    await expect(page.getByTestId("home-proof-hero-media")).toBeVisible()
+    await expect
+      .poll(async () => page.getByTestId("home-proof-hero-media").getAttribute("data-proof-visual"))
+      .toMatch(/loaded|fallback/)
   })
 
   test("critical route /penny-list loads", async ({ page }) => {
