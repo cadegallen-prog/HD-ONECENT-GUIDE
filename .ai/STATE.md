@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Mar 3, 2026 (`S2` homepage proof front door verified locally from a clean worktree)
+**Last updated:** Mar 4, 2026 (`develop` workflow migration + Sentry Slice 3 dashboard hardening captured on isolated feature worktree)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,33 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-04 (`develop` migration + Sentry Slice 3 dashboard hardening captured on isolated feature worktree):** The repo workflow is aligned to `feature/* -> develop -> main`, the repo-side Sentry hardening slice is complete, and the live Sentry dashboard is now narrowed enough for a conservative production-only rollout.
+  - **What changed:**
+    - used an authenticated Playwright Sentry session to finish the dashboard slice on org `pennycentral` / project `javascript-nextjs`.
+    - deleted legacy noisy issue alert `16552275` (`Send a notification for high priority issues`).
+    - created production-only issue rules:
+      - `16751148` `Production - New unhandled issue`
+      - `16751153` `Production - Regressed unhandled issue`
+    - created production crash-rate metric alert `409707` (`Production - Crash-free session rate below 97% (30m)`), after verifying that Sentry does not allow the requested `10m` crash-rate window for this alert type.
+    - enabled the `localhost` inbound filter and confirmed browser-extension and crawler filters remain enabled.
+    - verified GitHub repo integration for `cadegallen-prog/HD-ONECENT-GUIDE` and confirmed current production releases resolve against GitHub-backed commit association, while preview releases still show `origin` / `unknown`.
+    - hardened Seer Autofix for this project so the saved backend preference is `automated_run_stopping_point = solution`, with the project linked to the GitHub repo and org defaults keeping PR creation off for new projects.
+    - captured proof artifacts under `reports/sentry/2026-03-04/`, including rules, filters, Seer defaults, connected repo screenshots, and `settings-summary.md`.
+  - **Why:** the founder priority is to stop quota burn and alert fatigue immediately, while keeping Autofix conservative enough that Sentry cannot open or advance code changes beyond the approved phase-1 workflow.
+  - **Status:** dashboard slice is complete on `feature/sentry-spam-fix-and-autofix`. The remaining Sentry work is Slice 4 onward: merge/promote, let production data stabilize, then triage real production issues one-by-one on child branches. One UI caveat was documented in the proof bundle: the project Seer checkbox surface was inconsistent with the saved backend state, so the API-backed `solution` stopping point is the authoritative setting.
+
+- **2026-03-04 (`develop` migration + Sentry Slice 2 shipped on isolated feature worktree):** The repo workflow is now aligned to `feature/* -> develop -> main`, and the code-side Sentry hardening slice is complete on an isolated Sentry worktree.
+  - **What changed:**
+    - created and pushed `develop` from clean `origin/dev`, leaving local `dev` and its two unpublished commits untouched.
+    - created isolated worktree `C:\Users\cadeg\Projects\HD-ONECENT-GUIDE-sentry` on branch `feature/sentry-spam-fix-and-autofix`.
+    - updated canonical workflow docs and CI triggers so `develop` is the integration branch and `quality.yml` / `smoke-e2e.yml` now run on `develop`.
+    - changed GitHub default branch to `develop` and applied matching branch protection to `develop` plus `main`.
+    - added shared runtime helper `lib/monitoring/sentry-runtime.ts` and targeted coverage in `tests/sentry-runtime.test.ts`.
+    - updated `instrumentation-client.ts`, `sentry.server.config.ts`, and `sentry.edge.config.ts` so runtime tags, environment tagging, sample rates, first-party allow rules, and low-signal noise filtering are centralized.
+    - updated `.ai/ENVIRONMENT_VARIABLES.md` and `.ai/SENTRY_ALERTS_MANUAL.md` so the Sentry runbook matches the runtime behavior and the pending dashboard slice.
+  - **Why:** the founder set a new mandatory workflow contract and a Sentry cleanup priority after noise and alert volume made the current setup too expensive and too distracting.
+  - **Status:** verified on `feature/sentry-spam-fix-and-autofix` with passing `ai:memory:check`, `ai:checkpoint`, `check:docs-governance`, targeted Sentry unit tests, and `verify:fast`. Current branch commits: `5eca55f`, `52bf1c4`, `8e7b249`. Remote branch exists. Slice 3 is blocked only by missing Sentry login/API access in this shell; Playwright lands on the Sentry sign-in wall and no local `SENTRY_*` env vars or Vercel CLI are available.
 
 - **2026-03-03 (`S2 - Homepage Proof Front Door` shipped locally from clean worktree):** Rebuilt the homepage into a proof-first front door so first-time visitors see what Penny Central is, why it is real, and what to do next within the first screen.
   - **What changed:**
@@ -2121,5 +2148,5 @@ From `.ai/ANALYTICS_WEEKLY_REVIEW.md`:
   - Store Finder is currently a supporting utility, not a front-door feature.
 - **Hydration diagnosis resolved:** the audited dev mismatch was caused by the Grow script bootstrap mutating `<head>` order before hydration. `S1` replaced that loader with a hydration-safe `next/script` pattern and added route-sweep coverage to keep the mismatch from returning silently.
 - **Hydration diagnosis status:** `S1` has now removed the Grow pre-hydration head mutation and added regression coverage for the audited routes.
-- **Implementation status:** `S0` complete (docs-only). `S1 - Hydration Stability` complete and verified. `S2 - Homepage Proof Front Door` is complete and locally verified from a clean worktree. `S3 - Guide Core Rebuild` is the next implementation slice.
+- **Implementation status:** `S0` complete (docs-only). `S1 - Hydration Stability` complete and verified. `S2 - Homepage Proof Front Door` is complete and locally verified from a clean worktree. The active founder override is now the Sentry workflow migration plan on `feature/sentry-spam-fix-and-autofix`; its Slice 0, Slice 1, and Slice 2 are complete, while Slice 3 is blocked on Sentry access. `S3 - Guide Core Rebuild` remains the next site-recovery slice after the Sentry override clears.
 - **Code/runtime impact:** none in this session. No product route files were edited.

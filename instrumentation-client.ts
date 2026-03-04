@@ -1,53 +1,53 @@
 import * as Sentry from "@sentry/nextjs"
 
-const allowedSentryHosts = ["pennycentral.com", "www.pennycentral.com"]
+import {
+  FIRST_PARTY_URL_ALLOWLIST,
+  INITIAL_NOISE_PATTERNS,
+  RUNTIME_SENTRY_DSN,
+  getClientSentryEnvironment,
+  getSentryRuntimeTag,
+  shouldDropSentryEvent,
+} from "@/lib/monitoring/sentry-runtime"
 
-const shouldEnableSentry =
-  process.env.NODE_ENV === "production" &&
-  typeof window !== "undefined" &&
-  allowedSentryHosts.includes(window.location.hostname)
+const runtimeEnvironment =
+  typeof window === "undefined"
+    ? "development"
+    : getClientSentryEnvironment(window.location.hostname)
+
+const shouldEnableSentry = typeof window !== "undefined" && runtimeEnvironment === "production"
 
 Sentry.init({
-  dsn: "https://6c97a22cc0a22bf546df09e9051202f6@o4510605822394368.ingest.us.sentry.io/4510605823246336",
+  dsn: RUNTIME_SENTRY_DSN,
 
-  // Avoid noisy reports from localhost and Vercel preview deployments.
+  // Only report client errors from the production hostname.
   enabled: shouldEnableSentry,
 
   // Capture 10% of transactions for performance monitoring (stay in free tier)
   tracesSampleRate: 0.1,
 
-  // Set environment to distinguish dev vs prod errors
-  environment: process.env.NODE_ENV,
+  // Capture a subset of browser errors while keeping server/edge at 100%.
+  sampleRate: 0.25,
+
+  // Production is pinned to the canonical hostname even if the build came from preview.
+  environment: runtimeEnvironment,
+
+  initialScope: {
+    tags: {
+      runtime: getSentryRuntimeTag("client"),
+    },
+  },
+
+  ignoreErrors: INITIAL_NOISE_PATTERNS,
+
+  // Only accept first-party PennyCentral frames from the browser runtime.
+  allowUrls: FIRST_PARTY_URL_ALLOWLIST,
 
   // Enable debug mode in development
   debug: false,
 
-  // Filter out expected/harmless errors before sending to Sentry
+  // Keep low-signal browser noise out of the paid error stream.
   beforeSend(event) {
-    // Suppress geolocation API errors (not critical)
-    if (event.message?.includes("geolocation")) {
-      return null
-    }
-    // Suppress network errors (transient, not actionable)
-    if (
-      event.message?.includes("fetch") ||
-      event.message?.includes("XMLHttpRequest") ||
-      event.message?.includes("Network request failed")
-    ) {
-      return null
-    }
-    // Suppress CSP and third-party script load failures
-    if (
-      event.message?.includes("Content Security Policy") ||
-      event.message?.includes("Refused to load the script")
-    ) {
-      return null
-    }
-    // Suppress CORS errors (expected in cross-origin scenarios)
-    if (event.message?.includes("CORS") || event.message?.includes("Cross-Origin")) {
-      return null
-    }
-    return event
+    return shouldDropSentryEvent(event) ? null : event
   },
 })
 

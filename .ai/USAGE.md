@@ -104,7 +104,7 @@ This supports multiple concurrent plans without losing track of which is approve
 ## Critical Rules (repeat daily)
 
 - Default to **no new dependencies** and avoid one-off files; if you must add a file, prune or merge an obsolete one and log it.
-- Implement on `dev`; promote to `main` only after verification and review.
+- Implement on `feature/*` from `develop`; promote `develop` to `main` only after verification and review.
 - Use DECISION_RIGHTS for approval checks before UI/system changes.
 - Keep edits inside the design system and constraints; prefer token-backed utilities.
 

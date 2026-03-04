@@ -23,6 +23,7 @@
 
 | Plan                                            | Status                     | Priority              | Last updated | Notes                                                                                                      |
 | ----------------------------------------------- | -------------------------- | --------------------- | ------------ | ---------------------------------------------------------------------------------------------------------- |
+| `.ai/impl/sentry-spam-autofix-workflow-migration.md` | In Progress                | P0 (Workflow + Sentry) | 2026-03-04   | Branch-model migration + Sentry noise reduction + conservative Autofix rollout                            |
 | `.ai/impl/site-recovery-program.md`             | In Progress                | P0 (Product Recovery) | 2026-03-03   | `S1` shipped; `S2 - Homepage Proof Front Door` is the next slice while plan authority lives in `.ai/impl/` |
 | `.ai/plans/sitewide-monetization-readiness.md`  | Planning (Superseded)      | P0 (Monetization)     | 2026-02-11   | Superseded for launch decisions by `.ai/impl/monumetric-launch-spec.md`                                    |
 | `.ai/impl/founder-autonomy-memory-hardening.md` | In Progress                | P0 (Enablement)       | 2026-02-15   | Persistent-memory integrity + founder-effort minimization hardening                                        |

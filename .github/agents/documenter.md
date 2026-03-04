@@ -46,7 +46,7 @@ Use **Claude Haiku 4.5** — simple structured updates, cheapest capable option.
 - [File path] — [what changed, one line]
 
 **Verification:** FAST ✅ | SMOKE ✅/N/A
-**Branch:** dev | Commit: [short SHA] | Push: ✅/❌
+**Branch:** feature/<slug> from develop | Commit: [short SHA] | Push: ✅/❌
 ```
 
 ## Rules

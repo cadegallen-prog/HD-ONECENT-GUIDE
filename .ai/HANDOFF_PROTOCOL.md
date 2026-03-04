@@ -11,7 +11,7 @@
    - Do not include unrelated cleanup/refactors.
 2. **Run verification with proof** (per `.ai/VERIFICATION_REQUIRED.md` — the canonical source for all gate definitions and proof templates)
 3. **Close git loop (branch hygiene)**
-   - Work on `dev` unless an explicit emergency override is approved.
+   - Work on a scoped `feature/*` branch from `develop` unless an explicit emergency override is approved.
    - Record commit SHA(s) and push status.
    - Capture `git status --short` at session end (clean expected). If dirty, list carryover files and reason.
 4. **Update persistent memory**

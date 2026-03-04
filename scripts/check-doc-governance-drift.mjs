@@ -292,7 +292,6 @@ const checkProductTruthDrift = () => {
   const activeFiles = [
     "README.md",
     "SKILLS.md",
-    "SCRIPTS-AND-GATES.txt",
     "scripts/run-audit.ps1",
     ".ai/DECISION_RIGHTS.md",
     ".ai/CONTEXT.md",

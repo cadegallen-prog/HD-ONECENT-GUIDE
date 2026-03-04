@@ -182,31 +182,37 @@ Anything not helping this loop is secondary.
 
 ---
 
-## 3. Git / Deployment Workflow (Dev -> Main)
+## 3. Git / Deployment Workflow (Feature -> Develop -> Main)
 
-We run a two-branch promotion workflow.
+We run a three-lane promotion workflow.
 
-- **`dev`** is the active integration branch for implementation work.
+- **`feature/*`** are short-lived implementation branches or worktrees, one objective per branch.
+- **`develop`** is the active protected integration branch.
 - **`main`** is the protected deployment branch.
+- Keep at most **4 active feature branches/worktrees** at any time.
 
 Workflow:
 
-1. `git checkout dev && git pull origin dev`
+1. `git checkout develop && git pull origin develop`
 2. Run `git status --short` before starting:
    - If clean, continue.
    - If dirty, do **not** start a new objective until carryover changes are closed (commit/push) or explicitly resolved with you (Cade).
-3. Make scoped changes on `dev` for one objective at a time.
-4. Stage narrowly (`git add <paths>`) and verify staged scope with `git diff --cached --name-only`.
-5. **Run `npm run ai:memory:check` + `npm run verify:fast` before pushing**
-6. **Run `npm run e2e:smoke` when touching routes/forms/API/UI flows**
-7. **Use Playwright for UI changes** (screenshots required)
-8. Commit and push `dev`
-9. Run `git status --short` after push:
-   - Clean is the expected end state.
-   - If still dirty, report exact carryover files and why before starting another task.
-10. Promote to `main` only after required checks pass
+3. Create a scoped `feature/<slug>` branch or worktree from `develop`.
+4. Make scoped changes on that `feature/*` branch for one objective at a time.
+5. Stage narrowly (`git add <paths>`) and verify staged scope with `git diff --cached --name-only`.
+6. **Run `npm run ai:memory:check` + `npm run verify:fast` before pushing**
+7. **Run `npm run e2e:smoke` when touching routes/forms/API/UI flows**
+8. **Use Playwright for UI changes** (screenshots required)
+9. Commit and push the `feature/*` branch.
+10. Run `git status --short` after push:
 
-Do not implement directly on `main` unless you (Cade) explicitly request an emergency hotfix.
+- Clean is the expected end state.
+- If still dirty, report exact carryover files and why before starting another task.
+
+11. Open a clean PR to `develop`.
+12. Promote `develop` to `main` only after required checks pass
+
+Do not implement directly on `develop` or `main` unless you (Cade) explicitly request an emergency hotfix.
 
 ---
 

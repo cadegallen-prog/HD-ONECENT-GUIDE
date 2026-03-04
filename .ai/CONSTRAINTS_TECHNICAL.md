@@ -286,7 +286,7 @@
 
 ### Deployment Hygiene
 
-- Use `dev` for implementation and promote verified commits to `main`
+- Use `feature/*` branches from `develop` for implementation and promote verified commits from `develop` to `main`
 - Start and end each objective with `git status --short`; do not stack unrelated carryover changes
 - State the branch, commit SHA(s), and push status you used
 - Do not assume local behavior matches production

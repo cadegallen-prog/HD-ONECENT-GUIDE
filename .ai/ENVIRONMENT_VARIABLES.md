@@ -1,6 +1,6 @@
 # Environment Variables Reference
 
-**Last Updated:** 2026-03-03
+**Last Updated:** 2026-03-04
 **Purpose:** Track environment variables across Vercel (runtime), GitHub Actions (pipelines), and local dev.
 
 ---
@@ -25,17 +25,24 @@
 
 ### Sentry (4 variables)
 
-| Variable            | Where Set       | Purpose                          | Used In                   |
-| ------------------- | --------------- | -------------------------------- | ------------------------- |
-| `SENTRY_DSN`        | Vercel (Manual) | Error reporting endpoint         | All runtime error capture |
-| `SENTRY_ORG`        | Vercel (Manual) | Sentry organization name         | Build process             |
-| `SENTRY_PROJECT`    | Vercel (Manual) | Sentry project name              | Build process             |
-| `SENTRY_AUTH_TOKEN` | Vercel (Manual) | Upload source maps during builds | Build process only        |
+| Variable            | Where Set       | Purpose                          | Used In                             |
+| ------------------- | --------------- | -------------------------------- | ----------------------------------- |
+| `SENTRY_DSN`        | Vercel (Manual) | Canonical DSN record for Sentry  | Vercel parity / future DSN rotation |
+| `SENTRY_ORG`        | Vercel (Manual) | Sentry organization name         | Build process                       |
+| `SENTRY_PROJECT`    | Vercel (Manual) | Sentry project name              | Build process                       |
+| `SENTRY_AUTH_TOKEN` | Vercel (Manual) | Upload source maps during builds | Build process only                  |
 
-**Why needed?**
+**Runtime note (phase 1 hardening):**
+
+- Browser, server, and edge capture now share the same DSN from `lib/monitoring/sentry-runtime.ts`
+- We are intentionally **not** adding `NEXT_PUBLIC_SENTRY_DSN`
+- Environment tagging uses `VERCEL_ENV` on server/edge and hostname mapping on client so preview noise stays separated from production
+- The Vercel `SENTRY_DSN` value remains the canonical dashboard record and future rotation point, even though the current runtime path is centralized in code to avoid client/server drift
+
+**Why these still matter?**
 
 - Captures JavaScript errors in production
-- Sends email alerts when errors occur
+- Separates production vs preview noise with runtime environment tags
 - Source maps help debug minified code
 
 ---
@@ -239,11 +246,12 @@ SUPABASE_SERVICE_ROLE_KEY=your-test-service-role-key
 
 ## 🔐 Security Notes
 
-### ✅ Safe to Expose (NEXT_PUBLIC prefix)
+### ✅ Safe to Expose (NEXT_PUBLIC prefix or already-public runtime value)
 
 - `NEXT_PUBLIC_SUPABASE_URL` - Just a URL
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Protected by RLS
 - `NEXT_PUBLIC_HOME_DEPOT_STORES_URL` - Read-only public data
+- `SENTRY_DSN` - DSNs are ingest identifiers, not account-secrets; phase 1 runtime uses a shared code constant instead of `NEXT_PUBLIC_SENTRY_DSN`
 
 ### 🔒 MUST Keep Secret (No NEXT_PUBLIC)
 
@@ -298,6 +306,7 @@ This varies by which features you enable (ads, email digest, cron jobs, etc.). U
 
 **Last major changes:**
 
+- Mar 4, 2026: Centralized Sentry runtime tagging/filtering docs; clarified shared DSN runtime strategy and production-vs-preview tagging.
 - Jan 23, 2026: Added cron/email + GitHub Actions pipeline env var sections; clarified Vercel project vs team/shared vars.
 - Dec 27, 2025: Removed Vercel Blob Storage (2 deleted, switched to local file)
 - Dec 27, 2025: Added Sentry (4 variables)

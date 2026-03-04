@@ -4,6 +4,77 @@
 
 ---
 
+## 2026-03-04 - Codex - Sentry Workflow Migration + Slice 3 Dashboard Hardening
+
+**Goal:** Replace the repo's old `dev/main` branch model with `feature/* -> develop -> main`, isolate Sentry work in its own worktree, ship repo-side hardening, and complete the live Sentry dashboard slice so production noise is separated from real failures.
+
+**Status:** ✅ Completed through Slice 3
+
+### Changes
+
+- Branch/bootstrap:
+  - created local `develop` from `origin/dev` and pushed it to origin.
+  - created isolated worktree `C:\Users\cadeg\Projects\HD-ONECENT-GUIDE-sentry` on `feature/sentry-spam-fix-and-autofix`.
+  - changed GitHub default branch to `develop`.
+  - applied branch protection to `develop` and `main` with required checks `quality-fast` + `smoke-e2e`, one approving review, and conversation resolution.
+- Canon/docs/CI:
+  - added canonical plan file `.ai/impl/sentry-spam-autofix-workflow-migration.md` and registered it in `.ai/plans/INDEX.md`.
+  - updated workflow canon across `README.md`, `AGENTS.md`, `.ai/CRITICAL_RULES.md`, `.ai/VERIFICATION_REQUIRED.md`, `.ai/AI_ENABLEMENT_BLUEPRINT.md`, `.ai/HANDOFF_PROTOCOL.md`, `.github/copilot-instructions.md`, `docs/skills/ship-safely.md`, `docs/skills/single-writer-lock.md`, `.github/agents/documenter.md`, `.ai/USAGE.md`, `.ai/CONSTRAINTS_TECHNICAL.md`, and `scripts/check-doc-governance-drift.mjs`.
+  - added `develop` push triggers to `.github/workflows/quality.yml` and `.github/workflows/smoke-e2e.yml`.
+  - trimmed `.ai/SESSION_LOG.md` to five entries so `ai:checkpoint` would stop failing on memory size.
+- Sentry Slice 2:
+  - added `lib/monitoring/sentry-runtime.ts` to centralize DSN use, client/server environment mapping, runtime tags, first-party URL allow rules, event normalization, and drop logic.
+  - updated `instrumentation-client.ts`, `sentry.server.config.ts`, and `sentry.edge.config.ts` to use the shared helper, explicit `sampleRate`, runtime tags, and noise filters.
+  - added `tests/sentry-runtime.test.ts` for environment mapping, message normalization, and noise-drop behavior.
+  - updated `.ai/ENVIRONMENT_VARIABLES.md` and `.ai/SENTRY_ALERTS_MANUAL.md` so the Sentry operational docs match the shipped runtime behavior and the pending dashboard settings.
+- Sentry Slice 3:
+  - used authenticated Playwright access to Sentry org `pennycentral` / project `javascript-nextjs`.
+  - deleted legacy noisy issue alert `16552275` (`Send a notification for high priority issues`).
+  - created production-only issue rules:
+    - `16751148` `Production - New unhandled issue`
+    - `16751153` `Production - Regressed unhandled issue`
+  - created production crash-rate alert `409707` (`Production - Crash-free session rate below 97% (30m)`) after confirming Sentry rejects a `10m` crash-rate window for this alert type.
+  - enabled the `localhost` inbound filter and confirmed the browser-extension and crawler filters remain enabled.
+  - verified GitHub repo integration for `cadegallen-prog/HD-ONECENT-GUIDE` and confirmed recent production releases resolve against GitHub-backed commit association, while preview releases still show `origin` / `unknown`.
+  - verified Seer org defaults, kept new-project PR creation off, connected the project repo, and set the saved project stopping point to `solution`.
+  - captured proof artifacts under `reports/sentry/2026-03-04/` and documented the dashboard state in `reports/sentry/2026-03-04/settings-summary.md`.
+
+### Summary
+
+- The branch model is now standardized around `develop` and isolated `feature/*` worktrees instead of direct work on `dev`.
+- Sentry runtime behavior is now much stricter: only production sends should get through, preview/development are tagged separately, and common browser/network noise is filtered before it counts against quota.
+- The dashboard slice is now complete: production-only alerts are live, the main noisy rule is gone, GitHub integration is verified, and Seer Autofix is capped at the backend `solution` stopping point for phase 1.
+- The next Sentry work is Slice 4 onward only after promotion and production stabilization; the plan now waits on merge/deploy plus the planned `24h` or `100+` production-event checkpoint.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run ai:checkpoint` ✅
+- `npm run check:docs-governance` ✅
+- `npx tsx --import ./tests/setup.ts --test tests/sentry-runtime.test.ts` ✅
+- `npm run verify:fast` ✅
+- `gh auth status` ✅
+- `git worktree list` ✅
+- Sentry dashboard/API verification via authenticated Playwright ✅
+  - issue rules: `16751148`, `16751153`
+  - metric alert: `409707`
+  - Seer project preference: `automated_run_stopping_point = solution`
+  - proof bundle: `reports/sentry/2026-03-04/`
+
+### Branch Hygiene
+
+- Branch: `feature/sentry-spam-fix-and-autofix`
+- Scope: workflow migration bootstrap + Sentry Slice 2 runtime hardening + Slice 3 dashboard hardening proof
+- Commits:
+  - `5eca55f docs(plans): add sentry migration canon and memory trim`
+  - `52bf1c4 docs(workflow): adopt develop plus feature branches`
+  - `8e7b249 refactor(sentry): centralize runtime filtering to cut production noise`
+  - `1cb3731 docs(ai): record sentry workflow status and access blocker`
+- Push: pushed to origin (`origin/feature/sentry-spam-fix-and-autofix`); dashboard-proof commit pending at memory-write time
+- Next blocker: do not start Slice 4 until this branch is merged/promoted and fresh production data is available for real issue triage
+
+---
+
 ## 2026-03-03 - Claude Code (Sonnet 4.6) - Branch Cleanup & Consolidation
 
 **Goal:** Clean up git branch/worktree mess on dev — commit 38 uncommitted files, remove orphaned worktrees, delete 14 stale local branches, 4 stale remote branches, close PR #143.
@@ -197,128 +268,6 @@
 
 - Branch: `dev`
 - Scope: report-find basket submit hotfix + regression coverage
-- Push: not pushed
-
----
-
-## 2026-03-03 - Codex - Site Recovery S1 Hydration Stability
-
-**Goal:** Remove the global hydration mismatch and lock the Penny List text regression before any visual site-recovery slice starts.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `app/layout.tsx`
-  - replaced the Grow DOM-insertion bootstrap with `next/script` `afterInteractive` scripts so the server-rendered head is no longer mutated before hydration.
-- `lib/penny-list-utils.ts`
-  - added `DIY` to the protected uppercase word set in `normalizeProductName(...)`.
-- `tests/visual-smoke.spec.ts`
-  - expanded the route sweep to all nine audited recovery routes and made hydration mismatch console output a first-class failure.
-- `tests/smoke-critical.spec.ts`
-  - added a Penny List rendered-surface assertion that fails if `Diy` appears.
-- `tests/penny-list-utils.test.ts`
-  - added deterministic helper coverage for mixed-case `DIY` input.
-- `.ai/impl/site-recovery-program.md`
-  - marked the parent recovery program in progress with `S1` shipped and `S2` next.
-- `.ai/impl/site-recovery-s1-hydration-stability.md`
-  - marked the slice shipped and recorded the implementation outcome.
-- `.ai/plans/INDEX.md`
-  - updated the registry status to match the canonical `.ai/impl/` plan.
-- `.ai/BACKLOG.md`
-  - advanced the immediate next slice from `S1` to `S2 - Homepage Proof Front Door`.
-- `.ai/STATE.md`
-  - updated current project reality to reflect the shipped hydration fix and next slice.
-- `.ai/LEARNINGS.md`
-  - documented that direct `node` execution is the wrong lane for repo TypeScript test files.
-
-### Summary
-
-- The audited hydration mismatch is no longer reproducible across `/`, `/guide`, `/penny-list`, `/report-find`, `/faq`, `/what-are-pennies`, `/store-finder`, `/about`, and `/transparency`.
-- The Grow integration now loads in a hydration-safe way without mutating head order before React starts.
-- The site-recovery program can now move from stabilization into `S2 - Homepage Proof Front Door`.
-
-### Verification
-
-- Before fix reproduction:
-  - `$env:PLAYWRIGHT_BASE_URL='http://localhost:3001'; npx playwright test tests/visual-smoke.spec.ts --project=chromium-desktop-light --workers=1` ❌
-  - failure signature: `A tree hydrated but some attributes of the server rendered HTML didn't match...`
-- `npm run ai:memory:check` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `$env:PLAYWRIGHT_BASE_URL='http://localhost:3001'; npx playwright test tests/visual-smoke.spec.ts --project=chromium-desktop-light --workers=1` ✅
-- `$env:PLAYWRIGHT_BASE_URL='http://localhost:3001'; npx playwright test tests/smoke-critical.spec.ts --project=chromium-desktop-light --workers=1` ✅
-- `npm run ai:proof -- / /guide /penny-list /report-find /faq /what-are-pennies /store-finder /about /transparency` ✅
-  - artifacts: `reports/proof/2026-03-03T00-44-54/`
-  - console: `reports/proof/2026-03-03T00-44-54/console-errors.txt`
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Scope: `S1` hydration fix + regression coverage + continuity updates
-- Push: not pushed
-
----
-
-## 2026-03-02 - Codex - Site Recovery Planning Spine (S0)
-
-**Goal:** Convert the site-recovery intent into durable repo memory so future agents can execute a coherent multi-slice recovery program without re-deriving it from chat.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `.ai/topics/SITE_RECOVERY_CURRENT.md`
-  - added the current-state audit for `/`, `/guide`, `/penny-list`, `/report-find`, `/faq`, `/what-are-pennies`, `/store-finder`, `/about`, and `/transparency`.
-  - persisted founder-calibrated quality feedback so it does not die with the context window.
-  - documented mobile issues, coherence issues, top 3 ROI improvements, and the hydration root-cause assessment.
-- `.ai/impl/site-recovery-program.md`
-  - created the authoritative parent recovery plan in `.ai/impl/`.
-  - locked the program decisions, dependency order, stop/go rules, and immediate next task.
-- `.ai/impl/site-recovery-s1-hydration-stability.md`
-  - created the implementation-ready plan for the global hydration mismatch and Penny List text determinism fix.
-- `.ai/impl/site-recovery-s2-homepage-proof-front-door.md`
-  - created the implementation-ready plan for the homepage redesign.
-- `.ai/impl/site-recovery-s3-guide-core-rebuild.md`
-  - created the implementation-ready plan for rebuilding `/guide` into the canonical long-form guide and demoting supporting routes.
-- `.ai/impl/site-recovery-s4-penny-list-mobile-focus.md`
-  - created the implementation-ready plan for Penny List mobile hierarchy cleanup.
-- `.ai/impl/site-recovery-s5-report-find-compression.md`
-  - created the implementation-ready plan for reducing pre-form friction on `/report-find`.
-- `.ai/impl/site-recovery-s6-typography-template-consistency.md`
-  - created the implementation-ready plan for type/spacing/template normalization.
-- `.ai/impl/site-recovery-s7-store-finder-supporting-role.md`
-  - created the implementation-ready plan for calming Store Finder and demoting it to a supporting role.
-- `.ai/impl/site-recovery-s8-trust-pages-hardening.md`
-  - created the implementation-ready plan for `/about` and `/transparency`.
-- `.ai/plans/INDEX.md`
-  - registered the new parent plan and explicitly documented the `.ai/plans/` vs `.ai/impl/` authority split.
-- `.ai/BACKLOG.md`
-  - persisted the site-recovery program as the active product-priority sequence.
-- `.ai/STATE.md`
-  - updated current project reality so fresh agents can identify the new canonical program and next slice.
-- `.ai/LEARNINGS.md`
-  - documented the fail-closed rule that `.ai/SESSION_LOG.md` must stay at 5 live entries before rerunning `ai:checkpoint`.
-
-### Summary
-
-- Penny Central now has one repo-canonical site recovery program instead of chat-only intent.
-- The planning spine is complete and the next implementation slice is unambiguous: `S1 - Hydration Stability`.
-- Future agents now have a route-by-route audit, a parent plan, and eight child plans to execute in order.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run ai:checkpoint` ✅
-  - artifacts:
-    - `reports/context-packs/2026-03-02T04-41-00/context-pack.md`
-    - `reports/context-packs/2026-03-02T04-41-00/resume-prompt.txt`
-- Runtime verification lanes: N/A (docs-only planning/memory work; no route/form/API/runtime code paths changed)
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Scope: planning docs + registry + shared memory
 - Push: not pushed
 
 ---

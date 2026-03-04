@@ -1,10 +1,19 @@
 import * as Sentry from "@sentry/nextjs"
 
+import {
+  INITIAL_NOISE_PATTERNS,
+  RUNTIME_SENTRY_DSN,
+  getSentryRuntimeTag,
+  getServerSentryEnvironment,
+  shouldDropSentryEvent,
+} from "@/lib/monitoring/sentry-runtime"
+
+const runtimeEnvironment = getServerSentryEnvironment()
 const shouldEnableSentry =
-  process.env.NODE_ENV === "production" && process.env.VERCEL_ENV === "production"
+  runtimeEnvironment === "production" && process.env.VERCEL_ENV === "production"
 
 Sentry.init({
-  dsn: "https://6c97a22cc0a22bf546df09e9051202f6@o4510605822394368.ingest.us.sentry.io/4510605823246336",
+  dsn: RUNTIME_SENTRY_DSN,
 
   // Avoid noisy reports from Vercel Preview/Development; only report Production.
   enabled: shouldEnableSentry,
@@ -12,22 +21,24 @@ Sentry.init({
   // Capture 10% of transactions for performance monitoring (stay in free tier)
   tracesSampleRate: 0.1,
 
-  // Set environment to distinguish dev vs prod errors
-  environment: process.env.NODE_ENV,
+  sampleRate: 1.0,
+
+  // Tag preview/dev separately while keeping event delivery production-only.
+  environment: runtimeEnvironment,
+
+  initialScope: {
+    tags: {
+      runtime: getSentryRuntimeTag("server"),
+    },
+  },
+
+  ignoreErrors: INITIAL_NOISE_PATTERNS,
 
   // Enable debug mode in development
   debug: false,
 
-  // Filter out expected/harmless errors before sending to Sentry
+  // Keep low-signal backend transport errors out of alerting.
   beforeSend(event) {
-    // Suppress network timeout errors (transient, expected in distributed systems)
-    if (event.message?.includes("ECONNREFUSED") || event.message?.includes("ETIMEDOUT")) {
-      return null
-    }
-    // Suppress database connection pool exhaustion (non-critical, auto-recovers)
-    if (event.message?.includes("pool exhausted")) {
-      return null
-    }
-    return event
+    return shouldDropSentryEvent(event) ? null : event
   },
 })

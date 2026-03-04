@@ -1,6 +1,6 @@
 # Backlog (Top Priority Items)
 
-**Last updated:** Mar 3, 2026 (`S1` hydration stability shipped)
+**Last updated:** Mar 4, 2026 (`develop` workflow migration + Sentry Slice 3 dashboard hardening captured; production stabilization window is next`)
 **Rule:** Keep ≤10 items. Archive completed/deferred items.
 
 **Auto-archive:** Full backlog history preserved in `archive/backlog-history/`
@@ -13,11 +13,38 @@ Each AI session should:
 4. Update `.ai/SESSION_LOG.md`, `.ai/STATE.md`, and this file
 
 **Planning (canonical):** See `.ai/plans/INDEX.md` for all concurrent plans and their statuses.
-**Founder override (active):** Site recovery is the current product-priority program. Start from `.ai/impl/site-recovery-program.md`. `S1 - Hydration Stability` is complete; the immediate next implementation slice is `S2 - Homepage Proof Front Door`.
+**Founder override (active):** Sentry workflow migration + Sentry cleanup is the active founder request. Start from `.ai/impl/sentry-spam-autofix-workflow-migration.md`. Slice 0 through Slice 3 are complete on `feature/sentry-spam-fix-and-autofix`; Slice 4 waits on promotion/deploy plus the planned production stabilization window. Site recovery resumes after the Sentry override clears.
 
 ---
 
 ## P0 - Do Next (Analytics-Driven Growth)
+
+### 0. Sentry Workflow Migration + Dashboard Hardening (Founder Override)
+
+- **Problem:** The repo was still operating on `dev/main`, while Sentry was noisy enough to risk quota burn and alert fatigue. The workflow migration, repo-side hardening, and dashboard hardening slices are now complete; the next work must wait for production rollout and real post-change data.
+- **Progress (2026-03-04):**
+  - `develop` created from clean `origin/dev` and pushed.
+  - isolated worktree created at `C:\Users\cadeg\Projects\HD-ONECENT-GUIDE-sentry` on `feature/sentry-spam-fix-and-autofix`.
+  - GitHub default branch switched to `develop`; branch protection applied to `develop` and `main`.
+  - workflow canon + CI triggers updated to the new branch model.
+  - Sentry runtime helper shipped with centralized environment tags, runtime tags, first-party URL allow rules, and low-signal event filtering.
+  - docs updated to match the runtime filtering and the intended dashboard settings.
+  - branch pushed to origin with commits `5eca55f`, `52bf1c4`, `8e7b249`, `1cb3731`.
+  - dashboard slice completed in the live Sentry UI/API:
+    - removed legacy noisy issue rule `16552275`
+    - added issue rules `16751148` and `16751153`
+    - added metric alert `409707`
+    - enabled `localhost` inbound filtering
+    - verified GitHub repo integration for `cadegallen-prog/HD-ONECENT-GUIDE`
+    - set Seer project stopping point to `solution`
+    - captured proof bundle under `reports/sentry/2026-03-04/`
+- **Current blocker:** do not start Slice 4 until the branch is reviewed/merged, production deploys from `main`, and either `24 hours` pass or `100+` new production events arrive for triage.
+- **Done means:**
+  - Sentry dashboard rules are narrowed to production-only real failures.
+  - GitHub integration is linked to `cadegallen-prog/HD-ONECENT-GUIDE`.
+  - Autofix is enabled conservatively (`Highly Actionable and Above`, stop at `Solution`).
+  - proof bundle exists under `reports/sentry/2026-03-04/`.
+- **Plan:** `.ai/impl/sentry-spam-autofix-workflow-migration.md`
 
 ### 0. Persistent Memory + Founder Autonomy Hardening (Critical Enablement)
 
