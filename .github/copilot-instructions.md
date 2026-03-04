@@ -37,9 +37,15 @@ PennyCentral is the Home Depot penny-shopping companion for Cade, a solo founder
 - Never expose it in client code or UI.
 - Store SKU is the display SKU; SO SKU is an alias path.
 
-### 5. Shared Memory Safety
+### 5. Continuity + Surface Awareness
 
-- `.ai/SESSION_LOG.md`, `.ai/STATE.md`, `.ai/BACKLOG.md`, and `.ai/HANDOFF.md` are shared-memory files.
+- **Before starting:** Read `.ai/THREAD.md` to understand where the project is in its reasoning chain.
+- **Before modifying any route/surface:** Read the relevant brief in `.ai/SURFACE_BRIEFS.md`. If your change doesn't serve the surface's stated job, stop and reconsider.
+- **At session end:** Update `.ai/THREAD.md` (rewrite, don't append) and update the surface brief's "last verified" date if you touched a surface.
+
+### 6. Shared Memory Safety
+
+- `.ai/THREAD.md`, `.ai/SESSION_LOG.md`, `.ai/STATE.md`, `.ai/BACKLOG.md`, `.ai/SURFACE_BRIEFS.md`, and `.ai/HANDOFF.md` are shared-memory files.
 - Claim the writer lock before editing them:
   - `npm run ai:writer-lock:claim -- <agent-name> "<task>"`
 - Release it after updates:

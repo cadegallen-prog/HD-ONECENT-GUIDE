@@ -833,3 +833,31 @@ export const metadata: Metadata = {
 - **What we tried:** Ran the normal smoke command after successful build.
 - **What we learned:** In this environment, app build can pass while Playwright e2e still fails due to missing local browser install; this is an environment dependency issue, not always an app regression.
 - **What to do instead:** Report the limitation transparently, run lint/typecheck + targeted unit tests, and capture UI proof using `mcp__browser_tools__run_playwright_script` when available.
+
+---
+
+### 22. `ai:checkpoint` Fail-Closes When `.ai/SESSION_LOG.md` Exceeds 5 Live Entries
+
+**Problem:** Docs-only closeout failed even though the new planning files were valid, because `.ai/SESSION_LOG.md` had grown to 6 live entries and the memory gate hard-fails above 5.
+
+**What We Tried:** Ran `npm run ai:memory:check` and `npm run ai:checkpoint` after appending a new session-log entry.
+
+**What We Learned:** The session log is not just informational; it is an enforced memory-integrity surface. Adding a new entry without trimming the oldest live entry will fail the docs-only verification lane.
+
+**What to Do Instead:** Before rerunning `ai:memory:check` or `ai:checkpoint`, trim `.ai/SESSION_LOG.md` back to 5 live entries, then rerun the memory gate and update the session log entry with the real verification result.
+
+**Date:** Mar 02, 2026
+
+---
+
+### 23. Direct `node` Execution Is The Wrong Lane For Repo TypeScript Tests
+
+**Problem:** `node tests/penny-list-utils.test.ts` failed with `ERR_MODULE_NOT_FOUND` because the test imports repo TypeScript modules without emitted `.js` paths.
+
+**What We Tried:** Ran the test file directly with Node after making a targeted utility assertion change.
+
+**What We Learned:** These repo test files are meant to run through the project scripts/tooling layer, not raw Node module resolution.
+
+**What to Do Instead:** Use the repo verification commands (`npm run verify:fast`, `npm run e2e:smoke`, or the existing test script wrappers) instead of invoking TypeScript test files directly with `node`.
+
+**Date:** Mar 02, 2026

@@ -19,9 +19,11 @@
      - `npm run ai:writer-lock:claim -- <agent-name> "<task>"`
      - `npm run ai:writer-lock:status`
      - `npm run ai:writer-lock:release -- <agent-name>` after memory updates
+   - `.ai/THREAD.md` (always — rewrite the active sections to carry the reasoning chain forward. Do not rush this. See THREAD.md header for instructions.)
    - `.ai/SESSION_LOG.md` (always for meaningful work)
    - `.ai/STATE.md` (if current project reality changed)
    - `.ai/BACKLOG.md` (only if priorities changed)
+   - `.ai/SURFACE_BRIEFS.md` (if you modified a surface — update "last verified" and note what changed)
    - `.ai/LEARNINGS.md` (if mistakes/failed approaches occurred)
    - `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md` (required whenever any monetization incident is open or touched)
    - Run `npm run ai:checkpoint` before handoff when work spans multiple sessions/context windows
@@ -111,12 +113,14 @@ Notes on field meaning:
 
 To survive context windows, convert volatile chat context into durable repo context:
 
-1. **Facts and status** -> `.ai/STATE.md` (date-stamped, concrete)
-2. **What happened in this session** -> `.ai/SESSION_LOG.md`
-3. **Priority decisions** -> `.ai/BACKLOG.md`
-4. **Domain-specific durable context** -> `.ai/topics/<TOPIC>_CURRENT.md`
-5. **Failure pattern + prevention** -> `.ai/LEARNINGS.md`
-6. **Founder collaboration preferences** -> `PENNYCENTRAL_MASTER_CONTEXT.md` (+ `.ai/SESSION_LOG.md`, `.ai/STATE.md` when relevant)
+1. **Reasoning chain + continuity** -> `.ai/THREAD.md` (why we did what we did, where the next link goes)
+2. **Facts and status** -> `.ai/STATE.md` (date-stamped, concrete)
+3. **What happened in this session** -> `.ai/SESSION_LOG.md`
+4. **Priority decisions** -> `.ai/BACKLOG.md`
+5. **Surface-level evaluative context** -> `.ai/SURFACE_BRIEFS.md` (what good looks like per route)
+6. **Domain-specific durable context** -> `.ai/topics/<TOPIC>_CURRENT.md`
+7. **Failure pattern + prevention** -> `.ai/LEARNINGS.md`
+8. **Founder collaboration preferences** -> `PENNYCENTRAL_MASTER_CONTEXT.md` (+ `.ai/SESSION_LOG.md`, `.ai/STATE.md` when relevant)
 
 If it is not in `.ai/`, assume it will be lost.
 

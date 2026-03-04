@@ -10,8 +10,8 @@ This file contains Claude Code-specific notes only.
 
 Follow `.ai/START_HERE.md` — it defines the canonical tiered read order for all tools.
 
-Tier 1 (every session): `VISION_CHARTER.md` → `START_HERE.md` → `CRITICAL_RULES.md` → `STATE.md` → `BACKLOG.md`
-Tier 2 (before implementing): CONTRACT → DECISION_RIGHTS
+Tier 1 (every session): `VISION_CHARTER.md` → `START_HERE.md` → `CRITICAL_RULES.md` → `THREAD.md` → `STATE.md` → `BACKLOG.md`
+Tier 2 (before implementing): `SURFACE_BRIEFS.md` (for any surface you'll touch) → CONTRACT → DECISION_RIGHTS
 Tier 3 (contextual): See START_HERE.md for the full list.
 
 Use `.ai/VERIFICATION_REQUIRED.md` for the proof bundle format.

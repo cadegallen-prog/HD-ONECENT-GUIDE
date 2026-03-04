@@ -11,13 +11,15 @@
 1. **VISION_CHARTER.md** - Highest authority, always first
 2. **THIS FILE** - Start Here (you're reading it)
 3. **CRITICAL_RULES.md** - Never violate these
-4. **STATE.md** - Where we are now
-5. **BACKLOG.md** - What to work on
+4. **THREAD.md** - Where we were, where we are, where the next link goes
+5. **STATE.md** - Where we are now
+6. **BACKLOG.md** - What to work on
 
 ### Tier 2 — Before implementing (skim if already familiar)
 
-5. **CONTRACT.md** - How we collaborate
-6. **DECISION_RIGHTS.md** - What needs approval
+7. **SURFACE_BRIEFS.md** - What each surface does, what good looks like, what would make it worse (read the brief for any surface you're about to modify)
+8. **CONTRACT.md** - How we collaborate
+9. **DECISION_RIGHTS.md** - What needs approval
 
 ### Tier 3 — Contextual (read when relevant)
 

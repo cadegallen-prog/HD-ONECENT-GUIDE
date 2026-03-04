@@ -1,6 +1,6 @@
 # Context Handoff Pack (Portable, Tool-Agnostic)
 
-**Last Updated:** Feb 22, 2026 by Claude Opus 4.6
+**Last Updated:** Mar 3, 2026 by Claude Code (Opus 4.6)
 
 **Purpose:** Compressed, copy-paste-ready context for starting fresh chats or switching tools (Claude / Codex / Copilot).
 
@@ -12,83 +12,186 @@
 
 **Open-source Next.js PWA** helping Home Depot shoppers find "penny items" (clearance deals, often $0.01 to $10). Live at pennycentral.com.
 
-### Current Reality (2026-02-22)
+### Current Reality (2026-03-03)
 
-- ✅ **Core product working:** Submissions, enrichment, Penny List, Store Finder, 6-chapter guide + hub + FAQ
-- ✅ **Penny list scroll restoration fixed (Feb 22, `836c738`):** Pages 2+ now correctly restore both page number and scroll position after back-navigation from detail pages.
-- ✅ **Report Find Participation Lift v1 shipped (Feb 22):** Basket UX, measurement integrity fixes, event taxonomy expansion, anti-mega-plan governance — all completed by Codex
-- ✅ **Store Finder mobile UX fixed (Feb 21, uncommitted):** Replaced broken 3-detent bottom sheet with fixed-height overlay panel + restored minimal mobile popup. All gates passed (lint, typecheck, unit, build, e2e:full 198/198).
-- ✅ **Design system solid:** WCAG AAA compliant, custom CSS variable tokens, guide-article CSS class
-- 🔄 **Monetization blocked:** AdSense policy violations, Monumetric Ascend approved, Ezoic GAM pending
-- 🔄 **Anti-spam needed:** Submit-find form has no duplicate SKU throttling. A Feb 21 spam incident produced 10 duplicate generator submissions in 2 minutes from "PA". Cleaned manually but protections needed.
-- 🔄 **Visual pointing tool requested:** Cade wants a way to click/tap elements on the live site and have the selection translate to an unambiguous element reference the agent can act on. NOT yet designed or implemented — see "Open Design Work" below.
-- 📊 **Metrics:** ~680 daily users, 26% conversion (HD clicks), 100% Facebook dependency, 70K+ community members
+- ✅ **Site Recovery S1 (Hydration Stability) shipped** — global hydration mismatch fixed, 9-route regression coverage locked
+- ✅ **Report-find basket hotfix shipped** — multi-item basket submit restored, 30-item limit aligned UI/API, blank draft field no longer blocks submit
+- ✅ **FAQ CTR remediation shipped** — `/faq` is now an internal-link hub routing into the product loop
+- ✅ **Resend SMTP connected to Supabase Auth** — OTP emails send from `noreply@pennycentral.com` via Resend (configured 2026-03-03)
+- ✅ **Design system solid:** WCAG AAA compliant, CSS variable tokens, guide-article class
+- ✅ **Agent continuity system created** — `.ai/THREAD.md` (reasoning chain) + `.ai/SURFACE_BRIEFS.md` (evaluative context per route) wired into all agent read orders
+- 🔄 **PR #143 open** — monumetric docs + enrichment migration + FAQ fix. `full-e2e` failing on `report-find-batch.spec.ts` (basket hotfix not cherry-picked to release branch yet)
+- 🔄 **Uncommitted work on dev** — S1 hydration fix, report-find hotfix, email docs, archived orphans, continuity system files (THREAD.md, SURFACE_BRIEFS.md, site recovery plans). See file list below.
+- 🔄 **Site Recovery S2 (Homepage Proof Front Door)** is the next implementation slice
+- ❌ **Weekly email digest paused** — 400 subscribers, Resend free tier (100/day) means 4-5 day send window. Needs Pro upgrade ($20/month) before resuming.
+- ❌ **Monumetric ads disabled** — emergency rollback 2026-02-27 (refresh loop + header blocking). Do not re-enable without root-cause fix.
+- ❌ **AdSense blocked** — policy violations (moved from "Low Value Content" to specific violations on Feb 12)
+- 📊 **Metrics:** ~680 daily users, 26% conversion (HD clicks), ~400 email subscribers, 70K+ Facebook community
 
-### Immediate Next Move
+### Immediate Next Moves
 
-1. **Anti-spam protections for submit-find form** — duplicate SKU throttling, submission cooldowns, client-side debounce (identified as next priority this session)
-2. **Commit Store Finder mobile UX fix** (changes are verified but uncommitted — stage only the 4 store-finder files, not the Codex batch report files)
-3. **Design + implement the Visual Pointing Tool** (see "Open Design Work" below)
-
----
-
-## What Just Happened (This Session, Feb 21)
-
-### Store Finder Mobile UX Fix — VERIFIED, NOT COMMITTED
-
-**Problem:** The 3-detent bottom sheet (peek/half/expanded) from commits `27fe7b4`/`6540d3c` was broken on mobile:
-
-- Content clipped in peek/half states (sticky header consumed most of the 168px)
-- "Expanded" state crushed the map to ~168px (unusable)
-- No popup on mobile — tapping a marker gave zero feedback on the map
-- Three detent states were redundant with the existing Map View / List View toggle
-- Detent buttons labeled "peek"/"half"/"expanded" (dev jargon)
-
-**What was done:**
-
-| File                               | Change                                                                                                                                                                                                                                                     |
-| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `app/store-finder/page.tsx`        | Removed entire detent system (type, state, height classes, buttons, drag handle). Converted mobile layout from push (flex-col) to overlay (sheet is `absolute bottom-0 h-[200px] z-10`, map fills full container behind it). Desktop side-panel unchanged. |
-| `components/store-map.tsx`         | Restored minimal popup on mobile (store name + Directions link). Updated effect to open popups on both mobile and desktop.                                                                                                                                 |
-| `components/store-map.css`         | Added `.store-popup-card--minimal` compact style + hid popup tip arrow on mobile.                                                                                                                                                                          |
-| `tests/store-finder-popup.spec.ts` | Removed detent button references. Updated mobile popup assertion from "expect 0" to "expect 1 minimal popup".                                                                                                                                              |
-
-**Verification:** All gates green:
-
-- `npm run verify:fast` ✅ (lint + typecheck + unit + build)
-- `npm run e2e:smoke` ✅ (5/5)
-- `npm run e2e:full` ✅ (198 passed, 2 skipped)
-
-**⚠️ NOT COMMITTED YET.** The work tree also has uncommitted changes from a Codex session (Report Find Participation Lift v1). When committing, stage ONLY the store-finder files for this commit:
-
-- `app/store-finder/page.tsx`
-- `components/store-map.tsx`
-- `components/store-map.css`
-- `tests/store-finder-popup.spec.ts`
-
-### Visual Pointing Tool — CONCEPT ONLY, NOT IMPLEMENTED
-
-**Cade's request:** He wants a way to precisely communicate which element on the site he's talking about when giving UX feedback. Currently he describes things vaguely ("the thing at the bottom that clips") and agents have to guess.
-
-**What he wants:** Click/tap an element on the live site → the system identifies it (CSS selector, component name, file/line number) → agent knows exactly what "this" refers to. The purpose is exclusively for non-technical UX/UI feedback from a layperson's perspective.
-
-**Status:** Concept understood and confirmed with Cade. No design or implementation work has been done yet. This needs an architect pass to determine the right approach (browser extension? dev-mode overlay? bookmarklet?).
+1. **Add Context7 MCP** to Claude Code, Copilot, and Codex configs — gives all agents up-to-date library docs instead of stale training data. One-time setup, zero cost. See "MCP Upgrades" section below.
+2. **Evaluate MCP Memory Service** — cross-agent persistent semantic memory that could replace manual markdown-based context management. Needs Windows compatibility check. See "MCP Upgrades" section below.
+3. **Commit the uncommitted work on dev** — S1 + report-find hotfix + continuity system + email docs are verified but not committed
+4. **Fix PR #143** — cherry-pick basket hotfix onto `release/ship-monumetric-and-faq` so `full-e2e` passes, then merge
+5. **Start S2 (Homepage Proof Front Door)** — plan at `.ai/impl/site-recovery-s2-homepage-proof-front-door.md`
 
 ---
 
-## Uncommitted Changes (Work Tree Status)
+## What Just Happened (2026-03-03, Claude Code — session 2)
 
-The `dev` branch has uncommitted changes from TWO sessions:
+1. Reviewed dev branch — 7 commits ahead of main. 5 safe to ship, 2 held back (guide hub refocus + Copilot workflow — Cade hasn't verified)
+2. Cherry-picked 5 commits onto `release/ship-monumetric-and-faq`, created PR #143
+3. PR #143 CI result: fast gate + smoke pass, `full-e2e` fails on `report-find-batch.spec.ts` (pre-existing bug fixed on dev but not on the release branch)
+4. Deep discussion about agent continuity: agents have been making changes without understanding what "good" looks like for each surface. Identified the gap between executing tasks and evaluating quality.
+5. Created `.ai/THREAD.md` — reasoning chain document that carries the _why_ forward between sessions (not just what happened)
+6. Created `.ai/SURFACE_BRIEFS.md` — evaluative context per surface with job descriptions, success criteria, failure modes, and baseline metrics from GA4 data
+7. Wired both files into all three agent entry points (CLAUDE.md, CODEX_ENTRY.md, copilot-instructions.md) and the handoff protocol
+8. Researched current tools for agent continuity — discovered Context7 MCP (up-to-date docs), MCP Memory Service (cross-agent semantic memory), and the three-tier context architecture pattern from academic research
 
-**Session 1 (Codex, Feb 22):** Report Find Participation Lift v1
+---
 
-- ~20 files across governance docs, analytics, report-find components, tests
+## MCP Upgrades to Evaluate
 
-**Session 2 (Claude, Feb 21):** Store Finder mobile UX fix
+### Context7 (Ready to add)
 
-- 4 files (listed above)
+**What:** MCP server that gives agents real-time access to up-to-date library documentation instead of relying on stale training data.
 
-**Recommendation:** Commit these as two separate commits. The Codex changes should be committed first (or separately) since they're a distinct feature.
+**Why:** Claude's training data cuts off ~May 2025. Next.js 16, newer Tailwind, etc. may have APIs that agents guess at instead of looking up.
+
+**Setup:**
+
+- Claude Code: `claude mcp add context7 -- npx -y @upstash/context7-mcp@latest`
+- Copilot (`.vscode/mcp.json`): add `"context7": { "type": "http", "url": "https://mcp.context7.com/mcp" }`
+- Codex (`~/.codex/config.toml`): add equivalent config
+
+**Cost:** Free. **Risk:** Low. **Source:** https://github.com/upstash/context7
+
+### MCP Memory Service (Needs evaluation)
+
+**What:** Self-hosted persistent memory service with semantic search, knowledge graphs, and cross-agent memory sharing. Works with Claude Code, Copilot, Codex, and ChatGPT.
+
+**Why:** Could replace manual markdown-based context management. Agents would automatically capture and retrieve relevant context instead of relying on file reads.
+
+**Key questions before adopting:**
+
+- Does it run cleanly on Windows 11?
+- Does the semantic search actually surface relevant context better than grep on `.ai/` files?
+- Is the maintenance overhead worth the benefit for a solo-founder project?
+- Does it complement or replace THREAD.md / SURFACE_BRIEFS.md?
+
+**Source:** https://github.com/doobidoo/mcp-memory-service
+
+### Three-Tier Context Architecture (Pattern reference)
+
+**What:** Academic pattern (arXiv 2602.20478) for structuring AI agent context: hot memory (always loaded), specialist agents (per-task), cold memory (queried on-demand via retrieval service).
+
+**Current fit:** PennyCentral's `.ai/START_HERE.md` + `CRITICAL_RULES.md` = Tier 1. Agent pool = partial Tier 2. Tier 3 (on-demand retrieval) is the gap that MCP Memory Service could fill.
+
+**Source:** https://arxiv.org/html/2602.20478v1
+
+---
+
+## Uncommitted Changes on dev
+
+Verified work from Codex + Claude sessions that need committing:
+
+| File                                    | Source                   | What changed                                         |
+| --------------------------------------- | ------------------------ | ---------------------------------------------------- |
+| `app/layout.tsx`                        | S1 (Codex)               | Grow script → `next/script afterInteractive`         |
+| `lib/penny-list-utils.ts`               | S1 (Codex)               | DIY normalization fix                                |
+| `tests/visual-smoke.spec.ts`            | S1 (Codex)               | Hydration mismatch sweep for 9 routes                |
+| `tests/smoke-critical.spec.ts`          | S1 (Codex) + report-find | Penny list text + report-find coverage               |
+| `tests/penny-list-utils.test.ts`        | S1 (Codex)               | DIY normalization unit test                          |
+| `.ai/THREAD.md`                         | Claude (this session)    | NEW: reasoning chain continuity doc                  |
+| `.ai/SURFACE_BRIEFS.md`                 | Claude (this session)    | NEW: evaluative context per surface                  |
+| `.ai/START_HERE.md`                     | Claude (this session)    | THREAD + SURFACE_BRIEFS added to read order          |
+| `.ai/HANDOFF_PROTOCOL.md`               | Claude (this session)    | THREAD + SURFACE_BRIEFS added to session-end updates |
+| `.ai/CODEX_ENTRY.md`                    | Claude (this session)    | Read order updated                                   |
+| `.ai/ENVIRONMENT_VARIABLES.md`          | Claude (earlier)         | SMTP cross-reference                                 |
+| `.ai/BACKLOG.md`                        | Codex                    | S1 completion update                                 |
+| `.ai/LEARNINGS.md`                      | Codex                    | New learnings                                        |
+| `.ai/plans/INDEX.md`                    | Codex                    | Site recovery registered                             |
+| `.ai/impl/site-recovery-*.md` (9 files) | Codex                    | NEW: site recovery program + 8 slice plans           |
+| `.ai/topics/SITE_RECOVERY_CURRENT.md`   | Codex                    | NEW: per-route quality audit                         |
+| `CLAUDE.md`                             | Claude (this session)    | Read order updated                                   |
+| `.github/copilot-instructions.md`       | Claude (this session)    | Continuity rule added                                |
+| `.gitignore`                            | Codex                    | Removed 2 entries                                    |
+| `Guide Remodel/*` (deleted)             | Codex                    | Archived to `archive/root-level-orphans/`            |
+| `monumental/*` (deleted)                | Codex                    | Archived to `archive/root-level-orphans/`            |
+| `docs/EMAIL-INFRASTRUCTURE.md`          | Claude (earlier)         | NEW: full email setup doc                            |
+
+**Recommendation:** Commit as 3-4 separate commits:
+
+1. S1 hydration fix (layout.tsx, penny-list-utils, tests)
+2. Agent continuity system (THREAD.md, SURFACE_BRIEFS.md, read order updates)
+3. Site recovery planning docs (impl plans, site recovery audit)
+4. Housekeeping (email docs, archived orphans, .gitignore)
+
+---
+
+## Open PRs
+
+| PR       | Branch                            | Status             | Action needed               |
+| -------- | --------------------------------- | ------------------ | --------------------------- |
+| #143     | `release/ship-monumetric-and-faq` | `full-e2e` failing | Cherry-pick basket hotfix   |
+| #138     | dependabot: zod 3→4               | Passing            | Review — major version bump |
+| #137     | dependabot: react-email bump      | Passing            | Review                      |
+| #136-145 | Various dependabot                | Mixed              | Low priority                |
+
+---
+
+## Held-back Changes on dev (Need Cade's Review)
+
+| Commit    | What it does                                                                                          | Why held            |
+| --------- | ----------------------------------------------------------------------------------------------------- | ------------------- |
+| `9cc9800` | Rewrites `/guide` page intro — Part 1 primer, ethical disclosure moved, chapter grid starts at Part 2 | Cade hasn't seen it |
+| `2843e20` | Copilot native workflow — 7 agent definitions + 6 prompt files under `.github/`                       | Cade hasn't seen it |
+
+---
+
+## Site Recovery Program (Current Priority)
+
+**Plan:** `.ai/impl/site-recovery-program.md`
+**Current state audit:** `.ai/topics/SITE_RECOVERY_CURRENT.md`
+
+| Slice                                | Status                                |
+| ------------------------------------ | ------------------------------------- |
+| S0 — Planning spine                  | ✅ Complete                           |
+| S1 — Hydration stability             | ✅ Complete (verified, not committed) |
+| **S2 — Homepage proof front door**   | **Next**                              |
+| S3 — Guide core rebuild              | Planned                               |
+| S4 — Penny list mobile focus         | Planned                               |
+| S5 — Report-find compression         | Planned                               |
+| S6 — Typography/template consistency | Planned                               |
+| S7 — Store finder supporting role    | Planned                               |
+| S8 — Trust pages hardening           | Planned                               |
+
+---
+
+## Key Decisions Pending
+
+| Decision                     | Context                                                         | Who                              |
+| ---------------------------- | --------------------------------------------------------------- | -------------------------------- |
+| Add Context7 MCP?            | Gives agents current library docs. One command, free, low risk. | Cade (approve) → agent (execute) |
+| Evaluate MCP Memory Service? | Cross-agent semantic memory. Needs Windows check.               | Agent (research) → Cade (decide) |
+| Resume weekly digest?        | 400 subs, free tier can't handle it. Resend Pro = $20/month     | Cade                             |
+| Re-enable Monumetric?        | Rollback 2026-02-27. Need root-cause for refresh loop           | Cade + agent                     |
+| Review guide hub refocus     | Sitting on dev unverified                                       | Cade                             |
+| Review Copilot workflow      | `.github/agents/` + `.github/prompts/` added                    | Cade                             |
+
+---
+
+## Email Infrastructure Summary
+
+| Path                   | Sender                     | Method                   | Configured where                 |
+| ---------------------- | -------------------------- | ------------------------ | -------------------------------- |
+| Supabase Auth (OTP)    | `noreply@pennycentral.com` | Resend SMTP              | Supabase Dashboard > Auth > SMTP |
+| Weekly Digest (paused) | `updates@pennycentral.com` | Resend SDK (API)         | `RESEND_API_KEY` in Vercel       |
+| Inbound support        | `contact@pennycentral.com` | Cloudflare Email Routing | Cloudflare dashboard             |
+
+Rate limits (free tier): 100/day, 3,000/month, 60-sec OTP interval.
+Full docs: `docs/EMAIL-INFRASTRUCTURE.md`
 
 ---
 
@@ -98,18 +201,24 @@ The `dev` branch has uncommitted changes from TWO sessions:
 
 1. `.ai/START_HERE.md`
 2. `.ai/CRITICAL_RULES.md`
-3. `.ai/STATE.md`
+3. `.ai/THREAD.md`
+4. `.ai/STATE.md`
 
 ### Always Second (2 min)
 
-4. **This file** (`.ai/HANDOFF.md`)
+5. **This file** (`.ai/HANDOFF.md`)
+
+### Before Touching Any Surface
+
+6. `.ai/SURFACE_BRIEFS.md` (read the brief for the surface you're modifying)
 
 ### Contextual (Choose One)
 
 - **For general:** `.ai/BACKLOG.md` + `.ai/GROWTH_STRATEGY.md`
-- **For guide work:** `.ai/impl/guide-recovery.md` (approved plan)
+- **For site recovery (current priority):** `.ai/impl/site-recovery-program.md` → `site-recovery-s2-homepage-proof-front-door.md`
 - **For monetization:** `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`
-- **For topic work:** `.ai/topics/INDEX.md` then `.ai/topics/<TOPIC>.md`
+- **For email/auth:** `docs/EMAIL-INFRASTRUCTURE.md`
+- **For topic work:** `.ai/topics/INDEX.md` → `.ai/topics/<TOPIC>.md`
 
 ### Before Implementation
 
@@ -123,33 +232,40 @@ The `dev` branch has uncommitted changes from TWO sessions:
 
 ### Claude Code (VSCode Extension)
 
-- ✅ **MCP Support:** Filesystem, GitHub, Playwright, Supabase
-- ✅ **Agent System:** 14+ skills (plan, architect, implement, test, review, debug, etc.)
+- ✅ **MCP:** filesystem, git, github, playwright, supabase
+- ✅ **Skills:** plan, architect, implement, test, review, debug, handoff, verify, etc.
+- ✅ **GA4/GSC:** `npm run analytics:delta`
 - ✅ **Ideal for:** Full feature development (design, code, test, verify)
+- 🔜 **Pending:** Context7 MCP (up-to-date library docs)
 
 ### Codex (ChatGPT, GPT-5.2)
 
-- ✅ **MCP Support:** Same (if `~/.codex/config.toml` is synced)
-- ✅ **Ideal for:** Full feature development, alternative to Claude
+- ✅ **MCP:** Same (if `~/.codex/config.toml` is synced)
+- ✅ **Ideal for:** Full feature development, alternative perspective
+- 🔜 **Pending:** Context7 MCP
 
 ### Copilot Chat (GitHub Copilot)
 
-- ❌ **MCP Support:** None
-- ✅ **Ideal for:** Q&A only, not full development
+- ✅ **MCP:** filesystem, github, playwright, supabase (via `.vscode/mcp.json`)
+- ✅ **Ideal for:** Quick development + Supabase migrations
+- 🔜 **Pending:** Context7 MCP
 
 ---
 
 ## Key Files by Purpose
 
-| Goal                           | File to Read                                       |
-| ------------------------------ | -------------------------------------------------- |
-| Understand project & business  | `.ai/GROWTH_STRATEGY.md` + `.ai/BACKLOG.md`        |
-| See what's broken/planned      | `.ai/STATE.md` + `.ai/BACKLOG.md`                  |
-| See what changed recently      | `.ai/SESSION_LOG.md`                               |
-| Check design system            | `.ai/CONSTRAINTS.md` + `docs/DESIGN-SYSTEM-AAA.md` |
-| See approved plans             | `.ai/impl/` directory                              |
-| Check past mistakes            | `.ai/LEARNINGS.md`                                 |
-| Understand collaboration rules | `.ai/CONTRACT.md` + `.ai/DECISION_RIGHTS.md`       |
+| Goal                                          | File to Read                                       |
+| --------------------------------------------- | -------------------------------------------------- |
+| Understand reasoning chain                    | `.ai/THREAD.md`                                    |
+| Understand what "good" looks like per surface | `.ai/SURFACE_BRIEFS.md`                            |
+| Understand project & business                 | `.ai/GROWTH_STRATEGY.md` + `.ai/BACKLOG.md`        |
+| See what's broken/planned                     | `.ai/STATE.md` + `.ai/BACKLOG.md`                  |
+| See what changed recently                     | `.ai/SESSION_LOG.md`                               |
+| Check design system                           | `.ai/CONSTRAINTS.md` + `docs/DESIGN-SYSTEM-AAA.md` |
+| See approved plans                            | `.ai/impl/` directory                              |
+| Check past mistakes                           | `.ai/LEARNINGS.md`                                 |
+| Understand collaboration rules                | `.ai/CONTRACT.md` + `.ai/DECISION_RIGHTS.md`       |
+| Email/auth setup                              | `docs/EMAIL-INFRASTRUCTURE.md`                     |
 
 ---
 
@@ -162,7 +278,3 @@ The `dev` branch has uncommitted changes from TWO sessions:
 | "Tests are failing"               | Paste error. Ask: "Debug or revert?"                                         |
 | "Locked copy seems wrong"         | STOP. Ask founder. Do NOT modify.                                            |
 | "Feature scope is unclear"        | Stop. Ask Cade: GOAL / WHY / DONE MEANS?                                     |
-
----
-
-**Last updated:** Feb 21, 2026

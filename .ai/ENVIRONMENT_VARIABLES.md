@@ -1,6 +1,6 @@
 # Environment Variables Reference
 
-**Last Updated:** 2026-02-16
+**Last Updated:** 2026-03-03
 **Purpose:** Track environment variables across Vercel (runtime), GitHub Actions (pipelines), and local dev.
 
 ---
@@ -60,7 +60,7 @@
 
 ---
 
-### Email (2 variables)
+### Email / Resend (2 variables)
 
 | Variable               | Where Set       | Purpose                                | Used In                              |
 | ---------------------- | --------------- | -------------------------------------- | ------------------------------------ |
@@ -68,6 +68,8 @@
 | `NEXT_PUBLIC_SITE_URL` | Vercel (Manual) | Canonical base URL for links in emails | `app/api/cron/send-weekly-digest/**` |
 
 **Recommended:** `NEXT_PUBLIC_SITE_URL=https://www.pennycentral.com`
+
+**Note:** The same `RESEND_API_KEY` is also configured as the SMTP password inside Supabase's Auth settings (dashboard-only, not a Vercel env var). See `docs/EMAIL-INFRASTRUCTURE.md` for the full picture.
 
 ---
 
