@@ -131,7 +131,7 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "globals": "^17.0.0",
     "husky": "^9.1.7",
-    "lighthouse": "^12.8.2",
+    "lighthouse": "^13.0.3",
     "lint-staged": "^16.2.7",
     "playwright-extra": "^4.3.6",
     "postcss": "^8.4.47",
