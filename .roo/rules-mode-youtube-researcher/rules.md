@@ -2,63 +2,87 @@
 
 You inherit all shared rules from `.roo/rules/research-base.md`. This file adds YouTube-specific workflow instructions.
 
-## Your Output Directory
+## Your Output Directories
 
-`.roo/research/youtube/` — you can ONLY write markdown files here.
+- `.roo/research/youtube/` — standalone research files (when used directly)
+- `.roo/research/sessions/` — shared session files (when used in a pipeline)
 
-## Workflow
+## Skills Available
+
+You have two skills in `.roo/skills-youtube-researcher/`:
+
+| Skill            | When to Use                                                         |
+| ---------------- | ------------------------------------------------------------------- |
+| `extract-topics` | Orchestrator asks to extract/identify topics from a video           |
+| `analyze-topic`  | Orchestrator asks to analyze ONE specific topic from a session file |
+
+**When a skill applies, follow it exactly.** The skill's workflow overrides any free-form approach.
+
+## Session File Workflow (Pipeline Mode)
+
+When you receive a task that references a session file:
+
+1. Read the session file FIRST — it contains your assignment
+2. Find YOUR assigned section (Topic Extraction, or Topic N)
+3. Do your work following the appropriate skill
+4. Write results ONLY to your assigned section
+5. Do NOT modify other sections of the session file
+6. The session file is the authority — if the orchestrator's chat contradicts the file structure, follow the file
+
+## Standalone Workflow (Direct Mode)
+
+When used directly (no session file), follow the original workflow:
 
 ### Step 1: Receive the YouTube URL
 
-The user will provide a YouTube video URL. If they provide multiple URLs, process them one at a time, creating a separate research file for each.
+The user provides a YouTube video URL. Process one video at a time.
 
 ### Step 2: Extract Video Content
 
-Use the YouTube MCP tool `download_youtube_url` with the video URL. This returns cleaned subtitle/transcript text.
-
-If the tool fails (video has no subtitles, URL is invalid, etc.), tell the user immediately. Do not guess or fabricate content.
+Use `download_youtube_url` MCP tool. If it fails, tell the user immediately.
 
 ### Step 3: Identify the Topic
 
-Read the transcript and determine what technical topic(s) the video covers. This determines which codebase context files you need to read next.
+Read the transcript and determine technical topics covered.
 
 ### Step 4: Read Codebase Context
 
-Based on the video topic, read:
+Based on topics, read:
 
-- The mandatory files listed in the shared rules (START_HERE, GROWTH_STRATEGY, SURFACE_BRIEFS, CLAUDE.md)
-- Any `.ai/topics/` files relevant to the video's subject
-- Any source files that the video's concepts might apply to
+- Mandatory files (START_HERE, GROWTH_STRATEGY, SURFACE_BRIEFS, CLAUDE.md)
+- Any `.ai/topics/` files relevant to the video
+- Source files the video's concepts might apply to
 
 ### Step 5: Use Sequential Thinking
 
-Invoke the Sequential Thinking MCP to structure your analysis:
+Invoke Sequential Thinking MCP (MINIMUM 5 steps):
 
-1. **Define:** What is this video about? What technical concepts does it cover?
-2. **Research:** List every distinct concept, pattern, or technique from the transcript
-3. **Analyze:** For each concept, map it to this codebase — does it apply? where?
-4. **Synthesize:** Prioritize and sequence the applicable recommendations
-5. **Conclude:** What are the top 1-3 actions to take?
+1. What is this video about? What technical concepts does it cover?
+2. List every distinct concept, pattern, or technique from the transcript
+3. For each concept, map it to this codebase — does it apply? where?
+4. Prioritize and sequence the applicable recommendations
+5. What are the top 1-3 actions to take?
 
 ### Step 6: Write the Research File
 
-Using the output template from the shared rules, write your findings to:
-
-```
-.roo/research/youtube/YYYY-MM-DD-<slug>.md
-```
+Write to `.roo/research/youtube/YYYY-MM-DD-<slug>.md`
 
 ### Step 7: Store in Memory
 
-Save these to the Memory MCP:
+Save to Memory MCP: video title + URL, P0/P1 recommendations, dismissed concepts.
 
-- Video title + URL (so we don't re-research the same video)
-- P0/P1 recommendations with their target files
-- Any dismissed concepts (and why)
+## Depth Requirements
+
+These apply to ALL modes (pipeline and standalone):
+
+- **Minimum 5 Sequential Thinking steps** per analysis
+- **Must read at least 2 codebase files** before making any recommendation
+- Every recommendation must contain a **specific file path and action verb**
+- Do NOT copy code from transcripts verbatim — extract the pattern
 
 ## Tips for Good YouTube Research
 
-- **Timestamps matter.** If the transcript has useful sections, note approximate timestamps in Raw Notes so Cade can watch the relevant parts.
-- **Speaker credibility.** Note who is speaking and their background (e.g., "Theo Browne, Next.js contributor" vs "random tutorial channel"). This helps Cade assess how much weight to give recommendations.
-- **Code examples in transcripts** are often incomplete or have errors. Don't copy them verbatim — extract the pattern/concept and map it to our existing code.
-- **Don't summarize the whole video.** Focus on what's actionable for THIS project. If 80% of the video is irrelevant, that's fine — document only the 20% that matters.
+- **Timestamps matter.** Note approximate timestamps so Cade can watch relevant parts.
+- **Speaker credibility.** Note who is speaking and their background.
+- **Code examples in transcripts** are often incomplete. Extract the pattern, not the code.
+- **Don't summarize the whole video.** Focus on what's actionable for THIS project.

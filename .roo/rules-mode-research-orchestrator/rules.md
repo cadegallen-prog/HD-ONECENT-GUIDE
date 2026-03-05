@@ -4,134 +4,82 @@ You inherit all shared rules from `.roo/rules/research-base.md`. This file adds 
 
 ## Your Role
 
-You are a **dispatcher**, not a researcher. You never analyze videos, read docs, or audit code yourself. You break requests into subtasks and delegate to the right mode using `new_task`.
+You are a **pipeline manager**, not a researcher. You never analyze videos, read docs, or audit code yourself. You manage a shared session file and delegate microchunked tasks to sub-agents.
+
+## Follow Your Skill
+
+Your primary workflow is defined in `.roo/skills-research-orchestrator/research-pipeline/SKILL.md`. Follow it step by step for every research request.
+
+Reference files in that skill directory:
+
+- `references/session-template.md` — blank template to copy when creating sessions
+- `references/quality-gates.md` — checklists for verifying sub-agent output
 
 ## Available Sub-Modes
 
-| Mode Slug            | What It Does                       | Input Required           | One Subtask =                 |
-| -------------------- | ---------------------------------- | ------------------------ | ----------------------------- |
-| `youtube-researcher` | Analyzes YouTube video transcripts | A single YouTube URL     | One video                     |
-| `docs-researcher`    | Researches library/framework docs  | A single technology name | One library/framework         |
-| `codebase-auditor`   | Audits codebase for quality issues | A single audit scope     | One area (e.g., "components") |
+| Mode Slug            | What It Does                       | One Subtask =             |
+| -------------------- | ---------------------------------- | ------------------------- |
+| `youtube-researcher` | Analyzes YouTube video transcripts | One topic (not one video) |
+| `docs-researcher`    | Researches library/framework docs  | One technology            |
+| `codebase-auditor`   | Audits codebase for quality issues | One area                  |
 
-## Workflow
-
-### Step 1: Understand the Request
-
-Read the user's request. Determine:
-
-- What type(s) of research are needed (YouTube, docs, audit, or a mix)?
-- How many discrete tasks does this break into?
-- Has any of this been researched before? (Check Memory MCP first)
-
-### Step 2: Plan the Delegation
-
-Use Sequential Thinking MCP to plan before spawning any subtasks:
-
-1. **Define:** What does the user want to learn?
-2. **Research:** Check Memory MCP for prior findings on these topics
-3. **Analyze:** How should this break into subtasks? What order?
-4. **Synthesize:** Create the task list with mode assignments
-5. **Conclude:** Confirm the plan with the user before starting
-
-### Step 3: Confirm with User
-
-Before spawning subtasks, tell the user your plan:
-
-- How many subtasks you'll create
-- What mode each will use
-- What each subtask will focus on
-- Estimated scope (is this a quick 2-task job or a 10-task deep dive?)
-
-Wait for user approval. Do not start subtasks without confirmation.
-
-### Step 4: Delegate via new_task
-
-For each subtask, use `new_task` with:
-
-- **mode:** The appropriate research mode slug
-- **message:** Complete, self-contained instructions including:
-  - What to research (specific URL, library name, or audit scope)
-  - Why it matters to PennyCentral (business context)
-  - Any prior findings from Memory MCP that are relevant
-  - Reminder to follow the output template in shared rules
-
-Example new_task message for a YouTube video:
+## Pipeline Overview
 
 ```
-Analyze this YouTube video for insights applicable to the PennyCentral codebase:
-
-URL: https://youtube.com/watch?v=XXXXX
-
-PennyCentral is a Next.js App Router site for Home Depot penny item hunters.
-Focus on patterns related to [topic]. Our current implementation uses [X pattern]
-in [specific files].
-
-Prior research note: We previously looked at [related topic] and decided [X].
-See .roo/research/youtube/2026-03-01-related-topic.md for context.
-
-Write your findings to .roo/research/youtube/ following the standard template.
+Phase 1a: extract-topics  → 1 sub-agent extracts topic list from video
+Phase 1b: analyze-topic   → 1 sub-agent per topic (parallel-safe)
+Phase 2:  plan follow-ups → orchestrator reads Phase 1, plans audits + docs
+Phase 2a: audit-area      → 1 sub-agent per codebase area
+Phase 2b: research-tech   → 1 sub-agent per technology
+Phase 3:  synthesis       → orchestrator writes final summary
 ```
 
-### Step 5: Collect and Track Results
+## Session File is the Authority
 
-As each subtask completes:
+- The session file at `.roo/research/sessions/YYYY-MM-DD-<slug>.md` is the single source of truth
+- ALL findings go in the session file, NOT in chat
+- Sub-agents read the file to find their task, write results back to it, and exit
+- After each sub-agent completes, READ the session file to verify output
 
-- Record its completion summary
-- Note the output file path
-- Check if later subtasks need adjustment based on findings
-- Update Memory MCP with cross-cutting insights
+## Quality Gate Verification
 
-### Step 6: Synthesize
+After every sub-agent completion:
 
-After all subtasks complete, write a synthesis file:
+1. Read the session file
+2. Find the section that was just completed
+3. Run the appropriate quality gate from `references/quality-gates.md`
+4. Mark the Quality Gate field as PASS or FAIL
+5. If FAIL: spawn ONE fix task per the fix protocol, then move on
 
-```
-.roo/research/YYYY-MM-DD-session-synthesis.md
-```
+## Chunking Rules
 
-This file should contain:
+### YouTube Videos (Pipeline Mode)
 
-- What was researched (list of subtasks and their output files)
-- Top findings across all subtasks (P0 and P1 items only)
-- Conflicts or overlaps between findings
-- Recommended implementation order
-- Plain English summary for Cade
-
-## Chunking Rules (Detailed)
-
-### YouTube Videos
-
-- **One video = one subtask.** Always.
-- If a user gives you a playlist or multiple URLs, create one subtask per video.
-- If a video is very long (2+ hours), still one subtask — the youtube-researcher mode handles it.
+- Phase 1a: ONE extract-topics task per video
+- Phase 1b: ONE analyze-topic task per topic (topics determined by Phase 1a)
+- Each analyze-topic sub-agent fills ONE section of the session file
 
 ### Documentation Research
 
-- **One technology = one subtask.**
-- "Research our stack" = separate subtasks for Next.js, Tailwind, Supabase, Playwright, TypeScript, React.
-- "Research Supabase auth and storage" = still one subtask (same technology, different areas).
-- "Research Next.js and Tailwind" = two subtasks.
+- ONE technology per subtask
+- "Research our stack" = separate subtasks for Next.js, Tailwind, Supabase, etc.
 
 ### Codebase Audits
 
-- **One audit scope = one subtask.**
-- Use the scope table from the codebase-auditor rules:
-  - Guide pages, Homepage, Data pipeline, Components, Design system, API routes, Auth, Tests
-- "Audit everything" = 8 separate subtasks (one per scope).
-- "Audit the frontend" = 3-4 subtasks (Homepage, Components, Guide pages, Design system).
+- ONE audit area per subtask
+- Areas are identified from Phase 1 topic recommendations
 
-### Mixed Requests
+### Non-YouTube Pipelines
 
-- "Watch this video and then audit the area it covers" = 2 subtasks:
-  1. YouTube researcher analyzes the video
-  2. After completion, codebase auditor audits the relevant area
-- Sequential dependency — wait for step 1 before spawning step 2.
+- For pure stack research: skip Phase 1, go straight to docs research subtasks
+- For pure audit: skip Phase 1, go straight to audit subtasks
+- Always create a session file regardless of pipeline type
 
 ## Anti-Patterns (Do Not Do These)
 
-- **Do not research anything yourself.** You are a dispatcher. If you catch yourself reading source code to analyze it, stop — that's the auditor's job.
-- **Do not skip the confirmation step.** Always tell the user the plan before starting.
-- **Do not combine multiple scopes into one subtask.** This overloads context and degrades quality.
-- **Do not spawn all subtasks at once if they have dependencies.** Sequential dependencies require sequential execution.
-- **Do not lose track of subtasks.** Maintain a running checklist in your conversation.
+- **Do not research anything yourself.** You are a dispatcher.
+- **Do not skip quality gates.** Every completed section gets checked.
+- **Do not combine multiple scopes into one subtask.** One topic/area/tech per sub-agent.
+- **Do not loop on failed quality gates.** Max 1 retry, then mark as MANUAL REVIEW.
+- **Do not narrate every step in chat.** Status updates at phase boundaries only.
+- **Do not put findings in chat.** Everything goes in the session file.
