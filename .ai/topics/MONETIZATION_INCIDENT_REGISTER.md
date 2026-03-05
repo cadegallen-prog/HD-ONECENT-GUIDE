@@ -347,3 +347,22 @@ All must be true before re-review:
   - Incident progression:
     - status advanced to `OPEN-S4-CSP-HARDENING-VERIFIED`
     - next action advanced to `S5 - controlled rollout and partner confirmation pass`.
+
+## 24) Session Notes (2026-03-05, post-S4 Rubicon CSP hotfix + verification)
+
+- `INC-MONUMETRIC-001`:
+  - Full CI on `main` after `#149` surfaced one remaining critical CSP blocker:
+    - `secure-assets.rubiconproject.com`.
+  - PR `#151` was merged to `main` (`ad72f3a`) with one minimal evidence-backed host delta in `next.config.js`:
+    - `frame-src`: `https://secure-assets.rubiconproject.com`
+  - Production header verification confirmed the host is now present in live CSP.
+  - Post-hotfix production audit:
+    - `reports/monumetric-audit/2026-03-05T22-38-27-814-post-rubicon-hotfix/`
+  - Observed outcome:
+    - no `secure-assets.rubiconproject.com` CSP block signatures in post-hotfix console audit buckets,
+    - mobile `/guide -> /what-are-pennies -> /penny-list` SPA transition path preserved in-content wrappers with `blankActiveWrappers=0`,
+    - `/report-find` remained ad-excluded (no ad wrappers / no route-plan payload).
+  - Incident progression:
+    - status remains `OPEN-S4-CSP-HARDENING-VERIFIED` (no downgrade).
+    - next action remains `S5 - controlled rollout and partner confirmation pass`.
+    - deadline remains `2026-03-12`.
