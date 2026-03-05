@@ -1,3 +1,8 @@
+---
+name: analyze-topic
+description: "Analyzes one assigned transcript topic and maps it to relevant PennyCentral code paths."
+---
+
 # Skill: analyze-topic
 
 **Description:** Analyzes ONE specific topic from a YouTube video transcript and maps it to the PennyCentral codebase. Use when the orchestrator assigns a specific topic number from a session file. Reads the transcript, finds relevant codebase files, and fills in that topic's section in the session file.

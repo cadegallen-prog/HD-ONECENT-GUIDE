@@ -1,3 +1,8 @@
+---
+name: research-pipeline
+description: "Dispatches and quality-gates the full multi-phase research pipeline using a shared session file."
+---
+
 # Skill: research-pipeline
 
 **Description:** Orchestrates a full multi-phase research pipeline using a shared session file. Use when the user provides a YouTube video URL, asks for stack research, or requests a codebase audit. Manages topic extraction, per-topic analysis, codebase auditing, documentation research, and synthesis — all through microchunked sub-agent tasks.

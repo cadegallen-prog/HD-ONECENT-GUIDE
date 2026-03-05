@@ -1,3 +1,8 @@
+---
+name: research-technology
+description: "Researches one assigned technology against current docs and maps upgrades to PennyCentral files."
+---
+
 # Skill: research-technology
 
 **Description:** Researches ONE technology or framework from current documentation and compares it to PennyCentral's implementation. Use when the orchestrator assigns a specific technology from a session file. Checks version gaps, deprecated patterns, and new features we should adopt.

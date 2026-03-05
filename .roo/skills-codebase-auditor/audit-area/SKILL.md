@@ -1,3 +1,8 @@
+---
+name: audit-area
+description: "Audits one assigned codebase area for consistency, quality issues, and prioritized risks."
+---
+
 # Skill: audit-area
 
 **Description:** Audits ONE specific area of the PennyCentral codebase for quality issues, pattern violations, and improvement opportunities. Use when the orchestrator assigns a specific codebase area from a session file. Reads every file in scope and writes findings to the session file.

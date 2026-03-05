@@ -1,3 +1,8 @@
+---
+name: extract-topics
+description: "Extracts and lists distinct technical topics from a YouTube transcript for the research pipeline."
+---
+
 # Skill: extract-topics
 
 **Description:** Extracts and lists distinct technical topics from a YouTube video transcript for the research pipeline. Use when the orchestrator asks to extract or identify topics from a YouTube video and write them to a session file. Does NOT analyze topics — only identifies and lists them.
