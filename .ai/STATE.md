@@ -28,6 +28,7 @@ Every AI session must update this after meaningful work.
     - intentionally excluded redesign-heavy and Roo experimentation commits from the recovered branch.
   - **Why:** `dev` had too many co-mingled commits (design/runtime/docs/research), which made safe promotion and rollback difficult.
   - **Status:** `dev-recovery-20260305` is now the clean implementation lane for continuation. Verification passed on `ai:memory:check`, `verify:fast`, and `e2e:smoke`. `e2e:full` no longer fails on visual-pointer tests; current remaining blocker is `tests/live/console.spec.ts` reporting critical CSP blocks for `www.google-analytics.com` on `/store-finder` and `/about` from live-site audit.
+  - **Review path:** draft PR opened at `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/pull/148`.
 
 - **2026-03-03 (`/report-find` share + basket UX hardening shipped locally):** Finished the founder-requested follow-up slice on top of the basket hotfix so the success-state copy is trustworthy again and the basket limit is safely back at `10`.
   - **What changed:**

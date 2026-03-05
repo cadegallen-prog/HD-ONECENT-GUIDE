@@ -54,6 +54,7 @@
 - Recovery branch: `dev-recovery-20260305` (ahead `5` from `origin/main`)
 - Snapshot branch: `backup/dev-snapshot-20260305-pre-recovery`
 - Push: pushed
+- Draft PR: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/pull/148`
 - Carryover untracked files (not touched by this objective):
   - `archive/root-level-orphans/`
   - `emails/monumetric-reengagement-draft.md`
