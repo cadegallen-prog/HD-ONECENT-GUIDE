@@ -34,13 +34,13 @@
 
 **Status:** 🔄 Planning baseline (sitewide)
 **Focus:** Route eligibility, thin URL lifecycle, and UX-safe ad architecture
-**Quick link:** See `.ai/plans/sitewide-monetization-readiness.md`
+**Quick link:** See `.ai/impl/monumetric-balanced-stabilization-density-recovery.md`
 
 ### [MONETIZATION](.ai/topics/MONETIZATION.md)
 
 **Status:** ✅ Historical bridge context
 **Focus:** Ad networks, revenue strategy, timeline
-**Quick link:** See `.ai/plans/sitewide-monetization-readiness.md` for current canonical planning
+**Quick link:** See `.ai/impl/monumetric-balanced-stabilization-density-recovery.md` for current canonical stabilization planning
 
 ### [ADSENSE_APPROVAL](.ai/topics/ADSENSE_APPROVAL_CURRENT.md)
 

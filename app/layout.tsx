@@ -1,5 +1,6 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import localFont from "next/font/local"
+import Script from "next/script"
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css"
@@ -13,6 +14,7 @@ import { AnalyticsTracker } from "@/components/analytics-tracker"
 import VisualPointerShell from "@/components/dev/visual-pointer-shell"
 import { ogImageUrl } from "@/lib/og"
 import { CANONICAL_BASE } from "@/lib/canonical"
+import { MonumetricRouteLifecycleCoordinator } from "@/lib/ads/monumetric-runtime"
 import { isVisualPointerEnvironmentEnabled } from "@/lib/visual-pointer/env"
 
 const DEFAULT_OG_IMAGE = `https://www.pennycentral.com${ogImageUrl("homepage")}`
@@ -35,6 +37,7 @@ const ENABLE_VERCEL_SCRIPTS =
   IS_VERCEL_PROD
 const ENABLE_VERCEL_ANALYTICS = ANALYTICS_ENABLED && ENABLE_VERCEL_SCRIPTS
 const ENABLE_VISUAL_POINTER = isVisualPointerEnvironmentEnabled()
+const GROW_FAVES_SITE_ID = "U2l0ZToyOWE5MzYwOS02MjA3LTQ4NzMtOGNjOC01ZDI5MjliMWZlYzY="
 
 const inter = localFont({
   src: [
@@ -54,6 +57,14 @@ const inter = localFont({
   preload: true,
   fallback: ["system-ui", "arial"],
 })
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  viewportFit: "cover",
+}
 
 export const metadata: Metadata = {
   title: "Penny Central | Home Depot Penny List",
@@ -188,19 +199,6 @@ export default function RootLayout({
         />
 
         {/* ===================================================
-            MEDIAVINE JOURNEY (GROW)
-            DO NOT REMOVE OR MODIFY
-            =================================================== */}
-        <script
-          data-grow-initializer=""
-          dangerouslySetInnerHTML={{
-            __html: `
-              !(function(){window.growMe||((window.growMe=function(e){(window.growMe._=window.growMe._||[]).push(e)}),(window.growMe._=window.growMe._||[]));var e=document.createElement("script");(e.type="text/javascript"),(e.src="https://faves.grow.me/main.js"),(e.defer=!0),e.setAttribute("data-grow-faves-site-id","U2l0ZToyOWE5MzYwOS02MjA3LTQ4NzMtOGNjOC01ZDI5MjliMWZlYzY=");var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})();
-            `,
-          }}
-        />
-
-        {/* ===================================================
             GOOGLE ANALYTICS 4 (GA4)
             Measurement ID: G-DJ4RJRX05E
             Tidied up: Consent Mode v2 + SPA tracking fix
@@ -284,6 +282,24 @@ export default function RootLayout({
         )}
       </head>
       <body className="bg-background text-foreground">
+        {/* ===================================================
+            MEDIAVINE JOURNEY (GROW)
+            DO NOT REMOVE OR MODIFY
+            =================================================== */}
+        <Script id="grow-bootstrap" strategy="afterInteractive">
+          {`
+            window.growMe = window.growMe || function(command) {
+              (window.growMe.q = window.growMe.q || []).push(command);
+            };
+            window.growMe.q = window.growMe.q || [];
+          `}
+        </Script>
+        <Script
+          id="grow-loader"
+          src="https://faves.grow.me/main.js"
+          strategy="afterInteractive"
+          data-grow-faves-site-id={GROW_FAVES_SITE_ID}
+        />
         {/* Skip link for keyboard accessibility */}
         <a
           href="#main-content"
@@ -297,6 +313,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <MonumetricRouteLifecycleCoordinator />
           {/* Handles client-side tracking for GA4 */}
           <AnalyticsTracker />
           <AuthProvider>
