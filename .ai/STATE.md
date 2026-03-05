@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Mar 5, 2026 (Monumetric S1-S4 promoted to `main`; production re-audits completed)
+**Last updated:** Mar 5, 2026 (Monumetric S1-S4 + Rubicon CSP hotfix promoted to `main`; production re-audits completed)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,18 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-05 (Monumetric Rubicon CSP hotfix promoted + live re-audit):** Merged PR `#151` (`ad72f3a`) to patch the remaining live CSP blocker observed after S4.
+  - **What changed:**
+    - added `https://secure-assets.rubiconproject.com` to `frame-src` in `next.config.js` (minimal host delta only).
+    - confirmed production CSP header now includes the new Rubicon host.
+    - captured post-hotfix production audit with desktop + mobile direct + SPA transition checks:
+      - `reports/monumetric-audit/2026-03-05T22-38-27-814-post-rubicon-hotfix/`
+  - **Why:** post-merge full CI on `main` still failed the critical CSP gate with `secure-assets.rubiconproject.com`, which could suppress bidder sync/fill behavior.
+  - **Status:** hotfix is live on `main`; post-hotfix audit shows:
+    - no `secure-assets.rubiconproject.com` CSP block signatures,
+    - mobile `/guide -> /what-are-pennies -> /penny-list` SPA transitions retained in-content wrappers without blank active shells,
+    - `/report-find` remained ad-excluded.
 
 - **2026-03-05 (Monumetric S1-S4 promoted to production + live re-audit):** Merged PR `#148` (`f00c246`) to ship S1-S3 on `main`, then merged PR `#149` (`de6bd28`) to harden S4 CSP compatibility with minimal host deltas.
   - **What changed:**
