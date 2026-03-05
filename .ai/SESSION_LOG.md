@@ -4,6 +4,53 @@
 
 ---
 
+## 2026-03-05 - Codex - Live Console CSP False-Positive Fix (FULL Lane Unblocked)
+
+**Goal:** Clear the remaining `e2e:full` blocker without broadening CSP policy in `next.config.js`.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `tests/live/console.spec.ts`
+  - fixed blocked-domain extraction so CSP parsing uses the actual blocked target before directive text.
+  - added safe handling for non-host CSP targets (for example `data:` URIs) so they do not get misclassified as host blockers.
+  - preserved fallback parsing for variants like `Fetch API cannot load https://...`.
+
+### Summary
+
+- Root cause was a test-classifier bug, not a runtime CSP allowlist gap.
+- The failing messages on `/store-finder` and `/about` were `Connecting to 'data:text/xml...'` entries.
+- The prior extractor incorrectly pulled `https://www.google-analytics.com` from the CSP directive allowlist text and marked it as a critical blocked host.
+- After the parser fix, critical CSP counts are `0` and FULL passes.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:full` ✅ (first run had one transient local connection flake; immediate rerun passed clean)
+- `npm run e2e:smoke` ✅
+- console report artifacts with `criticalCspViolations=0`:
+  - `reports/playwright/console-report-2026-03-05T06-32-09-456Z.json`
+  - `reports/playwright/console-report-2026-03-05T06-33-39-485Z.json`
+  - `reports/playwright/console-report-2026-03-05T06-36-04-913Z.json`
+  - `reports/playwright/console-report-2026-03-05T06-37-06-266Z.json`
+- Writer lock:
+  - `npm run ai:writer-lock:status` ✅ (unlocked before claim)
+  - `npm run ai:writer-lock:claim -- codex "fix live-console CSP false-positive extraction and verify full lane"` ✅
+
+### Branch Hygiene
+
+- Branch: `dev-recovery-20260305`
+- Scope: live-console CSP parser fix only
+- Push: not pushed
+- Carryover untracked files (unchanged, unrelated):
+  - `archive/root-level-orphans/`
+  - `emails/monumetric-reengagement-draft.md`
+  - `emails/monumetric-reengagement-final.md`
+
+---
+
 ## 2026-03-05 - Codex - Dev Branch Recovery + Clean Integration Lane
 
 **Goal:** Recover from mixed `dev` history by preserving all current work in a safety snapshot, then creating a clean integration branch from `main` with only high-value salvage commits.
@@ -225,68 +272,3 @@
 - Branch: `dev`
 - Scope: `S1` hydration fix + regression coverage + continuity updates
 - Push: not pushed
-
----
-
-## 2026-03-02 - Codex - Site Recovery Planning Spine (S0)
-
-**Goal:** Convert the site-recovery intent into durable repo memory so future agents can execute a coherent multi-slice recovery program without re-deriving it from chat.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `.ai/topics/SITE_RECOVERY_CURRENT.md`
-  - added the current-state audit for `/`, `/guide`, `/penny-list`, `/report-find`, `/faq`, `/what-are-pennies`, `/store-finder`, `/about`, and `/transparency`.
-  - persisted founder-calibrated quality feedback so it does not die with the context window.
-  - documented mobile issues, coherence issues, top 3 ROI improvements, and the hydration root-cause assessment.
-- `.ai/impl/site-recovery-program.md`
-  - created the authoritative parent recovery plan in `.ai/impl/`.
-  - locked the program decisions, dependency order, stop/go rules, and immediate next task.
-- `.ai/impl/site-recovery-s1-hydration-stability.md`
-  - created the implementation-ready plan for the global hydration mismatch and Penny List text determinism fix.
-- `.ai/impl/site-recovery-s2-homepage-proof-front-door.md`
-  - created the implementation-ready plan for the homepage redesign.
-- `.ai/impl/site-recovery-s3-guide-core-rebuild.md`
-  - created the implementation-ready plan for rebuilding `/guide` into the canonical long-form guide and demoting supporting routes.
-- `.ai/impl/site-recovery-s4-penny-list-mobile-focus.md`
-  - created the implementation-ready plan for Penny List mobile hierarchy cleanup.
-- `.ai/impl/site-recovery-s5-report-find-compression.md`
-  - created the implementation-ready plan for reducing pre-form friction on `/report-find`.
-- `.ai/impl/site-recovery-s6-typography-template-consistency.md`
-  - created the implementation-ready plan for type/spacing/template normalization.
-- `.ai/impl/site-recovery-s7-store-finder-supporting-role.md`
-  - created the implementation-ready plan for calming Store Finder and demoting it to a supporting role.
-- `.ai/impl/site-recovery-s8-trust-pages-hardening.md`
-  - created the implementation-ready plan for `/about` and `/transparency`.
-- `.ai/plans/INDEX.md`
-  - registered the new parent plan and explicitly documented the `.ai/plans/` vs `.ai/impl/` authority split.
-- `.ai/BACKLOG.md`
-  - persisted the site-recovery program as the active product-priority sequence.
-- `.ai/STATE.md`
-  - updated current project reality so fresh agents can identify the new canonical program and next slice.
-- `.ai/LEARNINGS.md`
-  - documented the fail-closed rule that `.ai/SESSION_LOG.md` must stay at 5 live entries before rerunning `ai:checkpoint`.
-
-### Summary
-
-- Penny Central now has one repo-canonical site recovery program instead of chat-only intent.
-- The planning spine is complete and the next implementation slice is unambiguous: `S1 - Hydration Stability`.
-- Future agents now have a route-by-route audit, a parent plan, and eight child plans to execute in order.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run ai:checkpoint` ✅
-  - artifacts:
-    - `reports/context-packs/2026-03-02T04-41-00/context-pack.md`
-    - `reports/context-packs/2026-03-02T04-41-00/resume-prompt.txt`
-- Runtime verification lanes: N/A (docs-only planning/memory work; no route/form/API/runtime code paths changed)
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Scope: planning docs + registry + shared memory
-- Push: not pushed
-
----

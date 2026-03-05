@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Mar 5, 2026 (`dev` recovery lane stabilized; full-suite visual-pointer gate fixed, remaining blocker is live-console CSP)
+**Last updated:** Mar 5, 2026 (`dev` recovery lane stabilized; live-console CSP false-positive fixed; FULL lane green)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,14 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-05 (Live-console CSP false-positive resolved):** Cleared the remaining FULL-suite blocker by fixing CSP blocked-domain parsing in the live console audit test.
+  - **What changed:**
+    - updated `tests/live/console.spec.ts` `extractBlockedDomain(...)` to parse blocked targets before CSP directive allowlist text.
+    - added safe handling for non-host CSP targets (for example `data:` URIs) to avoid host misclassification.
+    - kept fallback URL parsing for `"Fetch API cannot load https://..."` message variants.
+  - **Why:** `/store-finder` and `/about` were failing due to a parser false positive that read `www.google-analytics.com` from the CSP directive itself, not from the blocked target.
+  - **Status:** `e2e:full` now passes on `dev-recovery-20260305`; latest live console artifacts show `criticalCspViolations=0` while preserving non-critical third-party CSP noise reporting.
 
 - **2026-03-05 (Branch recovery lane established from `main`):** Recovered from mixed `dev` history by creating a safety snapshot and a clean integration branch with selected salvage commits only.
   - **What changed:**
@@ -27,7 +35,7 @@ Every AI session must update this after meaningful work.
       - `.ai/impl/dev-branch-recovery-triage-2026-03-05.md`.
     - intentionally excluded redesign-heavy and Roo experimentation commits from the recovered branch.
   - **Why:** `dev` had too many co-mingled commits (design/runtime/docs/research), which made safe promotion and rollback difficult.
-  - **Status:** `dev-recovery-20260305` is now the clean implementation lane for continuation. Verification passed on `ai:memory:check`, `verify:fast`, and `e2e:smoke`. `e2e:full` no longer fails on visual-pointer tests; current remaining blocker is `tests/live/console.spec.ts` reporting critical CSP blocks for `www.google-analytics.com` on `/store-finder` and `/about` from live-site audit.
+  - **Status:** `dev-recovery-20260305` is now the clean implementation lane for continuation. Verification has passed on `ai:memory:check`, `verify:fast`, `e2e:smoke`, and `e2e:full` after the live-console CSP parser fix.
   - **Review path:** draft PR opened at `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/pull/148`.
 
 - **2026-03-03 (`/report-find` share + basket UX hardening shipped locally):** Finished the founder-requested follow-up slice on top of the basket hotfix so the success-state copy is trustworthy again and the basket limit is safely back at `10`.

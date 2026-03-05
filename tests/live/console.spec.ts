@@ -69,9 +69,27 @@ test.describe("live site console audit", () => {
     const isCSPViolation = (text: string) =>
       /Content Security Policy|violates the following.*directive/i.test(text)
 
-    // Extract blocked domain from CSP error message
+    // Extract blocked domain from CSP error message.
+    // Prefer the blocked target before the directive text to avoid false positives
+    // from allowlist entries (e.g. "https://www.google-analytics.com" inside connect-src).
     const extractBlockedDomain = (text: string): string | null => {
-      const urlMatches = Array.from(text.matchAll(/https?:\/\/[^\s'")]+/gi))
+      const [beforeDirective] = text.split(/violates the following/i)
+
+      // Common CSP text pattern:
+      // "Loading the script 'https://example.com/...'" or "Connecting to 'data:...'"
+      const quotedTarget = beforeDirective.match(/'([^']+)'/)?.[1]
+      if (quotedTarget) {
+        try {
+          const host = new URL(quotedTarget).hostname
+          if (host) return host
+        } catch {
+          // Non-URL targets (for example data: URIs) are not host-based blockers.
+        }
+      }
+
+      // Fallback for variants like:
+      // "Fetch API cannot load https://example.com. Refused to connect because..."
+      const urlMatches = Array.from(beforeDirective.matchAll(/https?:\/\/[^\s'")]+/gi))
       for (const match of urlMatches) {
         try {
           const host = new URL(match[0]).hostname
