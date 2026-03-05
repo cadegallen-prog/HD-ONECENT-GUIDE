@@ -4,7 +4,7 @@
 
 **Rule:** Every agent — Claude, Codex, Copilot — must read this file at session start and update it at session end. If you don't update this file, the next agent starts disconnected. That wastes everything you just did.
 
-**Last updated:** 2026-03-04 by Codex
+**Last updated:** 2026-03-05 by Claude Code (Opus 4.6)
 
 ---
 
@@ -14,50 +14,41 @@
 
 The product thread is still the same: make PennyCentral more trustworthy and easier to use so the core loop compounds (`/penny-list` habit -> submit finds -> better data -> stronger trust).
 
-Three continuity facts now matter together:
+Five continuity facts now matter together:
 
-1. **Site Recovery Program** (`.ai/impl/site-recovery-program.md`) is still the main product lane, and `/guide` is now the canonical long-form beginner route on `dev`.
-2. **The next guide slice is no longer `/guide` itself.** `S3B` is complete, so the next runtime work is `S3C1 - supporting chapter-route demotion` for `/what-are-pennies`, `/clearance-lifecycle`, and `/digital-pre-hunt`.
-3. **Manual workflow and branch workflow rules remain strict:** `manual:enrich` vs `manual:cade-fast-track` stay separate, `dev` remains the canonical branch, and dirty-file checks are overlap-first instead of hard-stop by default.
+1. **Responsive foundations (READY TO IMPLEMENT):** `.ai/impl/responsive-foundations-impl.md` is the approved implementation plan. `.ai/impl/responsive-foundations-spec.md` is the concrete spec. This is the immediate next implementation task.
+2. **UX redesign (Track 2, PLANNED BUT NOT STARTED):** `.ai/impl/ux-redesign-requirements.md` captures owner feedback on guide hierarchy, link styling, report-find credibility, and overall cohesion. This is a separate future `/plan` session.
+3. **dev-to-main merge is BLOCKED** until owner reviews user-facing page changes (homepage, guide hub, FAQ, report-find). The 25+ "safe" commits (docs, scripts, bug fixes) are intertwined with 7 "needs-review" commits via shared test files, making clean cherry-picking impractical.
+4. **Monetization execution has a locked parent+child stabilization plan:** `.ai/impl/monumetric-balanced-stabilization-density-recovery.md` with `S1` through `S5` child docs.
+5. **Manual workflow and branch workflow rules remain strict:** `dev` remains the canonical branch.
 
 ### Where we just were
 
-After the workflow cleanup and `S3A` ownership lock, the remaining risk was that `/guide` could still become a dressed-up hub instead of a real teaching route. The content map solved "what belongs where," but not the actual beginner experience.
+Owner expressed deep frustration with the site's mobile responsiveness and overall UX quality. The core issue is NOT device-specific (not just iPhone XR) -- it's systemic: fixed typography sizes, missing viewport-height handling, and cramped layouts at all narrow widths.
 
-This session executed `S3B` as the runtime follow-through:
+This session:
 
-- replaced the old hub/chapter-grid posture on `/guide` with one seven-section long-form narrative,
-- added jump navigation so returning users can reach the exact section they need without route-hopping,
-- kept supporting-route links as secondary deep dives instead of the main spine,
-- updated smoke coverage and verified the route with fast, smoke, and standalone visual-smoke lanes,
-- recorded the shell-specific `npx cross-env` learning so future standalone Playwright retries do not repeat the same PATH mistake.
-
-The key lesson carried forward is that guide recovery only works if `/guide` keeps ownership of the full beginner flow. If a future agent reintroduces a chapter-grid-first posture, the architecture regression will be immediate even if the copy looks better.
+- Fixed immediate mobile clipping bug (viewport-fit=cover + safe-area-inset-top on navbar) -- already committed and pushed to dev.
+- Installed 3 new MCPs: Context7, Chrome DevTools, Sequential Thinking.
+- Ran full responsive audit of the codebase (all pages, all components).
+- Completed `/plan` session defining Track 1 (responsive foundations) vs Track 2 (UX redesign).
+- Completed `/architect` session producing a 5-phase implementation plan with 14 files, each phase independently committable.
+- Attempted dev-to-main merge but owner skipped all 5 user-facing page reviews. PR #147 was closed.
 
 ### Where the next link goes
 
-Next sessions should prioritize:
+Next session should:
 
-1. **Implement `S3C1 - supporting chapter-route demotion` on `dev`.**
-   - Start with `/what-are-pennies`, `/clearance-lifecycle`, and `/digital-pre-hunt`.
-   - Each route should visibly point back to `/guide` as the canonical path before its unique detail begins.
-   - Preserve the useful detail; do not turn the routes into empty shells.
-2. **Keep `/faq` untouched until `S3D`.**
-   - `S3B` already moved the primary conceptual teaching onto `/guide`.
-   - Do not widen scope into FAQ cleanup during `S3C1`.
-3. **Keep manual workflow boundaries strict.**
-   - Use `manual:enrich` only when Penny List rows already exist.
-   - Use `manual:cade-fast-track` for founder direct submissions from pre-scraped payloads.
-4. **Treat branch-topology cleanup as its own explicit git objective.**
-   - Do not merge, delete, or re-target `develop`/Sentry branches based on assumption.
-   - If Cade wants branch cleanup, start from the verified topology captured in `STATE.md` and `SESSION_LOG.md`.
-5. **Use overlap-first dirty-file checks in multi-agent sessions.**
-   - Unrelated dirty files are not an automatic blocker.
-   - `.roo/**` research files and `.roo/mcp.json` are usually optional carryover, not blockers.
-   - Shared-memory files still require the writer lock.
-   - Separate worktrees are optional isolation tools, not the default workflow.
-
-The thread connection: founder trust depends on continuity being understandable. The branch/worktree cleanup removed operational confusion, `S3A` removed content-ownership confusion, and `S3B` finally turned `/guide` into the primary learning path. `S3C1` matters next because supporting routes still need to acknowledge that new hierarchy instead of competing with it.
+1. **IMPLEMENT responsive foundations** using `/implement` skill.
+   - Read `.ai/impl/responsive-foundations-impl.md` first.
+   - Follow the 5 phases in order: globals.css -> min-h-screen replacement -> penny-list -> homepage -> report-find.
+   - Each phase is a separate commit.
+   - Run `npm run verify:fast` + `npm run e2e:smoke` after all phases.
+   - Since globals.css is modified, run `npm run e2e:full` before pushing.
+2. **Do NOT start Track 2 (UX redesign) yet.** That needs a fresh `/plan` session when owner has energy.
+3. **Do NOT attempt dev-to-main merge.** Owner is not ready to review page content.
+4. **Keep monetization lane separate.** If monetization is the session objective, start from `.ai/impl/monumetric-balanced-s1-lifecycle-guardrails.md`.
+5. **Use overlap-first dirty-file checks in multi-agent sessions.** `.roo/**` research files are optional carryover, not blockers.
 
 ### What the agent must understand before working
 
@@ -77,6 +68,10 @@ If you make a change that doesn't serve the surface's stated job, or if you can'
 **Route roles are now explicit.** `/guide` owns the full beginner narrative, `/faq` is tactical, `/what-are-pennies` is the short supporting explainer, and the other chapter routes are supporting reference pages with unique detail.
 
 **Supporting routes must be repositioned, not gutted.** `S3C1` and `S3C2` should add canonical-guide framing before unique detail, not remove all useful reference content.
+
+**Monetization now has a single active stabilization plan.** Use `.ai/impl/monumetric-balanced-stabilization-density-recovery.md` and one child slice at a time; do not run multi-slice monetization implementation in one batch.
+
+**SPA callback caveat is locked.** Do not enable `$MMT.spa.setCallback(...)` in production paths until isolated canary evidence resolves the prior `updateConfig is not a function` runtime failure.
 
 **Standalone visual smoke now has a known shell rule.** In this environment, use `npx cross-env ...` for one-off Playwright build/test commands instead of assuming `cross-env` is directly on PATH.
 
