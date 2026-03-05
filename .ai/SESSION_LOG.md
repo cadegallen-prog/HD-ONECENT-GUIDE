@@ -23,28 +23,37 @@
   - `e781cb3` — Monumetric balanced parent/child plans + `S1` lifecycle runtime/tests/docs
   - `5504ac8` — trimmed `app/layout.tsx` to keep only Monumetric lifecycle wiring (removed unrelated carried-over layout edits from salvage)
 - Kept redesign-heavy and Roo-experimental commit history out of this branch on purpose.
+- Overnight continuation on the same recovery branch:
+  - added `NEXT_PUBLIC_VISUAL_POINTER_ENABLED=true` to `package.json` `e2e:full` so visual-pointer capture tests are enabled in production-mode test builds.
+  - added commit-triage artifact: `.ai/impl/dev-branch-recovery-triage-2026-03-05.md`.
+  - pushed both branches to origin:
+    - `dev-recovery-20260305`
+    - `backup/dev-snapshot-20260305-pre-recovery`
 
 ### Summary
 
 - Recovery branch now isolates business-critical work from mixed `dev` history without deleting any prior work.
 - Snapshot branch preserves full recoverability of the pre-recovery state.
 - The recovered branch is now a safer base for future implementation and PR review.
+- `e2e:full` no longer fails on visual-pointer toggle absence; remaining full-lane blocker is a live-console CSP gate on `www.google-analytics.com` for `/store-finder` and `/about`.
 
 ### Verification
 
 - `npm run ai:memory:check` ✅
 - `npm run verify:fast` ✅
 - `npm run e2e:smoke` ✅
-- `npm run e2e:full` ⚠️ ran and failed on pre-existing `tests/visual-pointer-capture.spec.ts` expectations (`visual-pointer-toggle` not found across multiple projects); no failures in the changed Monumetric/enrichment lanes.
+- `npm run e2e:full` ⚠️ rerun after script fix:
+  - visual-pointer capture specs now pass.
+  - full suite still fails due live-console critical CSP finding (`www.google-analytics.com`) on `/store-finder` and `/about`.
 - Writer lock:
   - `npm run ai:writer-lock:claim -- codex "record dev-branch recovery branch creation and commit triage"` ✅
   - `npm run ai:writer-lock:status` ✅ (active under `codex` during memory updates)
 
 ### Branch Hygiene
 
-- Recovery branch: `dev-recovery-20260305` (ahead `4` from `origin/main`)
+- Recovery branch: `dev-recovery-20260305` (ahead `5` from `origin/main`)
 - Snapshot branch: `backup/dev-snapshot-20260305-pre-recovery`
-- Push: not pushed
+- Push: pushed
 - Carryover untracked files (not touched by this objective):
   - `archive/root-level-orphans/`
   - `emails/monumetric-reengagement-draft.md`

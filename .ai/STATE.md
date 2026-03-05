@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Mar 5, 2026 (`dev` recovery branch created; high-value work salvaged to clean integration lane)
+**Last updated:** Mar 5, 2026 (`dev` recovery lane stabilized; full-suite visual-pointer gate fixed, remaining blocker is live-console CSP)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -21,9 +21,13 @@ Every AI session must update this after meaningful work.
       - `a53f42a`: manual fast-track/manual-enrich script corrections
       - `e781cb3`: Monumetric balanced parent/child plans + `S1` lifecycle runtime/tests/docs
       - `5504ac8`: constrained `app/layout.tsx` to Monumetric lifecycle-only wiring after salvage cleanup.
+    - hardened full QA script by enabling visual-pointer test env in `package.json`:
+      - `e2e:full` now includes `NEXT_PUBLIC_VISUAL_POINTER_ENABLED=true`.
+    - added branch triage artifact for parked old-`dev` commit decisions:
+      - `.ai/impl/dev-branch-recovery-triage-2026-03-05.md`.
     - intentionally excluded redesign-heavy and Roo experimentation commits from the recovered branch.
   - **Why:** `dev` had too many co-mingled commits (design/runtime/docs/research), which made safe promotion and rollback difficult.
-  - **Status:** `dev-recovery-20260305` is now the clean implementation lane for continuation. Verification passed on `ai:memory:check`, `verify:fast`, and `e2e:smoke`; `e2e:full` was attempted and failed on pre-existing `visual-pointer-capture` expectations.
+  - **Status:** `dev-recovery-20260305` is now the clean implementation lane for continuation. Verification passed on `ai:memory:check`, `verify:fast`, and `e2e:smoke`. `e2e:full` no longer fails on visual-pointer tests; current remaining blocker is `tests/live/console.spec.ts` reporting critical CSP blocks for `www.google-analytics.com` on `/store-finder` and `/about` from live-site audit.
 
 - **2026-03-03 (`/report-find` share + basket UX hardening shipped locally):** Finished the founder-requested follow-up slice on top of the basket hotfix so the success-state copy is trustworthy again and the basket limit is safely back at `10`.
   - **What changed:**
