@@ -16,6 +16,11 @@
   - fixed blocked-domain extraction so CSP parsing uses the actual blocked target before directive text.
   - added safe handling for non-host CSP targets (for example `data:` URIs) so they do not get misclassified as host blockers.
   - preserved fallback parsing for variants like `Fetch API cannot load https://...`.
+- follow-up integration readiness steps:
+  - committed and pushed parser/memory updates on `dev-recovery-20260305` (`ec4dfbc`).
+  - watched PR #148 CI to completion (`Full QA Suite`, `quality-fast`, and `smoke-e2e` all passed).
+  - marked PR #148 ready for review (not draft) and posted a CI/status note:
+    - `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/pull/148#issuecomment-4002680052`.
 
 ### Summary
 
@@ -35,6 +40,10 @@
   - `reports/playwright/console-report-2026-03-05T06-33-39-485Z.json`
   - `reports/playwright/console-report-2026-03-05T06-36-04-913Z.json`
   - `reports/playwright/console-report-2026-03-05T06-37-06-266Z.json`
+- CI status after push:
+  - required branch-protection checks for `main`: `quality-fast` ✅, `smoke-e2e` ✅
+  - `Full QA Suite` ✅
+  - `SonarCloud Code Analysis` ❌ (non-required quality gate on this recovery PR)
 - Writer lock:
   - `npm run ai:writer-lock:status` ✅ (unlocked before claim)
   - `npm run ai:writer-lock:claim -- codex "fix live-console CSP false-positive extraction and verify full lane"` ✅
@@ -43,7 +52,9 @@
 
 - Branch: `dev-recovery-20260305`
 - Scope: live-console CSP parser fix only
-- Push: not pushed
+- Commit: `ec4dfbc`
+- Push: pushed
+- PR status: ready for review (not draft)
 - Carryover untracked files (unchanged, unrelated):
   - `archive/root-level-orphans/`
   - `emails/monumetric-reengagement-draft.md`

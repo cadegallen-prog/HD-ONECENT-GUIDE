@@ -35,8 +35,8 @@ Every AI session must update this after meaningful work.
       - `.ai/impl/dev-branch-recovery-triage-2026-03-05.md`.
     - intentionally excluded redesign-heavy and Roo experimentation commits from the recovered branch.
   - **Why:** `dev` had too many co-mingled commits (design/runtime/docs/research), which made safe promotion and rollback difficult.
-  - **Status:** `dev-recovery-20260305` is now the clean implementation lane for continuation. Verification has passed on `ai:memory:check`, `verify:fast`, `e2e:smoke`, and `e2e:full` after the live-console CSP parser fix.
-  - **Review path:** draft PR opened at `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/pull/148`.
+  - **Status:** `dev-recovery-20260305` is now the clean implementation lane for continuation. Verification has passed on `ai:memory:check`, `verify:fast`, `e2e:smoke`, and `e2e:full` after the live-console CSP parser fix. PR `#148` is now marked ready for review with required checks (`quality-fast`, `smoke-e2e`) green.
+  - **Review path:** ready-for-review PR at `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/pull/148` (remaining block is reviewer approval; SonarCloud failure is non-required).
 
 - **2026-03-03 (`/report-find` share + basket UX hardening shipped locally):** Finished the founder-requested follow-up slice on top of the basket hotfix so the success-state copy is trustworthy again and the basket limit is safely back at `10`.
   - **What changed:**
