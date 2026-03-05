@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Mar 5, 2026 (`dev` recovery lane stabilized; Monumetric S3 placement coverage implemented; FULL lane green)
+**Last updated:** Mar 5, 2026 (Monumetric S1-S4 promoted to `main`; production re-audits completed)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,21 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-05 (Monumetric S1-S4 promoted to production + live re-audit):** Merged PR `#148` (`f00c246`) to ship S1-S3 on `main`, then merged PR `#149` (`de6bd28`) to harden S4 CSP compatibility with minimal host deltas.
+  - **What changed:**
+    - promoted S1-S3 lifecycle/placement recovery to `main` via PR `#148`.
+    - validated production route payload now includes lifecycle metadata (`densityProfile`, `inContentSlotIds`, requeue flags) on `/guide` and `/penny-list`.
+    - added evidence-backed CSP deltas in `next.config.js` via PR `#149`:
+      - `script-src`: `https://script.4dex.io`
+      - `connect-src`: `https://mp.4dex.io`, `https://apex.go.sonobi.com`
+    - kept `/report-find` exclusion unchanged, experimental SPA callback path disabled, and sticky footer disabled.
+  - **Why:** founder-reported under-serving and blank-on-navigation behavior required immediate production recovery and re-verification.
+  - **Status:** post-deploy production audits are saved at:
+    - `reports/monumetric-audit/2026-03-05T16-47-41-pre-s1s3/`
+    - `reports/monumetric-audit/2026-03-05T16-51-44-post-s1s3/`
+    - `reports/monumetric-audit/2026-03-05T17-06-22-post-s4/`
+    - S1-S3 restored in-content opportunities on `/penny-list` and guide routes; S4 removed observed `mp.4dex.io` and `apex.go.sonobi.com` CSP blockers from the sampled audit window.
 
 - **2026-03-05 (Monumetric `S3` placement coverage implemented):** Shipped balanced density recovery on `/guide` and `/penny-list` with profile-gated in-content opportunities and per-slot caps.
   - **What changed:**

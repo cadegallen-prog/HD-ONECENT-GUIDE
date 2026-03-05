@@ -4,6 +4,60 @@
 
 ---
 
+## 2026-03-05 - Codex - Monumetric Production Recovery Deployment (S1-S4)
+
+**Goal:** Execute founder-approved emergency monetization recovery plan by promoting S1-S3 to production, auditing live behavior, then hardening S4 CSP when residual under-serving remained.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- Promotion to production:
+  - merged PR `#148` (`f00c246`) into `main` to ship Monumetric S1-S3 runtime/placement recovery.
+  - merged PR `#149` (`de6bd28`) into `main` to ship S4 CSP compatibility hardening.
+- Code change scope for S4:
+  - `next.config.js` only:
+    - `script-src` + `https://script.4dex.io`
+    - `connect-src` + `https://mp.4dex.io`
+    - `connect-src` + `https://apex.go.sonobi.com`
+- Live production audit artifacts:
+  - pre-S1/S3 baseline: `reports/monumetric-audit/2026-03-05T16-47-41-pre-s1s3/`
+  - post-S1/S3: `reports/monumetric-audit/2026-03-05T16-51-44-post-s1s3/`
+  - post-S4: `reports/monumetric-audit/2026-03-05T17-06-22-post-s4/`
+
+### Summary
+
+- S1-S3 is now live on production `main`.
+- In sampled mobile/desktop audits, in-content opportunities now render on `/penny-list` and guide surfaces where pre-S1/S3 had missing route coverage.
+- S4 removed previously observed `mp.4dex.io` / `apex.go.sonobi.com` CSP blocker signatures from the sampled window; remaining noise shifted to different third-party frame/script hosts.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npm run e2e:full` ✅
+- `npm run ai:proof -- /guide /penny-list` ⚠️ first attempt blocked by unhealthy occupied port 3001; follow-up capture succeeded:
+  - artifacts: `reports/proof/2026-03-05T22-03-16/`
+- FULL live-console artifacts from this session:
+  - `reports/playwright/console-report-2026-03-05T21-54-41-027Z.json`
+  - `reports/playwright/console-report-2026-03-05T21-56-28-919Z.json`
+  - `reports/playwright/console-report-2026-03-05T21-59-13-802Z.json`
+  - `reports/playwright/console-report-2026-03-05T22-00-15-603Z.json`
+
+### Branch Hygiene
+
+- Merge PRs:
+  - `#148` -> `main` at `f00c246`
+  - `#149` -> `main` at `de6bd28`
+- Working branch for S4 implementation: `dev-s4-csp-20260305` (remote auto-deleted after merge)
+- Carryover untracked files (unchanged, unrelated):
+  - `archive/root-level-orphans/`
+  - `emails/monumetric-reengagement-draft.md`
+  - `emails/monumetric-reengagement-final.md`
+
+---
+
 ## 2026-03-05 - Codex - Monumetric S3 Placement Coverage Recovery
 
 **Goal:** Implement `S3` from the balanced Monumetric stabilization plan to recover controlled in-content coverage on `/guide` and `/penny-list` without touching exclusions or risky runtime paths.
@@ -232,60 +286,5 @@
   - `archive/root-level-orphans/`
   - `emails/monumetric-reengagement-draft.md`
   - `emails/monumetric-reengagement-final.md`
-
----
-
-## 2026-03-03 - Codex - Report Find Share + Basket UX Hardening
-
-**Goal:** Finish the founder-requested `/report-find` follow-up slice by making the Facebook copy SKU-only, restoring the basket cap to `10`, safely blocking restored over-limit baskets, and explaining the Back-button workflow.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `components/report-find/ReportFindFormClient.tsx`
-  - moved the Facebook/share text onto a submit-time snapshot so the success-state preview/copy reflects the actual submitted location/date instead of live form edits.
-  - replaced the name-based share text with a SKU-only preview/copy flow, renamed the action to `Copy Facebook post`, added the inline `<details>` preview, and added the helper line clarifying that only plain-text SKUs are copied.
-  - restored the basket cap to `10`, removed the always-visible basket-limit helper, added the saved-basket over-limit warning/submit disable rule, and shortened the add-time full-basket message.
-  - added the explicit Penny List Back-button guidance in the intro box.
-  - fixed the prefill hydration race so a saved full basket now blocks extra prefill adds deterministically instead of showing a false success message.
-- `lib/constants.ts`
-  - changed `REPORT_FIND_BASKET_ITEM_LIMIT` from `30` back to `10` so the client and route share one source of truth again.
-- `lib/report-find-share.ts`
-  - added a pure share formatter that builds stable SKU-only Facebook text with location/date context and quantity suffixes only when quantity is greater than `1`.
-- `tests/report-find-batch.spec.ts`
-  - added coverage for the success-state preview/copy text, the restored valid `10`-item submit regression, and the restored over-limit basket warning/disable flow.
-- `tests/report-find-prefill.spec.ts`
-  - added the `11th` manual add rejection coverage and the prefill-at-cap rejection coverage.
-- `tests/report-find-share.test.ts`
-  - added exact-string unit coverage for the new share formatter.
-- `tests/smoke-critical.spec.ts`
-  - added smoke coverage for the Back-button guidance in the report-find explainer.
-
-### Summary
-
-- Facebook/share text on `/report-find` now copies clean plain text with formatted SKUs only, plus the submitted location/date line and PennyCentral CTA.
-- The basket is back to a hard `10`-item cap on both client and server, without advertising that cap in normal UI.
-- Older saved baskets above `10` are preserved, clearly warned, and blocked until the user trims them into separate batches.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run lint:colors` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `npx playwright test tests/report-find-prefill.spec.ts tests/report-find-batch.spec.ts tests/smoke-critical.spec.ts --project=chromium-desktop-light --workers=1` ✅
-- `npx playwright test tests/report-find-prefill.spec.ts tests/report-find-batch.spec.ts tests/smoke-critical.spec.ts --project=chromium-mobile-light --workers=1` ✅
-- UI proof captured via one-off local Playwright script:
-  - artifacts: `reports/proof/2026-03-03-report-find-share-proof/`
-  - desktop proof: `reports/proof/2026-03-03-report-find-share-proof/report-find-success-desktop-light.png`
-  - mobile proof: `reports/proof/2026-03-03-report-find-share-proof/report-find-success-mobile-light.png`
-  - console: `reports/proof/2026-03-03-report-find-share-proof/console-errors.txt`
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Scope: report-find share/cap/preview hardening + targeted regression coverage
-- Push: pending at memory-write time
 
 ---
