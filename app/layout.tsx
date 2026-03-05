@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import localFont from "next/font/local"
 import Script from "next/script"
 import { Analytics } from "@vercel/analytics/react"
@@ -56,6 +56,14 @@ const inter = localFont({
   preload: true,
   fallback: ["system-ui", "arial"],
 })
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  viewportFit: "cover",
+}
 
 export const metadata: Metadata = {
   title: "Penny Central | Home Depot Penny List",
