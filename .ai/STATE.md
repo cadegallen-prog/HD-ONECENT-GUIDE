@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Mar 5, 2026 (`dev` recovery lane stabilized; live-console CSP false-positive fixed; FULL lane green)
+**Last updated:** Mar 5, 2026 (`dev` recovery lane stabilized; Monumetric S2 placeholder stability implemented; FULL lane green)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,23 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-05 (Monumetric `S2` placeholder stability implemented):** Shipped reserve-height + controlled empty-slot collapse behavior for Monumetric wrappers and advanced the balanced stabilization lane from `S1` to `S2`.
+  - **What changed:**
+    - added shared slot-shell runtime in `lib/ads/monumetric-slot-shell.tsx` with timeout-based empty-slot collapse + mutation observation.
+    - extended launch config in `lib/ads/launch-config.ts` with:
+      - `slotShell.collapseEmptyEnabled` (`NEXT_PUBLIC_MONU_COLLAPSE_EMPTY` gate),
+      - stable per-slot policies for in-content and mobile-sticky shells.
+    - extended slot planning in `lib/ads/slot-plan.ts` to emit `slotPolicies` alongside requeue metadata.
+    - wired S2 behavior into:
+      - `components/ads/monumetric-in-content-slot.tsx`
+      - `components/ads/mobile-sticky-anchor.tsx`
+      - `components/ads/route-ad-slots.tsx`
+    - added/updated unit coverage:
+      - `tests/ads-launch-config.test.ts`
+      - `tests/ads-slot-plan.test.ts`
+  - **Why:** keep ad placeholders stable on `/guide` and `/penny-list` while preventing indefinitely empty ad shells, without enabling risky SPA callback hooks or changing route eligibility.
+  - **Status:** local verification passed on `ai:memory:check`, `verify:fast`, `e2e:smoke`, and `e2e:full`; proof screenshots captured at `reports/proof/2026-03-05T07-08-05/`.
 
 - **2026-03-05 (Live-console CSP false-positive resolved):** Cleared the remaining FULL-suite blocker by fixing CSP blocked-domain parsing in the live console audit test.
   - **What changed:**

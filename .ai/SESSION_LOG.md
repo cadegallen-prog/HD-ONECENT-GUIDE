@@ -4,6 +4,63 @@
 
 ---
 
+## 2026-03-05 - Codex - Monumetric S2 Placeholder Stability + Empty-Slot Collapse
+
+**Goal:** Implement `S2` from the balanced Monumetric stabilization plan so ad wrappers reserve space and collapse only when truly empty after a controlled timeout.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `lib/ads/monumetric-slot-shell.tsx` (new)
+  - added shared slot-shell behavior and `useMonumetricSlotCollapse(...)` hook.
+  - implemented timeout-gated empty-slot collapse with mutation-observer recovery when creatives appear later.
+- `lib/ads/launch-config.ts`
+  - added `NEXT_PUBLIC_MONU_COLLAPSE_EMPTY` gate via `MONUMETRIC_LAUNCH_CONFIG.slotShell.collapseEmptyEnabled`.
+  - added stable per-slot policy metadata (reserve min height + collapse timeout + max-per-route + viewport enablement) for in-content and mobile sticky slots.
+- `lib/ads/slot-plan.ts`
+  - extended route plan output with `slotPolicies` so runtime metadata now includes placeholder behavior contracts.
+- `components/ads/monumetric-in-content-slot.tsx`
+  - migrated wrapper rendering to `MonumetricSlotShell`.
+  - preserved existing slot queue script while adding reserve/collapse behavior.
+- `components/ads/mobile-sticky-anchor.tsx`
+  - added collapse hook integration and policy-driven reserve height.
+  - collapse now respects both sheet-open state and empty-slot timeout behavior.
+- `components/ads/route-ad-slots.tsx`
+  - emitted `slotPolicies` and `collapseEmptyEnabled` into route-plan JSON payload.
+- `tests/ads-launch-config.test.ts`
+  - added assertions for slot-shell config and policy helper output.
+- `tests/ads-slot-plan.test.ts`
+  - added assertions for per-route `slotPolicies` output.
+
+### Summary
+
+- `S2` placeholder stability is now implemented on the recovery branch with reversible env-gated collapse behavior.
+- Route eligibility and CSP policy were intentionally left unchanged.
+- `/report-find` exclusion behavior was not touched.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npm run e2e:full` ✅
+- `npm run ai:proof -- /guide /penny-list` ✅
+  - artifacts: `reports/proof/2026-03-05T07-08-05/`
+- live console artifacts from full run:
+  - `reports/playwright/console-report-2026-03-05T07-09-31-176Z.json`
+  - `reports/playwright/console-report-2026-03-05T07-11-01-217Z.json`
+  - `reports/playwright/console-report-2026-03-05T07-13-42-460Z.json`
+  - `reports/playwright/console-report-2026-03-05T07-14-43-973Z.json`
+
+### Branch Hygiene
+
+- Branch: `dev-recovery-20260305`
+- Scope: Monumetric `S2` placeholder stability only
+- Push: pending
+
+---
+
 ## 2026-03-05 - Codex - Live Console CSP False-Positive Fix (FULL Lane Unblocked)
 
 **Goal:** Clear the remaining `e2e:full` blocker without broadening CSP policy in `next.config.js`.
@@ -226,60 +283,3 @@
 - Push: not pushed
 
 ---
-
-## 2026-03-03 - Codex - Site Recovery S1 Hydration Stability
-
-**Goal:** Remove the global hydration mismatch and lock the Penny List text regression before any visual site-recovery slice starts.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `app/layout.tsx`
-  - replaced the Grow DOM-insertion bootstrap with `next/script` `afterInteractive` scripts so the server-rendered head is no longer mutated before hydration.
-- `lib/penny-list-utils.ts`
-  - added `DIY` to the protected uppercase word set in `normalizeProductName(...)`.
-- `tests/visual-smoke.spec.ts`
-  - expanded the route sweep to all nine audited recovery routes and made hydration mismatch console output a first-class failure.
-- `tests/smoke-critical.spec.ts`
-  - added a Penny List rendered-surface assertion that fails if `Diy` appears.
-- `tests/penny-list-utils.test.ts`
-  - added deterministic helper coverage for mixed-case `DIY` input.
-- `.ai/impl/site-recovery-program.md`
-  - marked the parent recovery program in progress with `S1` shipped and `S2` next.
-- `.ai/impl/site-recovery-s1-hydration-stability.md`
-  - marked the slice shipped and recorded the implementation outcome.
-- `.ai/plans/INDEX.md`
-  - updated the registry status to match the canonical `.ai/impl/` plan.
-- `.ai/BACKLOG.md`
-  - advanced the immediate next slice from `S1` to `S2 - Homepage Proof Front Door`.
-- `.ai/STATE.md`
-  - updated current project reality to reflect the shipped hydration fix and next slice.
-- `.ai/LEARNINGS.md`
-  - documented that direct `node` execution is the wrong lane for repo TypeScript test files.
-
-### Summary
-
-- The audited hydration mismatch is no longer reproducible across `/`, `/guide`, `/penny-list`, `/report-find`, `/faq`, `/what-are-pennies`, `/store-finder`, `/about`, and `/transparency`.
-- The Grow integration now loads in a hydration-safe way without mutating head order before React starts.
-- The site-recovery program can now move from stabilization into `S2 - Homepage Proof Front Door`.
-
-### Verification
-
-- Before fix reproduction:
-  - `$env:PLAYWRIGHT_BASE_URL='http://localhost:3001'; npx playwright test tests/visual-smoke.spec.ts --project=chromium-desktop-light --workers=1` ❌
-  - failure signature: `A tree hydrated but some attributes of the server rendered HTML didn't match...`
-- `npm run ai:memory:check` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `$env:PLAYWRIGHT_BASE_URL='http://localhost:3001'; npx playwright test tests/visual-smoke.spec.ts --project=chromium-desktop-light --workers=1` ✅
-- `$env:PLAYWRIGHT_BASE_URL='http://localhost:3001'; npx playwright test tests/smoke-critical.spec.ts --project=chromium-desktop-light --workers=1` ✅
-- `npm run ai:proof -- / /guide /penny-list /report-find /faq /what-are-pennies /store-finder /about /transparency` ✅
-  - artifacts: `reports/proof/2026-03-03T00-44-54/`
-  - console: `reports/proof/2026-03-03T00-44-54/console-errors.txt`
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Scope: `S1` hydration fix + regression coverage + continuity updates
-- Push: not pushed

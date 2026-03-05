@@ -2,11 +2,13 @@ import assert from "node:assert"
 import test from "node:test"
 
 import {
+  getMonumetricSlotPolicy,
   getMonumetricSlotDomId,
   getLaunchInventoryForRoute,
   getRouteRequeueSlotIds,
   MONUMETRIC_IN_CONTENT_SLOT_ID,
   MONUMETRIC_LAUNCH_CONFIG,
+  MONUMETRIC_MOBILE_STICKY_SLOT_ID,
   PENNY_LIST_PROMPTS_TO_PAUSE,
   shouldPausePennyListPromptStack,
 } from "../lib/ads/launch-config"
@@ -56,6 +58,8 @@ test("launch config keeps sticky test prompt pause list stable", () => {
   assert.strictEqual(MONUMETRIC_LAUNCH_CONFIG.volt.enabled, false)
   assert.strictEqual(MONUMETRIC_LAUNCH_CONFIG.routeRequeue.enabled, true)
   assert.strictEqual(MONUMETRIC_LAUNCH_CONFIG.routeRequeue.debounceMs, 120)
+  assert.strictEqual(MONUMETRIC_LAUNCH_CONFIG.slotShell.collapseEmptyEnabled, true)
+  assert.strictEqual(MONUMETRIC_LAUNCH_CONFIG.slotShell.observerDebounceMs, 150)
   assert.strictEqual(MONUMETRIC_LAUNCH_CONFIG.experimentalSpa.enabled, false)
 })
 
@@ -77,4 +81,22 @@ test("slot dom id helper keeps prefix contract stable", () => {
     getMonumetricSlotDomId(MONUMETRIC_IN_CONTENT_SLOT_ID),
     `mmt-${MONUMETRIC_IN_CONTENT_SLOT_ID}`
   )
+})
+
+test("slot policy helper returns stable in-content and sticky policies", () => {
+  assert.deepStrictEqual(getMonumetricSlotPolicy(MONUMETRIC_IN_CONTENT_SLOT_ID), {
+    reserveMinHeightPx: 250,
+    collapseAfterMs: 7000,
+    maxPerRoute: 2,
+    mobileEnabled: true,
+    desktopEnabled: true,
+  })
+
+  assert.deepStrictEqual(getMonumetricSlotPolicy(MONUMETRIC_MOBILE_STICKY_SLOT_ID), {
+    reserveMinHeightPx: 50,
+    collapseAfterMs: 7000,
+    maxPerRoute: 1,
+    mobileEnabled: true,
+    desktopEnabled: false,
+  })
 })

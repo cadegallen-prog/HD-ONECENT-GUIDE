@@ -1,4 +1,10 @@
-import { getRouteRequeueSlotIds, MONUMETRIC_LAUNCH_CONFIG } from "@/lib/ads/launch-config"
+import {
+  getMonumetricSlotPolicy,
+  getRouteRequeueSlotIds,
+  MONUMETRIC_LAUNCH_CONFIG,
+  MONUMETRIC_MOBILE_STICKY_SLOT_ID,
+  type MonumetricSlotPolicy,
+} from "@/lib/ads/launch-config"
 import {
   getAdRoutePolicy,
   normalizeRoutePath,
@@ -12,6 +18,28 @@ export interface ActiveAdRoutePlan {
   inventory: readonly AdInventoryUnit[]
   providerManaged: boolean
   requeueSlotIds: readonly string[]
+  slotPolicies: Record<string, MonumetricSlotPolicy>
+}
+
+function buildSlotPolicies(pathname: string, requeueSlotIds: readonly string[]) {
+  const slotPolicies: Record<string, MonumetricSlotPolicy> = {}
+
+  for (const slotId of requeueSlotIds) {
+    const policy = getMonumetricSlotPolicy(slotId)
+    if (policy) {
+      slotPolicies[slotId] = policy
+    }
+  }
+
+  const normalizedStickyRoute = normalizeRoutePath(MONUMETRIC_LAUNCH_CONFIG.sticky.route)
+  if (normalizedStickyRoute === pathname) {
+    const stickyPolicy = getMonumetricSlotPolicy(MONUMETRIC_MOBILE_STICKY_SLOT_ID)
+    if (stickyPolicy) {
+      slotPolicies[MONUMETRIC_MOBILE_STICKY_SLOT_ID] = stickyPolicy
+    }
+  }
+
+  return slotPolicies
 }
 
 export function getActiveAdRoutePlan(pathname: string): ActiveAdRoutePlan {
@@ -25,8 +53,11 @@ export function getActiveAdRoutePlan(pathname: string): ActiveAdRoutePlan {
       inventory: [],
       providerManaged: false,
       requeueSlotIds: [],
+      slotPolicies: {},
     }
   }
+
+  const requeueSlotIds = getRouteRequeueSlotIds(normalizedPathname)
 
   return {
     pathname: normalizedPathname,
@@ -36,6 +67,7 @@ export function getActiveAdRoutePlan(pathname: string): ActiveAdRoutePlan {
         ? ["provider_managed"]
         : policy.inventory,
     providerManaged: MONUMETRIC_LAUNCH_CONFIG.placement.mode === "provider-managed",
-    requeueSlotIds: getRouteRequeueSlotIds(normalizedPathname),
+    requeueSlotIds,
+    slotPolicies: buildSlotPolicies(normalizedPathname, requeueSlotIds),
   }
 }

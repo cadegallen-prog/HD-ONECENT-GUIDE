@@ -1,6 +1,18 @@
-const MONUMETRIC_IN_CONTENT_SLOT_ID = "39b97adf-dc3e-4795-b4a4-39f0da3c68dd"
-const MONUMETRIC_IN_CONTENT_DOM_ID = `mmt-${MONUMETRIC_IN_CONTENT_SLOT_ID}`
+"use client"
+
+import {
+  getMonumetricSlotDomId,
+  getMonumetricSlotPolicy,
+  MONUMETRIC_IN_CONTENT_SLOT_ID,
+  MONUMETRIC_LAUNCH_CONFIG,
+} from "@/lib/ads/launch-config"
+import { MonumetricSlotShell } from "@/lib/ads/monumetric-slot-shell"
+
+const MONUMETRIC_IN_CONTENT_DOM_ID = getMonumetricSlotDomId(MONUMETRIC_IN_CONTENT_SLOT_ID)
 const MONUMETRIC_ENABLED = process.env.NEXT_PUBLIC_MONUMETRIC_ENABLED === "true"
+const IN_CONTENT_SLOT_POLICY = getMonumetricSlotPolicy(MONUMETRIC_IN_CONTENT_SLOT_ID)
+const FALLBACK_MIN_HEIGHT_PX = 250
+const FALLBACK_COLLAPSE_AFTER_MS = 7000
 
 const MONUMETRIC_IN_CONTENT_SCRIPT = `
 window.$MMT = window.$MMT || {};
@@ -15,22 +27,25 @@ window.$MMT.cmd.push(function () {
 export function MonumetricInContentSlot() {
   if (!MONUMETRIC_ENABLED) return null
 
+  const reserveMinHeightPx = IN_CONTENT_SLOT_POLICY?.reserveMinHeightPx ?? FALLBACK_MIN_HEIGHT_PX
+  const collapseAfterMs = IN_CONTENT_SLOT_POLICY?.collapseAfterMs ?? FALLBACK_COLLAPSE_AFTER_MS
+
   return (
-    <section
-      aria-label="Advertisement"
-      className="my-8 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-3 sm:p-4"
-      data-ad-slot="monumetric-in-content-repeatable"
+    <MonumetricSlotShell
+      enabled={MONUMETRIC_ENABLED}
+      slotId="monumetric-in-content-repeatable"
+      slotDomId={MONUMETRIC_IN_CONTENT_DOM_ID}
+      reserveMinHeightPx={reserveMinHeightPx}
+      collapseAfterMs={collapseAfterMs}
+      collapseEnabled={MONUMETRIC_LAUNCH_CONFIG.slotShell.collapseEmptyEnabled}
+      containerClassName="min-h-[250px]"
     >
-      <p className="mb-2 text-center text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)]">
-        Advertisement
-      </p>
-      <div id={MONUMETRIC_IN_CONTENT_DOM_ID} className="mx-auto min-h-[250px] w-full" />
       <script
         id="pc-monumetric-in-content-repeatable"
         type="text/javascript"
         data-cfasync="false"
         dangerouslySetInnerHTML={{ __html: MONUMETRIC_IN_CONTENT_SCRIPT }}
       />
-    </section>
+    </MonumetricSlotShell>
   )
 }

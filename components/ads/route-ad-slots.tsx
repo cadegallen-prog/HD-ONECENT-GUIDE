@@ -30,6 +30,8 @@ export function RouteAdSlots({ pathname }: RouteAdSlotsProps) {
     lifecycle: {
       routeRequeueEnabled: MONUMETRIC_LAUNCH_CONFIG.routeRequeue.enabled,
       requeueSlotIds: plan.requeueSlotIds,
+      slotPolicies: plan.slotPolicies,
+      collapseEmptyEnabled: MONUMETRIC_LAUNCH_CONFIG.slotShell.collapseEmptyEnabled,
       experimentalSpaEnabled: MONUMETRIC_LAUNCH_CONFIG.experimentalSpa.enabled,
     },
     launch: {
