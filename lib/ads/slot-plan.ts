@@ -1,5 +1,6 @@
 import {
   getMonumetricSlotPolicy,
+  getRouteInContentSlotIds,
   getRouteRequeueSlotIds,
   MONUMETRIC_LAUNCH_CONFIG,
   MONUMETRIC_MOBILE_STICKY_SLOT_ID,
@@ -17,14 +18,15 @@ export interface ActiveAdRoutePlan {
   policy: AdRoutePolicy
   inventory: readonly AdInventoryUnit[]
   providerManaged: boolean
+  inContentSlotIds: readonly string[]
   requeueSlotIds: readonly string[]
   slotPolicies: Record<string, MonumetricSlotPolicy>
 }
 
-function buildSlotPolicies(pathname: string, requeueSlotIds: readonly string[]) {
+function buildSlotPolicies(pathname: string, inContentSlotIds: readonly string[]) {
   const slotPolicies: Record<string, MonumetricSlotPolicy> = {}
 
-  for (const slotId of requeueSlotIds) {
+  for (const slotId of inContentSlotIds) {
     const policy = getMonumetricSlotPolicy(slotId)
     if (policy) {
       slotPolicies[slotId] = policy
@@ -52,11 +54,13 @@ export function getActiveAdRoutePlan(pathname: string): ActiveAdRoutePlan {
       policy,
       inventory: [],
       providerManaged: false,
+      inContentSlotIds: [],
       requeueSlotIds: [],
       slotPolicies: {},
     }
   }
 
+  const inContentSlotIds = getRouteInContentSlotIds(normalizedPathname)
   const requeueSlotIds = getRouteRequeueSlotIds(normalizedPathname)
 
   return {
@@ -67,7 +71,8 @@ export function getActiveAdRoutePlan(pathname: string): ActiveAdRoutePlan {
         ? ["provider_managed"]
         : policy.inventory,
     providerManaged: MONUMETRIC_LAUNCH_CONFIG.placement.mode === "provider-managed",
+    inContentSlotIds,
     requeueSlotIds,
-    slotPolicies: buildSlotPolicies(normalizedPathname, requeueSlotIds),
+    slotPolicies: buildSlotPolicies(normalizedPathname, inContentSlotIds),
   }
 }

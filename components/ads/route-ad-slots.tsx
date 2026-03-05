@@ -28,6 +28,8 @@ export function RouteAdSlots({ pathname }: RouteAdSlotsProps) {
     inventory: plan.inventory,
     providerManaged: plan.providerManaged,
     lifecycle: {
+      densityProfile: MONUMETRIC_LAUNCH_CONFIG.density.profile,
+      inContentSlotIds: plan.inContentSlotIds,
       routeRequeueEnabled: MONUMETRIC_LAUNCH_CONFIG.routeRequeue.enabled,
       requeueSlotIds: plan.requeueSlotIds,
       slotPolicies: plan.slotPolicies,

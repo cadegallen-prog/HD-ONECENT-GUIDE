@@ -1,6 +1,6 @@
 # Monumetric Balanced Stabilization + Density Recovery (Parent)
 
-**Status:** Approved (Not Implemented)  
+**Status:** In Progress (`S1`-`S3` implemented locally; `S4` next)  
 **Created:** 2026-03-05  
 **Last updated:** 2026-03-05  
 **Owner:** Cade (founder approval), AI agents (execution)  
@@ -50,13 +50,13 @@ Planned interface/config additions for implementation slices:
 
 ## 3) Parent -> Child Slice Topology (Ordered)
 
-| Slice | Status                     | Depends on | Primary outcome                                                   | Child plan                                                       |
-| ----- | -------------------------- | ---------- | ----------------------------------------------------------------- | ---------------------------------------------------------------- |
-| `S1`  | Approved (Not Implemented) | none       | Route lifecycle requeue guardrails without risky SPA callback     | `.ai/impl/monumetric-balanced-s1-lifecycle-guardrails.md`        |
-| `S2`  | Approved (Not Implemented) | `S1`       | Placeholder reserve + controlled empty collapse behavior          | `.ai/impl/monumetric-balanced-s2-placeholder-stability.md`       |
-| `S3`  | Approved (Not Implemented) | `S2`       | Balanced in-content placement recovery on Guide + Penny List      | `.ai/impl/monumetric-balanced-s3-placement-coverage-recovery.md` |
-| `S4`  | Approved (Not Implemented) | `S3`       | Minimal-safe CSP host expansion by directive                      | `.ai/impl/monumetric-balanced-s4-csp-compat-hardening.md`        |
-| `S5`  | Approved (Not Implemented) | `S4`       | Controlled production rollout with staged flags + rollback ladder | `.ai/impl/monumetric-balanced-s5-controlled-rollout.md`          |
+| Slice | Status                         | Depends on | Primary outcome                                                   | Child plan                                                       |
+| ----- | ------------------------------ | ---------- | ----------------------------------------------------------------- | ---------------------------------------------------------------- |
+| `S1`  | Implemented (Locally Verified) | none       | Route lifecycle requeue guardrails without risky SPA callback     | `.ai/impl/monumetric-balanced-s1-lifecycle-guardrails.md`        |
+| `S2`  | Implemented (Locally Verified) | `S1`       | Placeholder reserve + controlled empty collapse behavior          | `.ai/impl/monumetric-balanced-s2-placeholder-stability.md`       |
+| `S3`  | Implemented (Locally Verified) | `S2`       | Balanced in-content placement recovery on Guide + Penny List      | `.ai/impl/monumetric-balanced-s3-placement-coverage-recovery.md` |
+| `S4`  | Approved (Not Implemented)     | `S3`       | Minimal-safe CSP host expansion by directive                      | `.ai/impl/monumetric-balanced-s4-csp-compat-hardening.md`        |
+| `S5`  | Approved (Not Implemented)     | `S4`       | Controlled production rollout with staged flags + rollback ladder | `.ai/impl/monumetric-balanced-s5-controlled-rollout.md`          |
 
 ## 4) Stop/Go Rule (Mandatory)
 
@@ -117,9 +117,9 @@ After each slice:
 
 ## 9) Immediate Next Task
 
-- **Single next task:** Execute `S1` from `.ai/impl/monumetric-balanced-s1-lifecycle-guardrails.md`
+- **Single next task:** Execute `S4` from `.ai/impl/monumetric-balanced-s4-csp-compat-hardening.md`
 - **First files to open:**
-  - `.ai/impl/monumetric-balanced-s1-lifecycle-guardrails.md`
-  - `app/layout.tsx`
-  - `components/ads/route-ad-slots.tsx`
-  - `lib/ads/slot-plan.ts`
+  - `.ai/impl/monumetric-balanced-s4-csp-compat-hardening.md`
+  - `next.config.js`
+  - `tests/live/console.spec.ts`
+  - `reports/playwright/console-report-*.json`

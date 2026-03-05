@@ -4,11 +4,14 @@ import test from "node:test"
 import {
   getMonumetricSlotPolicy,
   getMonumetricSlotDomId,
+  getRouteInContentSlotIds,
   getLaunchInventoryForRoute,
   getRouteRequeueSlotIds,
+  MONUMETRIC_GUIDE_SECONDARY_SLOT_ID,
   MONUMETRIC_IN_CONTENT_SLOT_ID,
   MONUMETRIC_LAUNCH_CONFIG,
   MONUMETRIC_MOBILE_STICKY_SLOT_ID,
+  MONUMETRIC_PENNY_LIST_IN_CONTENT_SLOT_ID,
   PENNY_LIST_PROMPTS_TO_PAUSE,
   shouldPausePennyListPromptStack,
 } from "../lib/ads/launch-config"
@@ -51,6 +54,7 @@ test("launch config keeps sticky test prompt pause list stable", () => {
   ])
   assert.strictEqual(MONUMETRIC_LAUNCH_CONFIG.placement.mode, "provider-managed")
   assert.strictEqual(MONUMETRIC_LAUNCH_CONFIG.placement.hardExclusionsOnly, true)
+  assert.strictEqual(MONUMETRIC_LAUNCH_CONFIG.density.profile, "balanced")
   assert.strictEqual(MONUMETRIC_LAUNCH_CONFIG.sticky.enabled, false)
   assert.strictEqual(MONUMETRIC_LAUNCH_CONFIG.sticky.route, "/penny-list")
   assert.strictEqual(MONUMETRIC_LAUNCH_CONFIG.sticky.size, "320x50")
@@ -68,12 +72,31 @@ test("provider-managed mode resolves generic inventory marker", () => {
   assert.deepStrictEqual(getLaunchInventoryForRoute("/penny-list"), ["provider_managed"])
 })
 
-test("route requeue slot IDs only apply to guide surfaces", () => {
-  assert.deepStrictEqual(getRouteRequeueSlotIds("/guide"), [MONUMETRIC_IN_CONTENT_SLOT_ID])
+test("route requeue slot IDs follow balanced density defaults", () => {
+  assert.deepStrictEqual(getRouteRequeueSlotIds("/guide"), [
+    MONUMETRIC_IN_CONTENT_SLOT_ID,
+    MONUMETRIC_GUIDE_SECONDARY_SLOT_ID,
+  ])
   assert.deepStrictEqual(getRouteRequeueSlotIds("/what-are-pennies"), [
     MONUMETRIC_IN_CONTENT_SLOT_ID,
   ])
-  assert.deepStrictEqual(getRouteRequeueSlotIds("/penny-list"), [])
+  assert.deepStrictEqual(getRouteRequeueSlotIds("/penny-list"), [
+    MONUMETRIC_PENNY_LIST_IN_CONTENT_SLOT_ID,
+  ])
+})
+
+test("in-content slot helper resolves profile-gated opportunities", () => {
+  assert.deepStrictEqual(getRouteInContentSlotIds("/guide"), [
+    MONUMETRIC_IN_CONTENT_SLOT_ID,
+    MONUMETRIC_GUIDE_SECONDARY_SLOT_ID,
+  ])
+  assert.deepStrictEqual(getRouteInContentSlotIds("/what-are-pennies"), [
+    MONUMETRIC_IN_CONTENT_SLOT_ID,
+  ])
+  assert.deepStrictEqual(getRouteInContentSlotIds("/penny-list"), [
+    MONUMETRIC_PENNY_LIST_IN_CONTENT_SLOT_ID,
+  ])
+  assert.deepStrictEqual(getRouteInContentSlotIds("/unknown"), [])
 })
 
 test("slot dom id helper keeps prefix contract stable", () => {
@@ -87,7 +110,23 @@ test("slot policy helper returns stable in-content and sticky policies", () => {
   assert.deepStrictEqual(getMonumetricSlotPolicy(MONUMETRIC_IN_CONTENT_SLOT_ID), {
     reserveMinHeightPx: 250,
     collapseAfterMs: 7000,
-    maxPerRoute: 2,
+    maxPerRoute: 1,
+    mobileEnabled: true,
+    desktopEnabled: true,
+  })
+
+  assert.deepStrictEqual(getMonumetricSlotPolicy(MONUMETRIC_GUIDE_SECONDARY_SLOT_ID), {
+    reserveMinHeightPx: 250,
+    collapseAfterMs: 7000,
+    maxPerRoute: 1,
+    mobileEnabled: true,
+    desktopEnabled: true,
+  })
+
+  assert.deepStrictEqual(getMonumetricSlotPolicy(MONUMETRIC_PENNY_LIST_IN_CONTENT_SLOT_ID), {
+    reserveMinHeightPx: 250,
+    collapseAfterMs: 7000,
+    maxPerRoute: 1,
     mobileEnabled: true,
     desktopEnabled: true,
   })

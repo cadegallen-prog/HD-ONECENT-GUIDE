@@ -1,6 +1,6 @@
 # Monumetric Balanced S3 - Placement Coverage Recovery (Balanced Density)
 
-**Status:** Approved (Not Implemented)  
+**Status:** Implemented (Local Verification Complete)  
 **Depends on:** `S2`  
 **Parent plan:** `.ai/impl/monumetric-balanced-stabilization-density-recovery.md`  
 **Last updated:** 2026-03-05
@@ -60,3 +60,23 @@ Current provider-managed posture is stable but under-served on key utility/edito
 
 - **Go to S4 only if:** added opportunities improve coverage with no major UX regression.
 - **Stop if:** anchor duplication, layout crowding, or list usability regressions appear.
+
+## Implementation Notes (2026-03-05)
+
+- Added density-profile gating in `lib/ads/launch-config.ts`:
+  - `NEXT_PUBLIC_MONU_DENSITY_PROFILE` (`balanced` default, `conservative` rollback),
+  - profile-aware route in-content slot mapping via `getRouteInContentSlotIds(...)`,
+  - per-slot caps set to `maxPerRoute: 1` to prevent duplicate/stacked behavior.
+- Extended route plan metadata in `lib/ads/slot-plan.ts` and `components/ads/route-ad-slots.tsx`:
+  - `inContentSlotIds` and `densityProfile` now flow into route lifecycle payloads.
+- Made in-content shell reusable per slot in `components/ads/monumetric-in-content-slot.tsx`
+  with dynamic slot IDs and stable script IDs.
+- Added balanced placements:
+  - `/guide` now renders lead + follow-up in-content opportunities (`app/guide/page.tsx`),
+  - `/penny-list` now renders one in-feed in-content opportunity
+    (`app/penny-list/page.tsx`, `components/penny-list-client.tsx`).
+- Verification evidence:
+  - `npm run verify:fast` ✅
+  - `npm run e2e:smoke` ✅
+  - `npm run e2e:full` ✅
+  - `npm run ai:proof -- /guide /penny-list` ✅ (`reports/proof/2026-03-05T07-45-48/`)

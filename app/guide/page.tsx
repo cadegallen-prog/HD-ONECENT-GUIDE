@@ -5,6 +5,7 @@ import { EditorialBlock } from "@/components/guide/EditorialBlock"
 import { ResponsibleHunting } from "@/components/guide/sections/ResponsibleHunting"
 import { RouteAdSlots } from "@/components/ads/route-ad-slots"
 import { MonumetricInContentSlot } from "@/components/ads/monumetric-in-content-slot"
+import { getRouteInContentSlotIds } from "@/lib/ads/launch-config"
 
 export const metadata: Metadata = {
   title: "Home Depot Penny Guide (2026) | Penny Central",
@@ -149,6 +150,10 @@ const howToJsonLd = {
 }
 
 export default function GuideHubPage() {
+  const guideInContentSlotIds = getRouteInContentSlotIds("/guide")
+  const leadInContentSlotId = guideInContentSlotIds[0]
+  const followupInContentSlotId = guideInContentSlotIds[1]
+
   return (
     <>
       <script
@@ -213,7 +218,9 @@ export default function GuideHubPage() {
           <ResponsibleHunting />
         </section>
 
-        <MonumetricInContentSlot />
+        {leadInContentSlotId && (
+          <MonumetricInContentSlot slotId={leadInContentSlotId} slotKey="guide-lead" />
+        )}
 
         <section className="mb-6 space-y-3 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-5">
           <h2 className="text-2xl font-bold text-[var(--text-primary)]">Guide Chapters</h2>
@@ -222,6 +229,10 @@ export default function GuideHubPage() {
           </p>
           <TableOfContents />
         </section>
+
+        {followupInContentSlotId && (
+          <MonumetricInContentSlot slotId={followupInContentSlotId} slotKey="guide-followup" />
+        )}
       </div>
     </>
   )

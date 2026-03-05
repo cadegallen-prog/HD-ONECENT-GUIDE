@@ -18,9 +18,14 @@ export const PENNY_LIST_PROMPTS_TO_PAUSE = [
 ] as const
 
 export const MONUMETRIC_IN_CONTENT_SLOT_ID = "39b97adf-dc3e-4795-b4a4-39f0da3c68dd"
+export const MONUMETRIC_GUIDE_SECONDARY_SLOT_ID =
+  process.env.NEXT_PUBLIC_MONU_GUIDE_SECONDARY_SLOT_ID || "pc-guide-secondary-in-content"
+export const MONUMETRIC_PENNY_LIST_IN_CONTENT_SLOT_ID =
+  process.env.NEXT_PUBLIC_MONU_PENNY_LIST_SLOT_ID || "pc-penny-list-in-content"
 export const MONUMETRIC_MOBILE_STICKY_SLOT_ID = "pc-mobile-sticky-anchor"
 export const MONUMETRIC_IN_CONTENT_DOM_ID_PREFIX = "mmt-"
-export const MONUMETRIC_REQUEUE_SLOT_ROUTES = ["/guide", ...GUIDE_CHAPTER_ROUTES] as const
+
+export type MonumetricDensityProfile = "balanced" | "conservative"
 
 export interface MonumetricSlotPolicy {
   reserveMinHeightPx: number
@@ -30,15 +35,48 @@ export interface MonumetricSlotPolicy {
   desktopEnabled: boolean
 }
 
-const MONUMETRIC_REQUEUE_SLOT_ROUTE_SET = new Set<string>(MONUMETRIC_REQUEUE_SLOT_ROUTES)
 const MONUMETRIC_ROUTE_REQUEUE_FLAG = process.env.NEXT_PUBLIC_MONU_ROUTE_REQUEUE
 const MONUMETRIC_COLLAPSE_EMPTY_FLAG = process.env.NEXT_PUBLIC_MONU_COLLAPSE_EMPTY
 const MONUMETRIC_EXPERIMENTAL_SPA_FLAG = process.env.NEXT_PUBLIC_MONU_EXPERIMENTAL_SPA
+const MONUMETRIC_DENSITY_PROFILE_FLAG = process.env.NEXT_PUBLIC_MONU_DENSITY_PROFILE
+
+const MONUMETRIC_DENSITY_PROFILE: MonumetricDensityProfile =
+  MONUMETRIC_DENSITY_PROFILE_FLAG === "conservative" ? "conservative" : "balanced"
+
+const GUIDE_ROUTE_IN_CONTENT_SLOTS = Object.fromEntries(
+  GUIDE_CHAPTER_ROUTES.map((route) => [route, [MONUMETRIC_IN_CONTENT_SLOT_ID]])
+) as Record<string, readonly string[]>
+
+const MONUMETRIC_ROUTE_IN_CONTENT_SLOTS_BY_PROFILE: Record<
+  MonumetricDensityProfile,
+  Record<string, readonly string[]>
+> = {
+  conservative: {
+    "/guide": [MONUMETRIC_IN_CONTENT_SLOT_ID],
+    ...GUIDE_ROUTE_IN_CONTENT_SLOTS,
+  },
+  balanced: {
+    "/guide": [MONUMETRIC_IN_CONTENT_SLOT_ID, MONUMETRIC_GUIDE_SECONDARY_SLOT_ID],
+    "/penny-list": [MONUMETRIC_PENNY_LIST_IN_CONTENT_SLOT_ID],
+    ...GUIDE_ROUTE_IN_CONTENT_SLOTS,
+  },
+}
+
+const MONUMETRIC_KNOWN_IN_CONTENT_SLOT_IDS = Array.from(
+  new Set(
+    Object.values(MONUMETRIC_ROUTE_IN_CONTENT_SLOTS_BY_PROFILE)
+      .flatMap((routeMap) => Object.values(routeMap))
+      .flat()
+  )
+)
 
 export const MONUMETRIC_LAUNCH_CONFIG = {
   placement: {
     mode: "provider-managed",
     hardExclusionsOnly: true,
+  },
+  density: {
+    profile: MONUMETRIC_DENSITY_PROFILE,
   },
   sticky: {
     enabled: false,
@@ -62,7 +100,7 @@ export const MONUMETRIC_LAUNCH_CONFIG = {
   routeRequeue: {
     enabled: MONUMETRIC_ROUTE_REQUEUE_FLAG !== "0",
     debounceMs: 120,
-    knownInContentSlotIds: [MONUMETRIC_IN_CONTENT_SLOT_ID],
+    knownInContentSlotIds: MONUMETRIC_KNOWN_IN_CONTENT_SLOT_IDS,
   },
   slotShell: {
     collapseEmptyEnabled: MONUMETRIC_COLLAPSE_EMPTY_FLAG !== "0",
@@ -72,7 +110,21 @@ export const MONUMETRIC_LAUNCH_CONFIG = {
     [MONUMETRIC_IN_CONTENT_SLOT_ID]: {
       reserveMinHeightPx: 250,
       collapseAfterMs: 7000,
-      maxPerRoute: 2,
+      maxPerRoute: 1,
+      mobileEnabled: true,
+      desktopEnabled: true,
+    },
+    [MONUMETRIC_GUIDE_SECONDARY_SLOT_ID]: {
+      reserveMinHeightPx: 250,
+      collapseAfterMs: 7000,
+      maxPerRoute: 1,
+      mobileEnabled: true,
+      desktopEnabled: true,
+    },
+    [MONUMETRIC_PENNY_LIST_IN_CONTENT_SLOT_ID]: {
+      reserveMinHeightPx: 250,
+      collapseAfterMs: 7000,
+      maxPerRoute: 1,
       mobileEnabled: true,
       desktopEnabled: true,
     },
@@ -108,12 +160,16 @@ export function shouldPausePennyListPromptStack(options: {
   )
 }
 
-export function getRouteRequeueSlotIds(pathname: string): readonly string[] {
+export function getRouteInContentSlotIds(pathname: string): readonly string[] {
   const normalizedPath = normalizeRoutePath(pathname)
-  if (!MONUMETRIC_REQUEUE_SLOT_ROUTE_SET.has(normalizedPath)) {
-    return []
-  }
-  return [MONUMETRIC_IN_CONTENT_SLOT_ID]
+  const routeSlotMap =
+    MONUMETRIC_ROUTE_IN_CONTENT_SLOTS_BY_PROFILE[MONUMETRIC_LAUNCH_CONFIG.density.profile]
+
+  return routeSlotMap[normalizedPath] ?? []
+}
+
+export function getRouteRequeueSlotIds(pathname: string): readonly string[] {
+  return getRouteInContentSlotIds(pathname)
 }
 
 export function getMonumetricSlotDomId(slotId: string): string {

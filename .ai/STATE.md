@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Mar 5, 2026 (`dev` recovery lane stabilized; Monumetric S2 placeholder stability implemented; FULL lane green)
+**Last updated:** Mar 5, 2026 (`dev` recovery lane stabilized; Monumetric S3 placement coverage implemented; FULL lane green)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,25 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-05 (Monumetric `S3` placement coverage implemented):** Shipped balanced density recovery on `/guide` and `/penny-list` with profile-gated in-content opportunities and per-slot caps.
+  - **What changed:**
+    - extended launch config in `lib/ads/launch-config.ts` with:
+      - density profile gate `NEXT_PUBLIC_MONU_DENSITY_PROFILE` (`balanced` default, `conservative` rollback),
+      - route in-content mapping via `getRouteInContentSlotIds(...)`,
+      - additional guide/penny-list slot policies with `maxPerRoute: 1` cap.
+    - extended route-plan payloads in:
+      - `lib/ads/slot-plan.ts` (`inContentSlotIds`),
+      - `components/ads/route-ad-slots.tsx` (`densityProfile`, `inContentSlotIds`).
+    - made reusable slot rendering per slot ID in `components/ads/monumetric-in-content-slot.tsx`.
+    - added balanced placements:
+      - `/guide` lead + follow-up opportunities in `app/guide/page.tsx`,
+      - `/penny-list` in-feed opportunity wiring in `app/penny-list/page.tsx` and `components/penny-list-client.tsx`.
+    - updated regression coverage:
+      - `tests/ads-launch-config.test.ts`
+      - `tests/ads-slot-plan.test.ts`
+  - **Why:** recover controlled monetization coverage after lifecycle (`S1`) and placeholder (`S2`) stabilization while keeping hard exclusions and runtime safety locks unchanged.
+  - **Status:** local verification passed on `ai:memory:check`, `verify:fast`, `e2e:smoke`, and `e2e:full`; proof screenshots captured at `reports/proof/2026-03-05T07-45-48/`.
 
 - **2026-03-05 (Monumetric `S2` placeholder stability implemented):** Shipped reserve-height + controlled empty-slot collapse behavior for Monumetric wrappers and advanced the balanced stabilization lane from `S1` to `S2`.
   - **What changed:**
