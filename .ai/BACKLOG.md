@@ -1,6 +1,6 @@
 # Backlog (Top Priority Items)
 
-**Last updated:** Feb 22, 2026 (memory trend reporting slice shipped for autonomy hardening)
+**Last updated:** Mar 5, 2026 (dev-branch recovery lane established from main)
 **Rule:** Keep ≤10 items. Archive completed/deferred items.
 
 **Auto-archive:** Full backlog history preserved in `archive/backlog-history/`
@@ -13,6 +13,7 @@ Each AI session should:
 4. Update `.ai/SESSION_LOG.md`, `.ai/STATE.md`, and this file
 
 **Planning (canonical):** See `.ai/plans/INDEX.md` for all concurrent plans and their statuses.
+**Founder override (active):** Use `dev-recovery-20260305` as the active integration lane for now. The mixed-history `dev` branch is preserved as reference via `backup/dev-snapshot-20260305-pre-recovery`.
 
 ---
 

@@ -1,36 +1,75 @@
-const MONUMETRIC_IN_CONTENT_SLOT_ID = "39b97adf-dc3e-4795-b4a4-39f0da3c68dd"
-const MONUMETRIC_IN_CONTENT_DOM_ID = `mmt-${MONUMETRIC_IN_CONTENT_SLOT_ID}`
-const MONUMETRIC_ENABLED = process.env.NEXT_PUBLIC_MONUMETRIC_ENABLED === "true"
+"use client"
 
-const MONUMETRIC_IN_CONTENT_SCRIPT = `
+import {
+  getMonumetricSlotDomId,
+  getMonumetricSlotPolicy,
+  MONUMETRIC_IN_CONTENT_SLOT_ID,
+  MONUMETRIC_LAUNCH_CONFIG,
+} from "@/lib/ads/launch-config"
+import { MonumetricSlotShell } from "@/lib/ads/monumetric-slot-shell"
+
+const MONUMETRIC_ENABLED = process.env.NEXT_PUBLIC_MONUMETRIC_ENABLED === "true"
+const FALLBACK_MIN_HEIGHT_PX = 250
+const FALLBACK_COLLAPSE_AFTER_MS = 7000
+
+interface MonumetricInContentSlotProps {
+  slotId?: string
+  slotKey?: string
+  className?: string
+  containerClassName?: string
+}
+
+function toToken(value: string): string {
+  return value
+    .replace(/[^a-z0-9]+/gi, "-")
+    .replace(/^-+|-+$/g, "")
+    .toLowerCase()
+}
+
+function buildMonumetricInContentScript(slotId: string): string {
+  return `
 window.$MMT = window.$MMT || {};
 window.$MMT.cmd = window.$MMT.cmd || [];
 window.$MMT.cmd.push(function () {
   window.$MMT.display = window.$MMT.display || {};
   window.$MMT.display.slots = window.$MMT.display.slots || [];
-  window.$MMT.display.slots.push(["${MONUMETRIC_IN_CONTENT_SLOT_ID}"]);
+  window.$MMT.display.slots.push(["${slotId}"]);
 });
 `.trim()
+}
 
-export function MonumetricInContentSlot() {
+export function MonumetricInContentSlot({
+  slotId = MONUMETRIC_IN_CONTENT_SLOT_ID,
+  slotKey,
+  className,
+  containerClassName = "min-h-[250px]",
+}: MonumetricInContentSlotProps = {}) {
   if (!MONUMETRIC_ENABLED) return null
 
+  const slotDomId = getMonumetricSlotDomId(slotId)
+  const slotPolicy = getMonumetricSlotPolicy(slotId)
+  const reserveMinHeightPx = slotPolicy?.reserveMinHeightPx ?? FALLBACK_MIN_HEIGHT_PX
+  const collapseAfterMs = slotPolicy?.collapseAfterMs ?? FALLBACK_COLLAPSE_AFTER_MS
+  const token = toToken(slotKey ?? slotId)
+  const scriptId = `pc-monumetric-in-content-${token}`
+
   return (
-    <section
-      aria-label="Advertisement"
-      className="my-8 rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-3 sm:p-4"
-      data-ad-slot="monumetric-in-content-repeatable"
+    <MonumetricSlotShell
+      enabled={MONUMETRIC_ENABLED}
+      slotId={`monumetric-in-content-${token}`}
+      slotDomId={slotDomId}
+      reserveMinHeightPx={reserveMinHeightPx}
+      collapseAfterMs={collapseAfterMs}
+      collapseEnabled={MONUMETRIC_LAUNCH_CONFIG.slotShell.collapseEmptyEnabled}
+      className={className}
+      containerClassName={containerClassName}
     >
-      <p className="mb-2 text-center text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)]">
-        Advertisement
-      </p>
-      <div id={MONUMETRIC_IN_CONTENT_DOM_ID} className="mx-auto min-h-[250px] w-full" />
       <script
-        id="pc-monumetric-in-content-repeatable"
+        id={scriptId}
         type="text/javascript"
         data-cfasync="false"
-        dangerouslySetInnerHTML={{ __html: MONUMETRIC_IN_CONTENT_SCRIPT }}
+        dangerouslySetInnerHTML={{ __html: buildMonumetricInContentScript(slotId) }}
       />
-    </section>
+    </MonumetricSlotShell>
   )
 }

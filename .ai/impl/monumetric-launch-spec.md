@@ -2,8 +2,11 @@
 
 **Status:** IMPLEMENTED (Option B runtime policy active; partner tag wiring pending)  
 **Created:** 2026-02-11  
-**Last updated:** 2026-02-13  
+**Last updated:** 2026-03-05  
 **Owner:** Cade (founder)
+
+> 2026-03-05 continuity note: this file remains the historical launch baseline.  
+> Post-reactivation stabilization + balanced density recovery now lives in `.ai/impl/monumetric-balanced-stabilization-density-recovery.md`.
 
 ---
 

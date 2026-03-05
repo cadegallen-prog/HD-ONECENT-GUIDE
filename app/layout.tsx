@@ -13,6 +13,7 @@ import { AnalyticsTracker } from "@/components/analytics-tracker"
 import VisualPointerShell from "@/components/dev/visual-pointer-shell"
 import { ogImageUrl } from "@/lib/og"
 import { CANONICAL_BASE } from "@/lib/canonical"
+import { MonumetricRouteLifecycleCoordinator } from "@/lib/ads/monumetric-runtime"
 import { isVisualPointerEnvironmentEnabled } from "@/lib/visual-pointer/env"
 
 const DEFAULT_OG_IMAGE = `https://www.pennycentral.com${ogImageUrl("homepage")}`
@@ -297,6 +298,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <MonumetricRouteLifecycleCoordinator />
           {/* Handles client-side tracking for GA4 */}
           <AnalyticsTracker />
           <AuthProvider>

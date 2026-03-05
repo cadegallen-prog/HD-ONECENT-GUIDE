@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Mar 3, 2026 (`/report-find` share + basket UX hardening verified locally)
+**Last updated:** Mar 5, 2026 (`dev` recovery lane stabilized; Monumetric S3 placement coverage implemented; FULL lane green)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,68 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-05 (Monumetric `S3` placement coverage implemented):** Shipped balanced density recovery on `/guide` and `/penny-list` with profile-gated in-content opportunities and per-slot caps.
+  - **What changed:**
+    - extended launch config in `lib/ads/launch-config.ts` with:
+      - density profile gate `NEXT_PUBLIC_MONU_DENSITY_PROFILE` (`balanced` default, `conservative` rollback),
+      - route in-content mapping via `getRouteInContentSlotIds(...)`,
+      - additional guide/penny-list slot policies with `maxPerRoute: 1` cap.
+    - extended route-plan payloads in:
+      - `lib/ads/slot-plan.ts` (`inContentSlotIds`),
+      - `components/ads/route-ad-slots.tsx` (`densityProfile`, `inContentSlotIds`).
+    - made reusable slot rendering per slot ID in `components/ads/monumetric-in-content-slot.tsx`.
+    - added balanced placements:
+      - `/guide` lead + follow-up opportunities in `app/guide/page.tsx`,
+      - `/penny-list` in-feed opportunity wiring in `app/penny-list/page.tsx` and `components/penny-list-client.tsx`.
+    - updated regression coverage:
+      - `tests/ads-launch-config.test.ts`
+      - `tests/ads-slot-plan.test.ts`
+  - **Why:** recover controlled monetization coverage after lifecycle (`S1`) and placeholder (`S2`) stabilization while keeping hard exclusions and runtime safety locks unchanged.
+  - **Status:** local verification passed on `ai:memory:check`, `verify:fast`, `e2e:smoke`, and `e2e:full`; proof screenshots captured at `reports/proof/2026-03-05T07-45-48/`.
+
+- **2026-03-05 (Monumetric `S2` placeholder stability implemented):** Shipped reserve-height + controlled empty-slot collapse behavior for Monumetric wrappers and advanced the balanced stabilization lane from `S1` to `S2`.
+  - **What changed:**
+    - added shared slot-shell runtime in `lib/ads/monumetric-slot-shell.tsx` with timeout-based empty-slot collapse + mutation observation.
+    - extended launch config in `lib/ads/launch-config.ts` with:
+      - `slotShell.collapseEmptyEnabled` (`NEXT_PUBLIC_MONU_COLLAPSE_EMPTY` gate),
+      - stable per-slot policies for in-content and mobile-sticky shells.
+    - extended slot planning in `lib/ads/slot-plan.ts` to emit `slotPolicies` alongside requeue metadata.
+    - wired S2 behavior into:
+      - `components/ads/monumetric-in-content-slot.tsx`
+      - `components/ads/mobile-sticky-anchor.tsx`
+      - `components/ads/route-ad-slots.tsx`
+    - added/updated unit coverage:
+      - `tests/ads-launch-config.test.ts`
+      - `tests/ads-slot-plan.test.ts`
+  - **Why:** keep ad placeholders stable on `/guide` and `/penny-list` while preventing indefinitely empty ad shells, without enabling risky SPA callback hooks or changing route eligibility.
+  - **Status:** local verification passed on `ai:memory:check`, `verify:fast`, `e2e:smoke`, and `e2e:full`; proof screenshots captured at `reports/proof/2026-03-05T07-08-05/`.
+
+- **2026-03-05 (Live-console CSP false-positive resolved):** Cleared the remaining FULL-suite blocker by fixing CSP blocked-domain parsing in the live console audit test.
+  - **What changed:**
+    - updated `tests/live/console.spec.ts` `extractBlockedDomain(...)` to parse blocked targets before CSP directive allowlist text.
+    - added safe handling for non-host CSP targets (for example `data:` URIs) to avoid host misclassification.
+    - kept fallback URL parsing for `"Fetch API cannot load https://..."` message variants.
+  - **Why:** `/store-finder` and `/about` were failing due to a parser false positive that read `www.google-analytics.com` from the CSP directive itself, not from the blocked target.
+  - **Status:** `e2e:full` now passes on `dev-recovery-20260305`; latest live console artifacts show `criticalCspViolations=0` while preserving non-critical third-party CSP noise reporting.
+
+- **2026-03-05 (Branch recovery lane established from `main`):** Recovered from mixed `dev` history by creating a safety snapshot and a clean integration branch with selected salvage commits only.
+  - **What changed:**
+    - created safety snapshot branch `backup/dev-snapshot-20260305-pre-recovery` with commit `7cf09ca` preserving the full pre-recovery dirty `dev` working tree.
+    - created clean integration branch `dev-recovery-20260305` from `origin/main`.
+    - cherry-picked/salvaged high-value non-redesign work:
+      - `ad9c2e4`: retail-price migration `supabase/migrations/031_item_cache_include_retail_price.sql`
+      - `a53f42a`: manual fast-track/manual-enrich script corrections
+      - `e781cb3`: Monumetric balanced parent/child plans + `S1` lifecycle runtime/tests/docs
+      - `5504ac8`: constrained `app/layout.tsx` to Monumetric lifecycle-only wiring after salvage cleanup.
+    - hardened full QA script by enabling visual-pointer test env in `package.json`:
+      - `e2e:full` now includes `NEXT_PUBLIC_VISUAL_POINTER_ENABLED=true`.
+    - added branch triage artifact for parked old-`dev` commit decisions:
+      - `.ai/impl/dev-branch-recovery-triage-2026-03-05.md`.
+    - intentionally excluded redesign-heavy and Roo experimentation commits from the recovered branch.
+  - **Why:** `dev` had too many co-mingled commits (design/runtime/docs/research), which made safe promotion and rollback difficult.
+  - **Status:** `dev-recovery-20260305` is now the clean implementation lane for continuation. Verification has passed on `ai:memory:check`, `verify:fast`, `e2e:smoke`, and `e2e:full` after the live-console CSP parser fix. PR `#148` is now marked ready for review with required checks (`quality-fast`, `smoke-e2e`) green.
+  - **Review path:** ready-for-review PR at `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/pull/148` (remaining block is reviewer approval; SonarCloud failure is non-required).
 
 - **2026-03-03 (`/report-find` share + basket UX hardening shipped locally):** Finished the founder-requested follow-up slice on top of the basket hotfix so the success-state copy is trustworthy again and the basket limit is safely back at `10`.
   - **What changed:**

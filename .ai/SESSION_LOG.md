@@ -4,6 +4,237 @@
 
 ---
 
+## 2026-03-05 - Codex - Monumetric S3 Placement Coverage Recovery
+
+**Goal:** Implement `S3` from the balanced Monumetric stabilization plan to recover controlled in-content coverage on `/guide` and `/penny-list` without touching exclusions or risky runtime paths.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `lib/ads/launch-config.ts`
+  - added `NEXT_PUBLIC_MONU_DENSITY_PROFILE` gate (`balanced` default, `conservative` rollback).
+  - added profile-aware slot mapping via `getRouteInContentSlotIds(...)`.
+  - added guide/penny-list in-content slot policies and tightened per-slot `maxPerRoute` caps to `1`.
+- `lib/ads/slot-plan.ts`
+  - extended active route plan with `inContentSlotIds`.
+  - ensured slot policies are emitted for all in-content opportunities.
+- `components/ads/route-ad-slots.tsx`
+  - added `densityProfile` and `inContentSlotIds` to route payload metadata.
+- `components/ads/monumetric-in-content-slot.tsx`
+  - made slot component reusable per slot ID (`slotId`, `slotKey`) with stable script IDs.
+- `app/guide/page.tsx`
+  - added lead + follow-up in-content opportunities for balanced profile.
+- `app/penny-list/page.tsx`
+  - passed route-mapped penny-list in-content slot IDs into client rendering.
+- `components/penny-list-client.tsx`
+  - rendered in-feed in-content opportunity above results when available.
+- `tests/ads-launch-config.test.ts`
+  - added density-profile + in-content-slot mapping assertions.
+- `tests/ads-slot-plan.test.ts`
+  - added route-plan assertions for `inContentSlotIds` and updated slot policy expectations.
+
+### Summary
+
+- `S3` balanced density recovery is now implemented locally with profile gating and slot-cap protections.
+- `/report-find` remains excluded and CSP policy was intentionally unchanged in this slice.
+- Next planned slice is `S4` CSP compatibility hardening.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npm run e2e:full` ✅
+- `npm run ai:proof -- /guide /penny-list` ✅
+  - artifacts: `reports/proof/2026-03-05T07-45-48/`
+- full-lane console artifacts:
+  - `reports/playwright/console-report-2026-03-05T07-39-17-156Z.json`
+  - `reports/playwright/console-report-2026-03-05T07-40-55-632Z.json`
+  - `reports/playwright/console-report-2026-03-05T07-43-38-289Z.json`
+  - `reports/playwright/console-report-2026-03-05T07-44-39-703Z.json`
+
+### Branch Hygiene
+
+- Branch: `dev-recovery-20260305`
+- Scope: Monumetric `S3` placement coverage only
+- Push: pending
+
+---
+
+## 2026-03-05 - Codex - Monumetric S2 Placeholder Stability + Empty-Slot Collapse
+
+**Goal:** Implement `S2` from the balanced Monumetric stabilization plan so ad wrappers reserve space and collapse only when truly empty after a controlled timeout.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `lib/ads/monumetric-slot-shell.tsx` (new)
+  - added shared slot-shell behavior and `useMonumetricSlotCollapse(...)` hook.
+  - implemented timeout-gated empty-slot collapse with mutation-observer recovery when creatives appear later.
+- `lib/ads/launch-config.ts`
+  - added `NEXT_PUBLIC_MONU_COLLAPSE_EMPTY` gate via `MONUMETRIC_LAUNCH_CONFIG.slotShell.collapseEmptyEnabled`.
+  - added stable per-slot policy metadata (reserve min height + collapse timeout + max-per-route + viewport enablement) for in-content and mobile sticky slots.
+- `lib/ads/slot-plan.ts`
+  - extended route plan output with `slotPolicies` so runtime metadata now includes placeholder behavior contracts.
+- `components/ads/monumetric-in-content-slot.tsx`
+  - migrated wrapper rendering to `MonumetricSlotShell`.
+  - preserved existing slot queue script while adding reserve/collapse behavior.
+- `components/ads/mobile-sticky-anchor.tsx`
+  - added collapse hook integration and policy-driven reserve height.
+  - collapse now respects both sheet-open state and empty-slot timeout behavior.
+- `components/ads/route-ad-slots.tsx`
+  - emitted `slotPolicies` and `collapseEmptyEnabled` into route-plan JSON payload.
+- `tests/ads-launch-config.test.ts`
+  - added assertions for slot-shell config and policy helper output.
+- `tests/ads-slot-plan.test.ts`
+  - added assertions for per-route `slotPolicies` output.
+
+### Summary
+
+- `S2` placeholder stability is now implemented on the recovery branch with reversible env-gated collapse behavior.
+- Route eligibility and CSP policy were intentionally left unchanged.
+- `/report-find` exclusion behavior was not touched.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npm run e2e:full` ✅
+- `npm run ai:proof -- /guide /penny-list` ✅
+  - artifacts: `reports/proof/2026-03-05T07-08-05/`
+- live console artifacts from full run:
+  - `reports/playwright/console-report-2026-03-05T07-09-31-176Z.json`
+  - `reports/playwright/console-report-2026-03-05T07-11-01-217Z.json`
+  - `reports/playwright/console-report-2026-03-05T07-13-42-460Z.json`
+  - `reports/playwright/console-report-2026-03-05T07-14-43-973Z.json`
+
+### Branch Hygiene
+
+- Branch: `dev-recovery-20260305`
+- Scope: Monumetric `S2` placeholder stability only
+- Push: pending
+
+---
+
+## 2026-03-05 - Codex - Live Console CSP False-Positive Fix (FULL Lane Unblocked)
+
+**Goal:** Clear the remaining `e2e:full` blocker without broadening CSP policy in `next.config.js`.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- `tests/live/console.spec.ts`
+  - fixed blocked-domain extraction so CSP parsing uses the actual blocked target before directive text.
+  - added safe handling for non-host CSP targets (for example `data:` URIs) so they do not get misclassified as host blockers.
+  - preserved fallback parsing for variants like `Fetch API cannot load https://...`.
+- follow-up integration readiness steps:
+  - committed and pushed parser/memory updates on `dev-recovery-20260305` (`ec4dfbc`).
+  - watched PR #148 CI to completion (`Full QA Suite`, `quality-fast`, and `smoke-e2e` all passed).
+  - marked PR #148 ready for review (not draft) and posted a CI/status note:
+    - `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/pull/148#issuecomment-4002680052`.
+
+### Summary
+
+- Root cause was a test-classifier bug, not a runtime CSP allowlist gap.
+- The failing messages on `/store-finder` and `/about` were `Connecting to 'data:text/xml...'` entries.
+- The prior extractor incorrectly pulled `https://www.google-analytics.com` from the CSP directive allowlist text and marked it as a critical blocked host.
+- After the parser fix, critical CSP counts are `0` and FULL passes.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:full` ✅ (first run had one transient local connection flake; immediate rerun passed clean)
+- `npm run e2e:smoke` ✅
+- console report artifacts with `criticalCspViolations=0`:
+  - `reports/playwright/console-report-2026-03-05T06-32-09-456Z.json`
+  - `reports/playwright/console-report-2026-03-05T06-33-39-485Z.json`
+  - `reports/playwright/console-report-2026-03-05T06-36-04-913Z.json`
+  - `reports/playwright/console-report-2026-03-05T06-37-06-266Z.json`
+- CI status after push:
+  - required branch-protection checks for `main`: `quality-fast` ✅, `smoke-e2e` ✅
+  - `Full QA Suite` ✅
+  - `SonarCloud Code Analysis` ❌ (non-required quality gate on this recovery PR)
+- Writer lock:
+  - `npm run ai:writer-lock:status` ✅ (unlocked before claim)
+  - `npm run ai:writer-lock:claim -- codex "fix live-console CSP false-positive extraction and verify full lane"` ✅
+
+### Branch Hygiene
+
+- Branch: `dev-recovery-20260305`
+- Scope: live-console CSP parser fix only
+- Commit: `ec4dfbc`
+- Push: pushed
+- PR status: ready for review (not draft)
+- Carryover untracked files (unchanged, unrelated):
+  - `archive/root-level-orphans/`
+  - `emails/monumetric-reengagement-draft.md`
+  - `emails/monumetric-reengagement-final.md`
+
+---
+
+## 2026-03-05 - Codex - Dev Branch Recovery + Clean Integration Lane
+
+**Goal:** Recover from mixed `dev` history by preserving all current work in a safety snapshot, then creating a clean integration branch from `main` with only high-value salvage commits.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- Created a non-destructive safety snapshot branch:
+  - `backup/dev-snapshot-20260305-pre-recovery`
+  - snapshot commit: `7cf09ca` (`chore(snapshot): preserve pre-recovery dev working tree (2026-03-05)`)
+- Created a clean recovery integration branch from `origin/main`:
+  - `dev-recovery-20260305`
+- Salvaged only selected non-redesign work onto the recovery branch:
+  - `ad9c2e4` — retail price migration (`supabase/migrations/031_item_cache_include_retail_price.sql`)
+  - `a53f42a` — manual fast-track/manual-enrich script fixes (`scripts/manual-cade-fast-track.ts`, `scripts/manual-enrich.ts`, `package.json`)
+  - `e781cb3` — Monumetric balanced parent/child plans + `S1` lifecycle runtime/tests/docs
+  - `5504ac8` — trimmed `app/layout.tsx` to keep only Monumetric lifecycle wiring (removed unrelated carried-over layout edits from salvage)
+- Kept redesign-heavy and Roo-experimental commit history out of this branch on purpose.
+- Overnight continuation on the same recovery branch:
+  - added `NEXT_PUBLIC_VISUAL_POINTER_ENABLED=true` to `package.json` `e2e:full` so visual-pointer capture tests are enabled in production-mode test builds.
+  - added commit-triage artifact: `.ai/impl/dev-branch-recovery-triage-2026-03-05.md`.
+  - pushed both branches to origin:
+    - `dev-recovery-20260305`
+    - `backup/dev-snapshot-20260305-pre-recovery`
+
+### Summary
+
+- Recovery branch now isolates business-critical work from mixed `dev` history without deleting any prior work.
+- Snapshot branch preserves full recoverability of the pre-recovery state.
+- The recovered branch is now a safer base for future implementation and PR review.
+- `e2e:full` no longer fails on visual-pointer toggle absence; remaining full-lane blocker is a live-console CSP gate on `www.google-analytics.com` for `/store-finder` and `/about`.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npm run e2e:full` ⚠️ rerun after script fix:
+  - visual-pointer capture specs now pass.
+  - full suite still fails due live-console critical CSP finding (`www.google-analytics.com`) on `/store-finder` and `/about`.
+- Writer lock:
+  - `npm run ai:writer-lock:claim -- codex "record dev-branch recovery branch creation and commit triage"` ✅
+  - `npm run ai:writer-lock:status` ✅ (active under `codex` during memory updates)
+
+### Branch Hygiene
+
+- Recovery branch: `dev-recovery-20260305` (ahead `5` from `origin/main`)
+- Snapshot branch: `backup/dev-snapshot-20260305-pre-recovery`
+- Push: pushed
+- Draft PR: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/pull/148`
+- Carryover untracked files (not touched by this objective):
+  - `archive/root-level-orphans/`
+  - `emails/monumetric-reengagement-draft.md`
+  - `emails/monumetric-reengagement-final.md`
+
+---
+
 ## 2026-03-03 - Codex - Report Find Share + Basket UX Hardening
 
 **Goal:** Finish the founder-requested `/report-find` follow-up slice by making the Facebook copy SKU-only, restoring the basket cap to `10`, safely blocking restored over-limit baskets, and explaining the Back-button workflow.
@@ -56,218 +287,5 @@
 - Branch: `dev`
 - Scope: report-find share/cap/preview hardening + targeted regression coverage
 - Push: pending at memory-write time
-
----
-
-## 2026-03-03 - Codex - Report Find Basket Submit Hotfix
-
-**Goal:** Restore the `/report-find` basket flow so multi-item baskets submit again and stop the blank draft `Item Name` field from blocking `Submit all`.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `lib/constants.ts`
-  - added `REPORT_FIND_BASKET_ITEM_LIMIT = 30` as the shared basket-size source of truth.
-- `app/api/submit-find/route.ts`
-  - aligned the batch submit cap to the shared 30-item basket limit.
-  - added a clear oversized-basket error message instead of the generic schema failure text.
-- `components/report-find/ReportFindFormClient.tsx`
-  - removed the draft `Item Name` field from native submit validation so a filled basket no longer gets blocked by an empty draft row.
-  - enforced the same 30-item limit on manual adds and prefilled basket adds.
-  - added visible basket-limit copy so the cap is not hidden from users.
-- `tests/report-find-batch.spec.ts`
-  - kept the mixed-result batch-submit coverage.
-  - added a regression test that restores a 16-item basket from session storage and verifies submit still works while the draft item fields are blank.
-- `tests/submit-find-route.test.ts`
-  - updated the oversized-batch route test to use the shared 30-item limit and assert the new user-facing error message.
-
-### Summary
-
-- Root cause 1: the browser was validating the empty draft `Item Name` input on form submit even when the basket was already populated, so `Submit all` got blocked before the request fired.
-- Root cause 2: the API only accepted 10 basket items while the UI allowed more, so a 16-item basket failed with the same generic error for every item.
-- The basket submit path now accepts up to 30 items in one request, the draft field no longer blocks batch submit, and oversized baskets now fail with a specific message instead of a misleading required-fields error.
-
-### Verification
-
-- Before fix reproduction:
-  - `npx playwright test tests/report-find-batch.spec.ts --project=chromium-desktop-light --workers=1` ❌
-  - failure signature: the batch-submit UI test never reached the success summary because `Submit all` was blocked by the empty draft `Item Name` field.
-- `npm run ai:memory:check` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `npx tsx --import ./tests/setup.ts --test --test-name-pattern "batch submit rejects more than max allowed items" tests/submit-find-route.test.ts` ✅
-- `$env:SUBMIT_FIND_DRY_RUN='false'; npx tsx --import ./tests/setup.ts --test --test-name-pattern "batch submit supports partial success in one request" tests/submit-find-route.test.ts` ✅
-- `$env:NEXT_DIST_DIR='.next-playwright'; $env:PLAYWRIGHT='1'; $env:NEXT_PUBLIC_EZOIC_ENABLED='false'; $env:NEXT_PUBLIC_ANALYTICS_ENABLED='false'; npx playwright test tests/report-find-batch.spec.ts --project=chromium-desktop-light --workers=1` ✅
-- Playwright proof screenshots captured via temporary local proof spec (removed after capture):
-  - artifacts: `reports/proof/2026-03-03T06-00-57-440Z/`
-  - console: `reports/proof/2026-03-03T06-00-57-440Z/console-errors.txt`
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Scope: report-find basket submit hotfix + regression coverage
-- Push: not pushed
-
----
-
-## 2026-03-03 - Codex - Site Recovery S1 Hydration Stability
-
-**Goal:** Remove the global hydration mismatch and lock the Penny List text regression before any visual site-recovery slice starts.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `app/layout.tsx`
-  - replaced the Grow DOM-insertion bootstrap with `next/script` `afterInteractive` scripts so the server-rendered head is no longer mutated before hydration.
-- `lib/penny-list-utils.ts`
-  - added `DIY` to the protected uppercase word set in `normalizeProductName(...)`.
-- `tests/visual-smoke.spec.ts`
-  - expanded the route sweep to all nine audited recovery routes and made hydration mismatch console output a first-class failure.
-- `tests/smoke-critical.spec.ts`
-  - added a Penny List rendered-surface assertion that fails if `Diy` appears.
-- `tests/penny-list-utils.test.ts`
-  - added deterministic helper coverage for mixed-case `DIY` input.
-- `.ai/impl/site-recovery-program.md`
-  - marked the parent recovery program in progress with `S1` shipped and `S2` next.
-- `.ai/impl/site-recovery-s1-hydration-stability.md`
-  - marked the slice shipped and recorded the implementation outcome.
-- `.ai/plans/INDEX.md`
-  - updated the registry status to match the canonical `.ai/impl/` plan.
-- `.ai/BACKLOG.md`
-  - advanced the immediate next slice from `S1` to `S2 - Homepage Proof Front Door`.
-- `.ai/STATE.md`
-  - updated current project reality to reflect the shipped hydration fix and next slice.
-- `.ai/LEARNINGS.md`
-  - documented that direct `node` execution is the wrong lane for repo TypeScript test files.
-
-### Summary
-
-- The audited hydration mismatch is no longer reproducible across `/`, `/guide`, `/penny-list`, `/report-find`, `/faq`, `/what-are-pennies`, `/store-finder`, `/about`, and `/transparency`.
-- The Grow integration now loads in a hydration-safe way without mutating head order before React starts.
-- The site-recovery program can now move from stabilization into `S2 - Homepage Proof Front Door`.
-
-### Verification
-
-- Before fix reproduction:
-  - `$env:PLAYWRIGHT_BASE_URL='http://localhost:3001'; npx playwright test tests/visual-smoke.spec.ts --project=chromium-desktop-light --workers=1` ❌
-  - failure signature: `A tree hydrated but some attributes of the server rendered HTML didn't match...`
-- `npm run ai:memory:check` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `$env:PLAYWRIGHT_BASE_URL='http://localhost:3001'; npx playwright test tests/visual-smoke.spec.ts --project=chromium-desktop-light --workers=1` ✅
-- `$env:PLAYWRIGHT_BASE_URL='http://localhost:3001'; npx playwright test tests/smoke-critical.spec.ts --project=chromium-desktop-light --workers=1` ✅
-- `npm run ai:proof -- / /guide /penny-list /report-find /faq /what-are-pennies /store-finder /about /transparency` ✅
-  - artifacts: `reports/proof/2026-03-03T00-44-54/`
-  - console: `reports/proof/2026-03-03T00-44-54/console-errors.txt`
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Scope: `S1` hydration fix + regression coverage + continuity updates
-- Push: not pushed
-
----
-
-## 2026-03-02 - Codex - Site Recovery Planning Spine (S0)
-
-**Goal:** Convert the site-recovery intent into durable repo memory so future agents can execute a coherent multi-slice recovery program without re-deriving it from chat.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `.ai/topics/SITE_RECOVERY_CURRENT.md`
-  - added the current-state audit for `/`, `/guide`, `/penny-list`, `/report-find`, `/faq`, `/what-are-pennies`, `/store-finder`, `/about`, and `/transparency`.
-  - persisted founder-calibrated quality feedback so it does not die with the context window.
-  - documented mobile issues, coherence issues, top 3 ROI improvements, and the hydration root-cause assessment.
-- `.ai/impl/site-recovery-program.md`
-  - created the authoritative parent recovery plan in `.ai/impl/`.
-  - locked the program decisions, dependency order, stop/go rules, and immediate next task.
-- `.ai/impl/site-recovery-s1-hydration-stability.md`
-  - created the implementation-ready plan for the global hydration mismatch and Penny List text determinism fix.
-- `.ai/impl/site-recovery-s2-homepage-proof-front-door.md`
-  - created the implementation-ready plan for the homepage redesign.
-- `.ai/impl/site-recovery-s3-guide-core-rebuild.md`
-  - created the implementation-ready plan for rebuilding `/guide` into the canonical long-form guide and demoting supporting routes.
-- `.ai/impl/site-recovery-s4-penny-list-mobile-focus.md`
-  - created the implementation-ready plan for Penny List mobile hierarchy cleanup.
-- `.ai/impl/site-recovery-s5-report-find-compression.md`
-  - created the implementation-ready plan for reducing pre-form friction on `/report-find`.
-- `.ai/impl/site-recovery-s6-typography-template-consistency.md`
-  - created the implementation-ready plan for type/spacing/template normalization.
-- `.ai/impl/site-recovery-s7-store-finder-supporting-role.md`
-  - created the implementation-ready plan for calming Store Finder and demoting it to a supporting role.
-- `.ai/impl/site-recovery-s8-trust-pages-hardening.md`
-  - created the implementation-ready plan for `/about` and `/transparency`.
-- `.ai/plans/INDEX.md`
-  - registered the new parent plan and explicitly documented the `.ai/plans/` vs `.ai/impl/` authority split.
-- `.ai/BACKLOG.md`
-  - persisted the site-recovery program as the active product-priority sequence.
-- `.ai/STATE.md`
-  - updated current project reality so fresh agents can identify the new canonical program and next slice.
-- `.ai/LEARNINGS.md`
-  - documented the fail-closed rule that `.ai/SESSION_LOG.md` must stay at 5 live entries before rerunning `ai:checkpoint`.
-
-### Summary
-
-- Penny Central now has one repo-canonical site recovery program instead of chat-only intent.
-- The planning spine is complete and the next implementation slice is unambiguous: `S1 - Hydration Stability`.
-- Future agents now have a route-by-route audit, a parent plan, and eight child plans to execute in order.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run ai:checkpoint` ✅
-  - artifacts:
-    - `reports/context-packs/2026-03-02T04-41-00/context-pack.md`
-    - `reports/context-packs/2026-03-02T04-41-00/resume-prompt.txt`
-- Runtime verification lanes: N/A (docs-only planning/memory work; no route/form/API/runtime code paths changed)
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Scope: planning docs + registry + shared memory
-- Push: not pushed
-
----
-
-## 2026-03-01 - Codex - Dead-Link-Safe Founder References
-
-**Goal:** Make founder-facing file and proof references repeatable and low-friction by codifying plain-path output instead of dead local markdown links.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `.ai/START_HERE.md`
-  - added an explicit founder-communication rule to use plain absolute Windows paths for repo files and local proof artifacts.
-- `docs/skills/README.md`
-  - registered a new local skill for dead-link-safe reference formatting.
-- `docs/skills/dead-link-safe-paths.md`
-  - added a short skill describing when to use plain paths, what format to use, and when clickable links are still appropriate.
-- `.ai/STATE.md`
-  - updated current operating reality so future sessions know dead local links are a friction point in this chat surface.
-- `.ai/SESSION_LOG.md`
-  - added this closeout entry.
-
-### Summary
-
-- Future agents now have an explicit session-start instruction not to rely on markdown local links in founder-facing replies.
-- Local files, reports, and artifacts should be delivered as plain absolute Windows paths so Cade can copy them without fighting dead links.
-- Real web URLs can still be clickable; local repo paths should not assume chat support.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run ai:checkpoint` ✅
-- Runtime verification lanes: N/A (docs-only collaboration rule update; no runtime code paths changed)
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Scope: docs/memory/skill update only
-- Push: not pushed
 
 ---

@@ -5,9 +5,11 @@ import { queryPennyItems, getHotItems } from "@/lib/penny-list-query"
 import { PennyListClient } from "@/components/penny-list-client"
 import { getCanonicalUrl } from "@/lib/canonical"
 import { RouteAdSlots } from "@/components/ads/route-ad-slots"
+import { getRouteInContentSlotIds } from "@/lib/ads/launch-config"
 
 const VALID_PER_PAGE = [25, 50, 100] as const
 const DEFAULT_PER_PAGE = 50
+const PENNY_LIST_IN_CONTENT_SLOT_IDS = getRouteInContentSlotIds("/penny-list")
 
 export const metadata: Metadata = {
   title: "Live Home Depot Penny List ($0.01 Finds) by State | Penny Central",
@@ -306,6 +308,7 @@ export default async function PennyListPage({ searchParams }: PennyListPageProps
             initialTotal={initialTotal}
             hotItems={hotItems}
             initialSearchParams={resolvedSearchParams}
+            monumetricInContentSlotIds={PENNY_LIST_IN_CONTENT_SLOT_IDS}
           />
 
           <section

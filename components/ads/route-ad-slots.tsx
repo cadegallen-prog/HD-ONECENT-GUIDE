@@ -27,6 +27,15 @@ export function RouteAdSlots({ pathname }: RouteAdSlotsProps) {
     eligibility: plan.policy.eligibility,
     inventory: plan.inventory,
     providerManaged: plan.providerManaged,
+    lifecycle: {
+      densityProfile: MONUMETRIC_LAUNCH_CONFIG.density.profile,
+      inContentSlotIds: plan.inContentSlotIds,
+      routeRequeueEnabled: MONUMETRIC_LAUNCH_CONFIG.routeRequeue.enabled,
+      requeueSlotIds: plan.requeueSlotIds,
+      slotPolicies: plan.slotPolicies,
+      collapseEmptyEnabled: MONUMETRIC_LAUNCH_CONFIG.slotShell.collapseEmptyEnabled,
+      experimentalSpaEnabled: MONUMETRIC_LAUNCH_CONFIG.experimentalSpa.enabled,
+    },
     launch: {
       placementMode: MONUMETRIC_LAUNCH_CONFIG.placement.mode,
       hardExclusionsOnly: MONUMETRIC_LAUNCH_CONFIG.placement.hardExclusionsOnly,

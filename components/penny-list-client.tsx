@@ -18,6 +18,7 @@ import { TrackableLink } from "@/components/trackable-link"
 import { trackEvent } from "@/lib/analytics"
 import { FeedbackWidget } from "@/components/feedback-widget"
 import { MONUMETRIC_LAUNCH_CONFIG, shouldPausePennyListPromptStack } from "@/lib/ads/launch-config"
+import { MonumetricInContentSlot } from "@/components/ads/monumetric-in-content-slot"
 import {
   PennyListFilters,
   type SortOption,
@@ -40,6 +41,7 @@ interface PennyListClientProps {
   initialTotal: number
   hotItems?: PennyItem[]
   initialSearchParams?: Record<string, string | string[] | undefined>
+  monumetricInContentSlotIds?: readonly string[]
 }
 
 function toURLSearchParams(
@@ -94,6 +96,7 @@ export function PennyListClient({
   initialTotal,
   hotItems: serverHotItems = [],
   initialSearchParams,
+  monumetricInContentSlotIds = [],
 }: PennyListClientProps) {
   const router = useRouter()
   const pathname = usePathname()
@@ -571,6 +574,7 @@ export function PennyListClient({
   // Pagination - API returns the page slice, so we just use total from state
   const pageCount = Math.max(1, Math.ceil(total / itemsPerPage))
   const clampedPage = Math.min(Math.max(currentPage, 1), pageCount)
+  const primaryInContentSlotId = monumetricInContentSlotIds[0]
   const showingStartIndex = total === 0 ? 0 : (clampedPage - 1) * itemsPerPage + 1
   const showingEndIndex = Math.min(total, clampedPage * itemsPerPage)
   const resultsSummary =
@@ -968,6 +972,13 @@ export function PennyListClient({
             </button>
           </div>
         </div>
+        {primaryInContentSlotId && total > 0 && (
+          <MonumetricInContentSlot
+            slotId={primaryInContentSlotId}
+            slotKey="penny-list-in-feed-primary"
+            className="my-6"
+          />
+        )}
         {total === 0 ? (
           <div className="rounded-xl border border-[var(--border-default)] bg-[var(--bg-elevated)] p-8 text-center">
             <Package
