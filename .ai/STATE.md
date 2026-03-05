@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Mar 4, 2026 (`S3B` guide long-form implementation shipped; `S3C1` next)
+**Last updated:** Mar 5, 2026 (Monumetric S1 lifecycle guardrails shipped and verified)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,39 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-05 (`S1 - lifecycle guardrails` shipped):** Implemented the first runtime slice of the Monumetric balanced stabilization plan to keep slot eligibility stable across client-side route transitions without enabling undocumented SPA callbacks.
+  - **What changed:**
+    - added `lib/ads/monumetric-runtime.ts` and wired `MonumetricRouteLifecycleCoordinator` into `app/layout.tsx` so route changes can re-queue known Monumetric slots through first-party logic.
+    - extended ad launch/plan contracts in `lib/ads/launch-config.ts`, `lib/ads/slot-plan.ts`, and `components/ads/route-ad-slots.tsx` with route-requeue metadata, env-flag gating (`NEXT_PUBLIC_MONU_ROUTE_REQUEUE`), and explicit `experimentalSpa` lock (`NEXT_PUBLIC_MONU_EXPERIMENTAL_SPA` remains off).
+    - added runtime typing guardrails in `types/ads-runtime.d.ts` for `window.$MMT`.
+    - expanded unit coverage in `tests/ads-launch-config.test.ts` and `tests/ads-slot-plan.test.ts` for the new lifecycle/requeue contracts.
+    - captured local desktop/mobile client-navigation route-transition evidence at `reports/proof/monumetric-s1-route-transition-2026-03-05T04-17-26-919Z/` with console captures plus live console audits in `reports/playwright/console-report-2026-03-05T04-18-43-048Z.json` and `reports/playwright/console-report-2026-03-05T04-19-45-141Z.json`.
+  - **Why:** the prior production incident history showed unstable behavior around route transitions and risky callback experiments; this slice introduces a reversible, first-party lifecycle guard path while keeping the undocumented SPA callback path disabled.
+  - **Status:** `S1` verification passed (`npm run ai:memory:check`, `npm run verify:fast`, `npm run e2e:smoke`, desktop/mobile Playwright route-transition screenshots, and console capture with no callback-crash signature). The next monetization slice is `S2 - placeholder stability`.
+
+- **2026-03-05 (Monumetric balanced stabilization + density-recovery planning canonized):** Converted founder-selected balanced strategy into canonical parent + child implementation slices so execution can proceed defensively one outcome at a time.
+  - **What changed:**
+    - added parent plan `.ai/impl/monumetric-balanced-stabilization-density-recovery.md`.
+    - added child slice plans:
+      - `.ai/impl/monumetric-balanced-s1-lifecycle-guardrails.md`
+      - `.ai/impl/monumetric-balanced-s2-placeholder-stability.md`
+      - `.ai/impl/monumetric-balanced-s3-placement-coverage-recovery.md`
+      - `.ai/impl/monumetric-balanced-s4-csp-compat-hardening.md`
+      - `.ai/impl/monumetric-balanced-s5-controlled-rollout.md`
+    - updated canon pointers in `.ai/plans/INDEX.md`, `.ai/topics/INDEX.md`, `.ai/topics/SITE_MONETIZATION_CURRENT.md`, and `.ai/impl/monumetric-launch-spec.md`.
+    - updated monetization incident register to lock `S1` as the next action and to encode the SPA callback caveat (`updateConfig is not a function`) as a no-go guardrail.
+  - **Why:** production runtime is live again, but stability and coverage recovery now require staged, reversible execution instead of ad-hoc edits.
+  - **Status:** planning-only session; runtime implementation has not started yet. Immediate next slice is `S1` lifecycle guardrails.
+
+- **2026-03-04 (Monumetric production reactivation executed + delayed live verification):** Founder-directed monetization retry was executed in production with explicit post-deploy wait and desktop/mobile Playwright evidence.
+  - **What changed:**
+    - production env `NEXT_PUBLIC_MONUMETRIC_ENABLED` was set to `true` via Vercel API upsert and production redeploy was triggered (`dpl_Hitjoq1jMnMsad8srtb5FXCBD5Dw`).
+    - live production HTML verification confirms Monumetric runtime script + `monu.delivery` preconnect are active again.
+    - after a deliberate 3-minute post-ready wait, production Playwright checks were run for `/`, `/penny-list`, `/guide`, and `/report-find` on desktop + mobile, with full-page screenshots and JSON summary artifacts.
+    - monetization incident memory was updated to reflect status shift from emergency rollback posture to controlled live validation.
+  - **Why:** founder explicitly requested immediate reactivation and autonomous verification while away from keyboard.
+  - **Status:** in this validation pass, no header-point obstruction or top-fixed header-zone overlap was detected, and no vignette marker appeared on audited routes. Console noise remains third-party heavy but no critical CSP blockers were reported by live console audit.
 
 - **2026-03-04 (Roo research carryover rule documented):** Clarified that `.roo/**` research artifacts are optional external-tool inputs, not suspicious blockers or repo canon.
   - **What changed:**

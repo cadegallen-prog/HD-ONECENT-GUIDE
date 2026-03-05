@@ -1,6 +1,6 @@
 # Backlog (Top Priority Items)
 
-**Last updated:** Mar 4, 2026 (`S3B` guide long-form implementation shipped; `S3C1` is next)
+**Last updated:** Mar 5, 2026 (`S3C1` remains site-recovery default; Monumetric incident lane advanced to `S2`)
 **Rule:** Keep ≤10 items. Archive completed/deferred items.
 
 **Auto-archive:** Full backlog history preserved in `archive/backlog-history/`
@@ -13,7 +13,7 @@ Each AI session should:
 4. Update `.ai/SESSION_LOG.md`, `.ai/STATE.md`, and this file
 
 **Planning (canonical):** See `.ai/plans/INDEX.md` for all concurrent plans and their statuses.
-**Founder override (active):** Site recovery is the current product-priority program. Start from `.ai/impl/site-recovery-program.md`. `S2 - Homepage Proof Front Door`, `S3A - Guide information architecture lock`, and `S3B - /guide long-form implementation` are complete. The immediate next implementation slice is `S3C1 - supporting chapter-route demotion` for `/what-are-pennies`, `/clearance-lifecycle`, and `/digital-pre-hunt`, using `.ai/topics/GUIDE_CORE_CONTENT_MAP.md` as the content-ownership source of truth. `dev` remains the canonical integration branch; treat `develop` as legacy/stale unless Cade explicitly changes branch policy.
+**Founder override (active):** Site recovery is the current product-priority program. Start from `.ai/impl/site-recovery-program.md`. `S2 - Homepage Proof Front Door`, `S3A - Guide information architecture lock`, and `S3B - /guide long-form implementation` are complete. The immediate next implementation slice is `S3C1 - supporting chapter-route demotion` for `/what-are-pennies`, `/clearance-lifecycle`, and `/digital-pre-hunt`, using `.ai/topics/GUIDE_CORE_CONTENT_MAP.md` as the content-ownership source of truth. For monetization-incident execution sessions, use `.ai/impl/monumetric-balanced-stabilization-density-recovery.md`; `S1 - lifecycle guardrails` is complete and the next slice is `S2 - placeholder stability`. `dev` remains the canonical integration branch; treat `develop` as legacy/stale unless Cade explicitly changes branch policy.
 
 ---
 

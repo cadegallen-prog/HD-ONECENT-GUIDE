@@ -1,4 +1,4 @@
-import { MONUMETRIC_LAUNCH_CONFIG } from "@/lib/ads/launch-config"
+import { getRouteRequeueSlotIds, MONUMETRIC_LAUNCH_CONFIG } from "@/lib/ads/launch-config"
 import {
   getAdRoutePolicy,
   normalizeRoutePath,
@@ -11,6 +11,7 @@ export interface ActiveAdRoutePlan {
   policy: AdRoutePolicy
   inventory: readonly AdInventoryUnit[]
   providerManaged: boolean
+  requeueSlotIds: readonly string[]
 }
 
 export function getActiveAdRoutePlan(pathname: string): ActiveAdRoutePlan {
@@ -23,6 +24,7 @@ export function getActiveAdRoutePlan(pathname: string): ActiveAdRoutePlan {
       policy,
       inventory: [],
       providerManaged: false,
+      requeueSlotIds: [],
     }
   }
 
@@ -34,5 +36,6 @@ export function getActiveAdRoutePlan(pathname: string): ActiveAdRoutePlan {
         ? ["provider_managed"]
         : policy.inventory,
     providerManaged: MONUMETRIC_LAUNCH_CONFIG.placement.mode === "provider-managed",
+    requeueSlotIds: getRouteRequeueSlotIds(normalizedPathname),
   }
 }

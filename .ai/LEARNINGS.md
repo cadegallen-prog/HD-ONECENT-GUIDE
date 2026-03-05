@@ -988,3 +988,17 @@ export const metadata: Metadata = {
 **What to Do Instead:** Invoke the command as separate arguments, for example: `npx cross-env NEXT_DIST_DIR=.next-playwright PLAYWRIGHT=1 NEXT_PUBLIC_EZOIC_ENABLED=false NEXT_PUBLIC_ANALYTICS_ENABLED=false npm run build`.
 
 **Date:** Mar 04, 2026
+
+---
+
+### 26. Running `verify:fast` and `e2e:smoke` in Parallel Can Trigger `.next-playwright` Lock Collisions
+
+**Problem:** `npm run verify:fast` failed at `build:verify` with `Unable to acquire lock at .next-playwright/lock` when `e2e:smoke` was running at the same time.
+
+**What We Tried:** Launched `ai:memory:check`, `verify:fast`, and `e2e:smoke` in parallel.
+
+**What We Learned:** Even when the app code is healthy, concurrent build lanes that touch `.next-playwright` can fail due to lock contention.
+
+**What to Do Instead:** Run verification lanes sequentially in this order: `ai:memory:check` -> `verify:fast` -> `e2e:smoke`.
+
+**Date:** Mar 04, 2026

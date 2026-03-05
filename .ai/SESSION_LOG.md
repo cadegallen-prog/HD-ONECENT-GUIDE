@@ -4,6 +4,155 @@
 
 ---
 
+## 2026-03-05 - Codex - Monumetric `S1` Lifecycle Guardrails
+
+**Goal:** Execute `S1` of the balanced Monumetric stabilization plan by adding a safe, reversible route-lifecycle requeue path without using undocumented SPA callback hooks.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- Runtime lifecycle coordinator + wiring:
+  - `lib/ads/monumetric-runtime.ts` (new) adds a client-side route coordinator that observes pathname changes and re-queues known Monumetric slots idempotently per route transition.
+  - `app/layout.tsx` now mounts `MonumetricRouteLifecycleCoordinator`.
+- Route/launch plan contract updates:
+  - `lib/ads/launch-config.ts` adds:
+    - `NEXT_PUBLIC_MONU_ROUTE_REQUEUE` gate (`routeRequeue.enabled`, default on unless set to `0`),
+    - `experimentalSpa.enabled` lock (`NEXT_PUBLIC_MONU_EXPERIMENTAL_SPA`, default off),
+    - route-to-slot helpers for guide/chapter surfaces only.
+  - `lib/ads/slot-plan.ts` now includes `requeueSlotIds` in active plans.
+  - `components/ads/route-ad-slots.tsx` now emits lifecycle metadata (`routeRequeueEnabled`, `requeueSlotIds`, `experimentalSpaEnabled`) in the route-plan payload.
+- Typing + tests:
+  - `types/ads-runtime.d.ts` (new) adds explicit `window.$MMT` typing.
+  - `tests/ads-launch-config.test.ts` and `tests/ads-slot-plan.test.ts` now cover route-requeue contracts and slot-id helpers.
+
+### Summary
+
+- `S1` is now implemented with a first-party lifecycle guard that does not call `$MMT.spa.setCallback(...)`.
+- Requeue behavior is reversible by env flag (`NEXT_PUBLIC_MONU_ROUTE_REQUEUE=0`) and still protected by the global Monumetric kill switch.
+- The monetization incident lane advances from `S1` to `S2 - placeholder stability`.
+
+### Verification
+
+- `npm run ai:writer-lock:status` ✅
+- `python C:\\Users\\cadeg\\.codex\\skills\\pc-scope-guard\\scripts\\scope_guard.py` ✅ (no issues)
+- `npm run ai:memory:check` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- Local route-transition proof (desktop + mobile + console):
+  - `reports/proof/monumetric-s1-route-transition-2026-03-05T04-17-26-919Z/`
+- Playwright console audits (desktop + mobile):
+  - `reports/playwright/console-report-2026-03-05T04-18-43-048Z.json`
+  - `reports/playwright/console-report-2026-03-05T04-19-45-141Z.json`
+- Callback-crash signature check:
+  - `rg -n \"updateConfig is not a function|\\$MMT\\.spa\\.setCallback|setCallback|updateConfig\" ...` returned no matches in the new console artifacts.
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Scope: runtime ad lifecycle guardrails + related tests + continuity updates
+- Push: not pushed
+
+## 2026-03-05 - Codex - Monumetric Balanced Stabilization Plan Canonization
+
+**Goal:** Convert founder-selected balanced monetization strategy into canonical parent + child implementation slices before any new runtime edits.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- Added canonical parent plan:
+  - `.ai/impl/monumetric-balanced-stabilization-density-recovery.md`
+- Added five child slice plans:
+  - `.ai/impl/monumetric-balanced-s1-lifecycle-guardrails.md`
+  - `.ai/impl/monumetric-balanced-s2-placeholder-stability.md`
+  - `.ai/impl/monumetric-balanced-s3-placement-coverage-recovery.md`
+  - `.ai/impl/monumetric-balanced-s4-csp-compat-hardening.md`
+  - `.ai/impl/monumetric-balanced-s5-controlled-rollout.md`
+- Updated canon pointers and historical docs:
+  - `.ai/impl/monumetric-launch-spec.md`
+  - `.ai/plans/INDEX.md`
+  - `.ai/topics/INDEX.md`
+  - `.ai/topics/SITE_MONETIZATION_CURRENT.md`
+  - `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`
+- Updated continuity memory:
+  - `.ai/THREAD.md`
+  - `.ai/STATE.md`
+
+### Summary
+
+- Monumetric work now has a single canonical parent + child execution spine with stop/go checkpoints.
+- The risky SPA callback path is explicitly blocked until canary evidence exists.
+- `S1` lifecycle guardrails is now the first implementation slice for monetization stabilization.
+
+### Verification
+
+- `npm run ai:writer-lock:status` ✅
+- `npm run ai:writer-lock:claim -- codex "monumetric balanced stabilization planning memory updates"` ✅
+- `npm run ai:memory:check` ✅
+- `npm run ai:checkpoint` ✅
+  - artifacts: `reports/context-packs/2026-03-05T02-11-21/`
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Scope: planning/docs + continuity updates only
+- Push: not pushed
+
+## 2026-03-04 - Codex - Monumetric Production Reactivation + Live Audit
+
+**Goal:** Re-enable Monumetric ads in production immediately, wait for propagation, and verify live desktop/mobile behavior with screenshot proof while founder was AFK.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- Production operations (no app-code mutation):
+  - Upserted Vercel production env `NEXT_PUBLIC_MONUMETRIC_ENABLED=true` via API.
+  - Triggered production redeploy from latest deployment; new deployment ID: `dpl_Hitjoq1jMnMsad8srtb5FXCBD5Dw`.
+  - Confirmed live HTML on `https://www.pennycentral.com` contains Monumetric runtime script + `monu.delivery` preconnect.
+- Delayed validation window:
+  - Waited 3 minutes post-READY before running production checks.
+- Playwright production verification (desktop + mobile):
+  - Audited `/`, `/penny-list`, `/guide`, and `/report-find` with full-page screenshots and summary JSON.
+  - Ran live console audit suite on desktop and mobile projects.
+- Memory/incident updates:
+  - Updated `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md` to reflect reactivation status and new evidence.
+  - Added a verification-lane collision lesson in `.ai/LEARNINGS.md` after an initial parallel-run lock failure.
+
+### Summary
+
+- Monumetric is live again in production as of this session.
+- This verification pass did not detect header-point obstruction, top-fixed header-zone overlap, or vignette markers on audited routes.
+- Console output remains third-party noisy but live console audit reported no critical CSP blockers.
+
+### Verification
+
+- Production env + deploy via Vercel API:
+  - env upsert: `NEXT_PUBLIC_MONUMETRIC_ENABLED=true`
+  - production redeploy: `dpl_Hitjoq1jMnMsad8srtb5FXCBD5Dw` (READY)
+- Live runtime presence checks:
+  - `Invoke-WebRequest https://www.pennycentral.com` (200)
+  - source contains Monumetric runtime script + preconnect
+- Playwright production proof:
+  - `reports/proof/monumetric-live-2026-03-04T23-14-08-233Z/summary.json`
+  - route screenshots for desktop/mobile and menu-open captures in the same folder
+- Live console audits:
+  - `npx cross-env PLAYWRIGHT_BASE_URL=https://www.pennycentral.com playwright test tests/live/console.spec.ts --project=chromium-desktop-light --project=chromium-mobile-light --workers=1` ✅
+  - artifacts:
+    - `reports/playwright/console-report-2026-03-04T23-15-49-487Z.json`
+    - `reports/playwright/console-report-2026-03-04T23-16-35-879Z.json`
+- Repo verification lanes:
+  - `npm run ai:memory:check` ✅
+  - `npm run verify:fast` ✅ (after sequential rerun)
+  - `npm run e2e:smoke` ✅
+
+### Branch Hygiene
+
+- Branch: `dev`
+- Scope: production ops validation + `.ai` memory/log updates only
+- Push: not pushed
+
 ## 2026-03-04 - Codex - Roo Research Carryover Rule
 
 **Goal:** Stop future agents from overreacting to Roo Code research files by documenting that `.roo/**` is optional carryover unless a task actually needs it.
@@ -82,131 +231,3 @@
 - Branch: `dev`
 - Scope: `/guide` long-form rebuild + smoke update + continuity updates
 - Push: not pushed
-
-## 2026-03-04 - Codex - Guide IA Lock (`S3A`)
-
-**Goal:** Freeze guide content ownership before runtime edits so the `/guide` rebuild can remove overlap instead of recreating it.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `.ai/topics/GUIDE_CORE_CONTENT_MAP.md`
-  - created the canonical seven-section `/guide` outline for the rebuilt long-form guide.
-  - mapped current route material into keep/merge/drop decisions for `/guide`, `/faq`, `/what-are-pennies`, and the supporting chapter routes.
-  - locked the route-role decisions that `S3B`, `S3C`, and `S3D` must follow.
-- `.ai/impl/site-recovery-program.md`
-  - corrected stale parent-plan status so `S2` is marked shipped, `S3A` is complete, and `S3B` is the immediate next runtime slice.
-- `.ai/impl/site-recovery-s3-guide-core-rebuild.md`
-  - marked `S3A` complete, linked the new content-map artifact, and recorded the drift-check note.
-- `.ai/BACKLOG.md`, `.ai/STATE.md`, `.ai/THREAD.md`
-  - updated continuity so future agents start at `S3B - /guide long-form implementation` instead of rediscovering the guide overlap problem.
-
-### Summary
-
-- Guide recovery now has a locked ownership map before any route code changes start.
-- `/guide` owns the full beginner narrative, `/faq` is tactical, and `/what-are-pennies` becomes the narrower supporting explainer.
-- The next runtime slice is `S3B - /guide long-form implementation`.
-
-### Verification
-
-- `npm run ai:writer-lock:status` ✅
-- `npm run ai:writer-lock:claim -- codex "complete S3A guide IA lock and update continuity memory"` ✅
-- `npm run ai:memory:check` ✅
-- `npm run ai:checkpoint` ✅
-  - artifacts: `reports/context-packs/2026-03-04T08-12-52/`
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Scope: guide-planning docs + shared-memory updates only
-- Push: not pushed
-
-## 2026-03-04 - Codex - Overlap-First Multi-Agent Workflow Patch
-
-**Goal:** Stop false freezes in multi-agent sessions by changing the repo workflow from "any dirty worktree blocks work" to "inspect overlap first," while keeping shared-memory locking strict.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `AGENTS.md`
-  - changed the branch-hygiene workflow so dirty files trigger an overlap check instead of an automatic stop.
-  - codified that separate worktrees are optional, not default, and must not be created silently.
-- `README.md`
-  - aligned the branch-strategy workflow to the same overlap-first rule for dirty files and clarified that clean status is preferred, not mandatory, when unrelated carryover is disclosed.
-- `.ai/CRITICAL_RULES.md`
-  - replaced the hard-stop clean-worktree rule with an overlap-first dirty-worktree rule.
-  - clarified that separate worktrees are optional isolation tools and the main repo folder on `dev` is the default workflow.
-- `.ai/HANDOFF_PROTOCOL.md`
-  - updated handoff branch-hygiene wording so dirty session-end state must include overlap status, not just a generic blocker label.
-- `.ai/VERIFICATION_REQUIRED.md`
-  - aligned branch-hygiene proof wording to require carryover file list + overlap status + reason when a worktree is dirty.
-- `.ai/AI_ENABLEMENT_BLUEPRINT.md`
-  - updated the enablement non-negotiable from a hard clean-worktree gate to an overlap-first worktree gate.
-- `docs/skills/ship-safely.md`
-  - updated the skill to continue when dirty files are unrelated and only stop on true file overlap.
-- `docs/skills/single-writer-lock.md`
-  - updated the multi-agent workflow to default to the main repo folder on `dev` and treat separate worktrees as optional.
-- `PENNYCENTRAL_MASTER_CONTEXT.md`
-  - added the founder preference that multi-agent workflow must favor simplicity, overlap-first dirty-file checks, and no silent worktree creation.
-- `.ai/THREAD.md`, `.ai/STATE.md`
-  - updated continuity so future agents inherit the new workflow rule instead of rediscovering the frustration from chat.
-
-### Summary
-
-- Agents should now stop only for true file overlap, unclear ownership, or missing shared-memory lock.
-- Unrelated dirty files are no longer supposed to freeze the whole session.
-- Separate worktrees are still allowed, but they are now documented as optional isolation tools rather than the default answer.
-
-### Verification
-
-- `npm run ai:writer-lock:status` ✅
-- `npm run ai:writer-lock:claim -- codex "patch dirty-worktree policy for overlap-first multi-agent flow"` ✅
-- `npm run ai:memory:check` ✅
-- `npm run ai:checkpoint` ✅
-  - artifacts: `reports/context-packs/2026-03-04T07-48-59/`
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Scope: workflow-policy docs + shared-memory updates only
-- Commit: `2d5f10a`
-- Push: pushed to `origin/dev`
-
-## 2026-03-04 - Codex - Branch/Worktree Canon Clarification
-
-**Goal:** Remove current repo-continuity confusion by restoring the missing root founder-context file, correcting stale shared-memory references, and documenting the verified branch/worktree topology in plain English.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `PENNYCENTRAL_MASTER_CONTEXT.md`
-  - restored the missing canonical root file from the archived orphan content so the repo read order points at a real founder-context document again.
-- `.ai/BACKLOG.md`
-  - corrected the founder-override note so the next recovery slice is `S3 - Guide Core Rebuild`, not the already-completed `S2 - Homepage Proof Front Door`.
-  - added an explicit continuity note that `dev` remains the canonical integration branch and `develop` should be treated as legacy/stale unless Cade changes policy.
-- `.ai/THREAD.md`
-  - rewrote the active continuity thread to include the verified branch/worktree reality and the rule that branch-topology cleanup must be its own explicit git objective.
-- `.ai/STATE.md`
-  - recorded the verified topology facts for both worktrees and why the continuity patch was needed.
-
-### Summary
-
-- The repo canon no longer points at a missing founder-context file.
-- Shared memory now matches reality: `S3` is next, `dev` is the active integration branch, and the separate Sentry worktree is real but should not silently redefine branch policy.
-- This was a docs-only clarity pass; no code paths changed.
-
-### Verification
-
-- `npm run ai:writer-lock:status` ✅ (`Writer lock: UNLOCKED` before claim)
-- `npm run ai:writer-lock:claim -- codex "clarify branch-worktree canon and shared memory"` ✅
-- `npm run ai:memory:check` ✅
-- `npm run ai:checkpoint` ✅
-  - artifacts: `reports/context-packs/2026-03-04T07-33-56/`
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Scope: root context restore + shared-memory clarification only

@@ -1,10 +1,12 @@
 # SITE_MONETIZATION_CURRENT
 
-**Last updated:** 2026-02-18  
+**Last updated:** 2026-03-05  
 **Owner:** Cade (founder)  
-**Status:** Runtime foundation complete; tier dispute + cross-network incident hardening active (Monumetric + AdSense + Ad Manager + Journey)
+**Status:** Runtime foundation complete; Monumetric production reactivation is live; balanced stabilization/density-recovery plan is approved and not yet implemented.
 
 > 2026-02-18 update: Ascend tier has since been approved by Monumetric Sales Lead. Remaining uncertainty is explicit GAM domain-approval confirmation and technical go-live timing.
+>
+> 2026-03-05 update: use `.ai/impl/monumetric-balanced-stabilization-density-recovery.md` as the active implementation spine for post-reactivation lifecycle stability, placeholder behavior, balanced density recovery, and staged CSP hardening.
 
 ---
 
@@ -119,7 +121,14 @@ Cade is pathway #2 (new applicant, not Propel site). Samantha is applying pathwa
 
 ### Planning/execution state
 
-- Canonical launch roadmap: `.ai/impl/monumetric-launch-spec.md`.
+- Historical launch roadmap: `.ai/impl/monumetric-launch-spec.md`.
+- Active stabilization roadmap: `.ai/impl/monumetric-balanced-stabilization-density-recovery.md` and child slices:
+  - `.ai/impl/monumetric-balanced-s1-lifecycle-guardrails.md`
+  - `.ai/impl/monumetric-balanced-s2-placeholder-stability.md`
+  - `.ai/impl/monumetric-balanced-s3-placement-coverage-recovery.md`
+  - `.ai/impl/monumetric-balanced-s4-csp-compat-hardening.md`
+  - `.ai/impl/monumetric-balanced-s5-controlled-rollout.md`
+- Locked caveat for new execution: do not enable undocumented SPA callback hooks in production; a prior test path threw `updateConfig is not a function` after `$MMT.spa.setCallback(...)`.
 - **Completed runtime work (2026-02-11):** Phases 1-4 implementation:
   - `lib/analytics.ts`: reserved-key sanitizer + attribution normalization (`ui_source`).
   - `lib/ads/route-eligibility.ts`: runtime hard-exclusion enforcement for trust/safety/system routes.
@@ -139,7 +148,7 @@ Cade is pathway #2 (new applicant, not Propel site). Samantha is applying pathwa
   - hard exclusions enforced for `/report-find`, legal/support/auth/internal/API/redirect routes
   - no strict route inventory forcing
   - sticky reserve disabled until explicitly re-enabled after Monumetric guidance
-- Next implementation target is partner integration operations (Monumetric tag/ID wiring + final placement guidance) after guardrail report inputs are flowing.
+- Next implementation target is `S1` route lifecycle guardrails from the active stabilization roadmap.
 
 ### Indexing baseline
 
@@ -205,7 +214,8 @@ These pages must preserve fast utility; runtime policy enforces hard route exclu
 ## 7) Related Canonical Docs
 
 - Sitewide plan (historical): `.ai/plans/sitewide-monetization-readiness.md`
-- Launch spec (canonical): `.ai/impl/monumetric-launch-spec.md`
+- Launch spec (historical baseline): `.ai/impl/monumetric-launch-spec.md`
+- Active stabilization parent plan: `.ai/impl/monumetric-balanced-stabilization-density-recovery.md`
 - Guide execution plan: `.ai/impl/guide-recovery.md`
 - Monetization context: `.ai/topics/MONETIZATION.md`
 - Approval context: `.ai/topics/ADSENSE_APPROVAL_CURRENT.md`
