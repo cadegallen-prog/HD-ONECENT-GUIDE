@@ -4,6 +4,54 @@
 
 ---
 
+## 2026-03-05 - Codex - Dev Branch Recovery + Clean Integration Lane
+
+**Goal:** Recover from mixed `dev` history by preserving all current work in a safety snapshot, then creating a clean integration branch from `main` with only high-value salvage commits.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- Created a non-destructive safety snapshot branch:
+  - `backup/dev-snapshot-20260305-pre-recovery`
+  - snapshot commit: `7cf09ca` (`chore(snapshot): preserve pre-recovery dev working tree (2026-03-05)`)
+- Created a clean recovery integration branch from `origin/main`:
+  - `dev-recovery-20260305`
+- Salvaged only selected non-redesign work onto the recovery branch:
+  - `ad9c2e4` — retail price migration (`supabase/migrations/031_item_cache_include_retail_price.sql`)
+  - `a53f42a` — manual fast-track/manual-enrich script fixes (`scripts/manual-cade-fast-track.ts`, `scripts/manual-enrich.ts`, `package.json`)
+  - `e781cb3` — Monumetric balanced parent/child plans + `S1` lifecycle runtime/tests/docs
+  - `5504ac8` — trimmed `app/layout.tsx` to keep only Monumetric lifecycle wiring (removed unrelated carried-over layout edits from salvage)
+- Kept redesign-heavy and Roo-experimental commit history out of this branch on purpose.
+
+### Summary
+
+- Recovery branch now isolates business-critical work from mixed `dev` history without deleting any prior work.
+- Snapshot branch preserves full recoverability of the pre-recovery state.
+- The recovered branch is now a safer base for future implementation and PR review.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npm run e2e:full` ⚠️ ran and failed on pre-existing `tests/visual-pointer-capture.spec.ts` expectations (`visual-pointer-toggle` not found across multiple projects); no failures in the changed Monumetric/enrichment lanes.
+- Writer lock:
+  - `npm run ai:writer-lock:claim -- codex "record dev-branch recovery branch creation and commit triage"` ✅
+  - `npm run ai:writer-lock:status` ✅ (active under `codex` during memory updates)
+
+### Branch Hygiene
+
+- Recovery branch: `dev-recovery-20260305` (ahead `4` from `origin/main`)
+- Snapshot branch: `backup/dev-snapshot-20260305-pre-recovery`
+- Push: not pushed
+- Carryover untracked files (not touched by this objective):
+  - `archive/root-level-orphans/`
+  - `emails/monumetric-reengagement-draft.md`
+  - `emails/monumetric-reengagement-final.md`
+
+---
+
 ## 2026-03-03 - Codex - Report Find Share + Basket UX Hardening
 
 **Goal:** Finish the founder-requested `/report-find` follow-up slice by making the Facebook copy SKU-only, restoring the basket cap to `10`, safely blocking restored over-limit baskets, and explaining the Back-button workflow.
@@ -229,45 +277,6 @@
 
 - Branch: `dev`
 - Scope: planning docs + registry + shared memory
-- Push: not pushed
-
----
-
-## 2026-03-01 - Codex - Dead-Link-Safe Founder References
-
-**Goal:** Make founder-facing file and proof references repeatable and low-friction by codifying plain-path output instead of dead local markdown links.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `.ai/START_HERE.md`
-  - added an explicit founder-communication rule to use plain absolute Windows paths for repo files and local proof artifacts.
-- `docs/skills/README.md`
-  - registered a new local skill for dead-link-safe reference formatting.
-- `docs/skills/dead-link-safe-paths.md`
-  - added a short skill describing when to use plain paths, what format to use, and when clickable links are still appropriate.
-- `.ai/STATE.md`
-  - updated current operating reality so future sessions know dead local links are a friction point in this chat surface.
-- `.ai/SESSION_LOG.md`
-  - added this closeout entry.
-
-### Summary
-
-- Future agents now have an explicit session-start instruction not to rely on markdown local links in founder-facing replies.
-- Local files, reports, and artifacts should be delivered as plain absolute Windows paths so Cade can copy them without fighting dead links.
-- Real web URLs can still be clickable; local repo paths should not assume chat support.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run ai:checkpoint` ✅
-- Runtime verification lanes: N/A (docs-only collaboration rule update; no runtime code paths changed)
-
-### Branch Hygiene
-
-- Branch: `dev`
-- Scope: docs/memory/skill update only
 - Push: not pushed
 
 ---

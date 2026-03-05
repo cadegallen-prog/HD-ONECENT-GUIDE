@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Mar 3, 2026 (`/report-find` share + basket UX hardening verified locally)
+**Last updated:** Mar 5, 2026 (`dev` recovery branch created; high-value work salvaged to clean integration lane)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,19 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-05 (Branch recovery lane established from `main`):** Recovered from mixed `dev` history by creating a safety snapshot and a clean integration branch with selected salvage commits only.
+  - **What changed:**
+    - created safety snapshot branch `backup/dev-snapshot-20260305-pre-recovery` with commit `7cf09ca` preserving the full pre-recovery dirty `dev` working tree.
+    - created clean integration branch `dev-recovery-20260305` from `origin/main`.
+    - cherry-picked/salvaged high-value non-redesign work:
+      - `ad9c2e4`: retail-price migration `supabase/migrations/031_item_cache_include_retail_price.sql`
+      - `a53f42a`: manual fast-track/manual-enrich script corrections
+      - `e781cb3`: Monumetric balanced parent/child plans + `S1` lifecycle runtime/tests/docs
+      - `5504ac8`: constrained `app/layout.tsx` to Monumetric lifecycle-only wiring after salvage cleanup.
+    - intentionally excluded redesign-heavy and Roo experimentation commits from the recovered branch.
+  - **Why:** `dev` had too many co-mingled commits (design/runtime/docs/research), which made safe promotion and rollback difficult.
+  - **Status:** `dev-recovery-20260305` is now the clean implementation lane for continuation. Verification passed on `ai:memory:check`, `verify:fast`, and `e2e:smoke`; `e2e:full` was attempted and failed on pre-existing `visual-pointer-capture` expectations.
 
 - **2026-03-03 (`/report-find` share + basket UX hardening shipped locally):** Finished the founder-requested follow-up slice on top of the basket hotfix so the success-state copy is trustworthy again and the basket limit is safely back at `10`.
   - **What changed:**
