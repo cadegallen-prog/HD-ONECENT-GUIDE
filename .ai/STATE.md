@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Mar 6, 2026 (SerpAPI hotfix verified: manual limit restored, stale query widened, workflow vars wired)
+**Last updated:** Mar 6, 2026 (Mobile safe-area navbar clipping patch re-applied on main and verified)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,22 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-06 (Mobile safe-area navbar clipping patch reapplied on `main`):** Restored the known notched-device safe-area fix from historical commit `f4912a0` directly into current `main` without cherry-pick.
+  - **What changed:**
+    - `app/globals.css`
+      - added safe-area CSS custom properties:
+        - `--safe-area-top`, `--safe-area-bottom`, `--safe-area-left`, `--safe-area-right`
+    - `app/layout.tsx`
+      - added `viewport` export (`Viewport`) with `viewportFit: "cover"` and mobile-friendly scaling settings.
+    - `components/navbar.tsx`
+      - added `pt-[env(safe-area-inset-top)]` to the sticky navbar.
+    - captured cross-viewport/browser proof artifacts:
+      - `reports/proof/2026-03-06T07-40-48-762Z-navbar-safe-area/summary.md`
+      - `reports/proof/2026-03-06T07-40-48-762Z-navbar-safe-area/summary.json`
+      - route screenshots for `/`, `/guide`, `/faq`, `/penny-list` on iPhone SE, iPhone 14 Pro, Android Pixel 5, desktop Chrome, desktop Firefox.
+  - **Why:** this is a foundational mobile layout fix needed before Monumetric header insertion work so top-of-page elements are not pushed into unsafe/notch areas.
+  - **Status:** verified locally with `npm run ai:memory:check`, `npm run verify:fast`, and `npm run e2e:smoke`.
 
 - **2026-03-06 (SerpAPI production hotfix after review):** Closed the remaining runner/workflow gaps before live push.
   - **What changed:**

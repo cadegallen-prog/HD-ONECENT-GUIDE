@@ -4,6 +4,76 @@
 
 ---
 
+## 2026-03-06 - Codex - Mobile Safe-Area Navbar Clipping Fix (Prompt 0)
+
+**Goal:** Re-apply the known safe-area/navbar fix from `f4912a0` onto the current `main` state (without cherry-pick), verify no conflicts with newer layout/Monumetric changes, and run mobile+desktop proof checks for clipping.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- Re-applied safe-area foundation lines from `f4912a0` to current `main`:
+  - `app/globals.css`
+    - added safe-area CSS custom properties:
+      - `--safe-area-top`
+      - `--safe-area-bottom`
+      - `--safe-area-left`
+      - `--safe-area-right`
+  - `app/layout.tsx`
+    - updated import to `Metadata, Viewport`
+    - added `export const viewport: Viewport` with:
+      - `width: "device-width"`
+      - `initialScale: 1`
+      - `maximumScale: 5`
+      - `userScalable: true`
+      - `viewportFit: "cover"`
+  - `components/navbar.tsx`
+    - added navbar top safe-area padding:
+      - `pt-[env(safe-area-inset-top)]`
+- Kept scope strict to the 3-file patch and preserved current Monumetric/CSP/runtime logic in `app/layout.tsx`.
+- Added proof capture bundle for requested spot-check routes and viewports:
+  - `/`, `/guide`, `/faq`, `/penny-list`
+  - iPhone SE (WebKit), iPhone 14 Pro (WebKit), Android Pixel 5 (Chromium), Desktop Chrome (Chromium), Desktop Firefox.
+
+### Summary
+
+- The exact `f4912a0` safe-area fix is now present on current `main` without cherry-pick conflicts.
+- Verification lanes passed (`ai:memory:check`, `verify:fast`, `e2e:smoke`).
+- Cross-viewport proof artifacts were generated under `reports/proof/2026-03-06T07-40-48-762Z-navbar-safe-area/`.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- Playwright/device proof bundle ✅
+  - `reports/proof/2026-03-06T07-40-48-762Z-navbar-safe-area/summary.md`
+  - `reports/proof/2026-03-06T07-40-48-762Z-navbar-safe-area/summary.json`
+  - screenshots in the same folder (`*.png`)
+
+### Branch Hygiene
+
+- Branch: `main` (founder-requested direct patch target)
+- Commit SHA(s): none (not committed in this session)
+- Push status: not pushed (local working tree update only)
+- Session-end status: dirty by scope + pre-existing carryover files
+  - scope files:
+    - `app/globals.css`
+    - `app/layout.tsx`
+    - `components/navbar.tsx`
+  - carryover (pre-existing, unchanged):
+    - `.github/agents/`
+    - `Monumetric_Ads_information/`
+    - `archive/root-level-orphans/`
+    - `emails/monumetric-reengagement-draft.md`
+    - `emails/monumetric-reengagement-final.md`
+    - `monumental/Monumetric.json`
+- Shared-memory lock:
+  - `npm run ai:writer-lock:status` ✅ (unlocked before claim)
+  - `npm run ai:writer-lock:claim -- codex "mobile safe-area navbar clipping fix memory updates"` ✅
+
+---
+
 ## 2026-03-06 - Codex - SerpAPI Runner Limit + Workflow Variable Hotfix
 
 **Goal:** Fix the post-review issues in the pending SerpAPI budget-policy work before pushing it live: keep manual/test limits authoritative, make workflow budget knobs actually configurable, and make stale-row prioritization query the right rows.
@@ -237,63 +307,5 @@
   - `archive/root-level-orphans/`
   - `emails/monumetric-reengagement-draft.md`
   - `emails/monumetric-reengagement-final.md`
-
----
-
-## 2026-03-05 - Codex - Monumetric S3 Placement Coverage Recovery
-
-**Goal:** Implement `S3` from the balanced Monumetric stabilization plan to recover controlled in-content coverage on `/guide` and `/penny-list` without touching exclusions or risky runtime paths.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `lib/ads/launch-config.ts`
-  - added `NEXT_PUBLIC_MONU_DENSITY_PROFILE` gate (`balanced` default, `conservative` rollback).
-  - added profile-aware slot mapping via `getRouteInContentSlotIds(...)`.
-  - added guide/penny-list in-content slot policies and tightened per-slot `maxPerRoute` caps to `1`.
-- `lib/ads/slot-plan.ts`
-  - extended active route plan with `inContentSlotIds`.
-  - ensured slot policies are emitted for all in-content opportunities.
-- `components/ads/route-ad-slots.tsx`
-  - added `densityProfile` and `inContentSlotIds` to route payload metadata.
-- `components/ads/monumetric-in-content-slot.tsx`
-  - made slot component reusable per slot ID (`slotId`, `slotKey`) with stable script IDs.
-- `app/guide/page.tsx`
-  - added lead + follow-up in-content opportunities for balanced profile.
-- `app/penny-list/page.tsx`
-  - passed route-mapped penny-list in-content slot IDs into client rendering.
-- `components/penny-list-client.tsx`
-  - rendered in-feed in-content opportunity above results when available.
-- `tests/ads-launch-config.test.ts`
-  - added density-profile + in-content-slot mapping assertions.
-- `tests/ads-slot-plan.test.ts`
-  - added route-plan assertions for `inContentSlotIds` and updated slot policy expectations.
-
-### Summary
-
-- `S3` balanced density recovery is now implemented locally with profile gating and slot-cap protections.
-- `/report-find` remains excluded and CSP policy was intentionally unchanged in this slice.
-- Next planned slice is `S4` CSP compatibility hardening.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `npm run e2e:full` ✅
-- `npm run ai:proof -- /guide /penny-list` ✅
-  - artifacts: `reports/proof/2026-03-05T07-45-48/`
-- full-lane console artifacts:
-  - `reports/playwright/console-report-2026-03-05T07-39-17-156Z.json`
-  - `reports/playwright/console-report-2026-03-05T07-40-55-632Z.json`
-  - `reports/playwright/console-report-2026-03-05T07-43-38-289Z.json`
-  - `reports/playwright/console-report-2026-03-05T07-44-39-703Z.json`
-
-### Branch Hygiene
-
-- Branch: `dev-recovery-20260305`
-- Scope: Monumetric `S3` placement coverage only
-- Push: pending
 
 ---

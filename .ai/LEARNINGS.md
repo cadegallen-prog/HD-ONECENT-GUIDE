@@ -78,6 +78,29 @@ Scan this FIRST before suggesting anything. If your idea matches an anti-pattern
 
 ---
 
+### 0i. Route-isolated Playwright capture avoids navigation-race failures on multi-route proof runs
+
+**Problem:** A one-process Playwright script that reused a single `page` while hopping across multiple routes failed with a navigation interruption (`...interrupted by another navigation...`) during proof capture.
+
+**What We Tried:**
+
+- Captured all routes in one context with one persistent `page`.
+- Used sequential `page.goto(...)` calls for each route and device profile.
+
+**What We Learned:**
+
+- In this app/runtime mix, route transitions plus injected scripts can trigger intermittent navigation races during repeated same-page `goto` loops.
+- The failure is avoidable by creating a fresh page per route capture.
+
+**What to Do Instead:**
+
+- For multi-route screenshot/proof bundles, keep one browser/context per scenario but open a **new `page` per route**.
+- Keep timeout budgets realistic (`>=45s` for navigation) and record failures in `summary.md/json` instead of hard-failing the entire bundle.
+
+**Date:** Mar 6, 2026
+
+---
+
 ### 0c. Never publish partner-program claims unless they are factually true
 
 **Problem:** Public legal/transparency pages stated "As an Amazon Associate..." and implied formal affiliate partnerships that were not actually in place.
