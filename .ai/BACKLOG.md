@@ -1,6 +1,6 @@
 # Backlog (Top Priority Items)
 
-**Last updated:** Mar 5, 2026 (dev-branch recovery lane established from main)
+**Last updated:** Mar 6, 2026 (SerpAPI hotfix verified for runner limits, stale-query coverage, and workflow vars)
 **Rule:** Keep ≤10 items. Archive completed/deferred items.
 
 **Auto-archive:** Full backlog history preserved in `archive/backlog-history/`
@@ -140,6 +140,22 @@ Each AI session should:
 ### 6. Data Pipeline Reliability - Pre-scrape + Cron Auth (P0-0)
 
 - **Problem:** GitHub-hosted runners are blocked upstream (**403 + Cloudflare “Just a moment...”**), so scheduled scraping cannot be the primary freshness path right now. Separately, Vercel cron endpoints will return 401 if `CRON_SECRET` is missing/mismatched.
+- **Progress (2026-03-06):** SerpAPI fallback path now runs on a freshness-first, policy-gated model:
+  - scheduler moved to 2-hour cadence (`.github/workflows/serpapi-enrich.yml`),
+  - run/day/month budgets and reset-window safety implemented in `lib/enrichment/serpapi-budget-policy.ts`,
+  - stale-row prioritization + per-run credit caps wired in `scripts/serpapi-enrich.ts`,
+  - env/docs contract updated in `.env.example`, `.ai/ENVIRONMENT_VARIABLES.md`, and `docs/SCRAPING_COSTS.md`.
+- **Progress (2026-03-06 correction):** backfill activation now depends on billing-reset proximity only:
+  - removed active day-threshold/month-end/hour-window semantics from policy decisions,
+  - activation now requires high remaining credits + backfill minutes window before billing reset + outside pre/post guard windows,
+  - monthly usage window now follows billing-cycle anchor (`SERPAPI_BILLING_RESET_ANCHOR_ISO`) instead of calendar-month bounds,
+  - cron/manual fallback `--limit` corrected from `5` to `30`,
+  - policy/env/docs now use `SERPAPI_BACKFILL_WINDOW_MINUTES_BEFORE_RESET` and `SERPAPI_PRE_RESET_GUARD_MINUTES` / `SERPAPI_POST_RESET_GUARD_MINUTES` defaults (`360` / `60` / `60`).
+- **Progress (2026-03-06 hotfix):**
+  - manual `--limit` / `--test` caps are authoritative again; widening candidate fetches no longer widens processed scope,
+  - stale-row escalation now queries stale and recent pools separately instead of reordering only a recent slice,
+  - scheduled workflow now receives SerpAPI budget knobs from GitHub Actions repository variables with safe defaults,
+  - docs now explicitly explain the GitHub Actions Variables path and UPC extra-credit behavior.
 - **Done means:**
   - `npm run warm:staging` (local/home IP) reliably updates `enrichment_staging` with non-zero items
   - `npm run staging:status -- --max-age-hours 72` is ✅ green after a local warm run

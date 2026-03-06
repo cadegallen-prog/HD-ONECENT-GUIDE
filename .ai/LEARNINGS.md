@@ -833,3 +833,10 @@ export const metadata: Metadata = {
 - **What we tried:** Ran the normal smoke command after successful build.
 - **What we learned:** In this environment, app build can pass while Playwright e2e still fails due to missing local browser install; this is an environment dependency issue, not always an app regression.
 - **What to do instead:** Report the limitation transparently, run lint/typecheck + targeted unit tests, and capture UI proof using `mcp__browser_tools__run_playwright_script` when available.
+
+## 0e) `verify:fast` and `e2e:smoke` Must Not Share `.next-playwright` Concurrently
+
+- **Problem hit:** `npm run verify:fast` failed with `Unable to acquire lock at ... .next-playwright\\lock` when it ran in parallel with `npm run e2e:smoke`.
+- **What we tried:** Kicked off both commands at the same time during the same verification pass.
+- **What we learned:** Both lanes can contend for the same Next.js build directory and produce a false negative even when the code is fine.
+- **What to do instead:** Run `npm run verify:fast` and `npm run e2e:smoke` sequentially whenever both lanes use `.next-playwright`.

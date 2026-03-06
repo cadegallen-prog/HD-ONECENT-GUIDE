@@ -11,11 +11,12 @@
  * - Primary enrichment now comes from staging queue (staging-warmer.py)
  *
  * Usage:
- *   npx tsx scripts/serpapi-enrich.ts              # Enrich up to 10 items
+ *   npx tsx scripts/serpapi-enrich.ts              # Enrich up to 30 items (budget-capped)
  *   npx tsx scripts/serpapi-enrich.ts --limit 5    # Limit to 5 items
  *   npx tsx scripts/serpapi-enrich.ts --test       # Test with 1 item only
  *   npx tsx scripts/serpapi-enrich.ts --sku 1009258128 # Test specific SKU
  *   npx tsx scripts/serpapi-enrich.ts --force      # Overwrite existing fields
+ *   npx tsx scripts/serpapi-enrich.ts --ignore-budget # Emergency/manual bypass
  */
 
 import { config } from "dotenv"
@@ -28,6 +29,16 @@ import {
   SerpApiCreditsExhaustedError,
 } from "../lib/serpapi/home-depot"
 import { getHomeDepotProductUrl } from "../lib/home-depot"
+import {
+  decideSerpApiRunBudget,
+  getBillingCycleBounds,
+  getUtcDayBounds,
+} from "../lib/enrichment/serpapi-budget-policy"
+import {
+  buildSerpApiGapFetchPlan,
+  getSerpApiGapAgeMinutes,
+  prioritizeSerpApiGapCandidates,
+} from "../lib/enrichment/serpapi-gap-selection"
 
 // Load env
 config({ path: resolve(process.cwd(), ".env.local") })
@@ -70,6 +81,7 @@ interface EnrichmentResult {
 interface PennyListGapRow {
   id: string
   home_depot_sku_6_or_10_digits: string | number | null
+  timestamp?: string | null
   item_name: string | null
   brand: string | null
   image_url: string | null
@@ -85,10 +97,11 @@ interface PennyListGapRow {
 // Parse CLI args
 function parseArgs() {
   const args = process.argv.slice(2)
-  let limit = 10
+  let limit = 30
   let testMode = false
   let specificSku: string | null = null
   let force = false
+  let ignoreBudget = false
 
   for (let i = 0; i < args.length; i++) {
     if (args[i] === "--limit" && args[i + 1]) limit = parseInt(args[++i], 10)
@@ -101,9 +114,17 @@ function parseArgs() {
       limit = 1
     }
     if (args[i] === "--force") force = true
+    if (args[i] === "--ignore-budget") ignoreBudget = true
   }
 
-  return { limit, testMode, specificSku, force }
+  return { limit, testMode, specificSku, force, ignoreBudget }
+}
+
+function getStaleEscalationMinutes(): number {
+  const raw = String(process.env.SERPAPI_STALE_ESCALATION_MINUTES || "").trim()
+  const parsed = raw ? Number.parseInt(raw, 10) : NaN
+  if (Number.isFinite(parsed) && parsed >= 15 && parsed <= 10080) return parsed
+  return 120
 }
 
 // Normalize SKU to valid format
@@ -167,10 +188,7 @@ function cleanItemName(name: string): string {
 function isAllowedHomeDepotHost(hostname: string): boolean {
   const allowedRoots = ["thdstatic.com", "homedepot.com"]
   return allowedRoots.some((root) => {
-    return (
-      hostname === root ||
-      (hostname.endsWith("." + root) && hostname.length > root.length + 1)
-    )
+    return hostname === root || (hostname.endsWith("." + root) && hostname.length > root.length + 1)
   })
 }
 
@@ -294,12 +312,25 @@ function isLikelyMatch(resultTitle: string, originalName: string): boolean {
 async function smartEnrich(
   sku: string,
   itemName: string | null,
-  apiKey: string
-): Promise<{ result: EnrichmentResult | null; searchTerm: string; creditsUsed: number }> {
+  apiKey: string,
+  maxCredits: number
+): Promise<{
+  result: EnrichmentResult | null
+  searchTerm: string
+  creditsUsed: number
+  budgetLimited: boolean
+}> {
   let creditsUsed = 0
+
+  if (maxCredits < 1) {
+    return { result: null, searchTerm: sku, creditsUsed, budgetLimited: true }
+  }
 
   // Strategy 1: Search by SKU
   console.log(`   Trying SKU: ${sku}`)
+  if (creditsUsed + 1 > maxCredits) {
+    return { result: null, searchTerm: sku, creditsUsed, budgetLimited: true }
+  }
   creditsUsed++
   let products = await searchSerpApi(sku, apiKey)
 
@@ -324,6 +355,7 @@ async function smartEnrich(
         result: extractProduct(sku, candidate, sku),
         searchTerm: sku,
         creditsUsed,
+        budgetLimited: false,
       }
     }
   }
@@ -332,6 +364,9 @@ async function smartEnrich(
   if (itemName) {
     const cleanedName = cleanItemName(itemName)
     if (cleanedName.length >= 10) {
+      if (creditsUsed + 1 > maxCredits) {
+        return { result: null, searchTerm: sku, creditsUsed, budgetLimited: true }
+      }
       console.log(`   Trying item name: "${cleanedName.substring(0, 30)}..."`)
       creditsUsed++
       products = await searchSerpApi(cleanedName, apiKey)
@@ -344,6 +379,7 @@ async function smartEnrich(
             result: extractProduct(sku, topResult, cleanedName),
             searchTerm: cleanedName,
             creditsUsed,
+            budgetLimited: false,
           }
         } else {
           console.log(`   Warning: Result doesn't match: "${topResult.title.substring(0, 40)}..."`)
@@ -353,7 +389,7 @@ async function smartEnrich(
     }
   }
 
-  return { result: null, searchTerm: sku, creditsUsed }
+  return { result: null, searchTerm: sku, creditsUsed, budgetLimited: false }
 }
 
 // Extract product data from SerpApi result
@@ -415,32 +451,68 @@ function extractProduct(
 // Get Penny List rows that have missing fields (gaps)
 async function getPennyListGaps(
   supabase: ReturnType<typeof createClient>,
-  limit: number
+  plan: {
+    processLimit: number
+    staleQueryLimit: number
+    recentQueryLimit: number
+  }
 ): Promise<PennyListGapRow[]> {
+  const now = new Date()
+  const staleEscalationMinutes = getStaleEscalationMinutes()
   const sinceIso = new Date(Date.now() - GAP_LOOKBACK_DAYS * 24 * 60 * 60 * 1000).toISOString()
+  const staleCutoffIso = new Date(now.getTime() - staleEscalationMinutes * 60 * 1000).toISOString()
 
-  // Query Penny List for rows missing key fields
-  const { data, error } = await supabase
-    .from("Penny List")
-    .select(
-      "id, home_depot_sku_6_or_10_digits, item_name, brand, image_url, retail_price, internet_sku, home_depot_url, model_number, upc, enrichment_attempts, enrichment_provenance"
+  const baseSelect =
+    "id, home_depot_sku_6_or_10_digits, timestamp, item_name, brand, image_url, retail_price, internet_sku, home_depot_url, model_number, upc, enrichment_attempts, enrichment_provenance"
+
+  const [staleResponse, recentResponse] = await Promise.all([
+    supabase
+      .from("Penny List")
+      .select(baseSelect)
+      .or("item_name.is.null,brand.is.null,image_url.is.null,retail_price.is.null")
+      .lt("enrichment_attempts", 2)
+      .gte("timestamp", sinceIso)
+      .lt("timestamp", staleCutoffIso)
+      .order("timestamp", { ascending: true })
+      .limit(plan.staleQueryLimit),
+    supabase
+      .from("Penny List")
+      .select(baseSelect)
+      .or("item_name.is.null,brand.is.null,image_url.is.null,retail_price.is.null")
+      .lt("enrichment_attempts", 2)
+      .gte("timestamp", staleCutoffIso)
+      .order("timestamp", { ascending: false })
+      .limit(plan.recentQueryLimit),
+  ])
+
+  if (staleResponse.error && recentResponse.error) {
+    console.error(
+      "Failed to fetch Penny List gaps:",
+      staleResponse.error.message,
+      "|",
+      recentResponse.error.message
     )
-    .or("item_name.is.null,brand.is.null,image_url.is.null,retail_price.is.null")
-    .lt("enrichment_attempts", 2) // Skip items that already failed 2x
-    .gte("timestamp", sinceIso) // Only enrich recent activity (limits SerpApi spend)
-    .order("timestamp", { ascending: false })
-    .limit(limit * 2) // Fetch more to account for filtering
-
-  if (error) {
-    console.error("Failed to fetch Penny List gaps:", error.message)
     return []
   }
 
+  if (staleResponse.error) {
+    console.error("Warning: Failed to fetch stale Penny List gaps:", staleResponse.error.message)
+  }
+
+  if (recentResponse.error) {
+    console.error("Warning: Failed to fetch recent Penny List gaps:", recentResponse.error.message)
+  }
+
   // Filter to rows that actually have missing fields and valid SKUs
-  const gaps: PennyListGapRow[] = []
+  const candidates: Array<{
+    row: PennyListGapRow
+    ageMinutes: number
+    missingCount: number
+    staleEscalated: boolean
+  }> = []
   const seenSkus = new Set<string>()
 
-  for (const row of data || []) {
+  for (const row of [...(staleResponse.data || []), ...(recentResponse.data || [])]) {
     const typedRow = row as unknown as PennyListGapRow
     const sku = normalizeSku(typedRow.home_depot_sku_6_or_10_digits)
 
@@ -451,12 +523,16 @@ async function getPennyListGaps(
     if (missing.length === 0) continue
 
     seenSkus.add(sku)
-    gaps.push(typedRow)
-
-    if (gaps.length >= limit) break
+    const ageMinutes = getSerpApiGapAgeMinutes(typedRow.timestamp, now)
+    candidates.push({
+      row: typedRow,
+      ageMinutes,
+      missingCount: missing.length,
+      staleEscalated: ageMinutes >= staleEscalationMinutes,
+    })
   }
 
-  return gaps
+  return prioritizeSerpApiGapCandidates(candidates, plan.processLimit)
 }
 
 async function safeInsertSerpApiLogStart(
@@ -496,6 +572,33 @@ async function safeUpdateSerpApiLogEnd(
     }
   } catch (error) {
     console.log(`Warning: Failed to write serpapi_logs (end): ${String(error)}`)
+  }
+}
+
+async function getCreditsAttemptedInRange(
+  supabase: ReturnType<typeof createClient>,
+  startIso: string,
+  endIso: string
+): Promise<number> {
+  try {
+    const { data, error } = await supabase
+      .from("serpapi_logs")
+      .select("credits_attempted")
+      .gte("started_at", startIso)
+      .lt("started_at", endIso)
+
+    if (error) {
+      console.log(`Warning: Failed to read serpapi usage: ${error.message}`)
+      return 0
+    }
+
+    return (data ?? []).reduce((sum, row) => {
+      const credits = Number((row as { credits_attempted?: number }).credits_attempted ?? 0)
+      return sum + (Number.isFinite(credits) ? Math.max(0, credits) : 0)
+    }, 0)
+  } catch (error) {
+    console.log(`Warning: Failed to read serpapi usage: ${String(error)}`)
+    return 0
   }
 }
 
@@ -601,15 +704,17 @@ async function updatePennyListRow(
 }
 
 async function main() {
-  const { limit, testMode, specificSku, force } = parseArgs()
+  const { limit, testMode, specificSku, force, ignoreBudget } = parseArgs()
   const runId = randomUUID()
 
   console.log("SerpApi Home Depot Enrichment (v3 - Penny List Gaps)")
   console.log(`   Mode: ${testMode ? "TEST (1 item)" : `Normal (up to ${limit} items)`}`)
   console.log(`   delivery_zip: ${getSerpApiDeliveryZip()}`)
   console.log(`   gap_lookback_days: ${GAP_LOOKBACK_DAYS}`)
+  console.log(`   stale_escalation_minutes: ${getStaleEscalationMinutes()}`)
   if (force) console.log("   Warning: Force mode: Will overwrite existing fields")
   if (specificSku) console.log(`   Specific SKU: ${specificSku}`)
+  if (ignoreBudget) console.log("   Warning: Budget policy bypassed via --ignore-budget")
   console.log()
 
   // Validate credentials
@@ -629,9 +734,72 @@ async function main() {
   const supabase = createClient(supabaseUrl, supabaseServiceKey)
   console.log("Connected to Supabase")
 
+  const now = new Date()
+  const monthlyBounds = getBillingCycleBounds(now, process.env.SERPAPI_BILLING_RESET_ANCHOR_ISO)
+  const todayBounds = getUtcDayBounds(now)
+
+  const [monthlyCreditsUsed, todayCreditsUsed] = await Promise.all([
+    getCreditsAttemptedInRange(supabase, monthlyBounds.startIso, monthlyBounds.endIso),
+    getCreditsAttemptedInRange(supabase, todayBounds.startIso, todayBounds.endIso),
+  ])
+
+  const budgetDecision = decideSerpApiRunBudget({
+    snapshot: {
+      now,
+      monthlyCreditsUsed,
+      todayCreditsUsed,
+    },
+  })
+
+  if (!ignoreBudget) {
+    console.log("SerpApi budget policy:")
+    console.log(`   Month budget usable: ${budgetDecision.monthCapUsable}`)
+    console.log(`   Month credits used: ${monthlyCreditsUsed}`)
+    console.log(`   Month credits remaining: ${budgetDecision.monthCreditsRemaining}`)
+    console.log(
+      `   Daily cap target: ${budgetDecision.targetDailyCredits} (used today: ${todayCreditsUsed}, remaining: ${budgetDecision.dailyCreditsRemaining})`
+    )
+    console.log(`   Run credit budget: ${budgetDecision.runBudgetCredits}`)
+    console.log(`   Days until reset: ${budgetDecision.daysUntilReset}`)
+    console.log(`   Next reset at (UTC): ${budgetDecision.nextResetAtIso}`)
+    if (budgetDecision.inLateMonthBackfillMode) {
+      console.log("   Late-month backfill mode: ACTIVE")
+    }
+  }
+
+  if (!ignoreBudget && !budgetDecision.allowed) {
+    console.log(`\nSkipping run due to budget policy guard: ${budgetDecision.reason}`)
+    const logEnabled = await safeInsertSerpApiLogStart(supabase, {
+      run_id: runId,
+      started_at: new Date().toISOString(),
+    })
+
+    if (logEnabled) {
+      await safeUpdateSerpApiLogEnd(supabase, runId, {
+        finished_at: new Date().toISOString(),
+        items_processed: 0,
+        credits_attempted: 0,
+        skus_enriched: [],
+      })
+    }
+
+    process.exit(0)
+  }
+
   const logEnabled = await safeInsertSerpApiLogStart(supabase, {
     run_id: runId,
     started_at: new Date().toISOString(),
+  })
+
+  const runCreditBudget = ignoreBudget
+    ? Number.MAX_SAFE_INTEGER
+    : Math.max(1, budgetDecision.runBudgetCredits)
+
+  const budgetRecommendedLimit = ignoreBudget ? limit : budgetDecision.recommendedItemLimit
+  const selectionPlan = buildSerpApiGapFetchPlan({
+    requestedLimit: limit,
+    recommendedItemLimit: budgetRecommendedLimit,
+    ignoreBudget,
   })
 
   // Get items to enrich
@@ -648,7 +816,7 @@ async function main() {
     const { data, error } = await supabase
       .from("Penny List")
       .select(
-        "id, home_depot_sku_6_or_10_digits, item_name, brand, image_url, retail_price, internet_sku, home_depot_url, model_number, upc, enrichment_attempts, enrichment_provenance"
+        "id, home_depot_sku_6_or_10_digits, timestamp, item_name, brand, image_url, retail_price, internet_sku, home_depot_url, model_number, upc, enrichment_attempts, enrichment_provenance"
       )
       .eq("home_depot_sku_6_or_10_digits", normalized)
       .limit(1)
@@ -662,7 +830,7 @@ async function main() {
     itemsToEnrich = [data as unknown as PennyListGapRow]
   } else {
     console.log("Finding Penny List rows with gaps...")
-    itemsToEnrich = await getPennyListGaps(supabase, limit)
+    itemsToEnrich = await getPennyListGaps(supabase, selectionPlan)
   }
 
   if (itemsToEnrich.length === 0) {
@@ -686,16 +854,27 @@ async function main() {
   let success = 0
   let failed = 0
   let totalCredits = 0
+  let processedItems = 0
   const skusEnriched: string[] = []
 
   for (let i = 0; i < itemsToEnrich.length; i++) {
+    if (totalCredits >= runCreditBudget) {
+      console.log(`\nStopping run: credit budget reached (${totalCredits}/${runCreditBudget}).`)
+      break
+    }
+
     const row = itemsToEnrich[i]
     const sku = normalizeSku(row.home_depot_sku_6_or_10_digits)
     if (!sku) continue
+    processedItems++
 
     console.log(`[${i + 1}/${itemsToEnrich.length}] SKU: ${sku}`)
     const missing = getMissingFields(row)
     console.log(`   Missing: ${missing.join(", ")}`)
+    const rowAgeMinutes = getSerpApiGapAgeMinutes(row.timestamp, now)
+    if (Number.isFinite(rowAgeMinutes)) {
+      console.log(`   Age: ${rowAgeMinutes} minute(s) since report`)
+    }
 
     // Log if row is approaching max attempts
     if (row.enrichment_attempts >= 1) {
@@ -704,7 +883,13 @@ async function main() {
 
     if (row.item_name) console.log(`   Item name: ${row.item_name.substring(0, 40)}...`)
 
-    const { result, searchTerm, creditsUsed } = await smartEnrich(sku, row.item_name, serpApiKey)
+    const remainingRunCredits = Math.max(0, runCreditBudget - totalCredits)
+    const { result, creditsUsed, budgetLimited } = await smartEnrich(
+      sku,
+      row.item_name,
+      serpApiKey,
+      remainingRunCredits
+    )
     totalCredits += creditsUsed
 
     if (result && result.item_name) {
@@ -721,7 +906,7 @@ async function main() {
         hasValidInternetSku(productIdCandidate) &&
         !isConfirmedAbsentByStaging(row.enrichment_provenance, "internet_sku")
 
-      if (needUpc && canUseProductId) {
+      if (needUpc && canUseProductId && totalCredits < runCreditBudget) {
         totalCredits++ // home_depot_product call
         const upc = await fetchUpcFromHomeDepotProductWithSerpApi({
           apiKey: serpApiKey,
@@ -743,6 +928,11 @@ async function main() {
         failed++
       }
     } else {
+      if (budgetLimited) {
+        console.log("   Budget-limited stop before additional SerpApi calls.")
+        break
+      }
+
       console.log(`   No results found (tried ${creditsUsed} search${creditsUsed > 1 ? "es" : ""})`)
 
       // Increment attempt counter on failure
@@ -766,13 +956,13 @@ async function main() {
   console.log("Done!")
   console.log(`   Success: ${success}`)
   console.log(`   Failed: ${failed}`)
-  console.log(`   Credits used: ~${totalCredits}`)
+  console.log(`   Credits used: ~${totalCredits} (budget: ${runCreditBudget})`)
   console.log("=".repeat(50))
 
   if (logEnabled) {
     await safeUpdateSerpApiLogEnd(supabase, runId, {
       finished_at: new Date().toISOString(),
-      items_processed: itemsToEnrich.length,
+      items_processed: processedItems,
       credits_attempted: totalCredits,
       skus_enriched: [...new Set(skusEnriched)],
     })

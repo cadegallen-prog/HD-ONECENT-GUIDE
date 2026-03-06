@@ -4,6 +4,169 @@
 
 ---
 
+## 2026-03-06 - Codex - SerpAPI Runner Limit + Workflow Variable Hotfix
+
+**Goal:** Fix the post-review issues in the pending SerpAPI budget-policy work before pushing it live: keep manual/test limits authoritative, make workflow budget knobs actually configurable, and make stale-row prioritization query the right rows.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- Added focused gap-selection helper:
+  - `lib/enrichment/serpapi-gap-selection.ts`
+  - keeps processing limits separate from fetch-pool sizing,
+  - provides deterministic stale-first prioritization without increasing the number of rows a run is allowed to process.
+- Updated runner behavior:
+  - `scripts/serpapi-enrich.ts`
+  - restored `--limit` / `--test` as the hard cap on processed items,
+  - replaced the single recent-only query slice with separate stale + recent candidate queries,
+  - now widens the candidate pool for ranking without silently widening the actual run scope.
+- Updated workflow configuration:
+  - `.github/workflows/serpapi-enrich.yml`
+  - passes SerpAPI budget knobs from GitHub Actions repository variables with safe defaults, so scheduled runs can be tuned without code edits.
+- Synced docs:
+  - `.ai/ENVIRONMENT_VARIABLES.md`
+  - `docs/SCRAPING_COSTS.md`
+  - documented the GitHub Actions Variables path for scheduled tuning,
+  - corrected the UPC note to reflect that a product lookup can consume an extra SerpAPI credit.
+- Added regression coverage:
+  - `tests/serpapi-gap-selection.test.ts`
+  - covers requested-limit authority, stale-first ranking, and fresh-row ordering.
+- Added process learning:
+  - `.ai/LEARNINGS.md`
+  - recorded that `verify:fast` and `e2e:smoke` must not share `.next-playwright` concurrently.
+
+### Summary
+
+- Manual/test SerpAPI runs are predictable again and will not silently process more rows than requested.
+- Scheduled tuning is now real instead of doc-only because the workflow receives the budget variables.
+- Stale-row escalation now looks across stale rows explicitly instead of only reordering a recent slice.
+
+### Verification
+
+- `npx tsx --import ./tests/setup.ts --test tests/serpapi-budget-policy.test.ts tests/serpapi-gap-selection.test.ts` ✅
+- `npm run ai:memory:check` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+
+### Branch Hygiene
+
+- Branch: `main` (founder-requested direct hotfix path)
+- Head SHA before commit: `c52f7f0`
+- Push status: pending at time of memory update
+- Shared-memory lock:
+  - `npm run ai:writer-lock:status` ✅ (unlocked before claim)
+  - `npm run ai:writer-lock:claim -- codex "serpapi production hotfix memory updates"` ✅
+
+---
+
+## 2026-03-06 - Copilot - SerpAPI Billing-Reset-Proximity Backfill Correction
+
+**Goal:** Correct SerpApi backfill activation so it uses billing-reset proximity only (no day-threshold or calendar-month assumptions), fix workflow fallback limit, and align tests/docs/env contracts.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- Refactored policy decision logic in:
+  - `lib/enrichment/serpapi-budget-policy.ts`
+  - removed active day-threshold/month-end/hour-window backfill activation branches,
+  - added billing-cycle reset anchor math (`SERPAPI_BILLING_RESET_ANCHOR_ISO`),
+  - added reset-proximity window activation (`SERPAPI_BACKFILL_WINDOW_MINUTES_BEFORE_RESET`, default `360`),
+  - switched guard defaults to `SERPAPI_PRE_RESET_GUARD_MINUTES=60` and `SERPAPI_POST_RESET_GUARD_MINUTES=60`,
+  - removed `SERPAPI_RUN_INTERVAL_MINUTES` from active policy behavior.
+- Aligned usage accounting window in:
+  - `scripts/serpapi-enrich.ts`
+  - switched monthly-credit range from calendar-month bounds to billing-cycle bounds.
+- Replaced policy tests in:
+  - `tests/serpapi-budget-policy.test.ts`
+  - explicitly covers reset-proximity activation + guard blocks + no dependency on day-threshold/month-end semantics.
+- Fixed scheduler fallback mismatch in:
+  - `.github/workflows/serpapi-enrich.yml`
+  - cron/manual fallback `--limit` now defaults to `30` (not `5`).
+- Synced env/docs contracts in:
+  - `.env.example`
+  - `.ai/ENVIRONMENT_VARIABLES.md`
+  - `docs/SCRAPING_COSTS.md`
+
+### Summary
+
+- Backfill now activates only when the account is close to the next billing reset and outside pre/post guard windows.
+- Calendar-month boundaries and “last 3 days / last UTC day” logic are no longer part of active backfill decisions.
+- Scheduled workflow fallback is aligned with intended default throughput (`30`).
+
+### Verification
+
+- `npx tsx --import ./tests/setup.ts --test tests/serpapi-budget-policy.test.ts` ✅
+- `npm run ai:memory:check` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npm run ai:checkpoint` ✅
+  - artifacts: `reports/context-packs/2026-03-06T06-28-03/`
+
+### Branch Hygiene
+
+- Branch: `main`
+- Head SHA: `c52f7f0`
+- Push status: not pushed in this session
+- Session-end status: dirty worktree with both scope files and pre-existing carryover files still present
+- Writer lock: claimed via `npm run ai:writer-lock:claim -- copilot "serpapi billing-reset-proximity backfill correction memory updates"` ✅
+
+---
+
+## 2026-03-06 - Copilot - SerpAPI Freshness + Budget Policy Implementation
+
+**Goal:** Implement the approved freshness-first enrichment policy with practical credit caps, controlled late-month backfill, reset-safe guardrails, and `/ai` documentation updates.
+
+**Status:** ✅ Completed
+
+### Changes
+
+- Added a centralized SerpAPI budget policy module:
+  - `lib/enrichment/serpapi-budget-policy.ts` (new)
+  - includes UTC month/day helpers and deterministic budget decisions for:
+    - normal daily operation,
+    - stale-row escalation,
+    - late-month controlled backfill,
+    - pre/post reset protection windows.
+- Updated enrichment runner behavior:
+  - `scripts/serpapi-enrich.ts`
+  - integrated policy-aware usage reads + run budgeting from recent `serpapi_logs` activity,
+  - added stale-priority handling for older unfilled rows,
+  - added per-run credit stop conditions,
+  - added `--ignore-budget` escape hatch,
+  - raised default runner limit to align with micro-run cadence.
+- Added regression tests:
+  - `tests/serpapi-budget-policy.test.ts` (new)
+  - covers reset guards, mid-month behavior, late-month mode, and fail-closed daily exhaustion.
+- Updated schedule + ops docs/config:
+  - `.github/workflows/serpapi-enrich.yml` now runs every 2 hours,
+  - `.env.example` includes SerpAPI budget env knobs,
+  - `docs/SCRAPING_COSTS.md` updated for freshness-first + budget-safe behavior,
+  - `.ai/ENVIRONMENT_VARIABLES.md` updated for new policy variables.
+
+### Summary
+
+- Enrichment now runs on a frequent cadence for faster fill-in while still enforcing hard budget controls.
+- The policy is reset-safe (pre/post reset cool-off windows) and supports controlled late-month burn-down without spilling into next month credits.
+- Stale gaps are now promoted in priority so older unfilled submissions are less likely to linger.
+
+### Verification
+
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npm run ai:memory:check` ✅
+- `npm run ai:checkpoint` ✅
+  - artifacts: `reports/context-packs/2026-03-06T01-37-18/`
+
+### Branch Hygiene
+
+- Scope: SerpAPI enrichment budgeting/scheduling + docs only
+- Writer lock: claimed via `npm run ai:writer-lock:claim -- copilot "serpapi budget policy + scheduler freshness implementation"` ✅
+- Writer lock: released via `npm run ai:writer-lock:release -- copilot` ✅
+
+---
+
 ## 2026-03-05 - Codex - Monumetric Production Recovery Deployment (S1-S4 + Rubicon Hotfix)
 
 **Goal:** Execute founder-approved emergency monetization recovery plan by promoting S1-S3 to production, auditing live behavior, hardening S4 CSP, and closing the residual Rubicon CSP blocker observed after merge.
@@ -132,178 +295,5 @@
 - Branch: `dev-recovery-20260305`
 - Scope: Monumetric `S3` placement coverage only
 - Push: pending
-
----
-
-## 2026-03-05 - Codex - Monumetric S2 Placeholder Stability + Empty-Slot Collapse
-
-**Goal:** Implement `S2` from the balanced Monumetric stabilization plan so ad wrappers reserve space and collapse only when truly empty after a controlled timeout.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `lib/ads/monumetric-slot-shell.tsx` (new)
-  - added shared slot-shell behavior and `useMonumetricSlotCollapse(...)` hook.
-  - implemented timeout-gated empty-slot collapse with mutation-observer recovery when creatives appear later.
-- `lib/ads/launch-config.ts`
-  - added `NEXT_PUBLIC_MONU_COLLAPSE_EMPTY` gate via `MONUMETRIC_LAUNCH_CONFIG.slotShell.collapseEmptyEnabled`.
-  - added stable per-slot policy metadata (reserve min height + collapse timeout + max-per-route + viewport enablement) for in-content and mobile sticky slots.
-- `lib/ads/slot-plan.ts`
-  - extended route plan output with `slotPolicies` so runtime metadata now includes placeholder behavior contracts.
-- `components/ads/monumetric-in-content-slot.tsx`
-  - migrated wrapper rendering to `MonumetricSlotShell`.
-  - preserved existing slot queue script while adding reserve/collapse behavior.
-- `components/ads/mobile-sticky-anchor.tsx`
-  - added collapse hook integration and policy-driven reserve height.
-  - collapse now respects both sheet-open state and empty-slot timeout behavior.
-- `components/ads/route-ad-slots.tsx`
-  - emitted `slotPolicies` and `collapseEmptyEnabled` into route-plan JSON payload.
-- `tests/ads-launch-config.test.ts`
-  - added assertions for slot-shell config and policy helper output.
-- `tests/ads-slot-plan.test.ts`
-  - added assertions for per-route `slotPolicies` output.
-
-### Summary
-
-- `S2` placeholder stability is now implemented on the recovery branch with reversible env-gated collapse behavior.
-- Route eligibility and CSP policy were intentionally left unchanged.
-- `/report-find` exclusion behavior was not touched.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `npm run e2e:full` ✅
-- `npm run ai:proof -- /guide /penny-list` ✅
-  - artifacts: `reports/proof/2026-03-05T07-08-05/`
-- live console artifacts from full run:
-  - `reports/playwright/console-report-2026-03-05T07-09-31-176Z.json`
-  - `reports/playwright/console-report-2026-03-05T07-11-01-217Z.json`
-  - `reports/playwright/console-report-2026-03-05T07-13-42-460Z.json`
-  - `reports/playwright/console-report-2026-03-05T07-14-43-973Z.json`
-
-### Branch Hygiene
-
-- Branch: `dev-recovery-20260305`
-- Scope: Monumetric `S2` placeholder stability only
-- Push: pending
-
----
-
-## 2026-03-05 - Codex - Live Console CSP False-Positive Fix (FULL Lane Unblocked)
-
-**Goal:** Clear the remaining `e2e:full` blocker without broadening CSP policy in `next.config.js`.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- `tests/live/console.spec.ts`
-  - fixed blocked-domain extraction so CSP parsing uses the actual blocked target before directive text.
-  - added safe handling for non-host CSP targets (for example `data:` URIs) so they do not get misclassified as host blockers.
-  - preserved fallback parsing for variants like `Fetch API cannot load https://...`.
-- follow-up integration readiness steps:
-  - committed and pushed parser/memory updates on `dev-recovery-20260305` (`ec4dfbc`).
-  - watched PR #148 CI to completion (`Full QA Suite`, `quality-fast`, and `smoke-e2e` all passed).
-  - marked PR #148 ready for review (not draft) and posted a CI/status note:
-    - `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/pull/148#issuecomment-4002680052`.
-
-### Summary
-
-- Root cause was a test-classifier bug, not a runtime CSP allowlist gap.
-- The failing messages on `/store-finder` and `/about` were `Connecting to 'data:text/xml...'` entries.
-- The prior extractor incorrectly pulled `https://www.google-analytics.com` from the CSP directive allowlist text and marked it as a critical blocked host.
-- After the parser fix, critical CSP counts are `0` and FULL passes.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:full` ✅ (first run had one transient local connection flake; immediate rerun passed clean)
-- `npm run e2e:smoke` ✅
-- console report artifacts with `criticalCspViolations=0`:
-  - `reports/playwright/console-report-2026-03-05T06-32-09-456Z.json`
-  - `reports/playwright/console-report-2026-03-05T06-33-39-485Z.json`
-  - `reports/playwright/console-report-2026-03-05T06-36-04-913Z.json`
-  - `reports/playwright/console-report-2026-03-05T06-37-06-266Z.json`
-- CI status after push:
-  - required branch-protection checks for `main`: `quality-fast` ✅, `smoke-e2e` ✅
-  - `Full QA Suite` ✅
-  - `SonarCloud Code Analysis` ❌ (non-required quality gate on this recovery PR)
-- Writer lock:
-  - `npm run ai:writer-lock:status` ✅ (unlocked before claim)
-  - `npm run ai:writer-lock:claim -- codex "fix live-console CSP false-positive extraction and verify full lane"` ✅
-
-### Branch Hygiene
-
-- Branch: `dev-recovery-20260305`
-- Scope: live-console CSP parser fix only
-- Commit: `ec4dfbc`
-- Push: pushed
-- PR status: ready for review (not draft)
-- Carryover untracked files (unchanged, unrelated):
-  - `archive/root-level-orphans/`
-  - `emails/monumetric-reengagement-draft.md`
-  - `emails/monumetric-reengagement-final.md`
-
----
-
-## 2026-03-05 - Codex - Dev Branch Recovery + Clean Integration Lane
-
-**Goal:** Recover from mixed `dev` history by preserving all current work in a safety snapshot, then creating a clean integration branch from `main` with only high-value salvage commits.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- Created a non-destructive safety snapshot branch:
-  - `backup/dev-snapshot-20260305-pre-recovery`
-  - snapshot commit: `7cf09ca` (`chore(snapshot): preserve pre-recovery dev working tree (2026-03-05)`)
-- Created a clean recovery integration branch from `origin/main`:
-  - `dev-recovery-20260305`
-- Salvaged only selected non-redesign work onto the recovery branch:
-  - `ad9c2e4` — retail price migration (`supabase/migrations/031_item_cache_include_retail_price.sql`)
-  - `a53f42a` — manual fast-track/manual-enrich script fixes (`scripts/manual-cade-fast-track.ts`, `scripts/manual-enrich.ts`, `package.json`)
-  - `e781cb3` — Monumetric balanced parent/child plans + `S1` lifecycle runtime/tests/docs
-  - `5504ac8` — trimmed `app/layout.tsx` to keep only Monumetric lifecycle wiring (removed unrelated carried-over layout edits from salvage)
-- Kept redesign-heavy and Roo-experimental commit history out of this branch on purpose.
-- Overnight continuation on the same recovery branch:
-  - added `NEXT_PUBLIC_VISUAL_POINTER_ENABLED=true` to `package.json` `e2e:full` so visual-pointer capture tests are enabled in production-mode test builds.
-  - added commit-triage artifact: `.ai/impl/dev-branch-recovery-triage-2026-03-05.md`.
-  - pushed both branches to origin:
-    - `dev-recovery-20260305`
-    - `backup/dev-snapshot-20260305-pre-recovery`
-
-### Summary
-
-- Recovery branch now isolates business-critical work from mixed `dev` history without deleting any prior work.
-- Snapshot branch preserves full recoverability of the pre-recovery state.
-- The recovered branch is now a safer base for future implementation and PR review.
-- `e2e:full` no longer fails on visual-pointer toggle absence; remaining full-lane blocker is a live-console CSP gate on `www.google-analytics.com` for `/store-finder` and `/about`.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `npm run e2e:full` ⚠️ rerun after script fix:
-  - visual-pointer capture specs now pass.
-  - full suite still fails due live-console critical CSP finding (`www.google-analytics.com`) on `/store-finder` and `/about`.
-- Writer lock:
-  - `npm run ai:writer-lock:claim -- codex "record dev-branch recovery branch creation and commit triage"` ✅
-  - `npm run ai:writer-lock:status` ✅ (active under `codex` during memory updates)
-
-### Branch Hygiene
-
-- Recovery branch: `dev-recovery-20260305` (ahead `5` from `origin/main`)
-- Snapshot branch: `backup/dev-snapshot-20260305-pre-recovery`
-- Push: pushed
-- Draft PR: `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/pull/148`
-- Carryover untracked files (not touched by this objective):
-  - `archive/root-level-orphans/`
-  - `emails/monumetric-reengagement-draft.md`
-  - `emails/monumetric-reengagement-final.md`
 
 ---

@@ -1,8 +1,8 @@
 # SerpApi Enrichment Workflow
 # Uses SerpApi's Home Depot API for reliable product data enrichment
 #
-# Cost: $0/mo (free tier: 100 searches) or paid tiers for more
-# Runs: Daily, processes up to 5 SKUs per run by default
+# Cost: $0/mo (free tier: 250 searches) or paid tiers for more
+# Runs: Every 2 hours, but each run is hard budget-capped in script
 # Note: Each SKU may use 1-2 searches (SKU search + fallback name search)
 #
 # Required secrets:
@@ -14,15 +14,15 @@ name: SerpApi Enrich
 
 on:
   schedule:
-    # Run once daily to keep SerpApi spend firmly in the free tier.
-    - cron: "0 2 * * *"
+    # Run every 2 hours for better freshness; script enforces daily/monthly caps.
+    - cron: "0 */2 * * *"
   workflow_dispatch:
     # Allow manual trigger
     inputs:
       limit:
         description: "Number of SKUs to process"
         required: false
-        default: "5"
+        default: "30"
 
 jobs:
   enrich:
@@ -49,5 +49,19 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+          SERPAPI_MONTHLY_CAP: ${{ vars.SERPAPI_MONTHLY_CAP || '250' }}
+          SERPAPI_MONTHLY_RESERVE: ${{ vars.SERPAPI_MONTHLY_RESERVE || '10' }}
+          SERPAPI_MIN_DAILY_CREDITS: ${{ vars.SERPAPI_MIN_DAILY_CREDITS || '4' }}
+          SERPAPI_MAX_DAILY_CREDITS: ${{ vars.SERPAPI_MAX_DAILY_CREDITS || '12' }}
+          SERPAPI_MAX_CREDITS_PER_RUN: ${{ vars.SERPAPI_MAX_CREDITS_PER_RUN || '6' }}
+          SERPAPI_ESTIMATED_CREDITS_PER_ITEM: ${{ vars.SERPAPI_ESTIMATED_CREDITS_PER_ITEM || '3' }}
+          SERPAPI_BILLING_RESET_ANCHOR_ISO: ${{ vars.SERPAPI_BILLING_RESET_ANCHOR_ISO || '2026-03-18T00:00:00.000Z' }}
+          SERPAPI_BACKFILL_WINDOW_MINUTES_BEFORE_RESET: ${{ vars.SERPAPI_BACKFILL_WINDOW_MINUTES_BEFORE_RESET || '360' }}
+          SERPAPI_LATE_MONTH_HIGH_REMAINING_CREDITS: ${{ vars.SERPAPI_LATE_MONTH_HIGH_REMAINING_CREDITS || '45' }}
+          SERPAPI_LATE_MONTH_BACKFILL_DAILY_CAP: ${{ vars.SERPAPI_LATE_MONTH_BACKFILL_DAILY_CAP || '28' }}
+          SERPAPI_LATE_MONTH_BACKFILL_MAX_RUN_CREDITS: ${{ vars.SERPAPI_LATE_MONTH_BACKFILL_MAX_RUN_CREDITS || '14' }}
+          SERPAPI_PRE_RESET_GUARD_MINUTES: ${{ vars.SERPAPI_PRE_RESET_GUARD_MINUTES || '60' }}
+          SERPAPI_POST_RESET_GUARD_MINUTES: ${{ vars.SERPAPI_POST_RESET_GUARD_MINUTES || '60' }}
+          SERPAPI_STALE_ESCALATION_MINUTES: ${{ vars.SERPAPI_STALE_ESCALATION_MINUTES || '120' }}
         run: |
-          npx tsx scripts/serpapi-enrich.ts --limit ${{ github.event.inputs.limit || '5' }}
+          npx tsx scripts/serpapi-enrich.ts --limit ${{ github.event.inputs.limit || '30' }}

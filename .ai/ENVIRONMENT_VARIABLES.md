@@ -83,10 +83,33 @@
 
 ### Scraping / Enrichment Keys (2 variables)
 
-| Variable          | Where Set             | Purpose                                                              | Used In                       |
-| ----------------- | --------------------- | -------------------------------------------------------------------- | ----------------------------- |
-| `SERPAPI_KEY`     | Vercel / `.env.local` | SerpApi enrichment script (fallback enrichment)                      | `scripts/serpapi-enrich.ts`   |
-| `SCRAPER_API_KEY` | Vercel (Manual)       | ScraperAPI key for `/api/cron/auto-enrich` (not currently scheduled) | `app/api/cron/auto-enrich/**` |
+| Variable          | Where Set                    | Purpose                                                              | Used In                       |
+| ----------------- | ---------------------------- | -------------------------------------------------------------------- | ----------------------------- |
+| `SERPAPI_KEY`     | GitHub Secret / `.env.local` | SerpApi enrichment script (fallback enrichment)                      | `scripts/serpapi-enrich.ts`   |
+| `SCRAPER_API_KEY` | Vercel (Manual)              | ScraperAPI key for `/api/cron/auto-enrich` (not currently scheduled) | `app/api/cron/auto-enrich/**` |
+
+---
+
+### SerpApi Budget Policy Knobs (14 variables, optional)
+
+These variables tune scheduled SerpApi behavior (freshness vs cost control). Local runs read them from `.env.local`; the GitHub Actions workflow reads them from repository-level **Actions Variables** (`Settings -> Secrets and variables -> Actions -> Variables`) and falls back to the same defaults when a variable is unset.
+
+| Variable                                       | Default                    | Purpose                                                      |
+| ---------------------------------------------- | -------------------------- | ------------------------------------------------------------ |
+| `SERPAPI_MONTHLY_CAP`                          | `250`                      | Monthly credit ceiling used by budget logic                  |
+| `SERPAPI_MONTHLY_RESERVE`                      | `10`                       | Credits intentionally held in reserve                        |
+| `SERPAPI_MIN_DAILY_CREDITS`                    | `4`                        | Minimum daily spend target                                   |
+| `SERPAPI_MAX_DAILY_CREDITS`                    | `12`                       | Normal daily spend ceiling                                   |
+| `SERPAPI_MAX_CREDITS_PER_RUN`                  | `6`                        | Normal per-run spend ceiling                                 |
+| `SERPAPI_ESTIMATED_CREDITS_PER_ITEM`           | `3`                        | Used to estimate item count per run budget                   |
+| `SERPAPI_BILLING_RESET_ANCHOR_ISO`             | `2026-03-18T00:00:00.000Z` | Billing-cycle reset anchor timestamp (UTC ISO)               |
+| `SERPAPI_BACKFILL_WINDOW_MINUTES_BEFORE_RESET` | `360`                      | Backfill activation window before the next billing reset     |
+| `SERPAPI_LATE_MONTH_HIGH_REMAINING_CREDITS`    | `45`                       | Remaining-credit threshold before backfill mode can activate |
+| `SERPAPI_LATE_MONTH_BACKFILL_DAILY_CAP`        | `28`                       | Daily cap in late-month backfill window                      |
+| `SERPAPI_LATE_MONTH_BACKFILL_MAX_RUN_CREDITS`  | `14`                       | Per-run cap in late-month backfill window                    |
+| `SERPAPI_PRE_RESET_GUARD_MINUTES`              | `60`                       | No-run guard before billing reset                            |
+| `SERPAPI_POST_RESET_GUARD_MINUTES`             | `60`                       | No-run guard after billing reset                             |
+| `SERPAPI_STALE_ESCALATION_MINUTES`             | `120`                      | Rows older than this are prioritized                         |
 
 ---
 

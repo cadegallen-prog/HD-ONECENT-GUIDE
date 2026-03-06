@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Mar 5, 2026 (Monumetric S1-S4 + Rubicon CSP hotfix promoted to `main`; production re-audits completed)
+**Last updated:** Mar 6, 2026 (SerpAPI hotfix verified: manual limit restored, stale query widened, workflow vars wired)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,64 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-06 (SerpAPI production hotfix after review):** Closed the remaining runner/workflow gaps before live push.
+  - **What changed:**
+    - added `lib/enrichment/serpapi-gap-selection.ts`
+      - separates fetch-pool sizing from the processed-item cap,
+      - preserves `--limit` / `--test` as hard processing limits,
+      - centralizes stale-first ranking rules.
+    - updated `scripts/serpapi-enrich.ts`
+      - replaced the recent-only candidate slice with separate stale + recent queries,
+      - widened stale visibility without letting the runner process more rows than requested.
+    - updated `.github/workflows/serpapi-enrich.yml`
+      - passes SerpAPI budget knobs from GitHub Actions repository variables with safe defaults.
+    - updated `.ai/ENVIRONMENT_VARIABLES.md` and `docs/SCRAPING_COSTS.md`
+      - documented the Actions Variables path for scheduled tuning,
+      - corrected the UPC note to reflect optional extra SerpAPI credit usage.
+    - added `tests/serpapi-gap-selection.test.ts`
+      - covers authoritative requested-limit behavior and stale-first ordering.
+  - **Why:** the previous revision had the right budget direction, but it could overshoot manual/test limits and claimed configurability that the workflow did not actually honor.
+  - **Status:** verified locally with targeted SerpAPI tests, `ai:memory:check`, `verify:fast`, and `e2e:smoke`.
+
+- **2026-03-06 (SerpAPI billing-reset-proximity backfill correction):** Corrected the previously broad late-month activation model so backfill opens only near the actual billing-cycle reset anchor.
+  - **What changed:**
+    - `lib/enrichment/serpapi-budget-policy.ts`
+      - removed day-threshold/month-end/hour-window activation semantics from active decision logic,
+      - added billing-cycle anchor reset math (`SERPAPI_BILLING_RESET_ANCHOR_ISO`, default `2026-03-18T00:00:00.000Z`),
+      - added proximity window control (`SERPAPI_BACKFILL_WINDOW_MINUTES_BEFORE_RESET`, default `360`),
+      - set guard defaults to `SERPAPI_PRE_RESET_GUARD_MINUTES=60` and `SERPAPI_POST_RESET_GUARD_MINUTES=60`.
+    - `scripts/serpapi-enrich.ts`
+      - switched monthly credit-usage range calculation to billing-cycle bounds (not calendar-month bounds).
+    - `tests/serpapi-budget-policy.test.ts`
+      - replaced old tests with explicit coverage for window activation, pre/post guard blocks, and no dependency on day-threshold/month-end semantics.
+    - `.github/workflows/serpapi-enrich.yml`
+      - corrected scheduled/manual fallback `--limit` from `5` to `30`.
+    - `.env.example`, `.ai/ENVIRONMENT_VARIABLES.md`, `docs/SCRAPING_COSTS.md`
+      - removed old day-threshold/hour-window policy language and aligned docs/env to billing-reset-proximity behavior.
+  - **Why:** founder requirement was to stop broad late-month waiting/activation behavior and only allow controlled burn-down when genuinely close to billing reset.
+  - **Status:** verified locally with `verify:fast`, `e2e:smoke`, `ai:memory:check`, and `ai:checkpoint`.
+
+- **2026-03-06 (SerpAPI freshness-first budget policy + scheduler rollout):** Implemented and verified the approved enrichment policy to improve fill speed without losing monthly-credit control.
+  - **What changed:**
+    - added centralized budget policy helper:
+      - `lib/enrichment/serpapi-budget-policy.ts`
+    - integrated policy-aware run gating into:
+      - `scripts/serpapi-enrich.ts`
+    - added regression tests:
+      - `tests/serpapi-budget-policy.test.ts`
+    - increased scheduler cadence in:
+      - `.github/workflows/serpapi-enrich.yml` (now every 2 hours)
+    - updated env/docs contracts:
+      - `.env.example`
+      - `docs/SCRAPING_COSTS.md`
+      - `.ai/ENVIRONMENT_VARIABLES.md`
+  - **Why:** SKU forensics confirmed enrichment freshness gaps were driven by run timing, not credit exhaustion; the site needed faster coverage plus hard budget/rollover protection.
+  - **Status:** local verification passed (`verify:fast`, `e2e:smoke`). Policy now supports:
+    - frequent micro-runs,
+    - stale-row escalation,
+    - controlled pre-reset backfill windows when budget remains,
+    - pre/post reset guard windows to prevent cross-month spill behavior.
 
 - **2026-03-05 (Monumetric Rubicon CSP hotfix promoted + live re-audit):** Merged PR `#151` (`ad72f3a`) to patch the remaining live CSP blocker observed after S4.
   - **What changed:**
