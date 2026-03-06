@@ -119,7 +119,7 @@ export function PennyListMobileUtilityBar({
     <>
       <div className="h-[72px] sm:hidden" aria-hidden="true" />
       <div
-        className={`fixed inset-x-0 top-16 z-30 border-b border-[var(--border-default)] bg-[var(--bg-elevated)] ${
+        className={`fixed inset-x-0 top-[calc(4rem+env(safe-area-inset-top))] z-30 border-b border-[var(--border-default)] bg-[var(--bg-elevated)] ${
           isVisible ? "translate-y-0" : "-translate-y-full"
         } ${prefersReducedMotion ? "" : "transition-transform duration-150 ease-out"} sm:hidden`}
         data-mobile-utility-bar="true"
