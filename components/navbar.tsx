@@ -18,6 +18,10 @@ import {
 } from "lucide-react"
 import { useTheme } from "@/components/theme-provider"
 import { trackEvent } from "@/lib/analytics"
+import {
+  PENNY_LIST_MOBILE_CHROME_VISIBILITY_EVENT,
+  type PennyListMobileChromeVisibilityDetail,
+} from "@/lib/mobile-chrome-events"
 
 const guideHubLink = {
   step: 0,
@@ -74,6 +78,7 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [mobileGuideExpanded, setMobileGuideExpanded] = useState(false)
   const [desktopGuideOpen, setDesktopGuideOpen] = useState(false)
+  const [isPennyListMobileChromeVisible, setIsPennyListMobileChromeVisible] = useState(true)
   const desktopGuideDropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -110,11 +115,48 @@ export function Navbar() {
   }, [])
 
   const isDark = mounted && document.documentElement.classList.contains("dark")
+  const isPennyListRoute = mounted ? pathname === "/penny-list" : false
   const isGuideRoute = mounted
     ? pathname === "/guide" ||
       pathname.startsWith("/guide/") ||
       guideSectionLinks.some((item) => pathname === item.href)
     : false
+
+  useEffect(() => {
+    if (!isPennyListRoute) {
+      setIsPennyListMobileChromeVisible(true)
+      return
+    }
+
+    const handleMobileChromeVisibility = (event: Event) => {
+      const customEvent = event as CustomEvent<PennyListMobileChromeVisibilityDetail>
+      const nextVisible = customEvent.detail?.visible
+      if (typeof nextVisible === "boolean") {
+        setIsPennyListMobileChromeVisible(nextVisible)
+      }
+    }
+
+    window.addEventListener(
+      PENNY_LIST_MOBILE_CHROME_VISIBILITY_EVENT,
+      handleMobileChromeVisibility as EventListener
+    )
+
+    return () => {
+      window.removeEventListener(
+        PENNY_LIST_MOBILE_CHROME_VISIBILITY_EVENT,
+        handleMobileChromeVisibility as EventListener
+      )
+    }
+  }, [isPennyListRoute])
+
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      setIsPennyListMobileChromeVisible(true)
+    }
+  }, [mobileMenuOpen])
+
+  const shouldHidePennyListMobileNavbar =
+    isPennyListRoute && !mobileMenuOpen && !isPennyListMobileChromeVisible
   const navItems = [
     { href: "/guide", label: "Guide", icon: Book, hasDropdown: true },
     { href: "/penny-list", label: "Penny List", icon: List },
@@ -132,7 +174,11 @@ export function Navbar() {
   return (
     <>
       {/* Desktop & Mobile Navbar */}
-      <nav className="sticky top-0 z-50 backdrop-blur-lg bg-[var(--bg-page)] border-b border-[var(--border-default)] pt-[env(safe-area-inset-top)]">
+      <nav
+        className={`sticky top-0 z-50 border-b border-[var(--border-default)] bg-[var(--bg-page)] pt-[env(safe-area-inset-top)] backdrop-blur-lg transition-transform duration-150 ease-out motion-reduce:transition-none ${
+          shouldHidePennyListMobileNavbar ? "-translate-y-full sm:translate-y-0" : "translate-y-0"
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}

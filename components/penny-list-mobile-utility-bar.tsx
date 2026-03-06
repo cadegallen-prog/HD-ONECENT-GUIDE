@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { ArrowUpDown, FilePlus, Heart, SlidersHorizontal } from "lucide-react"
 import { TrackableLink } from "@/components/trackable-link"
+import { emitPennyListMobileChromeVisibility } from "@/lib/mobile-chrome-events"
 
 interface PennyListMobileUtilityBarProps {
   isFilterSheetOpen: boolean
@@ -114,6 +115,16 @@ export function PennyListMobileUtilityBar({
       window.removeEventListener("scroll", handleScroll)
     }
   }, [isSheetOpen])
+
+  useEffect(() => {
+    emitPennyListMobileChromeVisibility(isVisible)
+  }, [isVisible])
+
+  useEffect(() => {
+    return () => {
+      emitPennyListMobileChromeVisibility(true)
+    }
+  }, [])
 
   return (
     <>
