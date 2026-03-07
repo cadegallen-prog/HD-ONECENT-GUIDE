@@ -136,45 +136,68 @@ export function MonumetricSlotShell({
     collapseEnabled,
     collapseAfterMs,
   })
+  const [hasCreative, setHasCreative] = useState(false)
+
+  useEffect(() => {
+    if (!enabled) {
+      setHasCreative(false)
+      return
+    }
+
+    const evaluate = () => {
+      const slotElement = document.getElementById(slotDomId)
+      if (!slotElement) {
+        setHasCreative(false)
+        return
+      }
+      setHasCreative(hasRenderedCreative(slotElement))
+    }
+
+    evaluate()
+
+    const slotElement = document.getElementById(slotDomId)
+    if (!slotElement) {
+      return
+    }
+
+    const observer = new MutationObserver(() => {
+      evaluate()
+    })
+
+    observer.observe(slotElement, {
+      childList: true,
+      subtree: true,
+    })
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [enabled, slotDomId])
 
   if (!enabled) {
     return null
   }
 
   const isCollapsed = collapseEnabled && collapsed
+  if (isCollapsed) {
+    return null
+  }
 
   return (
-    <section
+    <div
       aria-label={label}
-      className={`my-8 overflow-hidden rounded-lg border border-[var(--border-default)] bg-[var(--bg-card)] p-3 transition-all duration-200 sm:p-4 ${className}`.trim()}
+      className={className}
       data-ad-slot={slotId}
-      data-ad-slot-collapsed={isCollapsed ? "true" : "false"}
-      style={
-        isCollapsed
-          ? {
-              borderWidth: 0,
-              height: 0,
-              marginBottom: 0,
-              marginTop: 0,
-              opacity: 0,
-              overflow: "hidden",
-              paddingBottom: 0,
-              paddingTop: 0,
-            }
-          : undefined
-      }
+      data-ad-slot-collapsed="false"
     >
-      <p className="mb-2 text-center text-[11px] font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)]">
-        {label}
-      </p>
       <div
         id={slotDomId}
         className={`mx-auto w-full overflow-hidden ${containerClassName}`.trim()}
         style={{
-          minHeight: isCollapsed ? 0 : reserveMinHeightPx,
+          minHeight: hasCreative ? 0 : reserveMinHeightPx,
         }}
       />
       {children}
-    </section>
+    </div>
   )
 }
