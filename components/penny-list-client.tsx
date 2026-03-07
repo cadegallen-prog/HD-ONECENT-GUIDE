@@ -113,6 +113,7 @@ export function PennyListClient({
   const hasMountedRef = useRef(false)
   const isInitialRenderRef = useRef(true)
   const didForceFreshRef = useRef(false)
+  const isFirstPageRenderRef = useRef(true)
 
   const getInitialParam = (key: string) => initialParams.get(key) || ""
   const shouldForceFreshOnce = getInitialParam("fresh") === "1"
@@ -570,6 +571,16 @@ export function PennyListClient({
       }
     }
   }, [currentPage, dateRange, searchQuery, sortOption, stateFilter, updateURL])
+
+  // Signal the Monumetric coordinator to refresh ads on page navigation.
+  // Skip the initial render — the coordinator already handles the first route load.
+  useEffect(() => {
+    if (isFirstPageRenderRef.current) {
+      isFirstPageRenderRef.current = false
+      return
+    }
+    window.dispatchEvent(new CustomEvent("pc:request-ad-refresh"))
+  }, [currentPage])
 
   // Pagination - API returns the page slice, so we just use total from state
   const pageCount = Math.max(1, Math.ceil(total / itemsPerPage))

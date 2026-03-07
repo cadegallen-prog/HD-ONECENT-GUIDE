@@ -288,6 +288,39 @@ export function MonumetricRouteLifecycleCoordinator() {
     }
   }, [pathname, scheduleMonumetricRefresh])
 
+  // Listen for manual ad refresh requests dispatched by in-page navigation (e.g., pagination
+  // within the same route). Any component can trigger this by dispatching:
+  //   window.dispatchEvent(new CustomEvent("pc:request-ad-refresh"))
+  // The existing cooldown (REFRESH_COOLDOWN_MS) prevents flooding.
+  useEffect(() => {
+    if (!MONUMETRIC_ENABLED) {
+      return
+    }
+
+    if (!MONUMETRIC_LAUNCH_CONFIG.routeRequeue.enabled) {
+      return
+    }
+
+    if (MONUMETRIC_LAUNCH_CONFIG.experimentalSpa.enabled) {
+      return
+    }
+
+    const handler = () => {
+      const currentPathname = queueStateRef.current.pathname ?? pathname
+      const plan = getActiveAdRoutePlan(currentPathname)
+      if (plan.policy.eligibility === "exclude") {
+        return
+      }
+      // Clear queued keys so slots can be re-queued for this refresh cycle.
+      queueStateRef.current.queuedKeys.clear()
+      queueMonumetricSlotsForPathname(currentPathname, queueStateRef.current.queuedKeys)
+      scheduleMonumetricRefresh()
+    }
+
+    window.addEventListener("pc:request-ad-refresh", handler)
+    return () => window.removeEventListener("pc:request-ad-refresh", handler)
+  }, [pathname, scheduleMonumetricRefresh])
+
   useEffect(() => {
     return () => {
       if (refreshRetryTimeoutRef.current !== null) {
