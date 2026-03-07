@@ -108,7 +108,7 @@ test("slot dom id helper keeps prefix contract stable", () => {
 
 test("slot policy helper returns stable in-content and sticky policies", () => {
   assert.deepStrictEqual(getMonumetricSlotPolicy(MONUMETRIC_IN_CONTENT_SLOT_ID), {
-    reserveMinHeightPx: 250,
+    reserveMinHeightPx: 0,
     collapseAfterMs: 7000,
     maxPerRoute: 1,
     mobileEnabled: true,
@@ -124,7 +124,7 @@ test("slot policy helper returns stable in-content and sticky policies", () => {
   })
 
   assert.deepStrictEqual(getMonumetricSlotPolicy(MONUMETRIC_PENNY_LIST_IN_CONTENT_SLOT_ID), {
-    reserveMinHeightPx: 250,
+    reserveMinHeightPx: 0,
     collapseAfterMs: 7000,
     maxPerRoute: 1,
     mobileEnabled: true,

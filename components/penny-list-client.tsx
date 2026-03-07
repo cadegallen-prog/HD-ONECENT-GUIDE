@@ -114,6 +114,7 @@ export function PennyListClient({
   const isInitialRenderRef = useRef(true)
   const didForceFreshRef = useRef(false)
   const isFirstPageRenderRef = useRef(true)
+  const pendingScrollToTopRef = useRef(false)
 
   const getInitialParam = (key: string) => initialParams.get(key) || ""
   const shouldForceFreshOnce = getInitialParam("fresh") === "1"
@@ -438,6 +439,15 @@ export function PennyListClient({
             }
           })
         })
+      } else if (pendingScrollToTopRef.current) {
+        // Scroll to top after a page-navigation fetch so the user sees the first result,
+        // not the pagination button they just clicked.
+        pendingScrollToTopRef.current = false
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            window.scrollTo({ top: 0, behavior: "instant" })
+          })
+        })
       }
     }
   }, [stateFilter, searchQuery, sortOption, dateRange, currentPage, itemsPerPage])
@@ -608,6 +618,7 @@ export function PennyListClient({
   const goToPage = useCallback(
     (value: number) => {
       const nextPage = Math.max(1, Math.min(value, pageCount))
+      pendingScrollToTopRef.current = true
       setCurrentPage(nextPage)
       updateURL({
         page: nextPage === 1 ? null : String(nextPage),
@@ -1053,7 +1064,6 @@ export function PennyListClient({
                 type="button"
                 onClick={() => {
                   goToPage(clampedPage - 1)
-                  window.scrollTo({ top: 0, behavior: "smooth" })
                   try {
                     sessionStorage.removeItem("penny-list-scroll")
                   } catch {}
@@ -1071,7 +1081,6 @@ export function PennyListClient({
                 type="button"
                 onClick={() => {
                   goToPage(clampedPage + 1)
-                  window.scrollTo({ top: 0, behavior: "smooth" })
                   try {
                     sessionStorage.removeItem("penny-list-scroll")
                   } catch {}

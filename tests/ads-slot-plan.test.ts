@@ -36,7 +36,7 @@ test("returns provider-managed inventory for /guide hub", () => {
   ])
   assert.deepStrictEqual(plan.slotPolicies, {
     [MONUMETRIC_IN_CONTENT_SLOT_ID]: {
-      reserveMinHeightPx: 250,
+      reserveMinHeightPx: 0,
       collapseAfterMs: 7000,
       maxPerRoute: 1,
       mobileEnabled: true,
@@ -62,7 +62,7 @@ test("returns provider-managed inventory for canonical guide chapter routes", ()
   assert.deepStrictEqual(plan.requeueSlotIds, [MONUMETRIC_IN_CONTENT_SLOT_ID])
   assert.deepStrictEqual(plan.slotPolicies, {
     [MONUMETRIC_IN_CONTENT_SLOT_ID]: {
-      reserveMinHeightPx: 250,
+      reserveMinHeightPx: 0,
       collapseAfterMs: 7000,
       maxPerRoute: 1,
       mobileEnabled: true,
@@ -92,7 +92,7 @@ test("returns provider-managed inventory for /penny-list", () => {
   assert.deepStrictEqual(plan.requeueSlotIds, [MONUMETRIC_PENNY_LIST_IN_CONTENT_SLOT_ID])
   assert.deepStrictEqual(plan.slotPolicies, {
     [MONUMETRIC_PENNY_LIST_IN_CONTENT_SLOT_ID]: {
-      reserveMinHeightPx: 250,
+      reserveMinHeightPx: 0,
       collapseAfterMs: 7000,
       maxPerRoute: 1,
       mobileEnabled: true,

@@ -107,7 +107,10 @@ export const MONUMETRIC_LAUNCH_CONFIG = {
   },
   slotPolicies: {
     [MONUMETRIC_IN_CONTENT_SLOT_ID]: {
-      reserveMinHeightPx: 250,
+      // 0: no pre-reserved space. Monumetric injects into its own container (outside our div),
+      // so holding space here only creates a permanent black gap — never filled by hasCreative.
+      // Accept the small CLS when the ad appears; it is less disruptive than a 250px void.
+      reserveMinHeightPx: 0,
       collapseAfterMs: 7000,
       maxPerRoute: 1,
       mobileEnabled: true,
