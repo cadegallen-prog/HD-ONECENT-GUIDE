@@ -20,8 +20,7 @@ export const PENNY_LIST_PROMPTS_TO_PAUSE = [
 export const MONUMETRIC_IN_CONTENT_SLOT_ID = "39b97adf-dc3e-4795-b4a4-39f0da3c68dd"
 export const MONUMETRIC_GUIDE_SECONDARY_SLOT_ID =
   process.env.NEXT_PUBLIC_MONU_GUIDE_SECONDARY_SLOT_ID || "pc-guide-secondary-in-content"
-export const MONUMETRIC_PENNY_LIST_IN_CONTENT_SLOT_ID =
-  process.env.NEXT_PUBLIC_MONU_PENNY_LIST_SLOT_ID || "pc-penny-list-in-content"
+export const MONUMETRIC_PENNY_LIST_IN_CONTENT_SLOT_ID = MONUMETRIC_IN_CONTENT_SLOT_ID
 export const MONUMETRIC_MOBILE_STICKY_SLOT_ID = "pc-mobile-sticky-anchor"
 export const MONUMETRIC_IN_CONTENT_DOM_ID_PREFIX = "mmt-"
 
@@ -115,13 +114,6 @@ export const MONUMETRIC_LAUNCH_CONFIG = {
       desktopEnabled: true,
     },
     [MONUMETRIC_GUIDE_SECONDARY_SLOT_ID]: {
-      reserveMinHeightPx: 250,
-      collapseAfterMs: 7000,
-      maxPerRoute: 1,
-      mobileEnabled: true,
-      desktopEnabled: true,
-    },
-    [MONUMETRIC_PENNY_LIST_IN_CONTENT_SLOT_ID]: {
       reserveMinHeightPx: 250,
       collapseAfterMs: 7000,
       maxPerRoute: 1,
