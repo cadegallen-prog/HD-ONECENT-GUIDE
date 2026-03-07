@@ -11,17 +11,11 @@ export interface AdRoutePolicy {
 
 export const HARD_AD_EXCLUDED_ROUTES = [
   "/report-find",
-  "/store-finder",
-  "/support",
   "/transparency",
-  "/contact",
   "/privacy-policy",
   "/terms-of-service",
   "/do-not-sell-or-share",
   "/unsubscribed",
-  "/go/rakuten",
-  "/go/befrugal",
-  "/login",
   "/auth/callback",
   "/robots.txt",
   "/sitemap.xml",

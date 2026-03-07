@@ -14,6 +14,7 @@ import VisualPointerShell from "@/components/dev/visual-pointer-shell"
 import { ogImageUrl } from "@/lib/og"
 import { CANONICAL_BASE } from "@/lib/canonical"
 import { MonumetricRouteLifecycleCoordinator } from "@/lib/ads/monumetric-runtime"
+import { MonumetricScriptGate } from "@/components/ads/monumetric-script-gate"
 import { isVisualPointerEnvironmentEnabled } from "@/lib/visual-pointer/env"
 
 const DEFAULT_OG_IMAGE = `https://www.pennycentral.com${ogImageUrl("homepage")}`
@@ -134,14 +135,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={inter.variable}>
       <head>
-        {!process.env.PLAYWRIGHT && MONUMETRIC_ENABLED && (
-          <script
-            type="text/javascript"
-            src="https://monu.delivery/site/1/d/65ab12-7f57-43c6-a5b7-76b6b4c6548c.js"
-            data-cfasync="false"
-          />
-        )}
-
         {/* Performance hints for critical third-party origins */}
         <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://www.google-analytics.com" crossOrigin="anonymous" />
@@ -306,6 +299,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <MonumetricScriptGate />
           <MonumetricRouteLifecycleCoordinator />
           {/* Handles client-side tracking for GA4 */}
           <AnalyticsTracker />
