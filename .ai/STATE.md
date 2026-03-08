@@ -12,7 +12,7 @@ Every AI session must update this after meaningful work.
 
 ## Current Sprint (Last 7 Days)
 
-- **2026-03-07 (Monumetric implementation baseline canonized + branch hygiene reset prep):** Added a canonical anti-drift record of the March production ad fixes and clarified current ownership boundaries so future agents do not re-introduce pre-fix behavior.
+- **2026-03-07 (Monumetric implementation baseline canonized + branch hygiene reset complete):** Added a canonical anti-drift record of the March production ad fixes and clarified current ownership boundaries so future agents do not re-introduce pre-fix behavior.
   - **What changed:**
     - added `.ai/topics/MONUMETRIC_IMPLEMENTATION_BASELINE.md`
       - captures the stabilized baseline, ownership boundaries, and commit-level recovery history.
@@ -25,7 +25,7 @@ Every AI session must update this after meaningful work.
     - updated this state file’s Monumetric section
       - replaced outdated “global head script” assumptions with route-gated runtime truth.
   - **Why:** repeated Monumetric regressions were caused by context drift and unclear app-vs-provider ownership; this makes the stable model explicit and reusable.
-  - **Status:** canonical docs updated; branch cleanup/commit/push workflow executed in same session.
+  - **Status:** canonical docs updated; cleanup commit `3079a7f` pushed to `main`; fresh working branch `dev-main-clone-20260307` created from updated `main`.
 
 - **2026-03-06 (Monumetric mobile re-enable email archived):** Preserved the founder-sent weekend mobile re-enable request and separated later follow-up asks so future agents do not redraft or resend the wrong version.
   - **What changed:**

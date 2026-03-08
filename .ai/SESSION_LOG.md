@@ -8,7 +8,7 @@
 
 **Goal:** Canonicalize the March Monumetric fixes so future agents stop rediscovering ad ownership/routing mistakes, then clean and ship `main`, and create a fresh branch cloned from updated `main`.
 
-**Status:** 🔄 In progress (docs/memory updates complete; verification + commit/push + branch clone pending)
+**Status:** ✅ Completed
 
 ### Changes
 
@@ -32,19 +32,25 @@
 
 - Future agents now have one canonical baseline for Monumetric implementation truth and anti-regression guardrails.
 - Current baseline explicitly states what app code controls versus what Monumetric controls.
-- Branch cleanup and shipping steps are being completed in this same session.
+- Dirty `main` state was closed out, pushed, and cloned into a fresh branch for isolated follow-on work.
 
 ### Verification
 
-- Pending:
-  - `npm run ai:memory:check`
-  - `npm run ai:checkpoint`
+- `npm run ai:memory:check` ✅
+- `npm run ai:checkpoint` ✅
+  - `reports/context-packs/2026-03-08T03-33-01/context-pack.md`
 
 ### Branch Hygiene
 
-- Branch: `main`
-- Commit SHA(s): pending
-- Push status: pending
+- Branches used:
+  - `main` (commit + push)
+  - `dev-main-clone-20260307` (fresh clone branch from updated `main`)
+- Commit SHA(s):
+  - `3079a7f` (`docs(monumetric): canonize ad baseline and clean branch state`)
+- Push status:
+  - `main` pushed to `origin/main`
+  - `dev-main-clone-20260307` created and pushed to `origin/dev-main-clone-20260307`
+- Session-end `git status --short`: clean
 - Shared-memory lock:
   - `npm run ai:writer-lock:status` ✅
   - `npm run ai:writer-lock:claim -- codex "monumetric canonical docs + branch cleanup"` ✅
