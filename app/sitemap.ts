@@ -4,7 +4,7 @@ import { MetadataRoute } from "next"
  * Sitemap Strategy: Pillar-Only Indexing
  *
  * This sitemap intentionally excludes dynamic pages (/sku/*, /pennies/*) to maintain
- * a high-quality indexed:unindexed ratio for ad network approval (AdSense, Monumetric, etc.).
+ * a high-quality indexed:unindexed ratio for ad network standards (Monumetric).
  *
  * Dynamic pages are still accessible to users but are noindexed via their metadata.
  * This prevents Google from flagging the site as "low value content" due to thin

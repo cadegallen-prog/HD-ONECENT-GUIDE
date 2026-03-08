@@ -3,7 +3,7 @@ import fs from "node:fs/promises"
 import path from "node:path"
 import "dotenv/config"
 
-const PROOF_DIR = path.join(process.cwd(), "reports", "proof", "adsense-readiness")
+const PROOF_DIR = path.join(process.cwd(), "reports", "proof", "ad-compliance-readiness")
 
 test("admin endpoints require bearer auth", async ({ request }) => {
   const noAuth = await request.get("/api/admin/submissions")
@@ -54,9 +54,7 @@ test("privacy policy includes required ad-service disclosures and embed", async 
   await page.goto("/privacy-policy")
   await expect(page.locator("body")).toContainText(/Google Analytics tracking via GA4/i)
   await expect(page.locator("body")).toContainText(/Monumetric/i)
-  await expect(page.locator("body")).toContainText(/Ezoic/i)
   await expect(page.locator("body")).toContainText(/Resend/i)
-  await expect(page.locator("#ezoic-privacy-policy-embed")).toHaveCount(1)
 
   await fs.mkdir(PROOF_DIR, { recursive: true })
   await page.screenshot({

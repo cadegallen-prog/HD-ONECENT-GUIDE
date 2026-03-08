@@ -58,23 +58,20 @@ Each AI session should:
   - Founder required actions remain limited to approvals/strategic decisions.
 - **Plan artifacts:** `.ai/impl/founder-autonomy-memory-hardening.md`, `.ai/FOUNDER_AUTONOMY_OPERATING_SYSTEM.md`, `.ai/topics/FOUNDER_AUTONOMY_CURRENT.md`
 
-### 1. Monetization Incident Resolution Command Center (Parallel Hardening, 14-day lock)
+### 1. Monetization Stabilization & Journey Pipeline (Updated 2026-03-07)
 
-- **Problem:** Monetization blockers are now multi-incident and cross-network, not a single AdSense issue:
-  - AdSense moved from `Low Value Content` to `We found some policy violations` on Feb 12, 2026.
-  - Monumetric tier qualification criteria remain inconsistent (`session pageviews` vs `active users` vs published `monthly pageviews`).
-  - Ad Manager domain decline via Ezoic path likely overlaps with policy/compliance signals.
-- **Progress (2026-02-13):**
-  - Plain-English communication requirements are now canonical across agent entry/collaboration docs.
-  - Policy-sensitive wording rewrites are implemented in source (`/in-store-strategy`, `/inside-scoop`, `/faq`).
-  - Matrix posture moved from content-blocked `NO-GO` to `CONDITIONAL-GO` pending deployment + refreshed evidence snapshot.
+- **Problem:** Two active monetization tracks require monitoring:
+  - Monumetric (Ascend Tier) is live but post-stabilization lifecycle is in progress (refresh behavior, mobile placement map).
+  - Journey by Mediavine application is pending, blocked by 120-day domain age gate (~2026-03-19).
+- **Progress (2026-03-07):**
+  - AdSense (`INC-ADSENSE-001`) and Ad Manager standalone (`INC-ADMANAGER-001`) withdrawn — no longer pursuing. Ezoic fully dropped.
+  - Monumetric (`INC-MONUMETRIC-001`) is in `S4-CSP-HARDENING-VERIFIED` with S5 rollout pass pending by 2026-03-12.
+  - Journey (`INC-JOURNEY-001`) updated: Grow installed, 30-day traffic met, domain age gate ~2026-03-19, 10k sessions required.
 - **Done means:**
   - `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md` remains the single source of truth and is updated every monetization session.
-  - `.ai/topics/MONETIZATION_POLICY_VIOLATION_MATRIX.md` is maintained and used as the hard re-review gate.
-  - All open incidents (`INC-ADSENSE-001`, `INC-MONUMETRIC-001`, `INC-ADMANAGER-001`, `INC-JOURNEY-001`) have current `status`, `next_action`, `deadline`, and evidence links.
-  - AdSense re-review gate is enforced (no unresolved `Critical`/`High` policy matrix items).
-  - Monumetric escalation timeline is followed (`Feb 17` follow-up, `Feb 19` supervisor escalation if unresolved).
-  - Primary path decision is revisited after the 14-day parallel-hardening window using incident outcomes, not assumptions.
+  - Open incidents (`INC-MONUMETRIC-001`, `INC-JOURNEY-001`) have current `status`, `next_action`, `deadline`, and evidence links.
+  - Monumetric S5 controlled rollout confirms stable mobile/desktop placement map and no refresh loop.
+  - Journey application result (approved or denied) is documented after domain age gate passes.
 - **Plan artifact:** `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`
 
 ### 2. Governance Realignment Follow-Through (Charter-first Enforcement)

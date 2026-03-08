@@ -151,9 +151,9 @@ export default function PrivacyPolicyPage() {
             for ad delivery, measurement, frequency capping, and fraud prevention.
           </p>
           <p>
-            If ads are active through Google or Google-certified ad networks, users may opt out of
-            personalized advertising via Google Ads Settings and can also opt out from many
-            participating third-party vendors through{" "}
+            If ads are active, users may opt out of personalized advertising via Google Ads Settings
+            (since our ad partners use Google Ad Manager infrastructure) and can also opt out from
+            many participating third-party vendors through{" "}
             <a href="http://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer">
               aboutads.info/choices
             </a>
@@ -167,10 +167,10 @@ export default function PrivacyPolicyPage() {
           <h3>Third-Party Service Providers</h3>
           <ul>
             <li>
-              <strong>Google AdSense &amp; Ad Manager:</strong> We use Google AdSense (Publisher ID:
-              ca-pub-5302589080375312) and Google Ad Manager to serve and manage advertising on this
-              site. Google may use cookies and similar technologies to serve ads based on your prior
-              visits. Learn how Google uses data:{" "}
+              <strong>Google Ad Manager (via Monumetric):</strong> Our ad partner Monumetric uses
+              Google Ad Manager infrastructure to serve and manage advertising on this site. Google
+              may use cookies and similar technologies to serve ads based on your prior visits.
+              Learn how Google uses data:{" "}
               <a
                 href="https://policies.google.com/technologies/partner-sites"
                 target="_blank"
@@ -220,19 +220,6 @@ export default function PrivacyPolicyPage() {
               .
             </li>
             <li>
-              <strong>Ezoic:</strong> PennyCentral has authorized Ezoic as an advertising partner.
-              When active, Ezoic may place cookies and process data for ad testing, optimization,
-              and serving. See{" "}
-              <a
-                href="https://www.ezoic.com/privacy-policy/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Ezoic&apos;s privacy policy
-              </a>
-              .
-            </li>
-            <li>
               <strong>Resend:</strong> We use Resend for email delivery (weekly digest and
               transactional emails). Resend processes email addresses and message content. See{" "}
               <a
@@ -277,17 +264,6 @@ export default function PrivacyPolicyPage() {
               .
             </li>
           </ul>
-
-          <h3>Ezoic-Specific Disclosure</h3>
-          <span id="ezoic-privacy-policy-embed" />
-          <p>
-            This site uses services provided by Ezoic Inc. to manage third-party interest-based
-            advertising. Ezoic technologies may use first- and third-party cookies to understand
-            visitor interactions. Data may include IP address, operating system and device
-            information, language preferences, browser type, and hashed or encrypted email
-            identifiers. Ezoic and its partners may combine this data with other independently
-            collected information to provide and measure targeted advertising.
-          </p>
         </Prose>
       </Section>
 

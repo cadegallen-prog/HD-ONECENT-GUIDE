@@ -48,23 +48,23 @@
 **Focus:** Ad networks, revenue strategy, timeline
 **Quick link:** See `.ai/impl/monumetric-balanced-stabilization-density-recovery.md` for current canonical stabilization planning
 
-### [ADSENSE_APPROVAL](.ai/topics/ADSENSE_APPROVAL_CURRENT.md)
+### [ADSENSE_APPROVAL](archive/ads-adsense-ezoic-dropped-20260307/ADSENSE_APPROVAL_CURRENT.md)
 
-**Status:** 🔄 In progress (hardening)
-**Focus:** Low-value-content recovery, canonical/index hygiene, approval evidence
-**Quick link:** See `.ai/STATE.md` for implemented changes and verification
+**Status:** ✅ Archived — AdSense and Ad Manager (standalone) dropped 2026-03-07
+**Focus:** Historical: low-value-content recovery, canonical/index hygiene, approval evidence
+**Quick link:** Archived to `archive/ads-adsense-ezoic-dropped-20260307/`
 
 ### [MONETIZATION_INCIDENT_REGISTER](.ai/topics/MONETIZATION_INCIDENT_REGISTER.md)
 
 **Status:** 🔄 Active command center (do not close until all incidents resolved)
-**Focus:** Cross-network incident tracking (AdSense, Ad Manager, Monumetric, Journey), evidence locking, deadlines, and close criteria
+**Focus:** Cross-network incident tracking (Monumetric, Journey by Mediavine), evidence locking, deadlines, and close criteria
 **Quick link:** Update this register at session open/close whenever monetization work is touched
 
-### [MONETIZATION_POLICY_MATRIX](.ai/topics/MONETIZATION_POLICY_VIOLATION_MATRIX.md)
+### [MONETIZATION_POLICY_MATRIX](archive/ads-adsense-ezoic-dropped-20260307/MONETIZATION_POLICY_VIOLATION_MATRIX.md)
 
-**Status:** 🔄 Active gate (must pass before AdSense re-review)
-**Focus:** Fixed policy risk dimensions, required route audit set, and go/no-go criteria for re-review
-**Quick link:** Resolve all `Critical/High` findings before requesting review
+**Status:** ✅ Archived — was AdSense re-review gate, no longer relevant (dropped 2026-03-07)
+**Focus:** Historical: policy risk dimensions and go/no-go criteria for AdSense re-review
+**Quick link:** Archived to `archive/ads-adsense-ezoic-dropped-20260307/`
 
 ### [ANALYTICS_CONTRACT](.ai/topics/ANALYTICS_CONTRACT.md)
 

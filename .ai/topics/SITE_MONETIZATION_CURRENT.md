@@ -4,11 +4,11 @@
 **Owner:** Cade (founder)  
 **Status:** Runtime foundation complete; production Monumetric baseline stabilized; use implementation baseline doc before touching ad code.
 
-> 2026-02-18 update: Ascend tier has since been approved by Monumetric Sales Lead. Remaining uncertainty is explicit GAM domain-approval confirmation and technical go-live timing.
->
-> 2026-03-05 update: use `.ai/impl/monumetric-balanced-stabilization-density-recovery.md` as the active implementation spine for post-reactivation lifecycle stability, placeholder behavior, balanced density recovery, and staged CSP hardening.
+> **2026-03-07 — AdSense, Ad Manager (standalone), and Ezoic dropped.** Current strategy: Monumetric (active, Ascend Tier) + Journey by Mediavine (pending domain age gate ~2026-03-19). GAM remains active only through Monumetric MCM child account.
 >
 > 2026-03-07 update: use `.ai/topics/MONUMETRIC_IMPLEMENTATION_BASELINE.md` and `docs/ads/monumetric-ops-baseline.md` as the anti-drift source for what changed in production and why.
+>
+> 2026-03-05 update: use `.ai/impl/monumetric-balanced-stabilization-density-recovery.md` as the active implementation spine for post-reactivation lifecycle stability, placeholder behavior, balanced density recovery, and staged CSP hardening.
 
 ---
 
@@ -29,7 +29,6 @@ Use it to avoid losing context between guide work, approval-readiness, and futur
 - Approval bottleneck is readiness/inventory quality, not ad tag placement alone.
 - Related context files:
   - `.ai/topics/MONETIZATION.md`
-  - `.ai/topics/ADSENSE_APPROVAL_CURRENT.md`
   - `.ai/topics/MONETIZATION_INCIDENT_REGISTER.md`
 
 ### Monumetric Onboarding Status & Tier Dispute
