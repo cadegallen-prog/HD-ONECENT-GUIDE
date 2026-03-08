@@ -4,6 +4,184 @@
 
 ---
 
+## 2026-03-07 - Codex - Monumetric Baseline Canon + Main Branch Hygiene Reset
+
+**Goal:** Canonicalize the March Monumetric fixes so future agents stop rediscovering ad ownership/routing mistakes, then clean and ship `main`, and create a fresh branch cloned from updated `main`.
+
+**Status:** 🔄 In progress (docs/memory updates complete; verification + commit/push + branch clone pending)
+
+### Changes
+
+- Added canonical Monumetric implementation baseline topic:
+  - `.ai/topics/MONUMETRIC_IMPLEMENTATION_BASELINE.md`
+  - captures ownership boundaries, stabilized behavior, anti-drift rules, and commit lineage.
+- Added operational ads runbook:
+  - `docs/ads/monumetric-ops-baseline.md`
+  - documents excluded-route policy, provider-managed vs app-managed responsibilities, and post-deploy validation checks.
+- Updated discovery/canon references:
+  - `.ai/topics/INDEX.md` (registered new Monumetric baseline topic)
+  - `.ai/topics/SITE_MONETIZATION_CURRENT.md` (points to baseline + aligned exclusions wording)
+  - `README.md` (AI docs table includes Monumetric ops baseline)
+- Updated live state snapshot:
+  - `.ai/STATE.md`
+  - Monumetric section now reflects route-gated script behavior instead of outdated global-head-script assumptions.
+- Included founder-confirmed tooling preference:
+  - `.vscode/settings.json` includes `workbench.browser.enableChatTools=true`.
+
+### Summary
+
+- Future agents now have one canonical baseline for Monumetric implementation truth and anti-regression guardrails.
+- Current baseline explicitly states what app code controls versus what Monumetric controls.
+- Branch cleanup and shipping steps are being completed in this same session.
+
+### Verification
+
+- Pending:
+  - `npm run ai:memory:check`
+  - `npm run ai:checkpoint`
+
+### Branch Hygiene
+
+- Branch: `main`
+- Commit SHA(s): pending
+- Push status: pending
+- Shared-memory lock:
+  - `npm run ai:writer-lock:status` ✅
+  - `npm run ai:writer-lock:claim -- codex "monumetric canonical docs + branch cleanup"` ✅
+
+---
+
+## 2026-03-06 - Codex - Monumetric Mobile Re-Enable Email Archived
+
+**Goal:** Preserve the Monumetric mobile re-enable email that the founder sent, remove the obsolete draft, and record deferred follow-up asks without reopening strategy drift.
+
+**Status:** ✅ Completed (docs-only archive update)
+
+### Changes
+
+- Added sent-email archive:
+  - `emails/monumetric-mobile-activation-final.md`
+  - captures the exact softer ask sent to Samantha on `2026-03-06`, focused on re-enabling existing mobile-capable placements and keeping Mobile Header In-screen off.
+- Added deferred follow-up note:
+  - `emails/monumetric-mobile-followup-notes.md`
+  - preserves later asks for desktop refinement, possible future mobile-header retest, and ad-ops best-practice questions.
+- Removed obsolete draft:
+  - `emails/monumetric-mobile-activation-draft.md`
+
+### Summary
+
+- The correspondence archive now reflects what was actually sent, not the superseded draft chain.
+- Deferred Monumetric asks are preserved separately so future follow-up emails can stay focused.
+
+### Verification
+
+- Docs-only change; runtime test lanes not run.
+- `npm run ai:memory:check` pending after memory updates
+- `npm run ai:checkpoint` pending after memory updates
+
+### Branch Hygiene
+
+- Branch: unknown in this session snapshot (no branch mutation performed)
+- Commit SHA(s): none
+- Push status: not pushed
+- Shared-memory lock:
+  - `npm run ai:writer-lock:status` ✅ (unlocked before claim)
+  - `npm run ai:writer-lock:claim -- codex "document sent monumetric mobile re-enable email and archive draft"` ✅
+
+---
+
+## 2026-03-06 - GitHub Copilot - Analytics Engagement Drop Investigation
+
+**Goal:** Root-cause the engagement time drop observed starting ~Feb 25, 2026.
+
+**Status:** ✅ Complete — three causes confirmed, no code broken, post-mortem filed.
+
+### Findings
+
+- **Feb 25 inflection confirmed by data.** Returning user engagement crashed from ~120s → 72s on the exact day 5 CSP commits landed (`89313e0` `045f0d7` `bafdd59` `fc2e22c` `70c3db6`). Sitewide every channel (Direct, Organic Search, Organic Social) crashed simultaneously — ruling out a traffic mix change.
+- **Ads off Feb 26:** Founder confirmed Monumetric was turned off Feb 26 and only re-enabled ~Mar 4 (desktop only, mobile ads not displaying). Feb 25 CSP explains that day only; Feb 26+ sustained drop is NOT ad-caused.
+- **Primary sustained cause: list shrank.** Penny list went from ~170 items (3.4 pages) → ~127 items (2.5 pages). One fewer page of browsable content removes 30–70s of power-user engagement per session. Self-correcting as items accumulate.
+- **Google discovery surge is healthy growth.** Non-branded organic clicks grew 6× (4.6 → 28/day) starting Feb 21. New discovery traffic dilutes averages but individual engagement per user type is unchanged. Analytics code last changed Feb 8 — nothing broken.
+
+### Artifacts
+
+- `.ai/topics/TRAFFIC_ENGAGEMENT_ANOMALY_FEB25.md` — full post-mortem with all data tables, channel breakdown, and daily returning-user series.
+- `.ai/topics/INDEX.md` — updated to register the post-mortem.
+
+### Branch / Verification
+
+- Read-only investigation — no code changes made this session.
+- Working tree dirty (carryover from prior sessions): `.ai/STATE.md`, `docs/skills/google-ga4-gsc-local-archive.md`, `lib/ads/monumetric-slot-shell.tsx`
+
+---
+
+## 2026-03-06 - Codex - Monumetric Route/Viewport Refresh Stabilization (Penny List)
+
+**Goal:** Fix founder-reported Monumetric behavior regressions where ad state failed to refresh across SPA route transitions and desktop/mobile breakpoint switches, causing stale rendering behavior (including inconsistent desktop footer ad composition).
+
+**Status:** ✅ Completed (code + verification complete; live production confirmation pending deploy)
+
+### Changes
+
+- Hardened Monumetric lifecycle coordinator in:
+  - `lib/ads/monumetric-runtime.ts`
+  - added viewport-band detection (`mobile` / `tablet` / `desktop`) and resize-driven lifecycle handling.
+  - route transitions now trigger both slot requeue and guarded runtime refresh attempts.
+  - added refresh cooldown + retry window to avoid runaway refresh loops.
+  - added stale-runtime fallback: when breakpoint flips but runtime remains mismatched and `refreshOnce` is unavailable after retries, force one guarded page reload to reinitialize runtime state.
+  - skipped refresh/reload behavior on ad-excluded routes.
+- Extended runtime typings in:
+  - `types/ads-runtime.d.ts`
+  - added optional Monumetric runtime members used by lifecycle guardrails (`refreshOnce`, `setNumMonuAdUnits`, `startRefresh`, `stopRefresh`, `insertAds`, `ready`, `deviceType`, SPA metadata fields).
+- Added regression coverage in:
+  - `tests/ads-monumetric-runtime.test.ts`
+  - validates viewport-band mapping and fail-closed runtime refresh behavior (no-window, runtime bootstrap, successful refresh path, thrown refresh path).
+- Captured diagnostic evidence for the reported mobile->desktop stale-runtime path:
+  - `reports/ad-runtime-diagnostics/2026-03-06T15-17-46-732Z-mobile-desktop-route-transition.json`
+  - documents `deviceType=mobile` persisting immediately after desktop resize in the reproduction flow before subsequent route transitions.
+
+### Summary
+
+- Runtime refresh behavior is now coordinated across both route changes and breakpoint transitions.
+- Safety guardrails were added to avoid infinite-refresh behavior while still recovering from stale mobile/desktop runtime state.
+- Local verification lanes are green; production behavior needs post-deploy validation because local port `3001` currently runs with Monumetric disabled.
+
+### Verification
+
+- `npm run ai:memory:check` ✅
+- `npm run verify:fast` ✅
+- `npm run e2e:smoke` ✅
+- `npm run ai:proof -- /penny-list /guide` ✅
+  - `reports/proof/2026-03-06T15-22-16/`
+  - no console errors in proof run
+
+### Branch Hygiene
+
+- Branch: `main`
+- Head SHA: `18ac687`
+- Commit SHA(s): none (not committed in this session)
+- Push status: not pushed
+- Session-end `git status --short`: dirty (scope files + pre-existing carryover files)
+  - scope files:
+    - `lib/ads/monumetric-runtime.ts`
+    - `types/ads-runtime.d.ts`
+    - `tests/ads-monumetric-runtime.test.ts`
+  - pre-existing carryover (unchanged in this session):
+    - `.ai/STATE.md`
+    - `docs/skills/google-ga4-gsc-local-archive.md`
+    - `lib/ads/monumetric-slot-shell.tsx`
+    - `.github/agents/`
+    - `Monumetric_Ads_information/`
+    - `archive/root-level-orphans/`
+    - `emails/monumetric-reengagement-draft.md`
+    - `emails/monumetric-reengagement-final.md`
+    - `monumental/Monumetric.json`
+- Shared-memory lock:
+  - `npm run ai:writer-lock:status` ✅ (unlocked before claim)
+  - `npm run ai:writer-lock:claim -- codex "monumetric route+viewport refresh stabilization memory updates"` ✅
+
+---
+
 ## 2026-03-06 - Codex - Mobile Safe-Area Navbar Clipping Fix (Prompt 0)
 
 **Goal:** Re-apply the known safe-area/navbar fix from `f4912a0` onto the current `main` state (without cherry-pick), verify no conflicts with newer layout/Monumetric changes, and run mobile+desktop proof checks for clipping.
@@ -71,241 +249,5 @@
 - Shared-memory lock:
   - `npm run ai:writer-lock:status` ✅ (unlocked before claim)
   - `npm run ai:writer-lock:claim -- codex "mobile safe-area navbar clipping fix memory updates"` ✅
-
----
-
-## 2026-03-06 - Codex - SerpAPI Runner Limit + Workflow Variable Hotfix
-
-**Goal:** Fix the post-review issues in the pending SerpAPI budget-policy work before pushing it live: keep manual/test limits authoritative, make workflow budget knobs actually configurable, and make stale-row prioritization query the right rows.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- Added focused gap-selection helper:
-  - `lib/enrichment/serpapi-gap-selection.ts`
-  - keeps processing limits separate from fetch-pool sizing,
-  - provides deterministic stale-first prioritization without increasing the number of rows a run is allowed to process.
-- Updated runner behavior:
-  - `scripts/serpapi-enrich.ts`
-  - restored `--limit` / `--test` as the hard cap on processed items,
-  - replaced the single recent-only query slice with separate stale + recent candidate queries,
-  - now widens the candidate pool for ranking without silently widening the actual run scope.
-- Updated workflow configuration:
-  - `.github/workflows/serpapi-enrich.yml`
-  - passes SerpAPI budget knobs from GitHub Actions repository variables with safe defaults, so scheduled runs can be tuned without code edits.
-- Synced docs:
-  - `.ai/ENVIRONMENT_VARIABLES.md`
-  - `docs/SCRAPING_COSTS.md`
-  - documented the GitHub Actions Variables path for scheduled tuning,
-  - corrected the UPC note to reflect that a product lookup can consume an extra SerpAPI credit.
-- Added regression coverage:
-  - `tests/serpapi-gap-selection.test.ts`
-  - covers requested-limit authority, stale-first ranking, and fresh-row ordering.
-- Added process learning:
-  - `.ai/LEARNINGS.md`
-  - recorded that `verify:fast` and `e2e:smoke` must not share `.next-playwright` concurrently.
-
-### Summary
-
-- Manual/test SerpAPI runs are predictable again and will not silently process more rows than requested.
-- Scheduled tuning is now real instead of doc-only because the workflow receives the budget variables.
-- Stale-row escalation now looks across stale rows explicitly instead of only reordering a recent slice.
-
-### Verification
-
-- `npx tsx --import ./tests/setup.ts --test tests/serpapi-budget-policy.test.ts tests/serpapi-gap-selection.test.ts` ✅
-- `npm run ai:memory:check` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-
-### Branch Hygiene
-
-- Branch: `main` (founder-requested direct hotfix path)
-- Head SHA before commit: `c52f7f0`
-- Push status: pending at time of memory update
-- Shared-memory lock:
-  - `npm run ai:writer-lock:status` ✅ (unlocked before claim)
-  - `npm run ai:writer-lock:claim -- codex "serpapi production hotfix memory updates"` ✅
-
----
-
-## 2026-03-06 - Copilot - SerpAPI Billing-Reset-Proximity Backfill Correction
-
-**Goal:** Correct SerpApi backfill activation so it uses billing-reset proximity only (no day-threshold or calendar-month assumptions), fix workflow fallback limit, and align tests/docs/env contracts.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- Refactored policy decision logic in:
-  - `lib/enrichment/serpapi-budget-policy.ts`
-  - removed active day-threshold/month-end/hour-window backfill activation branches,
-  - added billing-cycle reset anchor math (`SERPAPI_BILLING_RESET_ANCHOR_ISO`),
-  - added reset-proximity window activation (`SERPAPI_BACKFILL_WINDOW_MINUTES_BEFORE_RESET`, default `360`),
-  - switched guard defaults to `SERPAPI_PRE_RESET_GUARD_MINUTES=60` and `SERPAPI_POST_RESET_GUARD_MINUTES=60`,
-  - removed `SERPAPI_RUN_INTERVAL_MINUTES` from active policy behavior.
-- Aligned usage accounting window in:
-  - `scripts/serpapi-enrich.ts`
-  - switched monthly-credit range from calendar-month bounds to billing-cycle bounds.
-- Replaced policy tests in:
-  - `tests/serpapi-budget-policy.test.ts`
-  - explicitly covers reset-proximity activation + guard blocks + no dependency on day-threshold/month-end semantics.
-- Fixed scheduler fallback mismatch in:
-  - `.github/workflows/serpapi-enrich.yml`
-  - cron/manual fallback `--limit` now defaults to `30` (not `5`).
-- Synced env/docs contracts in:
-  - `.env.example`
-  - `.ai/ENVIRONMENT_VARIABLES.md`
-  - `docs/SCRAPING_COSTS.md`
-
-### Summary
-
-- Backfill now activates only when the account is close to the next billing reset and outside pre/post guard windows.
-- Calendar-month boundaries and “last 3 days / last UTC day” logic are no longer part of active backfill decisions.
-- Scheduled workflow fallback is aligned with intended default throughput (`30`).
-
-### Verification
-
-- `npx tsx --import ./tests/setup.ts --test tests/serpapi-budget-policy.test.ts` ✅
-- `npm run ai:memory:check` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `npm run ai:checkpoint` ✅
-  - artifacts: `reports/context-packs/2026-03-06T06-28-03/`
-
-### Branch Hygiene
-
-- Branch: `main`
-- Head SHA: `c52f7f0`
-- Push status: not pushed in this session
-- Session-end status: dirty worktree with both scope files and pre-existing carryover files still present
-- Writer lock: claimed via `npm run ai:writer-lock:claim -- copilot "serpapi billing-reset-proximity backfill correction memory updates"` ✅
-
----
-
-## 2026-03-06 - Copilot - SerpAPI Freshness + Budget Policy Implementation
-
-**Goal:** Implement the approved freshness-first enrichment policy with practical credit caps, controlled late-month backfill, reset-safe guardrails, and `/ai` documentation updates.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- Added a centralized SerpAPI budget policy module:
-  - `lib/enrichment/serpapi-budget-policy.ts` (new)
-  - includes UTC month/day helpers and deterministic budget decisions for:
-    - normal daily operation,
-    - stale-row escalation,
-    - late-month controlled backfill,
-    - pre/post reset protection windows.
-- Updated enrichment runner behavior:
-  - `scripts/serpapi-enrich.ts`
-  - integrated policy-aware usage reads + run budgeting from recent `serpapi_logs` activity,
-  - added stale-priority handling for older unfilled rows,
-  - added per-run credit stop conditions,
-  - added `--ignore-budget` escape hatch,
-  - raised default runner limit to align with micro-run cadence.
-- Added regression tests:
-  - `tests/serpapi-budget-policy.test.ts` (new)
-  - covers reset guards, mid-month behavior, late-month mode, and fail-closed daily exhaustion.
-- Updated schedule + ops docs/config:
-  - `.github/workflows/serpapi-enrich.yml` now runs every 2 hours,
-  - `.env.example` includes SerpAPI budget env knobs,
-  - `docs/SCRAPING_COSTS.md` updated for freshness-first + budget-safe behavior,
-  - `.ai/ENVIRONMENT_VARIABLES.md` updated for new policy variables.
-
-### Summary
-
-- Enrichment now runs on a frequent cadence for faster fill-in while still enforcing hard budget controls.
-- The policy is reset-safe (pre/post reset cool-off windows) and supports controlled late-month burn-down without spilling into next month credits.
-- Stale gaps are now promoted in priority so older unfilled submissions are less likely to linger.
-
-### Verification
-
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `npm run ai:memory:check` ✅
-- `npm run ai:checkpoint` ✅
-  - artifacts: `reports/context-packs/2026-03-06T01-37-18/`
-
-### Branch Hygiene
-
-- Scope: SerpAPI enrichment budgeting/scheduling + docs only
-- Writer lock: claimed via `npm run ai:writer-lock:claim -- copilot "serpapi budget policy + scheduler freshness implementation"` ✅
-- Writer lock: released via `npm run ai:writer-lock:release -- copilot` ✅
-
----
-
-## 2026-03-05 - Codex - Monumetric Production Recovery Deployment (S1-S4 + Rubicon Hotfix)
-
-**Goal:** Execute founder-approved emergency monetization recovery plan by promoting S1-S3 to production, auditing live behavior, hardening S4 CSP, and closing the residual Rubicon CSP blocker observed after merge.
-
-**Status:** ✅ Completed
-
-### Changes
-
-- Promotion to production:
-  - merged PR `#148` (`f00c246`) into `main` to ship Monumetric S1-S3 runtime/placement recovery.
-  - merged PR `#149` (`de6bd28`) into `main` to ship S4 CSP compatibility hardening.
-  - merged PR `#151` (`ad72f3a`) into `main` to patch the remaining critical CSP blocker for `secure-assets.rubiconproject.com`.
-- Code change scope for S4:
-  - `next.config.js` only:
-    - `script-src` + `https://script.4dex.io`
-    - `connect-src` + `https://mp.4dex.io`
-    - `connect-src` + `https://apex.go.sonobi.com`
-- Code change scope for follow-up hotfix:
-  - `next.config.js` only:
-    - `frame-src` + `https://secure-assets.rubiconproject.com`
-- Live production audit artifacts:
-  - pre-S1/S3 baseline: `reports/monumetric-audit/2026-03-05T16-47-41-pre-s1s3/`
-  - post-S1/S3: `reports/monumetric-audit/2026-03-05T16-51-44-post-s1s3/`
-  - post-S4: `reports/monumetric-audit/2026-03-05T17-06-22-post-s4/`
-  - post-Rubicon-hotfix: `reports/monumetric-audit/2026-03-05T22-38-27-814-post-rubicon-hotfix/`
-
-### Summary
-
-- S1-S3 is now live on production `main`.
-- In sampled mobile/desktop audits, in-content opportunities now render on `/penny-list` and guide surfaces where pre-S1/S3 had missing route coverage.
-- S4 removed previously observed `mp.4dex.io` / `apex.go.sonobi.com` CSP blocker signatures from the sampled window; remaining noise shifted to different third-party frame/script hosts.
-- Follow-up Rubicon host hotfix removed the critical `secure-assets.rubiconproject.com` CSP block signature from live CI/audit while keeping `/report-find` ad-excluded and SPA callback experimental mode off.
-
-### Verification
-
-- `npm run ai:memory:check` ✅
-- `npm run verify:fast` ✅
-- `npm run e2e:smoke` ✅
-- `npm run e2e:full` ✅
-- follow-up hotfix local lane:
-  - `npm run ai:memory:check` ✅
-  - `npm run verify:fast` ✅
-  - `npm run e2e:smoke` ✅
-  - `npm run e2e:full` ⚠️ expected pre-deploy fail while production still served old CSP; rerun on CI passed after merge (`full-e2e (1,2)` + `full-e2e (2,2)`).
-- `npm run ai:proof -- /guide /penny-list` ⚠️ first attempt blocked by unhealthy occupied port 3001; follow-up capture succeeded:
-  - artifacts: `reports/proof/2026-03-05T22-03-16/`
-- FULL live-console artifacts from this session:
-  - `reports/playwright/console-report-2026-03-05T21-54-41-027Z.json`
-  - `reports/playwright/console-report-2026-03-05T21-56-28-919Z.json`
-  - `reports/playwright/console-report-2026-03-05T21-59-13-802Z.json`
-  - `reports/playwright/console-report-2026-03-05T22-00-15-603Z.json`
-- post-hotfix CI/deploy:
-  - `quality-fast` ✅ `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22739773584/job/65950070119`
-  - `smoke-e2e` ✅ `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22739773600/job/65950070177`
-  - `full-e2e (1,2)` ✅ `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22739773604/job/65950257586`
-  - `full-e2e (2,2)` ✅ `https://github.com/cadegallen-prog/HD-ONECENT-GUIDE/actions/runs/22739773604/job/65950257578`
-  - Vercel production deploy ✅ `https://vercel.com/allens-projects-6bce9cc6/hd-onecent-guide/2V1R32eEjDyuRvwTkcnsK23pTfZT`
-
-### Branch Hygiene
-
-- Merge PRs:
-  - `#148` -> `main` at `f00c246`
-  - `#149` -> `main` at `de6bd28`
-  - `#151` -> `main` at `ad72f3a`
-- Working branch for S4 implementation: `dev-s4-csp-20260305` (remote auto-deleted after merge)
-- Working branch for Rubicon hotfix: `hotfix-csp-rubicon-20260305` (merged)
-- Carryover untracked files (unchanged, unrelated):
-  - `archive/root-level-orphans/`
-  - `emails/monumetric-reengagement-draft.md`
-  - `emails/monumetric-reengagement-final.md`
 
 ---

@@ -68,5 +68,6 @@
   "editor.experimentalGpuAcceleration": "off",
   "editor.mouseWheelZoom": true,
   "claudeCode.allowDangerouslySkipPermissions": true,
-  "claudeCode.usePythonEnvironment": true
+  "claudeCode.usePythonEnvironment": true,
+  "workbench.browser.enableChatTools": true
 }

@@ -1,6 +1,6 @@
 # MONETIZATION_INCIDENT_REGISTER
 
-**Last updated:** 2026-03-05
+**Last updated:** 2026-03-06
 **Owner:** Cade (founder)  
 **Purpose:** Single source of truth for unresolved monetization incidents across ad networks.
 
@@ -365,4 +365,19 @@ All must be true before re-review:
   - Incident progression:
     - status remains `OPEN-S4-CSP-HARDENING-VERIFIED` (no downgrade).
     - next action remains `S5 - controlled rollout and partner confirmation pass`.
+    - deadline remains `2026-03-12`.
+
+## 25) Session Notes (2026-03-06, founder mobile re-enable request archived)
+
+- `INC-MONUMETRIC-001`:
+  - Founder sent a softer mobile-focused follow-up email to Samantha on `2026-03-06` asking for existing mobile-capable placements to be re-enabled before the weekend, while explicitly keeping `Mobile Header In-screen` off.
+  - Canonical correspondence artifact:
+    - `emails/monumetric-mobile-activation-final.md`
+  - Deferred asks were split out so future follow-up stays focused:
+    - `emails/monumetric-mobile-followup-notes.md`
+  - Current posture:
+    - wait for Samantha / ad ops response before making new asks about desktop refinement, mobile header reinstatement, or additional UUID provisioning.
+  - Incident progression:
+    - status remains `OPEN-S4-CSP-HARDENING-VERIFIED`.
+    - next action is unchanged in substance: await partner response, then continue `S5 - controlled rollout and partner confirmation pass` with the new email context.
     - deadline remains `2026-03-12`.

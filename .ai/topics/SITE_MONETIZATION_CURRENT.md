@@ -1,12 +1,14 @@
 # SITE_MONETIZATION_CURRENT
 
-**Last updated:** 2026-03-05  
+**Last updated:** 2026-03-07  
 **Owner:** Cade (founder)  
-**Status:** Runtime foundation complete; Monumetric production reactivation is live; balanced stabilization/density-recovery plan is approved and not yet implemented.
+**Status:** Runtime foundation complete; production Monumetric baseline stabilized; use implementation baseline doc before touching ad code.
 
 > 2026-02-18 update: Ascend tier has since been approved by Monumetric Sales Lead. Remaining uncertainty is explicit GAM domain-approval confirmation and technical go-live timing.
 >
 > 2026-03-05 update: use `.ai/impl/monumetric-balanced-stabilization-density-recovery.md` as the active implementation spine for post-reactivation lifecycle stability, placeholder behavior, balanced density recovery, and staged CSP hardening.
+>
+> 2026-03-07 update: use `.ai/topics/MONUMETRIC_IMPLEMENTATION_BASELINE.md` and `docs/ads/monumetric-ops-baseline.md` as the anti-drift source for what changed in production and why.
 
 ---
 
@@ -145,7 +147,7 @@ Cade is pathway #2 (new applicant, not Propel site). Samantha is applying pathwa
   - Unit coverage: `tests/analytics.test.ts`, `tests/ads-route-eligibility.test.ts`, `tests/ads-launch-config.test.ts`, `tests/ads-slot-plan.test.ts`, `tests/ads-guardrail-report.test.ts`.
 - **Policy update (2026-02-12):** Founder approved Option B to avoid partner-placement conflicts:
   - provider-managed by default on non-excluded routes
-  - hard exclusions enforced for `/report-find`, legal/support/auth/internal/API/redirect routes
+  - hard exclusions enforced for `/report-find`, trust/legal/system routes, and `/lists/*`, `/s/*`, `/api/*`, `/admin/*`
   - no strict route inventory forcing
   - sticky reserve disabled until explicitly re-enabled after Monumetric guidance
 - Next implementation target is `S1` route lifecycle guardrails from the active stabilization roadmap.
@@ -162,7 +164,7 @@ Cade is pathway #2 (new applicant, not Propel site). Samantha is applying pathwa
 ### A) Strong editorial pages (candidate monetized after quality gates)
 
 - Guide chapter routes (`/what-are-pennies`, `/clearance-lifecycle`, `/digital-pre-hunt`, `/in-store-strategy`, `/inside-scoop`, `/facts-vs-myths`, `/faq`)
-- Supporting educational/trust pages as appropriate (`/about`, `/support`, selected help pages)
+- Supporting educational/help pages as appropriate (`/about`, `/support`, `/contact`, selected help pages)
 
 ### B) Utility-heavy pages (conditional monetization)
 
@@ -177,7 +179,7 @@ These pages must preserve fast utility; runtime policy enforces hard route exclu
 
 - `/privacy-policy`
 - `/terms-of-service`
-- `/contact` (context-dependent; default conservative)
+- `/contact` is currently route-eligible by policy, but may still be treated conservatively by partner-side placement decisions.
 
 ---
 
@@ -205,7 +207,7 @@ These pages must preserve fast utility; runtime policy enforces hard route exclu
 ## 6) Immediate Next Moves
 
 1. Run Window B and Window C guardrail checks with `npm run monumetric:guardrails -- --input <window-metrics.json>` and archive each artifact path.
-2. Keep `/report-find`, legal/support/auth/internal surfaces ad-excluded by policy module enforcement.
+2. Keep only the hard exclusions ad-free per `lib/ads/route-eligibility.ts` (do not expand exclusions without founder approval).
 3. Keep route-level proof coverage refreshed whenever monetization surface templates are touched.
 4. Keep analytics readouts blocked unless Phase 1 key hygiene (`ui_source` + reserved-key remap) and hard-exclusion enforcement remain intact under provider-managed mode.
 

@@ -52,6 +52,49 @@ Optional flags:
 - `.local/analytics-history/runs/<timestamp>/ga4/*.json|*.csv`
 - `.local/analytics-history/run-index.jsonl` (append-only run log)
 
+## Common follow-up analysis workflow
+
+Use this same skill as the default starting point when the real goal is not just "archive data" but also "figure out what changed."
+
+Typical investigation prompts:
+
+- Why is engagement time lower over the last 7 days versus the prior 30 days?
+- Which pages, traffic sources, or device segments are pulling overall performance down?
+- Did a recent UI, ad, routing, or traffic-mix change correlate with a performance drop?
+- Which metrics changed most at the page, source, or device level?
+
+Recommended follow-up steps after each archive run:
+
+1. Open the latest run folder under `.local/analytics-history/runs/<timestamp>/`.
+2. Start with `summary.md`, then inspect the GA4 and GSC CSV/JSON files relevant to the question.
+3. Compare a recent window against a baseline window appropriate to the question, such as:
+   - last 7 days vs prior 30 days,
+   - current week vs previous week,
+   - post-change window vs pre-change window.
+4. Break the metric down by the most likely dimensions:
+   - page/route,
+   - source/channel,
+   - device,
+   - search query,
+   - or key event.
+5. Write findings and next actions to `reports/analytics-weekly/<YYYY-MM-DD>/summary.md` when the work is part of a recurring review.
+
+Common file starting points:
+
+- GA4 route/page analysis: `ga4/daily_pages.csv`
+- GA4 source/channel analysis: `ga4/daily_channel.csv`
+- GA4 event analysis: `ga4/daily_events.csv` when present
+- GSC page/query analysis: `gsc/daily_pages.csv`, `gsc/daily_queries.csv`
+
+Fail-closed analysis rule:
+
+- Do not claim a cause with confidence if the archive is incomplete, a source is missing, or the comparison window is too small to support the conclusion.
+- Prefer wording like `likely contributor`, `strong suspect`, or `inconclusive` unless the pattern is clearly supported by the archived data.
+
+Example founder-friendly prompt:
+
+> Read `docs/skills/README.md` first. Use the analytics archive skill. Pull the latest GA4 and Search Console archive, then diagnose why engagement time per session is down over the last 7 days compared to the prior 30 days. Tell me which pages, traffic sources, or device segments are most responsible, what likely changed, and what the next best action is.
+
 ## Fail-Closed Interpretation
 
 - If any requested report fails, treat the run as incomplete and resolve auth/API/permission issues before using conclusions.

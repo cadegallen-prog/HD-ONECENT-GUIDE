@@ -1,6 +1,6 @@
 # Project State (Living Snapshot)
 
-**Last updated:** Mar 6, 2026 (Mobile safe-area navbar clipping patch re-applied on main and verified)
+**Last updated:** Mar 7, 2026 (Monumetric implementation baseline documented + route-gated status canonized)
 
 This file is the **single living snapshot** of where the project is right now.
 
@@ -11,6 +11,50 @@ Every AI session must update this after meaningful work.
 ---
 
 ## Current Sprint (Last 7 Days)
+
+- **2026-03-07 (Monumetric implementation baseline canonized + branch hygiene reset prep):** Added a canonical anti-drift record of the March production ad fixes and clarified current ownership boundaries so future agents do not re-introduce pre-fix behavior.
+  - **What changed:**
+    - added `.ai/topics/MONUMETRIC_IMPLEMENTATION_BASELINE.md`
+      - captures the stabilized baseline, ownership boundaries, and commit-level recovery history.
+    - added `docs/ads/monumetric-ops-baseline.md`
+      - operator runbook for route eligibility, in-content behavior, guardrails, and post-deploy validation.
+    - updated `.ai/topics/INDEX.md`
+      - registers the new Monumetric baseline topic for discovery.
+    - updated `.ai/topics/SITE_MONETIZATION_CURRENT.md`
+      - points to the new baseline and aligns exclusion wording to current policy enforcement.
+    - updated this state file’s Monumetric section
+      - replaced outdated “global head script” assumptions with route-gated runtime truth.
+  - **Why:** repeated Monumetric regressions were caused by context drift and unclear app-vs-provider ownership; this makes the stable model explicit and reusable.
+  - **Status:** canonical docs updated; branch cleanup/commit/push workflow executed in same session.
+
+- **2026-03-06 (Monumetric mobile re-enable email archived):** Preserved the founder-sent weekend mobile re-enable request and separated later follow-up asks so future agents do not redraft or resend the wrong version.
+  - **What changed:**
+    - added `emails/monumetric-mobile-activation-final.md`
+      - stores the actual email sent to Samantha requesting mobile re-enablement of existing placements, while explicitly keeping Mobile Header In-screen off.
+    - added `emails/monumetric-mobile-followup-notes.md`
+      - stores deferred asks for desktop refinement, possible future mobile-header retest, and best-practice/ad-ops questions.
+    - removed `emails/monumetric-mobile-activation-draft.md`
+      - obsolete draft chain no longer reflects the final founder message.
+  - **Why:** the sent message needed to be the canonical archive artifact, and the remaining ad topics needed to be preserved without cluttering the correspondence record.
+  - **Status:** docs-only archival update complete; awaiting Samantha/Monumetric response.
+
+- **2026-03-06 (Monumetric route + viewport refresh stabilization on `main`):** Implemented runtime guardrails to recover stale Monumetric state across SPA route transitions and mobile/desktop breakpoint flips.
+  - **What changed:**
+    - `lib/ads/monumetric-runtime.ts`
+      - added viewport-band detection and resize-triggered refresh scheduling,
+      - route transitions now run requeue + guarded runtime refresh attempts,
+      - added refresh cooldown/retry guardrails,
+      - added one-time hard-reload fallback when breakpoint changes but runtime remains mismatched and `refreshOnce` never becomes available after retries,
+      - skips refresh/reload behavior on ad-excluded routes.
+    - `types/ads-runtime.d.ts`
+      - expanded `$MMT` runtime typings (`refreshOnce`, `setNumMonuAdUnits`, `startRefresh`, `stopRefresh`, `insertAds`, `ready`, `deviceType`, SPA metadata fields).
+    - `tests/ads-monumetric-runtime.test.ts`
+      - added unit coverage for viewport mapping and fail-closed runtime refresh helper behavior.
+    - diagnostics + proof artifacts:
+      - `reports/ad-runtime-diagnostics/2026-03-06T15-17-46-732Z-mobile-desktop-route-transition.json`
+      - `reports/proof/2026-03-06T15-22-16/`
+  - **Why:** founder-reported ad behavior showed stale runtime state after device-mode switches and route transitions (including inconsistent desktop footer composition and missing refresh behavior).
+  - **Status:** verified locally with `ai:memory:check`, `verify:fast`, `e2e:smoke`, and Playwright proof capture; production confirmation pending deploy.
 
 - **2026-03-06 (Mobile safe-area navbar clipping patch reapplied on `main`):** Restored the known notched-device safe-area fix from historical commit `f4912a0` directly into current `main` without cherry-pick.
   - **What changed:**
@@ -2114,6 +2158,24 @@ Every AI session must update this after meaningful work.
 - **2026-01-28 (Pages overhaul: Affiliate docs cleanup):** Updated docs to treat `/go/rakuten` as canonical (keeping `/go/befrugal` as legacy redirect) and removed the BeFrugal CSP `connect-src` entry from `next.config.js`. Verified with `npm run lint`, `npm run build`, `npm run test:unit`, `npm run test:e2e`.
 
 - **2026-01-26 (Deprecate Google Sheets pipeline):** Archived legacy Google Forms/Sheets strategy doc (`docs/legacy/PENNY-LIST-STRATEGY.md`), updated docs to Supabase flow (`README.md`, `PROJECT_ROADMAP.md`, `docs/WEEKLY-UPDATE-CHECKLIST.md`, `docs/AUTH-PIVOT-GUIDANCE.md`), added DEPRECATED headers to sheet-related scripts, and moved sensitive scripts to `backups/legacy-scripts/` to satisfy privacy pre-commit checks. Verified with `npm run qa:fast` (lint/build/test:unit all passed). Commit: `cd78313`.
+
+---
+
+## Monumetric Status
+
+**Monumetric is ENABLED in production and now route-gated (as of 2026-03-07).**
+
+| Check                       | Result                                                                                               |
+| --------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `.env.example` default      | `NEXT_PUBLIC_MONUMETRIC_ENABLED=false` (line 40) — local dev defaults to off                         |
+| Production env var          | `NEXT_PUBLIC_MONUMETRIC_ENABLED=true`                                                                |
+| Script loading model        | Route-gated in `components/ads/monumetric-script-gate.tsx`                                           |
+| Eligible routes             | All non-excluded routes                                                                              |
+| Excluded routes             | `/report-find`, policy/trust/system routes, and `/lists/*`, `/s/*`, `/api/*`, `/admin/*`             |
+| Route lifecycle coordinator | `<MonumetricRouteLifecycleCoordinator />` remains active for SPA refresh handling on eligible routes |
+| Penny List in-content slot  | Real UUID is now wired (`39b97adf-dc3e-4795-b4a4-39f0da3c68dd`)                                      |
+
+**Summary:** Monumetric script no longer loads globally. It loads only on eligible routes, and ad nodes are cleaned on excluded routes. This resolved prior exclusion leakage and stabilized the current baseline.
 
 ---
 

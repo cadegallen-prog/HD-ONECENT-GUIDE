@@ -214,22 +214,23 @@ public/                 # Static assets
 
 ## For AI Agents & Developers
 
-| File                              | Purpose                                                              |
-| --------------------------------- | -------------------------------------------------------------------- |
-| `docs/skills/README.md`           | Task-to-skill index: fastest way to find exact implementation files  |
-| `AGENTS.md`                       | Master source of truth — behavior rules, design system, constraints  |
-| `SKILLS.md`                       | Technical stack, domain knowledge, MCP patterns                      |
-| `CLAUDE.md`                       | Claude Code instructions (points to AGENTS.md)                       |
-| `.github/copilot-instructions.md` | Copilot Chat instructions (points to AGENTS.md)                      |
-| `PENNYCENTRAL_MASTER_CONTEXT.md`  | Founder strategic intent + cognitive-load protocol for future agents |
-| `.ai/AI_ENABLEMENT_BLUEPRINT.md`  | When the goal is AI workflow/tooling/verification enablement         |
-| `.ai/STATE.md`                    | Current snapshot of what is true right now                           |
-| `.ai/BACKLOG.md`                  | Current priorities and execution order                               |
-| `docs/DESIGN-SYSTEM-AAA.md`       | Complete color and typography specification                          |
-| `docs/CROWDSOURCE-SYSTEM.md`      | Current Supabase tables and roles (Penny List + enrichment + lists)  |
-| `docs/supabase-rls.md`            | Supabase RLS + public view policy set (how reads/writes are secured) |
-| `docs/SCRAPING_COSTS.md`          | SerpApi enrichment budget + options                                  |
-| `docs/PENNY-LIST-STRATEGY.md`     | Community intake strategy, low-effort moderation                     |
+| File                                  | Purpose                                                                             |
+| ------------------------------------- | ----------------------------------------------------------------------------------- |
+| `docs/skills/README.md`               | Task-to-skill index: fastest way to find exact implementation files                 |
+| `AGENTS.md`                           | Master source of truth — behavior rules, design system, constraints                 |
+| `SKILLS.md`                           | Technical stack, domain knowledge, MCP patterns                                     |
+| `CLAUDE.md`                           | Claude Code instructions (points to AGENTS.md)                                      |
+| `.github/copilot-instructions.md`     | Copilot Chat instructions (points to AGENTS.md)                                     |
+| `PENNYCENTRAL_MASTER_CONTEXT.md`      | Founder strategic intent + cognitive-load protocol for future agents                |
+| `.ai/AI_ENABLEMENT_BLUEPRINT.md`      | When the goal is AI workflow/tooling/verification enablement                        |
+| `.ai/STATE.md`                        | Current snapshot of what is true right now                                          |
+| `.ai/BACKLOG.md`                      | Current priorities and execution order                                              |
+| `docs/DESIGN-SYSTEM-AAA.md`           | Complete color and typography specification                                         |
+| `docs/CROWDSOURCE-SYSTEM.md`          | Current Supabase tables and roles (Penny List + enrichment + lists)                 |
+| `docs/supabase-rls.md`                | Supabase RLS + public view policy set (how reads/writes are secured)                |
+| `docs/ads/monumetric-ops-baseline.md` | Monumetric implementation baseline, ownership boundaries, and anti-drift guardrails |
+| `docs/SCRAPING_COSTS.md`              | SerpApi enrichment budget + options                                                 |
+| `docs/PENNY-LIST-STRATEGY.md`         | Community intake strategy, low-effort moderation                                    |
 
 ### AI Canon & Read Order (canonical entrypoint)
 

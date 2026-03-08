@@ -36,6 +36,12 @@
 **Focus:** Route eligibility, thin URL lifecycle, and UX-safe ad architecture
 **Quick link:** See `.ai/impl/monumetric-balanced-stabilization-density-recovery.md`
 
+### [MONUMETRIC_IMPLEMENTATION_BASELINE](.ai/topics/MONUMETRIC_IMPLEMENTATION_BASELINE.md)
+
+**Status:** ✅ Active implementation baseline
+**Focus:** March 2026 regression fixes, ownership boundaries, route-gated script behavior, and non-negotiable anti-drift rules
+**Quick link:** `docs/ads/monumetric-ops-baseline.md`
+
 ### [MONETIZATION](.ai/topics/MONETIZATION.md)
 
 **Status:** ✅ Historical bridge context
@@ -65,6 +71,12 @@
 **Status:** ✅ Active guardrail
 **Focus:** GA4 single-source tracking, pageview/user/session verification protocol
 **Quick link:** Run `npm run ai:analytics:verify` before/after analytics changes
+
+### [TRAFFIC_ENGAGEMENT_ANOMALY_FEB25](.ai/topics/TRAFFIC_ENGAGEMENT_ANOMALY_FEB25.md)
+
+**Status:** ✅ Closed (root cause confirmed, no code broken)
+**Focus:** Post-mortem for engagement drop observed Feb 25–Mar 4, 2026
+**Quick link:** Three causes confirmed: (1) Monumetric CSP opened Feb 25, (2) penny list shrank ~170→127 items, (3) Google non-branded discovery surge. Analytics code unchanged since Feb 8.
 
 ### [UI_DESIGN](.ai/topics/UI_DESIGN.md)
 

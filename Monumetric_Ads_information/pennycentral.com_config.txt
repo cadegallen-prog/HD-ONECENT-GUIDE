@@ -1,0 +1,68 @@
+************* Start of Head Information *************************
+
+<script type="text/javascript" src="//monu.delivery/site/1/d/65ab12-7f57-43c6-a5b7-76b6b4c6548c.js" data-cfasync="false"></script>
+
+************** End of Head Information **************************
+
+
+
+************* Start of Body (Widget/Gadget) Information ***********
+
+
+<!--MONUMETRIC Video Ad D:640x480,400x300,1x1 M:640x480,400x300,1x1 T:640x480,400x300,1x1 START-->
+
+<div id="mmt-fd66fcce-8429-428b-b22d-8bac5706a731"></div><script type="text/javascript" data-cfasync="false">$MMT = window.$MMT || {}; $MMT.cmd = $MMT.cmd || [];$MMT.cmd.push(function(){ $MMT.display.slots.push(["fd66fcce-8429-428b-b22d-8bac5706a731"]); })</script>
+
+<!--MONUMETRIC Video Ad D:640x480,400x300,1x1 M:640x480,400x300,1x1 T:640x480,400x300,1x1  ENDS-->
+
+
+<!--MONUMETRIC Sticky Sidebar D:300x250,160x600,300x600 M:300x250,320x50,320x100 T:300x250,160x600,300x600 START-->
+
+<div id="mmt-5f725bea-07f8-4fed-b9dd-bb609c80609e"></div><script type="text/javascript" data-cfasync="false">$MMT = window.$MMT || {}; $MMT.cmd = $MMT.cmd || [];$MMT.cmd.push(function(){ $MMT.display.slots.push(["5f725bea-07f8-4fed-b9dd-bb609c80609e"]); })</script>
+
+<!--MONUMETRIC Sticky Sidebar D:300x250,160x600,300x600 M:300x250,320x50,320x100 T:300x250,160x600,300x600  ENDS-->
+
+
+<!--MONUMETRIC Middle Sidebar Flex D:300x250,160x600,300x600 M:300x250,320x50,320x100 T:300x250,160x600,300x600 START-->
+
+<div id="mmt-c243b456-5b7f-4065-8c5e-dac26a8978c4"></div><script type="text/javascript" data-cfasync="false">$MMT = window.$MMT || {}; $MMT.cmd = $MMT.cmd || [];$MMT.cmd.push(function(){ $MMT.display.slots.push(["c243b456-5b7f-4065-8c5e-dac26a8978c4"]); })</script>
+
+<!--MONUMETRIC Middle Sidebar Flex D:300x250,160x600,300x600 M:300x250,320x50,320x100 T:300x250,160x600,300x600  ENDS-->
+
+
+<!--MONUMETRIC Top Sidebar Flex D:300x250,160x600,300x600 M:300x250,320x50,320x100 T:300x250,160x600,300x600 START-->
+
+<div id="mmt-b3dc56d1-75b2-4f5b-be74-9a19a17434c1"></div><script type="text/javascript" data-cfasync="false">$MMT = window.$MMT || {}; $MMT.cmd = $MMT.cmd || [];$MMT.cmd.push(function(){ $MMT.display.slots.push(["b3dc56d1-75b2-4f5b-be74-9a19a17434c1"]); })</script>
+
+<!--MONUMETRIC Top Sidebar Flex D:300x250,160x600,300x600 M:300x250,320x50,320x100 T:300x250,160x600,300x600  ENDS-->
+
+
+<!--MONUMETRIC Pillar - Left D:300x250,160x600,300x600 START-->
+
+<div id="mmt-785d6c5a-f971-4fa0-887e-fe0db38eadfd"></div><script type="text/javascript" data-cfasync="false">$MMT = window.$MMT || {}; $MMT.cmd = $MMT.cmd || [];$MMT.cmd.push(function(){ $MMT.display.slots.push(["785d6c5a-f971-4fa0-887e-fe0db38eadfd"]); })</script>
+
+<!--MONUMETRIC Pillar - Left D:300x250,160x600,300x600  ENDS-->
+
+
+<!--MONUMETRIC Footer In-screen D:728x90 M:320x50,320x100 T:728x90 START-->
+
+<div id="mmt-45ff9f95-5cad-4e88-bac8-d55780b1049f"></div><script type="text/javascript" data-cfasync="false">$MMT = window.$MMT || {}; $MMT.cmd = $MMT.cmd || [];$MMT.cmd.push(function(){ $MMT.display.slots.push(["45ff9f95-5cad-4e88-bac8-d55780b1049f"]); })</script>
+
+<!--MONUMETRIC Footer In-screen D:728x90 M:320x50,320x100 T:728x90  ENDS-->
+
+
+<!--MONUMETRIC In-content Repeatable D:300x250,320x50,728x90,320x100,468x60 M:300x250,320x50,320x100 T:300x250,320x50,728x90,320x100,468x60 START-->
+
+<div id="mmt-39b97adf-dc3e-4795-b4a4-39f0da3c68dd"></div><script type="text/javascript" data-cfasync="false">$MMT = window.$MMT || {}; $MMT.cmd = $MMT.cmd || [];$MMT.cmd.push(function(){ $MMT.display.slots.push(["39b97adf-dc3e-4795-b4a4-39f0da3c68dd"]); })</script>
+
+<!--MONUMETRIC In-content Repeatable D:300x250,320x50,728x90,320x100,468x60 M:300x250,320x50,320x100 T:300x250,320x50,728x90,320x100,468x60  ENDS-->
+
+
+<!--MONUMETRIC Header In-screen D:728x90 M:320x50,320x100 T:728x90 START-->
+
+<div id="mmt-8c9623fb-51f8-48ac-b124-550e1f0b3888"></div><script type="text/javascript" data-cfasync="false">$MMT = window.$MMT || {}; $MMT.cmd = $MMT.cmd || [];$MMT.cmd.push(function(){ $MMT.display.slots.push(["8c9623fb-51f8-48ac-b124-550e1f0b3888"]); })</script>
+
+<!--MONUMETRIC Header In-screen D:728x90 M:320x50,320x100 T:728x90  ENDS-->
+
+
+*************** End of Body (Widget/Gadget) Information ***********

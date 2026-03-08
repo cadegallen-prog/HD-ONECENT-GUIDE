@@ -68,6 +68,7 @@ archive/docs-history/
 archive/legacy-json/
 archive/legacy-static-experiments/
 archive/verified-pennies.backup*.json
+archive/root-level-orphans/
 
 # typescript
 *.tsbuildinfo
